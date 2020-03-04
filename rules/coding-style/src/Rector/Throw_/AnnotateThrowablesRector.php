@@ -14,14 +14,14 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
-use PhpParser\ParserFactory;
+use PhpParser\Parser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Type\ObjectType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -29,6 +29,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -51,15 +52,14 @@ final class AnnotateThrowablesRector extends AbstractRector
     /**
      * @var array
      */
-    private $foundThrownClasses = [];
-
-    /** @var \PhpParser\Parser $parser */
-    private $parser;
+    private $throwablesToAnnotate = [];
 
     /**
-     * @param \PhpParser\Parser $parser
+     * @var Parser
      */
-    public function __construct(\PhpParser\Parser $parser)
+    private $parser;
+
+    public function __construct(Parser $parser)
     {
         $this->parser = $parser;
     }
@@ -119,96 +119,75 @@ PHP
 
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Throw_) {
-            if ($this->isThrowableAnnotated($node)) {
-                return null;
-            }
+        $this->throwablesToAnnotate = [];
+        if ($this->hasThrowablesToAnnotate($node)) {
+            $this->annotateThrowables($node);
+            return $node;
+        }
 
-            $this->annotateThrowable($node);
+        return null;
+    }
+
+    private function hasThrowablesToAnnotate(Node $node): bool
+    {
+        if ($node instanceof Throw_) {
+            $this->analyzeStmtThrow($node);
         }
 
         if ($node instanceof FuncCall) {
-            if (! $this->hasFunctionAnnotatedThrowables($node)) {
-                return null;
-            }
-
-            $this->annotateThrowablesFromFunctionCall($node);
+            $this->analyzeStmtFuncCall($node);
         }
 
-        return $node;
+        return count($this->throwablesToAnnotate) > 0;
     }
 
-    private function hasFunctionAnnotatedThrowables(FuncCall $funcCall): bool
+    private function annotateThrowables(Node $node): void
     {
-        $name = $funcCall->name;
-        if (! $name instanceof FullyQualified) {
-            return false;
+        $callee = $this->identifyCallee($node);
+
+        if ($callee === null) {
+            return;
         }
 
-        $functionFqn = implode('\\', $funcCall->name->parts);
-        $thrownClasses = $this->extractFunctionThrowsFromDockblock($functionFqn);
-        $callee = $this->identifyCalleeFromFunctionCall($funcCall);
-        $throwsToAnnotate = [];
+        $phpDocInfo = $callee->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        if ($callee instanceof ClassMethod) {
-            $class = $callee->getAttribute('className');
-            $method = $callee->getAttribute('methodName');
-
-            if (is_string($class) && is_string($method)) {
-                $alreadyAnnotatedThrownClasses = $this->extractMethodAnnotatedThrowsFromDocblock($class, $method);
-
-                foreach ($thrownClasses as $thrownClass) {
-                    if (false === in_array($thrownClass, $alreadyAnnotatedThrownClasses)) {
-                        $throwsToAnnotate[] = $thrownClass;
-                    }
-                }
-            }
+        foreach ($this->throwablesToAnnotate as $throwableToAnnotate) {
+            $docComment = $this->buildThrowsDocComment($throwableToAnnotate);
+            $phpDocInfo->addPhpDocTagNode($docComment);
         }
-
-        $this->foundThrownClasses = $throwsToAnnotate;
-
-        return ! empty($this->foundThrownClasses);
     }
 
-    private function isThrowableAnnotated(Throw_ $throw): bool
+    private function analyzeStmtThrow(Throw_ $throw): void
     {
-        $phpDocInfo = $this->getThrowingStmtPhpDocInfo($throw);
-        $identifiedThrownThrowables = $this->identifyThrownThrowables($throw);
+        $foundThrownThrowables = [];
 
-        foreach ($phpDocInfo->getThrowsTypes() as $throwsType) {
-            if (! $throwsType instanceof ObjectType) {
-                continue;
-            }
-
-            $className = $throwsType instanceof ShortenedObjectType
-                ? $throwsType->getFullyQualifiedName()
-                : $throwsType->getClassName();
-
-            if (! in_array($className, $identifiedThrownThrowables, true)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private function identifyThrownThrowables(Throw_ $throw): array
-    {
-        if ($throw->expr instanceof New_) {
-            return [$this->getName($throw->expr->class)];
+        // throw new \Throwable
+        if ($throw->expr instanceof New_ && $this->getName($throw->expr->class) !== null) {
+            $foundThrownThrowables[] = $this->getName($throw->expr->class);
         }
 
         if ($throw->expr instanceof StaticCall) {
-            return $this->identifyThrownThrowablesInStaticCall($throw->expr);
+            $foundThrownThrowables = $this->identifyThrownThrowablesInStaticCall($throw->expr);
         }
 
         if ($throw->expr instanceof MethodCall) {
-            return $this->identifyThrownThrowablesInMethodCall($throw->expr);
+            $foundThrownThrowables = $this->identifyThrownThrowablesInMethodCall($throw->expr);
         }
 
-        return [];
+        $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($throw);
+
+        $this->compareThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+    }
+
+    private function analyzeStmtFuncCall(FuncCall $funcCall): void
+    {
+        $name = $funcCall->name;
+        if (! $name instanceof FullyQualified) {
+            return;
+        }
+        $foundThrownThrowables = $this->extractFunctionAnnotatedThrows($name);
+        $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($funcCall);
+        $this->compareThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
     }
 
     private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
@@ -222,11 +201,7 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        $classFqn = implode('\\', $thrownClass->parts);
-        $methodNode = $methodCall->var->getAttribute('nextNode');
-        $methodName = $methodNode->name;
-
-        return $this->extractMethodReturnsFromDocblock($classFqn, $methodName);
+        return $this->extractMethodReturns($thrownClass, $methodCall->var->getAttribute('nextNode'));
     }
 
     private function identifyThrownThrowablesInStaticCall(StaticCall $staticCall): array
@@ -236,227 +211,173 @@ PHP
         if (! $thrownClass instanceof FullyQualified) {
             throw new ShouldNotHappenException();
         }
-        $classFqn = implode('\\', $thrownClass->parts);
-        $methodNode = $thrownClass->getAttribute('nextNode');
-        $methodName = $methodNode->name;
 
-        return $this->extractMethodReturnsFromDocblock($classFqn, $methodName);
+        return $this->extractMethodReturns($thrownClass, $thrownClass->getAttribute('nextNode'));
     }
 
-    private function extractMethodReturnsFromDocblock(string $classFqn, string $methodName): array
+    private function extractMethodReturns(FullyQualified $fullyQualified, $methodNode): array
     {
+        $classFqn = implode('\\', $fullyQualified->parts);
+        $methodName = $methodNode->name;
         $reflectedMethod = new ReflectionMethod($classFqn, $methodName);
         $methodDocblock = $reflectedMethod->getDocComment();
 
-        // copied from https://github.com/nette/di/blob/d1c0598fdecef6d3b01e2ace5f2c30214b3108e6/src/DI/Autowiring.php#L215
-        $result = Strings::match((string) $methodDocblock, self::RETURN_DOCBLOCK_TAG_REGEX);
-        if ($result === null) {
+        if (! is_string($methodDocblock)) {
             return [];
         }
 
-        $returnTags = explode('|', str_replace('@return ', '', $result[0]));
+        $returnTags = $this->extractTagFromStringedDocblock($methodDocblock, '@return');
+
         $returnClasses = [];
         foreach ($returnTags as $returnTag) {
             $returnClasses[] = Reflection::expandClassName($returnTag, $reflectedMethod->getDeclaringClass());
         }
 
-        $this->foundThrownClasses = $returnClasses;
-
         return $returnClasses;
     }
 
-    private function extractMethodAnnotatedThrowsFromDocblock(string $classFqn, string $methodName):array
+    private function extractFunctionAnnotatedThrows(FullyQualified $fullyQualified): array
     {
-        $reflectedMethod = new ReflectionMethod($classFqn, $methodName);
-        $methodDocblock = $reflectedMethod->getDocComment();
-
-        // copied from https://github.com/nette/di/blob/d1c0598fdecef6d3b01e2ace5f2c30214b3108e6/src/DI/Autowiring.php#L215
-        $result = Strings::matchAll((string) $methodDocblock, self::THROWS_DOCBLOCK_TAG_REGEX);
-        if ($result === null || empty($result)) {
-            return [];
-        }
-
-        $throwTags = array_merge(...$result);
-        $thrownClasses = [];
-        foreach ($throwTags as $throwTag) {
-            $throwTag = str_replace('@throws ', '', $throwTag);
-            if (false === class_exists($throwTag)) {
-                $throwTag = Reflection::expandClassName($throwTag, $reflectedMethod->getDeclaringClass());
-            }
-
-            if (class_exists($throwTag)) {
-                $thrownClasses[] = ltrim($throwTag, '\\');
-            }
-        }
-
-        return $thrownClasses;
-    }
-
-    private function extractFunctionThrowsFromDockblock(string $functionFqn): array
-    {
+        $functionFqn = implode('\\', $fullyQualified->parts);
         $reflectedFunction = new ReflectionFunction($functionFqn);
         $functionDocblock = $reflectedFunction->getDocComment();
 
+        if (! is_string($functionDocblock)) {
+            return [];
+        }
+
+        $annotatedThrownClasses = $this->extractTagFromStringedDocblock($functionDocblock, '@throws');
+
+        return $this->expandClassNamesAnnotatedInFunction($reflectedFunction, $annotatedThrownClasses);
+    }
+
+    private function extractTagFromStringedDocblock(string $dockblock, string $tagName): array
+    {
+        $regEx = null;
+        switch ($tagName) {
+            case '@throws':
+                $regEx = self::THROWS_DOCBLOCK_TAG_REGEX;
+                break;
+            case '@return':
+                $regEx = self::RETURN_DOCBLOCK_TAG_REGEX;
+                break;
+            default:
+                throw new ShouldNotHappenException();
+        }
         // copied from https://github.com/nette/di/blob/d1c0598fdecef6d3b01e2ace5f2c30214b3108e6/src/DI/Autowiring.php#L215
-        $result = Strings::matchAll((string) $functionDocblock, self::THROWS_DOCBLOCK_TAG_REGEX);
+        $result = Strings::matchAll($dockblock, $regEx);
         if (empty($result)) {
             return [];
         }
 
-        $uses = $this->getUsesFromReflectedFunction($reflectedFunction);
-        $throwsClasses = [];
-        foreach ($result as $throwsTag) {
-            $thrownClass = str_replace('@throws ', '', $throwsTag[0]);
-            $thrownClass = ltrim($thrownClass, '\\');
+        $matchingTags = array_merge(...$result);
+        $explode = static function ($matchingTag) use ($tagName): array {
+            // This is required as @return, for example, can be written as "@return ClassOne|ClassTwo|ClassThree"
+            return explode('|', str_replace($tagName . ' ', '', $matchingTag));
+        };
+        $matchingTags = array_map($explode, $matchingTags);
 
-            if (! class_exists('\\' . $thrownClass)) {
-                $thrownClassParts = explode('\\', $thrownClass);
-                $thrownClassShortName = $thrownClassParts[count($thrownClassParts) - 1];
+        return array_merge(...$matchingTags);
+    }
 
-                if (key_exists($thrownClassShortName, $uses)) {
-                    $thrownClass = $uses[$thrownClassShortName];
-                }
+    private function extractAlreadyAnnotatedThrowables(Node $node): array
+    {
+        $alreadyAnnotatedThrowables = [];
+        $callee = $this->identifyCallee($node);
+
+        if ($callee === null) {
+            return $alreadyAnnotatedThrowables;
+        }
+
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $callee->getAttribute(AttributeKey::PHP_DOC_INFO);
+        foreach ($phpDocInfo->getThrowsTypes() as $throwsType) {
+            $thrownClass = null;
+            if ($throwsType instanceof ShortenedObjectType) {
+                $thrownClass = $throwsType->getFullyQualifiedName();
             }
 
-            $throwsClasses[] = $thrownClass;
+            if ($throwsType instanceof FullyQualifiedObjectType) {
+                $thrownClass = $throwsType->getClassName();
+            }
+
+            if ($thrownClass !== null) {
+                $alreadyAnnotatedThrowables[] = $thrownClass;
+            }
         }
 
-        return $throwsClasses;
+        return $alreadyAnnotatedThrowables;
     }
 
-    private function annotateThrowable(Throw_ $node): void
+    private function compareThrowables(array $foundThrownThrowables, array $alreadyAnnotatedThrowables): void
     {
-        $throwClass = $this->buildFQN($node);
-        if ($throwClass !== null) {
-            $this->foundThrownClasses[] = $throwClass;
-        }
+        $normalizeNamespace = static function (string $class): string {
+            $class = ltrim($class, '\\');
+            return '\\' . $class;
+        };
 
-        if (empty($this->foundThrownClasses)) {
-            return;
-        }
+        $foundThrownThrowables = array_map($normalizeNamespace, $foundThrownThrowables);
+        $alreadyAnnotatedThrowables = array_map($normalizeNamespace, $alreadyAnnotatedThrowables);
 
-        foreach ($this->foundThrownClasses as $thrownClass) {
-            $docComment = $this->buildThrowsDocComment($thrownClass);
+        $filterClasses = static function (string $class): bool {
+            return class_exists($class) || interface_exists($class);
+        };
 
-            $throwingStmtPhpDocInfo = $this->getThrowingStmtPhpDocInfo($node);
-            $throwingStmtPhpDocInfo->addPhpDocTagNode($docComment);
-        }
+        $foundThrownThrowables = array_filter($foundThrownThrowables, $filterClasses);
+        $alreadyAnnotatedThrowables = array_filter($alreadyAnnotatedThrowables, $filterClasses);
 
-        $this->foundThrownClasses = [];
-    }
-
-    private function annotateThrowablesFromFunctionCall(FuncCall $funcCall): void
-    {
-        $thrownClasses = $this->foundThrownClasses;
-        $this->foundThrownClasses = [];
-
-        if (empty($thrownClasses)) {
-            return;
-        }
-
-        $calleePhpDocInfo = $this->getCalleeDocBlockFromFuncCall($funcCall);
-        if (null === $calleePhpDocInfo) {
-            return;
-        }
-
-        foreach ($thrownClasses as $thrownClass) {
-            $docComment = $this->buildThrowsDocComment($thrownClass);
-            $calleePhpDocInfo->addPhpDocTagNode($docComment);
+        foreach ($foundThrownThrowables as $foundThrownThrowable) {
+            if (! in_array($foundThrownThrowable, $alreadyAnnotatedThrowables, true)) {
+                $this->throwablesToAnnotate[] = $foundThrownThrowable;
+            }
         }
     }
 
     private function buildThrowsDocComment(string $throwableClass): AttributeAwarePhpDocTagNode
     {
-        $throwableClass = ltrim($throwableClass, '\\');
-        $genericTagValueNode = new ThrowsTagValueNode(new IdentifierTypeNode('\\' . $throwableClass), '');
+        $genericTagValueNode = new ThrowsTagValueNode(new IdentifierTypeNode($throwableClass), '');
 
         return new AttributeAwarePhpDocTagNode('@throws', $genericTagValueNode);
     }
 
-    private function buildFQN(Throw_ $throw): ?string
+    private function identifyCallee(Node $node): ?Node
     {
-        if (! $throw->expr instanceof New_) {
-            return null;
-        }
-
-        return $this->getName($throw->expr->class);
-    }
-
-    private function getThrowingStmtPhpDocInfo(Throw_ $throw): PhpDocInfo
-    {
-        $method = $throw->getAttribute(AttributeKey::METHOD_NODE);
-        $function = $throw->getAttribute(AttributeKey::FUNCTION_NODE);
-
-        /** @var Node|null $stmt */
-        $stmt = $method ?? $function ?? null;
-        if ($stmt === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
-    }
-
-    private function getUsesFromReflectedFunction(ReflectionFunction $reflectionFunction): array
-    {
-        $functionNode = $this->parseFunction($reflectionFunction);
-        if ($functionNode === false) {
-            return [];
-        }
-
-        $uses = [];
-        foreach ($functionNode->stmts as $stmt) {
-            if (! $stmt instanceof Use_) {
-                continue;
-            }
-
-            $use = $stmt->uses[0];
-            if (! $use instanceof UseUse) {
-                continue;
-            }
-
-            $parts = $use->name->parts;
-            $uses[$parts[count($parts) - 1]] = implode('\\', $parts);
-        }
-
-        return $uses;
-    }
-
-    private function getCalleeDocBlockFromFuncCall(FuncCall $funcCall):?PhpDocInfo
-    {
-        $callee = $this->identifyCalleeFromFunctionCall($funcCall);
-        if (null === $callee) {
-            return null;
-        }
-
-        $calleePhpDocInfo = $callee->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (null === $calleePhpDocInfo) {
-            return null;
-        }
-
-        return $calleePhpDocInfo;
-    }
-
-    private function identifyCalleeFromFunctionCall(FuncCall $funcCall):?ClassMethod
-    {
-        $callee = $funcCall->getAttribute('previousExpression');
-        $i = 0;
+        $callee = $node->getAttribute('previousExpression');
         while (true) {
-            if ($callee instanceof ClassMethod) {
+            if (
+                $callee instanceof ClassMethod ||
+                $callee instanceof Function_
+            ) {
                 break;
             }
 
-            // Anti loop
-            if ($i >= 100) {
-                return null;
-            }
-
-            $i++;
+            $callee = $callee->getAttribute('previousExpression');
         }
 
         return $callee;
     }
 
-    private function parseFunction(ReflectionFunction $reflectionFunction):?Namespace_
+    private function expandClassNamesAnnotatedInFunction(
+        ReflectionFunction $reflectionFunction,
+        array $classNames
+    ): array {
+        $functionNode = $this->reflectionFunctionGetNode($reflectionFunction);
+        if (! $functionNode instanceof Namespace_) {
+            return [];
+        }
+
+        $uses = $this->getUses($functionNode);
+
+        $expandedClasses = [];
+        foreach ($classNames as $className) {
+            $shortClassName = $this->getShortName($className);
+            $expandedClasses[] = $uses[$shortClassName] ?? $className;
+        }
+
+        return $expandedClasses;
+    }
+
+    private function reflectionFunctionGetNode(ReflectionFunction $reflectionFunction): ?Namespace_
     {
         $fileName = $reflectionFunction->getFileName();
         if (! is_string($fileName)) {
@@ -475,5 +396,25 @@ PHP
         }
 
         return $ast;
+    }
+
+    private function getUses(Namespace_ $node): array
+    {
+        $uses = [];
+        foreach ($node->stmts as $stmt) {
+            if (! $stmt instanceof Use_) {
+                continue;
+            }
+
+            $use = $stmt->uses[0];
+            if (! $use instanceof UseUse) {
+                continue;
+            }
+
+            $parts = $use->name->parts;
+            $uses[$parts[count($parts) - 1]] = implode('\\', $parts);
+        }
+
+        return $uses;
     }
 }
