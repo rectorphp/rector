@@ -35,6 +35,7 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use ReflectionFunction;
 use ReflectionMethod;
+use Throwable;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\AnnotateThrowablesRectorTest
@@ -123,8 +124,6 @@ PHP
 
     /**
      * @param Node|Throw_|MethodCall|FuncCall $node
-     *
-     * @return Node|null
      */
     public function refactor(Node $node): ?Node
     {
@@ -236,24 +235,27 @@ PHP
         return $this->extractMethodReturns($thrownClass, $methodName);
     }
 
-    private function extractMethodReturns(FullyQualified $fullyQualified, Identifier $methodNode): array
+    private function extractMethodReturns(FullyQualified $fullyQualified, Identifier $identifier): array
     {
-        return $this->extractTagsFromMethodDockblock($fullyQualified, $methodNode, '@return');
+        return $this->extractTagsFromMethodDockblock($fullyQualified, $identifier, '@return');
     }
 
-    private function extractMethodThrows(FullyQualified $fullyQualified, Identifier $methodNode):array
+    private function extractMethodThrows(FullyQualified $fullyQualified, Identifier $identifier): array
     {
-        return $this->extractTagsFromMethodDockblock($fullyQualified, $methodNode, '@throws');
+        return $this->extractTagsFromMethodDockblock($fullyQualified, $identifier, '@throws');
     }
 
-    private function extractTagsFromMethodDockblock(FullyQualified $fullyQualified, Identifier $methodNode, string $tagName):array
-    {
+    private function extractTagsFromMethodDockblock(
+        FullyQualified $fullyQualified,
+        Identifier $identifier,
+        string $tagName
+    ): array {
         $classFqn = $this->getName($fullyQualified);
-        $methodName = $methodNode->name;
+        $methodName = $identifier->name;
 
         try {
             $reflectedMethod = new ReflectionMethod($classFqn, $methodName);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             return [];
         }
 
@@ -431,7 +433,7 @@ PHP
         return $ast;
     }
 
-    private function getClassFromMethodCall(MethodCall $methodCall):?FullyQualified
+    private function getClassFromMethodCall(MethodCall $methodCall): ?FullyQualified
     {
         $class = null;
         $previousExpression = $methodCall->getAttribute('previousExpression');
@@ -449,7 +451,7 @@ PHP
          */
         if ($previousExpression instanceof ClassMethod) {
             $params = $previousExpression->params;
-            foreach($params as $param) {
+            foreach ($params as $param) {
                 if ($param->var->name === $methodCall->var->name) {
                     $class = $param->type;
                     break;
