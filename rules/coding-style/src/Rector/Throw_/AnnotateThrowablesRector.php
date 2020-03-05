@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
@@ -36,7 +37,6 @@ use Rector\PHPStan\Type\ShortenedObjectType;
 use ReflectionFunction;
 use ReflectionMethod;
 use Throwable;
-use PhpParser\Node\Stmt\ClassLike;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\AnnotateThrowablesRectorTest
@@ -442,40 +442,30 @@ PHP
         // [PhpParser\Node\Expr\Assign] $variable = new Class()
         if ($previousExpression instanceof Expression) {
             $class = $previousExpression->expr->expr->class;
+            return $class instanceof FullyQualified ? $class : null;
         }
 
         if ($previousExpression instanceof ClassMethod) {
-            /*
-             * method(Param $param)
-             * {
-             *     $this->method();
-             * }
-             */
+            // $ this -> method();
             $stmts = $previousExpression->stmts;
             foreach ($stmts as $stmt) {
-                if ('this' === $stmt->expr->var->name) {
+                if ($stmt->expr->var->name === 'this') {
                     $class = $previousExpression->name->getAttribute(ClassLike::class)->extends;
+                    return $class instanceof FullyQualified ? $class : null;
                 }
             }
 
-            // extended class: $previousExpression->name->getAttribute('PhpParser\Node\Stmt\ClassLike')->extends->parts
-
-            /*
-             * method(Param $param)
-             * {
-             *     $param->method();
-             * }
-             */
+            // $ param -> method();
             $params = $previousExpression->params;
             foreach ($params as $param) {
                 if ($param->var->name === $methodCall->var->name) {
                     $class = $param->type;
-                    break;
+                    return $class instanceof FullyQualified ? $class : null;
                 }
             }
         }
 
-        return $class instanceof FullyQualified ? $class : null;
+        return null;
     }
 
     private function getUses(Namespace_ $node): array
