@@ -121,6 +121,11 @@ PHP
         );
     }
 
+    /**
+     * @param Node|Throw_|MethodCall|FuncCall $node
+     *
+     * @return Node|null
+     */
     public function refactor(Node $node): ?Node
     {
         $this->throwablesToAnnotate = [];
@@ -184,7 +189,7 @@ PHP
 
         $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($throw);
 
-        $this->compareThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+        $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
     }
 
     private function analyzeStmtFuncCall(FuncCall $funcCall): void
@@ -195,14 +200,14 @@ PHP
         }
         $foundThrownThrowables = $this->extractFunctionAnnotatedThrows($name);
         $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($funcCall);
-        $this->compareThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+        $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
     }
 
     private function analyzeStmtMethodCall(MethodCall $methodCall): void
     {
         $foundThrownThrowables = $this->identifyThrownThrowablesInMethodCall($methodCall);
         $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($methodCall);
-        $this->compareThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+        $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
     }
 
     private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
@@ -243,7 +248,7 @@ PHP
 
     private function extractTagsFromMethodDockblock(FullyQualified $fullyQualified, Identifier $methodNode, string $tagName):array
     {
-        $classFqn = implode('\\', $fullyQualified->parts);
+        $classFqn = $this->getName($fullyQualified);
         $methodName = $methodNode->name;
 
         try {
@@ -341,7 +346,7 @@ PHP
         return $alreadyAnnotatedThrowables;
     }
 
-    private function compareThrowables(array $foundThrownThrowables, array $alreadyAnnotatedThrowables): void
+    private function diffThrowables(array $foundThrownThrowables, array $alreadyAnnotatedThrowables): void
     {
         $normalizeNamespace = static function (string $class): string {
             $class = ltrim($class, '\\');
@@ -358,11 +363,7 @@ PHP
         $foundThrownThrowables = array_filter($foundThrownThrowables, $filterClasses);
         $alreadyAnnotatedThrowables = array_filter($alreadyAnnotatedThrowables, $filterClasses);
 
-        foreach ($foundThrownThrowables as $foundThrownThrowable) {
-            if (! in_array($foundThrownThrowable, $alreadyAnnotatedThrowables, true)) {
-                $this->throwablesToAnnotate[] = $foundThrownThrowable;
-            }
-        }
+        $this->throwablesToAnnotate = array_diff($foundThrownThrowables, $alreadyAnnotatedThrowables);
     }
 
     private function buildThrowsDocComment(string $throwableClass): AttributeAwarePhpDocTagNode
