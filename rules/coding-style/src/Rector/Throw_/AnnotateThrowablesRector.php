@@ -43,13 +43,15 @@ final class AnnotateThrowablesRector extends AbstractRector
 {
     /**
      * @var string
+     * @link https://regex101.com/r/oEiq3y/3
      */
-    private const RETURN_DOCBLOCK_TAG_REGEX = '#@return[ a-zA-Z0-9-_\|\\\t]+#';
+    private const RETURN_DOCBLOCK_TAG_REGEX = '#@return[ a-zA-Z0-9_\|\\\t]+#';
 
     /**
      * @var string
+     * @see https://regex101.com/r/fi33R2/1
      */
-    private const THROWS_DOCBLOCK_TAG_REGEX = '#@throws[ a-zA-Z0-9-_\|\\\t]+#';
+    private const THROWS_DOCBLOCK_TAG_REGEX = '#@throws[ a-zA-Z0-9_\|\\\t]+#';
 
     /**
      * @var array
