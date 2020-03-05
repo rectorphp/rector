@@ -36,6 +36,7 @@ use Rector\PHPStan\Type\ShortenedObjectType;
 use ReflectionFunction;
 use ReflectionMethod;
 use Throwable;
+use PhpParser\Node\Stmt\ClassLike;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\AnnotateThrowablesRectorTest
@@ -443,13 +444,28 @@ PHP
             $class = $previousExpression->expr->expr->class;
         }
 
-        /*
-         * method(Param $param)
-         * {
-         *     $param->method();
-         * }
-         */
         if ($previousExpression instanceof ClassMethod) {
+            /*
+             * method(Param $param)
+             * {
+             *     $this->method();
+             * }
+             */
+            $stmts = $previousExpression->stmts;
+            foreach ($stmts as $stmt) {
+                if ('this' === $stmt->expr->var->name) {
+                    $class = $previousExpression->name->getAttribute(ClassLike::class)->extends;
+                }
+            }
+
+            // extended class: $previousExpression->name->getAttribute('PhpParser\Node\Stmt\ClassLike')->extends->parts
+
+            /*
+             * method(Param $param)
+             * {
+             *     $param->method();
+             * }
+             */
             $params = $previousExpression->params;
             foreach ($params as $param) {
                 if ($param->var->name === $methodCall->var->name) {
