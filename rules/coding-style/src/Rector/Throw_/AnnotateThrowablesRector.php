@@ -157,7 +157,7 @@ PHP
 
     private function annotateThrowables(Node $node): void
     {
-        $callee = $this->identifyCallee($node);
+        $callee = $this->identifyCaller($node);
 
         if ($callee === null) {
             return;
@@ -268,7 +268,7 @@ PHP
 
     private function extractAlreadyAnnotatedThrowables(Node $node): array
     {
-        $callee = $this->identifyCallee($node);
+        $callee = $this->identifyCaller($node);
 
         return $callee === null ? [] : $this->phpDocTagsFinder->extractTagsThrowsFromNode($callee);
     }
@@ -302,7 +302,7 @@ PHP
         return new AttributeAwarePhpDocTagNode('@throws', $genericTagValueNode);
     }
 
-    private function identifyCallee(Node $node): ?Node
+    private function identifyCaller(Node $node): ?Node
     {
         return $this->betterNodeFinder->findFirstAncestorInstancesOf($node, [ClassMethod::class, Function_::class]);
     }
