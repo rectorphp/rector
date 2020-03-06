@@ -41,7 +41,7 @@ final class ClassMethodReflectionFactory
         return null;
     }
 
-    private function createReflectionMethodIfExists(string $class, string $method): ?ReflectionMethod
+    public function createReflectionMethodIfExists(string $class, string $method): ?ReflectionMethod
     {
         if (! method_exists($class, $method)) {
             return null;
