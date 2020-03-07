@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
@@ -73,8 +74,13 @@ final class ClassResolver
         /** @var Stmt $stmt */
         foreach ($stmts as $stmt) {
             if ($stmt->expr->var->name === 'this') {
-                $class = $classMethod->name->getAttribute(ClassLike::class)->extends;
-                return $class instanceof FullyQualified ? $class : null;
+                $class = $classMethod->name->getAttribute(ClassLike::class)->name;
+
+                if (! $class instanceof Identifier) {
+                    return null;
+                }
+
+                return new FullyQualified($class->getAttribute('className'));
             }
         }
 
