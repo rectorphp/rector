@@ -54,37 +54,20 @@ final class ClassResolver
 
     private function resolveFromClassMethod(ClassMethod $classMethod, MethodCall $methodCall): ?FullyQualified
     {
-        $class = $this->tryToResolveClassMethodStmts($classMethod);
-
-        if ($class === null) {
-            $class = $this->tryToResolveClassMethodParams($classMethod, $methodCall);
-        }
-
-        return $class;
+        return 'this' === $methodCall->var->name
+            ? $this->tryToResolveClassMethodFromThis($classMethod)
+            : $this->tryToResolveClassMethodParams($classMethod, $methodCall);
     }
 
-    private function tryToResolveClassMethodStmts(ClassMethod $classMethod): ?FullyQualified
+    private function tryToResolveClassMethodFromThis(ClassMethod $classMethod): ?FullyQualified
     {
-        // $ this -> method();
-        $stmts = $classMethod->stmts;
-        if ($stmts === null) {
+        $class = $classMethod->name->getAttribute(ClassLike::class)->name;
+
+        if (! $class instanceof Identifier) {
             return null;
         }
 
-        /** @var Stmt $stmt */
-        foreach ($stmts as $stmt) {
-            if ($stmt->expr->var->name === 'this') {
-                $class = $classMethod->name->getAttribute(ClassLike::class)->name;
-
-                if (! $class instanceof Identifier) {
-                    return null;
-                }
-
-                return new FullyQualified($class->getAttribute('className'));
-            }
-        }
-
-        return null;
+        return new FullyQualified($class->getAttribute('className'));
     }
 
     private function tryToResolveClassMethodParams(ClassMethod $classMethod, MethodCall $methodCall): ?FullyQualified
