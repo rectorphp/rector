@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -54,7 +53,12 @@ final class ClassResolver
 
     private function resolveFromClassMethod(ClassMethod $classMethod, MethodCall $methodCall): ?FullyQualified
     {
-        return 'this' === $methodCall->var->name
+        $var = $methodCall->var;
+        if (! $var instanceof Variable) {
+            return null;
+        }
+
+        return $var->name === 'this'
             ? $this->tryToResolveClassMethodFromThis($classMethod)
             : $this->tryToResolveClassMethodParams($classMethod, $methodCall);
     }
