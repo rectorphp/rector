@@ -13,7 +13,6 @@ use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTestCase
@@ -75,7 +74,12 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         return $temporaryFilePath;
     }
 
-    protected function createTemporaryFilePath(SmartFileInfo $fileInfo, string $file): string
+    protected function getRectorInterface(): string
+    {
+        return FileSystemRectorInterface::class;
+    }
+
+    private function createTemporaryFilePath(SmartFileInfo $fileInfo, string $file): string
     {
         $temporaryFilePath = sprintf(
             '%s%sFixture%s%s',
@@ -88,17 +92,6 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         FileSystem::copy($file, $temporaryFilePath);
 
         return $temporaryFilePath;
-    }
-
-    protected function getRectorInterface(): string
-    {
-        return FileSystemRectorInterface::class;
-    }
-
-    protected function setParameter(string $name, $value): void
-    {
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-        $parameterProvider->changeParameter($name, $value);
     }
 
     private function createContainerWithProvidedRector(): void
