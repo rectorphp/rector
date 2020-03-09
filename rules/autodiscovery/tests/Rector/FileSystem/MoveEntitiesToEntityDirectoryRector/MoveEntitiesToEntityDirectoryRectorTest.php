@@ -13,12 +13,12 @@ final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractFileSystemRe
     /**
      * @dataProvider provideData()
      */
-    public function test(string $originalFile, string $expectedFileLocation, string $expectedFileContent): void
+    public function test(string $originalFile, string $expectedFileLocation): void
     {
         $this->doTestFile($originalFile);
 
         $this->assertFileExists($expectedFileLocation);
-        $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
+        $this->assertFileEquals($expectedFileLocation, $expectedFileLocation);
     }
 
     public function provideData(): Iterator
@@ -26,7 +26,6 @@ final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractFileSystemRe
         yield [
             __DIR__ . '/Source/Controller/RandomEntity.php',
             __DIR__ . '/Source/Entity/Fixture/RandomEntity.php',
-            __DIR__ . '/Expected/ExpectedRandomEntity.php',
         ];
     }
 
