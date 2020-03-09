@@ -42,8 +42,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
 
     protected function tearDown(): void
     {
-        $testReflectionClass = new ReflectionClass(static::class);
-        $testDirectory = (string) dirname((string) $testReflectionClass->getFileName());
+        $testDirectory = $this->resolveTestDirectory();
 
         if (file_exists($testDirectory . '/Source/Fixture')) {
             FileSystem::delete($testDirectory . '/Source/Fixture');
@@ -54,11 +53,19 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         }
     }
 
+    protected function doTestFileWithoutAutoload(string $file): string
+    {
+        $temporaryFilePath = $this->createTemporaryFilePathFromFilePath($file);
+
+        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($temporaryFilePath));
+        $this->removedAndAddedFilesProcessor->run();
+
+        return $temporaryFilePath;
+    }
+
     protected function doTestFile(string $file): string
     {
-        $fileInfo = new SmartFileInfo($file);
-
-        $temporaryFilePath = $this->createTemporaryFilePath($fileInfo, $file);
+        $temporaryFilePath = $this->createTemporaryFilePathFromFilePath($file);
 
         require_once $temporaryFilePath;
 
@@ -117,5 +124,18 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $thisClass = Strings::after(Strings::webalize(static::class), '-', -1);
 
         return sprintf(sys_get_temp_dir() . '/rector_temp_tests/' . $thisClass . 'file_system_rector.yaml');
+    }
+
+    private function createTemporaryFilePathFromFilePath(string $file): string
+    {
+        $fileInfo = new SmartFileInfo($file);
+        return $this->createTemporaryFilePath($fileInfo, $file);
+    }
+
+    private function resolveTestDirectory(): string
+    {
+        $testReflectionClass = new ReflectionClass(static::class);
+
+        return (string) dirname((string) $testReflectionClass->getFileName());
     }
 }
