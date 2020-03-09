@@ -52,7 +52,7 @@ final class RectorStrings
         return self::camelCaseToGlue($input, '_');
     }
 
-    public function underscoreToCamelCase(string $input): string
+    public static function underscoreToCamelCase(string $input): string
     {
         $nameParts = explode('_', $input);
         $camelCase = '';
