@@ -8,15 +8,26 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ClassResolver
 {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(NodeNameResolver $nodeNameResolver)
+    {
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
+
     public function getClassFromMethodCall(MethodCall $methodCall): ?FullyQualified
     {
         $class = null;
@@ -53,32 +64,25 @@ final class ClassResolver
 
     private function resolveFromClassMethod(ClassMethod $classMethod, MethodCall $methodCall): ?FullyQualified
     {
-        $class = $this->tryToResolveClassMethodStmts($classMethod);
-
-        if ($class === null) {
-            $class = $this->tryToResolveClassMethodParams($classMethod, $methodCall);
-        }
-
-        return $class;
-    }
-
-    private function tryToResolveClassMethodStmts(ClassMethod $classMethod): ?FullyQualified
-    {
-        // $ this -> method();
-        $stmts = $classMethod->stmts;
-        if ($stmts === null) {
+        $var = $methodCall->var;
+        if (! $var instanceof Variable) {
             return null;
         }
 
-        /** @var Stmt $stmt */
-        foreach ($stmts as $stmt) {
-            if ($stmt->expr->var->name === 'this') {
-                $class = $classMethod->name->getAttribute(ClassLike::class)->extends;
-                return $class instanceof FullyQualified ? $class : null;
-            }
+        return $this->nodeNameResolver->isName($var, 'this')
+            ? $this->tryToResolveClassMethodFromThis($classMethod)
+            : $this->tryToResolveClassMethodParams($classMethod, $methodCall);
+    }
+
+    private function tryToResolveClassMethodFromThis(ClassMethod $classMethod): ?FullyQualified
+    {
+        $class = $classMethod->name->getAttribute(ClassLike::class)->name;
+
+        if (! $class instanceof Identifier) {
+            return null;
         }
 
-        return null;
+        return new FullyQualified($class->getAttribute('className'));
     }
 
     private function tryToResolveClassMethodParams(ClassMethod $classMethod, MethodCall $methodCall): ?FullyQualified

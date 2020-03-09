@@ -41,13 +41,13 @@ final class ClassMethodReflectionHelper
             return [];
         }
 
-        $returnTags = $this->phpDocTagsFinder->extractTagsFromStringedDocblock($methodDocblock, $tag);
+        $extractedTags = $this->phpDocTagsFinder->extractTagsFromStringedDocblock($methodDocblock, $tag);
 
-        $returnClasses = [];
-        foreach ($returnTags as $returnTag) {
-            $returnClasses[] = Reflection::expandClassName($returnTag, $reflectedMethod->getDeclaringClass());
+        $classes = [];
+        foreach ($extractedTags as $returnTag) {
+            $classes[] = Reflection::expandClassName($returnTag, $reflectedMethod->getDeclaringClass());
         }
 
-        return $returnClasses;
+        return $classes;
     }
 }
