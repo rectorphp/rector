@@ -13,7 +13,6 @@ use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTestCase
@@ -42,8 +41,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
 
     protected function tearDown(): void
     {
-        $testReflectionClass = new ReflectionClass(static::class);
-        $testDirectory = (string) dirname((string) $testReflectionClass->getFileName());
+        $testDirectory = $this->resolveTestDirectory();
 
         if (file_exists($testDirectory . '/Source/Fixture')) {
             FileSystem::delete($testDirectory . '/Source/Fixture');
@@ -54,11 +52,19 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         }
     }
 
+    protected function doTestFileWithoutAutoload(string $file): string
+    {
+        $temporaryFilePath = $this->createTemporaryFilePathFromFilePath($file);
+
+        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($temporaryFilePath));
+        $this->removedAndAddedFilesProcessor->run();
+
+        return $temporaryFilePath;
+    }
+
     protected function doTestFile(string $file): string
     {
-        $fileInfo = new SmartFileInfo($file);
-
-        $temporaryFilePath = $this->createTemporaryFilePath($fileInfo, $file);
+        $temporaryFilePath = $this->createTemporaryFilePathFromFilePath($file);
 
         require_once $temporaryFilePath;
 
@@ -68,7 +74,12 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         return $temporaryFilePath;
     }
 
-    protected function createTemporaryFilePath(SmartFileInfo $fileInfo, string $file): string
+    protected function getRectorInterface(): string
+    {
+        return FileSystemRectorInterface::class;
+    }
+
+    private function createTemporaryFilePath(SmartFileInfo $fileInfo, string $file): string
     {
         $temporaryFilePath = sprintf(
             '%s%sFixture%s%s',
@@ -81,17 +92,6 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         FileSystem::copy($file, $temporaryFilePath);
 
         return $temporaryFilePath;
-    }
-
-    protected function getRectorInterface(): string
-    {
-        return FileSystemRectorInterface::class;
-    }
-
-    protected function setParameter(string $name, $value): void
-    {
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-        $parameterProvider->changeParameter($name, $value);
     }
 
     private function createContainerWithProvidedRector(): void
@@ -117,5 +117,18 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $thisClass = Strings::after(Strings::webalize(static::class), '-', -1);
 
         return sprintf(sys_get_temp_dir() . '/rector_temp_tests/' . $thisClass . 'file_system_rector.yaml');
+    }
+
+    private function createTemporaryFilePathFromFilePath(string $file): string
+    {
+        $fileInfo = new SmartFileInfo($file);
+        return $this->createTemporaryFilePath($fileInfo, $file);
+    }
+
+    private function resolveTestDirectory(): string
+    {
+        $testReflectionClass = new ReflectionClass(static::class);
+
+        return (string) dirname((string) $testReflectionClass->getFileName());
     }
 }
