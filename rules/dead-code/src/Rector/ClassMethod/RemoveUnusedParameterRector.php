@@ -114,7 +114,6 @@ PHP
 
         $childrenOfClass = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
         $unusedParameters = $this->getUnusedParameters($node, $methodName, $childrenOfClass);
-
         if ($unusedParameters === []) {
             return null;
         }
@@ -184,7 +183,7 @@ PHP
         $unusedParameters = [];
 
         foreach ((array) $classMethod->params as $i => $param) {
-            if ($this->classMethodManipulator->isParameterUsedMethod($param, $classMethod)) {
+            if ($this->classMethodManipulator->isParameterUsedInClassMethod($param, $classMethod)) {
                 // reset to keep order of removed arguments, if not construtctor - probably autowired
                 if (! $this->isName($classMethod, '__construct')) {
                     $unusedParameters = [];
