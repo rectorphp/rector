@@ -59,12 +59,12 @@ final class ClassMethodManipulator
         $this->funcCallManipulator = $funcCallManipulator;
     }
 
-    public function isParameterUsedMethod(Param $param, ClassMethod $classMethod): bool
+    public function isParameterUsedInClassMethod(Param $param, ClassMethod $classMethod): bool
     {
         $isUsedDirectly = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
             $param
         ): bool {
-            return $this->betterStandardPrinter->areNodesEqual($node, $param->var);
+            return $this->betterStandardPrinter->areNodesWithoutCommentsEqual($node, $param->var);
         });
 
         if ($isUsedDirectly) {
@@ -188,7 +188,7 @@ final class ClassMethodManipulator
     public function removeUnusedParameters(ClassMethod $classMethod): void
     {
         foreach ($classMethod->getParams() as $param) {
-            if (! $this->isParameterUsedMethod($param, $classMethod)) {
+            if (! $this->isParameterUsedInClassMethod($param, $classMethod)) {
                 $this->removeParameter($param, $classMethod);
             }
         }
