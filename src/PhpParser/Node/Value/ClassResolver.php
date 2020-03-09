@@ -14,9 +14,20 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ClassResolver
 {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(NodeNameResolver $nodeNameResolver)
+    {
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
+
     public function getClassFromMethodCall(MethodCall $methodCall): ?FullyQualified
     {
         $class = null;
@@ -58,7 +69,7 @@ final class ClassResolver
             return null;
         }
 
-        return $var->name === 'this'
+        return $this->nodeNameResolver->isName($var, 'this')
             ? $this->tryToResolveClassMethodFromThis($classMethod)
             : $this->tryToResolveClassMethodParams($classMethod, $methodCall);
     }
