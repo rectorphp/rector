@@ -31,11 +31,8 @@ jobs:
 
             -
                 name: Commit rector
-                if:
-                    - steps.git-check.outputs.modified == 'true'
-
-                    # Due to limitations, it does not work with PRs from forked repositories, forks has to fix manually
-                    - github.event.pull_request.head.repo.full_name == github.repository
+                # Due to limitations, it does not work with PRs from forked repositories, forks has to fix manually
+                if: steps.git-check.outputs.modified == 'true' && github.event.pull_request.head.repo.full_name == github.repository
                 run: |
                   git config --global user.name 'rectorphp'
                   git config --global user.email 'rectorphp@users.noreply.github.com'
