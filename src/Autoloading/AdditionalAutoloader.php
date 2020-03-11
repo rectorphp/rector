@@ -63,8 +63,7 @@ final class AdditionalAutoloader
         $this->autoloadFiles($autoloadFiles);
 
         // the scanned file needs to be autoloaded
-        [$files, $directories] = $this->fileSystem->separateFilesAndDirectories($source);
-        $this->autoloadFiles($files);
+        [, $directories] = $this->fileSystem->separateFilesAndDirectories($source);
 
         foreach ($directories as $directory) {
             // load project autoload
