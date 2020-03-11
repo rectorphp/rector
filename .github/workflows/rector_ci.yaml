@@ -10,12 +10,17 @@ jobs:
     rector-ci:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
+            -
+                uses: actions/checkout@v2
+                with:
+                    ref: ${{ github.event.pull_request.head.ref }}
+
             -
                 uses: shivammathur/setup-php@v1
                 with:
                     php-version: 7.3
                     coverage: none
+
             -   run: composer install --no-progress
             -   run: composer rector-ci
 
@@ -30,6 +35,5 @@ jobs:
                 run: |
                   git config --global user.name 'Rector'
                   git config --global user.email 'rector@actions.github.com'
-                  git checkout "${GITHUB_REF:11}"
                   git commit -am "Rector fixes"
                   git push
