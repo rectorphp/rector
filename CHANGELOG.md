@@ -9,9 +9,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-<!-- dumped content start -->
-
-## Unreleased
+## [v0.7.4] - 2020-03-11
 
 ### Added
 
@@ -44,9 +42,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 - [#3005] remove comments only in case of change to original node
 
-<!-- dumped content end -->
-
-## [v0.7.3]
+## [v0.7.3] - 2020-03-01
 
 ### Added
 
