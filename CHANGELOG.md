@@ -9,6 +9,43 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+<!-- dumped content start -->
+
+## Unreleased
+
+### Added
+
+- [#3003] Add failing tests for method annotation, Thanks to [@stedekay]
+- [#2990] AssertTrueFalseToSpecificMethodRector: add broken test ('Pick more specific node than PhpParser\Node\Expr\StaticCall'), Thanks to [@gnutix]
+- [#2988] add space between name and value
+
+### Changed
+
+- [#3009] [ReadyToBeMerged][AnnotateThrowables] Support `$this` calling a method of the same class, Thanks to [@Aerendir]
+- [#3012] check for used variable without comments
+- [#2981] Skip passed argument
+- [#2984] improve array shape double collon spacing
+- [#2987] improve param array type for change type
+- [#2980] skip empty method on open-source
+- [#3010] Abstract files system
+- [#2998] AnnotateThrowables: support analysis of called functions and methods, Thanks to [@Aerendir]
+
+### Fixed
+
+- [#3008] [ReadyToBeMerged][AnnotateThrowables] Fix a small mispelling., Thanks to [@Aerendir]
+- [#2992] fix spacing of data provider
+- [#2997] Fix various static calls errors in PHPUnit Rectors., Thanks to [@gnutix]
+- [#3004] fix method annotation
+- [#2985] fix union param
+- [#2982] Fix PhpDocInfoPrinter slash removal
+- [#2996] fix multiline with one space
+
+### Removed
+
+- [#3005] remove comments only in case of change to original node
+
+<!-- dumped content end -->
+
 ## [v0.7.3]
 
 ### Added
@@ -2598,3 +2635,22 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [v0.7.3]: https://github.com/rectorphp/rector/compare/v0.7.2...v0.7.3
 [v0.7.2]: https://github.com/rectorphp/rector/compare/v0.7.1...v0.7.2
 [@alexanderschnitzler]: https://github.com/alexanderschnitzler
+[#3012]: https://github.com/rectorphp/rector/pull/3012
+[#3010]: https://github.com/rectorphp/rector/pull/3010
+[#3009]: https://github.com/rectorphp/rector/pull/3009
+[#3008]: https://github.com/rectorphp/rector/pull/3008
+[#3005]: https://github.com/rectorphp/rector/pull/3005
+[#3004]: https://github.com/rectorphp/rector/pull/3004
+[#3003]: https://github.com/rectorphp/rector/pull/3003
+[#2998]: https://github.com/rectorphp/rector/pull/2998
+[#2997]: https://github.com/rectorphp/rector/pull/2997
+[#2996]: https://github.com/rectorphp/rector/pull/2996
+[#2992]: https://github.com/rectorphp/rector/pull/2992
+[#2990]: https://github.com/rectorphp/rector/pull/2990
+[#2988]: https://github.com/rectorphp/rector/pull/2988
+[#2987]: https://github.com/rectorphp/rector/pull/2987
+[#2985]: https://github.com/rectorphp/rector/pull/2985
+[#2984]: https://github.com/rectorphp/rector/pull/2984
+[#2982]: https://github.com/rectorphp/rector/pull/2982
+[#2981]: https://github.com/rectorphp/rector/pull/2981
+[#2980]: https://github.com/rectorphp/rector/pull/2980
