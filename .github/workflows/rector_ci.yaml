@@ -18,3 +18,17 @@ jobs:
                     coverage: none
             -   run: composer install --no-progress
             -   run: composer rector-ci
+
+            -
+                name: Check for modified files
+                id: git-check
+                run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+
+            -
+                name: Commit rector
+                if: steps.git-check.outputs.modified == 'true'
+                run: |
+                  git config --global user.name 'Rector'
+                  git config --global user.email 'rector@actions.github.com'
+                  git commit -am "Rector fixes"
+                  git push
