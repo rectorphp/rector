@@ -9,5 +9,6 @@ final class DogFoodClass
     public function test(): int
     {
         return 0;
+        return 666;
     }
 }
