@@ -28,15 +28,7 @@ jobs:
             -
                 name: Check for modified files
                 id: git-check
-                run: |
-                    echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
-                    echo git diff-index HEAD --
-                    echo git diff-index --quiet HEAD --
-                    git diff-index HEAD --
-                    git diff-index HEAD
-                    echo git diff-index HEAD
-                    echo git diff-index --quiet HEAD
-                    git status
+                run: ::set-output name=modified::$(if git diff --exit-code -s; then echo "false"; else echo "true"; fi)
 
             -   name: Push changes
                 if: steps.git-check.outputs.modified == 'true'
@@ -46,4 +38,3 @@ jobs:
                     git commit -am "Bot commit"
                     git push
                     exit 1
-
