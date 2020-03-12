@@ -28,7 +28,7 @@ jobs:
             -
                 name: Check for modified files
                 id: git-check
-                run: ::set-output name=modified::$(if git diff --exit-code -s; then echo "false"; else echo "true"; fi)
+                run: echo ::set-output name=modified::$(if git diff --exit-code -s; then echo "false"; else echo "true"; fi)
 
             -   name: Push changes
                 if: steps.git-check.outputs.modified == 'true'
