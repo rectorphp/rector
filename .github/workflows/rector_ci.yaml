@@ -1,3 +1,15 @@
+####
+# Due to some Github Actions limitations, we are running realtime fixes (commits) only for self-owned-pr
+#
+# Current limitations:
+# - Secrets (ACCESS_TOKEN) are not available in PRs from forks
+# - Github Token has Read-only access (can not commit), Personal Access Token must be used instead
+# - Github Token does not trigger workflows after push
+#
+# So we basically have chicken-egg problem here
+#
+# https://help.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token#permissions-for-the-github_token
+####
 name: Rector CI
 
 on:
@@ -9,12 +21,13 @@ on:
 jobs:
     rector-ci:
         runs-on: ubuntu-latest
+        if: github.event.pull_request.head.repo.full_name == github.repository
         steps:
             -
                 uses: actions/checkout@v2
                 with:
-                    ref: ${{ github.event.pull_request.head.ref }}
-                    token: ${{ secrets.ACCESS_TOKEN }}
+                    ref: ${{ github.event.pull_request.head.ref }} # Solves the not "You are not currently on a branch" problem, see https://github.com/actions/checkout/issues/124#issuecomment-586664611
+                    token: ${{ secrets.ACCESS_TOKEN }} # Must be used to trigger workflow after push
 
             -
                 uses: shivammathur/setup-php@v1
@@ -23,18 +36,19 @@ jobs:
                     coverage: none
 
             -   run: composer install --no-progress
-            -   run: composer rector-ci
+            -   run: composer rector-ci-fix
 
             -
                 name: Check for modified files
                 id: git-check
-                run: echo ::set-output name=modified::$(if git diff --exit-code -s; then echo "false"; else echo "true"; fi)
+                run: echo ::set-output name=modified::$(if git diff --exit-code --no-patch; then echo "false"; else echo "true"; fi)
 
             -   name: Push changes
                 if: steps.git-check.outputs.modified == 'true'
                 run: |
                     git config --global user.name 'rector-bot'
                     git config --global user.email 'tomas@getrector.org'
-                    git commit -am "Bot commit"
+                    git commit -am "[Rector CI] Fixed Rector issues"
                     git push
-                    exit 1
+                # In case we want to fail this job when there are changed files, just add "exit 1"
+
