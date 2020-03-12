@@ -28,14 +28,16 @@ jobs:
             -
                 name: Check for modified files
                 id: git-check
-                run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+                run: |
+                    echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+                    git diff-index HEAD --
 
-            -
-                name: Commit rector
+            -   name: Push changes
                 if: steps.git-check.outputs.modified == 'true'
                 run: |
-                    git config --global user.name 'rectorphp'
-                    git config --global user.email 'rectorphp@users.noreply.github.com'
-                    git commit -am "Rector fixes"
+                    git config --global user.name 'rector-bot'
+                    git config --global user.email 'tomas@getrector.org'
+                    git commit -am "Bot commit"
                     git push
                     exit 1
+
