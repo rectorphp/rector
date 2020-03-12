@@ -1,0 +1,22 @@
+name: Rector
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    rector-ci:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.3
+                    coverage: none
+
+            -   run: composer install --no-progress
+            -   run: composer rector-ci
