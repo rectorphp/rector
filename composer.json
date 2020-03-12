@@ -252,7 +252,7 @@
             "bin/rector dump-rectors -o markdown > docs/AllRectorsOverview.md",
             "bin/rector dump-nodes -o markdown > docs/NodesOverview.md"
         ],
-        "rector-ci": "bin/rector process --config rector-ci.yaml --dry-run --ansi --no-progress-bar",
+        "rector-ci": "bin/rector process --config rector-ci.yaml --ansi --no-progress-bar",
         "rector": "bin/rector process --config rector-ci.yaml --ansi"
     },
     "config": {
