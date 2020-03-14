@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
@@ -20,6 +21,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Symfony\Component\Finder\Finder;
 
 /**
  * @see https://wiki.php.net/rfc/spread_operator_for_array
@@ -117,10 +119,16 @@ PHP
         return $array;
     }
 
-    private function refactorIteratorToArray(FuncCall $funcCall): Array_
+    private function refactorIteratorToArray(FuncCall $funcCall): ?Array_
     {
+        $value = $funcCall->args[0]->value;
+
+        if ($this->isMethodCallWithFinderAndGetIterator($value)) {
+            return null;
+        }
+
         $array = new Array_();
-        $array->items[] = $this->createUnpackedArrayItem($funcCall->args[0]->value);
+        $array->items[] = $this->createUnpackedArrayItem($value);
 
         return $array;
     }
@@ -190,5 +198,22 @@ PHP
         }
 
         return false;
+    }
+
+    /**
+     * Special type, not resolved by PHPStan correctly.
+     * Has string keys, has to be skipped
+     */
+    private function isMethodCallWithFinderAndGetIterator(Expr $expr): bool
+    {
+        if (! $expr instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $this->isObjectType($expr->var, Finder::class)) {
+            return false;
+        }
+
+        return $this->isName($expr->name, 'getIterator');
     }
 }
