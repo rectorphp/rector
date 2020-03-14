@@ -54,13 +54,13 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
 ## What Can Rector Do for You?
 
 - Rename classes, methods, properties, namespaces or constants
-- Complete [parameter, var or return type declarations](https://www.tomasvotruba.com/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/) based on static analysis of your code
+- Complete [parameter, var or return type declarations](https://www.tomasvotruba.com/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/) based on static analysis of your code
 - Upgrade your code from PHP 5.3 to PHP 7.4
-- [Migrate your project from Nette to Symfony](https://www.tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
-- [Complete PHP 7.4 property type declarations](https://www.tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
-- [Refactor Laravel facades to dependency injection](https://www.tomasvotruba.com/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
-- [Prepare a codebase before huge upgrades](https://www.tomasvotruba.com/blog/2019/12/16/8-steps-you-can-make-before-huge-upgrade-to-make-it-faster-cheaper-and-more-stable/)
-- [Get rid of technical debt](https://www.tomasvotruba.com/blog/2019/12/09/how-to-get-rid-of-technical-debt-or-what-we-would-have-done-differently-2-years-ago/)
+- [Migrate your project from Nette to Symfony](https://www.tomasvotruba.com/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
+- [Complete PHP 7.4 property type declarations](https://www.tomasvotruba.com/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
+- [Refactor Laravel facades to dependency injection](https://www.tomasvotruba.com/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
+- [Prepare a codebase before huge upgrades](https://www.tomasvotruba.com/2019/12/16/8-steps-you-can-make-before-huge-upgrade-to-make-it-faster-cheaper-and-more-stable/)
+- [Get rid of technical debt](https://www.tomasvotruba.com/2019/12/09/how-to-get-rid-of-technical-debt-or-what-we-would-have-done-differently-2-years-ago/)
 - And much more...
 
 ...**look at the overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
