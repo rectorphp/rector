@@ -1,4 +1,4 @@
-# All 464 Rectors Overview
+# All 465 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -5671,6 +5671,32 @@ Change assertContains()/assertNotContains() method to new string and iterable al
 -        $this->assertNotContains('foo', 'foo bar');
 +        $this->assertStringContainsString('foo', 'foo bar');
 +        $this->assertStringNotContainsString('foo', 'foo bar');
+     }
+ }
+```
+
+<br>
+
+### `SpecificAssertContainsWithoutIdentityRector`
+
+- class: [`Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector`](/../master/rules/phpunit/src/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector/Fixture)
+
+Change assertContains()/assertNotContains() with non-strict comparison to new specific alternatives
+
+```diff
+ <?php
+
+-final class SomeTest extends \PHPUnit\Framework\TestCase
++final class SomeTest extends TestCase
+ {
+     public function test()
+     {
+         $objects = [ new \stdClass(), new \stdClass(), new \stdClass() ];
+-        $this->assertContains(new \stdClass(), $objects, 'message', false, false);
+-        $this->assertNotContains(new \stdClass(), $objects, 'message', false, false);
++        $this->assertContainsEquals(new \stdClass(), $objects, 'message');
++        $this->assertNotContainsEquals(new \stdClass(), $objects, 'message');
      }
  }
 ```
