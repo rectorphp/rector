@@ -13,3 +13,23 @@ class SkipOtherUseOfLoopVar
         }
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector\Fixture;
+
+class SkipOtherUseOfLoopVar
+{
+    public function run($tokens)
+    {
+        $other = array_reverse($tokens);
+        foreach ($tokens as $i => $token) {
+            $value = $token[0][1][4];
+            return $other[$i];
+        }
+    }
+}
+
+?>
