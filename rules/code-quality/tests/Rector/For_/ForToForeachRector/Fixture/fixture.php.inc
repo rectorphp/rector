@@ -17,6 +17,8 @@ class SomeClass
 
                 $tokens[$i][0][1][4] = self::T_FN;
                 $value = $tokens[$i][0][1][4];
+
+                $impertinent[$i] = true;
             }
         }
     }
@@ -43,6 +45,8 @@ class SomeClass
 
                 $tokens[$i][0][1][4] = self::T_FN;
                 $value = $token[0][1][4];
+
+                $impertinent[$i] = true;
             }
         }
     }
