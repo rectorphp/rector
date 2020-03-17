@@ -9,6 +9,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Php\TypeAnalyzer;
 use Rector\Core\Yaml\YamlPrinter;
 use ReflectionClass;
+use ReflectionNamedType;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -98,8 +99,9 @@ final class ShowCommand extends AbstractCommand
 
         $configuration = [];
         foreach ($constructorReflection->getParameters() as $reflectionParameter) {
-            $parameterType = (string) $reflectionParameter->getType();
-            if (! $this->typeAnalyzer->isPhpReservedType($parameterType)) {
+            $parameterType = $reflectionParameter->getType();
+            $parameterTypeName = (string) ($parameterType instanceof ReflectionNamedType ? $parameterType->getName() : null);
+            if (! $this->typeAnalyzer->isPhpReservedType($parameterTypeName)) {
                 continue;
             }
 
