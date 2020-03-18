@@ -121,8 +121,10 @@ PHP
         foreach ((array) $functionLike->getStmts() as $stmt) {
             if (! $this->ifManipulator->isIfWithOnlyReturn($stmt)) {
                 // variable modification
-                $modifiedVariableNames += $this->modifiedVariableNamesCollector->collectModifiedVariableNames($stmt);
-
+                $modifiedVariableNames = array_merge(
+                    $modifiedVariableNames,
+                    $this->modifiedVariableNamesCollector->collectModifiedVariableNames($stmt)
+                );
                 continue;
             }
 
