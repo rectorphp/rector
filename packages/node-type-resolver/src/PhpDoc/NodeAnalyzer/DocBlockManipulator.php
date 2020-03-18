@@ -150,7 +150,7 @@ final class DocBlockManipulator
         if ($node->getComments() !== []) {
             $commentsContent = implode(PHP_EOL, $node->getComments());
 
-            if ($this->removeSpaces($commentsContent) === $this->removeSpaces($phpDoc)) {
+            if ($this->removeSpacesAndAsterisks($commentsContent) === $this->removeSpacesAndAsterisks($phpDoc)) {
                 return false;
             }
         }
@@ -180,8 +180,8 @@ final class DocBlockManipulator
         return $startComments . PHP_EOL . $phpDoc;
     }
 
-    private function removeSpaces(string $content): string
+    private function removeSpacesAndAsterisks(string $content): string
     {
-        return Strings::replace($content, '#\s+#');
+        return Strings::replace($content, '#(\s|\*)+#');
     }
 }
