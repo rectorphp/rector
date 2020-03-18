@@ -440,6 +440,11 @@ final class PhpDocInfo
         $this->addTagValueNode($paramTagValueNode);
     }
 
+    public function getNode(): Node
+    {
+        return $this->node;
+    }
+
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
         $phpDocNode = $this->getPhpDocNode();

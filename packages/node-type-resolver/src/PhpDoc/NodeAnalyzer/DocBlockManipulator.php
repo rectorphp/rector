@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
+use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -94,6 +95,7 @@ final class DocBlockManipulator
         }
 
         $phpDoc = $this->printPhpDocInfoToString($phpDocInfo);
+
         if ($phpDoc === '') {
             if ($phpDocInfo->getOriginalPhpDocNode()->children !== []) {
                 // all comments were removed → null
@@ -143,13 +145,43 @@ final class DocBlockManipulator
             return false;
         }
 
+        $phpDoc = $this->completeSimpleCommentsToPhpDoc($node, $phpDoc);
+
         if ($node->getComments() !== []) {
-            $commentsContent = implode('', $node->getComments());
-            if ($commentsContent === $phpDoc) {
+            $commentsContent = implode(PHP_EOL, $node->getComments());
+
+            if ($this->removeSpaces($commentsContent) === $this->removeSpaces($phpDoc)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * add // comments to phpdoc (only has /**
+     */
+    private function completeSimpleCommentsToPhpDoc(Node $node, string $phpDoc): string
+    {
+        $startComments = '';
+        foreach ($node->getComments() as $comment) {
+            // skip non-simple comments
+            if (! Strings::startsWith($comment->getText(), '//')) {
+                continue;
+            }
+
+            $startComments .= $comment->getText();
+        }
+
+        if ($startComments === '') {
+            return $phpDoc;
+        }
+
+        return $startComments . PHP_EOL . $phpDoc;
+    }
+
+    private function removeSpaces(string $content): string
+    {
+        return Strings::replace($content, '#\s+#');
     }
 }
