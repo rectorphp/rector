@@ -7,11 +7,12 @@ namespace Rector\Core\Rector\AbstractRector;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\ChangesReporting\Rector\AbstractRector\RectorChangeCollectorTrait;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
 
 trait AbstractRectorTrait
 {
-    use AppliedRectorCollectorTrait;
+    use RectorChangeCollectorTrait;
     use DoctrineTrait;
     use NodeTypeResolverTrait;
     use NameResolverTrait;

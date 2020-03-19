@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Contract\Console\Output;
+namespace Rector\ChangesReporting\Contract\Output;
 
-use Rector\Core\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 
 interface OutputFormatterInterface
 {

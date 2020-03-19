@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Console\Output;
+namespace Rector\ChangesReporting\Output;
 
 use Nette\Utils\Strings;
-use Rector\Core\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Console\Output\OutputFormatterInterface;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\Application\Error;
 use Rector\Core\ValueObject\Reporting\FileDiff;
@@ -112,10 +112,10 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $this->symfonyStyle->writeln($fileDiff->getDiffConsoleFormatted());
             $this->symfonyStyle->newLine();
 
-            if ($fileDiff->getAppliedRectorClasses() !== []) {
+            if ($fileDiff->getRectorChanges() !== []) {
                 $this->symfonyStyle->writeln('Applied rules:');
                 $this->symfonyStyle->newLine();
-                $this->symfonyStyle->listing($fileDiff->getAppliedRectorClasses());
+                $this->symfonyStyle->listing($fileDiff->getRectorClasses());
                 $this->symfonyStyle->newLine();
             }
         }

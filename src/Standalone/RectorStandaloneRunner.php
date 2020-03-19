@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\Core\Standalone;
 
 use Psr\Container\ContainerInterface;
-use Rector\Core\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\RectorApplication;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\ProcessCommand;
-use Rector\Core\Console\Output\ConsoleOutputFormatter;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\Exception\FileSystem\FileNotFoundException;
 use Rector\Core\Extension\FinishingExtensionRunner;

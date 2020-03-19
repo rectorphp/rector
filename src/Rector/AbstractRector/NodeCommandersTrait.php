@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\CodingStyle\Application\NameImportingCommander;
 use Rector\CodingStyle\Application\UseAddingCommander;
-use Rector\Core\Application\AppliedRectorCollector;
 use Rector\Core\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\Commander\NodeReplacingCommander;
@@ -25,7 +25,7 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
  * This could be part of @see AbstractRector, but decopuling to trait
  * makes clear what code has 1 purpose.
  *
- * @property-read AppliedRectorCollector $appliedRectorCollector
+ * @property-read RectorChangeCollector $rectorChangeCollector
  */
 trait NodeCommandersTrait
 {

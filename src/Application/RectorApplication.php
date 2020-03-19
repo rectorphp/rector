@@ -7,6 +7,7 @@ namespace Rector\Core\Application;
 use OndraM\CiDetector\CiDetector;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\NodeScopeResolver;
+use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;

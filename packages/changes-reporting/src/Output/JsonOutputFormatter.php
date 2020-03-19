@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Console\Output;
+namespace Rector\ChangesReporting\Output;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
-use Rector\Core\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Contract\Console\Output\OutputFormatterInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
@@ -61,7 +61,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
             $errorsArray['file_diffs'][] = [
                 'file' => $relativeFilePath,
                 'diff' => $fileDiff->getDiff(),
-                'applied_rectors' => $fileDiff->getAppliedRectorClasses(),
+                'applied_rectors' => $fileDiff->getRectorClasses(),
             ];
 
             // for Rector CI

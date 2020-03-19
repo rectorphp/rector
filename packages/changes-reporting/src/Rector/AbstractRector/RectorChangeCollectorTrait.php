@@ -2,29 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Rector\AbstractRector;
+namespace Rector\ChangesReporting\Rector\AbstractRector;
 
 use PhpParser\Node;
-use Rector\Core\Application\AppliedRectorCollector;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
  * makes clear what code has 1 purpose.
  */
-trait AppliedRectorCollectorTrait
+trait RectorChangeCollectorTrait
 {
     /**
-     * @var AppliedRectorCollector
+     * @var RectorChangeCollector
      */
-    private $appliedRectorCollector;
+    private $rectorChangeCollector;
 
     /**
      * @required
      */
-    public function setAppliedRectorCollector(AppliedRectorCollector $appliedRectorCollector): void
+    public function autowireAppliedRectorCollectorTrait(RectorChangeCollector $rectorChangeCollector): void
     {
-        $this->appliedRectorCollector = $appliedRectorCollector;
+        $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
     protected function notifyNodeChangeFileInfo(Node $node): void
@@ -36,6 +36,6 @@ trait AppliedRectorCollectorTrait
             return;
         }
 
-        $this->appliedRectorCollector->addRectorClass(static::class, $fileInfo);
+        $this->rectorChangeCollector->addRectorClassWithLine(static::class, $fileInfo, $node->getLine());
     }
 }

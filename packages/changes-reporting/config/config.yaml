@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Rector\ChangesReporting\:
+        resource: '../src'
+        exclude:
+            - '../src/Contract/*'
+            - '../src/ValueObject/*'

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject\Reporting;
 
+use Rector\ChangesReporting\ValueObject\RectorWithFileAndLineChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileDiff
@@ -19,9 +20,9 @@ final class FileDiff
     private $diffConsoleFormatted;
 
     /**
-     * @var string[]
+     * @var RectorWithFileAndLineChange[]
      */
-    private $appliedRectorClasses = [];
+    private $rectorWithFileAndLineChanges = [];
 
     /**
      * @var SmartFileInfo
@@ -29,17 +30,17 @@ final class FileDiff
     private $smartFileInfo;
 
     /**
-     * @param string[] $appliedRectorClasses
+     * @param RectorWithFileAndLineChange[] $rectorWithFileAndLineChanges
      */
     public function __construct(
         SmartFileInfo $smartFileInfo,
         string $diff,
         string $diffConsoleFormatted,
-        array $appliedRectorClasses = []
+        array $rectorWithFileAndLineChanges = []
     ) {
         $this->smartFileInfo = $smartFileInfo;
         $this->diff = $diff;
-        $this->appliedRectorClasses = $appliedRectorClasses;
+        $this->rectorWithFileAndLineChanges = $rectorWithFileAndLineChanges;
         $this->diffConsoleFormatted = $diffConsoleFormatted;
     }
 
@@ -59,10 +60,27 @@ final class FileDiff
     }
 
     /**
+     * @return RectorWithFileAndLineChange[]
+     */
+    public function getRectorChanges(): array
+    {
+        return $this->rectorWithFileAndLineChanges;
+    }
+
+    /**
      * @return string[]
      */
-    public function getAppliedRectorClasses(): array
+    public function getRectorClasses(): array
     {
-        return $this->appliedRectorClasses;
+        $rectorClasses = [];
+        foreach ($this->rectorWithFileAndLineChanges as $rectorWithFileAndLineChange) {
+            $rectorClasses[] = $rectorWithFileAndLineChange->getRectorClass();
+        }
+
+        $rectorClasses = array_unique($rectorClasses);
+
+        sort($rectorClasses);
+
+        return $rectorClasses;
     }
 }

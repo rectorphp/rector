@@ -6,7 +6,8 @@ namespace Rector\Core\Configuration;
 
 use Jean85\PrettyVersions;
 use Nette\Utils\Strings;
-use Rector\Core\Console\Output\JsonOutputFormatter;
+use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
+use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
@@ -166,8 +167,14 @@ final class Configuration
     private function canShowProgressBar(InputInterface $input): bool
     {
         $noProgressBar = (bool) $input->getOption(Option::OPTION_NO_PROGRESS_BAR);
+        if ($noProgressBar) {
+            return false;
+        }
 
-        return ! $noProgressBar && $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== JsonOutputFormatter::NAME;
+        if ($input->getOption(Option::OPTION_OUTPUT_FORMAT) === JsonOutputFormatter::NAME) {
+            return false;
+        }
+        return $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== CheckstyleOutputFormatter::NAME;
     }
 
     private function setOnlyRector(?string $rector): void
