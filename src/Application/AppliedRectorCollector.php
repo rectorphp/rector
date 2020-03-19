@@ -28,5 +28,6 @@ final class AppliedRectorCollector
         }
 
         return array_unique($this->rectorClassesByFile[$smartFileInfo->getRealPath()]);
+        return [];
     }
 }
