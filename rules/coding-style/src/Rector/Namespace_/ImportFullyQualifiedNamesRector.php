@@ -124,10 +124,13 @@ PHP
             /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($phpDocInfo === null) {
-                return $node;
+                return null;
             }
 
-            $this->docBlockNameImporter->importNames($phpDocInfo, $node);
+            $hasChanged = $this->docBlockNameImporter->importNames($phpDocInfo, $node);
+            if (! $hasChanged) {
+                return null;
+            }
 
             return $node;
         }

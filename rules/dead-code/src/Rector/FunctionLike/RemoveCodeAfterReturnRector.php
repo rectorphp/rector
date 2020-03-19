@@ -66,8 +66,6 @@ PHP
         }
 
         $isDeadAfterReturn = false;
-        $isDeadAfterReturnRemoved = false;
-
         foreach ($node->stmts as $key => $stmt) {
             if ($isDeadAfterReturn) {
                 // keep comment
@@ -75,8 +73,7 @@ PHP
                     continue;
                 }
 
-                unset($node->stmts[$key]);
-                $isDeadAfterReturnRemoved = true;
+                $this->removeStmt($node, $key);
             }
 
             if ($stmt instanceof Return_) {
@@ -85,10 +82,6 @@ PHP
             }
         }
 
-        if (! $isDeadAfterReturnRemoved) {
-            return null;
-        }
-
-        return $node;
+        return null;
     }
 }

@@ -140,7 +140,7 @@ final class Application extends SymfonyApplication
             $input->getParameterOption('--output-format') === CheckstyleOutputFormatter::NAME ||
             $input->getParameterOption('-o') === CheckstyleOutputFormatter::NAME
         );
-        return !$hasCheckstyleOutput;
+        return ! $hasCheckstyleOutput;
     }
 
     private function removeUnusedOptions(InputDefinition $inputDefinition): void
