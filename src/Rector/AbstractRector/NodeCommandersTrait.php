@@ -24,8 +24,6 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
  * makes clear what code has 1 purpose.
- *
- * @property-read RectorChangeCollector $rectorChangeCollector
  */
 trait NodeCommandersTrait
 {
@@ -60,6 +58,11 @@ trait NodeCommandersTrait
     private $nodeReplacingCommander;
 
     /**
+     * @var RectorChangeCollector
+     */
+    private $rectorChangeCollector;
+
+    /**
      * @required
      */
     public function autowireNodeCommandersTrait(
@@ -68,7 +71,8 @@ trait NodeCommandersTrait
         PropertyAddingCommander $propertyAddingCommander,
         UseAddingCommander $useAddingCommander,
         NameImportingCommander $nameImportingCommander,
-        NodeReplacingCommander $nodeReplacingCommander
+        NodeReplacingCommander $nodeReplacingCommander,
+        RectorChangeCollector $rectorChangeCollector
     ): void {
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->nodeAddingCommander = $nodeAddingCommander;
@@ -76,6 +80,7 @@ trait NodeCommandersTrait
         $this->useAddingCommander = $useAddingCommander;
         $this->nameImportingCommander = $nameImportingCommander;
         $this->nodeReplacingCommander = $nodeReplacingCommander;
+        $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
     /**
@@ -92,28 +97,26 @@ trait NodeCommandersTrait
     {
         $this->nodeAddingCommander->addNodeAfterNode($newNode, $positionNode);
 
-        $this->notifyNodeChangeFileInfo($positionNode);
+        $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
 
     protected function addNodeBeforeNode(Node $newNode, Node $positionNode): void
     {
         $this->nodeAddingCommander->addNodeBeforeNode($newNode, $positionNode);
 
-        $this->notifyNodeChangeFileInfo($positionNode);
+        $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
 
     protected function addPropertyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void
     {
         $this->propertyAddingCommander->addPropertyToClass($propertyName, $propertyType, $class);
-
-        $this->notifyNodeChangeFileInfo($class);
+        $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
 
     protected function addConstantToClass(Class_ $class, ClassConst $classConst): void
     {
         $this->propertyAddingCommander->addConstantToClass($class, $classConst);
-
-        $this->notifyNodeChangeFileInfo($class);
+        $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
 
     protected function addPropertyWithoutConstructorToClass(
@@ -123,21 +126,21 @@ trait NodeCommandersTrait
     ): void {
         $this->propertyAddingCommander->addPropertyWithoutConstructorToClass($propertyName, $propertyType, $classNode);
 
-        $this->notifyNodeChangeFileInfo($classNode);
+        $this->rectorChangeCollector->notifyNodeFileInfo($classNode);
     }
 
     protected function removeNode(Node $node): void
     {
         $this->nodeRemovingCommander->addNode($node);
 
-        $this->notifyNodeChangeFileInfo($node);
+        $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
 
     protected function replaceNode(Node $node, Node $replaceWith): void
     {
         $this->nodeReplacingCommander->replaceNode($node, $replaceWith);
 
-        $this->notifyNodeChangeFileInfo($replaceWith);
+        $this->rectorChangeCollector->notifyNodeFileInfo($replaceWith);
     }
 
     /**
@@ -168,5 +171,10 @@ trait NodeCommandersTrait
         foreach ($nodes as $node) {
             $this->removeNode($node);
         }
+    }
+
+    protected function notifyNodeFileInfo(Node $node): void
+    {
+        $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
 }

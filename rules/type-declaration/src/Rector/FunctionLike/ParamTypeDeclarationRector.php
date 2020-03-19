@@ -193,7 +193,7 @@ PHP
         $paramNode->type = $resolvedChildType;
         $paramNode->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
 
-        $this->notifyNodeChangeFileInfo($paramNode);
+        $this->notifyNodeFileInfo($paramNode);
     }
 
     /**

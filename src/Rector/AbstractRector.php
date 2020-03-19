@@ -174,7 +174,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->mirrorAttributes($originalNodeWithAttributes, $node);
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
-            $this->notifyNodeChangeFileInfo($node);
+            $this->notifyNodeFileInfo($node);
         }
 
         // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code
