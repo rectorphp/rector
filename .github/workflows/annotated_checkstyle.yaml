@@ -19,4 +19,4 @@ jobs:
                     tools: cs2pr
             -   run: composer install --no-progress
             -   run: |
-                    bin/rector p abz/DeadCode.php --set dead-code -n --autoload-file abz/DeadCode.php --output-format=checkstyle | cs2pr
+                    bin/rector process --config rector-ci.yaml --no-progress-bar --ansi --dry-run --output-format=checkstyle | cs2pr

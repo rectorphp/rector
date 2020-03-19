@@ -20,6 +20,7 @@ use Rector\Core\Commander\CommanderCollector;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
+use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -86,6 +87,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $staticTypeMapper;
 
     /**
+     * @var CurrentRectorProvider
+     */
+    private $currentRectorProvider;
+
+    /**
      * @var string[]
      */
     private const ATTRIBUTES_TO_MIRROR = [
@@ -122,7 +128,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         PhpDocInfoPrinter $phpDocInfoPrinter,
         DocBlockManipulator $docBlockManipulator,
         StaticTypeMapper $staticTypeMapper,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        CurrentRectorProvider $currentRectorProvider
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -134,6 +141,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
+        $this->currentRectorProvider = $currentRectorProvider;
     }
 
     /**
@@ -144,6 +152,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         if (! $this->isMatchingNodeType(get_class($node))) {
             return null;
         }
+
+        $this->currentRectorProvider->changeCurrentRector($this);
 
         // show current Rector class on --debug
         if ($this->symfonyStyle->isDebug()) {

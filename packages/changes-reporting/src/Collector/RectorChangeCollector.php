@@ -7,7 +7,8 @@ namespace Rector\ChangesReporting\Collector;
 use PhpParser\Node;
 use Rector\ChangesReporting\ValueObject\RectorWithFileAndLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\Exception\NotRectorException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -18,14 +19,20 @@ final class RectorChangeCollector
      */
     private $rectorWithFileAndLineChanges = [];
 
-    public function addRectorClassWithLine(string $rectorClass, SmartFileInfo $smartFileInfo, int $line): void
-    {
-        if (! is_a($rectorClass, RectorInterface::class, true)) {
-            throw new NotRectorException($rectorClass);
-        }
+    /**
+     * @var CurrentRectorProvider
+     */
+    private $currentRectorProvider;
 
+    public function __construct(CurrentRectorProvider $currentRectorProvider)
+    {
+        $this->currentRectorProvider = $currentRectorProvider;
+    }
+
+    public function addRectorClassWithLine(RectorInterface $rector, SmartFileInfo $smartFileInfo, int $line): void
+    {
         $this->rectorWithFileAndLineChanges[] = new RectorWithFileAndLineChange(
-            $rectorClass,
+            $rector,
             $smartFileInfo->getRealPath(),
             $line
         );
@@ -53,6 +60,11 @@ final class RectorChangeCollector
             return;
         }
 
-        $this->addRectorClassWithLine(static::class, $fileInfo, $node->getLine());
+        $currentRector = $this->currentRectorProvider->getCurrentRector();
+        if ($currentRector === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->addRectorClassWithLine($currentRector, $fileInfo, $node->getLine());
     }
 }

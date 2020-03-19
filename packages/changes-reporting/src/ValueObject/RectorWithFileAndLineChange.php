@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Rector\ChangesReporting\ValueObject;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\Exception\NotRectorException;
 
 final class RectorWithFileAndLineChange
 {
     /**
-     * @var string
+     * @var RectorInterface
      */
-    private $rectorClass;
+    private $rector;
 
     /**
      * @var int
@@ -24,20 +23,26 @@ final class RectorWithFileAndLineChange
      */
     private $realPath;
 
-    public function __construct(string $rectorClass, string $realPath, int $line)
+    public function __construct(RectorInterface $rector, string $realPath, int $line)
     {
-        if (! is_a($rectorClass, RectorInterface::class, true)) {
-            throw new NotRectorException($rectorClass);
-        }
-
-        $this->rectorClass = $rectorClass;
+        $this->rector = $rector;
         $this->line = $line;
         $this->realPath = $realPath;
     }
 
+    public function getRector(): RectorInterface
+    {
+        return $this->rector;
+    }
+
+    public function getRectorDefinitionsDescription(): string
+    {
+        return $this->rector->getDefinition()->getDescription();
+    }
+
     public function getRectorClass(): string
     {
-        return $this->rectorClass;
+        return get_class($this->rector);
     }
 
     public function getLine(): int

@@ -36,10 +36,6 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
 
     public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
-        if ($errorAndDiffCollector->getErrors() === [] && $errorAndDiffCollector->getFileDiffsCount() === 0) {
-            return;
-        }
-
         $this->symfonyStyle->writeln('<?xml version="1.0" encoding="UTF-8"?>');
         $this->symfonyStyle->writeln('<checkstyle>');
 
@@ -62,10 +58,13 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
         $this->symfonyStyle->writeln(sprintf('<file name="%s">', $this->escape($fileDiff->getRelativeFilePath())));
 
         foreach ($fileDiff->getRectorChanges() as $rectorChange) {
+            $message = $rectorChange->getRectorDefinitionsDescription() . ' (Reported by: ' . $rectorChange->getRectorClass() . ')';
+            $message = $this->escape($message);
+
             $error = sprintf(
                 '  <error line="%d" column="1" severity="error" message="%s" />',
                 $this->escape((string) $rectorChange->getLine()),
-                $this->escape((string) $rectorChange->getRectorClass())
+                $message
             );
             $this->symfonyStyle->writeln($error);
         }
