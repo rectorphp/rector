@@ -61,6 +61,7 @@
             "Rector\\CodeQuality\\": "rules/code-quality/src",
             "Rector\\CodingStyle\\": "rules/coding-style/src",
             "Rector\\ConsoleDiffer\\": "packages/console-differ/src",
+            "Rector\\ChangesReporting\\": "packages/changes-reporting/src",
             "Rector\\DeadCode\\": "rules/dead-code/src",
             "Rector\\DoctrineCodeQuality\\": "rules/doctrine-code-quality/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "rules/doctrine-gedmo-to-knplabs/src",

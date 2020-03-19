@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Output;
 
-use Rector\Core\Contract\Console\Output\OutputFormatterInterface;
+use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Exception\Console\Output\MissingOutputFormatterException;
 
 final class OutputFormatterCollector

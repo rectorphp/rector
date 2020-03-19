@@ -115,8 +115,7 @@ PHP
             $paramName = $this->getName($paramNode->var);
             $this->addPropertyToClass($classNode, $paramNodeType, $paramName);
 
-            // remove arguments
-            unset($classMethod->params[$key]);
+            $this->removeParam($classMethod, $key);
 
             $this->variablesToPropertyFetchCollection->addVariableNameAndType($paramName, $paramNodeType);
         }

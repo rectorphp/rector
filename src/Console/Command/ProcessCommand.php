@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Rector\Core\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\RectorApplication;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Output\ConsoleOutputFormatter;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Console\Shell;
 use Rector\Core\Extension\ReportingExtensionRunner;

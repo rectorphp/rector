@@ -92,7 +92,7 @@ PHP
         foreach ($classNode->implements as $key => $name) {
             $fqnName = $this->getName($name);
             if (in_array($fqnName, $alreadyAddedNames, true)) {
-                unset($classNode->implements[$key]);
+                $this->removeImplements($classNode, $key);
                 continue;
             }
 

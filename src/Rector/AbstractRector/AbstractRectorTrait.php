@@ -7,11 +7,11 @@ namespace Rector\Core\Rector\AbstractRector;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\ChangesReporting\Rector\AbstractRector\NotifyingRemovingNodeTrait;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
 
 trait AbstractRectorTrait
 {
-    use AppliedRectorCollectorTrait;
     use DoctrineTrait;
     use NodeTypeResolverTrait;
     use NameResolverTrait;
@@ -24,6 +24,7 @@ trait AbstractRectorTrait
     use CallableNodeTraverserTrait;
     use ComplexRemovalTrait;
     use NodeCollectorTrait;
+    use NotifyingRemovingNodeTrait;
 
     protected function isNonAnonymousClass(?Node $node): bool
     {

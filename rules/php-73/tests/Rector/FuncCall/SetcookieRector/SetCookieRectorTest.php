@@ -6,9 +6,9 @@ namespace Rector\Php73\Tests\Rector\FuncCall\SetcookieRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Php73\Rector\FuncCall\SetcookieRector;
+use Rector\Php73\Rector\FuncCall\SetCookieRector;
 
-final class SetcookieRectorTest extends AbstractRectorTestCase
+final class SetCookieRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -25,6 +25,6 @@ final class SetcookieRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return SetcookieRector::class;
+        return SetCookieRector::class;
     }
 }

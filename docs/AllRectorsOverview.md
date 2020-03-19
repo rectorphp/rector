@@ -7015,9 +7015,9 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
 
 <br>
 
-### `SetcookieRector`
+### `SetCookieRector`
 
-- class: [`Rector\Php73\Rector\FuncCall\SetcookieRector`](/../master/rules/php-73/src/Rector/FuncCall/SetcookieRector.php)
+- class: [`Rector\Php73\Rector\FuncCall\SetCookieRector`](/../master/rules/php-73/src/Rector/FuncCall/SetCookieRector.php)
 - [test fixtures](/../master/rules/php-73/tests/Rector/FuncCall/SetcookieRector/Fixture)
 
 Convert setcookie argument to PHP7.3 option array

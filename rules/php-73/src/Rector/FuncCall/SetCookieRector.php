@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php73\Rector\FuncCall;
 
-use function count;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -22,8 +21,10 @@ use Rector\Core\ValueObject\PhpVersionFeature;
  *
  * @see https://www.php.net/setcookie
  * @see https://wiki.php.net/rfc/same-site-cookie
+ *
+ * @see \Rector\Php73\Tests\Rector\FuncCall\SetcookieRector\SetcookieRectorTest
  */
-final class SetcookieRector extends AbstractRector
+final class SetCookieRector extends AbstractRector
 {
     /**
      * Conversion table from argument index to options name

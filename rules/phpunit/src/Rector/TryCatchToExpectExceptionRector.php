@@ -80,7 +80,8 @@ PHP
                 continue;
             }
 
-            unset($node->stmts[$key]);
+            /** @var int $key */
+            $this->removeStmt($node, $key);
         }
 
         $node->stmts = array_merge((array) $node->stmts, (array) $proccesed);

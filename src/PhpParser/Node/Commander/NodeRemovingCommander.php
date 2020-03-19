@@ -9,10 +9,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
+use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\NodeVisitorFactory\NodeRemovingNodeVisitorFactory;
-use Rector\Core\Report\AffectedFilesCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

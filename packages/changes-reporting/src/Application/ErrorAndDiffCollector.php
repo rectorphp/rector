@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Application;
+namespace Rector\ChangesReporting\Application;
 
 use PhpParser\Node;
 use PHPStan\AnalysedCodeException;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Error\ExceptionCorrector;
@@ -33,9 +34,9 @@ final class ErrorAndDiffCollector
     private $differAndFormatter;
 
     /**
-     * @var AppliedRectorCollector
+     * @var RectorChangeCollector
      */
-    private $appliedRectorCollector;
+    private $rectorChangeCollector;
 
     /**
      * @var ExceptionCorrector
@@ -54,13 +55,13 @@ final class ErrorAndDiffCollector
 
     public function __construct(
         DifferAndFormatter $differAndFormatter,
-        AppliedRectorCollector $appliedRectorCollector,
+        RectorChangeCollector $rectorChangeCollector,
         ExceptionCorrector $exceptionCorrector,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         NodeRemovingCommander $nodeRemovingCommander
     ) {
         $this->differAndFormatter = $differAndFormatter;
-        $this->appliedRectorCollector = $appliedRectorCollector;
+        $this->rectorChangeCollector = $rectorChangeCollector;
         $this->exceptionCorrector = $exceptionCorrector;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
@@ -103,14 +104,14 @@ final class ErrorAndDiffCollector
             return;
         }
 
-        $appliedRectors = $this->appliedRectorCollector->getRectorClasses($smartFileInfo);
+        $rectorChanges = $this->rectorChangeCollector->getRectorChangesByFileInfo($smartFileInfo);
 
         // always keep the most recent diff
         $this->fileDiffs[$smartFileInfo->getRealPath()] = new FileDiff(
             $smartFileInfo,
             $this->differAndFormatter->diff($oldContent, $newContent),
             $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
-            $appliedRectors
+            $rectorChanges
         );
     }
 
@@ -148,7 +149,8 @@ final class ErrorAndDiffCollector
         if ($rectorClass) {
             $this->addErrorWithRectorClassMessageAndFileInfo($rectorClass, $throwable->getMessage(), $fileInfo);
         } else {
-            $this->addError(new Error($fileInfo, $throwable->getMessage(), $throwable->getCode()));
+            $error = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
+            $this->addError($error);
         }
     }
 }

@@ -260,7 +260,7 @@ PHP
         // make sure the type is not overridden
         $currentClassMethod->returnType->setAttribute(self::DO_NOT_CHANGE, true);
 
-        $this->notifyNodeChangeFileInfo($currentClassMethod);
+        $this->notifyNodeFileInfo($currentClassMethod);
     }
 
     /**

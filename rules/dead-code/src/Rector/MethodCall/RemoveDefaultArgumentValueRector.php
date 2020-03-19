@@ -93,7 +93,7 @@ PHP
 
         $keysToRemove = $this->resolveKeysToRemove($node, $defaultValues);
         foreach ($keysToRemove as $keyToRemove) {
-            unset($node->args[$keyToRemove]);
+            $this->removeArg($node, $keyToRemove);
         }
 
         return $node;
