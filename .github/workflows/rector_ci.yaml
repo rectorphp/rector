@@ -36,19 +36,43 @@ jobs:
                     coverage: none
 
             -   run: composer install --no-progress
+
+            ## First run Rector
             -   run: composer rector-ci-fix
 
             -
-                name: Check for modified files
+                name: Check for Rector modified files
                 id: git-check
-                run: echo ::set-output name=modified::$(if git diff --exit-code --no-patch; then echo "false"; else echo "true"; fi)
+                run: echo ::set-output name=modified_rector::$(if git diff --exit-code --no-patch; then echo "false"; else echo "true"; fi)
 
-            -   name: Push changes
-                if: steps.git-check.outputs.modified == 'true'
+            -   name: Git config
+                if: steps.git-check.outputs.modified_rector == 'true'
                 run: |
                     git config --global user.name 'rector-bot'
                     git config --global user.email 'tomas@getrector.org'
-                    git commit -am "[Rector CI] Fixed Rector issues"
-                    git push
+
+            -   name: Commit Rector changes
+                if: steps.git-check.outputs.modified_rector == 'true'
+                run: git commit -am "fixup! [Rector CI] Fixed Rector issues"
+
+            ## Now, there might be coding standard issues after running Rector
+            -
+                if: steps.git-check.outputs.modified_rector == 'true'
+                run: composer fix-cs
+
+            -
+                name: Check for CS modified files
+                if: steps.git-check.outputs.modified_rector == 'true'
+                id: git-check
+                run: echo ::set-output name=modified_cs::$(if git diff --exit-code --no-patch; then echo "false"; else echo "true"; fi)
+
+            -   name: Commit CS changes
+                if: steps.git-check.outputs.modified_cs == 'true'
+                run: git commit -am "fixup! [Rector CI] Fixed CS issues"
+
+
+            -   name: Push changes
+                if: steps.git-check.outputs.modified_rector == 'true'
+                run: git push
                 # In case we want to fail this job when there are changed files, just add "exit 1"
 
