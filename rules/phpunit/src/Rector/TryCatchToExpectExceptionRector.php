@@ -80,6 +80,7 @@ PHP
                 continue;
             }
 
+            /** @var int $key */
             $this->removeStmt($node, $key);
         }
 

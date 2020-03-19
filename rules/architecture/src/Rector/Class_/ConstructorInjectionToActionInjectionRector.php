@@ -298,7 +298,7 @@ PHP
             }
 
             // remove the assign
-            unset($classMethod->stmts[$key]);
+            $this->removeStmt($classMethod, $key);
         }
     }
 

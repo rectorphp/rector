@@ -131,7 +131,7 @@ PHP
     {
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
             if (isset($node->args[$position]) && $this->isName($node->args[$position], $name)) {
-                unset($node->args[$position]);
+                $this->removeArg($node, $position);
             }
 
             return;
@@ -139,7 +139,7 @@ PHP
 
         if ($node instanceof ClassMethod) {
             if (isset($node->params[$position]) && $this->isName($node->params[$position], $name)) {
-                unset($node->params[$position]);
+                $this->removeParam($node, $position);
             }
 
             return;
