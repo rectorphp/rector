@@ -6,6 +6,8 @@ namespace Rector\ChangesReporting\Collector;
 
 use PhpParser\Node;
 use Rector\ChangesReporting\ValueObject\RectorWithFileAndLineChange;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Exception\NotRectorException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -18,6 +20,10 @@ final class RectorChangeCollector
 
     public function addRectorClassWithLine(string $rectorClass, SmartFileInfo $smartFileInfo, int $line): void
     {
+        if (! is_a($rectorClass, RectorInterface::class, true)) {
+            throw new NotRectorException($rectorClass);
+        }
+
         $this->rectorWithFileAndLineChanges[] = new RectorWithFileAndLineChange(
             $rectorClass,
             $smartFileInfo->getRealPath(),

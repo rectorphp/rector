@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Report;
+namespace Rector\ChangesReporting\Collector;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 

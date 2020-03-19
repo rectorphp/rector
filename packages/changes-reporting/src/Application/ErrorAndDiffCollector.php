@@ -149,7 +149,8 @@ final class ErrorAndDiffCollector
         if ($rectorClass) {
             $this->addErrorWithRectorClassMessageAndFileInfo($rectorClass, $throwable->getMessage(), $fileInfo);
         } else {
-            $this->addError(new Error($fileInfo, $throwable->getMessage(), $throwable->getCode()));
+            $error = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
+            $this->addError($error);
         }
     }
 }

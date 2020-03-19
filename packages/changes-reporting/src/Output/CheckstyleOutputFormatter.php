@@ -57,6 +57,22 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
         return htmlspecialchars($string, ENT_XML1 | ENT_COMPAT, 'UTF-8');
     }
 
+    private function writeFileErrors(FileDiff $fileDiff): void
+    {
+        $this->symfonyStyle->writeln(sprintf('<file name="%s">', $this->escape($fileDiff->getRelativeFilePath())));
+
+        foreach ($fileDiff->getRectorChanges() as $rectorChange) {
+            $error = sprintf(
+                '  <error line="%d" column="1" severity="error" message="%s" />',
+                $this->escape((string) $rectorChange->getLine()),
+                $this->escape((string) $rectorChange->getRectorClass())
+            );
+            $this->symfonyStyle->writeln($error);
+        }
+
+        $this->symfonyStyle->writeln('</file>');
+    }
+
     private function writeNonFileErrors(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
         if ($errorAndDiffCollector->getErrors() !== []) {
@@ -72,21 +88,5 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
 
             $this->symfonyStyle->writeln('</file>');
         }
-    }
-
-    private function writeFileErrors(FileDiff $fileDiff): void
-    {
-        $this->symfonyStyle->writeln(sprintf('<file name="%s">', $this->escape($fileDiff->getRelativeFilePath())));
-
-        foreach ($fileDiff->getRectorChanges() as $rectorChange) {
-            $error = sprintf(
-                '  <error line="%d" column="1" severity="error" message="%s" />',
-                $this->escape((string) $rectorChange->getLine()),
-                $this->escape((string) $rectorChange->getRectorClass())
-            );
-            $this->symfonyStyle->writeln($error);
-        }
-
-        $this->symfonyStyle->writeln('</file>');
     }
 }
