@@ -142,7 +142,7 @@ parameters:
 
     ```yaml
     services:
-        Rector\Core\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector
+        Rector\Core\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector:
             $annotation: "inject"
     ```
 
