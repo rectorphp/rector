@@ -1,6 +1,6 @@
-# Generate own Rector from Recipe
+# Generating your own Rector from a Recipe
 
-## 1. Configure Rector Recipe in `rector.yaml`
+## 1. Configure a Rector Recipe in `rector.yaml`
 
 ```yaml
 # rector.yaml
@@ -10,9 +10,9 @@ parameters:
         package: "Celebrity"
         name: "SplitToExplodeRector"
         node_types:
-            # put main node first, it is used to create namespace
+            # put the main node first, it is used to create the namespace
             - "Assign"
-        description: "Removes unneeded $a = $a assigns"
+        description: "Removes unneeded $a = $a assignments"
         code_before: >
             <?php
 
