@@ -37,7 +37,6 @@ parameters:
         source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
             - ""
         set: "celebrity" # e.g. symfony30, target config to append this rector to
-
 ```
 
 ## 2. Generate it
