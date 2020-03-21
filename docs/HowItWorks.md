@@ -4,13 +4,13 @@
 
 ## 1. Finds all files and Load Configured Rectors
 
-- The application finds files in source you provide and registered Rectors - from `--set`, `--config` or local `rector.yaml`
+- The application finds files in the source code you provide and registered Rectors - from `--set`, `--config` or local `rector.yaml`
 - Then it iterates all found files and applies relevant Rectors to them.
-- *Rector* in this context is 1 single class that modifies 1 thing, e.g. changes class name
+- A *Rector* in this context is 1 single class that modifies 1 thing, e.g. changes the class name
 
 ## 2. Parse and Reconstruct 1 File
 
-The iteration of files, nodes and Rectors respects this life cycle:
+The iteration of files, nodes and Rectors respects this lifecycle:
 
 ```php
 <?php
@@ -42,23 +42,24 @@ foreach ($fileInfos as $fileInfo) {
 
 ### 2.1 Prepare Phase
 
-- File is parsed by [`nikic/php-parser`](https://github.com/nikic/PHP-Parser), 4.0 that supports writing modified tree back to a file
-- Then nodes (array of objects by parser) are traversed by `StandaloneTraverseNodeTraverser` to prepare it's metadata, e.g. class name, method node the node is in, namespace name etc. added by `$node->setAttribute(Attribute::CLASS_NODE, 'value')`.
+- Files are parsed by [`nikic/php-parser`](https://github.com/nikic/PHP-Parser), 4.0 that supports writing modified tree back to a file
+- Then nodes (array of objects by parser) are traversed by `StandaloneTraverseNodeTraverser` to prepare their metadata, e.g. the class name, the method node the node is in, the namespace name etc. added by `$node->setAttribute(Attribute::CLASS_NODE, 'value')`.
 
 ### 2.2 Rectify Phase
 
-- When all nodes are ready, application iterates all active Rectors
-- Each node is compared to `$rector->getNodeTypes()` method to see, if this Rector should do some work on it, e.g. is this class name called `OldClassName`?
+- When all nodes are ready, the application iterates on all active Rectors
+- Each node is compared with `$rector->getNodeTypes()` method to see if this Rector should do some work on it, e.g. is this class name called `OldClassName`?
 - If it doesn't match, it goes to next node.
 - If it matches, the `$rector->reconstruct($node)` method is called
-- Active Rector changes all what he should and returns changed node
+- Active Rector change everything they have to and return changed nodes
 
 ### 2.2.1 Order of Rectors
 
-- Rectors are run by they natural order in config, first will be run first.
+- Rectors are run by they natural order in the configuration, meaning the first
+in the configuration will be run first.
 
-E.g. in this case, first will be changed `@expectedException` annotation to method,
- then a method `setExpectedException` to `expectedException`.
+E.g. in this case, first the `@expectedException` annotation will be changed to a method,
+ then the `setExpectedException` method will be changed to `expectedException`.
 
 ```yaml
 # rector.yaml
@@ -76,11 +77,11 @@ services:
 
 - When work on all nodes of 1 file is done, the file will be saved if it has some changes
 - Or if the `--dry-run` option is on, it will store the *git-like* diff thanks to [GeckoPackages/GeckoDiffOutputBuilder](https://github.com/GeckoPackages/GeckoDiffOutputBuilder)
-- Then go to next file
+- Then Rector will go to the next file
 
 ## 3 Reporting
 
-- After this Rector displays list of changed files
+- After this, Rector displays the list of changed files
 - Or with `--dry-run` option the diff of these files
 
 ### Similar Projects
