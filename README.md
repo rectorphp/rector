@@ -335,7 +335,8 @@ final class MyFirstRector extends AbstractRector
     }
 
     /**
-     * @param MethodCall $node - we can add "MethodCall" type here, because only this node is in "getNodeTypes()"
+     * @param MethodCall $node - we can add "MethodCall" type here, because
+     *                         only this node is in "getNodeTypes()"
      */
     public function refactor(Node $node): ?Node
     {
@@ -456,7 +457,10 @@ docker run -v $(pwd):/project rector/rector:latest process /project/src --set sy
 Using `rector.yaml`:
 
 ```bash
-docker run -v $(pwd):/project rector/rector:latest process /project/app --config /project/rector.yaml --autoload-file /project/vendor/autoload.php --dry-run
+docker run -v $(pwd):/project rector/rector:latest process /project/app \
+--config /project/rector.yaml \
+--autoload-file /project/vendor/autoload.php \
+--dry-run
 ```
 
 ### Community Packages
