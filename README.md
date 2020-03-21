@@ -1,7 +1,7 @@
 # Rector - Upgrade Your Legacy App to a Modern Codebase
 
 Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code.
-Why refactor manually if Rector can handle 80% for you?
+Why refactor manually if Rector can handle 80% of the task for you?
 
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
@@ -9,7 +9,7 @@ Why refactor manually if Rector can handle 80% for you?
 
 <br>
 
-- **[All 450+ Rectors Overview](/docs/AllRectorsOverview.md)**
+- **[Overview of all 450+ Rectors](/docs/AllRectorsOverview.md)**
 - **[Do you Love&Hate Legacy? We're Hiring](https://getrector.org/join-rector-team)**
 
 <br>
@@ -21,7 +21,7 @@ Why refactor manually if Rector can handle 80% for you?
 ## Sponsors
 
 Rector grows faster with your help, the more you help the more work it saves you.
-Check out [Rector's Patreon](https://www.patreon.com/rectorphp). One-time donation is welcomed [through PayPal](https://www.paypal.me/rectorphp).
+Check out [Rector's Patreon](https://www.patreon.com/rectorphp). One-time donations are welcome [through PayPal](https://www.paypal.me/rectorphp).
 
 Thank you:
 
@@ -75,9 +75,9 @@ Tip: If you have EasyCodingStandard, you can start your set with [`ecs-after-rec
 
 ## Try Rector Online
 
-Too little time to download?
+No time to try Rector locally?
 
-We have **[online demo](https://getrector.org/demo) just for you!**
+We have **[an online demo](https://getrector.org/demo) just for you!**
 
 ## Install
 
@@ -85,11 +85,11 @@ We have **[online demo](https://getrector.org/demo) just for you!**
 composer require rector/rector --dev
 ```
 
-**Do you have conflicts during `composer require` or on run?**
+**Having conflicts during `composer require` or on run?**
 
 - Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed)
 
-**Do you need different PHP version than Rector supports?**
+**Using a different PHP version than Rector supports?**
 
 - Use the [Docker image](#run-rector-in-docker)
 
@@ -138,7 +138,7 @@ parameters:
 
 ### C. Custom Sets
 
-1. Create a `rector.yaml` config file with your desired Rectors or provide another config file with `--config`:
+1. Create a `rector.yaml` configuration file with your desired Rectors or provide another configuration file with `--config`:
 
     ```yaml
     services:
@@ -159,13 +159,13 @@ parameters:
 
 ### Extra Autoloading
 
-Rector relies on project and autoloading of its classes by using the composer autoloader as default. To specify your own autoload file, use `--autoload-file` option:
+Rector relies on whatever autoload setup the project it is fixing is using by using the Composer autoloader as default. To specify your own autoload file, use `--autoload-file` option:
 
 ```bash
 vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
 ```
 
-Or use a `rector.yaml` config file:
+Or use a `rector.yaml` configuration file:
 
 ```yaml
 # rector.yaml
@@ -329,7 +329,7 @@ final class MyFirstRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        // what node types we look for?
+        // what node types are we looking for?
         // pick any node from https://github.com/rectorphp/rector/blob/master/docs/NodesOverview.md
         return [MethodCall::class];
     }
@@ -373,7 +373,7 @@ final class MyFirstRector extends AbstractRector
 }
 ```
 
-This is how file structure should look like:
+This is how the file structure should look like:
 
 ```bash
 /src/YourCode.php
@@ -399,7 +399,7 @@ We also need to load Rector rules in `composer.json`:
 }
 ```
 
-After adding this to `composer.json`, be sure to reload composer class map:
+After adding this to `composer.json`, be sure to reload Composer's class map:
 
 ```bash
 composer dump-autoload
@@ -415,7 +415,7 @@ services:
 
 ### 3. Let Rector Refactor Your Code
 
-The `rector.yaml` config is loaded by default, so we can skip it.
+The `rector.yaml` configuration is loaded by default, so we can skip it.
 
 ```bash
 # see the diff first
@@ -427,11 +427,11 @@ vendor/bin/rector process src
 
 That's it!
 
-### Generate Rector Rule
+### Generating a Rector Rule
 
 Do you want to save time with making rules and tests?
 
-Use [`create` command](/docs/RectorRecipe.md).
+Use [the `create` command](/docs/RectorRecipe.md).
 
 ## More Detailed Documentation
 
