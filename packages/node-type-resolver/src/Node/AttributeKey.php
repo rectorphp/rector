@@ -136,4 +136,9 @@ final class AttributeKey
      * @var string
      */
     public const PHP_DOC_INFO = PhpDocInfo::class;
+
+    /**
+     * @var string
+     */
+    public const METHOD_CALL_NODE_VARIABLE = 'method_call_variable';
 }

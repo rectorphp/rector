@@ -7,6 +7,7 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -91,11 +92,16 @@ PHP
             return null;
         }
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Assign) {
+        if (! $parentNode instanceof Assign) {
             return null;
         }
 
-        dump($this->methodCallManipulator->findMethodCallNamesOnVariable($parentNode->var));
+        $mockVariable = $parentNode->var;
+        if (! $mockVariable instanceof Variable) {
+            return null;
+        }
+
+        dump($this->methodCallManipulator->findMethodCallNamesOnVariable($mockVariable));
 
         return $node;
     }

@@ -59,6 +59,9 @@ final class MethodCallManipulator
             $methodCallNamesOnVariable[] = $methodName;
         }
 
+        dump($methodCallNamesOnVariable);
+        die;
+
         return array_unique($methodCallNamesOnVariable);
     }
 
@@ -137,6 +140,10 @@ final class MethodCallManipulator
             $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         } while ($parentNode instanceof Node && ! $parentNode instanceof FunctionLike);
 
+        dump(12345);
+        dump($previousMethodCalls);
+        die;
+
         return $previousMethodCalls;
     }
 
@@ -209,15 +216,36 @@ final class MethodCallManipulator
             $variableName,
             &$methodCalls
         ) {
+            // @todo add variable
+
             if (! $node instanceof MethodCall) {
                 return null;
             }
 
-            if (! $node->var instanceof Variable) {
+            dump($node->getAttribute(AttributeKey::METHOD_CALL_NODE_VARIABLE));
+            die;
+
+            // include chain method calls
+            $nestedMethodCall = $node->var;
+
+            while ($nestedMethodCall instanceof MethodCall) {
+                $onCalledVariable = $this->resolveMethodCallAndChainMethodCallVariable($nestedMethodCall);
+                if (! $this->isVariableOfName($onCalledVariable, $variableName)) {
+                    continue;
+                }
+
+                $methodCalls[] = $nestedMethodCall;
+            }
+
+            $onCalledVariable = $this->resolveMethodCallAndChainMethodCallVariable($node);
+            dump($onCalledVariable);
+            die;
+
+            if (! $onCalledVariable instanceof Variable) {
                 return null;
             }
 
-            if (! $this->nodeNameResolver->isName($node->var, $variableName)) {
+            if (! $this->nodeNameResolver->isName($onCalledVariable, $variableName)) {
                 return null;
             }
 
@@ -227,5 +255,28 @@ final class MethodCallManipulator
         });
 
         return $methodCalls;
+    }
+
+    private function resolveMethodCallAndChainMethodCallVariable(MethodCall $methodCall): ?Variable
+    {
+        $possibleVariable = $methodCall->var;
+        while ($possibleVariable instanceof MethodCall) {
+            $possibleVariable = $possibleVariable->var;
+        }
+
+        if (! $possibleVariable instanceof Variable) {
+            return null;
+        }
+
+        return $possibleVariable;
+    }
+
+    private function isVariableOfName(Node\Expr $node, string $variableName): bool
+    {
+        if (! $node instanceof Variable) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($node, $variableName);
     }
 }
