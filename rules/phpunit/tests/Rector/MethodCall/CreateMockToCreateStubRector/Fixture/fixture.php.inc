@@ -11,12 +11,6 @@ class MyTest extends TestCase
         $stub = $this->createMock(\Exception::class);
         $stub->method('getMessage')
             ->willReturn('a message');
-        $mock = $this->createMock(\Exception::class);
-        $mock->expects($this->once())
-            ->method('getMessage')
-            ->willReturn('a message');
-        self::assertSame('a message', $stub->getMessage());
-        self::assertSame('a message', $mock->getMessage());
     }
 }
 
@@ -35,12 +29,6 @@ class MyTest extends TestCase
         $stub = $this->createStub(\Exception::class);
         $stub->method('getMessage')
             ->willReturn('a message');
-        $mock = $this->createMock(\Exception::class);
-        $mock->expects($this->once())
-            ->method('getMessage')
-            ->willReturn('a message');
-        self::assertSame('a message', $stub->getMessage());
-        self::assertSame('a message', $mock->getMessage());
     }
 }
 
