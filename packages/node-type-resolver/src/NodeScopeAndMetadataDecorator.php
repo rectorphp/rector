@@ -12,6 +12,7 @@ use Rector\Core\Configuration\Configuration;
 use Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\MethodCallNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\PhpDocInfoNodeVisitor;
@@ -70,6 +71,11 @@ final class NodeScopeAndMetadataDecorator
      */
     private $phpDocInfoNodeVisitor;
 
+    /**
+     * @var MethodCallNodeVisitor
+     */
+    private $methodCallNodeVisitor;
+
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
@@ -80,7 +86,8 @@ final class NodeScopeAndMetadataDecorator
         FileInfoNodeVisitor $fileInfoNodeVisitor,
         NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
         PhpDocInfoNodeVisitor $phpDocInfoNodeVisitor,
-        Configuration $configuration
+        Configuration $configuration,
+        MethodCallNodeVisitor $methodCallNodeVisitor
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
@@ -92,6 +99,7 @@ final class NodeScopeAndMetadataDecorator
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
         $this->configuration = $configuration;
         $this->phpDocInfoNodeVisitor = $phpDocInfoNodeVisitor;
+        $this->methodCallNodeVisitor = $methodCallNodeVisitor;
     }
 
     /**
@@ -125,6 +133,7 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
+        $nodeTraverser->addVisitor($this->methodCallNodeVisitor);
         $nodeTraverser->addVisitor($this->phpDocInfoNodeVisitor);
 
         $nodes = $nodeTraverser->traverse($nodes);

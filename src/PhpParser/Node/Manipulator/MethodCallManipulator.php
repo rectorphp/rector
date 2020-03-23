@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -23,22 +22,13 @@ final class MethodCallManipulator
     private $nodeNameResolver;
 
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
 
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        CallableNodeTraverser $callableNodeTraverser,
-        BetterNodeFinder $betterNodeFinder
-    ) {
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
@@ -117,27 +107,22 @@ final class MethodCallManipulator
      */
     private function findMethodCallsOnVariable(Variable $variable): array
     {
-        /** @var Node|null $parentNode */
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode === null) {
+        // get scope node, e.g. parent function call, method call or anonymous function
+        $scopeNode = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [FunctionLike::class]);
+        if ($scopeNode === null) {
             return [];
         }
 
-        $variableName = $this->nodeNameResolver->getName($variable);
-        if ($variableName === null) {
-            return [];
-        }
+        return $this->betterNodeFinder->find($scopeNode, function (Node $node) use ($variable) {
+            if (! $node instanceof MethodCall) {
+                return false;
+            }
 
-        $previousMethodCalls = [];
+            /** @var string $methodCallVariableName */
+            $methodCallVariableName = $node->getAttribute(AttributeKey::METHOD_CALL_NODE_CALLER_NAME);
 
-        do {
-            $methodCalls = $this->collectMethodCallsOnVariableName($parentNode, $variableName);
-            $previousMethodCalls = array_merge($previousMethodCalls, $methodCalls);
-
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        } while ($parentNode instanceof Node && ! $parentNode instanceof FunctionLike);
-
-        return $previousMethodCalls;
+            return $this->nodeNameResolver->isName($variable, $methodCallVariableName);
+        });
     }
 
     /**
@@ -196,36 +181,5 @@ final class MethodCallManipulator
         }
 
         return $parentNode;
-    }
-
-    /**
-     * @return MethodCall[]
-     */
-    private function collectMethodCallsOnVariableName(Node $node, string $variableName): array
-    {
-        $methodCalls = [];
-
-        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
-            $variableName,
-            &$methodCalls
-        ) {
-            if (! $node instanceof MethodCall) {
-                return null;
-            }
-
-            if (! $node->var instanceof Variable) {
-                return null;
-            }
-
-            if (! $this->nodeNameResolver->isName($node->var, $variableName)) {
-                return null;
-            }
-
-            $methodCalls[] = $node;
-
-            return null;
-        });
-
-        return $methodCalls;
     }
 }

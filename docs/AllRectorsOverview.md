@@ -1,4 +1,4 @@
-# All 465 Rectors Overview
+# All 466 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -5329,6 +5329,38 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 ```diff
 -$this->assertTrue(is_readable($readmeFile), "message");
 +$this->assertIsReadable($readmeFile, "message");
+```
+
+<br>
+
+### `CreateMockToCreateStubRector`
+
+- class: [`Rector\PHPUnit\Rector\MethodCall\CreateMockToCreateStubRector`](/../master/rules/phpunit/src/Rector/MethodCall/CreateMockToCreateStubRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/CreateMockToCreateStubRector/Fixture)
+
+Replaces createMock() with createStub() when relevant
+
+```diff
+ use PHPUnit\Framework\TestCase
+
+ class MyTest extends TestCase
+ {
+     public function testItBehavesAsExpected(): void
+     {
+-        $stub = $this->createMock(\Exception::class);
++        $stub = $this->createStub(\Exception::class);
+         $stub->method('getMessage')
+             ->willReturn('a message');
+
+         $mock = $this->createMock(\Exception::class);
+         $mock->expects($this->once())
+             ->method('getMessage')
+             ->willReturn('a message');
+
+         self::assertSame('a message', $stub->getMessage());
+         self::assertSame('a message', $mock->getMessage());
+     }
+ }
 ```
 
 <br>

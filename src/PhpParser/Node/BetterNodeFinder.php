@@ -176,6 +176,24 @@ final class BetterNodeFinder
     }
 
     /**
+     * @param class-string[] $types
+     */
+    public function findFirstPreviousOfTypes(Node $mainNode, array $types): ?Node
+    {
+        return $this->findFirstPrevious($mainNode, function (Node $node) use ($types) {
+            foreach ($types as $type) {
+                if (! is_a($node, $type, true)) {
+                    continue;
+                }
+
+                return true;
+            }
+
+            return false;
+        });
+    }
+
+    /**
      * @param Node|Node[] $nodes
      */
     public function findFirstClass($nodes): ?Class_
