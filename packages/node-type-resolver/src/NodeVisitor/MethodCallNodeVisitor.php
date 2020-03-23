@@ -5,16 +5,30 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MethodCallNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var Node\Expr
+     * @var Expr|Name
      */
-    private $currentCaller;
+    private $callerNode;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(NodeNameResolver $nodeNameResolver)
+    {
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
 
     /**
      * @return int|Node|void|null
@@ -32,12 +46,22 @@ final class MethodCallNodeVisitor extends NodeVisitorAbstract
             return;
         }
 
-        if (! $node->var instanceof MethodCall) {
-            $this->currentCaller = $node->var;
+        $callerNode = $node->var;
+        if ($callerNode instanceof MethodCall) {
+            while ($callerNode instanceof MethodCall) {
+                $callerNode = $callerNode->var;
+            }
         }
 
-        $node->setAttribute(AttributeKey::METHOD_CALL_NODE_VARIABLE, $this->currentCaller);
+        if ($callerNode instanceof StaticCall) {
+            while ($callerNode instanceof StaticCall) {
+                $callerNode = $callerNode->class;
+            }
+        }
 
+        $this->callerNode = $callerNode;
+        $currentCallerName = $this->nodeNameResolver->getName($this->callerNode);
 
+        $node->setAttribute(AttributeKey::METHOD_CALL_NODE_CALLER_NAME, $currentCallerName);
     }
 }

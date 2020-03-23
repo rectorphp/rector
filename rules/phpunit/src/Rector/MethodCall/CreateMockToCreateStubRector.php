@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
+use PhpParser\Node\Identifier;
 use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -38,16 +38,20 @@ final class CreateMockToCreateStubRector extends AbstractRector
             new CodeSample(
                 <<<'PHP'
 use PHPUnit\Framework\TestCase
-class MyTest extends TestCase {
+
+class MyTest extends TestCase
+{
     public function testItBehavesAsExpected(): void
     {
         $stub = $this->createMock(\Exception::class);
         $stub->method('getMessage')
             ->willReturn('a message');
+
         $mock = $this->createMock(\Exception::class);
         $mock->expects($this->once())
             ->method('getMessage')
             ->willReturn('a message');
+
         self::assertSame('a message', $stub->getMessage());
         self::assertSame('a message', $mock->getMessage());
     }
@@ -56,16 +60,20 @@ PHP
                  ,
                 <<<'PHP'
 use PHPUnit\Framework\TestCase
-class MyTest extends TestCase {
+
+class MyTest extends TestCase
+{
     public function testItBehavesAsExpected(): void
     {
         $stub = $this->createStub(\Exception::class);
         $stub->method('getMessage')
             ->willReturn('a message');
+
         $mock = $this->createMock(\Exception::class);
         $mock->expects($this->once())
             ->method('getMessage')
             ->willReturn('a message');
+
         self::assertSame('a message', $stub->getMessage());
         self::assertSame('a message', $mock->getMessage());
     }
@@ -91,6 +99,7 @@ PHP
         if (! $this->isName($node->name, 'createMock')) {
             return null;
         }
+
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Assign) {
             return null;
@@ -101,7 +110,12 @@ PHP
             return null;
         }
 
-        dump($this->methodCallManipulator->findMethodCallNamesOnVariable($mockVariable));
+        $methodCallNamesOnVariable = $this->methodCallManipulator->findMethodCallNamesOnVariable($mockVariable);
+        if (in_array('expects', $methodCallNamesOnVariable, true)) {
+            return null;
+        }
+
+        $node->name = new Identifier('createStub');
 
         return $node;
     }

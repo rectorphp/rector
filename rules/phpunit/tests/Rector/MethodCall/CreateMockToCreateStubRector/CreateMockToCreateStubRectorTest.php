@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\phpunit\Tests\Rector\MethodCall\CreateMockToCreateStubRector;
+namespace Rector\PHPUnit\Tests\Rector\MethodCall\CreateMockToCreateStubRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\phpunit\Rector\MethodCall\CreateMockToCreateStubRector;
+use Rector\PHPUnit\Rector\MethodCall\CreateMockToCreateStubRector;
 
 final class CreateMockToCreateStubRectorTest extends AbstractRectorTestCase
 {

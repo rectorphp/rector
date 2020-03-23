@@ -140,5 +140,5 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const METHOD_CALL_NODE_VARIABLE = 'method_call_variable';
+    public const METHOD_CALL_NODE_CALLER_NAME = 'method_call_variable_name';
 }
