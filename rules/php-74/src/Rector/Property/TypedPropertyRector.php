@@ -10,7 +10,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -122,6 +124,7 @@ PHP
 
         $this->removeVarPhpTagValueNodeIfNotComment($node, $varType);
         $this->removeDefaultValueForDoctrineCollection($node, $varType);
+        $this->addDefaultValueNullForNullableType($node, $varType);
 
         $node->type = $propertyTypeNode;
 
@@ -183,13 +186,27 @@ PHP
         return $varTagValueNode->type instanceof ArrayTypeNode;
     }
 
-    private function removeDefaultValueForDoctrineCollection(Property $property, Type $varType): void
+    private function removeDefaultValueForDoctrineCollection(Property $property, Type $propertyType): void
     {
-        if (! $this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($varType)) {
+        if (! $this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($propertyType)) {
             return;
         }
 
         $onlyProperty = $property->props[0];
         $onlyProperty->default = null;
+    }
+
+    private function addDefaultValueNullForNullableType(Property $property, Type $propertyType): void
+    {
+        if (! $propertyType instanceof UnionType) {
+            return;
+        }
+
+        if (! $propertyType->isSuperTypeOf(new NullType())->yes()) {
+            return;
+        }
+
+        $onlyProperty = $property->props[0];
+        $onlyProperty->default = $this->createNull();
     }
 }
