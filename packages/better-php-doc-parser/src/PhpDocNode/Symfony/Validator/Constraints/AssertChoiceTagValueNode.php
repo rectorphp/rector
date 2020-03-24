@@ -110,7 +110,7 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode impl
 
     private function resolveOriginalChoiceContent(string $annotationContent): ?string
     {
-        $matches = Strings::match($annotationContent, '#(\(choices=|\()(?<choice_content>.*?)(\)|,)#ms');
+        $matches = Strings::match($annotationContent, '#(\(choices=|\()(?<choice_content>.*?(})?)(\)|})#ms');
 
         return $matches['choice_content'] ?? null;
     }
