@@ -56,7 +56,7 @@ final class ListSwapArrayOrderRector extends AbstractRector
                 continue;
             }
 
-            if ($item->value instanceof ArrayDimFetch) {
+            if ($item->value instanceof ArrayDimFetch && $item->value->dim === null) {
                 $printerVars[] = $this->print($item->value->var);
             } else {
                 return null;
