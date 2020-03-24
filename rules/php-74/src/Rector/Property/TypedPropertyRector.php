@@ -121,6 +121,7 @@ PHP
         }
 
         $this->removeVarPhpTagValueNodeIfNotComment($node, $varType);
+        $this->removeDefaultValueForDoctrineCollection($node, $varType);
 
         $node->type = $propertyTypeNode;
 
@@ -180,5 +181,15 @@ PHP
     private function isArrayTypeNode(VarTagValueNode $varTagValueNode): bool
     {
         return $varTagValueNode->type instanceof ArrayTypeNode;
+    }
+
+    private function removeDefaultValueForDoctrineCollection(Property $property, Type $varType): void
+    {
+        if (! $this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($varType)) {
+            return;
+        }
+
+        $onlyProperty = $property->props[0];
+        $onlyProperty->default = null;
     }
 }

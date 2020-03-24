@@ -37,6 +37,16 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected $orderedVisibleItems;
 
     /**
+     * @var bool
+     */
+    protected $hasOpeningBracket = false;
+
+    /**
+     * @var bool
+     */
+    protected $hasClosingBracket = false;
+
+    /**
      * @param mixed[] $item
      */
     protected function printArrayItem(array $item, ?string $key = null): string
@@ -145,5 +155,8 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         $this->hasNewlineAfterOpening = (bool) Strings::match($originalContent, '#^(\(\s+|\n)#m');
         $this->hasNewlineBeforeClosing = (bool) Strings::match($originalContent, '#(\s+\)|\n(\s+)?)$#m');
+
+        $this->hasOpeningBracket = (bool) Strings::match($originalContent, '#^\(#');
+        $this->hasClosingBracket = (bool) Strings::match($originalContent, '#\)$#');
     }
 }
