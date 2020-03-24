@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\PhpVersionFeature;
 
 /**
  * @see \Rector\Php74\Tests\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector\RestoreDefaultNullToNullableTypePropertyRectorTest
@@ -63,6 +64,10 @@ PHP
 
     private function shouldSkip(Property $property): bool
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
+            return true;
+        }
+
         if (! $property->type instanceof NullableType) {
             return true;
         }
