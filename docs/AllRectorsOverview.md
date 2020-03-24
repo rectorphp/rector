@@ -1,4 +1,4 @@
-# All 466 Rectors Overview
+# All 467 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -6028,8 +6028,8 @@ Change new application to default factory with application
 
 ### `ContinueToBreakInSwitchRector`
 
-- class: [`Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector`](/../master/rules/php-52/src/Rector/Switch_/ContinueToBreakInSwitchRector.php)
-- [test fixtures](/../master/rules/php-52/tests/Rector/Switch_/ContinueToBreakInSwitchRector/Fixture)
+- class: [`Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector`](/../master/rules/php52/src/Rector/Switch_/ContinueToBreakInSwitchRector.php)
+- [test fixtures](/../master/rules/php52/tests/Rector/Switch_/ContinueToBreakInSwitchRector/Fixture)
 
 Use break instead of continue in switch statements
 
@@ -6052,8 +6052,8 @@ Use break instead of continue in switch statements
 
 ### `VarToPublicPropertyRector`
 
-- class: [`Rector\Php52\Rector\Property\VarToPublicPropertyRector`](/../master/rules/php-52/src/Rector/Property/VarToPublicPropertyRector.php)
-- [test fixtures](/../master/rules/php-52/tests/Rector/Property/VarToPublicPropertyRector/Fixture)
+- class: [`Rector\Php52\Rector\Property\VarToPublicPropertyRector`](/../master/rules/php52/src/Rector/Property/VarToPublicPropertyRector.php)
+- [test fixtures](/../master/rules/php52/tests/Rector/Property/VarToPublicPropertyRector/Fixture)
 
 Remove unused private method
 
@@ -6071,8 +6071,8 @@ Remove unused private method
 
 ### `DirNameFileConstantToDirConstantRector`
 
-- class: [`Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector`](/../master/rules/php-53/src/Rector/FuncCall/DirNameFileConstantToDirConstantRector.php)
-- [test fixtures](/../master/rules/php-53/tests/Rector/FuncCall/DirNameFileConstantToDirConstantRector/Fixture)
+- class: [`Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector`](/../master/rules/php53/src/Rector/FuncCall/DirNameFileConstantToDirConstantRector.php)
+- [test fixtures](/../master/rules/php53/tests/Rector/FuncCall/DirNameFileConstantToDirConstantRector/Fixture)
 
 Convert dirname(__FILE__) to __DIR__
 
@@ -6091,8 +6091,8 @@ Convert dirname(__FILE__) to __DIR__
 
 ### `TernaryToElvisRector`
 
-- class: [`Rector\Php53\Rector\Ternary\TernaryToElvisRector`](/../master/rules/php-53/src/Rector/Ternary/TernaryToElvisRector.php)
-- [test fixtures](/../master/rules/php-53/tests/Rector/Ternary/TernaryToElvisRector/Fixture)
+- class: [`Rector\Php53\Rector\Ternary\TernaryToElvisRector`](/../master/rules/php53/src/Rector/Ternary/TernaryToElvisRector.php)
+- [test fixtures](/../master/rules/php53/tests/Rector/Ternary/TernaryToElvisRector/Fixture)
 
 Use ?: instead of ?, where useful
 
@@ -6110,8 +6110,8 @@ Use ?: instead of ?, where useful
 
 ### `RemoveReferenceFromCallRector`
 
-- class: [`Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector`](/../master/rules/php-54/src/Rector/FuncCall/RemoveReferenceFromCallRector.php)
-- [test fixtures](/../master/rules/php-54/tests/Rector/FuncCall/RemoveReferenceFromCallRector/Fixture)
+- class: [`Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector`](/../master/rules/php54/src/Rector/FuncCall/RemoveReferenceFromCallRector.php)
+- [test fixtures](/../master/rules/php54/tests/Rector/FuncCall/RemoveReferenceFromCallRector/Fixture)
 
 Remove & from function and method calls
 
@@ -6130,8 +6130,8 @@ Remove & from function and method calls
 
 ### `RemoveZeroBreakContinueRector`
 
-- class: [`Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector`](/../master/rules/php-54/src/Rector/Break_/RemoveZeroBreakContinueRector.php)
-- [test fixtures](/../master/rules/php-54/tests/Rector/Break_/RemoveZeroBreakContinueRector/Fixture)
+- class: [`Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector`](/../master/rules/php54/src/Rector/Break_/RemoveZeroBreakContinueRector.php)
+- [test fixtures](/../master/rules/php54/tests/Rector/Break_/RemoveZeroBreakContinueRector/Fixture)
 
 Remove 0 from break and continue
 
@@ -6161,8 +6161,8 @@ Remove 0 from break and continue
 
 ### `PregReplaceEModifierRector`
 
-- class: [`Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`](/../master/rules/php-55/src/Rector/FuncCall/PregReplaceEModifierRector.php)
-- [test fixtures](/../master/rules/php-55/tests/Rector/FuncCall/PregReplaceEModifierRector/Fixture)
+- class: [`Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`](/../master/rules/php55/src/Rector/FuncCall/PregReplaceEModifierRector.php)
+- [test fixtures](/../master/rules/php55/tests/Rector/FuncCall/PregReplaceEModifierRector/Fixture)
 
 The /e modifier is no longer supported, use preg_replace_callback instead
 
@@ -6183,8 +6183,8 @@ The /e modifier is no longer supported, use preg_replace_callback instead
 
 ### `StringClassNameToClassConstantRector`
 
-- class: [`Rector\Php55\Rector\String_\StringClassNameToClassConstantRector`](/../master/rules/php-55/src/Rector/String_/StringClassNameToClassConstantRector.php)
-- [test fixtures](/../master/rules/php-55/tests/Rector/String_/StringClassNameToClassConstantRector/Fixture)
+- class: [`Rector\Php55\Rector\String_\StringClassNameToClassConstantRector`](/../master/rules/php55/src/Rector/String_/StringClassNameToClassConstantRector.php)
+- [test fixtures](/../master/rules/php55/tests/Rector/String_/StringClassNameToClassConstantRector/Fixture)
 
 Replace string class names by <class>::class constant
 
@@ -6209,8 +6209,8 @@ Replace string class names by <class>::class constant
 
 ### `AddDefaultValueForUndefinedVariableRector`
 
-- class: [`Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector`](/../master/rules/php-56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php)
-- [test fixtures](/../master/rules/php-56/tests/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector/Fixture)
+- class: [`Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector`](/../master/rules/php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php)
+- [test fixtures](/../master/rules/php56/tests/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector/Fixture)
 
 Adds default value for undefined variable
 
@@ -6232,8 +6232,8 @@ Adds default value for undefined variable
 
 ### `PowToExpRector`
 
-- class: [`Rector\Php56\Rector\FuncCall\PowToExpRector`](/../master/rules/php-56/src/Rector/FuncCall/PowToExpRector.php)
-- [test fixtures](/../master/rules/php-56/tests/Rector/FuncCall/PowToExpRector/Fixture)
+- class: [`Rector\Php56\Rector\FuncCall\PowToExpRector`](/../master/rules/php56/src/Rector/FuncCall/PowToExpRector.php)
+- [test fixtures](/../master/rules/php56/tests/Rector/FuncCall/PowToExpRector/Fixture)
 
 Changes pow(val, val2) to ** (exp) parameter
 
@@ -6248,8 +6248,8 @@ Changes pow(val, val2) to ** (exp) parameter
 
 ### `BreakNotInLoopOrSwitchToReturnRector`
 
-- class: [`Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector`](/../master/rules/php-70/src/Rector/Break_/BreakNotInLoopOrSwitchToReturnRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/Break_/BreakNotInLoopOrSwitchToReturnRector/Fixture)
+- class: [`Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector`](/../master/rules/php70/src/Rector/Break_/BreakNotInLoopOrSwitchToReturnRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/Break_/BreakNotInLoopOrSwitchToReturnRector/Fixture)
 
 Convert break outside for/foreach/switch context to return
 
@@ -6274,8 +6274,8 @@ Convert break outside for/foreach/switch context to return
 
 ### `CallUserMethodRector`
 
-- class: [`Rector\Php70\Rector\FuncCall\CallUserMethodRector`](/../master/rules/php-70/src/Rector/FuncCall/CallUserMethodRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/FuncCall/CallUserMethodRector/Fixture)
+- class: [`Rector\Php70\Rector\FuncCall\CallUserMethodRector`](/../master/rules/php70/src/Rector/FuncCall/CallUserMethodRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/CallUserMethodRector/Fixture)
 
 Changes call_user_method()/call_user_method_array() to call_user_func()/call_user_func_array()
 
@@ -6288,8 +6288,8 @@ Changes call_user_method()/call_user_method_array() to call_user_func()/call_use
 
 ### `EmptyListRector`
 
-- class: [`Rector\Php70\Rector\List_\EmptyListRector`](/../master/rules/php-70/src/Rector/List_/EmptyListRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/List_/EmptyListRector/Fixture)
+- class: [`Rector\Php70\Rector\List_\EmptyListRector`](/../master/rules/php70/src/Rector/List_/EmptyListRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/List_/EmptyListRector/Fixture)
 
 list() cannot be empty
 
@@ -6302,8 +6302,8 @@ list() cannot be empty
 
 ### `EregToPregMatchRector`
 
-- class: [`Rector\Php70\Rector\FuncCall\EregToPregMatchRector`](/../master/rules/php-70/src/Rector/FuncCall/EregToPregMatchRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/FuncCall/EregToPregMatchRector/Fixture)
+- class: [`Rector\Php70\Rector\FuncCall\EregToPregMatchRector`](/../master/rules/php70/src/Rector/FuncCall/EregToPregMatchRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/EregToPregMatchRector/Fixture)
 
 Changes ereg*() to preg*() calls
 
@@ -6316,8 +6316,8 @@ Changes ereg*() to preg*() calls
 
 ### `ExceptionHandlerTypehintRector`
 
-- class: [`Rector\Php70\Rector\FunctionLike\ExceptionHandlerTypehintRector`](/../master/rules/php-70/src/Rector/FunctionLike/ExceptionHandlerTypehintRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/FunctionLike/ExceptionHandlerTypehintRector/Fixture)
+- class: [`Rector\Php70\Rector\FunctionLike\ExceptionHandlerTypehintRector`](/../master/rules/php70/src/Rector/FunctionLike/ExceptionHandlerTypehintRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/FunctionLike/ExceptionHandlerTypehintRector/Fixture)
 
 Changes property `@var` annotations from annotation to type.
 
@@ -6331,8 +6331,8 @@ Changes property `@var` annotations from annotation to type.
 
 ### `IfToSpaceshipRector`
 
-- class: [`Rector\Php70\Rector\If_\IfToSpaceshipRector`](/../master/rules/php-70/src/Rector/If_/IfToSpaceshipRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/If_/IfToSpaceshipRector/Fixture)
+- class: [`Rector\Php70\Rector\If_\IfToSpaceshipRector`](/../master/rules/php70/src/Rector/If_/IfToSpaceshipRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/If_/IfToSpaceshipRector/Fixture)
 
 Changes if/else to spaceship <=> where useful
 
@@ -6357,8 +6357,8 @@ Changes if/else to spaceship <=> where useful
 
 ### `ListSplitStringRector`
 
-- class: [`Rector\Php70\Rector\List_\ListSplitStringRector`](/../master/rules/php-70/src/Rector/List_/ListSplitStringRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/List_/ListSplitStringRector/Fixture)
+- class: [`Rector\Php70\Rector\List_\ListSplitStringRector`](/../master/rules/php70/src/Rector/List_/ListSplitStringRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/List_/ListSplitStringRector/Fixture)
 
 list() cannot split string directly anymore, use str_split()
 
@@ -6371,8 +6371,8 @@ list() cannot split string directly anymore, use str_split()
 
 ### `ListSwapArrayOrderRector`
 
-- class: [`Rector\Php70\Rector\List_\ListSwapArrayOrderRector`](/../master/rules/php-70/src/Rector/List_/ListSwapArrayOrderRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/List_/ListSwapArrayOrderRector/Fixture)
+- class: [`Rector\Php70\Rector\List_\ListSwapArrayOrderRector`](/../master/rules/php70/src/Rector/List_/ListSwapArrayOrderRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/List_/ListSwapArrayOrderRector/Fixture)
 
 list() assigns variables in reverse order - relevant in array assign
 
@@ -6385,8 +6385,8 @@ list() assigns variables in reverse order - relevant in array assign
 
 ### `MultiDirnameRector`
 
-- class: [`Rector\Php70\Rector\FuncCall\MultiDirnameRector`](/../master/rules/php-70/src/Rector/FuncCall/MultiDirnameRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/FuncCall/MultiDirnameRector/Fixture)
+- class: [`Rector\Php70\Rector\FuncCall\MultiDirnameRector`](/../master/rules/php70/src/Rector/FuncCall/MultiDirnameRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/MultiDirnameRector/Fixture)
 
 Changes multiple dirname() calls to one with nesting level
 
@@ -6399,8 +6399,8 @@ Changes multiple dirname() calls to one with nesting level
 
 ### `NonVariableToVariableOnFunctionCallRector`
 
-- class: [`Rector\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector`](/../master/rules/php-70/src/Rector/FuncCall/NonVariableToVariableOnFunctionCallRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/FuncCall/NonVariableToVariableOnFunctionCallRector/Fixture)
+- class: [`Rector\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector`](/../master/rules/php70/src/Rector/FuncCall/NonVariableToVariableOnFunctionCallRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/NonVariableToVariableOnFunctionCallRector/Fixture)
 
 Transform non variable like arguments to variable where a function or method expects an argument passed by reference
 
@@ -6413,8 +6413,8 @@ Transform non variable like arguments to variable where a function or method exp
 
 ### `Php4ConstructorRector`
 
-- class: [`Rector\Php70\Rector\FunctionLike\Php4ConstructorRector`](/../master/rules/php-70/src/Rector/FunctionLike/Php4ConstructorRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/FunctionLike/Php4ConstructorRector/Fixture)
+- class: [`Rector\Php70\Rector\FunctionLike\Php4ConstructorRector`](/../master/rules/php70/src/Rector/FunctionLike/Php4ConstructorRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/FunctionLike/Php4ConstructorRector/Fixture)
 
 Changes PHP 4 style constructor to __construct.
 
@@ -6432,8 +6432,8 @@ Changes PHP 4 style constructor to __construct.
 
 ### `RandomFunctionRector`
 
-- class: [`Rector\Php70\Rector\FuncCall\RandomFunctionRector`](/../master/rules/php-70/src/Rector/FuncCall/RandomFunctionRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/FuncCall/RandomFunctionRector/Fixture)
+- class: [`Rector\Php70\Rector\FuncCall\RandomFunctionRector`](/../master/rules/php70/src/Rector/FuncCall/RandomFunctionRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/RandomFunctionRector/Fixture)
 
 Changes rand, srand and getrandmax by new mt_* alternatives.
 
@@ -6446,8 +6446,8 @@ Changes rand, srand and getrandmax by new mt_* alternatives.
 
 ### `ReduceMultipleDefaultSwitchRector`
 
-- class: [`Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector`](/../master/rules/php-70/src/Rector/Switch_/ReduceMultipleDefaultSwitchRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/Switch_/ReduceMultipleDefaultSwitchRector/Fixture)
+- class: [`Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector`](/../master/rules/php70/src/Rector/Switch_/ReduceMultipleDefaultSwitchRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/Switch_/ReduceMultipleDefaultSwitchRector/Fixture)
 
 Remove first default switch, that is ignored
 
@@ -6466,8 +6466,8 @@ Remove first default switch, that is ignored
 
 ### `RenameMktimeWithoutArgsToTimeRector`
 
-- class: [`Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector`](/../master/rules/php-70/src/Rector/FuncCall/RenameMktimeWithoutArgsToTimeRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/FuncCall/RenameMktimeWithoutArgsToTimeRector/Fixture)
+- class: [`Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector`](/../master/rules/php70/src/Rector/FuncCall/RenameMktimeWithoutArgsToTimeRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/RenameMktimeWithoutArgsToTimeRector/Fixture)
 
 ```diff
  class SomeClass
@@ -6485,8 +6485,8 @@ Remove first default switch, that is ignored
 
 ### `StaticCallOnNonStaticToInstanceCallRector`
 
-- class: [`Rector\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector`](/../master/rules/php-70/src/Rector/StaticCall/StaticCallOnNonStaticToInstanceCallRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/StaticCall/StaticCallOnNonStaticToInstanceCallRector/Fixture)
+- class: [`Rector\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector`](/../master/rules/php70/src/Rector/StaticCall/StaticCallOnNonStaticToInstanceCallRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/StaticCall/StaticCallOnNonStaticToInstanceCallRector/Fixture)
 
 Changes static call to instance call, where not useful
 
@@ -6512,8 +6512,8 @@ Changes static call to instance call, where not useful
 
 ### `TernaryToNullCoalescingRector`
 
-- class: [`Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector`](/../master/rules/php-70/src/Rector/Ternary/TernaryToNullCoalescingRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/Ternary/TernaryToNullCoalescingRector/Fixture)
+- class: [`Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector`](/../master/rules/php70/src/Rector/Ternary/TernaryToNullCoalescingRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/Ternary/TernaryToNullCoalescingRector/Fixture)
 
 Changes unneeded null check to ?? operator
 
@@ -6531,8 +6531,8 @@ Changes unneeded null check to ?? operator
 
 ### `TernaryToSpaceshipRector`
 
-- class: [`Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector`](/../master/rules/php-70/src/Rector/Ternary/TernaryToSpaceshipRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/Ternary/TernaryToSpaceshipRector/Fixture)
+- class: [`Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector`](/../master/rules/php70/src/Rector/Ternary/TernaryToSpaceshipRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/Ternary/TernaryToSpaceshipRector/Fixture)
 
 Use <=> spaceship instead of ternary with same effect
 
@@ -6547,8 +6547,8 @@ Use <=> spaceship instead of ternary with same effect
 
 ### `ThisCallOnStaticMethodToStaticCallRector`
 
-- class: [`Rector\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector`](/../master/rules/php-70/src/Rector/MethodCall/ThisCallOnStaticMethodToStaticCallRector.php)
-- [test fixtures](/../master/rules/php-70/tests/Rector/MethodCall/ThisCallOnStaticMethodToStaticCallRector/Fixture)
+- class: [`Rector\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector`](/../master/rules/php70/src/Rector/MethodCall/ThisCallOnStaticMethodToStaticCallRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/MethodCall/ThisCallOnStaticMethodToStaticCallRector/Fixture)
 
 Changes $this->call() to static method to static call
 
@@ -6573,8 +6573,8 @@ Changes $this->call() to static method to static call
 
 ### `AssignArrayToStringRector`
 
-- class: [`Rector\Php71\Rector\Assign\AssignArrayToStringRector`](/../master/rules/php-71/src/Rector/Assign/AssignArrayToStringRector.php)
-- [test fixtures](/../master/rules/php-71/tests/Rector/Assign/AssignArrayToStringRector/Fixture)
+- class: [`Rector\Php71\Rector\Assign\AssignArrayToStringRector`](/../master/rules/php71/src/Rector/Assign/AssignArrayToStringRector.php)
+- [test fixtures](/../master/rules/php71/tests/Rector/Assign/AssignArrayToStringRector/Fixture)
 
 String cannot be turned into array by assignment anymore
 
@@ -6588,8 +6588,8 @@ String cannot be turned into array by assignment anymore
 
 ### `BinaryOpBetweenNumberAndStringRector`
 
-- class: [`Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector`](/../master/rules/php-71/src/Rector/BinaryOp/BinaryOpBetweenNumberAndStringRector.php)
-- [test fixtures](/../master/rules/php-71/tests/Rector/BinaryOp/BinaryOpBetweenNumberAndStringRector/Fixture)
+- class: [`Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector`](/../master/rules/php71/src/Rector/BinaryOp/BinaryOpBetweenNumberAndStringRector.php)
+- [test fixtures](/../master/rules/php71/tests/Rector/BinaryOp/BinaryOpBetweenNumberAndStringRector/Fixture)
 
 Change binary operation between some number + string to PHP 7.1 compatible version
 
@@ -6610,8 +6610,8 @@ Change binary operation between some number + string to PHP 7.1 compatible versi
 
 ### `CountOnNullRector`
 
-- class: [`Rector\Php71\Rector\FuncCall\CountOnNullRector`](/../master/rules/php-71/src/Rector/FuncCall/CountOnNullRector.php)
-- [test fixtures](/../master/rules/php-71/tests/Rector/FuncCall/CountOnNullRector/Fixture)
+- class: [`Rector\Php71\Rector\FuncCall\CountOnNullRector`](/../master/rules/php71/src/Rector/FuncCall/CountOnNullRector.php)
+- [test fixtures](/../master/rules/php71/tests/Rector/FuncCall/CountOnNullRector/Fixture)
 
 Changes count() on null to safe ternary check
 
@@ -6625,8 +6625,8 @@ Changes count() on null to safe ternary check
 
 ### `IsIterableRector`
 
-- class: [`Rector\Php71\Rector\BinaryOp\IsIterableRector`](/../master/rules/php-71/src/Rector/BinaryOp/IsIterableRector.php)
-- [test fixtures](/../master/rules/php-71/tests/Rector/BinaryOp/IsIterableRector/Fixture)
+- class: [`Rector\Php71\Rector\BinaryOp\IsIterableRector`](/../master/rules/php71/src/Rector/BinaryOp/IsIterableRector.php)
+- [test fixtures](/../master/rules/php71/tests/Rector/BinaryOp/IsIterableRector/Fixture)
 
 Changes is_array + Traversable check to is_iterable
 
@@ -6639,8 +6639,8 @@ Changes is_array + Traversable check to is_iterable
 
 ### `ListToArrayDestructRector`
 
-- class: [`Rector\Php71\Rector\List_\ListToArrayDestructRector`](/../master/rules/php-71/src/Rector/List_/ListToArrayDestructRector.php)
-- [test fixtures](/../master/rules/php-71/tests/Rector/List_/ListToArrayDestructRector/Fixture)
+- class: [`Rector\Php71\Rector\List_\ListToArrayDestructRector`](/../master/rules/php71/src/Rector/List_/ListToArrayDestructRector.php)
+- [test fixtures](/../master/rules/php71/tests/Rector/List_/ListToArrayDestructRector/Fixture)
 
 Remove & from new &X
 
@@ -6663,8 +6663,8 @@ Remove & from new &X
 
 ### `MultiExceptionCatchRector`
 
-- class: [`Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector`](/../master/rules/php-71/src/Rector/TryCatch/MultiExceptionCatchRector.php)
-- [test fixtures](/../master/rules/php-71/tests/Rector/TryCatch/MultiExceptionCatchRector/Fixture)
+- class: [`Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector`](/../master/rules/php71/src/Rector/TryCatch/MultiExceptionCatchRector.php)
+- [test fixtures](/../master/rules/php71/tests/Rector/TryCatch/MultiExceptionCatchRector/Fixture)
 
 Changes multi catch of same exception to single one | separated.
 
@@ -6683,8 +6683,8 @@ Changes multi catch of same exception to single one | separated.
 
 ### `PublicConstantVisibilityRector`
 
-- class: [`Rector\Php71\Rector\ClassConst\PublicConstantVisibilityRector`](/../master/rules/php-71/src/Rector/ClassConst/PublicConstantVisibilityRector.php)
-- [test fixtures](/../master/rules/php-71/tests/Rector/ClassConst/PublicConstantVisibilityRector/Fixture)
+- class: [`Rector\Php71\Rector\ClassConst\PublicConstantVisibilityRector`](/../master/rules/php71/src/Rector/ClassConst/PublicConstantVisibilityRector.php)
+- [test fixtures](/../master/rules/php71/tests/Rector/ClassConst/PublicConstantVisibilityRector/Fixture)
 
 Add explicit public constant visibility.
 
@@ -6700,8 +6700,8 @@ Add explicit public constant visibility.
 
 ### `RemoveExtraParametersRector`
 
-- class: [`Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector`](/../master/rules/php-71/src/Rector/FuncCall/RemoveExtraParametersRector.php)
-- [test fixtures](/../master/rules/php-71/tests/Rector/FuncCall/RemoveExtraParametersRector/Fixture)
+- class: [`Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector`](/../master/rules/php71/src/Rector/FuncCall/RemoveExtraParametersRector.php)
+- [test fixtures](/../master/rules/php71/tests/Rector/FuncCall/RemoveExtraParametersRector/Fixture)
 
 Remove extra parameters
 
@@ -6714,8 +6714,8 @@ Remove extra parameters
 
 ### `ReservedObjectRector`
 
-- class: [`Rector\Php71\Rector\Name\ReservedObjectRector`](/../master/rules/php-71/src/Rector/Name/ReservedObjectRector.php)
-- [test fixtures](/../master/rules/php-71/tests/Rector/Name/ReservedObjectRector/Fixture)
+- class: [`Rector\Php71\Rector\Name\ReservedObjectRector`](/../master/rules/php71/src/Rector/Name/ReservedObjectRector.php)
+- [test fixtures](/../master/rules/php71/tests/Rector/Name/ReservedObjectRector/Fixture)
 
 Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured
 
@@ -6732,8 +6732,8 @@ Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configure
 
 ### `BarewordStringRector`
 
-- class: [`Rector\Php72\Rector\ConstFetch\BarewordStringRector`](/../master/rules/php-72/src/Rector/ConstFetch/BarewordStringRector.php)
-- [test fixtures](/../master/rules/php-72/tests/Rector/ConstFetch/BarewordStringRector/Fixture)
+- class: [`Rector\Php72\Rector\ConstFetch\BarewordStringRector`](/../master/rules/php72/src/Rector/ConstFetch/BarewordStringRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/ConstFetch/BarewordStringRector/Fixture)
 
 Changes unquoted non-existing constants to strings
 
@@ -6746,8 +6746,8 @@ Changes unquoted non-existing constants to strings
 
 ### `CreateFunctionToAnonymousFunctionRector`
 
-- class: [`Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector`](/../master/rules/php-72/src/Rector/FuncCall/CreateFunctionToAnonymousFunctionRector.php)
-- [test fixtures](/../master/rules/php-72/tests/Rector/FuncCall/CreateFunctionToAnonymousFunctionRector/Fixture)
+- class: [`Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector`](/../master/rules/php72/src/Rector/FuncCall/CreateFunctionToAnonymousFunctionRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/CreateFunctionToAnonymousFunctionRector/Fixture)
 
 Use anonymous functions instead of deprecated create_function()
 
@@ -6768,8 +6768,8 @@ Use anonymous functions instead of deprecated create_function()
 
 ### `GetClassOnNullRector`
 
-- class: [`Rector\Php72\Rector\FuncCall\GetClassOnNullRector`](/../master/rules/php-72/src/Rector/FuncCall/GetClassOnNullRector.php)
-- [test fixtures](/../master/rules/php-72/tests/Rector/FuncCall/GetClassOnNullRector/Fixture)
+- class: [`Rector\Php72\Rector\FuncCall\GetClassOnNullRector`](/../master/rules/php72/src/Rector/FuncCall/GetClassOnNullRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/GetClassOnNullRector/Fixture)
 
 Null is no more allowed in get_class()
 
@@ -6789,8 +6789,8 @@ Null is no more allowed in get_class()
 
 ### `IsObjectOnIncompleteClassRector`
 
-- class: [`Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector`](/../master/rules/php-72/src/Rector/FuncCall/IsObjectOnIncompleteClassRector.php)
-- [test fixtures](/../master/rules/php-72/tests/Rector/FuncCall/IsObjectOnIncompleteClassRector/Fixture)
+- class: [`Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector`](/../master/rules/php72/src/Rector/FuncCall/IsObjectOnIncompleteClassRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/IsObjectOnIncompleteClassRector/Fixture)
 
 Incomplete class returns inverted bool on is_object()
 
@@ -6804,7 +6804,7 @@ Incomplete class returns inverted bool on is_object()
 
 ### `ListEachRector`
 
-- class: [`Rector\Php72\Rector\Each\ListEachRector`](/../master/rules/php-72/src/Rector/Each/ListEachRector.php)
+- class: [`Rector\Php72\Rector\Each\ListEachRector`](/../master/rules/php72/src/Rector/Each/ListEachRector.php)
 
 each() function is deprecated, use key() and current() instead
 
@@ -6818,8 +6818,8 @@ each() function is deprecated, use key() and current() instead
 
 ### `ParseStrWithResultArgumentRector`
 
-- class: [`Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector`](/../master/rules/php-72/src/Rector/FuncCall/ParseStrWithResultArgumentRector.php)
-- [test fixtures](/../master/rules/php-72/tests/Rector/FuncCall/ParseStrWithResultArgumentRector/Fixture)
+- class: [`Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector`](/../master/rules/php72/src/Rector/FuncCall/ParseStrWithResultArgumentRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/ParseStrWithResultArgumentRector/Fixture)
 
 Use $result argument in parse_str() function
 
@@ -6834,8 +6834,8 @@ Use $result argument in parse_str() function
 
 ### `StringifyDefineRector`
 
-- class: [`Rector\Php72\Rector\FuncCall\StringifyDefineRector`](/../master/rules/php-72/src/Rector/FuncCall/StringifyDefineRector.php)
-- [test fixtures](/../master/rules/php-72/tests/Rector/FuncCall/StringifyDefineRector/Fixture)
+- class: [`Rector\Php72\Rector\FuncCall\StringifyDefineRector`](/../master/rules/php72/src/Rector/FuncCall/StringifyDefineRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/StringifyDefineRector/Fixture)
 
 Make first argument of define() string
 
@@ -6855,8 +6855,8 @@ Make first argument of define() string
 
 ### `StringsAssertNakedRector`
 
-- class: [`Rector\Php72\Rector\FuncCall\StringsAssertNakedRector`](/../master/rules/php-72/src/Rector/FuncCall/StringsAssertNakedRector.php)
-- [test fixtures](/../master/rules/php-72/tests/Rector/FuncCall/StringsAssertNakedRector/Fixture)
+- class: [`Rector\Php72\Rector\FuncCall\StringsAssertNakedRector`](/../master/rules/php72/src/Rector/FuncCall/StringsAssertNakedRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/StringsAssertNakedRector/Fixture)
 
 String asserts must be passed directly to assert()
 
@@ -6874,8 +6874,8 @@ String asserts must be passed directly to assert()
 
 ### `UnsetCastRector`
 
-- class: [`Rector\Php72\Rector\Unset_\UnsetCastRector`](/../master/rules/php-72/src/Rector/Unset_/UnsetCastRector.php)
-- [test fixtures](/../master/rules/php-72/tests/Rector/Unset_/UnsetCastRector/Fixture)
+- class: [`Rector\Php72\Rector\Unset_\UnsetCastRector`](/../master/rules/php72/src/Rector/Unset_/UnsetCastRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/Unset_/UnsetCastRector/Fixture)
 
 Removes (unset) cast
 
@@ -6891,7 +6891,7 @@ Removes (unset) cast
 
 ### `WhileEachToForeachRector`
 
-- class: [`Rector\Php72\Rector\Each\WhileEachToForeachRector`](/../master/rules/php-72/src/Rector/Each/WhileEachToForeachRector.php)
+- class: [`Rector\Php72\Rector\Each\WhileEachToForeachRector`](/../master/rules/php72/src/Rector/Each/WhileEachToForeachRector.php)
 
 each() function is deprecated, use foreach() instead.
 
@@ -6915,8 +6915,8 @@ each() function is deprecated, use foreach() instead.
 
 ### `ArrayKeyFirstLastRector`
 
-- class: [`Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector`](/../master/rules/php-73/src/Rector/FuncCall/ArrayKeyFirstLastRector.php)
-- [test fixtures](/../master/rules/php-73/tests/Rector/FuncCall/ArrayKeyFirstLastRector/Fixture)
+- class: [`Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector`](/../master/rules/php73/src/Rector/FuncCall/ArrayKeyFirstLastRector.php)
+- [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/ArrayKeyFirstLastRector/Fixture)
 
 Make use of array_key_first() and array_key_last()
 
@@ -6936,8 +6936,8 @@ Make use of array_key_first() and array_key_last()
 
 ### `IsCountableRector`
 
-- class: [`Rector\Php73\Rector\BinaryOp\IsCountableRector`](/../master/rules/php-73/src/Rector/BinaryOp/IsCountableRector.php)
-- [test fixtures](/../master/rules/php-73/tests/Rector/BinaryOp/IsCountableRector/Fixture)
+- class: [`Rector\Php73\Rector\BinaryOp\IsCountableRector`](/../master/rules/php73/src/Rector/BinaryOp/IsCountableRector.php)
+- [test fixtures](/../master/rules/php73/tests/Rector/BinaryOp/IsCountableRector/Fixture)
 
 Changes is_array + Countable check to is_countable
 
@@ -6950,8 +6950,8 @@ Changes is_array + Countable check to is_countable
 
 ### `JsonThrowOnErrorRector`
 
-- class: [`Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector`](/../master/rules/php-73/src/Rector/FuncCall/JsonThrowOnErrorRector.php)
-- [test fixtures](/../master/rules/php-73/tests/Rector/FuncCall/JsonThrowOnErrorRector/Fixture)
+- class: [`Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector`](/../master/rules/php73/src/Rector/FuncCall/JsonThrowOnErrorRector.php)
+- [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/JsonThrowOnErrorRector/Fixture)
 
 Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error
 
@@ -6966,8 +6966,8 @@ Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonExcepti
 
 ### `RegexDashEscapeRector`
 
-- class: [`Rector\Php73\Rector\FuncCall\RegexDashEscapeRector`](/../master/rules/php-73/src/Rector/FuncCall/RegexDashEscapeRector.php)
-- [test fixtures](/../master/rules/php-73/tests/Rector/FuncCall/RegexDashEscapeRector/Fixture)
+- class: [`Rector\Php73\Rector\FuncCall\RegexDashEscapeRector`](/../master/rules/php73/src/Rector/FuncCall/RegexDashEscapeRector.php)
+- [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/RegexDashEscapeRector/Fixture)
 
 Escape - in some cases
 
@@ -6980,8 +6980,8 @@ Escape - in some cases
 
 ### `RemoveMissingCompactVariableRector`
 
-- class: [`Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector`](/../master/rules/php-73/src/Rector/FuncCall/RemoveMissingCompactVariableRector.php)
-- [test fixtures](/../master/rules/php-73/tests/Rector/FuncCall/RemoveMissingCompactVariableRector/Fixture)
+- class: [`Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector`](/../master/rules/php73/src/Rector/FuncCall/RemoveMissingCompactVariableRector.php)
+- [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/RemoveMissingCompactVariableRector/Fixture)
 
 Remove non-existing vars from compact()
 
@@ -7002,8 +7002,8 @@ Remove non-existing vars from compact()
 
 ### `SensitiveConstantNameRector`
 
-- class: [`Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector`](/../master/rules/php-73/src/Rector/ConstFetch/SensitiveConstantNameRector.php)
-- [test fixtures](/../master/rules/php-73/tests/Rector/ConstFetch/SensitiveConstantNameRector/Fixture)
+- class: [`Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector`](/../master/rules/php73/src/Rector/ConstFetch/SensitiveConstantNameRector.php)
+- [test fixtures](/../master/rules/php73/tests/Rector/ConstFetch/SensitiveConstantNameRector/Fixture)
 
 Changes case insensitive constants to sensitive ones.
 
@@ -7018,8 +7018,8 @@ Changes case insensitive constants to sensitive ones.
 
 ### `SensitiveDefineRector`
 
-- class: [`Rector\Php73\Rector\FuncCall\SensitiveDefineRector`](/../master/rules/php-73/src/Rector/FuncCall/SensitiveDefineRector.php)
-- [test fixtures](/../master/rules/php-73/tests/Rector/FuncCall/SensitiveDefineRector/Fixture)
+- class: [`Rector\Php73\Rector\FuncCall\SensitiveDefineRector`](/../master/rules/php73/src/Rector/FuncCall/SensitiveDefineRector.php)
+- [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/SensitiveDefineRector/Fixture)
 
 Changes case insensitive constants to sensitive ones.
 
@@ -7032,8 +7032,8 @@ Changes case insensitive constants to sensitive ones.
 
 ### `SensitiveHereNowDocRector`
 
-- class: [`Rector\Php73\Rector\String_\SensitiveHereNowDocRector`](/../master/rules/php-73/src/Rector/String_/SensitiveHereNowDocRector.php)
-- [test fixtures](/../master/rules/php-73/tests/Rector/String_/SensitiveHereNowDocRector/Fixture)
+- class: [`Rector\Php73\Rector\String_\SensitiveHereNowDocRector`](/../master/rules/php73/src/Rector/String_/SensitiveHereNowDocRector.php)
+- [test fixtures](/../master/rules/php73/tests/Rector/String_/SensitiveHereNowDocRector/Fixture)
 
 Changes heredoc/nowdoc that contains closing word to safe wrapper name
 
@@ -7049,8 +7049,8 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
 
 ### `SetCookieRector`
 
-- class: [`Rector\Php73\Rector\FuncCall\SetCookieRector`](/../master/rules/php-73/src/Rector/FuncCall/SetCookieRector.php)
-- [test fixtures](/../master/rules/php-73/tests/Rector/FuncCall/SetcookieRector/Fixture)
+- class: [`Rector\Php73\Rector\FuncCall\SetCookieRector`](/../master/rules/php73/src/Rector/FuncCall/SetCookieRector.php)
+- [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/SetcookieRector/Fixture)
 
 Convert setcookie argument to PHP7.3 option array
 
@@ -7068,8 +7068,8 @@ Convert setcookie argument to PHP7.3 option array
 
 ### `StringifyStrNeedlesRector`
 
-- class: [`Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector`](/../master/rules/php-73/src/Rector/FuncCall/StringifyStrNeedlesRector.php)
-- [test fixtures](/../master/rules/php-73/tests/Rector/FuncCall/StringifyStrNeedlesRector/Fixture)
+- class: [`Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector`](/../master/rules/php73/src/Rector/FuncCall/StringifyStrNeedlesRector.php)
+- [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/StringifyStrNeedlesRector/Fixture)
 
 Makes needles explicit strings
 
@@ -7085,8 +7085,8 @@ Makes needles explicit strings
 
 ### `AddLiteralSeparatorToNumberRector`
 
-- class: [`Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector`](/../master/rules/php-74/src/Rector/LNumber/AddLiteralSeparatorToNumberRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/LNumber/AddLiteralSeparatorToNumberRector/Fixture)
+- class: [`Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector`](/../master/rules/php74/src/Rector/LNumber/AddLiteralSeparatorToNumberRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/LNumber/AddLiteralSeparatorToNumberRector/Fixture)
 
 Add "_" as thousands separator in numbers
 
@@ -7107,8 +7107,8 @@ Add "_" as thousands separator in numbers
 
 ### `ArrayKeyExistsOnPropertyRector`
 
-- class: [`Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector`](/../master/rules/php-74/src/Rector/FuncCall/ArrayKeyExistsOnPropertyRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/FuncCall/ArrayKeyExistsOnPropertyRector/Fixture)
+- class: [`Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector`](/../master/rules/php74/src/Rector/FuncCall/ArrayKeyExistsOnPropertyRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/FuncCall/ArrayKeyExistsOnPropertyRector/Fixture)
 
 Change array_key_exists() on property to property_exists()
 
@@ -7126,8 +7126,8 @@ Change array_key_exists() on property to property_exists()
 
 ### `ArraySpreadInsteadOfArrayMergeRector`
 
-- class: [`Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector`](/../master/rules/php-74/src/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector/Fixture)
+- class: [`Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector`](/../master/rules/php74/src/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector/Fixture)
 
 Change array_merge() to spread operator, except values with possible string key values
 
@@ -7153,8 +7153,8 @@ Change array_merge() to spread operator, except values with possible string key 
 
 ### `ChangeReflectionTypeToStringToGetNameRector`
 
-- class: [`Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector`](/../master/rules/php-74/src/Rector/MethodCall/ChangeReflectionTypeToStringToGetNameRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/MethodCall/ChangeReflectionTypeToStringToGetNameRector/Fixture)
+- class: [`Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector`](/../master/rules/php74/src/Rector/MethodCall/ChangeReflectionTypeToStringToGetNameRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/MethodCall/ChangeReflectionTypeToStringToGetNameRector/Fixture)
 
 Change string calls on ReflectionType
 
@@ -7181,8 +7181,8 @@ Change string calls on ReflectionType
 
 ### `ClassConstantToSelfClassRector`
 
-- class: [`Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector`](/../master/rules/php-74/src/Rector/MagicConstClass/ClassConstantToSelfClassRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/MagicConstClass/ClassConstantToSelfClassRector/Fixture)
+- class: [`Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector`](/../master/rules/php74/src/Rector/MagicConstClass/ClassConstantToSelfClassRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/MagicConstClass/ClassConstantToSelfClassRector/Fixture)
 
 Change __CLASS__ to self::class
 
@@ -7201,8 +7201,8 @@ Change __CLASS__ to self::class
 
 ### `ClosureToArrowFunctionRector`
 
-- class: [`Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector`](/../master/rules/php-74/src/Rector/Closure/ClosureToArrowFunctionRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/Closure/ClosureToArrowFunctionRector/Fixture)
+- class: [`Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector`](/../master/rules/php74/src/Rector/Closure/ClosureToArrowFunctionRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/Closure/ClosureToArrowFunctionRector/Fixture)
 
 Change closure to arrow function
 
@@ -7223,8 +7223,8 @@ Change closure to arrow function
 
 ### `ExportToReflectionFunctionRector`
 
-- class: [`Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector`](/../master/rules/php-74/src/Rector/StaticCall/ExportToReflectionFunctionRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/StaticCall/ExportToReflectionFunctionRector/Fixture)
+- class: [`Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector`](/../master/rules/php74/src/Rector/StaticCall/ExportToReflectionFunctionRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/StaticCall/ExportToReflectionFunctionRector/Fixture)
 
 Change export() to ReflectionFunction alternatives
 
@@ -7239,8 +7239,8 @@ Change export() to ReflectionFunction alternatives
 
 ### `FilterVarToAddSlashesRector`
 
-- class: [`Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector`](/../master/rules/php-74/src/Rector/FuncCall/FilterVarToAddSlashesRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/FuncCall/FilterVarToAddSlashesRector/Fixture)
+- class: [`Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector`](/../master/rules/php74/src/Rector/FuncCall/FilterVarToAddSlashesRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/FuncCall/FilterVarToAddSlashesRector/Fixture)
 
 Change filter_var() with slash escaping to addslashes()
 
@@ -7254,8 +7254,8 @@ Change filter_var() with slash escaping to addslashes()
 
 ### `GetCalledClassToStaticClassRector`
 
-- class: [`Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector`](/../master/rules/php-74/src/Rector/FuncCall/GetCalledClassToStaticClassRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/FuncCall/GetCalledClassToStaticClassRector/Fixture)
+- class: [`Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector`](/../master/rules/php74/src/Rector/FuncCall/GetCalledClassToStaticClassRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/FuncCall/GetCalledClassToStaticClassRector/Fixture)
 
 Change __CLASS__ to self::class
 
@@ -7274,8 +7274,8 @@ Change __CLASS__ to self::class
 
 ### `MbStrrposEncodingArgumentPositionRector`
 
-- class: [`Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector`](/../master/rules/php-74/src/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector/Fixture)
+- class: [`Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector`](/../master/rules/php74/src/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector/Fixture)
 
 Change mb_strrpos() encoding argument position
 
@@ -7288,8 +7288,8 @@ Change mb_strrpos() encoding argument position
 
 ### `NullCoalescingOperatorRector`
 
-- class: [`Rector\Php74\Rector\Assign\NullCoalescingOperatorRector`](/../master/rules/php-74/src/Rector/Assign/NullCoalescingOperatorRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/Assign/NullCoalescingOperatorRector/Fixture)
+- class: [`Rector\Php74\Rector\Assign\NullCoalescingOperatorRector`](/../master/rules/php74/src/Rector/Assign/NullCoalescingOperatorRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/Assign/NullCoalescingOperatorRector/Fixture)
 
 Use null coalescing operator ??=
 
@@ -7303,8 +7303,8 @@ Use null coalescing operator ??=
 
 ### `RealToFloatTypeCastRector`
 
-- class: [`Rector\Php74\Rector\Double\RealToFloatTypeCastRector`](/../master/rules/php-74/src/Rector/Double/RealToFloatTypeCastRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/Double/RealToFloatTypeCastRector/Fixture)
+- class: [`Rector\Php74\Rector\Double\RealToFloatTypeCastRector`](/../master/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/Double/RealToFloatTypeCastRector/Fixture)
 
 Change deprecated (real) to (float)
 
@@ -7325,8 +7325,8 @@ Change deprecated (real) to (float)
 
 ### `ReservedFnFunctionRector`
 
-- class: [`Rector\Php74\Rector\Function_\ReservedFnFunctionRector`](/../master/rules/php-74/src/Rector/Function_/ReservedFnFunctionRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/Function_/ReservedFnFunctionRector/Fixture)
+- class: [`Rector\Php74\Rector\Function_\ReservedFnFunctionRector`](/../master/rules/php74/src/Rector/Function_/ReservedFnFunctionRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/Function_/ReservedFnFunctionRector/Fixture)
 
 Change fn() function name, since it will be reserved keyword
 
@@ -7349,10 +7349,27 @@ Change fn() function name, since it will be reserved keyword
 
 <br>
 
+### `RestoreDefaultNullToNullableTypePropertyRector`
+
+- class: [`Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector`](/../master/rules/php74/src/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector/Fixture)
+
+Add null default to properties with PHP 7.4 property nullable type
+
+```diff
+ class SomeClass
+ {
+-    public ?string $name;
++    public ?string $name = null;
+ }
+```
+
+<br>
+
 ### `TypedPropertyRector`
 
-- class: [`Rector\Php74\Rector\Property\TypedPropertyRector`](/../master/rules/php-74/src/Rector/Property/TypedPropertyRector.php)
-- [test fixtures](/../master/rules/php-74/tests/Rector/Property/TypedPropertyRector/Fixture)
+- class: [`Rector\Php74\Rector\Property\TypedPropertyRector`](/../master/rules/php74/src/Rector/Property/TypedPropertyRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/Property/TypedPropertyRector/Fixture)
 
 Changes property `@var` annotations from annotation to type.
 
@@ -7373,8 +7390,8 @@ Changes property `@var` annotations from annotation to type.
 
 ### `UnionTypesRector`
 
-- class: [`Rector\Php80\Rector\FunctionLike\UnionTypesRector`](/../master/rules/php-80/src/Rector/FunctionLike/UnionTypesRector.php)
-- [test fixtures](/../master/rules/php-80/tests/Rector/FunctionLike/UnionTypesRector/Fixture)
+- class: [`Rector\Php80\Rector\FunctionLike\UnionTypesRector`](/../master/rules/php80/src/Rector/FunctionLike/UnionTypesRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/FunctionLike/UnionTypesRector/Fixture)
 
 Change docs types to union types, where possible (properties are covered by TypedPropertiesRector)
 

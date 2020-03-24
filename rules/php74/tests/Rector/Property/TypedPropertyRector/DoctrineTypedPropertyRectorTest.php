@@ -6,6 +6,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 
 final class DoctrineTypedPropertyRectorTest extends AbstractRectorTestCase
@@ -30,7 +31,6 @@ final class DoctrineTypedPropertyRectorTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): string
     {
-        // before union type
-        return '7.4';
+        return PhpVersionFeature::BEFORE_UNION_TYPES;
     }
 }

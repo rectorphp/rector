@@ -65,7 +65,7 @@ parameters:
         Symplify\CodingStandard\Fixer\Order\PrivateMethodOrderByUseFixer: null
 
         PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer:
-            - 'rules/php-74/src/Rector/Double/RealToFloatTypeCastRector.php'
+            - 'rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff: null
 
@@ -88,7 +88,7 @@ parameters:
             # node printing
             - 'utils/documentation-generator/src/Command/DumpNodesCommand.php'
             # 3rd party code
-            - 'rules/php-70/src/EregToPcreTransformer.php'
+            - 'rules/php70/src/EregToPcreTransformer.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # todo
@@ -105,10 +105,10 @@ parameters:
             # per node logic
             - 'utils/documentation-generator/src/Command/DumpNodesCommand.php'
             # copied 3rd party logic
-            - 'rules/php-70/src/EregToPcreTransformer.php'
+            - 'rules/php70/src/EregToPcreTransformer.php'
             # dev
             - 'packages/type-declaration/src/Rector/FunctionLike/*TypeDeclarationRector.php'
-            - 'rules/php-70/src/Rector/If_/IfToSpaceshipRector.php'
+            - 'rules/php70/src/Rector/If_/IfToSpaceshipRector.php'
 
         Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:
             # respects inherited pattern for better comparing
@@ -129,7 +129,7 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff.Found:
             # notes
-            - 'rules/php-72/src/Rector/Each/ListEachRector.php'
+            - 'rules/php72/src/Rector/Each/ListEachRector.php'
             - 'rules/dead-code/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php'
             - 'rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
             - 'rules/cakephp-to-symfony/tests/Rector/Class_/CakePHPModelToDoctrineRepositoryRector/CakePHPModelToDoctrineRepositoryRectorTest.php'
@@ -154,6 +154,6 @@ parameters:
 
         SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse:
             - "rules/dead-code/src/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php"
-            - "rules/php-56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php"
+            - "rules/php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php"
 
     line_ending: "\n"
