@@ -23,7 +23,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 final class NullablePropertyScalar
 {
-    private ?int $countOrNull;
+    private ?int $countOrNull = null;
 
     public function countOrNull(): ?int
     {

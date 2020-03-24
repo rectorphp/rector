@@ -29,7 +29,7 @@ final class ClassWithNullableProperty
 {
     private ?\Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $nullableClassWithDefaultNull = null;
 
-    private ?\Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $yetAnotherClass;
+    private ?\Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $yetAnotherClass = null;
 }
 
 ?>
