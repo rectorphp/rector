@@ -10,11 +10,13 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
@@ -36,10 +38,19 @@ final class TypedPropertyRector extends AbstractRector
      */
     private $vendorLockResolver;
 
-    public function __construct(PropertyTypeInferer $propertyTypeInferer, VendorLockResolver $vendorLockResolver)
-    {
+    /**
+     * @var DoctrineTypeAnalyzer
+     */
+    private $doctrineTypeAnalyzer;
+
+    public function __construct(
+        PropertyTypeInferer $propertyTypeInferer,
+        VendorLockResolver $vendorLockResolver,
+        DoctrineTypeAnalyzer $doctrineTypeAnalyzer
+    ) {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
+        $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -100,6 +111,7 @@ PHP
             $varType,
             PHPStanStaticTypeMapper::KIND_PROPERTY
         );
+
         if ($propertyTypeNode === null) {
             return null;
         }
@@ -108,15 +120,20 @@ PHP
             return null;
         }
 
-        $this->removeVarPhpTagValueNodeIfNotComment($node);
+        $this->removeVarPhpTagValueNodeIfNotComment($node, $varType);
 
         $node->type = $propertyTypeNode;
 
         return $node;
     }
 
-    private function removeVarPhpTagValueNodeIfNotComment(Property $property): void
+    private function removeVarPhpTagValueNodeIfNotComment(Property $property, Type $type): void
     {
+        // keep doctrine collection narrow type
+        if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type)) {
+            return;
+        }
+
         $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
         // nothing to remove
         if ($propertyPhpDocInfo === null) {
