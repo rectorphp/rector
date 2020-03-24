@@ -20,6 +20,8 @@ final class IdPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
     {
-        return new IdTagValueNode();
+        $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
+
+        return new IdTagValueNode($annotationContent);
     }
 }

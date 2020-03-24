@@ -10,6 +10,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer;
 
@@ -31,16 +32,23 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
     private $typeFactory;
 
     /**
+     * @var DoctrineTypeAnalyzer
+     */
+    private $doctrineTypeAnalyzer;
+
+    /**
      * @param PropertyTypeInfererInterface[] $propertyTypeInferers
      */
     public function __construct(
         array $propertyTypeInferers,
         DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        DoctrineTypeAnalyzer $doctrineTypeAnalyzer
     ) {
         $this->propertyTypeInferers = $this->sortTypeInferersByPriority($propertyTypeInferers);
         $this->defaultValuePropertyTypeInferer = $defaultValuePropertyTypeInferer;
         $this->typeFactory = $typeFactory;
+        $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
     }
 
     public function inferProperty(Property $property): Type
@@ -53,7 +61,7 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
 
             // default value type must be added to each resolved type
             $defaultValueType = $this->defaultValuePropertyTypeInferer->inferProperty($property);
-            if (! $defaultValueType instanceof MixedType) {
+            if ($this->shouldUnionWithDefaultValue($defaultValueType, $type)) {
                 return $this->unionWithDefaultValueType($type, $defaultValueType);
             }
 
@@ -72,5 +80,14 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
 
         $types = [$type, $defaultValueType];
         return $this->typeFactory->createMixedPassedOrUnionType($types);
+    }
+
+    private function shouldUnionWithDefaultValue(Type $defaultValueType, Type $type): bool
+    {
+        if ($defaultValueType instanceof MixedType) {
+            return false;
+        }
+
+        return ! $this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type);
     }
 }

@@ -39,8 +39,8 @@ final class IntersectionTypeMapper implements TypeMapperInterface
     {
         $intersectionTypesNodes = [];
 
-        foreach ($type->getTypes() as $unionedType) {
-            $intersectionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
+        foreach ($type->getTypes() as $intersectionedType) {
+            $intersectionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($intersectionedType);
         }
 
         $intersectionTypesNodes = array_unique($intersectionTypesNodes);
