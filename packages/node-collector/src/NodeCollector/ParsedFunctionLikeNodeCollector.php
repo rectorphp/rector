@@ -7,6 +7,7 @@ namespace Rector\NodeCollector\NodeCollector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -35,6 +36,11 @@ final class ParsedFunctionLikeNodeCollector
      * @var Function_[]
      */
     private $functionsByName = [];
+
+    /**
+     * @var FuncCall[][]
+     */
+    private $funcCallsByName = [];
 
     /**
      * @var MethodCall[][][]|StaticCall[][][]
@@ -100,11 +106,12 @@ final class ParsedFunctionLikeNodeCollector
 
         if ($node instanceof Function_) {
             $functionName = $this->nodeNameResolver->getName($node);
-            if ($functionName === null) {
-                return;
-            }
-
             $this->functionsByName[$functionName] = $node;
+        }
+
+        if ($node instanceof FuncCall) {
+            $functionName = $this->nodeNameResolver->getName($node);
+            $this->funcCallsByName[$functionName][] = $node;
         }
     }
 
@@ -143,6 +150,11 @@ final class ParsedFunctionLikeNodeCollector
         }
 
         return null;
+    }
+
+    public function isFunctionUsed(string $functionName): bool
+    {
+        return isset($this->funcCallsByName[$functionName]);
     }
 
     private function addMethod(ClassMethod $classMethod): void

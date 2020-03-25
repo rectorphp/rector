@@ -116,7 +116,7 @@ PHP
             return true;
         }
 
-        $functionName = $this->getName($node->name);
+        $functionName = $this->getName($node);
         if ($functionName === null) {
             return false;
         }
@@ -137,8 +137,7 @@ PHP
      */
     private function resolveDefaultValuesFromCall(Node $node): array
     {
-        /** @var string|null $nodeName */
-        $nodeName = $this->getName($node->name);
+        $nodeName = $this->resolveNodeName($node);
         if ($nodeName === null) {
             return [];
         }
@@ -241,5 +240,17 @@ PHP
         }
 
         return $defaultValues;
+    }
+
+    /**
+     * @param StaticCall|FuncCall|MethodCall $node
+     */
+    private function resolveNodeName(Node $node): ?string
+    {
+        if ($node instanceof FuncCall) {
+            return $this->getName($node);
+        }
+
+        return $this->getName($node->name);
     }
 }
