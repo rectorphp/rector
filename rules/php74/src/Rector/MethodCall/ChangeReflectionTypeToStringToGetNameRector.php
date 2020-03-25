@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -174,10 +173,7 @@ PHP
         }
 
         // probably already converted
-        if ($parentNode instanceof Ternary) {
-            return true;
-        }
-        return $parentNode instanceof Return_;
+        return true;
     }
 
     private function isReflectionParameterGetTypeMethodCall(MethodCall $methodCall): bool
