@@ -52,6 +52,11 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     private $requirements = [];
 
     /**
+     * @var string
+     */
+    private $requirementsKeyValueSeparator = '=';
+
+    /**
      * @param string[] $methods
      * @param string[] $options
      * @param string[] $defaults
@@ -73,6 +78,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         $this->defaults = $defaults;
         $this->requirements = $requirements;
 
+        // covers https://github.com/rectorphp/rector/issues/2994#issuecomment-598712339
         if ($originalContent !== null) {
             $this->isPathExplicit = (bool) Strings::contains($originalContent, 'path=');
 
@@ -83,6 +89,9 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
                 // add path as first item
                 $this->orderedVisibleItems = array_merge(['path'], (array) $this->orderedVisibleItems);
             }
+
+            $matches = Strings::match($originalContent, '#requirements={(.*?)(?<separator>(=|:))(.*)}#');
+            $this->requirementsKeyValueSeparator = $matches['separator'] ?? '=';
         }
     }
 
@@ -109,7 +118,11 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         }
 
         if ($this->requirements !== []) {
-            $contentItems['requirements'] = $this->printArrayItem($this->requirements, 'requirements');
+            $contentItems['requirements'] = $this->printArrayItemWithSeparator(
+                $this->requirements,
+                'requirements',
+                $this->requirementsKeyValueSeparator
+            );
         }
 
         return $this->printContentItems($contentItems);
