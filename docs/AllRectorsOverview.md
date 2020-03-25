@@ -1,4 +1,4 @@
-# All 468 Rectors Overview
+# All 469 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -3079,6 +3079,32 @@ Remove unused function
  }
 
  useMe();
+```
+
+<br>
+
+### `RemoveUnusedNonEmptyArrayBeforeForeachRector`
+
+- class: [`Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector`](/../master/rules/dead-code/src/Rector/If_/RemoveUnusedNonEmptyArrayBeforeForeachRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/If_/RemoveUnusedNonEmptyArrayBeforeForeachRector/Fixture)
+
+Remove unused if check to non-empty array before foreach of the array
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $values = [];
+-        if ($values !== []) {
+-            foreach ($values as $value) {
+-                echo $value;
+-            }
++        foreach ($values as $value) {
++            echo $value;
+         }
+     }
+ }
 ```
 
 <br>
