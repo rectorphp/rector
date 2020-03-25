@@ -9,6 +9,7 @@ use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\Type;
+use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface;
 
 final class ClosureTypeToCallReflectionResolver implements TypeToCallReflectionResolverInterface
 {

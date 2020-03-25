@@ -73,6 +73,9 @@ final class FunctionReflectionHelper
         return $expandedClasses;
     }
 
+    /**
+     * @return string[]
+     */
     private function getUses(Namespace_ $node): array
     {
         $uses = [];

@@ -37,3 +37,4 @@ services:
     Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector: null
     Rector\DeadCode\Rector\Function_\RemoveUnusedFunctionRector: null
     Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector: null
+    Rector\DeadCode\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector: null

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
+namespace Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver;
 
 use PHPStan\Reflection\ClassMemberAccessAnswerer;
 use PHPStan\Reflection\FunctionReflection;

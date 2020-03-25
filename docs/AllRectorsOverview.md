@@ -1,4 +1,4 @@
-# All 469 Rectors Overview
+# All 470 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2506,6 +2506,30 @@ Remove and true that has no added value
      {
 -        return true && 5 === 1;
 +        return 5 === 1;
+     }
+ }
+```
+
+<br>
+
+### `RemoveAssignOfVoidReturnFunctionRector`
+
+- class: [`Rector\DeadCode\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector`](/../master/rules/dead-code/src/Rector/Assign/RemoveAssignOfVoidReturnFunctionRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/Assign/RemoveAssignOfVoidReturnFunctionRector/Fixture)
+
+Remove assign of void function/method to variable
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = $this->getOne();
++        $this->getOne();
+     }
+
+     private function getOne(): void
+     {
      }
  }
 ```
