@@ -4,24 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Php55\Rector\FuncCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Parser;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Php55\NodeFactory\AnonymousFunctionNodeFactory;
+use Rector\Php55\RegexMatcher;
 
 /**
  * @see https://wiki.php.net/rfc/remove_preg_replace_eval_modifier
@@ -32,13 +22,21 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class PregReplaceEModifierRector extends AbstractRector
 {
     /**
-     * @var Parser
+     * @var RegexMatcher
      */
-    private $parser;
+    private $regexMatcher;
 
-    public function __construct(Parser $parser)
-    {
-        $this->parser = $parser;
+    /**
+     * @var AnonymousFunctionNodeFactory
+     */
+    private $anonymousFunctionNodeFactory;
+
+    public function __construct(
+        RegexMatcher $regexMatcher,
+        AnonymousFunctionNodeFactory $anonymousFunctionNodeFactory
+    ) {
+        $this->regexMatcher = $regexMatcher;
+        $this->anonymousFunctionNodeFactory = $anonymousFunctionNodeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -88,77 +86,23 @@ PHP
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if (! $firstArgumentValue instanceof String_) {
+        $patternWithoutE = $this->regexMatcher->resolvePatternExpressionWithoutEIfFound($firstArgumentValue);
+        if ($patternWithoutE === null) {
             return null;
         }
-
-        $pattern = $this->getValue($firstArgumentValue);
-        $delimiter = $pattern[0];
-
-        /** @var string $modifiers */
-        $modifiers = Strings::after($pattern, $delimiter, -1);
-        if (! Strings::contains($modifiers, 'e')) {
-            return null;
-        }
-
-        $patternWithoutE = $this->createPatternWithoutE($pattern, $delimiter, $modifiers);
 
         $secondArgumentValue = $node->args[1]->value;
-
-        $anonymousFunction = $this->createAnonymousFunctionFromString($secondArgumentValue);
+        $anonymousFunction = $this->anonymousFunctionNodeFactory->createAnonymousFunctionFromString(
+            $secondArgumentValue
+        );
         if ($anonymousFunction === null) {
             return null;
         }
 
         $node->name = new Name('preg_replace_callback');
-        $node->args[0]->value = new String_($patternWithoutE);
+        $node->args[0]->value = $patternWithoutE;
         $node->args[1]->value = $anonymousFunction;
 
         return $node;
-    }
-
-    private function createAnonymousFunctionFromString(Expr $expr): ?Closure
-    {
-        if (! $expr instanceof String_) {
-            // not supported yet
-            throw new ShouldNotHappenException();
-        }
-
-        $phpCode = '<?php ' . $expr->value . ';';
-        $contentNodes = $this->parser->parse($phpCode);
-
-        $anonymousFunction = new Closure();
-        if (! $contentNodes[0] instanceof Expression) {
-            return null;
-        }
-
-        $stmt = $contentNodes[0]->expr;
-
-        $this->traverseNodesWithCallable($stmt, function (Node $node): Node {
-            if (! $node instanceof String_) {
-                return $node;
-            }
-
-            $match = Strings::match($node->value, '#(\\$|\\\\|\\x0)(?<number>\d+)#');
-            if (! $match) {
-                return $node;
-            }
-
-            $matchesVariable = new Variable('matches');
-
-            return new ArrayDimFetch($matchesVariable, new LNumber((int) $match['number']));
-        });
-
-        $anonymousFunction->stmts[] = new Return_($stmt);
-        $anonymousFunction->params[] = new Param(new Variable('matches'));
-
-        return $anonymousFunction;
-    }
-
-    private function createPatternWithoutE(string $pattern, string $delimiter, string $modifiers): string
-    {
-        $modifiersWithoutE = Strings::replace($modifiers, '#e#');
-
-        return Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
     }
 }
