@@ -87,7 +87,12 @@ PHP
             return null;
         }
 
-        $pattern = $this->getValue($node->args[0]->value);
+        $firstArgumentValue = $node->args[0]->value;
+        if (! $firstArgumentValue instanceof String_) {
+            return null;
+        }
+
+        $pattern = $this->getValue($firstArgumentValue);
         $delimiter = $pattern[0];
 
         /** @var string $modifiers */
