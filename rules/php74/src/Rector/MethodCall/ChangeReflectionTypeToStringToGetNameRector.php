@@ -167,13 +167,8 @@ PHP
         if ($parentNode instanceof String_) {
             return false;
         }
-
-        if ($parentNode instanceof Concat) {
-            return false;
-        }
-
         // probably already converted
-        return true;
+        return !$parentNode instanceof Concat;
     }
 
     private function isReflectionParameterGetTypeMethodCall(MethodCall $methodCall): bool
