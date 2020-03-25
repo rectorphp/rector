@@ -8,6 +8,7 @@ use PHPStan\Reflection\ClassMemberAccessAnswerer;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface;
 
 /**
  * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/ObjectType.php#L705
@@ -40,7 +41,6 @@ final class ObjectTypeToCallReflectionResolver implements TypeToCallReflectionRe
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-
         if (! $classReflection->hasNativeMethod('__invoke')) {
             return null;
         }
