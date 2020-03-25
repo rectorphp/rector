@@ -31,7 +31,6 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
         }
 
         $functionName = $node->name;
-
         if (! $functionName instanceof Name) {
             return (string) $functionName;
         }

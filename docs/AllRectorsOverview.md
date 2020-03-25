@@ -1,4 +1,4 @@
-# All 467 Rectors Overview
+# All 468 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -3058,6 +3058,27 @@ Remove unused key in foreach
 +foreach ($items as $value) {
      $result = $value;
  }
+```
+
+<br>
+
+### `RemoveUnusedFunctionRector`
+
+- class: [`Rector\DeadCode\Rector\Function_\RemoveUnusedFunctionRector`](/../master/rules/dead-code/src/Rector/Function_/RemoveUnusedFunctionRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/Function_/RemoveUnusedFunctionRector/Fixture)
+
+Remove unused function
+
+```diff
+-function removeMe()
+-{
+-}
+-
+ function useMe()
+ {
+ }
+
+ useMe();
 ```
 
 <br>

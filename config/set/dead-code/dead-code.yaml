@@ -35,3 +35,4 @@ services:
     Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector: null
     Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector: null
     Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector: null
+    Rector\DeadCode\Rector\Function_\RemoveUnusedFunctionRector: null
