@@ -29,6 +29,11 @@ final class NodeAnnotationReader
      */
     private $nodeNameResolver;
 
+    /**
+     * @var string[]
+     */
+    private $alreadyProvidedAnnotations = [];
+
     public function __construct(Reader $reader, NodeNameResolver $nodeNameResolver)
     {
         $this->reader = $reader;
@@ -49,11 +54,30 @@ final class NodeAnnotationReader
         $reflectionMethod = new ReflectionMethod($className, $methodName);
 
         try {
-            return $this->reader->getMethodAnnotation($reflectionMethod, $annotationClassName);
+            // covers cases like https://github.com/rectorphp/rector/issues/3046
+
+            /** @var object[] $methodAnnotations */
+            $methodAnnotations = $this->reader->getMethodAnnotations($reflectionMethod);
+            foreach ($methodAnnotations as $methodAnnotation) {
+                if (! is_a($methodAnnotation, $annotationClassName, true)) {
+                    continue;
+                }
+
+                $objectHash = md5(spl_object_hash($classMethod) . serialize($methodAnnotation));
+                if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
+                    continue;
+                }
+
+                $this->alreadyProvidedAnnotations[] = $objectHash;
+
+                return $methodAnnotation;
+            }
         } catch (AnnotationException $annotationException) {
             // unable to laod
             return null;
         }
+
+        return null;
     }
 
     /**
