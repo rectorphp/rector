@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -168,16 +167,8 @@ PHP
         if ($parentNode instanceof String_) {
             return false;
         }
-
-        if ($parentNode instanceof Concat) {
-            return false;
-        }
-
         // probably already converted
-        if ($parentNode instanceof Ternary) {
-            return true;
-        }
-        return $parentNode instanceof Return_;
+        return ! $parentNode instanceof Concat;
     }
 
     private function isReflectionParameterGetTypeMethodCall(MethodCall $methodCall): bool
