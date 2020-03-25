@@ -168,7 +168,7 @@ PHP
             return false;
         }
         // probably already converted
-        return !$parentNode instanceof Concat;
+        return ! $parentNode instanceof Concat;
     }
 
     private function isReflectionParameterGetTypeMethodCall(MethodCall $methodCall): bool
