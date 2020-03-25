@@ -101,10 +101,11 @@ PHP
             return null;
         }
 
-        $modifiersWithoutE = Strings::replace($modifiers, '#e#');
-        $patternWithoutE = Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
+        $patternWithoutE = $this->createPatternWithoutE($pattern, $delimiter, $modifiers);
 
-        $anonymousFunction = $this->createAnonymousFunctionFromString($node->args[1]->value);
+        $secondArgumentValue = $node->args[1]->value;
+
+        $anonymousFunction = $this->createAnonymousFunctionFromString($secondArgumentValue);
         if ($anonymousFunction === null) {
             return null;
         }
@@ -152,5 +153,12 @@ PHP
         $anonymousFunction->params[] = new Param(new Variable('matches'));
 
         return $anonymousFunction;
+    }
+
+    private function createPatternWithoutE(string $pattern, string $delimiter, string $modifiers): string
+    {
+        $modifiersWithoutE = Strings::replace($modifiers, '#e#');
+
+        return Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
     }
 }
