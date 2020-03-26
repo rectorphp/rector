@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\NotEqual;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\DeadCode\NodeManipulator\CountManipulator;
+use Rector\DeadCode\UselessIfCondBeforeForeachDetector;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector\RemoveUnusedNonEmptyArrayBeforeForeachRectorTest
@@ -27,9 +24,24 @@ final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractRector
      */
     private $ifManipulator;
 
-    public function __construct(IfManipulator $ifManipulator)
-    {
+    /**
+     * @var UselessIfCondBeforeForeachDetector
+     */
+    private $uselessIfCondBeforeForeachDetector;
+
+    /**
+     * @var CountManipulator
+     */
+    private $countManipulator;
+
+    public function __construct(
+        IfManipulator $ifManipulator,
+        UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector,
+        CountManipulator $countManipulator
+    ) {
         $this->ifManipulator = $ifManipulator;
+        $this->uselessIfCondBeforeForeachDetector = $uselessIfCondBeforeForeachDetector;
+        $this->countManipulator = $countManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -81,55 +93,31 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->ifManipulator->isIfWithOnlyForeach($node)) {
+        if (! $this->isUselessBeforeForeachCheck($node)) {
             return null;
+        }
+
+        return $node->stmts[0];
+    }
+
+    private function isUselessBeforeForeachCheck(If_ $if): bool
+    {
+        if (! $this->ifManipulator->isIfWithOnlyForeach($if)) {
+            return false;
         }
 
         /** @var Foreach_ $foreach */
-        $foreach = $node->stmts[0];
+        $foreach = $if->stmts[0];
         $foreachExpr = $foreach->expr;
 
-        if (! $node->cond instanceof NotIdentical && ! $node->cond instanceof NotEqual) {
-            return null;
-        }
-
-        /** @var NotIdentical|NotEqual $notIdentical */
-        $notIdentical = $node->cond;
-
-        if (! $this->isMatching($notIdentical, $foreachExpr)) {
-            return null;
-        }
-
-        return $foreach;
-    }
-
-    private function isEmptyArray(Expr $expr): bool
-    {
-        if (! $expr instanceof Array_) {
-            return false;
-        }
-
-        return $expr->items === [];
-    }
-
-    private function isEmptyArrayAndForeachedVariable(Expr $leftExpr, Expr $rightExpr, Expr $foreachExpr): bool
-    {
-        if (! $this->isEmptyArray($leftExpr)) {
-            return false;
-        }
-
-        return $this->areNodesWithoutCommentsEqual($foreachExpr, $rightExpr);
-    }
-
-    /**
-     * @param NotIdentical|NotEqual $binaryOp
-     */
-    private function isMatching(BinaryOp $binaryOp, Expr $foreachExpr): bool
-    {
-        if ($this->isEmptyArrayAndForeachedVariable($binaryOp->left, $binaryOp->right, $foreachExpr)) {
+        if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotIdenticalEmptyArray($if, $foreachExpr)) {
             return true;
         }
 
-        return $this->isEmptyArrayAndForeachedVariable($binaryOp->right, $binaryOp->left, $foreachExpr);
+        if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotEmpty($if, $foreachExpr)) {
+            return true;
+        }
+
+        return $this->countManipulator->isCounterHigherThanOne($if->cond, $foreachExpr);
     }
 }
