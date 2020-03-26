@@ -1,4 +1,4 @@
-# All 470 Rectors Overview
+# All 471 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7458,6 +7458,26 @@ Changes property `@var` annotations from annotation to type.
 <br>
 
 ## Php80
+
+### `StrContainsRector`
+
+- class: [`Rector\Php80\Rector\NotIdentical\StrContainsRector`](/../master/rules/php80/src/Rector/NotIdentical/StrContainsRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/NotIdentical/StrContainsRector/Fixture)
+
+Replace strpos() !== false, strstr and preg_match() with str_contains()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return strpos('abc', 'a') !== false;
++        return str_contains('abc', 'a');
+     }
+ }
+```
+
+<br>
 
 ### `UnionTypesRector`
 
