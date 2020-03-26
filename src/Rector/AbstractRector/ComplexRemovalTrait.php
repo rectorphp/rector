@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
@@ -19,6 +20,7 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
@@ -42,6 +44,11 @@ trait ComplexRemovalTrait
     protected $livingCodeManipulator;
 
     /**
+     * @var BetterStandardPrinter
+     */
+    protected $betterStandardPrinter;
+
+    /**
      * @var PropertyManipulator
      */
     private $propertyManipulator;
@@ -52,11 +59,13 @@ trait ComplexRemovalTrait
     public function autowireComplextRemovalTrait(
         PropertyManipulator $propertyManipulator,
         ParsedNodeCollector $parsedNodeCollector,
-        LivingCodeManipulator $livingCodeManipulator
+        LivingCodeManipulator $livingCodeManipulator,
+        BetterStandardPrinter $betterStandardPrinter
     ): void {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->propertyManipulator = $propertyManipulator;
         $this->livingCodeManipulator = $livingCodeManipulator;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     abstract protected function removeNode(Node $node): void;
@@ -91,14 +100,18 @@ trait ComplexRemovalTrait
                 continue;
             }
 
+            // remove assigns
             $assign = $this->resolveAssign($propertyFetch);
-
             $this->removeAssignNode($assign);
+
+            $this->removeConstructorDependency($assign);
         }
 
         if ($shouldKeepProperty) {
             return;
         }
+
+        // remove __contruct param
 
         /** @var Property $property */
         $property = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
@@ -184,5 +197,32 @@ trait ComplexRemovalTrait
         }
 
         return $assign;
+    }
+
+    private function removeConstructorDependency(Assign $assign): void
+    {
+        $methodName = $assign->getAttribute(AttributeKey::METHOD_NAME);
+        if ($methodName !== '__construct') {
+            return;
+        }
+
+        $class = $assign->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return;
+        }
+
+        /** @var Class_|null $class */
+        $constructClassMethod = $class->getMethod('__construct');
+        if ($constructClassMethod === null) {
+            return;
+        }
+
+        foreach ($constructClassMethod->getParams() as $param) {
+            if (! $this->betterStandardPrinter->areNodesWithoutCommentsEqual($param->var, $assign->expr)) {
+                continue;
+            }
+
+            $this->removeNode($param);
+        }
     }
 }
