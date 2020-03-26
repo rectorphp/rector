@@ -26,7 +26,7 @@ namespace Rector\DeadCode\Tests\Rector\Class_\RemoveSetterOnlyPropertyAndMethodC
 
 class MyClass
 {
-    public function __construct($unused)
+    public function __construct()
     {
     }
 }
