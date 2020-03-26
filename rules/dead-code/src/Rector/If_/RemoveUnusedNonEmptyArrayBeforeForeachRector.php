@@ -11,6 +11,7 @@ use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\DeadCode\NodeManipulator\CountManipulator;
 use Rector\DeadCode\UselessIfCondBeforeForeachDetector;
 
 /**
@@ -28,12 +29,19 @@ final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractRector
      */
     private $uselessIfCondBeforeForeachDetector;
 
+    /**
+     * @var CountManipulator
+     */
+    private $countManipulator;
+
     public function __construct(
         IfManipulator $ifManipulator,
-        UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector
+        UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector,
+        CountManipulator $countManipulator
     ) {
         $this->ifManipulator = $ifManipulator;
         $this->uselessIfCondBeforeForeachDetector = $uselessIfCondBeforeForeachDetector;
+        $this->countManipulator = $countManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -106,6 +114,10 @@ PHP
             return true;
         }
 
-        return $this->uselessIfCondBeforeForeachDetector->isMatchingNotEmpty($if, $foreachExpr);
+        if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotEmpty($if, $foreachExpr)) {
+            return true;
+        }
+
+        return $this->countManipulator->isCounterHigherThanOne($if->cond, $foreachExpr);
     }
 }
