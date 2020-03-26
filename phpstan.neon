@@ -100,7 +100,6 @@ parameters:
         # part of test
         - '#(.*?)(AttributeAwareNodeInterface|AttributeAware(.*?)TagValueNode)(.*?)#'
 
-        - '#Call to an undefined method PHPStan\\PhpDocParser\\Ast\\PhpDoc\\(.*?)\:\:getAttribute\(\)#'
         - '#Parameter \#1 \$children of class PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocNode constructor expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\>, array<int, PHPStan\\PhpDocParser\\Ast\\Node\> given#'
         - '#Method Rector\\PHPUnit\\Rector\\MethodCall\\ReplaceAssertArraySubsetRector\:\:matchArray\(\) should return PhpParser\\Node\\Expr\\Array_\|null but returns PhpParser\\Node\\Expr#'
 
@@ -133,7 +132,6 @@ parameters:
 
         - '#Ternary operator condition is always true#'
 
-        - '#Call to function property_exists\(\) with string and (.*?) will always evaluate to false#'
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\ClassLike\:\:\$stmts#'
 
         - '#Property Rector\\TypeDeclaration\\TypeInferer\\(.*?)\:\:\$(.*?)TypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\(.*?)TypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
@@ -211,12 +209,9 @@ parameters:
         - '#Result of \|\| is always true#'
 
         # known value
-        - '#Access to undefined constant Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode\:\:SHORT_NAME#'
-
         - '#Parameter \#2 \$name of class PhpParser\\Node\\Expr\\MethodCall constructor expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier\|string, string\|null given#'
         - '#Ternary operator condition is always false#'
 
-        - '#Parameter \#1 \$tagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:addTagValueNodeWithShortName\(\) expects Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|Rector\\BetterPhpDocParser\\PhpDocNode\\Doctrine\\Property_\\JoinColumnTagValueNode given#'
         - '#Parameter \#1 \$eventListenerTag of method Rector\\SymfonyCodeQuality\\Rector\\Class_\\EventListenerToEventSubscriberRector\:\:createEventItem\(\) expects Rector\\Symfony\\ValueObject\\Tag\\EventListenerTag, Rector\\Symfony\\Contract\\Tag\\TagInterface given#'
         - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfoFactory\:\:parseTokensToPhpDocNode\(\) should return Rector\\AttributeAwarePhpDoc\\Ast\\PhpDoc\\AttributeAwarePhpDocNode but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocNode#'
 
@@ -248,6 +243,7 @@ parameters:
 
         - '#Method Rector\\(.*?)\:\:__toString\(\) should return string but returns string\|null#'
 
-        - '#Strict comparison using \=\=\= between mixed and (.*?) will always evaluate to false#'
-        - '#Parameter \#1 \$c of method Rector\\Php70\\EregToPcreTransformer\:\:_ere2pcre_escape\(\) expects string, mixed given#'
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$description#'
+
+        - '#Method Rector\\Php80\\Rector\\NotIdentical\\StrContainsRector\:\:matchNotIdenticalToFalse\(\) should return PhpParser\\Node\\Expr\\FuncCall\|null but returns PhpParser\\Node\\Expr#'
+        - '#Method Rector\\Php80\\Rector\\NotIdentical\\StrContainsRector\:\:matchPossibleFuncCallToFalseOrZero\(\) should return PhpParser\\Node\\Expr\\FuncCall\|null but returns PhpParser\\Node\\Expr#'

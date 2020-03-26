@@ -75,4 +75,20 @@ trait NameResolverTrait
 
         return $this->isName($node, $name);
     }
+
+    /**
+     * @param string[] $names
+     */
+    protected function isFuncCallNames(Node $node, array $names): bool
+    {
+        foreach ($names as $name) {
+            if (! $this->isFuncCallName($node, $name)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 }
