@@ -128,9 +128,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         return $this->printContentItems($contentItems);
     }
 
-    /**
-     * @param mixed[] $methods
-     */
     public function changeMethods(array $methods): void
     {
         $this->orderedVisibleItems[] = 'methods';

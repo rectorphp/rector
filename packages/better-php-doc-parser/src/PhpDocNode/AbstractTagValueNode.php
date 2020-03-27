@@ -53,7 +53,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     {
         $json = Json::encode($item);
         $json = Strings::replace($json, '#,#', ', ');
-        $json = Strings::replace($json, '#\[(.*?)\]#', '{$1}');
+
+        // change brackets from json to annotations
+        $json = Strings::replace($json, '#^\[(.*?)\]$#', '{$1}');
 
         // cleanup json encoded extra slashes
         $json = Strings::replace($json, '#\\\\\\\\#', '\\');
