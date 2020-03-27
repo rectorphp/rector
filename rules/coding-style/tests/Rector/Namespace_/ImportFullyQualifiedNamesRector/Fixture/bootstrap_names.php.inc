@@ -1,30 +1,42 @@
 <?php
 
-declare(strict_types=1);
+namespace {
+    function run_me_never()
+    {
+        // silent deprecations, since we test them
+        error_reporting(E_ALL ^ E_DEPRECATED);
 
-function run_me_never()
+        // performance boost
+        \SomeNamespace\gc_disable();
+    }
+}
+
+namespace SomeNamespace
 {
-    // silent deprecations, since we test them
-    error_reporting(E_ALL ^ E_DEPRECATED);
-
-    // performance boost
-    \SomeNamespace\gc_disable();
+    function gc_disable()
+    {}
 }
 
 ?>
 -----
 <?php
 
-declare(strict_types=1);
-use function SomeNamespace\gc_disable;
+namespace {
+    use function SomeNamespace\gc_disable;
+    function run_me_never()
+    {
+        // silent deprecations, since we test them
+        error_reporting(E_ALL ^ E_DEPRECATED);
 
-function run_me_never()
+        // performance boost
+        gc_disable();
+    }
+}
+
+namespace SomeNamespace
 {
-    // silent deprecations, since we test them
-    error_reporting(E_ALL ^ E_DEPRECATED);
-
-    // performance boost
-    gc_disable();
+    function gc_disable()
+    {}
 }
 
 ?>

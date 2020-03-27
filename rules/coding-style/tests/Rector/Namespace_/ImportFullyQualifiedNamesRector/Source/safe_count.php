@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Safe;
+
+function count()
+{
+
+}
+
+function substr()
+{
+
+}
