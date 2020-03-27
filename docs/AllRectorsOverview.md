@@ -1,4 +1,4 @@
-# All 471 Rectors Overview
+# All 472 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -829,6 +829,27 @@ Change array_key_exists() ternary to coalesing
      {
 -        $result = array_key_exists($keyToMatch, $values) ? $values[$keyToMatch] : null;
 +        $result = $values[$keyToMatch] ?? null;
+     }
+ }
+```
+
+<br>
+
+### `ArrayKeysAndInArrayToIssetRector`
+
+- class: [`Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToIssetRector`](/../master/rules/code-quality/src/Rector/FuncCall/ArrayKeysAndInArrayToIssetRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/ArrayKeysAndInArrayToIssetRector/Fixture)
+
+Replace array_keys() and in_array() to isset
+
+```diff
+ class SomeClass
+ {
+     public function run($packageName, $values)
+     {
+-        $keys = array_keys($values);
+-        return in_array($packageName, $keys, true);
++        return isset($values[$packageName]));
      }
  }
 ```
