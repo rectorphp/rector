@@ -7464,7 +7464,7 @@ Changes property `@var` annotations from annotation to type.
 - class: [`Rector\Php80\Rector\NotIdentical\StrContainsRector`](/../master/rules/php80/src/Rector/NotIdentical/StrContainsRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/NotIdentical/StrContainsRector/Fixture)
 
-Replace strpos() !== false, strstr and preg_match() with str_contains()
+Replace strpos() !== false and strstr()  with str_contains()
 
 ```diff
  class SomeClass

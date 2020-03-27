@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Application\UseAddingCommander;
@@ -14,6 +15,7 @@ use Rector\CodingStyle\Imports\AliasUsesResolver;
 use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\Core\Configuration\Option;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -95,7 +97,7 @@ final class NameImporter
         }
 
         // is scalar name?
-        if (in_array($name->toString(), ['true', 'false', 'bool'], true)) {
+        if (in_array($name->toLowerString(), ['true', 'false', 'bool'], true)) {
             return true;
         }
 
@@ -115,6 +117,10 @@ final class NameImporter
             if ($name !== null && substr_count($name, '\\') === 0) {
                 return true;
             }
+        }
+
+        if ($this->isNonExistingClassLikeAndFunctionFullyQualifiedName($name)) {
+            return true;
         }
 
         return false;
@@ -186,5 +192,23 @@ final class NameImporter
         } else {
             $this->useAddingCommander->addUseImport($name, $fullyQualifiedObjectType);
         }
+    }
+
+    private function isNonExistingClassLikeAndFunctionFullyQualifiedName(Name $name): bool
+    {
+        if (! $name instanceof FullyQualified) {
+            return false;
+        }
+
+        // skip-non existing class-likes and functions
+        if (ClassExistenceStaticHelper::doesClassLikeExist($name->toString())) {
+            return false;
+        }
+
+        if (function_exists($name->toString())) {
+            return false;
+        }
+
+        return true;
     }
 }
