@@ -222,7 +222,9 @@
             "rules/solid/tests/Rector/ClassMethod/UseInterfaceOverImplementationInConstructorRector/Source/Apple.php",
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Foo.php",
-            "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/safe_count.php"
+            "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/safe_count.php",
+            "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",
+            "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/YetAnotherClass.php"
         ]
     },
     "scripts": {

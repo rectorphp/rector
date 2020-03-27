@@ -109,18 +109,17 @@ final class NameImporter
             return true;
         }
 
+        if ($this->isNonExistingClassLikeAndFunctionFullyQualifiedName($name)) {
+            return true;
+        }
+
         // Importing root namespace classes (like \DateTime) is optional
         $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER);
-
         if (! $importShortClasses) {
             $name = $this->nodeNameResolver->getName($name);
             if ($name !== null && substr_count($name, '\\') === 0) {
                 return true;
             }
-        }
-
-        if ($this->isNonExistingClassLikeAndFunctionFullyQualifiedName($name)) {
-            return true;
         }
 
         return false;
@@ -205,10 +204,6 @@ final class NameImporter
             return false;
         }
 
-        if (function_exists($name->toString())) {
-            return false;
-        }
-
-        return true;
+        return ! function_exists($name->toString());
     }
 }
