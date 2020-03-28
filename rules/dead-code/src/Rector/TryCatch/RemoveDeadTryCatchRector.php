@@ -78,7 +78,7 @@ PHP
             return null;
         }
 
-        if (! $this->areNodesWithoutCommentsEqual($onlyCatch->var, $onlyCatchStmt->expr)) {
+        if (! $this->areNodesEqual($onlyCatch->var, $onlyCatchStmt->expr)) {
             return null;
         }
 

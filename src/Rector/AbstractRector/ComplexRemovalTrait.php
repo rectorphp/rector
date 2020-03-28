@@ -218,7 +218,7 @@ trait ComplexRemovalTrait
         }
 
         foreach ($constructClassMethod->getParams() as $param) {
-            if (! $this->betterStandardPrinter->areNodesWithoutCommentsEqual($param->var, $assign->expr)) {
+            if (! $this->betterStandardPrinter->areNodesEqual($param->var, $assign->expr)) {
                 continue;
             }
 

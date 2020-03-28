@@ -202,7 +202,7 @@ PHP
 
             $param = $params[$key];
 
-            if (! $this->areNodesWithoutCommentsEqual($param->var, $arg->value)) {
+            if (! $this->areNodesEqual($param->var, $arg->value)) {
                 return false;
             }
         }

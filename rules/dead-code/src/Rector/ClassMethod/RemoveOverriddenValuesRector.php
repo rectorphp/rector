@@ -311,7 +311,7 @@ PHP
         $isVariableAssigned = (bool) $this->betterNodeFinder->findFirst($assignNode->expr, function (Node $node) use (
             $nodeByTypeAndPosition
         ): bool {
-            return $this->areNodesWithoutCommentsEqual($node, $nodeByTypeAndPosition->getVariableNode());
+            return $this->areNodesEqual($node, $nodeByTypeAndPosition->getVariableNode());
         });
 
         return ! $isVariableAssigned;
