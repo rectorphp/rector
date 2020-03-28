@@ -26,11 +26,13 @@ final class ParamTypeInferer
 
     public function inferParam(Param $param): Type
     {
-        foreach ($this->paramTypeInferers as $paramTypeInferers) {
-            $type = $paramTypeInferers->inferParam($param);
-            if (! $type instanceof MixedType) {
-                return $type;
+        foreach ($this->paramTypeInferers as $paramTypeInferer) {
+            $type = $paramTypeInferer->inferParam($param);
+            if ($type instanceof MixedType) {
+                continue;
             }
+
+            return $type;
         }
 
         return new MixedType();

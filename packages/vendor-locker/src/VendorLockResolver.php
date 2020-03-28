@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\VendorLocker;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
@@ -43,6 +44,15 @@ final class VendorLockResolver
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
         $this->propertyVendorLockResolver = $propertyVendorLockResolver;
         $this->classMethodVendorLockResolver = $classMethodVendorLockResolver;
+    }
+
+    public function isClassMethodParamLockedIn(Node $node, int $paramPosition): bool
+    {
+        if (! $node instanceof ClassMethod) {
+            return false;
+        }
+
+        return $this->isParamChangeVendorLockedIn($node, $paramPosition);
     }
 
     public function isParamChangeVendorLockedIn(ClassMethod $classMethod, int $paramPosition): bool
