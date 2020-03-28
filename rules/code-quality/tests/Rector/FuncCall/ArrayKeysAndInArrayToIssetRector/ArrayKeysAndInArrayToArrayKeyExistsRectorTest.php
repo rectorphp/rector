@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToIssetRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToIssetRector;
+use Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ArrayKeysAndInArrayToIssetRectorTest extends AbstractRectorTestCase
+final class ArrayKeysAndInArrayToArrayKeyExistsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -25,6 +25,6 @@ final class ArrayKeysAndInArrayToIssetRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ArrayKeysAndInArrayToIssetRector::class;
+        return ArrayKeysAndInArrayToArrayKeyExistsRector::class;
     }
 }

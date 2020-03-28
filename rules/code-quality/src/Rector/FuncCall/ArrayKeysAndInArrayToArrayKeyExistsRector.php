@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\FunctionLike;
@@ -16,13 +14,13 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToIssetRector\ArrayKeysAndInArrayToIssetRectorTest
+ * @see \Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToIssetRector\ArrayKeysAndInArrayToArrayKeyExistsRectorTest
  */
-final class ArrayKeysAndInArrayToIssetRector extends AbstractRector
+final class ArrayKeysAndInArrayToArrayKeyExistsRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Replace array_keys() and in_array() to isset', [
+        return new RectorDefinition('Replace array_keys() and in_array() to array_key_exists()', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
@@ -40,7 +38,7 @@ class SomeClass
 {
     public function run($packageName, $values)
     {
-        return isset($values[$packageName]));
+        return array_keys_exists($values, $packageName));
     }
 }
 PHP
@@ -97,13 +95,13 @@ PHP
 
         $this->removeNode($previousAssignArraysKeysFuncCall);
 
-        return $this->createIsset($node, $arrayKeysFuncCall);
+        return $this->createArrayKeyExists($node, $arrayKeysFuncCall);
     }
 
-    private function createIsset(FuncCall $inArrayFuncCall, FuncCall $arrayKeysFuncCall): FuncCall
+    private function createArrayKeyExists(FuncCall $inArrayFuncCall, FuncCall $arrayKeysFuncCall): FuncCall
     {
-        $dimFetch = new ArrayDimFetch($arrayKeysFuncCall->args[0]->value, $inArrayFuncCall->args[0]->value);
+        $arguments = [$arrayKeysFuncCall->args[0], $inArrayFuncCall->args[0]];
 
-        return new FuncCall(new Name('isset'), [new Arg($dimFetch)]);
+        return new FuncCall(new Name('array_key_exists'), $arguments);
     }
 }
