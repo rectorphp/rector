@@ -194,7 +194,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
     }
 
-    protected function addFile(string $filePath, string $content): void
+    private function addFile(string $filePath, string $content): void
     {
         $this->removedAndAddedFilesCollector->addFileWithContent($filePath, $content);
     }

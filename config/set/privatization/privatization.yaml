@@ -1,0 +1,2 @@
+services:
+    Rector\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector: null

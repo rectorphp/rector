@@ -50,7 +50,6 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\Core\\": "src",
             "Rector\\Architecture\\": "rules/architecture/src",
             "Rector\\AttributeAwarePhpDoc\\": "packages/attribute-aware-php-doc/src",
             "Rector\\Autodiscovery\\": "rules/autodiscovery/src",
@@ -58,10 +57,11 @@
             "Rector\\CakePHPToSymfony\\": "rules/cakephp-to-symfony/src",
             "Rector\\CakePHP\\": "rules/cakephp/src",
             "Rector\\Celebrity\\": "rules/celebrity/src",
+            "Rector\\ChangesReporting\\": "packages/changes-reporting/src",
             "Rector\\CodeQuality\\": "rules/code-quality/src",
             "Rector\\CodingStyle\\": "rules/coding-style/src",
             "Rector\\ConsoleDiffer\\": "packages/console-differ/src",
-            "Rector\\ChangesReporting\\": "packages/changes-reporting/src",
+            "Rector\\Core\\": "src",
             "Rector\\DeadCode\\": "rules/dead-code/src",
             "Rector\\DoctrineCodeQuality\\": "rules/doctrine-code-quality/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "rules/doctrine-gedmo-to-knplabs/src",
@@ -103,6 +103,7 @@
             "Rector\\PhpDeglobalize\\": "rules/php-deglobalize/src",
             "Rector\\PhpSpecToPHPUnit\\": "rules/php-spec-to-phpunit/src",
             "Rector\\Polyfill\\": "packages/polyfill/src",
+            "Rector\\Privatization\\": "rules/privatization/src",
             "Rector\\RectorGenerator\\": "packages/rector-generator/src",
             "Rector\\Refactoring\\": "packages/refactoring/src",
             "Rector\\RemovingStatic\\": "rules/removing-static/src",
@@ -126,7 +127,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Core\\Tests\\": "tests",
             "Rector\\Architecture\\Tests\\": "rules/architecture/tests",
             "Rector\\Autodiscovery\\Tests\\": "rules/autodiscovery/tests",
             "Rector\\BetterPhpDocParser\\Tests\\": "packages/better-php-doc-parser/tests",
@@ -135,6 +135,7 @@
             "Rector\\Celebrity\\Tests\\": "rules/celebrity/tests",
             "Rector\\CodeQuality\\Tests\\": "rules/code-quality/tests",
             "Rector\\CodingStyle\\Tests\\": "rules/coding-style/tests",
+            "Rector\\Core\\Tests\\": "tests",
             "Rector\\DeadCode\\Tests\\": "rules/dead-code/tests",
             "Rector\\DoctrineCodeQuality\\Tests\\": "rules/doctrine-code-quality/tests",
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "rules/doctrine-gedmo-to-knplabs/tests",
@@ -173,6 +174,7 @@
             "Rector\\PhpDeglobalize\\Tests\\": "rules/php-deglobalize/tests",
             "Rector\\PhpSpecToPHPUnit\\Tests\\": "rules/php-spec-to-phpunit/tests",
             "Rector\\Polyfill\\Tests\\": "packages/polyfill/tests",
+            "Rector\\Privatization\\Tests\\": "rules/privatization/tests",
             "Rector\\RemovingStatic\\Tests\\": "rules/removing-static/tests",
             "Rector\\Renaming\\Tests\\": "rules/renaming/tests",
             "Rector\\Restoration\\Tests\\": "rules/restoration/tests",

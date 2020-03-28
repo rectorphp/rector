@@ -16,13 +16,13 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 
 final class ParsedNodesByTypeReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     public function getClass(): string
     {
-        return ParsedNodesByType::class;
+        return ParsedNodeCollector::class;
     }
 
     public function isMethodSupported(MethodReflection $methodReflection): bool
@@ -47,10 +47,8 @@ final class ParsedNodesByTypeReturnTypeExtension implements DynamicMethodReturnT
 
     private function resolveArgumentValue(Expr $expr): ?string
     {
-        if ($expr instanceof ClassConstFetch) {
-            if ($expr->class instanceof Name) {
-                return $expr->class->toString();
-            }
+        if ($expr instanceof ClassConstFetch && $expr->class instanceof Name) {
+            return $expr->class->toString();
         }
 
         return null;

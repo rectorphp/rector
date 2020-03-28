@@ -16,8 +16,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
@@ -206,20 +204,6 @@ PHP
         return 'provideDataFor' . ucfirst($methodName);
     }
 
-    private function resolveUniqueArrayStaticType(Array_ $array): Type
-    {
-        $isNestedArray = $this->isNestedArray($array);
-
-        $uniqueArrayStaticType = $this->resolveUniqueArrayStaticTypes($array);
-
-        if ($isNestedArray && $uniqueArrayStaticType instanceof ArrayType) {
-            // unwrap one level up
-            return $uniqueArrayStaticType->getItemType();
-        }
-
-        return $uniqueArrayStaticType;
-    }
-
     /**
      * @return ParamAndArgValueObject[]
      */
@@ -296,21 +280,6 @@ PHP
         return false;
     }
 
-    private function resolveUniqueArrayStaticTypes(Array_ $array): Type
-    {
-        $itemStaticTypes = [];
-        foreach ($array->items as $arrayItem) {
-            $arrayItemStaticType = $this->getStaticType($arrayItem->value);
-            if ($arrayItemStaticType instanceof MixedType) {
-                continue;
-            }
-
-            $itemStaticTypes[] = new ArrayType(new MixedType(), $arrayItemStaticType);
-        }
-
-        return $this->typeFactory->createMixedPassedOrUnionType($itemStaticTypes);
-    }
-
     private function resolveItemStaticType(Array_ $array, bool $isNestedArray): Type
     {
         $staticTypes = [];
@@ -380,8 +349,7 @@ PHP
 
         $this->dataProviderClassMethodRecipes[] = new DataProviderClassMethodRecipe(
             $dataProviderMethodName,
-            $methodCall->args,
-            $this->resolveUniqueArrayStaticType($firstArgumentValue)
+            $methodCall->args
         );
 
         $methodCall->args = [];

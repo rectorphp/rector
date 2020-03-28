@@ -75,29 +75,6 @@ final class PhpDocInfoFactory
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
     }
 
-    public function createFromString(Node $node, string $content): PhpDocInfo
-    {
-        $tokens = $this->lexer->tokenize($content);
-        $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
-
-        /** @var AttributeAwarePhpDocNode $phpDocNode */
-        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $content);
-
-        $phpDocInfo = new PhpDocInfo(
-            $phpDocNode,
-            $tokens,
-            $content,
-            $this->staticTypeMapper,
-            $node,
-            $this->typeComparator,
-            $this->paramPhpDocNodeFactory
-        );
-
-        $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
-
-        return $phpDocInfo;
-    }
-
     public function createFromNode(Node $node): ?PhpDocInfo
     {
         /** needed for @see PhpDocNodeFactoryInterface */

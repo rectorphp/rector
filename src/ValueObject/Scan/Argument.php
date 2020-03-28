@@ -14,28 +14,17 @@ final class Argument
     /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var string
-     */
     private $type;
 
-    public function __construct(string $name, int $position, string $type = '')
+    public function __construct(int $position, string $type = '')
     {
         $this->position = $position;
-        $this->name = $name;
         $this->type = $type;
     }
 
     public function getPosition(): int
     {
         return $this->position;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getType(): string

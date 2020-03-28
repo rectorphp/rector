@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\ValueObject;
 
 use PhpParser\Node\Arg;
-use PHPStan\Type\Type;
 
 final class DataProviderClassMethodRecipe
 {
@@ -20,18 +19,12 @@ final class DataProviderClassMethodRecipe
     private $args = [];
 
     /**
-     * @var Type|null
-     */
-    private $type;
-
-    /**
      * @param Arg[] $args
      */
-    public function __construct(string $methodName, array $args, ?Type $type)
+    public function __construct(string $methodName, array $args)
     {
         $this->methodName = $methodName;
         $this->args = $args;
-        $this->type = $type;
     }
 
     public function getMethodName(): string
@@ -45,10 +38,5 @@ final class DataProviderClassMethodRecipe
     public function getArgs(): array
     {
         return $this->args;
-    }
-
-    public function getType(): ?Type
-    {
-        return $this->type;
     }
 }

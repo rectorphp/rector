@@ -38,6 +38,7 @@ final class SymfonyFormAbstractTypeFactory
     }
 
     /**
+     * @api
      * @param MethodCall[] $methodCalls
      */
     public function createFromNetteFormMethodCalls(array $methodCalls): Class_

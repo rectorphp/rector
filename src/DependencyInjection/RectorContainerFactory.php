@@ -44,6 +44,7 @@ final class RectorContainerFactory
     }
 
     /**
+     * @api
      * @param string[] $configFiles
      */
     public function createFromConfigs(array $configFiles): ContainerInterface

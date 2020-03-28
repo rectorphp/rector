@@ -6,7 +6,6 @@ namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -24,6 +23,8 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
+use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -54,18 +55,25 @@ trait ComplexRemovalTrait
     private $propertyManipulator;
 
     /**
+     * @var MethodCallParsedNodesFinder
+     */
+    private $methodCallParsedNodesFinder;
+
+    /**
      * @required
      */
     public function autowireComplextRemovalTrait(
         PropertyManipulator $propertyManipulator,
         ParsedNodeCollector $parsedNodeCollector,
         LivingCodeManipulator $livingCodeManipulator,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        MethodCallParsedNodesFinder $methodCallParsedNodesFinder
     ): void {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->propertyManipulator = $propertyManipulator;
         $this->livingCodeManipulator = $livingCodeManipulator;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
     }
 
     abstract protected function removeNode(Node $node): void;
@@ -74,9 +82,9 @@ trait ComplexRemovalTrait
     {
         $this->removeNode($classMethod);
 
-        $classMethodCalls = $this->functionLikeParsedNodesFinder->findClassMethodCalls($classMethod);
+        $classMethodCalls = $this->methodCallParsedNodesFinder->findClassMethodCalls($classMethod);
         foreach ($classMethodCalls as $classMethodCall) {
-            if ($classMethodCall instanceof Array_) {
+            if ($classMethodCall instanceof ArrayCallable) {
                 continue;
             }
 

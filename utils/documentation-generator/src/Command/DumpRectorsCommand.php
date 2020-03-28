@@ -16,6 +16,11 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 final class DumpRectorsCommand extends AbstractCommand
 {
     /**
+     * @var string
+     */
+    private const OUTPUT_FORMAT_OPTION = 'output-format';
+
+    /**
      * @var DumpRectorsOutputFormatterInterface[]
      */
     private $dumpRectorsOutputFormatterInterfaces = [];
@@ -41,7 +46,7 @@ final class DumpRectorsCommand extends AbstractCommand
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[Docs] Dump overview of all Rectors');
         $this->addOption(
-            'output-format',
+            self::OUTPUT_FORMAT_OPTION,
             'o',
             InputOption::VALUE_REQUIRED,
             'Output format for Rectors [json, markdown]',
@@ -59,7 +64,7 @@ final class DumpRectorsCommand extends AbstractCommand
         $generalRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../src');
 
         foreach ($this->dumpRectorsOutputFormatterInterfaces as $outputFormatter) {
-            if ($outputFormatter->getName() !== $input->getOption('output-format')) {
+            if ($outputFormatter->getName() !== $input->getOption(self::OUTPUT_FORMAT_OPTION)) {
                 continue;
             }
 

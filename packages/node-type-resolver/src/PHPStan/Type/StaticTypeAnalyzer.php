@@ -53,7 +53,7 @@ final class StaticTypeAnalyzer
         return $this->isAlwaysTruableUnionType($type);
     }
 
-    public function isNullable(Type $type): bool
+    private function isNullable(Type $type): bool
     {
         if (! $type instanceof UnionType) {
             return false;

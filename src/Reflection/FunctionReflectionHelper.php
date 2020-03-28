@@ -55,7 +55,7 @@ final class FunctionReflectionHelper
         return $this->expandAnnotatedClasses($reflectionFunction, $annotatedThrownClasses);
     }
 
-    public function expandAnnotatedClasses(ReflectionFunction $reflectionFunction, array $classNames): array
+    private function expandAnnotatedClasses(ReflectionFunction $reflectionFunction, array $classNames): array
     {
         $functionNode = $this->functionParser->parseFunction($reflectionFunction);
         if (! $functionNode instanceof Namespace_) {

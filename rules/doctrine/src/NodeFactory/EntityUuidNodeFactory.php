@@ -63,7 +63,7 @@ final class EntityUuidNodeFactory
         return new Expression($assign);
     }
 
-    public function decoratePropertyWithUuidAnnotations(Property $property, bool $isNullable, bool $isId): void
+    private function decoratePropertyWithUuidAnnotations(Property $property, bool $isNullable, bool $isId): void
     {
         $this->clearVarAndOrmAnnotations($property);
         $this->replaceIntSerializerTypeWithString($property);

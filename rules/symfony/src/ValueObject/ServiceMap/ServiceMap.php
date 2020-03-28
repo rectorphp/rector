@@ -28,11 +28,6 @@ final class ServiceMap
         return isset($this->services[$id]);
     }
 
-    public function getService(string $id): ?ServiceDefinition
-    {
-        return $this->services[$id] ?? null;
-    }
-
     public function getServiceType(string $id): ?Type
     {
         $serviceDefinition = $this->getService($id);
@@ -74,5 +69,10 @@ final class ServiceMap
         }
 
         return $servicesWithTag;
+    }
+
+    private function getService(string $id): ?ServiceDefinition
+    {
+        return $this->services[$id] ?? null;
     }
 }

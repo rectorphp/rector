@@ -29,15 +29,6 @@ final class RectorChangeCollector
         $this->currentRectorProvider = $currentRectorProvider;
     }
 
-    public function addRectorClassWithLine(RectorInterface $rector, SmartFileInfo $smartFileInfo, int $line): void
-    {
-        $this->rectorWithFileAndLineChanges[] = new RectorWithFileAndLineChange(
-            $rector,
-            $smartFileInfo->getRealPath(),
-            $line
-        );
-    }
-
     /**
      * @return RectorWithFileAndLineChange[]
      */
@@ -66,5 +57,14 @@ final class RectorChangeCollector
         }
 
         $this->addRectorClassWithLine($currentRector, $fileInfo, $node->getLine());
+    }
+
+    private function addRectorClassWithLine(RectorInterface $rector, SmartFileInfo $smartFileInfo, int $line): void
+    {
+        $this->rectorWithFileAndLineChanges[] = new RectorWithFileAndLineChange(
+            $rector,
+            $smartFileInfo->getRealPath(),
+            $line
+        );
     }
 }

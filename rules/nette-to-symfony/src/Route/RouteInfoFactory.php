@@ -132,7 +132,7 @@ final class RouteInfoFactory
             }
 
             if (method_exists($presenterClass, 'run')) {
-                return new RouteInfo($presenterClass, 'run', $routePath, null, $methods);
+                return new RouteInfo($presenterClass, 'run', $routePath, $methods);
             }
         }
 
@@ -177,6 +177,6 @@ final class RouteInfoFactory
             return null;
         }
 
-        return new RouteInfo($controllerClass, $methodName, $routePath, null, []);
+        return new RouteInfo($controllerClass, $methodName, $routePath, []);
     }
 }

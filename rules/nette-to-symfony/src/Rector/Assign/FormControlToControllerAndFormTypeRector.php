@@ -62,46 +62,50 @@ use Nette\Application\UI\Control;
 
 class SomeForm extends Control
 {
-	public function createComponentForm()
-	{
-		$form = new Form();
-		$form->addText('name', 'Your name');
+    public function createComponentForm()
+    {
+        $form = new Form();
+        $form->addText('name', 'Your name');
 
-		$form->onSuccess[] = [$this, 'processForm'];
-	}
+        $form->onSuccess[] = [$this, 'processForm'];
+    }
 
-	public function processForm(Form $form)
-	{
+    public function processForm(Form $form)
+    {
         // process me
-	}
+    }
 }
 PHP
 ,
                 <<<'PHP'
 class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
-	/**
-	 * @Route(...)
-	 */
-	public function actionSomeForm(\Symfony\Component\HttpFoundation\Request $request): \Symfony\Component\HttpFoundation\Response
-	{
-		$form = $this->createForm(SomeFormType::class);
-		$form->handleRequest($request);
+    /**
+     * @Route(...)
+     */
+    public function actionSomeForm(\Symfony\Component\HttpFoundation\Request $request): \Symfony\Component\HttpFoundation\Response
+    {
+        $form = $this->createForm(SomeFormType::class);
+        $form->handleRequest($request);
 
-		if ($form->isSuccess() && $form->isValid()) {
-			// process me
-		}
-	}
+        if ($form->isSuccess() && $form->isValid()) {
+            // process me
+        }
+    }
 }
 PHP
                 ,
                 <<<'PHP'
-class SomeFormType extends \Symfony\Component\Form\AbstractType
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+
+class SomeFormType extends AbstractType
 {
-	public function buildForm(\Symfony\Component\Form\FormBuilderInterface $formBuilder, array $options)
+    public function buildForm(FormBuilderInterface $formBuilder, array $options)
     {
-        $formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
-        	'label' => 'Your name'
+        $formBuilder->add('name', TextType::class, [
+            'label' => 'Your name'
         ]);
     }
 }

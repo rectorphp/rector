@@ -31,9 +31,9 @@ use PHPStan\Type\Type;
 abstract class AbstractResolvedNameReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     /**
-     * @var string[]
+     * @var class-string[]
      */
-    private $alwaysNamedTypes = [
+    private const ALWAYS_NAMED_TYPES = [
         ClassMethod::class,
         Trait_::class,
         Interface_::class,
@@ -57,7 +57,7 @@ abstract class AbstractResolvedNameReturnTypeExtension implements DynamicMethodR
             return $returnType;
         }
 
-        if (in_array($argumentValueType->getClassName(), $this->alwaysNamedTypes, true)) {
+        if (in_array($argumentValueType->getClassName(), self::ALWAYS_NAMED_TYPES, true)) {
             return new StringType();
         }
 

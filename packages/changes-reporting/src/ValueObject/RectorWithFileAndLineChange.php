@@ -30,11 +30,6 @@ final class RectorWithFileAndLineChange
         $this->realPath = $realPath;
     }
 
-    public function getRector(): RectorInterface
-    {
-        return $this->rector;
-    }
-
     public function getRectorDefinitionsDescription(): string
     {
         return $this->rector->getDefinition()->getDescription();

@@ -68,7 +68,7 @@ final class EregToPcreTransformer
     }
 
     // converts the ERE $s into the PCRE $r. triggers error on any invalid input.
-    public function ere2pcre(string $content, bool $ignorecase): string
+    private function ere2pcre(string $content, bool $ignorecase): string
     {
         if ($ignorecase) {
             if (isset($this->icache[$content])) {

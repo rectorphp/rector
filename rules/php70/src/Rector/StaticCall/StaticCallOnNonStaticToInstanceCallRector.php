@@ -14,6 +14,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeCollector\StaticAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 
@@ -31,9 +32,15 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
      */
     private $classMethodManipulator;
 
-    public function __construct(ClassMethodManipulator $classMethodManipulator)
+    /**
+     * @var StaticAnalyzer
+     */
+    private $staticAnalyzer;
+
+    public function __construct(ClassMethodManipulator $classMethodManipulator, StaticAnalyzer $staticAnalyzer)
     {
         $this->classMethodManipulator = $classMethodManipulator;
+        $this->staticAnalyzer = $staticAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -97,7 +104,7 @@ PHP
             return null;
         }
 
-        $isStaticMethod = $this->functionLikeParsedNodesFinder->isStaticMethod($methodName, $className);
+        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
         if ($isStaticMethod) {
             return null;
         }

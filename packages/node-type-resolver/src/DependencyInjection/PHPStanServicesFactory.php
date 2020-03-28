@@ -77,36 +77,57 @@ final class PHPStanServicesFactory
         }
     }
 
+    /**
+     * @api
+     */
     public function createReflectionProvider(): ReflectionProvider
     {
         return $this->container->getByType(ReflectionProvider::class);
     }
 
+    /**
+     * @api
+     */
     public function createNodeScopeResolver(): NodeScopeResolver
     {
         return $this->container->getByType(NodeScopeResolver::class);
     }
 
+    /**
+     * @api
+     */
     public function createTypeSpecifier(): TypeSpecifier
     {
         return $this->container->getByType(TypeSpecifier::class);
     }
 
+    /**
+     * @api
+     */
     public function createScopeFactory(): ScopeFactory
     {
         return $this->container->getByType(ScopeFactory::class);
     }
 
+    /**
+     * @api
+     */
     public function createDynamicReturnTypeExtensionRegistryProvider(): DynamicReturnTypeExtensionRegistryProvider
     {
         return $this->container->getByType(DynamicReturnTypeExtensionRegistryProvider::class);
     }
 
+    /**
+     * @api
+     */
     public function createOperatorTypeSpecifyingExtensionRegistryProvider(): OperatorTypeSpecifyingExtensionRegistryProvider
     {
         return $this->container->getByType(OperatorTypeSpecifyingExtensionRegistryProvider::class);
     }
 
+    /**
+     * @api
+     */
     public function createTypeNodeResolver(): TypeNodeResolver
     {
         return $this->container->getByType(TypeNodeResolver::class);

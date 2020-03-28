@@ -43,7 +43,26 @@ final class MultilineSpaceFormatPreserver
         return null;
     }
 
-    public function setNewTextToPhpDocNode(
+    /**
+     * Fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
+     */
+    public function fixMultilineDescriptions(
+        AttributeAwareNodeInterface $attributeAwareNode
+    ): AttributeAwareNodeInterface {
+        if (! $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT)) {
+            return $attributeAwareNode;
+        }
+
+        $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($attributeAwareNode);
+        if ($nodeWithRestoredSpaces !== null) {
+            $attributeAwareNode = $nodeWithRestoredSpaces;
+            $attributeAwareNode->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
+        }
+
+        return $attributeAwareNode;
+    }
+
+    private function setNewTextToPhpDocNode(
         AttributeAwareNodeInterface $attributeAwareNode,
         string $newText
     ): AttributeAwareNodeInterface {
@@ -60,25 +79,6 @@ final class MultilineSpaceFormatPreserver
 
         if ($attributeAwareNode instanceof AttributeAwarePhpDocTagNode && $attributeAwareNode->value instanceof AttributeAwareGenericTagValueNode) {
             $attributeAwareNode->value->value = $newText;
-        }
-
-        return $attributeAwareNode;
-    }
-
-    /**
-     * Fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
-     */
-    public function fixMultilineDescriptions(
-        AttributeAwareNodeInterface $attributeAwareNode
-    ): AttributeAwareNodeInterface {
-        if (! $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT)) {
-            return $attributeAwareNode;
-        }
-
-        $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($attributeAwareNode);
-        if ($nodeWithRestoredSpaces !== null) {
-            $attributeAwareNode = $nodeWithRestoredSpaces;
-            $attributeAwareNode->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
         }
 
         return $attributeAwareNode;

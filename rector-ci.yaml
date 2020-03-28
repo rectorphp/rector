@@ -5,12 +5,14 @@ parameters:
         - 'dead-code'
         - 'nette-utils-code-quality'
         - 'solid'
+        - 'privatization'
 
     paths:
         - 'src'
         - 'rules'
         - 'packages'
         - 'tests'
+        - 'utils'
 
     exclude_paths:
         - '/Fixture/'

@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -19,6 +20,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RemoveUnusedPrivateMethodRector extends AbstractRector
 {
+    /**
+     * @var MethodCallParsedNodesFinder
+     */
+    private $methodCallParsedNodesFinder;
+
+    public function __construct(MethodCallParsedNodesFinder $methodCallParsedNodesFinder)
+    {
+        $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove unused private method', [
@@ -68,7 +79,7 @@ PHP
             return null;
         }
 
-        $classMethodCalls = $this->functionLikeParsedNodesFinder->findClassMethodCalls($node);
+        $classMethodCalls = $this->methodCallParsedNodesFinder->findClassMethodCalls($node);
         if ($classMethodCalls !== []) {
             return null;
         }

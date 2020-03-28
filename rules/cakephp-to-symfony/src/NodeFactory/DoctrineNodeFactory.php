@@ -37,23 +37,6 @@ final class DoctrineNodeFactory
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
-    /**
-     * Creates:
-     * $this->repository = $entityManager->getRepository(\EntityClass::class);
-     */
-    public function createRepositoryAssign(string $entityClass): Assign
-    {
-        $repositoryPropertyFetch = new PropertyFetch(new Variable('this'), new Identifier('repository'));
-
-        $entityClassReference = new ClassConstFetch(new FullyQualified($entityClass), 'class');
-
-        $getRepositoryMethodCall = new MethodCall(new Variable('entityManager'), 'getRepository', [
-            new Arg($entityClassReference),
-        ]);
-
-        return new Assign($repositoryPropertyFetch, $getRepositoryMethodCall);
-    }
-
     public function createRepositoryProperty(): Property
     {
         $repositoryPropertyBuilder = $this->builderFactory->property('repository');
@@ -81,5 +64,22 @@ final class DoctrineNodeFactory
             ->addParam($param)
             ->addStmt($assign)
             ->getNode();
+    }
+
+    /**
+     * Creates:
+     * $this->repository = $entityManager->getRepository(\EntityClass::class);
+     */
+    private function createRepositoryAssign(string $entityClass): Assign
+    {
+        $repositoryPropertyFetch = new PropertyFetch(new Variable('this'), new Identifier('repository'));
+
+        $entityClassReference = new ClassConstFetch(new FullyQualified($entityClass), 'class');
+
+        $getRepositoryMethodCall = new MethodCall(new Variable('entityManager'), 'getRepository', [
+            new Arg($entityClassReference),
+        ]);
+
+        return new Assign($repositoryPropertyFetch, $getRepositoryMethodCall);
     }
 }
