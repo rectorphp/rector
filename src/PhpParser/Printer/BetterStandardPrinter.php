@@ -106,19 +106,12 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
+     * Removes all comments from both nodes
+     *
      * @param Node|Node[]|null $firstNode
      * @param Node|Node[]|null $secondNode
      */
     public function areNodesEqual($firstNode, $secondNode): bool
-    {
-        return $this->print($firstNode) === $this->print($secondNode);
-    }
-
-    /**
-     * @param Node|Node[]|null $firstNode
-     * @param Node|Node[]|null $secondNode
-     */
-    public function areNodesWithoutCommentsEqual($firstNode, $secondNode): bool
     {
         return $this->printWithoutComments($firstNode) === $this->printWithoutComments($secondNode);
     }

@@ -170,7 +170,7 @@ PHP
             $parameters1,
             $parameters2,
             function (Param $firstParam, Param $secondParam): int {
-                return $this->areNodesWithoutCommentsEqual($firstParam, $secondParam) ? 0 : 1;
+                return $this->areNodesEqual($firstParam, $secondParam) ? 0 : 1;
             }
         );
     }

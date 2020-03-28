@@ -44,7 +44,7 @@ final class UselessIfCondBeforeForeachDetector
         /** @var Empty_ $empty */
         $empty = $cond->expr;
 
-        return $this->betterStandardPrinter->areNodesWithoutCommentsEqual($empty->expr, $foreachExpr);
+        return $this->betterStandardPrinter->areNodesEqual($empty->expr, $foreachExpr);
     }
 
     /**
@@ -84,7 +84,7 @@ final class UselessIfCondBeforeForeachDetector
             return false;
         }
 
-        return $this->betterStandardPrinter->areNodesWithoutCommentsEqual($foreachExpr, $rightExpr);
+        return $this->betterStandardPrinter->areNodesEqual($foreachExpr, $rightExpr);
     }
 
     private function isEmptyArray(Expr $expr): bool

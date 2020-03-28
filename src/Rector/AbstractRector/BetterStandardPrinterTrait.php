@@ -63,21 +63,14 @@ trait BetterStandardPrinterTrait
     }
 
     /**
+     * Removes all comments from both nodes
+     *
      * @param Node|Node[]|null $firstNode
      * @param Node|Node[]|null $secondNode
      */
     protected function areNodesEqual($firstNode, $secondNode): bool
     {
         return $this->betterStandardPrinter->areNodesEqual($firstNode, $secondNode);
-    }
-
-    /**
-     * @param Node|Node[]|null $firstNode
-     * @param Node|Node[]|null $secondNode
-     */
-    protected function areNodesWithoutCommentsEqual($firstNode, $secondNode): bool
-    {
-        return $this->betterStandardPrinter->areNodesWithoutCommentsEqual($firstNode, $secondNode);
     }
 
     /**
@@ -94,7 +87,7 @@ trait BetterStandardPrinterTrait
             $availableNode = clone $availableNode;
             $availableNode->setAttribute('comments', null);
 
-            if ($this->areNodesWithoutCommentsEqual($singleNode, $availableNode)) {
+            if ($this->areNodesEqual($singleNode, $availableNode)) {
                 return true;
             }
         }

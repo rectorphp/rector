@@ -71,7 +71,7 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
-        if ($this->betterStandardPrinter->areNodesWithoutCommentsEqual($nodeReturnType, $returnNode)) {
+        if ($this->betterStandardPrinter->areNodesEqual($nodeReturnType, $returnNode)) {
             return true;
         }
 
