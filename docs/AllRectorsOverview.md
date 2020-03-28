@@ -4352,8 +4352,8 @@ Change static validate() method to $request->validate()
 
 ### `ChangeSingletonToServiceRector`
 
-- class: [`Rector\Legacy\Rector\ClassMethod\ChangeSingletonToServiceRector`](/../master/packages/legacy/src/Rector/ClassMethod/ChangeSingletonToServiceRector.php)
-- [test fixtures](/../master/packages/legacy/tests/Rector/ClassMethod/ChangeSingletonToServiceRector/Fixture)
+- class: [`Rector\Legacy\Rector\ClassMethod\ChangeSingletonToServiceRector`](/../master/rules/legacy/src/Rector/ClassMethod/ChangeSingletonToServiceRector.php)
+- [test fixtures](/../master/rules/legacy/tests/Rector/ClassMethod/ChangeSingletonToServiceRector/Fixture)
 
 Change singleton class to normal class that can be registered as a service
 
