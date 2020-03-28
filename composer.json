@@ -236,8 +236,12 @@
             "@check-services",
             "phpunit",
             "@phpstan",
-            "@docs"
+            "@docs",
+            "bin/rector sync-types",
+            "bin/rector check-static-type-mappers",
+            "@check-sets"
         ],
+        "check-sets": "php ci/run_all_sets.php",
         "check-cs": "vendor/bin/ecs check --ansi",
         "check-fixtures": "php ci/check_keep_fixtures.php",
         "check-services": "php ci/check_services_in_yaml_configs.php",
