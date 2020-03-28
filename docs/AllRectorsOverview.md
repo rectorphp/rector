@@ -838,7 +838,7 @@ Change array_key_exists() ternary to coalesing
 ### `ArrayKeysAndInArrayToArrayKeyExistsRector`
 
 - class: [`Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector`](/../master/rules/code-quality/src/Rector/FuncCall/ArrayKeysAndInArrayToArrayKeyExistsRector.php)
-- [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/ArrayKeysAndInArrayToIssetRector/Fixture)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/ArrayKeysAndInArrayToArrayKeyExistsRector/Fixture)
 
 Replace array_keys() and in_array() to array_key_exists()
 
@@ -849,7 +849,7 @@ Replace array_keys() and in_array() to array_key_exists()
      {
 -        $keys = array_keys($values);
 -        return in_array($packageName, $keys, true);
-+        return array_keys_exists($values, $packageName));
++        return array_key_exists($packageName, $values);
      }
  }
 ```

@@ -14,7 +14,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToIssetRector\ArrayKeysAndInArrayToArrayKeyExistsRectorTest
+ * @see \Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector\ArrayKeysAndInArrayToArrayKeyExistsRectorTest
  */
 final class ArrayKeysAndInArrayToArrayKeyExistsRector extends AbstractRector
 {
@@ -38,7 +38,7 @@ class SomeClass
 {
     public function run($packageName, $values)
     {
-        return array_keys_exists($values, $packageName));
+        return array_key_exists($packageName, $values);
     }
 }
 PHP
@@ -100,7 +100,7 @@ PHP
 
     private function createArrayKeyExists(FuncCall $inArrayFuncCall, FuncCall $arrayKeysFuncCall): FuncCall
     {
-        $arguments = [$arrayKeysFuncCall->args[0], $inArrayFuncCall->args[0]];
+        $arguments = [$inArrayFuncCall->args[0], $arrayKeysFuncCall->args[0]];
 
         return new FuncCall(new Name('array_key_exists'), $arguments);
     }
