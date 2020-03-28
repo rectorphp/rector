@@ -835,12 +835,12 @@ Change array_key_exists() ternary to coalesing
 
 <br>
 
-### `ArrayKeysAndInArrayToIssetRector`
+### `ArrayKeysAndInArrayToArrayKeyExistsRector`
 
-- class: [`Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToIssetRector`](/../master/rules/code-quality/src/Rector/FuncCall/ArrayKeysAndInArrayToIssetRector.php)
+- class: [`Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector`](/../master/rules/code-quality/src/Rector/FuncCall/ArrayKeysAndInArrayToArrayKeyExistsRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/ArrayKeysAndInArrayToIssetRector/Fixture)
 
-Replace array_keys() and in_array() to isset
+Replace array_keys() and in_array() to array_key_exists()
 
 ```diff
  class SomeClass
@@ -849,7 +849,7 @@ Replace array_keys() and in_array() to isset
      {
 -        $keys = array_keys($values);
 -        return in_array($packageName, $keys, true);
-+        return isset($values[$packageName]));
++        return array_keys_exists($values, $packageName));
      }
  }
 ```

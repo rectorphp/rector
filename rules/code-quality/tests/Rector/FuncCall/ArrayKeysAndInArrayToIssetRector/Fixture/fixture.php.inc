@@ -21,7 +21,7 @@ class SomeClass
 {
     public function run($packageName, $values)
     {
-        return isset($values[$packageName]);
+        return array_key_exists($values, $packageName);
     }
 }
 
