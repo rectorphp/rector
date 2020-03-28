@@ -140,7 +140,7 @@ final class PhpDocInfo
 
     public function getVarTagValue(): ?AttributeAwareVarTagValueNode
     {
-        return $this->getPhpDocNode()->getVarTagValues()[0] ?? null;
+        return $this->phpDocNode->getVarTagValues()[0] ?? null;
     }
 
     /**
@@ -215,7 +215,7 @@ final class PhpDocInfo
     public function getParamTypes(): array
     {
         $paramTypes = [];
-        foreach ($this->getParamTagValues() as $paramTagValue) {
+        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
             $paramTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValue, $this->node);
         }
 
@@ -424,23 +424,13 @@ final class PhpDocInfo
 
     private function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
     {
-        return $this->getPhpDocNode()->getReturnTagValues()[0] ?? null;
-    }
-
-    /**
-     * @return AttributeAwareParamTagValueNode[]
-     */
-    private function getParamTagValues(): array
-    {
-        return $this->getPhpDocNode()->getParamTagValues();
+        return $this->phpDocNode->getReturnTagValues()[0] ?? null;
     }
 
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
-        $phpDocNode = $this->getPhpDocNode();
-
         /** @var AttributeAwareParamTagValueNode $paramTagValue */
-        foreach ($phpDocNode->getParamTagValues() as $paramTagValue) {
+        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
             if (Strings::match($paramTagValue->parameterName, '#^(\$)?' . $name . '$#')) {
                 return $paramTagValue;
             }
