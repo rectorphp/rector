@@ -18,6 +18,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodVisibilityVendorLockResolver;
 use ReflectionMethod;
 
 /**
@@ -30,9 +31,17 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector
      */
     private $methodCallParsedNodesFinder;
 
-    public function __construct(MethodCallParsedNodesFinder $methodCallParsedNodesFinder)
-    {
+    /**
+     * @var ClassMethodVisibilityVendorLockResolver
+     */
+    private $classMethodVisibilityVendorLockResolver;
+
+    public function __construct(
+        MethodCallParsedNodesFinder $methodCallParsedNodesFinder,
+        ClassMethodVisibilityVendorLockResolver $classMethodVisibilityVendorLockResolver
+    ) {
         $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
+        $this->classMethodVisibilityVendorLockResolver = $classMethodVisibilityVendorLockResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -123,13 +132,11 @@ PHP
         }
 
         // is interface required method? skip it
-        /** @var string $className */
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if ($this->isParentLockedMethod($classMethod, $className)) {
+        if ($this->classMethodVisibilityVendorLockResolver->isParentLockedMethod($classMethod)) {
             return true;
         }
 
-        if ($this->isChildLockedMethod($classMethod, $className)) {
+        if ($this->classMethodVisibilityVendorLockResolver->isChildLockedMethod($classMethod)) {
             return true;
         }
 
@@ -185,69 +192,6 @@ PHP
         return false;
     }
 
-    /**
-     * @todo move to method visibility vendor lockin
-     */
-    private function isParentLockedMethod(ClassMethod $classMethod, string $className): bool
-    {
-        $methodName = $this->getName($classMethod);
-        if ($this->isInterfaceMethod($classMethod, $className)) {
-            return true;
-        }
-
-        return $this->hasParentMethod($className, $methodName);
-    }
-
-    /**
-     * @todo move to vendor lockin
-     */
-    private function isInterfaceMethod(ClassMethod $classMethod, string $className): bool
-    {
-        $interfaceMethods = $this->getInterfaceMethods($className);
-
-        return $this->isNames($classMethod, $interfaceMethods);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getInterfaceMethods(string $className): array
-    {
-        $interfaces = class_implements($className);
-
-        $interfaceMethods = [];
-        foreach ($interfaces as $interface) {
-            $interfaceMethods = array_merge($interfaceMethods, get_class_methods($interface));
-        }
-
-        return $interfaceMethods;
-    }
-
-    private function hasParentMethod(string $className, string $methodName)
-    {
-        $parentClasses = class_parents($className);
-
-        foreach ($parentClasses as $parentClass) {
-            if (! method_exists($parentClass, $methodName)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @todo move to vendor lockin
-     */
-    private function isChildLockedMethod(ClassMethod $classMethod, string $className): bool
-    {
-        $methodName = $this->getName($classMethod);
-
-        return $this->hasChildMethod($className, $methodName);
-    }
-
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if ($classMethod->isPrivate()) {
@@ -269,25 +213,6 @@ PHP
 
         // possibly container service factories
         return $this->isNames($classMethod, ['create', 'create*']);
-    }
-
-    private function hasChildMethod(string $desiredClassName, string $methodName): bool
-    {
-        foreach (get_declared_classes() as $className) {
-            if ($className === $desiredClassName) {
-                continue;
-            }
-
-            if (! is_a($className, $desiredClassName, true)) {
-                continue;
-            }
-
-            if (method_exists($className, $methodName)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
