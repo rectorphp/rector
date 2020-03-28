@@ -211,6 +211,14 @@ final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputForma
         );
 
         $this->printCodeWrapped($diff, 'diff');
+
+        $extraFileContent = $codeSample->getExtraFileContent();
+        if ($extraFileContent !== null) {
+            $this->symfonyStyle->newLine();
+            $this->symfonyStyle->writeln('**New file**');
+            $this->symfonyStyle->newLine();
+            $this->printCodeWrapped($extraFileContent, 'php');
+        }
     }
 
     private function printCodeWrapped(string $content, string $format): void

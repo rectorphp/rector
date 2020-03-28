@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
@@ -140,26 +138,6 @@ final class PropertyFetchManipulator
         }
 
         return $this->nodeNameResolver->isName($node->var, 'this');
-    }
-
-    /**
-     * @return PropertyFetch|StaticPropertyFetch|null
-     */
-    public function matchPropertyFetch(Node $node): ?Node
-    {
-        if ($node instanceof PropertyFetch) {
-            return $node;
-        }
-
-        if ($node instanceof StaticPropertyFetch) {
-            return $node;
-        }
-
-        if ($node instanceof ArrayDimFetch) {
-            return $this->matchPropertyFetch($node->var);
-        }
-
-        return null;
     }
 
     /**

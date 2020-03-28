@@ -67,11 +67,6 @@ final class ErrorAndDiffCollector
         $this->nodeRemovingCommander = $nodeRemovingCommander;
     }
 
-    public function addError(Error $error): void
-    {
-        $this->errors[] = $error;
-    }
-
     /**
      * @return Error[]
      */
@@ -132,7 +127,7 @@ final class ErrorAndDiffCollector
     {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
 
-        $this->addError(new Error($fileInfo, $message));
+        $this->errors[] = new Error($fileInfo, $message);
     }
 
     public function addErrorWithRectorClassMessageAndFileInfo(
@@ -149,8 +144,7 @@ final class ErrorAndDiffCollector
         if ($rectorClass) {
             $this->addErrorWithRectorClassMessageAndFileInfo($rectorClass, $throwable->getMessage(), $fileInfo);
         } else {
-            $error = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
-            $this->addError($error);
+            $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
         }
     }
 }

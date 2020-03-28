@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeCollector\StaticAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -19,6 +20,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector
 {
+    /**
+     * @var StaticAnalyzer
+     */
+    private $staticAnalyzer;
+
+    public function __construct(StaticAnalyzer $staticAnalyzer)
+    {
+        $this->staticAnalyzer = $staticAnalyzer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes $this->call() to static method to static call', [
@@ -89,7 +100,7 @@ PHP
             return null;
         }
 
-        $isStaticMethod = $this->functionLikeParsedNodesFinder->isStaticMethod($methodName, $className);
+        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
         if (! $isStaticMethod) {
             return null;
         }

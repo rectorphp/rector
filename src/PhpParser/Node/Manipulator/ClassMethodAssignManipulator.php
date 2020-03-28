@@ -75,15 +75,6 @@ final class ClassMethodAssignManipulator
         return $this->variableManipulator->filterOutReadOnlyVariables($readOnlyVariableAssigns, $classMethod);
     }
 
-    public function isExplicitlyReferenced(Node $node): bool
-    {
-        if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
-            return $node->byRef;
-        }
-
-        return false;
-    }
-
     public function addParameterAndAssignToMethod(
         ClassMethod $classMethod,
         string $name,
@@ -96,6 +87,15 @@ final class ClassMethodAssignManipulator
 
         $classMethod->params[] = $this->nodeFactory->createParamFromNameAndType($name, $type);
         $classMethod->stmts[] = new Expression($assign);
+    }
+
+    private function isExplicitlyReferenced(Node $node): bool
+    {
+        if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
+            return $node->byRef;
+        }
+
+        return false;
     }
 
     /**
@@ -118,6 +118,11 @@ final class ClassMethodAssignManipulator
             }
 
             foreach ($node->var->items as $arrayItem) {
+                // empty item
+                if ($arrayItem === null) {
+                    continue;
+                }
+
                 if (! $arrayItem->value instanceof Variable) {
                     continue;
                 }

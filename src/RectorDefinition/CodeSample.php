@@ -40,7 +40,7 @@ final class CodeSample implements CodeSampleInterface
         return $this->codeAfter;
     }
 
-    public function getExtraFileAfter(): ?string
+    public function getExtraFileContent(): ?string
     {
         return $this->extraFileContent;
     }

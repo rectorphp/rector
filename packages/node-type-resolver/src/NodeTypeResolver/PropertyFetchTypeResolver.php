@@ -7,7 +7,9 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 use PhpParser\Builder\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
@@ -19,6 +21,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use ReflectionProperty;
 
@@ -52,16 +55,23 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
      */
     private $staticTypeMapper;
 
+    /**
+     * @var TraitNodeScopeCollector
+     */
+    private $traitNodeScopeCollector;
+
     public function __construct(
         ParsedNodeCollector $parsedNodeCollector,
         NodeNameResolver $nodeNameResolver,
         BetterPhpDocParser $betterPhpDocParser,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        TraitNodeScopeCollector $traitNodeScopeCollector
     ) {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterPhpDocParser = $betterPhpDocParser;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
 
     /**
@@ -87,58 +97,77 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     {
         // compensate 3rd party non-analysed property reflection
         $vendorPropertyType = $this->getVendorPropertyFetchType($node);
-        if ($vendorPropertyType !== null) {
+        if (! $vendorPropertyType instanceof MixedType) {
             return $vendorPropertyType;
         }
 
         /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+
         if ($scope === null) {
-            return new MixedType();
+            $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+            if ($classNode instanceof Trait_) {
+                /** @var string $traitName */
+                $traitName = $classNode->getAttribute(AttributeKey::CLASS_NAME);
+
+                /** @var Scope|null $scope */
+                $scope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
+            }
+        }
+
+        if ($scope === null) {
+            $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+            // fallback to class, since property fetches are not scoped by PHPStan
+            if ($classNode instanceof ClassLike) {
+                $scope = $classNode->getAttribute(AttributeKey::SCOPE);
+            }
+
+            if ($scope === null) {
+                return new MixedType();
+            }
         }
 
         return $scope->getType($node);
     }
 
-    private function getVendorPropertyFetchType(PropertyFetch $propertyFetch): ?Type
+    private function getVendorPropertyFetchType(PropertyFetch $propertyFetch): Type
     {
         $varObjectType = $this->nodeTypeResolver->resolve($propertyFetch->var);
-
         if (! $varObjectType instanceof TypeWithClassName) {
-            return null;
+            return new MixedType();
         }
 
         $class = $this->parsedNodeCollector->findClass($varObjectType->getClassName());
         if ($class !== null) {
-            return null;
+            return new MixedType();
         }
 
         // 3rd party code
         $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
         if ($propertyName === null) {
-            return null;
+            return new MixedType();
         }
 
         if (! property_exists($varObjectType->getClassName(), $propertyName)) {
-            return null;
+            return new MixedType();
         }
 
         // property is used
         $propertyReflection = new ReflectionProperty($varObjectType->getClassName(), $propertyName);
         if (! $propertyReflection->getDocComment()) {
-            return null;
+            return new MixedType();
         }
 
         $phpDocNode = $this->betterPhpDocParser->parseString((string) $propertyReflection->getDocComment());
         $varTagValues = $phpDocNode->getVarTagValues();
 
         if (! isset($varTagValues[0])) {
-            return null;
+            return new MixedType();
         }
 
         $typeNode = $varTagValues[0]->type;
         if (! $typeNode instanceof TypeNode) {
-            return null;
+            return new MixedType();
         }
 
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());

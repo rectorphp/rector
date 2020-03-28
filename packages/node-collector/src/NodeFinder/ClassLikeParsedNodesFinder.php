@@ -105,10 +105,20 @@ final class ClassLikeParsedNodesFinder
         return array_merge($this->findChildrenOfClass($type), $this->findImplementersOfInterface($type));
     }
 
+    public function findInterface(string $class): ?Interface_
+    {
+        return $this->parsedNodeCollector->findInterface($class);
+    }
+
+    public function findClass(string $name): ?Class_
+    {
+        return $this->parsedNodeCollector->findClass($name);
+    }
+
     /**
      * @return Interface_[]
      */
-    public function findImplementersOfInterface(string $interface): array
+    private function findImplementersOfInterface(string $interface): array
     {
         $implementerInterfaces = [];
 
@@ -123,16 +133,6 @@ final class ClassLikeParsedNodesFinder
         }
 
         return $implementerInterfaces;
-    }
-
-    public function findInterface(string $class): ?Interface_
-    {
-        return $this->parsedNodeCollector->findInterface($class);
-    }
-
-    public function findClass(string $name): ?Class_
-    {
-        return $this->parsedNodeCollector->findClass($name);
     }
 
     private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName): bool

@@ -33,7 +33,7 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
     /**
      * @var string[]|string[][]
      */
-    private $argumentKeyToReturnType = [
+    private const ARGUMENT_KEY_TO_RETURN_TYPE = [
         AttributeKey::class . '::FILE_INFO' => SmartFileInfo::class,
         AttributeKey::class . '::RESOLVED_NAME' => Name::class,
         AttributeKey::class . '::CLASS_NODE' => ClassLike::class,
@@ -86,11 +86,11 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
             return $returnType;
         }
 
-        if (! isset($this->argumentKeyToReturnType[$argumentValue])) {
+        if (! isset(self::ARGUMENT_KEY_TO_RETURN_TYPE[$argumentValue])) {
             return $returnType;
         }
 
-        $knownReturnType = $this->argumentKeyToReturnType[$argumentValue];
+        $knownReturnType = self::ARGUMENT_KEY_TO_RETURN_TYPE[$argumentValue];
         if ($knownReturnType === 'string') {
             return new UnionType([new StringType(), new NullType()]);
         }

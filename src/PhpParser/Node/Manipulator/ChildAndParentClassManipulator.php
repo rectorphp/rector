@@ -69,7 +69,6 @@ final class ChildAndParentClassManipulator
         if ($parentClassName !== '' && method_exists($parentClassName, '__construct')) {
             $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams([]);
             $classMethod->stmts[] = new Expression($parentConstructCallNode);
-            return;
         }
     }
 

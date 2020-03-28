@@ -143,11 +143,6 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         return $this->printContentItems($contentItems);
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
     public function getShortName(): string
     {
         return '@ORM\Table';

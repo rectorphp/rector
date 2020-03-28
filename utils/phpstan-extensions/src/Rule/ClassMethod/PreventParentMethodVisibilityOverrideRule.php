@@ -68,11 +68,7 @@ final class PreventParentMethodVisibilityOverrideRule implements Rule
             return true;
         }
 
-        if ($reflectionMethod->isPrivate() && $classMethod->isPrivate()) {
-            return true;
-        }
-
-        return false;
+        return $reflectionMethod->isPrivate() && $classMethod->isPrivate();
     }
 
     private function resolveReflectionMethodVisibilityAsStrings(ReflectionMethod $reflectionMethod): string

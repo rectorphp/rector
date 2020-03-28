@@ -67,7 +67,7 @@ final class EventSubscriberClassFactory
         return dirname($fileInfo->getRealPath()) . DIRECTORY_SEPARATOR . $eventSubscriberClassName . '.php';
     }
 
-    public function createEventSubscriberClassName(Class_ $class): string
+    private function createEventSubscriberClassName(Class_ $class): string
     {
         $className = $class->getAttribute(AttributeKey::CLASS_SHORT_NAME);
 

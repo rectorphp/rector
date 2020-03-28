@@ -79,6 +79,9 @@ final class Configuration
         $this->setOnlyRector($onlyRector);
     }
 
+    /**
+     * @api
+     */
     public function setFirstResolverConfig(?string $firstResolvedConfig): void
     {
         $this->configFilePath = $firstResolvedConfig;

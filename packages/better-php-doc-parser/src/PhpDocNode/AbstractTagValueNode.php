@@ -132,10 +132,26 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         );
     }
 
+    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
+    {
+        if ($originalContent === null) {
+            return;
+        }
+
+        $this->originalContent = $originalContent;
+        $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
+
+        $this->hasNewlineAfterOpening = (bool) Strings::match($originalContent, '#^(\(\s+|\n)#m');
+        $this->hasNewlineBeforeClosing = (bool) Strings::match($originalContent, '#(\s+\)|\n(\s+)?)$#m');
+
+        $this->hasOpeningBracket = (bool) Strings::match($originalContent, '#^\(#');
+        $this->hasClosingBracket = (bool) Strings::match($originalContent, '#\)$#');
+    }
+
     /**
      * @param PhpDocTagValueNode[] $tagValueNodes
      */
-    protected function printTagValueNodesSeparatedByComma(array $tagValueNodes): string
+    private function printTagValueNodesSeparatedByComma(array $tagValueNodes): string
     {
         if ($tagValueNodes === []) {
             return '';
@@ -154,21 +170,5 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         }
 
         return implode(', ', $itemsAsStrings);
-    }
-
-    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
-    {
-        if ($originalContent === null) {
-            return;
-        }
-
-        $this->originalContent = $originalContent;
-        $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
-
-        $this->hasNewlineAfterOpening = (bool) Strings::match($originalContent, '#^(\(\s+|\n)#m');
-        $this->hasNewlineBeforeClosing = (bool) Strings::match($originalContent, '#(\s+\)|\n(\s+)?)$#m');
-
-        $this->hasOpeningBracket = (bool) Strings::match($originalContent, '#^\(#');
-        $this->hasClosingBracket = (bool) Strings::match($originalContent, '#\)$#');
     }
 }

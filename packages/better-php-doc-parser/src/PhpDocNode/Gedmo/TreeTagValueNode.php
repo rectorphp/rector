@@ -22,9 +22,4 @@ final class TreeTagValueNode extends AbstractTagValueNode
     {
         return sprintf('(type="%s")', $this->type);
     }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
 }

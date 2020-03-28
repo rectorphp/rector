@@ -22,11 +22,6 @@ final class RouteInfo
     private $path;
 
     /**
-     * @var string|null
-     */
-    private $name;
-
-    /**
      * @var string[]
      */
     private $httpMethods = [];
@@ -34,17 +29,11 @@ final class RouteInfo
     /**
      * @param string[] $httpMethods
      */
-    public function __construct(
-        string $class,
-        string $method,
-        string $path,
-        ?string $name = null,
-        array $httpMethods = []
-    ) {
+    public function __construct(string $class, string $method, string $path, array $httpMethods = [])
+    {
         $this->class = $class;
         $this->method = $method;
         $this->path = $path;
-        $this->name = $name;
         $this->httpMethods = $httpMethods;
     }
 
@@ -61,11 +50,6 @@ final class RouteInfo
     public function getPath(): string
     {
         return $this->path;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
     }
 
     /**

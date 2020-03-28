@@ -143,19 +143,6 @@ final class PhpDocInfo
         return $this->getPhpDocNode()->getVarTagValues()[0] ?? null;
     }
 
-    public function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
-    {
-        return $this->getPhpDocNode()->getReturnTagValues()[0] ?? null;
-    }
-
-    /**
-     * @return AttributeAwareParamTagValueNode[]
-     */
-    public function getParamTagValues(): array
-    {
-        return $this->getPhpDocNode()->getParamTagValues();
-    }
-
     /**
      * @return PhpDocTagNode[]
      */
@@ -402,11 +389,6 @@ final class PhpDocInfo
         $this->addPhpDocTagNode($phpDocTagNode);
     }
 
-    public function isEmpty(): bool
-    {
-        return $this->phpDocNode->children === [];
-    }
-
     public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
     {
         $name = $this->resolveNameForPhpDocTagValueNode($phpDocTagValueNode);
@@ -440,9 +422,17 @@ final class PhpDocInfo
         $this->addTagValueNode($paramTagValueNode);
     }
 
-    public function getNode(): Node
+    private function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
     {
-        return $this->node;
+        return $this->getPhpDocNode()->getReturnTagValues()[0] ?? null;
+    }
+
+    /**
+     * @return AttributeAwareParamTagValueNode[]
+     */
+    private function getParamTagValues(): array
+    {
+        return $this->getPhpDocNode()->getParamTagValues();
     }
 
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode

@@ -1,4 +1,4 @@
-# All 472 Rectors Overview
+# All 473 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -48,6 +48,7 @@
 - [PhpDeglobalize](#phpdeglobalize)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
 - [Polyfill](#polyfill)
+- [Privatization](#privatization)
 - [Refactoring](#refactoring)
 - [RemovingStatic](#removingstatic)
 - [Renaming](#renaming)
@@ -4807,28 +4808,46 @@ Change Form that extends Control to Controller and decoupled FormType
 -class SomeForm extends Control
 +class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
  {
--	public function createComponentForm()
-+	/**
-+	 * @Route(...)
-+	 */
-+	public function actionSomeForm(\Symfony\Component\HttpFoundation\Request $request): \Symfony\Component\HttpFoundation\Response
- 	{
--		$form = new Form();
--		$form->addText('name', 'Your name');
-+		$form = $this->createForm(SomeFormType::class);
-+		$form->handleRequest($request);
+-    public function createComponentForm()
++    /**
++     * @Route(...)
++     */
++    public function actionSomeForm(\Symfony\Component\HttpFoundation\Request $request): \Symfony\Component\HttpFoundation\Response
+     {
+-        $form = new Form();
+-        $form->addText('name', 'Your name');
++        $form = $this->createForm(SomeFormType::class);
++        $form->handleRequest($request);
 
--		$form->onSuccess[] = [$this, 'processForm'];
--	}
+-        $form->onSuccess[] = [$this, 'processForm'];
+-    }
 -
--	public function processForm(Form $form)
--	{
+-    public function processForm(Form $form)
+-    {
 -        // process me
-+		if ($form->isSuccess() && $form->isValid()) {
-+			// process me
-+		}
- 	}
++        if ($form->isSuccess() && $form->isValid()) {
++            // process me
++        }
+     }
  }
+```
+
+**New file**
+
+```php
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+
+class SomeFormType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $formBuilder, array $options)
+    {
+        $formBuilder->add('name', TextType::class, [
+            'label' => 'Your name'
+        ]);
+    }
+}
 ```
 
 <br>
@@ -7809,6 +7828,35 @@ Remove php version checks if they are passed
 -    return 'is PHP 7.2+';
 -}
 +return 'is PHP 7.2+';
+```
+
+<br>
+
+## Privatization
+
+### `PrivatizeLocalOnlyMethodRector`
+
+- class: [`Rector\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector`](/../master/rules/privatization/src/Rector/ClassMethod/PrivatizeLocalOnlyMethodRector.php)
+- [test fixtures](/../master/rules/privatization/tests/Rector/ClassMethod/PrivatizeLocalOnlyMethodRector/Fixture)
+
+Privatize local-only use methods
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @api
+      */
+     public function run()
+     {
+         return $this->useMe();
+     }
+
+-    public function useMe()
++    private function useMe()
+     {
+     }
+ }
 ```
 
 <br>

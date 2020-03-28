@@ -22,6 +22,9 @@ final class CompleteUnifiedDiffOutputBuilderFactory
         $this->privatesAccessor = new PrivatesAccessor();
     }
 
+    /**
+     * @api
+     */
     public function create(): UnifiedDiffOutputBuilder
     {
         $unifiedDiffOutputBuilder = new UnifiedDiffOutputBuilder('');

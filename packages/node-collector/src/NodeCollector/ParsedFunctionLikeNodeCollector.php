@@ -18,6 +18,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -49,7 +50,7 @@ final class ParsedFunctionLikeNodeCollector
 
     /**
      * E.g. [$this, 'someLocalMethod']
-     * @var Array_[][][]
+     * @var ArrayCallable[][][]
      */
     private $arrayCallablesByTypeAndMethod = [];
 
@@ -96,7 +97,9 @@ final class ParsedFunctionLikeNodeCollector
                 return;
             }
 
-            $this->arrayCallablesByTypeAndMethod[$className][$methodName][] = $node;
+            $arrayCallable = new ArrayCallable($className, $methodName);
+            $this->arrayCallablesByTypeAndMethod[$className][$methodName][] = $arrayCallable;
+
             return;
         }
 
@@ -129,7 +132,7 @@ final class ParsedFunctionLikeNodeCollector
     }
 
     /**
-     * @return MethodCall[]|StaticCall[]|Array_[]
+     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
      */
     public function findByClassAndMethod(string $className, string $methodName): array
     {
@@ -215,30 +218,23 @@ final class ParsedFunctionLikeNodeCollector
     private function addCall(Node $node): void
     {
         // one node can be of multiple-class types
-        $classType = $this->resolveClassType($node);
+        if ($node instanceof MethodCall) {
+            $classType = $this->resolveNodeClassTypes($node->var);
+        } else {
+            /** @var StaticCall $node */
+            $classType = $this->resolveNodeClassTypes($node->class);
+        }
 
-        $methodName = $this->nodeNameResolver->getName($node->name);
         if ($classType instanceof MixedType) { // anonymous
             return;
         }
 
+        $methodName = $this->nodeNameResolver->getName($node->name);
         if ($methodName === null) {
             return;
         }
 
-        if ($classType instanceof ObjectType) {
-            $this->methodsCallsByTypeAndMethod[$classType->getClassName()][$methodName][] = $node;
-        }
-
-        if ($classType instanceof UnionType) {
-            foreach ($classType->getTypes() as $unionedType) {
-                if (! $unionedType instanceof ObjectType) {
-                    continue;
-                }
-
-                $this->methodsCallsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
-            }
-        }
+        $this->addCallByType($node, $classType, $methodName);
     }
 
     private function isThisVariable(Node $node): bool
@@ -291,19 +287,20 @@ final class ParsedFunctionLikeNodeCollector
         return $this->nodeTypeResolver->resolve($node);
     }
 
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    private function resolveClassType(Node $node): Type
+    private function addCallByType(Node $node, Type $classType, string $methodName): void
     {
-        if ($node instanceof MethodCall) {
-            if ($node->var instanceof MethodCall) {
-                return $this->resolveNodeClassTypes($node);
-            }
-
-            return $this->resolveNodeClassTypes($node->var);
+        if ($classType instanceof ObjectType) {
+            $this->methodsCallsByTypeAndMethod[$classType->getClassName()][$methodName][] = $node;
         }
 
-        return $this->resolveNodeClassTypes($node->class);
+        if ($classType instanceof UnionType) {
+            foreach ($classType->getTypes() as $unionedType) {
+                if (! $unionedType instanceof ObjectType) {
+                    continue;
+                }
+
+                $this->methodsCallsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
+            }
+        }
     }
 }
