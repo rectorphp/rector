@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\TypeAlreadyAddedChecker;
 
 use Iterator;
 use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -58,11 +59,11 @@ final class ReturnTypeAlreadyAddedChecker
     }
 
     /**
-     * @param ClassMethod|Function_ $node
+     * @param ClassMethod|Function_ $functionLike
      */
-    public function isReturnTypeAlreadyAdded(Node $node, Type $returnType): bool
+    public function isReturnTypeAlreadyAdded(FunctionLike $functionLike, Type $returnType): bool
     {
-        $nodeReturnType = $node->returnType;
+        $nodeReturnType = $functionLike->returnType;
 
         /** @param Identifier|Name|NullableType|PhpParserUnionType|null $returnTypeNode */
         if ($nodeReturnType === null) {
@@ -70,7 +71,7 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
-        if ($this->betterStandardPrinter->areNodesEqual($nodeReturnType, $returnNode)) {
+        if ($this->betterStandardPrinter->areNodesWithoutCommentsEqual($nodeReturnType, $returnNode)) {
             return true;
         }
 
@@ -89,14 +90,16 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         // prevent overriding self with itself
-        if ($this->betterStandardPrinter->printWithoutComments($node->returnType) === 'self') {
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-            if (ltrim($this->betterStandardPrinter->printWithoutComments($returnNode), '\\') === $className) {
-                return true;
-            }
+        if (! $functionLike->returnType instanceof Name) {
+            return false;
         }
 
-        return false;
+        if ($functionLike->returnType->toLowerString() !== 'self') {
+            return false;
+        }
+
+        $className = $functionLike->getAttribute(AttributeKey::CLASS_NAME);
+        return ltrim($this->betterStandardPrinter->printWithoutComments($returnNode), '\\') === $className;
     }
 
     /**

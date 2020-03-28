@@ -4,10 +4,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRe
 
 class InferFromPropertyType
 {
-    /**
-     * @var int
-     */
-    private $id;
+    private int $id;
 
     public function setId($id)
     {
@@ -23,10 +20,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRe
 
 class InferFromPropertyType
 {
-    /**
-     * @var int
-     */
-    private $id;
+    private int $id;
 
     public function setId(int $id)
     {

@@ -7,8 +7,6 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
@@ -16,9 +14,10 @@ use PHPStan\Type\Type;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
+use Rector\TypeDeclaration\ValueObject\NewType;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
@@ -30,9 +29,15 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $paramTypeInferer;
 
-    public function __construct(ParamTypeInferer $paramTypeInferer)
+    /**
+     * @var ChildParamPopulator
+     */
+    private $childParamPopulator;
+
+    public function __construct(ParamTypeInferer $paramTypeInferer, ChildParamPopulator $childParamPopulator)
     {
         $this->paramTypeInferer = $paramTypeInferer;
+        $this->childParamPopulator = $childParamPopulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -148,76 +153,7 @@ PHP
         }
 
         $param->type = $paramTypeNode;
-        $this->populateChildren($functionLike, $position, $inferedType);
-    }
-
-    /**
-     * Add typehint to all children
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function populateChildren(FunctionLike $functionLike, int $position, Type $paramType): void
-    {
-        if (! $functionLike instanceof ClassMethod) {
-            return;
-        }
-
-        /** @var string|null $className */
-        $className = $functionLike->getAttribute(AttributeKey::CLASS_NAME);
-        // anonymous class
-        if ($className === null) {
-            return;
-        }
-
-        $childrenClassLikes = $this->classLikeParsedNodesFinder->findClassesAndInterfacesByType($className);
-
-        // update their methods as well
-        foreach ($childrenClassLikes as $childClassLike) {
-            if ($childClassLike instanceof Class_) {
-                $usedTraits = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($childClassLike);
-
-                foreach ($usedTraits as $trait) {
-                    $this->addParamTypeToMethod($trait, $position, $functionLike, $paramType);
-                }
-            }
-
-            $this->addParamTypeToMethod($childClassLike, $position, $functionLike, $paramType);
-        }
-    }
-
-    private function addParamTypeToMethod(
-        ClassLike $classLike,
-        int $position,
-        ClassMethod $classMethod,
-        Type $paramType
-    ): void {
-        $methodName = $this->getName($classMethod);
-
-        $currentClassMethod = $classLike->getMethod($methodName);
-        if ($currentClassMethod === null) {
-            return;
-        }
-
-        if (! isset($currentClassMethod->params[$position])) {
-            return;
-        }
-
-        $paramNode = $currentClassMethod->params[$position];
-
-        // already has a type
-        if ($paramNode->type !== null) {
-            return;
-        }
-
-        $resolvedChildType = $this->resolveChildTypeNode($paramType);
-        if ($resolvedChildType === null) {
-            return;
-        }
-
-        // let the method know it was changed now
-        $paramNode->type = $resolvedChildType;
-        $paramNode->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
-
-        $this->notifyNodeFileInfo($paramNode);
+        $this->childParamPopulator->populateChildClassMethod($functionLike, $position, $inferedType);
     }
 
     private function shouldSkipParam(Param $param, FunctionLike $functionLike, int $position): bool
@@ -236,6 +172,6 @@ PHP
         }
 
         // already set → skip
-        return ! $param->type->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
+        return ! $param->type->getAttribute(NewType::HAS_NEW_INHERITED_TYPE, false);
     }
 }
