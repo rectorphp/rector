@@ -142,11 +142,7 @@ PHP
         $assign = $node->expr;
 
         // the variable is on the left side = just created
-        if (! $assign->var instanceof Variable) {
-            return false;
-        }
-
-        return $this->isName($assign->var, $docVariableName);
+        return $this->isVariableName($assign->var, $docVariableName);
     }
 
     private function refactorFreshlyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node

@@ -1,2 +1,3 @@
 services:
     Rector\Privatization\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector: null
+    Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector: null

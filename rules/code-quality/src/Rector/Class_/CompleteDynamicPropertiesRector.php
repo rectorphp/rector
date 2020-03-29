@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -149,11 +148,7 @@ PHP
                 return null;
             }
 
-            if (! $node->var instanceof Variable) {
-                return null;
-            }
-
-            if (! $this->isName($node->var, 'this')) {
+            if (! $this->isVariableName($node->var, 'this')) {
                 return null;
             }
 
