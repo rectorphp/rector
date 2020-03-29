@@ -12,7 +12,7 @@ final class FunctionToServiceMap
     /**
      * @var FunctionToMethodCall[]
      */
-    public $functionToMethodCalls = [];
+    private $functionToMethodCalls = [];
 
     /**
      * @var ArrayFunctionToMethodCall[]

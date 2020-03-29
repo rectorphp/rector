@@ -19,7 +19,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     /**
      * @var string|null
      */
-    public $name;
+    private $name;
 
     /**
      * @var string|null

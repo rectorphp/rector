@@ -14,7 +14,7 @@ final class ImplicitNameResolver
      *
      * @var string[]
      */
-    public $implicitMap = [
+    private const IMPLICIT_MAP = [
         'App' => 'Cake\Core\App',
         'AppController' => 'App\Controller\AppController',
         'AppHelper' => 'App\View\Helper\AppHelper',
@@ -54,6 +54,6 @@ final class ImplicitNameResolver
      */
     public function resolve(string $shortClass): ?string
     {
-        return $this->implicitMap[$shortClass] ?? null;
+        return self::IMPLICIT_MAP[$shortClass] ?? null;
     }
 }
