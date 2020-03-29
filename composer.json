@@ -240,7 +240,8 @@
             "@phpstan",
             "@docs",
             "bin/rector sync-types",
-            "bin/rector check-static-type-mappers"
+            "bin/rector check-static-type-mappers",
+            "@rector-dry"
         ],
         "check-cs": "vendor/bin/ecs check --ansi",
         "fix-cs": [
@@ -263,7 +264,8 @@
         ],
         "rector-ci-fix": "bin/rector process --config rector-ci.yaml --ansi --no-progress-bar",
         "rector-ci": "bin/rector process --config rector-ci.yaml --ansi --no-progress-bar --dry-run",
-        "rector": "bin/rector process --config rector-ci.yaml --ansi"
+        "rector": "bin/rector process --config rector-ci.yaml --ansi",
+        "rector-dry": "bin/rector process --config rector-ci.yaml --ansi --dry-run"
     },
     "config": {
         "sort-packages": true

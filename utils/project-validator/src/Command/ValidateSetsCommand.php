@@ -76,9 +76,12 @@ final class ValidateSetsCommand extends Command
         $setTasks = $this->createSetTasks();
         $cpuCoreCount = $this->cpuCoreCountResolver->resolve();
 
-        $this->parallelTaskRunner->run($setTasks, $cpuCoreCount, self::SLEEP_IN_SECONDS);
+        $noErrors = $this->parallelTaskRunner->run($setTasks, $cpuCoreCount, self::SLEEP_IN_SECONDS);
 
-        return ShellCode::SUCCESS;
+        if ($noErrors) {
+            return ShellCode::SUCCESS;
+        }
+        return ShellCode::ERROR;
     }
 
     /**

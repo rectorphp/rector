@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Utils\ProjectValidator\Process;
 
-use Nette\Utils\Strings;
-use Rector\Utils\ProjectValidator\Exception\ProcessResultInvalidException;
+use Generator;
 use Rector\Utils\ProjectValidator\ValueObject\SetTask;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
-use Throwable;
 
 final class ParallelTaskRunner
 {
@@ -33,26 +31,6 @@ final class ParallelTaskRunner
      */
     private $symfonyStyle;
 
-    /**
-     * @var Process[]
-     */
-    private $runningProcesses = [];
-
-    /**
-     * @var bool
-     */
-    private $isSuccessful = true;
-
-    /**
-     * @var int
-     */
-    private $finishedProcessCount = 0;
-
-    /**
-     * @var SetTask[]
-     */
-    private $remainingTasks = [];
-
     public function __construct(SymfonyStyle $symfonyStyle)
     {
         $this->phpExecutable = 'php';
@@ -68,111 +46,17 @@ final class ParallelTaskRunner
     {
         $this->printInfo($tasks, $maxProcesses);
 
-        $this->remainingTasks = $tasks;
-        $total = count($tasks);
-
-        do {
-            $this->sleepIfNecessary($maxProcesses, $sleepInSeconds);
-            $this->startProcess($maxProcesses, $total);
-            $this->evaluateRunningProcesses($total);
-
-            $someProcessesAreStillRunning = count($this->runningProcesses) > 0;
-            $notAllProcessesAreStartedYet = count($this->remainingTasks) > 0;
-        } while ($someProcessesAreStillRunning || $notAllProcessesAreStartedYet);
-
-        return $this->isSuccessful;
-    }
-
-    /**
-     * We should sleep when the processes are running in order to not
-     * exhaust system resources. But we only wanna do this when
-     * we can't start another processes:
-     * either because none are left or
-     * because we reached the threshold of allowed processes
-     */
-    private function sleepIfNecessary(int $maxProcesses, int $secondsToSleep): void
-    {
-        $noMoreProcessesAreLeft = count($this->remainingTasks) === 0;
-        $maxNumberOfProcessesAreRunning = count($this->runningProcesses) >= $maxProcesses;
-
-        if ($noMoreProcessesAreLeft || $maxNumberOfProcessesAreRunning) {
-            sleep($secondsToSleep);
-        }
-    }
-
-    private function startProcess(int $maxProcesses, int $total): void
-    {
-        if ($this->canStartAnotherProcess($maxProcesses)) {
-            $setName = array_key_first($this->remainingTasks);
-            $task = array_shift($this->remainingTasks);
-
-            try {
-                $process = $this->createProcessFromSetTask($task);
-                $process->start();
-                $this->runningProcesses[$setName] = $process;
-            } catch (Throwable $throwable) {
-                $this->isSuccessful = false;
-                $this->printError($setName, $throwable->getMessage(), $total);
+        $processGenerator = function (array $tasks): Generator {
+            foreach ($tasks as $setName => $task) {
+                yield $setName => $this->createProcess($task);
             }
-        }
-    }
+        };
 
-    private function evaluateRunningProcesses(int $total): void
-    {
-        foreach ($this->runningProcesses as $setName => $process) {
-            if ($process->isRunning()) {
-                continue;
-            }
+        $processes = $processGenerator($tasks);
 
-            ++$this->finishedProcessCount;
+        $taskRun = new ParallelTaskRun($this->symfonyStyle, count($tasks), $maxProcesses, $sleepInSeconds);
 
-            unset($this->runningProcesses[$setName]);
-
-            try {
-                $this->evaluateProcess($process);
-                $this->printSuccess($setName, $total);
-            } catch (Throwable $throwable) {
-                $this->isSuccessful = false;
-                $this->printError($setName, $process->getOutput() . $process->getErrorOutput(), $total);
-            }
-        }
-    }
-
-    private function canStartAnotherProcess(int $max): bool
-    {
-        $hasOpenTasks = count($this->remainingTasks) > 0;
-        if (! $hasOpenTasks) {
-            return false;
-        }
-
-        return count($this->runningProcesses) < $max;
-    }
-
-    private function createProcessFromSetTask(SetTask $setTask): Process
-    {
-        $command = [
-            $this->phpExecutable,
-            $this->rectorExecutable,
-            'process',
-            $setTask->getPathToFile(),
-            '--set',
-            $setTask->getSetName(),
-            '--dry-run',
-        ];
-
-        return new Process($command, $this->cwd);
-    }
-
-    private function printSuccess(string $set, int $totalTasks): void
-    {
-        $message = sprintf('(%d/%d) Set "%s" is OK', $this->finishedProcessCount, $totalTasks, $set);
-        $this->symfonyStyle->success($message);
-    }
-
-    private function printError(string $set, string $output, int $totalTasks): void
-    {
-        $message = sprintf('(%d/%d) Set "%s" failed: %s', $this->finishedProcessCount, $totalTasks, $set, $output);
-        $this->symfonyStyle->error($message);
+        return $taskRun($processes);
     }
 
     /**
@@ -185,27 +69,18 @@ final class ParallelTaskRunner
         $this->symfonyStyle->writeln($message);
     }
 
-    private function evaluateProcess(Process $process): void
+    private function createProcess(SetTask $setTask): Process
     {
-        if ($process->isSuccessful()) {
-            return;
-        }
+        $command = [
+            $this->phpExecutable,
+            $this->rectorExecutable,
+            'process',
+            $setTask->getPathToFile(),
+            '--set',
+            $setTask->getSetName(),
+            '--dry-run',
+        ];
 
-        // If the process was not successful, there might
-        // OR an actual error due to an exception
-        // The latter case is determined via regex
-        // EITHER be a "possible correction" from rector
-
-        $fullOutput = array_filter([$process->getOutput(), $process->getErrorOutput()]);
-
-        $ouptput = implode("\n", $fullOutput);
-
-        $actualErrorHappened = Strings::match($ouptput, '#(Fatal error)|(\[ERROR\])#');
-
-        if (! $actualErrorHappened) {
-            return;
-        }
-
-        throw new ProcessResultInvalidException($ouptput);
+        return new Process($command, $this->cwd);
     }
 }

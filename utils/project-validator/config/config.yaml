@@ -8,3 +8,4 @@ services:
         resource: '../src'
         exclude:
             - '../src/ValueObject/*'
+            - '../src/Process/ParallelTaskRun.php'
