@@ -123,7 +123,9 @@ PHP
             return null;
         }
 
-        $methodName = self::FUNCTION_NAME_TO_METHOD_NAME[$this->getName($funcCall)];
+        $currentFunctionName = $this->getName($funcCall);
+
+        $methodName = self::FUNCTION_NAME_TO_METHOD_NAME[$currentFunctionName];
         $matchStaticCall = $this->createMatchStaticCall($funcCall, $methodName);
 
         // skip assigns, might be used with different return value
@@ -146,7 +148,7 @@ PHP
         }
 
         // assign
-        if (isset($funcCall->args[2])) {
+        if (isset($funcCall->args[2]) && $currentFunctionName !== 'preg_replace') {
             return new Assign($funcCall->args[2]->value, $matchStaticCall);
         }
 
