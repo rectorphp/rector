@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Rector\ClassConst;
+namespace Rector\Privatization\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
@@ -17,7 +17,7 @@ use Rector\SOLID\Reflection\ParentConstantReflectionResolver;
 use Rector\SOLID\ValueObject\ConstantVisibility;
 
 /**
- * @see \Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\PrivatizeLocalClassConstantRectorTest
+ * @see \Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\PrivatizeLocalClassConstantRectorTest
  */
 final class PrivatizeLocalClassConstantRector extends AbstractRector
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
 // The class using the constant must be parsed first
 class ForeignConstantAddictUser2
@@ -25,7 +25,7 @@ class ClassWithConstantUsedSomewhereElse2 extends ClassWithConstantUsedSomewhere
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
 // The class using the constant must be parsed first
 class ForeignConstantAddictUser2

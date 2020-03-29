@@ -7834,6 +7834,28 @@ Remove php version checks if they are passed
 
 ## Privatization
 
+### `PrivatizeLocalClassConstantRector`
+
+- class: [`Rector\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector`](/../master/rules/privatization/src/Rector/ClassConst/PrivatizeLocalClassConstantRector.php)
+- [test fixtures](/../master/rules/privatization/tests/Rector/ClassConst/PrivatizeLocalClassConstantRector/Fixture)
+
+Finalize every class constant that is used only locally
+
+```diff
+ class ClassWithConstantUsedOnlyHere
+ {
+-    const LOCAL_ONLY = true;
++    private const LOCAL_ONLY = true;
+
+     public function isLocalOnly()
+     {
+         return self::LOCAL_ONLY;
+     }
+ }
+```
+
+<br>
+
 ### `PrivatizeLocalGetterToPropertyRector`
 
 - class: [`Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector`](/../master/rules/privatization/src/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php)
@@ -8652,28 +8674,6 @@ Classes that have no children nor are used, should have abstract
 -class PossibleAbstractClass
 +abstract class PossibleAbstractClass
  {
- }
-```
-
-<br>
-
-### `PrivatizeLocalClassConstantRector`
-
-- class: [`Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector`](/../master/rules/solid/src/Rector/ClassConst/PrivatizeLocalClassConstantRector.php)
-- [test fixtures](/../master/rules/solid/tests/Rector/ClassConst/PrivatizeLocalClassConstantRector/Fixture)
-
-Finalize every class constant that is used only locally
-
-```diff
- class ClassWithConstantUsedOnlyHere
- {
--    const LOCAL_ONLY = true;
-+    private const LOCAL_ONLY = true;
-
-     public function isLocalOnly()
-     {
-         return self::LOCAL_ONLY;
-     }
  }
 ```
 
