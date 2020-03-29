@@ -57,6 +57,12 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     private $requirementsKeyValueSeparator = '=';
 
     /**
+     * @var string[]
+     */
+    private $localizedPaths = [];
+
+    /**
+     * @param string[] $localizedPaths
      * @param string[] $methods
      * @param string[] $options
      * @param string[] $defaults
@@ -64,6 +70,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
      */
     public function __construct(
         ?string $path,
+        array $localizedPaths = [],
         ?string $name = null,
         array $methods = [],
         array $options = [],
@@ -72,6 +79,8 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         ?string $originalContent = null
     ) {
         $this->path = $path;
+        $this->localizedPaths = $localizedPaths;
+
         $this->name = $name;
         $this->methods = $methods;
         $this->options = $options;
@@ -79,13 +88,14 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         $this->requirements = $requirements;
 
         // covers https://github.com/rectorphp/rector/issues/2994#issuecomment-598712339
+
         if ($originalContent !== null) {
             $this->isPathExplicit = (bool) Strings::contains($originalContent, 'path=');
 
             $this->resolveOriginalContentSpacingAndOrder($originalContent);
 
             // default value without key
-            if ($this->path && ! in_array('path', (array) $this->orderedVisibleItems, true)) {
+            if ($this->shouldAddIimplicitPaths()) {
                 // add path as first item
                 $this->orderedVisibleItems = array_merge(['path'], (array) $this->orderedVisibleItems);
             }
@@ -145,6 +155,17 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
             return sprintf('path="%s"', $this->path);
         }
 
-        return sprintf('"%s"', $this->path);
+        if ($this->path !== null) {
+            return sprintf('"%s"', $this->path);
+        }
+
+        $localizedPaths = $this->printArrayItem($this->localizedPaths);
+
+        return Strings::replace($localizedPaths, '#:#', ': ');
+    }
+
+    private function shouldAddIimplicitPaths(): bool
+    {
+        return ($this->path || $this->localizedPaths) && ! in_array('path', (array) $this->orderedVisibleItems, true);
     }
 }

@@ -5,22 +5,17 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser;
 
 use PhpParser\Node;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FileSystemRector\Parser\FileInfoParser;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
     /**
      * @var FileInfoParser
      */
@@ -40,7 +35,6 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->phpDocInfoFactory = self::$container->get(PhpDocInfoFactory::class);
         $this->fileInfoParser = self::$container->get(FileInfoParser::class);
 
         $this->betterNodeFinder = self::$container->get(BetterNodeFinder::class);
@@ -54,9 +48,9 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         return $this->betterNodeFinder->findFirstInstanceOf($nodes, $type);
     }
 
-    protected function createPhpDocInfoFromNodeAndPrintBackToString(Node $node): string
+    protected function printNodePhpDocInfoToString(Node $node): string
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             throw new ShouldNotHappenException();
         }

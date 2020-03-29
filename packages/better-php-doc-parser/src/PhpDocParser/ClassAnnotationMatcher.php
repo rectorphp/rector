@@ -20,6 +20,7 @@ final class ClassAnnotationMatcher
         $tag = ltrim($tag, '@');
 
         $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
+
         if ($useNodes === null) {
             return $matchingClass === $tag;
         }

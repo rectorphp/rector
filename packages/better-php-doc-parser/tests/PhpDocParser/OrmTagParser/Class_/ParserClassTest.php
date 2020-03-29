@@ -17,7 +17,7 @@ final class ParserClassTest extends AbstractPhpDocInfoTest
     public function test(string $filePath, string $expectedPrintedPhpDoc, string $type): void
     {
         $class = $this->parseFileAndGetFirstNodeOfType($filePath, $type);
-        $printedPhpDocInfo = $this->createPhpDocInfoFromNodeAndPrintBackToString($class);
+        $printedPhpDocInfo = $this->printNodePhpDocInfoToString($class);
 
         $this->assertStringEqualsFile($expectedPrintedPhpDoc, $printedPhpDocInfo);
     }

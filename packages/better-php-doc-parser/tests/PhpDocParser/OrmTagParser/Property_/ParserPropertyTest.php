@@ -16,7 +16,7 @@ final class ParserPropertyTest extends AbstractPhpDocInfoTest
     public function test(string $filePath, string $expectedPrintedPhpDoc): void
     {
         $property = $this->parseFileAndGetFirstNodeOfType($filePath, Property::class);
-        $printedPhpDocInfo = $this->createPhpDocInfoFromNodeAndPrintBackToString($property);
+        $printedPhpDocInfo = $this->printNodePhpDocInfoToString($property);
 
         $this->assertStringEqualsFile($expectedPrintedPhpDoc, $printedPhpDocInfo);
     }
