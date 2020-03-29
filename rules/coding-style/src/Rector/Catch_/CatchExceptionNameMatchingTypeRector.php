@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\Catch_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -94,11 +93,7 @@ PHP
             $oldVariableName,
             $newVariableName
         ): void {
-            if (! $node instanceof Variable) {
-                return;
-            }
-
-            if (! $this->isName($node, $oldVariableName)) {
+            if (! $this->isVariableName($node, $oldVariableName)) {
                 return;
             }
 

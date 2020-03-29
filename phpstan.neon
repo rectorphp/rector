@@ -247,3 +247,6 @@ parameters:
 
         - '#Method Rector\\Php80\\Rector\\NotIdentical\\StrContainsRector\:\:matchNotIdenticalToFalse\(\) should return PhpParser\\Node\\Expr\\FuncCall\|null but returns PhpParser\\Node\\Expr#'
         - '#Method Rector\\NodeCollector\\StaticAnalyzer\:\:hasStaticAnnotation\(\) has parameter \$reflectionClass with generic class ReflectionClass but does not specify its types\: T#'
+
+        - '#Parameter \#1 \$node of method Rector\\Core\\Rector\\AbstractRector\:\:isVariableName\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\|null given#'
+        - '#Parameter \#2 \$name of method Rector\\Core\\Rector\\AbstractRector\:\:isVariableName\(\) expects string, string\|null given#'

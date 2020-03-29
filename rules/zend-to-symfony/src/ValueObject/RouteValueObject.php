@@ -69,7 +69,7 @@ final class RouteValueObject
         $path = strtolower($path);
 
         // @todo solve required/optional/type of params
-        foreach ($this->getParams() as $param) {
+        foreach ($this->params as $param) {
             $path .= '/{' . $param . '}';
         }
 

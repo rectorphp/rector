@@ -1,4 +1,4 @@
-# All 473 Rectors Overview
+# All 474 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7833,6 +7833,33 @@ Remove php version checks if they are passed
 <br>
 
 ## Privatization
+
+### `PrivatizeLocalGetterToPropertyRector`
+
+- class: [`Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector`](/../master/rules/privatization/src/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php)
+- [test fixtures](/../master/rules/privatization/tests/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector/Fixture)
+
+Privatize getter of local property to property
+
+```diff
+ class SomeClass
+ {
+     private $some;
+
+     public function run()
+     {
+-        return $this->getSome() + 5;
++        return $this->some + 5;
+     }
+
+     private function getSome()
+     {
+         return $this->some;
+     }
+ }
+```
+
+<br>
 
 ### `PrivatizeLocalOnlyMethodRector`
 

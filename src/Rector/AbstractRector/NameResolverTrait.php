@@ -6,6 +6,7 @@ namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\CodingStyle\Naming\ClassNaming;
@@ -70,6 +71,15 @@ trait NameResolverTrait
     protected function isFuncCallName(Node $node, string $name): bool
     {
         if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->isName($node, $name);
+    }
+
+    protected function isVariableName(?Node $node, string $name): bool
+    {
+        if (! $node instanceof Variable) {
             return false;
         }
 

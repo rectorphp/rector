@@ -241,12 +241,8 @@ PHP
                 return null;
             }
 
-            if (! $node->dim instanceof Variable) {
-                return null;
-            }
-
             // is dim same as key value name, ...[$i]
-            if (! $this->isName($node->dim, $this->keyValueName)) {
+            if (! $this->isVariableName($node->dim, $this->keyValueName)) {
                 return null;
             }
 
