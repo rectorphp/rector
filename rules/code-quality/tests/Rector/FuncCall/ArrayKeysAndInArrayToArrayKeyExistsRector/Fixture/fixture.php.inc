@@ -1,11 +1,16 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToIssetRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector\Fixture;
 
-class SomeClass
+use Rector\Core\Testing\PHPUnit\RunnableInterface;
+
+class SomeClass implements RunnableInterface
 {
-    public function run($packageName, $values)
+    public function run()
     {
+        $packageName = "foo";
+        $values      = ["foo" => "bar"];
+        
         $keys = array_keys($values);
         return in_array($packageName, $keys, true);
     }
@@ -15,12 +20,16 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToIssetRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector\Fixture;
 
-class SomeClass
+use Rector\Core\Testing\PHPUnit\RunnableInterface;
+
+class SomeClass implements RunnableInterface
 {
-    public function run($packageName, $values)
+    public function run()
     {
+        $packageName = "foo";
+        $values      = ["foo" => "bar"];
         return array_key_exists($packageName, $values);
     }
 }
