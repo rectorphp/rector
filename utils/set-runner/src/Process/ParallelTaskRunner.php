@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\ParallelProcessRunner;
+namespace Rector\Utils\SetRunner\Process;
 
 use Nette\Utils\Strings;
-use Rector\Utils\ParallelProcessRunner\Exception\ProcessResultInvalidException;
+use Rector\Utils\SetRunner\Exception\ProcessResultInvalidException;
+use Rector\Utils\SetRunner\ValueObject\SetTask;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use Throwable;
 
-final class TaskRunner
+final class ParallelTaskRunner
 {
     /**
      * @var string
@@ -27,22 +29,22 @@ final class TaskRunner
     private $cwd;
 
     /**
-     * @var bool
+     * @var SymfonyStyle
      */
-    private $failOnlyOnError = false;
+    private $symfonyStyle;
 
-    public function __construct(string $phpExecutable, string $rectorExecutable, string $cwd, bool $failOnlyOnError)
+    public function __construct(SymfonyStyle $symfonyStyle)
     {
-        $this->phpExecutable = $phpExecutable;
-        $this->rectorExecutable = $rectorExecutable;
-        $this->cwd = $cwd;
-        $this->failOnlyOnError = $failOnlyOnError;
+        $this->phpExecutable = 'php';
+        $this->rectorExecutable = getcwd() . '/bin/rector';
+        $this->cwd = getcwd();
+        $this->symfonyStyle = $symfonyStyle;
     }
 
     /**
-     * @param Task[] $tasks
+     * @param SetTask[] $tasks
      */
-    public function run(array $tasks, int $maxProcesses = 1, int $sleepSeconds = 1): bool
+    public function run(array $tasks, int $maxProcesses, int $sleepInSeconds): bool
     {
         $this->printInfo($tasks, $maxProcesses);
 
@@ -53,8 +55,9 @@ final class TaskRunner
         $remainingTasks = $tasks;
         $finished = 0;
         $total = count($tasks);
+
         do {
-            $this->sleepIfNecessary($remainingTasks, $runningProcesses, $maxProcesses, $sleepSeconds);
+            $this->sleepIfNecessary($remainingTasks, $runningProcesses, $maxProcesses, $sleepInSeconds);
 
             $this->startProcess($remainingTasks, $runningProcesses, $success, $maxProcesses, $total, $finished);
 
@@ -85,14 +88,15 @@ final class TaskRunner
     ): void {
         $noMoreProcessesAreLeft = count($taskIdsToRuns) === 0;
         $maxNumberOfProcessesAreRunning = count($runningProcesses) >= $maxProcesses;
+
         if ($noMoreProcessesAreLeft || $maxNumberOfProcessesAreRunning) {
             sleep($secondsToSleep);
         }
     }
 
     /**
-     * @param Task[] $remainingTasks
-     * @param Task[] $runningProcesses
+     * @param SetTask[] $remainingTasks
+     * @param SetTask[] $runningProcesses
      */
     private function startProcess(
         array &$remainingTasks,
@@ -107,7 +111,7 @@ final class TaskRunner
             $task = array_shift($remainingTasks);
 
             try {
-                $process = $this->createProcess($task);
+                $process = $this->createProcessFromSetTask($task);
                 $process->start();
                 $runningProcesses[$setName] = $process;
             } catch (Throwable $throwable) {
@@ -124,22 +128,19 @@ final class TaskRunner
         int &$finished
     ): void {
         foreach ($runningProcesses as $setName => $process) {
-            if (! $process->isRunning()) {
-                $finished++;
-                unset($runningProcesses[$setName]);
+            if ($process->isRunning()) {
+                continue;
+            }
 
-                try {
-                    $this->evaluateProcess($process);
-                    $this->printSuccess($setName, $total, $finished);
-                } catch (Throwable $throwable) {
-                    $success = false;
-                    $this->printError(
-                        $setName,
-                        $process->getOutput() . $process->getErrorOutput(),
-                        $total,
-                        $finished
-                    );
-                }
+            $finished++;
+            unset($runningProcesses[$setName]);
+
+            try {
+                $this->evaluateProcess($process);
+                $this->printSuccess($setName, $total, $finished);
+            } catch (Throwable $throwable) {
+                $success = false;
+                $this->printError($setName, $process->getOutput() . $process->getErrorOutput(), $total, $finished);
             }
         }
     }
@@ -151,15 +152,15 @@ final class TaskRunner
         return $hasOpenTasks && $moreProcessesCanBeStarted;
     }
 
-    private function createProcess(Task $task): Process
+    private function createProcessFromSetTask(SetTask $setTask): Process
     {
         $command = [
             $this->phpExecutable,
             $this->rectorExecutable,
             'process',
-            $task->getPathToFile(),
+            $setTask->getPathToFile(),
             '--set',
-            $task->getSetName(),
+            $setTask->getSetName(),
             '--dry-run',
         ];
 
@@ -168,17 +169,24 @@ final class TaskRunner
 
     private function printSuccess(string $set, int $totalTasks, int $finishedTasks): void
     {
-        echo sprintf('(%d/%d) ✔ Set "%s" is OK' . PHP_EOL, $finishedTasks, $totalTasks, $set);
+        $message = sprintf('(%d/%d) Set "%s" is OK', $finishedTasks, $totalTasks, $set);
+        $this->symfonyStyle->success($message);
     }
 
     private function printError(string $set, string $output, int $totalTasks, int $finishedTasks): void
     {
-        echo sprintf('(%d/%d) ❌ Set "%s" failed: %s' . PHP_EOL, $finishedTasks, $totalTasks, $set, $output);
+        $message = sprintf('(%d/%d) Set "%s" failed: %s', $finishedTasks, $totalTasks, $set, $output);
+        $this->symfonyStyle->error($message);
     }
 
-    private function printInfo(array $tasks, int $maxProcesses): void
+    /**
+     * @param SetTask[] $setTasks
+     */
+    private function printInfo(array $setTasks, int $maxProcesses): void
     {
-        echo sprintf('Running %d sets with %d parallel processes' . PHP_EOL . PHP_EOL, count($tasks), $maxProcesses);
+        $message = sprintf('Running %d sets with %d parallel processes', count($setTasks), $maxProcesses);
+
+        $this->symfonyStyle->writeln($message);
     }
 
     private function evaluateProcess(Process $process): void
@@ -198,7 +206,7 @@ final class TaskRunner
 
         $actualErrorHappened = Strings::match($ouptput, '#(Fatal error)|(\[ERROR\])#');
 
-        if ($this->failOnlyOnError && ! $actualErrorHappened) {
+        if (! $actualErrorHappened) {
             return;
         }
 

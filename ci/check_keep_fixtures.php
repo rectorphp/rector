@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Nette\Utils\Strings;
-use Rector\Core\Testing\PHPUnit\FixtureSplitter;
 use Rector\Core\Testing\ValueObject\SplitLine;
 use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\ShellCode;
