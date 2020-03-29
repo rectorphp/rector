@@ -68,7 +68,7 @@ final class ValidateSetsCommand extends Command
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Validate each sets by running it on simple file');
+        $this->setDescription('[CI] Validate each sets by running it on simple file');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

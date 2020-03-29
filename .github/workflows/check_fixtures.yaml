@@ -16,4 +16,4 @@ jobs:
                     php-version: 7.2
                     coverage: none # disable xdebug, pcov
             -   run: composer install --no-progress
-            -   run: composer check-fixtures
+            -   run: bin/rector validate-fixture
