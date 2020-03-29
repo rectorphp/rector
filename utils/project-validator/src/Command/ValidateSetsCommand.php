@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\SetRunner\Command;
+namespace Rector\Utils\ProjectValidator\Command;
 
 use Rector\Core\Set\SetProvider;
-use Rector\Utils\SetRunner\CpuCoreCountResolver;
-use Rector\Utils\SetRunner\Process\ParallelTaskRunner;
-use Rector\Utils\SetRunner\ValueObject\SetTask;
+use Rector\Utils\ProjectValidator\CpuCoreCountResolver;
+use Rector\Utils\ProjectValidator\Process\ParallelTaskRunner;
+use Rector\Utils\ProjectValidator\ValueObject\SetTask;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

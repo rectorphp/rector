@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\SetRunner\ValueObject;
+namespace Rector\Utils\ProjectValidator\ValueObject;
 
 final class SetTask
 {

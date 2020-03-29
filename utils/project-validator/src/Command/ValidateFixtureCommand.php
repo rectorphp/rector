@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\SetRunner\Command;
+namespace Rector\Utils\ProjectValidator\Command;
 
 use Nette\Utils\Strings;
 use Rector\Core\Testing\ValueObject\SplitLine;

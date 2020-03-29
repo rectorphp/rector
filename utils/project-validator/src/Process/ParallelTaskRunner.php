@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\SetRunner\Process;
+namespace Rector\Utils\ProjectValidator\Process;
 
 use Nette\Utils\Strings;
-use Rector\Utils\SetRunner\Exception\ProcessResultInvalidException;
-use Rector\Utils\SetRunner\ValueObject\SetTask;
+use Rector\Utils\ProjectValidator\Exception\ProcessResultInvalidException;
+use Rector\Utils\ProjectValidator\ValueObject\SetTask;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use Throwable;

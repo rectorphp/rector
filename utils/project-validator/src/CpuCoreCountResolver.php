@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\SetRunner;
+namespace Rector\Utils\ProjectValidator;
 
-use Rector\Utils\SetRunner\Exception\CouldNotDeterminedCpuCoresException;
+use Rector\Utils\ProjectValidator\Exception\CouldNotDeterminedCpuCoresException;
 
 final class CpuCoreCountResolver
 {

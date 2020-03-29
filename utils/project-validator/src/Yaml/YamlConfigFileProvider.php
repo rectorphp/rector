@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\SetRunner\Yaml;
+namespace Rector\Utils\ProjectValidator\Yaml;
 
 use Symfony\Component\Finder\Finder;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;

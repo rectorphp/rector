@@ -190,7 +190,7 @@
             "Rector\\Twig\\Tests\\": "rules/twig/tests",
             "Rector\\TypeDeclaration\\Tests\\": "rules/type-declaration/tests",
             "Rector\\Utils\\DocumentationGenerator\\": "utils/documentation-generator/src",
-            "Rector\\Utils\\SetRunner\\": "utils/set-runner/src",
+            "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
             "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/phpstan-attribute-type-syncer/src",
             "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/phpstan-static-type-mapper-checker/src",
             "Rector\\ZendToSymfony\\Tests\\": "rules/zend-to-symfony/tests"
@@ -245,7 +245,7 @@
         "check-sets": "bin/rector validate-sets --ansi",
         "check-cs": "vendor/bin/ecs check --ansi",
         "check-fixtures": "bin/rector validate-fixture --ansi",
-        "check-services": "php ci/check_services_in_yaml_configs.php",
+        "check-services": "bin/rector validate-services-in-sets --ansi",
         "fix-cs": [
             "vendor/bin/ecs check --fix --ansi",
             "ci/clean_trailing_spaces.sh"

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\SetRunner\Validation;
+namespace Rector\Utils\ProjectValidator\Validation;
 
 use Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;

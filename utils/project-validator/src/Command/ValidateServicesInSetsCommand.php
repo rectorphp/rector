@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\SetRunner\Command;
+namespace Rector\Utils\ProjectValidator\Command;
 
 use Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
-use Rector\Utils\SetRunner\Validation\ServiceConfigurationValidator;
-use Rector\Utils\SetRunner\Yaml\YamlConfigFileProvider;
+use Rector\Utils\ProjectValidator\Validation\ServiceConfigurationValidator;
+use Rector\Utils\ProjectValidator\Yaml\YamlConfigFileProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
