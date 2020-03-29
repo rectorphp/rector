@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector;
+namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector;
+use Rector\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector;
 
 final class PrivatizeLocalClassConstantRectorTest extends AbstractRectorTestCase
 {

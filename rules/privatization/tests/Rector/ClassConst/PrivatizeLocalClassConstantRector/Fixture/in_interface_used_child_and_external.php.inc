@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
 interface AnotherInterfaceWithConstant
 {
@@ -27,7 +27,7 @@ class Foreigner
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
 interface AnotherInterfaceWithConstant
 {

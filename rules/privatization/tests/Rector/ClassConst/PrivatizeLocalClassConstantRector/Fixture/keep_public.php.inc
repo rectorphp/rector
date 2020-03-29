@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
 class ClassWithConstantUsedSomewhereElse
 {
@@ -19,7 +19,7 @@ class ForeignConstantAddictUser
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
 class ClassWithConstantUsedSomewhereElse
 {
