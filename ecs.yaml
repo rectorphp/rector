@@ -24,7 +24,6 @@ services:
 
 parameters:
     paths:
-        - "ci"
         - "bin"
         - "src"
         - "packages"

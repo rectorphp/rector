@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Utils\ProjectValidator;
 
+use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
 use Rector\Utils\ProjectValidator\Exception\CouldNotDeterminedCpuCoresException;
 
 final class CpuCoreCountResolver
@@ -18,7 +20,9 @@ final class CpuCoreCountResolver
     {
         if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
             $str = trim(shell_exec('wmic cpu get NumberOfCores 2>&1'));
-            if (! preg_match('#(\d+)#', $str, $matches)) {
+
+            $matches = Strings::match($str, '#(\d+)#');
+            if (! $matches) {
                 throw new CouldNotDeterminedCpuCoresException('wmic failed to get number of cpu cores on windows!');
             }
 
@@ -34,13 +38,13 @@ final class CpuCoreCountResolver
         }
 
         if (is_readable('/proc/cpuinfo')) {
-            $cpuinfo = file_get_contents('/proc/cpuinfo');
+            $cpuinfo = FileSystem::read('/proc/cpuinfo');
             $count = substr_count($cpuinfo, 'processor');
             if ($count > 0) {
                 return $count;
             }
         }
 
-        throw new CouldNotDeterminedCpuCoresException('Failed to detect number of CPUs!');
+        throw new CouldNotDeterminedCpuCoresException('Failed to detect number of CPUs');
     }
 }

@@ -1,4 +1,4 @@
-name: Check Sets
+name: Validate Sets
 
 on:
     pull_request: null
@@ -7,7 +7,7 @@ on:
             - master
 
 jobs:
-    check_sets:
+    validate_sets:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2

@@ -1,4 +1,4 @@
-name: Check Fixtures
+name: Validate Fixtures
 
 on:
     pull_request: null

@@ -33,6 +33,26 @@ final class ParallelTaskRunner
      */
     private $symfonyStyle;
 
+    /**
+     * @var Process[]
+     */
+    private $runningProcesses = [];
+
+    /**
+     * @var bool
+     */
+    private $isSuccessful = true;
+
+    /**
+     * @var int
+     */
+    private $finishedProcessCount = 0;
+
+    /**
+     * @var SetTask[]
+     */
+    private $remainingTasks = [];
+
     public function __construct(SymfonyStyle $symfonyStyle)
     {
         $this->phpExecutable = 'php';
@@ -48,26 +68,19 @@ final class ParallelTaskRunner
     {
         $this->printInfo($tasks, $maxProcesses);
 
-        $success = true;
-
-        /** @var Process[] $runningProcesses */
-        $runningProcesses = [];
-        $remainingTasks = $tasks;
-        $finished = 0;
+        $this->remainingTasks = $tasks;
         $total = count($tasks);
 
         do {
-            $this->sleepIfNecessary($remainingTasks, $runningProcesses, $maxProcesses, $sleepInSeconds);
+            $this->sleepIfNecessary($maxProcesses, $sleepInSeconds);
+            $this->startProcess($maxProcesses, $total);
+            $this->evaluateRunningProcesses($total);
 
-            $this->startProcess($remainingTasks, $runningProcesses, $success, $maxProcesses, $total, $finished);
-
-            $this->evaluateRunningProcesses($runningProcesses, $success, $total, $finished);
-
-            $someProcessesAreStillRunning = count($runningProcesses) > 0;
-            $notAllProcessesAreStartedYet = count($remainingTasks) > 0;
+            $someProcessesAreStillRunning = count($this->runningProcesses) > 0;
+            $notAllProcessesAreStartedYet = count($this->remainingTasks) > 0;
         } while ($someProcessesAreStillRunning || $notAllProcessesAreStartedYet);
 
-        return $success;
+        return $this->isSuccessful;
     }
 
     /**
@@ -76,80 +89,63 @@ final class ParallelTaskRunner
      * we can't start another processes:
      * either because none are left or
      * because we reached the threshold of allowed processes
-     *
-     * @param string[] $taskIdsToRuns
-     * @param Process[] $runningProcesses
      */
-    private function sleepIfNecessary(
-        array $taskIdsToRuns,
-        array $runningProcesses,
-        int $maxProcesses,
-        int $secondsToSleep
-    ): void {
-        $noMoreProcessesAreLeft = count($taskIdsToRuns) === 0;
-        $maxNumberOfProcessesAreRunning = count($runningProcesses) >= $maxProcesses;
+    private function sleepIfNecessary(int $maxProcesses, int $secondsToSleep): void
+    {
+        $noMoreProcessesAreLeft = count($this->remainingTasks) === 0;
+        $maxNumberOfProcessesAreRunning = count($this->runningProcesses) >= $maxProcesses;
 
         if ($noMoreProcessesAreLeft || $maxNumberOfProcessesAreRunning) {
             sleep($secondsToSleep);
         }
     }
 
-    /**
-     * @param SetTask[] $remainingTasks
-     * @param SetTask[] $runningProcesses
-     */
-    private function startProcess(
-        array &$remainingTasks,
-        array &$runningProcesses,
-        bool &$success,
-        int $maxProcesses,
-        int $total,
-        int $finished
-    ): void {
-        if ($this->canStartAnotherProcess($remainingTasks, $runningProcesses, $maxProcesses)) {
-            $setName = array_key_first($remainingTasks);
-            $task = array_shift($remainingTasks);
+    private function startProcess(int $maxProcesses, int $total): void
+    {
+        if ($this->canStartAnotherProcess($maxProcesses)) {
+            $setName = array_key_first($this->remainingTasks);
+            $task = array_shift($this->remainingTasks);
 
             try {
                 $process = $this->createProcessFromSetTask($task);
                 $process->start();
-                $runningProcesses[$setName] = $process;
+                $this->runningProcesses[$setName] = $process;
             } catch (Throwable $throwable) {
-                $success = false;
-                $this->printError($setName, $throwable->getMessage(), $total, $finished);
+                $this->isSuccessful = false;
+                $this->printError($setName, $throwable->getMessage(), $total);
             }
         }
     }
 
-    private function evaluateRunningProcesses(
-        array &$runningProcesses,
-        bool &$success,
-        int $total,
-        int &$finished
-    ): void {
-        foreach ($runningProcesses as $setName => $process) {
+    private function evaluateRunningProcesses(int $total): void
+    {
+        foreach ($this->runningProcesses as $setName => $process) {
             if ($process->isRunning()) {
                 continue;
             }
 
-            $finished++;
-            unset($runningProcesses[$setName]);
+            ++$this->finishedProcessCount;
+
+            unset($this->runningProcesses[$setName]);
 
             try {
                 $this->evaluateProcess($process);
-                $this->printSuccess($setName, $total, $finished);
+                $this->printSuccess($setName, $total);
             } catch (Throwable $throwable) {
-                $success = false;
-                $this->printError($setName, $process->getOutput() . $process->getErrorOutput(), $total, $finished);
+                $this->isSuccessful = false;
+                $this->printError($setName, $process->getOutput() . $process->getErrorOutput(), $total);
             }
         }
     }
 
-    private function canStartAnotherProcess(array $remainingTasks, array $runningProcesses, int $max): bool
+    private function canStartAnotherProcess(int $max): bool
     {
-        $hasOpenTasks = count($remainingTasks) > 0;
-        $moreProcessesCanBeStarted = count($runningProcesses) < $max;
-        return $hasOpenTasks && $moreProcessesCanBeStarted;
+        $hasOpenTasks = count($this->remainingTasks) > 0;
+        if (! $hasOpenTasks) {
+            return false;
+        }
+
+        return count($this->runningProcesses) < $max;
     }
 
     private function createProcessFromSetTask(SetTask $setTask): Process
@@ -167,15 +163,15 @@ final class ParallelTaskRunner
         return new Process($command, $this->cwd);
     }
 
-    private function printSuccess(string $set, int $totalTasks, int $finishedTasks): void
+    private function printSuccess(string $set, int $totalTasks): void
     {
-        $message = sprintf('(%d/%d) Set "%s" is OK', $finishedTasks, $totalTasks, $set);
+        $message = sprintf('(%d/%d) Set "%s" is OK', $this->finishedProcessCount, $totalTasks, $set);
         $this->symfonyStyle->success($message);
     }
 
-    private function printError(string $set, string $output, int $totalTasks, int $finishedTasks): void
+    private function printError(string $set, string $output, int $totalTasks): void
     {
-        $message = sprintf('(%d/%d) Set "%s" failed: %s', $finishedTasks, $totalTasks, $set, $output);
+        $message = sprintf('(%d/%d) Set "%s" failed: %s', $this->finishedProcessCount, $totalTasks, $set, $output);
         $this->symfonyStyle->error($message);
     }
 
