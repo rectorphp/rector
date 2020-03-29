@@ -108,6 +108,6 @@ PHP
 
     private function createSymfonyRoutePhpDocTagValueNode(string $path, string $name): SymfonyRouteTagValueNode
     {
-        return new SymfonyRouteTagValueNode($path, $name);
+        return new SymfonyRouteTagValueNode($path, [], $name);
     }
 }

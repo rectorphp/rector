@@ -138,6 +138,11 @@ final class PhpDocInfo
         return $this->tokens;
     }
 
+    public function getTokenCount(): int
+    {
+        return count($this->tokens);
+    }
+
     public function getVarTagValue(): ?AttributeAwareVarTagValueNode
     {
         return $this->phpDocNode->getVarTagValues()[0] ?? null;

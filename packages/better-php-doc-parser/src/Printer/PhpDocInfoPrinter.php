@@ -107,8 +107,7 @@ final class PhpDocInfoPrinter
         $this->attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
 
         $this->tokens = $phpDocInfo->getTokens();
-
-        $this->tokenCount = count($phpDocInfo->getTokens());
+        $this->tokenCount = $phpDocInfo->getTokenCount();
         $this->phpDocInfo = $phpDocInfo;
 
         $this->currentTokenPosition = 0;
