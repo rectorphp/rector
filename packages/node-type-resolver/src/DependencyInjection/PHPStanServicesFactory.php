@@ -54,7 +54,9 @@ final class PHPStanServicesFactory
 
             // bleeding edge clean out, see https://github.com/rectorphp/rector/issues/2431
             if (Strings::match($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN)) {
-                $temporaryPhpstanNeon = $currentWorkingDirectory . '/rector-temp-phpstan.neon';
+                // Note: We need a unique file per process if rector runs in parallel
+                $pid = getmypid();
+                $temporaryPhpstanNeon = $currentWorkingDirectory . '/rector-temp-phpstan' . $pid . '.neon';
                 $clearedPhpstanNeonContent = Strings::replace($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN);
                 FileSystem::write($temporaryPhpstanNeon, $clearedPhpstanNeonContent);
 
