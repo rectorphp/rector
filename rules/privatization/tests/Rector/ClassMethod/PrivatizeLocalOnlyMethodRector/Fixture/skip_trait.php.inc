@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Fixture;
 
-trait SkipTraits
+trait SkipTrait
 {
     public function go()
     {

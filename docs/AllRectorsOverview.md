@@ -1,4 +1,4 @@
-# All 474 Rectors Overview
+# All 475 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7882,6 +7882,28 @@ Privatize local-only use methods
 -    public function useMe()
 +    private function useMe()
      {
+     }
+ }
+```
+
+<br>
+
+### `PrivatizeLocalPropertyToPrivatePropertyRector`
+
+- class: [`Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector`](/../master/rules/privatization/src/Rector/Property/PrivatizeLocalPropertyToPrivatePropertyRector.php)
+- [test fixtures](/../master/rules/privatization/tests/Rector/Property/PrivatizeLocalPropertyToPrivatePropertyRector/Fixture)
+
+Privatize local-only property to private property
+
+```diff
+ class SomeClass
+ {
+-    public $value;
++    private $value;
+
+     public function run()
+     {
+         return $this->value;
      }
  }
 ```
