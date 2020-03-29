@@ -66,6 +66,8 @@ final class ParallelTaskRunner
      */
     public function run(array $tasks, int $maxProcesses, int $sleepInSeconds): bool
     {
+        $this->initialize();
+
         $this->printInfo($tasks, $maxProcesses);
 
         $this->remainingTasks = $tasks;
@@ -207,5 +209,12 @@ final class ParallelTaskRunner
         }
 
         throw new ProcessResultInvalidException($ouptput);
+    }
+
+    private function initialize(): void
+    {
+        $this->finishedProcessCount = 0;
+        $this->isSuccessful = true;
+        $this->remainingTasks = [];
     }
 }

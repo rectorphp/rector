@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -289,7 +290,7 @@ final class ParsedFunctionLikeNodeCollector
 
     private function addCallByType(Node $node, Type $classType, string $methodName): void
     {
-        if ($classType instanceof ObjectType) {
+        if ($classType instanceof TypeWithClassName) {
             $this->methodsCallsByTypeAndMethod[$classType->getClassName()][$methodName][] = $node;
         }
 
