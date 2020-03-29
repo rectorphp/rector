@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\ParallelProcessRunner;
+namespace Rector\Utils\ProjectValidator\ValueObject;
 
-final class Task
+final class SetTask
 {
     /**
      * @var string

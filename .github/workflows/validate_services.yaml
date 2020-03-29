@@ -1,4 +1,4 @@
-name: Sets Check
+name: Validate Services
 
 on:
     pull_request: null
@@ -7,7 +7,7 @@ on:
             - master
 
 jobs:
-    run_all_sets:
+    validate_services:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
@@ -16,4 +16,4 @@ jobs:
                     php-version: 7.2
                     coverage: none # disable xdebug, pcov
             -   run: composer install --no-progress
-            -   run: php ci/run_all_sets.php
+            -   run: bin/rector validate-services-in-sets --ansi

@@ -16,7 +16,6 @@ parameters:
         - compiler/src
 
     paths:
-        - ci
         - bin
         - src
         - rules

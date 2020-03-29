@@ -1,4 +1,4 @@
-name: Sets Check (parallel)
+name: Validate Sets
 
 on:
     pull_request: null
@@ -7,7 +7,7 @@ on:
             - master
 
 jobs:
-    run_all_sets:
+    validate_sets:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
@@ -16,4 +16,4 @@ jobs:
                     php-version: 7.4
                     coverage: none # disable xdebug, pcov
             -   run: composer install --no-progress
-            -   run: php ci/run_all_sets_parallel.php
+            -   run: bin/rector validate-sets --ansi
