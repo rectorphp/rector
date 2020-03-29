@@ -233,19 +233,16 @@
     "scripts": {
         "complete-check": [
             "@check-cs",
-            "@check-fixtures",
-            "@check-services",
+            "bin/rector validate-fixtures --ansi",
+            "bin/rector validate-services-in-sets --ansi",
+            "bin/rector validate-sets --ansi",
             "phpunit",
             "@phpstan",
             "@docs",
             "bin/rector sync-types",
-            "bin/rector check-static-type-mappers",
-            "@check-sets"
+            "bin/rector check-static-type-mappers"
         ],
-        "check-sets": "bin/rector validate-sets --ansi",
         "check-cs": "vendor/bin/ecs check --ansi",
-        "check-fixtures": "bin/rector validate-fixture --ansi",
-        "check-services": "bin/rector validate-services-in-sets --ansi",
         "fix-cs": [
             "vendor/bin/ecs check --fix --ansi",
             "ci/clean_trailing_spaces.sh"
