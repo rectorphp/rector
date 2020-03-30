@@ -17,22 +17,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 
 /**
+ * This rule must be last, as it shortens nodes before using them by other Rectors, thus breaking them.
+ *
+ * This file remains just for testing.
+ * Breaks other rectors by making name nodes short, FQN → short names
+ *
  * @see \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\ImportFullyQualifiedNamesRectorTest
  * @see \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\NonNamespacedTest
  * @see \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\ImportRootNamespaceClassesDisabledTest
  */
 final class ImportFullyQualifiedNamesRector extends AbstractRector
 {
-    /**
-     * @var bool
-     */
-    private $importDocBlocks = true;
-
-    /**
-     * @var bool
-     */
-    private $autoImportNames = false;
-
     /**
      * @var NameImporter
      */
@@ -43,15 +38,9 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
      */
     private $docBlockNameImporter;
 
-    public function __construct(
-        NameImporter $nameImporter,
-        bool $importDocBlocks,
-        bool $autoImportNames,
-        DocBlockNameImporter $docBlockNameImporter
-    ) {
+    public function __construct(NameImporter $nameImporter, DocBlockNameImporter $docBlockNameImporter)
+    {
         $this->nameImporter = $nameImporter;
-        $this->importDocBlocks = $importDocBlocks;
-        $this->autoImportNames = $autoImportNames;
         $this->docBlockNameImporter = $docBlockNameImporter;
     }
 
@@ -108,8 +97,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        // this file remains just for testing
+        // breaks other rectors by making name nodes short, FQN → short names
         /** prevents duplicated run with @see NameImportingCommander  */
-        if ($this->autoImportNames && ! PHPUnitEnvironment::isPHPUnitRun()) {
+        if (! PHPUnitEnvironment::isPHPUnitRun()) {
             return null;
         }
 
@@ -120,21 +111,17 @@ PHP
         }
 
         // process doc blocks
-        if ($this->importDocBlocks) {
-            /** @var PhpDocInfo|null $phpDocInfo */
-            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($phpDocInfo === null) {
-                return null;
-            }
-
-            $hasChanged = $this->docBlockNameImporter->importNames($phpDocInfo, $node);
-            if (! $hasChanged) {
-                return null;
-            }
-
-            return $node;
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
         }
 
-        return null;
+        $hasChanged = $this->docBlockNameImporter->importNames($phpDocInfo, $node);
+        if (! $hasChanged) {
+            return null;
+        }
+
+        return $node;
     }
 }

@@ -155,7 +155,7 @@ PHP
 
     private function hasExternalCall(ClassMethod $classMethod): bool
     {
-        $methodCalls = $this->methodCallParsedNodesFinder->findClassMethodCalls($classMethod);
+        $methodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($classMethod);
         $methodName = $this->getName($classMethod);
 
         if ($this->isArrayCallable($classMethod, $methodCalls, $methodName)) {

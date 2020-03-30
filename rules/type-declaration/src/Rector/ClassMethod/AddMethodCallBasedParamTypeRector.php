@@ -98,7 +98,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classMethodCalls = $this->methodCallParsedNodesFinder->findClassMethodCalls($node);
+        $classMethodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($node);
         $classParameterTypes = $this->getCallTypesByPosition($classMethodCalls);
 
         foreach ($classParameterTypes as $position => $argumentStaticType) {

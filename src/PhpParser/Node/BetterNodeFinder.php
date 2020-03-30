@@ -108,6 +108,23 @@ final class BetterNodeFinder
 
     /**
      * @param Node|Node[] $nodes
+     * @param string[] $types
+     */
+    public function hasInstancesOf($nodes, array $types): bool
+    {
+        foreach ($types as $type) {
+            if ($this->nodeFinder->findFirstInstanceOf($nodes, $type) === null) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Node|Node[] $nodes
      */
     public function findLastInstanceOf($nodes, string $type): ?Node
     {

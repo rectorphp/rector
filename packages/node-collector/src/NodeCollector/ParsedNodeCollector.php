@@ -228,16 +228,9 @@ final class ParsedNodeCollector
 
     public function findClassConstantByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
     {
-        $class = $this->nodeNameResolver->getName($classConstFetch->class);
+        $className = $this->nodeNameResolver->getName($classConstFetch->class);
 
-        if ($class === 'self') {
-            /** @var string|null $class */
-            $class = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
-        } elseif ($class === 'parent') {
-            /** @var string|null $class */
-            $class = $classConstFetch->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        }
-
+        $class = $this->resolveClassConstant($classConstFetch, $className);
         if ($class === null) {
             throw new NotImplementedException();
         }
@@ -283,5 +276,18 @@ final class ParsedNodeCollector
 
         // PHPStan polution
         return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
+    }
+
+    private function resolveClassConstant(ClassConstFetch $classConstFetch, ?string $className): ?string
+    {
+        if ($className === 'self') {
+            return $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
+        }
+
+        if ($className === 'parent') {
+            return $classConstFetch->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        }
+
+        return $className;
     }
 }

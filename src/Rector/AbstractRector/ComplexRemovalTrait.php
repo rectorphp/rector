@@ -82,7 +82,7 @@ trait ComplexRemovalTrait
     {
         $this->removeNode($classMethod);
 
-        $classMethodCalls = $this->methodCallParsedNodesFinder->findClassMethodCalls($classMethod);
+        $classMethodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($classMethod);
         foreach ($classMethodCalls as $classMethodCall) {
             if ($classMethodCall instanceof ArrayCallable) {
                 continue;

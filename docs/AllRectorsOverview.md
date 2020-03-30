@@ -1,4 +1,4 @@
-# All 475 Rectors Overview
+# All 476 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2640,6 +2640,25 @@ Remove if, foreach and for that does not do anything
 
          return $value;
      }
+ }
+```
+
+<br>
+
+### `RemoveDeadRecursiveClassMethodRector`
+
+- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveDeadRecursiveClassMethodRector`](/../master/rules/dead-code/src/Rector/ClassMethod/RemoveDeadRecursiveClassMethodRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/ClassMethod/RemoveDeadRecursiveClassMethodRector/Fixture)
+
+Remove unused public method that only calls itself recursively
+
+```diff
+ class SomeClass
+ {
+-    public function run()
+-    {
+-        return $this->run();
+-    }
  }
 ```
 
