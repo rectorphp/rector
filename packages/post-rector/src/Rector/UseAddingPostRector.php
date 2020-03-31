@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\NodeVisitorAbstract;
 use Rector\CodingStyle\Application\UseImportsAdder;
 use Rector\CodingStyle\Application\UseImportsRemover;
-use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -20,7 +17,7 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class UseAddingPostRector extends NodeVisitorAbstract implements RectorInterface
+final class UseAddingPostRector extends AbstractPostRector
 {
     /**
      * @var UseImportsAdder
@@ -65,22 +62,21 @@ final class UseAddingPostRector extends NodeVisitorAbstract implements RectorInt
      * @param Stmt[] $nodes
      * @return Stmt[]
      */
-    public function traverse(array $nodes): array
+    public function beforeTraverse(array $nodes): array
     {
         // no nodes → just return
         if (count($nodes) === 0) {
             return $nodes;
         }
 
-        $filePath = $this->getRealPathFromNode($nodes[0]);
-
-        if ($filePath === null) {
+        $smartFileInfo = $this->getSmartFileInfo($nodes);
+        if ($smartFileInfo === null) {
             return $nodes;
         }
 
-        $useImportTypes = $this->useNodesToAddCollector->getUseImportTypes($filePath);
-        $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionUseImportTypesInFilePath($filePath);
-        $removedShortUses = $this->useNodesToAddCollector->getShortUsesInFilePath($filePath);
+        $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFileInfo($smartFileInfo);
+        $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFileInfo($smartFileInfo);
+        $removedShortUses = $this->useNodesToAddCollector->getShortUsesByFileInfo($smartFileInfo);
 
         // nothing to import or remove
         if ($useImportTypes === [] && $functionUseImportTypes === [] && $removedShortUses === []) {
@@ -90,7 +86,7 @@ final class UseAddingPostRector extends NodeVisitorAbstract implements RectorInt
         /** @var FullyQualifiedObjectType[] $useImportTypes */
         $useImportTypes = $this->typeFactory->uniquateTypes($useImportTypes);
 
-        $this->useNodesToAddCollector->clear($filePath);
+        $this->useNodesToAddCollector->clear($smartFileInfo);
 
         // A. has namespace? add under it
         $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
@@ -112,32 +108,6 @@ final class UseAddingPostRector extends NodeVisitorAbstract implements RectorInt
         return $this->useImportsAdder->addImportsToStmts($nodes, $useImportTypes, $functionUseImportTypes);
     }
 
-    /**
-     * This prevents importing:
-     * - App\Some\Product
-     *
-     * if there is already:
-     * - use App\Another\Product
-     */
-    public function canImportBeAdded(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
-    {
-        $useImportTypes = $this->useNodesToAddCollector->getUseImportTypesByNode($node);
-
-        foreach ($useImportTypes as $useImportType) {
-            if (! $useImportType->equals($fullyQualifiedObjectType) &&
-                $useImportType->areShortNamesEqual($fullyQualifiedObjectType)
-            ) {
-                return false;
-            }
-
-            if ($useImportType->equals($fullyQualifiedObjectType)) {
-                return true;
-            }
-        }
-
-        return true;
-    }
-
     public function getPriority(): int
     {
         return 500;
@@ -146,12 +116,6 @@ final class UseAddingPostRector extends NodeVisitorAbstract implements RectorInt
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Post Rector that adds use statements');
-    }
-
-    public function refactor(Node $node): ?Node
-    {
-        // note: traverse() is used instead
-        return null;
     }
 
     /**
@@ -174,14 +138,16 @@ final class UseAddingPostRector extends NodeVisitorAbstract implements RectorInt
         return $namespacedUseImportTypes;
     }
 
-    private function getRealPathFromNode(Node $node): ?string
+    private function getSmartFileInfo(array $nodes): ?SmartFileInfo
     {
-        /** @var SmartFileInfo|null $fileInfo */
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
-            return null;
+        foreach ($nodes as $node) {
+            /** @var SmartFileInfo|null $smartFileInfo */
+            $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+            if ($smartFileInfo !== null) {
+                return $smartFileInfo;
+            }
         }
 
-        return $fileInfo->getRealPath();
+        return null;
     }
 }

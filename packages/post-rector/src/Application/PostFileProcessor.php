@@ -6,120 +6,56 @@ namespace Rector\PostRector\Application;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
-use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use Rector\PostRector\Rector\UseAddingPostRector;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class PostFileProcessor extends NodeTraverser
+final class PostFileProcessor
 {
     /**
-     * @var CommanderInterface[]|PostRectorInterface[]
+     * @var PostRectorInterface[]
      */
-    private $commanders = [];
+    private $postRectors = [];
 
     /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
-
-    /**
-     * @var UseAddingPostRector
-     */
-    private $useAddingPostRector;
-
-    /**
-     * @param CommanderInterface[] $commanders
      * @param PostRectorInterface[] $postRectors
      */
-    public function __construct(
-        CurrentFileInfoProvider $currentFileInfoProvider,
-        array $commanders,
-        array $postRectors,
-        UseAddingPostRector $useAddingPostRector
-    ) {
-        // A. slowly remove...
-        $commanders = array_merge($commanders, $postRectors);
-
-        $this->sortByPriorityAndSetCommanders($commanders);
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
-
-        // B. refactor into ↓
-        foreach ($commanders as $commander) {
-            if ($commander instanceof PostRectorInterface) {
-                $this->addVisitor($commander);
-            }
-        }
-
-        $this->useAddingPostRector = $useAddingPostRector;
+    public function __construct(array $postRectors)
+    {
+        $this->sortByPriorityAndSetCommanders($postRectors);
     }
 
     /**
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function traverseNodes(array $nodes): array
+    public function traverse(array $nodes): array
     {
-        $this->setCurrentFileInfo($nodes);
-
-        // A. commanders
-        foreach ($this->commanders as $commander) {
-            if (! $commander instanceof CommanderInterface) {
-                continue;
-            }
-
-            if (! $commander->isActive()) {
-                continue;
-            }
-
-            $nodes = $commander->traverseNodes($nodes);
+        foreach ($this->postRectors as $postRector) {
+            $nodeTraverser = new NodeTraverser();
+            $nodeTraverser->addVisitor($postRector);
+            $nodes = $nodeTraverser->traverse($nodes);
         }
 
-        // B. post rectors
-        $nodes = parent::traverse($nodes);
-
-        // must run standalone, after NameImporitngPostRector, so it won't skip TraverseNodes()
-
-        return $this->useAddingPostRector->traverse($nodes);
+        return $nodes;
     }
 
     /**
-     * @param CommanderInterface[]|PostRectorInterface[] $commanders
+     * @param PostRectorInterface[] $postRectors
      */
-    private function sortByPriorityAndSetCommanders(array $commanders): void
+    private function sortByPriorityAndSetCommanders(array $postRectors): void
     {
-        $commandersByPriority = [];
+        $postRectorsByPriority = [];
 
-        foreach ($commanders as $commander) {
-            if (isset($commandersByPriority[$commander->getPriority()])) {
+        foreach ($postRectors as $postRector) {
+            if (isset($postRectorsByPriority[$postRector->getPriority()])) {
                 throw new ShouldNotHappenException();
             }
 
-            $commandersByPriority[$commander->getPriority()] = $commander;
+            $postRectorsByPriority[$postRector->getPriority()] = $postRector;
         }
 
-        krsort($commandersByPriority);
+        krsort($postRectorsByPriority);
 
-        $this->commanders = $commandersByPriority;
-    }
-
-    /**
-     * @param Node[] $nodes
-     */
-    private function setCurrentFileInfo(array $nodes): void
-    {
-        foreach ($nodes as $node) {
-            /** @var SmartFileInfo|null $fileInfo */
-            $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-            if (! $fileInfo instanceof SmartFileInfo) {
-                continue;
-            }
-
-            $this->currentFileInfoProvider->setCurrentFileInfo($fileInfo);
-            break;
-        }
+        $this->postRectors = $postRectorsByPriority;
     }
 }

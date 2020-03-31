@@ -317,10 +317,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private function isNameIdentical(Node $node, Node $originalNode): bool
     {
-        if (static::class !== ImportFullyQualifiedNamesRector::class) {
-            return false;
-        }
-
         if (! $originalNode instanceof Name) {
             return false;
         }

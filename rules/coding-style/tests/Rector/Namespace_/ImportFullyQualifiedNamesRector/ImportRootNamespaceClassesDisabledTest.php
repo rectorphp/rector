@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 
-use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Renaming\Rector\Class_\RenameClassRector;
 
+/**
+ * @see \Rector\PostRector\Rector\NameImportingPostRector
+ */
 final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCase
 {
     /**
@@ -15,7 +18,10 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
      */
     public function test(string $file): void
     {
+        $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
+
         $this->setParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER, false);
+
         $this->doTestFile($file);
     }
 
@@ -26,6 +32,7 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
 
     protected function getRectorClass(): string
     {
-        return ImportFullyQualifiedNamesRector::class;
+        // the must be any rector class to run
+        return RenameClassRector::class;
     }
 }

@@ -46,7 +46,7 @@ final class PropertyAddingPostRector extends AbstractPostRector
         return 900;
     }
 
-    public function refactor(Node $node): ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (! $node instanceof Class_ || $node->isAnonymous()) {
             return null;

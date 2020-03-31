@@ -39,7 +39,7 @@ final class NodeRemovingRector extends AbstractPostRector
         return 800;
     }
 
-    public function refactor(Node $node): ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (! $this->nodesToRemoveCollector->isActive()) {
             return null;

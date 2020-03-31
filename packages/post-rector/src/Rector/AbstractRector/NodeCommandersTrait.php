@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
-use Rector\Core\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\PostRector\Collector\NodesToReplaceCollector;
 use Rector\PostRector\Collector\PropertyToAddCollector;
@@ -37,9 +37,9 @@ trait NodeCommandersTrait
     private $nodesToRemoveCollector;
 
     /**
-     * @var NodeAddingCommander
+     * @var NodesToAddCollector
      */
-    private $nodeAddingCommander;
+    private $nodesToAddCollector;
 
     /**
      * @var PropertyToAddCollector
@@ -61,17 +61,17 @@ trait NodeCommandersTrait
      */
     public function autowireNodeCommandersTrait(
         NodesToRemoveCollector $nodesToRemoveCollector,
-        NodeAddingCommander $nodeAddingCommander,
         PropertyToAddCollector $propertyToAddCollector,
         UseNodesToAddCollector $useNodesToAddCollector,
+        NodesToAddCollector $nodesToAddCollector,
         NodesToReplaceCollector $nodesToReplaceCollector,
         RectorChangeCollector $rectorChangeCollector
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-        $this->nodeAddingCommander = $nodeAddingCommander;
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->nodesToReplaceCollector = $nodesToReplaceCollector;
+        $this->nodesToAddCollector = $nodesToAddCollector;
         $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
@@ -87,15 +87,13 @@ trait NodeCommandersTrait
 
     protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
     {
-        $this->nodeAddingCommander->addNodeAfterNode($newNode, $positionNode);
-
+        $this->nodesToAddCollector->addNodeAfterNode($newNode, $positionNode);
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
 
     protected function addNodeBeforeNode(Node $newNode, Node $positionNode): void
     {
-        $this->nodeAddingCommander->addNodeBeforeNode($newNode, $positionNode);
-
+        $this->nodesToAddCollector->addNodeBeforeNode($newNode, $positionNode);
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
 

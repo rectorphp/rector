@@ -25,13 +25,6 @@ final class NodeToReplacePostRector extends AbstractPostRector
         return 1100;
     }
 
-    public function refactor(Node $node): ?Node
-    {
-        // used in leave node
-        return null;
-        // TODO: Implement refactor() method.
-    }
-
     public function leaveNode(Node $node): ?Node
     {
         foreach ($this->nodesToReplaceCollector->getNodes() as [$nodeToFind, $replacement]) {
@@ -39,6 +32,7 @@ final class NodeToReplacePostRector extends AbstractPostRector
                 return $replacement;
             }
         }
+
         return null;
     }
 
