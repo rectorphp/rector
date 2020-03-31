@@ -20,7 +20,6 @@ services:
     Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
         extra_parent_types_to_suffixes:
             - 'Rector'
-            - 'NodeVisitorAbstract'
 
 parameters:
     paths:
@@ -83,6 +82,7 @@ parameters:
         Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
             # hidden API
             - 'src/Rector/AbstractRector.php'
+            - 'packages/post-rector/src/Rector/AbstractPostRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
             # node printing

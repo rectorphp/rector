@@ -19,12 +19,12 @@ use PHPStan\Type\BooleanType;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\Node\Commander\NodeAddingCommander;
-use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class AssertManipulator
 {
@@ -87,29 +87,29 @@ final class AssertManipulator
     private $nodeAddingCommander;
 
     /**
-     * @var NodeRemovingCommander
-     */
-    private $nodeRemovingCommander;
-
-    /**
      * @var StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
+
+    /**
+     * @var NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         ValueResolver $valueResolver,
         NodeAddingCommander $nodeAddingCommander,
-        NodeRemovingCommander $nodeRemovingCommander,
+        NodesToRemoveCollector $nodesToRemoveCollector,
         StringTypeAnalyzer $stringTypeAnalyzer
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->valueResolver = $valueResolver;
         $this->nodeAddingCommander = $nodeAddingCommander;
-        $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
 
     /**
@@ -196,7 +196,7 @@ final class AssertManipulator
             $this->nodeAddingCommander->addNodeAfterNode($callableStmt, $staticCall);
         }
 
-        $this->nodeRemovingCommander->addNode($staticCall);
+        $this->nodesToRemoveCollector->addNodeToRemove($staticCall);
     }
 
     private function processTypeCall(StaticCall $staticCall): void
@@ -225,7 +225,7 @@ final class AssertManipulator
             $this->nodeAddingCommander->addNodeAfterNode($callableStmt, $staticCall);
         }
 
-        $this->nodeRemovingCommander->addNode($staticCall);
+        $this->nodesToRemoveCollector->addNodeToRemove($staticCall);
 
         /** @var ClassMethod|null $methodNode */
         $methodNode = $staticCall->getAttribute(AttributeKey::METHOD_NODE);

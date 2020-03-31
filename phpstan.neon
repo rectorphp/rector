@@ -249,3 +249,4 @@ parameters:
 
         - '#Parameter \#1 \$node of method Rector\\Core\\Rector\\AbstractRector\:\:isVariableName\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\|null given#'
         - '#Parameter \#2 \$name of method Rector\\Core\\Rector\\AbstractRector\:\:isVariableName\(\) expects string, string\|null given#'
+        - '#Method Rector\\PostRector\\Rector\\AbstractPostRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'

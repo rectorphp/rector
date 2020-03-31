@@ -273,11 +273,22 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->fileProcessor->refactor($smartFileInfo);
         $changedContent = $this->fileProcessor->printToString($smartFileInfo);
 
+        $causedByFixtureMessage = $this->createCausedByFixtureMessage($fixtureFile);
+
         try {
-            $this->assertStringEqualsFile($expectedFile, $changedContent, 'Caused by ' . $fixtureFile);
+            $this->assertStringEqualsFile($expectedFile, $changedContent, $causedByFixtureMessage);
         } catch (ExpectationFailedException $expectationFailedException) {
             $expectedFileContent = FileSystem::read($expectedFile);
-            $this->assertStringMatchesFormat($expectedFileContent, $changedContent, 'Caused by ' . $fixtureFile);
+
+            $this->assertStringMatchesFormat($expectedFileContent, $changedContent, $causedByFixtureMessage);
         }
+    }
+
+    private function createCausedByFixtureMessage(string $fixtureFile): string
+    {
+        $fixtureSmartFileInfo = new SmartFileInfo($fixtureFile);
+        $relativeFixtureFilePath = $fixtureSmartFileInfo->getRelativeFilePathFromCwd();
+
+        return 'Caused by ' . $relativeFixtureFilePath;
     }
 }

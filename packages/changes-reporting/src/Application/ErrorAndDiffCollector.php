@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Rector\ChangesReporting\Application;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PHPStan\AnalysedCodeException;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Error\ExceptionCorrector;
-use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\ValueObject\Application\Error;
 use Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
@@ -49,22 +50,22 @@ final class ErrorAndDiffCollector
     private $removedAndAddedFilesCollector;
 
     /**
-     * @var NodeRemovingCommander
+     * @var NodesToRemoveCollector
      */
-    private $nodeRemovingCommander;
+    private $nodesToRemoveCollector;
 
     public function __construct(
         DifferAndFormatter $differAndFormatter,
         RectorChangeCollector $rectorChangeCollector,
         ExceptionCorrector $exceptionCorrector,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        NodeRemovingCommander $nodeRemovingCommander
+        NodesToRemoveCollector $nodesToRemoveCollector
     ) {
         $this->differAndFormatter = $differAndFormatter;
         $this->rectorChangeCollector = $rectorChangeCollector;
         $this->exceptionCorrector = $exceptionCorrector;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
-        $this->nodeRemovingCommander = $nodeRemovingCommander;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
 
     /**
@@ -82,15 +83,15 @@ final class ErrorAndDiffCollector
 
     public function getRemovedNodeCount(): int
     {
-        return $this->nodeRemovingCommander->getCount();
+        return $this->nodesToRemoveCollector->getCount();
     }
 
     /**
-     * @return Node[]
+     * @return Node[]|Stmt[]
      */
     public function getRemovedNodes(): array
     {
-        return $this->nodeRemovingCommander->getNodesToRemove();
+        return $this->nodesToRemoveCollector->getNodesToRemove();
     }
 
     public function addFileDiff(SmartFileInfo $smartFileInfo, string $newContent, string $oldContent): void

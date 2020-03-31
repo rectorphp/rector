@@ -15,10 +15,10 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class ClassManipulator
 {
@@ -33,11 +33,6 @@ final class ClassManipulator
     private $callableNodeTraverser;
 
     /**
-     * @var NodeRemovingCommander
-     */
-    private $nodeRemovingCommander;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -47,18 +42,23 @@ final class ClassManipulator
      */
     private $propertyFetchManipulator;
 
+    /**
+     * @var NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
-        NodeRemovingCommander $nodeRemovingCommander,
+        NodesToRemoveCollector $nodesToRemoveCollector,
         NodeTypeResolver $nodeTypeResolver,
         PropertyFetchManipulator $propertyFetchManipulator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
 
     /**
@@ -247,7 +247,7 @@ final class ClassManipulator
                 continue;
             }
 
-            $this->nodeRemovingCommander->addNode($implement);
+            $this->nodesToRemoveCollector->addNodeToRemove($implement);
         }
     }
 
@@ -289,7 +289,7 @@ final class ClassManipulator
                 return null;
             }
 
-            $this->nodeRemovingCommander->addNode($node);
+            $this->nodesToRemoveCollector->addNodeToRemove($node);
         });
     }
 }
