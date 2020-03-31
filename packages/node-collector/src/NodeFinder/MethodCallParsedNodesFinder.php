@@ -26,7 +26,7 @@ final class MethodCallParsedNodesFinder
     /**
      * @return MethodCall[]|StaticCall[]|ArrayCallable[]
      */
-    public function findClassMethodCalls(ClassMethod $classMethod): array
+    public function findByClassMethod(ClassMethod $classMethod): array
     {
         /** @var string|null $className */
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);

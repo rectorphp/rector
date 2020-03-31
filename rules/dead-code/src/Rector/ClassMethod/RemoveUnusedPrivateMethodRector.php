@@ -79,7 +79,7 @@ PHP
             return null;
         }
 
-        $classMethodCalls = $this->methodCallParsedNodesFinder->findClassMethodCalls($node);
+        $classMethodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($node);
         if ($classMethodCalls !== []) {
             return null;
         }

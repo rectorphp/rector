@@ -25,11 +25,12 @@ final class ExclusionManager
 
     public function isNodeSkippedByRector(PhpRectorInterface $phpRector, Node $onNode): bool
     {
-        foreach ($this->exclusionChecks as $check) {
-            if ($check->isNodeSkippedByRector($phpRector, $onNode)) {
+        foreach ($this->exclusionChecks as $exclusionCheck) {
+            if ($exclusionCheck->isNodeSkippedByRector($phpRector, $onNode)) {
                 return true;
             }
         }
+
         return false;
     }
 }

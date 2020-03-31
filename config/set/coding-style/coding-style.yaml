@@ -7,8 +7,8 @@ services:
     Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector: null
 
     # requires configuration
-    # Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector: null
-    # Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector: null
+#     Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector: null
+#     Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector: null
     Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector: null
     Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector: null
     Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector: null

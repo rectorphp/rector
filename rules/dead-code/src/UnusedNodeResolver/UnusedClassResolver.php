@@ -178,6 +178,10 @@ final class UnusedClassResolver
         return $classNames;
     }
 
+    /**
+     * @param string[] $items
+     * @return string[]
+     */
     private function sortAndUniqueArray(array $items): array
     {
         sort($items);
