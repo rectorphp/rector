@@ -14,10 +14,10 @@ use PHPStan\Type\Type;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\Core\PhpParser\Node\Commander\NodeReplacingCommander;
-use Rector\Core\PhpParser\Node\Commander\PropertyAddingCommander;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 
 /**
@@ -42,9 +42,9 @@ trait NodeCommandersTrait
     private $nodeAddingCommander;
 
     /**
-     * @var PropertyAddingCommander
+     * @var PropertyToAddCollector
      */
-    private $propertyAddingCommander;
+    private $propertyToAddCollector;
 
     /**
      * @var NodeReplacingCommander
@@ -62,14 +62,14 @@ trait NodeCommandersTrait
     public function autowireNodeCommandersTrait(
         NodesToRemoveCollector $nodesToRemoveCollector,
         NodeAddingCommander $nodeAddingCommander,
-        PropertyAddingCommander $propertyAddingCommander,
+        PropertyToAddCollector $propertyToAddCollector,
         UseNodesToAddCollector $useNodesToAddCollector,
         NodeReplacingCommander $nodeReplacingCommander,
         RectorChangeCollector $rectorChangeCollector
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeAddingCommander = $nodeAddingCommander;
-        $this->propertyAddingCommander = $propertyAddingCommander;
+        $this->propertyToAddCollector = $propertyToAddCollector;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->nodeReplacingCommander = $nodeReplacingCommander;
         $this->rectorChangeCollector = $rectorChangeCollector;
@@ -101,13 +101,13 @@ trait NodeCommandersTrait
 
     protected function addPropertyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void
     {
-        $this->propertyAddingCommander->addPropertyToClass($propertyName, $propertyType, $class);
+        $this->propertyToAddCollector->addPropertyToClass($propertyName, $propertyType, $class);
         $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
 
     protected function addConstantToClass(Class_ $class, ClassConst $classConst): void
     {
-        $this->propertyAddingCommander->addConstantToClass($class, $classConst);
+        $this->propertyToAddCollector->addConstantToClass($class, $classConst);
         $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
 
@@ -116,8 +116,7 @@ trait NodeCommandersTrait
         ?Type $propertyType,
         string $propertyName
     ): void {
-        $this->propertyAddingCommander->addPropertyWithoutConstructorToClass($propertyName, $propertyType, $classNode);
-
+        $this->propertyToAddCollector->addPropertyWithoutConstructorToClass($propertyName, $propertyType, $classNode);
         $this->rectorChangeCollector->notifyNodeFileInfo($classNode);
     }
 
