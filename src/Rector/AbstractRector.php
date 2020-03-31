@@ -16,7 +16,6 @@ use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
-use Rector\Core\Commander\CommanderCollector;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
@@ -60,11 +59,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var ExclusionManager
      */
     private $exclusionManager;
-
-    /**
-     * @var CommanderCollector
-     */
-    private $commanderCollector;
 
     /**
      * @var CurrentFileInfoProvider
@@ -116,7 +110,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager,
-        CommanderCollector $commanderCollector,
         CurrentFileInfoProvider $currentFileInfoProvider,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         DocBlockManipulator $docBlockManipulator,
@@ -128,7 +121,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
         $this->exclusionManager = $exclusionManager;
-        $this->commanderCollector = $commanderCollector;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockManipulator = $docBlockManipulator;
@@ -203,14 +195,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
                 $this->currentFileInfoProvider->setCurrentFileInfo($fileInfo);
                 break;
             }
-        }
-
-        foreach ($this->commanderCollector->provide() as $commander) {
-            if (! $commander->isActive()) {
-                continue;
-            }
-
-            $nodes = $commander->traverseNodes($nodes);
         }
 
         return $nodes;

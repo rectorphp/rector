@@ -63,6 +63,11 @@ final class FileProcessor
      */
     private $affectedFilesCollector;
 
+    /**
+     * @var PostFileProcessor
+     */
+    private $postFileProcessor;
+
     public function __construct(
         FormatPerservingPrinter $formatPerservingPrinter,
         Parser $parser,
@@ -71,7 +76,8 @@ final class FileProcessor
         NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         CurrentFileInfoProvider $currentFileInfoProvider,
         StubLoader $stubLoader,
-        AffectedFilesCollector $affectedFilesCollector
+        AffectedFilesCollector $affectedFilesCollector,
+        PostFileProcessor $postFileProcessor
     ) {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->parser = $parser;
@@ -81,6 +87,7 @@ final class FileProcessor
         $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->stubLoader = $stubLoader;
         $this->affectedFilesCollector = $affectedFilesCollector;
+        $this->postFileProcessor = $postFileProcessor;
     }
 
     public function parseFileInfoToLocalCache(SmartFileInfo $smartFileInfo): void
@@ -132,6 +139,7 @@ final class FileProcessor
 
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
+        $newStmts = $this->postFileProcessor->traverseNodes($newStmts);
 
         // this is needed for new tokens added in "afterTraverse()"
         $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];
