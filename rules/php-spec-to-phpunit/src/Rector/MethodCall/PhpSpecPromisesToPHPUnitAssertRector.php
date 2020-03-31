@@ -116,12 +116,6 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         $this->matchersManipulator = $matchersManipulator;
     }
 
-    protected function tearDown(): void
-    {
-        $this->isPrepared = false;
-        $this->matchersKeys = [];
-    }
-
     /**
      * @return string[]
      */
@@ -135,6 +129,9 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
      */
     public function refactor(Node $node): ?Node
     {
+        $this->isPrepared = false;
+        $this->matchersKeys = [];
+
         if (! $this->isInPhpSpecBehavior($node)) {
             return null;
         }

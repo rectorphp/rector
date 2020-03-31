@@ -109,13 +109,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     ];
 
     /**
-     * Run once in the every end of one processed file
-     */
-    protected function tearDown(): void
-    {
-    }
-
-    /**
      * @required
      */
     public function autowireAbstractRectorDependencies(
@@ -219,8 +212,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
             $nodes = $commander->traverseNodes($nodes);
         }
-
-        $this->tearDown();
 
         return $nodes;
     }
