@@ -26,7 +26,6 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
-use Rector\Core\Rector\AbstractRector\NodeCommandersTrait;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -178,26 +177,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return $node;
-    }
-
-    /**
-     * @see NodeCommandersTrait
-     *
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    public function afterTraverse(array $nodes): array
-    {
-        // setup for commanders
-        foreach ($nodes as $node) {
-            $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-            if ($fileInfo instanceof SmartFileInfo) {
-                $this->currentFileInfoProvider->setCurrentFileInfo($fileInfo);
-                break;
-            }
-        }
-
-        return $nodes;
     }
 
     protected function getNextExpression(Node $node): ?Node
@@ -364,6 +343,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         return in_array(
             $projectType,
+            // make it typo proof
             [Option::PROJECT_TYPE_OPEN_SOURCE, Option::PROJECT_TYPE_OPEN_SOURCE_UNDESCORED],
             true
         );

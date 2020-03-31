@@ -132,6 +132,7 @@ PHP
                 return false;
             }
         }
+
         return true;
     }
 
