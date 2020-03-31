@@ -13,10 +13,10 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\PhpParser\Node\Commander\NodeAddingCommander;
-use Rector\Core\PhpParser\Node\Commander\NodeReplacingCommander;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Rector\PostRector\Collector\NodesToReplaceCollector;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 
@@ -47,9 +47,9 @@ trait NodeCommandersTrait
     private $propertyToAddCollector;
 
     /**
-     * @var NodeReplacingCommander
+     * @var NodesToReplaceCollector
      */
-    private $nodeReplacingCommander;
+    private $nodesToReplaceCollector;
 
     /**
      * @var RectorChangeCollector
@@ -64,14 +64,14 @@ trait NodeCommandersTrait
         NodeAddingCommander $nodeAddingCommander,
         PropertyToAddCollector $propertyToAddCollector,
         UseNodesToAddCollector $useNodesToAddCollector,
-        NodeReplacingCommander $nodeReplacingCommander,
+        NodesToReplaceCollector $nodesToReplaceCollector,
         RectorChangeCollector $rectorChangeCollector
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeAddingCommander = $nodeAddingCommander;
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
-        $this->nodeReplacingCommander = $nodeReplacingCommander;
+        $this->nodesToReplaceCollector = $nodesToReplaceCollector;
         $this->rectorChangeCollector = $rectorChangeCollector;
     }
 
@@ -128,8 +128,7 @@ trait NodeCommandersTrait
 
     protected function replaceNode(Node $node, Node $replaceWith): void
     {
-        $this->nodeReplacingCommander->replaceNode($node, $replaceWith);
-
+        $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($node, $replaceWith);
         $this->rectorChangeCollector->notifyNodeFileInfo($replaceWith);
     }
 

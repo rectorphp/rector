@@ -1,4 +1,4 @@
-# All 477 Rectors Overview
+# All 481 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7854,11 +7854,43 @@ Remove php version checks if they are passed
 
 ## PostRector
 
+### `NameImportingRector`
+
+- class: [`Rector\PostRector\Rector\NameImportingRector`](/../master/packages/post-rector/src/Rector/NameImportingRector.php)
+
+Imports names
+
+<br>
+
 ### `NodeRemovingRector`
 
 - class: [`Rector\PostRector\Rector\NodeRemovingRector`](/../master/packages/post-rector/src/Rector/NodeRemovingRector.php)
 
 PostRector that removes nodes
+
+<br>
+
+### `NodeToReplacePostRector`
+
+- class: [`Rector\PostRector\Rector\NodeToReplacePostRector`](/../master/packages/post-rector/src/Rector/NodeToReplacePostRector.php)
+
+Post Rector that replaces one nodes  with another
+
+<br>
+
+### `PropertyAddingPostRector`
+
+- class: [`Rector\PostRector\Rector\PropertyAddingPostRector`](/../master/packages/post-rector/src/Rector/PropertyAddingPostRector.php)
+
+Post Rector that adds properties
+
+<br>
+
+### `UseAddingPostRector`
+
+- class: [`Rector\PostRector\Rector\UseAddingPostRector`](/../master/packages/post-rector/src/Rector/UseAddingPostRector.php)
+
+Post Rector that adds use statements
 
 <br>
 
