@@ -196,20 +196,20 @@
             "Rector\\ZendToSymfony\\Tests\\": "rules/zend-to-symfony/tests"
         },
         "classmap": [
-            "tests/Source",
-            "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source",
-            "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source",
-            "tests/Issues/Issue1243/Source",
+            "packages/node-type-resolver/tests/PerNodeTypeResolver/ParamTypeResolver/Source",
+            "packages/node-type-resolver/tests/PerNodeTypeResolver/PropertyTypeResolver/Source",
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
             "rules/symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
             "rules/symfony/tests/Rector/FrameworkBundle/ContainerGetToConstructorInjectionRector/Source",
-            "packages/node-type-resolver/tests/PerNodeTypeResolver/ParamTypeResolver/Source",
-            "packages/node-type-resolver/tests/PerNodeTypeResolver/PropertyTypeResolver/Source",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
             "rules/cakephp/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source",
             "rules/cakephp-to-symfony/tests/Rector/Class_/CakePHPControllerComponentToSymfonyRector/Source",
-            "rules/cakephp-to-symfony/tests/Rector/Class_/CakePHPModelToDoctrineEntityRector/Source"
+            "rules/cakephp-to-symfony/tests/Rector/Class_/CakePHPModelToDoctrineEntityRector/Source",
+            "tests/Source",
+            "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source",
+            "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source",
+            "tests/Issues/Issue1243/Source"
         ],
         "files": [
             "packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php",
@@ -225,7 +225,7 @@
             "rules/solid/tests/Rector/ClassMethod/UseInterfaceOverImplementationInConstructorRector/Source/Apple.php",
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Foo.php",
-            "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/safe_count.php",
+            "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Function_/count.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/YetAnotherClass.php"
         ]

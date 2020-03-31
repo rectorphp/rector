@@ -6,7 +6,7 @@ class ImportFunction
 {
     public function run()
     {
-        return \Safe\count([1]);
+        return \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Function_\count([1]);
     }
 }
 
@@ -22,7 +22,7 @@ function someFunctionWithNoEffect()
 
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-use function Safe\count;
+use function Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Function_\count;
 class ImportFunction
 {
     public function run()
