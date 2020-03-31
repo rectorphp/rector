@@ -12,14 +12,13 @@ use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
-use Rector\CodingStyle\Application\NameImportingCommander;
-use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\Core\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\Core\PhpParser\Node\Commander\NodeReplacingCommander;
 use Rector\Core\PhpParser\Node\Commander\PropertyAddingCommander;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Rector\PostRector\Collector\UseNodesToAddCollector;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -28,14 +27,9 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 trait NodeCommandersTrait
 {
     /**
-     * @var NameImportingCommander
+     * @var UseNodesToAddCollector
      */
-    protected $nameImportingCommander;
-
-    /**
-     * @var UseAddingCommander
-     */
-    protected $useAddingCommander;
+    protected $useNodesToAddCollector;
 
     /**
      * @var NodesToRemoveCollector
@@ -69,16 +63,14 @@ trait NodeCommandersTrait
         NodesToRemoveCollector $nodesToRemoveCollector,
         NodeAddingCommander $nodeAddingCommander,
         PropertyAddingCommander $propertyAddingCommander,
-        UseAddingCommander $useAddingCommander,
-        NameImportingCommander $nameImportingCommander,
+        UseNodesToAddCollector $useNodesToAddCollector,
         NodeReplacingCommander $nodeReplacingCommander,
         RectorChangeCollector $rectorChangeCollector
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeAddingCommander = $nodeAddingCommander;
         $this->propertyAddingCommander = $propertyAddingCommander;
-        $this->useAddingCommander = $useAddingCommander;
-        $this->nameImportingCommander = $nameImportingCommander;
+        $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->nodeReplacingCommander = $nodeReplacingCommander;
         $this->rectorChangeCollector = $rectorChangeCollector;
     }
@@ -90,7 +82,7 @@ trait NodeCommandersTrait
     {
         assert($objectType instanceof FullyQualifiedObjectType || $objectType instanceof AliasedObjectType);
 
-        $this->useAddingCommander->addUseImport($positionNode, $objectType);
+        $this->useNodesToAddCollector->addUseImport($positionNode, $objectType);
     }
 
     protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
