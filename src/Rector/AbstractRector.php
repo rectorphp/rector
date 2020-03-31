@@ -20,7 +20,6 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -58,11 +57,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var ExclusionManager
      */
     private $exclusionManager;
-
-    /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
 
     /**
      * @var PhpDocInfoPrinter
@@ -109,7 +103,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager,
-        CurrentFileInfoProvider $currentFileInfoProvider,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         DocBlockManipulator $docBlockManipulator,
         StaticTypeMapper $staticTypeMapper,
@@ -120,7 +113,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
         $this->exclusionManager = $exclusionManager;
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;

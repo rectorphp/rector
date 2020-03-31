@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Rector\AbstractRector;
+namespace Rector\PostRector\Rector\AbstractRector;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
@@ -15,11 +15,11 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\CodingStyle\Application\NameImportingCommander;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\Core\PhpParser\Node\Commander\NodeAddingCommander;
-use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\Commander\NodeReplacingCommander;
 use Rector\Core\PhpParser\Node\Commander\PropertyAddingCommander;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -38,9 +38,9 @@ trait NodeCommandersTrait
     protected $useAddingCommander;
 
     /**
-     * @var NodeRemovingCommander
+     * @var NodesToRemoveCollector
      */
-    private $nodeRemovingCommander;
+    private $nodesToRemoveCollector;
 
     /**
      * @var NodeAddingCommander
@@ -66,7 +66,7 @@ trait NodeCommandersTrait
      * @required
      */
     public function autowireNodeCommandersTrait(
-        NodeRemovingCommander $nodeRemovingCommander,
+        NodesToRemoveCollector $nodesToRemoveCollector,
         NodeAddingCommander $nodeAddingCommander,
         PropertyAddingCommander $propertyAddingCommander,
         UseAddingCommander $useAddingCommander,
@@ -74,7 +74,7 @@ trait NodeCommandersTrait
         NodeReplacingCommander $nodeReplacingCommander,
         RectorChangeCollector $rectorChangeCollector
     ): void {
-        $this->nodeRemovingCommander = $nodeRemovingCommander;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeAddingCommander = $nodeAddingCommander;
         $this->propertyAddingCommander = $propertyAddingCommander;
         $this->useAddingCommander = $useAddingCommander;
@@ -131,8 +131,7 @@ trait NodeCommandersTrait
 
     protected function removeNode(Node $node): void
     {
-        $this->nodeRemovingCommander->addNode($node);
-
+        $this->nodesToRemoveCollector->addNodeToRemove($node);
         $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
 
@@ -160,7 +159,7 @@ trait NodeCommandersTrait
 
     protected function isNodeRemoved(Node $node): bool
     {
-        return $this->nodeRemovingCommander->isNodeRemoved($node);
+        return $this->nodesToRemoveCollector->isNodeRemoved($node);
     }
 
     /**

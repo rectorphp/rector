@@ -2,46 +2,36 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PhpParser\Node\Commander;
+namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeTraverser;
 use Rector\ChangesReporting\Collector\AffectedFilesCollector;
-use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\NodeVisitorFactory\NodeRemovingNodeVisitorFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class NodeRemovingCommander implements CommanderInterface
+final class NodesToRemoveCollector implements NodeCollectorInterface
 {
-    /**
-     * @var Stmt[]
-     */
-    private $nodesToRemove = [];
-
-    /**
-     * @var NodeRemovingNodeVisitorFactory
-     */
-    private $nodeRemovingNodeVisitorFactory;
-
     /**
      * @var AffectedFilesCollector
      */
     private $affectedFilesCollector;
 
-    public function __construct(
-        NodeRemovingNodeVisitorFactory $nodeRemovingNodeVisitorFactory,
-        AffectedFilesCollector $affectedFilesCollector
-    ) {
-        $this->nodeRemovingNodeVisitorFactory = $nodeRemovingNodeVisitorFactory;
+    /**
+     * @var Stmt[]|Node[]
+     */
+    private $nodesToRemove = [];
+
+    public function __construct(AffectedFilesCollector $affectedFilesCollector)
+    {
         $this->affectedFilesCollector = $affectedFilesCollector;
     }
 
-    public function addNode(Node $node): void
+    public function addNodeToRemove(Node $node): void
     {
         // chain call: "->method()->another()"
         $this->ensureIsNotPartOfChainMethodCall($node);
@@ -62,20 +52,6 @@ final class NodeRemovingCommander implements CommanderInterface
         $this->nodesToRemove[] = $node;
     }
 
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    public function traverseNodes(array $nodes): array
-    {
-        $nodeTraverser = new NodeTraverser();
-
-        $nodeRemovingNodeVisitor = $this->nodeRemovingNodeVisitorFactory->createFromNodesToRemove($this->nodesToRemove);
-        $nodeTraverser->addVisitor($nodeRemovingNodeVisitor);
-
-        return $nodeTraverser->traverse($nodes);
-    }
-
     public function isNodeRemoved(Node $node): bool
     {
         return in_array($node, $this->nodesToRemove, true);
@@ -92,16 +68,16 @@ final class NodeRemovingCommander implements CommanderInterface
     }
 
     /**
-     * @return Node[]
+     * @return Node[]|Stmt[]
      */
     public function getNodesToRemove(): array
     {
         return $this->nodesToRemove;
     }
 
-    public function getPriority(): int
+    public function unset(int $key): void
     {
-        return 800;
+        unset($this->nodesToRemove[$key]);
     }
 
     private function ensureIsNotPartOfChainMethodCall(Node $node): void

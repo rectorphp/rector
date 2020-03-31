@@ -14,6 +14,7 @@ use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Stubs\StubLoader;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use Rector\PostRector\Application\PostFileProcessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileProcessor

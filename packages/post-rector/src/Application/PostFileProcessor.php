@@ -2,19 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Application;
+namespace Rector\PostRector\Application;
 
 use PhpParser\Node;
+use PhpParser\NodeTraverser;
 use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\Entity\Post;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class PostFileProcessor
+final class PostFileProcessor extends NodeTraverser
 {
     /**
-     * @var CommanderInterface[]
+     * @var CommanderInterface[]|PostRectorInterface[]
      */
     private $commanders = [];
 
@@ -25,11 +28,22 @@ final class PostFileProcessor
 
     /**
      * @param CommanderInterface[] $commanders
+     * @param PostRectorInterface[] $postRectors
      */
-    public function __construct(CurrentFileInfoProvider $currentFileInfoProvider, array $commanders)
+    public function __construct(CurrentFileInfoProvider $currentFileInfoProvider, array $commanders, array $postRectors)
     {
+        // A. slowly remove...
+        $commanders = array_merge($commanders, $postRectors);
+
         $this->sortByPriorityAndSetCommanders($commanders);
         $this->currentFileInfoProvider = $currentFileInfoProvider;
+
+        // B. refactor into ↓
+        foreach ($commanders as $commander) {
+            if ($commander instanceof PostRectorInterface) {
+                $this->addVisitor($commander);
+            }
+        }
     }
 
     /**
@@ -40,7 +54,12 @@ final class PostFileProcessor
     {
         $this->setCurrentFileInfo($nodes);
 
+        // A. commanders
         foreach ($this->commanders as $commander) {
+            if (! $commander instanceof CommanderInterface) {
+                continue;
+            }
+
             if (! $commander->isActive()) {
                 continue;
             }
@@ -48,11 +67,12 @@ final class PostFileProcessor
             $nodes = $commander->traverseNodes($nodes);
         }
 
-        return $nodes;
+        // B. post rectors
+        return parent::traverse($nodes);
     }
 
     /**
-     * @param CommanderInterface[] $commanders
+     * @param CommanderInterface[]|PostRectorInterface[] $commanders
      */
     private function sortByPriorityAndSetCommanders(array $commanders): void
     {

@@ -8,11 +8,11 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class TemplatePathResolver
 {
@@ -32,20 +32,20 @@ final class TemplatePathResolver
     private $valueResolver;
 
     /**
-     * @var NodeRemovingCommander
+     * @var NodesToRemoveCollector
      */
-    private $nodeRemovingCommander;
+    private $nodesToRemoveCollector;
 
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
         PropertyFetchManipulator $propertyFetchManipulator,
         ValueResolver $valueResolver,
-        NodeRemovingCommander $nodeRemovingCommander
+        NodesToRemoveCollector $nodesToRemoveCollector
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->propertyFetchManipulator = $propertyFetchManipulator;
         $this->valueResolver = $valueResolver;
-        $this->nodeRemovingCommander = $nodeRemovingCommander;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
 
     public function resolveForClassMethod(ClassMethod $classMethod): string
@@ -87,7 +87,7 @@ final class TemplatePathResolver
 
             $setViewProperty = $node->expr;
 
-            $this->nodeRemovingCommander->addNode($node);
+            $this->nodesToRemoveCollector->addNodeToRemove($node);
         });
 
         if ($setViewProperty === null) {

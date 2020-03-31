@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
@@ -26,10 +25,11 @@ use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 /**
  * Located in another trait ↓
- * @property NodeRemovingCommander $nodeRemovingCommander
+ * @property NodesToRemoveCollector $nodesToRemoveCollector
  * @property FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder
  */
 trait ComplexRemovalTrait
@@ -126,7 +126,7 @@ trait ComplexRemovalTrait
         $this->removeNode($propertyProperty);
 
         foreach ($property->props as $prop) {
-            if (! $this->nodeRemovingCommander->isNodeRemoved($prop)) {
+            if (! $this->nodesToRemoveCollector->isNodeRemoved($prop)) {
                 // if the property has at least one node left -> return
                 return;
             }

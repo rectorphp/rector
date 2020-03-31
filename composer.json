@@ -51,6 +51,7 @@
     "autoload": {
         "psr-4": {
             "Rector\\Architecture\\": "rules/architecture/src",
+            "Rector\\PostRector\\": "packages/post-rector/src",
             "Rector\\AttributeAwarePhpDoc\\": "packages/attribute-aware-php-doc/src",
             "Rector\\Autodiscovery\\": "rules/autodiscovery/src",
             "Rector\\BetterPhpDocParser\\": "packages/better-php-doc-parser/src",

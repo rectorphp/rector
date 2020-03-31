@@ -1,4 +1,4 @@
-# All 476 Rectors Overview
+# All 477 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -48,6 +48,7 @@
 - [PhpDeglobalize](#phpdeglobalize)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
 - [Polyfill](#polyfill)
+- [PostRector](#postrector)
 - [Privatization](#privatization)
 - [Refactoring](#refactoring)
 - [RemovingStatic](#removingstatic)
@@ -7848,6 +7849,16 @@ Remove php version checks if they are passed
 -}
 +return 'is PHP 7.2+';
 ```
+
+<br>
+
+## PostRector
+
+### `NodeRemovingRector`
+
+- class: [`Rector\PostRector\Rector\NodeRemovingRector`](/../master/packages/post-rector/src/Rector/NodeRemovingRector.php)
+
+PostRector that removes nodes
 
 <br>
 
