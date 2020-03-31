@@ -10,7 +10,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
-use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\AliasUsesResolver;
 use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\Core\Configuration\Option;
@@ -18,6 +17,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -39,11 +39,6 @@ final class NameImporter
     private $aliasUsesResolver;
 
     /**
-     * @var UseAddingCommander
-     */
-    private $useAddingCommander;
-
-    /**
      * @var ImportSkipper
      */
     private $importSkipper;
@@ -58,20 +53,25 @@ final class NameImporter
      */
     private $parameterProvider;
 
+    /**
+     * @var UseNodesToAddCollector
+     */
+    private $useNodesToAddCollector;
+
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         AliasUsesResolver $aliasUsesResolver,
-        UseAddingCommander $useAddingCommander,
         ImportSkipper $importSkipper,
         NodeNameResolver $nodeNameResolver,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        UseNodesToAddCollector $useNodesToAddCollector
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
-        $this->useAddingCommander = $useAddingCommander;
         $this->importSkipper = $importSkipper;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parameterProvider = $parameterProvider;
+        $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
 
     public function importName(Name $name): ?Name
@@ -134,8 +134,8 @@ final class NameImporter
             return null;
         }
 
-        if ($this->useAddingCommander->isShortImported($name, $fullyQualifiedObjectType)) {
-            if ($this->useAddingCommander->isImportShortable($name, $fullyQualifiedObjectType)) {
+        if ($this->useNodesToAddCollector->isShortImported($name, $fullyQualifiedObjectType)) {
+            if ($this->useNodesToAddCollector->isImportShortable($name, $fullyQualifiedObjectType)) {
                 return $fullyQualifiedObjectType->getShortNameNode();
             }
 
@@ -181,15 +181,15 @@ final class NameImporter
 
     private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
-        if ($this->useAddingCommander->hasImport($name, $fullyQualifiedObjectType)) {
+        if ($this->useNodesToAddCollector->hasImport($name, $fullyQualifiedObjectType)) {
             return;
         }
 
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof FuncCall) {
-            $this->useAddingCommander->addFunctionUseImport($name, $fullyQualifiedObjectType);
+            $this->useNodesToAddCollector->addFunctionUseImport($name, $fullyQualifiedObjectType);
         } else {
-            $this->useAddingCommander->addUseImport($name, $fullyQualifiedObjectType);
+            $this->useNodesToAddCollector->addUseImport($name, $fullyQualifiedObjectType);
         }
     }
 

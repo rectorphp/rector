@@ -7,7 +7,6 @@ namespace Rector\CodingStyle\Rector\Namespace_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\CodingStyle\Application\NameImportingCommander;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -99,12 +98,12 @@ PHP
     {
         // this file remains just for testing
         // breaks other rectors by making name nodes short, FQN → short names
-        /** prevents duplicated run with @see NameImportingCommander  */
+        /** prevents duplicated run with @see \Rector\PostRector\Application\\Rector\PostRector\Rector\NameImportingRector */
         if (! PHPUnitEnvironment::isPHPUnitRun()) {
             return null;
         }
 
-        $this->useAddingCommander->analyseFileInfoUseStatements($node);
+        $this->useNodesToAddCollector->analyseFileInfoUseStatements($node);
 
         if ($node instanceof Name) {
             return $this->nameImporter->importName($node);

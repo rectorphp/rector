@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\Entity\Post;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use Rector\PostRector\Rector\UseAddingPostRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PostFileProcessor extends NodeTraverser
@@ -27,11 +27,20 @@ final class PostFileProcessor extends NodeTraverser
     private $currentFileInfoProvider;
 
     /**
+     * @var UseAddingPostRector
+     */
+    private $useAddingPostRector;
+
+    /**
      * @param CommanderInterface[] $commanders
      * @param PostRectorInterface[] $postRectors
      */
-    public function __construct(CurrentFileInfoProvider $currentFileInfoProvider, array $commanders, array $postRectors)
-    {
+    public function __construct(
+        CurrentFileInfoProvider $currentFileInfoProvider,
+        array $commanders,
+        array $postRectors,
+        UseAddingPostRector $useAddingPostRector
+    ) {
         // A. slowly remove...
         $commanders = array_merge($commanders, $postRectors);
 
@@ -44,6 +53,8 @@ final class PostFileProcessor extends NodeTraverser
                 $this->addVisitor($commander);
             }
         }
+
+        $this->useAddingPostRector = $useAddingPostRector;
     }
 
     /**
@@ -68,7 +79,11 @@ final class PostFileProcessor extends NodeTraverser
         }
 
         // B. post rectors
-        return parent::traverse($nodes);
+        $nodes = parent::traverse($nodes);
+
+        // must run standalone, after NameImporitngPostRector, so it won't skip TraverseNodes()
+
+        return $this->useAddingPostRector->traverse($nodes);
     }
 
     /**

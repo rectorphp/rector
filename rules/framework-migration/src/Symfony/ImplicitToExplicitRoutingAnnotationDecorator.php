@@ -9,10 +9,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
-use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PostRector\Collector\UseNodesToAddCollector;
 
 final class ImplicitToExplicitRoutingAnnotationDecorator
 {
@@ -22,13 +22,13 @@ final class ImplicitToExplicitRoutingAnnotationDecorator
     public const HAS_ROUTE_ANNOTATION = 'has_route_annotation';
 
     /**
-     * @var UseAddingCommander
+     * @var UseNodesToAddCollector
      */
-    private $useAddingCommander;
+    private $useNodesToAddCollector;
 
-    public function __construct(UseAddingCommander $useAddingCommander)
+    public function __construct(UseNodesToAddCollector $useNodesToAddCollector)
     {
-        $this->useAddingCommander = $useAddingCommander;
+        $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
 
     public function decorateClassMethodWithRouteAnnotation(
@@ -43,7 +43,7 @@ final class ImplicitToExplicitRoutingAnnotationDecorator
         $this->addUseType($symfonyRouteUseObjectType, $classMethod);
 
         // remove
-        $this->useAddingCommander->removeShortUse($classMethod, 'Route');
+        $this->useNodesToAddCollector->removeShortUse($classMethod, 'Route');
 
         $classMethod->setAttribute(self::HAS_ROUTE_ANNOTATION, true);
     }
@@ -55,6 +55,6 @@ final class ImplicitToExplicitRoutingAnnotationDecorator
     {
         assert($objectType instanceof FullyQualifiedObjectType || $objectType instanceof AliasedObjectType);
 
-        $this->useAddingCommander->addUseImport($positionNode, $objectType);
+        $this->useNodesToAddCollector->addUseImport($positionNode, $objectType);
     }
 }

@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -20,6 +19,7 @@ use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -46,11 +46,6 @@ final class DocBlockNameImporter
     private $staticTypeMapper;
 
     /**
-     * @var UseAddingCommander
-     */
-    private $useAddingCommander;
-
-    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -70,22 +65,27 @@ final class DocBlockNameImporter
      */
     private $parameterProvider;
 
+    /**
+     * @var UseNodesToAddCollector
+     */
+    private $useNodesToAddCollector;
+
     public function __construct(
         PhpDocNodeTraverser $phpDocNodeTraverser,
         StaticTypeMapper $staticTypeMapper,
-        UseAddingCommander $useAddingCommander,
         NodeNameResolver $nodeNameResolver,
         BetterStandardPrinter $betterStandardPrinter,
         ImportSkipper $importSkipper,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        UseNodesToAddCollector $useNodesToAddCollector
     ) {
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->useAddingCommander = $useAddingCommander;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->importSkipper = $importSkipper;
         $this->parameterProvider = $parameterProvider;
+        $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
 
     public function importNames(PhpDocInfo $phpDocInfo, Node $phpParserNode): bool
@@ -132,8 +132,8 @@ final class DocBlockNameImporter
             return $identifierTypeNode;
         }
 
-        if ($this->useAddingCommander->isShortImported($node, $fullyQualifiedObjectType)) {
-            if ($this->useAddingCommander->isImportShortable($node, $fullyQualifiedObjectType)) {
+        if ($this->useNodesToAddCollector->isShortImported($node, $fullyQualifiedObjectType)) {
+            if ($this->useNodesToAddCollector->isImportShortable($node, $fullyQualifiedObjectType)) {
                 $identifierTypeNode->name = $fullyQualifiedObjectType->getShortName();
                 $this->hasPhpDocChanged = true;
             }
@@ -143,7 +143,7 @@ final class DocBlockNameImporter
 
         $identifierTypeNode->name = $fullyQualifiedObjectType->getShortName();
         $this->hasPhpDocChanged = true;
-        $this->useAddingCommander->addUseImport($node, $fullyQualifiedObjectType);
+        $this->useNodesToAddCollector->addUseImport($node, $fullyQualifiedObjectType);
 
         return $identifierTypeNode;
     }

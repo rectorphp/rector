@@ -12,7 +12,7 @@ use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
 
 /**
- * @see \Rector\CodingStyle\Application\NameImportingCommander
+ * @see \Rector\PostRector\Rector\NameImportingRector
  */
 final class AutoImportNamesParameterTest extends AbstractRectorTestCase
 {
