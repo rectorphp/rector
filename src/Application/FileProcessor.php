@@ -135,12 +135,13 @@ final class FileProcessor
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
         $this->stubLoader->loadStubs();
+        $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
 
         $this->makeSureFileIsParsed($smartFileInfo);
 
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
-        $newStmts = $this->postFileProcessor->traverseNodes($newStmts);
+        $newStmts = $this->postFileProcessor->traverse($newStmts);
 
         // this is needed for new tokens added in "afterTraverse()"
         $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];

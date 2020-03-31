@@ -2075,35 +2075,6 @@ Changes === false to negate !
 
 <br>
 
-### `ImportFullyQualifiedNamesRector`
-
-- class: [`Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector`](/../master/rules/coding-style/src/Rector/Namespace_/ImportFullyQualifiedNamesRector.php)
-- [test fixtures](/../master/rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Fixture)
-
-Import fully qualified names to use statements
-
-```diff
-+use SomeAnother\AnotherClass;
-+use DateTime;
-+
- class SomeClass
- {
-     public function create()
-     {
--          return SomeAnother\AnotherClass;
-+          return AnotherClass;
-     }
-
-     public function createDate()
-     {
--        return new \DateTime();
-+        return new DateTime();
-     }
- }
-```
-
-<br>
-
 ### `MakeInheritedMethodVisibilitySameAsParentRector`
 
 - class: [`Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector`](/../master/rules/coding-style/src/Rector/ClassMethod/MakeInheritedMethodVisibilitySameAsParentRector.php)
@@ -7854,11 +7825,19 @@ Remove php version checks if they are passed
 
 ## PostRector
 
-### `NameImportingRector`
+### `NameImportingPostRector`
 
-- class: [`Rector\PostRector\Rector\NameImportingRector`](/../master/packages/post-rector/src/Rector/NameImportingRector.php)
+- class: [`Rector\PostRector\Rector\NameImportingPostRector`](/../master/packages/post-rector/src/Rector/NameImportingPostRector.php)
 
 Imports names
+
+<br>
+
+### `NodeAddingPostRector`
+
+- class: [`Rector\PostRector\Rector\NodeAddingPostRector`](/../master/packages/post-rector/src/Rector/NodeAddingPostRector.php)
+
+Post Rector that adds nodes
 
 <br>
 

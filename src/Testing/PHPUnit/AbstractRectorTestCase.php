@@ -105,7 +105,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $stubLoader->loadStubs();
 
         $this->configurePhpVersionFeatures();
-        $this->configureAutoImportParameter();
     }
 
     protected function tearDown(): void
@@ -115,11 +114,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         // restore PHP version if changed
         if ($this->getPhpVersion() !== '') {
             $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
-        }
-
-        // restore disabled auto_import_names if changed
-        if ($this->getAutoImportNames() !== null) {
-            $this->setParameter(Option::AUTO_IMPORT_NAMES, false);
         }
     }
 
@@ -162,12 +156,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     protected function getRectorInterface(): string
     {
         return PhpRectorInterface::class;
-    }
-
-    protected function getAutoImportNames(): ?bool
-    {
-        // to be implemented
-        return null;
     }
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
@@ -246,17 +234,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         }
 
         $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
-    }
-
-    private function configureAutoImportParameter(): void
-    {
-        // for faster tests
-        $autoImportNames = false;
-        if ($this->getAutoImportNames() !== null) {
-            $autoImportNames = $this->getAutoImportNames();
-        }
-
-        $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, $autoImportNames);
     }
 
     private function doTestFileMatchesExpectedContent(

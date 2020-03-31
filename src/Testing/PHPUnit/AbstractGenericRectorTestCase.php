@@ -76,7 +76,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     {
         $parameterProvider = self::$container->get(ParameterProvider::class);
 
-        if (! in_array($name, [Option::PHP_VERSION_FEATURES, Option::AUTO_IMPORT_NAMES], true)) {
+        if ($name !== Option::PHP_VERSION_FEATURES) {
             $oldParameterValue = $parameterProvider->provideParameter($name);
             $this->oldParameterValues[$name] = $oldParameterValue;
         }

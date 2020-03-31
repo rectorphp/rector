@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Renaming\Rector\Class_\RenameClassRector;
 
+/**
+ * @see \Rector\PostRector\Rector\NameImportingPostRector
+ */
 final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
 {
     /**
@@ -16,6 +20,8 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
      */
     public function test(string $file): void
     {
+        $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
+
         $this->doTestFile($file);
     }
 
@@ -37,6 +43,7 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ImportFullyQualifiedNamesRector::class;
+        // the must be any rector class to run
+        return RenameClassRector::class;
     }
 }

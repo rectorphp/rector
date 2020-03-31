@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
-final class NameImportingRector extends AbstractPostRector
+final class NameImportingPostRector extends AbstractPostRector
 {
     /**
      * @var ParameterProvider
@@ -48,7 +48,7 @@ final class NameImportingRector extends AbstractPostRector
         $this->docBlockNameImporter = $docBlockNameImporter;
     }
 
-    public function refactor(Node $node): ?Node
+    public function enterNode(Node $node): ?Node
     {
         if (! $this->parameterProvider->provideParameter(Option::AUTO_IMPORT_NAMES)) {
             return null;
