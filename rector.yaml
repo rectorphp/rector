@@ -2,6 +2,9 @@ imports:
     - { resource: "create-rector.yaml", ignore_errors: 'not_found' }
 
 parameters:
+    # bleeding edge feature
+    # is_cache_enabled: true
+
     paths:
         - src
         - tests

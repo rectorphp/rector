@@ -51,6 +51,8 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
     {
         $printedContent = $this->printNodesToString($nodes);
 
+        $printedContent = rtrim($printedContent) . PHP_EOL;
+
         FileSystem::write($this->getTargetFilePath(), $printedContent);
     }
 
@@ -59,9 +61,7 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
      */
     protected function printNodesToString(array $nodes): string
     {
-        $printedContent = $this->betterStandardPrinter->prettyPrint($nodes);
-
-        return '<?php' . PHP_EOL . PHP_EOL . $printedContent;
+        return $this->betterStandardPrinter->prettyPrintFile($nodes) . PHP_EOL;
     }
 
     /**

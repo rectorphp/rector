@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\Function_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -14,7 +15,7 @@ use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
 /**
  * @see \Rector\DeadCode\Tests\Rector\Function_\RemoveUnusedFunctionRector\RemoveUnusedFunctionRectorTest
  */
-final class RemoveUnusedFunctionRector extends AbstractRector
+final class RemoveUnusedFunctionRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
      * @var ParsedFunctionLikeNodeCollector

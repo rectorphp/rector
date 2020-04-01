@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -20,6 +21,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractRector
 {
+    /**
+     * @var ScopeAwareNodeFinder
+     */
+    private $scopeAwareNodeFinder;
+
+    public function __construct(ScopeAwareNodeFinder $scopeAwareNodeFinder)
+    {
+        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change foreach() items assign to empty array to direct assign', [
@@ -85,7 +96,7 @@ PHP
             return null;
         }
 
-        // must be empty array, othewise it will false override
+        // must be empty array, otherwise it will false override
         $defaultValue = $this->getValue($previousDeclarationParentNode->expr);
         if ($defaultValue !== []) {
             return null;
@@ -126,13 +137,13 @@ PHP
 
     private function findPreviousNodeUsage(Node $node, Expr $expr): ?Node
     {
-        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use ($expr) {
+        return $this->scopeAwareNodeFinder->findParent($node, function (Node $node) use ($expr) {
             if ($node === $expr) {
                 return false;
             }
 
             return $this->areNodesEqual($node, $expr);
-        });
+        }, [Foreach_::class]);
     }
 
     private function shouldSkipAsPartOfNestedForeach(Foreach_ $foreach): bool

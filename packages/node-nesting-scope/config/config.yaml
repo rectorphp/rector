@@ -6,3 +6,5 @@ services:
 
     Rector\NodeNestingScope\:
         resource: '../src'
+        exclude:
+            - '../src/ValueObject/*'

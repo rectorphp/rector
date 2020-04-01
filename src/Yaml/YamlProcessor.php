@@ -45,13 +45,14 @@ final class YamlProcessor
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function run(): void
+    /**
+     * @param string[] $source
+     */
+    public function run(array $source): void
     {
-        $source = $this->configuration->getSource();
         $yamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['yaml']);
 
         // 1. raw class rename
-
         $oldToNewClasses = $this->changeConfiguration->getOldToNewClasses();
         if ($oldToNewClasses === []) {
             return;

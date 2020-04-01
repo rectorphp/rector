@@ -3,6 +3,7 @@
 
 declare(strict_types=1);
 
+use Rector\Caching\ChangedFilesDetector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Console\Application;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
@@ -36,6 +37,10 @@ try {
     /** @var Configuration $configuration */
     $configuration = $container->get(Configuration::class);
     $configuration->setFirstResolverConfig($rectorConfigsResolver->getFirstResolvedConfig());
+
+    /** @var ChangedFilesDetector $changedFilesDetector */
+    $changedFilesDetector = $container->get(ChangedFilesDetector::class);
+    $changedFilesDetector->setFirstUsedConfig(realpath($rectorConfigsResolver->getFirstResolvedConfig()));
 } catch (Throwable $throwable) {
     $symfonyStyle = (new SymfonyStyleFactory(new PrivatesCaller()))->create();
     $symfonyStyle->error($throwable->getMessage());

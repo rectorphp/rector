@@ -163,7 +163,7 @@ final class RectorApplication
         // 4. remove and add files
         $this->removedAndAddedFilesProcessor->run();
 
-        // 5. extensions on finish
+        // 5. various extensions on finish
         $this->finishingExtensionRunner->run();
     }
 

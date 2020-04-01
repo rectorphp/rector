@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -21,7 +22,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodVendorLockResolver;
 /**
  * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDeadRecursiveClassMethodRector\RemoveDeadRecursiveClassMethodRectorTest
  */
-final class RemoveDeadRecursiveClassMethodRector extends AbstractRector
+final class RemoveDeadRecursiveClassMethodRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
      * @var MethodCallParsedNodesFinder

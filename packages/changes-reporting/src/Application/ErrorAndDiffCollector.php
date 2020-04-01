@@ -119,6 +119,19 @@ final class ErrorAndDiffCollector
         return $this->fileDiffs;
     }
 
+    /**
+     * @return SmartFileInfo[]
+     */
+    public function getAffectedFileInfos(): array
+    {
+        $fileInfos = [];
+        foreach ($this->fileDiffs as $fileDiff) {
+            $fileInfos[] = $fileDiff->getFileInfo();
+        }
+
+        return array_unique($fileInfos);
+    }
+
     public function getFileDiffsCount(): int
     {
         return count($this->fileDiffs);
