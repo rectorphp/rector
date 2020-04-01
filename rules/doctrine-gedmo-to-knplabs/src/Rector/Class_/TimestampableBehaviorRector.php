@@ -73,7 +73,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->classManipulator->hasClassTrait($node, 'Gedmo\Timestampable\Traits\TimestampableEntity')) {
+        if (! $this->classManipulator->hasTrait($node, 'Gedmo\Timestampable\Traits\TimestampableEntity')) {
             return null;
         }
 

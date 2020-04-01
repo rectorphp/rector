@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Core\Util\RectorStrings;
 use Rector\RectorGenerator\ValueObject\Configuration;
 
 final class TemplateVariablesFactory
@@ -32,7 +31,7 @@ final class TemplateVariablesFactory
     {
         $data = [
             '_Package_' => $configuration->getPackage(),
-            '_package_' => RectorStrings::camelCaseToDashes($configuration->getPackage()),
+            '_package_' => $configuration->getPackageDirectory(),
             '_Category_' => $configuration->getCategory(),
             '_Description_' => $configuration->getDescription(),
             '_Name_' => $configuration->getName(),

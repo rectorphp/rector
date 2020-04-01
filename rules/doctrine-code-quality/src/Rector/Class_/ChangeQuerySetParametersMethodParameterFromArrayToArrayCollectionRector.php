@@ -83,8 +83,9 @@ class SomeRepository extends EntityRepository
 PHP
                 ,
                 <<<'PHP'
-
-use Doctrine\Common\Collections\ArrayCollection;use Doctrine\ORM\EntityRepository;use Doctrine\ORM\Query\Parameter;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Parameter;
 
 class SomeRepository extends EntityRepository
 {

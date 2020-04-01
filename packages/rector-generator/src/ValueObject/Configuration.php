@@ -113,6 +113,11 @@ final class Configuration
 
     public function getPackageDirectory(): string
     {
+        // special cases
+        if ($this->package === 'PHPUnit') {
+            return 'phpunit';
+        }
+
         return RectorStrings::camelCaseToDashes($this->package);
     }
 

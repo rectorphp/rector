@@ -98,7 +98,7 @@ final class ScreenFileCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('[Dev] Load file and print nodes meta data - super helpful to learn to build rules');
+        $this->setDescription('[DEV] Load file and print nodes meta data - super helpful to learn to build rules');
 
         $this->addArgument(self::FILE_ARGUMENT, InputArgument::REQUIRED, 'Path to file to be screened');
     }

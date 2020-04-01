@@ -84,7 +84,7 @@ final class ClassInsertManipulator
     {
         $trait = new TraitUse([new FullyQualified($traitName)]);
 
-        $this->addStatementToClassBeforeTypes($class, $trait, TraitUse::class, Property::class);
+        $this->addStatementToClassBeforeTypes($class, $trait, TraitUse::class, Property::class, ClassMethod::class);
     }
 
     /**

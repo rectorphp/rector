@@ -61,7 +61,7 @@ final class SyncTypesCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('[Dev] Synchronize PHPStan types to attribute aware types in Rectors');
+        $this->setDescription('[DEV] Synchronize PHPStan types to attribute aware types in Rectors');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
