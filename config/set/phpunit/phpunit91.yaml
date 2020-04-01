@@ -1,0 +1,2 @@
+services:
+    Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector: null

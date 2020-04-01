@@ -304,7 +304,9 @@ PHP
 
     private function removeUnusedProperties(Class_ $class): void
     {
-        foreach (array_keys($this->propertyFetchToParamsToRemoveFromConstructor) as $propertyFetchName) {
+        $propertyFetchNames = array_keys($this->propertyFetchToParamsToRemoveFromConstructor);
+
+        foreach ($propertyFetchNames as $propertyFetchName) {
             /** @var string $propertyFetchName */
             $this->classManipulator->removeProperty($class, $propertyFetchName);
         }

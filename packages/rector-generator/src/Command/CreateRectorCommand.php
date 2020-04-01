@@ -117,7 +117,7 @@ final class CreateRectorCommand extends Command
     {
         $this->setName(CommandNaming::classToName(self::class));
         $this->setAliases(['c']);
-        $this->setDescription('[Dev] Create a new Rector, in a proper location, with new tests');
+        $this->setDescription('[DEV] Create a new Rector, in a proper location, with new tests');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

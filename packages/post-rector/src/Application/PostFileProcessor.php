@@ -21,7 +21,7 @@ final class PostFileProcessor
      */
     public function __construct(array $postRectors)
     {
-        $this->sortByPriorityAndSetCommanders($postRectors);
+        $this->postRectors = $this->sortByPriority($postRectors);
     }
 
     /**
@@ -41,8 +41,9 @@ final class PostFileProcessor
 
     /**
      * @param PostRectorInterface[] $postRectors
+     * @return PostRectorInterface[]
      */
-    private function sortByPriorityAndSetCommanders(array $postRectors): void
+    private function sortByPriority(array $postRectors): array
     {
         $postRectorsByPriority = [];
 
@@ -56,6 +57,6 @@ final class PostFileProcessor
 
         krsort($postRectorsByPriority);
 
-        $this->postRectors = $postRectorsByPriority;
+        return $postRectorsByPriority;
     }
 }

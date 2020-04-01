@@ -196,7 +196,7 @@ final class ClassManipulator
         return false;
     }
 
-    public function hasClassTrait(Class_ $class, string $desiredTrait): bool
+    public function hasTrait(Class_ $class, string $desiredTrait): bool
     {
         foreach ($class->getTraitUses() as $traitUse) {
             if (! $this->nodeNameResolver->haveName($traitUse->traits, $desiredTrait)) {

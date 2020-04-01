@@ -1,4 +1,4 @@
-# All 481 Rectors Overview
+# All 482 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -3612,9 +3612,10 @@ Remove temporary *Uuid relation properties
 Change array to ArrayCollection in setParameters method of query builder
 
 ```diff
-
--use Doctrine\ORM\EntityRepository;
-+use Doctrine\Common\Collections\ArrayCollection;use Doctrine\ORM\EntityRepository;use Doctrine\ORM\Query\Parameter;
+-
++use Doctrine\Common\Collections\ArrayCollection;
+ use Doctrine\ORM\EntityRepository;
++use Doctrine\ORM\Query\Parameter;
 
  class SomeRepository extends EntityRepository
  {
@@ -5125,6 +5126,30 @@ Tests without assertion will have @doesNotPerformAssertion
      public function test()
      {
          $nothing = 5;
+     }
+ }
+```
+
+<br>
+
+### `AddProphecyTraitRector`
+
+- class: [`Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector`](/../master/rules/phpunit/src/Rector/Class_/AddProphecyTraitRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/Class_/AddProphecyTraitRector/Fixture)
+
+Add Prophecy trait for method using $this->prophesize()
+
+```diff
+ use PHPUnit\Framework\TestCase;
++use Prophecy\PhpUnit\ProphecyTrait;
+
+ final class ExampleTest extends TestCase
+ {
++    use ProphecyTrait;
++
+     public function testOne(): void
+     {
+         $prophecy = $this->prophesize(\AnInterface::class);
      }
  }
 ```

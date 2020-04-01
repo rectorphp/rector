@@ -152,7 +152,7 @@ final class DumpNodesCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('[Docs] Dump overview of all Nodes');
+        $this->setDescription('[DOCS] Dump overview of all Nodes');
         $this->addOption(
             'output-format',
             'o',

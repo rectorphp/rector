@@ -49,7 +49,7 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('[Dev] check PHPStan types to TypeMappers');
+        $this->setDescription('[DEV] check PHPStan types to TypeMappers');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
