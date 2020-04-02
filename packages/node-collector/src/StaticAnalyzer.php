@@ -21,6 +21,9 @@ final class StaticAnalyzer
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
     }
 
+    /**
+     * @param class-string $className
+     */
     public function isStaticMethod(string $methodName, string $className): bool
     {
         $methodNode = $this->parsedFunctionLikeNodeCollector->findMethod($methodName, $className);

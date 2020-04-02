@@ -143,6 +143,9 @@ PHP
         return null;
     }
 
+    /**
+     * @return class-string|null
+     */
     private function resolveStaticCallClassName(Node $node): ?string
     {
         if ($node->class instanceof PropertyFetch) {

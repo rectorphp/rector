@@ -5,7 +5,7 @@ includes:
     - 'vendor/phpstan/phpstan/conf/bleedingEdge.neon'
 
 parameters:
-    checkGenericClassInNonGenericObjectType: false
+#    checkGenericClassInNonGenericObjectType: false
     level: max
 
     # to allow installing with various phsptan versions without reporting old errors here
