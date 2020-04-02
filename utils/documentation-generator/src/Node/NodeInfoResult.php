@@ -19,6 +19,14 @@ final class NodeInfoResult
     }
 
     /**
+     * @return string[]
+     */
+    public function getCategories(): array
+    {
+        return array_keys($this->getNodeInfos());
+    }
+
+    /**
      * @return NodeInfo[][]
      */
     public function getNodeInfos(): array
