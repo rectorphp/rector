@@ -12,5 +12,8 @@ if (class_exists('Doctrine\ORM\Mapping\OrderBy')) {
  */
 class OrderBy
 {
-
+    /**
+     * @var array<string>
+     */
+    public $value;
 }
