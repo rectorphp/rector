@@ -83,7 +83,7 @@ PHP
             }
 
             foreach ($nestedArrayItem->items as $nestedArrayItemItem) {
-                $array->items[] = new ArrayItem($nestedArrayItemItem->value);
+                $array->items[] = new ArrayItem($nestedArrayItemItem->value, $nestedArrayItemItem->key);
             }
         }
 
