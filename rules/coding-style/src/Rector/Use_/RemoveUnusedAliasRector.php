@@ -108,6 +108,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->shouldSkipUse($node)) {
+            return null;
+        }
+
         $searchNode = $this->resolveSearchNode($node);
         if ($searchNode === null) {
             return null;
@@ -275,5 +279,21 @@ PHP
 
         $this->renameNameNode($this->resolvedNodeNames[$aliasName], $lastName);
         $useUse->alias = null;
+    }
+
+    private function shouldSkipUse(Use_ $use): bool
+    {
+        return ! $this->hasUseAlias($use);
+    }
+
+    private function hasUseAlias(Use_ $use): bool
+    {
+        foreach ($use->uses as $useUse) {
+            if ($useUse->alias !== null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
