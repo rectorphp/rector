@@ -90,6 +90,7 @@ PHP
             return null;
         }
 
+        /** @var class-string $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($className)) {
             return null;

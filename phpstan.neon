@@ -5,7 +5,7 @@ includes:
     - 'vendor/phpstan/phpstan/conf/bleedingEdge.neon'
 
 parameters:
-    checkGenericClassInNonGenericObjectType: false
+#    checkGenericClassInNonGenericObjectType: false
     level: max
 
     # to allow installing with various phsptan versions without reporting old errors here
@@ -247,3 +247,7 @@ parameters:
         - '#Parameter \#2 \$name of method Rector\\Core\\Rector\\AbstractRector\:\:isVariableName\(\) expects string, string\|null given#'
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
+
+        # generics
+        - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createClassReflectionFromNode\(\) return type with generic class ReflectionClass does not specify its types\: T#'
+        - '#Method Rector\\NodeCollector\\StaticAnalyzer\:\:hasStaticAnnotation\(\) has parameter \$reflectionClass with generic class ReflectionClass but does not specify its types\: T#'
