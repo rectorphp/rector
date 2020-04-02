@@ -45,15 +45,8 @@ final class MarkdownDumpNodesOutputFormatter
                 $this->symfonyStyle->newLine();
 
                 $this->printRequiredArguments($nodeInfo);
+                $this->printCodeExample($nodeInfo);
                 $this->printPublicProperties($nodeInfo);
-
-                $this->symfonyStyle->newLine();
-
-                $this->symfonyStyle->writeln('#### Example PHP Code');
-                $this->symfonyStyle->newLine();
-                $this->symfonyStyle->writeln(
-                    sprintf('```php%s%s%s```', PHP_EOL, $nodeInfo->getPrintedContent(), PHP_EOL)
-                );
 
                 $this->symfonyStyle->writeln('<br>');
                 $this->symfonyStyle->newLine();
@@ -76,20 +69,32 @@ final class MarkdownDumpNodesOutputFormatter
             return;
         }
 
+        $this->symfonyStyle->newLine();
         $this->symfonyStyle->writeln('#### Public Properties');
         $this->symfonyStyle->newLine();
 
         foreach ($nodeInfo->getPublicPropertyInfos() as $publicPropertyInfo) {
             $this->symfonyStyle->writeln($publicPropertyInfo);
         }
-        $this->symfonyStyle->newLine();
     }
 
     private function printRequiredArguments(NodeInfo $nodeInfo): void
     {
-        if ($nodeInfo->hasRequiredArguments()) {
-            $this->symfonyStyle->writeln(' * requires arguments on construct');
-            $this->symfonyStyle->newLine();
+        if (!$nodeInfo->hasRequiredArguments()) {
+            return;
         }
+
+        $this->symfonyStyle->writeln(' * requires arguments on construct');
+        $this->symfonyStyle->newLine();
+    }
+
+    private function printCodeExample(NodeInfo $nodeInfo): void
+    {
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->writeln('#### Example PHP Code');
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->writeln(
+            sprintf('```php%s%s%s```', PHP_EOL, $nodeInfo->getPrintedContent(), PHP_EOL)
+        );
     }
 }
