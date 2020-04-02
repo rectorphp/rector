@@ -256,11 +256,11 @@
         ],
         "check-docs": [
             "bin/rector dump-rectors | diff --ignore-space-change docs/AllRectorsOverview.md - ",
-            "bin/rector dump-nodes -o markdown | diff --ignore-space-change docs/NodesOverview.md - "
+            "bin/rector dump-nodes | diff --ignore-space-change docs/NodesOverview.md - "
         ],
         "docs": [
             "bin/rector dump-rectors > docs/AllRectorsOverview.md",
-            "bin/rector dump-nodes -o markdown > docs/NodesOverview.md"
+            "bin/rector dump-nodes > docs/NodesOverview.md"
         ],
         "rector-ci-fix": "bin/rector process --config rector-ci.yaml --ansi --no-progress-bar",
         "rector-ci": "bin/rector process --config rector-ci.yaml --ansi --no-progress-bar --dry-run",
