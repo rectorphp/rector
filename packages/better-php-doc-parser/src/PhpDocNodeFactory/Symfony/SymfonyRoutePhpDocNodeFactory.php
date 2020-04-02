@@ -43,6 +43,7 @@ final class SymfonyRoutePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             $route->getMethods(),
             $route->getOptions(),
             $route->getDefaults(),
+            $route->getHost(),
             $route->getRequirements(),
             $annotationContent
         );

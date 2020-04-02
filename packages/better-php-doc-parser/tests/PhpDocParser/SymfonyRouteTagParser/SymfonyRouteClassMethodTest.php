@@ -11,7 +11,7 @@ use Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\AbstractPhpDocInfo
 /**
  * @see \Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode
  */
-final class ClassMethodTest extends AbstractPhpDocInfoTest
+final class SymfonyRouteClassMethodTest extends AbstractPhpDocInfoTest
 {
     /**
      * @dataProvider provideData()
@@ -29,5 +29,7 @@ final class ClassMethodTest extends AbstractPhpDocInfoTest
     public function provideData(): Iterator
     {
         yield [__DIR__ . '/Source/SomeClassMethod.php', __DIR__ . '/Fixture/expected_some_class_method.txt'];
+
+        yield [__DIR__ . '/Source/RouteWithHost.php', __DIR__ . '/Fixture/expected_route_with_host.txt'];
     }
 }

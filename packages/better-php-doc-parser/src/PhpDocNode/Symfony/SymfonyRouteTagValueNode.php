@@ -9,6 +9,9 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyRouteTagParser\SymfonyRouteClassMethodTest
+ */
 final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
     /**
@@ -25,6 +28,11 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
      * @var string|null
      */
     private $path;
+
+    /**
+     * @var string|null
+     */
+    private $host;
 
     /**
      * @var bool
@@ -75,6 +83,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         array $methods = [],
         array $options = [],
         array $defaults = [],
+        ?string $host = null,
         array $requirements = [],
         ?string $originalContent = null
     ) {
@@ -103,6 +112,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
             $matches = Strings::match($originalContent, '#requirements={(.*?)(?<separator>(=|:))(.*)}#');
             $this->requirementsKeyValueSeparator = $matches['separator'] ?? '=';
         }
+        $this->host = $host;
     }
 
     public function __toString(): string
@@ -125,6 +135,10 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
         if ($this->defaults !== []) {
             $contentItems['defaults'] = $this->printArrayItem($this->defaults, 'defaults');
+        }
+
+        if ($this->host !== null) {
+            $contentItems['host'] = sprintf('host="%s"', $this->host);
         }
 
         if ($this->requirements !== []) {
