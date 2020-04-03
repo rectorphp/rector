@@ -50,10 +50,11 @@ jobs:
                 run: |
                     git config --global user.name 'rector-bot'
                     git config --global user.email 'tomas@getrector.org'
+                    echo ::set-env name=COMMIT_MESSAGE::$(git log -1 --pretty=format:"%s")
 
             -   name: Commit Rector changes
                 if: steps.rector-git-check.outputs.modified == 'true'
-                run: git commit -am "fixup! [Rector CI] Fixed Rector issues"
+                run: git commit -am "fixup! ${COMMIT_MESSAGE}"
 
             ## Now, there might be coding standard issues after running Rector
             -
@@ -68,7 +69,7 @@ jobs:
 
             -   name: Commit CS changes
                 if: steps.cs-git-check.outputs.modified == 'true'
-                run: git commit -am "fixup! [Rector CI] Fixed CS issues"
+                run: git commit -am "fixup! fixup! ${COMMIT_MESSAGE}"
 
 
             -   name: Push changes
