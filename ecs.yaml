@@ -98,8 +98,8 @@ parameters:
             # @todo split to multiple rectors
             - "rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php"
 
-            - "packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/ColumnTagValueNode.php"
-            - "packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinColumnTagValueNode.php"
+            - 'packages/better-php-doc-parser/src/PhpDocNode/**/*TagValueNode.php'
+#
             - "rules/coding-style/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php"
 
             # per node logic

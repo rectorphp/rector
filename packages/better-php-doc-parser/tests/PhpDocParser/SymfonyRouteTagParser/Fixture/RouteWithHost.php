@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyRouteTagParser\Source;
+namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyRouteTagParser\Fixture;
 
 use Symfony\Component\Routing\Annotation\Route;
 

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser;
 
+use Iterator;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Testing\StaticFixtureProvider;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
@@ -57,6 +59,11 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $printedPhpDocInfo = $this->printNodePhpDocInfoToString($nodeWithPhpDocInfo);
 
         $this->assertSame($originalDocCommentText, $printedPhpDocInfo);
+    }
+
+    protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
+    {
+        return StaticFixtureProvider::yieldFilesFromDirectory($directory, $suffix);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\GedmoTagParser\Source;
+namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\GedmoTagParser\Fixture\Slug;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 

@@ -13,25 +13,41 @@ use Rector\BetterPhpDocParser\Tests\PhpDocParser\AbstractPhpDocInfoTest;
 final class DoctrineOrmTagNodeTest extends AbstractPhpDocInfoTest
 {
     /**
-     * @dataProvider provideData()
-     * @param class-string $nodeType
+     * @dataProvider provideDataForTestProperty()
      */
-    public function test(string $filePath, string $nodeType): void
+    public function testProperty(string $filePath): void
     {
-        $this->doTestPrintedPhpDocInfo($filePath, $nodeType);
+        $this->doTestPrintedPhpDocInfo($filePath, Property::class);
     }
 
-    public function provideData(): Iterator
+    public function provideDataForTestProperty()
     {
-        yield [__DIR__ . '/Fixture/SomeEntity.php', Class_::class];
-        yield [__DIR__ . '/Fixture/SomeEntitySimple.php', Class_::class];
-        yield [__DIR__ . '/Fixture/SkipNonDoctrineEntity.php', ClassMethod::class];
-        yield [__DIR__ . '/Fixture/TableWithIndexes.php', Class_::class];
-        yield [__DIR__ . '/Fixture/FormattingDoctrineEntity.php', Class_::class];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture/Property');
+    }
 
-        yield [__DIR__ . '/Fixture/SomeProperty.php', Property::class];
-        yield [__DIR__ . '/Fixture/PropertyWithName.php', Property::class];
-        yield [__DIR__ . '/Fixture/FromOfficialDocs.php', Property::class];
-        yield [__DIR__ . '/Fixture/JoinTable.php', Property::class];
+    /**
+     * @dataProvider provideDataForTestClass()
+     */
+    public function testClass(string $filePath): void
+    {
+        $this->doTestPrintedPhpDocInfo($filePath, Class_::class);
+    }
+
+    public function provideDataForTestClass()
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture/Class_');
+    }
+
+    /**
+     * @dataProvider provideDataForClassMethod()
+     */
+    public function testClassMethod(string $filePath): void
+    {
+        $this->doTestPrintedPhpDocInfo($filePath, ClassMethod::class);
+    }
+
+    public function provideDataForClassMethod(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture/ClassMethod');
     }
 }

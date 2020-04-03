@@ -10,19 +10,24 @@ use Rector\BetterPhpDocParser\Tests\PhpDocParser\AbstractPhpDocInfoTest;
 
 /**
  * @see \Rector\BetterPhpDocParser\PhpDocNode\Gedmo\BlameableTagValueNode
+ * @see \Rector\BetterPhpDocParser\PhpDocNode\Gedmo\SlugTagValueNode
  */
 final class GedmoTagParserTest extends AbstractPhpDocInfoTest
 {
     /**
      * @dataProvider provideData()
+     * @param class-string[] $expectedTagValueNodeTypes
+     *
      */
-    public function test(string $filePath): void
+    public function test(string $filePath, array $expectedTagValueNodeTypes): void
     {
         $this->doTestPrintedPhpDocInfo($filePath, Property::class);
+
+        $this->doTestContainsTag($filePath, $expectedTagValueNodeTypes);
     }
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Source/SomeClassMethod.php'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture', '*.php');
     }
 }

@@ -23,7 +23,6 @@ final class SymfonyRouteClassMethodTest extends AbstractPhpDocInfoTest
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Source/SomeClassMethod.php'];
-        yield [__DIR__ . '/Source/RouteWithHost.php'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture', '*.php');
     }
 }
