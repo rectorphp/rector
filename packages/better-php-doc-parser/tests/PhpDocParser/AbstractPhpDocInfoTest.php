@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser;
 
 use Iterator;
 use PhpParser\Node;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
@@ -46,8 +47,10 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     /**
      * @param class-string $nodeType
      */
-    protected function doTestPrintedPhpDocInfo(string $filePath, string $nodeType): void
+    protected function doTestPrintedPhpDocInfo(string $filePath, string $nodeType, string $tagValueNodeType): void
     {
+        $this->ensureIsNodeType($nodeType);
+
         $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($filePath, $nodeType);
 
         $docComment = $nodeWithPhpDocInfo->getDocComment();
@@ -59,11 +62,20 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $printedPhpDocInfo = $this->printNodePhpDocInfoToString($nodeWithPhpDocInfo);
 
         $this->assertSame($originalDocCommentText, $printedPhpDocInfo);
+
+        $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $tagValueNodeType);
     }
 
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
     {
         return StaticFixtureProvider::yieldFilesFromDirectory($directory, $suffix);
+    }
+
+    private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType): void
+    {
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo->hasByType($tagValueNodeType);
     }
 
     /**
@@ -84,5 +96,17 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         }
 
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+    }
+
+    /**
+     * @param class-string $nodeType
+     */
+    private function ensureIsNodeType(string $nodeType): void
+    {
+        if (is_a($nodeType, Node::class, true)) {
+            return;
+        }
+
+        throw new ShouldNotHappenException(sprintf('"%s" must be type of "%s"', $nodeType, Node::class));
     }
 }

@@ -6,48 +6,36 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\DoctrineOrmTagParser;
 
 use Iterator;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\AbstractPhpDocInfoTest;
+use Rector\Core\Testing\StaticFixtureProvider;
 
 final class DoctrineOrmTagNodeTest extends AbstractPhpDocInfoTest
 {
     /**
-     * @dataProvider provideDataForTestProperty()
+     * @param class-string $nodeType
+     * @param class-string $expectedTagValueNodeType
+     *
+     * @dataProvider provideData()
      */
-    public function testProperty(string $filePath): void
+    public function test(string $directoryPath, string $nodeType, string $expectedTagValueNodeType): void
     {
-        $this->doTestPrintedPhpDocInfo($filePath, Property::class);
+        $filePaths = StaticFixtureProvider::yieldFileFromDirectory($directoryPath, '*.php');
+        foreach ($filePaths as $filePath) {
+            $this->doTestPrintedPhpDocInfo($filePath, $nodeType, $expectedTagValueNodeType);
+        }
     }
 
-    public function provideDataForTestProperty()
+    public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture/Property');
-    }
+        yield [__DIR__ . '/Fixture/Property/Column', Property::class, ColumnTagValueNode::class];
+        yield [__DIR__ . '/Fixture/Property/JoinTable', Property::class, JoinTableTagValueNode::class];
 
-    /**
-     * @dataProvider provideDataForTestClass()
-     */
-    public function testClass(string $filePath): void
-    {
-        $this->doTestPrintedPhpDocInfo($filePath, Class_::class);
-    }
-
-    public function provideDataForTestClass()
-    {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture/Class_');
-    }
-
-    /**
-     * @dataProvider provideDataForClassMethod()
-     */
-    public function testClassMethod(string $filePath): void
-    {
-        $this->doTestPrintedPhpDocInfo($filePath, ClassMethod::class);
-    }
-
-    public function provideDataForClassMethod(): Iterator
-    {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture/ClassMethod');
+        yield [__DIR__ . '/Fixture/Class_/Entity', Class_::class, EntityTagValueNode::class];
+        yield [__DIR__ . '/Fixture/Class_/Table', Class_::class, TableTagValueNode::class];
     }
 }

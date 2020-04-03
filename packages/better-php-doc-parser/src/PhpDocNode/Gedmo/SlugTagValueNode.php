@@ -106,7 +106,7 @@ final class SlugTagValueNode extends AbstractTagValueNode implements ShortNameAw
             $contentItems['updatable'] = sprintf('updatable=%s', $this->updatable ? 'true' : 'false');
         }
 
-        if ($this->style) {
+        if ($this->style !== '') {
             $contentItems['style'] = sprintf('style="%s"', $this->style);
         }
 
@@ -118,15 +118,15 @@ final class SlugTagValueNode extends AbstractTagValueNode implements ShortNameAw
             $contentItems['unique_base'] = sprintf('unique_base="%s"', $this->uniqueBase);
         }
 
-        if ($this->separator) {
+        if ($this->separator !== '') {
             $contentItems['separator'] = sprintf('separator="%s"', $this->separator);
         }
 
-        if ($this->prefix) {
+        if ($this->prefix !== '') {
             $contentItems['prefix'] = sprintf('prefix="%s"', $this->prefix);
         }
 
-        if ($this->suffix) {
+        if ($this->suffix !== '') {
             $contentItems['suffix'] = sprintf('suffix="%s"', $this->suffix);
         }
 

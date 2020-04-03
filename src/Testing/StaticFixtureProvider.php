@@ -19,6 +19,15 @@ final class StaticFixtureProvider
         }
     }
 
+    public static function yieldFileFromDirectory(string $directory, string $suffix): Iterator
+    {
+        $fileInfos = self::findFilesInDirectory($directory, $suffix);
+
+        foreach ($fileInfos as $fileInfo) {
+            yield $fileInfo->getPathName();
+        }
+    }
+
     /**
      * @return SplFileInfo[]
      */

@@ -6,6 +6,8 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\GedmoTagParser;
 
 use Iterator;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\BlameableTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\SlugTagValueNode;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\AbstractPhpDocInfoTest;
 
 /**
@@ -15,19 +17,28 @@ use Rector\BetterPhpDocParser\Tests\PhpDocParser\AbstractPhpDocInfoTest;
 final class GedmoTagParserTest extends AbstractPhpDocInfoTest
 {
     /**
-     * @dataProvider provideData()
-     * @param class-string[] $expectedTagValueNodeTypes
-     *
+     * @dataProvider provideDataForBlameable()
      */
-    public function test(string $filePath, array $expectedTagValueNodeTypes): void
+    public function testBlameable(string $filePath): void
     {
-        $this->doTestPrintedPhpDocInfo($filePath, Property::class);
-
-        $this->doTestContainsTag($filePath, $expectedTagValueNodeTypes);
+        $this->doTestPrintedPhpDocInfo($filePath, Property::class, BlameableTagValueNode::class);
     }
 
-    public function provideData(): Iterator
+    public function provideDataForBlameable(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture', '*.php');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture/Blameable');
+    }
+
+    /**
+     * @dataProvider provideDataForBlameable()
+     */
+    public function testSlug(string $filePath): void
+    {
+        $this->doTestPrintedPhpDocInfo($filePath, Property::class, SlugTagValueNode::class);
+    }
+
+    public function provideDataForSlug(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture/Slug');
     }
 }

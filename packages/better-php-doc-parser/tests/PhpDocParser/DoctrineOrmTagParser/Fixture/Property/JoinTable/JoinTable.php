@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\DoctrineOrmTagParser\Fixture\Property;
+namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\DoctrineOrmTagParser\Fixture\Property\JoinTable;
 
 use Doctrine\ORM\Mapping as ORM;
 
