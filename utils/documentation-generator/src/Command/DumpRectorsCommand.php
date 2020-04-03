@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\Utils\DocumentationGenerator\Command;
 
 use Rector\Core\Console\Command\AbstractCommand;
-use Rector\Core\Console\Shell;
 use Rector\Core\Testing\Finder\RectorsFinder;
 use Rector\Utils\DocumentationGenerator\OutputFormatter\DumpRectors\MarkdownDumpRectorsOutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Console\ShellCode;
 
 final class DumpRectorsCommand extends AbstractCommand
 {
@@ -51,6 +51,6 @@ final class DumpRectorsCommand extends AbstractCommand
 
         $this->markdownDumpRectorsOutputFormatter->format($generalRectors, $rulesRectors);
 
-        return Shell::CODE_SUCCESS;
+        return ShellCode::SUCCESS;
     }
 }

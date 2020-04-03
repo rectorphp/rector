@@ -31,8 +31,9 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 /**
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Class_\DoctrinePhpDocParserTest
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Property_\ParserPropertyTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\DoctrineOrmTagParser\DoctrineOrmTagNodeTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyRouteTagParser\SymfonyRouteClassMethodTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyValidation\AssertTypeTagValueNodeTest
  */
 final class BetterPhpDocParser extends PhpDocParser
 {

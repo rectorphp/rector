@@ -21,4 +21,4 @@ services:
         alias: 'Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser'
 
     Doctrine\Common\Annotations\Reader:
-        alias: 'Doctrine\Common\Annotations\AnnotationReader'
+        alias: 'Rector\DoctrineAnnotationGenerated\ConstantPreservingAnnotationReader'

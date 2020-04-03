@@ -37,6 +37,6 @@ final class AssertTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         // to skip tokens for this node
         $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new AssertTypeTagValueNode($type->type);
+        return new AssertTypeTagValueNode($type->groups, $type->type);
     }
 }

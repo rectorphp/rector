@@ -11,7 +11,6 @@ use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
-use Rector\Core\Console\Shell;
 use Rector\Core\Extension\ReportingExtensionRunner;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\Guard\RectorGuard;
@@ -23,6 +22,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Console\ShellCode;
 
 final class ProcessCommand extends AbstractCommand
 {
@@ -229,15 +229,15 @@ final class ProcessCommand extends AbstractCommand
 
         // some errors were found → fail
         if ($this->errorAndDiffCollector->getErrors() !== []) {
-            return Shell::CODE_ERROR;
+            return ShellCode::SUCCESS;
         }
 
         // inverse error code for CI dry-run
         if ($this->configuration->isDryRun() && $this->errorAndDiffCollector->getFileDiffsCount()) {
-            return Shell::CODE_ERROR;
+            return ShellCode::ERROR;
         }
 
-        return Shell::CODE_SUCCESS;
+        return ShellCode::SUCCESS;
     }
 
     /**

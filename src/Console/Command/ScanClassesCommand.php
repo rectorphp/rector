@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Rector\Core\Console\Shell;
 use Rector\Core\FileSystem\ClassFinder;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Console\ShellCode;
 
 final class ScanClassesCommand extends AbstractCommand
 {
@@ -55,6 +55,6 @@ final class ScanClassesCommand extends AbstractCommand
 
         $this->symfonyStyle->success(sprintf('We found %d classes', count($foundClasses)));
 
-        return Shell::CODE_SUCCESS;
+        return ShellCode::SUCCESS;
     }
 }

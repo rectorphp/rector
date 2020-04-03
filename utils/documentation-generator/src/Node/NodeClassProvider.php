@@ -9,7 +9,7 @@ use Nette\Loaders\RobotLoader;
 final class NodeClassProvider
 {
     /**
-     * @return string[]
+     * @return class-string[]
      */
     public function getNodeClasses(): array
     {

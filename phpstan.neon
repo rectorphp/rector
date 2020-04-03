@@ -5,7 +5,6 @@ includes:
     - 'vendor/phpstan/phpstan/conf/bleedingEdge.neon'
 
 parameters:
-#    checkGenericClassInNonGenericObjectType: false
     level: max
 
     # to allow installing with various phsptan versions without reporting old errors here
@@ -24,6 +23,10 @@ parameters:
         - compiler/src
 
     excludes_analyse:
+        - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
+        - 'packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
+
+
         - ci/check_services_in_yaml_configs.php
         - "*/Expected/*"
         # complex printer
@@ -251,3 +254,5 @@ parameters:
         # generics
         - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createClassReflectionFromNode\(\) return type with generic class ReflectionClass does not specify its types\: T#'
         - '#Method Rector\\NodeCollector\\StaticAnalyzer\:\:hasStaticAnnotation\(\) has parameter \$reflectionClass with generic class ReflectionClass but does not specify its types\: T#'
+
+        - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\AnnotationReaderFactory\:\:create\(\) should return Doctrine\\Common\\Annotations\\Reader but returns Doctrine\\Common\\Annotations\\AnnotationReader\|Rector\\DoctrineAnnotationGenerated\\ConstantPreservingAnnotationReader#'

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Rector\Core\Console\Shell;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Php\TypeAnalyzer;
 use Rector\Core\Yaml\YamlPrinter;
@@ -14,6 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Console\ShellCode;
 
 final class ShowCommand extends AbstractCommand
 {
@@ -81,7 +81,7 @@ final class ShowCommand extends AbstractCommand
 
         $this->symfonyStyle->success(sprintf('%d loaded Rectors', count($this->rectors)));
 
-        return Shell::CODE_SUCCESS;
+        return ShellCode::SUCCESS;
     }
 
     /**
