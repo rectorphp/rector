@@ -26,6 +26,10 @@ COPY .docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 COPY composer.json composer.json
 COPY stubs stubs
+
+# This is to make parsing version possible
+COPY .git .git
+
 RUN  composer install --no-dev --optimize-autoloader --prefer-dist
 
 RUN mkdir /tmp/opcache
