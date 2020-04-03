@@ -1,3 +1,0 @@
-/**
-     * @Route({"en": "/en"}, name="homepage")
-     */

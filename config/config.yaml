@@ -9,9 +9,15 @@ imports:
 parameters:
     # processed paths
     paths: []
+    file_extensions:
+        - 'php'
+
+    # exclude
     exclude_paths: []
     exclude_rectors: []
+
     autoload_paths: []
+
     rector_recipe: []
 
     # this helps to separate opened 3rd party code vs private code approach (e.g. use of public constants)
@@ -20,7 +26,7 @@ parameters:
     # lower for performance; higher to prevent bugs with fluent interfaces like https://github.com/rectorphp/rector/issues/1646, or https://github.com/rectorphp/rector/issues/2444
     nested_chain_method_call_limit: 30
 
-    # importing FQN names
+    # importing FQN names; false disables "import_short_classes" and "import_doc_blocks" options bellow
     auto_import_names: false
     # e.g. import \DateTime
     import_short_classes: true
@@ -29,6 +35,3 @@ parameters:
 
     # what PHP version is used for features, composer.json version, then local PHP version is used by default
     php_version_features: null
-
-    file_extensions:
-        - 'php'
