@@ -1,3 +1,11 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\DoctrineOrmTagParser\Fixture;
+
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @ORM\Table(
  *     name="my_entity",
@@ -12,3 +20,6 @@
  * )
  * @ORM\Entity(repositoryClass="App\Repository\MyEntityRepository")
  */
+final class FormattingDoctrineEntity
+{
+}

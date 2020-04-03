@@ -1,3 +1,0 @@
-/**
-     * @Route("/user", name="user_index", host="%test%", methods={"GET"})
-     */

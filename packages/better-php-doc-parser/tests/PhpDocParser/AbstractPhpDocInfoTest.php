@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser;
+namespace Rector\BetterPhpDocParser\Tests\PhpDocParser;
 
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
@@ -41,14 +41,35 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $this->phpDocInfoPrinter = self::$container->get(PhpDocInfoPrinter::class);
     }
 
-    protected function parseFileAndGetFirstNodeOfType(string $filePath, string $type): Node
+    /**
+     * @param class-string $nodeType
+     */
+    protected function doTestPrintedPhpDocInfo(string $filePath, string $nodeType): void
+    {
+        $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($filePath, $nodeType);
+
+        $docComment = $nodeWithPhpDocInfo->getDocComment();
+        if ($docComment === null) {
+            throw new ShouldNotHappenException(sprintf('Doc comments for "%s" file cannot not be empty', $filePath));
+        }
+
+        $originalDocCommentText = $docComment->getText();
+        $printedPhpDocInfo = $this->printNodePhpDocInfoToString($nodeWithPhpDocInfo);
+
+        $this->assertSame($originalDocCommentText, $printedPhpDocInfo);
+    }
+
+    /**
+     * @param class-string $nodeType
+     */
+    private function parseFileAndGetFirstNodeOfType(string $filePath, string $nodeType): Node
     {
         $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate(new SmartFileInfo($filePath));
 
-        return $this->betterNodeFinder->findFirstInstanceOf($nodes, $type);
+        return $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
     }
 
-    protected function printNodePhpDocInfoToString(Node $node): string
+    private function printNodePhpDocInfoToString(Node $node): string
     {
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
