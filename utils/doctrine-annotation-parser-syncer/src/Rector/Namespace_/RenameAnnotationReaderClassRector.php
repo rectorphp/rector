@@ -11,8 +11,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 
-final class RenameAnnotationReaderClassRector extends AbstractRector
+final class RenameAnnotationReaderClassRector extends AbstractRector implements ClassSyncerRectorInterface
 {
     /**
      * @return class-string[]

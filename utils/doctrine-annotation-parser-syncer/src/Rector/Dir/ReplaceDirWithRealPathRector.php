@@ -12,8 +12,9 @@ use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 
-final class ReplaceDirWithRealPathRector extends AbstractRector
+final class ReplaceDirWithRealPathRector extends AbstractRector implements ClassSyncerRectorInterface
 {
     /**
      * @var string

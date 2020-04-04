@@ -15,8 +15,9 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 
-final class RemoveValueChangeFromConstantClassMethodRector extends AbstractRector
+final class RemoveValueChangeFromConstantClassMethodRector extends AbstractRector implements ClassSyncerRectorInterface
 {
     /**
      * @return class-string[]
