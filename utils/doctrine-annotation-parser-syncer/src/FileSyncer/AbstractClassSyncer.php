@@ -9,16 +9,10 @@ use PhpParser\Node;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\ClassSyncerInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractClassSyncer implements ClassSyncerInterface
 {
-    /**
-     * @var SymfonyStyle
-     */
-    protected $symfonyStyle;
-
     /**
      * @var BetterStandardPrinter
      */
@@ -34,12 +28,10 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
      */
     public function autowireAbstractClassSyncer(
         BetterStandardPrinter $betterStandardPrinter,
-        FileInfoParser $fileInfoParser,
-        SymfonyStyle $symfonyStyle
+        FileInfoParser $fileInfoParser
     ): void {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->fileInfoParser = $fileInfoParser;
-        $this->symfonyStyle = $symfonyStyle;
     }
 
     /**
@@ -57,19 +49,36 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
      */
     protected function printNodesToPath(array $nodes): void
     {
-        $printedContent = $this->betterStandardPrinter->prettyPrint($nodes);
-        $printedContent = '<?php' . PHP_EOL . PHP_EOL . $printedContent;
+        $printedContent = $this->printNodesToString($nodes);
 
         FileSystem::write($this->getTargetFilePath(), $printedContent);
     }
 
-    protected function reportChange(): void
+    /**
+     * @param Node[] $nodes
+     */
+    protected function printNodesToString(array $nodes): string
     {
-        $message = sprintf(
-            'Original "%s" was changed and refactored to "%s"',
-            $this->getSourceFilePath(),
-            $this->getTargetFilePath()
-        );
-        $this->symfonyStyle->note($message);
+        $printedContent = $this->betterStandardPrinter->prettyPrint($nodes);
+
+        return '<?php' . PHP_EOL . PHP_EOL . $printedContent;
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    protected function hasContentChanged(array $nodes): bool
+    {
+        $finalContent = $this->printNodesToString($nodes);
+
+        // nothing to validate agains
+        if (! file_exists($this->getTargetFilePath())) {
+            return false;
+        }
+
+        $currentContent = FileSystem::read($this->getTargetFilePath());
+
+        // has content changed
+        return $finalContent !== $currentContent;
     }
 }

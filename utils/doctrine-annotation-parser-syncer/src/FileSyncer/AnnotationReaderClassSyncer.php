@@ -30,13 +30,17 @@ final class AnnotationReaderClassSyncer extends AbstractClassSyncer
         $this->nodeTraverser->addVisitor($assignNewDocParserRector);
     }
 
-    public function sync(): void
+    public function sync(bool $isDryRun): bool
     {
         $nodes = $this->getFileNodes();
         $changedNodes = $this->nodeTraverser->traverse($nodes);
-        $this->printNodesToPath($changedNodes);
 
-        $this->reportChange();
+        if ($isDryRun) {
+            return ! $this->hasContentChanged($nodes);
+        }
+
+        $this->printNodesToPath($changedNodes);
+        return true;
     }
 
     public function getSourceFilePath(): string

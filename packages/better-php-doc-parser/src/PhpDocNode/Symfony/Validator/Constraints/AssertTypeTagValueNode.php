@@ -26,7 +26,12 @@ final class AssertTypeTagValueNode extends AbstractConstraintTagValueNode implem
 
     public function __toString(): string
     {
-        return '(' . $this->type . ')';
+        $contentItems = [];
+        $contentItems['type'] = $this->type;
+
+        $contentItems = $this->appendGroups($contentItems);
+
+        return $this->printContentItems($contentItems);
     }
 
     public function getShortName(): string

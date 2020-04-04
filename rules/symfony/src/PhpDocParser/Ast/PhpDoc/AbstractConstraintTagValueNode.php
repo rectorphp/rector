@@ -28,7 +28,9 @@ abstract class AbstractConstraintTagValueNode extends AbstractTagValueNode
         }
 
         if (count($this->groups) === 1) {
-            $contentItems['groups'] = sprintf('groups=%s', $this->groups[0]);
+            if ($this->groups !== ['Default']) {
+                $contentItems['groups'] = sprintf('groups=%s', $this->groups[0]);
+            }
         } else {
             $contentItems['groups'] = sprintf('groups=%s', $this->printArrayItem($this->groups));
         }

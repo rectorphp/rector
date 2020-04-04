@@ -10,5 +10,5 @@ interface ClassSyncerInterface
 
     public function getTargetFilePath(): string;
 
-    public function sync(): void;
+    public function sync(bool $isDryRun): bool;
 }
