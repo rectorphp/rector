@@ -101,16 +101,13 @@ trait NameResolverTrait
         return $this->isName($node, $name);
     }
 
-    /**
-     * @param class-name $desiredClassName
-     */
     protected function isInClassNamed(Node $node, string $desiredClassName): bool
     {
         return $node->getAttribute(AttributeKey::CLASS_NAME) === $desiredClassName;
     }
 
     /**
-     * @param class-string[] $desiredClassNames
+     * @param string[] $desiredClassNames
      */
     protected function isInClassesNamed(Node $node, array $desiredClassNames): bool
     {

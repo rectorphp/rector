@@ -347,10 +347,6 @@ final class ConstantPreservingDocParser
             self::$metadataParser->setIgnoreNotImportedAnnotations(true);
             self::$metadataParser->setIgnoredAnnotationNames($this->ignoredAnnotationNames);
             self::$metadataParser->setImports(['enum' => 'Doctrine\Common\Annotations\Annotation\Enum', 'target' => 'Doctrine\Common\Annotations\Annotation\Target', 'attribute' => 'Doctrine\Common\Annotations\Annotation\Attribute', 'attributes' => 'Doctrine\Common\Annotations\Annotation\Attributes']);
-            \Doctrine\Common\Annotations\AnnotationRegistry::registerFile(__DIR__ . '/../../../vendor/doctrine/annotations/lib/Doctrine/Common/Annotations' . '/Annotation/Enum.php');
-            \Doctrine\Common\Annotations\AnnotationRegistry::registerFile(__DIR__ . '/../../../vendor/doctrine/annotations/lib/Doctrine/Common/Annotations' . '/Annotation/Target.php');
-            \Doctrine\Common\Annotations\AnnotationRegistry::registerFile(__DIR__ . '/../../../vendor/doctrine/annotations/lib/Doctrine/Common/Annotations' . '/Annotation/Attribute.php');
-            \Doctrine\Common\Annotations\AnnotationRegistry::registerFile(__DIR__ . '/../../../vendor/doctrine/annotations/lib/Doctrine/Common/Annotations' . '/Annotation/Attributes.php');
         }
         $class = new \ReflectionClass($name);
         $docComment = $class->getDocComment();
