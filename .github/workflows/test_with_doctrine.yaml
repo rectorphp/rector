@@ -21,7 +21,6 @@ jobs:
                     # cannot install dev deps (--no-dev), because doctrine/orm might inherit from them in different version
                     composer install --no-progress --no-dev
                     # loads autoload-dev packages as well, there are utils that might be used later
-                    composer dump-autoload
                     git clone https://github.com/doctrine/orm.git
 
                     # older version have breaking "object" type
