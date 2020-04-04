@@ -7,6 +7,7 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -79,6 +80,19 @@ trait NameResolverTrait
         return $this->isName($node, $name);
     }
 
+    protected function isStaticCallNamed(Node $node, string $className, string $methodName): bool
+    {
+        if (! $node instanceof StaticCall) {
+            return false;
+        }
+
+        if (! $this->isName($node->class, $className)) {
+            return false;
+        }
+
+        return $this->isName($node->name, $methodName);
+    }
+
     protected function isMethodCall(Node $node, string $variableName, string $methodName): bool
     {
         if (! $node instanceof MethodCall) {
@@ -89,7 +103,7 @@ trait NameResolverTrait
             return false;
         }
 
-        return (bool) $this->isName($node->name, $methodName);
+        return $this->isName($node->name, $methodName);
     }
 
     protected function isVariableName(?Node $node, string $name): bool

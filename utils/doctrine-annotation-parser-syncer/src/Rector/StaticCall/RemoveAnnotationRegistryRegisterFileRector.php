@@ -39,11 +39,7 @@ final class RemoveAnnotationRegistryRegisterFileRector extends AbstractRector im
             return null;
         }
 
-        if (! $this->isName($node->class, AnnotationRegistry::class)) {
-            return null;
-        }
-
-        if (! $this->isName($node->name, 'registerFile')) {
+        if (! $this->isStaticCallNamed($node, AnnotationRegistry::class, 'registerFile')) {
             return null;
         }
 

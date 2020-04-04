@@ -55,11 +55,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($node->class, 'ReflectionFunction')) {
-            return null;
-        }
-
-        if (! $this->isName($node->name, 'export')) {
+        if (! $this->isStaticCallNamed($node, 'ReflectionFunction', 'export')) {
             return null;
         }
 

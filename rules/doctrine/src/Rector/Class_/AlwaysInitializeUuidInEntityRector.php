@@ -7,7 +7,6 @@ namespace Rector\Doctrine\Rector\Class_;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
@@ -119,18 +118,10 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
                 return false;
             }
 
-            if (! $node->expr instanceof StaticCall) {
+            if (! $this->isStaticCallNamed($node->expr, 'Ramsey\Uuid\Uuid', 'uuid4')) {
                 return false;
             }
 
-            $staticCall = $node->expr;
-            if (! $this->isObjectType($staticCall->class, 'Ramsey\Uuid\Uuid')) {
-                return false;
-            }
-
-            if (! $this->isName($staticCall->name, 'uuid4')) {
-                return false;
-            }
             return $this->isName($node->var, $uuidPropertyName);
         });
     }
