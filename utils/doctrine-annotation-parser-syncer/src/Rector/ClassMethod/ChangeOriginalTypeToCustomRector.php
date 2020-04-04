@@ -11,8 +11,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
+use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 
-final class ChangeOriginalTypeToCustomRector extends AbstractRector
+final class ChangeOriginalTypeToCustomRector extends AbstractRector implements ClassSyncerRectorInterface
 {
     /**
      * @return class-string[]

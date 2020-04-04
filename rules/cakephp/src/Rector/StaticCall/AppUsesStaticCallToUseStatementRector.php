@@ -93,13 +93,9 @@ PHP
         return null;
     }
 
-    private function isAppUses($staticCall): bool
+    private function isAppUses(StaticCall $staticCall): bool
     {
-        if (! $this->isName($staticCall->class, 'App')) {
-            return false;
-        }
-
-        return $this->isName($staticCall->name, 'uses');
+        return $this->isStaticCallNamed($staticCall, 'App', 'uses');
     }
 
     private function createFullyQualifiedNameFromAppUsesStaticCall(StaticCall $staticCall): string

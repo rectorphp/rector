@@ -12,8 +12,9 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
+use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 
-final class AssignNewDocParserRector extends AbstractRector
+final class AssignNewDocParserRector extends AbstractRector implements ClassSyncerRectorInterface
 {
     /**
      * @return class-string[]

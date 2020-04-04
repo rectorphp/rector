@@ -4,33 +4,24 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer;
 
-use PhpParser\NodeTraverser;
-use Rector\Utils\DoctrineAnnotationParserSyncer\Rector\ClassMethod\RemoveValueChangeFromConstantClassMethodRector;
-use Rector\Utils\DoctrineAnnotationParserSyncer\Rector\Dir\ReplaceDirWithRealPathRector;
-use Rector\Utils\DoctrineAnnotationParserSyncer\Rector\Namespace_\RenameDocParserClassRector;
+use Rector\Utils\DoctrineAnnotationParserSyncer\ClassSyncerNodeTraverser;
 
 final class DocParserClassSyncer extends AbstractClassSyncer
 {
     /**
-     * @var NodeTraverser
+     * @var ClassSyncerNodeTraverser
      */
-    private $nodeTraverser;
+    private $classSyncerNodeTraverser;
 
-    public function __construct(
-        RenameDocParserClassRector $renameDocParserClassRector,
-        RemoveValueChangeFromConstantClassMethodRector $removeValueChangeFromConstantClassMethodRector,
-        ReplaceDirWithRealPathRector $replaceDirWithRealPathRector
-    ) {
-        $this->nodeTraverser = new NodeTraverser();
-        $this->nodeTraverser->addVisitor($renameDocParserClassRector);
-        $this->nodeTraverser->addVisitor($removeValueChangeFromConstantClassMethodRector);
-        $this->nodeTraverser->addVisitor($replaceDirWithRealPathRector);
+    public function __construct(ClassSyncerNodeTraverser $classSyncerNodeTraverser)
+    {
+        $this->classSyncerNodeTraverser = $classSyncerNodeTraverser;
     }
 
     public function sync(bool $isDryRun): bool
     {
         $nodes = $this->getFileNodes();
-        $changedNodes = $this->nodeTraverser->traverse($nodes);
+        $changedNodes = $this->classSyncerNodeTraverser->traverse($nodes);
 
         if ($isDryRun) {
             return ! $this->hasContentChanged($nodes);

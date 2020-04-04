@@ -212,10 +212,7 @@ PHP
                 return false;
             }
 
-            if ($this->isName($node->expr->class, 'self')) {
-                return true;
-            }
-            return $this->isName($node->expr->class, 'static');
+            return $this->isNames($node->expr->class, ['self', 'static']);
         });
     }
 }

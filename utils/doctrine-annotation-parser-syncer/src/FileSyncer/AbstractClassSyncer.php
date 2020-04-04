@@ -71,7 +71,7 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
     {
         $finalContent = $this->printNodesToString($nodes);
 
-        // nothing to validate agains
+        // nothing to validate against
         if (! file_exists($this->getTargetFilePath())) {
             return false;
         }

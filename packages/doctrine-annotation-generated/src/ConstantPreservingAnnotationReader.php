@@ -211,7 +211,6 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
         if (extension_loaded('Zend OPcache') && ini_get('opcache.save_comments') == 0) {
             throw \Doctrine\Common\Annotations\AnnotationException::optimizerPlusSaveComments();
         }
-        \Doctrine\Common\Annotations\AnnotationRegistry::registerFile(__DIR__ . '/../../../vendor/doctrine/annotations/lib/Doctrine/Common/Annotations' . '/Annotation/IgnoreAnnotation.php');
         $this->parser = $parser ?: new \Doctrine\Common\Annotations\DocParser();
         $this->preParser = new \Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser();
         $this->preParser->setImports(self::$globalImports);
