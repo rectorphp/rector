@@ -249,7 +249,7 @@ parameters:
 
 ### Import Use Statements
 
-FQN classes are not imported by default. If you don't to do do it manually after every Rector run, enable it by:
+FQN classes are not imported by default. If you don't want to do it manually after every Rector run, enable it by:
 
 ```yaml
 # rector.yaml
