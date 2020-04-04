@@ -101,11 +101,26 @@ trait NameResolverTrait
         return $this->isName($node, $name);
     }
 
-    protected function isInClassNamed(Node $node, string $name): bool
+    /**
+     * @param class-name $desiredClassName
+     */
+    protected function isInClassNamed(Node $node, string $desiredClassName): bool
     {
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        return $node->getAttribute(AttributeKey::CLASS_NAME) === $desiredClassName;
+    }
 
-        return $className === $name;
+    /**
+     * @param class-string[] $desiredClassNames
+     */
+    protected function isInClassesNamed(Node $node, array $desiredClassNames): bool
+    {
+        foreach ($desiredClassNames as $desiredClassName) {
+            if ($this->isInClassNamed($node, $desiredClassName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
