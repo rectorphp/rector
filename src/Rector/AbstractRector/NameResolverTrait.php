@@ -12,6 +12,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -98,6 +99,13 @@ trait NameResolverTrait
         }
 
         return $this->isName($node, $name);
+    }
+
+    protected function isInClassNamed(Node $node, string $name): bool
+    {
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+
+        return $className === $name;
     }
 
     /**

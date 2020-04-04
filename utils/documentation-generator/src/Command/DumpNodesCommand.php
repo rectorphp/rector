@@ -96,7 +96,6 @@ use PhpParser\Node\Stmt\While_;
 use PhpParser\Node\UnionType;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\Console\Command\AbstractCommand;
-use Rector\Core\Console\Shell;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Utils\DocumentationGenerator\Node\NodeClassProvider;
@@ -108,6 +107,7 @@ use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Console\ShellCode;
 
 final class DumpNodesCommand extends AbstractCommand
 {
@@ -411,7 +411,7 @@ final class DumpNodesCommand extends AbstractCommand
 
         $this->markdownDumpNodesOutputFormatter->format($this->nodeInfoResult);
 
-        return Shell::CODE_SUCCESS;
+        return ShellCode::SUCCESS;
     }
 
     private function resolveCategoryByNodeClass(string $nodeClass): string

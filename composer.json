@@ -68,6 +68,7 @@
             "Rector\\DoctrineGedmoToKnplabs\\": "rules/doctrine-gedmo-to-knplabs/src",
             "Rector\\Doctrine\\": "rules/doctrine/src",
             "Rector\\DynamicTypeAnalysis\\": "packages/dynamic-type-analysis/src",
+            "Rector\\DoctrineAnnotationGenerated\\": "packages/doctrine-annotation-generated/src",
             "Rector\\ElasticSearchDSL\\": "rules/elastic-search-dsl/src",
             "Rector\\FileSystemRector\\": "packages/file-system-rector/src",
             "Rector\\FrameworkMigration\\": "rules/framework-migration/src",
@@ -192,6 +193,7 @@
             "Rector\\TypeDeclaration\\Tests\\": "rules/type-declaration/tests",
             "Rector\\Utils\\DocumentationGenerator\\": "utils/documentation-generator/src",
             "Rector\\Utils\\ProjectValidator\\": "utils/project-validator/src",
+            "Rector\\Utils\\DoctrineAnnotationParserSyncer\\": "utils/doctrine-annotation-parser-syncer/src",
             "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/phpstan-attribute-type-syncer/src",
             "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/phpstan-static-type-mapper-checker/src",
             "Rector\\ZendToSymfony\\Tests\\": "rules/zend-to-symfony/tests"

@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\TypeUtils;
-use Rector\Core\Console\Shell;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\Parser\FileInfoParser;
@@ -31,6 +30,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ScreenFileCommand extends AbstractCommand
@@ -120,7 +120,7 @@ final class ScreenFileCommand extends AbstractCommand
         // 4. print decorated nodes to output/file
         $this->outputDecoratedFileContent($nodes, $smartFileInfo);
 
-        return Shell::CODE_SUCCESS;
+        return ShellCode::SUCCESS;
     }
 
     /**

@@ -9,6 +9,9 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AbstractConstraintTagValueNode;
 
+/**
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyValidation\AssertChoiceTagValueNodeTest
+ */
 final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface
 {
     /**
@@ -22,35 +25,32 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode impl
     private $strict;
 
     /**
-     * @var array|null
+     * @var mixed[]|string|null
      */
     private $choices;
 
     /**
-     * @var string|null
-     */
-    private $originalChoiceContent;
-
-    /**
      * @var bool
      */
-    private $hasChoiceKeywordExplicit = false;
+    private $isChoicesExplicit = true;
 
     /**
      * @param mixed[]|string|null $callback
+     * @param mixed[]|string|null $choices
      */
-    public function __construct($callback, ?bool $strict, string $annotationContent, ?array $choices)
+    public function __construct($groups, $callback, ?bool $strict, ?string $originalContent, $choices)
     {
         $this->callback = $callback;
         $this->strict = $strict;
-        $this->resolveOriginalContentSpacingAndOrder($annotationContent);
         $this->choices = $choices;
 
-        // is default key
-        $this->hasChoiceKeywordExplicit = (bool) Strings::match($annotationContent, '#choices=#');
+        if ($originalContent !== null) {
+            $this->isChoicesExplicit = (bool) Strings::contains($originalContent, 'choices=');
+        }
 
-        // hotfix for https://github.com/rectorphp/rector/issues/3044, the constant reference is actually parsed to values
-        $this->originalChoiceContent = $this->resolveOriginalChoiceContent($annotationContent);
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
+
+        parent::__construct($groups);
     }
 
     public function __toString(): string
@@ -71,6 +71,8 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode impl
             $contentItems['strict'] = sprintf('strict=%s', $this->strict ? 'true' : 'false');
         }
 
+        $contentItems = $this->appendGroups($contentItems);
+
         return $this->printContentItems($contentItems);
     }
 
@@ -89,40 +91,19 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode impl
         return '@Assert\Choice';
     }
 
-    private function isClassConstantReference(?string $originalChoiceContent): bool
-    {
-        if ($originalChoiceContent === null) {
-            return false;
-        }
-
-        return Strings::contains($originalChoiceContent, '::');
-    }
-
-    private function createOriginalChoiceContent()
-    {
-        $content = '';
-        if ($this->hasChoiceKeywordExplicit) {
-            $content = 'choices=';
-        }
-
-        return $content . $this->originalChoiceContent;
-    }
-
-    private function resolveOriginalChoiceContent(string $annotationContent): ?string
-    {
-        $matches = Strings::match($annotationContent, '#(\(choices=|\()(?<choice_content>.*?(})?)(\)|})#ms');
-
-        return $matches['choice_content'] ?? null;
-    }
-
     private function createChoices(): string
     {
-        if ($this->isClassConstantReference($this->originalChoiceContent)) {
-            return $this->createOriginalChoiceContent();
+        $content = '';
+        if ($this->isChoicesExplicit) {
+            $content .= 'choices=';
+        }
+
+        if (is_string($this->choices)) {
+            return $content . $this->choices;
         }
 
         assert(is_array($this->choices));
 
-        return $this->printArrayItem($this->choices);
+        return $content . $this->printArrayItem($this->choices);
     }
 }

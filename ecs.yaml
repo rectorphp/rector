@@ -49,6 +49,9 @@ parameters:
         # exclude
         - 'src/Rector/AbstractRector.php'
         - 'src/PhpParser/BetterNodeDumper.php'
+        # generated
+        - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
+        - 'packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
 
     skip:
         # rather useless
@@ -99,7 +102,6 @@ parameters:
             - "rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php"
 
             - 'packages/better-php-doc-parser/src/PhpDocNode/**/*TagValueNode.php'
-#
             - "rules/coding-style/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php"
 
             # per node logic

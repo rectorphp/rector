@@ -6,7 +6,10 @@ namespace Rector\BetterPhpDocParser\AnnotationReader;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\Annotations\Reader;
+use Rector\DoctrineAnnotationGenerated\ConstantPreservingAnnotationReader;
+use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
 
 final class AnnotationReaderFactory
 {
@@ -42,7 +45,16 @@ final class AnnotationReaderFactory
     {
         AnnotationRegistry::registerLoader('class_exists');
 
-        $annotationReader = new AnnotationReader();
+        // generated
+        if (class_exists(ConstantPreservingAnnotationReader::class) && class_exists(
+            ConstantPreservingDocParser::class
+        )) {
+            $docParser = new ConstantPreservingDocParser();
+            $annotationReader = new ConstantPreservingAnnotationReader($docParser);
+        } else {
+            // fallback for testing incompatibilities
+            $annotationReader = new AnnotationReader(new DocParser());
+        }
 
         // without this the reader will try to resolve them and fails with an exception
         // don't forget to add it to "stubs/Doctrine/Empty" directory, because the class needs to exists

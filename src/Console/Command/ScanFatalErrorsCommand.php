@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\Console\Command;
 
 use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Shell;
 use Rector\Core\Scan\ErrorScanner;
 use Rector\Core\Scan\ScannedErrorToRectorResolver;
 use Rector\Core\Yaml\YamlPrinter;
@@ -103,6 +102,6 @@ final class ScanFatalErrorsCommand extends AbstractCommand
             self::RECTOR_TYPES_YAML
         ));
 
-        return Shell::CODE_SUCCESS;
+        return ShellCode::SUCCESS;
     }
 }

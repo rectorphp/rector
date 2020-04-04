@@ -1,0 +1,22 @@
+# related PR: https://github.com/rectorphp/rector/pull/3134
+name: Validate Doctine Annotation
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    validate_doctrine_annotation:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.4
+                    coverage: none # disable xdebug, pcov
+                    extensions: "intl"
+            -   run: composer install --no-progress
+            -   run: |
+                    bin/rector sync-annotation-parser --dry-run

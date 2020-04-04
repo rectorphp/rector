@@ -6,7 +6,6 @@ namespace Rector\Utils\PHPStanAttributeTypeSyncer\Command;
 
 use Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactoryCollector;
 use Rector\Core\Console\Command\AbstractCommand;
-use Rector\Core\Console\Shell;
 use Rector\Utils\PHPStanAttributeTypeSyncer\Finder\NodeClassFinder;
 use Rector\Utils\PHPStanAttributeTypeSyncer\Generator\AttributeAwareNodeFactoryGenerator;
 use Rector\Utils\PHPStanAttributeTypeSyncer\Generator\AttributeAwareNodeGenerator;
@@ -14,6 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Console\ShellCode;
 
 final class SyncTypesCommand extends AbstractCommand
 {
@@ -72,7 +72,7 @@ final class SyncTypesCommand extends AbstractCommand
                 'All PHPStan Doc Parser nodes are covered with attribute aware mirror in Rector'
             );
 
-            return Shell::CODE_SUCCESS;
+            return ShellCode::SUCCESS;
         }
 
         $this->symfonyStyle->error('These classes are missing their attribute aware brother');
@@ -85,7 +85,7 @@ final class SyncTypesCommand extends AbstractCommand
             $this->attributeAwareNodeFactoryGenerator->generateFromPhpDocParserNodeClass($missingNodeClass);
         }
 
-        return Shell::CODE_ERROR;
+        return ShellCode::SUCCESS;
     }
 
     /**

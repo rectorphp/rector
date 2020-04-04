@@ -25,7 +25,13 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         }
 
         if ($shouldDeleteOriginalFile) {
-            $this->assertFileNotExists($temporaryFilePath);
+            // PHPUnit 9.0 ready
+            if (method_exists($this, 'assertFileDoesNotExist')) {
+                $this->assertFileDoesNotExist($temporaryFilePath);
+            } else {
+                // PHPUnit 8.0 ready
+                $this->assertFileNotExists($temporaryFilePath);
+            }
         }
     }
 
