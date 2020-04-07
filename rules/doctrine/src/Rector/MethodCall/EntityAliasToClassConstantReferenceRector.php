@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Doctrine\Rector\MethodCall;
 
+use Doctrine\Common\Persistence\ObjectManager as DeprecatedObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -61,7 +63,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, EntityManagerInterface::class)) {
+        if (! $this->isObjectTypes(
+            $node->var,
+            [EntityManagerInterface::class, ObjectManager::class, DeprecatedObjectManager::class]
+        )) {
             return null;
         }
 

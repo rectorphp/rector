@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Common\Persistence;
+namespace Doctrine\Persistence;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-if (class_exists('Doctrine\Common\Persistence\ManagerRegistry')) {
+if (class_exists('Doctrine\Persistence\ManagerRegistry')) {
     return;
 }
 
