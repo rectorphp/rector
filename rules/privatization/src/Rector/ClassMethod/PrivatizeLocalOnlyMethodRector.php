@@ -5,21 +5,16 @@ declare(strict_types=1);
 namespace Rector\Privatization\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\TypeWithClassName;
 use PHPUnit\Framework\TestCase;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
-use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeAnalyzer\ClassMethodExternalCallNodeAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodVisibilityVendorLockResolver;
-use ReflectionMethod;
 
 /**
  * @see \Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\PrivatizeLocalOnlyMethodRectorTest
@@ -27,21 +22,21 @@ use ReflectionMethod;
 final class PrivatizeLocalOnlyMethodRector extends AbstractRector
 {
     /**
-     * @var MethodCallParsedNodesFinder
-     */
-    private $methodCallParsedNodesFinder;
-
-    /**
      * @var ClassMethodVisibilityVendorLockResolver
      */
     private $classMethodVisibilityVendorLockResolver;
 
+    /**
+     * @var ClassMethodExternalCallNodeAnalyzer
+     */
+    private $classMethodExternalCallNodeAnalyzer;
+
     public function __construct(
-        MethodCallParsedNodesFinder $methodCallParsedNodesFinder,
-        ClassMethodVisibilityVendorLockResolver $classMethodVisibilityVendorLockResolver
+        ClassMethodVisibilityVendorLockResolver $classMethodVisibilityVendorLockResolver,
+        ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer
     ) {
-        $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
         $this->classMethodVisibilityVendorLockResolver = $classMethodVisibilityVendorLockResolver;
+        $this->classMethodExternalCallNodeAnalyzer = $classMethodExternalCallNodeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -103,7 +98,7 @@ PHP
             return null;
         }
 
-        if ($this->hasExternalCall($node)) {
+        if ($this->classMethodExternalCallNodeAnalyzer->hasExternalCall($node)) {
             return null;
         }
 
@@ -146,50 +141,7 @@ PHP
             return false;
         }
 
-        if ($phpDocInfo->hasByName('api')) {
-            return true;
-        }
-
-        return $phpDocInfo->hasByName('required');
-    }
-
-    private function hasExternalCall(ClassMethod $classMethod): bool
-    {
-        $methodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($classMethod);
-        $methodName = $this->getName($classMethod);
-
-        if ($this->isArrayCallable($classMethod, $methodCalls, $methodName)) {
-            return true;
-        }
-
-        // remove static calls and [$this, 'call']
-        /** @var MethodCall[] $methodCalls */
-        $methodCalls = array_filter($methodCalls, function (object $node) {
-            return $node instanceof MethodCall;
-        });
-
-        foreach ($methodCalls as $methodCall) {
-            $callerType = $this->getStaticType($methodCall->var);
-            if (! $callerType instanceof TypeWithClassName) {
-                // unable to handle reliably
-                return true;
-            }
-
-            // external call
-            $nodeClassName = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
-            if ($nodeClassName !== $callerType->getClassName()) {
-                return true;
-            }
-
-            // parent class name, must be at least protected
-            $methodName = $this->getName($classMethod);
-            $reflectionMethod = new ReflectionMethod($nodeClassName, $methodName);
-            if ($reflectionMethod->getDeclaringClass()->getName() !== $nodeClassName) {
-                return true;
-            }
-        }
-
-        return false;
+        return $phpDocInfo->hasByNames(['api', 'required']);
     }
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
@@ -213,25 +165,5 @@ PHP
 
         // possibly container service factories
         return $this->isNames($classMethod, ['create', 'create*']);
-    }
-
-    /**
-     * @param StaticCall[]|MethodCall[]|ArrayCallable[] $methodCalls
-     */
-    private function isArrayCallable(ClassMethod $classMethod, array $methodCalls, ?string $methodName): bool
-    {
-        /** @var ArrayCallable[] $arrayCallables */
-        $arrayCallables = array_filter($methodCalls, function (object $node) {
-            return $node instanceof ArrayCallable;
-        });
-
-        foreach ($arrayCallables as $arrayCallable) {
-            $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-            if ($className === $arrayCallable->getClass() && $methodName === $arrayCallable->getMethod()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
