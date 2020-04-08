@@ -12,7 +12,9 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\MixedType;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class UselessIfCondBeforeForeachDetector
 {
@@ -21,9 +23,15 @@ final class UselessIfCondBeforeForeachDetector
      */
     private $betterStandardPrinter;
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, NodeTypeResolver $nodeTypeResolver)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
@@ -44,7 +52,14 @@ final class UselessIfCondBeforeForeachDetector
         /** @var Empty_ $empty */
         $empty = $cond->expr;
 
-        return $this->betterStandardPrinter->areNodesEqual($empty->expr, $foreachExpr);
+        if (! $this->betterStandardPrinter->areNodesEqual($empty->expr, $foreachExpr)) {
+            return false;
+        }
+
+        // is array though?
+        $arrayType = $this->nodeTypeResolver->resolve($empty->expr);
+
+        return ! $arrayType instanceof MixedType;
     }
 
     /**
