@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\Property\PrivatizeLocalOnlyMethodRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector\Fixture;
 
 class SkipClassExtended extends AbstractParentClass
 {
