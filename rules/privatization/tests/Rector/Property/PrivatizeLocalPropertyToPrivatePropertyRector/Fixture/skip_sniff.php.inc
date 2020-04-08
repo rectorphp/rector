@@ -1,29 +1,37 @@
 <?php
 
-namespace Rector\Privatization\Tests\Rector\Property\PrivatizeLocalOnlyMethodRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector\Fixture;
 
-class SkipExternalFetch
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
+
+final class SkipSniff implements Sniff
 {
-    /**
-     * @var ExternalClass
-     */
-    private $externalClass;
+    public $sniffConfigProperty;
 
-    public function __construct(ExternalClass $externalClass)
+    public function shouldSkip(string $methodName, string $className): bool
     {
-        $this->externalClass = $externalClass;
+        // not really a setter, but usually test "setup" method
+        if ($methodName === 'setUp') {
+            return true;
+        }
+
+        foreach ($this->sniffConfigProperty as $allowedClass) {
+            if (fnmatch($allowedClass, $className, FNM_NOESCAPE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    /**
-     * @api
-     */
-    public function run()
+    public function register()
     {
-        $this->externalClass->externalProperty;
+        // TODO: Implement register() method.
     }
-}
 
-class ExternalClass
-{
-    public $externalProperty;
+    public function process(File $phpcsFile, $stackPtr)
+    {
+        // TODO: Implement process() method.
+    }
 }
