@@ -7,7 +7,6 @@ namespace Rector\Php70\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use PHPUnit\Framework\TestCase;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -86,7 +85,7 @@ PHP
             return null;
         }
 
-        if ($this->isObjectType($node->var, TestCase::class)) {
+        if ($this->isObjectType($node->var, 'PHPUnit\Framework\TestCase')) {
             return null;
         }
 
