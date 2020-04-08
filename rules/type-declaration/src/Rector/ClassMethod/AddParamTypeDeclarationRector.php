@@ -140,14 +140,16 @@ PHP
         return ! (bool) $class->extends;
     }
 
-    private function refactorClassMethodWithTypehintByParameterPosition(Node $node, $typehintByParameterPosition): void
-    {
+    private function refactorClassMethodWithTypehintByParameterPosition(
+        ClassMethod $classMethod,
+        $typehintByParameterPosition
+    ): void {
         foreach ($typehintByParameterPosition as $parameterPosition => $type) {
-            if (! isset($node->params[$parameterPosition])) {
+            if (! isset($classMethod->params[$parameterPosition])) {
                 continue;
             }
 
-            $parameter = $node->params[$parameterPosition];
+            $parameter = $classMethod->params[$parameterPosition];
             $this->refactorParameter($parameter, $type);
         }
     }
