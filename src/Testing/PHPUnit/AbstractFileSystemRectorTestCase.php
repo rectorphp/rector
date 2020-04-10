@@ -109,7 +109,13 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
 
         FileSystem::write($configFileTempPath, $yamlContent);
 
-        $this->bootKernelWithConfigs(RectorKernel::class, [$configFileTempPath]);
+        // for 3rd party testing with services defined in configs
+        $configFilePaths = [$configFileTempPath];
+        if ($this->provideConfig() !== '') {
+            $configFilePaths[] = $this->provideConfig();
+        }
+
+        $this->bootKernelWithConfigs(RectorKernel::class, $configFilePaths);
     }
 
     private function createConfigFileTempPath(): string
