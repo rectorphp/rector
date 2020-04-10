@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Doctrine\Rector\MethodCall;
 
+use Doctrine\Common\Persistence\ManagerRegistry as DeprecatedManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager as DeprecatedObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -20,6 +22,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class EntityAliasToClassConstantReferenceRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_OBJECT_TYPES = [
+        EntityManagerInterface::class,
+        ObjectManager::class,
+        DeprecatedObjectManager::class,
+        ManagerRegistry::class,
+        DeprecatedManagerRegistry::class,
+    ];
+
     /**
      * @var string[]
      */
@@ -63,10 +76,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectTypes(
-            $node->var,
-            [EntityManagerInterface::class, ObjectManager::class, DeprecatedObjectManager::class]
-        )) {
+        if (! $this->isObjectTypes($node->var, self::ALLOWED_OBJECT_TYPES)) {
             return null;
         }
 
