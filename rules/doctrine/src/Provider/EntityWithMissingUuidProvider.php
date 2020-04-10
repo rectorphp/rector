@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -34,11 +33,6 @@ final class EntityWithMissingUuidProvider
     private $doctrineDocBlockResolver;
 
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -46,12 +40,10 @@ final class EntityWithMissingUuidProvider
     public function __construct(
         ParsedNodeCollector $parsedNodeCollector,
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
-        ClassManipulator $classManipulator,
         NodeNameResolver $nodeNameResolver
     ) {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
-        $this->classManipulator = $classManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -71,7 +63,7 @@ final class EntityWithMissingUuidProvider
             }
 
             // already has $uuid property
-            if ($this->classManipulator->getProperty($class, 'uuid') !== null) {
+            if ($class->getProperty('uuid') !== null) {
                 continue;
             }
 
