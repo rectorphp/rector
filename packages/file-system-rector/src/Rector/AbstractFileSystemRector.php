@@ -17,6 +17,7 @@ use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use Rector\PostRector\Application\PostFileProcessor;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use TypeError;
@@ -71,6 +72,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     private $parserFactory;
 
     /**
+     * @var PostFileProcessor
+     */
+    private $postFileProcessor;
+
+    /**
      * @required
      */
     public function autowireAbstractFileSystemRector(
@@ -82,7 +88,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         Configuration $configuration,
         BetterStandardPrinter $betterStandardPrinter,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        PostFileProcessor $postFileProcessor
     ): void {
         $this->parser = $parser;
         $this->parserFactory = $parserFactory;
@@ -93,6 +100,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->configuration = $configuration;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parameterProvider = $parameterProvider;
+        $this->postFileProcessor = $postFileProcessor;
     }
 
     /**
@@ -125,6 +133,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function printNodesToFilePath(array $nodes, string $fileDestination): void
     {
+        $nodes = $this->postFileProcessor->traverse($nodes);
+
         $fileContent = $this->formatPerservingPrinter->printToString(
             $nodes,
             $this->oldStmts,
@@ -139,6 +149,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function printNewNodesToFilePath(array $nodes, string $fileDestination): void
     {
+        $nodes = $this->postFileProcessor->traverse($nodes);
+
         // 1. if nodes are the same, prefer format preserving printer
         try {
             $dummyLexer = new Lexer();
