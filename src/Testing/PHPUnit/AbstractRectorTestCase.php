@@ -124,12 +124,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->autoloadTestFixture = true;
     }
 
-    protected function provideConfig(): string
-    {
-        // can be implemented
-        return '';
-    }
-
     protected function doTestFile(string $file): void
     {
         $smartFileInfo = new SmartFileInfo($file);

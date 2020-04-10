@@ -34,6 +34,12 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         return '';
     }
 
+    protected function provideConfig(): string
+    {
+        // can be implemented
+        return '';
+    }
+
     /**
      * @return array<string, mixed[]>
      */
