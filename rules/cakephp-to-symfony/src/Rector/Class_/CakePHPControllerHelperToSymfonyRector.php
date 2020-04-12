@@ -7,7 +7,6 @@ namespace Rector\CakePHPToSymfony\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -125,13 +124,6 @@ PHP
             return false;
         }
 
-        if (! $node->var instanceof PropertyFetch) {
-            return false;
-        }
-
-        if (! $this->isName($node->var->var, 'this')) {
-            return false;
-        }
-        return $this->isName($node->var->name, 'Flash');
+        return $this->isLocalPropertyFetchName($node->var, 'Flash');
     }
 }

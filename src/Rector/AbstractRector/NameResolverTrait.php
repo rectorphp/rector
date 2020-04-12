@@ -7,6 +7,7 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -69,6 +70,19 @@ trait NameResolverTrait
     protected function getShortName($name): string
     {
         return $this->classNaming->getShortName($name);
+    }
+
+    protected function isLocalPropertyFetchName(Node $node, string $name): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        if (! $this->isName($node->var, 'this')) {
+            return false;
+        }
+
+        return $this->isName($node->name, $name);
     }
 
     protected function isFuncCallName(Node $node, string $name): bool
