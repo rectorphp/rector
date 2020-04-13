@@ -256,3 +256,9 @@ parameters:
         - '#Method Rector\\NodeCollector\\StaticAnalyzer\:\:hasStaticAnnotation\(\) has parameter \$reflectionClass with generic class ReflectionClass but does not specify its types\: T#'
 
         - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\AnnotationReaderFactory\:\:create\(\) should return Doctrine\\Common\\Annotations\\Reader but returns Doctrine\\Common\\Annotations\\AnnotationReader\|Rector\\DoctrineAnnotationGenerated\\ConstantPreservingAnnotationReader#'
+
+        # mixed
+        - '#Property Rector\\Polyfill\\ValueObject\\BinaryToVersionCompareCondition\:\:\$expectedValue has no typehint specified#'
+        # node finder
+        - '#Method Rector\\Core\\PhpParser\\Node\\Manipulator\\MethodCallManipulator\:\:findAssignToVariableName\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
+

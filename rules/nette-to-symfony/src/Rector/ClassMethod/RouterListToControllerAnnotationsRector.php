@@ -179,8 +179,7 @@ PHP
     {
         // look for <...>[] = IRoute<Type>
 
-        /** @var Assign[] $assings */
-        $assings = $this->betterNodeFinder->find($classMethod->stmts, function (Node $node): bool {
+        return $this->betterNodeFinder->find($classMethod->stmts, function (Node $node): bool {
             if (! $node instanceof Assign) {
                 return false;
             }
@@ -201,8 +200,6 @@ PHP
 
             return false;
         });
-
-        return $assings;
     }
 
     /**
