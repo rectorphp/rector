@@ -64,7 +64,6 @@ final class ClassUnusedPrivateClassMethodResolver
         $unusedMethods = array_diff($classPublicMethodNames, $usedMethodNames);
 
         $unusedMethods = $this->filterOutSystemMethods($unusedMethods);
-
         $unusedMethods = $this->filterOutInterfaceRequiredMethods($class, $unusedMethods);
 
         return $this->filterOutParentAbstractMethods($class, $unusedMethods);

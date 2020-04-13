@@ -13,6 +13,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\DeadCode\ScopeNesting\ParentScopeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -33,14 +34,21 @@ final class PregMatchTypeCorrector
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var ParentScopeFinder
+     */
+    private $parentScopeFinder;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         NodeNameResolver $nodeNameResolver,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        ParentScopeFinder $parentScopeFinder
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->parentScopeFinder = $parentScopeFinder;
     }
 
     /**
@@ -93,8 +101,7 @@ final class PregMatchTypeCorrector
      */
     private function getVariableUsages(Variable $variable): array
     {
-        $scope = $this->getScopeNode($variable);
-
+        $scope = $this->parentScopeFinder->find($variable);
         if ($scope === null) {
             return [];
         }
@@ -102,12 +109,5 @@ final class PregMatchTypeCorrector
         return $this->betterNodeFinder->find((array) $scope->stmts, function (Node $node) use ($variable): bool {
             return $node instanceof Variable && $node->name === $variable->name;
         });
-    }
-
-    private function getScopeNode(Node $node): ?Node
-    {
-        return $node->getAttribute(AttributeKey::METHOD_NODE)
-            ?? $node->getAttribute(AttributeKey::FUNCTION_NODE)
-            ?? $node->getAttribute(AttributeKey::NAMESPACE_NODE);
     }
 }

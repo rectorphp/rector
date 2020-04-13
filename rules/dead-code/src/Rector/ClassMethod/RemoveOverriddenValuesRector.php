@@ -12,8 +12,8 @@ use Rector\Core\Context\ContextAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DeadCode\Data\VariableNodeUseInfo;
-use Rector\DeadCode\FlowOfControlLocator;
+use Rector\DeadCode\ScopeNesting\FlowOfControlLocator;
+use Rector\DeadCode\ValueObject\VariableNodeUse;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -180,7 +180,7 @@ PHP
     /**
      * @param Variable[] $assignedVariables
      * @param Variable[] $assignedVariablesUse
-     * @return VariableNodeUseInfo[]
+     * @return VariableNodeUse[]
      */
     private function collectNodesByTypeAndPosition(
         array $assignedVariables,
@@ -199,10 +199,13 @@ PHP
             $assignNode = $assignedVariable->getAttribute(AttributeKey::PARENT_NODE);
             $nestingHash = $this->flowOfControlLocator->resolveNestingHashFromFunctionLike($functionLike, $assignNode);
 
-            $nodesByTypeAndPosition[] = new VariableNodeUseInfo(
+            /** @var string $variableName */
+            $variableName = $this->getName($assignedVariable);
+
+            $nodesByTypeAndPosition[] = new VariableNodeUse(
                 $startTokenPos,
-                $this->getName($assignedVariable),
-                VariableNodeUseInfo::TYPE_ASSIGN,
+                $variableName,
+                VariableNodeUse::TYPE_ASSIGN,
                 $assignedVariable,
                 $nestingHash
             );
@@ -212,10 +215,13 @@ PHP
             /** @var int $startTokenPos */
             $startTokenPos = $assignedVariableUse->getAttribute(AttributeKey::START_TOKEN_POSITION);
 
-            $nodesByTypeAndPosition[] = new VariableNodeUseInfo(
+            /** @var string $variableName */
+            $variableName = $this->getName($assignedVariableUse);
+
+            $nodesByTypeAndPosition[] = new VariableNodeUse(
                 $startTokenPos,
-                $this->getName($assignedVariableUse),
-                VariableNodeUseInfo::TYPE_USE,
+                $variableName,
+                VariableNodeUse::TYPE_USE,
                 $assignedVariableUse
             );
         }
@@ -223,11 +229,8 @@ PHP
         // sort
         usort(
             $nodesByTypeAndPosition,
-            function (
-                VariableNodeUseInfo $firstVariableNodeUseInfo,
-                VariableNodeUseInfo $secondVariableNodeUseInfo
-            ): int {
-                return $firstVariableNodeUseInfo->getStartTokenPosition() <=> $secondVariableNodeUseInfo->getStartTokenPosition();
+            function (VariableNodeUse $firstVariableNodeUse, VariableNodeUse $secondVariableNodeUse): int {
+                return $firstVariableNodeUse->getStartTokenPosition() <=> $secondVariableNodeUse->getStartTokenPosition();
             }
         );
 
@@ -236,7 +239,7 @@ PHP
 
     /**
      * @param string[] $assignedVariableNames
-     * @param VariableNodeUseInfo[] $nodesByTypeAndPosition
+     * @param VariableNodeUse[] $nodesByTypeAndPosition
      * @return Node[]
      */
     private function resolveNodesToRemove(array $assignedVariableNames, array $nodesByTypeAndPosition): array
@@ -244,7 +247,7 @@ PHP
         $nodesToRemove = [];
 
         foreach ($assignedVariableNames as $assignedVariableName) {
-            /** @var VariableNodeUseInfo|null $previousNode */
+            /** @var VariableNodeUse|null $previousNode */
             $previousNode = null;
 
             foreach ($nodesByTypeAndPosition as $nodeByTypeAndPosition) {
@@ -257,6 +260,7 @@ PHP
 
                 // instant override → remove
                 } elseif ($this->shouldRemoveAssignNode($previousNode, $nodeByTypeAndPosition)) {
+                    /** @var VariableNodeUse $previousNode */
                     $nodesToRemove[] = $previousNode->getParentNode();
                 }
 
@@ -268,31 +272,31 @@ PHP
     }
 
     private function isAssignNodeUsed(
-        ?VariableNodeUseInfo $previousNode,
-        VariableNodeUseInfo $nodeByTypeAndPosition
+        ?VariableNodeUse $previousNode,
+        VariableNodeUse $nodeByTypeAndPosition
     ): bool {
         // this node was just used, skip to next one
         if ($previousNode === null) {
             return false;
         }
 
-        if (! $previousNode->isType(VariableNodeUseInfo::TYPE_ASSIGN)) {
+        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN)) {
             return false;
         }
 
-        return $nodeByTypeAndPosition->isType(VariableNodeUseInfo::TYPE_USE);
+        return $nodeByTypeAndPosition->isType(VariableNodeUse::TYPE_USE);
     }
 
     private function shouldRemoveAssignNode(
-        ?VariableNodeUseInfo $previousNode,
-        VariableNodeUseInfo $nodeByTypeAndPosition
+        ?VariableNodeUse $previousNode,
+        VariableNodeUse $nodeByTypeAndPosition
     ): bool {
         if ($previousNode === null) {
             return false;
         }
 
-        if (! $previousNode->isType(VariableNodeUseInfo::TYPE_ASSIGN) || ! $nodeByTypeAndPosition->isType(
-            VariableNodeUseInfo::TYPE_ASSIGN
+        if (! $previousNode->isType(VariableNodeUse::TYPE_ASSIGN) || ! $nodeByTypeAndPosition->isType(
+            VariableNodeUse::TYPE_ASSIGN
         )) {
             return false;
         }

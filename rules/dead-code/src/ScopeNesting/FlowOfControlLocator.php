@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode;
+namespace Rector\DeadCode\ScopeNesting;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
