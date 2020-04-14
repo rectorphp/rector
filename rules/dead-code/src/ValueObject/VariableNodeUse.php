@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Data;
+namespace Rector\DeadCode\ValueObject;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class VariableNodeUseInfo
+final class VariableNodeUse
 {
     /**
      * @var string

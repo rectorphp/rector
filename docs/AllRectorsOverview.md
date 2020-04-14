@@ -1,4 +1,4 @@
-# All 482 Rectors Overview
+# All 483 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2995,6 +2995,32 @@ Remove unreachable statements
          return 5;
 -
 -        $removeMe = 10;
+     }
+ }
+```
+
+<br>
+
+### `RemoveUnusedAssignVariableRector`
+
+- class: [`Rector\DeadCode\Rector\Assign\RemoveUnusedAssignVariableRector`](/../master/rules/dead-code/src/Rector/Assign/RemoveUnusedAssignVariableRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/Assign/RemoveUnusedAssignVariableRector/Fixture)
+
+Remove assigned unused variable
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = $this->process();
++        $this->process();
+     }
+
+     public function process()
+     {
+         // something going on
+         return 5;
      }
  }
 ```

@@ -95,10 +95,6 @@ parameters:
         # node finder
         - '#Method Rector\\(.*?) should return array<PhpParser\\Node\\(.*?)> but returns array<PhpParser\\Node\>#'
 
-        # known values
-        - '#Parameter \#2 \$variableName of class Rector\\DeadCode\\Data\\VariableNodeUseInfo constructor expects string, string\|null given#'
-        - '#Cannot call method getParentNode\(\) on Rector\\DeadCode\\Data\\VariableNodeUseInfo\|null#'
-
         # part of test
         - '#(.*?)(AttributeAwareNodeInterface|AttributeAware(.*?)TagValueNode)(.*?)#'
 
@@ -255,10 +251,12 @@ parameters:
         - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createClassReflectionFromNode\(\) return type with generic class ReflectionClass does not specify its types\: T#'
         - '#Method Rector\\NodeCollector\\StaticAnalyzer\:\:hasStaticAnnotation\(\) has parameter \$reflectionClass with generic class ReflectionClass but does not specify its types\: T#'
 
-        - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\AnnotationReaderFactory\:\:create\(\) should return Doctrine\\Common\\Annotations\\Reader but returns Doctrine\\Common\\Annotations\\AnnotationReader\|Rector\\DoctrineAnnotationGenerated\\ConstantPreservingAnnotationReader#'
-
         # mixed
         - '#Property Rector\\Polyfill\\ValueObject\\BinaryToVersionCompareCondition\:\:\$expectedValue has no typehint specified#'
         # node finder
         - '#Method Rector\\Core\\PhpParser\\Node\\Manipulator\\MethodCallManipulator\:\:findAssignToVariableName\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
 
+        # broken
+        - '#Cannot call method getParentNode\(\) on Rector\\DeadCode\\ValueObject\\VariableNodeUse\|null#'
+        - '#Method Rector\\DeadCode\\NodeFinder\\PreviousVariableAssignNodeFinder\:\:find\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
+        - '#Parameter \#2 \$name of method Rector\\NodeNameResolver\\NodeNameResolver\:\:isName\(\) expects string, string\|null given#'

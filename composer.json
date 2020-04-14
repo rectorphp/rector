@@ -112,6 +112,7 @@
             "Rector\\Renaming\\": "rules/renaming/src",
             "Rector\\Restoration\\": "rules/restoration/src",
             "Rector\\SOLID\\": "rules/solid/src",
+            "Rector\\NodeNestingScope\\": "packages/node-nesting-scope/src",
             "Rector\\Sensio\\": "rules/sensio/src",
             "Rector\\Shopware\\": "rules/shopware/src",
             "Rector\\Silverstripe\\": "rules/silverstripe/src",
