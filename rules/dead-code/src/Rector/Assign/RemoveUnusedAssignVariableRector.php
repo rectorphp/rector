@@ -13,8 +13,8 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\NodeFinder\NextVariableUsageNodeFinder;
 use Rector\DeadCode\NodeFinder\PreviousVariableAssignNodeFinder;
-use Rector\DeadCode\ScopeNesting\ScopeNestingComparator;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
+use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**

@@ -19,7 +19,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class SideEffectNodeDetector
 {
     /**
-     * @var class-string[]
+     * @var string[]
      */
     private const SIDE_EFFECT_NODE_TYPES = [Encapsed::class, New_::class, Concat::class, PropertyFetch::class];
 

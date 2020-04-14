@@ -12,8 +12,8 @@ use Rector\Core\Context\ContextAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DeadCode\ScopeNesting\FlowOfControlLocator;
 use Rector\DeadCode\ValueObject\VariableNodeUse;
+use Rector\NodeNestingScope\FlowOfControlLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**

@@ -13,8 +13,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\DeadCode\ScopeNesting\ParentScopeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PregMatchTypeCorrector

@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\DeadCode\ScopeNesting\ParentScopeFinder;
+use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NextVariableUsageNodeFinder
