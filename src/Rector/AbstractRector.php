@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -312,6 +313,19 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
             $this->addNodeAfterNode($ifStmt, $node);
         }
+    }
+
+    protected function isOnClassMethodCall(Node $node, string $type, string $methodName): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $this->isObjectType($node->var, $type)) {
+            return false;
+        }
+
+        return $this->isName($node->name, $methodName);
     }
 
     private function isNameIdentical(Node $node, Node $originalNode): bool

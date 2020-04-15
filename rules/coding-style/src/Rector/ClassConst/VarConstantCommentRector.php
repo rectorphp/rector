@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
@@ -61,6 +62,11 @@ PHP
 
         $constStaticType = $this->getStaticType($node->consts[0]->value);
         if ($constStaticType instanceof MixedType) {
+            return null;
+        }
+
+        // skip big constants
+        if ($constStaticType instanceof ConstantArrayType && count($constStaticType->getValueTypes()) > 5) {
             return null;
         }
 
