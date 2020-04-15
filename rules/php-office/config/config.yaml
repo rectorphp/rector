@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Rector\PHPOffice\:
+        resource: '../src'
+        exclude:
+            - '../src/Rector/**/*Rector.php'
+            - '../src/ValueObject/*'

@@ -1,4 +1,4 @@
-# All 483 Rectors Overview
+# All 496 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -29,6 +29,7 @@
 - [NetteTesterToPHPUnit](#nettetestertophpunit)
 - [NetteToSymfony](#nettetosymfony)
 - [Oxid](#oxid)
+- [PHPOffice](#phpoffice)
 - [PHPStan](#phpstan)
 - [PHPUnit](#phpunit)
 - [PHPUnitSymfony](#phpunitsymfony)
@@ -5073,6 +5074,276 @@ Replaces deprecated backwards compatability classes with namespaces ones in oxNe
 ```diff
 -oxNew("oxcmp_basket");
 +oxNew(\OxidEsales\Eshop\Application\Component\BasketComponent::class);
+```
+
+<br>
+
+## PHPOffice
+
+### `AddRemovedDefaultValuesRector`
+
+- class: [`Rector\PHPOffice\Rector\StaticCall\AddRemovedDefaultValuesRector`](/../master/rules/php-office/src/Rector/StaticCall/AddRemovedDefaultValuesRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/StaticCall/AddRemovedDefaultValuesRector/Fixture)
+
+Complete removed default values explicitly
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+         $logger = new \PHPExcel_CalcEngine_Logger;
+-        $logger->setWriteDebugLog();
++        $logger->setWriteDebugLog(false);
+     }
+ }
+```
+
+<br>
+
+### `CellStaticToCoordinateRector`
+
+- class: [`Rector\PHPOffice\Rector\StaticCall\CellStaticToCoordinateRector`](/../master/rules/php-office/src/Rector/StaticCall/CellStaticToCoordinateRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/StaticCall/CellStaticToCoordinateRector/Fixture)
+
+Methods to manipulate coordinates that used to exists in PHPExcel_Cell to PhpOffice\PhpSpreadsheet\Cell\Coordinate
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        \PHPExcel_Cell::stringFromColumnIndex();
++        \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex();
+     }
+ }
+```
+
+<br>
+
+### `ChangeChartRendererRector`
+
+- class: [`Rector\PHPOffice\Rector\StaticCall\ChangeChartRendererRector`](/../master/rules/php-office/src/Rector/StaticCall/ChangeChartRendererRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/StaticCall/ChangeChartRendererRector/Fixture)
+
+Change chart renderer
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+-        \PHPExcel_Settings::setChartRenderer($rendererName, $rendererLibraryPath);
++        \PHPExcel_Settings::setChartRenderer(\PhpOffice\PhpSpreadsheet\Chart\Renderer\JpGraph::class);
+     }
+ }
+```
+
+<br>
+
+### `ChangeConditionalGetConditionRector`
+
+- class: [`Rector\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector`](/../master/rules/php-office/src/Rector/MethodCall/ChangeConditionalGetConditionRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/ChangeConditionalGetConditionRector/Fixture)
+
+Change argument PHPExcel_Style_Conditional->getCondition() to getConditions()
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+         $conditional = new \PHPExcel_Style_Conditional;
+-        $someCondition = $conditional->getCondition();
++        $someCondition = $conditional->getConditions()[0] ?? '';
+     }
+ }
+```
+
+<br>
+
+### `ChangeConditionalReturnedCellRector`
+
+- class: [`Rector\PHPOffice\Rector\MethodCall\ChangeConditionalReturnedCellRector`](/../master/rules/php-office/src/Rector/MethodCall/ChangeConditionalReturnedCellRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/ChangeConditionalReturnedCellRector/Fixture)
+
+Change conditional call to getCell()
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+         $worksheet = new \PHPExcel_Worksheet();
+-        $cell = $worksheet->setCellValue('A1', 'value', true);
++        $cell = $worksheet->getCell('A1')->setValue('value');
+     }
+ }
+```
+
+<br>
+
+### `ChangeConditionalSetConditionRector`
+
+- class: [`Rector\PHPOffice\Rector\MethodCall\ChangeConditionalSetConditionRector`](/../master/rules/php-office/src/Rector/MethodCall/ChangeConditionalSetConditionRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/ChangeConditionalSetConditionRector/Fixture)
+
+Change argument PHPExcel_Style_Conditional->setCondition() to setConditions()
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+         $conditional = new \PHPExcel_Style_Conditional;
+-        $someCondition = $conditional->setCondition(1);
++        $someCondition = $conditional->setConditions((array) 1);
+     }
+ }
+```
+
+<br>
+
+### `ChangeDataTypeForValueRector`
+
+- class: [`Rector\PHPOffice\Rector\StaticCall\ChangeDataTypeForValueRector`](/../master/rules/php-office/src/Rector/StaticCall/ChangeDataTypeForValueRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/StaticCall/ChangeDataTypeForValueRector/Fixture)
+
+Change argument DataType::dataTypeForValue() to DefaultValueBinder
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+-        $type = \PHPExcel_Cell_DataType::dataTypeForValue('value');
++        $type = \PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder::dataTypeForValue('value');
+     }
+ }
+```
+
+<br>
+
+### `ChangeDuplicateStyleArrayToApplyFromArrayRector`
+
+- class: [`Rector\PHPOffice\Rector\MethodCall\ChangeDuplicateStyleArrayToApplyFromArrayRector`](/../master/rules/php-office/src/Rector/MethodCall/ChangeDuplicateStyleArrayToApplyFromArrayRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/ChangeDuplicateStyleArrayToApplyFromArrayRector/Fixture)
+
+Change method call duplicateStyleArray() to getStyle() + applyFromArray()
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+         $worksheet = new \PHPExcel_Worksheet();
+-        $worksheet->duplicateStyleArray($styles, $range, $advanced);
++        $worksheet->getStyle($range)->applyFromArray($styles, $advanced);
+     }
+ }
+```
+
+<br>
+
+### `ChangeIOFactoryArgumentRector`
+
+- class: [`Rector\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector`](/../master/rules/php-office/src/Rector/StaticCall/ChangeIOFactoryArgumentRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/StaticCall/ChangeIOFactoryArgumentRector/Fixture)
+
+Change argument of PHPExcel_IOFactory::createReader(), PHPExcel_IOFactory::createWriter() and PHPExcel_IOFactory::identify()
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+-        $writer = \PHPExcel_IOFactory::createWriter('CSV');
++        $writer = \PHPExcel_IOFactory::createWriter('Csv');
+     }
+ }
+```
+
+<br>
+
+### `ChangePdfWriterRector`
+
+- class: [`Rector\PHPOffice\Rector\StaticCall\ChangePdfWriterRector`](/../master/rules/php-office/src/Rector/StaticCall/ChangePdfWriterRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/StaticCall/ChangePdfWriterRector/Fixture)
+
+Change init of PDF writer
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+-        \PHPExcel_Settings::setPdfRendererName(PHPExcel_Settings::PDF_RENDERER_MPDF);
+-        \PHPExcel_Settings::setPdfRenderer($somePath);
+-        $writer = \PHPExcel_IOFactory::createWriter($spreadsheet, 'PDF');
++        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf($spreadsheet);
+     }
+ }
+```
+
+<br>
+
+### `ChangeSearchLocationToRegisterReaderRector`
+
+- class: [`Rector\PHPOffice\Rector\StaticCall\ChangeSearchLocationToRegisterReaderRector`](/../master/rules/php-office/src/Rector/StaticCall/ChangeSearchLocationToRegisterReaderRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/StaticCall/ChangeSearchLocationToRegisterReaderRector/Fixture)
+
+Change argument addSearchLocation() to registerReader()
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+-        \PHPExcel_IOFactory::addSearchLocation($type, $location, $classname);
++        \PhpOffice\PhpSpreadsheet\IOFactory::registerReader($type, $classname);
+     }
+ }
+```
+
+<br>
+
+### `GetDefaultStyleToGetParentRector`
+
+- class: [`Rector\PHPOffice\Rector\MethodCall\GetDefaultStyleToGetParentRector`](/../master/rules/php-office/src/Rector/MethodCall/GetDefaultStyleToGetParentRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/GetDefaultStyleToGetParentRector/Fixture)
+
+Methods to (new Worksheet())->getDefaultStyle() to getParent()->getDefaultStyle()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $worksheet = new \PHPExcel_Worksheet();
+-        $worksheet->getDefaultStyle();
++        $worksheet->getParent()->getDefaultStyle();
+     }
+ }
+```
+
+<br>
+
+### `RemoveSetTempDirOnExcelWriterRector`
+
+- class: [`Rector\PHPOffice\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector`](/../master/rules/php-office/src/Rector/MethodCall/RemoveSetTempDirOnExcelWriterRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/RemoveSetTempDirOnExcelWriterRector/Fixture)
+
+Remove setTempDir() on PHPExcel_Writer_Excel5
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+         $writer = new \PHPExcel_Writer_Excel5;
+-        $writer->setTempDir();
+     }
+ }
 ```
 
 <br>

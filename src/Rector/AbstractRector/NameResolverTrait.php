@@ -107,6 +107,20 @@ trait NameResolverTrait
         return $this->isName($node->name, $methodName);
     }
 
+    /**
+     * @param string[] $methodNames
+     */
+    protected function isStaticCallsNamed(Node $node, string $className, array $methodNames): bool
+    {
+        foreach ($methodNames as $methodName) {
+            if ($this->isStaticCallNamed($node, $className, $methodName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function isMethodCall(Node $node, string $variableName, string $methodName): bool
     {
         if (! $node instanceof MethodCall) {
