@@ -11,12 +11,10 @@ use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#column-index-based-on-1
@@ -71,7 +69,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, 'PHPExcel_Worksheet')) {
+        if (! $this->isObjectTypes($node->var, ['PHPExcel_Worksheet', 'PHPExcel_Worksheet_PageSetup'])) {
             return null;
         }
 
@@ -80,25 +78,24 @@ PHP
         }
 
         // increase column value
-        $firstArumentValue = $node->args[0]->value;
-        if ($firstArumentValue instanceof LNumber) {
-            ++$firstArumentValue->value;
+        $firstArgumentValue = $node->args[0]->value;
+        if ($firstArgumentValue instanceof LNumber) {
+            ++$firstArgumentValue->value;
         }
 
-        if ($firstArumentValue instanceof BinaryOp) {
-            $this->refactorBinaryOp($firstArumentValue);
+        if ($firstArgumentValue instanceof BinaryOp) {
+            $this->refactorBinaryOp($firstArgumentValue);
         }
 
-        if ($firstArumentValue instanceof Variable) {
-            $parentNode = $this->getParentNode($node);
-
-            if (! $parentNode instanceof For_) {
-                $node->args[0]->value = new Plus($firstArumentValue, new LNumber(1));
+        if ($firstArgumentValue instanceof Variable) {
+            // check if for() value, rather update that
+            $forDefinedVariableAssignedValue = $this->findPreviousForWithVariable($firstArgumentValue);
+            if ($forDefinedVariableAssignedValue === null) {
+                $node->args[0]->value = new Plus($firstArgumentValue, new LNumber(1));
                 return null;
             }
 
-            // check if for() value, rather update that
-            $this->refactorFor($firstArumentValue, $parentNode);
+            ++$forDefinedVariableAssignedValue->value;
         }
 
         return $node;
@@ -135,33 +132,28 @@ PHP
         });
     }
 
-    private function getParentNode(Node $node): ?Node
+    private function findPreviousForWithVariable(Variable $variable): ?LNumber
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Expression) {
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        /** @var For_|null $for */
+        $for = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [For_::class]);
+        if ($for === null) {
+            return null;
         }
 
-        return $parentNode;
-    }
-
-    private function refactorFor(Variable $variable, For_ $for): void
-    {
         $variableName = $this->getName($variable);
-
-        // nothing we can do
         if ($variableName === null) {
-            return;
+            return null;
         }
 
         $assignVariable = $this->findVariableAssignName($for->init, $variableName);
         if ($assignVariable === null) {
-            return;
+            return null;
         }
 
         if ($assignVariable->expr instanceof LNumber) {
-            $number = $this->getValue($assignVariable->expr);
-            $assignVariable->expr = new LNumber($number + 1);
+            return $assignVariable->expr;
         }
+
+        return null;
     }
 }
