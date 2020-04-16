@@ -6,7 +6,6 @@ namespace Rector\DeadCode\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
@@ -53,7 +52,7 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [FunctionLike::class];
+        return [Closure::class, ClassMethod::class, Function_::class];
     }
 
     /**
