@@ -15,12 +15,18 @@ final class ArrayItemStaticHelper
     /**
      * @return string[]
      */
-    public static function resolveAnnotationItemsOrder(string $content): array
+    public static function resolveAnnotationItemsOrder(string $content, ?string $silentKey = null): array
     {
         $itemsOrder = [];
+
         $matches = Strings::matchAll($content, '#(?<item>\w+)=#m');
         foreach ($matches as $match) {
             $itemsOrder[] = $match['item'];
+        }
+
+        // is not empty and has silent key
+        if (self::isNotEmptyAndHasSilentKey($content, $silentKey, $itemsOrder)) {
+            $itemsOrder = array_merge([$silentKey], $itemsOrder);
         }
 
         return $itemsOrder;
@@ -67,5 +73,18 @@ final class ArrayItemStaticHelper
         });
 
         return $contentItems;
+    }
+
+    private static function isNotEmptyAndHasSilentKey(string $content, ?string $silentKey, array $itemsOrder): bool
+    {
+        if (! Strings::match($content, '#()|\(\)#')) {
+            return false;
+        }
+
+        if ($silentKey === null) {
+            return false;
+        }
+
+        return ! in_array($silentKey, $itemsOrder, true);
     }
 }

@@ -35,6 +35,11 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode impl
     private $isChoicesExplicit = true;
 
     /**
+     * @var bool
+     */
+    private $isChoiceQuoted = false;
+
+    /**
      * @param mixed[]|string|null $callback
      * @param mixed[]|string|null $choices
      */
@@ -46,6 +51,8 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode impl
 
         if ($originalContent !== null) {
             $this->isChoicesExplicit = (bool) Strings::contains($originalContent, 'choices=');
+
+            $this->resolveAreQuotedChoices($originalContent, $choices);
         }
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
@@ -58,11 +65,7 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode impl
         $contentItems = [];
 
         if ($this->callback) {
-            if (is_array($this->callback)) {
-                $contentItems['callback'] = $this->printArrayItem($this->callback, 'callback');
-            } else {
-                $contentItems['callback'] = sprintf('callback="%s"', $this->callback);
-            }
+            $contentItems['callback'] = $this->createCallback();
         } elseif ($this->choices) {
             $contentItems[] = $this->createChoices();
         }
@@ -104,6 +107,35 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode impl
 
         assert(is_array($this->choices));
 
-        return $content . $this->printArrayItem($this->choices);
+        if ($this->isChoiceQuoted) {
+            return $content . $this->printArrayItem($this->choices);
+        }
+
+        return $content . $this->printArrayItemWithoutQuotes($this->choices);
+    }
+
+    private function createCallback(): string
+    {
+        if (is_array($this->callback)) {
+            return $this->printArrayItem($this->callback, 'callback');
+        }
+
+        return sprintf('callback="%s"', $this->callback);
+    }
+
+    private function resolveAreQuotedChoices(string $originalContent, $choices): void
+    {
+        if ($choices === null) {
+            return;
+        }
+
+        if (is_array($choices)) {
+            $choices = implode('", "', $choices);
+        }
+
+        // @see https://regex101.com/r/VgvK8C/3/
+        $quotedChoicePattern = sprintf('#\(\{"%s"\}\)#', preg_quote($choices, '#'));
+
+        $this->isChoiceQuoted = (bool) Strings::match($originalContent, $quotedChoicePattern);
     }
 }

@@ -45,7 +45,6 @@ final class PhpDocClassRenamer
             }
 
             $choiceTagValueNode->changeCallbackClass($newClass);
-//            $this->shouldUpdate = true;
             break;
         }
     }
