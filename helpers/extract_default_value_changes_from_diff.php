@@ -51,7 +51,7 @@ final class RemovedDefaultValueDiffExtractor
 
     public function __construct()
     {
-        $yaml = Yaml::parseFile(__DIR__ .  '/../config/set/phpoffice/phpexcel-to-phpspreadsheet.yaml');
+        $yaml = Yaml::parseFile(__DIR__ . '/../config/set/php-office/phpexcel-to-phpspreadsheet.yaml');
         $oldToNewClasses = $yaml['services']['Rector\Renaming\Rector\Class_\RenameClassRector']['$oldToNewClasses'];
         $this->newToOldClasses = array_flip($oldToNewClasses);
 
