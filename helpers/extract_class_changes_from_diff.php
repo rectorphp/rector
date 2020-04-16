@@ -4,58 +4,95 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Symfony\Component\Yaml\Yaml;
 
-// @todo change to command
-
 require __DIR__ . '/../vendor/autoload.php';
 
-### CONFIGURE INPUT HERE
-$diffPath = 'https://github.com/symfony/symfony/commit/53a4711520d52bccd20fa6e616731114fa6eb61f.diff';
-$classNamePrefix = 'Doctrine';
+final class ClassChangesDiffExtractor
+{
+    /**
+     * @see https://regex101.com/r/tyABnc/1/
+     * @var string
+     */
+    private const BEFORE_AFTER_PATTERN = '#^\-(?<before>[^-].*?)$\n\+(?<after>.*?)$#ms';
 
+    /**
+     * @var string
+     */
+    private const CLASS_NAME_PREFIX = 'Doctrine';
 
+    /**
+     * @see https://regex101.com/r/tyABnc/2/
+     * @var string
+     */
+    private const CLASS_NAME_PATTERN = '#(?<class_name>' . self::CLASS_NAME_PREFIX . '\\\\[\w|\\\\]+)#';
 
-// @see https://regex101.com/r/tyABnc/1/
-$beforeAfterPattern = '#^\-(?<before>[^-].*?)$\n\+(?<after>.*?)$#ms';
+    /**
+     * @var string[]
+     */
+    private $classesBeforeAfter = [];
 
-$diff = FileSystem::read($diffPath);
-$beforeAfterMatches = Strings::matchAll($diff, $beforeAfterPattern);
+    public function run(string $diffFilePath): void
+    {
+        $diff = FileSystem::read($diffFilePath);
+        $beforeAfterMatches = Strings::matchAll($diff, self::BEFORE_AFTER_PATTERN);
 
-$classesBeforeAfter = [];
-foreach ($beforeAfterMatches as $beforeAfterMatch) {
-    // file change
-    if (Strings::contains($beforeAfterMatch['before'], '//')) {
-        continue;
+        $classesBeforeAfter = [];
+        foreach ($beforeAfterMatches as $beforeAfterMatch) {
+            $classBeforeAndAfter = $this->resolveClassBeforeAndAfter($beforeAfterMatch);
+            if ($classBeforeAndAfter === null) {
+                continue;
+            }
+
+            [$classBefore, $classAfter] = $classBeforeAndAfter;
+
+            if (Strings::contains($classBefore, 'Tests')) {
+                continue;
+            }
+
+            // classes are the same, no change in the class name
+            if ($classBefore === $classAfter) {
+                continue;
+            }
+
+            $this->classesBeforeAfter[$classBefore] = $classAfter;
+        }
+
+        $this->report();
     }
 
-    // @see https://regex101.com/r/tyABnc/2/
-    $classNamePattern = sprintf('#(?<class_name>%s\\\\[\w|\\\\]+)#', $classNamePrefix);
+    private function report(): void
+    {
+        $this->classesBeforeAfter = array_unique($this->classesBeforeAfter);
+        ksort($this->classesBeforeAfter);
 
-    $classNameBefore = Strings::match($beforeAfterMatch['before'], $classNamePattern);
-    $classNameAfter = Strings::match($beforeAfterMatch['after'], $classNamePattern);
-
-    if ($classNameBefore === null || $classNameAfter === null) {
-        continue;
+        $yaml = Yaml::dump($this->classesBeforeAfter);
+        echo PHP_EOL;
+        echo $yaml;
+        echo PHP_EOL;
     }
 
-    $classNameBeforeValue = $classNameBefore['class_name'];
-    $classNameAfterValue = $classNameAfter['class_name'];
+    /**
+     * @return string[]|null
+     */
+    private function resolveClassBeforeAndAfter(array $beforeAfterMatch): ?array
+    {
+        // file change
+        if (Strings::contains($beforeAfterMatch['before'], '//')) {
+            return null;
+        }
 
-    if (Strings::contains($classNameBeforeValue, 'Tests')) {
-        continue;
+        $classNameBefore = Strings::match($beforeAfterMatch['before'], self::CLASS_NAME_PATTERN);
+        if ($classNameBefore === null) {
+            return null;
+        }
+
+        $classNameAfter = Strings::match($beforeAfterMatch['after'], self::CLASS_NAME_PATTERN);
+        if ($classNameAfter === null) {
+            return null;
+        }
+
+        return [$classNameBefore['class_name'], $classNameAfter['class_name']];
     }
-
-    // classes are the same, no change in the class name
-    if ($classNameBeforeValue === $classNameAfterValue) {
-        continue;
-    }
-
-    $classesBeforeAfter[$classNameBeforeValue] = $classNameAfterValue;
 }
 
-$classesBeforeAfter = array_unique($classesBeforeAfter);
-ksort($classesBeforeAfter);
-
-$yaml = Yaml::dump($classesBeforeAfter);
-echo PHP_EOL;
-echo $yaml;
-echo PHP_EOL;
+$classChangesDiffExtractor = new ClassChangesDiffExtractor();
+// $classChangesDiffExtractor->run();

@@ -1,4 +1,3 @@
-
 services:
     # see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md
     # inspired https://github.com/PHPOffice/PhpSpreadsheet/blob/87f71e1930b497b36e3b9b1522117dfa87096d2b/src/PhpSpreadsheet/Helper/Migrator.php
@@ -9,7 +8,9 @@ services:
     Rector\PHPOffice\Rector\StaticCall\ChangeDataTypeForValueRector: null
     Rector\PHPOffice\Rector\StaticCall\ChangePdfWriterRector: null
     Rector\PHPOffice\Rector\StaticCall\ChangeChartRendererRector: null
+    Rector\PHPOffice\Rector\StaticCall\AddRemovedDefaultValuesRector: null
 
+    Rector\PHPOffice\Rector\MethodCall\ChangeConditionalReturnedCellRector: null
     Rector\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector: null
     Rector\PHPOffice\Rector\MethodCall\ChangeConditionalSetConditionRector: null
     Rector\PHPOffice\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector: null
@@ -235,5 +236,3 @@ services:
             PHPExcel_Settings: PhpOffice\PhpSpreadsheet\Settings
             PHPExcel_Style: PhpOffice\PhpSpreadsheet\Style\Style
             PHPExcel_Worksheet: PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
-    Rector\PHPOffice\Rector\MethodCall\ChangeConditionalReturnedCellRector: null
-    Rector\PHPOffice\Rector\StaticCall\AddRemovedDefaultValuesRector: null
