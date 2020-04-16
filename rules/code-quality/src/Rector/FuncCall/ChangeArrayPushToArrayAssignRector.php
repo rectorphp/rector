@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
@@ -67,6 +68,10 @@ PHP
             return null;
         }
 
+        if ($this->hasArraySpread($node)) {
+            return null;
+        }
+
         $arrayDimFetch = new ArrayDimFetch($node->args[0]->value);
 
         $position = 1;
@@ -87,5 +92,17 @@ PHP
         $this->removeNode($node);
 
         return null;
+    }
+
+    private function hasArraySpread(FuncCall $funcCall): bool
+    {
+        foreach ($funcCall->args as $arg) {
+            /** @var Arg $arg */
+            if ($arg->unpack) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
