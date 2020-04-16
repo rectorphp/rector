@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
@@ -113,6 +114,11 @@ PHP
             $varType,
             PHPStanStaticTypeMapper::KIND_PROPERTY
         );
+
+        // false positive
+        if ($propertyTypeNode instanceof Name && $this->isName($propertyTypeNode, 'mixed')) {
+            return null;
+        }
 
         if ($propertyTypeNode === null) {
             return null;
