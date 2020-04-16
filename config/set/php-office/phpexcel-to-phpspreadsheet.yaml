@@ -16,6 +16,7 @@ services:
     Rector\PHPOffice\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector: null
     Rector\PHPOffice\Rector\MethodCall\ChangeDuplicateStyleArrayToApplyFromArrayRector: null
     Rector\PHPOffice\Rector\MethodCall\GetDefaultStyleToGetParentRector: null
+    Rector\PHPOffice\Rector\MethodCall\IncreaseColumnIndexRector: null
 
     Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
         $oldToNewMethodsByClass:

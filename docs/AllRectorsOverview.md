@@ -1,4 +1,4 @@
-# All 496 Rectors Overview
+# All 497 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -5322,6 +5322,27 @@ Methods to (new Worksheet())->getDefaultStyle() to getParent()->getDefaultStyle(
          $worksheet = new \PHPExcel_Worksheet();
 -        $worksheet->getDefaultStyle();
 +        $worksheet->getParent()->getDefaultStyle();
+     }
+ }
+```
+
+<br>
+
+### `IncreaseColumnIndexRector`
+
+- class: [`Rector\PHPOffice\Rector\MethodCall\IncreaseColumnIndexRector`](/../master/rules/php-office/src/Rector/MethodCall/IncreaseColumnIndexRector.php)
+- [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/IncreaseColumnIndexRector/Fixture)
+
+Column index changed from 0 to 1 - run only ONCE! changes current value without memory
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+         $worksheet = new \PHPExcel_Worksheet();
+-        $worksheet->setCellValueByColumnAndRow(0, 3, '1150');
++        $worksheet->setCellValueByColumnAndRow(1, 3, '1150');
      }
  }
 ```
