@@ -67,10 +67,16 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         return $json;
     }
 
+    protected function printArrayItemWithoutQuotes(array $item, ?string $key = null): string
+    {
+        $content = $this->printArrayItem($item, $key);
+        return Strings::replace($content, '#"#');
+    }
+
     /**
      * @param mixed[] $item
      */
-    protected function printArrayItemWithSeparator(array $item, ?string $key = null, string $separator): string
+    protected function printArrayItemWithSeparator(array $item, ?string $key = null, string $separator = ''): string
     {
         $content = $this->printArrayItem($item, $key);
 
@@ -132,14 +138,14 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         );
     }
 
-    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
+    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent, ?string $silentKey = null): void
     {
         if ($originalContent === null) {
             return;
         }
 
         $this->originalContent = $originalContent;
-        $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
+        $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent, $silentKey);
 
         $this->hasNewlineAfterOpening = (bool) Strings::match($originalContent, '#^(\(\s+|\n)#m');
         $this->hasNewlineBeforeClosing = (bool) Strings::match($originalContent, '#(\s+\)|\n(\s+)?)$#m');

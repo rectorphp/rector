@@ -113,6 +113,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
             $matches = Strings::match($originalContent, '#requirements={(.*?)(?<separator>(=|:))(.*)}#');
             $this->requirementsKeyValueSeparator = $matches['separator'] ?? '=';
         }
+
         $this->host = $host;
     }
 
