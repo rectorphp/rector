@@ -109,16 +109,20 @@ PHP
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
             return true;
         }
 
-        if ($this->isAnonymousClass($classNode)) {
+        if ($this->isAnonymousClass($class)) {
             return true;
         }
 
-        if ($this->isObjectType($classNode, TestCase::class)) {
+        if ($this->isObjectType($class, TestCase::class)) {
+            return true;
+        }
+
+        if ($this->isDoctrineEntityClass($class)) {
             return true;
         }
 
