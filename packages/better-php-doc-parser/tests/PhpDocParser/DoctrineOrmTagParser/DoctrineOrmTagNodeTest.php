@@ -25,6 +25,7 @@ final class DoctrineOrmTagNodeTest extends AbstractPhpDocInfoTest
     public function test(string $directoryPath, string $nodeType, string $expectedTagValueNodeType): void
     {
         $filePaths = StaticFixtureProvider::yieldFileFromDirectory($directoryPath, '*.php');
+
         foreach ($filePaths as $filePath) {
             $this->doTestPrintedPhpDocInfo($filePath, $nodeType, $expectedTagValueNodeType);
         }

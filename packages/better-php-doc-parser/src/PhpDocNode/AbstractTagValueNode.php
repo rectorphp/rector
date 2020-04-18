@@ -52,7 +52,11 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected function printArrayItem(array $item, ?string $key = null): string
     {
         $json = Json::encode($item);
+
+        // separate by space only items separated by comma, not in "quotes"
         $json = Strings::replace($json, '#,#', ', ');
+        // @see https://regex101.com/r/C2fDQp/2
+        $json = Strings::replace($json, '#("[^",]+)(\s+)?,(\s+)?([^"]+")#', '$1,$4');
 
         // change brackets from json to annotations
         $json = Strings::replace($json, '#^\[(.*?)\]$#', '{$1}');
