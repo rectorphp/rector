@@ -11,7 +11,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
             'cache_directory' => 'new_value',
         ];
 
-        $this->assertArraySubset($expectedSubset, $checkedArray);
+        $this->assertArraySubset($expectedSubset, $checkedArray, true);
     }
 }
 

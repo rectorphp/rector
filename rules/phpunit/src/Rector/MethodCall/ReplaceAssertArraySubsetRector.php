@@ -49,7 +49,7 @@ class SomeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArraySubset([
            'cache_directory' => 'new_value',
-        ], $checkedArray);
+        ], $checkedArray, true);
     }
 }
 PHP
@@ -176,11 +176,13 @@ PHP
      */
     private function addValueAsserts(Node $node): void
     {
+        $assertMethodName = $this->resolveAssertMethodName($node);
+
         foreach ($this->expectedValuesWithKeys as $expectedValueWithKey) {
             $expectedKey = $expectedValueWithKey['key'];
             $expectedValue = $expectedValueWithKey['value'];
 
-            $assertSame = $this->createPHPUnitCallWithName($node, 'assertSame');
+            $assertSame = $this->createPHPUnitCallWithName($node, $assertMethodName);
             $assertSame->args[0] = new Arg($expectedValue);
 
             $arrayDimFetch = new ArrayDimFetch($node->args[1]->value, BuilderHelpers::normalizeValue($expectedKey));
@@ -188,5 +190,19 @@ PHP
 
             $this->addNodeAfterNode($assertSame, $node);
         }
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function resolveAssertMethodName(Node $node): string
+    {
+        if (! isset($node->args[2])) {
+            return 'assertEquals';
+        }
+
+        $isStrict = $this->getValue($node->args[2]->value);
+
+        return $isStrict ? 'assertSame' : 'assertEquals';
     }
 }
