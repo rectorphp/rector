@@ -266,9 +266,15 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pScalar_String(String_ $node): string
     {
-        $kind = $node->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
-        if ($kind === String_::KIND_DOUBLE_QUOTED && $node->getAttribute('is_regular_pattern')) {
-            return '"' . $node->value . '"';
+        if ($node->getAttribute('is_regular_pattern')) {
+            $kind = $node->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
+            if ($kind === String_::KIND_DOUBLE_QUOTED) {
+                return '"' . $node->value . '"';
+            }
+
+            if ($kind === String_::KIND_SINGLE_QUOTED) {
+                return "'" . $node->value . "'";
+            }
         }
 
         return parent::pScalar_String($node);
