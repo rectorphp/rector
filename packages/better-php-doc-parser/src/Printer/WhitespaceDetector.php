@@ -29,7 +29,7 @@ final class WhitespaceDetector
             --$start;
         }
 
-        for ($i = $start; $i <= $startEndValueObject->getEnd(); ++$i) {
+        for ($i = $start; $i < $startEndValueObject->getEnd(); ++$i) {
             /** @var string $tokenValue */
             $tokenValue = $tokens[$i][0];
 
