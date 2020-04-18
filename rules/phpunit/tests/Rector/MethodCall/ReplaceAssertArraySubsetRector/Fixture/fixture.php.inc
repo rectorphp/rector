@@ -10,7 +10,7 @@ class SomeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArraySubset([
            'cache_directory' => 'new_value',
-        ], $checkedArray);
+        ], $checkedArray, true);
     }
 }
 

@@ -6054,7 +6054,7 @@ Replace deprecated "assertArraySubset()" method with alternative methods
 
 -        $this->assertArraySubset([
 -           'cache_directory' => 'new_value',
--        ], $checkedArray);
+-        ], $checkedArray, true);
 +        $this->assertArrayHasKey('cache_directory', $checkedArray);
 +        $this->assertSame('new_value', $checkedArray['cache_directory']);
      }
