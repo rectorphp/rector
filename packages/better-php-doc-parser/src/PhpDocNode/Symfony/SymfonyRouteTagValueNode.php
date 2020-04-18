@@ -75,6 +75,11 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     private $condition;
 
     /**
+     * @var bool
+     */
+    private $isNameQuoted = true;
+
+    /**
      * @param string[] $localizedPaths
      * @param string[] $methods
      * @param string[] $options
@@ -111,13 +116,15 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
             $this->resolveOriginalContentSpacingAndOrder($originalContent);
 
             // default value without key
-            if ($this->shouldAddIimplicitPaths()) {
+            if ($this->shouldAddImplicitPaths()) {
                 // add path as first item
                 $this->orderedVisibleItems = array_merge(['path'], (array) $this->orderedVisibleItems);
             }
 
             $matches = Strings::match($originalContent, '#requirements={(.*?)(?<separator>(=|:))(.*)}#');
             $this->requirementsKeyValueSeparator = $matches['separator'] ?? '=';
+
+            $this->isNameQuoted = $this->resolveIsValueQuoted($originalContent, $name);
         }
 
         $this->host = $host;
@@ -131,7 +138,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         ];
 
         if ($this->name) {
-            $contentItems['name'] = sprintf('name="%s"', $this->name);
+            $contentItems['name'] = $this->printWithOptionalQuotes('name', $this->name, $this->isNameQuoted);
         }
 
         if ($this->methods !== []) {
@@ -191,7 +198,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         return Strings::replace($localizedPaths, '#:#', ': ');
     }
 
-    private function shouldAddIimplicitPaths(): bool
+    private function shouldAddImplicitPaths(): bool
     {
         return ($this->path || $this->localizedPaths) && ! in_array('path', (array) $this->orderedVisibleItems, true);
     }

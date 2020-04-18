@@ -158,6 +158,40 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $this->hasClosingBracket = (bool) Strings::match($originalContent, '#\)$#');
     }
 
+    protected function resolveIsValueQuoted(string $originalContent, $value): bool
+    {
+        if ($value === null) {
+            return false;
+        }
+
+        if (! is_string($value)) {
+            return false;
+        }
+
+        // @see https://regex101.com/r/VgvK8C/3/
+        $quotedNamePattern = sprintf('#"%s"#', preg_quote($value, '#'));
+
+        return (bool) Strings::match($originalContent, $quotedNamePattern);
+    }
+
+    protected function printWithOptionalQuotes(string $name, $value, bool $isQuoted, bool $isExplicit = true): string
+    {
+        $content = '';
+        if ($isExplicit) {
+            $content = $name . '=';
+        }
+
+        if (is_array($value)) {
+            return $content . $this->printArrayItem($value);
+        }
+
+        if ($isQuoted) {
+            return $content . sprintf('"%s"', $value);
+        }
+
+        return $content . sprintf('%s', $value);
+    }
+
     /**
      * @param PhpDocTagValueNode[] $tagValueNodes
      */
