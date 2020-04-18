@@ -70,6 +70,11 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     private $localizedPaths = [];
 
     /**
+     * @var string|null
+     */
+    private $condition;
+
+    /**
      * @param string[] $localizedPaths
      * @param string[] $methods
      * @param string[] $options
@@ -85,6 +90,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         array $defaults = [],
         ?string $host = null,
         array $requirements = [],
+        ?string $condition = null,
         ?string $originalContent = null
     ) {
         $this->path = $path;
@@ -115,6 +121,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         }
 
         $this->host = $host;
+        $this->condition = $condition;
     }
 
     public function __toString(): string
@@ -141,6 +148,10 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
         if ($this->host !== null) {
             $contentItems['host'] = sprintf('host="%s"', $this->host);
+        }
+
+        if ($this->condition !== null) {
+            $contentItems['condition'] = sprintf('condition="%s"', $this->condition);
         }
 
         if ($this->requirements !== []) {

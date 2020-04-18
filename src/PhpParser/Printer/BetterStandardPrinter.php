@@ -269,11 +269,11 @@ final class BetterStandardPrinter extends Standard
         if ($node->getAttribute('is_regular_pattern')) {
             $kind = $node->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
             if ($kind === String_::KIND_DOUBLE_QUOTED) {
-                return '"' . $node->value . '"';
+                return $this->wrapValueWith($node, '"');
             }
 
             if ($kind === String_::KIND_SINGLE_QUOTED) {
-                return "'" . $node->value . "'";
+                return $this->wrapValueWith($node, "'");
             }
         }
 
@@ -411,5 +411,10 @@ final class BetterStandardPrinter extends Standard
         }
 
         return false;
+    }
+
+    private function wrapValueWith(String_ $node, string $wrap): string
+    {
+        return $wrap . $node->value . $wrap;
     }
 }
