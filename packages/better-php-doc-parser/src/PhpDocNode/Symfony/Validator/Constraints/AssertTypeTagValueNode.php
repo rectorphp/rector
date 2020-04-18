@@ -10,6 +10,8 @@ use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AbstractConstraintTagValueNode;
 
 /**
  * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\Symfony\Validator\Constraints\AssertTypePhpDocNodeFactory
+ *
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyValidation\AssertTypeTagValueNodeTest
  */
 final class AssertTypeTagValueNode extends AbstractConstraintTagValueNode implements ShortNameAwareTagInterface
 {
@@ -37,7 +39,7 @@ final class AssertTypeTagValueNode extends AbstractConstraintTagValueNode implem
 
         if ($originalContent !== null) {
             $this->isTypeExplicit = (bool) Strings::contains($originalContent, 'type=');
-            $this->resolveIsQuotedType($originalContent, $type);
+            $this->isTypeQuoted = $this->resolveIsValueQuoted($originalContent, $type);
         }
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent, 'type');
@@ -50,7 +52,12 @@ final class AssertTypeTagValueNode extends AbstractConstraintTagValueNode implem
         $contentItems = [];
 
         if ($this->type !== null) {
-            $contentItems['type'] = $this->createType();
+            $contentItems['type'] = $this->printWithOptionalQuotes(
+                'type',
+                $this->type,
+                $this->isTypeQuoted,
+                $this->isTypeExplicit
+            );
         }
 
         $contentItems = $this->appendGroups($contentItems);
@@ -62,42 +69,5 @@ final class AssertTypeTagValueNode extends AbstractConstraintTagValueNode implem
     public function getShortName(): string
     {
         return '@Assert\Type';
-    }
-
-    /**
-     * @param string|mixed[]|null $type
-     */
-    private function resolveIsQuotedType(string $originalContent, $type): void
-    {
-        if ($type === null) {
-            return;
-        }
-
-        if (! is_string($type)) {
-            return;
-        }
-
-        // @see https://regex101.com/r/VgvK8C/3/
-        $quotedTypePattern = sprintf('#"%s"#', preg_quote($type, '#'));
-
-        $this->isTypeQuoted = (bool) Strings::match($originalContent, $quotedTypePattern);
-    }
-
-    private function createType(): string
-    {
-        $content = '';
-        if ($this->isTypeExplicit) {
-            $content = 'type=';
-        }
-
-        if ($this->isTypeQuoted && is_string($this->type)) {
-            return $content . '"' . $this->type . '"';
-        }
-
-        if (is_array($this->type)) {
-            return $content . $this->printArrayItem($this->type);
-        }
-
-        return $content . $this->type;
     }
 }
