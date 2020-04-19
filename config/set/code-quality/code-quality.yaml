@@ -54,3 +54,4 @@ services:
     Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector: null
     Rector\CodeQuality\Rector\BinaryOp\InlineIfToExplicitIfRector: null
     Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector: null
+    Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector: null
