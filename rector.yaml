@@ -1,7 +1,3 @@
-services:
-    Rector\DeadCode\Rector\ClassMethod\RemoveDeadRecursiveClassMethodRector: null
-#    Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector: null
-
 imports:
     - { resource: "create-rector.yaml", ignore_errors: 'not_found' }
 

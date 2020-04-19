@@ -18,6 +18,7 @@ use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\PhpDocInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeScopeAndMetadataDecorator
 {
@@ -106,18 +107,19 @@ final class NodeScopeAndMetadataDecorator
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function decorateNodesFromFile(array $nodes, string $filePath, bool $needsScope = false): array
+    public function decorateNodesFromFile(array $nodes, SmartFileInfo $fileInfo, bool $needsScope = false): array
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
             'preserveOriginalNames' => true,
-            'replaceNodes' => true, // required by PHPStan
+            // required by PHPStan
+            'replaceNodes' => true,
         ]));
         $nodes = $nodeTraverser->traverse($nodes);
 
         // node scoping is needed only for Scope
         if ($needsScope || $this->configuration->areAnyPhpRectorsLoaded()) {
-            $nodes = $this->nodeScopeResolver->processNodes($nodes, $filePath);
+            $nodes = $this->nodeScopeResolver->processNodes($nodes, $fileInfo);
         }
 
         $nodeTraverser = new NodeTraverser();

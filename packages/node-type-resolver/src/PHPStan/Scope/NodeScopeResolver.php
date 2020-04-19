@@ -19,6 +19,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -69,11 +70,11 @@ final class NodeScopeResolver
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function processNodes(array $nodes, string $filePath): array
+    public function processNodes(array $nodes, SmartFileInfo $smartFileInfo): array
     {
         $this->removeDeepChainMethodCallNodes($nodes);
 
-        $scope = $this->scopeFactory->createFromFile($filePath);
+        $scope = $this->scopeFactory->createFromFile($smartFileInfo);
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (Node $node, MutatingScope $scope): void {

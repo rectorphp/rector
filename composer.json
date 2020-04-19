@@ -22,7 +22,7 @@
         "nikic/php-parser": "4.3.*",
         "ondram/ci-detector": "^3.1",
         "phpstan/phpdoc-parser": "^0.4",
-        "phpstan/phpstan": "^0.12.11",
+        "phpstan/phpstan": "0.12.18",
         "phpstan/phpstan-phpunit": "^0.12",
         "sebastian/diff": "^3.0|^4.0",
         "symfony/console": "^4.4.6|^5.0.6",
@@ -202,10 +202,7 @@
             "Rector\\ZendToSymfony\\Tests\\": "rules/zend-to-symfony/tests"
         },
         "classmap": [
-            "packages/node-type-resolver/tests/PerNodeTypeResolver/ParamTypeResolver/Source",
-            "packages/node-type-resolver/tests/PerNodeTypeResolver/PropertyTypeResolver/Source",
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
-            "rules/symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
             "rules/symfony/tests/Rector/FrameworkBundle/ContainerGetToConstructorInjectionRector/Source",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
@@ -218,7 +215,6 @@
             "tests/Issues/Issue1243/Source"
         ],
         "files": [
-            "packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/AbstractPhpDocInfoPrinterTest.php",
             "rules/coding-style/tests/Rector/Throw_/AnnotateThrowablesRector/Source/i_throw_an_exception.func.php",
             "rules/dead-code/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
             "rules/type-declaration/tests/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
@@ -228,12 +224,12 @@
             "rules/renaming/tests/Rector/Class_/RenameClassRector/Source/Twig_Extension_Sandbox.php",
             "rules/renaming/tests/Rector/Class_/RenameClassRector/Source/TwigFilter.php",
             "rules/renaming/tests/Rector/Class_/RenameClassRector/Source/Manual_Twig_Filter.php",
-            "rules/solid/tests/Rector/ClassMethod/UseInterfaceOverImplementationInConstructorRector/Source/Apple.php",
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Foo.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Function_/count.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",
-            "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/YetAnotherClass.php"
+            "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/YetAnotherClass.php",
+            "rules/solid/tests/Rector/ClassMethod/UseInterfaceOverImplementationInConstructorRector/Source/Coconut.php"
         ]
     },
     "scripts": {

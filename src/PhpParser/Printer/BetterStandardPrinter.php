@@ -71,7 +71,11 @@ final class BetterStandardPrinter extends Standard
 
         // remove dead <?php structures
         $clearContent = Strings::replace($content, '#\<\?php(\s)\?\>\n?#');
-        return Strings::replace($clearContent, '#\<\?php(\s+)\?\>#');
+
+        $clearContent = Strings::replace($clearContent, '#\<\?php(\s+)\?\>#');
+
+        // keep EOL
+        return rtrim($clearContent) . PHP_EOL;
     }
 
     /**

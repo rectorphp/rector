@@ -74,6 +74,6 @@ abstract class AbstractNodeTypeResolverTest extends AbstractKernelTestCase
 
         $nodes = $this->parser->parseFile($smartFileInfo->getRealPath());
 
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($nodes, $smartFileInfo->getRealPath());
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($nodes, $smartFileInfo);
     }
 }

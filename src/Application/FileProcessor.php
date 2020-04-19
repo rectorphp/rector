@@ -163,10 +163,7 @@ final class FileProcessor
         // needed for \Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver
         $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$oldStmts, $oldStmts, $oldTokens];
 
-        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile(
-            $oldStmts,
-            $smartFileInfo->getRealPath()
-        );
+        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $smartFileInfo);
 
         return [$newStmts, $oldStmts, $oldTokens];
     }

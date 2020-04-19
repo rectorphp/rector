@@ -34,7 +34,7 @@ final class FileInfoParser
     {
         $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
 
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath());
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo);
     }
 
     /**
@@ -44,6 +44,6 @@ final class FileInfoParser
     {
         $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
 
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath(), true);
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo, true);
     }
 }

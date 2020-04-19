@@ -1,8 +1,6 @@
 <?php
 
-namespace Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector;
-
-use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\SomeChild;
+namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source;
 
 class ActionClass
 {

@@ -164,8 +164,6 @@ PHP
      */
     private function renameNameNode(array $usedNameNodes, string $lastName): void
     {
-        /** @var Identifier|Name $usedName */
-        // @todo value objects
         foreach ($usedNameNodes as $nameAndParent) {
             $parentNode = $nameAndParent->getParentNode();
             $usedName = $nameAndParent->getNameNode();

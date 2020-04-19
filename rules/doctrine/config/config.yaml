@@ -1,7 +1,8 @@
 services:
     _defaults:
-        autowire: true
         public: true
+        autowire: true
+        autoconfigure: true
 
     Rector\Doctrine\:
         resource: '../src'

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector\Source;
 
-class Apple implements Fruit
+class Coconut implements Fruit
 {
 
 }

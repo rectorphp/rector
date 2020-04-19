@@ -111,10 +111,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
         // needed for format preserving
         $this->oldStmts = $oldStmts;
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile(
-            $oldStmts,
-            $smartFileInfo->getRealPath()
-        );
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $smartFileInfo);
     }
 
     /**

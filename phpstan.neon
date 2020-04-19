@@ -261,3 +261,5 @@ parameters:
         - '#Method Rector\\DeadCode\\NodeFinder\\PreviousVariableAssignNodeFinder\:\:find\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
         - '#Parameter \#2 \$name of method Rector\\NodeNameResolver\\NodeNameResolver\:\:isName\(\) expects string, string\|null given#'
         - '#Method Rector\\PHPOffice\\Rector\\MethodCall\\IncreaseColumnIndexRector\:\:findVariableAssignName\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
+
+        - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
