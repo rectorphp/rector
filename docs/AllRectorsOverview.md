@@ -1,4 +1,4 @@
-# All 497 Rectors Overview
+# All 498 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1720,6 +1720,27 @@ Changes in_array() with single element to ===
 +        if (strtolower($type) === '$this') {
              return strtolower($type);
          }
+     }
+ }
+```
+
+<br>
+
+### `SplitListAssignToSeparateLineRector`
+
+- class: [`Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector`](/../master/rules/code-quality/src/Rector/Assign/SplitListAssignToSeparateLineRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/Assign/SplitListAssignToSeparateLineRector/Fixture)
+
+Splits [$a, $b] = [5, 10] scalar assign to standalone lines
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+-        [$a, $b] = [1, 2];
++        $a = 1;
++        $b = 2;
      }
  }
 ```
