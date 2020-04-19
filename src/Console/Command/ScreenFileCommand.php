@@ -152,9 +152,9 @@ final class ScreenFileCommand extends AbstractCommand
      */
     private function outputDecoratedFileContent(array $nodes, SmartFileInfo $fileInfo): void
     {
-        $decoratedFileContent = '<?php' . PHP_EOL . $this->betterStandardPrinter->prettyPrint($nodes);
-
         $outputFileName = 'rector_vision_' . $fileInfo->getFilename();
+        $decoratedFileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
+
         FileSystem::write($outputFileName, $decoratedFileContent);
 
         $this->symfonyStyle->writeln(sprintf('See: %s', $outputFileName));

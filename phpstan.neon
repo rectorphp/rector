@@ -250,3 +250,4 @@ parameters:
         - '#Method Rector\\Caching\\ChangedFilesDetector\:\:hashFile\(\) should return string but returns string\|false#'
 
         - '#If condition is always false#'
+        - '#Parameter \#1 \$stmts of method Rector\\Core\\PhpParser\\Printer\\BetterStandardPrinter\:\:prettyPrintFile\(\) expects array<PhpParser\\Node\>, PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Namespace_ given#'

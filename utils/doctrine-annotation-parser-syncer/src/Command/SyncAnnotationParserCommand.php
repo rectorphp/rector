@@ -71,20 +71,7 @@ final class SyncAnnotationParserCommand extends Command
                 return ShellCode::ERROR;
             }
 
-            $sourceFileInfo = new SmartFileInfo($classSyncer->getSourceFilePath());
-            $targetFileInfo = new SmartFileInfo($classSyncer->getTargetFilePath());
-
-            if ($dryRun) {
-                $messageFormat = 'Original "%s" is in sync with "%s"';
-            } else {
-                $messageFormat = 'Original "%s" was changed and refactored to "%s"';
-            }
-
-            $message = sprintf(
-                $messageFormat,
-                $sourceFileInfo->getRelativeFilePathFromCwd(),
-                $targetFileInfo->getRelativeFilePathFromCwd()
-            );
+            $message = $this->createMessageAboutFileChanges($classSyncer, $dryRun);
 
             $this->symfonyStyle->note($message);
         }
@@ -92,5 +79,19 @@ final class SyncAnnotationParserCommand extends Command
         $this->symfonyStyle->success('Done');
 
         return ShellCode::SUCCESS;
+    }
+
+    private function createMessageAboutFileChanges(ClassSyncerInterface $classSyncer, bool $dryRun): string
+    {
+        $sourceFileInfo = new SmartFileInfo($classSyncer->getSourceFilePath());
+        $targetFileInfo = new SmartFileInfo($classSyncer->getTargetFilePath());
+
+        $messageFormat = $dryRun ? 'Original "%s" is in sync with "%s"' : 'Original "%s" was changed and refactored to "%s"';
+
+        return sprintf(
+            $messageFormat,
+            $sourceFileInfo->getRelativeFilePathFromCwd(),
+            $targetFileInfo->getRelativeFilePathFromCwd()
+        );
     }
 }

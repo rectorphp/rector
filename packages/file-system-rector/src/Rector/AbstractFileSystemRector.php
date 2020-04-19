@@ -173,7 +173,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $formatPreservingContent = '';
         }
 
-        $prettyPrintContent = '<?php' . PHP_EOL . $this->betterStandardPrinter->prettyPrint($nodes);
+        $prettyPrintContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
 
         if ($this->areStringsSameWithoutSpaces($formatPreservingContent, $prettyPrintContent)) {
             $fileContent = $formatPreservingContent;
