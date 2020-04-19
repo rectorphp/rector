@@ -6,6 +6,7 @@ namespace Rector\Core\Configuration;
 
 use Jean85\PrettyVersions;
 use Nette\Utils\Strings;
+use OndraM\CiDetector\CiDetector;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
@@ -59,6 +60,16 @@ final class Configuration
      * @var mixed[]
      */
     private $source = [];
+
+    /**
+     * @var CiDetector
+     */
+    private $ciDetector;
+
+    public function __construct(CiDetector $ciDetector)
+    {
+        $this->ciDetector = $ciDetector;
+    }
 
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
@@ -119,6 +130,10 @@ final class Configuration
 
     public function showProgressBar(): bool
     {
+        if ($this->ciDetector->isCiDetected()) {
+            return false;
+        }
+
         return $this->showProgressBar;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-class PHPUnit_TestCase
+class PHPUnit_Abc
 {
 }
 
@@ -11,6 +11,6 @@ class PHPUnit_TestCase
 
 namespace PHPUnit;
 
-class TestCase
+class Abc
 {
 }

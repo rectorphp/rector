@@ -41,17 +41,17 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Source/ClassWithProperties.php', 0, new ObjectType(Html::class)];
+        yield [__DIR__ . '/Source/MethodParamDocBlock.php', 0, new ObjectType(Html::class)];
 
         yield [
-            __DIR__ . '/Source/ClassWithProperties.php',
+            __DIR__ . '/Source/MethodParamDocBlock.php',
             1,
             TypeFactoryStaticHelper::createUnionObjectType([ClassThatExtendsHtml::class, Html::class]),
         ];
 
         // mimics failing test from DomainDrivenDesign set
         $unionType = TypeFactoryStaticHelper::createUnionObjectType([SomeChild::class, new NullType()]);
-        yield [__DIR__ . '/Source/fixture.php', 0, $unionType];
+        yield [__DIR__ . '/Source/ActionClass.php', 0, $unionType];
     }
 
     private function getStringFromType(Type $type): string

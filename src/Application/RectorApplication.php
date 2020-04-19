@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Application;
 
-use OndraM\CiDetector\CiDetector;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
@@ -86,11 +85,6 @@ final class RectorApplication
      */
     private $finishingExtensionRunner;
 
-    /**
-     * @var CiDetector
-     */
-    private $ciDetector;
-
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileSystemFileProcessor $fileSystemFileProcessor,
@@ -101,8 +95,7 @@ final class RectorApplication
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         NodeScopeResolver $nodeScopeResolver,
-        FinishingExtensionRunner $finishingExtensionRunner,
-        CiDetector $ciDetector
+        FinishingExtensionRunner $finishingExtensionRunner
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
@@ -114,7 +107,6 @@ final class RectorApplication
         $this->enabledRectorsProvider = $enabledRectorsProvider;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->finishingExtensionRunner = $finishingExtensionRunner;
-        $this->ciDetector = $ciDetector;
     }
 
     /**
@@ -180,15 +172,11 @@ final class RectorApplication
      */
     private function configureStepCount(SymfonyStyle $symfonyStyle): void
     {
-        if (! $this->ciDetector->isCiDetected()) {
-            return;
-        }
-
         $privatesAccessor = new PrivatesAccessor();
 
         /** @var ProgressBar $progressBar */
         $progressBar = $privatesAccessor->getPrivateProperty($symfonyStyle, 'progressBar');
-        if ($progressBar->getMaxSteps() < 10) {
+        if ($progressBar->getMaxSteps() < 40) {
             return;
         }
 
@@ -246,9 +234,8 @@ final class RectorApplication
 
         $oldContent = $fileInfo->getContents();
 
-        $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString(
-            $fileInfo
-        ) : $this->fileProcessor->printToFile($fileInfo);
+        $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString($fileInfo)
+            : $this->fileProcessor->printToFile($fileInfo);
 
         $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
 

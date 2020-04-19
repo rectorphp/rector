@@ -2,6 +2,8 @@
 
 namespace Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Fixture;
 
+use Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\Source\ExternalClass;
+
 class SkipExternalCall
 {
     /**
@@ -20,12 +22,5 @@ class SkipExternalCall
     public function run()
     {
         $this->externalClass->run();
-    }
-}
-
-class ExternalClass
-{
-    public function run()
-    {
     }
 }
