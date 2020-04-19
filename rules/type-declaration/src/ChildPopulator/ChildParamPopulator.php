@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\ChildPopulator;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
@@ -133,7 +132,7 @@ final class ChildParamPopulator
     }
 
     /**
-     * @return Name|NullableType|Identifier|UnionType|null
+     * @return Name|NullableType|UnionType|null
      */
     private function resolveChildTypeNode(Type $type): ?Node
     {

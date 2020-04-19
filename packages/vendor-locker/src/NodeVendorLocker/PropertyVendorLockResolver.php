@@ -63,6 +63,6 @@ final class PropertyVendorLockResolver extends AbstractNodeVendorLockResolver
             return null;
         }
 
-        return $this->classManipulator->getProperty($parentClassNode, $propertyName);
+        return $parentClassNode->getProperty($propertyName);
     }
 }

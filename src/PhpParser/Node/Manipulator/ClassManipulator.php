@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -77,26 +76,6 @@ final class ClassManipulator
         }
 
         return $usedTraits;
-    }
-
-    /**
-     * @todo
-     * Waits on https://github.com/nikic/PHP-Parser/pull/646 to be relased
-     */
-    public function getProperty(ClassLike $classLike, string $name): ?Property
-    {
-        foreach ($classLike->getProperties() as $property) {
-            if (count($property->props) > 1) {
-                // usually full property is needed to have all the docs values
-                throw new ShouldNotHappenException();
-            }
-
-            if ($this->nodeNameResolver->isName($property, $name)) {
-                return $property;
-            }
-        }
-
-        return null;
     }
 
     public function hasParentMethodOrInterface(string $class, string $method): bool

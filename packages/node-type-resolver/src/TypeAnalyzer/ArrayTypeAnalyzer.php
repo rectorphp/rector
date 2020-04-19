@@ -19,7 +19,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector;
@@ -42,21 +41,14 @@ final class ArrayTypeAnalyzer
      */
     private $nodeNameResolver;
 
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         PregMatchTypeCorrector $pregMatchTypeCorrector,
-        NodeNameResolver $nodeNameResolver,
-        ClassManipulator $classManipulator
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->classManipulator = $classManipulator;
     }
 
     public function isArrayType(Node $node): bool
@@ -125,7 +117,7 @@ final class ArrayTypeAnalyzer
             return false;
         }
 
-        $property = $this->classManipulator->getProperty($classNode, $propertyName);
+        $property = $classNode->getProperty($propertyName);
         if ($property !== null) {
             $propertyProperty = $property->props[0];
             return $propertyProperty->default instanceof Array_;

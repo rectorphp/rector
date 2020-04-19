@@ -7,10 +7,13 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -136,6 +139,7 @@ PHP
             return null;
         }
 
+        /** @var Name|NullableType|PhpParserUnionType $inferredReturnNode */
         $this->addReturnType($node, $inferredReturnNode);
 
         if ($node instanceof ClassMethod) {
@@ -297,6 +301,7 @@ PHP
 
     /**
      * @param ClassMethod|Function_ $functionLike
+     * @param Name|NullableType|PhpParserUnionType $inferredReturnNode
      */
     private function addReturnType(FunctionLike $functionLike, Node $inferredReturnNode): void
     {

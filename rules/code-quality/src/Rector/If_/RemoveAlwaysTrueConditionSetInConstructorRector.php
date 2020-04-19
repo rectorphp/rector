@@ -18,7 +18,6 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -34,11 +33,6 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 final class RemoveAlwaysTrueConditionSetInConstructorRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var StaticTypeAnalyzer
      */
     private $staticTypeAnalyzer;
@@ -48,12 +42,8 @@ final class RemoveAlwaysTrueConditionSetInConstructorRector extends AbstractRect
      */
     private $typeFactory;
 
-    public function __construct(
-        ClassManipulator $classManipulator,
-        StaticTypeAnalyzer $staticTypeAnalyzer,
-        TypeFactory $typeFactory
-    ) {
-        $this->classManipulator = $classManipulator;
+    public function __construct(StaticTypeAnalyzer $staticTypeAnalyzer, TypeFactory $typeFactory)
+    {
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
         $this->typeFactory = $typeFactory;
     }
@@ -182,7 +172,7 @@ PHP
             return new MixedType();
         }
 
-        $property = $this->classManipulator->getProperty($class, $propertyName);
+        $property = $class->getProperty($propertyName);
         if ($property === null) {
             return new MixedType();
         }
