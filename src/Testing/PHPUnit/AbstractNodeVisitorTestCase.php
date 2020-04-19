@@ -75,7 +75,8 @@ abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase
         );
         $smartFileInfo2 = new SmartFileInfo($expectedNodesFile);
 
-        $nodes = $this->parser->parseFile($originalFile);
+        $originalFileInfo = new SmartFileInfo($originalFile);
+        $nodes = $this->parser->parseFileInfo($originalFileInfo);
 
         $this->visitNodes($nodes);
 
