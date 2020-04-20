@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\CustomIdGeneratorTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\AbstractPhpDocInfoTest;
 use Rector\Core\Testing\StaticFixtureProvider;
@@ -61,6 +62,14 @@ final class DoctrineOrmTagNodeTest extends AbstractPhpDocInfoTest
         );
         foreach ($filePaths as $filePath) {
             yield [$filePath, Property::class, CustomIdGeneratorTagValueNode::class];
+        }
+
+        $filePaths = StaticFixtureProvider::yieldFileFromDirectory(
+            __DIR__ . '/Fixture/Property/GeneratedValue',
+            '*.php'
+        );
+        foreach ($filePaths as $filePath) {
+            yield [$filePath, Property::class, GeneratedValueTagValueNode::class];
         }
     }
 }
