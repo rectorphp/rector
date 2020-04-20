@@ -12,6 +12,7 @@
     "require": {
         "php": "^7.2.4",
         "ext-json": "*",
+        "amphp/process": "^1.1",
         "composer/xdebug-handler": "^1.4",
         "doctrine/annotations": "^1.8",
         "doctrine/inflector": "^1.3",
