@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
+use Amp\Loop;
+use Amp\Process\Process;
 use Rector\Caching\ChangedFilesDetector;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
@@ -28,6 +30,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Amp;
+use Amp\ByteStream;
+use Amp\Promise;
 
 final class ProcessCommand extends AbstractCommand
 {
@@ -351,11 +356,53 @@ final class ProcessCommand extends AbstractCommand
         }
     }
 
+    /**
+     * @param SmartFileInfo[] $phpFileInfos
+     */
     private function processFilesInParallel(array $phpFileInfos): int
     {
-        $processesNumber = 4;
-        $fileInfosForProcesses = array_chunk($phpFileInfos, $processesNumber);
+        /** @var string[] $fileNames */
+        $fileNames = array_map(static function(SmartFileInfo $smartFileInfo) {
+            return $smartFileInfo->getRelativePathname();
+        }, $phpFileInfos);
 
-        throw new ShouldNotHappenException('Not implemented yet');
+        $minimumFilesToProcessInParallel = 1;
+        $maxProcessesCount = 4;
+        $filesToChunkCount = (int) max($minimumFilesToProcessInParallel, (int) (count($phpFileInfos) / $maxProcessesCount));
+        $chunkedFilenames = array_chunk($fileNames, $filesToChunkCount);
+
+        $results = [];
+
+        Loop::run(static function() use (&$results, $chunkedFilenames) {
+            $promises = [];
+
+            foreach($chunkedFilenames as $filenamesForChildProcess) {
+                $promises[] = Amp\call(function() use ($filenamesForChildProcess): \Generator {
+                    $script = array_merge(
+                        [
+                            __DIR__ . '/../../../bin/rector',
+                            CommandNaming::classToName(ProcessWorkerCommand::class),
+                            // Please can we take somehow everything from configuration object or input object?
+                            // etc $this->configuration->toCliArguments() ??
+                            '--dry-run',
+                        ],
+                        // TODO: Does worker process accept multiple files or only source directories?
+                        $filenamesForChildProcess
+                    );
+
+                    $process = new Process($script);
+
+                    yield $process->start();
+
+                    return yield ByteStream\buffer($process->getStdout());
+                });
+            }
+
+            $results = yield Promise\all($promises);
+        });
+
+        print_r($results);
+
+        return ShellCode::SUCCESS;
     }
 }

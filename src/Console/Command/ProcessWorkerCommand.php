@@ -7,12 +7,11 @@ namespace Rector\Core\Console\Command;
 use Rector\Caching\ChangedFilesDetector;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
-use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Application\RectorApplication;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Extension\ReportingExtensionRunner;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\Guard\RectorGuard;
@@ -66,11 +65,6 @@ final class ProcessWorkerCommand extends AbstractCommand
     private $rectorApplication;
 
     /**
-     * @var OutputFormatterCollector
-     */
-    private $outputFormatterCollector;
-
-    /**
      * @var ReportingExtensionRunner
      */
     private $reportingExtensionRunner;
@@ -104,6 +98,10 @@ final class ProcessWorkerCommand extends AbstractCommand
      * @var SymfonyStyle
      */
     private $symfonyStyle;
+    /**
+     * @var JsonOutputFormatter
+     */
+    private $jsonOutputFormatter;
 
     /**
      * @param string[] $paths
@@ -115,7 +113,6 @@ final class ProcessWorkerCommand extends AbstractCommand
         ErrorAndDiffCollector $errorAndDiffCollector,
         Configuration $configuration,
         RectorApplication $rectorApplication,
-        OutputFormatterCollector $outputFormatterCollector,
         ReportingExtensionRunner $reportingExtensionRunner,
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
@@ -123,6 +120,7 @@ final class ProcessWorkerCommand extends AbstractCommand
         ChangedFilesDetector $changedFilesDetector,
         UnchangedFilesFilter $unchangedFilesFilter,
         SymfonyStyle $symfonyStyle,
+        JsonOutputFormatter $jsonOutputFormatter,
         array $paths
     ) {
         $this->filesFinder = $phpFilesFinder;
@@ -131,17 +129,17 @@ final class ProcessWorkerCommand extends AbstractCommand
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
         $this->rectorApplication = $rectorApplication;
-        $this->outputFormatterCollector = $outputFormatterCollector;
         $this->reportingExtensionRunner = $reportingExtensionRunner;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->stubLoader = $stubLoader;
         $this->paths = $paths;
         $this->yamlProcessor = $yamlProcessor;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
-
-        parent::__construct();
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
+        $this->jsonOutputFormatter = $jsonOutputFormatter;
+
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -188,15 +186,6 @@ final class ProcessWorkerCommand extends AbstractCommand
             'r',
             InputOption::VALUE_REQUIRED,
             'Run only one single Rector from the loaded Rectors (in services, sets, etc).'
-        );
-
-        $availableOutputFormatters = $this->outputFormatterCollector->getNames();
-        $this->addOption(
-            Option::OPTION_OUTPUT_FORMAT,
-            'o',
-            InputOption::VALUE_OPTIONAL,
-            sprintf('Select output format: "%s".', implode('", "', $availableOutputFormatters)),
-            ConsoleOutputFormatter::NAME
         );
 
         $this->addOption(
@@ -251,9 +240,7 @@ final class ProcessWorkerCommand extends AbstractCommand
         $this->reportZeroCacheRectorsCondition();
 
         // report diffs and errors
-        $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
-        $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
-        $outputFormatter->report($this->errorAndDiffCollector);
+        $this->jsonOutputFormatter->report($this->errorAndDiffCollector);
 
         $this->reportingExtensionRunner->run();
 
