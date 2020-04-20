@@ -1,4 +1,6 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
@@ -140,10 +142,9 @@ abstract class AbstractProcessCommand extends AbstractCommand
         $this->symfonyStyle = $symfonyStyle;
     }
 
-
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(get_class($this)));
+        $this->setName(CommandNaming::classToName(static::class));
 
         $this->addArgument(
             Option::SOURCE,
@@ -211,12 +212,7 @@ abstract class AbstractProcessCommand extends AbstractCommand
         $this->addOption(Option::CACHE_DEBUG, null, InputOption::VALUE_NONE, 'Debug changed file cache');
         $this->addOption(Option::OPTION_CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear un-chaged files cache');
 
-        $this->addOption(
-            'parallel',
-            null,
-            InputOption::VALUE_NONE,
-            'Experimental feature of parallel processing'
-        );
+        $this->addOption('parallel', null, InputOption::VALUE_NONE, 'Experimental feature of parallel processing');
     }
 
     /**

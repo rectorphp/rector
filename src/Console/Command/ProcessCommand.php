@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
+use function Amp\ByteStream\buffer;
+use function Amp\call;
 use Amp\Loop;
 use Amp\Process\Process;
+use function Amp\Promise\all;
+use Generator;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Configuration\Option;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Amp;
-use Amp\ByteStream;
-use Amp\Promise;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ProcessCommand extends AbstractProcessCommand
@@ -89,30 +90,32 @@ final class ProcessCommand extends AbstractProcessCommand
         return ShellCode::SUCCESS;
     }
 
-
     /**
      * @param SmartFileInfo[] $phpFileInfos
      */
     private function processFilesInParallel(array $phpFileInfos): int
     {
         /** @var string[] $fileNames */
-        $fileNames = array_map(static function(SmartFileInfo $smartFileInfo) {
+        $fileNames = array_map(static function (SmartFileInfo $smartFileInfo) {
             return $smartFileInfo->getRelativePathname();
         }, $phpFileInfos);
 
         $minimumFilesToProcessInParallel = 1;
         $maxProcessesCount = 4;
         // TODO: $maxFilesPerProcess
-        $filesToChunkCount = (int) max($minimumFilesToProcessInParallel, (int) (count($phpFileInfos) / $maxProcessesCount));
+        $filesToChunkCount = (int) max(
+            $minimumFilesToProcessInParallel,
+            (int) (count($phpFileInfos) / $maxProcessesCount)
+        );
         $chunkedFilenames = array_chunk($fileNames, $filesToChunkCount);
 
         $results = [];
 
-        Loop::run(static function() use (&$results, $chunkedFilenames) {
+        Loop::run(static function () use (&$results, $chunkedFilenames) {
             $promises = [];
 
-            foreach($chunkedFilenames as $filenamesForChildProcess) {
-                $promises[] = Amp\call(function() use ($filenamesForChildProcess): \Generator {
+            foreach ($chunkedFilenames as $filenamesForChildProcess) {
+                $promises[] = call(static function () use ($filenamesForChildProcess): Generator {
                     $script = array_merge(
                         [
                             __DIR__ . '/../../../bin/rector', // Dynamic ?
@@ -129,22 +132,17 @@ final class ProcessCommand extends AbstractProcessCommand
 
                     yield $process->start();
 
-                    return yield ByteStream\buffer($process->getStdout());
+                    return yield buffer($process->getStdout());
                 });
             }
 
-            $results = yield Promise\all($promises);
+            $results = yield all($promises);
         });
 
         // Merge results from workers and act as normally
 
         // TODO: merge + deformat and pass it to output formatter
         // report diffs and errors
-        /*
-        $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
-        $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
-        $outputFormatter->report($this->errorAndDiffCollector);
-        */
 
         print_r($results);
 

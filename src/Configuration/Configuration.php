@@ -9,12 +9,10 @@ use Nette\Utils\Strings;
 use OndraM\CiDetector\CiDetector;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
-use Rector\Core\Console\Command\ProcessWorkerCommand;
 use Rector\Core\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Configuration
@@ -117,7 +115,7 @@ final class Configuration
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
         $this->isParallelEnabled = (bool) $input->getOption(Option::OPTION_PARALLEL);
 
-        $outputFileOption = $input->hasOption(Option::OPTION_OUTPUT_FILE) ? $input->getOption(Option::OPTION_OUTPUT_FILE) : null;
+        $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
         $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
 
         /** @var string|null $onlyRector */
@@ -252,10 +250,6 @@ final class Configuration
 
     private function canShowProgressBar(InputInterface $input): bool
     {
-        if ($input->getArgument('command') === CommandNaming::classToName(ProcessWorkerCommand::class)) {
-            return false;
-        }
-
         $noProgressBar = (bool) $input->getOption(Option::OPTION_NO_PROGRESS_BAR);
         if ($noProgressBar) {
             return false;
