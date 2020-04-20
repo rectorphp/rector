@@ -83,8 +83,11 @@ PHP
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
 
         foreach (self::ANNOTATION_TO_METHOD as $annotation => $method) {
             if (! $phpDocInfo->hasByName($annotation)) {
