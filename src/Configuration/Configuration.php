@@ -119,7 +119,10 @@ final class Configuration
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
         $this->isParallelEnabled = (bool) $input->getOption(Option::OPTION_PARALLEL);
-        $this->parallelProcessesCount = (int) $input->getOption(Option::OPTION_PARALLEL_PROCESSES_COUNT);
+
+        /** @var string|null $parallelProcessesCount */
+        $parallelProcessesCount = $input->getOption(Option::OPTION_PARALLEL_PROCESSES_COUNT);
+        $this->parallelProcessesCount = $parallelProcessesCount ? (int) $parallelProcessesCount : 1;
 
         $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
         $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
