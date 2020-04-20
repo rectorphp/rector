@@ -48,7 +48,7 @@ final class PHPStanServicesFactory
             $additionalConfigFiles
         );
 
-        $temporaryPhpstanNeon = null;
+        $temporaryPHPStanNeon = null;
 
         $currentProjectConfigFile = $currentWorkingDirectory . '/phpstan.neon';
         if (file_exists($currentProjectConfigFile)) {
@@ -58,11 +58,11 @@ final class PHPStanServicesFactory
             if (Strings::match($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN)) {
                 // Note: We need a unique file per process if rector runs in parallel
                 $pid = getmypid();
-                $temporaryPhpstanNeon = $currentWorkingDirectory . '/rector-temp-phpstan' . $pid . '.neon';
+                $temporaryPHPStanNeon = $currentWorkingDirectory . '/rector-temp-phpstan' . $pid . '.neon';
                 $clearedPhpstanNeonContent = Strings::replace($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN);
-                FileSystem::write($temporaryPhpstanNeon, $clearedPhpstanNeonContent);
+                FileSystem::write($temporaryPHPStanNeon, $clearedPhpstanNeonContent);
 
-                $additionalConfigFiles[] = $temporaryPhpstanNeon;
+                $additionalConfigFiles[] = $temporaryPHPStanNeon;
             } else {
                 $additionalConfigFiles[] = $currentProjectConfigFile;
             }
@@ -76,8 +76,8 @@ final class PHPStanServicesFactory
         $this->container = $containerFactory->create(sys_get_temp_dir(), $additionalConfigFiles, []);
 
         // clear bleeding edge fallback
-        if ($temporaryPhpstanNeon !== null) {
-            FileSystem::delete($temporaryPhpstanNeon);
+        if ($temporaryPHPStanNeon !== null) {
+            FileSystem::delete($temporaryPHPStanNeon);
         }
     }
 

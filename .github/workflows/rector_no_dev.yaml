@@ -19,4 +19,7 @@ jobs:
                     coverage: none
 
             -   run: composer install --no-progress --no-dev
-            -   run: bin/rector list
+            -   run: |
+                    # needs to remove, add dev dependencies are missing and phpstan.neon includes them
+                    rm phpstan.neon
+                    bin/rector list
