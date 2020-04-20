@@ -232,7 +232,7 @@ final class ProcessCommand extends AbstractCommand
         $this->addOption(Option::CACHE_DEBUG, null, InputOption::VALUE_NONE, 'Debug changed file cache');
         $this->addOption(Option::OPTION_CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear un-chaged files cache');
 
-        $this->addOption('parallel', null, InputOption::VALUE_NONE, 'Experimental feature of parallel processing');
+        $this->addOption(Option::OPTION_PARALLEL, null, InputOption::VALUE_NONE, 'Experimental feature of parallel processing');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
