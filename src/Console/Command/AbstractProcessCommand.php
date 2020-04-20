@@ -212,8 +212,19 @@ abstract class AbstractProcessCommand extends AbstractCommand
         $this->addOption(Option::CACHE_DEBUG, null, InputOption::VALUE_NONE, 'Debug changed file cache');
         $this->addOption(Option::OPTION_CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear un-chaged files cache');
 
-        $this->addOption(Option::OPTION_PARALLEL, null, InputOption::VALUE_NONE, 'Experimental feature of parallel processing');
-        $this->addOption(Option::OPTION_PARALLEL_PROCESSES_COUNT, null, InputOption::VALUE_REQUIRED, 'Experimental feature of parallel processing', 4);
+        $this->addOption(
+            Option::OPTION_PARALLEL,
+            null,
+            InputOption::VALUE_NONE,
+            'Experimental feature of parallel processing'
+        );
+        $this->addOption(
+            Option::OPTION_PARALLEL_PROCESSES_COUNT,
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Experimental feature of parallel processing',
+            4
+        );
     }
 
     /**

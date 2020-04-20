@@ -109,7 +109,7 @@ final class ProcessCommand extends AbstractProcessCommand
 
         $filesToChunkCount = (int) max(
             self::MINIMUM_FILES_TO_PROCESS_IN_PARALLEL,
-            (int) ceil((count($phpFileInfos) / $this->configuration->getParallelProcessesCount()))
+            (int) ceil(count($phpFileInfos) / $this->configuration->getParallelProcessesCount())
         );
         $chunkedFilenames = array_chunk($fileNames, $filesToChunkCount);
 
@@ -155,65 +155,5 @@ final class ProcessCommand extends AbstractProcessCommand
         print_r($results);
 
         return ShellCode::SUCCESS;
-    }
-
-    /**
-     * Adapted from https://gist.github.com/divinity76/01ef9ca99c111565a72d3a8a6e42f7fb
-     * returns number of cpu cores
-     * Copyleft 2018, license: WTFPL
-     * @throws \RuntimeException
-     * @throws \LogicException
-     * @return int
-     * @psalm-suppress ForbiddenCode
-     */
-    private function getCpuCount(): int
-    {
-        if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-            /*
-            $str = trim((string) shell_exec('wmic cpu get NumberOfCores 2>&1'));
-            if (!preg_match('/(\d+)/', $str, $matches)) {
-                throw new \RuntimeException('wmic failed to get number of cpu cores on windows!');
-            }
-            return ((int) $matches [1]);
-            */
-            return 1;
-        }
-
-        if (!extension_loaded('pcntl')) {
-            return 1;
-        }
-
-        $has_nproc = trim((string) @shell_exec('command -v nproc'));
-        if ($has_nproc) {
-            $ret = @shell_exec('nproc');
-            if (is_string($ret)) {
-                $ret = trim($ret);
-                /** @var int|false */
-                $tmp = filter_var($ret, FILTER_VALIDATE_INT);
-                if (is_int($tmp)) {
-                    return $tmp;
-                }
-            }
-        }
-
-        $ret = @shell_exec('sysctl -n hw.ncpu');
-        if (is_string($ret)) {
-            $ret = trim($ret);
-            /** @var int|false */
-            $tmp = filter_var($ret, FILTER_VALIDATE_INT);
-            if (is_int($tmp)) {
-                return $tmp;
-            }
-        }
-
-        if (is_readable('/proc/cpuinfo')) {
-            $cpuinfo = file_get_contents('/proc/cpuinfo');
-            $count = substr_count($cpuinfo, 'processor');
-            if ($count > 0) {
-                return $count;
-            }
-        }
-
-        throw new \LogicException('failed to detect number of CPUs!');
     }
 }
