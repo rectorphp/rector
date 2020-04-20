@@ -73,8 +73,6 @@ PHP
 
         $doctrineEntityTag->removeRepositoryClass();
 
-        // save the entity tag
-
         return $node;
     }
 }

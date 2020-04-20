@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 final class SomeClassMethod
 {
     /**
-     * @Route({"en": "/en"}, name="homepage")
+     * @Route({"en":"/en"}, name="homepage")
      */
     public function run()
     {

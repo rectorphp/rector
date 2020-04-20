@@ -34,7 +34,10 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode
         $contentItems = [];
 
         if ($this->repositoryClass !== null) {
-            $contentItems['repositoryClass'] = sprintf('repositoryClass="%s"', $this->repositoryClass);
+            $contentItems['repositoryClass'] = $this->printValueWithOptionalQuotes(
+                'repositoryClass',
+                $this->repositoryClass
+            );
         }
 
         if ($this->readOnly !== null) {
