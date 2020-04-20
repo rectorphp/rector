@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
+use function Amp\ByteStream\buffer;
+use function Amp\call;
 use Amp\Loop;
 use Amp\Process\Process;
+use function Amp\Promise\all;
+use Generator;
 use Rector\Caching\ChangedFilesDetector;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
@@ -15,7 +19,6 @@ use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Extension\ReportingExtensionRunner;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\Guard\RectorGuard;
@@ -30,9 +33,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Amp;
-use Amp\ByteStream;
-use Amp\Promise;
 
 final class ProcessCommand extends AbstractCommand
 {
@@ -222,12 +222,7 @@ final class ProcessCommand extends AbstractCommand
         $this->addOption(Option::CACHE_DEBUG, null, InputOption::VALUE_NONE, 'Debug changed file cache');
         $this->addOption(Option::OPTION_CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear un-chaged files cache');
 
-        $this->addOption(
-            'parallel',
-            null,
-            InputOption::VALUE_NONE,
-            'Experimental feature of parallel processing'
-        );
+        $this->addOption('parallel', null, InputOption::VALUE_NONE, 'Experimental feature of parallel processing');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -362,22 +357,25 @@ final class ProcessCommand extends AbstractCommand
     private function processFilesInParallel(array $phpFileInfos): int
     {
         /** @var string[] $fileNames */
-        $fileNames = array_map(static function(SmartFileInfo $smartFileInfo) {
+        $fileNames = array_map(static function (SmartFileInfo $smartFileInfo) {
             return $smartFileInfo->getRelativePathname();
         }, $phpFileInfos);
 
         $minimumFilesToProcessInParallel = 1;
         $maxProcessesCount = 4;
-        $filesToChunkCount = (int) max($minimumFilesToProcessInParallel, (int) (count($phpFileInfos) / $maxProcessesCount));
+        $filesToChunkCount = (int) max(
+            $minimumFilesToProcessInParallel,
+            (int) (count($phpFileInfos) / $maxProcessesCount)
+        );
         $chunkedFilenames = array_chunk($fileNames, $filesToChunkCount);
 
         $results = [];
 
-        Loop::run(static function() use (&$results, $chunkedFilenames) {
+        Loop::run(static function () use (&$results, $chunkedFilenames) {
             $promises = [];
 
-            foreach($chunkedFilenames as $filenamesForChildProcess) {
-                $promises[] = Amp\call(function() use ($filenamesForChildProcess): \Generator {
+            foreach ($chunkedFilenames as $filenamesForChildProcess) {
+                $promises[] = call(function () use ($filenamesForChildProcess): Generator {
                     $script = array_merge(
                         [
                             __DIR__ . '/../../../bin/rector',
@@ -394,11 +392,11 @@ final class ProcessCommand extends AbstractCommand
 
                     yield $process->start();
 
-                    return yield ByteStream\buffer($process->getStdout());
+                    return yield buffer($process->getStdout());
                 });
             }
 
-            $results = yield Promise\all($promises);
+            $results = yield all($promises);
         });
 
         print_r($results);

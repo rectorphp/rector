@@ -98,6 +98,7 @@ final class ProcessWorkerCommand extends AbstractCommand
      * @var SymfonyStyle
      */
     private $symfonyStyle;
+
     /**
      * @var JsonOutputFormatter
      */
