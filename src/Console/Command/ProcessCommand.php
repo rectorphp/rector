@@ -37,6 +37,16 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ProcessCommand extends AbstractCommand
 {
     /**
+     * @var int
+     */
+    private const MINIMUM_FILES_TO_PROCESS_IN_PARALLEL = 1;
+
+    /**
+     * @var int
+     */
+    private const MAX_PROCESSES_COUNT = 4;
+
+    /**
      * @var string[]
      */
     private $paths = [];
@@ -110,14 +120,6 @@ final class ProcessCommand extends AbstractCommand
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-    /**
-     * @var int
-     */
-    private const MINIMUM_FILES_TO_PROCESS_IN_PARALLEL = 1;
-    /**
-     * @var int
-     */
-    private const MAX_PROCESSES_COUNT = 4;
 
     /**
      * @param string[] $paths
