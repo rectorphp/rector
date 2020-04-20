@@ -248,7 +248,7 @@ final class Configuration
 
     public function isParallelEnabled(): bool
     {
-        return $this->getParallelProcessesCount() > 1;
+        return $this->isParallelEnabled;
     }
 
     /**
