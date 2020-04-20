@@ -38,9 +38,11 @@ try {
     $configuration = $container->get(Configuration::class);
     $configuration->setFirstResolverConfig($rectorConfigsResolver->getFirstResolvedConfig());
 
-    /** @var ChangedFilesDetector $changedFilesDetector */
-    $changedFilesDetector = $container->get(ChangedFilesDetector::class);
-    $changedFilesDetector->setFirstUsedConfig(realpath($rectorConfigsResolver->getFirstResolvedConfig()));
+    if ($rectorConfigsResolver->getFirstResolvedConfig()) {
+        /** @var ChangedFilesDetector $changedFilesDetector */
+        $changedFilesDetector = $container->get(ChangedFilesDetector::class);
+        $changedFilesDetector->setFirstUsedConfig(realpath($rectorConfigsResolver->getFirstResolvedConfig()));
+    }
 } catch (Throwable $throwable) {
     $symfonyStyle = (new SymfonyStyleFactory(new PrivatesCaller()))->create();
     $symfonyStyle->error($throwable->getMessage());
