@@ -110,6 +110,14 @@ final class ProcessCommand extends AbstractCommand
      * @var SymfonyStyle
      */
     private $symfonyStyle;
+    /**
+     * @var int
+     */
+    private const MINIMUM_FILES_TO_PROCESS_IN_PARALLEL = 1;
+    /**
+     * @var int
+     */
+    private const MAX_PROCESSES_COUNT = 4;
 
     /**
      * @param string[] $paths
@@ -360,12 +368,9 @@ final class ProcessCommand extends AbstractCommand
         $fileNames = array_map(static function (SmartFileInfo $smartFileInfo) {
             return $smartFileInfo->getRelativePathname();
         }, $phpFileInfos);
-
-        $minimumFilesToProcessInParallel = 1;
-        $maxProcessesCount = 4;
         $filesToChunkCount = (int) max(
-            $minimumFilesToProcessInParallel,
-            (int) (count($phpFileInfos) / $maxProcessesCount)
+            self::MINIMUM_FILES_TO_PROCESS_IN_PARALLEL,
+            (int) (count($phpFileInfos) / self::MAX_PROCESSES_COUNT)
         );
         $chunkedFilenames = array_chunk($fileNames, $filesToChunkCount);
 
