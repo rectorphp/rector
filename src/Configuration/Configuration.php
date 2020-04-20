@@ -83,6 +83,11 @@ final class Configuration
     private $isCacheEnabled = false;
 
     /**
+     * @var bool
+     */
+    private $isParallelEnabled = false;
+
+    /**
      * @var string[]
      */
     private $fileExtensions = [];
@@ -108,6 +113,7 @@ final class Configuration
         $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
+        $this->isParallelEnabled = (bool) $input->getOption(Option::OPTION_PARALLEL);
 
         $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
         $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
@@ -227,6 +233,11 @@ final class Configuration
     public function isCacheEnabled(): bool
     {
         return $this->isCacheEnabled;
+    }
+
+    public function isParallelEnabled(): bool
+    {
+        return $this->isParallelEnabled;
     }
 
     /**

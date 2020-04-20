@@ -13,6 +13,7 @@ use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Extension\ReportingExtensionRunner;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\Guard\RectorGuard;
@@ -215,6 +216,13 @@ final class ProcessCommand extends AbstractCommand
 
         $this->addOption(Option::CACHE_DEBUG, null, InputOption::VALUE_NONE, 'Debug changed file cache');
         $this->addOption(Option::OPTION_CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear un-chaged files cache');
+
+        $this->addOption(
+            'parallel',
+            null,
+            InputOption::VALUE_NONE,
+            'Experimental feature of parallel processing'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -238,6 +246,12 @@ final class ProcessCommand extends AbstractCommand
 
         $phpFileInfos = $this->processWithCache($phpFileInfos);
 
+        $this->configuration->setFileInfos($phpFileInfos);
+
+        if ($this->configuration->isParallelEnabled()) {
+            return $this->processFilesInParallel($phpFileInfos);
+        }
+
         if ($this->configuration->isCacheDebug()) {
             $this->symfonyStyle->note(sprintf('[cache] %d files after cache filter', count($phpFileInfos)));
             $this->symfonyStyle->listing($phpFileInfos);
@@ -245,7 +259,6 @@ final class ProcessCommand extends AbstractCommand
 
         $this->yamlProcessor->run($source);
 
-        $this->configuration->setFileInfos($phpFileInfos);
         $this->rectorApplication->runOnFileInfos($phpFileInfos);
 
         $this->reportZeroCacheRectorsCondition();
@@ -336,5 +349,13 @@ final class ProcessCommand extends AbstractCommand
         foreach ($this->errorAndDiffCollector->getAffectedFileInfos() as $affectedFileInfo) {
             $this->changedFilesDetector->invalidateFile($affectedFileInfo);
         }
+    }
+
+    private function processFilesInParallel(array $phpFileInfos): int
+    {
+        $processesNumber = 4;
+        $fileInfosForProcesses = array_chunk($phpFileInfos, $processesNumber);
+
+        throw new ShouldNotHappenException('Not implemented yet');
     }
 }
