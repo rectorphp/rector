@@ -85,9 +85,7 @@ final class RenamedClassesReportExtension implements ReportingExtensionInterface
     {
         $classRenames = $this->renamedClassesCollector->getClassRenamesSortedByHighestParents();
 
-        $classAliasContent = $this->betterStandardPrinter->print($this->createClassAliasNodes($classRenames));
-
-        return '<?php' . PHP_EOL . PHP_EOL . $classAliasContent;
+        return $this->betterStandardPrinter->prettyPrintFile($this->createClassAliasNodes($classRenames));
     }
 
     /**

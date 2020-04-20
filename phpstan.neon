@@ -23,30 +23,20 @@ parameters:
         - compiler/src
 
     excludes_analyse:
+        # generated files
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
-
 
         - ci/check_services_in_yaml_configs.php
         - "*/Expected/*"
         # complex printer
-        - "packages/ContributorTools/src/Command/DumpNodesCommand.php"
         - "utils/phpstan/generate-paths.php"
-        # test files
-        - '*packages/NodeTypeResolver/tests/Source/AnotherClass.php'
         - '*tests/Rector/MethodCall/RenameMethodRector/**/SomeClass.php'
-        - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
-        - 'packages/NodeTypeResolver/tests/PerNodeTypeResolver/VariableTypeResolver/Source/NewClass.php'
         # tests files
         - '*tests/*/Fixture/*'
         - '*tests/*/Source/*'
         - '*tests/Source/*'
-        - 'packages/NodeTypeResolver/tests/Source/SomeClass.php'
-        # intentionally original
-        - 'packages/Php70/src/EregToPcreTransformer.php'
-        - '*/packages/ContributorTools/templates/*'
         # part of composer
-        - 'tests/Composer/AutoloadWrongCasesEventSubscriber.php'
         - '*/tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Expected/Just*ExceptionWithoutNamespace.php'
         # stubs
         - 'stubs/*'
@@ -159,9 +149,6 @@ parameters:
         # test
         - '#Class Rector\\DynamicTypeAnalysis\\Tests\\Rector\\ClassMethod\\AddArgumentTypeWithProbeDataRector\\Fixture\\SomeClass not found#'
 
-        # known value
-        - '#Parameter \#1 \$type of method PhpParser\\Builder\\Param\:\:setType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
-
         -
             message: '#Class Rector\\Core\\Tests\\Rector\\StaticCall\\SwapClassMethodArgumentsRector\\Fixture\\SomeClass not found#'
             path: tests/Rector/StaticCall/SwapClassMethodArgumentsRector/SwapClassMethodArgumentsRectorTest.php
@@ -226,10 +213,7 @@ parameters:
         - '#Method Rector\\SOLID\\Reflection\\ParentConstantReflectionResolver\:\:(.*?)\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
         - '#Parameter \#1 \$firstStmt of method Rector\\Core\\Rector\\MethodBody\\NormalToFluentRector\:\:isBothMethodCallMatch\(\) expects PhpParser\\Node\\Stmt\\Expression, PhpParser\\Node\\Stmt given#'
         - '#Method Rector\\Core\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
-        - '#Property PhpParser\\Node\\Stmt\\ClassMethod\:\:\$returnType \(PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null\) does not accept PhpParser\\Node#'
 
-        - '#Parameter \#1 \$possibleSubtype of method Rector\\TypeDeclaration\\PhpParserTypeAnalyzer\:\:isSubtypeOf\(\) expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType, PhpParser\\Node given#'
-        - '#Parameter \#2 \$inferredReturnNode of method Rector\\TypeDeclaration\\Rector\\FunctionLike\\ReturnTypeDeclarationRector\:\:addReturnType\(\) expects PhpParser\\Node, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null given#'
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
         - '#Strict comparison using \=\=\= between mixed and null will always evaluate to false#'
         - '#Cannot call method (.*?)\(\) on Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\|null#'
@@ -263,3 +247,7 @@ parameters:
         - '#Method Rector\\PHPOffice\\Rector\\MethodCall\\IncreaseColumnIndexRector\:\:findVariableAssignName\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
 
         - '#Parameter \#1 \$keyName of method Rector\\AttributeAwarePhpDoc\\Ast\\Type\\AttributeAwareArrayShapeItemNode\:\:createKeyWithSpacePattern\(\) expects PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null, PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode\|PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode\|PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode\|null given#'
+        - '#Method Rector\\Caching\\ChangedFilesDetector\:\:hashFile\(\) should return string but returns string\|false#'
+
+        - '#If condition is always false#'
+        - '#Parameter \#1 \$stmts of method Rector\\Core\\PhpParser\\Printer\\BetterStandardPrinter\:\:prettyPrintFile\(\) expects array<PhpParser\\Node\>, PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Namespace_ given#'

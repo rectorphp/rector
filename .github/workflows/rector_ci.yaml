@@ -38,7 +38,7 @@ jobs:
             -   run: composer install --no-progress
 
             ## First run Rector
-            -   run: composer rector-ci-fix
+            -   run: composer rector
 
             -
                 name: Check for Rector modified files

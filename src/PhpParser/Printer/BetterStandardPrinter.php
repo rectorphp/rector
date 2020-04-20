@@ -121,6 +121,21 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
+     * @param Node[]|Node|null $stmts
+     */
+    public function prettyPrintFile($stmts): string
+    {
+        if ($stmts === null) {
+            $stmts = [];
+        } elseif (! is_array($stmts)) {
+            $stmts = [$stmts];
+        }
+
+        $fileContent = parent::prettyPrintFile($stmts);
+        return $fileContent . PHP_EOL;
+    }
+
+    /**
      * This allows to use both spaces and tabs vs. original space-only
      */
     protected function setIndentLevel(int $level): void

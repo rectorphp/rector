@@ -24,7 +24,9 @@
         "phpstan/phpdoc-parser": "^0.4",
         "phpstan/phpstan": "^0.12.19",
         "phpstan/phpstan-phpunit": "^0.12",
+        "psr/simple-cache": "^1.0",
         "sebastian/diff": "^3.0|^4.0",
+        "symfony/cache": "^4.4.6|^5.0.6",
         "symfony/console": "^4.4.6|^5.0.6",
         "symfony/dependency-injection": "^4.4.6|^5.0.6",
         "symfony/finder": "^4.4.6|^5.0.6",
@@ -88,6 +90,7 @@
             "Rector\\PHPStanStaticTypeMapper\\": "packages/phpstan-static-type-mapper/src",
             "Rector\\PHPStan\\": "rules/phpstan/src",
             "Rector\\PHPUnitSymfony\\": "rules/phpunit-symfony/src",
+            "Rector\\Caching\\": "packages/caching/src",
             "Rector\\PHPUnit\\": "rules/phpunit/src",
             "Rector\\PSR4\\": "rules/psr4/src",
             "Rector\\Phalcon\\": "rules/phalcon/src",
@@ -138,6 +141,7 @@
             "Rector\\CakePHP\\Tests\\": "rules/cakephp/tests",
             "Rector\\Celebrity\\Tests\\": "rules/celebrity/tests",
             "Rector\\CodeQuality\\Tests\\": "rules/code-quality/tests",
+            "Rector\\Caching\\Tests\\": "packages/caching/tests",
             "Rector\\CodingStyle\\Tests\\": "rules/coding-style/tests",
             "Rector\\Core\\Tests\\": "tests",
             "Rector\\DeadCode\\Tests\\": "rules/dead-code/tests",
@@ -263,8 +267,7 @@
             "bin/rector dump-rectors > docs/AllRectorsOverview.md",
             "bin/rector dump-nodes > docs/NodesOverview.md"
         ],
-        "rector-ci-fix": "bin/rector process --config rector-ci.yaml --ansi --no-progress-bar",
-        "rector-ci": "bin/rector process --config rector-ci.yaml --ansi --no-progress-bar --dry-run",
+        "rector-ci": "bin/rector process --config rector-ci.yaml --debug --dry-run",
         "rector": "bin/rector process --config rector-ci.yaml --ansi"
     },
     "config": {

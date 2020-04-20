@@ -6,6 +6,7 @@ namespace Rector\Privatization\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -19,7 +20,7 @@ use Rector\SOLID\ValueObject\ConstantVisibility;
 /**
  * @see \Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\PrivatizeLocalClassConstantRectorTest
  */
-final class PrivatizeLocalClassConstantRector extends AbstractRector
+final class PrivatizeLocalClassConstantRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
      * @var string

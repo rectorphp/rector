@@ -59,6 +59,11 @@ final class FileDiff
         return $this->smartFileInfo->getRelativeFilePath();
     }
 
+    public function getFileInfo(): SmartFileInfo
+    {
+        return $this->smartFileInfo;
+    }
+
     /**
      * @return RectorWithFileAndLineChange[]
      */

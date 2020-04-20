@@ -9,10 +9,12 @@ use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
+use PHPStan\Dependency\DependencyResolver;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
 use PHPStan\DependencyInjection\Type\DynamicReturnTypeExtensionRegistryProvider;
 use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProvider;
+use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 
@@ -117,6 +119,22 @@ final class PHPStanServicesFactory
     public function createDynamicReturnTypeExtensionRegistryProvider(): DynamicReturnTypeExtensionRegistryProvider
     {
         return $this->container->getByType(DynamicReturnTypeExtensionRegistryProvider::class);
+    }
+
+    /**
+     * @api
+     */
+    public function createDependencyResolver(): DependencyResolver
+    {
+        return $this->container->getByType(DependencyResolver::class);
+    }
+
+    /**
+     * @api
+     */
+    public function createFileHelper(): FileHelper
+    {
+        return $this->container->getByType(FileHelper::class);
     }
 
     /**

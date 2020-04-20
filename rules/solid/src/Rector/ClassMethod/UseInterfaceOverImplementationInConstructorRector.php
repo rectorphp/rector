@@ -112,6 +112,7 @@ PHP
     private function getClassDirectInterfaces(string $typeName): array
     {
         $interfaceNames = class_implements($typeName);
+
         foreach ($interfaceNames as $possibleDirectInterfaceName) {
             foreach ($interfaceNames as $key => $interfaceName) {
                 if ($possibleDirectInterfaceName === $interfaceName) {
