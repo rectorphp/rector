@@ -115,6 +115,9 @@ final class ProcessCommand extends AbstractProcessCommand
 
         $results = [];
 
+        $this->symfonyStyle->note(sprintf('[debug] %d files to process', count($phpFileInfos)));
+        $this->symfonyStyle->note(sprintf('[debug] running in %d processes', count($chunkedFilenames)));
+
         Loop::run(static function () use (&$results, $chunkedFilenames) {
             $promises = [];
 
