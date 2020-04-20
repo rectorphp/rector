@@ -195,7 +195,7 @@ parameters:
         - 'Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector'
 ```
 
-Do you want to skip just specific line with specific rule?
+### How to Skip Specific Line + Specific Rule?
 
 Use `@noRector \FQN name` annotation:
 
