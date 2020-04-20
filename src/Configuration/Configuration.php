@@ -93,6 +93,11 @@ final class Configuration
     private $fileExtensions = [];
 
     /**
+     * @var int
+     */
+    private $parallelProcessesCount = 1;
+
+    /**
      * @param string[] $fileExtensions
      */
     public function __construct(CiDetector $ciDetector, bool $isCacheEnabled, array $fileExtensions)
@@ -114,6 +119,7 @@ final class Configuration
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
         $this->isParallelEnabled = (bool) $input->getOption(Option::OPTION_PARALLEL);
+        $this->parallelProcessesCount = (int) $input->getOption(Option::OPTION_PARALLEL_PROCESSES_COUNT);
 
         $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
         $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
@@ -235,9 +241,14 @@ final class Configuration
         return $this->isCacheEnabled;
     }
 
+    public function getParallelProcessesCount(): int
+    {
+        return $this->parallelProcessesCount;
+    }
+
     public function isParallelEnabled(): bool
     {
-        return $this->isParallelEnabled;
+        return $this->getParallelProcessesCount() > 1;
     }
 
     /**

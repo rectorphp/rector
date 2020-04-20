@@ -269,7 +269,6 @@
             "bin/rector dump-nodes > docs/NodesOverview.md"
         ],
         "rector-ci": "bin/rector process --config rector-ci.yaml --dry-run",
-        "rector-ci-parallel": "bin/rector process --config rector-ci.yaml --dry-run --parallel",
         "rector": "bin/rector process --config rector-ci.yaml --ansi"
     },
     "config": {

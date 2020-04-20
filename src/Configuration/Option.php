@@ -105,4 +105,9 @@ final class Option
      * @var string
      */
     public const OPTION_PARALLEL = 'parallel';
+
+    /**
+     * @var string
+     */
+    public const OPTION_PARALLEL_PROCESSES_COUNT = 'parallel-processes';
 }
