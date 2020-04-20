@@ -115,10 +115,7 @@ final class Configuration
         $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
-
-        if ($input->hasOption(Option::OPTION_PARALLEL)) {
-            $this->isParallelEnabled = (bool) $input->getOption(Option::OPTION_PARALLEL);
-        }
+        $this->isParallelEnabled = (bool) $input->getOption(Option::OPTION_PARALLEL);
 
         $outputFileOption = $input->hasOption(Option::OPTION_OUTPUT_FILE) ? $input->getOption(Option::OPTION_OUTPUT_FILE) : null;
         $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
