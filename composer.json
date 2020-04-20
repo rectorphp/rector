@@ -254,7 +254,7 @@
             "vendor/bin/ecs check --fix --ansi",
             "ci/clean_trailing_spaces.sh"
         ],
-        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=4G --ansi --error-format symplify",
         "changelog": [
             "vendor/bin/changelog-linker dump-merges --in-categories",
             "vendor/bin/changelog-linker link",
