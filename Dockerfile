@@ -37,7 +37,7 @@ RUN mkdir /tmp/opcache
 COPY . .
 
 # To warmup opcache a little
-RUN bin/rector list 2>&1 > /dev/null
+RUN bin/rector list
 
 ENTRYPOINT [ "bin/rector" ]
 
