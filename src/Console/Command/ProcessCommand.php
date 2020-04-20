@@ -24,10 +24,12 @@ final class ProcessCommand extends AbstractProcessCommand
      * @var int
      */
     private const MINIMUM_FILES_TO_PROCESS_IN_PARALLEL = 1;
+
     /**
      * @var int
      */
     private const MAX_PROCESSES_COUNT = 4;
+
     protected function configure(): void
     {
         parent::configure();
