@@ -19,7 +19,9 @@ jobs:
                     coverage: none
 
             -   run: composer install --no-progress
-            -   run: bin/rector process --config rector-ci.yaml --dry-run #No parallel to compare speed
-            -   run: bin/rector process --config rector-ci.yaml --dry-run --parallel # Default is 4
+            -   run: bin/rector process --config rector-ci.yaml --dry-run
+            -   run: bin/rector process --config rector-ci.yaml --dry-run --parallel --parallel-processes=2
+            -   run: bin/rector process --config rector-ci.yaml --dry-run --parallel --parallel-processes=3
+            -   run: bin/rector process --config rector-ci.yaml --dry-run --parallel --parallel-processes=4
             -   run: bin/rector process --config rector-ci.yaml --dry-run --parallel --parallel-processes=8
             -   run: bin/rector process --config rector-ci.yaml --dry-run --parallel --parallel-processes=16
