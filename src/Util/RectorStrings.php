@@ -52,6 +52,18 @@ final class RectorStrings
         return self::camelCaseToGlue($input, '_');
     }
 
+    public static function underscoreToCamelCase(string $input): string
+    {
+        $nameParts = explode('_', $input);
+        $camelCase = '';
+
+        foreach ($nameParts as $namePart) {
+            $camelCase .= ucfirst($namePart);
+        }
+
+        return $camelCase;
+    }
+
     /**
      * @param string[] $prefixesToRemove
      */

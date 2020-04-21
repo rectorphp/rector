@@ -77,16 +77,6 @@ final class DoctrineDocBlockResolver
         return $doctrineRelationTagValueNode->getTargetEntity();
     }
 
-    public function hasPropertyDoctrineIdTag(Property $property): bool
-    {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
-        return $phpDocInfo->hasByType(IdTagValueNode::class);
-    }
-
     public function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
     {
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -122,6 +112,13 @@ final class DoctrineDocBlockResolver
         return $this->isDoctrineEntityClass($classNode);
     }
 
+    private function hasPropertyDoctrineIdTag(Property $property): bool
+    {
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        return $phpDocInfo ? $phpDocInfo->hasByType(IdTagValueNode::class) : false;
+    }
+
     private function isDoctrineEntityClassNode(Class_ $class): bool
     {
         $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -152,10 +149,6 @@ final class DoctrineDocBlockResolver
         // dummy check of 3rd party code without running it
         $docCommentContent = (string) $reflectionClass->getDocComment();
 
-        if (Strings::contains($docCommentContent, '@ORM\Entity')) {
-            return true;
-        }
-
-        return Strings::contains($docCommentContent, '@ORM\Embeddable');
+        return (bool) Strings::match($docCommentContent, '#@ORM\\\\(Entity|Embeddable)#');
     }
 }

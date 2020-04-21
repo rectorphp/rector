@@ -10,15 +10,20 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
+use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
-use PHPStan\Analyser\Scope;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\Caching\ChangedFilesDetector;
+use Rector\Caching\FileSystem\DependencyResolver;
+use Rector\Core\Configuration\Configuration;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -51,29 +56,64 @@ final class NodeScopeResolver
      */
     private $traitNodeScopeCollector;
 
+    /**
+     * @var DependencyResolver
+     */
+    private $dependencyResolver;
+
+    /**
+     * @var ChangedFilesDetector
+     */
+    private $changedFilesDetector;
+
+    /**
+     * @var Configuration
+     */
+    private $configuration;
+
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
+
+    /**
+     * @var string[]
+     */
+    private $dependentFiles = [];
+
     public function __construct(
+        ChangedFilesDetector $changedFilesDetector,
         ScopeFactory $scopeFactory,
         PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         ReflectionProvider $reflectionProvider,
         RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
-        TraitNodeScopeCollector $traitNodeScopeCollector
+        TraitNodeScopeCollector $traitNodeScopeCollector,
+        DependencyResolver $dependencyResolver,
+        Configuration $configuration,
+        SymfonyStyle $symfonyStyle
     ) {
         $this->scopeFactory = $scopeFactory;
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->removeDeepChainMethodCallNodeVisitor = $removeDeepChainMethodCallNodeVisitor;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
+        $this->dependencyResolver = $dependencyResolver;
+        $this->changedFilesDetector = $changedFilesDetector;
+        $this->configuration = $configuration;
+        $this->symfonyStyle = $symfonyStyle;
     }
 
     /**
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function processNodes(array $nodes, string $filePath): array
+    public function processNodes(array $nodes, SmartFileInfo $smartFileInfo): array
     {
         $this->removeDeepChainMethodCallNodes($nodes);
 
-        $scope = $this->scopeFactory->createFromFile($filePath);
+        $scope = $this->scopeFactory->createFromFile($smartFileInfo);
+
+        $this->dependentFiles = [];
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (Node $node, MutatingScope $scope): void {
@@ -99,10 +139,14 @@ final class NodeScopeResolver
             } else {
                 $node->setAttribute(AttributeKey::SCOPE, $scope);
             }
+
+            $this->resolveDependentFiles($node, $scope);
         };
 
         /** @var MutatingScope $scope */
         $this->phpStanNodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
+
+        $this->reportCacheDebugAndSaveDependentFiles($smartFileInfo, $this->dependentFiles);
 
         return $nodes;
     }
@@ -144,5 +188,50 @@ final class NodeScopeResolver
         }
 
         return $classLike->name->toString();
+    }
+
+    private function reportCacheDebug(SmartFileInfo $smartFileInfo, array $dependentFiles): void
+    {
+        if (! $this->configuration->isCacheDebug()) {
+            return;
+        }
+
+        $this->symfonyStyle->note(
+            sprintf('[debug] %d dependencies for %s file', count($dependentFiles), $smartFileInfo->getRealPath())
+        );
+
+        if ($dependentFiles !== []) {
+            $this->symfonyStyle->listing($dependentFiles);
+        }
+    }
+
+    private function resolveDependentFiles(Node $node, MutatingScope $mutatingScope): void
+    {
+        if (! $this->configuration->isCacheEnabled()) {
+            return;
+        }
+
+        try {
+            foreach ($this->dependencyResolver->resolveDependencies($node, $mutatingScope) as $dependentFile) {
+                $this->dependentFiles[] = $dependentFile;
+            }
+        } catch (AnalysedCodeException $analysedCodeException) {
+            // @ignoreException
+        }
+    }
+
+    /**
+     * @param string[] $dependentFiles
+     */
+    private function reportCacheDebugAndSaveDependentFiles(SmartFileInfo $smartFileInfo, array $dependentFiles): void
+    {
+        if (! $this->configuration->isCacheEnabled()) {
+            return;
+        }
+
+        $this->reportCacheDebug($smartFileInfo, $dependentFiles);
+
+        // save for cache
+        $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
     }
 }

@@ -110,7 +110,7 @@ PHP
 
         /** @var ClassMethod $method */
         foreach ($classMethodsToCheck as $method) {
-            if (! $this->methodHasNoStmtsLeft($method)) {
+            if (! $this->hasMethodSomeStmtsLeft($method)) {
                 continue;
             }
 
@@ -125,13 +125,14 @@ PHP
         return $node;
     }
 
-    protected function methodHasNoStmtsLeft(ClassMethod $classMethod): bool
+    private function hasMethodSomeStmtsLeft(ClassMethod $classMethod): bool
     {
         foreach ((array) $classMethod->stmts as $stmt) {
             if (! $this->isNodeRemoved($stmt)) {
                 return false;
             }
         }
+
         return true;
     }
 

@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\TypeUtils;
-use Rector\Core\Console\Shell;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\Parser\FileInfoParser;
@@ -31,6 +30,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ScreenFileCommand extends AbstractCommand
@@ -98,7 +98,7 @@ final class ScreenFileCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('[Dev] Load file and print nodes meta data - super helpful to learn to build rules');
+        $this->setDescription('[DEV] Load file and print nodes meta data - super helpful to learn to build rules');
 
         $this->addArgument(self::FILE_ARGUMENT, InputArgument::REQUIRED, 'Path to file to be screened');
     }
@@ -120,7 +120,7 @@ final class ScreenFileCommand extends AbstractCommand
         // 4. print decorated nodes to output/file
         $this->outputDecoratedFileContent($nodes, $smartFileInfo);
 
-        return Shell::CODE_SUCCESS;
+        return ShellCode::SUCCESS;
     }
 
     /**
@@ -152,9 +152,9 @@ final class ScreenFileCommand extends AbstractCommand
      */
     private function outputDecoratedFileContent(array $nodes, SmartFileInfo $fileInfo): void
     {
-        $decoratedFileContent = '<?php' . PHP_EOL . $this->betterStandardPrinter->prettyPrint($nodes);
-
         $outputFileName = 'rector_vision_' . $fileInfo->getFilename();
+        $decoratedFileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
+
         FileSystem::write($outputFileName, $decoratedFileContent);
 
         $this->symfonyStyle->writeln(sprintf('See: %s', $outputFileName));

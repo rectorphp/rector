@@ -20,7 +20,7 @@ namespace Rector\DeadCode\Tests\Rector\Class_\RemoveSetterOnlyPropertyAndMethodC
 
 class InConstructor
 {
-    public function __construct($name)
+    public function __construct()
     {
     }
 }

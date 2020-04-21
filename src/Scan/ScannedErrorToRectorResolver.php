@@ -172,7 +172,7 @@ final class ScannedErrorToRectorResolver
                 throw new NotImplementedException();
             }
 
-            $arguments[] = new Argument($match['name'], $position, $match['type'] ?? '');
+            $arguments[] = new Argument($position, $match['type'] ?? '');
         }
 
         return $arguments;

@@ -8,9 +8,24 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
 final class IdTagValueNode extends AbstractDoctrineTagValueNode
 {
+    public function __construct(?string $annotationContent = null)
+    {
+        $this->resolveOriginalContentSpacingAndOrder($annotationContent);
+    }
+
     public function __toString(): string
     {
-        return '';
+        $content = '';
+
+        if ($this->hasOpeningBracket) {
+            $content .= '(';
+        }
+
+        if ($this->hasClosingBracket) {
+            $content .= ')';
+        }
+
+        return $content;
     }
 
     public function getShortName(): string

@@ -10,11 +10,11 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\SymfonyPHPUnit\Naming\ServiceNaming;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeAnalyzer;
 
@@ -36,11 +36,6 @@ final class OnContainerGetCallManipulator
     private $serviceNaming;
 
     /**
-     * @var NodeRemovingCommander
-     */
-    private $nodeRemovingCommander;
-
-    /**
      * @var KernelTestCaseNodeAnalyzer
      */
     private $kernelTestCaseNodeAnalyzer;
@@ -50,20 +45,25 @@ final class OnContainerGetCallManipulator
      */
     private $valueResolver;
 
+    /**
+     * @var NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
         ServiceNaming $serviceNaming,
-        NodeRemovingCommander $nodeRemovingCommander,
+        NodesToRemoveCollector $nodesToRemoveCollector,
         KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
         ValueResolver $valueResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->serviceNaming = $serviceNaming;
-        $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->kernelTestCaseNodeAnalyzer = $kernelTestCaseNodeAnalyzer;
         $this->valueResolver = $valueResolver;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
 
     /**
@@ -160,6 +160,6 @@ final class OnContainerGetCallManipulator
         $methodName = $methodCall->getAttribute(AttributeKey::METHOD_NAME);
         $formerVariablesByMethods[$methodName][$variableName] = $type;
 
-        $this->nodeRemovingCommander->addNode($assign);
+        $this->nodesToRemoveCollector->addNodeToRemove($assign);
     }
 }

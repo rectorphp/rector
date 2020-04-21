@@ -21,7 +21,7 @@ trait ValueResolverTrait
     /**
      * @required
      */
-    public function setValueResolver(ValueResolver $valueResolver): void
+    public function autowireValueResolverTrait(ValueResolver $valueResolver): void
     {
         $this->valueResolver = $valueResolver;
     }

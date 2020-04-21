@@ -8,9 +8,6 @@ use Rector\Polyfill\Contract\ConditionInterface;
 
 final class BinaryToVersionCompareCondition implements ConditionInterface
 {
-    /**
-     * @var mixed
-     */
     private $expectedValue;
 
     /**

@@ -15,7 +15,7 @@ class MultiLevelArray extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->assertArraySubset($expectedSubset, $checkedArray);
+        $this->assertArraySubset($expectedSubset, $checkedArray, true);
     }
 
     public function otherTest()
@@ -30,7 +30,7 @@ class MultiLevelArray extends \PHPUnit\Framework\TestCase
                     ],
                 ],
             ],
-            $checkedArray
+            $checkedArray, true
         );
     }
 }

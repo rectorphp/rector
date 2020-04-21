@@ -22,3 +22,4 @@ services:
     Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector: null
     Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector: null
     Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector: null
+    Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector: null

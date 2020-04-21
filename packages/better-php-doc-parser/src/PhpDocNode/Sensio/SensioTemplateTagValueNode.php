@@ -40,7 +40,7 @@ final class SensioTemplateTagValueNode extends AbstractTagValueNode implements S
         $contentItems = [];
 
         if ($this->template) {
-            $contentItems[] = $this->template;
+            $contentItems[] = '"' . $this->template . '"';
         }
 
         if ($this->owner) {
@@ -55,7 +55,7 @@ final class SensioTemplateTagValueNode extends AbstractTagValueNode implements S
             return '';
         }
 
-        return implode(', ', $contentItems);
+        return '(' . implode(', ', $contentItems) . ')';
     }
 
     public function getTemplate(): ?string

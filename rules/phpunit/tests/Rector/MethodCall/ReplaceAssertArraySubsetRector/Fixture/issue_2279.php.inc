@@ -10,7 +10,7 @@ class Issue2279 extends TestCase
     {
         $this->assertArraySubset([
             static::KEY_RESPONSE_BAD_REQUEST => static::VALUE_RESPONSE_BAD_REQUEST,
-        ], $parameters->getPost()->getResponses());
+        ], $parameters->getPost()->getResponses(), true);
     }
 }
 

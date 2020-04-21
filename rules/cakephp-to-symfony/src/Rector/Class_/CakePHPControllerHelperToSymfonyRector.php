@@ -7,13 +7,11 @@ namespace Rector\CakePHPToSymfony\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
@@ -26,16 +24,6 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class CakePHPControllerHelperToSymfonyRector extends AbstractCakePHPRector
 {
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    public function __construct(ClassManipulator $classManipulator)
-    {
-        $this->classManipulator = $classManipulator;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Migrate CakePHP 2.4 Controller $helpers and $components property to Symfony 5', [
@@ -85,7 +73,7 @@ PHP
             return null;
         }
 
-        $helpersProperty = $this->classManipulator->getProperty($node, 'helpers');
+        $helpersProperty = $node->getProperty('helpers');
         if ($helpersProperty === null) {
             return null;
         }
@@ -125,13 +113,6 @@ PHP
             return false;
         }
 
-        if (! $node->var instanceof PropertyFetch) {
-            return false;
-        }
-
-        if (! $this->isName($node->var->var, 'this')) {
-            return false;
-        }
-        return $this->isName($node->var->name, 'Flash');
+        return $this->isLocalPropertyFetchName($node->var, 'Flash');
     }
 }

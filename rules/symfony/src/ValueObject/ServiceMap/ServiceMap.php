@@ -28,11 +28,6 @@ final class ServiceMap
         return isset($this->services[$id]);
     }
 
-    public function getService(string $id): ?ServiceDefinition
-    {
-        return $this->services[$id] ?? null;
-    }
-
     public function getServiceType(string $id): ?Type
     {
         $serviceDefinition = $this->getService($id);
@@ -47,11 +42,9 @@ final class ServiceMap
 
         $interfaces = class_implements($class);
 
-        if (count($interfaces) > 0) {
-            foreach ($interfaces as $interface) {
-                // return first interface
-                return new ObjectType($interface);
-            }
+        foreach ($interfaces as $interface) {
+            // return first interface
+            return new ObjectType($interface);
         }
 
         return new ObjectType($class);
@@ -76,5 +69,10 @@ final class ServiceMap
         }
 
         return $servicesWithTag;
+    }
+
+    private function getService(string $id): ?ServiceDefinition
+    {
+        return $this->services[$id] ?? null;
     }
 }

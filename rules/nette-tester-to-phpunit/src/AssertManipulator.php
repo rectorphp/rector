@@ -16,15 +16,14 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\BooleanType;
-use Prophecy\Doubler\Generator\Node\MethodNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\PhpParser\Node\Commander\NodeAddingCommander;
-use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
+use Rector\PostRector\Collector\NodesToAddCollector;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class AssertManipulator
 {
@@ -82,34 +81,34 @@ final class AssertManipulator
     private $valueResolver;
 
     /**
-     * @var NodeAddingCommander
-     */
-    private $nodeAddingCommander;
-
-    /**
-     * @var NodeRemovingCommander
-     */
-    private $nodeRemovingCommander;
-
-    /**
      * @var StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
+
+    /**
+     * @var NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
+
+    /**
+     * @var NodesToAddCollector
+     */
+    private $nodesToAddCollector;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         ValueResolver $valueResolver,
-        NodeAddingCommander $nodeAddingCommander,
-        NodeRemovingCommander $nodeRemovingCommander,
+        NodesToAddCollector $nodesToAddCollector,
+        NodesToRemoveCollector $nodesToRemoveCollector,
         StringTypeAnalyzer $stringTypeAnalyzer
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->valueResolver = $valueResolver;
-        $this->nodeAddingCommander = $nodeAddingCommander;
-        $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
+        $this->nodesToAddCollector = $nodesToAddCollector;
     }
 
     /**
@@ -178,7 +177,7 @@ final class AssertManipulator
         }
 
         $expectException->args[] = $staticCall->args[1];
-        $this->nodeAddingCommander->addNodeAfterNode($expectException, $staticCall);
+        $this->nodesToAddCollector->addNodeAfterNode($expectException, $staticCall);
 
         // expect message
         if (isset($staticCall->args[2])) {
@@ -193,10 +192,10 @@ final class AssertManipulator
         /** @var Closure $closure */
         $closure = $staticCall->args[0]->value;
         foreach ((array) $closure->stmts as $callableStmt) {
-            $this->nodeAddingCommander->addNodeAfterNode($callableStmt, $staticCall);
+            $this->nodesToAddCollector->addNodeAfterNode($callableStmt, $staticCall);
         }
 
-        $this->nodeRemovingCommander->addNode($staticCall);
+        $this->nodesToRemoveCollector->addNodeToRemove($staticCall);
     }
 
     private function processTypeCall(StaticCall $staticCall): void
@@ -222,10 +221,10 @@ final class AssertManipulator
         $closure = $staticCall->args[0]->value;
 
         foreach ((array) $closure->stmts as $callableStmt) {
-            $this->nodeAddingCommander->addNodeAfterNode($callableStmt, $staticCall);
+            $this->nodesToAddCollector->addNodeAfterNode($callableStmt, $staticCall);
         }
 
-        $this->nodeRemovingCommander->addNode($staticCall);
+        $this->nodesToRemoveCollector->addNodeToRemove($staticCall);
 
         /** @var ClassMethod|null $methodNode */
         $methodNode = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
@@ -278,7 +277,7 @@ final class AssertManipulator
         }
 
         $expectExceptionMessage->args[] = $staticCall->args[2];
-        $this->nodeAddingCommander->addNodeAfterNode($expectExceptionMessage, $staticCall);
+        $this->nodesToAddCollector->addNodeAfterNode($expectExceptionMessage, $staticCall);
         return $method;
     }
 
@@ -293,7 +292,7 @@ final class AssertManipulator
         }
 
         $expectExceptionCode->args[] = $staticCall->args[3];
-        $this->nodeAddingCommander->addNodeAfterNode($expectExceptionCode, $staticCall);
+        $this->nodesToAddCollector->addNodeAfterNode($expectExceptionCode, $staticCall);
     }
 
     private function renameAssertMethod(StaticCall $staticCall): void

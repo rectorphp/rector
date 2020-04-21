@@ -222,7 +222,7 @@ final class ServiceMapProvider
                 );
             } else {
                 unset($data['name']);
-                $tagValueObjects[$key] = new Tag($name, $data);
+                $tagValueObjects[$key] = new Tag($name);
             }
         }
 

@@ -69,50 +69,6 @@ final class CallReflectionResolver
     }
 
     /**
-     * @return FunctionReflection|MethodReflection|null
-     */
-    public function resolveFunctionCall(FuncCall $funcCall)
-    {
-        /** @var Scope|null $scope */
-        $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
-
-        if ($funcCall->name instanceof Name) {
-            try {
-                return $this->reflectionProvider->getFunction($funcCall->name, $scope);
-            } catch (FunctionNotFoundException $functionNotFoundException) {
-                return null;
-            }
-        }
-
-        if ($scope === null) {
-            return null;
-        }
-
-        return $this->typeToCallReflectionResolverRegistry->resolve($scope->getType($funcCall->name), $scope);
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     */
-    public function resolveMethodCall(Node $node): ?MethodReflection
-    {
-        /** @var Scope|null $scope */
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
-            return null;
-        }
-
-        $classType = $this->nodeTypeResolver->resolve($node instanceof MethodCall ? $node->var : $node->class);
-        $methodName = $this->nodeNameResolver->getName($node->name);
-
-        if ($methodName === null || ! $classType->hasMethod($methodName)->yes()) {
-            return null;
-        }
-
-        return $classType->getMethod($methodName, $scope);
-    }
-
-    /**
      * @param FunctionReflection|MethodReflection|null $reflection
      * @param FuncCall|MethodCall|StaticCall $node
      */
@@ -140,5 +96,49 @@ final class CallReflectionResolver
         }
 
         return $parametersAcceptor;
+    }
+
+    /**
+     * @return FunctionReflection|MethodReflection|null
+     */
+    private function resolveFunctionCall(FuncCall $funcCall)
+    {
+        /** @var Scope|null $scope */
+        $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
+
+        if ($funcCall->name instanceof Name) {
+            try {
+                return $this->reflectionProvider->getFunction($funcCall->name, $scope);
+            } catch (FunctionNotFoundException $functionNotFoundException) {
+                return null;
+            }
+        }
+
+        if ($scope === null) {
+            return null;
+        }
+
+        return $this->typeToCallReflectionResolverRegistry->resolve($scope->getType($funcCall->name), $scope);
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function resolveMethodCall(Node $node): ?MethodReflection
+    {
+        /** @var Scope|null $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            return null;
+        }
+
+        $classType = $this->nodeTypeResolver->resolve($node instanceof MethodCall ? $node->var : $node->class);
+        $methodName = $this->nodeNameResolver->getName($node->name);
+
+        if ($methodName === null || ! $classType->hasMethod($methodName)->yes()) {
+            return null;
+        }
+
+        return $classType->getMethod($methodName, $scope);
     }
 }

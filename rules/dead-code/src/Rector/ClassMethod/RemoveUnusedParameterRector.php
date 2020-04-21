@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -23,7 +24,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\RemoveUnusedParameterRectorTest
  * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\OpenSourceRectorTest
  */
-final class RemoveUnusedParameterRector extends AbstractRector
+final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
      * @var ClassManipulator
@@ -114,7 +115,6 @@ PHP
 
         $childrenOfClass = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
         $unusedParameters = $this->getUnusedParameters($node, $methodName, $childrenOfClass);
-
         if ($unusedParameters === []) {
             return null;
         }
@@ -171,7 +171,7 @@ PHP
             $parameters1,
             $parameters2,
             function (Param $firstParam, Param $secondParam): int {
-                return $this->areNodesWithoutCommentsEqual($firstParam, $secondParam) ? 0 : 1;
+                return $this->areNodesEqual($firstParam, $secondParam) ? 0 : 1;
             }
         );
     }
@@ -184,7 +184,7 @@ PHP
         $unusedParameters = [];
 
         foreach ((array) $classMethod->params as $i => $param) {
-            if ($this->classMethodManipulator->isParameterUsedMethod($param, $classMethod)) {
+            if ($this->classMethodManipulator->isParameterUsedInClassMethod($param, $classMethod)) {
                 // reset to keep order of removed arguments, if not construtctor - probably autowired
                 if (! $this->isName($classMethod, '__construct')) {
                     $unusedParameters = [];

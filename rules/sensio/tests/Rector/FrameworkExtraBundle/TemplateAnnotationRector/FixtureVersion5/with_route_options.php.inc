@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class WithRouteOptions extends AbstractController
 {
     /**
-     * @Route("/{category}", name="report_overview", defaults={"category":null}, requirements={"category":"\d+"})
+     * @Route("/{category}", name="report_overview", defaults={"category":null}, requirements={"category"="[a-z]\d+"})
      * @Template("PAPPReportBundle:Report:report_list.html.twig")
      */
     public function index($category = null)
@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class WithRouteOptions extends AbstractController
 {
     /**
-     * @Route("/{category}", name="report_overview", defaults={"category":null}, requirements={"category":"\d+"})
+     * @Route("/{category}", name="report_overview", defaults={"category":null}, requirements={"category"="[a-z]\d+"})
      */
     public function index($category = null): \Symfony\Component\HttpFoundation\Response
     {

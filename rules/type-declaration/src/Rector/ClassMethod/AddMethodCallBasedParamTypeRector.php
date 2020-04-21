@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -14,6 +13,8 @@ use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
+use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 
 /**
@@ -28,9 +29,15 @@ final class AddMethodCallBasedParamTypeRector extends AbstractRector
      */
     private $typeFactory;
 
-    public function __construct(TypeFactory $typeFactory)
+    /**
+     * @var MethodCallParsedNodesFinder
+     */
+    private $methodCallParsedNodesFinder;
+
+    public function __construct(TypeFactory $typeFactory, MethodCallParsedNodesFinder $methodCallParsedNodesFinder)
     {
         $this->typeFactory = $typeFactory;
+        $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
     }
 
     public function getDefinition(): RectorDefinition
@@ -91,8 +98,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classMethodCalls = $this->functionLikeParsedNodesFinder->findClassMethodCalls($node);
-
+        $classMethodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($node);
         $classParameterTypes = $this->getCallTypesByPosition($classMethodCalls);
 
         foreach ($classParameterTypes as $position => $argumentStaticType) {
@@ -110,7 +116,7 @@ PHP
     }
 
     /**
-     * @param MethodCall[]|StaticCall[]|Array_[] $classMethodCalls
+     * @param MethodCall[]|StaticCall[]|ArrayCallable[] $classMethodCalls
      * @return Type[]
      */
     private function getCallTypesByPosition(array $classMethodCalls): array

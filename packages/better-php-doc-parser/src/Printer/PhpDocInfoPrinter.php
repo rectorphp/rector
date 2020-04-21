@@ -107,8 +107,7 @@ final class PhpDocInfoPrinter
         $this->attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
 
         $this->tokens = $phpDocInfo->getTokens();
-
-        $this->tokenCount = count($phpDocInfo->getTokens());
+        $this->tokenCount = $phpDocInfo->getTokenCount();
         $this->phpDocInfo = $phpDocInfo;
 
         $this->currentTokenPosition = 0;
@@ -202,9 +201,11 @@ final class PhpDocInfoPrinter
         }
 
         if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startEndValueObject) {
+            $nodeContent = (string) $attributeAwareNode;
+
             return $this->originalSpacingRestorer->restoreInOutputWithTokensStartAndEndPosition(
                 $attributeAwareNode,
-                (string) $attributeAwareNode,
+                $nodeContent,
                 $this->tokens,
                 $startEndValueObject
             );

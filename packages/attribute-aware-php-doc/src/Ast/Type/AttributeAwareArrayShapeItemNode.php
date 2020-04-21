@@ -6,6 +6,7 @@ namespace Rector\AttributeAwarePhpDoc\Ast\Type;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprStringNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -22,7 +23,7 @@ final class AttributeAwareArrayShapeItemNode extends ArrayShapeItemNode implemen
     private $hasSpaceAfterDoubleColon = false;
 
     /**
-     * @param ConstExprIntegerNode|IdentifierTypeNode|null $keyName
+     * @param ConstExprIntegerNode|ConstExprStringNode|IdentifierTypeNode|null $keyName
      */
     public function __construct($keyName, bool $optional, TypeNode $typeNode, string $docComment = '')
     {

@@ -1,0 +1,19 @@
+name: Validate Fixtures
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    check_fixtures:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.4
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: bin/rector validate-fixtures --ansi

@@ -127,24 +127,6 @@ final class IfManipulator
         return null;
     }
 
-    public function isIfWithOnlyStmtIf(If_ $if): bool
-    {
-        if (! $this->isIfWithoutElseAndElseIfs($if)) {
-            return false;
-        }
-
-        return $this->hasOnlyStmtOfType($if, If_::class);
-    }
-
-    public function hasOnlyStmtOfType(If_ $if, string $desiredType): bool
-    {
-        if (count($if->stmts) !== 1) {
-            return false;
-        }
-
-        return is_a($if->stmts[0], $desiredType);
-    }
-
     /**
      * @return If_[]
      */
@@ -171,15 +153,6 @@ final class IfManipulator
         $ifs[] = $currentIf;
 
         return $ifs;
-    }
-
-    public function isIfWithElse(If_ $if): bool
-    {
-        if ($if->else === null) {
-            return false;
-        }
-
-        return ! (bool) $if->elseifs;
     }
 
     public function isIfAndElseWithSameVariableAssignAsLastStmts(If_ $if, Expr $desiredExpr): bool
@@ -274,6 +247,46 @@ final class IfManipulator
         }
 
         return $this->hasOnlyStmtOfType($node, Return_::class);
+    }
+
+    public function isIfWithOnlyForeach(Node $node): bool
+    {
+        if (! $node instanceof If_) {
+            return false;
+        }
+
+        if (! $this->isIfWithoutElseAndElseIfs($node)) {
+            return false;
+        }
+
+        return $this->hasOnlyStmtOfType($node, Foreach_::class);
+    }
+
+    private function isIfWithOnlyStmtIf(If_ $if): bool
+    {
+        if (! $this->isIfWithoutElseAndElseIfs($if)) {
+            return false;
+        }
+
+        return $this->hasOnlyStmtOfType($if, If_::class);
+    }
+
+    private function hasOnlyStmtOfType(If_ $if, string $desiredType): bool
+    {
+        if (count($if->stmts) !== 1) {
+            return false;
+        }
+
+        return is_a($if->stmts[0], $desiredType);
+    }
+
+    private function isIfWithElse(If_ $if): bool
+    {
+        if ($if->else === null) {
+            return false;
+        }
+
+        return ! (bool) $if->elseifs;
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr

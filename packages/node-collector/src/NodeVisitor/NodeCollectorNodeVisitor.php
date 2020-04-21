@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\ParsedPropertyFetchNodeCollector;
 
 final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 {
@@ -21,12 +22,19 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
      */
     private $parsedNodeCollector;
 
+    /**
+     * @var ParsedPropertyFetchNodeCollector
+     */
+    private $parsedPropertyFetchNodeCollector;
+
     public function __construct(
         ParsedNodeCollector $parsedNodeCollector,
-        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector
+        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector,
+        ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector
     ) {
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
         $this->parsedNodeCollector = $parsedNodeCollector;
+        $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
     }
 
     /**
@@ -39,5 +47,6 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
         }
 
         $this->parsedFunctionLikeNodeCollector->collect($node);
+        $this->parsedPropertyFetchNodeCollector->collect($node);
     }
 }

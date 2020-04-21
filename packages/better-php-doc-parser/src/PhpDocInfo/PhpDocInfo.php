@@ -138,22 +138,14 @@ final class PhpDocInfo
         return $this->tokens;
     }
 
+    public function getTokenCount(): int
+    {
+        return count($this->tokens);
+    }
+
     public function getVarTagValue(): ?AttributeAwareVarTagValueNode
     {
-        return $this->getPhpDocNode()->getVarTagValues()[0] ?? null;
-    }
-
-    public function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
-    {
-        return $this->getPhpDocNode()->getReturnTagValues()[0] ?? null;
-    }
-
-    /**
-     * @return AttributeAwareParamTagValueNode[]
-     */
-    public function getParamTagValues(): array
-    {
-        return $this->getPhpDocNode()->getParamTagValues();
+        return $this->phpDocNode->getVarTagValues()[0] ?? null;
     }
 
     /**
@@ -192,11 +184,7 @@ final class PhpDocInfo
     public function getParamType(string $name): Type
     {
         $paramTagValue = $this->getParamTagValueByName($name);
-        if ($paramTagValue === null) {
-            return new MixedType();
-        }
-
-        return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValue, $this->node);
+        return $this->getTypeOrMixed($paramTagValue);
     }
 
     /**
@@ -228,7 +216,7 @@ final class PhpDocInfo
     public function getParamTypes(): array
     {
         $paramTypes = [];
-        foreach ($this->getParamTagValues() as $paramTagValue) {
+        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
             $paramTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValue, $this->node);
         }
 
@@ -237,40 +225,43 @@ final class PhpDocInfo
 
     public function getVarType(): Type
     {
-        $varTagValue = $this->getVarTagValue();
-        if ($varTagValue === null) {
-            return new MixedType();
-        }
-
-        return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTagValue, $this->node);
+        return $this->getTypeOrMixed($this->getVarTagValue());
     }
 
     public function getReturnType(): Type
     {
-        $returnTypeValueNode = $this->getReturnTagValue();
-        if ($returnTypeValueNode === null) {
-            return new MixedType();
-        }
-
-        return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($returnTypeValueNode, $this->node);
+        return $this->getTypeOrMixed($this->getReturnTagValue());
     }
 
     public function removeTagValueNodeFromNode(PhpDocTagValueNode $phpDocTagValueNode): void
     {
         foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
-            if ($phpDocChildNode instanceof PhpDocTagNode) {
-                if ($phpDocChildNode->value !== $phpDocTagValueNode) {
-                    continue;
-                }
-
-                unset($this->phpDocNode->children[$key]);
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
             }
+
+            if ($phpDocChildNode->value !== $phpDocTagValueNode) {
+                continue;
+            }
+
+            unset($this->phpDocNode->children[$key]);
         }
     }
 
     public function hasByType(string $type): bool
     {
         return (bool) $this->getByType($type);
+    }
+
+    public function hasByNames(array $names): bool
+    {
+        foreach ($names as $name) {
+            if ($this->hasByName($name)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function hasByName(string $name): bool
@@ -283,13 +274,15 @@ final class PhpDocInfo
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
 
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if ($phpDocChildNode instanceof PhpDocTagNode) {
-                if (! is_a($phpDocChildNode->value, $type, true)) {
-                    continue;
-                }
-
-                return $phpDocChildNode->value;
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
             }
+
+            if (! is_a($phpDocChildNode->value, $type, true)) {
+                continue;
+            }
+
+            return $phpDocChildNode->value;
         }
 
         return null;
@@ -402,11 +395,6 @@ final class PhpDocInfo
         $this->addPhpDocTagNode($phpDocTagNode);
     }
 
-    public function isEmpty(): bool
-    {
-        return $this->phpDocNode->children === [];
-    }
-
     public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
     {
         $name = $this->resolveNameForPhpDocTagValueNode($phpDocTagValueNode);
@@ -440,12 +428,24 @@ final class PhpDocInfo
         $this->addTagValueNode($paramTagValueNode);
     }
 
+    private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode)
+    {
+        if ($phpDocTagValueNode === null) {
+            return new MixedType();
+        }
+
+        return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($phpDocTagValueNode, $this->node);
+    }
+
+    private function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
+    {
+        return $this->phpDocNode->getReturnTagValues()[0] ?? null;
+    }
+
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
-        $phpDocNode = $this->getPhpDocNode();
-
         /** @var AttributeAwareParamTagValueNode $paramTagValue */
-        foreach ($phpDocNode->getParamTagValues() as $paramTagValue) {
+        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
             if (Strings::match($paramTagValue->parameterName, '#^(\$)?' . $name . '$#')) {
                 return $paramTagValue;
             }

@@ -76,10 +76,7 @@ final class ClassConstManipulator
             $searchInNodes[] = $trait;
         }
 
-        /** @var ClassConstFetch[] $classConstFetches */
-        $classConstFetches = $this->betterNodeFinder->find($searchInNodes, function (Node $node) use (
-            $classConst
-        ): bool {
+        return $this->betterNodeFinder->find($searchInNodes, function (Node $node) use ($classConst): bool {
             // itself
             if ($this->betterStandardPrinter->areNodesEqual($node, $classConst)) {
                 return false;
@@ -92,8 +89,6 @@ final class ClassConstManipulator
 
             return $this->isNameMatch($node, $classConst);
         });
-
-        return $classConstFetches;
     }
 
     private function isNameMatch(Node $node, ClassConst $classConst): bool

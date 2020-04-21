@@ -134,19 +134,7 @@ PHP
         return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
             $method
         ): bool {
-            if (! $node instanceof StaticCall) {
-                return false;
-            }
-
-            if (! $node->class instanceof Name) {
-                return false;
-            }
-
-            if (! $this->isName($node->class, 'parent')) {
-                return false;
-            }
-
-            return $this->isName($node->name, $method);
+            return $this->isStaticCallNamed($node, 'parent', $method);
         });
     }
 }

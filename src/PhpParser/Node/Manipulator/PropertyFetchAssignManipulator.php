@@ -60,7 +60,7 @@ final class PropertyFetchAssignManipulator
      * Matches:
      * "$this->someValue = $<variableName>;"
      */
-    public function isVariableAssignToThisPropertyFetch(Node $node, string $variableName): bool
+    private function isVariableAssignToThisPropertyFetch(Node $node, string $variableName): bool
     {
         if (! $node instanceof Assign) {
             return false;

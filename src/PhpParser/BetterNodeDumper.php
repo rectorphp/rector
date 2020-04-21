@@ -88,35 +88,19 @@ final class BetterNodeDumper extends NodeDumper
     }
 
     /**
-     * @param mixed $attribute
-     */
-    protected function dumpAttributeValue($attribute): string
-    {
-        if ($attribute === null) {
-            return 'null';
-        } elseif ($attribute === false) {
-            return 'false';
-        } elseif ($attribute === true) {
-            return 'true';
-        } elseif (is_scalar($attribute)) {
-            return (string) $attribute;
-        }
-        return str_replace("\n", "\n    ", $this->dumpRecursive($attribute));
-    }
-
-    /**
      * @return mixed[]
      */
-    protected function getFilteredAttributes(Node $node) : array
+    private function getFilteredAttributes(Node $node) : array
     {
         $attributes = $node->getAttributes();
         if ($this->filterAttributes !== []) {
             $attributes = array_intersect_key($attributes, array_flip($this->filterAttributes));
         }
+
         return $attributes;
     }
 
-    protected function dumpSubNodes(Node $node): string
+    private function dumpSubNodes(Node $node): string
     {
         $r = '';
         foreach ($node->getSubNodeNames() as $key) {
@@ -153,15 +137,15 @@ final class BetterNodeDumper extends NodeDumper
 
     }
 
-    protected function dumpNode(Node $node): string
+    private function dumpNode(Node $node): string
     {
-        $spl_object_hash = spl_object_hash($node);
+        $splObjectHash = spl_object_hash($node);
 
-        if (isset($this->printedNodes[$spl_object_hash])) {
-            return $node->getType() . ' #' . $this->printedNodes[$spl_object_hash];
+        if (isset($this->printedNodes[$splObjectHash])) {
+            return $node->getType() . ' #' . $this->printedNodes[$splObjectHash];
         }
-        $this->printedNodes[$spl_object_hash] = $this->nodeIds++;
-        $r = $node->getType() . ' #' . $this->printedNodes[$spl_object_hash];
+        $this->printedNodes[$splObjectHash] = $this->nodeIds++;
+        $r = $node->getType() . ' #' . $this->printedNodes[$splObjectHash];
 
         if ($this->dumpPositions ) {
             $r .= $this->dumpPosition($node);

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\Contract;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType;
@@ -19,7 +18,7 @@ interface TypeMapperInterface
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode;
 
     /**
-     * @return Identifier|Name|NullableType|UnionType|null
+     * @return Name|NullableType|UnionType|null
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node;
 

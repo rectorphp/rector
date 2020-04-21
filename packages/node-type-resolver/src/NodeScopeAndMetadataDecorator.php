@@ -12,11 +12,13 @@ use Rector\Core\Configuration\Configuration;
 use Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\MethodCallNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\PhpDocInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeScopeAndMetadataDecorator
 {
@@ -70,6 +72,11 @@ final class NodeScopeAndMetadataDecorator
      */
     private $phpDocInfoNodeVisitor;
 
+    /**
+     * @var MethodCallNodeVisitor
+     */
+    private $methodCallNodeVisitor;
+
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
@@ -80,7 +87,8 @@ final class NodeScopeAndMetadataDecorator
         FileInfoNodeVisitor $fileInfoNodeVisitor,
         NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
         PhpDocInfoNodeVisitor $phpDocInfoNodeVisitor,
-        Configuration $configuration
+        Configuration $configuration,
+        MethodCallNodeVisitor $methodCallNodeVisitor
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
@@ -92,32 +100,37 @@ final class NodeScopeAndMetadataDecorator
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
         $this->configuration = $configuration;
         $this->phpDocInfoNodeVisitor = $phpDocInfoNodeVisitor;
+        $this->methodCallNodeVisitor = $methodCallNodeVisitor;
     }
 
     /**
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function decorateNodesFromFile(array $nodes, string $filePath, bool $needsScope = false): array
+    public function decorateNodesFromFile(array $nodes, SmartFileInfo $smartFileInfo, bool $needsScope = false): array
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
             'preserveOriginalNames' => true,
-            'replaceNodes' => true, // required by PHPStan
+            // required by PHPStan
+            'replaceNodes' => true,
         ]));
         $nodes = $nodeTraverser->traverse($nodes);
 
         // node scoping is needed only for Scope
         if ($needsScope || $this->configuration->areAnyPhpRectorsLoaded()) {
-            $nodes = $this->nodeScopeResolver->processNodes($nodes, $filePath);
+            $nodes = $this->nodeScopeResolver->processNodes($nodes, $smartFileInfo);
         }
 
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new NameResolver(null, [
+
+        $preservingNameResolver = new NameResolver(null, [
             'preserveOriginalNames' => true,
             // this option would override old non-fqn-namespaced nodes otherwise, so it needs to be disabled
             'replaceNodes' => false,
-        ]));
+        ]);
+
+        $nodeTraverser->addVisitor($preservingNameResolver);
         $nodes = $nodeTraverser->traverse($nodes);
 
         $nodeTraverser = new NodeTraverser();
@@ -125,6 +138,7 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
+        $nodeTraverser->addVisitor($this->methodCallNodeVisitor);
         $nodeTraverser->addVisitor($this->phpDocInfoNodeVisitor);
 
         $nodes = $nodeTraverser->traverse($nodes);

@@ -6,12 +6,18 @@ namespace Rector\TypeDeclaration\TypeAlreadyAddedChecker;
 
 use Iterator;
 use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -53,21 +59,28 @@ final class ReturnTypeAlreadyAddedChecker
     }
 
     /**
-     * @param ClassMethod|Function_ $node
+     * @param ClassMethod|Function_ $functionLike
      */
-    public function isReturnTypeAlreadyAdded(Node $node, Type $returnType): bool
+    public function isReturnTypeAlreadyAdded(FunctionLike $functionLike, Type $returnType): bool
     {
-        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
-        if ($node->returnType === null) {
+        $nodeReturnType = $functionLike->returnType;
+
+        /** @param Identifier|Name|NullableType|PhpParserUnionType|null $returnTypeNode */
+        if ($nodeReturnType === null) {
             return false;
         }
 
-        if ($this->betterStandardPrinter->areNodesEqual($node->returnType, $returnNode)) {
+        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+        if ($this->betterStandardPrinter->areNodesEqual($nodeReturnType, $returnNode)) {
             return true;
         }
 
         // is array <=> iterable <=> Iterator co-type? → skip
-        if ($this->isArrayIterableIteratorCoType($node, $returnType)) {
+        if ($this->isArrayIterableIteratorCoType($nodeReturnType, $returnType)) {
+            return true;
+        }
+
+        if ($this->isUnionCoType($nodeReturnType, $returnType)) {
             return true;
         }
 
@@ -77,19 +90,24 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         // prevent overriding self with itself
-        if ($this->betterStandardPrinter->printWithoutComments($node->returnType) === 'self') {
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-            if (ltrim($this->betterStandardPrinter->printWithoutComments($returnNode), '\\') === $className) {
-                return true;
-            }
+        if (! $functionLike->returnType instanceof Name) {
+            return false;
         }
 
-        return false;
+        if ($functionLike->returnType->toLowerString() !== 'self') {
+            return false;
+        }
+
+        $className = $functionLike->getAttribute(AttributeKey::CLASS_NAME);
+        return ltrim($this->betterStandardPrinter->printWithoutComments($returnNode), '\\') === $className;
     }
 
-    private function isArrayIterableIteratorCoType(Node $node, Type $returnType): bool
+    /**
+     * @param Identifier|Name|NullableType|PhpParserUnionType $returnTypeNode
+     */
+    private function isArrayIterableIteratorCoType(Node $returnTypeNode, Type $returnType): bool
     {
-        if (! $this->nodeNameResolver->isNames($node->returnType, self::FOREACHABLE_TYPES)) {
+        if (! $this->nodeNameResolver->isNames($returnTypeNode, self::FOREACHABLE_TYPES)) {
             return false;
         }
 
@@ -126,5 +144,24 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         return $type instanceof ObjectType && $type->getClassName() === Iterator::class;
+    }
+
+    /**
+     * @param Identifier|Name|NullableType|PhpParserUnionType $returnTypeNode
+     */
+    private function isUnionCoType(Node $returnTypeNode, Type $type): bool
+    {
+        if (! $type instanceof UnionType) {
+            return false;
+        }
+
+        // skip nullable type
+        $nullType = new NullType();
+        if ($type->isSuperTypeOf($nullType)->yes()) {
+            return false;
+        }
+
+        $classMethodReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnTypeNode);
+        return $type->isSuperTypeOf($classMethodReturnType)->yes();
     }
 }

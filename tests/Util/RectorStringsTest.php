@@ -30,4 +30,17 @@ final class RectorStringsTest extends TestCase
         yield ['Some4Numbers234', 'some4_numbers234'];
         yield ['TEST123String', 'test123_string'];
     }
+
+    /**
+     * @dataProvider provideDataForUnderscoreToCamelCase()
+     */
+    public function testUnderscoreToCamelCase(string $content, string $expected): void
+    {
+        $this->assertSame($expected, RectorStrings::underscoreToCamelCase($content));
+    }
+
+    public function provideDataForUnderscoreToCamelCase(): Iterator
+    {
+        yield ['simple_test', 'SimpleTest'];
+    }
 }

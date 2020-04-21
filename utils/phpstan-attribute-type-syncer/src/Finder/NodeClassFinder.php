@@ -9,6 +9,11 @@ use Nette\Loaders\RobotLoader;
 final class NodeClassFinder
 {
     /**
+     * @var string[]
+     */
+    private const EXCLUDED_CLASSES = ['PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode'];
+
+    /**
      * @return string[]
      */
     public function findCurrentPHPDocParserNodeClasses(): array
@@ -40,7 +45,6 @@ final class NodeClassFinder
         $classLikesToPaths = $robotLoader->getIndexedClasses();
 
         $classLikes = array_keys($classLikesToPaths);
-        $excludedClasses = ['PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode'];
 
         // keep only classes, skip interfaces
         $classes = [];
@@ -52,6 +56,6 @@ final class NodeClassFinder
             $classes[] = $classLike;
         }
 
-        return array_diff($classes, $excludedClasses);
+        return array_diff($classes, self::EXCLUDED_CLASSES);
     }
 }

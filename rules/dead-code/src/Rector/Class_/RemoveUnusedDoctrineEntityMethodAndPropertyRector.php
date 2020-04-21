@@ -11,6 +11,9 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
+use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -23,7 +26,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
  * @see \Rector\DeadCode\Tests\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector\RemoveUnusedDoctrineEntityMethodAndPropertyRectorTest
  */
-final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRector
+final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
      * @var Assign[]
@@ -164,6 +167,10 @@ PHP
     private function removeClassPrivatePropertiesByNames(Class_ $class, array $unusedPropertyNames): Class_
     {
         foreach ($class->getProperties() as $property) {
+            if ($this->isEntityId($property)) {
+                continue;
+            }
+
             if (! $this->isNames($property, $unusedPropertyNames)) {
                 continue;
             }
@@ -271,5 +278,16 @@ PHP
         }
 
         return null;
+    }
+
+    private function isEntityId(Property $property): bool
+    {
+        /** @var PhpDocInfo|null $propertyPhpDocInfo */
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($propertyPhpDocInfo === null) {
+            return false;
+        }
+
+        return $propertyPhpDocInfo->hasByType(IdTagValueNode::class);
     }
 }

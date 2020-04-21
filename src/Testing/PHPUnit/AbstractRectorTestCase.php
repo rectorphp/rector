@@ -55,14 +55,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      */
     private $nodeScopeResolver;
 
-    /**
-     * @var mixed[]
-     */
-    private $oldParameterValues = [];
-
     protected function setUp(): void
     {
-        $this->oldParameterValues = [];
+        parent::setUp();
+
         $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
 
         if ($this->provideConfig() !== '') {
@@ -109,22 +105,16 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $stubLoader->loadStubs();
 
         $this->configurePhpVersionFeatures();
-        $this->configureAutoImportParameter();
     }
 
     protected function tearDown(): void
     {
+        parent::tearDown();
+
         // restore PHP version if changed
         if ($this->getPhpVersion() !== '') {
             $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
         }
-
-        // restore disabled auto_import_names if changed
-        if ($this->getAutoImportNames() !== null) {
-            $this->setParameter(Option::AUTO_IMPORT_NAMES, false);
-        }
-
-        $this->restoreOldParameterValues();
     }
 
     protected function doTestFileWithoutAutoload(string $file): void
@@ -132,12 +122,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->autoloadTestFixture = false;
         $this->doTestFile($file);
         $this->autoloadTestFixture = true;
-    }
-
-    protected function provideConfig(): string
-    {
-        // can be implemented
-        return '';
     }
 
     protected function doTestFile(string $file): void
@@ -166,24 +150,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     protected function getRectorInterface(): string
     {
         return PhpRectorInterface::class;
-    }
-
-    protected function setParameter(string $name, $value): void
-    {
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-
-        if (! in_array($name, [Option::PHP_VERSION_FEATURES, Option::AUTO_IMPORT_NAMES], true)) {
-            $oldParameterValue = $parameterProvider->provideParameter($name);
-            $this->oldParameterValues[$name] = $oldParameterValue;
-        }
-
-        $parameterProvider->changeParameter($name, $value);
-    }
-
-    protected function getAutoImportNames(): ?bool
-    {
-        // to be implemented
-        return null;
     }
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
@@ -264,17 +230,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
     }
 
-    private function configureAutoImportParameter(): void
-    {
-        // for faster tests
-        $autoImportNames = false;
-        if ($this->getAutoImportNames() !== null) {
-            $autoImportNames = $this->getAutoImportNames();
-        }
-
-        $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, $autoImportNames);
-    }
-
     private function doTestFileMatchesExpectedContent(
         string $originalFile,
         string $expectedFile,
@@ -289,24 +244,22 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->fileProcessor->refactor($smartFileInfo);
         $changedContent = $this->fileProcessor->printToString($smartFileInfo);
 
+        $causedByFixtureMessage = $this->createCausedByFixtureMessage($fixtureFile);
+
         try {
-            $this->assertStringEqualsFile($expectedFile, $changedContent, 'Caused by ' . $fixtureFile);
+            $this->assertStringEqualsFile($expectedFile, $changedContent, $causedByFixtureMessage);
         } catch (ExpectationFailedException $expectationFailedException) {
             $expectedFileContent = FileSystem::read($expectedFile);
-            $this->assertStringMatchesFormat($expectedFileContent, $changedContent, 'Caused by ' . $fixtureFile);
+
+            $this->assertStringMatchesFormat($expectedFileContent, $changedContent, $causedByFixtureMessage);
         }
     }
 
-    private function restoreOldParameterValues(): void
+    private function createCausedByFixtureMessage(string $fixtureFile): string
     {
-        if ($this->oldParameterValues === []) {
-            return;
-        }
+        $fixtureSmartFileInfo = new SmartFileInfo($fixtureFile);
+        $relativeFixtureFilePath = $fixtureSmartFileInfo->getRelativeFilePathFromCwd();
 
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-
-        foreach ($this->oldParameterValues as $name => $oldParameterValue) {
-            $parameterProvider->changeParameter($name, $oldParameterValue);
-        }
+        return 'Caused by ' . $relativeFixtureFilePath;
     }
 }

@@ -12,7 +12,7 @@ if (class_exists('Doctrine\Common\Persistence\ManagerRegistry')) {
 
 final class ManagerRegistry
 {
-    public function getManager(): EntityManagerInterface
+    public function getManager(): ObjectManager
     {
     }
 }

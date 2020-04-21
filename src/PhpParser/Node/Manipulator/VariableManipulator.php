@@ -135,7 +135,7 @@ final class VariableManipulator
                 return false;
             }
 
-            return $this->betterStandardPrinter->areNodesWithoutCommentsEqual($node, $variable);
+            return $this->betterStandardPrinter->areNodesEqual($node, $variable);
         });
 
         foreach ($variableUsages as $variableUsage) {

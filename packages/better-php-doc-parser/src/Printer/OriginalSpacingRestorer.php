@@ -39,16 +39,34 @@ final class OriginalSpacingRestorer
         $newNodeOutput = '';
 
         // replace system whitespace by old ones, include \n*
-        $nodeOutputParts = Strings::split($nodeOutput, '#\s+#');
+        $nodeOutputParts = Strings::split($nodeOutput, '#\s+(\*)?#');
+
+        $oldWhitespaceCount = count($oldWhitespaces);
+        $nodeOutputPartCount = count($nodeOutputParts);
 
         // new nodes were probably added, skip them
-        if (count($oldWhitespaces) < count($nodeOutputParts) || count($nodeOutputParts) === 1) {
+        if ($nodeOutputPartCount === 1) {
             return $nodeOutput;
         }
 
+        if ($oldWhitespaceCount < $nodeOutputPartCount - 1) {
+            return $nodeOutput;
+        }
+
+        $asteriskSpaceFirst = Strings::contains($oldWhitespaces[0], '*');
+
         foreach ($nodeOutputParts as $key => $nodeOutputPart) {
-            $newNodeOutput .= $oldWhitespaces[$key] ?? '';
-            $newNodeOutput .= $nodeOutputPart;
+            if ($asteriskSpaceFirst) {
+                $newNodeOutput .= $nodeOutputPart;
+                $newNodeOutput .= $oldWhitespaces[$key] ?? ' ';
+            } else {
+                $newNodeOutput .= $oldWhitespaces[$key] ?? ' ';
+                $newNodeOutput .= $nodeOutputPart;
+            }
+        }
+
+        if ($asteriskSpaceFirst) {
+            return rtrim($newNodeOutput);
         }
 
         // remove first space, added by the printer above

@@ -10,14 +10,13 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
-use Rector\Utils\DocumentationGenerator\Contract\OutputFormatter\DumpRectorsOutputFormatterInterface;
 use Rector\Utils\DocumentationGenerator\RectorMetadataResolver;
 use ReflectionClass;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputFormatterInterface
+final class MarkdownDumpRectorsOutputFormatter
 {
     /**
      * @var SymfonyStyle
@@ -49,11 +48,6 @@ final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputForma
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
         $this->rectorMetadataResolver = $rectorMetadataResolver;
         $this->testClassResolver = $testClassResolver;
-    }
-
-    public function getName(): string
-    {
-        return 'markdown';
     }
 
     /**
@@ -211,6 +205,14 @@ final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputForma
         );
 
         $this->printCodeWrapped($diff, 'diff');
+
+        $extraFileContent = $codeSample->getExtraFileContent();
+        if ($extraFileContent !== null) {
+            $this->symfonyStyle->newLine();
+            $this->symfonyStyle->writeln('**New file**');
+            $this->symfonyStyle->newLine();
+            $this->printCodeWrapped($extraFileContent, 'php');
+        }
     }
 
     private function printCodeWrapped(string $content, string $format): void

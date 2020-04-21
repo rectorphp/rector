@@ -1,0 +1,7 @@
+services:
+    Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector: null
+
+    Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
+        $oldToNewMethodsByClass:
+            PHPUnit\Framework\TestCase:
+                assertFileNotExists: 'assertFileDoesNotExist'

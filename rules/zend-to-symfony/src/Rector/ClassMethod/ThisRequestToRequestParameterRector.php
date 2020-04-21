@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\ZendToSymfony\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -71,15 +70,7 @@ PHP
 
         $hasRequest = false;
         $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (&$hasRequest): ?Variable {
-            if (! $node instanceof PropertyFetch) {
-                return null;
-            }
-
-            if (! $this->isName($node->var, 'this')) {
-                return null;
-            }
-
-            if (! $this->isName($node->name, '_request')) {
+            if (! $this->isLocalPropertyFetchName($node, '_request')) {
                 return null;
             }
 

@@ -2,11 +2,11 @@
 services:
     # https://github.com/cakephp/cakephp/blob/2.4.6/lib/Cake/Controller/Controller.php
     Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerToSymfonyControllerRector: null
-    Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector: null
     Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerHelperToSymfonyRector: null
     Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerComponentToSymfonyRector: null
     Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRedirectToSymfonyRector: null
     Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRenderToSymfonyRector: null
+    Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector: null
 
     # .tpl templates to twig
     Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateLinkToTwigRector: null

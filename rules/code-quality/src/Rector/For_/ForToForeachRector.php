@@ -135,7 +135,7 @@ PHP
         $iteratedVariableSingle = Inflector::singularize($iteratedVariable);
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
-        $this->useForeachVariableInStmts($foreach->valueVar, $foreach->stmts);
+        $this->useForeachVariableInStmts($foreach->expr, $foreach->valueVar, $foreach->stmts);
 
         return $foreach;
     }
@@ -220,18 +220,19 @@ PHP
     /**
      * @param Stmt[] $stmts
      */
-    private function useForeachVariableInStmts(Expr $expr, array $stmts): void
+    private function useForeachVariableInStmts(Expr $foreachedValue, Expr $singleValue, array $stmts): void
     {
         if ($this->keyValueName === null) {
             throw new ShouldNotHappenException();
         }
 
-        $this->traverseNodesWithCallable($stmts, function (Node $node) use ($expr): ?Expr {
+        $this->traverseNodesWithCallable($stmts, function (Node $node) use ($foreachedValue, $singleValue): ?Expr {
             if (! $node instanceof ArrayDimFetch) {
                 return null;
             }
 
-            if ($this->areNodesEqual($node->var, $expr)) {
+            // must be the same as foreach value
+            if (! $this->areNodesEqual($node->var, $foreachedValue)) {
                 return null;
             }
 
@@ -240,15 +241,12 @@ PHP
                 return null;
             }
 
-            if (! $node->dim instanceof Variable) {
+            // is dim same as key value name, ...[$i]
+            if (! $this->isVariableName($node->dim, $this->keyValueName)) {
                 return null;
             }
 
-            if (! $this->isName($node->dim, $this->keyValueName)) {
-                return null;
-            }
-
-            return $expr;
+            return $singleValue;
         });
     }
 

@@ -13,24 +13,13 @@ final class Tag implements TagInterface
      */
     private $name;
 
-    /**
-     * @var array
-     */
-    private $data = [];
-
-    public function __construct(string $name, array $data)
+    public function __construct(string $name)
     {
         $this->name = $name;
-        $this->data = $data;
     }
 
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
     }
 }

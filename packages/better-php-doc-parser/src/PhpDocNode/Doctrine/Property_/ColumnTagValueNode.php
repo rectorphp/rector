@@ -148,11 +148,6 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
         $this->type = $type;
     }
 
-    public function changeUnique(bool $unique): void
-    {
-        $this->unique = $unique;
-    }
-
     public function getType(): ?string
     {
         return $this->type;

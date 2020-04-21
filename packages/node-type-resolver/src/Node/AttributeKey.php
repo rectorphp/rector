@@ -42,7 +42,7 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const CLASS_SHORT_NAME = 'class_short_name';
+    public const CLASS_SHORT_NAME = 'classShortName';
 
     /**
      * @todo split Class node, interface node and trait node, to be compatible with other SpecificNode|null, values
@@ -64,6 +64,11 @@ final class AttributeKey
      * @var string
      */
     public const METHOD_NODE = ClassMethod::class;
+
+    /**
+     * @var string
+     */
+    public const FUNCTION_NODE = Function_::class;
 
     /**
      * Internal php-parser name.
@@ -112,6 +117,9 @@ final class AttributeKey
     public const FILE_INFO = SmartFileInfo::class;
 
     /**
+     * Internal php-parser name.
+     * Do not change this even if you want!
+     *
      * @var string
      */
     public const START_TOKEN_POSITION = 'startTokenPos';
@@ -125,15 +133,15 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_UNREACHABLE = 'is_unreachable';
-
-    /**
-     * @var string
-     */
-    public const FUNCTION_NODE = Function_::class;
+    public const IS_UNREACHABLE = 'isUnreachable';
 
     /**
      * @var string
      */
     public const PHP_DOC_INFO = PhpDocInfo::class;
+
+    /**
+     * @var string
+     */
+    public const METHOD_CALL_NODE_CALLER_NAME = 'methodCallVariableName';
 }

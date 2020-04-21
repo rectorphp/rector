@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -15,18 +16,15 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
-use Rector\Core\Commander\CommanderCollector;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
+use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
-use Rector\Core\Rector\AbstractRector\NodeCommandersTrait;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -61,16 +59,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $exclusionManager;
 
     /**
-     * @var CommanderCollector
-     */
-    private $commanderCollector;
-
-    /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
-
-    /**
      * @var PhpDocInfoPrinter
      */
     protected $phpDocInfoPrinter;
@@ -84,6 +72,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var StaticTypeMapper
      */
     protected $staticTypeMapper;
+
+    /**
+     * @var CurrentRectorProvider
+     */
+    private $currentRectorProvider;
 
     /**
      * @var string[]
@@ -103,13 +96,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     ];
 
     /**
-     * Run once in the every end of one processed file
-     */
-    protected function tearDown(): void
-    {
-    }
-
-    /**
      * @required
      */
     public function autowireAbstractRectorDependencies(
@@ -117,23 +103,21 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager,
-        CommanderCollector $commanderCollector,
-        CurrentFileInfoProvider $currentFileInfoProvider,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         DocBlockManipulator $docBlockManipulator,
         StaticTypeMapper $staticTypeMapper,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        CurrentRectorProvider $currentRectorProvider
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
         $this->exclusionManager = $exclusionManager;
-        $this->commanderCollector = $commanderCollector;
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
+        $this->currentRectorProvider = $currentRectorProvider;
     }
 
     /**
@@ -144,6 +128,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         if (! $this->isMatchingNodeType(get_class($node))) {
             return null;
         }
+
+        $this->currentRectorProvider->changeCurrentRector($this);
 
         // show current Rector class on --debug
         if ($this->symfonyStyle->isDebug()) {
@@ -174,7 +160,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->mirrorAttributes($originalNodeWithAttributes, $node);
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
-            $this->notifyNodeChangeFileInfo($node);
+            $this->notifyNodeFileInfo($node);
         }
 
         // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code
@@ -183,36 +169,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return $node;
-    }
-
-    /**
-     * @see NodeCommandersTrait
-     *
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    public function afterTraverse(array $nodes): array
-    {
-        // setup for commanders
-        foreach ($nodes as $node) {
-            $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-            if ($fileInfo instanceof SmartFileInfo) {
-                $this->currentFileInfoProvider->setCurrentFileInfo($fileInfo);
-                break;
-            }
-        }
-
-        foreach ($this->commanderCollector->provide() as $commander) {
-            if (! $commander->isActive()) {
-                continue;
-            }
-
-            $nodes = $commander->traverseNodes($nodes);
-        }
-
-        $this->tearDown();
-
-        return $nodes;
     }
 
     protected function getNextExpression(Node $node): ?Node
@@ -359,12 +315,21 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
     }
 
-    private function isNameIdentical(Node $node, Node $originalNode): bool
+    protected function isOnClassMethodCall(Node $node, string $type, string $methodName): bool
     {
-        if (static::class !== ImportFullyQualifiedNamesRector::class) {
+        if (! $node instanceof MethodCall) {
             return false;
         }
 
+        if (! $this->isObjectType($node->var, $type)) {
+            return false;
+        }
+
+        return $this->isName($node->name, $methodName);
+    }
+
+    private function isNameIdentical(Node $node, Node $originalNode): bool
+    {
         if (! $originalNode instanceof Name) {
             return false;
         }
@@ -379,6 +344,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         return in_array(
             $projectType,
+            // make it typo proof
             [Option::PROJECT_TYPE_OPEN_SOURCE, Option::PROJECT_TYPE_OPEN_SOURCE_UNDESCORED],
             true
         );

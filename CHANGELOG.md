@@ -9,7 +9,114 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-## [v0.7.3]
+## Unreleased
+
+### Added
+
+- [#3080] [CodeQuality] Add ArrayKeysAndInArrayToIssetRector
+- [#3070] [DeadCode] Add empty() + count($values) > 0 checks to RemoveUnusedNonEmptyArrayBeforeForeachRector
+- [#3068] [DeadCode] Add RemoveAssignOfVoidReturnFunctionRector
+- [#3062] [DeadCode] Add RemoveUnusedFunctionRector
+- [#3066] [DeadCode] Add RemoveUnusedNonEmptyArrayBeforeForeachRector
+- [#3047] [PHPUnit] Add CreateMockToCreateStubRector
+- [#3081] [TypeDeclaration] Add class method param type resolving by property
+- [#3058] [PHP 7.4] Add default null type on properties
+- [#3059] [PHP 7.4] Add restoration null default only
+- [#3057] [PHP 7.4] Add id tag support + remove array on collection property
+- [#3078] Add Safe 0.7 set
+- [#3072] [PHP 8.0] Add StrContainsRector
+
+### Changed
+
+- [#3082] [CodeQuality] use array_key_exists instead of isset
+- [#3056] [PHP 7.4] Improve TypedPropertyRector for Doctrine collection
+- [#3051] improve GeneratedValueTagValueNode
+- [#3063] [PHP 5.5] Prevent error on non-string value in PregReplaceEModifierRector
+- [#3040] Proofread docs, Thanks to [@greg0ire]
+- [#3039] Proofread readme, Thanks to [@greg0ire]
+- [#3083] use just one type of printing
+
+### Fixed
+
+- [#3050] Fix assert choice tag value node with class constant reference
+- [#3049] fix union type on ReturnTypeDeclarationRector
+- [#3052] fix content resolving
+- [#3054] skip if not used with the `array []` operator fixes [#3053], Thanks to [@derflocki]
+- [#3065] Fix multiple annotation reading of same type at class method
+- [#3069] Fix Route separating key
+- [#3077] Fix auto import
+- [#3079] Fix annotation in requirements of [@Route]
+- [#3064] [PHP 7.4] Fix ChangeReflectionTypeToStringToGetNameRector
+
+### Removed
+
+- [#3071] remove ctor dependency on property/assign removal
+- [#3076] [PHP 8.0] drop preg_match support from StrContains, too vague
+
+## [v0.7.7] - 2020-03-20
+
+### Added
+
+- [#3024] add DoctrineBehaviors 2.0
+- [#3019] add fix for getIterator() on Finder for Array spread
+- [#3034] Add checkstyle output format
+- [#3021] add phpunit 9 rector to convert non-strict assertContains, Thanks to [@nightlinus]
+- [#3023] add DoctrineBehaviors 2.0
+
+### Changed
+
+- [#3032] [DeadCode] Skip shifted variable
+- [#3015] Rector CI is now exclusive for non-fork pushes + PRs, Thanks to [@JanMikes]
+- [#3013] Commit rector processed changes from CI, Thanks to [@JanMikes]
+- [#3036] Run cs after rector ci, Thanks to [@JanMikes]
+- [#3027] ForToForeachRector fixture, Thanks to [@crishoj]
+
+### Fixed
+
+- [#3029] Fix other loop
+- [#3022] PHP 7.4 deprecation fix, Thanks to [@alexeyshockov]
+- [#3030] fix no-space change reprint in case of dual comment
+- [#3035] Fix typo in README.md, Thanks to [@pgrimaud]
+- [#3031] fix asterisk indent
+
+### Removed
+
+- [#3016] Delete DogFoodClass, Thanks to [@JanMikes]
+
+## [v0.7.4] - 2020-03-11
+
+### Added
+
+- [#3003] Add failing tests for method annotation, Thanks to [@stedekay]
+- [#2990] AssertTrueFalseToSpecificMethodRector: add broken test ('Pick more specific node than PhpParser\Node\Expr\StaticCall'), Thanks to [@gnutix]
+- [#2988] add space between name and value
+
+### Changed
+
+- [#3009] [ReadyToBeMerged][AnnotateThrowables] Support `$this` calling a method of the same class, Thanks to [@Aerendir]
+- [#3012] check for used variable without comments
+- [#2981] Skip passed argument
+- [#2984] improve array shape double collon spacing
+- [#2987] improve param array type for change type
+- [#2980] skip empty method on open-source
+- [#3010] Abstract files system
+- [#2998] AnnotateThrowables: support analysis of called functions and methods, Thanks to [@Aerendir]
+
+### Fixed
+
+- [#3008] [ReadyToBeMerged][AnnotateThrowables] Fix a small mispelling., Thanks to [@Aerendir]
+- [#2992] fix spacing of data provider
+- [#2997] Fix various static calls errors in PHPUnit Rectors., Thanks to [@gnutix]
+- [#3004] fix method annotation
+- [#2985] fix union param
+- [#2982] Fix PhpDocInfoPrinter slash removal
+- [#2996] fix multiline with one space
+
+### Removed
+
+- [#3005] remove comments only in case of change to original node
+
+## [v0.7.3] - 2020-03-01
 
 ### Added
 
@@ -2598,3 +2705,78 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [v0.7.3]: https://github.com/rectorphp/rector/compare/v0.7.2...v0.7.3
 [v0.7.2]: https://github.com/rectorphp/rector/compare/v0.7.1...v0.7.2
 [@alexanderschnitzler]: https://github.com/alexanderschnitzler
+[#3012]: https://github.com/rectorphp/rector/pull/3012
+[#3010]: https://github.com/rectorphp/rector/pull/3010
+[#3009]: https://github.com/rectorphp/rector/pull/3009
+[#3008]: https://github.com/rectorphp/rector/pull/3008
+[#3005]: https://github.com/rectorphp/rector/pull/3005
+[#3004]: https://github.com/rectorphp/rector/pull/3004
+[#3003]: https://github.com/rectorphp/rector/pull/3003
+[#2998]: https://github.com/rectorphp/rector/pull/2998
+[#2997]: https://github.com/rectorphp/rector/pull/2997
+[#2996]: https://github.com/rectorphp/rector/pull/2996
+[#2992]: https://github.com/rectorphp/rector/pull/2992
+[#2990]: https://github.com/rectorphp/rector/pull/2990
+[#2988]: https://github.com/rectorphp/rector/pull/2988
+[#2987]: https://github.com/rectorphp/rector/pull/2987
+[#2985]: https://github.com/rectorphp/rector/pull/2985
+[#2984]: https://github.com/rectorphp/rector/pull/2984
+[#2982]: https://github.com/rectorphp/rector/pull/2982
+[#2981]: https://github.com/rectorphp/rector/pull/2981
+[#2980]: https://github.com/rectorphp/rector/pull/2980
+[#3083]: https://github.com/rectorphp/rector/pull/3083
+[#3082]: https://github.com/rectorphp/rector/pull/3082
+[#3081]: https://github.com/rectorphp/rector/pull/3081
+[#3080]: https://github.com/rectorphp/rector/pull/3080
+[#3079]: https://github.com/rectorphp/rector/pull/3079
+[#3078]: https://github.com/rectorphp/rector/pull/3078
+[#3077]: https://github.com/rectorphp/rector/pull/3077
+[#3076]: https://github.com/rectorphp/rector/pull/3076
+[#3072]: https://github.com/rectorphp/rector/pull/3072
+[#3071]: https://github.com/rectorphp/rector/pull/3071
+[#3070]: https://github.com/rectorphp/rector/pull/3070
+[#3069]: https://github.com/rectorphp/rector/pull/3069
+[#3068]: https://github.com/rectorphp/rector/pull/3068
+[#3066]: https://github.com/rectorphp/rector/pull/3066
+[#3065]: https://github.com/rectorphp/rector/pull/3065
+[#3064]: https://github.com/rectorphp/rector/pull/3064
+[#3063]: https://github.com/rectorphp/rector/pull/3063
+[#3062]: https://github.com/rectorphp/rector/pull/3062
+[#3059]: https://github.com/rectorphp/rector/pull/3059
+[#3058]: https://github.com/rectorphp/rector/pull/3058
+[#3057]: https://github.com/rectorphp/rector/pull/3057
+[#3056]: https://github.com/rectorphp/rector/pull/3056
+[#3054]: https://github.com/rectorphp/rector/pull/3054
+[#3053]: https://github.com/rectorphp/rector/pull/3053
+[#3052]: https://github.com/rectorphp/rector/pull/3052
+[#3051]: https://github.com/rectorphp/rector/pull/3051
+[#3050]: https://github.com/rectorphp/rector/pull/3050
+[#3049]: https://github.com/rectorphp/rector/pull/3049
+[#3047]: https://github.com/rectorphp/rector/pull/3047
+[#3040]: https://github.com/rectorphp/rector/pull/3040
+[#3039]: https://github.com/rectorphp/rector/pull/3039
+[#3036]: https://github.com/rectorphp/rector/pull/3036
+[#3035]: https://github.com/rectorphp/rector/pull/3035
+[#3034]: https://github.com/rectorphp/rector/pull/3034
+[#3032]: https://github.com/rectorphp/rector/pull/3032
+[#3031]: https://github.com/rectorphp/rector/pull/3031
+[#3030]: https://github.com/rectorphp/rector/pull/3030
+[#3029]: https://github.com/rectorphp/rector/pull/3029
+[#3027]: https://github.com/rectorphp/rector/pull/3027
+[#3024]: https://github.com/rectorphp/rector/pull/3024
+[#3023]: https://github.com/rectorphp/rector/pull/3023
+[#3022]: https://github.com/rectorphp/rector/pull/3022
+[#3021]: https://github.com/rectorphp/rector/pull/3021
+[#3019]: https://github.com/rectorphp/rector/pull/3019
+[#3016]: https://github.com/rectorphp/rector/pull/3016
+[#3015]: https://github.com/rectorphp/rector/pull/3015
+[#3013]: https://github.com/rectorphp/rector/pull/3013
+[v0.7.7]: https://github.com/rectorphp/rector/compare/v0.7.4...v0.7.7
+[v0.7.4]: https://github.com/rectorphp/rector/compare/v0.7.3...v0.7.4
+[@pgrimaud]: https://github.com/pgrimaud
+[@nightlinus]: https://github.com/nightlinus
+[@greg0ire]: https://github.com/greg0ire
+[@derflocki]: https://github.com/derflocki
+[@crishoj]: https://github.com/crishoj
+[@alexeyshockov]: https://github.com/alexeyshockov
+[@Route]: https://github.com/Route

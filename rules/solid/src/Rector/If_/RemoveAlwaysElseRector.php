@@ -70,7 +70,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->lastStatementBreaksFlow($node)) {
+        if ($this->doesLastStatementBreakFlow($node)) {
             return null;
         }
 
@@ -99,7 +99,7 @@ PHP
         return null;
     }
 
-    protected function lastStatementBreaksFlow(Node $node): bool
+    private function doesLastStatementBreakFlow(Node $node): bool
     {
         $lastStmt = end($node->stmts);
         return ! ($lastStmt instanceof Return_

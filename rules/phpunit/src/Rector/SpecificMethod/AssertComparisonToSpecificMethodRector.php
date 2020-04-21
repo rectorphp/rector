@@ -100,7 +100,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function changeOrderArguments(Node $node): void
+    private function changeArgumentsOrder(Node $node): void
     {
         $oldArguments = $node->args;
 
@@ -137,7 +137,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
             'assertFalse' => $falseMethodName,
         ]);
 
-        $this->changeOrderArguments($node);
+        $this->changeArgumentsOrder($node);
 
         return $node;
     }

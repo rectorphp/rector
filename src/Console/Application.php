@@ -6,8 +6,9 @@ namespace Rector\Core\Console;
 
 use Composer\XdebugHandler\XdebugHandler;
 use Jean85\PrettyVersions;
+use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
+use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Console\Output\JsonOutputFormatter;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Utils\DocumentationGenerator\Command\DumpNodesCommand;
 use Rector\Utils\DocumentationGenerator\Command\DumpRectorsCommand;
@@ -118,14 +119,28 @@ final class Application extends SymfonyApplication
     private function shouldPrintMetaInformation(InputInterface $input): bool
     {
         $hasNoArguments = $input->getFirstArgument() === null;
+        if ($hasNoArguments) {
+            return false;
+        }
+
         $hasVersionOption = $input->hasParameterOption('--version');
+        if ($hasVersionOption) {
+            return false;
+        }
 
         $hasJsonOutput = (
             $input->getParameterOption('--output-format') === JsonOutputFormatter::NAME ||
             $input->getParameterOption('-o') === JsonOutputFormatter::NAME
         );
+        if ($hasJsonOutput) {
+            return false;
+        }
 
-        return ! ($hasVersionOption || $hasNoArguments || $hasJsonOutput);
+        $hasCheckstyleOutput = (
+            $input->getParameterOption('--output-format') === CheckstyleOutputFormatter::NAME ||
+            $input->getParameterOption('-o') === CheckstyleOutputFormatter::NAME
+        );
+        return ! $hasCheckstyleOutput;
     }
 
     private function removeUnusedOptions(InputDefinition $inputDefinition): void

@@ -6,13 +6,13 @@ namespace Rector\Utils\PHPStanStaticTypeMapperChecker\Command;
 
 use PHPStan\Type\NonexistentParentClassType;
 use Rector\Core\Console\Command\AbstractCommand;
-use Rector\Core\Console\Shell;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\Utils\PHPStanStaticTypeMapperChecker\Finder\PHPStanTypeClassFinder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Console\ShellCode;
 
 final class CheckStaticTypeMappersCommand extends AbstractCommand
 {
@@ -49,7 +49,7 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('[Dev] check PHPStan types to TypeMappers');
+        $this->setDescription('[DEV] check PHPStan types to TypeMappers');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -58,13 +58,13 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
         if ($missingNodeClasses === []) {
             $this->symfonyStyle->success('All PHPStan Types are covered by TypeMapper');
 
-            return Shell::CODE_SUCCESS;
+            return ShellCode::SUCCESS;
         }
 
         $this->symfonyStyle->error('Some classes are missing nodes');
         $this->symfonyStyle->listing($missingNodeClasses);
 
-        return Shell::CODE_ERROR;
+        return ShellCode::SUCCESS;
     }
 
     /**

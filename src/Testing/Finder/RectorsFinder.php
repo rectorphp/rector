@@ -71,7 +71,7 @@ final class RectorsFinder
 
             $rector = $reflectionClass->newInstanceWithoutConstructor();
             if (! $rector instanceof RectorInterface) {
-                // lowercase letter bug in RototLoader
+                // lowercase letter bug in RobotLoader
                 if (Strings::endsWith($class, 'rector')) {
                     continue;
                 }

@@ -5,17 +5,22 @@ parameters:
         - 'dead-code'
         - 'nette-utils-code-quality'
         - 'solid'
+        - 'privatization'
 
     paths:
         - 'src'
         - 'rules'
         - 'packages'
         - 'tests'
+        - 'utils'
 
     exclude_paths:
         - '/Fixture/'
         - '/Source/'
         - '/Expected/'
+        # generated
+        - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
+        - 'packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
 
     exclude_rectors:
         # @todo needs to check for "autoload-dev" local dependency

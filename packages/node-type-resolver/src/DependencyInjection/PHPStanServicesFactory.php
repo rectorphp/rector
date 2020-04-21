@@ -9,10 +9,12 @@ use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
+use PHPStan\Dependency\DependencyResolver;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
 use PHPStan\DependencyInjection\Type\DynamicReturnTypeExtensionRegistryProvider;
 use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProvider;
+use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 
@@ -46,7 +48,7 @@ final class PHPStanServicesFactory
             $additionalConfigFiles
         );
 
-        $temporaryPhpstanNeon = null;
+        $temporaryPHPStanNeon = null;
 
         $currentProjectConfigFile = $currentWorkingDirectory . '/phpstan.neon';
         if (file_exists($currentProjectConfigFile)) {
@@ -54,11 +56,13 @@ final class PHPStanServicesFactory
 
             // bleeding edge clean out, see https://github.com/rectorphp/rector/issues/2431
             if (Strings::match($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN)) {
-                $temporaryPhpstanNeon = $currentWorkingDirectory . '/rector-temp-phpstan.neon';
+                // Note: We need a unique file per process if rector runs in parallel
+                $pid = getmypid();
+                $temporaryPHPStanNeon = $currentWorkingDirectory . '/rector-temp-phpstan' . $pid . '.neon';
                 $clearedPhpstanNeonContent = Strings::replace($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN);
-                FileSystem::write($temporaryPhpstanNeon, $clearedPhpstanNeonContent);
+                FileSystem::write($temporaryPHPStanNeon, $clearedPhpstanNeonContent);
 
-                $additionalConfigFiles[] = $temporaryPhpstanNeon;
+                $additionalConfigFiles[] = $temporaryPHPStanNeon;
             } else {
                 $additionalConfigFiles[] = $currentProjectConfigFile;
             }
@@ -72,41 +76,78 @@ final class PHPStanServicesFactory
         $this->container = $containerFactory->create(sys_get_temp_dir(), $additionalConfigFiles, []);
 
         // clear bleeding edge fallback
-        if ($temporaryPhpstanNeon !== null) {
-            FileSystem::delete($temporaryPhpstanNeon);
+        if ($temporaryPHPStanNeon !== null) {
+            FileSystem::delete($temporaryPHPStanNeon);
         }
     }
 
+    /**
+     * @api
+     */
     public function createReflectionProvider(): ReflectionProvider
     {
         return $this->container->getByType(ReflectionProvider::class);
     }
 
+    /**
+     * @api
+     */
     public function createNodeScopeResolver(): NodeScopeResolver
     {
         return $this->container->getByType(NodeScopeResolver::class);
     }
 
+    /**
+     * @api
+     */
     public function createTypeSpecifier(): TypeSpecifier
     {
         return $this->container->getByType(TypeSpecifier::class);
     }
 
+    /**
+     * @api
+     */
     public function createScopeFactory(): ScopeFactory
     {
         return $this->container->getByType(ScopeFactory::class);
     }
 
+    /**
+     * @api
+     */
     public function createDynamicReturnTypeExtensionRegistryProvider(): DynamicReturnTypeExtensionRegistryProvider
     {
         return $this->container->getByType(DynamicReturnTypeExtensionRegistryProvider::class);
     }
 
+    /**
+     * @api
+     */
+    public function createDependencyResolver(): DependencyResolver
+    {
+        return $this->container->getByType(DependencyResolver::class);
+    }
+
+    /**
+     * @api
+     */
+    public function createFileHelper(): FileHelper
+    {
+        return $this->container->getByType(FileHelper::class);
+    }
+
+    /**
+     * @api
+     */
     public function createOperatorTypeSpecifyingExtensionRegistryProvider(): OperatorTypeSpecifyingExtensionRegistryProvider
     {
         return $this->container->getByType(OperatorTypeSpecifyingExtensionRegistryProvider::class);
     }
 
+    /**
+     * @api
+     */
     public function createTypeNodeResolver(): TypeNodeResolver
     {
         return $this->container->getByType(TypeNodeResolver::class);

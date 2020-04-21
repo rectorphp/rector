@@ -12,18 +12,11 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Case_;
-use PhpParser\Node\Stmt\Catch_;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\While_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -32,18 +25,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RemoveDoubleAssignRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var ScopeNestingComparator
      */
-    private const CONTROL_STRUCTURE_NODES = [
-        Foreach_::class,
-        If_::class,
-        While_::class,
-        Do_::class,
-        Else_::class,
-        ElseIf_::class,
-        Catch_::class,
-        Case_::class,
-    ];
+    private $scopeNestingComparator;
+
+    public function __construct(ScopeNestingComparator $scopeNestingComparator)
+    {
+        $this->scopeNestingComparator = $scopeNestingComparator;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -113,11 +102,7 @@ PHP
             return true;
         }
 
-        if ($this->shouldSkipDueToForeachOverride($assign, $anotherNode)) {
-            return true;
-        }
-
-        return $this->shouldSkipForDifferenceParent($assign, $anotherNode);
+        return ! $this->scopeNestingComparator->areScopeNestingEqual($assign, $anotherNode);
     }
 
     private function isSelfReferencing(Assign $assign): bool
@@ -133,34 +118,5 @@ PHP
             $node->getAttribute(AttributeKey::METHOD_NODE),
             $previousExpression->getAttribute(AttributeKey::METHOD_NODE)
         );
-    }
-
-    private function shouldSkipDueToForeachOverride(Assign $assign, Node $node): bool
-    {
-        // is nested in a foreach and the previous expression is not?
-        $nodePreviousForeach = $this->betterNodeFinder->findFirstParentInstanceOf($assign, Foreach_::class);
-
-        $previousExpressionPreviousForeach = $this->betterNodeFinder->findFirstParentInstanceOf(
-            $node,
-            Foreach_::class
-        );
-        return $nodePreviousForeach !== $previousExpressionPreviousForeach;
-    }
-
-    private function shouldSkipForDifferenceParent(Node $firstNode, Node $secondNode): bool
-    {
-        $firstNodeParent = $this->findParentControlStructure($firstNode);
-        $secondNodeParent = $this->findParentControlStructure($secondNode);
-
-        if ($firstNodeParent === null || $secondNodeParent === null) {
-            return false;
-        }
-
-        return ! $this->areNodesEqual($firstNodeParent, $secondNodeParent);
-    }
-
-    private function findParentControlStructure(Node $node): ?Node
-    {
-        return $this->betterNodeFinder->findFirstParentInstanceOf($node, self::CONTROL_STRUCTURE_NODES);
     }
 }

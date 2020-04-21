@@ -102,7 +102,7 @@ PHP
             return null;
         }
 
-        $componentsProperty = $this->classManipulator->getProperty($node, 'components');
+        $componentsProperty = $node->getProperty('components');
         if ($componentsProperty === null) {
             return null;
         }

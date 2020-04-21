@@ -179,8 +179,7 @@ PHP
     {
         // look for <...>[] = IRoute<Type>
 
-        /** @var Assign[] $assings */
-        $assings = $this->betterNodeFinder->find($classMethod->stmts, function (Node $node): bool {
+        return $this->betterNodeFinder->find($classMethod->stmts, function (Node $node): bool {
             if (! $node instanceof Assign) {
                 return false;
             }
@@ -201,8 +200,6 @@ PHP
 
             return false;
         });
-
-        return $assings;
     }
 
     /**
@@ -238,7 +235,7 @@ PHP
 
     private function createSymfonyRoutePhpDocTagValueNode(RouteInfo $routeInfo): SymfonyRouteTagValueNode
     {
-        return new SymfonyRouteTagValueNode($routeInfo->getPath(), null, $routeInfo->getHttpMethods());
+        return new SymfonyRouteTagValueNode($routeInfo->getPath(), [], null, $routeInfo->getHttpMethods());
     }
 
     private function completeImplicitRoutes(): void

@@ -33,8 +33,8 @@ final class GeneratedValuePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         // skip tokens for this annotation
-        $this->resolveContentFromTokenIterator($tokenIterator);
+        $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new GeneratedValueTagValueNode($generatedValue->strategy);
+        return new GeneratedValueTagValueNode($generatedValue->strategy, $annotationContent);
     }
 }

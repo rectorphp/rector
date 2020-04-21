@@ -32,9 +32,9 @@ final class FileInfoParser
      */
     public function parseFileInfoToNodesAndDecorate(SmartFileInfo $fileInfo): array
     {
-        $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
+        $oldStmts = $this->parser->parseFileInfo($fileInfo);
 
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath());
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo);
     }
 
     /**
@@ -42,8 +42,8 @@ final class FileInfoParser
      */
     public function parseFileInfoToNodesAndDecorateWithScope(SmartFileInfo $fileInfo): array
     {
-        $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
+        $oldStmts = $this->parser->parseFileInfo($fileInfo);
 
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath(), true);
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo, true);
     }
 }

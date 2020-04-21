@@ -14,11 +14,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class ClassManipulator
 {
@@ -33,11 +32,6 @@ final class ClassManipulator
     private $callableNodeTraverser;
 
     /**
-     * @var NodeRemovingCommander
-     */
-    private $nodeRemovingCommander;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -47,18 +41,23 @@ final class ClassManipulator
      */
     private $propertyFetchManipulator;
 
+    /**
+     * @var NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
-        NodeRemovingCommander $nodeRemovingCommander,
+        NodesToRemoveCollector $nodesToRemoveCollector,
         NodeTypeResolver $nodeTypeResolver,
         PropertyFetchManipulator $propertyFetchManipulator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
 
     /**
@@ -77,26 +76,6 @@ final class ClassManipulator
         }
 
         return $usedTraits;
-    }
-
-    /**
-     * @todo
-     * Waits on https://github.com/nikic/PHP-Parser/pull/646 to be relased
-     */
-    public function getProperty(ClassLike $classLike, string $name): ?Property
-    {
-        foreach ($classLike->getProperties() as $property) {
-            if (count($property->props) > 1) {
-                // usually full property is needed to have all the docs values
-                throw new ShouldNotHappenException();
-            }
-
-            if ($this->nodeNameResolver->isName($property, $name)) {
-                return $property;
-            }
-        }
-
-        return null;
     }
 
     public function hasParentMethodOrInterface(string $class, string $method): bool
@@ -196,7 +175,7 @@ final class ClassManipulator
         return false;
     }
 
-    public function hasClassTrait(Class_ $class, string $desiredTrait): bool
+    public function hasTrait(Class_ $class, string $desiredTrait): bool
     {
         foreach ($class->getTraitUses() as $traitUse) {
             if (! $this->nodeNameResolver->haveName($traitUse->traits, $desiredTrait)) {
@@ -247,7 +226,7 @@ final class ClassManipulator
                 continue;
             }
 
-            $this->nodeRemovingCommander->addNode($implement);
+            $this->nodesToRemoveCollector->addNodeToRemove($implement);
         }
     }
 
@@ -289,7 +268,7 @@ final class ClassManipulator
                 return null;
             }
 
-            $this->nodeRemovingCommander->addNode($node);
+            $this->nodesToRemoveCollector->addNodeToRemove($node);
         });
     }
 }

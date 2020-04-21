@@ -21,6 +21,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 
@@ -41,10 +42,19 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     private $unionTypeAnalyzer;
 
-    public function __construct(PhpVersionProvider $phpVersionProvider, UnionTypeAnalyzer $unionTypeAnalyzer)
-    {
+    /**
+     * @var DoctrineTypeAnalyzer
+     */
+    private $doctrineTypeAnalyzer;
+
+    public function __construct(
+        PhpVersionProvider $phpVersionProvider,
+        UnionTypeAnalyzer $unionTypeAnalyzer,
+        DoctrineTypeAnalyzer $doctrineTypeAnalyzer
+    ) {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
+        $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
     }
 
     /**
@@ -210,16 +220,18 @@ final class UnionTypeMapper implements TypeMapperInterface
 
     private function resolveCompatibleObjectCandidate(UnionType $unionType): ?string
     {
+        if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($unionType)) {
+            return 'Doctrine\Common\Collections\Collection';
+        }
+
+        if (! $this->isUnionTypeWithTypeClassNameOnly($unionType)) {
+            return null;
+        }
+
+        /** @var TypeWithClassName $unionedType */
         foreach ($unionType->getTypes() as $unionedType) {
-            if (! $unionedType instanceof TypeWithClassName) {
-                return null;
-            }
-
+            /** @var TypeWithClassName $nestedUnionedType */
             foreach ($unionType->getTypes() as $nestedUnionedType) {
-                if (! $nestedUnionedType instanceof TypeWithClassName) {
-                    return null;
-                }
-
                 if (! $this->areTypeWithClassNamesRelated($unionedType, $nestedUnionedType)) {
                     continue 2;
                 }
@@ -248,5 +260,16 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return $unionTypeAnalysis->hasIterable() && $unionTypeAnalysis->hasArray();
+    }
+
+    private function isUnionTypeWithTypeClassNameOnly(UnionType $unionType): bool
+    {
+        foreach ($unionType->getTypes() as $unionedType) {
+            if (! $unionedType instanceof TypeWithClassName) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

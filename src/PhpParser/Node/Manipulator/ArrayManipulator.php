@@ -8,9 +8,20 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
 
 final class ArrayManipulator
 {
+    /**
+     * @var RectorChangeCollector
+     */
+    private $rectorChangeCollector;
+
+    public function __construct(RectorChangeCollector $rectorChangeCollector)
+    {
+        $this->rectorChangeCollector = $rectorChangeCollector;
+    }
+
     public function isArrayOnlyScalarValues(Array_ $array): bool
     {
         foreach ($array->items as $arrayItem) {
@@ -56,7 +67,9 @@ final class ArrayManipulator
             }
 
             // remove + recount for the printer
+            $removedArrayItem = $arrayNode->items[$i];
             unset($arrayNode->items[$i]);
+            $this->rectorChangeCollector->notifyNodeFileInfo($removedArrayItem);
 
             return $item;
         }

@@ -357,15 +357,7 @@ PHP
                 $methodStmt = $methodStmt->expr;
             }
 
-            if (! $methodStmt instanceof StaticCall) {
-                continue;
-            }
-
-            if (! $this->isName($methodStmt->class, 'parent')) {
-                continue;
-            }
-
-            if (! $this->isName($methodStmt->name, 'setUp')) {
+            if (! $this->isStaticCallNamed($methodStmt, 'parent', 'setUp')) {
                 continue;
             }
 

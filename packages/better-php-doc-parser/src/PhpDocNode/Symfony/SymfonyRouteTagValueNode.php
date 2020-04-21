@@ -9,6 +9,9 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyRouteTagParser\SymfonyRouteClassMethodTest
+ */
 final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
     /**
@@ -19,12 +22,17 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     /**
      * @var string|null
      */
-    public $name;
+    private $name;
 
     /**
      * @var string|null
      */
     private $path;
+
+    /**
+     * @var string|null
+     */
+    private $host;
 
     /**
      * @var bool
@@ -52,6 +60,27 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     private $requirements = [];
 
     /**
+     * @var string
+     */
+    private $requirementsKeyValueSeparator = '=';
+
+    /**
+     * @var string[]
+     */
+    private $localizedPaths = [];
+
+    /**
+     * @var string|null
+     */
+    private $condition;
+
+    /**
+     * @var bool
+     */
+    private $isNameQuoted = true;
+
+    /**
+     * @param string[] $localizedPaths
      * @param string[] $methods
      * @param string[] $options
      * @param string[] $defaults
@@ -59,31 +88,47 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
      */
     public function __construct(
         ?string $path,
+        array $localizedPaths = [],
         ?string $name = null,
         array $methods = [],
         array $options = [],
         array $defaults = [],
+        ?string $host = null,
         array $requirements = [],
+        ?string $condition = null,
         ?string $originalContent = null
     ) {
         $this->path = $path;
+        $this->localizedPaths = $localizedPaths;
+
         $this->name = $name;
         $this->methods = $methods;
         $this->options = $options;
         $this->defaults = $defaults;
         $this->requirements = $requirements;
 
+        // covers https://github.com/rectorphp/rector/issues/2994#issuecomment-598712339
+
+        // @todo make generic to abstrat class
         if ($originalContent !== null) {
             $this->isPathExplicit = (bool) Strings::contains($originalContent, 'path=');
 
             $this->resolveOriginalContentSpacingAndOrder($originalContent);
 
             // default value without key
-            if ($this->path && ! in_array('path', (array) $this->orderedVisibleItems, true)) {
+            if ($this->shouldAddImplicitPaths()) {
                 // add path as first item
                 $this->orderedVisibleItems = array_merge(['path'], (array) $this->orderedVisibleItems);
             }
+
+            $matches = Strings::match($originalContent, '#requirements={(.*?)(?<separator>(=|:))(.*)}#');
+            $this->requirementsKeyValueSeparator = $matches['separator'] ?? '=';
+
+            $this->isNameQuoted = $this->resolveIsValueQuoted($originalContent, $name);
         }
+
+        $this->host = $host;
+        $this->condition = $condition;
     }
 
     public function __toString(): string
@@ -93,7 +138,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         ];
 
         if ($this->name) {
-            $contentItems['name'] = sprintf('name="%s"', $this->name);
+            $contentItems['name'] = $this->printWithOptionalQuotes('name', $this->name, $this->isNameQuoted);
         }
 
         if ($this->methods !== []) {
@@ -108,16 +153,25 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
             $contentItems['defaults'] = $this->printArrayItem($this->defaults, 'defaults');
         }
 
+        if ($this->host !== null) {
+            $contentItems['host'] = sprintf('host="%s"', $this->host);
+        }
+
+        if ($this->condition !== null) {
+            $contentItems['condition'] = sprintf('condition="%s"', $this->condition);
+        }
+
         if ($this->requirements !== []) {
-            $contentItems['requirements'] = $this->printArrayItem($this->requirements, 'requirements');
+            $contentItems['requirements'] = $this->printArrayItemWithSeparator(
+                $this->requirements,
+                'requirements',
+                $this->requirementsKeyValueSeparator
+            );
         }
 
         return $this->printContentItems($contentItems);
     }
 
-    /**
-     * @param mixed[] $methods
-     */
     public function changeMethods(array $methods): void
     {
         $this->orderedVisibleItems[] = 'methods';
@@ -135,6 +189,17 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
             return sprintf('path="%s"', $this->path);
         }
 
-        return sprintf('"%s"', $this->path);
+        if ($this->path !== null) {
+            return sprintf('"%s"', $this->path);
+        }
+
+        $localizedPaths = $this->printArrayItem($this->localizedPaths);
+
+        return Strings::replace($localizedPaths, '#:#', ': ');
+    }
+
+    private function shouldAddImplicitPaths(): bool
+    {
+        return ($this->path || $this->localizedPaths) && ! in_array('path', (array) $this->orderedVisibleItems, true);
     }
 }

@@ -82,8 +82,7 @@ final class PropertyManipulator
         $nodesToSearch = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($classNode);
         $nodesToSearch[] = $classNode;
 
-        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use (
+        return $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use (
             $propertyProperty,
             $nodesToSearch
         ): bool {
@@ -104,8 +103,6 @@ final class PropertyManipulator
 
             return in_array($node->getAttribute(AttributeKey::CLASS_NODE), $nodesToSearch, true);
         });
-
-        return $propertyFetches;
     }
 
     public function isReadOnlyProperty(PropertyProperty $propertyProperty): bool

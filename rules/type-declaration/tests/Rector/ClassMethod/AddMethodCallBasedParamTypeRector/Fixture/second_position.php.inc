@@ -2,7 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Source\Apple;
+use Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector\Source\Coconut;
 
 class SecondPosition
 {
@@ -15,7 +15,7 @@ class CallerClassForSecondPosition
 {
     public function run()
     {
-        $building = new Apple();
+        $building = new Coconut();
         $someClass = new SecondPosition();
         $someClass->process('hi', $building->getId());
     }
@@ -27,7 +27,7 @@ class CallerClassForSecondPosition
 
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Source\Apple;
+use Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector\Source\Coconut;
 
 class SecondPosition
 {
@@ -40,7 +40,7 @@ class CallerClassForSecondPosition
 {
     public function run()
     {
-        $building = new Apple();
+        $building = new Coconut();
         $someClass = new SecondPosition();
         $someClass->process('hi', $building->getId());
     }

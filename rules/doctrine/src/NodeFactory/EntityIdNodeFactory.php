@@ -39,7 +39,7 @@ final class EntityIdNodeFactory
         return $uuidProperty;
     }
 
-    public function decoratePropertyWithIdAnnotations(Property $property): void
+    private function decoratePropertyWithIdAnnotations(Property $property): void
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);

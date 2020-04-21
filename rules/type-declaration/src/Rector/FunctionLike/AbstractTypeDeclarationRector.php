@@ -31,11 +31,6 @@ use Rector\VendorLocker\VendorLockResolver;
 abstract class AbstractTypeDeclarationRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    protected const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_return_type';
-
-    /**
      * @var DocBlockManipulator
      */
     protected $docBlockManipulator;

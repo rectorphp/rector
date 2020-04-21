@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -29,16 +28,6 @@ use ReflectionParameter;
  */
 final class RemoveDelegatingParentCallRector extends AbstractRector
 {
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    public function __construct(ValueResolver $valueResolver)
-    {
-        $this->valueResolver = $valueResolver;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('', [
@@ -202,7 +191,7 @@ PHP
 
             $param = $params[$key];
 
-            if (! $this->areNodesWithoutCommentsEqual($param->var, $arg->value)) {
+            if (! $this->areNodesEqual($param->var, $arg->value)) {
                 return false;
             }
         }
@@ -296,6 +285,6 @@ PHP
         }
 
         return $reflectionParameter->isDefaultValueAvailable() && $methodParam->default !== null &&
-            ! $this->valueResolver->isValue($methodParam->default, $reflectionParameter->getDefaultValue());
+            ! $this->isValue($methodParam->default, $reflectionParameter->getDefaultValue());
     }
 }

@@ -57,27 +57,19 @@ trait BetterStandardPrinterTrait
      */
     public function printToFile($node, string $filePath): void
     {
-        $content = $this->print($node);
-        $content = '<?php' . PHP_EOL . PHP_EOL . $content . PHP_EOL;
+        $content = $this->betterStandardPrinter->prettyPrintFile($node);
         FileSystem::write($filePath, $content);
     }
 
     /**
+     * Removes all comments from both nodes
+     *
      * @param Node|Node[]|null $firstNode
      * @param Node|Node[]|null $secondNode
      */
     protected function areNodesEqual($firstNode, $secondNode): bool
     {
         return $this->betterStandardPrinter->areNodesEqual($firstNode, $secondNode);
-    }
-
-    /**
-     * @param Node|Node[]|null $firstNode
-     * @param Node|Node[]|null $secondNode
-     */
-    protected function areNodesWithoutCommentsEqual($firstNode, $secondNode): bool
-    {
-        return $this->betterStandardPrinter->areNodesWithoutCommentsEqual($firstNode, $secondNode);
     }
 
     /**
@@ -94,7 +86,7 @@ trait BetterStandardPrinterTrait
             $availableNode = clone $availableNode;
             $availableNode->setAttribute('comments', null);
 
-            if ($this->areNodesWithoutCommentsEqual($singleNode, $availableNode)) {
+            if ($this->areNodesEqual($singleNode, $availableNode)) {
                 return true;
             }
         }

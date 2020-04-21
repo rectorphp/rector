@@ -40,7 +40,7 @@ final class BlameableTagValueNode extends AbstractTagValueNode implements ShortN
         $contentItems = [];
 
         if ($this->on !== null) {
-            $contentItems['on'] = $this->on;
+            $contentItems['on'] = sprintf('on="%s"', $this->on);
         }
 
         if ($this->field) {

@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -14,7 +15,7 @@ use Rector\DeadCode\UnusedNodeResolver\UnusedClassResolver;
 /**
  * @see \Rector\DeadCode\Tests\Rector\Class_\RemoveUnusedClassesRector\RemoveUnusedClassesRectorTest
  */
-final class RemoveUnusedClassesRector extends AbstractRector
+final class RemoveUnusedClassesRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
      * @var UnusedClassResolver

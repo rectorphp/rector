@@ -31,8 +31,9 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 /**
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Class_\DoctrinePhpDocParserTest
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Property_\OrmTagParserPropertyTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\DoctrineOrmTagParser\DoctrineOrmTagNodeTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyRouteTagParser\SymfonyRouteClassMethodTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyValidation\AssertTypeTagValueNodeTest
  */
 final class BetterPhpDocParser extends PhpDocParser
 {
@@ -143,6 +144,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $children = [];
         if (! $tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PHPDOC)) {
             $children[] = $this->parseChildAndStoreItsPositions($tokenIterator);
+
             while ($tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL) && ! $tokenIterator->isCurrentTokenType(
                 Lexer::TOKEN_CLOSE_PHPDOC
             )) {
@@ -216,14 +218,12 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $tokenStart = $this->getTokenIteratorIndex($tokenIterator);
         $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', $tokenIterator);
-        $tokenEnd = $this->getTokenIteratorIndex($tokenIterator);
 
-        $tokenEnd = $this->adjustTokenEndToFitClassAnnotation($tokenIterator, $tokenEnd);
+        $tokenEnd = $this->resolveTokenEnd($tokenIterator);
 
         $startEndValueObject = new StartEndValueObject($tokenStart, $tokenEnd);
 
         $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
-
         $attributeAwareNode->setAttribute(Attribute::START_END, $startEndValueObject);
 
         $possibleMultilineText = $this->multilineSpaceFormatPreserver->resolveCurrentPhpDocNodeText(
@@ -356,6 +356,13 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         return trim($originalContent);
+    }
+
+    private function resolveTokenEnd(TokenIterator $tokenIterator): int
+    {
+        $tokenEnd = $this->getTokenIteratorIndex($tokenIterator);
+
+        return $this->adjustTokenEndToFitClassAnnotation($tokenIterator, $tokenEnd);
     }
 
     private function isTagMatchedByFactories(string $tag): bool

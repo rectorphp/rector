@@ -1,0 +1,30 @@
+parameters:
+    is_cache_enabled: false
+
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    Rector\Caching\:
+        resource: '../src'
+
+    PHPStan\Dependency\DependencyResolver:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createDependencyResolver']
+
+    PHPStan\File\FileHelper:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createFileHelper']
+
+    # inspired from https://raw.githubusercontent.com/symplify/easy-coding-standard/master/config/services/services_cache.yaml
+    Symfony\Component\Cache\Psr16Cache: ~
+    Psr\SimpleCache\CacheInterface: '@Symfony\Component\Cache\Psr16Cache'
+
+    Symfony\Component\Cache\Adapter\FilesystemAdapter:
+        factory: ['@Rector\Caching\Cache\Adapter\FilesystemAdapterFactory', 'create']
+
+    Symfony\Component\Cache\Adapter\TagAwareAdapter:
+        $itemsPool: '@Symfony\Component\Cache\Adapter\FilesystemAdapter'
+
+    Psr\Cache\CacheItemPoolInterface: '@Symfony\Component\Cache\Adapter\FilesystemAdapter'
+
+    Symfony\Component\Cache\Adapter\TagAwareAdapterInterface: '@Symfony\Component\Cache\Adapter\TagAwareAdapter'

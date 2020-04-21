@@ -40,27 +40,6 @@ final class UnusedClassResolver
         $this->parsedNodeCollector = $parsedNodeCollector;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getUsedClassNames(): array
-    {
-        if (! PHPUnitEnvironment::isPHPUnitRun() && $this->cachedUsedClassNames !== []) {
-            return $this->cachedUsedClassNames;
-        }
-
-        $cachedUsedClassNames = array_merge(
-            $this->getParamNodesClassNames(),
-            $this->getNewNodesClassNames(),
-            $this->getStaticCallClassNames(),
-            $this->getClassConstantFetchNames()
-        );
-
-        $cachedUsedClassNames = $this->sortAndUniqueArray($cachedUsedClassNames);
-
-        return $this->cachedUsedClassNames = $cachedUsedClassNames;
-    }
-
     public function isClassWithoutInterfaceAndNotController(Class_ $class): bool
     {
         if ($class->implements !== []) {
@@ -80,6 +59,27 @@ final class UnusedClassResolver
     public function isClassUsed(Class_ $class): bool
     {
         return $this->nodeNameResolver->isNames($class, $this->getUsedClassNames());
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getUsedClassNames(): array
+    {
+        if (! PHPUnitEnvironment::isPHPUnitRun() && $this->cachedUsedClassNames !== []) {
+            return $this->cachedUsedClassNames;
+        }
+
+        $cachedUsedClassNames = array_merge(
+            $this->getParamNodesClassNames(),
+            $this->getNewNodesClassNames(),
+            $this->getStaticCallClassNames(),
+            $this->getClassConstantFetchNames()
+        );
+
+        $cachedUsedClassNames = $this->sortAndUniqueArray($cachedUsedClassNames);
+
+        return $this->cachedUsedClassNames = $cachedUsedClassNames;
     }
 
     /**
@@ -178,6 +178,10 @@ final class UnusedClassResolver
         return $classNames;
     }
 
+    /**
+     * @param string[] $items
+     * @return string[]
+     */
     private function sortAndUniqueArray(array $items): array
     {
         sort($items);

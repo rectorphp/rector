@@ -96,27 +96,21 @@ use PhpParser\Node\Stmt\While_;
 use PhpParser\Node\UnionType;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\Console\Command\AbstractCommand;
-use Rector\Core\Console\Shell;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Utils\DocumentationGenerator\Contract\OutputFormatter\DumpNodesOutputFormatterInterface;
 use Rector\Utils\DocumentationGenerator\Node\NodeClassProvider;
 use Rector\Utils\DocumentationGenerator\Node\NodeInfoResult;
+use Rector\Utils\DocumentationGenerator\OutputFormatter\DumpNodes\MarkdownDumpNodesOutputFormatter;
 use Rector\Utils\DocumentationGenerator\ValueObject\NodeInfo;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Console\ShellCode;
 
 final class DumpNodesCommand extends AbstractCommand
 {
-    /**
-     * @var DumpNodesOutputFormatterInterface[]
-     */
-    private $outputFormatters = [];
-
     /**
      * @var BetterStandardPrinter
      */
@@ -133,18 +127,20 @@ final class DumpNodesCommand extends AbstractCommand
     private $nodeInfoResult;
 
     /**
-     * @param DumpNodesOutputFormatterInterface[] $outputFormatters
+     * @var MarkdownDumpNodesOutputFormatter
      */
+    private $markdownDumpNodesOutputFormatter;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         NodeClassProvider $nodeClassProvider,
         NodeInfoResult $nodeInfoResult,
-        array $outputFormatters
+        MarkdownDumpNodesOutputFormatter $markdownDumpNodesOutputFormatter
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeClassProvider = $nodeClassProvider;
         $this->nodeInfoResult = $nodeInfoResult;
-        $this->outputFormatters = $outputFormatters;
+        $this->markdownDumpNodesOutputFormatter = $markdownDumpNodesOutputFormatter;
 
         parent::__construct();
     }
@@ -152,14 +148,7 @@ final class DumpNodesCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('[Docs] Dump overview of all Nodes');
-        $this->addOption(
-            'output-format',
-            'o',
-            InputOption::VALUE_REQUIRED,
-            'Output format for Nodes [json, console, markdown]',
-            'console'
-        );
+        $this->setDescription('[DOCS] Dump overview of all Nodes');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -420,15 +409,9 @@ final class DumpNodesCommand extends AbstractCommand
             }
         }
 
-        foreach ($this->outputFormatters as $outputFormatter) {
-            if ($outputFormatter->getName() !== $input->getOption('output-format')) {
-                continue;
-            }
+        $this->markdownDumpNodesOutputFormatter->format($this->nodeInfoResult);
 
-            $outputFormatter->format($this->nodeInfoResult);
-        }
-
-        return Shell::CODE_SUCCESS;
+        return ShellCode::SUCCESS;
     }
 
     private function resolveCategoryByNodeClass(string $nodeClass): string

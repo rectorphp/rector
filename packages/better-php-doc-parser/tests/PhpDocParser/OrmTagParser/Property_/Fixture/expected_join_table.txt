@@ -1,6 +1,0 @@
-/**
-     * @ORM\JoinTable(name="page_template_area",
-     *      joinColumns={@ORM\JoinColumn(name="template_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="area_id", referencedColumnName="id")}
-     * )
-     */

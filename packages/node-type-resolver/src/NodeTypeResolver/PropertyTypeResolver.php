@@ -50,9 +50,4 @@ final class PropertyTypeResolver implements NodeTypeResolverInterface
 
         return $this->nodeTypeResolver->resolve($propertyFetchNode);
     }
-
-    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-    }
 }

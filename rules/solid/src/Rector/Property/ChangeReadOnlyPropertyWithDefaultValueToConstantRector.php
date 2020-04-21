@@ -99,7 +99,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (count($node->props) !== 1) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -184,5 +184,19 @@ PHP
         }
 
         return false;
+    }
+
+    private function shouldSkip(Property $property): bool
+    {
+        if (count($property->props) !== 1) {
+            return true;
+        }
+
+        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return false;
+        }
+
+        return $this->isObjectType($class, 'PHP_CodeSniffer\Sniffs\Sniff');
     }
 }

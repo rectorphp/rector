@@ -6,16 +6,11 @@ namespace Rector\CodingStyle\Imports;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PostRector\Validator\CanImportBeAddedValidator;
 
 final class ImportSkipper
 {
-    /**
-     * @var UseAddingCommander
-     */
-    private $useAddingCommander;
-
     /**
      * @var AliasUsesResolver
      */
@@ -26,14 +21,19 @@ final class ImportSkipper
      */
     private $shortNameResolver;
 
+    /**
+     * @var CanImportBeAddedValidator
+     */
+    private $canImportBeAddedValidator;
+
     public function __construct(
-        UseAddingCommander $useAddingCommander,
         AliasUsesResolver $aliasUsesResolver,
-        ShortNameResolver $shortNameResolver
+        ShortNameResolver $shortNameResolver,
+        CanImportBeAddedValidator $canImportBeAddedValidator
     ) {
-        $this->useAddingCommander = $useAddingCommander;
         $this->aliasUsesResolver = $aliasUsesResolver;
         $this->shortNameResolver = $shortNameResolver;
+        $this->canImportBeAddedValidator = $canImportBeAddedValidator;
     }
 
     public function shouldSkipNameForFullyQualifiedObjectType(
@@ -52,7 +52,7 @@ final class ImportSkipper
             return true;
         }
 
-        return ! $this->useAddingCommander->canImportBeAdded($node, $fullyQualifiedObjectType);
+        return ! $this->canImportBeAddedValidator->canImportBeAdded($node, $fullyQualifiedObjectType);
     }
 
     private function isShortNameAlreadyUsedForDifferentFullyQualifiedName(

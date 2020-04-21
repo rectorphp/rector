@@ -17,6 +17,7 @@ use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use Rector\PostRector\Application\PostFileProcessor;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use TypeError;
@@ -71,6 +72,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     private $parserFactory;
 
     /**
+     * @var PostFileProcessor
+     */
+    private $postFileProcessor;
+
+    /**
      * @required
      */
     public function autowireAbstractFileSystemRector(
@@ -82,7 +88,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         Configuration $configuration,
         BetterStandardPrinter $betterStandardPrinter,
-        ParameterProvider $parameterProvider
+        ParameterProvider $parameterProvider,
+        PostFileProcessor $postFileProcessor
     ): void {
         $this->parser = $parser;
         $this->parserFactory = $parserFactory;
@@ -93,6 +100,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->configuration = $configuration;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parameterProvider = $parameterProvider;
+        $this->postFileProcessor = $postFileProcessor;
     }
 
     /**
@@ -100,13 +108,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function parseFileInfoToNodes(SmartFileInfo $smartFileInfo): array
     {
-        $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
+        $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
         // needed for format preserving
         $this->oldStmts = $oldStmts;
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile(
-            $oldStmts,
-            $smartFileInfo->getRealPath()
-        );
+
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $smartFileInfo);
     }
 
     /**
@@ -114,7 +120,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function parseFileInfoToNodesWithoutScope(SmartFileInfo $smartFileInfo): array
     {
-        $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
+        $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
         $this->oldStmts = $oldStmts;
 
         return $oldStmts;
@@ -125,6 +131,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function printNodesToFilePath(array $nodes, string $fileDestination): void
     {
+        $nodes = $this->postFileProcessor->traverse($nodes);
+
         $fileContent = $this->formatPerservingPrinter->printToString(
             $nodes,
             $this->oldStmts,
@@ -139,6 +147,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function printNewNodesToFilePath(array $nodes, string $fileDestination): void
     {
+        $nodes = $this->postFileProcessor->traverse($nodes);
+
         // 1. if nodes are the same, prefer format preserving printer
         try {
             $dummyLexer = new Lexer();
@@ -163,7 +173,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $formatPreservingContent = '';
         }
 
-        $prettyPrintContent = '<?php' . PHP_EOL . $this->betterStandardPrinter->prettyPrint($nodes);
+        $prettyPrintContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
 
         if ($this->areStringsSameWithoutSpaces($formatPreservingContent, $prettyPrintContent)) {
             $fileContent = $formatPreservingContent;
@@ -194,7 +204,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
     }
 
-    protected function addFile(string $filePath, string $content): void
+    private function addFile(string $filePath, string $content): void
     {
         $this->removedAndAddedFilesCollector->addFileWithContent($filePath, $content);
     }
