@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
-            -   uses: shivammathur/setup-php@v1
+            -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.3
                     coverage: none # disable xdebug, pcov
@@ -19,14 +19,16 @@ jobs:
 
             # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
             -   run: |
-                    # 1. install locally
-                    mkdir test-paths
-                    cd test-paths
+                    # Install Drupal
+                    composer create-project drupal/recommended-project drupal --dev --no-progress
 
-                    # Install Drupal with Rector 0.7.3
-                    mkdir drupal-rector073
-                    composer create-project drupal/recommended-project drupal-rector073 --dev --no-progress
-                    cd drupal-rector073
+            -   run: |
+                    # Install Rector, metatag (without console)
+                    cd drupal
                     composer require drupal/metatag palantirnet/drupal-rector
+
+            -   run: |
+                    # Run Rector on metatag/src/Generator (added -e to skip autoload errors)
+                    cd drupal
                     cp vendor/palantirnet/drupal-rector/rector.yml .
-                    vendor/bin/rector process web/modules/contrib/metatag/src/Generator --dry-run -e
+                    vendor/bin/rector process web/modules/contrib/metatag/src/Generator -e -debug
