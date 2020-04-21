@@ -1,4 +1,4 @@
-name: Rector
+name: Rector bug
 
 on:
     pull_request: null
@@ -19,5 +19,5 @@ jobs:
                     coverage: none
 
             -   run: composer install --no-progress
-            -   run: bin/rector process --config rector-ci.yaml --debug --dry-run
-            -   run: bin/rector process --config rector-ci.yaml --debug --dry-run src
+            -   run: bin/rector process --config rector-ci.yaml --dry-run
+            -   run: bin/rector process --config rector-ci.yaml --dry-run src
