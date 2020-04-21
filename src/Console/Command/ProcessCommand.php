@@ -131,6 +131,7 @@ final class ProcessCommand extends AbstractProcessCommand
                             // etc $this->configuration->toCliArguments() ??
                             '--dry-run',
                             '--output-format', JsonOutputFormatter::NAME,
+                            '--config', 'rector-ci.yaml'
                         ],
                         $filenamesForChildProcess
                     );
