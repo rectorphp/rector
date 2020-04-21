@@ -27,6 +27,6 @@ jobs:
                     mkdir drupal-rector073
                     composer create-project drupal/recommended-project drupal-rector073 --dev --no-progress
                     cd drupal-rector073
-                    composer require drupal/metatag palantirnet/drupal-rector:dev-rector-0.7
+                    composer require drupal/metatag palantirnet/drupal-rector
                     cp vendor/palantirnet/drupal-rector/rector.yml .
                     vendor/bin/rector process web/modules/contrib/metatag/src/Generator --dry-run -e
