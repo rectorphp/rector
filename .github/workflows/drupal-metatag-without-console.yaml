@@ -25,7 +25,7 @@ jobs:
             -   run: |
                     # Install Rector, metatag (without console)
                     cd drupal
-                    composer require drupal/metatag palantirnet/drupal-rector
+                    composer require drupal/metatag:1.12 palantirnet/drupal-rector
 
             -   run: |
                     # Run Rector on metatag/src/Generator

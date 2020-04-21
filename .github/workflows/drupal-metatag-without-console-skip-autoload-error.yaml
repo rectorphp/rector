@@ -25,10 +25,15 @@ jobs:
             -   run: |
                     # Install Rector, metatag (without console)
                     cd drupal
-                    composer require drupal/metatag palantirnet/drupal-rector
+                    composer require drupal/metatag:1.12 palantirnet/drupal-rector
 
             -   run: |
                     # Run Rector on metatag/src/Generator (added -e to skip autoload errors)
                     cd drupal
                     cp vendor/palantirnet/drupal-rector/rector.yml .
-                    vendor/bin/rector process web/modules/contrib/metatag/src/Generator -e -debug
+                    vendor/bin/rector process web/modules/contrib/metatag/src/Generator -e
+
+            -   run: |
+                    # DEBUG: Run Rector on metatag/src/Generator (added -e to skip autoload errors and --debug)
+                    cd drupal
+                    vendor/bin/rector process web/modules/contrib/metatag/src/Generator -e --debug
