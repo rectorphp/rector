@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints;
 
-use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AbstractConstraintTagValueNode;
 
@@ -21,26 +20,11 @@ final class AssertTypeTagValueNode extends AbstractConstraintTagValueNode implem
     private $type;
 
     /**
-     * @var bool
-     */
-    private $isTypeQuoted = false;
-
-    /**
-     * @var bool
-     */
-    private $isTypeExplicit = true;
-
-    /**
      * @param string|mixed[]|null $type
      */
     public function __construct(array $groups, ?string $message = null, $type = null, ?string $originalContent = null)
     {
         $this->type = $type;
-
-        if ($originalContent !== null) {
-            $this->isTypeExplicit = (bool) Strings::contains($originalContent, 'type=');
-            $this->isTypeQuoted = $this->resolveIsValueQuoted($originalContent, $type);
-        }
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent, 'type');
 
@@ -52,12 +36,7 @@ final class AssertTypeTagValueNode extends AbstractConstraintTagValueNode implem
         $contentItems = [];
 
         if ($this->type !== null) {
-            $contentItems['type'] = $this->printWithOptionalQuotes(
-                'type',
-                $this->type,
-                $this->isTypeQuoted,
-                $this->isTypeExplicit
-            );
+            $contentItems['type'] = $this->printValueWithOptionalQuotes('type', $this->type);
         }
 
         $contentItems = $this->appendGroups($contentItems);

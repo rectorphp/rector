@@ -133,7 +133,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         );
 
         $this->nodeScopeResolver->setAnalysedFiles([$originalFile]);
-        $this->doTestFileMatchesExpectedContent($originalFile, $changedFile, $smartFileInfo->getRealPath());
+
+        $this->doTestFileMatchesExpectedContent($originalFile, $changedFile, $originalFile);
     }
 
     protected function getTempPath(): string

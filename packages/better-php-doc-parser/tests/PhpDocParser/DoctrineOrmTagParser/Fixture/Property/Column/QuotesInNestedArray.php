@@ -6,10 +6,10 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\DoctrineOrmTagParser\Fixt
 
 use Doctrine\ORM\Mapping as ORM;
 
-final class FromOfficialDocs
+final class QuotesInNestedArray
 {
     /**
-     * @ORM\Column(type="integer", name="login_count", nullable=false, columnDefinition="CHAR(2) NOT NULL")
+     * @ORM\Column(options={"unsigned":true, "default":0})
      */
     private $loginCount;
 }

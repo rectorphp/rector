@@ -35,11 +35,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     private $host;
 
     /**
-     * @var bool
-     */
-    private $isPathExplicit = true;
-
-    /**
      * @var string[]
      */
     private $methods = [];
@@ -75,11 +70,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     private $condition;
 
     /**
-     * @var bool
-     */
-    private $isNameQuoted = true;
-
-    /**
      * @param string[] $localizedPaths
      * @param string[] $methods
      * @param string[] $options
@@ -111,9 +101,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
         // @todo make generic to abstrat class
         if ($originalContent !== null) {
-            $this->isPathExplicit = (bool) Strings::contains($originalContent, 'path=');
-
-            $this->resolveOriginalContentSpacingAndOrder($originalContent);
+            $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
 
             // default value without key
             if ($this->shouldAddImplicitPaths()) {
@@ -121,10 +109,9 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
                 $this->orderedVisibleItems = array_merge(['path'], (array) $this->orderedVisibleItems);
             }
 
+            // @todo use generic approach
             $matches = Strings::match($originalContent, '#requirements={(.*?)(?<separator>(=|:))(.*)}#');
             $this->requirementsKeyValueSeparator = $matches['separator'] ?? '=';
-
-            $this->isNameQuoted = $this->resolveIsValueQuoted($originalContent, $name);
         }
 
         $this->host = $host;
@@ -134,11 +121,11 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     public function __toString(): string
     {
         $contentItems = [
-            'path' => $this->createPath(),
+            'path' => $this->printValueWithOptionalQuotes('path', $this->path, $this->localizedPaths),
         ];
 
         if ($this->name) {
-            $contentItems['name'] = $this->printWithOptionalQuotes('name', $this->name, $this->isNameQuoted);
+            $contentItems['name'] = $this->printValueWithOptionalQuotes('name', $this->name);
         }
 
         if ($this->methods !== []) {
@@ -181,21 +168,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     public function getShortName(): string
     {
         return '@Route';
-    }
-
-    private function createPath(): string
-    {
-        if ($this->isPathExplicit) {
-            return sprintf('path="%s"', $this->path);
-        }
-
-        if ($this->path !== null) {
-            return sprintf('"%s"', $this->path);
-        }
-
-        $localizedPaths = $this->printArrayItem($this->localizedPaths);
-
-        return Strings::replace($localizedPaths, '#:#', ': ');
     }
 
     private function shouldAddImplicitPaths(): bool

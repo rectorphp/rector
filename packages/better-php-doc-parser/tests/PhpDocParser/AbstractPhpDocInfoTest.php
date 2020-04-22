@@ -61,7 +61,9 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $originalDocCommentText = $docComment->getText();
         $printedPhpDocInfo = $this->printNodePhpDocInfoToString($nodeWithPhpDocInfo);
 
-        $this->assertSame($originalDocCommentText, $printedPhpDocInfo);
+        $fileInfo = new SmartFileInfo($filePath);
+        $errorMessage = 'Caused by: ' . $fileInfo->getRelativeFilePathFromCwd() . PHP_EOL;
+        $this->assertSame($originalDocCommentText, $printedPhpDocInfo, $errorMessage);
 
         $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $tagValueNodeType);
     }
