@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\GedmoTagParser;
 
 use Iterator;
-use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\BlameableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\SlugTagValueNode;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\AbstractPhpDocInfoTest;
@@ -21,7 +20,7 @@ final class GedmoTagParserTest extends AbstractPhpDocInfoTest
      */
     public function testBlameable(string $filePath): void
     {
-        $this->doTestPrintedPhpDocInfo($filePath, Property::class, BlameableTagValueNode::class);
+        $this->doTestPrintedPhpDocInfo($filePath, BlameableTagValueNode::class);
     }
 
     public function provideDataForBlameable(): Iterator
@@ -34,7 +33,7 @@ final class GedmoTagParserTest extends AbstractPhpDocInfoTest
      */
     public function testSlug(string $filePath): void
     {
-        $this->doTestPrintedPhpDocInfo($filePath, Property::class, SlugTagValueNode::class);
+        $this->doTestPrintedPhpDocInfo($filePath, SlugTagValueNode::class);
     }
 
     public function provideDataForSlug(): Iterator

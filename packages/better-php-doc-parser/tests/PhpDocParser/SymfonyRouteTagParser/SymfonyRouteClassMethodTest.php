@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyRouteTagParser;
 
 use Iterator;
-use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\AbstractPhpDocInfoTest;
 
@@ -19,7 +18,7 @@ final class SymfonyRouteClassMethodTest extends AbstractPhpDocInfoTest
      */
     public function test(string $filePath): void
     {
-        $this->doTestPrintedPhpDocInfo($filePath, ClassMethod::class, SymfonyRouteTagValueNode::class);
+        $this->doTestPrintedPhpDocInfo($filePath, SymfonyRouteTagValueNode::class);
     }
 
     public function provideData(): Iterator

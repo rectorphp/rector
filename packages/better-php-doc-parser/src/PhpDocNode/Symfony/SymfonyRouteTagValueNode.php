@@ -99,7 +99,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
         // covers https://github.com/rectorphp/rector/issues/2994#issuecomment-598712339
 
-        // @todo make generic to abstrat class
         if ($originalContent !== null) {
             $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
 
@@ -112,6 +111,8 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
             // @todo use generic approach
             $matches = Strings::match($originalContent, '#requirements={(.*?)(?<separator>(=|:))(.*)}#');
             $this->requirementsKeyValueSeparator = $matches['separator'] ?? '=';
+
+            $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
         }
 
         $this->host = $host;
