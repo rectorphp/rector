@@ -1,4 +1,4 @@
-# All 498 Rectors Overview
+# All 499 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -8875,6 +8875,27 @@ Convert missing class reference to string
 -        return NonExistingClass::class;
 +        return 'NonExistingClass';
      }
+ }
+```
+
+<br>
+
+### `RemoveFinalFromEntityRector`
+
+- class: [`Rector\Restoration\Rector\Class_\RemoveFinalFromEntityRector`](/../master/rules/restoration/src/Rector/Class_/RemoveFinalFromEntityRector.php)
+- [test fixtures](/../master/rules/restoration/tests/Rector/Class_/RemoveFinalFromEntityRector/Fixture)
+
+Remove final from Doctrine entities
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+-final class SomeClass
++class SomeClass
+ {
  }
 ```
 
