@@ -209,10 +209,6 @@ final class RectorApplication
 
             $callback($smartFileInfo);
         } catch (AnalysedCodeException $analysedCodeException) {
-            if ($this->configuration->shouldHideAutoloadErrors()) {
-                return;
-            }
-
             $this->notParsedFiles[] = $smartFileInfo;
 
             $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $smartFileInfo);

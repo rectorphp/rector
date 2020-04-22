@@ -170,13 +170,6 @@ final class ProcessCommand extends AbstractCommand
         );
 
         $this->addOption(
-            Option::HIDE_AUTOLOAD_ERRORS,
-            'e',
-            InputOption::VALUE_NONE,
-            'Hide autoload errors for the moment.'
-        );
-
-        $this->addOption(
             Option::MATCH_GIT_DIFF,
             null,
             InputOption::VALUE_NONE,
