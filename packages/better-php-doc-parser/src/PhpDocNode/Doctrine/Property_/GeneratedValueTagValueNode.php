@@ -7,7 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
 /**
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\DoctrineOrmTagParser\DoctrineOrmTagNodeTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
 final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode
 {
