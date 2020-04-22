@@ -23,11 +23,6 @@ final class Configuration
     private $isDryRun = false;
 
     /**
-     * @var bool
-     */
-    private $hideAutoloadErrors = false;
-
-    /**
      * @var string|null
      */
     private $configFilePath;
@@ -104,7 +99,6 @@ final class Configuration
     {
         $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
         $this->shouldClearCache = (bool) $input->getOption(Option::OPTION_CLEAR_CACHE);
-        $this->hideAutoloadErrors = (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS);
         $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
         $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
@@ -149,11 +143,6 @@ final class Configuration
     public function isDryRun(): bool
     {
         return $this->isDryRun;
-    }
-
-    public function shouldHideAutoloadErrors(): bool
-    {
-        return $this->hideAutoloadErrors;
     }
 
     public function showProgressBar(): bool

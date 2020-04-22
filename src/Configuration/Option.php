@@ -39,11 +39,6 @@ final class Option
     /**
      * @var string
      */
-    public const HIDE_AUTOLOAD_ERRORS = 'hide-autoload-errors';
-
-    /**
-     * @var string
-     */
     public const OPTION_ONLY = 'only';
 
     /**

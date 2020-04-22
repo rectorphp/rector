@@ -39,5 +39,5 @@ jobs:
                     cd symfony-demo-dir
                     ../rector-dir/vendor/bin/rector
 
-                    # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
-                    ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors
+                    # autoload errors due to remove --dev and mixed dependencies in /src and /tests
+                    ../rector-dir/vendor/bin/rector process src --set code-quality
