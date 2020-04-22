@@ -267,7 +267,7 @@
             "bin/rector dump-rectors > docs/AllRectorsOverview.md",
             "bin/rector dump-nodes > docs/NodesOverview.md"
         ],
-        "rector-ci": "bin/rector process --config rector-ci.yaml --debug --dry-run",
+        "rector-ci": "bin/rector process --config rector-ci.yaml --dry-run",
         "rector": "bin/rector process --config rector-ci.yaml --ansi"
     },
     "config": {
