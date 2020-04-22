@@ -9,7 +9,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-## Unreleased
+## v0.7.17 - 2020-04-23
 
 ### Added
 
@@ -143,7 +143,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- dumped content end -->
 
-## Unreleased
+## v0.7.17 - 2020-04-23
 
 ### Added
 
