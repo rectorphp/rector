@@ -12,7 +12,7 @@ final class RouteWithSpacesOnItem
     /**
      * @Route(
      *     path="/some-endpoint",
-     *     methods = { "POST" }
+     *     methods={"POST"}
      * )
      */
     public function run()

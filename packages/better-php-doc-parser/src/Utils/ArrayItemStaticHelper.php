@@ -24,7 +24,7 @@ final class ArrayItemStaticHelper
 
         $itemsOrder = [];
 
-        $matches = Strings::matchAll($content, '#(?<item>\w+)=#m');
+        $matches = Strings::matchAll($content, '#(?<item>\w+)(\s+)?=(\s+)?#m');
         foreach ($matches as $match) {
             $itemsOrder[] = $match['item'];
         }
