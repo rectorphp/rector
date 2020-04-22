@@ -96,17 +96,13 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         $this->options = $options;
         $this->defaults = $defaults;
         $this->requirements = $requirements;
+        $this->host = $host;
+        $this->condition = $condition;
 
         // covers https://github.com/rectorphp/rector/issues/2994#issuecomment-598712339
 
         if ($originalContent !== null) {
             $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
-
-            // default value without key
-            if ($this->shouldAddImplicitPaths()) {
-                // add path as first item
-                $this->orderedVisibleItems = array_merge(['path'], (array) $this->orderedVisibleItems);
-            }
 
             // @todo use generic approach
             $matches = Strings::match($originalContent, '#requirements={(.*?)(?<separator>(=|:))(.*)}#');
@@ -114,9 +110,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
             $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
         }
-
-        $this->host = $host;
-        $this->condition = $condition;
     }
 
     public function __toString(): string
@@ -169,10 +162,5 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     public function getShortName(): string
     {
         return '@Route';
-    }
-
-    private function shouldAddImplicitPaths(): bool
-    {
-        return ($this->path || $this->localizedPaths) && ! in_array('path', (array) $this->orderedVisibleItems, true);
     }
 }

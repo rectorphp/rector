@@ -13,6 +13,140 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ### Added
 
+- [#3196] [CodeQuality] Add SplitListScalarAssignToSeparateLineRector
+- [#3195] [PHPUnit] Add strict param to ReplaceAssertArraySubsetRector
+- [#3118] Add cache for un-changed files
+- [#3193] add condition test for [@Route]
+
+### Changed
+
+- [#3175] [CodeQuality] Make ChangeArrayPushToArrayAssignRector skip spread
+- [#3211] [PhpDoc] Use generic approach to TagValueNode annotations quotes and explicitness
+- [#3182] [Privatization] Make PrivatizeLocalOnlyMethodRector skip entities
+- [#3156] Upgrade to php-parser 4.4
+- [#3174] include PHPExcel_Worksheet_PageSetup
+- [#3186] Updating the link to Drupal-Rector repo, Thanks to [@shaal]
+- [#3187] Test with Drupal-Rector project to discover BC breaks early on, Thanks to [@shaal]
+- [#3217] reorganize phpdoc reprint test
+- [#3194] Spacing + quoting improvements in [@Route]
+- [#3197] various improvements
+- [#3198] use FileInfo in Parser
+- [#3200] Run rector list in CI to detect potential issues, Thanks to [@JanMikes]
+- [#3215] improve TagValueNodes
+
+### Fixed
+
+- [#3199] [PHPUnit] Fix ExceptionAnnotationRector for null phpdoc
+- [#3191] [PHP 7.3] Fix regex slash escaping
+- [#3177] fix back annotation
+- [#3176] Type and Choice fixes
+- [#3204] various fixes
+
+### Removed
+
+- [#3216] drop hide autoload errors
+
+## [v0.7.16] - 2020-04-16
+
+### Added
+
+- [#3172] [PHPOffice] Add IncreaseColumnIndexRector
+
+## [v0.7.15] - 2020-04-16
+
+### Changed
+
+- [#3168] [PHPOffice] Init migration to PHPSpreadSheets
+- [#3171] Cleanup
+
+## [v0.7.14] - 2020-04-14
+
+### Added
+
+- [#3164] [DeadCode] Add RemoveUnusedAssignVariableRector
+
+### Fixed
+
+- [#3161] fix comment removal
+
+## [v0.7.12] - 2020-04-13
+
+### Added
+
+- [#3155] Add extra allowed interface to EntityAliasToClassConstantReferenceRector, Thanks to [@acrobat]
+- [#3154] provide config + add post Rectors for FileSystemRector
+
+### Fixed
+
+- [#3153] [DeadCode] Fix RemoveUnusedDoctrineEntityMethodAndPropertyRector for id
+
+## [v0.7.11] - 2020-04-08
+
+- [#3152] fix ThisCallOnStaticMethodToStaticCallRector in prefixed rector
+
+## [v0.7.10] - 2020-04-08
+
+### Changed
+
+- [#3151] check for array at UselessIfCondBeforeForeachDetector
+
+## [v0.7.9] - 2020-04-08
+
+### Fixed
+
+- [#3149] fix sniff public
+- [#3148] fix PrivatizeLocalOnlyMethodRector for event subscriber methods
+
+## [v0.7.8] - 2020-04-07
+
+### Added
+
+- [#3108] [DeadCode] Add RemoveDeadRecursiveClassMethodRector
+- [#3117] [PHPUnit] Add AddProphecyTraitRector
+- [#3093] [Privatization] Add PrivatizeLocalGetterToPropertyRector
+- [#3100] [Privatization] Add PrivatizeLocalPropertyToPrivatePropertyRector
+- [#3116] move node adding to PostRector
+- [#3140] add ClassSyncerNodeTraverser
+- [#3089] Add RunnableTestCase to run fixed code in a test, Thanks to [@paslandau]
+- [#3094] Add parallel execution to ci/run_all_sets, Thanks to [@paslandau]
+- [#3134] Add DoctrineAnnotationParserSyncer to prevent doctrine/annotation constant by-value override
+- [#3114] move property adding to PostRector
+- [#3141] [PHPUnit 9.1] Add assertFileNotExists() method rename
+
+### Changed
+
+- [#3111] [API] NodeRemovingCommander to PostRector
+- [#3084] [Privatization] Privatize methods that are used only locally
+- [#3120] Improve performance
+- [#3097] move ci validation scripts to objectivy ProjectValidator package
+- [#3139] Correct sentence in README.md, Thanks to [@callmebob2016]
+- [#3092] Cleanup
+- [#3137] Fixup has same commit message, Thanks to [@JanMikes]
+- [#3136] Copy .git directory into docker image, Thanks to [@JanMikes]
+- [#3103] move constant privatization to privatization set
+- [#3113] move name-importing to PostRector
+- [#3106] Require symfony 5.0.6 or 4.4.6, Thanks to [@UFTimmy]
+- [#3128] Allow PHPStan generics
+- [#3115] move node-replacing to PostRector
+- [#3146] Make sure doctrine alias rector works in symfony controllers, Thanks to [@acrobat]
+
+### Fixed
+
+- [#3132] Fix Gedmo annotation printing
+- [#3130] Fix missing array key in ArrayMergeOfNonArraysToSimpleArrayRector
+- [#3096] Fix [@Route] localized paths
+- [#3129] fix missing host at [@Route] annotation
+
+### Removed
+
+- [#3122] remove json rector dump formatter, not needed
+
+<!-- dumped content end -->
+
+## Unreleased
+
+### Added
+
 - [#3080] [CodeQuality] Add ArrayKeysAndInArrayToIssetRector
 - [#3070] [DeadCode] Add empty() + count($values) > 0 checks to RemoveUnusedNonEmptyArrayBeforeForeachRector
 - [#3068] [DeadCode] Add RemoveAssignOfVoidReturnFunctionRector
@@ -660,7 +794,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ## [v0.6.1] - 2019-12-10
 
-**Rector is now shipped as prefixed phar - download from [rector-prefixed](https://github.com/rectorphp/rector-prefixed)** 
+**Rector is now shipped as prefixed phar - download from [rector-prefixed](https://github.com/rectorphp/rector-prefixed)**
 
 ### Added
 
@@ -2780,3 +2914,81 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@crishoj]: https://github.com/crishoj
 [@alexeyshockov]: https://github.com/alexeyshockov
 [@Route]: https://github.com/Route
+[#3217]: https://github.com/rectorphp/rector/pull/3217
+[#3216]: https://github.com/rectorphp/rector/pull/3216
+[#3215]: https://github.com/rectorphp/rector/pull/3215
+[#3211]: https://github.com/rectorphp/rector/pull/3211
+[#3204]: https://github.com/rectorphp/rector/pull/3204
+[#3200]: https://github.com/rectorphp/rector/pull/3200
+[#3199]: https://github.com/rectorphp/rector/pull/3199
+[#3198]: https://github.com/rectorphp/rector/pull/3198
+[#3197]: https://github.com/rectorphp/rector/pull/3197
+[#3196]: https://github.com/rectorphp/rector/pull/3196
+[#3195]: https://github.com/rectorphp/rector/pull/3195
+[#3194]: https://github.com/rectorphp/rector/pull/3194
+[#3193]: https://github.com/rectorphp/rector/pull/3193
+[#3191]: https://github.com/rectorphp/rector/pull/3191
+[#3187]: https://github.com/rectorphp/rector/pull/3187
+[#3186]: https://github.com/rectorphp/rector/pull/3186
+[#3182]: https://github.com/rectorphp/rector/pull/3182
+[#3177]: https://github.com/rectorphp/rector/pull/3177
+[#3176]: https://github.com/rectorphp/rector/pull/3176
+[#3175]: https://github.com/rectorphp/rector/pull/3175
+[#3174]: https://github.com/rectorphp/rector/pull/3174
+[#3172]: https://github.com/rectorphp/rector/pull/3172
+[#3171]: https://github.com/rectorphp/rector/pull/3171
+[#3168]: https://github.com/rectorphp/rector/pull/3168
+[#3164]: https://github.com/rectorphp/rector/pull/3164
+[#3161]: https://github.com/rectorphp/rector/pull/3161
+[#3156]: https://github.com/rectorphp/rector/pull/3156
+[#3155]: https://github.com/rectorphp/rector/pull/3155
+[#3154]: https://github.com/rectorphp/rector/pull/3154
+[#3153]: https://github.com/rectorphp/rector/pull/3153
+[#3152]: https://github.com/rectorphp/rector/pull/3152
+[#3151]: https://github.com/rectorphp/rector/pull/3151
+[#3149]: https://github.com/rectorphp/rector/pull/3149
+[#3148]: https://github.com/rectorphp/rector/pull/3148
+[#3146]: https://github.com/rectorphp/rector/pull/3146
+[#3141]: https://github.com/rectorphp/rector/pull/3141
+[#3140]: https://github.com/rectorphp/rector/pull/3140
+[#3139]: https://github.com/rectorphp/rector/pull/3139
+[#3137]: https://github.com/rectorphp/rector/pull/3137
+[#3136]: https://github.com/rectorphp/rector/pull/3136
+[#3134]: https://github.com/rectorphp/rector/pull/3134
+[#3132]: https://github.com/rectorphp/rector/pull/3132
+[#3130]: https://github.com/rectorphp/rector/pull/3130
+[#3129]: https://github.com/rectorphp/rector/pull/3129
+[#3128]: https://github.com/rectorphp/rector/pull/3128
+[#3122]: https://github.com/rectorphp/rector/pull/3122
+[#3120]: https://github.com/rectorphp/rector/pull/3120
+[#3118]: https://github.com/rectorphp/rector/pull/3118
+[#3117]: https://github.com/rectorphp/rector/pull/3117
+[#3116]: https://github.com/rectorphp/rector/pull/3116
+[#3115]: https://github.com/rectorphp/rector/pull/3115
+[#3114]: https://github.com/rectorphp/rector/pull/3114
+[#3113]: https://github.com/rectorphp/rector/pull/3113
+[#3111]: https://github.com/rectorphp/rector/pull/3111
+[#3108]: https://github.com/rectorphp/rector/pull/3108
+[#3106]: https://github.com/rectorphp/rector/pull/3106
+[#3103]: https://github.com/rectorphp/rector/pull/3103
+[#3100]: https://github.com/rectorphp/rector/pull/3100
+[#3097]: https://github.com/rectorphp/rector/pull/3097
+[#3096]: https://github.com/rectorphp/rector/pull/3096
+[#3094]: https://github.com/rectorphp/rector/pull/3094
+[#3093]: https://github.com/rectorphp/rector/pull/3093
+[#3092]: https://github.com/rectorphp/rector/pull/3092
+[#3089]: https://github.com/rectorphp/rector/pull/3089
+[#3084]: https://github.com/rectorphp/rector/pull/3084
+[v0.7.9]: https://github.com/rectorphp/rector/compare/v0.7.8...v0.7.9
+[v0.7.8]: https://github.com/rectorphp/rector/compare/v0.7.7...v0.7.8
+[v0.7.16]: https://github.com/rectorphp/rector/compare/v0.7.15...v0.7.16
+[v0.7.15]: https://github.com/rectorphp/rector/compare/v0.7.14...v0.7.15
+[v0.7.14]: https://github.com/rectorphp/rector/compare/v0.7.12...v0.7.14
+[v0.7.12]: https://github.com/rectorphp/rector/compare/v0.7.11...v0.7.12
+[v0.7.11]: https://github.com/rectorphp/rector/compare/v0.7.10...v0.7.11
+[v0.7.10]: https://github.com/rectorphp/rector/compare/v0.7.9...v0.7.10
+[@shaal]: https://github.com/shaal
+[@paslandau]: https://github.com/paslandau
+[@callmebob2016]: https://github.com/callmebob2016
+[@acrobat]: https://github.com/acrobat
+[@UFTimmy]: https://github.com/UFTimmy

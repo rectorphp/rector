@@ -3,7 +3,7 @@ imports:
 
 parameters:
     # bleeding edge feature
-    # is_cache_enabled: true
+    is_cache_enabled: true
 
     paths:
         - src
