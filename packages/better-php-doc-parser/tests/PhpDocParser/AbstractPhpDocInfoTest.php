@@ -52,8 +52,6 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     {
         $nodeType = TagValueToPhpParserNodeMap::MAP[$tagValueNodeType];
 
-        $this->ensureIsNodeType($nodeType);
-
         $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($filePath, $nodeType);
 
         $docComment = $nodeWithPhpDocInfo->getDocComment();
@@ -75,11 +73,19 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         return StaticFixtureProvider::yieldFilesFromDirectory($directory, $suffix);
     }
 
+    /**
+     * @return string[]
+     */
+    protected function findFilesFromDirectory(string $directory, string $suffix = '*.php'): array
+    {
+        return StaticFixtureProvider::findFilesFromDirectory($directory, $suffix);
+    }
+
     private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType): void
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->hasByType($tagValueNodeType);
+        $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType));
     }
 
     /**
@@ -88,7 +94,6 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     private function parseFileAndGetFirstNodeOfType(string $filePath, string $nodeType): Node
     {
         $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate(new SmartFileInfo($filePath));
-
         return $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
     }
 
@@ -100,18 +105,6 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         }
 
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
-    }
-
-    /**
-     * @param class-string $nodeType
-     */
-    private function ensureIsNodeType(string $nodeType): void
-    {
-        if (is_a($nodeType, Node::class, true)) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(sprintf('"%s" must be type of "%s"', $nodeType, Node::class));
     }
 
     private function createErrorMessage(string $filePath): string

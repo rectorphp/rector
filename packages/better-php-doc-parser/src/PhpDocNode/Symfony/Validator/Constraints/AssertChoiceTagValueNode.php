@@ -9,7 +9,7 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface
 use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AbstractConstraintTagValueNode;
 
 /**
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyValidation\AssertChoiceTagValueNodeTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
 final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface
 {

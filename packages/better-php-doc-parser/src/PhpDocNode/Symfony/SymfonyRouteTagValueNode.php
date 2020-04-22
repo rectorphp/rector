@@ -10,7 +10,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyRouteTagParser\SymfonyRouteClassMethodTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
 final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {

@@ -10,7 +10,7 @@ use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AbstractConstraintTagValueNode;
 /**
  * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\Symfony\Validator\Constraints\AssertTypePhpDocNodeFactory
  *
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyValidation\AssertTypeTagValueNodeTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\AssertTypeTagValueNodeTest
  */
 final class AssertTypeTagValueNode extends AbstractConstraintTagValueNode implements ShortNameAwareTagInterface
 {

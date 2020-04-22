@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser;
 
+use Iterator;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocParser\TypeNodeAnalyzer;
 use Rector\Core\HttpKernel\RectorKernel;
@@ -23,25 +25,37 @@ final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
-
         $this->typeNodeAnalyzer = self::$container->get(TypeNodeAnalyzer::class);
     }
 
-    public function testContainsArrayType(): void
+    /**
+     * @dataProvider provideDataForArrayType()
+     */
+    public function testContainsArrayType(TypeNode $typeNode, bool $expectedContains): void
+    {
+        $this->assertSame($expectedContains, $this->typeNodeAnalyzer->containsArrayType($typeNode));
+    }
+
+    public function provideDataForArrayType(): Iterator
     {
         $arrayTypeNode = new ArrayTypeNode(new IdentifierTypeNode('int'));
 
-        $this->assertFalse($this->typeNodeAnalyzer->containsArrayType(new IdentifierTypeNode('int')));
-        $this->assertTrue($this->typeNodeAnalyzer->containsArrayType($arrayTypeNode));
-        $this->assertTrue($this->typeNodeAnalyzer->containsArrayType(new UnionTypeNode([$arrayTypeNode])));
+        yield [new IdentifierTypeNode('int'), false];
+        yield [$arrayTypeNode, true];
+        yield [new UnionTypeNode([$arrayTypeNode]), true];
     }
 
-    public function testIsIntersectionAndNotNullable(): void
+    /**
+     * @dataProvider provideDataForIntersectionAndNotNullable()
+     */
+    public function testIsIntersectionAndNotNullable(TypeNode $typeNode, bool $expectedIs): void
     {
-        $intersectionTypeNode = new IntersectionTypeNode([new IdentifierTypeNode('int')]);
-        $nullableTypeNode = new IntersectionTypeNode([new NullableTypeNode(new IdentifierTypeNode('int'))]);
+        $this->assertSame($expectedIs, $this->typeNodeAnalyzer->isIntersectionAndNotNullable($typeNode));
+    }
 
-        $this->assertTrue($this->typeNodeAnalyzer->isIntersectionAndNotNullable($intersectionTypeNode));
-        $this->assertFalse($this->typeNodeAnalyzer->isIntersectionAndNotNullable($nullableTypeNode));
+    public function provideDataForIntersectionAndNotNullable(): Iterator
+    {
+        yield [new IntersectionTypeNode([new IdentifierTypeNode('int')]), true];
+        yield [new IntersectionTypeNode([new NullableTypeNode(new IdentifierTypeNode('int'))]), false];
     }
 }
