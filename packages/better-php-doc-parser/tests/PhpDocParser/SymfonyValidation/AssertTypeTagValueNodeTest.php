@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyValidation;
 
 use Iterator;
-use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\AbstractPhpDocInfoTest;
 
@@ -19,7 +18,7 @@ final class AssertTypeTagValueNodeTest extends AbstractPhpDocInfoTest
      */
     public function test(string $filePath): void
     {
-        $this->doTestPrintedPhpDocInfo($filePath, Property::class, AssertTypeTagValueNode::class);
+        $this->doTestPrintedPhpDocInfo($filePath, AssertTypeTagValueNode::class);
     }
 
     public function provideData(): Iterator

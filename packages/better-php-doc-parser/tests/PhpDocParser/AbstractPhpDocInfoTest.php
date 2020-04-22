@@ -8,6 +8,7 @@ use Iterator;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\BetterPhpDocParser\Tests\PhpDocParser\Helper\TagValueToPhpParserNodeMap;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -45,10 +46,12 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     }
 
     /**
-     * @param class-string $nodeType
+     * @param class-string $tagValueNodeType
      */
-    protected function doTestPrintedPhpDocInfo(string $filePath, string $nodeType, string $tagValueNodeType): void
+    protected function doTestPrintedPhpDocInfo(string $filePath, string $tagValueNodeType): void
     {
+        $nodeType = TagValueToPhpParserNodeMap::MAP[$tagValueNodeType];
+
         $this->ensureIsNodeType($nodeType);
 
         $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($filePath, $nodeType);
@@ -61,8 +64,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $originalDocCommentText = $docComment->getText();
         $printedPhpDocInfo = $this->printNodePhpDocInfoToString($nodeWithPhpDocInfo);
 
-        $fileInfo = new SmartFileInfo($filePath);
-        $errorMessage = 'Caused by: ' . $fileInfo->getRelativeFilePathFromCwd() . PHP_EOL;
+        $errorMessage = $this->createErrorMessage($filePath);
         $this->assertSame($originalDocCommentText, $printedPhpDocInfo, $errorMessage);
 
         $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $tagValueNodeType);
@@ -110,5 +112,12 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         }
 
         throw new ShouldNotHappenException(sprintf('"%s" must be type of "%s"', $nodeType, Node::class));
+    }
+
+    private function createErrorMessage(string $filePath): string
+    {
+        $fileInfo = new SmartFileInfo($filePath);
+
+        return 'Caused by: ' . $fileInfo->getRelativeFilePathFromCwd() . PHP_EOL;
     }
 }

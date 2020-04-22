@@ -61,11 +61,11 @@ abstract class AbstractPhpDocNodeFactory implements ClassAwarePhpDocNodeFactoryI
      */
     protected function matchCurlyBracketOpeningAndClosingSpace(string $annotationContent): array
     {
-        $match = Strings::match($annotationContent, '#^\{(?<openingSpace>\s+)#');
-        $openingSpace = $match['openingSpace'] ?? '';
+        $match = Strings::match($annotationContent, '#^\{(?<opening_space>\s+)#');
+        $openingSpace = $match['opening_space'] ?? '';
 
-        $match = Strings::match($annotationContent, '#(?<closingSpace>\s+)\}$#');
-        $closingSpace = $match['closingSpace'] ?? '';
+        $match = Strings::match($annotationContent, '#(?<closing_space>\s+)\}$#');
+        $closingSpace = $match['closing_space'] ?? '';
 
         return [$openingSpace, $closingSpace];
     }
