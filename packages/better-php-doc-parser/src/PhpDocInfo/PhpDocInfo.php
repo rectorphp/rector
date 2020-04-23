@@ -15,7 +15,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -34,6 +33,8 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 
@@ -165,49 +166,10 @@ final class PhpDocInfo
         return array_values($tags);
     }
 
-    /**
-     * @return AttributeAwareNodeInterface|TypeNode
-     */
-    public function getParamTypeNode(string $paramName): ?TypeNode
-    {
-        $paramName = '$' . ltrim($paramName, '$');
-
-        foreach ($this->phpDocNode->getParamTagValues() as $paramTagsValue) {
-            if ($paramTagsValue->parameterName === $paramName) {
-                return $paramTagsValue->type;
-            }
-        }
-
-        return null;
-    }
-
     public function getParamType(string $name): Type
     {
         $paramTagValue = $this->getParamTagValueByName($name);
         return $this->getTypeOrMixed($paramTagValue);
-    }
-
-    /**
-     * @return Type[]
-     */
-    public function getThrowsTypes(): array
-    {
-        $throwsPhpDocNodes = $this->getTagsByName('throws');
-
-        $throwsTypes = [];
-
-        foreach ($throwsPhpDocNodes as $throwsPhpDocNode) {
-            if (! $throwsPhpDocNode->value instanceof ThrowsTagValueNode) {
-                continue;
-            }
-
-            $throwsTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
-                $throwsPhpDocNode->value,
-                $this->node
-            );
-        }
-
-        return $throwsTypes;
     }
 
     /**
@@ -305,14 +267,14 @@ final class PhpDocInfo
         }
     }
 
-    public function removeByName(string $nameToRemove): void
+    public function removeByName(string $name): void
     {
         foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
 
-            if (! $this->areAnnotationNamesEqual($nameToRemove, $phpDocChildNode->name)) {
+            if (! $this->areAnnotationNamesEqual($name, $phpDocChildNode->name)) {
                 continue;
             }
 
@@ -426,6 +388,46 @@ final class PhpDocInfo
 
         $paramTagValueNode = $this->paramPhpDocNodeFactory->create($type, $param);
         $this->addTagValueNode($paramTagValueNode);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getThrowsClassNames(): array
+    {
+        $throwsClasses = [];
+        foreach ($this->getThrowsTypes() as $throwsType) {
+            if ($throwsType instanceof ShortenedObjectType) {
+                $throwsClasses[] = $throwsType->getFullyQualifiedName();
+            }
+
+            if ($throwsType instanceof FullyQualifiedObjectType) {
+                $throwsClasses[] = $throwsType->getClassName();
+            }
+        }
+
+        return $throwsClasses;
+    }
+
+    /**
+     * @return Type[]
+     */
+    private function getThrowsTypes(): array
+    {
+        $throwsTypes = [];
+
+        foreach ($this->getTagsByName('throws') as $throwsPhpDocNode) {
+            if (! $throwsPhpDocNode->value instanceof ThrowsTagValueNode) {
+                continue;
+            }
+
+            $throwsTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
+                $throwsPhpDocNode->value,
+                $this->node
+            );
+        }
+
+        return $throwsTypes;
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode)

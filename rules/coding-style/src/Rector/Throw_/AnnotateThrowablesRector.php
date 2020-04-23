@@ -17,8 +17,8 @@ use PhpParser\Node\Stmt\Throw_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpDoc\PhpDocTagsFinder;
 use Rector\Core\PhpParser\Node\Value\ClassResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -53,21 +53,14 @@ final class AnnotateThrowablesRector extends AbstractRector
      */
     private $classResolver;
 
-    /**
-     * @var PhpDocTagsFinder
-     */
-    private $phpDocTagsFinder;
-
     public function __construct(
         ClassMethodReflectionHelper $classMethodReflectionHelper,
         ClassResolver $classResolver,
-        FunctionReflectionHelper $functionReflectionHelper,
-        PhpDocTagsFinder $phpDocTagsFinder
+        FunctionReflectionHelper $functionReflectionHelper
     ) {
         $this->functionReflectionHelper = $functionReflectionHelper;
         $this->classMethodReflectionHelper = $classMethodReflectionHelper;
         $this->classResolver = $classResolver;
-        $this->phpDocTagsFinder = $phpDocTagsFinder;
     }
 
     /**
@@ -266,11 +259,23 @@ PHP
         return $this->classMethodReflectionHelper->extractTagsFromMethodDockblock($class, $method, '@throws');
     }
 
+    /**
+     * @return string[]
+     */
     private function extractAlreadyAnnotatedThrowables(Node $node): array
     {
         $callee = $this->identifyCaller($node);
+        if ($callee === null) {
+            return [];
+        }
 
-        return $callee === null ? [] : $this->phpDocTagsFinder->extractTagsThrowsFromNode($callee);
+        /** @var PhpDocInfo|null $callePhpDocInfo */
+        $callePhpDocInfo = $callee->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($callePhpDocInfo === null) {
+            return [];
+        }
+
+        return $callePhpDocInfo->getThrowsClassNames();
     }
 
     private function diffThrowables(array $foundThrownThrowables, array $alreadyAnnotatedThrowables): int
