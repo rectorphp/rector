@@ -6724,12 +6724,10 @@ Convert break outside for/foreach/switch context to return
  {
      public function run()
      {
-         $zhrs = abs($gmt)/3600;
-         $hrs = floor($zhrs);
          if ($isphp5)
-             return sprintf('%s%02d%02d',($gmt<=0)?'+':'-',floor($zhrs),($zhrs-$hrs)*60);
+             return 1;
          else
-             return sprintf('%s%02d%02d',($gmt<0)?'+':'-',floor($zhrs),($zhrs-$hrs)*60);
+             return 2;
 -        break;
 +        return;
      }
