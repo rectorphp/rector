@@ -112,7 +112,10 @@ return [
             if (strpos($filePath, '.neon') === false) {
                 return $content;
             }
-
+            // @see https://github.com/rectorphp/rector/issues/3227
+            if (strpos($filePath, 'config/set/') !== 0) {
+                return $content;
+            }
             if ($content === '') {
                 return $content;
             }
