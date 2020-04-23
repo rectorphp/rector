@@ -112,8 +112,18 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#3134] Add DoctrineAnnotationParserSyncer to prevent doctrine/annotation constant by-value override
 - [#3114] move property adding to PostRector
 - [#3141] [PHPUnit 9.1] Add assertFileNotExists() method rename
-
-### Changed
+- [#3080] [CodeQuality] Add ArrayKeysAndInArrayToIssetRector
+- [#3070] [DeadCode] Add empty() + count($values) > 0 checks to RemoveUnusedNonEmptyArrayBeforeForeachRector
+- [#3068] [DeadCode] Add RemoveAssignOfVoidReturnFunctionRector
+- [#3062] [DeadCode] Add RemoveUnusedFunctionRector
+- [#3066] [DeadCode] Add RemoveUnusedNonEmptyArrayBeforeForeachRector
+- [#3047] [PHPUnit] Add CreateMockToCreateStubRector
+- [#3081] [TypeDeclaration] Add class method param type resolving by property
+- [#3058] [PHP 7.4] Add default null type on properties
+- [#3059] [PHP 7.4] Add restoration null default only
+- [#3057] [PHP 7.4] Add id tag support + remove array on collection property
+- [#3078] Add Safe 0.7 set
+- [#3072] [PHP 8.0] Add StrContainsRector
 
 - [#3111] [API] NodeRemovingCommander to PostRector
 - [#3084] [Privatization] Privatize methods that are used only locally
@@ -129,39 +139,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#3128] Allow PHPStan generics
 - [#3115] move node-replacing to PostRector
 - [#3146] Make sure doctrine alias rector works in symfony controllers, Thanks to [@acrobat]
-
-### Fixed
-
-- [#3132] Fix Gedmo annotation printing
-- [#3130] Fix missing array key in ArrayMergeOfNonArraysToSimpleArrayRector
-- [#3096] Fix [@Route] localized paths
-- [#3129] fix missing host at [@Route] annotation
-
-### Removed
-
-- [#3122] remove json rector dump formatter, not needed
-
-<!-- dumped content end -->
-
-## v0.7.17 - 2020-04-23
-
-### Added
-
-- [#3080] [CodeQuality] Add ArrayKeysAndInArrayToIssetRector
-- [#3070] [DeadCode] Add empty() + count($values) > 0 checks to RemoveUnusedNonEmptyArrayBeforeForeachRector
-- [#3068] [DeadCode] Add RemoveAssignOfVoidReturnFunctionRector
-- [#3062] [DeadCode] Add RemoveUnusedFunctionRector
-- [#3066] [DeadCode] Add RemoveUnusedNonEmptyArrayBeforeForeachRector
-- [#3047] [PHPUnit] Add CreateMockToCreateStubRector
-- [#3081] [TypeDeclaration] Add class method param type resolving by property
-- [#3058] [PHP 7.4] Add default null type on properties
-- [#3059] [PHP 7.4] Add restoration null default only
-- [#3057] [PHP 7.4] Add id tag support + remove array on collection property
-- [#3078] Add Safe 0.7 set
-- [#3072] [PHP 8.0] Add StrContainsRector
-
-### Changed
-
 - [#3082] [CodeQuality] use array_key_exists instead of isset
 - [#3056] [PHP 7.4] Improve TypedPropertyRector for Doctrine collection
 - [#3051] improve GeneratedValueTagValueNode
@@ -181,9 +158,14 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#3077] Fix auto import
 - [#3079] Fix annotation in requirements of [@Route]
 - [#3064] [PHP 7.4] Fix ChangeReflectionTypeToStringToGetNameRector
+- [#3132] Fix Gedmo annotation printing
+- [#3130] Fix missing array key in ArrayMergeOfNonArraysToSimpleArrayRector
+- [#3096] Fix [@Route] localized paths
+- [#3129] fix missing host at [@Route] annotation
 
 ### Removed
 
+- [#3122] remove json rector dump formatter, not needed
 - [#3071] remove ctor dependency on property/assign removal
 - [#3076] [PHP 8.0] drop preg_match support from StrContains, too vague
 

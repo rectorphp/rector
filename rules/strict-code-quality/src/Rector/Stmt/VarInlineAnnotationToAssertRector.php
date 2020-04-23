@@ -184,27 +184,27 @@ PHP
     {
         if ($type instanceof ObjectType) {
             $instanceOf = new Instanceof_($variable, new FullyQualified($type->getClassName()));
-            return $this->createFunction('assert', [$instanceOf]);
+            return $this->createFuncCall('assert', [$instanceOf]);
         }
 
         if ($type instanceof IntegerType) {
-            $isInt = $this->createFunction('is_int', [$variable]);
-            return $this->createFunction('assert', [$isInt]);
+            $isInt = $this->createFuncCall('is_int', [$variable]);
+            return $this->createFuncCall('assert', [$isInt]);
         }
 
         if ($type instanceof FloatType) {
-            $isFloat = $this->createFunction('is_float', [$variable]);
-            return $this->createFunction('assert', [$isFloat]);
+            $isFloat = $this->createFuncCall('is_float', [$variable]);
+            return $this->createFuncCall('assert', [$isFloat]);
         }
 
         if ($type instanceof StringType) {
-            $isString = $this->createFunction('is_string', [$variable]);
-            return $this->createFunction('assert', [$isString]);
+            $isString = $this->createFuncCall('is_string', [$variable]);
+            return $this->createFuncCall('assert', [$isString]);
         }
 
         if ($type instanceof BooleanType) {
-            $isInt = $this->createFunction('is_bool', [$variable]);
-            return $this->createFunction('assert', [$isInt]);
+            $isInt = $this->createFuncCall('is_bool', [$variable]);
+            return $this->createFuncCall('assert', [$isInt]);
         }
 
         return null;

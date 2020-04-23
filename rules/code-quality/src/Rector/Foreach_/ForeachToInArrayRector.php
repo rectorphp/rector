@@ -218,7 +218,7 @@ PHP
             $arguments[] = $this->createArg($this->createTrue());
         }
 
-        return $this->createFunction('in_array', $arguments);
+        return $this->createFuncCall('in_array', $arguments);
     }
 
     /**
