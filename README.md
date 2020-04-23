@@ -440,6 +440,7 @@ Use [the `create` command](/docs/RectorRecipe.md).
 - [How Does Rector Work?](/docs/HowItWorks.md)
 - [PHP Parser Nodes Overview](/docs/NodesOverview.md)
 - [Generate Rector from Recipe](/docs/RectorRecipe.md)
+- [Add Checkstyle with your CI](/docs/Checkstyle.md)
 
 ## How to Contribute
 
