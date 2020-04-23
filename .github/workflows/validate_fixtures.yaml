@@ -18,3 +18,4 @@ jobs:
 
             -   run: composer install --no-progress
             -   run: bin/rector validate-fixtures --ansi
+            -   run: bin/rector validate-fixture-suffix --ansi

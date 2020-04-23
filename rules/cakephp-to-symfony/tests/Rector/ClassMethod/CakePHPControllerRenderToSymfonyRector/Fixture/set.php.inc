@@ -20,7 +20,7 @@ class SetController extends \AppController
 {
     public function index()
     {
-        return $this->render('homepage/index.twig', ['name' => 5]);
+        return $this->render('set/index.twig', ['name' => 5]);
     }
 }
 
