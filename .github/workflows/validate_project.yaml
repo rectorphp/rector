@@ -25,3 +25,5 @@ jobs:
             -   run: bin/rector sync-annotation-parser --dry-run --ansi
 
             -   run: bin/rector validate-services-in-sets --ansi
+
+            -   run: composer check-docs
