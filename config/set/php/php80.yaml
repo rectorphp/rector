@@ -2,3 +2,4 @@ services:
     Rector\Php80\Rector\FunctionLike\UnionTypesRector: null
     Rector\Php80\Rector\NotIdentical\StrContainsRector: null
     Rector\Php80\Rector\Identical\StrStartsWithRector: null
+    Rector\Php80\Rector\Identical\StrEndsWithRector: null
