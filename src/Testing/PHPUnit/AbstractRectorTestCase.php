@@ -124,9 +124,9 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->autoloadTestFixture = true;
     }
 
-    protected function doTestFile(string $file): void
+    protected function doTestFile(string $fixtureFile): void
     {
-        $smartFileInfo = new SmartFileInfo($file);
+        $smartFileInfo = new SmartFileInfo($fixtureFile);
         [$originalFile, $changedFile] = $this->fixtureSplitter->splitContentToOriginalFileAndExpectedFile(
             $smartFileInfo,
             $this->autoloadTestFixture
@@ -134,7 +134,11 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
         $this->nodeScopeResolver->setAnalysedFiles([$originalFile]);
 
-        $this->doTestFileMatchesExpectedContent($originalFile, $changedFile, $originalFile);
+        $this->doTestFileMatchesExpectedContent(
+            $originalFile,
+            $changedFile,
+            $smartFileInfo->getRelativeFilePathFromCwd()
+        );
     }
 
     protected function getTempPath(): string

@@ -42,20 +42,19 @@ final class ValidateFixtureSuffixCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $hasError = false;
+        $invalidFilePaths = [];
 
         foreach ($this->getInvalidFixtureFileInfos() as $fixtureFileInfo) {
-            // files content is equal, but it should not
-            $message = sprintf(
-                'The "%s" file has invalid suffix. Should be *.php.inc',
-                $fixtureFileInfo->getRelativeFilePathFromCwd()
-            );
-
-            $this->symfonyStyle->error($message);
-            $hasError = true;
+            $invalidFilePaths[] = $fixtureFileInfo->getRelativeFilePathFromCwd();
         }
 
-        if ($hasError) {
+        if (count($invalidFilePaths) > 0) {
+            $this->symfonyStyle->listing($invalidFilePaths);
+
+            $this->symfonyStyle->error(
+                sprintf('Found %d files with invalid suffix. Must be *.php.inc', count($invalidFilePaths))
+            );
+
             return ShellCode::ERROR;
         }
 
@@ -71,8 +70,17 @@ final class ValidateFixtureSuffixCommand extends Command
     {
         $finder = (new Finder())
             ->files()
-            ->name('*.inc')
-            ->notName('*.php.inc')
+            ->name('#\.inc$#')
+            ->name('#\.php#')
+            ->notName('#\.php\.inc$#')
+            ->path('#/Fixture/#')
+            // paths that needs psr-4 autoload
+            ->notPath('#TagValueNodeReprint#')
+            ->notPath('#PhpSpecToPHPUnitRector#')
+            ->notPath('#Source#')
+            ->notPath('DoctrineRepositoryAsService/Fixture/PostController.php')
+            ->notPath('Namespace_/ImportFullyQualifiedNamesRector/Fixture/SharedShortName.php')
+            ->notPath('Class_/RenameClassRector/Fixture/DuplicatedClass.php')
             ->in(__DIR__ . '/../../../../tests')
             ->in(__DIR__ . '/../../../../packages/*/tests')
             ->in(__DIR__ . '/../../../../rules/*/tests');
