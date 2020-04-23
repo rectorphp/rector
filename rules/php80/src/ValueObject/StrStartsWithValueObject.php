@@ -7,12 +7,12 @@ namespace Rector\Php80\ValueObject;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 
-final class SubstrFuncCallToHaystack
+final class StrStartsWithValueObject
 {
     /**
      * @var FuncCall
      */
-    private $substrFuncCall;
+    private $funcCall;
 
     /**
      * @var Expr
@@ -24,16 +24,22 @@ final class SubstrFuncCallToHaystack
      */
     private $isPositive = false;
 
-    public function __construct(FuncCall $substrFuncCall, Expr $haystackExpr, bool $isPositive)
+    /**
+     * @var Expr
+     */
+    private $needleExpr;
+
+    public function __construct(FuncCall $funcCall, Expr $haystackExpr, Expr $needleExpr, bool $isPositive)
     {
-        $this->substrFuncCall = $substrFuncCall;
+        $this->funcCall = $funcCall;
         $this->haystackExpr = $haystackExpr;
         $this->isPositive = $isPositive;
+        $this->needleExpr = $needleExpr;
     }
 
-    public function getSubstrFuncCall(): FuncCall
+    public function getFuncCall(): FuncCall
     {
-        return $this->substrFuncCall;
+        return $this->funcCall;
     }
 
     public function getHaystackExpr(): Expr
@@ -44,5 +50,10 @@ final class SubstrFuncCallToHaystack
     public function isPositive(): bool
     {
         return $this->isPositive;
+    }
+
+    public function getNeedleExpr(): Expr
+    {
+        return $this->needleExpr;
     }
 }

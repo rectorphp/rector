@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
-use Rector\Php80\ValueObject\StrncmpFuncCallToHaystack;
+use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
+use Rector\Php80\ValueObject\StrStartsWithValueObject;
 
-final class StrncmpMatchAndRefactor extends AbstractMatchAndRefactor
+final class StrncmpMatchAndRefactor extends AbstractMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     /**
      * @var string
@@ -25,30 +22,25 @@ final class StrncmpMatchAndRefactor extends AbstractMatchAndRefactor
     /**
      * @param Identical|NotIdentical $binaryOp
      */
-    public function match(BinaryOp $binaryOp): ?StrncmpFuncCallToHaystack
+    public function match(BinaryOp $binaryOp): ?StrStartsWithValueObject
     {
         $isPositive = $binaryOp instanceof Identical;
 
         if ($this->isFuncCallName($binaryOp->left, self::FUNCTION_NAME)) {
-            /** @var FuncCall $funcCall */
-            $funcCall = $binaryOp->left;
-            return new StrncmpFuncCallToHaystack($funcCall, $isPositive);
+            return $this->createStrStartsWithValueObjectFromFuncCall($binaryOp->left, $isPositive);
         }
 
         if ($this->isFuncCallName($binaryOp->right, self::FUNCTION_NAME)) {
-            /** @var FuncCall $funcCall */
-            $funcCall = $binaryOp->right;
-            return new StrncmpFuncCallToHaystack($funcCall, $isPositive);
+            return $this->createStrStartsWithValueObjectFromFuncCall($binaryOp->right, $isPositive);
         }
 
         return null;
     }
 
-    public function refactor(StrncmpFuncCallToHaystack $strncmpFuncCallToHaystack): ?Node
+    public function refactor(StrStartsWithValueObject $strStartsWithValueObject): ?Node
     {
-        $strncmpFuncCall = $strncmpFuncCallToHaystack->getStrncmpFuncCall();
-
-        $needleExpr = $strncmpFuncCall->args[1]->value;
+        $strncmpFuncCall = $strStartsWithValueObject->getFuncCall();
+        $needleExpr = $strStartsWithValueObject->getNeedleExpr();
 
         if (! $this->isFuncCallName($strncmpFuncCall->args[2]->value, 'strlen')) {
             return null;
@@ -62,19 +54,6 @@ final class StrncmpMatchAndRefactor extends AbstractMatchAndRefactor
             return null;
         }
 
-        $strStartsWith = $this->createStrStartsWith($strncmpFuncCall, $needleExpr);
-        if ($strncmpFuncCallToHaystack->isPositive()) {
-            return $strStartsWith;
-        }
-
-        return new BooleanNot($strStartsWith);
-    }
-
-    private function createStrStartsWith(FuncCall $strncmpFuncCall, Expr $needleExpr): FuncCall
-    {
-        $haystackExpr = $strncmpFuncCall->args[0]->value;
-        $args = [new Arg($haystackExpr), new Arg($needleExpr)];
-
-        return new FuncCall(new Name('str_starts_with'), $args);
+        return $this->createStrStartsWith($strStartsWithValueObject);
     }
 }
