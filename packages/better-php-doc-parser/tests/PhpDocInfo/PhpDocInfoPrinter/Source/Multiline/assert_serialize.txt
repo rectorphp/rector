@@ -6,4 +6,3 @@
  * @Serializer\Type("boolean")
  * @var bool
  */
-public $anotherProperty;
