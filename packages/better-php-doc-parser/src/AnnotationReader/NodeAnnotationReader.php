@@ -58,12 +58,14 @@ final class NodeAnnotationReader
 
             /** @var object[] $methodAnnotations */
             $methodAnnotations = $this->reader->getMethodAnnotations($reflectionMethod);
+
             foreach ($methodAnnotations as $methodAnnotation) {
                 if (! is_a($methodAnnotation, $annotationClassName, true)) {
                     continue;
                 }
 
                 $objectHash = md5(spl_object_hash($classMethod) . serialize($methodAnnotation));
+
                 if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
                     continue;
                 }
