@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
 use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 
 /**
- * @covers \Rector\NodeTypeResolver\NodeTypeResolver\NameTypeResolver
+ * @see \Rector\NodeTypeResolver\NodeTypeResolver\NameTypeResolver
  */
 final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
 {

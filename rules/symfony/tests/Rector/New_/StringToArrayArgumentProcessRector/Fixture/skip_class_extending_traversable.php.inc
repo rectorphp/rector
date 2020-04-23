@@ -2,6 +2,8 @@
 
 namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
 
+use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\TraversableClass;
+
 class TestClass
 {
     public function foo(): void

@@ -1,4 +1,4 @@
-name: Validate Services
+name: Validate Fixtures
 
 on:
     pull_request: null
@@ -7,7 +7,7 @@ on:
             - master
 
 jobs:
-    validate_services:
+    check_fixtures:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
@@ -17,4 +17,11 @@ jobs:
                     coverage: none
 
             -   run: composer install --no-progress
+
+            -   run: bin/rector validate-fixtures --ansi
+
+            -   run: bin/rector validate-fixture-suffix --ansi
+
+            -   run: bin/rector sync-annotation-parser --dry-run --ansi
+
             -   run: bin/rector validate-services-in-sets --ansi
