@@ -250,3 +250,6 @@ parameters:
         - '#Method Rector\\Caching\\ChangedFilesDetector\:\:hashFile\(\) should return string but returns string\|false#'
 
         - '#If condition is always false#'
+        - '#Method Rector\\Php80\\Rector\\Identical\\StrStartsWithRector\:\:refactor\(\) should return PhpParser\\Node\|null but return statement is missing#'
+
+        - '#Parameter \#1 \$funcCall of method Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\AbstractMatchAndRefactor\:\:createStrStartsWithValueObjectFromFuncCall\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node\\Expr given#'

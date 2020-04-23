@@ -10,9 +10,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor\StrncmpMatchAndRefactor;
-use Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor\StrposMatchAndRefactor;
-use Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor\SubstrMatchAndRefactor;
+use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
 
 /**
  * @see https://wiki.php.net/rfc/add_str_starts_with_and_ends_with_functions
@@ -25,28 +23,16 @@ use Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor\SubstrMatchAndRe
 final class StrStartsWithRector extends AbstractRector
 {
     /**
-     * @var StrncmpMatchAndRefactor
+     * @var StrStartWithMatchAndRefactorInterface[]
      */
-    private $strncmpMatchAndRefactor;
+    private $strStartWithMatchAndRefactors = [];
 
     /**
-     * @var StrposMatchAndRefactor
+     * @param StrStartWithMatchAndRefactorInterface[] $strStartWithMatchAndRefactors
      */
-    private $strposMatchAndRefactor;
-
-    /**
-     * @var SubstrMatchAndRefactor
-     */
-    private $substrMatchAndRefactor;
-
-    public function __construct(
-        StrncmpMatchAndRefactor $strncmpMatchAndRefactor,
-        StrposMatchAndRefactor $strposMatchAndRefactor,
-        SubstrMatchAndRefactor $substrMatchAndRefactor
-    ) {
-        $this->strncmpMatchAndRefactor = $strncmpMatchAndRefactor;
-        $this->strposMatchAndRefactor = $strposMatchAndRefactor;
-        $this->substrMatchAndRefactor = $substrMatchAndRefactor;
+    public function __construct(array $strStartWithMatchAndRefactors)
+    {
+        $this->strStartWithMatchAndRefactors = $strStartWithMatchAndRefactors;
     }
 
     public function getDefinition(): RectorDefinition
@@ -94,24 +80,13 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        // 1. substr
-        $substrFuncCallToHaystack = $this->substrMatchAndRefactor->match($node);
-        if ($substrFuncCallToHaystack !== null) {
-            return $this->substrMatchAndRefactor->refactor($substrFuncCallToHaystack);
-        }
+        foreach ($this->strStartWithMatchAndRefactors as $strStartWithMatchAndRefactor) {
+            $strStartsWithValueObject = $strStartWithMatchAndRefactor->match($node);
+            if ($strStartsWithValueObject === null) {
+                continue;
+            }
 
-        // 2. strpos
-        $strposFuncCallToZero = $this->strposMatchAndRefactor->match($node);
-        if ($strposFuncCallToZero !== null) {
-            return $this->strposMatchAndRefactor->refactor($strposFuncCallToZero);
+            return $strStartWithMatchAndRefactor->refactor($strStartsWithValueObject);
         }
-
-        // 3. strcmp
-        $strcmpFuncCallToHaystack = $this->strncmpMatchAndRefactor->match($node);
-        if ($strcmpFuncCallToHaystack !== null) {
-            return $this->strncmpMatchAndRefactor->refactor($strcmpFuncCallToHaystack);
-        }
-
-        return $node;
     }
 }
