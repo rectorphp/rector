@@ -1,4 +1,4 @@
-name: Validate Fixtures
+name: Validate Project
 
 on:
     pull_request: null
@@ -7,7 +7,7 @@ on:
             - master
 
 jobs:
-    check_fixtures:
+    validate_project:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
