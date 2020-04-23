@@ -17,4 +17,6 @@ jobs:
                     coverage: none
 
             -   run: composer install --no-progress
+
+            # this is very slow, so it has to be in own workflow
             -   run: bin/rector validate-sets --ansi
