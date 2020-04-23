@@ -145,6 +145,11 @@ final class PhpDocInfoPrinter
             $output = '/**' . $output;
         }
 
+        // fix missing end
+        if (Strings::match($output, '#^(/\*\*)#') && $output && ! Strings::match($output, '#\s\*\/(\s+)?$#')) {
+            $output .= ' */';
+        }
+
         return $output;
     }
 

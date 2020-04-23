@@ -6,3 +6,4 @@
  *     @Orm\Index(name="dateTo_idx", columns={"dateTo"}),
  *   }
  * )
+ */

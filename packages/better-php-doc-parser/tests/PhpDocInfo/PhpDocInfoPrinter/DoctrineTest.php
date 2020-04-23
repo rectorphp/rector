@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\Doctrine\CaseSensitive;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\Doctrine\IndexInTable;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\Doctrine\Short;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
 {
@@ -22,11 +23,10 @@ final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
         $docComment = FileSystem::read($docFilePath);
         $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, $node);
 
-        $this->assertSame(
-            $docComment,
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo),
-            'Caused in ' . $docFilePath
-        );
+        $fileInfo = new SmartFileInfo($docFilePath);
+        $message = $fileInfo->getRelativeFilePathFromCwd();
+
+        $this->assertSame($docComment, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo), $message);
     }
 
     public function provideDataClass(): Iterator
