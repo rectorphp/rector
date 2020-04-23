@@ -38,7 +38,7 @@ final class SymfonyRoutePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
         return new SymfonyRouteTagValueNode(
             $route->getPath(),
-            $route->getLocalizedPaths(),
+            method_exists($route, 'getLocalizedPaths') ? $route->getLocalizedPaths() : [],
             $route->getName(),
             $route->getMethods(),
             $route->getOptions(),
