@@ -23,7 +23,7 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
     {
         $this->doComparePrintedFileEquals(
             __DIR__ . '/FixtureChanged/with_space.txt',
-            __DIR__ . '/FixtureChanged/with_space_expected.txt.inc'
+            __DIR__ . '/FixtureChangedExpected/with_space_expected.txt'
         );
     }
 

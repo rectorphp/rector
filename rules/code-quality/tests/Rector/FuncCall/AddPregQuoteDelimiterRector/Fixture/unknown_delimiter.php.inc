@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\Fixture;
 
-class SomeClass
+class UnknownDelimiter
 {
     public function test()
     {
@@ -12,5 +12,3 @@ class SomeClass
         $pattern4 = '#' . preg_quote('name') . '/';
     }
 }
-
-?>
