@@ -49,7 +49,7 @@ final class ListSplitStringRector extends AbstractRector
             return null;
         }
 
-        $node->expr = $this->createFunction('str_split', [$node->expr]);
+        $node->expr = $this->createFuncCall('str_split', [$node->expr]);
 
         return $node;
     }

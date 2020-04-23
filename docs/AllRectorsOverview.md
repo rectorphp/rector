@@ -1,4 +1,4 @@
-# All 499 Rectors Overview
+# All 500 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7866,6 +7866,29 @@ Replace strpos() !== false and strstr()  with str_contains()
      {
 -        return strpos('abc', 'a') !== false;
 +        return str_contains('abc', 'a');
+     }
+ }
+```
+
+<br>
+
+### `StrStartsWithRector`
+
+- class: [`Rector\Php80\Rector\Identical\StrStartsWithRector`](/../master/rules/php80/src/Rector/Identical/StrStartsWithRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Identical/StrStartsWithRector/Fixture)
+
+Change helper functions to str_starts_with()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $isMatch = substr($haystack, 0, strlen($needle)) === $needle;
++        $isMatch = str_starts_with($haystack, $needle);
+
+-        $isNotMatch = substr($haystack, 0, strlen($needle)) !== $needle;
++        $isMatch = ! str_starts_with($haystack, $needle);
      }
  }
 ```

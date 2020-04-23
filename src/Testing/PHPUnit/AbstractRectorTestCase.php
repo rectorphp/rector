@@ -262,9 +262,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     private function createCausedByFixtureMessage(string $fixtureFile): string
     {
-        $fixtureSmartFileInfo = new SmartFileInfo($fixtureFile);
-        $relativeFixtureFilePath = $fixtureSmartFileInfo->getRelativeFilePathFromCwd();
-
-        return 'Caused by ' . $relativeFixtureFilePath;
+        return (new SmartFileInfo($fixtureFile))->getRelativeFilePathFromCwd();
     }
 }

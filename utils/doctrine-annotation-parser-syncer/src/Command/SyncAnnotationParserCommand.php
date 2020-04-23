@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SyncAnnotationParserCommand extends Command
@@ -30,12 +31,15 @@ final class SyncAnnotationParserCommand extends Command
     /**
      * @param ClassSyncerInterface[] $classSyncers
      */
-    public function __construct(array $classSyncers, SymfonyStyle $symfonyStyle)
+    public function __construct(array $classSyncers, SymfonyStyle $symfonyStyle, ParameterProvider $parameterProvider)
     {
         parent::__construct();
 
         $this->symfonyStyle = $symfonyStyle;
         $this->classSyncers = $classSyncers;
+
+        // disable imports
+        $parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, false);
     }
 
     protected function configure(): void

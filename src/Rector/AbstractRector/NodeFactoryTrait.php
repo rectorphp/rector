@@ -99,7 +99,7 @@ trait NodeFactoryTrait
     /**
      * @param mixed[] $arguments
      */
-    protected function createFunction(string $name, array $arguments = []): FuncCall
+    protected function createFuncCall(string $name, array $arguments = []): FuncCall
     {
         $arguments = $this->createArgs($arguments);
 
