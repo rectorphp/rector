@@ -38,8 +38,11 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
 
     public function inferProperty(Property $property): Type
     {
-        /** @var PhpDocInfo $phpDocInfo */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return new MixedType();
+        }
 
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
         if ($relationTagValueNode === null) {
