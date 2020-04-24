@@ -118,7 +118,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
         if ($this->path) {
             $contentItems['path'] = $this->printValueWithOptionalQuotes('path', $this->path);
-        } elseif ($this->localizedPaths) {
+        } elseif ($this->localizedPaths !== []) {
             $contentItems['path'] = $this->printArrayItemWithSeparator($this->localizedPaths, 'path', '=');
         }
 
