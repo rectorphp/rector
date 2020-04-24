@@ -37,25 +37,9 @@ final class SensioTemplateTagValueNode extends AbstractTagValueNode implements S
 
     public function __toString(): string
     {
-        $contentItems = [];
+        $items = $this->crateItems();
 
-        if ($this->template) {
-            $contentItems[] = '"' . $this->template . '"';
-        }
-
-        if ($this->owner) {
-            $contentItems[] = $this->printArrayItem($this->owner, 'owner');
-        }
-
-        if ($this->vars) {
-            $contentItems[] = $this->printArrayItem($this->vars, 'vars');
-        }
-
-        if ($contentItems === []) {
-            return '';
-        }
-
-        return '(' . implode(', ', $contentItems) . ')';
+        return $this->printContentItems($items);
     }
 
     public function getTemplate(): ?string
@@ -66,5 +50,24 @@ final class SensioTemplateTagValueNode extends AbstractTagValueNode implements S
     public function getShortName(): string
     {
         return '@Template';
+    }
+
+    private function crateItems(): array
+    {
+        $items = [];
+
+        if ($this->template) {
+            $items['template'] = sprintf('"%s"', $this->template);
+        }
+
+        if ($this->owner) {
+            $items['owner'] = $this->owner;
+        }
+
+        if ($this->vars) {
+            $items['vars'] = $this->vars;
+        }
+
+        return $items;
     }
 }

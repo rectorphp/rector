@@ -85,7 +85,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             self::INVERSE_JOIN_COLUMNS
         );
         $inverseJoinColumnValuesTags = $this->createJoinColumnTagValues(
-            $annotationContent,
+            $inverseJoinColumnsAnnotationContent,
             $joinTable,
             self::INVERSE_JOIN_COLUMNS
         );

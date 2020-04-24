@@ -87,6 +87,8 @@ parameters:
             - 'packages/post-rector/src/Rector/AbstractPostRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
+            # complex case
+            - 'packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php'
             # node printing
             - 'utils/documentation-generator/src/Command/DumpNodesCommand.php'
             # 3rd party code

@@ -4,3 +4,4 @@ services:
     Rector\Php80\Rector\Identical\StrStartsWithRector: null
     Rector\Php80\Rector\Identical\StrEndsWithRector: null
     Rector\Php80\Rector\Class_\StringableForToStringRector: null
+    Rector\Php80\Rector\Class_\AnnotationToAttributeRector: null

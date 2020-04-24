@@ -16,6 +16,17 @@ use Rector\Core\Exception\ShouldNotHappenException;
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
     use AttributeTrait;
+    use PrintTagValueNodeTrait;
+
+    /**
+     * @var string
+     */
+    protected const PRINT_TYPE_ATTRIBUTE = 'print_attribute';
+
+    /**
+     * @var string
+     */
+    protected const PRINT_TYPE_ANNOTATION = 'print_annotation';
 
     /**
      * @var bool
@@ -102,15 +113,13 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     }
 
     /**
-     * @param string[] $contentItems
+     * @param string[] $items
      */
-    protected function printContentItems(array $contentItems): string
+    protected function printContentItems(array $items): string
     {
-        if ($this->orderedVisibleItems !== null) {
-            $contentItems = ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
-        }
+        $items = $this->filterOutMissingItems($items);
 
-        if ($contentItems === []) {
+        if ($items === []) {
             if ($this->originalContent !== null && Strings::endsWith($this->originalContent, '()')) {
                 return '()';
             }
@@ -118,10 +127,20 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             return '';
         }
 
+        // print array value to string
+        foreach ($items as $key => $value) {
+            if (! is_array($value)) {
+                continue;
+            }
+
+            /** @var string $key */
+            $items[$key] = $this->printArrayItem($value, $key);
+        }
+
         return sprintf(
             '(%s%s%s)',
             $this->hasNewlineAfterOpening ? PHP_EOL : '',
-            implode(', ', $contentItems),
+            implode(', ', $items),
             $this->hasNewlineBeforeClosing ? PHP_EOL : ''
         );
     }
@@ -131,7 +150,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      */
     protected function printNestedTag(
         array $tagValueNodes,
-        string $label,
         bool $haveFinalComma,
         ?string $openingSpace,
         ?string $closingSpace
@@ -147,8 +165,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         }
 
         return sprintf(
-            '%s={%s%s%s%s}',
-            $label,
+            '{%s%s%s%s}',
             $openingSpace,
             $tagValueNodesAsString,
             $haveFinalComma ? ',' : '',
@@ -185,7 +202,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $this->isSilentKeyExplicit = (bool) Strings::contains($originalContent, sprintf('%s=', $silentKey));
     }
 
-    protected function printValueWithOptionalQuotes(string $key, ...$values): string
+    protected function printValueWithOptionalQuotes(?string $key = null, ...$values): string
     {
         // pick first non-null value
         foreach ($values as $value) {
@@ -208,15 +225,29 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         // quote by default
         if (! isset($this->keysByQuotedStatus[$key]) || (isset($this->keysByQuotedStatus[$key]) && $this->keysByQuotedStatus[$key])) {
+            // probably constant - no quote
+            if (Strings::match($value, '#\w+::\w+#')) {
+                return $keyPart . $value;
+            }
+
             return sprintf('%s"%s"', $keyPart, $value);
         }
 
         return $keyPart . $value;
     }
 
-    private function createKeyPart(?string $key): string
+    protected function filterOutMissingItems(array $contentItems): array
     {
-        if ($key === null) {
+        if ($this->orderedVisibleItems === null) {
+            return $contentItems;
+        }
+
+        return ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
+    }
+
+    private function createKeyPart(?string $key = null): string
+    {
+        if ($key === null || $key === '') {
             return '';
         }
 
