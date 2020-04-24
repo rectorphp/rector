@@ -1,4 +1,4 @@
-# All 502 Rectors Overview
+# All 503 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1799,6 +1799,29 @@ Remove unnecessary ternary expressions.
 ```diff
 -$foo === $bar ? true : false;
 +$foo === $bar;
+```
+
+<br>
+
+### `UnusedForeachValueToArrayKeysRector`
+
+- class: [`Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector`](/../master/rules/code-quality/src/Rector/Foreach_/UnusedForeachValueToArrayKeysRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/Foreach_/UnusedForeachValueToArrayKeysRector/Fixture)
+
+Change foreach with unused $value but only $key, to array_keys()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $items = [];
+-        foreach ($values as $key => $value) {
++        foreach (array_keys($values) as $key) {
+             $items[$key] = null;
+         }
+     }
+ }
 ```
 
 <br>
