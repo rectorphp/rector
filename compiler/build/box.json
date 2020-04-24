@@ -11,8 +11,8 @@
         "src",
         "rules",
         "packages",
-        "vendor"
     ],
+    "force-autodiscovery": true,
     "output": "tmp/rector.phar",
     "php-scoper": "compiler/build/scoper.inc.php"
 }
