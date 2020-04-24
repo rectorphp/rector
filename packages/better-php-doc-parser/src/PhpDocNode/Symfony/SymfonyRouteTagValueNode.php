@@ -114,9 +114,13 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
     public function __toString(): string
     {
-        $contentItems = [
-            'path' => $this->printValueWithOptionalQuotes('path', $this->path, $this->localizedPaths),
-        ];
+        $contentItems = [];
+
+        if ($this->path) {
+            $contentItems['path'] = $this->printValueWithOptionalQuotes('path', $this->path);
+        } elseif ($this->localizedPaths) {
+            $contentItems['path'] = $this->printArrayItemWithSeparator($this->localizedPaths, 'path', '=');
+        }
 
         if ($this->name) {
             $contentItems['name'] = $this->printValueWithOptionalQuotes('name', $this->name);
