@@ -12,7 +12,7 @@ use Rector\Core\PhpDoc\PhpDocTagsFinder;
 use Rector\Core\PhpParser\Parser\FunctionParser;
 use ReflectionFunction;
 
-final class FunctionReflectionHelper
+final class FunctionAnnotationResolver
 {
     /**
      * @var ClassNaming
