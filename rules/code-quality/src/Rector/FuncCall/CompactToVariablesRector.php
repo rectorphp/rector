@@ -78,6 +78,10 @@ PHP
             return null;
         }
 
+        if (! $this->compactConverter->hasAllArgumentsNamed($node)) {
+            return null;
+        }
+
         return $this->compactConverter->convertToArray($node);
     }
 }
