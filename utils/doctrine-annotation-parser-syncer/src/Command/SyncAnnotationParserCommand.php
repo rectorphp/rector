@@ -29,6 +29,11 @@ final class SyncAnnotationParserCommand extends Command
     private $classSyncers = [];
 
     /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
+    /**
      * @param ClassSyncerInterface[] $classSyncers
      */
     public function __construct(array $classSyncers, SymfonyStyle $symfonyStyle, ParameterProvider $parameterProvider)
@@ -37,13 +42,14 @@ final class SyncAnnotationParserCommand extends Command
 
         $this->symfonyStyle = $symfonyStyle;
         $this->classSyncers = $classSyncers;
-
-        // disable imports
-        $parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, false);
+        $this->parameterProvider = $parameterProvider;
     }
 
     protected function configure(): void
     {
+        // disable imports
+        $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, false);
+
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[DOC] Generate value-preserving DocParser from doctrine/annotation');
 
