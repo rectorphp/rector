@@ -24,7 +24,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Reflection\ClassMethodReflectionHelper;
-use Rector\Core\Reflection\FunctionReflectionHelper;
+use Rector\Core\Reflection\FunctionAnnotationResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionFunction;
 
@@ -39,9 +39,9 @@ final class AnnotateThrowablesRector extends AbstractRector
     private $throwablesToAnnotate = [];
 
     /**
-     * @var FunctionReflectionHelper
+     * @var FunctionAnnotationResolver
      */
-    private $functionReflectionHelper;
+    private $functionAnnotationResolver;
 
     /**
      * @var ClassMethodReflectionHelper
@@ -56,9 +56,9 @@ final class AnnotateThrowablesRector extends AbstractRector
     public function __construct(
         ClassMethodReflectionHelper $classMethodReflectionHelper,
         ClassResolver $classResolver,
-        FunctionReflectionHelper $functionReflectionHelper
+        FunctionAnnotationResolver $functionAnnotationResolver
     ) {
-        $this->functionReflectionHelper = $functionReflectionHelper;
+        $this->functionAnnotationResolver = $functionAnnotationResolver;
         $this->classMethodReflectionHelper = $classMethodReflectionHelper;
         $this->classResolver = $classResolver;
     }
@@ -197,7 +197,7 @@ PHP
         }
 
         $reflectedFunction = new ReflectionFunction($functionFqn);
-        $foundThrownThrowables = $this->functionReflectionHelper->extractFunctionAnnotatedThrows($reflectedFunction);
+        $foundThrownThrowables = $this->functionAnnotationResolver->extractFunctionAnnotatedThrows($reflectedFunction);
         $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($funcCall);
         return $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
     }
