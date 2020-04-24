@@ -123,15 +123,27 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         }
 
         if ($this->methods !== []) {
-            $contentItems['methods'] = $this->printArrayItem($this->methods, 'methods');
+            $contentItems['methods'] = $this->printArrayItemWithSeparator(
+                $this->methods,
+                'methods',
+                '='
+            );
         }
 
         if ($this->options !== []) {
-            $contentItems['options'] = $this->printArrayItem($this->options, 'options');
+            $contentItems['options'] = $this->printArrayItemWithSeparator(
+                $this->options,
+                'options',
+                '='
+            );
         }
 
         if ($this->defaults !== []) {
-            $contentItems['defaults'] = $this->printArrayItem($this->defaults, 'defaults');
+            $contentItems['defaults'] = $this->printArrayItemWithSeparator(
+                $this->defaults,
+                'defaults',
+                '='
+            );
         }
 
         if ($this->host !== null) {
