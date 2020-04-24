@@ -10,7 +10,7 @@
         "config",
         "src",
         "rules",
-        "packages",
+        "packages"
     ],
     "force-autodiscovery": true,
     "output": "tmp/rector.phar",
