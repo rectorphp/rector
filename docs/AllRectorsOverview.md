@@ -1,4 +1,4 @@
-# All 501 Rectors Overview
+# All 502 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7909,6 +7909,27 @@ Change helper functions to str_starts_with()
 
 -        $isNotMatch = substr($haystack, 0, strlen($needle)) !== $needle;
 +        $isMatch = ! str_starts_with($haystack, $needle);
+     }
+ }
+```
+
+<br>
+
+### `StringableForToStringRector`
+
+- class: [`Rector\Php80\Rector\Class_\StringableForToStringRector`](/../master/rules/php80/src/Rector/Class_/StringableForToStringRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Class_/StringableForToStringRector/Fixture)
+
+Add `Stringable` interface to classes with `__toString()` method
+
+```diff
+-class SomeClass
++class SomeClass implements Stringable
+ {
+-    public function __toString()
++    public function __toString(): string
+     {
+         return 'I can stringz';
      }
  }
 ```
