@@ -118,7 +118,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
             'path' => $this->printValueWithOptionalQuotes('path', $this->path, $this->localizedPaths),
         ];
 
-        if ($this->name) {
+        if ($this->name !== null) {
             $contentItems['name'] = $this->printValueWithOptionalQuotes('name', $this->name);
         }
 
