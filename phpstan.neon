@@ -253,3 +253,6 @@ parameters:
         - '#Method Rector\\Php80\\Rector\\Identical\\StrStartsWithRector\:\:refactor\(\) should return PhpParser\\Node\|null but return statement is missing#'
 
         - '#Parameter \#1 \$funcCall of method Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\AbstractMatchAndRefactor\:\:createStrStartsWithValueObjectFromFuncCall\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node\\Expr given#'
+
+        # mostly strings in tests
+        - '#Class (.*?) should be written with \:\:class notation, string found#'

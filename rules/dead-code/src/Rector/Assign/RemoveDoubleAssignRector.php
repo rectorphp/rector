@@ -107,7 +107,7 @@ PHP
 
     private function isSelfReferencing(Assign $assign): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function ($subNode) use ($assign): bool {
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $subNode) use ($assign): bool {
             return $this->areNodesEqual($assign->var, $subNode);
         });
     }

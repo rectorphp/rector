@@ -30,7 +30,8 @@ final class PhpDocTagsFinder
         }
 
         $matchingTags = array_merge(...$result);
-        $explode = static function ($matchingTag) use ($tagName): array {
+
+        $explode = static function (string $matchingTag) use ($tagName): array {
             // This is required as @return, for example, can be written as "@return ClassOne|ClassTwo|ClassThree"
             return explode('|', str_replace($tagName . ' ', '', $matchingTag));
         };
