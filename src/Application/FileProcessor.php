@@ -157,16 +157,13 @@ final class FileProcessor
      */
     private function parseAndTraverseFileInfoToNodes(SmartFileInfo $smartFileInfo): array
     {
-        $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
+        $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
         $oldTokens = $this->lexer->getTokens();
 
         // needed for \Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver
         $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$oldStmts, $oldStmts, $oldTokens];
 
-        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile(
-            $oldStmts,
-            $smartFileInfo->getRealPath()
-        );
+        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $smartFileInfo);
 
         return [$newStmts, $oldStmts, $oldTokens];
     }

@@ -2,7 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Source\Apple;
+use Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector\Source\Coconut;
 
 class AssignedVariable
 {
@@ -15,10 +15,10 @@ class CallerClassAssignedVariable
 {
     public function run()
     {
-        $building = new Apple();
+        $coconut = new Coconut();
         $someClass = new AssignedVariable();
 
-        $assignedVariable = $building->getId();
+        $assignedVariable = $coconut->getId();
         $someClass->getById($assignedVariable);
     }
 }
@@ -29,7 +29,7 @@ class CallerClassAssignedVariable
 
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Source\Apple;
+use Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector\Source\Coconut;
 
 class AssignedVariable
 {
@@ -42,10 +42,10 @@ class CallerClassAssignedVariable
 {
     public function run()
     {
-        $building = new Apple();
+        $coconut = new Coconut();
         $someClass = new AssignedVariable();
 
-        $assignedVariable = $building->getId();
+        $assignedVariable = $coconut->getId();
         $someClass->getById($assignedVariable);
     }
 }

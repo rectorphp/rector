@@ -71,7 +71,11 @@ final class BetterStandardPrinter extends Standard
 
         // remove dead <?php structures
         $clearContent = Strings::replace($content, '#\<\?php(\s)\?\>\n?#');
-        return Strings::replace($clearContent, '#\<\?php(\s+)\?\>#');
+
+        $clearContent = Strings::replace($clearContent, '#\<\?php(\s+)\?\>#');
+
+        // keep EOL
+        return rtrim($clearContent) . PHP_EOL;
     }
 
     /**
@@ -114,6 +118,21 @@ final class BetterStandardPrinter extends Standard
     public function areNodesEqual($firstNode, $secondNode): bool
     {
         return $this->printWithoutComments($firstNode) === $this->printWithoutComments($secondNode);
+    }
+
+    /**
+     * @param Node[]|Node|null $stmts
+     */
+    public function prettyPrintFile($stmts): string
+    {
+        if ($stmts === null) {
+            $stmts = [];
+        } elseif (! is_array($stmts)) {
+            $stmts = [$stmts];
+        }
+
+        $fileContent = parent::prettyPrintFile($stmts);
+        return $fileContent . PHP_EOL;
     }
 
     /**
@@ -266,9 +285,15 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pScalar_String(String_ $node): string
     {
-        $kind = $node->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
-        if ($kind === String_::KIND_DOUBLE_QUOTED && $node->getAttribute('is_regular_pattern')) {
-            return '"' . $node->value . '"';
+        if ($node->getAttribute('is_regular_pattern')) {
+            $kind = $node->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
+            if ($kind === String_::KIND_DOUBLE_QUOTED) {
+                return $this->wrapValueWith($node, '"');
+            }
+
+            if ($kind === String_::KIND_SINGLE_QUOTED) {
+                return $this->wrapValueWith($node, "'");
+            }
         }
 
         return parent::pScalar_String($node);
@@ -405,5 +430,10 @@ final class BetterStandardPrinter extends Standard
         }
 
         return false;
+    }
+
+    private function wrapValueWith(String_ $node, string $wrap): string
+    {
+        return $wrap . $node->value . $wrap;
     }
 }

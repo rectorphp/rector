@@ -6,7 +6,6 @@ namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
@@ -60,7 +59,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
             // fallback for freshly created Name nodes
             $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
             if ($fileInfo === null) {
-                throw new ShouldNotHappenException();
+                return;
             }
         }
 

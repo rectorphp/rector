@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\CakePHPToSymfony\NodeFactory\RelationPropertyFactory;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -31,20 +30,12 @@ use Rector\PHPStan\Type\AliasedObjectType;
 final class CakePHPModelToDoctrineEntityRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var RelationPropertyFactory
      */
     private $relationPropertyFactory;
 
-    public function __construct(
-        ClassManipulator $classManipulator,
-        RelationPropertyFactory $relationPropertyFactory
-    ) {
-        $this->classManipulator = $classManipulator;
+    public function __construct(RelationPropertyFactory $relationPropertyFactory)
+    {
         $this->relationPropertyFactory = $relationPropertyFactory;
     }
 
@@ -108,7 +99,7 @@ PHP
         $relationProperties = [];
 
         // extract relations
-        $belongsToProperty = $this->classManipulator->getProperty($node, 'belongsTo');
+        $belongsToProperty = $node->getProperty('belongsTo');
         if ($belongsToProperty !== null) {
             $manyToOneProperties = $this->relationPropertyFactory->createManyToOneProperties($belongsToProperty);
             $relationProperties = array_merge($relationProperties, $manyToOneProperties);
@@ -116,7 +107,7 @@ PHP
             $this->removeNode($belongsToProperty);
         }
 
-        $hasAndBelongsToManyProperty = $this->classManipulator->getProperty($node, 'hasAndBelongsToMany');
+        $hasAndBelongsToManyProperty = $node->getProperty('hasAndBelongsToMany');
         if ($hasAndBelongsToManyProperty !== null) {
             $newRelationProperties = $this->relationPropertyFactory->createManyToManyProperties(
                 $hasAndBelongsToManyProperty
@@ -126,7 +117,7 @@ PHP
             $this->removeNode($hasAndBelongsToManyProperty);
         }
 
-        $hasManyProperty = $this->classManipulator->getProperty($node, 'hasMany');
+        $hasManyProperty = $node->getProperty('hasMany');
         if ($hasManyProperty !== null) {
             $newRelationProperties = $this->relationPropertyFactory->createOneToManyProperties($hasManyProperty);
             $relationProperties = array_merge($relationProperties, $newRelationProperties);
@@ -134,7 +125,7 @@ PHP
             $this->removeNode($hasManyProperty);
         }
 
-        $hasOneProperty = $this->classManipulator->getProperty($node, 'hasOne');
+        $hasOneProperty = $node->getProperty('hasOne');
         if ($hasOneProperty !== null) {
             $newRelationProperties = $this->relationPropertyFactory->createOneToOneProperties($hasOneProperty);
             $relationProperties = array_merge($relationProperties, $newRelationProperties);

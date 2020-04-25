@@ -6,12 +6,14 @@ namespace Rector\Core\Configuration;
 
 use Jean85\PrettyVersions;
 use Nette\Utils\Strings;
+use OndraM\CiDetector\CiDetector;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Configuration
 {
@@ -19,11 +21,6 @@ final class Configuration
      * @var bool
      */
     private $isDryRun = false;
-
-    /**
-     * @var bool
-     */
-    private $hideAutoloadErrors = false;
 
     /**
      * @var string|null
@@ -56,9 +53,44 @@ final class Configuration
     private $outputFile;
 
     /**
-     * @var mixed[]
+     * @var CiDetector
      */
-    private $source = [];
+    private $ciDetector;
+
+    /**
+     * @var SmartFileInfo[]
+     */
+    private $fileInfos = [];
+
+    /**
+     * @var bool
+     */
+    private $shouldClearCache = false;
+
+    /**
+     * @var bool
+     */
+    private $isCacheDebug = false;
+
+    /**
+     * @var bool
+     */
+    private $isCacheEnabled = false;
+
+    /**
+     * @var string[]
+     */
+    private $fileExtensions = [];
+
+    /**
+     * @param string[] $fileExtensions
+     */
+    public function __construct(CiDetector $ciDetector, bool $isCacheEnabled, array $fileExtensions)
+    {
+        $this->ciDetector = $ciDetector;
+        $this->isCacheEnabled = $isCacheEnabled;
+        $this->fileExtensions = $fileExtensions;
+    }
 
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
@@ -66,9 +98,10 @@ final class Configuration
     public function resolveFromInput(InputInterface $input): void
     {
         $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
-        $this->hideAutoloadErrors = (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS);
+        $this->shouldClearCache = (bool) $input->getOption(Option::OPTION_CLEAR_CACHE);
         $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
+        $this->isCacheDebug = (bool) $input->getOption(Option::CACHE_DEBUG);
 
         $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
         $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
@@ -112,13 +145,16 @@ final class Configuration
         return $this->isDryRun;
     }
 
-    public function shouldHideAutoloadErrors(): bool
-    {
-        return $this->hideAutoloadErrors;
-    }
-
     public function showProgressBar(): bool
     {
+        if ($this->ciDetector->isCiDetected()) {
+            return false;
+        }
+
+        if ($this->isCacheDebug) {
+            return false;
+        }
+
         return $this->showProgressBar;
     }
 
@@ -152,19 +188,42 @@ final class Configuration
     }
 
     /**
-     * @param string[] $source
+     * @param SmartFileInfo[] $fileInfos
      */
-    public function setSource(array $source): void
+    public function setFileInfos(array $fileInfos): void
     {
-        $this->source = $source;
+        $this->fileInfos = $fileInfos;
+    }
+
+    /**
+     * @return SmartFileInfo[]
+     */
+    public function getFileInfos(): array
+    {
+        return $this->fileInfos;
+    }
+
+    public function shouldClearCache(): bool
+    {
+        return $this->shouldClearCache;
+    }
+
+    public function isCacheDebug(): bool
+    {
+        return $this->isCacheDebug;
+    }
+
+    public function isCacheEnabled(): bool
+    {
+        return $this->isCacheEnabled;
     }
 
     /**
      * @return string[]
      */
-    public function getSource(): array
+    public function getFileExtensions(): array
     {
-        return $this->source;
+        return $this->fileExtensions;
     }
 
     private function canShowProgressBar(InputInterface $input): bool

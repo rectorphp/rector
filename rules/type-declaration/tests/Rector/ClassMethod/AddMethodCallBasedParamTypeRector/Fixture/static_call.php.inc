@@ -2,7 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Source\Apple;
+use Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector\Source\Coconut;
 
 class TestingStaticCall
 {
@@ -15,9 +15,8 @@ class CallerClassForStaticCall
 {
     public function run()
     {
-        $building = new Apple();
-
-        TestingStaticCall::process('hi', $building->getId());
+        $coconut = new Coconut();
+        TestingStaticCall::process('hi', $coconut->getId());
     }
 }
 
@@ -27,7 +26,7 @@ class CallerClassForStaticCall
 
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Fixture;
 
-use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Source\Apple;
+use Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector\Source\Coconut;
 
 class TestingStaticCall
 {
@@ -40,9 +39,8 @@ class CallerClassForStaticCall
 {
     public function run()
     {
-        $building = new Apple();
-
-        TestingStaticCall::process('hi', $building->getId());
+        $coconut = new Coconut();
+        TestingStaticCall::process('hi', $coconut->getId());
     }
 }
 

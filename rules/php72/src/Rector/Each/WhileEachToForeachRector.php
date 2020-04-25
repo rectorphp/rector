@@ -95,7 +95,7 @@ PHP
         /** @var List_ $listNode */
         $listNode = $assignNode->var;
 
-        $foreachedExpr = count($listNode->items) === 1 ? $this->createFunction(
+        $foreachedExpr = count($listNode->items) === 1 ? $this->createFuncCall(
             'array_keys',
             [$eachFuncCall->args[0]]
         ) : $eachFuncCall->args[0]->value;

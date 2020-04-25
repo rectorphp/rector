@@ -14,6 +14,9 @@ jobs:
             -   uses: shivammathur/setup-php@v1
                 with:
                     php-version: 7.4
-                    coverage: none # disable xdebug, pcov
+                    coverage: none
+
             -   run: composer install --no-progress
+
+            # this is very slow, so it has to be in own workflow
             -   run: bin/rector validate-sets --ansi

@@ -108,13 +108,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function parseFileInfoToNodes(SmartFileInfo $smartFileInfo): array
     {
-        $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
+        $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
         // needed for format preserving
         $this->oldStmts = $oldStmts;
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile(
-            $oldStmts,
-            $smartFileInfo->getRealPath()
-        );
+
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $smartFileInfo);
     }
 
     /**
@@ -122,7 +120,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function parseFileInfoToNodesWithoutScope(SmartFileInfo $smartFileInfo): array
     {
-        $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
+        $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
         $this->oldStmts = $oldStmts;
 
         return $oldStmts;
@@ -175,7 +173,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $formatPreservingContent = '';
         }
 
-        $prettyPrintContent = '<?php' . PHP_EOL . $this->betterStandardPrinter->prettyPrint($nodes);
+        $prettyPrintContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
 
         if ($this->areStringsSameWithoutSpaces($formatPreservingContent, $prettyPrintContent)) {
             $fileContent = $formatPreservingContent;

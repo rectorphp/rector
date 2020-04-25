@@ -17,9 +17,14 @@ final class ArrayItemStaticHelper
      */
     public static function resolveAnnotationItemsOrder(string $content, ?string $silentKey = null): array
     {
+        // empty
+        if ($content === '' || $content === '()') {
+            return [];
+        }
+
         $itemsOrder = [];
 
-        $matches = Strings::matchAll($content, '#(?<item>\w+)=#m');
+        $matches = Strings::matchAll($content, '#(?<item>\w+)(\s+)?=(\s+)?#m');
         foreach ($matches as $match) {
             $itemsOrder[] = $match['item'];
         }

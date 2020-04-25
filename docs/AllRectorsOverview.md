@@ -1,4 +1,4 @@
-# All 497 Rectors Overview
+# All 503 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1726,6 +1726,27 @@ Changes in_array() with single element to ===
 
 <br>
 
+### `SplitListAssignToSeparateLineRector`
+
+- class: [`Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector`](/../master/rules/code-quality/src/Rector/Assign/SplitListAssignToSeparateLineRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/Assign/SplitListAssignToSeparateLineRector/Fixture)
+
+Splits [$a, $b] = [5, 10] scalar assign to standalone lines
+
+```diff
+ final class SomeClass
+ {
+     public function run(): void
+     {
+-        [$a, $b] = [1, 2];
++        $a = 1;
++        $b = 2;
+     }
+ }
+```
+
+<br>
+
 ### `StrlenZeroToIdenticalEmptyStringRector`
 
 - class: [`Rector\CodeQuality\Rector\FuncCall\StrlenZeroToIdenticalEmptyStringRector`](/../master/rules/code-quality/src/Rector/FuncCall/StrlenZeroToIdenticalEmptyStringRector.php)
@@ -1778,6 +1799,29 @@ Remove unnecessary ternary expressions.
 ```diff
 -$foo === $bar ? true : false;
 +$foo === $bar;
+```
+
+<br>
+
+### `UnusedForeachValueToArrayKeysRector`
+
+- class: [`Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector`](/../master/rules/code-quality/src/Rector/Foreach_/UnusedForeachValueToArrayKeysRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/Foreach_/UnusedForeachValueToArrayKeysRector/Fixture)
+
+Change foreach with unused $value but only $key, to array_keys()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $items = [];
+-        foreach ($values as $key => $value) {
++        foreach (array_keys($values) as $key) {
+             $items[$key] = null;
+         }
+     }
+ }
 ```
 
 <br>
@@ -6054,7 +6098,7 @@ Replace deprecated "assertArraySubset()" method with alternative methods
 
 -        $this->assertArraySubset([
 -           'cache_directory' => 'new_value',
--        ], $checkedArray);
+-        ], $checkedArray, true);
 +        $this->assertArrayHasKey('cache_directory', $checkedArray);
 +        $this->assertSame('new_value', $checkedArray['cache_directory']);
      }
@@ -6703,12 +6747,10 @@ Convert break outside for/foreach/switch context to return
  {
      public function run()
      {
-         $zhrs = abs($gmt)/3600;
-         $hrs = floor($zhrs);
          if ($isphp5)
-             return sprintf('%s%02d%02d',($gmt<=0)?'+':'-',floor($zhrs),($zhrs-$hrs)*60);
+             return 1;
          else
-             return sprintf('%s%02d%02d',($gmt<0)?'+':'-',floor($zhrs),($zhrs-$hrs)*60);
+             return 2;
 -        break;
 +        return;
      }
@@ -7853,6 +7895,70 @@ Replace strpos() !== false and strstr()  with str_contains()
 
 <br>
 
+### `StrEndsWithRector`
+
+- class: [`Rector\Php80\Rector\Identical\StrEndsWithRector`](/../master/rules/php80/src/Rector/Identical/StrEndsWithRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Identical/StrEndsWithRector/Fixture)
+
+Change helper functions to str_ends_with()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $isMatch = substr($haystack, -strlen($needle)) === $needle;
++        $isMatch = str_ends_with($haystack, $needle);
+     }
+ }
+```
+
+<br>
+
+### `StrStartsWithRector`
+
+- class: [`Rector\Php80\Rector\Identical\StrStartsWithRector`](/../master/rules/php80/src/Rector/Identical/StrStartsWithRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Identical/StrStartsWithRector/Fixture)
+
+Change helper functions to str_starts_with()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $isMatch = substr($haystack, 0, strlen($needle)) === $needle;
++        $isMatch = str_starts_with($haystack, $needle);
+
+-        $isNotMatch = substr($haystack, 0, strlen($needle)) !== $needle;
++        $isMatch = ! str_starts_with($haystack, $needle);
+     }
+ }
+```
+
+<br>
+
+### `StringableForToStringRector`
+
+- class: [`Rector\Php80\Rector\Class_\StringableForToStringRector`](/../master/rules/php80/src/Rector/Class_/StringableForToStringRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Class_/StringableForToStringRector/Fixture)
+
+Add `Stringable` interface to classes with `__toString()` method
+
+```diff
+-class SomeClass
++class SomeClass implements Stringable
+ {
+-    public function __toString()
++    public function __toString(): string
+     {
+         return 'I can stringz';
+     }
+ }
+```
+
+<br>
+
 ### `UnionTypesRector`
 
 - class: [`Rector\Php80\Rector\FunctionLike\UnionTypesRector`](/../master/rules/php80/src/Rector/FunctionLike/UnionTypesRector.php)
@@ -8854,6 +8960,27 @@ Convert missing class reference to string
 -        return NonExistingClass::class;
 +        return 'NonExistingClass';
      }
+ }
+```
+
+<br>
+
+### `RemoveFinalFromEntityRector`
+
+- class: [`Rector\Restoration\Rector\Class_\RemoveFinalFromEntityRector`](/../master/rules/restoration/src/Rector/Class_/RemoveFinalFromEntityRector.php)
+- [test fixtures](/../master/rules/restoration/tests/Rector/Class_/RemoveFinalFromEntityRector/Fixture)
+
+Remove final from Doctrine entities
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+-final class SomeClass
++class SomeClass
+ {
  }
 ```
 

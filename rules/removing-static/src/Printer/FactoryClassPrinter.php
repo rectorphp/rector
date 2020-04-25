@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\RemovingStatic\Printer;
 
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -55,7 +54,7 @@ final class FactoryClassPrinter
         }
 
         $factoryClassFilePath = $this->createFactoryClassFilePath($oldClass);
-        $factoryClassContent = $this->rawPrintNode($nodeToPrint);
+        $factoryClassContent = $this->betterStandardPrinter->prettyPrintFile($nodeToPrint);
 
         $this->filesystem->dumpFile($factoryClassFilePath, $factoryClassContent);
     }
@@ -77,13 +76,5 @@ final class FactoryClassPrinter
         $bareClassName = Strings::after($resolvedOldClass, '\\', -1) . 'Factory.php';
 
         return $directoryPath . DIRECTORY_SEPARATOR . $bareClassName;
-    }
-
-    /**
-     * @param Node|Node[] $node
-     */
-    private function rawPrintNode($node): string
-    {
-        return sprintf('<?php%s%s%s', PHP_EOL . PHP_EOL, $this->betterStandardPrinter->print($node), PHP_EOL);
     }
 }

@@ -21,7 +21,7 @@ class Issue2237 extends \PHPUnit\Framework\TestCase
             'c' => [
                 'd' => 'item d',
             ],
-        ], $result);
+        ], $result, true);
     }
 }
 

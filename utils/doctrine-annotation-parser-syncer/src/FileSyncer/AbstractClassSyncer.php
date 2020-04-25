@@ -49,7 +49,7 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
      */
     protected function printNodesToPath(array $nodes): void
     {
-        $printedContent = $this->printNodesToString($nodes);
+        $printedContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
 
         FileSystem::write($this->getTargetFilePath(), $printedContent);
     }
@@ -57,19 +57,9 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
     /**
      * @param Node[] $nodes
      */
-    protected function printNodesToString(array $nodes): string
-    {
-        $printedContent = $this->betterStandardPrinter->prettyPrint($nodes);
-
-        return '<?php' . PHP_EOL . PHP_EOL . $printedContent;
-    }
-
-    /**
-     * @param Node[] $nodes
-     */
     protected function hasContentChanged(array $nodes): bool
     {
-        $finalContent = $this->printNodesToString($nodes);
+        $finalContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
 
         // nothing to validate against
         if (! file_exists($this->getTargetFilePath())) {

@@ -145,6 +145,11 @@ final class PhpDocInfoPrinter
             $output = '/**' . $output;
         }
 
+        // fix missing end
+        if (Strings::match($output, '#^(/\*\*)#') && $output && ! Strings::match($output, '#\s(\*)?\*\/(\s+)?$#')) {
+            $output .= ' */';
+        }
+
         return $output;
     }
 
@@ -201,9 +206,11 @@ final class PhpDocInfoPrinter
         }
 
         if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startEndValueObject) {
+            $nodeContent = (string) $attributeAwareNode;
+
             return $this->originalSpacingRestorer->restoreInOutputWithTokensStartAndEndPosition(
                 $attributeAwareNode,
-                (string) $attributeAwareNode,
+                $nodeContent,
                 $this->tokens,
                 $startEndValueObject
             );

@@ -1,0 +1,25 @@
+name: Rector no dev
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    rector_no_dev:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.3
+                    coverage: none
+
+            -   run: composer install --no-progress --no-dev
+            -   run: |
+                    # needs to remove, add dev dependencies are missing and phpstan.neon includes them
+                    rm phpstan.neon
+                    bin/rector list

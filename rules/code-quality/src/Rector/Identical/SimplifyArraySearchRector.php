@@ -79,7 +79,7 @@ final class SimplifyArraySearchRector extends AbstractRector
         /** @var ConstFetch $boolConstFetch */
         [$arraySearchFuncCall, $boolConstFetch] = $matchedNodes;
 
-        $inArrayFuncCall = $this->createFunction('in_array', [
+        $inArrayFuncCall = $this->createFuncCall('in_array', [
             $arraySearchFuncCall->args[0],
             $arraySearchFuncCall->args[1],
         ]);

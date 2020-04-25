@@ -8,6 +8,7 @@ use Iterator;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\BetterPhpDocParser\Tests\PhpDocParser\Helper\TagValueToPhpParserNodeMap;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -45,11 +46,11 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     }
 
     /**
-     * @param class-string $nodeType
+     * @param class-string $tagValueNodeType
      */
-    protected function doTestPrintedPhpDocInfo(string $filePath, string $nodeType, string $tagValueNodeType): void
+    protected function doTestPrintedPhpDocInfo(string $filePath, string $tagValueNodeType): void
     {
-        $this->ensureIsNodeType($nodeType);
+        $nodeType = TagValueToPhpParserNodeMap::MAP[$tagValueNodeType];
 
         $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($filePath, $nodeType);
 
@@ -61,7 +62,8 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $originalDocCommentText = $docComment->getText();
         $printedPhpDocInfo = $this->printNodePhpDocInfoToString($nodeWithPhpDocInfo);
 
-        $this->assertSame($originalDocCommentText, $printedPhpDocInfo);
+        $errorMessage = $this->createErrorMessage($filePath);
+        $this->assertSame($originalDocCommentText, $printedPhpDocInfo, $errorMessage);
 
         $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $tagValueNodeType);
     }
@@ -71,11 +73,19 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         return StaticFixtureProvider::yieldFilesFromDirectory($directory, $suffix);
     }
 
+    /**
+     * @return string[]
+     */
+    protected function findFilesFromDirectory(string $directory, string $suffix = '*.php'): array
+    {
+        return StaticFixtureProvider::findFilesFromDirectory($directory, $suffix);
+    }
+
     private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType): void
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->hasByType($tagValueNodeType);
+        $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType));
     }
 
     /**
@@ -84,7 +94,6 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     private function parseFileAndGetFirstNodeOfType(string $filePath, string $nodeType): Node
     {
         $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate(new SmartFileInfo($filePath));
-
         return $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
     }
 
@@ -98,15 +107,10 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
     }
 
-    /**
-     * @param class-string $nodeType
-     */
-    private function ensureIsNodeType(string $nodeType): void
+    private function createErrorMessage(string $filePath): string
     {
-        if (is_a($nodeType, Node::class, true)) {
-            return;
-        }
+        $fileInfo = new SmartFileInfo($filePath);
 
-        throw new ShouldNotHappenException(sprintf('"%s" must be type of "%s"', $nodeType, Node::class));
+        return 'Caused by: ' . $fileInfo->getRelativeFilePathFromCwd() . PHP_EOL;
     }
 }

@@ -10,7 +10,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\SymfonyRouteTagParser\SymfonyRouteClassMethodTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
 final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
@@ -33,11 +33,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
      * @var string|null
      */
     private $host;
-
-    /**
-     * @var bool
-     */
-    private $isPathExplicit = true;
 
     /**
      * @var string[]
@@ -70,6 +65,11 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     private $localizedPaths = [];
 
     /**
+     * @var string|null
+     */
+    private $condition;
+
+    /**
      * @param string[] $localizedPaths
      * @param string[] $methods
      * @param string[] $options
@@ -85,6 +85,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         array $defaults = [],
         ?string $host = null,
         array $requirements = [],
+        ?string $condition = null,
         ?string $originalContent = null
     ) {
         $this->path = $path;
@@ -95,36 +96,30 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         $this->options = $options;
         $this->defaults = $defaults;
         $this->requirements = $requirements;
+        $this->host = $host;
+        $this->condition = $condition;
 
         // covers https://github.com/rectorphp/rector/issues/2994#issuecomment-598712339
 
-        // @todo make generic to abstrat class
         if ($originalContent !== null) {
-            $this->isPathExplicit = (bool) Strings::contains($originalContent, 'path=');
+            $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
 
-            $this->resolveOriginalContentSpacingAndOrder($originalContent);
-
-            // default value without key
-            if ($this->shouldAddIimplicitPaths()) {
-                // add path as first item
-                $this->orderedVisibleItems = array_merge(['path'], (array) $this->orderedVisibleItems);
-            }
-
+            // @todo use generic approach
             $matches = Strings::match($originalContent, '#requirements={(.*?)(?<separator>(=|:))(.*)}#');
             $this->requirementsKeyValueSeparator = $matches['separator'] ?? '=';
-        }
 
-        $this->host = $host;
+            $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
+        }
     }
 
     public function __toString(): string
     {
         $contentItems = [
-            'path' => $this->createPath(),
+            'path' => $this->printValueWithOptionalQuotes('path', $this->path, $this->localizedPaths),
         ];
 
-        if ($this->name) {
-            $contentItems['name'] = sprintf('name="%s"', $this->name);
+        if ($this->name !== null) {
+            $contentItems['name'] = $this->printValueWithOptionalQuotes('name', $this->name);
         }
 
         if ($this->methods !== []) {
@@ -141,6 +136,10 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
         if ($this->host !== null) {
             $contentItems['host'] = sprintf('host="%s"', $this->host);
+        }
+
+        if ($this->condition !== null) {
+            $contentItems['condition'] = sprintf('condition="%s"', $this->condition);
         }
 
         if ($this->requirements !== []) {
@@ -163,25 +162,5 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     public function getShortName(): string
     {
         return '@Route';
-    }
-
-    private function createPath(): string
-    {
-        if ($this->isPathExplicit) {
-            return sprintf('path="%s"', $this->path);
-        }
-
-        if ($this->path !== null) {
-            return sprintf('"%s"', $this->path);
-        }
-
-        $localizedPaths = $this->printArrayItem($this->localizedPaths);
-
-        return Strings::replace($localizedPaths, '#:#', ': ');
-    }
-
-    private function shouldAddIimplicitPaths(): bool
-    {
-        return ($this->path || $this->localizedPaths) && ! in_array('path', (array) $this->orderedVisibleItems, true);
     }
 }

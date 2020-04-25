@@ -57,8 +57,7 @@ trait BetterStandardPrinterTrait
      */
     public function printToFile($node, string $filePath): void
     {
-        $content = $this->print($node);
-        $content = '<?php' . PHP_EOL . PHP_EOL . $content . PHP_EOL;
+        $content = $this->betterStandardPrinter->prettyPrintFile($node);
         FileSystem::write($filePath, $content);
     }
 

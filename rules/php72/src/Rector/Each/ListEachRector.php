@@ -75,16 +75,16 @@ PHP
 
         // only key: list($key, ) = each($values);
         if ($listNode->items[0] && $listNode->items[1] === null) {
-            $keyFuncCall = $this->createFunction('key', $eachFuncCall->args);
+            $keyFuncCall = $this->createFuncCall('key', $eachFuncCall->args);
             return new Assign($listNode->items[0]->value, $keyFuncCall);
         }
 
         // only value: list(, $value) = each($values);
         if ($listNode->items[1] && $listNode->items[0] === null) {
-            $nextFuncCall = $this->createFunction('next', $eachFuncCall->args);
+            $nextFuncCall = $this->createFuncCall('next', $eachFuncCall->args);
             $this->addNodeAfterNode($nextFuncCall, $node);
 
-            $currentFuncCall = $this->createFunction('current', $eachFuncCall->args);
+            $currentFuncCall = $this->createFuncCall('current', $eachFuncCall->args);
             return new Assign($listNode->items[1]->value, $currentFuncCall);
         }
 
@@ -93,16 +93,16 @@ PHP
         // $key = key($values);
         // $value = current($values);
         // next($values); - only inside a loop
-        $currentFuncCall = $this->createFunction('current', $eachFuncCall->args);
+        $currentFuncCall = $this->createFuncCall('current', $eachFuncCall->args);
         $assignCurrentNode = new Assign($listNode->items[1]->value, $currentFuncCall);
         $this->addNodeAfterNode($assignCurrentNode, $node);
 
         if ($this->isInsideDoWhile($node)) {
-            $nextFuncCall = $this->createFunction('next', $eachFuncCall->args);
+            $nextFuncCall = $this->createFuncCall('next', $eachFuncCall->args);
             $this->addNodeAfterNode($nextFuncCall, $node);
         }
 
-        $keyFuncCall = $this->createFunction('key', $eachFuncCall->args);
+        $keyFuncCall = $this->createFuncCall('key', $eachFuncCall->args);
         return new Assign($listNode->items[0]->value, $keyFuncCall);
     }
 

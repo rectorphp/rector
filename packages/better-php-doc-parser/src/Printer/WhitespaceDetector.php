@@ -9,6 +9,7 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
 
 final class WhitespaceDetector
@@ -35,7 +36,7 @@ final class WhitespaceDetector
             if ($tokens[$i][1] === Lexer::TOKEN_HORIZONTAL_WS) {
                 // give back "\s+\*" as well
                 // do not overlap to previous node
-                if ($node instanceof DoctrineTagNodeInterface &&
+                if (($node instanceof DoctrineTagNodeInterface || $node instanceof ShortNameAwareTagInterface) &&
                     $i - 1 > $start &&
                     isset($tokens[$i - 1]) &&
                     $tokens[$i - 1][1] === Lexer::TOKEN_PHPDOC_EOL
@@ -47,6 +48,7 @@ final class WhitespaceDetector
                 }
 
                 $oldWhitespaces[] = $tokenValue;
+                continue;
             }
 
             // quoted string with spaces?

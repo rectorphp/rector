@@ -82,7 +82,7 @@ PHP
                 $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
             } else {
                 $conditionNode = new BooleanOr(
-                    $this->createFunction('is_array', [new Arg($countedNode)]),
+                    $this->createFuncCall('is_array', [new Arg($countedNode)]),
                     new Instanceof_($countedNode, new FullyQualified('Countable'))
                 );
             }

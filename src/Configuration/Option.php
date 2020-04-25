@@ -39,11 +39,6 @@ final class Option
     /**
      * @var string
      */
-    public const HIDE_AUTOLOAD_ERRORS = 'hide-autoload-errors';
-
-    /**
-     * @var string
-     */
     public const OPTION_ONLY = 'only';
 
     /**
@@ -79,6 +74,11 @@ final class Option
     /**
      * @var string
      */
+    public const OPTION_CLEAR_CACHE = 'clear-cache';
+
+    /**
+     * @var string
+     */
     public const PROJECT_TYPE = 'project_type';
 
     /**
@@ -90,4 +90,9 @@ final class Option
      * @var string
      */
     public const PROJECT_TYPE_OPEN_SOURCE_UNDESCORED = 'open_source';
+
+    /**
+     * @var string
+     */
+    public const CACHE_DEBUG = 'cache-debug';
 }

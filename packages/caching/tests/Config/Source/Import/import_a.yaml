@@ -1,0 +1,5 @@
+imports:
+    - { resource: "imported_file_a.yaml"}
+
+services:
+    TwoService: null

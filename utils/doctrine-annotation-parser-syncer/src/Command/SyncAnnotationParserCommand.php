@@ -13,6 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SyncAnnotationParserCommand extends Command
 {
@@ -27,14 +29,20 @@ final class SyncAnnotationParserCommand extends Command
     private $classSyncers = [];
 
     /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
+    /**
      * @param ClassSyncerInterface[] $classSyncers
      */
-    public function __construct(array $classSyncers, SymfonyStyle $symfonyStyle)
+    public function __construct(array $classSyncers, SymfonyStyle $symfonyStyle, ParameterProvider $parameterProvider)
     {
-        parent::__construct();
-
         $this->symfonyStyle = $symfonyStyle;
         $this->classSyncers = $classSyncers;
+        $this->parameterProvider = $parameterProvider;
+
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -52,22 +60,28 @@ final class SyncAnnotationParserCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // disable imports
+        $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, false);
+
         $dryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
 
         foreach ($this->classSyncers as $classSyncer) {
             $isSuccess = $classSyncer->sync($dryRun);
             if (! $isSuccess) {
-                $message = sprintf('File "%s" has changed, regenerate it: ', $classSyncer->getTargetFilePath());
+                $sourceFileInfo = new SmartFileInfo($classSyncer->getSourceFilePath());
+
+                $message = sprintf(
+                    'File "%s" has changed,%sregenerate it: %s',
+                    $sourceFileInfo->getRelativeFilePathFromCwd(),
+                    PHP_EOL,
+                    'bin/rector sync-annotation-parser'
+                );
                 $this->symfonyStyle->error($message);
 
                 return ShellCode::ERROR;
             }
 
-            $message = sprintf(
-                'Original "%s" was changed and refactored to "%s"',
-                $classSyncer->getSourceFilePath(),
-                $classSyncer->getTargetFilePath()
-            );
+            $message = $this->createMessageAboutFileChanges($classSyncer, $dryRun);
 
             $this->symfonyStyle->note($message);
         }
@@ -75,5 +89,19 @@ final class SyncAnnotationParserCommand extends Command
         $this->symfonyStyle->success('Done');
 
         return ShellCode::SUCCESS;
+    }
+
+    private function createMessageAboutFileChanges(ClassSyncerInterface $classSyncer, bool $dryRun): string
+    {
+        $sourceFileInfo = new SmartFileInfo($classSyncer->getSourceFilePath());
+        $targetFileInfo = new SmartFileInfo($classSyncer->getTargetFilePath());
+
+        $messageFormat = $dryRun ? 'Original "%s" is in sync with "%s"' : 'Original "%s" was changed and refactored to "%s"';
+
+        return sprintf(
+            $messageFormat,
+            $sourceFileInfo->getRelativeFilePathFromCwd(),
+            $targetFileInfo->getRelativeFilePathFromCwd()
+        );
     }
 }

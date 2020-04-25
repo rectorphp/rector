@@ -31,8 +31,8 @@ class Issue2069 extends \PHPUnit\Framework\TestCase
         $result = ['Hello' => 'a', 'World!' => 'b'];
         $this->assertArrayHasKey('World!', $result);
         $this->assertArrayHasKey('Hello', $result);
-        $this->assertSame('b', $result['World!']);
-        $this->assertSame('a', $result['Hello']);
+        $this->assertEquals('b', $result['World!']);
+        $this->assertEquals('a', $result['Hello']);
     }
 
     public function shouldWorkToo()

@@ -2,6 +2,8 @@
 
 namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
+use Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\SomeExternalClass;
+
 final class MethodExtraArgument
 {
     public function run()
@@ -9,28 +11,15 @@ final class MethodExtraArgument
         $this->perform(1);
         $this->perform(1, 2);
 
-        (new ExternalClass())->hide(1);
-        (new ExternalClass())->hide(1, 2);
+        (new SomeExternalClass())->hide(1);
+        (new SomeExternalClass())->hide(1, 2);
 
-        ExternalClass::seek(1);
-        ExternalClass::seek(1, 2);
+        SomeExternalClass::seek(1);
+        SomeExternalClass::seek(1, 2);
     }
 
     private function perform($value)
     {
-    }
-}
-
-class ExternalClass
-{
-    public function hide($value)
-    {
-
-    }
-
-    public static function seek($value)
-    {
-
     }
 }
 
@@ -40,6 +29,8 @@ class ExternalClass
 
 namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
+use Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\SomeExternalClass;
+
 final class MethodExtraArgument
 {
     public function run()
@@ -47,28 +38,15 @@ final class MethodExtraArgument
         $this->perform(1);
         $this->perform(1);
 
-        (new ExternalClass())->hide(1);
-        (new ExternalClass())->hide(1);
+        (new SomeExternalClass())->hide(1);
+        (new SomeExternalClass())->hide(1);
 
-        ExternalClass::seek(1);
-        ExternalClass::seek(1);
+        SomeExternalClass::seek(1);
+        SomeExternalClass::seek(1);
     }
 
     private function perform($value)
     {
-    }
-}
-
-class ExternalClass
-{
-    public function hide($value)
-    {
-
-    }
-
-    public static function seek($value)
-    {
-
     }
 }
 

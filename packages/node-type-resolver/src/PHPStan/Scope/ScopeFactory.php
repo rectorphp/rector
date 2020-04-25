@@ -14,6 +14,7 @@ use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProv
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Properties\PropertyReflectionFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ScopeFactory
 {
@@ -63,7 +64,7 @@ final class ScopeFactory
         $this->operatorTypeSpecifyingExtensionRegistryProvider = $operatorTypeSpecifyingExtensionRegistryProvider;
     }
 
-    public function createFromFile(string $filePath): Scope
+    public function createFromFile(SmartFileInfo $fileInfo): Scope
     {
         return new MutatingScope(
             $this->phpStanScopeFactory,
@@ -73,7 +74,7 @@ final class ScopeFactory
             $this->betterStandardPrinter,
             $this->typeSpecifier,
             new PropertyReflectionFinder(),
-            ScopeContext::create($filePath)
+            ScopeContext::create($fileInfo->getRealPath())
         );
     }
 }

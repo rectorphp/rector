@@ -347,6 +347,11 @@ final class ConstantPreservingDocParser
             self::$metadataParser->setIgnoreNotImportedAnnotations(true);
             self::$metadataParser->setIgnoredAnnotationNames($this->ignoredAnnotationNames);
             self::$metadataParser->setImports(['enum' => 'Doctrine\Common\Annotations\Annotation\Enum', 'target' => 'Doctrine\Common\Annotations\Annotation\Target', 'attribute' => 'Doctrine\Common\Annotations\Annotation\Attribute', 'attributes' => 'Doctrine\Common\Annotations\Annotation\Attributes']);
+            // Make sure that annotations from metadata are loaded
+            class_exists(\Doctrine\Common\Annotations\Annotation\Enum::class);
+            class_exists(\Doctrine\Common\Annotations\Annotation\Target::class);
+            class_exists(\Doctrine\Common\Annotations\Annotation\Attribute::class);
+            class_exists(\Doctrine\Common\Annotations\Annotation\Attributes::class);
         }
         $class = new \ReflectionClass($name);
         $docComment = $class->getDocComment();

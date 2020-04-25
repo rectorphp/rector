@@ -21,7 +21,7 @@ final class CustomIdGeneratorTagValueNode extends AbstractDoctrineTagValueNode
 
     public function __toString(): string
     {
-        return sprintf('(class="%s")', $this->class);
+        return '(' . $this->printValueWithOptionalQuotes('class', $this->class) . ')';
     }
 
     public function getShortName(): string

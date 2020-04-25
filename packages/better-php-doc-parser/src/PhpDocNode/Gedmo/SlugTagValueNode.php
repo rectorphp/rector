@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Gedmo;
 
-use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
@@ -60,11 +59,6 @@ final class SlugTagValueNode extends AbstractTagValueNode implements ShortNameAw
      */
     private $dateFormat;
 
-    /**
-     * @var bool
-     */
-    private $isFirstArgumentExplicit = true;
-
     public function __construct(
         array $fields,
         bool $updatable,
@@ -88,19 +82,16 @@ final class SlugTagValueNode extends AbstractTagValueNode implements ShortNameAw
         $this->suffix = $suffix;
         $this->handlers = $handlers;
 
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
         $this->dateFormat = $dateFormat;
 
         if ($originalContent !== null) {
-
-            // @todo make generic to abstrat class
-            $this->isFirstArgumentExplicit = (bool) Strings::contains($originalContent, 'fields=');
+            $this->resolveOriginalContentSpacingAndOrder($originalContent, 'fields');
         }
     }
 
     public function __toString(): string
     {
-        $contentItems['fields'] = $this->createFields();
+        $contentItems['fields'] = $this->printValueWithOptionalQuotes('fields', $this->fields);
 
         if ($this->updatable) {
             $contentItems['updatable'] = sprintf('updatable=%s', $this->updatable ? 'true' : 'false');
@@ -149,14 +140,5 @@ final class SlugTagValueNode extends AbstractTagValueNode implements ShortNameAw
     public function getShortName(): string
     {
         return '@Gedmo\Slug';
-    }
-
-    private function createFields(): string
-    {
-        if ($this->isFirstArgumentExplicit) {
-            return sprintf('fields=%s', $this->printArrayItem($this->fields));
-        }
-
-        return $this->printArrayItem($this->fields);
     }
 }

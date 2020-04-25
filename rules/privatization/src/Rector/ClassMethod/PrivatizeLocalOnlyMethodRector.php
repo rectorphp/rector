@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPUnit\Framework\TestCase;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -19,7 +20,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodVisibilityVendorLockResolver
 /**
  * @see \Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeLocalOnlyMethodRector\PrivatizeLocalOnlyMethodRectorTest
  */
-final class PrivatizeLocalOnlyMethodRector extends AbstractRector
+final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
      * @var ClassMethodVisibilityVendorLockResolver
