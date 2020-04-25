@@ -1,11 +1,11 @@
-name: drupal_rector_examples
+name: drupal_with_rector_0_7_18--working
 
 on:
     pull_request: null
     push: null
 
 jobs:
-    drupal_rector_examples:
+    drupal_with_rector_0_7_18--working:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
@@ -24,6 +24,10 @@ jobs:
                     # Install drupal-rector
                     cd drupal
                     composer require palantirnet/drupal-rector --no-progress
+
+            -   run: |
+                    # Require a specific version: rector-prefixed:0.7.18
+                    cd drupal
                     composer require rector/rector-prefixed:0.7.18
 
             -   run: |
