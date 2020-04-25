@@ -1,7 +1,8 @@
 includes:
-    - 'utils/phpstan-extensions/config/phpstan-extensions.neon'
-    - 'vendor/symplify/phpstan-extensions/config/config.neon'
-    - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
+    - utils/phpstan-extensions/config/phpstan-extensions.neon
+    - vendor/symplify/phpstan-extensions/config/config.neon
+    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - vendor/slam/phpstan-extensions/conf/slam-rules.neon
 
 parameters:
     level: max
