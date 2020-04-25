@@ -1,4 +1,4 @@
-# All 503 Rectors Overview
+# All 504 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -4656,7 +4656,30 @@ Changes json_encode()/json_decode() to safer and more verbose Nette\Utils\Json::
 - class: [`Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/FuncCall/PregFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/PregFunctionToNetteUtilsStringsRector/Fixture)
 
-Use Nette\Utils\Strings over bare preg_* functions
+Use Nette\Utils\Strings over bare preg_split() and preg_replace() functions
+
+```diff
++use Nette\Utils\Strings;
++
+ class SomeClass
+ {
+     public function run()
+     {
+         $content = 'Hi my name is Tom';
+-        $splitted = preg_split('#Hi#', $content);
++        $splitted = \Nette\Utils\Strings::split($content, '#Hi#');
+     }
+ }
+```
+
+<br>
+
+### `PregMatchFunctionToNetteUtilsStringsRector`
+
+- class: [`Rector\Nette\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector/Fixture)
+
+Use Nette\Utils\Strings over bare preg_match() and preg_match_all() functions
 
 ```diff
 +use Nette\Utils\Strings;
