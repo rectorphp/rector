@@ -35,8 +35,17 @@ final class PHPStanServicesFactory
      */
     private $container;
 
-    public function __construct()
+    /**
+     * The containerd needs to be lazy-loaded,
+     * as autoloading must run before adding phpstan.neon extensions,
+     * so extensions classes are autoloaded
+     */
+    private function getContainer(): Container
     {
+        if ($this->container) {
+            return $this->container;
+        }
+
         $currentWorkingDirectory = getcwd();
 
         $containerFactory = new ContainerFactory($currentWorkingDirectory);
@@ -51,6 +60,7 @@ final class PHPStanServicesFactory
         $temporaryPHPStanNeon = null;
 
         $currentProjectConfigFile = $currentWorkingDirectory . '/phpstan.neon';
+
         if (file_exists($currentProjectConfigFile)) {
             $phpstanNeonContent = FileSystem::read($currentProjectConfigFile);
 
@@ -79,6 +89,8 @@ final class PHPStanServicesFactory
         if ($temporaryPHPStanNeon !== null) {
             FileSystem::delete($temporaryPHPStanNeon);
         }
+
+        return $this->container;
     }
 
     /**
@@ -86,7 +98,7 @@ final class PHPStanServicesFactory
      */
     public function createReflectionProvider(): ReflectionProvider
     {
-        return $this->container->getByType(ReflectionProvider::class);
+        return $this->getContainer()->getByType(ReflectionProvider::class);
     }
 
     /**
@@ -94,7 +106,7 @@ final class PHPStanServicesFactory
      */
     public function createNodeScopeResolver(): NodeScopeResolver
     {
-        return $this->container->getByType(NodeScopeResolver::class);
+        return $this->getContainer()->getByType(NodeScopeResolver::class);
     }
 
     /**
@@ -102,7 +114,7 @@ final class PHPStanServicesFactory
      */
     public function createTypeSpecifier(): TypeSpecifier
     {
-        return $this->container->getByType(TypeSpecifier::class);
+        return $this->getContainer()->getByType(TypeSpecifier::class);
     }
 
     /**
@@ -110,7 +122,7 @@ final class PHPStanServicesFactory
      */
     public function createScopeFactory(): ScopeFactory
     {
-        return $this->container->getByType(ScopeFactory::class);
+        return $this->getContainer()->getByType(ScopeFactory::class);
     }
 
     /**
@@ -118,7 +130,7 @@ final class PHPStanServicesFactory
      */
     public function createDynamicReturnTypeExtensionRegistryProvider(): DynamicReturnTypeExtensionRegistryProvider
     {
-        return $this->container->getByType(DynamicReturnTypeExtensionRegistryProvider::class);
+        return $this->getContainer()->getByType(DynamicReturnTypeExtensionRegistryProvider::class);
     }
 
     /**
@@ -126,7 +138,7 @@ final class PHPStanServicesFactory
      */
     public function createDependencyResolver(): DependencyResolver
     {
-        return $this->container->getByType(DependencyResolver::class);
+        return $this->getContainer()->getByType(DependencyResolver::class);
     }
 
     /**
@@ -134,7 +146,7 @@ final class PHPStanServicesFactory
      */
     public function createFileHelper(): FileHelper
     {
-        return $this->container->getByType(FileHelper::class);
+        return $this->getContainer()->getByType(FileHelper::class);
     }
 
     /**
@@ -142,7 +154,7 @@ final class PHPStanServicesFactory
      */
     public function createOperatorTypeSpecifyingExtensionRegistryProvider(): OperatorTypeSpecifyingExtensionRegistryProvider
     {
-        return $this->container->getByType(OperatorTypeSpecifyingExtensionRegistryProvider::class);
+        return $this->getContainer()->getByType(OperatorTypeSpecifyingExtensionRegistryProvider::class);
     }
 
     /**
@@ -150,7 +162,7 @@ final class PHPStanServicesFactory
      */
     public function createTypeNodeResolver(): TypeNodeResolver
     {
-        return $this->container->getByType(TypeNodeResolver::class);
+        return $this->getContainer()->getByType(TypeNodeResolver::class);
     }
 
     private function appendPhpstanPHPUnitExtensionIfExists(
