@@ -2,7 +2,9 @@ name: drupal_with_rector_0_7_18--working
 
 on:
     pull_request: null
-    push: null
+    push:
+        branches:
+            - master
 
 jobs:
     drupal_with_rector_0_7_18--working:

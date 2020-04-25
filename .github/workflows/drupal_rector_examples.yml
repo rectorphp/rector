@@ -2,7 +2,9 @@ name: drupal_rector_examples
 
 on:
     pull_request: null
-    push: null
+    push:
+        branches:
+            - master
 
 jobs:
     drupal_rector_examples:
