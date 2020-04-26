@@ -9,10 +9,68 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-## v0.7.17 - 2020-04-23
+## Unreleased
+
+### Changed
+
+- [#3266] publish dump-rectors command with 3rd party install
+
+## [v0.7.20] - 2020-04-26
+
+- [#3253] make Doctrine property inferer skip non doc
+- [#3262] [cs] sort private methods by call order and property by complexity
+- [#3265] [docs] make dump-rectors command open to public
+
+### Fixed
+
+- [#3252] [CodeQuality] Fix CompactToVariablesRector for unknown names
+- [#3260] [Nette] Fix preg_match_all() to Nette\Utils migrations
+- [#3261] Fix autoloading for phpstan configs
+- [#3248] Fix [@Route] name can be empty, Thanks to [@stephanvierkant]
+
+### Removed
+
+- [#3264] remove RectorStandaloneRunner, too hacky
+
+## [v0.7.19] - 2020-04-24
 
 ### Added
 
+- [#3251] [CodeQuality] Add UnusedForeachValueToArrayKeysRector
+- [#3235] [DX] Add validate fixture suffix
+- [#3237] [PHP 8.0] Add str_ends_with()
+- [#3245] [PHP 8.0] Add Stringable
+- [#3228] [PHP 8.0] Add str_starts_with - rule [#500] 🎉🎉🎉
+
+### Changed
+
+- [#3242] Update rector counter, Thanks to [@vladyslavstartsev]
+- [#3238] StrStartWith refactoring
+- [#3239] simplify throws class resolving
+- [#3240] Symfony route with prefix, Thanks to [@stephanvierkant]
+- [#3244] docs refactoring
+
+### Fixed
+
+- [#3236] various suffix fixes
+- [#3233] Fix single-line doc end
+
+## [v0.7.18] - 2020-04-23
+
+### Changed
+
+- [#3224] https://github.com/rectorphp/rector/issues/3223, Thanks to [@atompulse]
+
+### Fixed
+
+- [#3232] Compiler: Fix invalid changes in config/set neon files, Thanks to [@RiKap]
+
+## [v0.7.17] - 2020-04-23
+
+### Added
+
+- [#3219] [Restoration] Add RemoveFinalFromEntityRector
+- [#3218] Add more tag value node tests
 - [#3196] [CodeQuality] Add SplitListScalarAssignToSeparateLineRector
 - [#3195] [PHPUnit] Add strict param to ReplaceAssertArraySubsetRector
 - [#3118] Add cache for un-changed files
@@ -2974,3 +3032,36 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@callmebob2016]: https://github.com/callmebob2016
 [@acrobat]: https://github.com/acrobat
 [@UFTimmy]: https://github.com/UFTimmy
+[#3266]: https://github.com/rectorphp/rector/pull/3266
+[#3265]: https://github.com/rectorphp/rector/pull/3265
+[#3264]: https://github.com/rectorphp/rector/pull/3264
+[#3262]: https://github.com/rectorphp/rector/pull/3262
+[#3261]: https://github.com/rectorphp/rector/pull/3261
+[#3260]: https://github.com/rectorphp/rector/pull/3260
+[#3253]: https://github.com/rectorphp/rector/pull/3253
+[#3252]: https://github.com/rectorphp/rector/pull/3252
+[#3251]: https://github.com/rectorphp/rector/pull/3251
+[#3248]: https://github.com/rectorphp/rector/pull/3248
+[#3245]: https://github.com/rectorphp/rector/pull/3245
+[#3244]: https://github.com/rectorphp/rector/pull/3244
+[#3242]: https://github.com/rectorphp/rector/pull/3242
+[#3240]: https://github.com/rectorphp/rector/pull/3240
+[#3239]: https://github.com/rectorphp/rector/pull/3239
+[#3238]: https://github.com/rectorphp/rector/pull/3238
+[#3237]: https://github.com/rectorphp/rector/pull/3237
+[#3236]: https://github.com/rectorphp/rector/pull/3236
+[#3235]: https://github.com/rectorphp/rector/pull/3235
+[#3233]: https://github.com/rectorphp/rector/pull/3233
+[#3232]: https://github.com/rectorphp/rector/pull/3232
+[#3228]: https://github.com/rectorphp/rector/pull/3228
+[#3224]: https://github.com/rectorphp/rector/pull/3224
+[#3219]: https://github.com/rectorphp/rector/pull/3219
+[#3218]: https://github.com/rectorphp/rector/pull/3218
+[#500]: https://github.com/rectorphp/rector/pull/500
+[v0.7.20]: https://github.com/rectorphp/rector/compare/v0.7.19...v0.7.20
+[v0.7.19]: https://github.com/rectorphp/rector/compare/v0.7.18...v0.7.19
+[v0.7.18]: https://github.com/rectorphp/rector/compare/v0.7.17...v0.7.18
+[v0.7.17]: https://github.com/rectorphp/rector/compare/v0.7.16...v0.7.17
+[@stephanvierkant]: https://github.com/stephanvierkant
+[@atompulse]: https://github.com/atompulse
+[@RiKap]: https://github.com/RiKap

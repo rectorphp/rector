@@ -257,9 +257,9 @@
         ],
         "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
         "changelog": [
-            "vendor/bin/changelog-linker dump-merges --in-categories",
-            "vendor/bin/changelog-linker link",
-            "vendor/bin/changelog-linker cleanup"
+            "vendor/bin/changelog-linker dump-merges --in-categories --ansi",
+            "vendor/bin/changelog-linker link --ansi",
+            "vendor/bin/changelog-linker cleanup --ansi"
         ],
         "check-docs": [
             "bin/rector dump-rectors | diff --ignore-space-change docs/AllRectorsOverview.md - ",
