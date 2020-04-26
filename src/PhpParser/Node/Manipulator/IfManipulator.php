@@ -262,6 +262,25 @@ final class IfManipulator
         return $this->hasOnlyStmtOfType($node, Foreach_::class);
     }
 
+    private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
+    {
+        if ($this->betterStandardPrinter->areNodesEqual(
+            $notIdentical->left,
+            $returnNode->expr
+        ) && $this->constFetchManipulator->isNull($notIdentical->right)) {
+            return $notIdentical->left;
+        }
+
+        if (! $this->betterStandardPrinter->areNodesEqual($notIdentical->right, $returnNode->expr)) {
+            return null;
+        }
+        if ($this->constFetchManipulator->isNull($notIdentical->left)) {
+            return $notIdentical->right;
+        }
+
+        return null;
+    }
+
     private function isIfWithOnlyStmtIf(If_ $if): bool
     {
         if (! $this->isIfWithoutElseAndElseIfs($if)) {
@@ -287,25 +306,6 @@ final class IfManipulator
         }
 
         return ! (bool) $if->elseifs;
-    }
-
-    private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
-    {
-        if ($this->betterStandardPrinter->areNodesEqual(
-            $notIdentical->left,
-            $returnNode->expr
-        ) && $this->constFetchManipulator->isNull($notIdentical->right)) {
-            return $notIdentical->left;
-        }
-
-        if (! $this->betterStandardPrinter->areNodesEqual($notIdentical->right, $returnNode->expr)) {
-            return null;
-        }
-        if ($this->constFetchManipulator->isNull($notIdentical->left)) {
-            return $notIdentical->right;
-        }
-
-        return null;
     }
 
     private function isIfWithoutElseAndElseIfs(If_ $if): bool

@@ -32,6 +32,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class NodeScopeResolver
 {
     /**
+     * @var string[]
+     */
+    private $dependentFiles = [];
+
+    /**
      * @var PHPStanNodeScopeResolver
      */
     private $phpStanNodeScopeResolver;
@@ -75,11 +80,6 @@ final class NodeScopeResolver
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-
-    /**
-     * @var string[]
-     */
-    private $dependentFiles = [];
 
     public function __construct(
         ChangedFilesDetector $changedFilesDetector,
@@ -174,6 +174,36 @@ final class NodeScopeResolver
         return $mutatingScope->enterClass($classReflection);
     }
 
+    private function resolveDependentFiles(Node $node, MutatingScope $mutatingScope): void
+    {
+        if (! $this->configuration->isCacheEnabled()) {
+            return;
+        }
+
+        try {
+            foreach ($this->dependencyResolver->resolveDependencies($node, $mutatingScope) as $dependentFile) {
+                $this->dependentFiles[] = $dependentFile;
+            }
+        } catch (AnalysedCodeException $analysedCodeException) {
+            // @ignoreException
+        }
+    }
+
+    /**
+     * @param string[] $dependentFiles
+     */
+    private function reportCacheDebugAndSaveDependentFiles(SmartFileInfo $smartFileInfo, array $dependentFiles): void
+    {
+        if (! $this->configuration->isCacheEnabled()) {
+            return;
+        }
+
+        $this->reportCacheDebug($smartFileInfo, $dependentFiles);
+
+        // save for cache
+        $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
+    }
+
     /**
      * @param Class_|Interface_|Trait_ $classLike
      */
@@ -203,35 +233,5 @@ final class NodeScopeResolver
         if ($dependentFiles !== []) {
             $this->symfonyStyle->listing($dependentFiles);
         }
-    }
-
-    private function resolveDependentFiles(Node $node, MutatingScope $mutatingScope): void
-    {
-        if (! $this->configuration->isCacheEnabled()) {
-            return;
-        }
-
-        try {
-            foreach ($this->dependencyResolver->resolveDependencies($node, $mutatingScope) as $dependentFile) {
-                $this->dependentFiles[] = $dependentFile;
-            }
-        } catch (AnalysedCodeException $analysedCodeException) {
-            // @ignoreException
-        }
-    }
-
-    /**
-     * @param string[] $dependentFiles
-     */
-    private function reportCacheDebugAndSaveDependentFiles(SmartFileInfo $smartFileInfo, array $dependentFiles): void
-    {
-        if (! $this->configuration->isCacheEnabled()) {
-            return;
-        }
-
-        $this->reportCacheDebug($smartFileInfo, $dependentFiles);
-
-        // save for cache
-        $this->changedFilesDetector->addFileWithDependencies($smartFileInfo, $dependentFiles);
     }
 }

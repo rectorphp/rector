@@ -116,6 +116,18 @@ PHP
     }
 
     /**
+     * @param Array_|List_ $firstArray
+     * @param Array_|List_ $secondArray
+     */
+    private function isValueSwap($firstArray, $secondArray): bool
+    {
+        $firstArrayItemsHash = $this->getArrayItemsHash($firstArray);
+        $secondArrayItemsHash = $this->getArrayItemsHash($secondArray);
+
+        return $firstArrayItemsHash === $secondArrayItemsHash;
+    }
+
+    /**
      * @param Array_|List_ $node
      */
     private function getArrayItemsHash(Node $node): string
@@ -130,17 +142,5 @@ PHP
         $arrayItemsHash = implode('', $arrayItemsHashes);
 
         return sha1($arrayItemsHash);
-    }
-
-    /**
-     * @param Array_|List_ $firstArray
-     * @param Array_|List_ $secondArray
-     */
-    private function isValueSwap($firstArray, $secondArray): bool
-    {
-        $firstArrayItemsHash = $this->getArrayItemsHash($firstArray);
-        $secondArrayItemsHash = $this->getArrayItemsHash($secondArray);
-
-        return $firstArrayItemsHash === $secondArrayItemsHash;
     }
 }

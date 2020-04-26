@@ -125,17 +125,6 @@ PHP
         return $node;
     }
 
-    private function hasMethodSomeStmtsLeft(ClassMethod $classMethod): bool
-    {
-        foreach ((array) $classMethod->stmts as $stmt) {
-            if (! $this->isNodeRemoved($stmt)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private function shouldSkipProperty(PropertyProperty $propertyProperty): bool
     {
         if (! $this->propertyManipulator->isPrivate($propertyProperty)) {
@@ -202,5 +191,16 @@ PHP
         }
 
         return $vendorLockedClassMethodsNames;
+    }
+
+    private function hasMethodSomeStmtsLeft(ClassMethod $classMethod): bool
+    {
+        foreach ((array) $classMethod->stmts as $stmt) {
+            if (! $this->isNodeRemoved($stmt)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

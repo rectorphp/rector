@@ -51,15 +51,6 @@ final class AttributeAwareCallableTypeNode extends CallableTypeNode implements A
         return trim($parameterTypeString);
     }
 
-    private function normalizeReturnType(string $parameterTypeString, string $returnTypeAsString): string
-    {
-        if ($returnTypeAsString === 'mixed' && $parameterTypeString === '') {
-            return '';
-        }
-
-        return ':' . $returnTypeAsString;
-    }
-
     private function normalizeParameterType(string $parameterTypeString, string $returnTypeAsString): string
     {
         if ($parameterTypeString !== '') {
@@ -71,5 +62,14 @@ final class AttributeAwareCallableTypeNode extends CallableTypeNode implements A
         }
 
         return $parameterTypeString;
+    }
+
+    private function normalizeReturnType(string $parameterTypeString, string $returnTypeAsString): string
+    {
+        if ($returnTypeAsString === 'mixed' && $parameterTypeString === '') {
+            return '';
+        }
+
+        return ':' . $returnTypeAsString;
     }
 }

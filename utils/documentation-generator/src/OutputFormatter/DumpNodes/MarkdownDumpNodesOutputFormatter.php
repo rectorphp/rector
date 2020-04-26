@@ -69,21 +69,6 @@ final class MarkdownDumpNodesOutputFormatter
         return $category;
     }
 
-    private function printPublicProperties(NodeInfo $nodeInfo): void
-    {
-        if (! $nodeInfo->hasPublicProperties()) {
-            return;
-        }
-
-        $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln('#### Public Properties');
-        $this->symfonyStyle->newLine();
-
-        foreach ($nodeInfo->getPublicPropertyInfos() as $publicPropertyInfo) {
-            $this->symfonyStyle->writeln($publicPropertyInfo);
-        }
-    }
-
     private function printRequiredArguments(NodeInfo $nodeInfo): void
     {
         if (! $nodeInfo->hasRequiredArguments()) {
@@ -100,5 +85,20 @@ final class MarkdownDumpNodesOutputFormatter
         $this->symfonyStyle->writeln('#### Example PHP Code');
         $this->symfonyStyle->newLine();
         $this->symfonyStyle->writeln(sprintf('```php%s%s%s```', PHP_EOL, $nodeInfo->getPrintedContent(), PHP_EOL));
+    }
+
+    private function printPublicProperties(NodeInfo $nodeInfo): void
+    {
+        if (! $nodeInfo->hasPublicProperties()) {
+            return;
+        }
+
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->writeln('#### Public Properties');
+        $this->symfonyStyle->newLine();
+
+        foreach ($nodeInfo->getPublicPropertyInfos() as $publicPropertyInfo) {
+            $this->symfonyStyle->writeln($publicPropertyInfo);
+        }
     }
 }

@@ -99,60 +99,6 @@ PHP
         return $commandName;
     }
 
-    private function matchCommandNameNodeInConstruct(Expr $expr): ?Node
-    {
-        if (! $expr instanceof MethodCall && ! $expr instanceof StaticCall) {
-            return null;
-        }
-
-        if (! $this->isName($expr->name, '__construct')) {
-            return null;
-        }
-
-        if (count($expr->args) < 1) {
-            return null;
-        }
-
-        $staticType = $this->getStaticType($expr->args[0]->value);
-        if (! $staticType instanceof StringType) {
-            return null;
-        }
-
-        return $expr->args[0]->value;
-    }
-
-    private function removeConstructorIfHasOnlySetNameMethodCall(Class_ $class): void
-    {
-        $constructClassMethod = $class->getMethod('__construct');
-        if ($constructClassMethod === null) {
-            return;
-        }
-
-        if (count((array) $constructClassMethod->stmts) !== 1) {
-            return;
-        }
-
-        $onlyNode = $constructClassMethod->stmts[0];
-        if ($onlyNode instanceof Expression) {
-            $onlyNode = $onlyNode->expr;
-        }
-
-        /** @var Expr|null $onlyNode */
-        if ($onlyNode === null) {
-            return;
-        }
-
-        if (! $onlyNode instanceof StaticCall) {
-            return;
-        }
-
-        if ($onlyNode->args !== []) {
-            return;
-        }
-
-        $this->removeNode($constructClassMethod);
-    }
-
     private function resolveCommandNameFromConstructor(Class_ $class): ?Node
     {
         $commandName = null;
@@ -202,5 +148,59 @@ PHP
         });
 
         return $commandName;
+    }
+
+    private function removeConstructorIfHasOnlySetNameMethodCall(Class_ $class): void
+    {
+        $constructClassMethod = $class->getMethod('__construct');
+        if ($constructClassMethod === null) {
+            return;
+        }
+
+        if (count((array) $constructClassMethod->stmts) !== 1) {
+            return;
+        }
+
+        $onlyNode = $constructClassMethod->stmts[0];
+        if ($onlyNode instanceof Expression) {
+            $onlyNode = $onlyNode->expr;
+        }
+
+        /** @var Expr|null $onlyNode */
+        if ($onlyNode === null) {
+            return;
+        }
+
+        if (! $onlyNode instanceof StaticCall) {
+            return;
+        }
+
+        if ($onlyNode->args !== []) {
+            return;
+        }
+
+        $this->removeNode($constructClassMethod);
+    }
+
+    private function matchCommandNameNodeInConstruct(Expr $expr): ?Node
+    {
+        if (! $expr instanceof MethodCall && ! $expr instanceof StaticCall) {
+            return null;
+        }
+
+        if (! $this->isName($expr->name, '__construct')) {
+            return null;
+        }
+
+        if (count($expr->args) < 1) {
+            return null;
+        }
+
+        $staticType = $this->getStaticType($expr->args[0]->value);
+        if (! $staticType instanceof StringType) {
+            return null;
+        }
+
+        return $expr->args[0]->value;
     }
 }

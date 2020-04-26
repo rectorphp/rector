@@ -12,14 +12,14 @@ use Symfony\Component\Filesystem\Filesystem;
 final class ComposerJsonManipulator
 {
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var string
      */
     private $originalComposerJsonFileContent;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**
      * @var ConsoleDiffer

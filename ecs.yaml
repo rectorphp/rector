@@ -55,7 +55,6 @@ parameters:
 
     skip:
         # rather useless
-        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff: null
         PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer: null
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer: null
 
@@ -111,11 +110,6 @@ parameters:
             # dev
             - 'packages/type-declaration/src/Rector/FunctionLike/*TypeDeclarationRector.php'
             - 'rules/php70/src/Rector/If_/IfToSpaceshipRector.php'
-
-        Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:
-            # respects inherited pattern for better comparing
-            - 'src/PhpParser/Printer/BetterStandardPrinter.php'
-            - 'src/Rector/AbstractRector/BetterStandardPrinterTrait.php'
 
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition: null
 

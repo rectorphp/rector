@@ -196,17 +196,6 @@ final class ClassMethodManipulator
         return null;
     }
 
-    private function removeParameter(Param $param, ClassMethod $classMethod): void
-    {
-        foreach ($classMethod->params as $key => $constructorParam) {
-            if (! $this->nodeNameResolver->areNamesEqual($constructorParam, $param)) {
-                continue;
-            }
-
-            unset($classMethod->params[$key]);
-        }
-    }
-
     private function isMethodInParent(string $class, string $method): bool
     {
         foreach (class_parents($class) as $parentClass) {
@@ -234,5 +223,16 @@ final class ClassMethodManipulator
         }
 
         throw new ShouldNotHappenException();
+    }
+
+    private function removeParameter(Param $param, ClassMethod $classMethod): void
+    {
+        foreach ($classMethod->params as $key => $constructorParam) {
+            if (! $this->nodeNameResolver->areNamesEqual($constructorParam, $param)) {
+                continue;
+            }
+
+            unset($classMethod->params[$key]);
+        }
     }
 }

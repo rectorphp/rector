@@ -12,14 +12,14 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileSystemFileProcessor
 {
     /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
-
-    /**
      * @var FileSystemRectorInterface[]
      */
     private $fileSystemRectors = [];
+
+    /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
 
     /**
      * @var CurrentRectorProvider

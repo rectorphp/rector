@@ -57,6 +57,22 @@ final class DocAliasResolver
     }
 
     /**
+     * @param string[] $possibleDocAliases
+     * @return string[]
+     */
+    private function collectVarType(PhpDocInfo $phpDocInfo, array $possibleDocAliases): array
+    {
+        $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getVarType(), $possibleDocAliases);
+        $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getReturnType(), $possibleDocAliases);
+
+        foreach ($phpDocInfo->getParamTypes() as $paramType) {
+            $possibleDocAliases = $this->appendPossibleAliases($paramType, $possibleDocAliases);
+        }
+
+        return $possibleDocAliases;
+    }
+
+    /**
      * @return string[]
      */
     private function appendPossibleAliases(Type $varType, array $possibleDocAliases): array
@@ -69,22 +85,6 @@ final class DocAliasResolver
             foreach ($varType->getTypes() as $type) {
                 $possibleDocAliases = $this->appendPossibleAliases($type, $possibleDocAliases);
             }
-        }
-
-        return $possibleDocAliases;
-    }
-
-    /**
-     * @param string[] $possibleDocAliases
-     * @return string[]
-     */
-    private function collectVarType(PhpDocInfo $phpDocInfo, array $possibleDocAliases): array
-    {
-        $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getVarType(), $possibleDocAliases);
-        $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getReturnType(), $possibleDocAliases);
-
-        foreach ($phpDocInfo->getParamTypes() as $paramType) {
-            $possibleDocAliases = $this->appendPossibleAliases($paramType, $possibleDocAliases);
         }
 
         return $possibleDocAliases;

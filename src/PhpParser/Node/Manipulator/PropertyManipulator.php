@@ -155,6 +155,14 @@ final class PropertyManipulator
         return $this->getProperty($propertyProperty)->isPrivate();
     }
 
+    /**
+     * @param PropertyFetch|StaticPropertyFetch $node
+     */
+    private function isReadContext(Node $node): bool
+    {
+        return ! $this->assignManipulator->isNodeLeftPartOfAssign($node);
+    }
+
     private function getProperty(PropertyProperty $propertyProperty): Property
     {
         $property = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
@@ -164,13 +172,5 @@ final class PropertyManipulator
         }
 
         return $property;
-    }
-
-    /**
-     * @param PropertyFetch|StaticPropertyFetch $node
-     */
-    private function isReadContext(Node $node): bool
-    {
-        return ! $this->assignManipulator->isNodeLeftPartOfAssign($node);
     }
 }

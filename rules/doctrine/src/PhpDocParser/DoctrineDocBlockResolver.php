@@ -112,13 +112,6 @@ final class DoctrineDocBlockResolver
         return $this->isDoctrineEntityClass($classNode);
     }
 
-    private function hasPropertyDoctrineIdTag(Property $property): bool
-    {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        return $phpDocInfo ? $phpDocInfo->hasByType(IdTagValueNode::class) : false;
-    }
-
     private function isDoctrineEntityClassNode(Class_ $class): bool
     {
         $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -150,5 +143,12 @@ final class DoctrineDocBlockResolver
         $docCommentContent = (string) $reflectionClass->getDocComment();
 
         return (bool) Strings::match($docCommentContent, '#@ORM\\\\(Entity|Embeddable)#');
+    }
+
+    private function hasPropertyDoctrineIdTag(Property $property): bool
+    {
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        return $phpDocInfo ? $phpDocInfo->hasByType(IdTagValueNode::class) : false;
     }
 }

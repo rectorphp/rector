@@ -19,14 +19,14 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class SyncAnnotationParserCommand extends Command
 {
     /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
      * @var ClassSyncerInterface[]
      */
     private $classSyncers = [];
+
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
 
     /**
      * @var ParameterProvider
