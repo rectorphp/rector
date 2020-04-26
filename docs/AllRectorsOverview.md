@@ -2,6 +2,7 @@
 
 - [Projects](#projects)
 - [General](#general)
+---
 
 ## Projects
 
@@ -10508,6 +10509,7 @@ Change $this->_view->assign = 5; to $this->render("...", $templateData);
 <br>
 
 ---
+
 ## General
 
 - [Core](#core)

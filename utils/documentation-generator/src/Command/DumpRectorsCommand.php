@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DocumentationGenerator\Command;
 
+use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\AbstractCommand;
 use Rector\Core\Testing\Finder\RectorsFinder;
 use Rector\Utils\DocumentationGenerator\OutputFormatter\DumpRectors\MarkdownDumpRectorsOutputFormatter;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
@@ -38,18 +40,35 @@ final class DumpRectorsCommand extends AbstractCommand
     {
         $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[DOCS] Dump overview of all Rectors');
+
+        $this->addArgument(
+            Option::SOURCE,
+            InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
+            'Directories with Rector rules'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rulesRectors = $this->rectorsFinder->findInDirectories([
-            __DIR__ . '/../../../../rules',
-            __DIR__ . '/../../../../packages',
-        ]);
+        $source = $input->getArgument(Option::SOURCE);
 
-        $generalRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../src');
+        $isRectorProject = $source === [];
 
-        $this->markdownDumpRectorsOutputFormatter->format($generalRectors, $rulesRectors);
+        if ($source === []) {
+            // fallback to core Rectors
+            $rulesRectors = $this->rectorsFinder->findInDirectories([
+                __DIR__ . '/../../../../rules',
+                __DIR__ . '/../../../../packages',
+            ]);
+
+            $generalRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../src');
+        } else {
+            // custom directory
+            $rulesRectors = $this->rectorsFinder->findInDirectories($source);
+            $generalRectors = [];
+        }
+
+        $this->markdownDumpRectorsOutputFormatter->format($rulesRectors, $generalRectors, $isRectorProject);
 
         return ShellCode::SUCCESS;
     }
