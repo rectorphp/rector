@@ -20,6 +20,11 @@ use Throwable;
 final class NodeAnnotationReader
 {
     /**
+     * @var string[]
+     */
+    private $alreadyProvidedAnnotations = [];
+
+    /**
      * @var Reader
      */
     private $reader;
@@ -28,11 +33,6 @@ final class NodeAnnotationReader
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
-    /**
-     * @var string[]
-     */
-    private $alreadyProvidedAnnotations = [];
 
     public function __construct(Reader $reader, NodeNameResolver $nodeNameResolver)
     {

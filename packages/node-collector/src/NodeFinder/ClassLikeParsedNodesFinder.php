@@ -115,6 +115,19 @@ final class ClassLikeParsedNodesFinder
         return $this->parsedNodeCollector->findClass($name);
     }
 
+    private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName): bool
+    {
+        if ($currentClassName === null) {
+            return false;
+        }
+
+        if (! is_a($currentClassName, $desiredClass, true)) {
+            return false;
+        }
+
+        return $currentClassName !== $desiredClass;
+    }
+
     /**
      * @return Interface_[]
      */
@@ -133,18 +146,5 @@ final class ClassLikeParsedNodesFinder
         }
 
         return $implementerInterfaces;
-    }
-
-    private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName): bool
-    {
-        if ($currentClassName === null) {
-            return false;
-        }
-
-        if (! is_a($currentClassName, $desiredClass, true)) {
-            return false;
-        }
-
-        return $currentClassName !== $desiredClass;
     }
 }

@@ -115,6 +115,17 @@ final class VariableManipulator
         });
     }
 
+    private function isTestCaseExpectedVariable(Variable $variable): bool
+    {
+        /** @var string $className */
+        $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
+        if (! Strings::endsWith($className, 'Test')) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($variable, 'expect*');
+    }
+
     /**
      * Inspiration
      * @see \Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator::isReadOnlyProperty()
@@ -147,16 +158,5 @@ final class VariableManipulator
         }
 
         return true;
-    }
-
-    private function isTestCaseExpectedVariable(Variable $variable): bool
-    {
-        /** @var string $className */
-        $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
-        if (! Strings::endsWith($className, 'Test')) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($variable, 'expect*');
     }
 }

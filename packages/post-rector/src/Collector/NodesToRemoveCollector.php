@@ -17,14 +17,14 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class NodesToRemoveCollector implements NodeCollectorInterface
 {
     /**
-     * @var AffectedFilesCollector
-     */
-    private $affectedFilesCollector;
-
-    /**
      * @var Stmt[]|Node[]
      */
     private $nodesToRemove = [];
+
+    /**
+     * @var AffectedFilesCollector
+     */
+    private $affectedFilesCollector;
 
     public function __construct(AffectedFilesCollector $affectedFilesCollector)
     {

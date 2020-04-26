@@ -173,25 +173,6 @@ PHP
         $propertyPhpDocInfo->removeByType(VarTagValueNode::class);
     }
 
-    private function isNonBasicArrayType(Property $property, VarTagValueNode $varTagValueNode): bool
-    {
-        if (! $this->isArrayTypeNode($varTagValueNode)) {
-            return false;
-        }
-
-        $varTypeDocString = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPhpDocString(
-            $varTagValueNode->type,
-            $property
-        );
-
-        return $varTypeDocString !== 'array';
-    }
-
-    private function isArrayTypeNode(VarTagValueNode $varTagValueNode): bool
-    {
-        return $varTagValueNode->type instanceof ArrayTypeNode;
-    }
-
     private function removeDefaultValueForDoctrineCollection(Property $property, Type $propertyType): void
     {
         if (! $this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($propertyType)) {
@@ -214,5 +195,24 @@ PHP
 
         $onlyProperty = $property->props[0];
         $onlyProperty->default = $this->createNull();
+    }
+
+    private function isNonBasicArrayType(Property $property, VarTagValueNode $varTagValueNode): bool
+    {
+        if (! $this->isArrayTypeNode($varTagValueNode)) {
+            return false;
+        }
+
+        $varTypeDocString = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPhpDocString(
+            $varTagValueNode->type,
+            $property
+        );
+
+        return $varTypeDocString !== 'array';
+    }
+
+    private function isArrayTypeNode(VarTagValueNode $varTagValueNode): bool
+    {
+        return $varTagValueNode->type instanceof ArrayTypeNode;
     }
 }

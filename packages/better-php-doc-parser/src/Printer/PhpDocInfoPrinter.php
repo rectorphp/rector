@@ -153,6 +153,11 @@ final class PhpDocInfoPrinter
         return $output;
     }
 
+    private function removeExtraSpacesAfterAsterisk(string $phpDocString): string
+    {
+        return Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
+    }
+
     private function isPhpDocNodeEmpty(PhpDocNode $phpDocNode): bool
     {
         if (count($phpDocNode->children) === 0) {
@@ -393,10 +398,5 @@ final class PhpDocInfoPrinter
         }
 
         return implode($implodeChar, $content);
-    }
-
-    private function removeExtraSpacesAfterAsterisk(string $phpDocString): string
-    {
-        return Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
     }
 }

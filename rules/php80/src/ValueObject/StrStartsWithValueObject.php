@@ -10,6 +10,11 @@ use PhpParser\Node\Expr\FuncCall;
 final class StrStartsWithValueObject
 {
     /**
+     * @var bool
+     */
+    private $isPositive = false;
+
+    /**
      * @var FuncCall
      */
     private $funcCall;
@@ -18,11 +23,6 @@ final class StrStartsWithValueObject
      * @var Expr
      */
     private $haystackExpr;
-
-    /**
-     * @var bool
-     */
-    private $isPositive = false;
 
     /**
      * @var Expr

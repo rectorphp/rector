@@ -40,14 +40,14 @@ final class RemoveUnusedAliasRector extends AbstractRector
     private $useNamesAliasToName = [];
 
     /**
-     * @var DocAliasResolver
-     */
-    private $docAliasResolver;
-
-    /**
      * @var string[]
      */
     private $resolvedDocPossibleAliases = [];
+
+    /**
+     * @var DocAliasResolver
+     */
+    private $docAliasResolver;
 
     /**
      * @var UseNameAliasToNameResolver
@@ -148,6 +148,21 @@ PHP
         return $node;
     }
 
+    private function shouldSkipUse(Use_ $use): bool
+    {
+        return ! $this->hasUseAlias($use);
+    }
+
+    private function resolveSearchNode(Use_ $use): ?Node
+    {
+        $searchNode = $use->getAttribute(AttributeKey::PARENT_NODE);
+        if ($searchNode !== null) {
+            return $searchNode;
+        }
+
+        return $use->getAttribute(AttributeKey::NEXT_NODE);
+    }
+
     private function shouldSkip(string $lastName, string $aliasName): bool
     {
         // both are used → nothing to remove
@@ -157,6 +172,81 @@ PHP
 
         // part of some @Doc annotation
         return in_array($aliasName, $this->resolvedDocPossibleAliases, true);
+    }
+
+    private function refactorAliasName(string $aliasName, string $lastName, UseUse $useUse): void
+    {
+        // only alias name is used → use last name directly
+
+        if (! isset($this->resolvedNodeNames[$aliasName])) {
+            return;
+        }
+
+        // keep to differentiate 2 aliases classes
+        if (isset($this->useNamesAliasToName[$lastName]) && count($this->useNamesAliasToName[$lastName]) > 1) {
+            return;
+        }
+
+        $this->renameNameNode($this->resolvedNodeNames[$aliasName], $lastName);
+        $useUse->alias = null;
+    }
+
+    private function renameTraitUse(string $lastName, TraitUse $traitUse, $usedName): void
+    {
+        foreach ($traitUse->traits as $key => $traitName) {
+            if (! $this->areNamesEqual($traitName, $usedName)) {
+                continue;
+            }
+
+            $traitUse->traits[$key] = new Name($lastName);
+        }
+    }
+
+    private function renameClass(string $lastName, Class_ $class, $usedName): void
+    {
+        if ($class->name !== null && $this->areNamesEqual($class->name, $usedName)) {
+            $class->name = new Identifier($lastName);
+        }
+
+        if ($class->extends !== null && $this->areNamesEqual($class->extends, $usedName)) {
+            $class->extends = new Name($lastName);
+        }
+
+        foreach ($class->implements as $key => $implementNode) {
+            if ($this->areNamesEqual($implementNode, $usedName)) {
+                $class->implements[$key] = new Name($lastName);
+            }
+        }
+    }
+
+    private function renameParam(string $lastName, $parentNode, $usedName): void
+    {
+        if ($parentNode->type !== null && $this->areNamesEqual($parentNode->type, $usedName)) {
+            $parentNode->type = new Name($lastName);
+        }
+    }
+
+    private function renameNew(string $lastName, $parentNode, $usedName): void
+    {
+        if ($this->areNamesEqual($parentNode->class, $usedName)) {
+            $parentNode->class = new Name($lastName);
+        }
+    }
+
+    private function renameClassMethod(string $lastName, ClassMethod $classMethod, $usedName): void
+    {
+        if ($classMethod->returnType !== null && $this->areNamesEqual($classMethod->returnType, $usedName)) {
+            $classMethod->returnType = new Name($lastName);
+        }
+    }
+
+    private function renameInterface(string $lastName, Interface_ $parentNode, $usedName): void
+    {
+        foreach ($parentNode->extends as $key => $extendInterfaceName) {
+            if ($this->areNamesEqual($extendInterfaceName, $usedName)) {
+                $parentNode->extends[$key] = new Name($lastName);
+            }
+        }
     }
 
     /**
@@ -192,96 +282,6 @@ PHP
                 $this->renameInterface($lastName, $parentNode, $usedName);
             }
         }
-    }
-
-    private function resolveSearchNode(Use_ $use): ?Node
-    {
-        $searchNode = $use->getAttribute(AttributeKey::PARENT_NODE);
-        if ($searchNode !== null) {
-            return $searchNode;
-        }
-
-        return $use->getAttribute(AttributeKey::NEXT_NODE);
-    }
-
-    private function renameClass(string $lastName, Class_ $class, $usedName): void
-    {
-        if ($class->name !== null && $this->areNamesEqual($class->name, $usedName)) {
-            $class->name = new Identifier($lastName);
-        }
-
-        if ($class->extends !== null && $this->areNamesEqual($class->extends, $usedName)) {
-            $class->extends = new Name($lastName);
-        }
-
-        foreach ($class->implements as $key => $implementNode) {
-            if ($this->areNamesEqual($implementNode, $usedName)) {
-                $class->implements[$key] = new Name($lastName);
-            }
-        }
-    }
-
-    private function renameTraitUse(string $lastName, TraitUse $traitUse, $usedName): void
-    {
-        foreach ($traitUse->traits as $key => $traitName) {
-            if (! $this->areNamesEqual($traitName, $usedName)) {
-                continue;
-            }
-
-            $traitUse->traits[$key] = new Name($lastName);
-        }
-    }
-
-    private function renameParam(string $lastName, $parentNode, $usedName): void
-    {
-        if ($parentNode->type !== null && $this->areNamesEqual($parentNode->type, $usedName)) {
-            $parentNode->type = new Name($lastName);
-        }
-    }
-
-    private function renameNew(string $lastName, $parentNode, $usedName): void
-    {
-        if ($this->areNamesEqual($parentNode->class, $usedName)) {
-            $parentNode->class = new Name($lastName);
-        }
-    }
-
-    private function renameClassMethod(string $lastName, ClassMethod $classMethod, $usedName): void
-    {
-        if ($classMethod->returnType !== null && $this->areNamesEqual($classMethod->returnType, $usedName)) {
-            $classMethod->returnType = new Name($lastName);
-        }
-    }
-
-    private function renameInterface(string $lastName, Interface_ $parentNode, $usedName): void
-    {
-        foreach ($parentNode->extends as $key => $extendInterfaceName) {
-            if ($this->areNamesEqual($extendInterfaceName, $usedName)) {
-                $parentNode->extends[$key] = new Name($lastName);
-            }
-        }
-    }
-
-    private function refactorAliasName(string $aliasName, string $lastName, UseUse $useUse): void
-    {
-        // only alias name is used → use last name directly
-
-        if (! isset($this->resolvedNodeNames[$aliasName])) {
-            return;
-        }
-
-        // keep to differentiate 2 aliases classes
-        if (isset($this->useNamesAliasToName[$lastName]) && count($this->useNamesAliasToName[$lastName]) > 1) {
-            return;
-        }
-
-        $this->renameNameNode($this->resolvedNodeNames[$aliasName], $lastName);
-        $useUse->alias = null;
-    }
-
-    private function shouldSkipUse(Use_ $use): bool
-    {
-        return ! $this->hasUseAlias($use);
     }
 
     private function hasUseAlias(Use_ $use): bool

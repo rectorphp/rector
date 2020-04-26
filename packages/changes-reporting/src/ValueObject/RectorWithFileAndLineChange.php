@@ -9,9 +9,9 @@ use Rector\Core\Contract\Rector\RectorInterface;
 final class RectorWithFileAndLineChange
 {
     /**
-     * @var RectorInterface
+     * @var string
      */
-    private $rector;
+    private $realPath;
 
     /**
      * @var int
@@ -19,9 +19,9 @@ final class RectorWithFileAndLineChange
     private $line;
 
     /**
-     * @var string
+     * @var RectorInterface
      */
-    private $realPath;
+    private $rector;
 
     public function __construct(RectorInterface $rector, string $realPath, int $line)
     {

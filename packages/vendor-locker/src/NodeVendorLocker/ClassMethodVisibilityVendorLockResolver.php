@@ -50,21 +50,6 @@ final class ClassMethodVisibilityVendorLockResolver extends AbstractNodeVendorLo
         return $this->nodeNameResolver->isNames($classMethod, $interfaceMethods);
     }
 
-    /**
-     * @return string[]
-     */
-    private function getInterfaceMethods(string $className): array
-    {
-        $interfaces = class_implements($className);
-
-        $interfaceMethods = [];
-        foreach ($interfaces as $interface) {
-            $interfaceMethods = array_merge($interfaceMethods, get_class_methods($interface));
-        }
-
-        return $interfaceMethods;
-    }
-
     private function hasParentMethod(string $className, string $methodName): bool
     {
         $parentClasses = class_parents($className);
@@ -97,5 +82,20 @@ final class ClassMethodVisibilityVendorLockResolver extends AbstractNodeVendorLo
         }
 
         return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getInterfaceMethods(string $className): array
+    {
+        $interfaces = class_implements($className);
+
+        $interfaceMethods = [];
+        foreach ($interfaces as $interface) {
+            $interfaceMethods = array_merge($interfaceMethods, get_class_methods($interface));
+        }
+
+        return $interfaceMethods;
     }
 }

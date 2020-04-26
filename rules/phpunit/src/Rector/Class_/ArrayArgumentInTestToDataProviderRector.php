@@ -184,6 +184,176 @@ PHP
         ));
     }
 
+    private function refactorMethodCallWithConfiguration(MethodCall $methodCall, array $singleConfiguration): void
+    {
+        if (! $this->isMethodCallMatch($methodCall, $singleConfiguration)) {
+            return;
+        }
+
+        if (count($methodCall->args) !== 1) {
+            throw new ShouldNotHappenException();
+        }
+
+        // resolve value types
+        $firstArgumentValue = $methodCall->args[0]->value;
+        if (! $firstArgumentValue instanceof Array_) {
+            // nothing we can do
+            return;
+        }
+
+        // rename method to new one handling non-array input
+        $methodCall->name = new Identifier($singleConfiguration['new_method']);
+
+        $dataProviderMethodName = $this->createDataProviderMethodName($methodCall);
+
+        $this->dataProviderClassMethodRecipes[] = new DataProviderClassMethodRecipe(
+            $dataProviderMethodName,
+            $methodCall->args
+        );
+
+        $methodCall->args = [];
+
+        $paramAndArgs = $this->collectParamAndArgsFromArray(
+            $firstArgumentValue,
+            $singleConfiguration['variable_name']
+        );
+
+        foreach ($paramAndArgs as $paramAndArg) {
+            $methodCall->args[] = new Arg($paramAndArg->getVariable());
+        }
+
+        /** @var ClassMethod $classMethod */
+        $classMethod = $methodCall->getAttribute(AttributeKey::METHOD_NODE);
+
+        $this->refactorTestClassMethodParams($classMethod, $paramAndArgs);
+
+        // add data provider annotation
+        $dataProviderTagNode = $this->createDataProviderTagNode($dataProviderMethodName);
+
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo->addPhpDocTagNode($dataProviderTagNode);
+    }
+
+    /**
+     * @return ClassMethod[]
+     */
+    private function createDataProviderClassMethodsFromRecipes(): array
+    {
+        $dataProviderClassMethods = [];
+
+        foreach ($this->dataProviderClassMethodRecipes as $dataProviderClassMethodRecipe) {
+            $dataProviderClassMethods[] = $this->dataProviderClassMethodFactory->createFromRecipe(
+                $dataProviderClassMethodRecipe
+            );
+        }
+
+        return $dataProviderClassMethods;
+    }
+
+    private function isNestedArray(Array_ $array): bool
+    {
+        foreach ($array->items as $arrayItem) {
+            if ($arrayItem->value instanceof Array_) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return ParamAndArgValueObject[]
+     */
+    private function collectParamAndArgsFromNestedArray(Array_ $array, string $variableName): array
+    {
+        $paramAndArgs = [];
+        $i = 1;
+
+        foreach ($array->items as $arrayItem) {
+            /** @var Array_ $nestedArray */
+            $nestedArray = $arrayItem->value;
+            foreach ($nestedArray->items as $nestedArrayItem) {
+                $variable = new Variable($variableName . ($i === 1 ? '' : $i));
+
+                $itemsStaticType = $this->getStaticType($nestedArrayItem->value);
+                $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
+                ++$i;
+            }
+        }
+        return $paramAndArgs;
+    }
+
+    private function resolveItemStaticType(Array_ $array, bool $isNestedArray): Type
+    {
+        $staticTypes = [];
+        if (! $isNestedArray) {
+            foreach ($array->items as $arrayItem) {
+                $arrayItemStaticType = $this->getStaticType($arrayItem->value);
+                if ($arrayItemStaticType) {
+                    $staticTypes[] = $arrayItemStaticType;
+                }
+            }
+        }
+
+        return $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
+    }
+
+    /**
+     * @return ParamAndArgValueObject[]
+     */
+    private function collectParamAndArgsFromNonNestedArray(
+        Array_ $array,
+        string $variableName,
+        Type $itemsStaticType
+    ): array {
+        $i = 1;
+        $paramAndArgs = [];
+
+        foreach ($array->items as $arrayItem) {
+            $variable = new Variable($variableName . ($i === 1 ? '' : $i));
+
+            $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
+            ++$i;
+
+            if (! $arrayItem->value instanceof Array_) {
+                break;
+            }
+        }
+
+        return $paramAndArgs;
+    }
+
+    /**
+     * @param ParamAndArgValueObject[] $paramAndArgs
+     * @return Param[]
+     */
+    private function createParams(array $paramAndArgs): array
+    {
+        $params = [];
+        foreach ($paramAndArgs as $paramAndArg) {
+            $param = new Param($paramAndArg->getVariable());
+
+            $staticType = $paramAndArg->getType();
+
+            if ($staticType !== null && ! $staticType instanceof UnionType) {
+                $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType);
+                if ($phpNodeType !== null) {
+                    $param->type = $phpNodeType;
+                }
+            }
+
+            $params[] = $param;
+        }
+
+        return $params;
+    }
+
+    private function createParamTagNode(string $name, TypeNode $typeNode): AttributeAwareParamTagValueNode
+    {
+        return new AttributeAwareParamTagValueNode($typeNode, false, '$' . $name, '', false);
+    }
+
     /**
      * @param string[] $singleConfiguration
      */
@@ -251,175 +421,5 @@ PHP
         return new AttributeAwarePhpDocTagNode('@dataProvider', new GenericTagValueNode(
             $dataProviderMethodName . '()'
         ));
-    }
-
-    /**
-     * @return ClassMethod[]
-     */
-    private function createDataProviderClassMethodsFromRecipes(): array
-    {
-        $dataProviderClassMethods = [];
-
-        foreach ($this->dataProviderClassMethodRecipes as $dataProviderClassMethodRecipe) {
-            $dataProviderClassMethods[] = $this->dataProviderClassMethodFactory->createFromRecipe(
-                $dataProviderClassMethodRecipe
-            );
-        }
-
-        return $dataProviderClassMethods;
-    }
-
-    private function isNestedArray(Array_ $array): bool
-    {
-        foreach ($array->items as $arrayItem) {
-            if ($arrayItem->value instanceof Array_) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function resolveItemStaticType(Array_ $array, bool $isNestedArray): Type
-    {
-        $staticTypes = [];
-        if (! $isNestedArray) {
-            foreach ($array->items as $arrayItem) {
-                $arrayItemStaticType = $this->getStaticType($arrayItem->value);
-                if ($arrayItemStaticType) {
-                    $staticTypes[] = $arrayItemStaticType;
-                }
-            }
-        }
-
-        return $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
-    }
-
-    /**
-     * @param ParamAndArgValueObject[] $paramAndArgs
-     * @return Param[]
-     */
-    private function createParams(array $paramAndArgs): array
-    {
-        $params = [];
-        foreach ($paramAndArgs as $paramAndArg) {
-            $param = new Param($paramAndArg->getVariable());
-
-            $staticType = $paramAndArg->getType();
-
-            if ($staticType !== null && ! $staticType instanceof UnionType) {
-                $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType);
-                if ($phpNodeType !== null) {
-                    $param->type = $phpNodeType;
-                }
-            }
-
-            $params[] = $param;
-        }
-
-        return $params;
-    }
-
-    private function createParamTagNode(string $name, TypeNode $typeNode): AttributeAwareParamTagValueNode
-    {
-        return new AttributeAwareParamTagValueNode($typeNode, false, '$' . $name, '', false);
-    }
-
-    private function refactorMethodCallWithConfiguration(MethodCall $methodCall, array $singleConfiguration): void
-    {
-        if (! $this->isMethodCallMatch($methodCall, $singleConfiguration)) {
-            return;
-        }
-
-        if (count($methodCall->args) !== 1) {
-            throw new ShouldNotHappenException();
-        }
-
-        // resolve value types
-        $firstArgumentValue = $methodCall->args[0]->value;
-        if (! $firstArgumentValue instanceof Array_) {
-            // nothing we can do
-            return;
-        }
-
-        // rename method to new one handling non-array input
-        $methodCall->name = new Identifier($singleConfiguration['new_method']);
-
-        $dataProviderMethodName = $this->createDataProviderMethodName($methodCall);
-
-        $this->dataProviderClassMethodRecipes[] = new DataProviderClassMethodRecipe(
-            $dataProviderMethodName,
-            $methodCall->args
-        );
-
-        $methodCall->args = [];
-
-        $paramAndArgs = $this->collectParamAndArgsFromArray(
-            $firstArgumentValue,
-            $singleConfiguration['variable_name']
-        );
-
-        foreach ($paramAndArgs as $paramAndArg) {
-            $methodCall->args[] = new Arg($paramAndArg->getVariable());
-        }
-
-        /** @var ClassMethod $classMethod */
-        $classMethod = $methodCall->getAttribute(AttributeKey::METHOD_NODE);
-
-        $this->refactorTestClassMethodParams($classMethod, $paramAndArgs);
-
-        // add data provider annotation
-        $dataProviderTagNode = $this->createDataProviderTagNode($dataProviderMethodName);
-
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->addPhpDocTagNode($dataProviderTagNode);
-    }
-
-    /**
-     * @return ParamAndArgValueObject[]
-     */
-    private function collectParamAndArgsFromNonNestedArray(
-        Array_ $array,
-        string $variableName,
-        Type $itemsStaticType
-    ): array {
-        $i = 1;
-        $paramAndArgs = [];
-
-        foreach ($array->items as $arrayItem) {
-            $variable = new Variable($variableName . ($i === 1 ? '' : $i));
-
-            $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
-            ++$i;
-
-            if (! $arrayItem->value instanceof Array_) {
-                break;
-            }
-        }
-
-        return $paramAndArgs;
-    }
-
-    /**
-     * @return ParamAndArgValueObject[]
-     */
-    private function collectParamAndArgsFromNestedArray(Array_ $array, string $variableName): array
-    {
-        $paramAndArgs = [];
-        $i = 1;
-
-        foreach ($array->items as $arrayItem) {
-            /** @var Array_ $nestedArray */
-            $nestedArray = $arrayItem->value;
-            foreach ($nestedArray->items as $nestedArrayItem) {
-                $variable = new Variable($variableName . ($i === 1 ? '' : $i));
-
-                $itemsStaticType = $this->getStaticType($nestedArrayItem->value);
-                $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
-                ++$i;
-            }
-        }
-        return $paramAndArgs;
     }
 }

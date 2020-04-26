@@ -99,13 +99,6 @@ PHP
         return $node;
     }
 
-    private function hasProphesizeMethodCall(Class_ $node): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) {
-            return $this->isMethodCall($node, 'this', 'prophesize');
-        });
-    }
-
     private function shouldSkipClass(Class_ $class): bool
     {
         if (! $this->isInTestClass($class)) {
@@ -118,5 +111,12 @@ PHP
         }
 
         return $this->classManipulator->hasTrait($class, self::PROPHECY_TRAIT);
+    }
+
+    private function hasProphesizeMethodCall(Class_ $node): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) {
+            return $this->isMethodCall($node, 'this', 'prophesize');
+        });
     }
 }

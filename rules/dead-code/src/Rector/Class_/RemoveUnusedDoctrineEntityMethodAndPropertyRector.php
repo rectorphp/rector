@@ -224,6 +224,17 @@ PHP
         return $usedPropertyNames;
     }
 
+    private function isEntityId(Property $property): bool
+    {
+        /** @var PhpDocInfo|null $propertyPhpDocInfo */
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($propertyPhpDocInfo === null) {
+            return false;
+        }
+
+        return $propertyPhpDocInfo->hasByType(IdTagValueNode::class);
+    }
+
     private function removeInversedByOrMappedByOnRelatedProperty(Property $property): void
     {
         $otherRelationProperty = $this->getOtherRelationProperty($property);
@@ -278,16 +289,5 @@ PHP
         }
 
         return null;
-    }
-
-    private function isEntityId(Property $property): bool
-    {
-        /** @var PhpDocInfo|null $propertyPhpDocInfo */
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($propertyPhpDocInfo === null) {
-            return false;
-        }
-
-        return $propertyPhpDocInfo->hasByType(IdTagValueNode::class);
     }
 }

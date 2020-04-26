@@ -11,14 +11,14 @@ use Rector\NodeNestingScope\ValueObject\ControlStructure;
 final class ScopeAwareNodeFinder
 {
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var bool
      */
     private $isBreakingNodeFoundFirst = false;
+
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
 
     public function __construct(BetterNodeFinder $betterNodeFinder)
     {

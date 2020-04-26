@@ -177,6 +177,24 @@ final class MarkdownDumpRectorsOutputFormatter
         return $rectorClassParts[count($rectorClassParts) - 1];
     }
 
+    private function resolveClassFilePathOnGitHub(string $className): string
+    {
+        $classRelativePath = $this->getClassRelativePath($className);
+        return '/../master/' . $classRelativePath;
+    }
+
+    private function resolveFixtureDirectoryPathOnGitHub(string $className): ?string
+    {
+        $classRelativePath = $this->getClassRelativePath($className);
+
+        $fixtureDirectory = dirname($classRelativePath) . '/Fixture';
+        if (is_dir($fixtureDirectory)) {
+            return '/../master/' . $fixtureDirectory;
+        }
+
+        return null;
+    }
+
     private function printConfiguration(RectorInterface $rector, CodeSampleInterface $codeSample): void
     {
         if (! $codeSample instanceof ConfiguredCodeSample) {
@@ -218,24 +236,6 @@ final class MarkdownDumpRectorsOutputFormatter
     private function printCodeWrapped(string $content, string $format): void
     {
         $this->symfonyStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL));
-    }
-
-    private function resolveClassFilePathOnGitHub(string $className): string
-    {
-        $classRelativePath = $this->getClassRelativePath($className);
-        return '/../master/' . $classRelativePath;
-    }
-
-    private function resolveFixtureDirectoryPathOnGitHub(string $className): ?string
-    {
-        $classRelativePath = $this->getClassRelativePath($className);
-
-        $fixtureDirectory = dirname($classRelativePath) . '/Fixture';
-        if (is_dir($fixtureDirectory)) {
-            return '/../master/' . $fixtureDirectory;
-        }
-
-        return null;
     }
 
     private function getClassRelativePath(string $className): string

@@ -48,11 +48,6 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
         $this->symfonyStyle->writeln('</checkstyle>');
     }
 
-    private function escape(string $string): string
-    {
-        return htmlspecialchars($string, ENT_XML1 | ENT_COMPAT, 'UTF-8');
-    }
-
     private function writeFileErrors(FileDiff $fileDiff): void
     {
         $this->symfonyStyle->writeln(sprintf('<file name="%s">', $this->escape($fileDiff->getRelativeFilePath())));
@@ -87,5 +82,10 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
 
             $this->symfonyStyle->writeln('</file>');
         }
+    }
+
+    private function escape(string $string): string
+    {
+        return htmlspecialchars($string, ENT_XML1 | ENT_COMPAT, 'UTF-8');
     }
 }

@@ -409,25 +409,16 @@ final class PhpDocInfo
         return $throwsClasses;
     }
 
-    /**
-     * @return Type[]
-     */
-    private function getThrowsTypes(): array
+    private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
-        $throwsTypes = [];
-
-        foreach ($this->getTagsByName('throws') as $throwsPhpDocNode) {
-            if (! $throwsPhpDocNode->value instanceof ThrowsTagValueNode) {
-                continue;
+        /** @var AttributeAwareParamTagValueNode $paramTagValue */
+        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
+            if (Strings::match($paramTagValue->parameterName, '#^(\$)?' . $name . '$#')) {
+                return $paramTagValue;
             }
-
-            $throwsTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
-                $throwsPhpDocNode->value,
-                $this->node
-            );
         }
 
-        return $throwsTypes;
+        return null;
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode)
@@ -442,18 +433,6 @@ final class PhpDocInfo
     private function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
     {
         return $this->phpDocNode->getReturnTagValues()[0] ?? null;
-    }
-
-    private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
-    {
-        /** @var AttributeAwareParamTagValueNode $paramTagValue */
-        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
-            if (Strings::match($paramTagValue->parameterName, '#^(\$)?' . $name . '$#')) {
-                return $paramTagValue;
-            }
-        }
-
-        return null;
     }
 
     private function ensureTypeIsTagValueNode(string $type, string $location): void
@@ -497,5 +476,26 @@ final class PhpDocInfo
         }
 
         throw new NotImplementedException();
+    }
+
+    /**
+     * @return Type[]
+     */
+    private function getThrowsTypes(): array
+    {
+        $throwsTypes = [];
+
+        foreach ($this->getTagsByName('throws') as $throwsPhpDocNode) {
+            if (! $throwsPhpDocNode->value instanceof ThrowsTagValueNode) {
+                continue;
+            }
+
+            $throwsTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
+                $throwsPhpDocNode->value,
+                $this->node
+            );
+        }
+
+        return $throwsTypes;
     }
 }

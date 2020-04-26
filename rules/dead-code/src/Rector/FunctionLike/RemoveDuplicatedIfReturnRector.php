@@ -141,17 +141,6 @@ PHP
     }
 
     /**
-     * @param If_[][] $ifWithOnlyReturnsByHash
-     * @return If_[][]
-     */
-    private function filterOutSingleItemStmts(array $ifWithOnlyReturnsByHash): array
-    {
-        return array_filter($ifWithOnlyReturnsByHash, function (array $stmts) {
-            return count($stmts) >= 2;
-        });
-    }
-
-    /**
      * @param string[] $modifiedVariableNames
      */
     private function containsVariableNames(Node $node, array $modifiedVariableNames): bool
@@ -179,5 +168,16 @@ PHP
         });
 
         return $containsVariableNames;
+    }
+
+    /**
+     * @param If_[][] $ifWithOnlyReturnsByHash
+     * @return If_[][]
+     */
+    private function filterOutSingleItemStmts(array $ifWithOnlyReturnsByHash): array
+    {
+        return array_filter($ifWithOnlyReturnsByHash, function (array $stmts) {
+            return count($stmts) >= 2;
+        });
     }
 }
