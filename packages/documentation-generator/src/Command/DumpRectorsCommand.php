@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\DocumentationGenerator\Command;
+namespace Rector\DocumentationGenerator\Command;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\AbstractCommand;
 use Rector\Core\Testing\Finder\RectorsFinder;
-use Rector\Utils\DocumentationGenerator\OutputFormatter\DumpRectors\MarkdownDumpRectorsOutputFormatter;
+use Rector\DocumentationGenerator\OutputFormatter\MarkdownDumpRectorsOutputFormatter;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -50,7 +50,7 @@ final class DumpRectorsCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $source = $input->getArgument(Option::SOURCE);
+        $source = (array) $input->getArgument(Option::SOURCE);
 
         $isRectorProject = $source === [];
 

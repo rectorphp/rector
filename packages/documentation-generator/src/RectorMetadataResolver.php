@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\DocumentationGenerator;
+namespace Rector\DocumentationGenerator;
 
 use Nette\Utils\Strings;
 

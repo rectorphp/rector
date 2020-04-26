@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\DocumentationGenerator\OutputFormatter\DumpRectors;
+namespace Rector\DocumentationGenerator\OutputFormatter;
 
 use Nette\Utils\Strings;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\DocumentationGenerator\RectorMetadataResolver;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
-use Rector\Utils\DocumentationGenerator\RectorMetadataResolver;
 use ReflectionClass;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Yaml;
@@ -68,7 +68,7 @@ final class MarkdownDumpRectorsOutputFormatter
             $this->printRectorsWithHeadline($packageRectors, 'Projects');
             $this->printRectorsWithHeadline($generalRectors, 'General');
         } else {
-            $this->printRectors($packageRectors);
+            $this->printRectors($packageRectors, $isRectorProject);
         }
     }
 
@@ -105,10 +105,15 @@ final class MarkdownDumpRectorsOutputFormatter
         $this->symfonyStyle->newLine();
     }
 
-    private function printRector(RectorInterface $rector): void
+    private function printRector(RectorInterface $rector, bool $isRectorProject): void
     {
         $headline = $this->getRectorClassWithoutNamespace($rector);
-        $this->symfonyStyle->writeln(sprintf('### `%s`', $headline));
+
+        if ($isRectorProject) {
+            $this->symfonyStyle->writeln(sprintf('### `%s`', $headline));
+        } else {
+            $this->symfonyStyle->writeln(sprintf('## `%s`', $headline));
+        }
 
         $rectorClass = get_class($rector);
 
@@ -237,23 +242,28 @@ final class MarkdownDumpRectorsOutputFormatter
         $this->symfonyStyle->writeln('## ' . $headline);
         $this->symfonyStyle->newLine();
 
-        $this->printRectors($rectors);
+        $this->printRectors($rectors, true);
     }
 
     /**
      * @param RectorInterface[] $rectors
      */
-    private function printRectors(array $rectors): void
+    private function printRectors(array $rectors, bool $isRectorProject): void
     {
         $groupedRectors = $this->groupRectorsByPackage($rectors);
-        $this->printGroupsMenu($groupedRectors);
+
+        if ($isRectorProject) {
+            $this->printGroupsMenu($groupedRectors);
+        }
 
         foreach ($groupedRectors as $group => $rectors) {
-            $this->symfonyStyle->writeln('## ' . $group);
-            $this->symfonyStyle->newLine();
+            if ($isRectorProject) {
+                $this->symfonyStyle->writeln('## ' . $group);
+                $this->symfonyStyle->newLine();
+            }
 
             foreach ($rectors as $rector) {
-                $this->printRector($rector);
+                $this->printRector($rector, $isRectorProject);
             }
         }
     }

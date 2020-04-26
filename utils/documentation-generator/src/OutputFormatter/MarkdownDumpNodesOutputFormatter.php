@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\DocumentationGenerator\OutputFormatter\DumpNodes;
+namespace Rector\Utils\DocumentationGenerator\OutputFormatter;
 
 use Nette\Utils\Strings;
 use Rector\Utils\DocumentationGenerator\Node\NodeInfoResult;
