@@ -67,6 +67,7 @@
             "Rector\\ConsoleDiffer\\": "packages/console-differ/src",
             "Rector\\Core\\": "src",
             "Rector\\DeadCode\\": "rules/dead-code/src",
+            "Rector\\DocumentationGenerator\\": "packages/documentation-generator/src",
             "Rector\\DoctrineCodeQuality\\": "rules/doctrine-code-quality/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "rules/doctrine-gedmo-to-knplabs/src",
             "Rector\\Doctrine\\": "rules/doctrine/src",
