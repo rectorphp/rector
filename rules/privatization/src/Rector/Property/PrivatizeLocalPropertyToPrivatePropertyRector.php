@@ -156,17 +156,6 @@ PHP
         return false;
     }
 
-    private function shouldSkipProperty(Property $property): bool
-    {
-        // already private
-        if ($property->isPrivate()) {
-            return true;
-        }
-
-        // skip for now
-        return $property->isStatic();
-    }
-
     private function shouldSkipClass(?ClassLike $classLike): bool
     {
         if (! $classLike instanceof Class_) {
@@ -182,5 +171,16 @@ PHP
         }
 
         return $this->isObjectType($classLike, 'PHP_CodeSniffer\Sniffs\Sniff');
+    }
+
+    private function shouldSkipProperty(Property $property): bool
+    {
+        // already private
+        if ($property->isPrivate()) {
+            return true;
+        }
+
+        // skip for now
+        return $property->isStatic();
     }
 }

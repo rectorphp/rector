@@ -179,9 +179,21 @@ PHP
         return new ArrayItem($expr, null, false, [], true);
     }
 
-    private function isIteratorToArrayFuncCall(Expr $expr): bool
+    /**
+     * Special type, not resolved by PHPStan correctly.
+     * Has string keys, has to be skipped
+     */
+    private function isMethodCallWithFinderAndGetIterator(Expr $expr): bool
     {
-        return $this->isFuncCallName($expr, 'iterator_to_array');
+        if (! $expr instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $this->isObjectType($expr->var, Finder::class)) {
+            return false;
+        }
+
+        return $this->isName($expr->name, 'getIterator');
     }
 
     private function isConstantArrayTypeWithStringKeyType(Type $type): bool
@@ -200,20 +212,8 @@ PHP
         return false;
     }
 
-    /**
-     * Special type, not resolved by PHPStan correctly.
-     * Has string keys, has to be skipped
-     */
-    private function isMethodCallWithFinderAndGetIterator(Expr $expr): bool
+    private function isIteratorToArrayFuncCall(Expr $expr): bool
     {
-        if (! $expr instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isObjectType($expr->var, Finder::class)) {
-            return false;
-        }
-
-        return $this->isName($expr->name, 'getIterator');
+        return $this->isFuncCallName($expr, 'iterator_to_array');
     }
 }

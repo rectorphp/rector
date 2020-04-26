@@ -143,13 +143,18 @@ CODE_SAMPLE
         return $nextUsedVariable !== null;
     }
 
-    /**
-     * Nested assign, e.g "$oldValues = <$values> = 5;"
-     */
-    private function isNestedAssign(Assign $assign): bool
+    private function isVariableTypeInScope(Assign $assign): bool
     {
-        $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentNode instanceof Assign;
+        /** @var Scope|null $scope */
+        $scope = $assign->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        /** @var string $variableName */
+        $variableName = $this->getName($assign->var);
+
+        return ! $scope->hasVariableType($variableName)->no();
     }
 
     private function isPreviousVariablePartOfOverridingAssign(Assign $assign): bool
@@ -163,17 +168,12 @@ CODE_SAMPLE
         return $this->scopeNestingComparator->areScopeNestingEqual($assign, $previousVariableAssign);
     }
 
-    private function isVariableTypeInScope(Assign $assign): bool
+    /**
+     * Nested assign, e.g "$oldValues = <$values> = 5;"
+     */
+    private function isNestedAssign(Assign $assign): bool
     {
-        /** @var Scope|null $scope */
-        $scope = $assign->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
-        /** @var string $variableName */
-        $variableName = $this->getName($assign->var);
-
-        return ! $scope->hasVariableType($variableName)->no();
+        $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        return $parentNode instanceof Assign;
     }
 }

@@ -19,14 +19,14 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode impl
     private $callback;
 
     /**
-     * @var bool|null
-     */
-    private $strict;
-
-    /**
      * @var mixed[]|string|null
      */
     private $choices;
+
+    /**
+     * @var bool|null
+     */
+    private $strict;
 
     /**
      * @param mixed[]|string|null $callback

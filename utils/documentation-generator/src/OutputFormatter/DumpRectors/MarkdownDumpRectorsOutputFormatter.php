@@ -51,48 +51,24 @@ final class MarkdownDumpRectorsOutputFormatter
     }
 
     /**
-     * @param RectorInterface[] $genericRectors
      * @param RectorInterface[] $packageRectors
+     * @param RectorInterface[] $generalRectors
      */
-    public function format(array $genericRectors, array $packageRectors): void
+    public function format(array $packageRectors, array $generalRectors, bool $isRectorProject): void
     {
-        $totalRectorCount = count($genericRectors) + count($packageRectors);
+        $totalRectorCount = count($packageRectors) + count($generalRectors);
 
         $this->symfonyStyle->writeln(sprintf('# All %d Rectors Overview', $totalRectorCount));
         $this->symfonyStyle->newLine();
 
-        $this->symfonyStyle->writeln('- [Projects](#projects)');
-        $this->symfonyStyle->writeln('- [General](#general)');
-        $this->symfonyStyle->newLine();
+        if ($isRectorProject) {
+            $this->symfonyStyle->writeln('- [Projects](#projects)');
+            $this->symfonyStyle->writeln('- [General](#general)');
 
-        $this->symfonyStyle->writeln('## Projects');
-        $this->symfonyStyle->newLine();
-
-        $this->printRectors($packageRectors);
-
-        $this->symfonyStyle->writeln('---');
-
-        $this->symfonyStyle->writeln('## General');
-        $this->symfonyStyle->newLine();
-
-        $this->printRectors($genericRectors);
-    }
-
-    /**
-     * @param RectorInterface[] $rectors
-     */
-    private function printRectors(array $rectors): void
-    {
-        $groupedRectors = $this->groupRectorsByPackage($rectors);
-        $this->printGroupsMenu($groupedRectors);
-
-        foreach ($groupedRectors as $group => $rectors) {
-            $this->symfonyStyle->writeln('## ' . $group);
-            $this->symfonyStyle->newLine();
-
-            foreach ($rectors as $rector) {
-                $this->printRector($rector);
-            }
+            $this->printRectorsWithHeadline($packageRectors, 'Projects');
+            $this->printRectorsWithHeadline($generalRectors, 'General');
+        } else {
+            $this->printRectors($packageRectors);
         }
     }
 
@@ -177,6 +153,24 @@ final class MarkdownDumpRectorsOutputFormatter
         return $rectorClassParts[count($rectorClassParts) - 1];
     }
 
+    private function resolveClassFilePathOnGitHub(string $className): string
+    {
+        $classRelativePath = $this->getClassRelativePath($className);
+        return '/../master/' . $classRelativePath;
+    }
+
+    private function resolveFixtureDirectoryPathOnGitHub(string $className): ?string
+    {
+        $classRelativePath = $this->getClassRelativePath($className);
+
+        $fixtureDirectory = dirname($classRelativePath) . '/Fixture';
+        if (is_dir($fixtureDirectory)) {
+            return '/../master/' . $fixtureDirectory;
+        }
+
+        return null;
+    }
+
     private function printConfiguration(RectorInterface $rector, CodeSampleInterface $codeSample): void
     {
         if (! $codeSample instanceof ConfiguredCodeSample) {
@@ -220,29 +214,47 @@ final class MarkdownDumpRectorsOutputFormatter
         $this->symfonyStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL));
     }
 
-    private function resolveClassFilePathOnGitHub(string $className): string
-    {
-        $classRelativePath = $this->getClassRelativePath($className);
-        return '/../master/' . $classRelativePath;
-    }
-
-    private function resolveFixtureDirectoryPathOnGitHub(string $className): ?string
-    {
-        $classRelativePath = $this->getClassRelativePath($className);
-
-        $fixtureDirectory = dirname($classRelativePath) . '/Fixture';
-        if (is_dir($fixtureDirectory)) {
-            return '/../master/' . $fixtureDirectory;
-        }
-
-        return null;
-    }
-
     private function getClassRelativePath(string $className): string
     {
         $rectorReflectionClass = new ReflectionClass($className);
         $rectorSmartFileInfo = new SmartFileInfo($rectorReflectionClass->getFileName());
 
         return $rectorSmartFileInfo->getRelativeFilePathFromCwd();
+    }
+
+    /**
+     * @param RectorInterface[] $rectors
+     */
+    private function printRectorsWithHeadline(array $rectors, string $headline): void
+    {
+        if (count($rectors) === 0) {
+            return;
+        }
+
+        $this->symfonyStyle->writeln('---');
+        $this->symfonyStyle->newLine();
+
+        $this->symfonyStyle->writeln('## ' . $headline);
+        $this->symfonyStyle->newLine();
+
+        $this->printRectors($rectors);
+    }
+
+    /**
+     * @param RectorInterface[] $rectors
+     */
+    private function printRectors(array $rectors): void
+    {
+        $groupedRectors = $this->groupRectorsByPackage($rectors);
+        $this->printGroupsMenu($groupedRectors);
+
+        foreach ($groupedRectors as $group => $rectors) {
+            $this->symfonyStyle->writeln('## ' . $group);
+            $this->symfonyStyle->newLine();
+
+            foreach ($rectors as $rector) {
+                $this->printRector($rector);
+            }
+        }
     }
 }

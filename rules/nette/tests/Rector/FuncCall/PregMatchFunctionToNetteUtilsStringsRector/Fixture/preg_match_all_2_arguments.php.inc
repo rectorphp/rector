@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Nette\Tests\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector\Fixture;
+namespace Rector\Nette\Tests\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector\Fixture;
 
-class PregMatchAll
+class PregMatchAll2Arguments
 {
     public function run()
     {
@@ -13,8 +13,6 @@ class PregMatchAll
         if (preg_match_all('#Hi#', $content)) {
             // matched!
         }
-
-        preg_match_all('#Hi#', $content, $matches);
     }
 }
 
@@ -22,9 +20,9 @@ class PregMatchAll
 -----
 <?php
 
-namespace Rector\Nette\Tests\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector\Fixture;
+namespace Rector\Nette\Tests\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector\Fixture;
 
-class PregMatchAll
+class PregMatchAll2Arguments
 {
     public function run()
     {
@@ -35,8 +33,6 @@ class PregMatchAll
         if (\Nette\Utils\Strings::matchAll($content, '#Hi#')) {
             // matched!
         }
-
-        $matches = \Nette\Utils\Strings::matchAll($content, '#Hi#');
     }
 }
 

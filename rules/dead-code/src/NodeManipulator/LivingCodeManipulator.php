@@ -103,6 +103,17 @@ final class LivingCodeManipulator
         return [$expr];
     }
 
+    private function isNestedExpr($expr): bool
+    {
+        return $expr instanceof Cast ||
+            $expr instanceof Empty_ ||
+            $expr instanceof UnaryMinus ||
+            $expr instanceof UnaryPlus ||
+            $expr instanceof BitwiseNot ||
+            $expr instanceof BooleanNot ||
+            $expr instanceof Clone_;
+    }
+
     private function isBinaryOpWithoutChange($expr): bool
     {
         return $expr instanceof BinaryOp
@@ -113,16 +124,5 @@ final class LivingCodeManipulator
                 $expr instanceof BooleanOr ||
                 $expr instanceof Coalesce
             );
-    }
-
-    private function isNestedExpr($expr): bool
-    {
-        return $expr instanceof Cast ||
-            $expr instanceof Empty_ ||
-            $expr instanceof UnaryMinus ||
-            $expr instanceof UnaryPlus ||
-            $expr instanceof BitwiseNot ||
-            $expr instanceof BooleanNot ||
-            $expr instanceof Clone_;
     }
 }

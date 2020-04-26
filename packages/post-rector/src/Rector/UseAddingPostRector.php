@@ -118,6 +118,19 @@ final class UseAddingPostRector extends AbstractPostRector
         return new RectorDefinition('Post Rector that adds use statements');
     }
 
+    private function getSmartFileInfo(array $nodes): ?SmartFileInfo
+    {
+        foreach ($nodes as $node) {
+            /** @var SmartFileInfo|null $smartFileInfo */
+            $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+            if ($smartFileInfo !== null) {
+                return $smartFileInfo;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Prevents
      * @param FullyQualifiedObjectType[] $useImportTypes
@@ -136,18 +149,5 @@ final class UseAddingPostRector extends AbstractPostRector
         }
 
         return $namespacedUseImportTypes;
-    }
-
-    private function getSmartFileInfo(array $nodes): ?SmartFileInfo
-    {
-        foreach ($nodes as $node) {
-            /** @var SmartFileInfo|null $smartFileInfo */
-            $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-            if ($smartFileInfo !== null) {
-                return $smartFileInfo;
-            }
-        }
-
-        return null;
     }
 }

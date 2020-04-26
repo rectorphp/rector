@@ -56,8 +56,8 @@ final class PSR4AutoloadPathsProvider
      */
     private function removeEmptyNamespaces(array $psr4Autoloads): array
     {
-        return array_filter($psr4Autoloads, function ($value): bool {
-            return $value !== '';
+        return array_filter($psr4Autoloads, function (string $psr4Autoload): bool {
+            return $psr4Autoload !== '';
         }, ARRAY_FILTER_USE_KEY);
     }
 }

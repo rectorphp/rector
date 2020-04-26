@@ -34,6 +34,11 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
     private $methodsByType = [];
 
     /**
+     * @var Comment[]
+     */
+    private $returnComments = [];
+
+    /**
      * @var NodeTransformer
      */
     private $nodeTransformer;
@@ -42,11 +47,6 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
      * @var PhpDocInfo|null
      */
     private $returnPhpDocInfo;
-
-    /**
-     * @var Comment[]
-     */
-    private $returnComments = [];
 
     /**
      * @param string[][] $methodsByType

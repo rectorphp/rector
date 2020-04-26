@@ -6,6 +6,9 @@ namespace Rector\Core\PhpDoc;
 
 use Nette\Utils\Strings;
 
+/**
+ * @see \Rector\Core\Tests\PhpDoc\PhpDocTagsFinderTest
+ */
 final class PhpDocTagsFinder
 {
     /**
@@ -27,10 +30,12 @@ final class PhpDocTagsFinder
         }
 
         $matchingTags = array_merge(...$result);
-        $explode = static function ($matchingTag) use ($tagName): array {
+
+        $explode = static function (string $matchingTag) use ($tagName): array {
             // This is required as @return, for example, can be written as "@return ClassOne|ClassTwo|ClassThree"
             return explode('|', str_replace($tagName . ' ', '', $matchingTag));
         };
+
         $matchingTags = array_map($explode, $matchingTags);
 
         return array_merge(...$matchingTags);

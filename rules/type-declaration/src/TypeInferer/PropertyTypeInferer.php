@@ -71,6 +71,15 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
         return new MixedType();
     }
 
+    private function shouldUnionWithDefaultValue(Type $defaultValueType, Type $type): bool
+    {
+        if ($defaultValueType instanceof MixedType) {
+            return false;
+        }
+
+        return ! $this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type);
+    }
+
     private function unionWithDefaultValueType(Type $type, Type $defaultValueType): Type
     {
         // default type has bigger priority than @var type, if not nullable type
@@ -80,14 +89,5 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
 
         $types = [$type, $defaultValueType];
         return $this->typeFactory->createMixedPassedOrUnionType($types);
-    }
-
-    private function shouldUnionWithDefaultValue(Type $defaultValueType, Type $type): bool
-    {
-        if ($defaultValueType instanceof MixedType) {
-            return false;
-        }
-
-        return ! $this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type);
     }
 }

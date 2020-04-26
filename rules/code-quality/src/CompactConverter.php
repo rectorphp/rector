@@ -24,6 +24,19 @@ final class CompactConverter
         $this->valueResolver = $valueResolver;
     }
 
+    public function hasAllArgumentsNamed(FuncCall $funcCall): bool
+    {
+        foreach ($funcCall->args as $arg) {
+            /** @var string|null $variableName */
+            $variableName = $this->valueResolver->getValue($arg->value);
+            if (! is_string($variableName)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function convertToArray(FuncCall $funcCall): Array_
     {
         $array = new Array_();

@@ -152,17 +152,6 @@ final class CreateRectorCommand extends Command
         return ShellCode::SUCCESS;
     }
 
-    private function addOneMoreRectorNesting(string $content): string
-    {
-        $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\Core\\');
-
-        return Strings::replace(
-            $content,
-            '#use Rector\\\\AbstractRector;#',
-            'use Rector\\Core\\Rector\\AbstractRector;'
-        );
-    }
-
     /**
      * @param SmartFileInfo[] $templateFileInfos
      */
@@ -205,5 +194,16 @@ final class CreateRectorCommand extends Command
             PHP_EOL . PHP_EOL,
             $this->testCasePath
         ));
+    }
+
+    private function addOneMoreRectorNesting(string $content): string
+    {
+        $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\Core\\');
+
+        return Strings::replace(
+            $content,
+            '#use Rector\\\\AbstractRector;#',
+            'use Rector\\Core\\Rector\\AbstractRector;'
+        );
     }
 }

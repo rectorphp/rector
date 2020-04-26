@@ -19,14 +19,14 @@ final class ConfiguredCodeSample implements CodeSampleInterface
     private $codeAfter;
 
     /**
-     * @var mixed[]
-     */
-    private $configuration = [];
-
-    /**
      * @var string|null
      */
     private $extraFileContent;
+
+    /**
+     * @var mixed[]
+     */
+    private $configuration = [];
 
     /**
      * @param mixed[] $configuration

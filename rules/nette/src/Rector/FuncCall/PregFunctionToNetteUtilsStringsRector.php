@@ -18,7 +18,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -35,8 +34,6 @@ final class PregFunctionToNetteUtilsStringsRector extends AbstractRector
      * @var string[]
      */
     private const FUNCTION_NAME_TO_METHOD_NAME = [
-        'preg_match' => 'match',
-        'preg_match_all' => 'matchAll',
         'preg_split' => 'split',
         'preg_replace' => 'replace',
         'preg_replace_callback' => 'replace',
@@ -44,7 +41,7 @@ final class PregFunctionToNetteUtilsStringsRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Use Nette\Utils\Strings over bare preg_* functions', [
+        return new RectorDefinition('Use Nette\Utils\Strings over bare preg_split() and preg_replace() functions', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
@@ -52,7 +49,7 @@ class SomeClass
     public function run()
     {
         $content = 'Hi my name is Tom';
-        preg_match('#Hi#', $content, $matches);
+        $splitted = preg_split('#Hi#', $content);
     }
 }
 PHP
@@ -65,7 +62,7 @@ class SomeClass
     public function run()
     {
         $content = 'Hi my name is Tom';
-        $matches = Strings::match($content, '#Hi#');
+        $splitted = \Nette\Utils\Strings::split($content, '#Hi#');
     }
 }
 PHP
@@ -131,11 +128,6 @@ PHP
         // skip assigns, might be used with different return value
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Assign) {
-            if ($methodName === 'matchAll') {
-                // use count
-                return new FuncCall(new Name('count'), [new Arg($matchStaticCall)]);
-            }
-
             if ($methodName === 'split') {
                 return $this->processSplit($funcCall, $matchStaticCall);
             }
@@ -153,18 +145,6 @@ PHP
         }
 
         return $matchStaticCall;
-    }
-
-    /**
-     * @param FuncCall|StaticCall|Assign $refactoredFuncCall
-     */
-    private function createBoolCast(?Node $parentNode, Node $refactoredFuncCall): Bool_
-    {
-        if ($parentNode instanceof Return_ && $refactoredFuncCall instanceof Assign) {
-            $refactoredFuncCall = $refactoredFuncCall->expr;
-        }
-
-        return new Bool_($refactoredFuncCall);
     }
 
     private function createMatchStaticCall(FuncCall $funcCall, string $methodName): StaticCall

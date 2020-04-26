@@ -89,15 +89,6 @@ final class ClassMethodAssignManipulator
         $classMethod->stmts[] = new Expression($assign);
     }
 
-    private function isExplicitlyReferenced(Node $node): bool
-    {
-        if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
-            return $node->byRef;
-        }
-
-        return false;
-    }
-
     /**
      * @param Assign[] $variableAssigns
      * @return Assign[]
@@ -193,6 +184,15 @@ final class ClassMethodAssignManipulator
             if ($this->nodeNameResolver->isName($constructorParameter->var, $name)) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private function isExplicitlyReferenced(Node $node): bool
+    {
+        if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
+            return $node->byRef;
         }
 
         return false;

@@ -113,6 +113,13 @@ final class PhpDocInfoFactory
         return $phpDocInfo;
     }
 
+    private function parseTokensToPhpDocNode(array $tokens): AttributeAwarePhpDocNode
+    {
+        $tokenIterator = new TokenIterator($tokens);
+
+        return $this->phpDocParser->parse($tokenIterator);
+    }
+
     /**
      * Needed for printing
      */
@@ -132,12 +139,5 @@ final class PhpDocInfoFactory
         if ($startEndValueObject !== null) {
             $attributeAwarePhpDocNode->setAttribute(Attribute::LAST_TOKEN_POSITION, $startEndValueObject->getEnd());
         }
-    }
-
-    private function parseTokensToPhpDocNode(array $tokens): AttributeAwarePhpDocNode
-    {
-        $tokenIterator = new TokenIterator($tokens);
-
-        return $this->phpDocParser->parse($tokenIterator);
     }
 }

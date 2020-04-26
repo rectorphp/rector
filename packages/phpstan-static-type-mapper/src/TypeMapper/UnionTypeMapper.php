@@ -143,6 +143,16 @@ final class UnionTypeMapper implements TypeMapperInterface
         return implode('|', $docStrings);
     }
 
+    private function shouldSkipIterable(UnionType $unionType): bool
+    {
+        $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
+        if ($unionTypeAnalysis === null) {
+            return false;
+        }
+
+        return $unionTypeAnalysis->hasIterable() && $unionTypeAnalysis->hasArray();
+    }
+
     private function matchArrayTypes(UnionType $unionType): ?Identifier
     {
         $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
@@ -243,25 +253,6 @@ final class UnionTypeMapper implements TypeMapperInterface
         return null;
     }
 
-    private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType): bool
-    {
-        if (is_a($firstType->getClassName(), $secondType->getClassName(), true)) {
-            return true;
-        }
-
-        return is_a($secondType->getClassName(), $firstType->getClassName(), true);
-    }
-
-    private function shouldSkipIterable(UnionType $unionType): bool
-    {
-        $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
-        if ($unionTypeAnalysis === null) {
-            return false;
-        }
-
-        return $unionTypeAnalysis->hasIterable() && $unionTypeAnalysis->hasArray();
-    }
-
     private function isUnionTypeWithTypeClassNameOnly(UnionType $unionType): bool
     {
         foreach ($unionType->getTypes() as $unionedType) {
@@ -271,5 +262,14 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return true;
+    }
+
+    private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType): bool
+    {
+        if (is_a($firstType->getClassName(), $secondType->getClassName(), true)) {
+            return true;
+        }
+
+        return is_a($secondType->getClassName(), $firstType->getClassName(), true);
     }
 }

@@ -50,14 +50,14 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
     private $columnDefinition;
 
     /**
-     * @var mixed[]|null
-     */
-    private $options;
-
-    /**
      * @var bool
      */
     private $isNullableUppercase = false;
+
+    /**
+     * @var mixed[]|null
+     */
+    private $options;
 
     /**
      * @param mixed[] $options

@@ -113,6 +113,23 @@ PHP
         return $node;
     }
 
+    private function shouldSkipPreviousStmt(Node $node, int $i, Stmt $stmt): bool
+    {
+        // we look only for 2+ stmts
+        if (! isset($node->stmts[$i - 1])) {
+            return true;
+        }
+
+        // we look for 2 methods calls in a row
+        if (! $stmt instanceof Expression) {
+            return true;
+        }
+
+        $prevStmt = $node->stmts[$i - 1];
+
+        return ! $prevStmt instanceof Expression;
+    }
+
     private function isBothMethodCallMatch(Expression $firstStmt, Expression $secondStmt): bool
     {
         if (! $firstStmt->expr instanceof MethodCall) {
@@ -183,22 +200,5 @@ PHP
         }
 
         return null;
-    }
-
-    private function shouldSkipPreviousStmt(Node $node, int $i, Stmt $stmt): bool
-    {
-        // we look only for 2+ stmts
-        if (! isset($node->stmts[$i - 1])) {
-            return true;
-        }
-
-        // we look for 2 methods calls in a row
-        if (! $stmt instanceof Expression) {
-            return true;
-        }
-
-        $prevStmt = $node->stmts[$i - 1];
-
-        return ! $prevStmt instanceof Expression;
     }
 }

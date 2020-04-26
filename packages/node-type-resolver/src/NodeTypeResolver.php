@@ -265,6 +265,23 @@ final class NodeTypeResolver
         return false;
     }
 
+    private function isMatchingUnionType(Type $requiredType, Type $resolvedType): bool
+    {
+        if (! $resolvedType instanceof UnionType) {
+            return false;
+        }
+
+        foreach ($resolvedType->getTypes() as $unionedType) {
+            if (! $unionedType->equals($requiredType)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     private function resolveFirstType(Node $node): Type
     {
         foreach ($this->nodeTypeResolvers as $nodeTypeResolver) {
@@ -328,22 +345,5 @@ final class NodeTypeResolver
         $className = $this->nodeNameResolver->getName($node);
 
         return $className === null || Strings::contains($className, 'AnonymousClass');
-    }
-
-    private function isMatchingUnionType(Type $requiredType, Type $resolvedType): bool
-    {
-        if (! $resolvedType instanceof UnionType) {
-            return false;
-        }
-
-        foreach ($resolvedType->getTypes() as $unionedType) {
-            if (! $unionedType->equals($requiredType)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
     }
 }

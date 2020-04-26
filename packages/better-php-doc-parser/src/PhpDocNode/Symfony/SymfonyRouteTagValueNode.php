@@ -35,6 +35,16 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     private $host;
 
     /**
+     * @var string
+     */
+    private $requirementsKeyValueSeparator = '=';
+
+    /**
+     * @var string|null
+     */
+    private $condition;
+
+    /**
      * @var string[]
      */
     private $methods = [];
@@ -55,19 +65,9 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     private $requirements = [];
 
     /**
-     * @var string
-     */
-    private $requirementsKeyValueSeparator = '=';
-
-    /**
      * @var string[]
      */
     private $localizedPaths = [];
-
-    /**
-     * @var string|null
-     */
-    private $condition;
 
     /**
      * @param string[] $localizedPaths
@@ -122,7 +122,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
             $contentItems['path'] = $this->printArrayItemWithSeparator($this->localizedPaths, 'path', '=');
         }
 
-        if ($this->name) {
+        if ($this->name !== null) {
             $contentItems['name'] = $this->printValueWithOptionalQuotes('name', $this->name);
         }
 

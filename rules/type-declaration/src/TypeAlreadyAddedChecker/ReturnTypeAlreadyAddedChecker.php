@@ -114,6 +114,25 @@ final class ReturnTypeAlreadyAddedChecker
         return $this->isStaticTypeIterable($returnType);
     }
 
+    /**
+     * @param Identifier|Name|NullableType|PhpParserUnionType $returnTypeNode
+     */
+    private function isUnionCoType(Node $returnTypeNode, Type $type): bool
+    {
+        if (! $type instanceof UnionType) {
+            return false;
+        }
+
+        // skip nullable type
+        $nullType = new NullType();
+        if ($type->isSuperTypeOf($nullType)->yes()) {
+            return false;
+        }
+
+        $classMethodReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnTypeNode);
+        return $type->isSuperTypeOf($classMethodReturnType)->yes();
+    }
+
     private function isStaticTypeIterable(Type $type): bool
     {
         if ($this->isArrayIterableOrIteratorType($type)) {
@@ -144,24 +163,5 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         return $type instanceof ObjectType && $type->getClassName() === Iterator::class;
-    }
-
-    /**
-     * @param Identifier|Name|NullableType|PhpParserUnionType $returnTypeNode
-     */
-    private function isUnionCoType(Node $returnTypeNode, Type $type): bool
-    {
-        if (! $type instanceof UnionType) {
-            return false;
-        }
-
-        // skip nullable type
-        $nullType = new NullType();
-        if ($type->isSuperTypeOf($nullType)->yes()) {
-            return false;
-        }
-
-        $classMethodReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnTypeNode);
-        return $type->isSuperTypeOf($classMethodReturnType)->yes();
     }
 }

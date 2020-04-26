@@ -196,6 +196,18 @@ PHP
     }
 
     /**
+     * @param StaticCall|FuncCall|MethodCall $node
+     */
+    private function resolveNodeName(Node $node): ?string
+    {
+        if ($node instanceof FuncCall) {
+            return $this->getName($node);
+        }
+
+        return $this->getName($node->name);
+    }
+
+    /**
      * @return Expr[]
      */
     private function resolveFuncCallDefaultParamValues(string $nodeName): array
@@ -240,17 +252,5 @@ PHP
         }
 
         return $defaultValues;
-    }
-
-    /**
-     * @param StaticCall|FuncCall|MethodCall $node
-     */
-    private function resolveNodeName(Node $node): ?string
-    {
-        if ($node instanceof FuncCall) {
-            return $this->getName($node);
-        }
-
-        return $this->getName($node->name);
     }
 }

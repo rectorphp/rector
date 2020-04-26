@@ -179,20 +179,6 @@ final class NameImporter
         return count($name->parts) === 1;
     }
 
-    private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void
-    {
-        if ($this->useNodesToAddCollector->hasImport($name, $fullyQualifiedObjectType)) {
-            return;
-        }
-
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof FuncCall) {
-            $this->useNodesToAddCollector->addFunctionUseImport($name, $fullyQualifiedObjectType);
-        } else {
-            $this->useNodesToAddCollector->addUseImport($name, $fullyQualifiedObjectType);
-        }
-    }
-
     private function isNonExistingClassLikeAndFunctionFullyQualifiedName(Name $name): bool
     {
         if (! $name instanceof FullyQualified) {
@@ -205,5 +191,19 @@ final class NameImporter
         }
 
         return ! function_exists($name->toString());
+    }
+
+    private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void
+    {
+        if ($this->useNodesToAddCollector->hasImport($name, $fullyQualifiedObjectType)) {
+            return;
+        }
+
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof FuncCall) {
+            $this->useNodesToAddCollector->addFunctionUseImport($name, $fullyQualifiedObjectType);
+        } else {
+            $this->useNodesToAddCollector->addUseImport($name, $fullyQualifiedObjectType);
+        }
     }
 }

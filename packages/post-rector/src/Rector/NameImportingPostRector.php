@@ -17,6 +17,11 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class NameImportingPostRector extends AbstractPostRector
 {
     /**
+     * @var bool
+     */
+    private $importDocBlocks = false;
+
+    /**
      * @var ParameterProvider
      */
     private $parameterProvider;
@@ -25,11 +30,6 @@ final class NameImportingPostRector extends AbstractPostRector
      * @var NameImporter
      */
     private $nameImporter;
-
-    /**
-     * @var bool
-     */
-    private $importDocBlocks = false;
 
     /**
      * @var DocBlockNameImporter

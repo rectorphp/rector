@@ -114,29 +114,6 @@ final class AnnotationContentResolver
         return implode('', $tokenContents);
     }
 
-    private function cleanMultilineAnnotationContent(string $annotationContent): string
-    {
-        return Strings::replace($annotationContent, '#(\s+)\*(\s+)#m', '$1$3');
-    }
-
-    private function tryStartWithKey(string $name, bool $start, TokenIterator $localTokenIterator): bool
-    {
-        if ($start) {
-            return true;
-        }
-
-        if ($localTokenIterator->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER) &&
-            $localTokenIterator->currentTokenValue() === $name
-        ) {
-            // consume "=" as well
-            $localTokenIterator->next();
-            $localTokenIterator->tryConsumeTokenType(Lexer::TOKEN_EQUAL);
-            return true;
-        }
-
-        return false;
-    }
-
     private function appendPreviousWhitespace(TokenIterator $tokenIterator, string $annotationContent): string
     {
         // is space?
@@ -160,5 +137,28 @@ final class AnnotationContentResolver
 
         // get the space
         return $annotationContent . $previousWhitespaceToken[0];
+    }
+
+    private function cleanMultilineAnnotationContent(string $annotationContent): string
+    {
+        return Strings::replace($annotationContent, '#(\s+)\*(\s+)#m', '$1$3');
+    }
+
+    private function tryStartWithKey(string $name, bool $start, TokenIterator $localTokenIterator): bool
+    {
+        if ($start) {
+            return true;
+        }
+
+        if ($localTokenIterator->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER) &&
+            $localTokenIterator->currentTokenValue() === $name
+        ) {
+            // consume "=" as well
+            $localTokenIterator->next();
+            $localTokenIterator->tryConsumeTokenType(Lexer::TOKEN_EQUAL);
+            return true;
+        }
+
+        return false;
     }
 }
