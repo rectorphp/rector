@@ -73,8 +73,8 @@ final class Application extends SymfonyApplication
 
         // skip in this case, since generate content must be clear from meta-info
         $dumpCommands = [
-            CommandNaming::classToName(DumpRectorsCommand::class),
             CommandNaming::classToName(DumpNodesCommand::class),
+            CommandNaming::classToName(DumpRectorsCommand::class),
         ];
         if (in_array($input->getFirstArgument(), $dumpCommands, true)) {
             return parent::doRun($input, $output);
@@ -135,19 +135,8 @@ final class Application extends SymfonyApplication
             return false;
         }
 
-        $hasJsonOutput = (
-            $input->getParameterOption('--output-format') === JsonOutputFormatter::NAME ||
-            $input->getParameterOption('-o') === JsonOutputFormatter::NAME
-        );
-        if ($hasJsonOutput) {
-            return false;
-        }
-
-        $hasCheckstyleOutput = (
-            $input->getParameterOption('--output-format') === CheckstyleOutputFormatter::NAME ||
-            $input->getParameterOption('-o') === CheckstyleOutputFormatter::NAME
-        );
-        return ! $hasCheckstyleOutput;
+        $outputFormat = $input->getParameterOption(['-o', '--output-format']);
+        return ! in_array($outputFormat, [JsonOutputFormatter::NAME, CheckstyleOutputFormatter::NAME], true);
     }
 
     private function removeUnusedOptions(InputDefinition $inputDefinition): void
