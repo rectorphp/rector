@@ -1,4 +1,4 @@
-# All 504 Rectors Overview
+# All 505 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7898,6 +7898,27 @@ Changes property `@var` annotations from annotation to type.
 <br>
 
 ## Php80
+
+### `AnnotationToAttributeRector`
+
+- class: [`Rector\Php80\Rector\Class_\AnnotationToAttributeRector`](/../master/rules/php80/src/Rector/Class_/AnnotationToAttributeRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Class_/AnnotationToAttributeRector/Fixture)
+
+Change annotation to attibute
+
+```diff
+ use Doctrine\ORM\Attributes as ORM;
+
+-/**
+-  * @ORM\Entity
+-  */
++<<ORM\Entity>>
+ class SomeClass
+ {
+ }
+```
+
+<br>
 
 ### `StrContainsRector`
 

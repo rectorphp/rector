@@ -33,6 +33,7 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
+use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -250,6 +251,31 @@ final class PhpDocInfo
         return null;
     }
 
+    /**
+     * @param class-string $type
+     * @return PhpDocTagValueNode[]
+     */
+    public function findAllByType(string $type): array
+    {
+        $this->ensureTypeIsTagValueNode($type, __METHOD__);
+
+        $foundTagsValueNodes = [];
+
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+
+            if (! is_a($phpDocChildNode->value, $type, true)) {
+                continue;
+            }
+
+            $foundTagsValueNodes[] = $phpDocChildNode->value;
+        }
+
+        return $foundTagsValueNodes;
+    }
+
     public function removeByType(string $type): void
     {
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
@@ -442,6 +468,10 @@ final class PhpDocInfo
         }
 
         if (is_a($type, TypeAwareTagValueNodeInterface::class, true)) {
+            return;
+        }
+
+        if (is_a($type, PhpAttributableTagNodeInterface::class, true)) {
             return;
         }
 

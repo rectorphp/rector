@@ -22,6 +22,7 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PhpAttribute\Printer\ContentPhpAttributePlaceholderReplacer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -41,10 +42,17 @@ final class BetterStandardPrinter extends Standard
     private $docBlockManipulator;
 
     /**
+     * @var ContentPhpAttributePlaceholderReplacer
+     */
+    private $contentPhpAttributePlaceholderReplacer;
+
+    /**
      * @param mixed[] $options
      */
-    public function __construct(array $options = [])
-    {
+    public function __construct(
+        ContentPhpAttributePlaceholderReplacer $contentPhpAttributePlaceholderReplacer,
+        array $options = []
+    ) {
         parent::__construct($options);
 
         // print return type double colon right after the bracket "function(): string"
@@ -52,6 +60,8 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Stmt_Function->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Expr_Closure->returnType'] = [')', false, ': ', null];
+
+        $this->contentPhpAttributePlaceholderReplacer = $contentPhpAttributePlaceholderReplacer;
     }
 
     /**
@@ -68,6 +78,9 @@ final class BetterStandardPrinter extends Standard
         $this->detectTabOrSpaceIndentCharacter($stmts);
 
         $content = parent::printFormatPreserving($stmts, $origStmts, $origTokens);
+
+        // php attributes
+        $content = $this->contentPhpAttributePlaceholderReplacer->decorateContent($content);
 
         // remove dead <?php structures
         $clearContent = Strings::replace($content, '#\<\?php(\s)\?\>\n?#');
@@ -131,8 +144,7 @@ final class BetterStandardPrinter extends Standard
             $stmts = [$stmts];
         }
 
-        $fileContent = parent::prettyPrintFile($stmts);
-        return $fileContent . PHP_EOL;
+        return parent::prettyPrintFile($stmts) . PHP_EOL;
     }
 
     /**
@@ -306,7 +318,10 @@ final class BetterStandardPrinter extends Standard
     {
         $this->moveCommentsFromAttributeObjectToCommentsAttribute($nodes);
 
-        return parent::pStmts($nodes, $indent);
+        $content = parent::pStmts($nodes, $indent);
+
+        // php attributes
+        return $this->contentPhpAttributePlaceholderReplacer->decorateContent($content);
     }
 
     /**
@@ -408,7 +423,7 @@ final class BetterStandardPrinter extends Standard
      */
     private function moveCommentsFromAttributeObjectToCommentsAttribute(array $nodes): void
     {
-        // move phpdoc from node to "comment" attirbute
+        // move phpdoc from node to "comment" attribute
         foreach ($nodes as $node) {
             if (! $node instanceof Node) {
                 continue;

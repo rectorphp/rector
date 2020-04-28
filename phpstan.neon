@@ -256,3 +256,4 @@ parameters:
 
         # mostly strings in tests
         - '#Class (.*?) should be written with \:\:class notation, string found#'
+        - '#Parameter \#2 \$key of method Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode\:\:printArrayItem\(\) expects string\|null, int\|string given#'
