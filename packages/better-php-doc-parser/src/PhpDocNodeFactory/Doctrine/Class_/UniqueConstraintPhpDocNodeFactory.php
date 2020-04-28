@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_;
 
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\UniqueConstraintTagValueNode;
 
@@ -30,7 +29,7 @@ final class UniqueConstraintPhpDocNodeFactory
         foreach ($uniqueConstraints as $key => $uniqueConstraint) {
             $subAnnotationContent = $uniqueConstraintContents[$key];
 
-            $uniqueConstraintTagValueNodes[] = $this->createIndexOrUniqueConstantTagValueNode(
+            $uniqueConstraintTagValueNodes[] = new UniqueConstraintTagValueNode(
                 $uniqueConstraint,
                 $subAnnotationContent['content'],
                 $subAnnotationContent['tag']
@@ -38,23 +37,5 @@ final class UniqueConstraintPhpDocNodeFactory
         }
 
         return $uniqueConstraintTagValueNodes;
-    }
-
-    private function createIndexOrUniqueConstantTagValueNode(
-        UniqueConstraint $uniqueConstraint,
-        string $annotationContent,
-        string $tag
-    ): UniqueConstraintTagValueNode {
-        // doctrine/orm compatibility between different versions
-        $flags = property_exists($uniqueConstraint, 'flags') ? $uniqueConstraint->flags : [];
-
-        return new UniqueConstraintTagValueNode(
-            $uniqueConstraint->name,
-            $uniqueConstraint->columns,
-            $flags,
-            $uniqueConstraint->options,
-            $annotationContent,
-            $tag
-        );
     }
 }

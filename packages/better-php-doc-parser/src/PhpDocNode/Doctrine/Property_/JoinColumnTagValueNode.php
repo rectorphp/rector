@@ -6,9 +6,13 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
+use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
+use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
 
-final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implements TagAwareNodeInterface
+final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implements TagAwareNodeInterface, PhpAttributableTagNodeInterface
 {
+    use PhpAttributePhpDocNodePrintTrait;
+
     /**
      * @var bool|null
      */
@@ -49,6 +53,11 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
      */
     private $tag;
 
+    /**
+     * @var string
+     */
+    private $shortName = '@ORM\JoinColumn';
+
     public function __construct(
         ?string $name,
         ?string $referencedColumnName,
@@ -76,42 +85,10 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function __toString(): string
     {
-        $contentItems = [];
+        $items = $this->createItems();
+        $items = $this->makeKeysExplicit($items);
 
-        if ($this->name) {
-            $contentItems['name'] = sprintf('name="%s"', $this->name);
-        }
-
-        if ($this->referencedColumnName !== null) {
-            $contentItems['referencedColumnName'] = sprintf('referencedColumnName="%s"', $this->referencedColumnName);
-        }
-
-        if ($this->nullable !== null) {
-            $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
-        }
-
-        // skip default value
-        if ($this->unique !== null && $this->unique) {
-            $contentItems['unique'] = sprintf('unique=%s', $this->unique ? 'true' : 'false');
-        }
-
-        if ($this->nullable !== null) {
-            $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
-        }
-
-        if ($this->onDelete !== null) {
-            $contentItems['onDelete'] = sprintf('onDelete="%s"', $this->onDelete);
-        }
-
-        if ($this->columnDefinition !== null) {
-            $contentItems['columnDefinition'] = sprintf('columnDefinition="%s"', $this->columnDefinition);
-        }
-
-        if ($this->fieldName !== null) {
-            $contentItems['fieldName'] = sprintf('fieldName="%s"', $this->fieldName);
-        }
-
-        return $this->printContentItems($contentItems);
+        return $this->printContentItems($items);
     }
 
     public function isNullable(): ?bool
@@ -121,7 +98,7 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function getTag(): ?string
     {
-        return $this->tag ?: $this->getShortName();
+        return $this->tag ?: $this->shortName;
     }
 
     public function getUnique(): ?bool
@@ -131,6 +108,67 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function getShortName(): string
     {
-        return '@ORM\JoinColumn';
+        return $this->shortName;
+    }
+
+    public function changeShortName(string $shortName): void
+    {
+        $this->shortName = $shortName;
+    }
+
+    public function toAttributeString(): string
+    {
+        $items = $this->createItems();
+        $items = $this->filterOutMissingItems($items);
+
+        // specific for attributes
+        foreach ($items as $key => $value) {
+            if ($key !== 'unique') {
+                continue;
+            }
+            if ($value !== 'true') {
+                continue;
+            }
+            $items[$key] = 'ORM\JoinColumn::UNIQUE';
+        }
+
+        $content = $this->printPhpAttributeItems($items);
+
+        return $this->printAttributeContent($content);
+    }
+
+    private function createItems(): array
+    {
+        $items = [];
+
+        if ($this->name) {
+            $items['name'] = sprintf('"%s"', $this->name);
+        }
+
+        if ($this->referencedColumnName !== null) {
+            $items['referencedColumnName'] = sprintf('"%s"', $this->referencedColumnName);
+        }
+
+        if ($this->nullable !== null) {
+            $items['nullable'] = $this->nullable ? 'true' : 'false';
+        }
+
+        // skip default value
+        if ($this->unique !== null) {
+            $items['unique'] = $this->unique ? 'true' : 'false';
+        }
+
+        if ($this->onDelete !== null) {
+            $items['onDelete'] = sprintf('"%s"', $this->onDelete);
+        }
+
+        if ($this->columnDefinition !== null) {
+            $items['columnDefinition'] = sprintf('"%s"', $this->columnDefinition);
+        }
+
+        if ($this->fieldName !== null) {
+            $items['fieldName'] = sprintf('"%s"', $this->fieldName);
+        }
+        return $items;
     }
 }

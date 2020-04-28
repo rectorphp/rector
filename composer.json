@@ -89,6 +89,7 @@
             "Rector\\NodeNameResolver\\": "packages/node-name-resolver/src",
             "Rector\\NodeTypeResolver\\": "packages/node-type-resolver/src",
             "Rector\\Oxid\\": "rules/oxid/src",
+            "Rector\\PhpAttribute\\": "packages/php-attribute/src",
             "Rector\\PHPStanStaticTypeMapper\\": "packages/phpstan-static-type-mapper/src",
             "Rector\\PHPStan\\": "rules/phpstan/src",
             "Rector\\PHPUnitSymfony\\": "rules/phpunit-symfony/src",
