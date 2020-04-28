@@ -32,16 +32,6 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
      */
     private const JOIN_COLUMN_PATTERN = '#(?<tag>@(ORM\\\\)?JoinColumn)\((?<content>.*?)\),?#si';
 
-    /**
-     * @var JoinColumnPhpDocNodeFactory
-     */
-    private $joinColumnPhpDocNodeFactory;
-
-    public function __construct(JoinColumnPhpDocNodeFactory $joinColumnPhpDocNodeFactory)
-    {
-        $this->joinColumnPhpDocNodeFactory = $joinColumnPhpDocNodeFactory;
-    }
-
     public function getClass(): string
     {
         return JoinTable::class;
@@ -124,7 +114,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         foreach ($joinColumns as $key => $joinColumn) {
             $subAnnotation = $joinColumnContents[$key];
 
-            $joinColumnValuesTags[] = $this->joinColumnPhpDocNodeFactory->createFromAnnotationAndAnnotationContent(
+            $joinColumnValuesTags[] = JoinColumnTagValueNode::createFromAnnotationAndOriginalContent(
                 $joinColumn,
                 $subAnnotation['content'],
                 $subAnnotation['tag']

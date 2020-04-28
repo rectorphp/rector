@@ -34,6 +34,6 @@ final class EntityPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new EntityTagValueNode($entity->repositoryClass, $entity->readOnly, $annotationContent);
+        return new EntityTagValueNode($entity, $annotationContent);
     }
 }

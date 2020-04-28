@@ -125,7 +125,7 @@ final class DocBlockManipulator
             return null;
         }
 
-        return $relationTagValueNode->getFqnTargetEntity();
+        return $relationTagValueNode->getFullyQualifiedTargetEntity();
     }
 
     private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo): string

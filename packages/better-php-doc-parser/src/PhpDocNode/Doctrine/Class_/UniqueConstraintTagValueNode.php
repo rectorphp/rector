@@ -26,18 +26,14 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode im
         ?string $originalTag = null
     ) {
         $this->items = get_object_vars($uniqueConstraint);
-
-        if ($originalContent !== null) {
-            $this->resolveOriginalContentSpacingAndOrder($originalContent);
-        }
-
         $this->tag = $originalTag;
+
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string
     {
         $items = $this->completeItemsQuotes($this->items);
-
         $items = $this->makeKeysExplicit($items);
 
         return $this->printContentItems($items);

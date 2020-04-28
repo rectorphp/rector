@@ -34,15 +34,12 @@ final class OneToManyPhpDocNodeFactory extends AbstractPhpDocNodeFactory
             return null;
         }
 
-        return new OneToManyTagValueNode(
-            $oneToMany->mappedBy,
-            $oneToMany->targetEntity,
-            $oneToMany->cascade,
-            $oneToMany->fetch,
-            $oneToMany->orphanRemoval,
-            $oneToMany->indexBy,
+        $fullyQualifiedTargetEntity = $this->resolveFqnTargetEntity($oneToMany->targetEntity, $node);
+
+        return OneToManyTagValueNode::createFromAnnotationAndContent(
+            $oneToMany,
             $annotationContent,
-            $this->resolveFqnTargetEntity($oneToMany->targetEntity, $node)
+            $fullyQualifiedTargetEntity
         );
     }
 }

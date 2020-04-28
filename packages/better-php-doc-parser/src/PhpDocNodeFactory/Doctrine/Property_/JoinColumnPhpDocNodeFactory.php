@@ -37,24 +37,6 @@ final class JoinColumnPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return $this->createFromAnnotationAndAnnotationContent($joinColumn, $annotationContent);
-    }
-
-    public function createFromAnnotationAndAnnotationContent(
-        JoinColumn $joinColumn,
-        string $annotationContent,
-        ?string $tag = null
-    ): JoinColumnTagValueNode {
-        return new JoinColumnTagValueNode(
-            $joinColumn->name,
-            $joinColumn->referencedColumnName,
-            $joinColumn->unique,
-            $joinColumn->nullable,
-            $joinColumn->onDelete,
-            $joinColumn->columnDefinition,
-            $joinColumn->fieldName,
-            $annotationContent,
-            $tag
-        );
+        return JoinColumnTagValueNode::createFromAnnotationAndOriginalContent($joinColumn, $annotationContent);
     }
 }

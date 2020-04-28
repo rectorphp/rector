@@ -235,7 +235,10 @@ PHP
 
     private function createSymfonyRoutePhpDocTagValueNode(RouteInfo $routeInfo): SymfonyRouteTagValueNode
     {
-        return new SymfonyRouteTagValueNode($routeInfo->getPath(), [], null, $routeInfo->getHttpMethods());
+        return new SymfonyRouteTagValueNode([
+            'path' => $routeInfo->getPath(),
+            'methods' => $routeInfo->getHttpMethods(),
+        ]);
     }
 
     private function completeImplicitRoutes(): void
@@ -249,7 +252,9 @@ PHP
                 }
 
                 $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classMethod);
-                $symfonyRoutePhpDocTagValueNode = new SymfonyRouteTagValueNode($path);
+                $symfonyRoutePhpDocTagValueNode = new SymfonyRouteTagValueNode([
+                    'path' => $path,
+                ]);
 
                 $this->implicitToExplicitRoutingAnnotationDecorator->decorateClassMethodWithRouteAnnotation(
                     $classMethod,

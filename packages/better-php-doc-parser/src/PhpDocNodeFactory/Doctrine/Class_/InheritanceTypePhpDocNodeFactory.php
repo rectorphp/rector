@@ -34,6 +34,6 @@ final class InheritanceTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new InheritanceTypeTagValueNode($inheritanceType->value, $annotationContent);
+        return new InheritanceTypeTagValueNode($inheritanceType, $annotationContent);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
+use Doctrine\ORM\Mapping\ManyToOne;
 use Rector\BetterPhpDocParser\Contract\Doctrine\InversedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToOneTagNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
@@ -13,88 +14,60 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
     /**
      * @var string
      */
-    private $targetEntity;
+    private $fullyQualifiedTargetEntity;
 
     /**
-     * @var array|null
+     * @var mixed[]
      */
-    private $cascade;
+    private $items = [];
 
-    /**
-     * @var string|null
-     */
-    private $fetch;
-
-    /**
-     * @var string|null
-     */
-    private $inversedBy;
-
-    /**
-     * @var string
-     */
-    private $fqnTargetEntity;
-
-    public function __construct(
-        string $targetEntity,
-        ?array $cascade,
-        ?string $fetch,
-        ?string $inversedBy,
-        ?string $originalContent,
-        string $fqnTargetEntity
-    ) {
-        $this->targetEntity = $targetEntity;
-        $this->cascade = $cascade;
-        $this->fetch = $fetch;
-        $this->inversedBy = $inversedBy;
-        $this->fqnTargetEntity = $fqnTargetEntity;
-
+    public function __construct(array $items, ?string $originalContent, string $fullyQualifiedTargetEntity)
+    {
+        $this->items = $items;
+        $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string
     {
-        $contentItems = [];
+        $items = $this->completeItemsQuotes($this->items);
+        $items = $this->makeKeysExplicit($items);
 
-        $contentItems['targetEntity'] = sprintf('targetEntity="%s"', $this->targetEntity);
-        if ($this->cascade) {
-            $contentItems['cascade'] = $this->printArrayItem($this->cascade, 'cascade');
-        }
+        return $this->printContentItems($items);
+    }
 
-        if ($this->fetch !== null) {
-            $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
-        }
-
-        if ($this->inversedBy !== null) {
-            $contentItems['inversedBy'] = sprintf('inversedBy="%s"', $this->inversedBy);
-        }
-
-        return $this->printContentItems($contentItems);
+    public static function createFromAnnotationAndOriginalContent(
+        ManyToOne $manyToOne,
+        string $originalContent,
+        string $fullyQualifiedTargetEntity
+    ) {
+        $items = get_object_vars($manyToOne);
+        return new self($items, $originalContent, $fullyQualifiedTargetEntity);
     }
 
     public function getTargetEntity(): ?string
     {
-        return $this->targetEntity;
+        return $this->items['targetEntity'];
     }
 
-    public function getFqnTargetEntity(): string
+    public function getFullyQualifiedTargetEntity(): string
     {
-        return $this->fqnTargetEntity;
+        return $this->fullyQualifiedTargetEntity;
     }
 
     public function getInversedBy(): ?string
     {
-        return $this->inversedBy;
+        return $this->items['inversedBy'];
     }
 
     public function removeInversedBy(): void
     {
-        $this->inversedBy = null;
+        $this->items['inversedBy'] = null;
     }
 
     public function changeTargetEntity(string $targetEntity): void
     {
-        $this->targetEntity = $targetEntity;
+        $this->items['targetEntity'] = $targetEntity;
     }
 
     public function getShortName(): string

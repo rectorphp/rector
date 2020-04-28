@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony;
 
-use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,143 +19,41 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     public const CLASS_NAME = Route::class;
 
     /**
-     * @var string|null
-     */
-    private $name;
-
-    /**
-     * @var string|null
-     */
-    private $path;
-
-    /**
-     * @var string|null
-     */
-    private $host;
-
-    /**
-     * @var string
-     */
-    private $requirementsKeyValueSeparator = '=';
-
-    /**
-     * @var string|null
-     */
-    private $condition;
-
-    /**
-     * @var string[]
-     */
-    private $methods = [];
-
-    /**
      * @var mixed[]
      */
-    private $options = [];
+    private $items = [];
 
-    /**
-     * @var mixed[]
-     */
-    private $defaults = [];
-
-    /**
-     * @var mixed[]
-     */
-    private $requirements = [];
-
-    /**
-     * @var string[]
-     */
-    private $localizedPaths = [];
-
-    /**
-     * @param string[] $localizedPaths
-     * @param string[] $methods
-     * @param string[] $options
-     * @param string[] $defaults
-     * @param string[] $requirements
-     */
-    public function __construct(
-        ?string $path,
-        array $localizedPaths = [],
-        ?string $name = null,
-        array $methods = [],
-        array $options = [],
-        array $defaults = [],
-        ?string $host = null,
-        array $requirements = [],
-        ?string $condition = null,
-        ?string $originalContent = null
-    ) {
-        $this->path = $path;
-        $this->localizedPaths = $localizedPaths;
-
-        $this->name = $name;
-        $this->methods = $methods;
-        $this->options = $options;
-        $this->defaults = $defaults;
-        $this->requirements = $requirements;
-        $this->host = $host;
-        $this->condition = $condition;
+    public function __construct(array $items, ?string $originalContent = null)
+    {
+        $this->items = $items;
 
         // covers https://github.com/rectorphp/rector/issues/2994#issuecomment-598712339
 
-        if ($originalContent !== null) {
-            $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
-
-            // @todo use generic approach
-            $matches = Strings::match($originalContent, '#requirements={(.*?)(?<separator>(=|:))(.*)}#');
-            $this->requirementsKeyValueSeparator = $matches['separator'] ?? '=';
-
-            $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
-        }
+        $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
     }
 
     public function __toString(): string
     {
-        $contentItems = [
-            'path' => $this->printValueWithOptionalQuotes('path', $this->path, $this->localizedPaths),
-        ];
-
-        if ($this->name !== null) {
-            $contentItems['name'] = $this->printValueWithOptionalQuotes('name', $this->name);
+        if (isset($this->items['path']) || isset($this->items['localizedPaths'])) {
+            $this->items['path'] = $this->items['path'] ?? $this->items['localizedPaths'];
         }
 
-        if ($this->methods !== []) {
-            $contentItems['methods'] = $this->printArrayItem($this->methods, 'methods');
-        }
+        $items = $this->completeItemsQuotes($this->items);
+        $items = $this->makeKeysExplicit($items);
 
-        if ($this->options !== []) {
-            $contentItems['options'] = $this->printArrayItem($this->options, 'options');
-        }
+        return $this->printContentItems($items);
+    }
 
-        if ($this->defaults !== []) {
-            $contentItems['defaults'] = $this->printArrayItem($this->defaults, 'defaults');
-        }
-
-        if ($this->host !== null) {
-            $contentItems['host'] = sprintf('host="%s"', $this->host);
-        }
-
-        if ($this->condition !== null) {
-            $contentItems['condition'] = sprintf('condition="%s"', $this->condition);
-        }
-
-        if ($this->requirements !== []) {
-            $contentItems['requirements'] = $this->printArrayItemWithSeparator(
-                $this->requirements,
-                'requirements',
-                $this->requirementsKeyValueSeparator
-            );
-        }
-
-        return $this->printContentItems($contentItems);
+    public static function createFromAnnotationAndAnnotatoinContent(Route $route, string $originalContent)
+    {
+        $items = get_object_vars($route);
+        return new self($items, $originalContent);
     }
 
     public function changeMethods(array $methods): void
     {
         $this->orderedVisibleItems[] = 'methods';
-        $this->methods = $methods;
+        $this->items['methods'] = $methods;
     }
 
     public function getShortName(): string

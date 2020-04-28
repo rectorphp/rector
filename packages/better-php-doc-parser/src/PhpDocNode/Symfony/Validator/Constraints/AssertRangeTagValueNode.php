@@ -6,12 +6,12 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
-use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AbstractConstraintTagValueNode;
 use Symfony\Component\Validator\Constraints\Range;
 
-final class AssertRangeTagValueNode extends AbstractConstraintTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface, PhpAttributableTagNodeInterface
+final class AssertRangeTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface, PhpAttributableTagNodeInterface
 {
     use PhpAttributePhpDocNodePrintTrait;
 

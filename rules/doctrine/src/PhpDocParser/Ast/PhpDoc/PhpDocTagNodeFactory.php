@@ -42,12 +42,18 @@ final class PhpDocTagNodeFactory
 
     public function createIdColumnTagValueNode(): ColumnTagValueNode
     {
-        return new ColumnTagValueNode(null, 'integer', null, null, null, null, null);
+        return new ColumnTagValueNode([
+            'type' => 'integer',
+        ]);
     }
 
     public function createUuidColumnTagValueNode(bool $isNullable): ColumnTagValueNode
     {
-        return new ColumnTagValueNode(null, 'uuid_binary', null, null, null, true, $isNullable ? true : null);
+        return new ColumnTagValueNode([
+            'type' => 'uuid_binary',
+            'unique' => true,
+            'nullable' => $isNullable ? true : null,
+        ]);
     }
 
     public function createJoinTableTagNode(Property $property): PhpDocTagNode
@@ -57,8 +63,8 @@ final class PhpDocTagNodeFactory
         $joinTableTagValueNode = new JoinTableTagValueNode(
             $uuidJoinTable,
             null,
-            [new JoinColumnTagValueNode(null, 'uuid')],
-            [new JoinColumnTagValueNode(null, 'uuid')]
+            [new JoinColumnTagValueNode(['referencedColumnName' => 'uuid'])],
+            [new JoinColumnTagValueNode(['referencedColumnName' => 'uuid'])]
         );
 
         return new SpacelessPhpDocTagNode($joinTableTagValueNode->getShortName(), $joinTableTagValueNode);
@@ -66,7 +72,10 @@ final class PhpDocTagNodeFactory
 
     public function createJoinColumnTagNode(bool $isNullable): JoinColumnTagValueNode
     {
-        return new JoinColumnTagValueNode(null, 'uuid', null, $isNullable);
+        return new JoinColumnTagValueNode([
+            'referencedColumn' => 'uuid',
+            'nullable' => $isNullable,
+        ]);
     }
 
     private function createVarTagValueNodeWithType(TypeNode $typeNode): AttributeAwareVarTagValueNode

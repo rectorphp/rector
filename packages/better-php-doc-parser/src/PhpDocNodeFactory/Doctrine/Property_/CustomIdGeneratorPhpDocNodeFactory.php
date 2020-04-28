@@ -34,6 +34,6 @@ final class CustomIdGeneratorPhpDocNodeFactory extends AbstractPhpDocNodeFactory
             return null;
         }
 
-        return new CustomIdGeneratorTagValueNode($customIdGenerator->class, $annotationContent);
+        return new CustomIdGeneratorTagValueNode($customIdGenerator, $annotationContent);
     }
 }
