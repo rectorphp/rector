@@ -6,7 +6,6 @@ namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
@@ -17,9 +16,10 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class UseNodesToAddCollector implements NodeCollectorInterface
 {
     /**
-     * @var CurrentFileInfoProvider
+     * @todo use value object
+     * @var FullyQualifiedObjectType[][]|AliasedObjectType[][]
      */
-    private $currentFileInfoProvider;
+    private $useImportTypesInFilePath = [];
 
     /**
      * @todo use value object
@@ -29,15 +29,14 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
 
     /**
      * @todo use value object
-     * @var FullyQualifiedObjectType[][]|AliasedObjectType[][]
-     */
-    private $useImportTypesInFilePath = [];
-
-    /**
-     * @todo use value object
      * @var FullyQualifiedObjectType[][]
      */
     private $functionUseImportTypesInFilePath = [];
+
+    /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
 
     public function __construct(CurrentFileInfoProvider $currentFileInfoProvider)
     {
@@ -60,7 +59,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
             // fallback for freshly created Name nodes
             $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
             if ($fileInfo === null) {
-                throw new ShouldNotHappenException();
+                return;
             }
         }
 

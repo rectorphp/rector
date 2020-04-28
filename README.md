@@ -9,7 +9,7 @@ Why refactor manually if Rector can handle 80% of the task for you?
 
 <br>
 
-- **[Overview of all 450+ Rectors](/docs/AllRectorsOverview.md)**
+- **[Overview of all 500+ Rectors](/docs/AllRectorsOverview.md)**
 - **[Online DEMO](https://getrector.org/demo)**
 
 <br>
@@ -440,6 +440,7 @@ Use [the `create` command](/docs/RectorRecipe.md).
 - [How Does Rector Work?](/docs/HowItWorks.md)
 - [PHP Parser Nodes Overview](/docs/NodesOverview.md)
 - [Generate Rector from Recipe](/docs/RectorRecipe.md)
+- [Add Checkstyle with your CI](/docs/Checkstyle.md)
 
 ## How to Contribute
 

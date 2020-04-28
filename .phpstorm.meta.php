@@ -41,6 +41,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO,
     \Rector\NodeTypeResolver\Node\AttributeKey::KIND,
     \Rector\NodeTypeResolver\Node\AttributeKey::CLASS_SHORT_NAME,
+    \Rector\NodeTypeResolver\Node\AttributeKey::IS_REGULAR_PATTERN,
 );
 
 expectedArguments(
@@ -67,6 +68,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO,
     \Rector\NodeTypeResolver\Node\AttributeKey::KIND,
     \Rector\NodeTypeResolver\Node\AttributeKey::CLASS_SHORT_NAME,
+    \Rector\NodeTypeResolver\Node\AttributeKey::IS_REGULAR_PATTERN,
 );
 
 expectedArguments(

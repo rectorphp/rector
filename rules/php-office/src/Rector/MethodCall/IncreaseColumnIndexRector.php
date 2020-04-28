@@ -114,24 +114,6 @@ PHP
         }
     }
 
-    /**
-     * @param Node|Node[] $node
-     */
-    private function findVariableAssignName($node, string $variableName): ?Assign
-    {
-        return $this->betterNodeFinder->findFirst((array) $node, function (Node $node) use ($variableName) {
-            if (! $node instanceof Assign) {
-                return false;
-            }
-
-            if (! $node->var instanceof Variable) {
-                return false;
-            }
-
-            return $this->isName($node->var, $variableName);
-        });
-    }
-
     private function findPreviousForWithVariable(Variable $variable): ?LNumber
     {
         /** @var For_|null $for */
@@ -155,5 +137,23 @@ PHP
         }
 
         return null;
+    }
+
+    /**
+     * @param Node|Node[] $node
+     */
+    private function findVariableAssignName($node, string $variableName): ?Assign
+    {
+        return $this->betterNodeFinder->findFirst((array) $node, function (Node $node) use ($variableName) {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            if (! $node->var instanceof Variable) {
+                return false;
+            }
+
+            return $this->isName($node->var, $variableName);
+        });
     }
 }

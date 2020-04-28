@@ -169,46 +169,55 @@ PHP
         return $this->isNames($functionLike, self::EXCLUDED_METHOD_NAMES);
     }
 
-    private function isVoidDueToThrow(Node $node, $inferredReturnNode): bool
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     */
+    private function shouldSkipInferredReturnNode(FunctionLike $functionLike, ?Node $inferredReturnNode): bool
     {
-        if (! $inferredReturnNode instanceof Identifier) {
-            return false;
+        // nothing to change in PHP code - @todo add @var annotation fallback?
+        if ($inferredReturnNode === null) {
+            return true;
         }
 
-        if ($inferredReturnNode->name !== 'void') {
-            return false;
+        // prevent void overriding exception
+        if ($this->isVoidDueToThrow($functionLike, $inferredReturnNode)) {
+            return true;
+        }
+        // already overridden by previous populateChild() method run
+        return $functionLike->returnType && $functionLike->returnType->getAttribute(self::DO_NOT_CHANGE);
+    }
+
+    private function shouldSkipExistingReturnType(Node $node, Type $inferedType): bool
+    {
+        $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
+
+        if ($node instanceof ClassMethod && $this->vendorLockResolver->isReturnChangeVendorLockedIn($node)) {
+            return true;
         }
 
-        return (bool) $this->betterNodeFinder->findFirstInstanceOf($node->stmts, Throw_::class);
+        if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
+            return true;
+        }
+        return $this->isNullableTypeSubType($currentType, $inferedType);
     }
 
     /**
-     * E.g. current E, new type A, E extends A → true
+     * @param ClassMethod|Function_ $functionLike
+     * @param Name|NullableType|PhpParserUnionType $inferredReturnNode
      */
-    private function isCurrentObjectTypeSubType(Type $currentType, Type $inferedType): bool
+    private function addReturnType(FunctionLike $functionLike, Node $inferredReturnNode): void
     {
-        if (! $currentType instanceof ObjectType) {
-            return false;
+        if ($functionLike->returnType !== null) {
+            $isSubtype = $this->phpParserTypeAnalyzer->isSubtypeOf($inferredReturnNode, $functionLike->returnType);
+            if ($this->isAtLeastPhpVersion(PhpVersionFeature::COVARIANT_RETURN) && $isSubtype) {
+                $functionLike->returnType = $inferredReturnNode;
+            } elseif (! $isSubtype) {
+                // type override with correct one
+                $functionLike->returnType = $inferredReturnNode;
+            }
+        } else {
+            $functionLike->returnType = $inferredReturnNode;
         }
-
-        if (! $inferedType instanceof ObjectType) {
-            return false;
-        }
-
-        return is_a($currentType->getClassName(), $inferedType->getClassName(), true);
-    }
-
-    private function isNullableTypeSubType(Type $currentType, Type $inferedType): bool
-    {
-        if (! $currentType instanceof UnionType) {
-            return false;
-        }
-
-        if (! $inferedType instanceof UnionType) {
-            return false;
-        }
-
-        return $inferedType->isSubTypeOf($currentType)->yes();
     }
 
     /**
@@ -267,54 +276,45 @@ PHP
         $this->notifyNodeFileInfo($currentClassMethod);
     }
 
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function shouldSkipInferredReturnNode(FunctionLike $functionLike, ?Node $inferredReturnNode): bool
+    private function isVoidDueToThrow(Node $node, $inferredReturnNode): bool
     {
-        // nothing to change in PHP code - @todo add @var annotation fallback?
-        if ($inferredReturnNode === null) {
-            return true;
+        if (! $inferredReturnNode instanceof Identifier) {
+            return false;
         }
 
-        // prevent void overriding exception
-        if ($this->isVoidDueToThrow($functionLike, $inferredReturnNode)) {
-            return true;
-        }
-        // already overridden by previous populateChild() method run
-        return $functionLike->returnType && $functionLike->returnType->getAttribute(self::DO_NOT_CHANGE);
-    }
-
-    private function shouldSkipExistingReturnType(Node $node, Type $inferedType): bool
-    {
-        $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
-
-        if ($node instanceof ClassMethod && $this->vendorLockResolver->isReturnChangeVendorLockedIn($node)) {
-            return true;
+        if ($inferredReturnNode->name !== 'void') {
+            return false;
         }
 
-        if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
-            return true;
-        }
-        return $this->isNullableTypeSubType($currentType, $inferedType);
+        return (bool) $this->betterNodeFinder->findFirstInstanceOf($node->stmts, Throw_::class);
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
-     * @param Name|NullableType|PhpParserUnionType $inferredReturnNode
+     * E.g. current E, new type A, E extends A → true
      */
-    private function addReturnType(FunctionLike $functionLike, Node $inferredReturnNode): void
+    private function isCurrentObjectTypeSubType(Type $currentType, Type $inferedType): bool
     {
-        if ($functionLike->returnType !== null) {
-            $isSubtype = $this->phpParserTypeAnalyzer->isSubtypeOf($inferredReturnNode, $functionLike->returnType);
-            if ($this->isAtLeastPhpVersion(PhpVersionFeature::COVARIANT_RETURN) && $isSubtype) {
-                $functionLike->returnType = $inferredReturnNode;
-            } elseif (! $isSubtype) {
-                // type override with correct one
-                $functionLike->returnType = $inferredReturnNode;
-            }
-        } else {
-            $functionLike->returnType = $inferredReturnNode;
+        if (! $currentType instanceof ObjectType) {
+            return false;
         }
+
+        if (! $inferedType instanceof ObjectType) {
+            return false;
+        }
+
+        return is_a($currentType->getClassName(), $inferedType->getClassName(), true);
+    }
+
+    private function isNullableTypeSubType(Type $currentType, Type $inferedType): bool
+    {
+        if (! $currentType instanceof UnionType) {
+            return false;
+        }
+
+        if (! $inferedType instanceof UnionType) {
+            return false;
+        }
+
+        return $inferedType->isSubTypeOf($currentType)->yes();
     }
 }

@@ -70,6 +70,6 @@ PHP
         $args = [];
         $args[] = new Arg($node->args[1]->value, false, true);
 
-        return $this->createFunction($functionName, $args);
+        return $this->createFuncCall($functionName, $args);
     }
 }

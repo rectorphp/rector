@@ -217,6 +217,23 @@ PHP
         return false;
     }
 
+    private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
+    {
+        if ($this->iteratedExpr === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        if ($this->keyValueName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $foreach = new Foreach_($this->iteratedExpr, new Variable($iteratedVariableName));
+        $foreach->stmts = $for->stmts;
+        $foreach->keyVar = new Variable($this->keyValueName);
+
+        return $foreach;
+    }
+
     /**
      * @param Stmt[] $stmts
      */
@@ -274,22 +291,5 @@ PHP
         }
 
         return false;
-    }
-
-    private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
-    {
-        if ($this->iteratedExpr === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        if ($this->keyValueName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $foreach = new Foreach_($this->iteratedExpr, new Variable($iteratedVariableName));
-        $foreach->stmts = $for->stmts;
-        $foreach->keyVar = new Variable($this->keyValueName);
-
-        return $foreach;
     }
 }

@@ -18,14 +18,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class UseManipulator
 {
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var NameAndParentValueObject[][]
      */
     private $resolvedNodeNames = [];
+
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
 
     /**
      * @var NodeNameResolver

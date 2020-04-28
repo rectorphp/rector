@@ -1,0 +1,29 @@
+name: Validate Project
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    validate_project:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.4
+                    coverage: none
+
+            -   run: composer install --no-progress
+
+            -   run: bin/rector validate-fixtures --ansi
+
+            -   run: bin/rector validate-fixture-suffix --ansi
+
+            -   run: bin/rector sync-annotation-parser --dry-run --ansi
+
+            -   run: bin/rector validate-services-in-sets --ansi
+
+            -   run: composer check-docs

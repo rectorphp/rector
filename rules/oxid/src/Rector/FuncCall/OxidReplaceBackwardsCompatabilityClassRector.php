@@ -45,7 +45,7 @@ final class OxidReplaceBackwardsCompatabilityClassRector extends AbstractRector
         if (array_key_exists($classname, $this->getClassmap())) {
             $newClassname = new ClassConstFetch(new FullyQualified($this->getClassmap()[$classname]), 'class');
 
-            return $this->createFunction('oxNew', array_merge([$newClassname], $arguments));
+            return $this->createFuncCall('oxNew', array_merge([$newClassname], $arguments));
         }
 
         return $node;

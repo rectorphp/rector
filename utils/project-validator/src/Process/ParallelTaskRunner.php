@@ -29,16 +29,6 @@ final class ParallelTaskRunner
     private $cwd;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
-     * @var Process[]
-     */
-    private $runningProcesses = [];
-
-    /**
      * @var bool
      */
     private $isSuccessful = true;
@@ -49,9 +39,19 @@ final class ParallelTaskRunner
     private $finishedProcessCount = 0;
 
     /**
+     * @var Process[]
+     */
+    private $runningProcesses = [];
+
+    /**
      * @var SetTask[]
      */
     private $remainingTasks = [];
+
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
 
     public function __construct(SymfonyStyle $symfonyStyle)
     {
@@ -83,6 +83,23 @@ final class ParallelTaskRunner
         } while ($someProcessesAreStillRunning || $notAllProcessesAreStartedYet);
 
         return $this->isSuccessful;
+    }
+
+    private function initialize(): void
+    {
+        $this->finishedProcessCount = 0;
+        $this->isSuccessful = true;
+        $this->remainingTasks = [];
+    }
+
+    /**
+     * @param SetTask[] $setTasks
+     */
+    private function printInfo(array $setTasks, int $maxProcesses): void
+    {
+        $message = sprintf('Running %d sets with %d parallel processes', count($setTasks), $maxProcesses);
+
+        $this->symfonyStyle->writeln($message);
     }
 
     /**
@@ -165,26 +182,10 @@ final class ParallelTaskRunner
         return new Process($command, $this->cwd);
     }
 
-    private function printSuccess(string $set, int $totalTasks): void
-    {
-        $message = sprintf('(%d/%d) Set "%s" is OK', $this->finishedProcessCount, $totalTasks, $set);
-        $this->symfonyStyle->success($message);
-    }
-
     private function printError(string $set, string $output, int $totalTasks): void
     {
         $message = sprintf('(%d/%d) Set "%s" failed: %s', $this->finishedProcessCount, $totalTasks, $set, $output);
         $this->symfonyStyle->error($message);
-    }
-
-    /**
-     * @param SetTask[] $setTasks
-     */
-    private function printInfo(array $setTasks, int $maxProcesses): void
-    {
-        $message = sprintf('Running %d sets with %d parallel processes', count($setTasks), $maxProcesses);
-
-        $this->symfonyStyle->writeln($message);
     }
 
     private function evaluateProcess(Process $process): void
@@ -211,10 +212,9 @@ final class ParallelTaskRunner
         throw new ProcessResultInvalidException($ouptput);
     }
 
-    private function initialize(): void
+    private function printSuccess(string $set, int $totalTasks): void
     {
-        $this->finishedProcessCount = 0;
-        $this->isSuccessful = true;
-        $this->remainingTasks = [];
+        $message = sprintf('(%d/%d) Set "%s" is OK', $this->finishedProcessCount, $totalTasks, $set);
+        $this->symfonyStyle->success($message);
     }
 }

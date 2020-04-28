@@ -8,9 +8,9 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector
- * @covers \Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRector
- * @covers \Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector
+ * @see \Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector
+ * @see \Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRector
+ * @see \Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector
  */
 final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
 {

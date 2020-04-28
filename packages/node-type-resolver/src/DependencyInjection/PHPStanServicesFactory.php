@@ -51,6 +51,7 @@ final class PHPStanServicesFactory
         $temporaryPHPStanNeon = null;
 
         $currentProjectConfigFile = $currentWorkingDirectory . '/phpstan.neon';
+
         if (file_exists($currentProjectConfigFile)) {
             $phpstanNeonContent = FileSystem::read($currentProjectConfigFile);
 

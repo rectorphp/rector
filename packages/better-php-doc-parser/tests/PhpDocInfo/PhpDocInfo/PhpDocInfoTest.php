@@ -8,16 +8,12 @@ use Nette\Utils\FileSystem;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Nop;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\BetterPhpDocParser\Type\PreSlashStringType;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\PHPStan\TypeFactoryStaticHelper;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class PhpDocInfoTest extends AbstractKernelTestCase
@@ -56,24 +52,6 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
     {
         $paramTags = $this->phpDocInfo->getTagsByName('param');
         $this->assertCount(2, $paramTags);
-    }
-
-    public function testParamTypeNode(): void
-    {
-        $typeNode = $this->phpDocInfo->getParamTypeNode('value');
-        $this->assertInstanceOf(TypeNode::class, $typeNode);
-
-        $paramType = $this->phpDocInfo->getParamType('value');
-
-        $expectedUnionType = TypeFactoryStaticHelper::createUnionObjectType([
-            new ObjectType('SomeType'),
-            new ObjectType('NoSlash'),
-            new ObjectType('\Preslashed'),
-            new NullType(),
-            new PreSlashStringType(),
-        ]);
-
-        $this->assertEquals($expectedUnionType, $paramType);
     }
 
     public function testGetVarType(): void

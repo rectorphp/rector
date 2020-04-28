@@ -5,6 +5,8 @@ parameters:
     # bleeding edge feature
     is_cache_enabled: true
 
+    auto_import_names: true
+
     paths:
         - src
         - tests

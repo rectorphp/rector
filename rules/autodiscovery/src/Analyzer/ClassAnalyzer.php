@@ -91,6 +91,19 @@ final class ClassAnalyzer
         return true;
     }
 
+    private function analyseWithoutConstructor(Class_ $class, ?string $className): bool
+    {
+        // A. has all properties with serialize?
+        if ($this->hasAllPropertiesWithSerialize($class)) {
+            $this->valueObjectStatusByClassName[$className] = true;
+            return true;
+        }
+
+        // probably not a value object
+        $this->valueObjectStatusByClassName[$className] = false;
+        return false;
+    }
+
     private function hasAllPropertiesWithSerialize(Class_ $class)
     {
         foreach ($class->stmts as $stmt) {
@@ -108,18 +121,5 @@ final class ClassAnalyzer
         }
 
         return true;
-    }
-
-    private function analyseWithoutConstructor(Class_ $class, ?string $className): bool
-    {
-        // A. has all properties with serialize?
-        if ($this->hasAllPropertiesWithSerialize($class)) {
-            $this->valueObjectStatusByClassName[$className] = true;
-            return true;
-        }
-
-        // probably not a value object
-        $this->valueObjectStatusByClassName[$className] = false;
-        return false;
     }
 }

@@ -58,15 +58,6 @@ final class CountManipulator
         return false;
     }
 
-    private function isNumber(Node $node, int $value): bool
-    {
-        if (! $node instanceof LNumber) {
-            return false;
-        }
-
-        return $node->value === $value;
-    }
-
     private function processGreater(Greater $greater, Expr $expr): bool
     {
         if (! $this->isNumber($greater->right, 0)) {
@@ -74,15 +65,6 @@ final class CountManipulator
         }
 
         return $this->isCountWithExpression($greater->left, $expr);
-    }
-
-    private function processSmaller(Smaller $smaller, Expr $expr): bool
-    {
-        if (! $this->isNumber($smaller->left, 0)) {
-            return false;
-        }
-
-        return $this->isCountWithExpression($smaller->right, $expr);
     }
 
     private function processGreaterOrEqual(GreaterOrEqual $greaterOrEqual, Expr $expr)
@@ -94,6 +76,15 @@ final class CountManipulator
         return $this->isCountWithExpression($greaterOrEqual->left, $expr);
     }
 
+    private function processSmaller(Smaller $smaller, Expr $expr): bool
+    {
+        if (! $this->isNumber($smaller->left, 0)) {
+            return false;
+        }
+
+        return $this->isCountWithExpression($smaller->right, $expr);
+    }
+
     private function processSmallerOrEqual(SmallerOrEqual $smallerOrEqual, Expr $expr): bool
     {
         if (! $this->isNumber($smallerOrEqual->left, 1)) {
@@ -101,6 +92,15 @@ final class CountManipulator
         }
 
         return $this->isCountWithExpression($smallerOrEqual->right, $expr);
+    }
+
+    private function isNumber(Node $node, int $value): bool
+    {
+        if (! $node instanceof LNumber) {
+            return false;
+        }
+
+        return $node->value === $value;
     }
 
     private function isCountWithExpression(Node $node, Expr $expr): bool

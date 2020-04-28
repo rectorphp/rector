@@ -125,28 +125,18 @@ PHP
         return $this->createClassConst($node, $onlyProperty);
     }
 
-    private function createClassConst(Property $property, PropertyProperty $propertyProperty): ClassConst
+    private function shouldSkip(Property $property): bool
     {
-        $constantName = $this->createConstantNameFromProperty($propertyProperty);
+        if (count($property->props) !== 1) {
+            return true;
+        }
 
-        /** @var Expr $defaultValue */
-        $defaultValue = $propertyProperty->default;
-        $constant = new Const_($constantName, $defaultValue);
+        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return false;
+        }
 
-        $classConst = new ClassConst([$constant]);
-        $classConst->flags = $property->flags & ~ Class_::MODIFIER_STATIC;
-
-        $classConst->setAttribute(AttributeKey::PHP_DOC_INFO, $property->getAttribute(AttributeKey::PHP_DOC_INFO));
-
-        return $classConst;
-    }
-
-    private function createConstantNameFromProperty(PropertyProperty $propertyProperty): string
-    {
-        $propertyName = $this->getName($propertyProperty);
-        $constantName = RectorStrings::camelCaseToUnderscore($propertyName);
-
-        return strtoupper($constantName);
+        return $this->isObjectType($class, 'PHP_CodeSniffer\Sniffs\Sniff');
     }
 
     private function replacePropertyFetchWithClassConstFetch(Node $node, PropertyProperty $propertyProperty): void
@@ -173,6 +163,30 @@ PHP
         });
     }
 
+    private function createClassConst(Property $property, PropertyProperty $propertyProperty): ClassConst
+    {
+        $constantName = $this->createConstantNameFromProperty($propertyProperty);
+
+        /** @var Expr $defaultValue */
+        $defaultValue = $propertyProperty->default;
+        $constant = new Const_($constantName, $defaultValue);
+
+        $classConst = new ClassConst([$constant]);
+        $classConst->flags = $property->flags & ~ Class_::MODIFIER_STATIC;
+
+        $classConst->setAttribute(AttributeKey::PHP_DOC_INFO, $property->getAttribute(AttributeKey::PHP_DOC_INFO));
+
+        return $classConst;
+    }
+
+    private function createConstantNameFromProperty(PropertyProperty $propertyProperty): string
+    {
+        $propertyName = $this->getName($propertyProperty);
+        $constantName = RectorStrings::camelCaseToUnderscore($propertyName);
+
+        return strtoupper($constantName);
+    }
+
     private function isLocalPropertyFetch(Node $node): bool
     {
         if ($node instanceof PropertyFetch) {
@@ -184,19 +198,5 @@ PHP
         }
 
         return false;
-    }
-
-    private function shouldSkip(Property $property): bool
-    {
-        if (count($property->props) !== 1) {
-            return true;
-        }
-
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
-            return false;
-        }
-
-        return $this->isObjectType($class, 'PHP_CodeSniffer\Sniffs\Sniff');
     }
 }

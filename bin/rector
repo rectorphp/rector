@@ -25,6 +25,7 @@ $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeCwdVendorAutoloadIfExists();
 $autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
+$autoloadIncluder->autoloadFromCommandLine();
 
 try {
     $rectorConfigsResolver = new RectorConfigsResolver();
@@ -132,6 +133,24 @@ final class AutoloadIncluder
     private function isDebugOption(): bool
     {
         return in_array('--debug', $_SERVER['argv'], true);
+    }
+
+    public function autoloadFromCommandLine(): void
+    {
+        $cliArgs = $_SERVER['argv'];
+
+        $autoloadOptionPosition = array_search('-a', $cliArgs) ?: array_search('--autoload-file', $cliArgs);
+        if (! $autoloadOptionPosition) {
+            return;
+        }
+
+        $autoloadFileValuePosition = $autoloadOptionPosition + 1;
+        $fileToAutoload = $cliArgs[$autoloadFileValuePosition] ?? null;
+        if ($fileToAutoload=== null) {
+            return;
+        }
+
+        $this->loadIfNotLoadedYet($fileToAutoload, __METHOD__);
     }
 }
 

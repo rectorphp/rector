@@ -55,7 +55,7 @@ PHP
                 $unset = $node->expr;
 
                 if ($this->areNodesEqual($node->var, $unset->expr)) {
-                    return $this->createFunction('unset', [$node->var]);
+                    return $this->createFuncCall('unset', [$node->var]);
                 }
             }
 

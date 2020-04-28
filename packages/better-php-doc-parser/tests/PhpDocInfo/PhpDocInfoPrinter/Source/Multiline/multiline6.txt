@@ -5,4 +5,3 @@
  *      @ORM\JoinColumn(referencedColumnName="id")
  *  })
  */
-protected $someProperty;

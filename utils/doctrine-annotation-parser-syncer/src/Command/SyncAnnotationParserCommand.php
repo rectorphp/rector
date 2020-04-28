@@ -13,29 +13,36 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SyncAnnotationParserCommand extends Command
 {
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
     /**
      * @var ClassSyncerInterface[]
      */
     private $classSyncers = [];
 
     /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
+
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
+    /**
      * @param ClassSyncerInterface[] $classSyncers
      */
-    public function __construct(array $classSyncers, SymfonyStyle $symfonyStyle)
+    public function __construct(array $classSyncers, SymfonyStyle $symfonyStyle, ParameterProvider $parameterProvider)
     {
-        parent::__construct();
-
         $this->symfonyStyle = $symfonyStyle;
         $this->classSyncers = $classSyncers;
+        $this->parameterProvider = $parameterProvider;
+
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -53,6 +60,9 @@ final class SyncAnnotationParserCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // disable imports
+        $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, false);
+
         $dryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
 
         foreach ($this->classSyncers as $classSyncer) {

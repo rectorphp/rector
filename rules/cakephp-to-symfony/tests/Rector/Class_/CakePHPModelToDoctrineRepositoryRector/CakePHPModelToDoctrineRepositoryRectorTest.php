@@ -24,7 +24,7 @@ final class CakePHPModelToDoctrineRepositoryRectorTest extends AbstractRectorTes
     public function provideData(): Iterator
     {
         yield [
-            __DIR__ . '/Fixture/find_first.inc',
+            __DIR__ . '/Fixture/find_first.php.inc',
             $this->getTempPath() . '/FindFirstRepository.php',
             __DIR__ . '/Source/ExpectedFindFirstRepository.php',
         ];

@@ -166,6 +166,23 @@ PHP
         $this->propertyFetchToParamsToRemoveFromConstructor = [];
     }
 
+    private function shouldSkip(Class_ $class): bool
+    {
+        // only in controllers
+        if (! $this->isName($class, '*Controller')) {
+            return true;
+        }
+
+        if ($class->isAbstract()) {
+            return true;
+        }
+
+        $constructMethod = $class->getMethod('__construct');
+        // no constructor, nothing to do
+
+        return $constructMethod === null;
+    }
+
     private function collectPropertyFetchToParams(ClassMethod $classMethod): void
     {
         foreach ((array) $classMethod->stmts as $constructorStmt) {
@@ -284,6 +301,15 @@ PHP
         return [$propertyFetchName, $variableName];
     }
 
+    private function shouldSkipClassMethod(Node $node): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return true;
+        }
+
+        return ! $this->isName($node->var, 'this');
+    }
+
     private function removeAssignsFromConstructor(ClassMethod $classMethod): void
     {
         foreach ((array) $classMethod->stmts as $key => $constructorStmt) {
@@ -319,31 +345,5 @@ PHP
         }
 
         $this->removeNodeFromStatements($class, $constructClassMethod);
-    }
-
-    private function shouldSkipClassMethod(Node $node): bool
-    {
-        if (! $node instanceof PropertyFetch) {
-            return true;
-        }
-
-        return ! $this->isName($node->var, 'this');
-    }
-
-    private function shouldSkip(Class_ $class): bool
-    {
-        // only in controllers
-        if (! $this->isName($class, '*Controller')) {
-            return true;
-        }
-
-        if ($class->isAbstract()) {
-            return true;
-        }
-
-        $constructMethod = $class->getMethod('__construct');
-        // no constructor, nothing to do
-
-        return $constructMethod === null;
     }
 }

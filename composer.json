@@ -41,6 +41,7 @@
         "friendsofphp/php-cs-fixer": "^2.16",
         "ocramius/package-versions": "^1.4|^1.5",
         "phpunit/phpunit": "^8.4|^9.0",
+        "slam/phpstan-extensions": "^5.0",
         "symplify/changelog-linker": "^7.2.4",
         "symplify/easy-coding-standard": "^7.2.4",
         "symplify/monorepo-builder": "^7.2.4",
@@ -66,6 +67,7 @@
             "Rector\\ConsoleDiffer\\": "packages/console-differ/src",
             "Rector\\Core\\": "src",
             "Rector\\DeadCode\\": "rules/dead-code/src",
+            "Rector\\DocumentationGenerator\\": "packages/documentation-generator/src",
             "Rector\\DoctrineCodeQuality\\": "rules/doctrine-code-quality/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "rules/doctrine-gedmo-to-knplabs/src",
             "Rector\\Doctrine\\": "rules/doctrine/src",
@@ -255,9 +257,9 @@
         ],
         "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
         "changelog": [
-            "vendor/bin/changelog-linker dump-merges --in-categories",
-            "vendor/bin/changelog-linker link",
-            "vendor/bin/changelog-linker cleanup"
+            "vendor/bin/changelog-linker dump-merges --in-categories --ansi",
+            "vendor/bin/changelog-linker link --ansi",
+            "vendor/bin/changelog-linker cleanup --ansi"
         ],
         "check-docs": [
             "bin/rector dump-rectors | diff --ignore-space-change docs/AllRectorsOverview.md - ",
@@ -267,7 +269,7 @@
             "bin/rector dump-rectors > docs/AllRectorsOverview.md",
             "bin/rector dump-nodes > docs/NodesOverview.md"
         ],
-        "rector-ci": "bin/rector process --config rector-ci.yaml --dry-run",
+        "rector-ci": "bin/rector process --config rector-ci.yaml --dry-run --ansi",
         "rector": "bin/rector process --config rector-ci.yaml --ansi"
     },
     "config": {

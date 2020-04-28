@@ -264,6 +264,40 @@ final class ScreenFileCommand extends AbstractCommand
         return $data;
     }
 
+    private function addNameData(Node $node, array $data): array
+    {
+        if ($node instanceof Variable) {
+            $data['name'] = $this->nodeNameResolver->getName($node);
+        }
+
+        if ($node instanceof Namespace_ && $node->name !== null) {
+            $data['name'] = $this->nodeNameResolver->getName($node->name);
+        }
+
+        if ($node instanceof FuncCall && $node->name !== null) {
+            $data['name'] = $this->nodeNameResolver->getName($node->name);
+        }
+
+        return $data;
+    }
+
+    private function addVariableTypeData(Node $node, array $data): array
+    {
+        if ($node instanceof Variable) {
+            $staticType = $this->nodeTypeResolver->getStaticType($node);
+
+            $classNames = TypeUtils::getDirectClassNames($staticType);
+            if ($classNames !== []) {
+                $objectTypesAsString = implode(', ', $classNames);
+                $data['variable_types'] = $objectTypesAsString;
+            } else {
+                $typeString = $this->staticTypeMapper->mapPHPStanTypeToDocString($staticType);
+                $data['variable_types'] = $typeString;
+            }
+        }
+        return $data;
+    }
+
     /**
      * @param mixed[] $data
      * @return mixed[]
@@ -298,40 +332,6 @@ final class ScreenFileCommand extends AbstractCommand
         $data['method_call_variable'] = $this->decorateNodeData($methodCall->var);
         $data['method_call_name'] = $this->nodeNameResolver->getName($methodCall->name);
 
-        return $data;
-    }
-
-    private function addNameData(Node $node, array $data): array
-    {
-        if ($node instanceof Variable) {
-            $data['name'] = $this->nodeNameResolver->getName($node);
-        }
-
-        if ($node instanceof Namespace_ && $node->name !== null) {
-            $data['name'] = $this->nodeNameResolver->getName($node->name);
-        }
-
-        if ($node instanceof FuncCall && $node->name !== null) {
-            $data['name'] = $this->nodeNameResolver->getName($node->name);
-        }
-
-        return $data;
-    }
-
-    private function addVariableTypeData(Node $node, array $data): array
-    {
-        if ($node instanceof Variable) {
-            $staticType = $this->nodeTypeResolver->getStaticType($node);
-
-            $classNames = TypeUtils::getDirectClassNames($staticType);
-            if ($classNames !== []) {
-                $objectTypesAsString = implode(', ', $classNames);
-                $data['variable_types'] = $objectTypesAsString;
-            } else {
-                $typeString = $this->staticTypeMapper->mapPHPStanTypeToDocString($staticType);
-                $data['variable_types'] = $typeString;
-            }
-        }
         return $data;
     }
 }

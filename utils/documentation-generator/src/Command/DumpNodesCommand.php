@@ -100,7 +100,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Utils\DocumentationGenerator\Node\NodeClassProvider;
 use Rector\Utils\DocumentationGenerator\Node\NodeInfoResult;
-use Rector\Utils\DocumentationGenerator\OutputFormatter\DumpNodes\MarkdownDumpNodesOutputFormatter;
+use Rector\Utils\DocumentationGenerator\OutputFormatter\MarkdownDumpNodesOutputFormatter;
 use Rector\Utils\DocumentationGenerator\ValueObject\NodeInfo;
 use ReflectionClass;
 use ReflectionMethod;

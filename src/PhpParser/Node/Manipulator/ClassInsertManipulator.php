@@ -87,25 +87,6 @@ final class ClassInsertManipulator
         $this->addStatementToClassBeforeTypes($class, $trait, TraitUse::class, Property::class, ClassMethod::class);
     }
 
-    /**
-     * @param string[] ...$types
-     */
-    private function addStatementToClassBeforeTypes(Class_ $class, Stmt $stmt, string ...$types): void
-    {
-        foreach ($types as $type) {
-            foreach ($class->stmts as $key => $classStmt) {
-                if (! $classStmt instanceof $type) {
-                    continue;
-                }
-                $class->stmts = $this->insertBefore($class->stmts, $stmt, $key);
-
-                return;
-            }
-        }
-
-        $class->stmts[] = $stmt;
-    }
-
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
         foreach ($classNode->stmts as $key => $classStmt) {
@@ -173,5 +154,24 @@ final class ClassInsertManipulator
         }
 
         return false;
+    }
+
+    /**
+     * @param string[] ...$types
+     */
+    private function addStatementToClassBeforeTypes(Class_ $class, Stmt $stmt, string ...$types): void
+    {
+        foreach ($types as $type) {
+            foreach ($class->stmts as $key => $classStmt) {
+                if (! $classStmt instanceof $type) {
+                    continue;
+                }
+                $class->stmts = $this->insertBefore($class->stmts, $stmt, $key);
+
+                return;
+            }
+        }
+
+        $class->stmts[] = $stmt;
     }
 }

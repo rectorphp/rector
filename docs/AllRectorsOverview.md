@@ -1,7 +1,8 @@
-# All 499 Rectors Overview
+# All 504 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
+---
 
 ## Projects
 
@@ -1799,6 +1800,29 @@ Remove unnecessary ternary expressions.
 ```diff
 -$foo === $bar ? true : false;
 +$foo === $bar;
+```
+
+<br>
+
+### `UnusedForeachValueToArrayKeysRector`
+
+- class: [`Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector`](/../master/rules/code-quality/src/Rector/Foreach_/UnusedForeachValueToArrayKeysRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/Foreach_/UnusedForeachValueToArrayKeysRector/Fixture)
+
+Change foreach with unused $value but only $key, to array_keys()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $items = [];
+-        foreach ($values as $key => $value) {
++        foreach (array_keys($values) as $key) {
+             $items[$key] = null;
+         }
+     }
+ }
 ```
 
 <br>
@@ -4633,7 +4657,30 @@ Changes json_encode()/json_decode() to safer and more verbose Nette\Utils\Json::
 - class: [`Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/FuncCall/PregFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/PregFunctionToNetteUtilsStringsRector/Fixture)
 
-Use Nette\Utils\Strings over bare preg_* functions
+Use Nette\Utils\Strings over bare preg_split() and preg_replace() functions
+
+```diff
++use Nette\Utils\Strings;
++
+ class SomeClass
+ {
+     public function run()
+     {
+         $content = 'Hi my name is Tom';
+-        $splitted = preg_split('#Hi#', $content);
++        $splitted = \Nette\Utils\Strings::split($content, '#Hi#');
+     }
+ }
+```
+
+<br>
+
+### `PregMatchFunctionToNetteUtilsStringsRector`
+
+- class: [`Rector\Nette\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector/Fixture)
+
+Use Nette\Utils\Strings over bare preg_match() and preg_match_all() functions
 
 ```diff
 +use Nette\Utils\Strings;
@@ -6724,12 +6771,10 @@ Convert break outside for/foreach/switch context to return
  {
      public function run()
      {
-         $zhrs = abs($gmt)/3600;
-         $hrs = floor($zhrs);
          if ($isphp5)
-             return sprintf('%s%02d%02d',($gmt<=0)?'+':'-',floor($zhrs),($zhrs-$hrs)*60);
+             return 1;
          else
-             return sprintf('%s%02d%02d',($gmt<0)?'+':'-',floor($zhrs),($zhrs-$hrs)*60);
+             return 2;
 -        break;
 +        return;
      }
@@ -7868,6 +7913,70 @@ Replace strpos() !== false and strstr()  with str_contains()
      {
 -        return strpos('abc', 'a') !== false;
 +        return str_contains('abc', 'a');
+     }
+ }
+```
+
+<br>
+
+### `StrEndsWithRector`
+
+- class: [`Rector\Php80\Rector\Identical\StrEndsWithRector`](/../master/rules/php80/src/Rector/Identical/StrEndsWithRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Identical/StrEndsWithRector/Fixture)
+
+Change helper functions to str_ends_with()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $isMatch = substr($haystack, -strlen($needle)) === $needle;
++        $isMatch = str_ends_with($haystack, $needle);
+     }
+ }
+```
+
+<br>
+
+### `StrStartsWithRector`
+
+- class: [`Rector\Php80\Rector\Identical\StrStartsWithRector`](/../master/rules/php80/src/Rector/Identical/StrStartsWithRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Identical/StrStartsWithRector/Fixture)
+
+Change helper functions to str_starts_with()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $isMatch = substr($haystack, 0, strlen($needle)) === $needle;
++        $isMatch = str_starts_with($haystack, $needle);
+
+-        $isNotMatch = substr($haystack, 0, strlen($needle)) !== $needle;
++        $isMatch = ! str_starts_with($haystack, $needle);
+     }
+ }
+```
+
+<br>
+
+### `StringableForToStringRector`
+
+- class: [`Rector\Php80\Rector\Class_\StringableForToStringRector`](/../master/rules/php80/src/Rector/Class_/StringableForToStringRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Class_/StringableForToStringRector/Fixture)
+
+Add `Stringable` interface to classes with `__toString()` method
+
+```diff
+-class SomeClass
++class SomeClass implements Stringable
+ {
+-    public function __toString()
++    public function __toString(): string
+     {
+         return 'I can stringz';
      }
  }
 ```
@@ -10400,6 +10509,7 @@ Change $this->_view->assign = 5; to $this->render("...", $templateData);
 <br>
 
 ---
+
 ## General
 
 - [Core](#core)

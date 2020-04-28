@@ -10,11 +10,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 final class SlugTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
     /**
-     * @var mixed[]
-     */
-    private $fields = [];
-
-    /**
      * @var bool
      */
     private $updatable = false;
@@ -50,14 +45,19 @@ final class SlugTagValueNode extends AbstractTagValueNode implements ShortNameAw
     private $suffix;
 
     /**
-     * @var mixed[]
-     */
-    private $handlers = [];
-
-    /**
      * @var string|null
      */
     private $dateFormat;
+
+    /**
+     * @var mixed[]
+     */
+    private $fields = [];
+
+    /**
+     * @var mixed[]
+     */
+    private $handlers = [];
 
     public function __construct(
         array $fields,

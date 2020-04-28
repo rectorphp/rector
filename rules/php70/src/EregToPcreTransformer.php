@@ -179,15 +179,22 @@ final class EregToPcreTransformer
         return [implode('|', $r), $i];
     }
 
-    private function _ere2pcre_escape(string $content): string
+    private function processBracket(string $content, int $i, int $l, array &$r, int $rr)
     {
-        if ($content === "\0") {
-            throw new InvalidEregException('a literal null byte in the regex');
-        } elseif (Strings::contains('\^$.[]|()?*+{}-/', $content)) {
-            return '\\' . $content;
+        if ($i + 1 < $l && $content[$i + 1] === ')') { // special case
+            $r[$rr] .= '()';
+            ++$i;
+        } else {
+            $position = (int) $i + 1;
+            [$t, $ii] = $this->_ere2pcre($content, $position);
+            if ($ii >= $l || $content[$ii] !== ')') {
+                throw new InvalidEregException('"(" does not have a matching ")"');
+            }
+            $r[$rr] .= '(' . $t . ')';
+            $i = $ii;
         }
 
-        return $content;
+        return $i;
     }
 
     private function processSquareBracket(string $s, int $i, int $l, string $cls, bool $start): array
@@ -218,6 +225,17 @@ final class EregToPcreTransformer
         } while ($i < $l && $s[$i] !== ']');
 
         return [$cls, $i];
+    }
+
+    private function _ere2pcre_escape(string $content): string
+    {
+        if ($content === "\0") {
+            throw new InvalidEregException('a literal null byte in the regex');
+        } elseif (Strings::contains('\^$.[]|()?*+{}-/', $content)) {
+            return '\\' . $content;
+        }
+
+        return $content;
     }
 
     private function processCurlyBracket(string $s, int $i, array &$r, int $rr): int
@@ -251,24 +269,6 @@ final class EregToPcreTransformer
         }
 
         return $ii + 1;
-    }
-
-    private function processBracket(string $content, int $i, int $l, array &$r, int $rr)
-    {
-        if ($i + 1 < $l && $content[$i + 1] === ')') { // special case
-            $r[$rr] .= '()';
-            ++$i;
-        } else {
-            $position = (int) $i + 1;
-            [$t, $ii] = $this->_ere2pcre($content, $position);
-            if ($ii >= $l || $content[$ii] !== ')') {
-                throw new InvalidEregException('"(" does not have a matching ")"');
-            }
-            $r[$rr] .= '(' . $t . ')';
-            $i = $ii;
-        }
-
-        return $i;
     }
 
     private function processCharacterClass(string $content, int $i, string $cls): array

@@ -148,6 +148,30 @@ final class AssertManipulator
         return $staticCall;
     }
 
+    /**
+     * @return StaticCall|MethodCall
+     */
+    private function processTruthyOrFalseyCall(StaticCall $staticCall): Expr
+    {
+        $method = $this->nodeNameResolver->isName($staticCall->name, 'truthy') ? 'assertTrue' : 'assertFalse';
+
+        if (! $this->sholdBeStaticCall($staticCall)) {
+            $call = new MethodCall(new Variable('this'), $method);
+            $call->args = $staticCall->args;
+            $call->setAttributes($staticCall->getAttributes());
+            $call->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        } else {
+            $call = $staticCall;
+            $call->name = new Identifier($method);
+        }
+
+        if (! $this->nodeTypeResolver->isStaticType($staticCall->args[0]->value, BooleanType::class)) {
+            $call->args[0]->value = new Bool_($staticCall->args[0]->value);
+        }
+
+        return $call;
+    }
+
     private function processContainsCall(StaticCall $staticCall): void
     {
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($staticCall->args[1]->value)) {
@@ -237,28 +261,15 @@ final class AssertManipulator
         $phpDocInfo->addBareTag('@doesNotPerformAssertions');
     }
 
-    /**
-     * @return StaticCall|MethodCall
-     */
-    private function processTruthyOrFalseyCall(StaticCall $staticCall): Expr
+    private function renameAssertMethod(StaticCall $staticCall): void
     {
-        $method = $this->nodeNameResolver->isName($staticCall->name, 'truthy') ? 'assertTrue' : 'assertFalse';
+        foreach (self::ASSERT_METHODS_REMAP as $oldMethod => $newMethod) {
+            if (! $this->nodeNameResolver->isName($staticCall->name, $oldMethod)) {
+                continue;
+            }
 
-        if (! $this->sholdBeStaticCall($staticCall)) {
-            $call = new MethodCall(new Variable('this'), $method);
-            $call->args = $staticCall->args;
-            $call->setAttributes($staticCall->getAttributes());
-            $call->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        } else {
-            $call = $staticCall;
-            $call->name = new Identifier($method);
+            $staticCall->name = new Identifier($newMethod);
         }
-
-        if (! $this->nodeTypeResolver->isStaticType($staticCall->args[0]->value, BooleanType::class)) {
-            $call->args[0]->value = new Bool_($staticCall->args[0]->value);
-        }
-
-        return $call;
     }
 
     private function sholdBeStaticCall(StaticCall $staticCall): bool
@@ -293,16 +304,5 @@ final class AssertManipulator
 
         $expectExceptionCode->args[] = $staticCall->args[3];
         $this->nodesToAddCollector->addNodeAfterNode($expectExceptionCode, $staticCall);
-    }
-
-    private function renameAssertMethod(StaticCall $staticCall): void
-    {
-        foreach (self::ASSERT_METHODS_REMAP as $oldMethod => $newMethod) {
-            if (! $this->nodeNameResolver->isName($staticCall->name, $oldMethod)) {
-                continue;
-            }
-
-            $staticCall->name = new Identifier($newMethod);
-        }
     }
 }
