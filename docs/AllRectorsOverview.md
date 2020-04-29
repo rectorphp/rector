@@ -1,4 +1,4 @@
-# All 505 Rectors Overview
+# All 506 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7904,7 +7904,7 @@ Changes property `@var` annotations from annotation to type.
 - class: [`Rector\Php80\Rector\Class_\AnnotationToAttributeRector`](/../master/rules/php80/src/Rector/Class_/AnnotationToAttributeRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/Class_/AnnotationToAttributeRector/Fixture)
 
-Change annotation to attibute
+Change annotation to attribute
 
 ```diff
  use Doctrine\ORM\Attributes as ORM;
@@ -7915,6 +7915,26 @@ Change annotation to attibute
 +<<ORM\Entity>>
  class SomeClass
  {
+ }
+```
+
+<br>
+
+### `ClassOnObjectRector`
+
+- class: [`Rector\Php80\Rector\FuncCall\ClassOnObjectRector`](/../master/rules/php80/src/Rector/FuncCall/ClassOnObjectRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/FuncCall/ClassOnObjectRector/Fixture)
+
+Change get_class($object) to faster $object::class
+
+```diff
+ class SomeClass
+ {
+     public function run($object)
+     {
+-        return get_class($object);
++        return $object::class;
+     }
  }
 ```
 

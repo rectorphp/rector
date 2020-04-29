@@ -146,4 +146,9 @@ final class PhpVersionFeature
      * @var string
      */
     public const UNION_TYPES = '8.0';
+
+    /**
+     * @var string
+     */
+    public const CLASS_ON_OBJECT = '8.0';
 }
