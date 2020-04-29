@@ -105,6 +105,7 @@ final class NodeAnnotationReader
 
             /** @var object[] $propertyAnnotations */
             $propertyAnnotations = $this->reader->getPropertyAnnotations($propertyReflection);
+
             foreach ($propertyAnnotations as $propertyAnnotation) {
                 if (! is_a($propertyAnnotation, $annotationClassName, true)) {
                     continue;

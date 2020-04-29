@@ -46,15 +46,7 @@ final class AnnotationReaderFactory
         AnnotationRegistry::registerLoader('class_exists');
 
         // generated
-        if (class_exists(ConstantPreservingAnnotationReader::class) && class_exists(
-            ConstantPreservingDocParser::class
-        )) {
-            $docParser = new ConstantPreservingDocParser();
-            $annotationReader = new ConstantPreservingAnnotationReader($docParser);
-        } else {
-            // fallback for testing incompatibilities
-            $annotationReader = new AnnotationReader(new DocParser());
-        }
+        $annotationReader = $this->createAnnotationReader();
 
         // without this the reader will try to resolve them and fails with an exception
         // don't forget to add it to "stubs/Doctrine/Empty" directory, because the class needs to exists
@@ -66,5 +58,16 @@ final class AnnotationReaderFactory
         // warning: nested tags must be parse-able, e.g. @ORM\Table must include @ORM\UniqueConstraint!
 
         return $annotationReader;
+    }
+
+    private function createAnnotationReader(): Reader
+    {
+        if (class_exists(ConstantPreservingAnnotationReader::class) && class_exists(ConstantPreservingDocParser::class)) {
+            $docParser = new ConstantPreservingDocParser();
+            return new ConstantPreservingAnnotationReader($docParser);
+        }
+
+        // fallback for testing incompatibilities
+        return new AnnotationReader(new DocParser());
     }
 }

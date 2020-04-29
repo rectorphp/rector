@@ -50,7 +50,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
      */
     protected function doTestPrintedPhpDocInfo(string $filePath, string $tagValueNodeType): void
     {
-        $nodeType = TagValueToPhpParserNodeMap::MAP[$tagValueNodeType];
+        $nodeType = TagValueToPhpParserNodeMap::MAP[$tagValueNodeType] ?? $tagValueNodeType;
 
         $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($filePath, $nodeType);
 
