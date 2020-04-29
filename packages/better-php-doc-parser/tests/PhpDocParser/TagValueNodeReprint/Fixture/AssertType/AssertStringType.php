@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class AssertStringType
 {
     /**
-     * @Assert\Type(string)
+     * @Assert\Type("string")
      */
     public $anotherProperty;
 }

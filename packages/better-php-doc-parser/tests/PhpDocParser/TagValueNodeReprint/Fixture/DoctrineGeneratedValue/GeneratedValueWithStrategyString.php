@@ -6,15 +6,10 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\Fixtu
 
 use Doctrine\ORM\Mapping as ORM;
 
-class GeneratedValueWithStrategy
+class GeneratedValueWithStrategyString
 {
-    /**
-     * @ORM\GeneratedValue("AUTO")
-     */
-    private $implicit;
-
     /**
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $explicitWithoutQuotes;
+    private $explicit;
 }

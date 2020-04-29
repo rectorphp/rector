@@ -38,8 +38,9 @@ final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode impl
     public static function createFromAnnotationAndAnnotationContent(
         GeneratedValue $generatedValue,
         string $annotationContent
-    ) {
+    ): self {
         $items = get_object_vars($generatedValue);
+
         return new self($items, $annotationContent);
     }
 

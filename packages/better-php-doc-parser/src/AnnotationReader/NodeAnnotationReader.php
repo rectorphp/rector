@@ -9,6 +9,7 @@ use Doctrine\Common\Annotations\Reader;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use Rector\DoctrineAnnotationGenerated\PhpDocNode\ConstantReferenceIdentifierRestorer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -34,10 +35,19 @@ final class NodeAnnotationReader
      */
     private $nodeNameResolver;
 
-    public function __construct(Reader $reader, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var ConstantReferenceIdentifierRestorer
+     */
+    private $constantReferenceIdentifierRestorer;
+
+    public function __construct(
+        Reader $reader,
+        NodeNameResolver $nodeNameResolver,
+        ConstantReferenceIdentifierRestorer $constantReferenceIdentifierRestorer
+    ) {
         $this->reader = $reader;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->constantReferenceIdentifierRestorer = $constantReferenceIdentifierRestorer;
     }
 
     /**
@@ -69,11 +79,12 @@ final class NodeAnnotationReader
                 }
 
                 $this->alreadyProvidedAnnotations[] = $objectHash;
+                $this->constantReferenceIdentifierRestorer->restoreObject($methodAnnotation);
 
                 return $methodAnnotation;
             }
         } catch (AnnotationException $annotationException) {
-            // unable to laod
+            // unable to load
             return null;
         }
 
@@ -87,7 +98,14 @@ final class NodeAnnotationReader
     {
         $classReflection = $this->createClassReflectionFromNode($class);
 
-        return $this->reader->getClassAnnotation($classReflection, $annotationClassName);
+        $annotation = $this->reader->getClassAnnotation($classReflection, $annotationClassName);
+        if ($annotation === null) {
+            return null;
+        }
+
+        $this->constantReferenceIdentifierRestorer->restoreObject($annotation);
+
+        return $annotation;
     }
 
     /**
@@ -117,6 +135,7 @@ final class NodeAnnotationReader
                 }
 
                 $this->alreadyProvidedAnnotations[] = $objectHash;
+                $this->constantReferenceIdentifierRestorer->restoreObject($propertyAnnotation);
 
                 return $propertyAnnotation;
             }

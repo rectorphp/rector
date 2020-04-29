@@ -50,7 +50,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
      */
     protected function doTestPrintedPhpDocInfo(string $filePath, string $tagValueNodeType): void
     {
-        $nodeType = TagValueToPhpParserNodeMap::MAP[$tagValueNodeType] ?? $tagValueNodeType;
+        $nodeType = TagValueToPhpParserNodeMap::MAP[$tagValueNodeType];
 
         $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($filePath, $nodeType);
 
@@ -65,7 +65,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $errorMessage = $this->createErrorMessage($filePath);
         $this->assertSame($originalDocCommentText, $printedPhpDocInfo, $errorMessage);
 
-        $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $tagValueNodeType);
+        $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $tagValueNodeType, $filePath);
     }
 
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
@@ -107,10 +107,13 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         return 'Caused by: ' . $fileInfo->getRelativeFilePathFromCwd() . PHP_EOL;
     }
 
-    private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType): void
+    private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType, string $filePath): void
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType));
+
+        $message = (new SmartFileInfo($filePath))->getRelativeFilePathFromCwd();
+
+        $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType), $message);
     }
 }
