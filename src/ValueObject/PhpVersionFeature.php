@@ -151,4 +151,9 @@ final class PhpVersionFeature
      * @var string
      */
     public const CLASS_ON_OBJECT = '8.0';
+
+    /**
+     * @var string
+     */
+    public const STATIC_RETURN_TYPE = '8.0';
 }

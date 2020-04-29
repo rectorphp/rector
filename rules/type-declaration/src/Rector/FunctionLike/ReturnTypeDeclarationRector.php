@@ -40,11 +40,6 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
     private const EXCLUDED_METHOD_NAMES = ['__construct', '__destruct', '__clone'];
 
     /**
-     * @var string
-     */
-    private const DO_NOT_CHANGE = 'do_not_change';
-
-    /**
      * @var bool
      */
     private $overrideExistingReturnTypes = true;
@@ -183,8 +178,9 @@ PHP
         if ($this->isVoidDueToThrow($functionLike, $inferredReturnNode)) {
             return true;
         }
+
         // already overridden by previous populateChild() method run
-        return $functionLike->returnType && $functionLike->returnType->getAttribute(self::DO_NOT_CHANGE);
+        return $functionLike->returnType && $functionLike->returnType->getAttribute(AttributeKey::DO_NOT_CHANGE);
     }
 
     private function shouldSkipExistingReturnType(Node $node, Type $inferedType): bool
@@ -271,7 +267,7 @@ PHP
         $currentClassMethod->returnType = $resolvedChildTypeNode;
 
         // make sure the type is not overridden
-        $currentClassMethod->returnType->setAttribute(self::DO_NOT_CHANGE, true);
+        $currentClassMethod->returnType->setAttribute(AttributeKey::DO_NOT_CHANGE, true);
 
         $this->notifyNodeFileInfo($currentClassMethod);
     }

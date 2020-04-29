@@ -149,4 +149,9 @@ final class AttributeKey
      * @var string
      */
     public const IS_REGULAR_PATTERN = 'is_regular_pattern';
+
+    /**
+     * @var string
+     */
+    public const DO_NOT_CHANGE = 'do_not_change';
 }

@@ -12,10 +12,22 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class StaticTypeMapper implements TypeMapperInterface
 {
+    /**
+     * @var PhpVersionProvider
+     */
+    private $phpVersionProvider;
+
+    public function __construct(PhpVersionProvider $phpVersionProvider)
+    {
+        $this->phpVersionProvider = $phpVersionProvider;
+    }
+
     public function getNodeClass(): string
     {
         return StaticType::class;
@@ -35,6 +47,11 @@ final class StaticTypeMapper implements TypeMapperInterface
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
         if ($type instanceof ThisType) {
+            // @todo wait for PHPStan to differentiate between self/static
+            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::STATIC_RETURN_TYPE)) {
+                return new Identifier('static');
+            }
+
             return new Identifier('self');
         }
 
