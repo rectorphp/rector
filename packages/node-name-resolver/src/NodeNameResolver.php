@@ -20,14 +20,14 @@ use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 final class NodeNameResolver
 {
     /**
-     * @var RegexPatternDetector
-     */
-    private $regexPatternDetector;
-
-    /**
      * @var NodeNameResolverInterface[]
      */
     private $nodeNameResolvers = [];
+
+    /**
+     * @var RegexPatternDetector
+     */
+    private $regexPatternDetector;
 
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers

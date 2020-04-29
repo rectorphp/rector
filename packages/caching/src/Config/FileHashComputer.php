@@ -28,14 +28,6 @@ final class FileHashComputer
             $this->arrayToHash($containerBuilder->getParameterBag()->all());
     }
 
-    /**
-     * @param mixed[] $array
-     */
-    private function arrayToHash(array $array): string
-    {
-        return md5(serialize($array));
-    }
-
     private function ensureIsYaml(string $filePath): void
     {
         if (Strings::match($filePath, '#\.(yml|yaml)$#')) {
@@ -45,5 +37,13 @@ final class FileHashComputer
         throw new ShouldNotHappenException(sprintf(
             'Provide only yml/yaml file, ready for Symfony DI. "%s" given', $filePath
         ));
+    }
+
+    /**
+     * @param mixed[] $array
+     */
+    private function arrayToHash(array $array): string
+    {
+        return md5(serialize($array));
     }
 }

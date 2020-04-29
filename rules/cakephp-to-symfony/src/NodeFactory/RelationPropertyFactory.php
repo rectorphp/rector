@@ -48,13 +48,17 @@ final class RelationPropertyFactory
             $className = $manyToOneConfiguration['className'];
 
             // add @ORM\ManyToOne
-            $manyToOneTagValueNode = new ManyToOneTagValueNode($className, null, null, null, null, $className);
+            $manyToOneTagValueNode = new ManyToOneTagValueNode([
+                'targetEntity' => $className,
+            ], null, $className);
 
             $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
             $phpDocInfo->addTagValueNodeWithShortName($manyToOneTagValueNode);
 
             // add @ORM\JoinColumn
-            $joinColumnTagValueNode = new JoinColumnTagValueNode($manyToOneConfiguration['foreignKey'], null);
+            $joinColumnTagValueNode = new JoinColumnTagValueNode([
+                'name' => $manyToOneConfiguration['foreignKey'],
+            ]);
 
             $phpDocInfo->addTagValueNodeWithShortName($joinColumnTagValueNode);
 
@@ -75,13 +79,13 @@ final class RelationPropertyFactory
         foreach ($propertyDefaultValue as $propertyName => $relationConfiguration) {
             $property = $this->createPrivateProperty($propertyName);
 
-            $className = $relationConfiguration['className'];
-
-            // add @ORM\ManyToOne
-            $manyToOneTagValueNode = new OneToOneTagValueNode($className);
+            // add @ORM\OneToOne
+            $oneToOneTagValueNode = new OneToOneTagValueNode([
+                'targetEntity' => $relationConfiguration['className'],
+            ]);
 
             $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-            $phpDocInfo->addTagValueNodeWithShortName($manyToOneTagValueNode);
+            $phpDocInfo->addTagValueNodeWithShortName($oneToOneTagValueNode);
 
             $properties[] = $property;
         }
@@ -100,10 +104,10 @@ final class RelationPropertyFactory
         foreach ($hasAndBelongsToValue as $propertyName => $manyToOneConfiguration) {
             $property = $this->createPrivateProperty($propertyName);
 
-            $className = $manyToOneConfiguration['className'];
-
             // add @ORM\ManyToOne
-            $manyToOneTagValueNode = new ManyToManyTagValueNode($className);
+            $manyToOneTagValueNode = new ManyToManyTagValueNode([
+                'targetEntity' => $manyToOneConfiguration['className'],
+            ]);
 
             $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
             $phpDocInfo->addTagValueNodeWithShortName($manyToOneTagValueNode);
@@ -128,7 +132,7 @@ final class RelationPropertyFactory
             $className = $relationConfiguration['className'];
 
             // add @ORM\OneToMany
-            $manyToOneTagValueNode = new OneToManyTagValueNode(null, $className);
+            $manyToOneTagValueNode = new OneToManyTagValueNode(['targetEntity' => $className]);
 
             /** @var PhpDocInfo $phpDocInfo */
             $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);

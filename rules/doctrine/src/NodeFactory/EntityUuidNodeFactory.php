@@ -84,7 +84,9 @@ final class EntityUuidNodeFactory
         $phpDocInfo->addTagValueNodeWithShortName($columnTagValueNode);
 
         if ($isId) {
-            $generatedValueTagValueNode = new GeneratedValueTagValueNode('CUSTOM');
+            $generatedValueTagValueNode = new GeneratedValueTagValueNode([
+                'strategy' => 'CUSTOM',
+            ]);
             $phpDocInfo->addTagValueNodeWithShortName($generatedValueTagValueNode);
         }
     }

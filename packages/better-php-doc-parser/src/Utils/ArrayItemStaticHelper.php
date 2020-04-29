@@ -70,7 +70,9 @@ final class ArrayItemStaticHelper
      */
     private static function sortItemsByOrderedListOfKeys(array $contentItems, array $orderedVisibleItems): array
     {
-        uksort($contentItems, function ($firstContentItem, $secondContentItem) use ($orderedVisibleItems): int {
+        uksort($contentItems, function (string $firstContentItem, string $secondContentItem) use (
+            $orderedVisibleItems
+        ): int {
             $firstItemPosition = array_search($firstContentItem, $orderedVisibleItems, true);
             $secondItemPosition = array_search($secondContentItem, $orderedVisibleItems, true);
 

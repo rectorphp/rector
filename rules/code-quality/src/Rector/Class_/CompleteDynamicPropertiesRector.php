@@ -179,17 +179,16 @@ PHP
     }
 
     /**
+     * @param Type[] $fetchedLocalPropertyNameToTypes
      * @return string[]
      */
-    private function getClassPropertyNames(Class_ $class): array
+    private function resolvePropertiesToComplete(Class_ $class, array $fetchedLocalPropertyNameToTypes): array
     {
-        $propertyNames = [];
+        $propertyNames = $this->getClassPropertyNames($class);
 
-        foreach ($class->getProperties() as $property) {
-            $propertyNames[] = $this->getName($property);
-        }
+        $fetchedLocalPropertyNames = array_keys($fetchedLocalPropertyNameToTypes);
 
-        return $propertyNames;
+        return array_diff($fetchedLocalPropertyNames, $propertyNames);
     }
 
     /**
@@ -256,15 +255,16 @@ PHP
     }
 
     /**
-     * @param Type[] $fetchedLocalPropertyNameToTypes
      * @return string[]
      */
-    private function resolvePropertiesToComplete(Class_ $class, array $fetchedLocalPropertyNameToTypes): array
+    private function getClassPropertyNames(Class_ $class): array
     {
-        $propertyNames = $this->getClassPropertyNames($class);
+        $propertyNames = [];
 
-        $fetchedLocalPropertyNames = array_keys($fetchedLocalPropertyNameToTypes);
+        foreach ($class->getProperties() as $property) {
+            $propertyNames[] = $this->getName($property);
+        }
 
-        return array_diff($fetchedLocalPropertyNames, $propertyNames);
+        return $propertyNames;
     }
 }

@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -95,13 +94,11 @@ trait ComplexRemovalTrait
     /**
      * @param string[] $classMethodNamesToSkip
      */
-    protected function removePropertyAndUsages(
-        PropertyProperty $propertyProperty,
-        array $classMethodNamesToSkip = []
-    ): void {
+    protected function removePropertyAndUsages(Property $property, array $classMethodNamesToSkip = []): void
+    {
         $shouldKeepProperty = false;
 
-        $propertyFetches = $this->propertyManipulator->getAllPropertyFetch($propertyProperty);
+        $propertyFetches = $this->propertyManipulator->getAllPropertyFetch($property);
         foreach ($propertyFetches as $propertyFetch) {
             if ($this->shouldSkipPropertyForClassMethod($propertyFetch, $classMethodNamesToSkip)) {
                 $shouldKeepProperty = true;
@@ -122,8 +119,7 @@ trait ComplexRemovalTrait
         // remove __contruct param
 
         /** @var Property $property */
-        $property = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
-        $this->removeNode($propertyProperty);
+        $this->removeNode($property);
 
         foreach ($property->props as $prop) {
             if (! $this->nodesToRemoveCollector->isNodeRemoved($prop)) {

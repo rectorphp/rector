@@ -209,12 +209,11 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
             // remove first
             $propertyPhpDocInfo->removeByType(JoinColumnTagValueNode::class);
 
-            $mirrorJoinColumnTagValueNode = new JoinColumnTagValueNode(
-                '',
-                'uuid',
-                $joinColumnTagValueNode->getUnique(),
-                true
-            );
+            $mirrorJoinColumnTagValueNode = new JoinColumnTagValueNode([
+                'referencedColumnName' => 'uuid',
+                'unique' => $joinColumnTagValueNode->getUnique(),
+                'nullable' => true,
+            ]);
         } else {
             $mirrorJoinColumnTagValueNode = $this->phpDocTagNodeFactory->createJoinColumnTagNode(true);
         }

@@ -38,8 +38,8 @@ final class PHPStanTypeClassFinder
     }
 
     /**
-     * @param string[] $classLikes
-     * @return string[]
+     * @param class-string[] $classLikes
+     * @return class-string[]
      */
     private function filterClassesOnly(array $classLikes): array
     {
@@ -55,6 +55,7 @@ final class PHPStanTypeClassFinder
 
             $classes[] = $classLike;
         }
+
         return $classes;
     }
 }

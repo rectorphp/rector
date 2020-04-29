@@ -34,16 +34,11 @@ final class ManyToManyPhpDocNodeFactory extends AbstractPhpDocNodeFactory
             return null;
         }
 
-        return new ManyToManyTagValueNode(
-            $manyToMany->targetEntity,
-            $manyToMany->mappedBy,
-            $manyToMany->inversedBy,
-            $manyToMany->cascade,
-            $manyToMany->fetch,
-            $manyToMany->orphanRemoval,
-            $manyToMany->indexBy,
+        $fullyQualifiedTargetEntity = $this->resolveFqnTargetEntity($manyToMany->targetEntity, $node);
+        return ManyToManyTagValueNode::createFromAnnotationAndOriginalContent(
+            $manyToMany,
             $annotationContent,
-            $this->resolveFqnTargetEntity($manyToMany->targetEntity, $node)
+            $fullyQualifiedTargetEntity
         );
     }
 }

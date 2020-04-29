@@ -87,7 +87,7 @@ PHP
         [$prefix, $table] = explode('.', $string->value);
 
         $table = array_map(
-            function ($token): string {
+            function (string $token): string {
                 $tokens = explode('_', $token);
 
                 return implode('', array_map('ucfirst', $tokens));

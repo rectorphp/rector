@@ -11,10 +11,8 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
@@ -71,10 +69,10 @@ final class PropertyManipulator
     /**
      * @return PropertyFetch[]|StaticPropertyFetch[]
      */
-    public function getAllPropertyFetch(PropertyProperty $propertyProperty): array
+    public function getAllPropertyFetch(Property $property): array
     {
         /** @var Class_|null $classNode */
-        $classNode = $propertyProperty->getAttribute(AttributeKey::CLASS_NODE);
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return [];
         }
@@ -82,8 +80,10 @@ final class PropertyManipulator
         $nodesToSearch = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($classNode);
         $nodesToSearch[] = $classNode;
 
+        $singleProperty = $property->props[0];
+
         return $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use (
-            $propertyProperty,
+            $singleProperty,
             $nodesToSearch
         ): bool {
             // property + static fetch
@@ -92,12 +92,12 @@ final class PropertyManipulator
             }
 
             // itself
-            if ($this->betterStandardPrinter->areNodesEqual($node, $propertyProperty)) {
+            if ($this->betterStandardPrinter->areNodesEqual($node, $singleProperty)) {
                 return false;
             }
 
             // is it the name match?
-            if (! $this->nodeNameResolver->areNamesEqual($node, $propertyProperty)) {
+            if (! $this->nodeNameResolver->areNamesEqual($node, $singleProperty)) {
                 return false;
             }
 
@@ -105,9 +105,9 @@ final class PropertyManipulator
         });
     }
 
-    public function isReadOnlyProperty(PropertyProperty $propertyProperty): bool
+    public function isReadOnlyProperty(Property $property): bool
     {
-        foreach ($this->getAllPropertyFetch($propertyProperty) as $propertyFetch) {
+        foreach ($this->getAllPropertyFetch($property) as $propertyFetch) {
             if (! $this->isReadContext($propertyFetch)) {
                 return false;
             }
@@ -116,9 +116,8 @@ final class PropertyManipulator
         return true;
     }
 
-    public function isPropertyUsedInReadContext(PropertyProperty $propertyProperty): bool
+    public function isPropertyUsedInReadContext(Property $property): bool
     {
-        $property = $this->getProperty($propertyProperty);
         if ($this->isDoctrineProperty($property)) {
             return true;
         }
@@ -129,7 +128,7 @@ final class PropertyManipulator
             return true;
         }
 
-        foreach ($this->getAllPropertyFetch($propertyProperty) as $propertyFetch) {
+        foreach ($this->getAllPropertyFetch($property) as $propertyFetch) {
             if ($this->isReadContext($propertyFetch)) {
                 return true;
             }
@@ -137,7 +136,7 @@ final class PropertyManipulator
 
         // has class $this->$variable call?
         /** @var ClassLike $class */
-        $class = $propertyProperty->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
         return (bool) $this->betterNodeFinder->findFirst($class->stmts, function (Node $node): bool {
             if (! $node instanceof PropertyFetch) {
                 return false;
@@ -148,22 +147,6 @@ final class PropertyManipulator
             }
             return $node->name instanceof Expr;
         });
-    }
-
-    public function isPrivate(PropertyProperty $propertyProperty): bool
-    {
-        return $this->getProperty($propertyProperty)->isPrivate();
-    }
-
-    private function getProperty(PropertyProperty $propertyProperty): Property
-    {
-        $property = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
-
-        if (! $property instanceof Property) {
-            throw new ShouldNotHappenException('PropertyProperty should always have Property as parent');
-        }
-
-        return $property;
     }
 
     /**

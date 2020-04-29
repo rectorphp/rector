@@ -34,13 +34,12 @@ final class ManyToOnePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             return null;
         }
 
-        return new ManyToOneTagValueNode(
-            $manyToOne->targetEntity,
-            $manyToOne->cascade,
-            $manyToOne->fetch,
-            $manyToOne->inversedBy,
+        $fullyQualifiedTargetEntity = $this->resolveFqnTargetEntity($manyToOne->targetEntity, $node);
+
+        return ManyToOneTagValueNode::createFromAnnotationAndOriginalContent(
+            $manyToOne,
             $annotationContent,
-            $this->resolveFqnTargetEntity($manyToOne->targetEntity, $node)
+            $fullyQualifiedTargetEntity
         );
     }
 }

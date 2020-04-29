@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector;
 
 use Iterator;
-use Nette\DI\Container;
 use Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
 
 final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase
 {
@@ -32,7 +32,7 @@ final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase
         return [
             UnsetAndIssetToMethodCallRector::class => [
                 '$typeToMethodCalls' => [
-                    Container::class => [
+                    LocalContainer::class => [
                         'isset' => 'hasService',
                         'unset' => 'removeService',
                     ],

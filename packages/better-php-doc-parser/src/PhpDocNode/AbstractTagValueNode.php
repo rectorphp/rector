@@ -11,11 +11,21 @@ use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
-use Rector\Core\Exception\ShouldNotHappenException;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
     use AttributeTrait;
+    use PrintTagValueNodeTrait;
+
+    /**
+     * @var string
+     */
+    protected const PRINT_TYPE_ATTRIBUTE = 'print_attribute';
+
+    /**
+     * @var string
+     */
+    protected const PRINT_TYPE_ANNOTATION = 'print_annotation';
 
     /**
      * @var bool
@@ -33,11 +43,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected $originalContent;
 
     /**
-     * @var string[]|null
-     */
-    protected $orderedVisibleItems;
-
-    /**
      * @var bool
      */
     protected $hasOpeningBracket = false;
@@ -48,9 +53,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected $hasClosingBracket = false;
 
     /**
-     * @var bool[]
+     * @var string[]|null
      */
-    private $keysByQuotedStatus = [];
+    protected $orderedVisibleItems;
 
     /**
      * @var bool
@@ -61,6 +66,11 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      * @var string|null
      */
     private $silentKey;
+
+    /**
+     * @var bool[]
+     */
+    private $keysByQuotedStatus = [];
 
     /**
      * @param mixed[] $item
@@ -82,7 +92,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         $keyPart = $this->createKeyPart($key);
 
-        // should unqote
+        // should unquote
         if ($this->isValueWithoutQuotes($key)) {
             // @todo resolve per key item
             $json = Strings::replace($json, '#"#');
@@ -102,15 +112,16 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     }
 
     /**
-     * @param string[] $contentItems
+     * @param string[] $items
      */
-    protected function printContentItems(array $contentItems): string
+    protected function printContentItems(array $items): string
     {
-        if ($this->orderedVisibleItems !== null) {
-            $contentItems = ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
-        }
+        $items = $this->filterOutMissingItems($items);
 
-        if ($contentItems === []) {
+        // remove null values
+        $items = array_filter($items);
+
+        if ($items === []) {
             if ($this->originalContent !== null && Strings::endsWith($this->originalContent, '()')) {
                 return '()';
             }
@@ -118,10 +129,20 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             return '';
         }
 
+        // print array value to string
+        foreach ($items as $key => $value) {
+            if (! is_array($value)) {
+                continue;
+            }
+
+            /** @var string $key */
+            $items[$key] = $this->printArrayItem($value, $key);
+        }
+
         return sprintf(
             '(%s%s%s)',
             $this->hasNewlineAfterOpening ? PHP_EOL : '',
-            implode(', ', $contentItems),
+            implode(', ', $items),
             $this->hasNewlineBeforeClosing ? PHP_EOL : ''
         );
     }
@@ -131,7 +152,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      */
     protected function printNestedTag(
         array $tagValueNodes,
-        string $label,
         bool $haveFinalComma,
         ?string $openingSpace,
         ?string $closingSpace
@@ -147,8 +167,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         }
 
         return sprintf(
-            '%s={%s%s%s%s}',
-            $label,
+            '{%s%s%s%s}',
             $openingSpace,
             $tagValueNodesAsString,
             $haveFinalComma ? ',' : '',
@@ -185,53 +204,18 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $this->isSilentKeyExplicit = (bool) Strings::contains($originalContent, sprintf('%s=', $silentKey));
     }
 
-    protected function printValueWithOptionalQuotes(string $key, ...$values): string
+    protected function filterOutMissingItems(array $contentItems): array
     {
-        // pick first non-null value
-        foreach ($values as $value) {
-            if ($value === null) {
-                continue;
-            }
-
-            break;
+        if ($this->orderedVisibleItems === null) {
+            return $contentItems;
         }
 
-        if (! isset($value)) {
-            throw new ShouldNotHappenException();
-        }
-
-        if (is_array($value)) {
-            return $this->printArrayItem($value, $key);
-        }
-
-        $keyPart = $this->createKeyPart($key);
-
-        // quote by default
-        if (! isset($this->keysByQuotedStatus[$key]) || (isset($this->keysByQuotedStatus[$key]) && $this->keysByQuotedStatus[$key])) {
-            return sprintf('%s"%s"', $keyPart, $value);
-        }
-
-        return $keyPart . $value;
+        return ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
     }
 
-    private function isKeyQuoted(string $originalContent, string $key, ?string $silentKey): bool
+    private function createKeyPart(?string $key = null): string
     {
-        $escapedKey = preg_quote($key, '#');
-
-        $quotedKeyPattern = $this->createQuotedKeyPattern($silentKey, $key, $escapedKey);
-        if ((bool) Strings::match($originalContent, $quotedKeyPattern)) {
-            return true;
-        }
-
-        // @see https://regex101.com/r/VgvK8C/5/
-        $quotedArrayPattern = sprintf('#%s=\{"(.*)"\}|\{"(.*)"\}#', $escapedKey);
-
-        return (bool) Strings::match($originalContent, $quotedArrayPattern);
-    }
-
-    private function createKeyPart(?string $key): string
-    {
-        if ($key === null) {
+        if (empty($key)) {
             return '';
         }
 
@@ -240,6 +224,19 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         }
 
         return $key . '=';
+    }
+
+    private function isValueWithoutQuotes(?string $key): bool
+    {
+        if ($key === null) {
+            return false;
+        }
+
+        if (! array_key_exists($key, $this->keysByQuotedStatus)) {
+            return false;
+        }
+
+        return ! $this->keysByQuotedStatus[$key];
     }
 
     /**
@@ -266,17 +263,19 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         return implode(', ', $itemsAsStrings);
     }
 
-    private function isValueWithoutQuotes(?string $key): bool
+    private function isKeyQuoted(string $originalContent, string $key, ?string $silentKey): bool
     {
-        if ($key === null) {
-            return false;
+        $escapedKey = preg_quote($key, '#');
+
+        $quotedKeyPattern = $this->createQuotedKeyPattern($silentKey, $key, $escapedKey);
+        if ((bool) Strings::match($originalContent, $quotedKeyPattern)) {
+            return true;
         }
 
-        if (! array_key_exists($key, $this->keysByQuotedStatus)) {
-            return false;
-        }
+        // @see https://regex101.com/r/VgvK8C/5/
+        $quotedArrayPattern = sprintf('#%s=\{"(.*)"\}|\{"(.*)"\}#', $escapedKey);
 
-        return ! $this->keysByQuotedStatus[$key];
+        return (bool) Strings::match($originalContent, $quotedArrayPattern);
     }
 
     private function createQuotedKeyPattern(?string $silentKey, string $key, string $escapedKey): string

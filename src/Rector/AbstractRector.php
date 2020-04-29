@@ -8,11 +8,14 @@ use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
@@ -348,5 +351,17 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             [Option::PROJECT_TYPE_OPEN_SOURCE, Option::PROJECT_TYPE_OPEN_SOURCE_UNDESCORED],
             true
         );
+    }
+
+    /**
+     * @param Expr $expr
+     */
+    protected function createBoolCast(?Node $parentNode, Node $expr): Bool_
+    {
+        if ($parentNode instanceof Return_ && $expr instanceof Assign) {
+            $expr = $expr->expr;
+        }
+
+        return new Bool_($expr);
     }
 }

@@ -76,6 +76,60 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         return 800;
     }
 
+    private function resolveFromParamType(Param $param, ClassMethod $classMethod, string $propertyName): Type
+    {
+        $type = $this->resolveParamTypeToPHPStanType($param);
+        if ($type instanceof MixedType) {
+            return new MixedType();
+        }
+
+        $types = [];
+
+        // it's an array - annotation → make type more precise, if possible
+        if ($type instanceof ArrayType) {
+            $types[] = $this->getResolveParamStaticTypeAsPHPStanType($classMethod, $propertyName);
+        } else {
+            $types[] = $type;
+        }
+
+        if ($this->isParamNullable($param)) {
+            $types[] = new NullType();
+        }
+
+        return $this->typeFactory->createMixedPassedOrUnionType($types);
+    }
+
+    private function resolveFullyQualifiedOrAliasedObjectType(Param $param): ?Type
+    {
+        if ($param->type === null) {
+            return null;
+        }
+
+        $fullyQualifiedName = $this->nodeNameResolver->getName($param->type);
+        if (! $fullyQualifiedName) {
+            return null;
+        }
+
+        $originalName = $param->type->getAttribute('originalName');
+        if (! $originalName instanceof Name) {
+            return null;
+        }
+
+        // if the FQN has different ending than the original, it was aliased and we need to return the alias
+        if (! Strings::endsWith($fullyQualifiedName, '\\' . $originalName->toString())) {
+            $className = $originalName->toString();
+
+            if (class_exists($className)) {
+                return new FullyQualifiedObjectType($className);
+            }
+
+            // @note: $fullyQualifiedName is a guess, needs real life test
+            return new AliasedObjectType($originalName->toString(), $fullyQualifiedName);
+        }
+
+        return null;
+    }
+
     private function resolveParamTypeToPHPStanType(Param $param): Type
     {
         if ($param->type === null) {
@@ -139,59 +193,5 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         }
 
         return false;
-    }
-
-    private function resolveFullyQualifiedOrAliasedObjectType(Param $param): ?Type
-    {
-        if ($param->type === null) {
-            return null;
-        }
-
-        $fullyQualifiedName = $this->nodeNameResolver->getName($param->type);
-        if (! $fullyQualifiedName) {
-            return null;
-        }
-
-        $originalName = $param->type->getAttribute('originalName');
-        if (! $originalName instanceof Name) {
-            return null;
-        }
-
-        // if the FQN has different ending than the original, it was aliased and we need to return the alias
-        if (! Strings::endsWith($fullyQualifiedName, '\\' . $originalName->toString())) {
-            $className = $originalName->toString();
-
-            if (class_exists($className)) {
-                return new FullyQualifiedObjectType($className);
-            }
-
-            // @note: $fullyQualifiedName is a guess, needs real life test
-            return new AliasedObjectType($originalName->toString(), $fullyQualifiedName);
-        }
-
-        return null;
-    }
-
-    private function resolveFromParamType(Param $param, ClassMethod $classMethod, string $propertyName): Type
-    {
-        $type = $this->resolveParamTypeToPHPStanType($param);
-        if ($type instanceof MixedType) {
-            return new MixedType();
-        }
-
-        $types = [];
-
-        // it's an array - annotation → make type more precise, if possible
-        if ($type instanceof ArrayType) {
-            $types[] = $this->getResolveParamStaticTypeAsPHPStanType($classMethod, $propertyName);
-        } else {
-            $types[] = $type;
-        }
-
-        if ($this->isParamNullable($param)) {
-            $types[] = new NullType();
-        }
-
-        return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
 }

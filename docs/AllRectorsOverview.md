@@ -1,7 +1,8 @@
-# All 501 Rectors Overview
+# All 505 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
+---
 
 ## Projects
 
@@ -1799,6 +1800,29 @@ Remove unnecessary ternary expressions.
 ```diff
 -$foo === $bar ? true : false;
 +$foo === $bar;
+```
+
+<br>
+
+### `UnusedForeachValueToArrayKeysRector`
+
+- class: [`Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector`](/../master/rules/code-quality/src/Rector/Foreach_/UnusedForeachValueToArrayKeysRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/Foreach_/UnusedForeachValueToArrayKeysRector/Fixture)
+
+Change foreach with unused $value but only $key, to array_keys()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $items = [];
+-        foreach ($values as $key => $value) {
++        foreach (array_keys($values) as $key) {
+             $items[$key] = null;
+         }
+     }
+ }
 ```
 
 <br>
@@ -4633,7 +4657,30 @@ Changes json_encode()/json_decode() to safer and more verbose Nette\Utils\Json::
 - class: [`Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/FuncCall/PregFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/PregFunctionToNetteUtilsStringsRector/Fixture)
 
-Use Nette\Utils\Strings over bare preg_* functions
+Use Nette\Utils\Strings over bare preg_split() and preg_replace() functions
+
+```diff
++use Nette\Utils\Strings;
++
+ class SomeClass
+ {
+     public function run()
+     {
+         $content = 'Hi my name is Tom';
+-        $splitted = preg_split('#Hi#', $content);
++        $splitted = \Nette\Utils\Strings::split($content, '#Hi#');
+     }
+ }
+```
+
+<br>
+
+### `PregMatchFunctionToNetteUtilsStringsRector`
+
+- class: [`Rector\Nette\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector/Fixture)
+
+Use Nette\Utils\Strings over bare preg_match() and preg_match_all() functions
 
 ```diff
 +use Nette\Utils\Strings;
@@ -7852,6 +7899,27 @@ Changes property `@var` annotations from annotation to type.
 
 ## Php80
 
+### `AnnotationToAttributeRector`
+
+- class: [`Rector\Php80\Rector\Class_\AnnotationToAttributeRector`](/../master/rules/php80/src/Rector/Class_/AnnotationToAttributeRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Class_/AnnotationToAttributeRector/Fixture)
+
+Change annotation to attibute
+
+```diff
+ use Doctrine\ORM\Attributes as ORM;
+
+-/**
+-  * @ORM\Entity
+-  */
++<<ORM\Entity>>
+ class SomeClass
+ {
+ }
+```
+
+<br>
+
 ### `StrContainsRector`
 
 - class: [`Rector\Php80\Rector\NotIdentical\StrContainsRector`](/../master/rules/php80/src/Rector/NotIdentical/StrContainsRector.php)
@@ -7909,6 +7977,27 @@ Change helper functions to str_starts_with()
 
 -        $isNotMatch = substr($haystack, 0, strlen($needle)) !== $needle;
 +        $isMatch = ! str_starts_with($haystack, $needle);
+     }
+ }
+```
+
+<br>
+
+### `StringableForToStringRector`
+
+- class: [`Rector\Php80\Rector\Class_\StringableForToStringRector`](/../master/rules/php80/src/Rector/Class_/StringableForToStringRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Class_/StringableForToStringRector/Fixture)
+
+Add `Stringable` interface to classes with `__toString()` method
+
+```diff
+-class SomeClass
++class SomeClass implements Stringable
+ {
+-    public function __toString()
++    public function __toString(): string
+     {
+         return 'I can stringz';
      }
  }
 ```
@@ -10441,6 +10530,7 @@ Change $this->_view->assign = 5; to $this->render("...", $templateData);
 <br>
 
 ---
+
 ## General
 
 - [Core](#core)

@@ -4,32 +4,29 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_;
 
+use Doctrine\ORM\Mapping\InheritanceType;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
 final class InheritanceTypeTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
-     * @var string|null
+     * @var mixed[]
      */
-    private $value;
+    private $items = [];
 
-    public function __construct(?string $value, ?string $originalContent)
+    public function __construct(InheritanceType $inheritanceType, ?string $originalContent)
     {
-        $this->value = $value;
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
+        $this->items = get_object_vars($inheritanceType);
+
+        $this->resolveOriginalContentSpacingAndOrder($originalContent, 'value');
     }
 
     public function __toString(): string
     {
-        if ($this->value === null) {
-            return '';
-        }
+        $items = $this->completeItemsQuotes($this->items);
+        $items = $this->makeKeysExplicit($items);
 
-        if ($this->originalContent && ! in_array('value', (array) $this->orderedVisibleItems, true)) {
-            return '("' . $this->value . '")';
-        }
-
-        return '(value="' . $this->value . '")';
+        return $this->printContentItems($items);
     }
 
     public function getShortName(): string

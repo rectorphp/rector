@@ -108,14 +108,22 @@ final class ChangedFilesDetector
         $this->storeConfigurationDataHash($firstConfig, $configHash);
     }
 
+    private function getFileInfoCacheKey(SmartFileInfo $smartFileInfo): string
+    {
+        return sha1($smartFileInfo->getRealPath());
+    }
+
     private function hashFile(SmartFileInfo $smartFileInfo): string
     {
         return hash_file('sha1', $smartFileInfo->getRealPath());
     }
 
-    private function getFileInfoCacheKey(SmartFileInfo $smartFileInfo): string
+    private function saveItemWithValue(string $key, $value): void
     {
-        return sha1($smartFileInfo->getRealPath());
+        $item = $this->tagAwareAdapter->getItem($key);
+        $item->set($value);
+
+        $this->tagAwareAdapter->save($item);
     }
 
     private function storeConfigurationDataHash(string $configPath, string $configurationHash): void
@@ -136,13 +144,5 @@ final class ChangedFilesDetector
             // should be unique per getcwd()
             $this->clear();
         }
-    }
-
-    private function saveItemWithValue(string $key, $value): void
-    {
-        $item = $this->tagAwareAdapter->getItem($key);
-        $item->set($value);
-
-        $this->tagAwareAdapter->save($item);
     }
 }

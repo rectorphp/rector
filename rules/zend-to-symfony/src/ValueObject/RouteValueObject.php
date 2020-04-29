@@ -47,7 +47,9 @@ final class RouteValueObject
 
     public function getSymfonyRoutePhpDocTagNode(): SymfonyRouteTagValueNode
     {
-        return new SymfonyRouteTagValueNode($this->getPath());
+        return new SymfonyRouteTagValueNode([
+            'path' => $this->getPath(),
+        ]);
     }
 
     public function getParamsAsString(): string

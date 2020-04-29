@@ -79,21 +79,6 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         return FileSystemRectorInterface::class;
     }
 
-    private function createTemporaryFilePath(SmartFileInfo $fileInfo, string $file): string
-    {
-        $temporaryFilePath = sprintf(
-            '%s%sFixture%s%s',
-            dirname($fileInfo->getPath()),
-            DIRECTORY_SEPARATOR,
-            DIRECTORY_SEPARATOR,
-            $fileInfo->getBasename()
-        );
-
-        FileSystem::copy($file, $temporaryFilePath);
-
-        return $temporaryFilePath;
-    }
-
     private function createContainerWithProvidedRector(): void
     {
         $configFileTempPath = $this->createConfigFileTempPath();
@@ -118,11 +103,11 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $this->bootKernelWithConfigs(RectorKernel::class, $configFilePaths);
     }
 
-    private function createConfigFileTempPath(): string
+    private function resolveTestDirectory(): string
     {
-        $thisClass = Strings::after(Strings::webalize(static::class), '-', -1);
+        $testReflectionClass = new ReflectionClass(static::class);
 
-        return sprintf(sys_get_temp_dir() . '/rector_temp_tests/' . $thisClass . 'file_system_rector.yaml');
+        return (string) dirname((string) $testReflectionClass->getFileName());
     }
 
     private function createTemporaryFilePathFromFilePath(string $file): string
@@ -131,10 +116,25 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         return $this->createTemporaryFilePath($fileInfo, $file);
     }
 
-    private function resolveTestDirectory(): string
+    private function createConfigFileTempPath(): string
     {
-        $testReflectionClass = new ReflectionClass(static::class);
+        $thisClass = Strings::after(Strings::webalize(static::class), '-', -1);
 
-        return (string) dirname((string) $testReflectionClass->getFileName());
+        return sprintf(sys_get_temp_dir() . '/rector_temp_tests/' . $thisClass . 'file_system_rector.yaml');
+    }
+
+    private function createTemporaryFilePath(SmartFileInfo $fileInfo, string $file): string
+    {
+        $temporaryFilePath = sprintf(
+            '%s%sFixture%s%s',
+            dirname($fileInfo->getPath()),
+            DIRECTORY_SEPARATOR,
+            DIRECTORY_SEPARATOR,
+            $fileInfo->getBasename()
+        );
+
+        FileSystem::copy($file, $temporaryFilePath);
+
+        return $temporaryFilePath;
     }
 }

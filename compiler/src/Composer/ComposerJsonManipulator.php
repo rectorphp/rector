@@ -12,14 +12,14 @@ use Symfony\Component\Filesystem\Filesystem;
 final class ComposerJsonManipulator
 {
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var string
      */
     private $originalComposerJsonFileContent;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**
      * @var ConsoleDiffer
@@ -67,7 +67,7 @@ final class ComposerJsonManipulator
 
     private function removeDevKeys(array $json): array
     {
-        $keysToRemove = ['require-dev', 'autoload-dev', 'replace'];
+        $keysToRemove = ['replace'];
 
         foreach ($keysToRemove as $keyToRemove) {
             unset($json[$keyToRemove]);

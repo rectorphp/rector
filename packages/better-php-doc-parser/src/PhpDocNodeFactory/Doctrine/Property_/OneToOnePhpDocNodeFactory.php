@@ -33,16 +33,12 @@ final class OneToOnePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
+        $fullyQualifiedTargetEntity = $this->resolveFqnTargetEntity($oneToOne->targetEntity, $node);
 
-        return new OneToOneTagValueNode(
-            $oneToOne->targetEntity,
-            $oneToOne->mappedBy,
-            $oneToOne->inversedBy,
-            $oneToOne->cascade,
-            $oneToOne->fetch,
-            $oneToOne->orphanRemoval,
+        return OneToOneTagValueNode::createFromAnnotationAndOriginalContent(
+            $oneToOne,
             $annotationContent,
-            $this->resolveFqnTargetEntity($oneToOne->targetEntity, $node)
+            $fullyQualifiedTargetEntity
         );
     }
 }

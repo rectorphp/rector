@@ -33,6 +33,7 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
+use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -250,6 +251,31 @@ final class PhpDocInfo
         return null;
     }
 
+    /**
+     * @param class-string $type
+     * @return PhpDocTagValueNode[]
+     */
+    public function findAllByType(string $type): array
+    {
+        $this->ensureTypeIsTagValueNode($type, __METHOD__);
+
+        $foundTagsValueNodes = [];
+
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+
+            if (! is_a($phpDocChildNode->value, $type, true)) {
+                continue;
+            }
+
+            $foundTagsValueNodes[] = $phpDocChildNode->value;
+        }
+
+        return $foundTagsValueNodes;
+    }
+
     public function removeByType(string $type): void
     {
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
@@ -409,25 +435,16 @@ final class PhpDocInfo
         return $throwsClasses;
     }
 
-    /**
-     * @return Type[]
-     */
-    private function getThrowsTypes(): array
+    private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
-        $throwsTypes = [];
-
-        foreach ($this->getTagsByName('throws') as $throwsPhpDocNode) {
-            if (! $throwsPhpDocNode->value instanceof ThrowsTagValueNode) {
-                continue;
+        /** @var AttributeAwareParamTagValueNode $paramTagValue */
+        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
+            if (Strings::match($paramTagValue->parameterName, '#^(\$)?' . $name . '$#')) {
+                return $paramTagValue;
             }
-
-            $throwsTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
-                $throwsPhpDocNode->value,
-                $this->node
-            );
         }
 
-        return $throwsTypes;
+        return null;
     }
 
     private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode)
@@ -444,18 +461,6 @@ final class PhpDocInfo
         return $this->phpDocNode->getReturnTagValues()[0] ?? null;
     }
 
-    private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
-    {
-        /** @var AttributeAwareParamTagValueNode $paramTagValue */
-        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
-            if (Strings::match($paramTagValue->parameterName, '#^(\$)?' . $name . '$#')) {
-                return $paramTagValue;
-            }
-        }
-
-        return null;
-    }
-
     private function ensureTypeIsTagValueNode(string $type, string $location): void
     {
         if (is_a($type, PhpDocTagValueNode::class, true)) {
@@ -463,6 +468,10 @@ final class PhpDocInfo
         }
 
         if (is_a($type, TypeAwareTagValueNodeInterface::class, true)) {
+            return;
+        }
+
+        if (is_a($type, PhpAttributableTagNodeInterface::class, true)) {
             return;
         }
 
@@ -497,5 +506,26 @@ final class PhpDocInfo
         }
 
         throw new NotImplementedException();
+    }
+
+    /**
+     * @return Type[]
+     */
+    private function getThrowsTypes(): array
+    {
+        $throwsTypes = [];
+
+        foreach ($this->getTagsByName('throws') as $throwsPhpDocNode) {
+            if (! $throwsPhpDocNode->value instanceof ThrowsTagValueNode) {
+                continue;
+            }
+
+            $throwsTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
+                $throwsPhpDocNode->value,
+                $this->node
+            );
+        }
+
+        return $throwsTypes;
     }
 }

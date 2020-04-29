@@ -19,27 +19,30 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class SyncAnnotationParserCommand extends Command
 {
     /**
+     * @var ClassSyncerInterface[]
+     */
+    private $classSyncers = [];
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
 
     /**
-     * @var ClassSyncerInterface[]
+     * @var ParameterProvider
      */
-    private $classSyncers = [];
+    private $parameterProvider;
 
     /**
      * @param ClassSyncerInterface[] $classSyncers
      */
     public function __construct(array $classSyncers, SymfonyStyle $symfonyStyle, ParameterProvider $parameterProvider)
     {
-        parent::__construct();
-
         $this->symfonyStyle = $symfonyStyle;
         $this->classSyncers = $classSyncers;
+        $this->parameterProvider = $parameterProvider;
 
-        // disable imports
-        $parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, false);
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -57,6 +60,9 @@ final class SyncAnnotationParserCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // disable imports
+        $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, false);
+
         $dryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
 
         foreach ($this->classSyncers as $classSyncer) {
