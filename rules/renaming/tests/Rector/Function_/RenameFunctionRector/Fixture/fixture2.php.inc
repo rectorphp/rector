@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Function_\RenameFunctionRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\Function_\RenameFunctionRector\Fixture;
 
 class CaseSensitive
 {
@@ -20,7 +20,7 @@ class CaseSensitive
 -----
 <?php
 
-namespace Rector\Tests\Rector\Function_\RenameFunctionRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\Function_\RenameFunctionRector\Fixture;
 
 class CaseSensitive
 {

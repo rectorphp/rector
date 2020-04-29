@@ -116,7 +116,7 @@ PHP
         }
 
         // is property read only?
-        if (! $this->propertyManipulator->isReadOnlyProperty($onlyProperty)) {
+        if (! $this->propertyManipulator->isReadOnlyProperty($node)) {
             return null;
         }
 

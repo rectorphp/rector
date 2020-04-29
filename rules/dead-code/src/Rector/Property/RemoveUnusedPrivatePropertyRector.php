@@ -7,7 +7,7 @@ namespace Rector\DeadCode\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -55,11 +55,11 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [PropertyProperty::class];
+        return [Property::class];
     }
 
     /**
-     * @param PropertyProperty $node
+     * @param Property $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -76,14 +76,18 @@ PHP
         return $node;
     }
 
-    private function shouldSkipProperty(PropertyProperty $propertyProperty): bool
+    private function shouldSkipProperty(Property $property): bool
     {
-        if (! $this->propertyManipulator->isPrivate($propertyProperty)) {
+        if (count($property->props) !== 1) {
+            return true;
+        }
+
+        if (! $property->isPrivate()) {
             return true;
         }
 
         /** @var Class_|Interface_|Trait_|null $classNode */
-        $classNode = $propertyProperty->getAttribute(AttributeKey::CLASS_NODE);
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         return $classNode === null || $classNode instanceof Trait_ || $classNode instanceof Interface_;
     }
 }

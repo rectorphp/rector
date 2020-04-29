@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -89,11 +89,11 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [PropertyProperty::class];
+        return [Property::class];
     }
 
     /**
-     * @param PropertyProperty $node
+     * @param Property $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -125,14 +125,18 @@ PHP
         return $node;
     }
 
-    private function shouldSkipProperty(PropertyProperty $propertyProperty): bool
+    private function shouldSkipProperty(Property $property): bool
     {
-        if (! $this->propertyManipulator->isPrivate($propertyProperty)) {
+        if (count($property->props) !== 1) {
+            return true;
+        }
+
+        if (! $property->isPrivate()) {
             return true;
         }
 
         /** @var Class_|Interface_|Trait_|null $classNode */
-        $classNode = $propertyProperty->getAttribute(AttributeKey::CLASS_NODE);
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return true;
         }
@@ -145,7 +149,7 @@ PHP
             return true;
         }
 
-        return $this->propertyManipulator->isPropertyUsedInReadContext($propertyProperty);
+        return $this->propertyManipulator->isPropertyUsedInReadContext($property);
     }
 
     /**
