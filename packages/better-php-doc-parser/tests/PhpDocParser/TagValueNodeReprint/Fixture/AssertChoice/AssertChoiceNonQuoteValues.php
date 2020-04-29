@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class AssertChoiceNonQuoteValues
 {
     /**
-     * @Assert\Choice({chalet, apartment})
+     * @Assert\Choice({"chalet", "apartment"})
      */
     public  $type;
 }

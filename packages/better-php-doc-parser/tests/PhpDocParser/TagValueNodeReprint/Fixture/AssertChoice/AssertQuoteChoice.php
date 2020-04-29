@@ -11,7 +11,7 @@ class AssertQuoteChoice
     const CHOICE_ONE = 'choice_one';
     const CHOICE_TWO = 'choice_two';
     /**
-     * @Assert\Choice({SomeEntity::CHOICE_ONE, SomeEntity::CHOICE_TWO})
+     * @Assert\Choice({AssertQuoteChoice::CHOICE_ONE, AssertQuoteChoice::CHOICE_TWO})
      */
     private $someChoice = self::CHOICE_ONE;
 }
