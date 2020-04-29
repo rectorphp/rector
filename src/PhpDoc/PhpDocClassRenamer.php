@@ -60,7 +60,7 @@ final class PhpDocClassRenamer
         }
 
         foreach ($oldToNewClasses as $oldClass => $newClass) {
-            if ($relationTagValueNode->getFqnTargetEntity() !== $oldClass) {
+            if ($relationTagValueNode->getFullyQualifiedTargetEntity() !== $oldClass) {
                 continue;
             }
 

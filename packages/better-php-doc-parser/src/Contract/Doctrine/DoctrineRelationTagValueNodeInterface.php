@@ -10,7 +10,7 @@ interface DoctrineRelationTagValueNodeInterface extends PhpDocTagValueNode
 {
     public function getTargetEntity(): ?string;
 
-    public function getFqnTargetEntity(): ?string;
+    public function getFullyQualifiedTargetEntity(): ?string;
 
     public function changeTargetEntity(string $targetEntity): void;
 }

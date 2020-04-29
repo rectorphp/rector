@@ -14,19 +14,20 @@ if (class_exists('Symfony\Component\Routing\Annotation\Route')) {
  */
 class Route
 {
-    private $path;
-    private $localizedPaths = [];
-    private $name;
-    private $requirements = [];
-    private $options = [];
-    private $defaults = [];
-    private $host;
-    private $methods = [];
-    private $schemes = [];
-    private $condition;
-    private $locale;
-    private $format;
-    private $utf8;
+    // @todo make it work with privates too!!!
+    public $path;
+    public $localizedPaths = [];
+    public $name;
+    public $requirements = [];
+    public $options = [];
+    public $defaults = [];
+    public $host;
+    public $methods = [];
+    public $schemes = [];
+    public $condition;
+    public $locale;
+    public $format;
+    public $utf8;
 
     /**
      * @param array $data An array of key/value parameters

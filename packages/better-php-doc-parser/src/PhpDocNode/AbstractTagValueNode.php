@@ -11,7 +11,6 @@ use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
-use Rector\Core\Exception\ShouldNotHappenException;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
@@ -93,7 +92,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         $keyPart = $this->createKeyPart($key);
 
-        // should unqote
+        // should unquote
         if ($this->isValueWithoutQuotes($key)) {
             // @todo resolve per key item
             $json = Strings::replace($json, '#"#');
@@ -118,6 +117,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected function printContentItems(array $items): string
     {
         $items = $this->filterOutMissingItems($items);
+
+        // remove null values
+        $items = array_filter($items);
 
         if ($items === []) {
             if ($this->originalContent !== null && Strings::endsWith($this->originalContent, '()')) {
@@ -202,40 +204,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $this->isSilentKeyExplicit = (bool) Strings::contains($originalContent, sprintf('%s=', $silentKey));
     }
 
-    protected function printValueWithOptionalQuotes(?string $key = null, ...$values): string
-    {
-        // pick first non-null value
-        foreach ($values as $value) {
-            if ($value === null) {
-                continue;
-            }
-
-            break;
-        }
-
-        if (! isset($value)) {
-            throw new ShouldNotHappenException();
-        }
-
-        if (is_array($value)) {
-            return $this->printArrayItem($value, $key);
-        }
-
-        $keyPart = $this->createKeyPart($key);
-
-        // quote by default
-        if (! isset($this->keysByQuotedStatus[$key]) || (isset($this->keysByQuotedStatus[$key]) && $this->keysByQuotedStatus[$key])) {
-            // probably constant - no quote
-            if (Strings::match($value, '#\w+::\w+#')) {
-                return $keyPart . $value;
-            }
-
-            return sprintf('%s"%s"', $keyPart, $value);
-        }
-
-        return $keyPart . $value;
-    }
-
     protected function filterOutMissingItems(array $contentItems): array
     {
         if ($this->orderedVisibleItems === null) {
@@ -247,7 +215,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
     private function createKeyPart(?string $key = null): string
     {
-        if ($key === null || $key === '') {
+        if (empty($key)) {
             return '';
         }
 

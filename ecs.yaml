@@ -76,6 +76,8 @@ parameters:
             - 'src/Testing/PHPUnit/PHPUnitEnvironment.php'
             # honesty first
             - 'src/*Static*.php'
+            # static ctor
+            - 'packages/better-php-doc-parser/src/PhpDocNode/**/*TagValueNode.php'
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'

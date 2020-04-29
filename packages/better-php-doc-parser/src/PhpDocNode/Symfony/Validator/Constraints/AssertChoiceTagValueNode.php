@@ -6,83 +6,46 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
-use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AbstractConstraintTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
+use Symfony\Component\Validator\Constraints\Choice;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
-final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface
+final class AssertChoiceTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface
 {
     /**
-     * @var mixed[]|string|null
+     * @var mixed[]
      */
-    private $callback;
+    private $items = [];
 
-    /**
-     * @var mixed[]|string|null
-     */
-    private $choices;
-
-    /**
-     * @var bool|null
-     */
-    private $strict;
-
-    /**
-     * @param mixed[]|string|null $callback
-     * @param mixed[]|string|null $choices
-     */
-    public function __construct($groups, $callback, ?bool $strict, ?string $originalContent, $choices)
+    public function __construct(Choice $choice, ?string $originalContent)
     {
-        $this->callback = $callback;
-        $this->strict = $strict;
-        $this->choices = $choices;
+        $this->items = get_object_vars($choice);
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent, 'choices');
-
-        parent::__construct($groups);
     }
 
     public function __toString(): string
     {
-        $contentItems = [];
+        $items = $this->completeItemsQuotes($this->items);
+        $items = $this->makeKeysExplicit($items);
 
-        if ($this->callback) {
-            $contentItems['callback'] = $this->createCallback();
-        } elseif ($this->choices) {
-            $contentItems['choices'] = $this->printValueWithOptionalQuotes('choices', $this->choices);
-        }
-
-        if ($this->strict !== null) {
-            $contentItems['strict'] = sprintf('strict=%s', $this->strict ? 'true' : 'false');
-        }
-
-        $contentItems = $this->appendGroups($contentItems);
-
-        return $this->printContentItems($contentItems);
+        return $this->printContentItems($items);
     }
 
     public function isCallbackClass(string $class): bool
     {
-        return $class === ($this->callback[0] ?? null);
+        return $class === ($this->items['callback'][0] ?? null);
     }
 
     public function changeCallbackClass(string $newClass): void
     {
-        $this->callback[0] = $newClass;
+        $this->items['callback'][0] = $newClass;
     }
 
     public function getShortName(): string
     {
         return '@Assert\Choice';
-    }
-
-    private function createCallback(): string
-    {
-        if (is_array($this->callback)) {
-            return $this->printArrayItem($this->callback, 'callback');
-        }
-
-        return sprintf('callback="%s"', $this->callback);
     }
 }
