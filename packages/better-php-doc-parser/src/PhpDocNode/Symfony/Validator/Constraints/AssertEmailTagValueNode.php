@@ -18,22 +18,10 @@ final class AssertEmailTagValueNode extends AbstractTagValueNode implements Type
 {
     use PhpAttributePhpDocNodePrintTrait;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(Email $email, ?string $originalContent = null)
     {
         $this->items = get_object_vars($email);
         $this->resolveOriginalContentSpacingAndOrder($originalContent, 'choices');
-    }
-
-    public function __toString(): string
-    {
-        $contentItemsWithExplicitKeys = $this->makeKeysExplicit($this->items);
-
-        return $this->printContentItems($contentItemsWithExplicitKeys);
     }
 
     public function getShortName(): string

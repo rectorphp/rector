@@ -16,31 +16,17 @@ final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode impl
 {
     use PhpAttributePhpDocNodePrintTrait;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(array $items, ?string $annotationContent = null)
     {
         $this->items = $items;
         $this->resolveOriginalContentSpacingAndOrder($annotationContent, 'strategy');
     }
 
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
-    }
-
-    public static function createFromAnnotationAndAnnotationContent(
+    public static function createFromAnnotationAndContent(
         GeneratedValue $generatedValue,
         string $annotationContent
     ): self {
         $items = get_object_vars($generatedValue);
-
         return new self($items, $annotationContent);
     }
 

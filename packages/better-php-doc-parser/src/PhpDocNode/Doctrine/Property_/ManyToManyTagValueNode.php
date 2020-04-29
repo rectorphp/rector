@@ -21,11 +21,6 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
      */
     private $fullyQualifiedTargetEntity;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(
         array $items,
         ?string $originalContent = null,
@@ -34,14 +29,6 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
         $this->items = $items;
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
-
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
     }
 
     public static function createFromAnnotationAndOriginalContent(
@@ -96,19 +83,17 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function toAttributeString(): string
     {
-        $items = $this->createItems(self::PRINT_TYPE_ATTRIBUTE);
+        $items = $this->createAttributeItems();
         $items = $this->filterOutMissingItems($items);
 
         $content = $this->printPhpAttributeItems($items);
         return $this->printAttributeContent($content);
     }
 
-    private function createItems(string $printType = self::PRINT_TYPE_ANNOTATION): array
+    private function createAttributeItems(): array
     {
         $items = $this->items;
-        if ($printType === self::PRINT_TYPE_ATTRIBUTE) {
-            $items['targetEntity'] .= '::class';
-        }
+        $items['targetEntity'] .= '::class';
 
         return $items;
     }

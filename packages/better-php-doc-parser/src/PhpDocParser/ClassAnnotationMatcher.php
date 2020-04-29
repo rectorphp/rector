@@ -17,20 +17,32 @@ final class ClassAnnotationMatcher
 {
     public function isTagMatchToNodeAndClass(string $tag, Node $node, string $matchingClass): bool
     {
+        $fullyQualifiedAnnotationClass = $this->resolveTagFullyQualifiedName($tag, $node);
+
+        return Strings::lower($fullyQualifiedAnnotationClass) === Strings::lower($matchingClass);
+    }
+
+    private function resolveTagFullyQualifiedName(string $tag, Node $node): string
+    {
         $tag = ltrim($tag, '@');
 
+        /** @var Use_[]|null $useNodes */
         $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
 
         if ($useNodes === null) {
-            return $matchingClass === $tag;
+            /** @var string|null $namespace */
+            $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
+            if ($namespace !== null) {
+                $namespacedTag = $namespace . '\\' . $tag;
+                if (class_exists($namespacedTag)) {
+                    return $namespacedTag;
+                }
+            }
+
+            return $tag;
         }
 
-        $fullyQualifiedClassNode = $this->matchFullAnnotationClassWithUses($tag, $useNodes);
-        if ($fullyQualifiedClassNode === null) {
-            return false;
-        }
-
-        return Strings::lower($fullyQualifiedClassNode) === Strings::lower($matchingClass);
+        return $this->matchFullAnnotationClassWithUses($tag, $useNodes) ?? $tag;
     }
 
     /**

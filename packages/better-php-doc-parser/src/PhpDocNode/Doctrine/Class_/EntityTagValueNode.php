@@ -13,11 +13,6 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
 {
     use PhpAttributePhpDocNodePrintTrait;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(?Entity $entity = null, ?string $originalContent = null)
     {
         if ($entity !== null) {
@@ -25,14 +20,6 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
         }
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
-
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
     }
 
     public function removeRepositoryClass(): void
@@ -47,7 +34,7 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
 
     public function toAttributeString(): string
     {
-        $items = $this->createItems(self::PRINT_TYPE_ATTRIBUTE);
+        $items = $this->createAttributeItems();
         $items = $this->filterOutMissingItems($items);
 
         $content = $this->printPhpAttributeItems($items);
@@ -55,18 +42,16 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
         return $this->printAttributeContent($content);
     }
 
-    private function createItems(string $printType = self::PRINT_TYPE_ANNOTATION): array
+    private function createAttributeItems(): array
     {
         $items = $this->items;
 
-        if ($printType === self::PRINT_TYPE_ATTRIBUTE) {
-            if ($items['repositoryClass'] !== null) {
-                $items['repositoryClass'] .= '::class';
-            }
+        if ($items['repositoryClass'] !== null) {
+            $items['repositoryClass'] .= '::class';
+        }
 
-            if ($items['readOnly'] !== null) {
-                $items['readOnly'] = $items['readOnly'] ? 'ORM\Entity::READ_ONLY' : '';
-            }
+        if ($items['readOnly'] !== null) {
+            $items['readOnly'] = $items['readOnly'] ? 'ORM\Entity::READ_ONLY' : '';
         }
 
         return $items;

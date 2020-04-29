@@ -14,24 +14,11 @@ use Symfony\Component\Validator\Constraints\Choice;
  */
 final class AssertChoiceTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface
 {
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(Choice $choice, ?string $originalContent)
     {
         $this->items = get_object_vars($choice);
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent, 'choices');
-    }
-
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
     }
 
     public function isCallbackClass(string $class): bool

@@ -173,6 +173,7 @@ PHP
         }
 
         $serviceName = $phpDocTagValueNode->getServiceName();
+
         if ($serviceName === null) {
             return false;
         }

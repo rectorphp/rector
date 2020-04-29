@@ -23,13 +23,14 @@ final class SerializerTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
     {
+        /** @var Type|null $type */
         $type = $this->resolveTypeAnnotation($node);
         if ($type === null) {
             return null;
         }
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
-        return new SerializerTypeTagValueNode($type->name, $annotationContent);
+        return new SerializerTypeTagValueNode($type, $annotationContent);
     }
 
     /**

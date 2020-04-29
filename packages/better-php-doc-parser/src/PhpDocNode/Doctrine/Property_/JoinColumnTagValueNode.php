@@ -15,19 +15,14 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
     use PhpAttributePhpDocNodePrintTrait;
 
     /**
-     * @var string|null
-     */
-    private $tag;
-
-    /**
      * @var string
      */
     private $shortName = '@ORM\JoinColumn';
 
     /**
-     * @var mixed[]
+     * @var string|null
      */
-    private $items = [];
+    private $tag;
 
     public function __construct(array $items, ?string $originalContent = null, ?string $originalTag = null)
     {
@@ -35,14 +30,6 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
         $this->tag = $originalTag;
-    }
-
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
     }
 
     public static function createFromAnnotationAndOriginalContent(

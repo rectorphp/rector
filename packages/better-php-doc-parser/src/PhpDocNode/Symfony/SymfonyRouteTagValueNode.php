@@ -18,11 +18,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
      */
     public const CLASS_NAME = Route::class;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(array $items, ?string $originalContent = null)
     {
         $this->items = $items;
