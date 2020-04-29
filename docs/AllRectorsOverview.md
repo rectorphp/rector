@@ -1,4 +1,4 @@
-# All 506 Rectors Overview
+# All 507 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7934,6 +7934,26 @@ Change get_class($object) to faster $object::class
      {
 -        return get_class($object);
 +        return $object::class;
+     }
+ }
+```
+
+<br>
+
+### `GetDebugTypeRector`
+
+- class: [`Rector\Php80\Rector\Ternary\GetDebugTypeRector`](/../master/rules/php80/src/Rector/Ternary/GetDebugTypeRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Ternary/GetDebugTypeRector/Fixture)
+
+Change ternary type resolve to get_debug_type()
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        return is_object($value) ? get_class($value) : gettype($value);
++        return get_debug_type($value);
      }
  }
 ```
