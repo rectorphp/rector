@@ -6,9 +6,10 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
 use JMS\DiExtraBundle\Annotation\Inject;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
-final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
+final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface
 {
     /**
      * @var string|null
@@ -20,7 +21,7 @@ final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortN
         $this->items = get_object_vars($inject);
         $this->serviceName = $serviceName;
 
-        $this->resolveOriginalContentSpacingAndOrder($annotationContent, 'value');
+        $this->resolveOriginalContentSpacingAndOrder($annotationContent);
     }
 
     public function getServiceName(): ?string
@@ -31,5 +32,10 @@ final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortN
     public function getShortName(): string
     {
         return '@DI\Inject';
+    }
+
+    public function getSilentKey(): string
+    {
+        return 'value';
     }
 }

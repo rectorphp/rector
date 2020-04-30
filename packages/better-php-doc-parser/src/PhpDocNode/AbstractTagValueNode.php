@@ -187,15 +187,17 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         );
     }
 
-    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent, ?string $silentKey = null): void
+    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
     {
         $this->keysByQuotedStatus = [];
         if ($originalContent === null) {
             return;
         }
 
-        if ($silentKey === null && $this instanceof SilentKeyNodeInterface) {
+        if ($this instanceof SilentKeyNodeInterface) {
             $silentKey = $this->getSilentKey();
+        } else {
+            $silentKey = null;
         }
 
         $this->originalContent = $originalContent;
