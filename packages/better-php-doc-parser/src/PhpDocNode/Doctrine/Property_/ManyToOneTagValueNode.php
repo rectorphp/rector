@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
-use Doctrine\ORM\Mapping\ManyToOne;
 use Rector\BetterPhpDocParser\Contract\Doctrine\InversedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToOneTagNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
@@ -16,20 +15,11 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
      */
     private $fullyQualifiedTargetEntity;
 
-    public function __construct(array $items, ?string $originalContent, string $fullyQualifiedTargetEntity)
+    public function __construct($annotationOrItems, ?string $content, string $fullyQualifiedTargetEntity)
     {
-        $this->items = $items;
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
 
-    public static function createFromAnnotationAndOriginalContent(
-        ManyToOne $manyToOne,
-        string $originalContent,
-        string $fullyQualifiedTargetEntity
-    ) {
-        $items = get_object_vars($manyToOne);
-        return new self($items, $originalContent, $fullyQualifiedTargetEntity);
+        parent::__construct($annotationOrItems, $content);
     }
 
     public function getTargetEntity(): ?string
