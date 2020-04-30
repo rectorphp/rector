@@ -21,13 +21,13 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     private $fullyQualifiedTargetEntity;
 
     public function __construct(
-        $annotationOrItems,
+        array $items,
         ?string $content = null,
         ?string $fullyQualifiedTargetEntity = null
     ) {
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
 
-        parent::__construct($annotationOrItems, $content);
+        parent::__construct($items, $content);
     }
 
     public function getTargetEntity(): string

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_;
 
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
@@ -15,13 +14,10 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode im
      */
     private $tag;
 
-    public function __construct(
-        UniqueConstraint $uniqueConstraint,
-        ?string $content = null,
-        ?string $originalTag = null
-    ) {
+    public function __construct(array $items, ?string $content = null, ?string $originalTag = null)
+    {
         $this->tag = $originalTag;
-        parent::__construct($uniqueConstraint, $content);
+        parent::__construct($items, $content);
     }
 
     public function getTag(): ?string

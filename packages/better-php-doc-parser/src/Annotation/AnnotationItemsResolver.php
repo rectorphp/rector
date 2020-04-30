@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\BetterPhpDocParser\Annotation;
+
+use Doctrine\Common\Annotations\Annotation;
+use Nette\Utils\Strings;
+use Symfony\Component\Routing\Annotation\Route;
+
+final class AnnotationItemsResolver
+{
+    /**
+     * @param object|Annotation|mixed[] $annotationOrItems
+     */
+    public function resolve($annotationOrItems): array
+    {
+        if (is_array($annotationOrItems)) {
+            return $annotationOrItems;
+        }
+
+        if (is_object($annotationOrItems)) {
+            // special case for private property annotations
+            if ($annotationOrItems instanceof Route) {
+                return $this->resolvePrivatePropertyValues($annotationOrItems);
+            }
+
+            return get_object_vars($annotationOrItems);
+        }
+
+        return [];
+    }
+
+    /**
+     * @see https://ocramius.github.io/blog/fast-php-object-to-array-conversion/
+     * @return mixed[]
+     */
+    private function resolvePrivatePropertyValues(object $object): array
+    {
+        $items = [];
+        foreach ((array) $object as $messedPropertyName => $value) {
+            $propertyName = Strings::after($messedPropertyName, "\x00", -1);
+            $items[$propertyName] = $value;
+        }
+
+        return $items;
+    }
+}

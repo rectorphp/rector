@@ -1,7 +1,5 @@
 <?php
 
-/** @source https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Routing/Annotation/Route.php */
-
 declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\AnnotationReader;
@@ -76,7 +74,7 @@ final class NodeAnnotationReader
     /**
      * @return object|null
      */
-    private function readClassAnnotation(Class_ $class, string $annotationClassName)
+    public function readClassAnnotation(Class_ $class, string $annotationClassName)
     {
         $classReflection = $this->createClassReflectionFromNode($class);
 
@@ -93,7 +91,7 @@ final class NodeAnnotationReader
     /**
      * @return object|null
      */
-    private function readPropertyAnnotation(Property $property, string $annotationClassName)
+    public function readPropertyAnnotation(Property $property, string $annotationClassName)
     {
         $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
         if ($propertyReflection === null) {

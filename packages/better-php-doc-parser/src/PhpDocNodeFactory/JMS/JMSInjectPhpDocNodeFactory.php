@@ -46,7 +46,7 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Inject|null $inject */
-        $inject = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
+        $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($inject === null) {
             return null;
         }
@@ -56,6 +56,7 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         // needed for proper doc block formatting
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new JMSInjectTagValueNode($inject, $serviceName, $annotationContent);
+        $items = $this->annotationItemsResolver->resolve($inject);
+        return new JMSInjectTagValueNode($items, $serviceName, $annotationContent);
     }
 }

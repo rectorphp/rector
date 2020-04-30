@@ -53,7 +53,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var JoinTable|null $joinTable */
-        $joinTable = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
+        $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($joinTable === null) {
             return null;
         }
@@ -120,8 +120,9 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         foreach ($joinColumns as $key => $joinColumn) {
             $subAnnotation = $joinColumnContents[$key];
 
+            $items = $this->annotationItemsResolver->resolve($joinColumn);
             $joinColumnValuesTags[] = new JoinColumnTagValueNode(
-                $joinColumn,
+                $items,
                 $subAnnotation['content'],
                 $subAnnotation['tag']
             );

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
-use JMS\DiExtraBundle\Annotation\Inject;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
@@ -16,11 +15,11 @@ final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortN
      */
     private $serviceName;
 
-    public function __construct(Inject $inject, ?string $serviceName, ?string $annotationContent)
+    public function __construct(array $items, ?string $serviceName, ?string $annotationContent)
     {
         $this->serviceName = $serviceName;
 
-        parent::__construct($inject, $annotationContent);
+        parent::__construct($items, $annotationContent);
     }
 
     public function getServiceName(): ?string

@@ -1,6 +1,6 @@
 <?php
 
-// mimics: https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Routing/Route.php
+/** @source https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Routing/Annotation/Route.php */
 
 declare(strict_types=1);
 

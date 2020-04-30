@@ -12,7 +12,6 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
-use Symfony\Component\Routing\Annotation\Route;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
@@ -69,9 +68,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      */
     private $keysByQuotedStatus = [];
 
-    public function __construct($annotationOrItems, ?string $originalContent = null)
+    public function __construct(array $items, ?string $originalContent = null)
     {
-        $this->items = $this->resolveItems($annotationOrItems);
+        $this->items = $items;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
@@ -295,42 +294,5 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         // @see https://regex101.com/r/VgvK8C/3/
         return sprintf('#%s="#', $escapedKey);
-    }
-
-    /**
-     * @todo decouple to service
-     * @param object|mixed[] $annotationOrItems
-     */
-    private function resolveItems($annotationOrItems): array
-    {
-        if (is_array($annotationOrItems)) {
-            return $annotationOrItems;
-        }
-
-        if (is_object($annotationOrItems)) {
-            // special case for private property annotations
-            if ($annotationOrItems instanceof Route) {
-                return $this->resolvePrivatePropertyAndValues($annotationOrItems);
-            }
-
-            return get_object_vars($annotationOrItems);
-        }
-
-        return [];
-    }
-
-    /**
-     * @see https://ocramius.github.io/blog/fast-php-object-to-array-conversion/
-     * @return mixed[]
-     */
-    private function resolvePrivatePropertyAndValues(object $object): array
-    {
-        $items = [];
-        foreach ((array) $object as $messedPropertyName => $value) {
-            $propertyName = Strings::after($messedPropertyName, "\x00", -1);
-            $items[$propertyName] = $value;
-        }
-
-        return $items;
     }
 }

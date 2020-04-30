@@ -52,7 +52,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Table|null $table */
-        $table = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
+        $table = $this->nodeAnnotationReader->readClassAnnotation($node, $annotationClass);
         if ($table === null) {
             return null;
         }
