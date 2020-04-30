@@ -1,5 +1,7 @@
 <?php
 
+/** @source https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Routing/Annotation/Route.php */
+
 declare(strict_types=1);
 
 namespace Symfony\Component\Routing\Annotation;
@@ -14,20 +16,19 @@ if (class_exists('Symfony\Component\Routing\Annotation\Route')) {
  */
 class Route
 {
-    // @todo make it work with privates too!!!
-    public $path;
-    public $localizedPaths = [];
-    public $name;
-    public $requirements = [];
-    public $options = [];
-    public $defaults = [];
-    public $host;
-    public $methods = [];
-    public $schemes = [];
-    public $condition;
-    public $locale;
-    public $format;
-    public $utf8;
+    private $path;
+    private $localizedPaths = [];
+    private $name;
+    private $requirements = [];
+    private $options = [];
+    private $defaults = [];
+    private $host;
+    private $methods = [];
+    private $schemes = [];
+    private $condition;
+    private $locale;
+    private $format;
+    private $utf8;
 
     /**
      * @param array $data An array of key/value parameters

@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
+use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
 use Rector\BetterPhpDocParser\AnnotationReader\NodeAnnotationReader;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
@@ -25,14 +26,21 @@ abstract class AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
     protected $annotationContentResolver;
 
     /**
+     * @var AnnotationItemsResolver
+     */
+    protected $annotationItemsResolver;
+
+    /**
      * @required
      */
     public function autowireAbstractPhpDocNodeFactory(
         NodeAnnotationReader $nodeAnnotationReader,
-        AnnotationContentResolver $annotationContentResolver
+        AnnotationContentResolver $annotationContentResolver,
+        AnnotationItemsResolver $annotationItemsResolver
     ): void {
         $this->nodeAnnotationReader = $nodeAnnotationReader;
         $this->annotationContentResolver = $annotationContentResolver;
+        $this->annotationItemsResolver = $annotationItemsResolver;
     }
 
     protected function resolveContentFromTokenIterator(TokenIterator $tokenIterator): string

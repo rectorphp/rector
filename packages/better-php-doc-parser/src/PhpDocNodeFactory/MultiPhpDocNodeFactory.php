@@ -143,6 +143,7 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         $annotationContent = $this->annotationContentResolver->resolveFromTokenIterator($tokenIterator);
-        return new $tagValueNodeClass($annotation, $annotationContent);
+        $items = $this->annotationItemsResolver->resolve($annotation);
+        return new $tagValueNodeClass($items, $annotationContent);
     }
 }
