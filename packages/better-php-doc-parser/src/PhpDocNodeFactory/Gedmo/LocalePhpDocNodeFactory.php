@@ -18,6 +18,9 @@ final class LocalePhpDocNodeFactory extends AbstractBasicPropertyPhpDocNodeFacto
         return Locale::class;
     }
 
+    /**
+     * @return LocaleTagValueNode|null
+     */
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
     {
         return $this->createFromPropertyNode($node);

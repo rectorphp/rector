@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 
-use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -14,13 +13,14 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Contract\NameAwarePhpDocNodeFactoryInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
-final class ParamPhpDocNodeFactory implements NameAwarePhpDocNodeFactoryInterface, PhpDocParserAwareInterface
+/**
+ * Same as original + also allows "&" reference: https://github.com/rectorphp/rector/pull/1735
+ */
+final class ParamPhpDocNodeFactory
 {
     /**
      * @var PrivatesAccessor
@@ -64,7 +64,7 @@ final class ParamPhpDocNodeFactory implements NameAwarePhpDocNodeFactoryInterfac
         return 'param';
     }
 
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
+    public function createFromTokens(TokenIterator $tokenIterator): ?PhpDocTagValueNode
     {
         try {
             $tokenIterator->pushSavePoint();
