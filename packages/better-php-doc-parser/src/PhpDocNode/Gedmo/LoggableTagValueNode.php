@@ -9,27 +9,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class LoggableTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var string|null
-     */
-    private $logEntryClass;
-
-    public function __construct(?string $logEntryClass)
-    {
-        $this->logEntryClass = $logEntryClass;
-    }
-
-    public function __toString(): string
-    {
-        $contentItems = [];
-
-        if ($this->logEntryClass !== null) {
-            $contentItems['logEntryClass'] = $this->logEntryClass;
-        }
-
-        return $this->printContentItems($contentItems);
-    }
-
     public function getShortName(): string
     {
         return '@Gedmo\Loggable';

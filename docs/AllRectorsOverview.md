@@ -1,4 +1,4 @@
-# All 505 Rectors Overview
+# All 508 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7904,7 +7904,7 @@ Changes property `@var` annotations from annotation to type.
 - class: [`Rector\Php80\Rector\Class_\AnnotationToAttributeRector`](/../master/rules/php80/src/Rector/Class_/AnnotationToAttributeRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/Class_/AnnotationToAttributeRector/Fixture)
 
-Change annotation to attibute
+Change annotation to attribute
 
 ```diff
  use Doctrine\ORM\Attributes as ORM;
@@ -7915,6 +7915,46 @@ Change annotation to attibute
 +<<ORM\Entity>>
  class SomeClass
  {
+ }
+```
+
+<br>
+
+### `ClassOnObjectRector`
+
+- class: [`Rector\Php80\Rector\FuncCall\ClassOnObjectRector`](/../master/rules/php80/src/Rector/FuncCall/ClassOnObjectRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/FuncCall/ClassOnObjectRector/Fixture)
+
+Change get_class($object) to faster $object::class
+
+```diff
+ class SomeClass
+ {
+     public function run($object)
+     {
+-        return get_class($object);
++        return $object::class;
+     }
+ }
+```
+
+<br>
+
+### `GetDebugTypeRector`
+
+- class: [`Rector\Php80\Rector\Ternary\GetDebugTypeRector`](/../master/rules/php80/src/Rector/Ternary/GetDebugTypeRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Ternary/GetDebugTypeRector/Fixture)
+
+Change ternary type resolve to get_debug_type()
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        return is_object($value) ? get_class($value) : gettype($value);
++        return get_debug_type($value);
+     }
  }
 ```
 
@@ -10799,6 +10839,40 @@ services:
  {
 -    public const SOME_CONSTANT = 1;
 +    protected const SOME_CONSTANT = 1;
+ }
+```
+
+<br>
+
+### `ChangeContractMethodSingleToManyRector`
+
+- class: [`Rector\Core\Rector\ClassMethod\ChangeContractMethodSingleToManyRector`](/../master/src/Rector/ClassMethod/ChangeContractMethodSingleToManyRector.php)
+- [test fixtures](/../master/tests/Rector/ClassMethod/ChangeContractMethodSingleToManyRector/Fixture)
+
+Change method that returns single value to multiple values
+
+```yaml
+services:
+    Rector\Core\Rector\ClassMethod\ChangeContractMethodSingleToManyRector:
+        $oldToNewMethodByType:
+            SomeClass:
+                getNode: getNodes
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public function getNode(): string
++    /**
++     * @return string[]
++     */
++    public function getNodes(): array
+     {
+-        return 'Echo_';
++        return ['Echo_'];
+     }
  }
 ```
 

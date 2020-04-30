@@ -32,22 +32,28 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
      */
     private const JOIN_COLUMN_PATTERN = '#(?<tag>@(ORM\\\\)?JoinColumn)\((?<content>.*?)\),?#si';
 
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return JoinTable::class;
+        return [JoinTable::class];
     }
 
     /**
      * @return JoinTableTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             throw new ShouldNotHappenException();
         }
 
         /** @var JoinTable|null $joinTable */
-        $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($joinTable === null) {
             return null;
         }
@@ -114,7 +120,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         foreach ($joinColumns as $key => $joinColumn) {
             $subAnnotation = $joinColumnContents[$key];
 
-            $joinColumnValuesTags[] = JoinColumnTagValueNode::createFromAnnotationAndOriginalContent(
+            $joinColumnValuesTags[] = new JoinColumnTagValueNode(
                 $joinColumn,
                 $subAnnotation['content'],
                 $subAnnotation['tag']

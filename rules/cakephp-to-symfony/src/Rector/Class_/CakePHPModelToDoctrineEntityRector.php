@@ -144,7 +144,7 @@ PHP
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->addTagValueNodeWithShortName(new EntityTagValueNode());
+        $phpDocInfo->addTagValueNodeWithShortName(new EntityTagValueNode([]));
 
         $objectType = new AliasedObjectType('ORM', 'Doctrine\Mapping\Annotation');
         $this->addUseType($objectType, $class);

@@ -49,7 +49,7 @@ final class EntityIdNodeFactory
         $phpDocInfo->addTagValueNode($varTagValueNode);
 
         // add @ORM\Id
-        $phpDocInfo->addTagValueNodeWithShortName(new IdTagValueNode());
+        $phpDocInfo->addTagValueNodeWithShortName(new IdTagValueNode([]));
 
         $idColumnTagValueNode = $this->phpDocTagNodeFactory->createIdColumnTagValueNode();
         $phpDocInfo->addTagValueNodeWithShortName($idColumnTagValueNode);

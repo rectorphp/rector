@@ -9,11 +9,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class VersionedTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    public function __toString(): string
-    {
-        return '';
-    }
-
     public function getShortName(): string
     {
         return '@Gedmo\Versioned';

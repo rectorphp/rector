@@ -33,7 +33,7 @@ final class AnnotationToAttributeRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change annotation to attibute', [
+        return new RectorDefinition('Change annotation to attribute', [
             new CodeSample(
                 <<<'PHP'
 use Doctrine\ORM\Attributes as ORM;

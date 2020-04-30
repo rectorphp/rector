@@ -318,6 +318,11 @@ final class NodeFactory
             return $arrayItem;
         }
 
+        if ($item instanceof ClassConstFetch) {
+            $itemValue = BuilderHelpers::normalizeValue($item);
+            return new ArrayItem($itemValue);
+        }
+
         throw new NotImplementedException(sprintf(
             'Not implemented yet. Go to "%s()" and add check for "%s" node.',
             __METHOD__,

@@ -274,7 +274,7 @@ PHP
         );
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
-        $phpDocInfo->addTagValueNodeWithShortName(new EntityTagValueNode());
+        $phpDocInfo->addTagValueNodeWithShortName(new EntityTagValueNode([]));
 
         foreach ($translatedPropertyToPhpDocInfos as $translatedPropertyName => $translatedPhpDocInfo) {
             $property = $this->nodeFactory->createPrivateProperty($translatedPropertyName);

@@ -6,9 +6,11 @@ namespace Rector\BetterPhpDocParser\AnnotationReader;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\Reader;
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use Rector\DoctrineAnnotationGenerated\PhpDocNode\ConstantReferenceIdentifierRestorer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -34,16 +36,101 @@ final class NodeAnnotationReader
      */
     private $nodeNameResolver;
 
-    public function __construct(Reader $reader, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var ConstantReferenceIdentifierRestorer
+     */
+    private $constantReferenceIdentifierRestorer;
+
+    public function __construct(
+        Reader $reader,
+        NodeNameResolver $nodeNameResolver,
+        ConstantReferenceIdentifierRestorer $constantReferenceIdentifierRestorer
+    ) {
         $this->reader = $reader;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->constantReferenceIdentifierRestorer = $constantReferenceIdentifierRestorer;
     }
 
     /**
      * @return object|null
      */
-    public function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName)
+    public function readAnnotation(Node $node, string $annotationClass)
+    {
+        if ($node instanceof Property) {
+            return $this->readPropertyAnnotation($node, $annotationClass);
+        }
+
+        if ($node instanceof ClassMethod) {
+            return $this->readMethodAnnotation($node, $annotationClass);
+        }
+
+        if ($node instanceof Class_) {
+            return $this->readClassAnnotation($node, $annotationClass);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return object|null
+     */
+    public function readClassAnnotation(Class_ $class, string $annotationClassName)
+    {
+        $classReflection = $this->createClassReflectionFromNode($class);
+
+        $annotation = $this->reader->getClassAnnotation($classReflection, $annotationClassName);
+        if ($annotation === null) {
+            return null;
+        }
+
+        $this->constantReferenceIdentifierRestorer->restoreObject($annotation);
+
+        return $annotation;
+    }
+
+    /**
+     * @return object|null
+     */
+    public function readPropertyAnnotation(Property $property, string $annotationClassName)
+    {
+        $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
+        if ($propertyReflection === null) {
+            return null;
+        }
+
+        try {
+            // covers cases like https://github.com/rectorphp/rector/issues/3046
+
+            /** @var object[] $propertyAnnotations */
+            $propertyAnnotations = $this->reader->getPropertyAnnotations($propertyReflection);
+
+            foreach ($propertyAnnotations as $propertyAnnotation) {
+                if (! is_a($propertyAnnotation, $annotationClassName, true)) {
+                    continue;
+                }
+
+                $objectHash = md5(spl_object_hash($propertyReflection) . serialize($propertyAnnotation));
+                if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
+                    continue;
+                }
+
+                $this->alreadyProvidedAnnotations[] = $objectHash;
+                $this->constantReferenceIdentifierRestorer->restoreObject($propertyAnnotation);
+
+                return $propertyAnnotation;
+            }
+        } catch (AnnotationException $annotationException) {
+            // unable to laod
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return object|null
+     */
+    private function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName)
     {
         /** @var string $className */
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
@@ -69,58 +156,12 @@ final class NodeAnnotationReader
                 }
 
                 $this->alreadyProvidedAnnotations[] = $objectHash;
+                $this->constantReferenceIdentifierRestorer->restoreObject($methodAnnotation);
 
                 return $methodAnnotation;
             }
         } catch (AnnotationException $annotationException) {
-            // unable to laod
-            return null;
-        }
-
-        return null;
-    }
-
-    /**
-     * @return object|null
-     */
-    public function readClassAnnotation(Class_ $class, string $annotationClassName)
-    {
-        $classReflection = $this->createClassReflectionFromNode($class);
-
-        return $this->reader->getClassAnnotation($classReflection, $annotationClassName);
-    }
-
-    /**
-     * @return object|null
-     */
-    public function readPropertyAnnotation(Property $property, string $annotationClassName)
-    {
-        $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
-        if ($propertyReflection === null) {
-            return null;
-        }
-
-        try {
-            // covers cases like https://github.com/rectorphp/rector/issues/3046
-
-            /** @var object[] $propertyAnnotations */
-            $propertyAnnotations = $this->reader->getPropertyAnnotations($propertyReflection);
-            foreach ($propertyAnnotations as $propertyAnnotation) {
-                if (! is_a($propertyAnnotation, $annotationClassName, true)) {
-                    continue;
-                }
-
-                $objectHash = md5(spl_object_hash($propertyReflection) . serialize($propertyAnnotation));
-                if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
-                    continue;
-                }
-
-                $this->alreadyProvidedAnnotations[] = $objectHash;
-
-                return $propertyAnnotation;
-            }
-        } catch (AnnotationException $annotationException) {
-            // unable to laod
+            // unable to load
             return null;
         }
 

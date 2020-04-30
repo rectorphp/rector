@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
-use Doctrine\ORM\Mapping\OneToMany;
 use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
@@ -17,37 +16,14 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
      */
     private $fullyQualifiedTargetEntity;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(
-        array $items,
-        ?string $originalContent = null,
+        $annotationOrItems,
+        ?string $content = null,
         ?string $fullyQualifiedTargetEntity = null
     ) {
-        $this->items = $items;
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
 
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
-    }
-
-    public static function createFromAnnotationAndContent(
-        OneToMany $oneToMany,
-        string $originalContent,
-        ?string $fullyQualifiedTargetEntity = null
-    ) {
-        $items = get_object_vars($oneToMany);
-
-        return new self($items, $originalContent, $fullyQualifiedTargetEntity);
+        parent::__construct($annotationOrItems, $content);
     }
 
     public function getTargetEntity(): string

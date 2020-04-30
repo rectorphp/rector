@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\Helper;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
@@ -40,5 +41,8 @@ final class TagValueToPhpParserNodeMap
         TableTagValueNode::class => Class_::class,
         CustomIdGeneratorTagValueNode::class => Property::class,
         GeneratedValueTagValueNode::class => Property::class,
+
+        // special case for constants
+        GenericTagValueNode::class => Property::class,
     ];
 }

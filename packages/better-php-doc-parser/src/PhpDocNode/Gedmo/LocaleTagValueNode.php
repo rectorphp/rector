@@ -8,8 +8,4 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class LocaleTagValueNode extends AbstractTagValueNode
 {
-    public function __toString(): string
-    {
-        return '';
-    }
 }

@@ -9,17 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 class GeneratedValueWithStrategy
 {
     /**
-     * @ORM\GeneratedValue(AUTO)
+     * @ORM\GeneratedValue("AUTO")
      */
     private $implicit;
 
     /**
      * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $explicit;
-
-    /**
-     * @ORM\GeneratedValue(strategy=AUTO)
      */
     private $explicitWithoutQuotes;
 }

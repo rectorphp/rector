@@ -9,6 +9,7 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 
@@ -18,14 +19,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     use PrintTagValueNodeTrait;
 
     /**
-     * @var string
+     * @var mixed[]
      */
-    protected const PRINT_TYPE_ATTRIBUTE = 'print_attribute';
-
-    /**
-     * @var string
-     */
-    protected const PRINT_TYPE_ANNOTATION = 'print_annotation';
+    protected $items = [];
 
     /**
      * @var bool
@@ -72,6 +68,22 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      */
     private $keysByQuotedStatus = [];
 
+    public function __construct($annotationOrItems, ?string $originalContent = null)
+    {
+        $this->items = $this->resolveItems($annotationOrItems);
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
+    }
+
+    /**
+     * Generic fallback
+     */
+    public function __toString(): string
+    {
+        $items = $this->completeItemsQuotes($this->items);
+        $items = $this->makeKeysExplicit($items);
+        return $this->printContentItems($items);
+    }
+
     /**
      * @param mixed[] $item
      */
@@ -99,16 +111,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         }
 
         return $keyPart . $json;
-    }
-
-    /**
-     * @param mixed[] $item
-     */
-    protected function printArrayItemWithSeparator(array $item, ?string $key = null, string $separator = ''): string
-    {
-        $content = $this->printArrayItem($item, $key);
-
-        return Strings::replace($content, '#:#', $separator);
     }
 
     /**
@@ -175,12 +177,17 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         );
     }
 
-    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent, ?string $silentKey = null): void
+    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
     {
         $this->keysByQuotedStatus = [];
-
         if ($originalContent === null) {
             return;
+        }
+
+        if ($this instanceof SilentKeyNodeInterface) {
+            $silentKey = $this->getSilentKey();
+        } else {
+            $silentKey = null;
         }
 
         $this->originalContent = $originalContent;
@@ -287,5 +294,21 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         // @see https://regex101.com/r/VgvK8C/3/
         return sprintf('#%s="#', $escapedKey);
+    }
+
+    /**
+     * @param object|mixed[] $annotationOrItems
+     */
+    private function resolveItems($annotationOrItems): array
+    {
+        if (is_array($annotationOrItems)) {
+            return $annotationOrItems;
+        }
+
+        if (is_object($annotationOrItems)) {
+            return get_object_vars($annotationOrItems);
+        }
+
+        return [];
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
-use Doctrine\ORM\Mapping\ManyToMany;
 use Rector\BetterPhpDocParser\Contract\Doctrine\InversedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
@@ -21,37 +20,14 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
      */
     private $fullyQualifiedTargetEntity;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(
-        array $items,
-        ?string $originalContent = null,
+        $annotationOrItems,
+        ?string $content = null,
         ?string $fullyQualifiedTargetEntity = null
     ) {
-        $this->items = $items;
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
 
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
-    }
-
-    public static function createFromAnnotationAndOriginalContent(
-        ManyToMany $manyToMany,
-        string $originalContent,
-        string $fullyQualifiedTargetEntity
-    ) {
-        $items = get_object_vars($manyToMany);
-
-        return new self($items, $originalContent, $fullyQualifiedTargetEntity);
+        parent::__construct($annotationOrItems, $content);
     }
 
     public function getTargetEntity(): string
@@ -96,19 +72,17 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function toAttributeString(): string
     {
-        $items = $this->createItems(self::PRINT_TYPE_ATTRIBUTE);
+        $items = $this->createAttributeItems();
         $items = $this->filterOutMissingItems($items);
 
         $content = $this->printPhpAttributeItems($items);
         return $this->printAttributeContent($content);
     }
 
-    private function createItems(string $printType = self::PRINT_TYPE_ANNOTATION): array
+    private function createAttributeItems(): array
     {
         $items = $this->items;
-        if ($printType === self::PRINT_TYPE_ATTRIBUTE) {
-            $items['targetEntity'] .= '::class';
-        }
+        $items['targetEntity'] .= '::class';
 
         return $items;
     }

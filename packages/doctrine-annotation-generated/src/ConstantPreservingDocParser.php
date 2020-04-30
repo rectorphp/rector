@@ -679,16 +679,60 @@ final class ConstantPreservingDocParser
     private function Constant()
     {
         $identifier = $this->Identifier();
-        if ($identifier === 'true') {
-            return true;
+        $originalIdentifier = $identifier;
+        if (!defined($identifier) && false !== strpos($identifier, '::') && '\\' !== $identifier[0]) {
+            list($className, $const) = explode('::', $identifier);
+            $pos = strpos($className, '\\');
+            $alias = false === $pos ? $className : substr($className, 0, $pos);
+            $found = false;
+            $loweredAlias = strtolower($alias);
+            switch (true) {
+                case !empty($this->namespaces):
+                    foreach ($this->namespaces as $ns) {
+                        if (class_exists($ns . '\\' . $className) || interface_exists($ns . '\\' . $className)) {
+                            $className = $ns . '\\' . $className;
+                            $found = true;
+                            break;
+                        }
+                    }
+                    break;
+                case isset($this->imports[$loweredAlias]):
+                    $found = true;
+                    $className = false !== $pos ? $this->imports[$loweredAlias] . substr($className, $pos) : $this->imports[$loweredAlias];
+                    break;
+                default:
+                    if (isset($this->imports['__NAMESPACE__'])) {
+                        $ns = $this->imports['__NAMESPACE__'];
+                        if (class_exists($ns . '\\' . $className) || interface_exists($ns . '\\' . $className)) {
+                            $className = $ns . '\\' . $className;
+                            $found = true;
+                        }
+                    }
+                    break;
+            }
+            if ($found) {
+                $identifier = $className . '::' . $const;
+            }
         }
-        if ($identifier === 'false') {
-            return false;
+        /**
+         * Checks if identifier ends with ::class and remove the leading backslash if it exists.
+         */
+        if ($this->identifierEndsWithClassConstant($identifier) && !$this->identifierStartsWithBackslash($identifier)) {
+            $resolvedValue = substr($identifier, 0, $this->getClassConstantPositionInIdentifier($identifier));
+            \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
+            return $resolvedValue;
         }
-        if ($identifier === 'null') {
-            return null;
+        if ($this->identifierEndsWithClassConstant($identifier) && $this->identifierStartsWithBackslash($identifier)) {
+            $resolvedValue = substr($identifier, 1, $this->getClassConstantPositionInIdentifier($identifier) - 1);
+            \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
+            return $resolvedValue;
         }
-        return $identifier;
+        if (!defined($identifier)) {
+            throw \Doctrine\Common\Annotations\AnnotationException::semanticalErrorConstants($identifier, $this->context);
+        }
+        $resolvedValue = constant($identifier);
+        \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
+        return $resolvedValue;
     }
     private function identifierStartsWithBackslash(string $identifier): bool
     {

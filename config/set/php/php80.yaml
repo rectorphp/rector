@@ -5,3 +5,5 @@ services:
     Rector\Php80\Rector\Identical\StrEndsWithRector: null
     Rector\Php80\Rector\Class_\StringableForToStringRector: null
     Rector\Php80\Rector\Class_\AnnotationToAttributeRector: null
+    Rector\Php80\Rector\FuncCall\ClassOnObjectRector: null
+    Rector\Php80\Rector\Ternary\GetDebugTypeRector: null
