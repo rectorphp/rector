@@ -9,6 +9,7 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 
@@ -66,6 +67,17 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      * @var bool[]
      */
     private $keysByQuotedStatus = [];
+
+    public function __construct($annotationOrItems, ?string $originalContent = null)
+    {
+        if (is_object($annotationOrItems)) {
+            $this->items = get_object_vars($annotationOrItems);
+        } else {
+            $this->items = $annotationOrItems;
+        }
+
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
+    }
 
     /**
      * Generic fallback
@@ -183,9 +195,12 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected function resolveOriginalContentSpacingAndOrder(?string $originalContent, ?string $silentKey = null): void
     {
         $this->keysByQuotedStatus = [];
-
         if ($originalContent === null) {
             return;
+        }
+
+        if ($silentKey === null && $this instanceof SilentKeyNodeInterface) {
+            $silentKey = $this->getSilentKey();
         }
 
         $this->originalContent = $originalContent;

@@ -22,6 +22,6 @@ final class IdPhpDocNodeFactory extends AbstractPhpDocNodeFactory
     {
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new IdTagValueNode($annotationContent);
+        return new IdTagValueNode([], $annotationContent);
     }
 }

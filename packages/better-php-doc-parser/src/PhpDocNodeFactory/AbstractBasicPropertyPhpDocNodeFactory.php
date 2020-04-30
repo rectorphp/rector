@@ -24,7 +24,7 @@ abstract class AbstractBasicPropertyPhpDocNodeFactory extends AbstractPhpDocNode
         }
 
         $getTagValueNodeClass = $this->getTagValueNodeClass();
-        return new $getTagValueNodeClass();
+        return new $getTagValueNodeClass($annotation);
     }
 
     abstract protected function getTagValueNodeClass(): string;

@@ -5,17 +5,11 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNode\Sensio;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-final class SensioMethodTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
+final class SensioMethodTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface
 {
-    public function __construct(Method $method, string $content)
-    {
-        $this->items = get_object_vars($method);
-        $this->resolveOriginalContentSpacingAndOrder($content, 'methods');
-    }
-
     /**
      * @return string[]
      */
@@ -27,5 +21,10 @@ final class SensioMethodTagValueNode extends AbstractTagValueNode implements Sho
     public function getShortName(): string
     {
         return '@Method';
+    }
+
+    public function getSilentKey(): string
+    {
+        return 'methods';
     }
 }

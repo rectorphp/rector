@@ -5,27 +5,19 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
-final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
+final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface
 {
     /**
      * @var string
      */
     public const CLASS_NAME = Route::class;
-
-    public function __construct(array $items, ?string $originalContent = null)
-    {
-        $this->items = $items;
-
-        // covers https://github.com/rectorphp/rector/issues/2994#issuecomment-598712339
-
-        $this->resolveOriginalContentSpacingAndOrder($originalContent, 'path');
-    }
 
     public function __toString(): string
     {
@@ -39,12 +31,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
         return $this->printContentItems($items);
     }
 
-    public static function createFromAnnotationAndAnnotatoinContent(Route $route, string $originalContent)
-    {
-        $items = get_object_vars($route);
-        return new self($items, $originalContent);
-    }
-
     public function changeMethods(array $methods): void
     {
         $this->orderedVisibleItems[] = 'methods';
@@ -54,5 +40,10 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     public function getShortName(): string
     {
         return '@Route';
+    }
+
+    public function getSilentKey(): string
+    {
+        return 'path';
     }
 }

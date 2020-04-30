@@ -12,9 +12,9 @@ final class IdTagValueNode extends AbstractDoctrineTagValueNode implements PhpAt
 {
     use PhpAttributePhpDocNodePrintTrait;
 
-    public function __construct(?string $annotationContent = null)
+    public function __construct(array $items = [], ?string $originalContent = null)
     {
-        $this->resolveOriginalContentSpacingAndOrder($annotationContent);
+        parent::__construct($items, $originalContent);
     }
 
     public function getShortName(): string

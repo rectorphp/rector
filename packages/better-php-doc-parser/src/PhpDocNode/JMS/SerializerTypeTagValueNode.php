@@ -4,20 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
-use JMS\Serializer\Annotation\Type;
 use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
-final class SerializerTypeTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface
+final class SerializerTypeTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface, SilentKeyNodeInterface
 {
-    public function __construct(Type $type, ?string $annotationContent)
-    {
-        $this->items = get_object_vars($type);
-        $this->resolveOriginalContentSpacingAndOrder($annotationContent, 'name');
-    }
-
     public function getShortName(): string
     {
         return '@Serializer\Type';
@@ -44,5 +38,10 @@ final class SerializerTypeTagValueNode extends AbstractTagValueNode implements T
         }
 
         return false;
+    }
+
+    public function getSilentKey(): string
+    {
+        return 'name';
     }
 }
