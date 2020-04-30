@@ -34,6 +34,6 @@ final class TreePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             return null;
         }
 
-        return new TreeTagValueNode($tree->type);
+        return new TreeTagValueNode($tree);
     }
 }

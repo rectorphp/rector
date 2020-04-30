@@ -26,14 +26,14 @@ final class EmbeddablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             throw new ShouldNotHappenException();
         }
 
-        /** @var Embeddable|null $entity */
-        $entity = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
-        if ($entity === null) {
+        /** @var Embeddable|null $embeddable */
+        $embeddable = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
+        if ($embeddable === null) {
             return null;
         }
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new EmbeddableTagValueNode($annotationContent);
+        return new EmbeddableTagValueNode($embeddable, $annotationContent);
     }
 }

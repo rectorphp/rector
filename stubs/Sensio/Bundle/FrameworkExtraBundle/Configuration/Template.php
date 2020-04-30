@@ -23,28 +23,28 @@ class Template extends ConfigurationAnnotation
      *
      * @var string
      */
-    protected $template;
+    public $template;
 
     /**
      * The associative array of template variables.
      *
      * @var array
      */
-    private $vars = [];
+    public $vars = [];
 
     /**
      * Should the template be streamed?
      *
      * @var bool
      */
-    private $streamable = false;
+    public $streamable = false;
 
     /**
      * The controller (+action) this annotation is set to.
      *
      * @var array
      */
-    private $owner = [];
+    public $owner = [];
 
     /**
      * Returns the array of templates variables.

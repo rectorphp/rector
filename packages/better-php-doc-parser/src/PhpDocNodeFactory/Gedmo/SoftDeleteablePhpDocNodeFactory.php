@@ -34,11 +34,7 @@ final class SoftDeleteablePhpDocNodeFactory extends AbstractBasicPropertyPhpDocN
             return null;
         }
 
-        return new SoftDeleteableTagValueNode(
-            $softDeletable->fieldName,
-            $softDeletable->timeAware,
-            $softDeletable->hardDelete
-        );
+        return new SoftDeleteableTagValueNode($softDeletable);
     }
 
     protected function getTagValueNodeClass(): string

@@ -176,6 +176,11 @@ final class BetterPhpDocParser extends PhpDocParser
         // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
         $tagValueNode = null;
 
+        $currentPhpNode = $this->currentNodeProvider->getNode();
+        if ($currentPhpNode === null) {
+            throw new ShouldNotHappenException();
+        }
+
         foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
             // to prevent circular reference of this service
             if ($phpDocNodeFactory instanceof PhpDocParserAwareInterface) {
@@ -183,11 +188,6 @@ final class BetterPhpDocParser extends PhpDocParser
             }
 
             // compare regardless sensitivity
-            $currentPhpNode = $this->currentNodeProvider->getNode();
-            if ($currentPhpNode === null) {
-                continue;
-            }
-
             if (! $this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory, $currentPhpNode)) {
                 continue;
             }

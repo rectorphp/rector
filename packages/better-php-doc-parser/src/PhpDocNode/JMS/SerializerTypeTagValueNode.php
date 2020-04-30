@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
+use JMS\Serializer\Annotation\Type;
 use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
@@ -11,47 +12,37 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class SerializerTypeTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    public function __construct(string $name, ?string $annotationContent)
+    public function __construct(Type $type, ?string $annotationContent)
     {
-        $this->name = $name;
-        $this->resolveOriginalContentSpacingAndOrder($annotationContent);
+        $this->items = get_object_vars($type);
+        $this->resolveOriginalContentSpacingAndOrder($annotationContent, 'name');
     }
 
-    public function __toString(): string
+    public function getShortName(): string
     {
-        return sprintf('("%s")', $this->name);
+        return '@Serializer\Type';
     }
 
     public function changeName(string $newName): void
     {
-        $this->name = $newName;
+        $this->items['name'] = $newName;
     }
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->items['name'];
     }
 
     public function replaceName(string $oldName, string $newName): bool
     {
         $oldNamePattern = '#\b' . preg_quote($oldName, '#') . '\b#';
 
-        $newNameValue = Strings::replace($this->name, $oldNamePattern, $newName);
-        if ($newNameValue !== $this->name) {
-            $this->name = $newNameValue;
+        $newNameValue = Strings::replace($this->items['name'], $oldNamePattern, $newName);
+        if ($newNameValue !== $this->items['name']) {
+            $this->changeName($newNameValue);
             return true;
         }
 
         return false;
-    }
-
-    public function getShortName(): string
-    {
-        return '@Serializer\Type';
     }
 }

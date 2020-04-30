@@ -15,11 +15,6 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode im
      */
     private $tag;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(
         UniqueConstraint $uniqueConstraint,
         ?string $originalContent = null,
@@ -29,14 +24,6 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode im
         $this->tag = $originalTag;
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
-
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
     }
 
     public function getTag(): ?string

@@ -8,8 +8,4 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class TreeLeftTagValueNode extends AbstractTagValueNode
 {
-    public function __toString(): string
-    {
-        return '';
-    }
 }

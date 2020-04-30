@@ -34,6 +34,6 @@ final class LoggablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             return null;
         }
 
-        return new LoggableTagValueNode($loggable->logEntryClass);
+        return new LoggableTagValueNode($loggable);
     }
 }

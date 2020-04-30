@@ -35,12 +35,7 @@ final class SensioTemplatePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         // to skip tokens for this node
-        $this->resolveContentFromTokenIterator($tokenIterator);
-
-        return new SensioTemplateTagValueNode(
-            $template->getTemplate(),
-            $template->getOwner(),
-            $template->getVars()
-        );
+        $content = $this->resolveContentFromTokenIterator($tokenIterator);
+        return new SensioTemplateTagValueNode($template, $content);
     }
 }

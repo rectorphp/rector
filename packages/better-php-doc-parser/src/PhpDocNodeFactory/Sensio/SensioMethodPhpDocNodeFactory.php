@@ -35,8 +35,8 @@ final class SensioMethodPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         // to skip tokens for this node
-        $this->resolveContentFromTokenIterator($tokenIterator);
+        $content = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new SensioMethodTagValueNode($method->getMethods());
+        return new SensioMethodTagValueNode($method, $content);
     }
 }

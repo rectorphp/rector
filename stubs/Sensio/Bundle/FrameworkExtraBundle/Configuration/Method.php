@@ -18,7 +18,7 @@ class Method extends ConfigurationAnnotation
      *
      * @var array
      */
-    private $methods = [];
+    public $methods = [];
     /**
      * Returns the array of HTTP methods.
      *

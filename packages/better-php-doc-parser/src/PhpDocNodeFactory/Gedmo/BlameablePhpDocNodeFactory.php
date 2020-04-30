@@ -34,7 +34,7 @@ final class BlameablePhpDocNodeFactory extends AbstractBasicPropertyPhpDocNodeFa
             return null;
         }
 
-        return new BlameableTagValueNode($blameable->on, $blameable->field, $blameable->value);
+        return new BlameableTagValueNode($blameable);
     }
 
     protected function getTagValueNodeClass(): string

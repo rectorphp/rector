@@ -13,29 +13,15 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements P
 {
     use PhpAttributePhpDocNodePrintTrait;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct($items, ?string $originalContent = null)
     {
         $this->items = $items;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
-    }
-
     public static function fromColumnAndOriginalContent(Column $column, string $originalContent): self
     {
         $items = get_object_vars($column);
-
         return new self($items, $originalContent);
     }
 

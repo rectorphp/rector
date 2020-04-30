@@ -15,24 +15,11 @@ use Symfony\Component\Validator\Constraints\Type;
  */
 final class AssertTypeTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(Type $type, ?string $originalContent = null)
     {
         $this->items = get_object_vars($type);
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent, 'type');
-    }
-
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
     }
 
     public function getShortName(): string

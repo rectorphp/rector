@@ -16,24 +16,11 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
      */
     private $fullyQualifiedTargetEntity;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(array $items, ?string $originalContent, string $fullyQualifiedTargetEntity)
     {
         $this->items = $items;
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
-
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
     }
 
     public static function createFromAnnotationAndOriginalContent(

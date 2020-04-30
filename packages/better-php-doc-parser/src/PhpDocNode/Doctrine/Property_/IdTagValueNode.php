@@ -17,21 +17,6 @@ final class IdTagValueNode extends AbstractDoctrineTagValueNode implements PhpAt
         $this->resolveOriginalContentSpacingAndOrder($annotationContent);
     }
 
-    public function __toString(): string
-    {
-        $content = '';
-
-        if ($this->hasOpeningBracket) {
-            $content .= '(';
-        }
-
-        if ($this->hasClosingBracket) {
-            $content .= ')';
-        }
-
-        return $content;
-    }
-
     public function getShortName(): string
     {
         return '@ORM\Id';

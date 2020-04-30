@@ -37,6 +37,6 @@ final class PHPDIInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         // needed for proper doc block formatting
         $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new PHPDIInjectTagValueNode($inject->getName());
+        return new PHPDIInjectTagValueNode($inject);
     }
 }

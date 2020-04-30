@@ -10,24 +10,10 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class SlugTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(Slug $slug, ?string $originalContent = null)
     {
         $this->items = get_object_vars($slug);
-
         $this->resolveOriginalContentSpacingAndOrder($originalContent, 'fields');
-    }
-
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
     }
 
     public function getFields(): array

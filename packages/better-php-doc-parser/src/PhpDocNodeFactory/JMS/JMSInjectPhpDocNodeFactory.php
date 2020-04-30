@@ -48,8 +48,8 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         $serviceName = $inject->value === null ? $this->nodeNameResolver->getName($node) : $inject->value;
 
         // needed for proper doc block formatting
-        $this->resolveContentFromTokenIterator($tokenIterator);
+        $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new JMSInjectTagValueNode($serviceName, $inject->required, $inject->strict);
+        return new JMSInjectTagValueNode($inject, $serviceName, $annotationContent);
     }
 }

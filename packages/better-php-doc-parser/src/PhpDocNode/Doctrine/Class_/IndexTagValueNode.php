@@ -15,24 +15,12 @@ final class IndexTagValueNode extends AbstractDoctrineTagValueNode implements Ta
      */
     private $tag;
 
-    /**
-     * @var mixed[]
-     */
-    private $items = [];
-
     public function __construct(Index $index, ?string $originalContent = null, ?string $originalTag = null)
     {
         $this->items = get_object_vars($index);
         $this->tag = $originalTag;
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
-
-    public function __toString(): string
-    {
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-        return $this->printContentItems($items);
     }
 
     public function getTag(): ?string

@@ -36,6 +36,6 @@ final class JMSInjectParamsPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new JMSInjectParamsTagValueNode($annotationContent);
+        return new JMSInjectParamsTagValueNode($injectParams, $annotationContent);
     }
 }

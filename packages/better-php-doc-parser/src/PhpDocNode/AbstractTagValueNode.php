@@ -18,14 +18,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     use PrintTagValueNodeTrait;
 
     /**
-     * @var string
+     * @var mixed[]
      */
-    protected const PRINT_TYPE_ATTRIBUTE = 'print_attribute';
-
-    /**
-     * @var string
-     */
-    protected const PRINT_TYPE_ANNOTATION = 'print_annotation';
+    protected $items = [];
 
     /**
      * @var bool
@@ -71,6 +66,16 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      * @var bool[]
      */
     private $keysByQuotedStatus = [];
+
+    /**
+     * Generic fallback
+     */
+    public function __toString(): string
+    {
+        $items = $this->completeItemsQuotes($this->items);
+        $items = $this->makeKeysExplicit($items);
+        return $this->printContentItems($items);
+    }
 
     /**
      * @param mixed[] $item

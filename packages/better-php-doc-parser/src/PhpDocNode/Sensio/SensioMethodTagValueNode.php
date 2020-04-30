@@ -6,25 +6,14 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\Sensio;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 final class SensioMethodTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var string[]
-     */
-    private $methods = [];
-
-    /**
-     * @param string[] $methods
-     */
-    public function __construct(array $methods = [])
+    public function __construct(Method $method, string $content)
     {
-        $this->methods = $methods;
-    }
-
-    public function __toString(): string
-    {
-        return '(' . $this->printArrayItem($this->methods) . ')';
+        $this->items = get_object_vars($method);
+        $this->resolveOriginalContentSpacingAndOrder($content, 'methods');
     }
 
     /**
@@ -32,7 +21,7 @@ final class SensioMethodTagValueNode extends AbstractTagValueNode implements Sho
      */
     public function getMethods(): array
     {
-        return $this->methods;
+        return $this->items['methods'];
     }
 
     public function getShortName(): string
