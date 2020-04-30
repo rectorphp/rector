@@ -114,16 +114,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     }
 
     /**
-     * @param mixed[] $item
-     */
-    protected function printArrayItemWithSeparator(array $item, ?string $key = null, string $separator = ''): string
-    {
-        $content = $this->printArrayItem($item, $key);
-
-        return Strings::replace($content, '#:#', $separator);
-    }
-
-    /**
      * @param string[] $items
      */
     protected function printContentItems(array $items): string
