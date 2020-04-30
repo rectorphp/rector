@@ -70,12 +70,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
     public function __construct($annotationOrItems, ?string $originalContent = null)
     {
-        if (is_object($annotationOrItems)) {
-            $this->items = get_object_vars($annotationOrItems);
-        } else {
-            $this->items = $annotationOrItems;
-        }
-
+        $this->items = $this->resolveItems($annotationOrItems);
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
@@ -307,5 +302,21 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         // @see https://regex101.com/r/VgvK8C/3/
         return sprintf('#%s="#', $escapedKey);
+    }
+
+    /**
+     * @param object|mixed[] $annotationOrItems
+     */
+    private function resolveItems($annotationOrItems): array
+    {
+        if (is_array($annotationOrItems)) {
+            return $annotationOrItems;
+        }
+
+        if (is_object($annotationOrItems)) {
+            return get_object_vars($annotationOrItems);
+        }
+
+        return [];
     }
 }
