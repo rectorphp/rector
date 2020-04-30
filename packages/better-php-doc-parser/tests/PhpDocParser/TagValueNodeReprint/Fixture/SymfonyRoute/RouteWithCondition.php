@@ -12,8 +12,8 @@ final class RouteWithCondition
      * @Route(
      *     path="/remove/{object}/{when}/{slot}",
      *     name="route_name",
-     *     requirements={"object":"\d{1,9}", "when":"\d{4}-\d{2}-\d{2}", "slot":"\d{1,9}"},
-     *     options={"expose":true, "i18n":false},
+     *     requirements={"object"="\d{1,9}", "when"="\d{4}-\d{2}-\d{2}", "slot"="\d{1,9}"},
+     *     options={"expose"=true, "i18n"=false},
      *     condition="request.isXmlHttpRequest()"
      * )
      */
