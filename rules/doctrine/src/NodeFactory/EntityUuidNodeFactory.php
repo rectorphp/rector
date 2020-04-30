@@ -77,7 +77,7 @@ final class EntityUuidNodeFactory
 
         if ($isId) {
             // add @ORM\Id
-            $phpDocInfo->addTagValueNodeWithShortName(new IdTagValueNode());
+            $phpDocInfo->addTagValueNodeWithShortName(new IdTagValueNode([]));
         }
 
         $columnTagValueNode = $this->phpDocTagNodeFactory->createUuidColumnTagValueNode($isNullable);

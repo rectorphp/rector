@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\AnnotationReader;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\Reader;
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -48,6 +49,26 @@ final class NodeAnnotationReader
         $this->reader = $reader;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->constantReferenceIdentifierRestorer = $constantReferenceIdentifierRestorer;
+    }
+
+    /**
+     * @return object|null
+     */
+    public function readAnnotation(Node $node, string $annotationClass)
+    {
+        if ($node instanceof Property) {
+            return $this->readPropertyAnnotation($node, $annotationClass);
+        }
+
+        if ($node instanceof ClassMethod) {
+            return $this->readMethodAnnotation($node, $annotationClass);
+        }
+
+        if ($node instanceof Class_) {
+            return $this->readClassAnnotation($node, $annotationClass);
+        }
+
+        return null;
     }
 
     /**
