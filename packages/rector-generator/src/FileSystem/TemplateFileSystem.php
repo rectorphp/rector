@@ -24,12 +24,10 @@ final class TemplateFileSystem
 
         // normalize core package
         if ($configuration->getPackage() === 'Rector') {
-            $destination = Strings::replace($destination, '#packages\/_Package_/tests/Rector#', 'tests/Rector');
-            $destination = Strings::replace($destination, '#packages\/_Package_/src/Rector#', 'src/Rector');
-        }
-
-        // special keyword for 3rd party Rectors, not for core Github contribution
-        if ($configuration->getPackage() === Package::UTILS) {
+            $destination = Strings::replace($destination, '#rules\/_package_/tests/Rector#', 'tests/Rector');
+            $destination = Strings::replace($destination, '#rules\/_package_/src/Rector#', 'src/Rector');
+        } elseif ($configuration->getPackage() === Package::UTILS) {
+            // special keyword for 3rd party Rectors, not for core Github contribution
             $destination = Strings::replace($destination, '#packages\/_Package_#', 'utils/rector');
         }
 

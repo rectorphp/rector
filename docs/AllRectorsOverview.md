@@ -1,4 +1,4 @@
-# All 507 Rectors Overview
+# All 508 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -10839,6 +10839,40 @@ services:
  {
 -    public const SOME_CONSTANT = 1;
 +    protected const SOME_CONSTANT = 1;
+ }
+```
+
+<br>
+
+### `ChangeContractMethodSingleToManyRector`
+
+- class: [`Rector\Core\Rector\ClassMethod\ChangeContractMethodSingleToManyRector`](/../master/src/Rector/ClassMethod/ChangeContractMethodSingleToManyRector.php)
+- [test fixtures](/../master/tests/Rector/ClassMethod/ChangeContractMethodSingleToManyRector/Fixture)
+
+Change method that returns single value to multiple values
+
+```yaml
+services:
+    Rector\Core\Rector\ClassMethod\ChangeContractMethodSingleToManyRector:
+        $oldToNewMethodByType:
+            SomeClass:
+                getNode: getNodes
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public function getNode(): string
++    /**
++     * @return string[]
++     */
++    public function getNodes(): array
+     {
+-        return 'Echo_';
++        return ['Echo_'];
+     }
  }
 ```
 
