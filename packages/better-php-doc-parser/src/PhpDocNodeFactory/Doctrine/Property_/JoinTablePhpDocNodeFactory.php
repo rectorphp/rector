@@ -120,7 +120,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         foreach ($joinColumns as $key => $joinColumn) {
             $subAnnotation = $joinColumnContents[$key];
 
-            $joinColumnValuesTags[] = JoinColumnTagValueNode::createFromAnnotationAndOriginalContent(
+            $joinColumnValuesTags[] = new JoinColumnTagValueNode(
                 $joinColumn,
                 $subAnnotation['content'],
                 $subAnnotation['tag']

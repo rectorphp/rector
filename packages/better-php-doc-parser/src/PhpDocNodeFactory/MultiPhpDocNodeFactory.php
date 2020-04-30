@@ -9,8 +9,10 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Embeddable;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\InheritanceType;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Gedmo\Mapping\Annotation\Blameable;
 use Gedmo\Mapping\Annotation\Locale;
 use Gedmo\Mapping\Annotation\Loggable;
@@ -35,7 +37,9 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\CustomIdGeneratorTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\BlameableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\LocaleTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\LoggableTagValueNode;
@@ -55,12 +59,16 @@ use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioMethodTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertChoiceTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertEmailTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertRangeTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Type as SymfonyValidationType;
 
@@ -81,11 +89,17 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory
             ColumnTagValueNode::class => Column::class,
             CustomIdGeneratorTagValueNode::class => CustomIdGenerator::class,
             IdTagValueNode::class => Id::class,
+            GeneratedValueTagValueNode::class => GeneratedValue::class,
+            JoinColumnTagValueNode::class => JoinColumn::class,
+
+            // symfony/http-kernel
+            SymfonyRouteTagValueNode::class => Route::class,
 
             // symfony/validator
             AssertRangeTagValueNode::class => Range::class,
             AssertTypeTagValueNode::class => SymfonyValidationType::class,
             AssertChoiceTagValueNode::class => Choice::class,
+            AssertEmailTagValueNode::class => Email::class,
 
             // gedmo
             LocaleTagValueNode::class => Locale::class,

@@ -74,47 +74,6 @@ final class NodeAnnotationReader
     /**
      * @return object|null
      */
-    public function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName)
-    {
-        /** @var string $className */
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-
-        /** @var string $methodName */
-        $methodName = $this->nodeNameResolver->getName($classMethod);
-
-        $reflectionMethod = new ReflectionMethod($className, $methodName);
-
-        try {
-            // covers cases like https://github.com/rectorphp/rector/issues/3046
-
-            /** @var object[] $methodAnnotations */
-            $methodAnnotations = $this->reader->getMethodAnnotations($reflectionMethod);
-            foreach ($methodAnnotations as $methodAnnotation) {
-                if (! is_a($methodAnnotation, $annotationClassName, true)) {
-                    continue;
-                }
-
-                $objectHash = md5(spl_object_hash($classMethod) . serialize($methodAnnotation));
-                if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
-                    continue;
-                }
-
-                $this->alreadyProvidedAnnotations[] = $objectHash;
-                $this->constantReferenceIdentifierRestorer->restoreObject($methodAnnotation);
-
-                return $methodAnnotation;
-            }
-        } catch (AnnotationException $annotationException) {
-            // unable to load
-            return null;
-        }
-
-        return null;
-    }
-
-    /**
-     * @return object|null
-     */
     public function readClassAnnotation(Class_ $class, string $annotationClassName)
     {
         $classReflection = $this->createClassReflectionFromNode($class);
@@ -162,6 +121,47 @@ final class NodeAnnotationReader
             }
         } catch (AnnotationException $annotationException) {
             // unable to laod
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return object|null
+     */
+    private function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName)
+    {
+        /** @var string $className */
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+
+        /** @var string $methodName */
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+
+        $reflectionMethod = new ReflectionMethod($className, $methodName);
+
+        try {
+            // covers cases like https://github.com/rectorphp/rector/issues/3046
+
+            /** @var object[] $methodAnnotations */
+            $methodAnnotations = $this->reader->getMethodAnnotations($reflectionMethod);
+            foreach ($methodAnnotations as $methodAnnotation) {
+                if (! is_a($methodAnnotation, $annotationClassName, true)) {
+                    continue;
+                }
+
+                $objectHash = md5(spl_object_hash($classMethod) . serialize($methodAnnotation));
+                if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
+                    continue;
+                }
+
+                $this->alreadyProvidedAnnotations[] = $objectHash;
+                $this->constantReferenceIdentifierRestorer->restoreObject($methodAnnotation);
+
+                return $methodAnnotation;
+            }
+        } catch (AnnotationException $annotationException) {
+            // unable to load
             return null;
         }
 

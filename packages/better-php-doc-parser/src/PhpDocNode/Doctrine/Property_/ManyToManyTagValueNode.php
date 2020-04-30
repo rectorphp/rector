@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
-use Doctrine\ORM\Mapping\ManyToMany;
 use Rector\BetterPhpDocParser\Contract\Doctrine\InversedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
@@ -22,23 +21,13 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     private $fullyQualifiedTargetEntity;
 
     public function __construct(
-        array $items,
-        ?string $originalContent = null,
+        $annotationOrItems,
+        ?string $content = null,
         ?string $fullyQualifiedTargetEntity = null
     ) {
-        $this->items = $items;
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
 
-    public static function createFromAnnotationAndOriginalContent(
-        ManyToMany $manyToMany,
-        string $originalContent,
-        string $fullyQualifiedTargetEntity
-    ) {
-        $items = get_object_vars($manyToMany);
-
-        return new self($items, $originalContent, $fullyQualifiedTargetEntity);
+        parent::__construct($annotationOrItems, $content);
     }
 
     public function getTargetEntity(): string

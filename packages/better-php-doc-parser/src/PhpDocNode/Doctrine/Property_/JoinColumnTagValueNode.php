@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
-use Doctrine\ORM\Mapping\JoinColumn;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
@@ -24,22 +23,10 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
      */
     private $tag;
 
-    public function __construct(array $items, ?string $originalContent = null, ?string $originalTag = null)
+    public function __construct($annotationOrItems, ?string $content = null, ?string $originalTag = null)
     {
-        $this->items = $items;
-
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
         $this->tag = $originalTag;
-    }
-
-    public static function createFromAnnotationAndOriginalContent(
-        JoinColumn $joinColumn,
-        string $originalContent,
-        ?string $originalTag = null
-    ) {
-        $items = get_object_vars($joinColumn);
-
-        return new self($items, $originalContent, $originalTag);
+        parent::__construct($annotationOrItems, $content);
     }
 
     public function isNullable(): ?bool
