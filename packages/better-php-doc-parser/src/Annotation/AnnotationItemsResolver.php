@@ -38,6 +38,7 @@ final class AnnotationItemsResolver
     private function resolvePrivatePropertyValues(object $object): array
     {
         $items = [];
+
         foreach ((array) $object as $messedPropertyName => $value) {
             $propertyName = Strings::after($messedPropertyName, "\x00", -1);
             $items[$propertyName] = $value;
