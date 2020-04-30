@@ -15,12 +15,10 @@ final class IndexTagValueNode extends AbstractDoctrineTagValueNode implements Ta
      */
     private $tag;
 
-    public function __construct(Index $index, ?string $originalContent = null, ?string $originalTag = null)
+    public function __construct(Index $index, ?string $content = null, ?string $originalTag = null)
     {
-        $this->items = get_object_vars($index);
         $this->tag = $originalTag;
-
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
+        parent::__construct($index, $content);
     }
 
     public function getTag(): ?string
