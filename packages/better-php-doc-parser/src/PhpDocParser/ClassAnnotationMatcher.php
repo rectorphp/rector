@@ -15,14 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ClassAnnotationMatcher
 {
-    public function isTagMatchToNodeAndClass(string $tag, Node $node, string $matchingClass): bool
-    {
-        $fullyQualifiedAnnotationClass = $this->resolveTagFullyQualifiedName($tag, $node);
-
-        return Strings::lower($fullyQualifiedAnnotationClass) === Strings::lower($matchingClass);
-    }
-
-    private function resolveTagFullyQualifiedName(string $tag, Node $node): string
+    public function resolveTagFullyQualifiedName(string $tag, Node $node): string
     {
         $tag = ltrim($tag, '@');
 

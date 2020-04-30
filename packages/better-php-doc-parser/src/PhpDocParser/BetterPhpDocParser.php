@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use Nette\Utils\Strings;
-use PhpParser\Node as PhpNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -109,12 +108,15 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->privatesAccessor = new PrivatesAccessor();
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
-        $this->phpDocNodeFactories = $phpDocNodeFactories;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->lexer = $lexer;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
+
+        foreach ($phpDocNodeFactories as $phpDocNodeFactory) {
+            $this->phpDocNodeFactories[$phpDocNodeFactory->getClass()] = $phpDocNodeFactory;
+        }
     }
 
     public function parseString(string $docBlock): PhpDocNode
@@ -191,14 +193,10 @@ final class BetterPhpDocParser extends PhpDocParser
             $this->paramPhpDocNodeFactory->setPhpDocParser($this);
             $tagValueNode = $this->paramPhpDocNodeFactory->createFromTokens($tokenIterator);
         } else {
-            foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
-                // compare regardless sensitivity
-                if (! $this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory, $currentPhpNode)) {
-                    continue;
-                }
-
+            // class-annotation
+            $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
+            if ($phpDocNodeFactory !== null) {
                 $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens($currentPhpNode, $tokenIterator);
-                break;
             }
         }
 
@@ -269,7 +267,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $tag .= $tokenIterator->currentTokenValue();
 
-        $isTagMatchedByFactories = $this->isTagMatchedByFactories($tag);
+        $isTagMatchedByFactories = (bool) $this->matchTagToPhpDocNodeFactory($tag);
         if (! $isTagMatchedByFactories) {
             return $oldTag;
         }
@@ -277,21 +275,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->next();
 
         return $tag;
-    }
-
-    private function isTagMatchingPhpDocNodeFactory(
-        string $tag,
-        PhpDocNodeFactoryInterface $phpDocNodeFactory,
-        PhpNode $phpNode
-    ): bool {
-        // normalize
-        $tag = ltrim($tag, '@');
-
-        return $this->classAnnotationMatcher->isTagMatchToNodeAndClass(
-            $tag,
-            $phpNode,
-            $phpDocNodeFactory->getClass()
-        );
     }
 
     private function getTokenIteratorIndex(TokenIterator $tokenIterator): int
@@ -333,22 +316,6 @@ final class BetterPhpDocParser extends PhpDocParser
         return trim($originalContent);
     }
 
-    private function isTagMatchedByFactories(string $tag): bool
-    {
-        $currentPhpNode = $this->currentNodeProvider->getNode();
-        if ($currentPhpNode === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
-            if ($this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory, $currentPhpNode)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @see https://github.com/rectorphp/rector/issues/2158
      *
@@ -373,5 +340,20 @@ final class BetterPhpDocParser extends PhpDocParser
         ++$tokenEnd;
 
         return $tokenEnd;
+    }
+
+    private function matchTagToPhpDocNodeFactory(string $tag): ?PhpDocNodeFactoryInterface
+    {
+        $currentPhpNode = $this->currentNodeProvider->getNode();
+        if ($currentPhpNode === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
+            $tag,
+            $currentPhpNode
+        );
+
+        return $this->phpDocNodeFactories[$fullyQualifiedAnnotationClass] ?? null;
     }
 }
