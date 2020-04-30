@@ -19,7 +19,6 @@ use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Contract\ClassAwarePhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\ParamPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
@@ -288,15 +287,11 @@ final class BetterPhpDocParser extends PhpDocParser
         // normalize
         $tag = ltrim($tag, '@');
 
-        if ($phpDocNodeFactory instanceof ClassAwarePhpDocNodeFactoryInterface) {
-            return $this->classAnnotationMatcher->isTagMatchToNodeAndClass(
-                $tag,
-                $phpNode,
-                $phpDocNodeFactory->getClass()
-            );
-        }
-
-        return false;
+        return $this->classAnnotationMatcher->isTagMatchToNodeAndClass(
+            $tag,
+            $phpNode,
+            $phpDocNodeFactory->getClass()
+        );
     }
 
     private function getTokenIteratorIndex(TokenIterator $tokenIterator): int

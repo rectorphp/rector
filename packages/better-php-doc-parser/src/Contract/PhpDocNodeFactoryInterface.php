@@ -11,4 +11,6 @@ use PHPStan\PhpDocParser\Parser\TokenIterator;
 interface PhpDocNodeFactoryInterface
 {
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode;
+
+    public function getClass(): string;
 }

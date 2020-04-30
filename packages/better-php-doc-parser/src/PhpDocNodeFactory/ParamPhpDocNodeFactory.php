@@ -59,11 +59,6 @@ final class ParamPhpDocNodeFactory
         $this->annotationContentResolver = $annotationContentResolver;
     }
 
-    public function getName(): string
-    {
-        return 'param';
-    }
-
     public function createFromTokens(TokenIterator $tokenIterator): ?PhpDocTagValueNode
     {
         try {
