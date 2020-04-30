@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 
 abstract class AbstractBasicPropertyPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    protected function createFromNode(Node $node): ?PhpDocTagValueNode
+    protected function createFromPropertyNode(Node $node): ?PhpDocTagValueNode
     {
         if (! $node instanceof Property) {
             return null;

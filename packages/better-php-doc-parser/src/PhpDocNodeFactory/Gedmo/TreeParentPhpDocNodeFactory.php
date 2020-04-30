@@ -23,7 +23,7 @@ final class TreeParentPhpDocNodeFactory extends AbstractBasicPropertyPhpDocNodeF
      */
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
     {
-        return $this->createFromNode($node);
+        return $this->createFromPropertyNode($node);
     }
 
     protected function getTagValueNodeClass(): string
