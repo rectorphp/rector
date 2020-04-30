@@ -50,16 +50,6 @@ final class Configuration
     private $isPhpSnippet = false;
 
     /**
-     * @var string[]
-     */
-    private $nodeTypes = [];
-
-    /**
-     * @var string[]
-     */
-    private $source = [];
-
-    /**
      * @var string|null
      */
     private $extraFileContent;
@@ -68,6 +58,16 @@ final class Configuration
      * @var string|null
      */
     private $extraFileName;
+
+    /**
+     * @var string[]
+     */
+    private $nodeTypes = [];
+
+    /**
+     * @var string[]
+     */
+    private $source = [];
 
     /**
      * @param string[] $nodeTypes

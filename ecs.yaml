@@ -55,7 +55,6 @@ parameters:
 
     skip:
         # rather useless
-        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff: null
         PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer: null
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer: null
 
@@ -77,6 +76,8 @@ parameters:
             - 'src/Testing/PHPUnit/PHPUnitEnvironment.php'
             # honesty first
             - 'src/*Static*.php'
+            # static ctor
+            - 'packages/better-php-doc-parser/src/PhpDocNode/**/*TagValueNode.php'
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
@@ -88,6 +89,8 @@ parameters:
             - 'packages/post-rector/src/Rector/AbstractPostRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
+            # complex case
+            - 'packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php'
             # node printing
             - 'utils/documentation-generator/src/Command/DumpNodesCommand.php'
             # 3rd party code
@@ -111,11 +114,6 @@ parameters:
             # dev
             - 'packages/type-declaration/src/Rector/FunctionLike/*TypeDeclarationRector.php'
             - 'rules/php70/src/Rector/If_/IfToSpaceshipRector.php'
-
-        Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:
-            # respects inherited pattern for better comparing
-            - 'src/PhpParser/Printer/BetterStandardPrinter.php'
-            - 'src/Rector/AbstractRector/BetterStandardPrinterTrait.php'
 
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition: null
 

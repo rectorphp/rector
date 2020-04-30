@@ -303,30 +303,11 @@ final class BetterPhpDocParser extends PhpDocParser
         return (int) $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
     }
 
-    /**
-     * @see https://github.com/rectorphp/rector/issues/2158
-     *
-     * Need to find end of this bracket first, because the parseChild() skips class annotatinos
-     */
-    private function adjustTokenEndToFitClassAnnotation(TokenIterator $tokenIterator, int $tokenEnd): int
+    private function resolveTokenEnd(TokenIterator $tokenIterator): int
     {
-        $tokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
-        if ($tokens[$tokenEnd][0] !== '(') {
-            return $tokenEnd;
-        }
+        $tokenEnd = $this->getTokenIteratorIndex($tokenIterator);
 
-        while ($tokens[$tokenEnd][0] !== ')') {
-            ++$tokenEnd;
-
-            // to prevent missing index error
-            if (! isset($tokens[$tokenEnd])) {
-                return --$tokenEnd;
-            }
-        }
-
-        ++$tokenEnd;
-
-        return $tokenEnd;
+        return $this->adjustTokenEndToFitClassAnnotation($tokenIterator, $tokenEnd);
     }
 
     private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
@@ -356,13 +337,6 @@ final class BetterPhpDocParser extends PhpDocParser
         return trim($originalContent);
     }
 
-    private function resolveTokenEnd(TokenIterator $tokenIterator): int
-    {
-        $tokenEnd = $this->getTokenIteratorIndex($tokenIterator);
-
-        return $this->adjustTokenEndToFitClassAnnotation($tokenIterator, $tokenEnd);
-    }
-
     private function isTagMatchedByFactories(string $tag): bool
     {
         $currentPhpNode = $this->currentNodeProvider->getNode();
@@ -377,5 +351,31 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         return false;
+    }
+
+    /**
+     * @see https://github.com/rectorphp/rector/issues/2158
+     *
+     * Need to find end of this bracket first, because the parseChild() skips class annotatinos
+     */
+    private function adjustTokenEndToFitClassAnnotation(TokenIterator $tokenIterator, int $tokenEnd): int
+    {
+        $tokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
+        if ($tokens[$tokenEnd][0] !== '(') {
+            return $tokenEnd;
+        }
+
+        while ($tokens[$tokenEnd][0] !== ')') {
+            ++$tokenEnd;
+
+            // to prevent missing index error
+            if (! isset($tokens[$tokenEnd])) {
+                return --$tokenEnd;
+            }
+        }
+
+        ++$tokenEnd;
+
+        return $tokenEnd;
     }
 }

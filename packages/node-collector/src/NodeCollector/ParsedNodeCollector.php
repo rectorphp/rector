@@ -64,11 +64,6 @@ final class ParsedNodeCollector
     private $simpleParsedNodesByType = [];
 
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var Interface_[]
      */
     private $interfaces = [];
@@ -77,6 +72,11 @@ final class ParsedNodeCollector
      * @var Trait_[]
      */
     private $traits = [];
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
 
     public function __construct(NodeNameResolver $nodeNameResolver)
     {
@@ -268,16 +268,6 @@ final class ParsedNodeCollector
         $this->constantsByType[$className][$constantName] = $classConst;
     }
 
-    private function isClassAnonymous(Class_ $classNode): bool
-    {
-        if ($classNode->isAnonymous() || $classNode->name === null) {
-            return true;
-        }
-
-        // PHPStan polution
-        return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
-    }
-
     private function resolveClassConstant(ClassConstFetch $classConstFetch, ?string $className): ?string
     {
         if ($className === 'self') {
@@ -289,5 +279,15 @@ final class ParsedNodeCollector
         }
 
         return $className;
+    }
+
+    private function isClassAnonymous(Class_ $classNode): bool
+    {
+        if ($classNode->isAnonymous() || $classNode->name === null) {
+            return true;
+        }
+
+        // PHPStan polution
+        return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
     }
 }

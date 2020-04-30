@@ -14,6 +14,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://3v4l.org/dRG8U
@@ -92,14 +93,14 @@ PHP
         if (Strings::match($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN)) {
             $stringNode->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN, '$1\-');
             // helped needed to skip re-escaping regular expression
-            $stringNode->setAttribute('is_regular_pattern', true);
+            $stringNode->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
             return;
         }
 
         if (Strings::match($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN)) {
             $stringNode->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN, '\-$1]');
             // helped needed to skip re-escaping regular expression
-            $stringNode->setAttribute('is_regular_pattern', true);
+            $stringNode->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
         }
     }
 }

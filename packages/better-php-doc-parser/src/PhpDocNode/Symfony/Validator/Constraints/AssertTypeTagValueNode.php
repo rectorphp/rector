@@ -5,44 +5,34 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
-use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AbstractConstraintTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
+use Symfony\Component\Validator\Constraints\Type;
 
 /**
  * @see \Rector\BetterPhpDocParser\PhpDocNodeFactory\Symfony\Validator\Constraints\AssertTypePhpDocNodeFactory
  *
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\AssertTypeTagValueNodeTest
  */
-final class AssertTypeTagValueNode extends AbstractConstraintTagValueNode implements ShortNameAwareTagInterface
+final class AssertTypeTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
     /**
-     * @var string|mixed[]|null
+     * @var mixed[]
      */
-    private $type;
+    private $items = [];
 
-    /**
-     * @param string|mixed[]|null $type
-     */
-    public function __construct(array $groups, ?string $message = null, $type = null, ?string $originalContent = null)
+    public function __construct(Type $type, ?string $originalContent = null)
     {
-        $this->type = $type;
+        $this->items = get_object_vars($type);
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent, 'type');
-
-        parent::__construct($groups, $message);
     }
 
     public function __toString(): string
     {
-        $contentItems = [];
+        $items = $this->completeItemsQuotes($this->items);
+        $items = $this->makeKeysExplicit($items);
 
-        if ($this->type !== null) {
-            $contentItems['type'] = $this->printValueWithOptionalQuotes('type', $this->type);
-        }
-
-        $contentItems = $this->appendGroups($contentItems);
-        $contentItems = $this->appendMessage($contentItems);
-
-        return $this->printContentItems($contentItems);
+        return $this->printContentItems($items);
     }
 
     public function getShortName(): string

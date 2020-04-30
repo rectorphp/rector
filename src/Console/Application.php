@@ -6,12 +6,13 @@ namespace Rector\Core\Console;
 
 use Composer\XdebugHandler\XdebugHandler;
 use Jean85\PrettyVersions;
+use OutOfBoundsException;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
+use Rector\DocumentationGenerator\Command\DumpRectorsCommand;
 use Rector\Utils\DocumentationGenerator\Command\DumpNodesCommand;
-use Rector\Utils\DocumentationGenerator\Command\DumpRectorsCommand;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -38,7 +39,13 @@ final class Application extends SymfonyApplication
      */
     public function __construct(Configuration $configuration, array $commands = [])
     {
-        parent::__construct(self::NAME, PrettyVersions::getVersion('rector/rector')->getPrettyVersion());
+        try {
+            $version = PrettyVersions::getVersion('rector/rector')->getPrettyVersion();
+        } catch (OutOfBoundsException $outOfBoundsException) {
+            $version = 'Unknown';
+        }
+
+        parent::__construct(self::NAME, $version);
 
         $this->addCommands($commands);
         $this->configuration = $configuration;
@@ -66,8 +73,8 @@ final class Application extends SymfonyApplication
 
         // skip in this case, since generate content must be clear from meta-info
         $dumpCommands = [
-            CommandNaming::classToName(DumpRectorsCommand::class),
             CommandNaming::classToName(DumpNodesCommand::class),
+            CommandNaming::classToName(DumpRectorsCommand::class),
         ];
         if (in_array($input->getFirstArgument(), $dumpCommands, true)) {
             return parent::doRun($input, $output);
@@ -128,19 +135,8 @@ final class Application extends SymfonyApplication
             return false;
         }
 
-        $hasJsonOutput = (
-            $input->getParameterOption('--output-format') === JsonOutputFormatter::NAME ||
-            $input->getParameterOption('-o') === JsonOutputFormatter::NAME
-        );
-        if ($hasJsonOutput) {
-            return false;
-        }
-
-        $hasCheckstyleOutput = (
-            $input->getParameterOption('--output-format') === CheckstyleOutputFormatter::NAME ||
-            $input->getParameterOption('-o') === CheckstyleOutputFormatter::NAME
-        );
-        return ! $hasCheckstyleOutput;
+        $outputFormat = $input->getParameterOption(['-o', '--output-format']);
+        return ! in_array($outputFormat, [JsonOutputFormatter::NAME, CheckstyleOutputFormatter::NAME], true);
     }
 
     private function removeUnusedOptions(InputDefinition $inputDefinition): void

@@ -113,6 +113,11 @@ PHP
         return null;
     }
 
+    private function containsClassMethodAnyCalls(ClassMethod $classMethod): bool
+    {
+        return $this->betterNodeFinder->hasInstancesOf($classMethod, [MethodCall::class, StaticCall::class]);
+    }
+
     /**
      * @param StaticCall|MethodCall|ArrayCallable $methodCall
      */
@@ -142,10 +147,5 @@ PHP
         }
 
         return ! $this->classMethodAndCallMatcher->isMethodLikeCallMatchingClassMethod($methodCall, $classMethod);
-    }
-
-    private function containsClassMethodAnyCalls(ClassMethod $classMethod): bool
-    {
-        return $this->betterNodeFinder->hasInstancesOf($classMethod, [MethodCall::class, StaticCall::class]);
     }
 }

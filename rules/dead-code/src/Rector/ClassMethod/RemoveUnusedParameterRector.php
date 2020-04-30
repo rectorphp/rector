@@ -134,6 +134,41 @@ PHP
         return $node;
     }
 
+    private function shouldSkip(ClassMethod $classMethod): bool
+    {
+        if ($classMethod->params === []) {
+            return true;
+        }
+
+        if ($this->magicMethodDetector->isMagicMethod($classMethod)) {
+            return true;
+        }
+
+        if ($this->variadicFunctionLikeDetector->isVariadic($classMethod)) {
+            return true;
+        }
+
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        // skip interfaces and traits
+        if (! $class instanceof Class_) {
+            return true;
+        }
+
+        if ($this->shouldSkipOpenSourceAbstract($classMethod, $class)) {
+            return true;
+        }
+
+        if ($this->shouldSkipOpenSourceEmpty($classMethod)) {
+            return true;
+        }
+
+        if ($this->shouldSkipOpenSourceProtectedMethod($classMethod)) {
+            return true;
+        }
+
+        return $this->isAnonymousClass($class);
+    }
+
     /**
      * @param Class_[] $childrenOfClass
      * @return Param[]
@@ -197,41 +232,6 @@ PHP
         }
 
         return $unusedParameters;
-    }
-
-    private function shouldSkip(ClassMethod $classMethod): bool
-    {
-        if ($classMethod->params === []) {
-            return true;
-        }
-
-        if ($this->magicMethodDetector->isMagicMethod($classMethod)) {
-            return true;
-        }
-
-        if ($this->variadicFunctionLikeDetector->isVariadic($classMethod)) {
-            return true;
-        }
-
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        // skip interfaces and traits
-        if (! $class instanceof Class_) {
-            return true;
-        }
-
-        if ($this->shouldSkipOpenSourceAbstract($classMethod, $class)) {
-            return true;
-        }
-
-        if ($this->shouldSkipOpenSourceEmpty($classMethod)) {
-            return true;
-        }
-
-        if ($this->shouldSkipOpenSourceProtectedMethod($classMethod)) {
-            return true;
-        }
-
-        return $this->isAnonymousClass($class);
     }
 
     private function shouldSkipOpenSourceAbstract(ClassMethod $classMethod, Class_ $class): bool

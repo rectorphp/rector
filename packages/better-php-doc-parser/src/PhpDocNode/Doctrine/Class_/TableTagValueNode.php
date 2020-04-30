@@ -88,9 +88,7 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         $this->uniqueConstraints = $uniqueConstraints;
         $this->options = $options;
 
-        if ($originalContent !== null) {
-            $this->resolveOriginalContentSpacingAndOrder($originalContent);
-        }
+        $this->resolveOriginalContentSpacingAndOrder($originalContent, 'name');
 
         $this->haveIndexesFinalComma = $haveIndexesFinalComma;
         $this->haveUniqueConstraintsFinalComma = $haveUniqueConstraintsFinalComma;
@@ -102,24 +100,32 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
 
     public function __toString(): string
     {
-        $contentItems = [];
+        $items = $this->createItems();
+        $items = $this->makeKeysExplicit($items);
+
+        return $this->printContentItems($items);
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\Table';
+    }
+
+    private function createItems(): array
+    {
+        $items = [];
 
         if ($this->name !== null) {
-            if ($this->originalContent !== null && ! in_array('name', (array) $this->orderedVisibleItems, true)) {
-                $contentItems[] = '"' . $this->name . '"';
-            } else {
-                $contentItems['name'] = sprintf('name="%s"', $this->name);
-            }
+            $items['name'] = sprintf('"%s"', $this->name);
         }
 
         if ($this->schema !== null) {
-            $contentItems['schema'] = sprintf('schema="%s"', $this->schema);
+            $items['schema'] = sprintf('"%s"', $this->schema);
         }
 
         if ($this->indexes !== []) {
-            $contentItems['indexes'] = $this->printNestedTag(
+            $items['indexes'] = $this->printNestedTag(
                 $this->indexes,
-                'indexes',
                 $this->haveIndexesFinalComma,
                 $this->indexesOpeningSpace,
                 $this->indexesClosingSpace
@@ -127,9 +133,8 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->uniqueConstraints !== []) {
-            $contentItems['uniqueConstraints'] = $this->printNestedTag(
+            $items['uniqueConstraints'] = $this->printNestedTag(
                 $this->uniqueConstraints,
-                'uniqueConstraints',
                 $this->haveUniqueConstraintsFinalComma,
                 $this->uniqueConstraintsOpeningSpace,
                 $this->uniqueConstraintsClosingSpace
@@ -137,14 +142,9 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->options !== []) {
-            $contentItems['options'] = $this->printArrayItem($this->options, 'options');
+            $items['options'] = $this->printArrayItem($this->options, 'options');
         }
 
-        return $this->printContentItems($contentItems);
-    }
-
-    public function getShortName(): string
-    {
-        return '@ORM\Table';
+        return $items;
     }
 }

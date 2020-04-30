@@ -360,19 +360,6 @@ PHP
         $phpDocInfo->changeReturnType($returnType);
     }
 
-    private function createEventItem(EventListenerTag $eventListenerTag): ArrayItem
-    {
-        if ($eventListenerTag->getPriority() !== 0) {
-            $methodNameWithPriorityArray = new Array_();
-            $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($eventListenerTag->getMethod()));
-            $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber($eventListenerTag->getPriority()));
-
-            return new ArrayItem($methodNameWithPriorityArray);
-        }
-
-        return new ArrayItem(new String_($eventListenerTag->getMethod()));
-    }
-
     /**
      * @param TagInterface[] $alreadyUsedTags
      */
@@ -387,5 +374,18 @@ PHP
         }
 
         return in_array($tag, $alreadyUsedTags, true);
+    }
+
+    private function createEventItem(EventListenerTag $eventListenerTag): ArrayItem
+    {
+        if ($eventListenerTag->getPriority() !== 0) {
+            $methodNameWithPriorityArray = new Array_();
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($eventListenerTag->getMethod()));
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber($eventListenerTag->getPriority()));
+
+            return new ArrayItem($methodNameWithPriorityArray);
+        }
+
+        return new ArrayItem(new String_($eventListenerTag->getMethod()));
     }
 }

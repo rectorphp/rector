@@ -20,6 +20,11 @@ use Throwable;
 final class NodeAnnotationReader
 {
     /**
+     * @var string[]
+     */
+    private $alreadyProvidedAnnotations = [];
+
+    /**
      * @var Reader
      */
     private $reader;
@@ -28,11 +33,6 @@ final class NodeAnnotationReader
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
-    /**
-     * @var string[]
-     */
-    private $alreadyProvidedAnnotations = [];
 
     public function __construct(Reader $reader, NodeNameResolver $nodeNameResolver)
     {
@@ -100,7 +100,31 @@ final class NodeAnnotationReader
             return null;
         }
 
-        return $this->reader->getPropertyAnnotation($propertyReflection, $annotationClassName);
+        try {
+            // covers cases like https://github.com/rectorphp/rector/issues/3046
+
+            /** @var object[] $propertyAnnotations */
+            $propertyAnnotations = $this->reader->getPropertyAnnotations($propertyReflection);
+            foreach ($propertyAnnotations as $propertyAnnotation) {
+                if (! is_a($propertyAnnotation, $annotationClassName, true)) {
+                    continue;
+                }
+
+                $objectHash = md5(spl_object_hash($propertyReflection) . serialize($propertyAnnotation));
+                if (in_array($objectHash, $this->alreadyProvidedAnnotations, true)) {
+                    continue;
+                }
+
+                $this->alreadyProvidedAnnotations[] = $objectHash;
+
+                return $propertyAnnotation;
+            }
+        } catch (AnnotationException $annotationException) {
+            // unable to laod
+            return null;
+        }
+
+        return null;
     }
 
     private function createClassReflectionFromNode(Class_ $class): ReflectionClass

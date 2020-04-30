@@ -100,29 +100,6 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function changeArgumentsOrder(Node $node): void
-    {
-        $oldArguments = $node->args;
-
-        /** @var BinaryOp $expression */
-        $expression = $oldArguments[0]->value;
-
-        if ($this->isConstantValue($expression->left)) {
-            $firstArgument = new Arg($expression->left);
-            $secondArgument = new Arg($expression->right);
-        } else {
-            $firstArgument = new Arg($expression->right);
-            $secondArgument = new Arg($expression->left);
-        }
-
-        unset($oldArguments[0]);
-
-        $node->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     */
     private function processCallWithBinaryOp(Node $node, BinaryOp $binaryOp): ?Node
     {
         $binaryOpClass = get_class($binaryOp);
@@ -154,5 +131,28 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         return $node instanceof Variable && $this->isName($node, 'exp*');
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function changeArgumentsOrder(Node $node): void
+    {
+        $oldArguments = $node->args;
+
+        /** @var BinaryOp $expression */
+        $expression = $oldArguments[0]->value;
+
+        if ($this->isConstantValue($expression->left)) {
+            $firstArgument = new Arg($expression->left);
+            $secondArgument = new Arg($expression->right);
+        } else {
+            $firstArgument = new Arg($expression->right);
+            $secondArgument = new Arg($expression->left);
+        }
+
+        unset($oldArguments[0]);
+
+        $node->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
     }
 }

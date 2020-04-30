@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
+use Doctrine\ORM\Mapping\OneToMany;
 use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
@@ -14,110 +15,64 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
     /**
      * @var string|null
      */
-    private $mappedBy;
+    private $fullyQualifiedTargetEntity;
 
     /**
-     * @var string
+     * @var mixed[]
      */
-    private $targetEntity;
-
-    /**
-     * @var string|null
-     */
-    private $fetch;
-
-    /**
-     * @var bool|null
-     */
-    private $orphanRemoval = false;
-
-    /**
-     * @var string|null
-     */
-    private $indexBy;
-
-    /**
-     * @var string|null
-     */
-    private $fqnTargetEntity;
-
-    /**
-     * @var mixed[]|null
-     */
-    private $cascade;
+    private $items = [];
 
     public function __construct(
-        ?string $mappedBy = null,
-        string $targetEntity,
-        ?array $cascade = null,
-        ?string $fetch = null,
-        ?bool $orphanRemoval = null,
-        ?string $indexBy = null,
+        array $items,
         ?string $originalContent = null,
-        ?string $fqnTargetEntity = null
+        ?string $fullyQualifiedTargetEntity = null
     ) {
-        $this->mappedBy = $mappedBy;
-        $this->targetEntity = $targetEntity;
-        $this->cascade = $cascade;
-        $this->fetch = $fetch;
-        $this->orphanRemoval = $orphanRemoval;
-        $this->indexBy = $indexBy;
-        $this->fqnTargetEntity = $fqnTargetEntity;
-
+        $this->items = $items;
+        $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string
     {
-        $contentItems = [];
+        $items = $this->completeItemsQuotes($this->items);
+        $items = $this->makeKeysExplicit($items);
 
-        if ($this->mappedBy !== null) {
-            $contentItems['mappedBy'] = sprintf('mappedBy="%s"', $this->mappedBy);
-        }
-        $contentItems['targetEntity'] = sprintf('targetEntity="%s"', $this->targetEntity);
+        return $this->printContentItems($items);
+    }
 
-        if ($this->cascade) {
-            $contentItems['cascade'] = $this->printArrayItem($this->cascade, 'cascade');
-        }
+    public static function createFromAnnotationAndContent(
+        OneToMany $oneToMany,
+        string $originalContent,
+        ?string $fullyQualifiedTargetEntity = null
+    ) {
+        $items = get_object_vars($oneToMany);
 
-        if ($this->fetch !== null) {
-            $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
-        }
-
-        if ($this->orphanRemoval !== null) {
-            $contentItems['orphanRemoval'] = sprintf('orphanRemoval=%s', $this->orphanRemoval ? 'true' : 'false');
-        }
-
-        if ($this->indexBy !== null) {
-            $contentItems['indexBy'] = sprintf('indexBy="%s"', $this->indexBy);
-        }
-
-        return $this->printContentItems($contentItems);
+        return new self($items, $originalContent, $fullyQualifiedTargetEntity);
     }
 
     public function getTargetEntity(): string
     {
-        return $this->targetEntity;
-    }
-
-    public function getFqnTargetEntity(): ?string
-    {
-        return $this->fqnTargetEntity;
+        return $this->items['targetEntity'];
     }
 
     public function getMappedBy(): ?string
     {
-        return $this->mappedBy;
+        return $this->items['mappedBy'];
     }
 
     public function removeMappedBy(): void
     {
-        $this->mappedBy = null;
+        $this->items['mappedBy'] = null;
     }
 
     public function changeTargetEntity(string $targetEntity): void
     {
-        $this->targetEntity = $targetEntity;
+        $this->items['targetEntity'] = $targetEntity;
+    }
+
+    public function getFullyQualifiedTargetEntity(): ?string
+    {
+        return $this->fullyQualifiedTargetEntity;
     }
 
     public function getShortName(): string

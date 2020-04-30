@@ -4,56 +4,71 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_;
 
+use Doctrine\ORM\Mapping\Entity;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
+use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
+use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
 
-final class EntityTagValueNode extends AbstractDoctrineTagValueNode
+final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface
 {
-    /**
-     * @var string|null
-     */
-    private $repositoryClass;
+    use PhpAttributePhpDocNodePrintTrait;
 
     /**
-     * @var bool|null
+     * @var mixed[]
      */
-    private $readOnly;
+    private $items = [];
 
-    public function __construct(
-        ?string $repositoryClass = null,
-        ?bool $readOnly = null,
-        ?string $originalContent = null
-    ) {
-        $this->repositoryClass = $repositoryClass;
-        $this->readOnly = $readOnly;
+    public function __construct(?Entity $entity = null, ?string $originalContent = null)
+    {
+        if ($entity !== null) {
+            $this->items = get_object_vars($entity);
+        }
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string
     {
-        $contentItems = [];
+        $items = $this->completeItemsQuotes($this->items);
+        $items = $this->makeKeysExplicit($items);
 
-        if ($this->repositoryClass !== null) {
-            $contentItems['repositoryClass'] = $this->printValueWithOptionalQuotes(
-                'repositoryClass',
-                $this->repositoryClass
-            );
-        }
-
-        if ($this->readOnly !== null) {
-            $contentItems['readOnly'] = sprintf('readOnly=%s', $this->readOnly ? 'true' : 'false');
-        }
-
-        return $this->printContentItems($contentItems);
+        return $this->printContentItems($items);
     }
 
     public function removeRepositoryClass(): void
     {
-        $this->repositoryClass = null;
+        $this->items['repositoryClass'] = null;
     }
 
     public function getShortName(): string
     {
         return '@ORM\Entity';
+    }
+
+    public function toAttributeString(): string
+    {
+        $items = $this->createItems(self::PRINT_TYPE_ATTRIBUTE);
+        $items = $this->filterOutMissingItems($items);
+
+        $content = $this->printPhpAttributeItems($items);
+
+        return $this->printAttributeContent($content);
+    }
+
+    private function createItems(string $printType = self::PRINT_TYPE_ANNOTATION): array
+    {
+        $items = $this->items;
+
+        if ($printType === self::PRINT_TYPE_ATTRIBUTE) {
+            if ($items['repositoryClass'] !== null) {
+                $items['repositoryClass'] .= '::class';
+            }
+
+            if ($items['readOnly'] !== null) {
+                $items['readOnly'] = $items['readOnly'] ? 'ORM\Entity::READ_ONLY' : '';
+            }
+        }
+
+        return $items;
     }
 }

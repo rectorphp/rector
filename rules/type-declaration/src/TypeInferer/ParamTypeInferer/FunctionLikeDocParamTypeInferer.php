@@ -42,6 +42,11 @@ final class FunctionLikeDocParamTypeInferer extends AbstractTypeInferer implemen
         return $this->matchParamNodeFromDoc($paramWithTypes, $param);
     }
 
+    private function resolveScopeNode(Param $param): ?FunctionLike
+    {
+        return $param->getAttribute(AttributeKey::METHOD_NODE) ?? $param->getAttribute(AttributeKey::FUNCTION_NODE);
+    }
+
     /**
      * @param Type[] $paramWithTypes
      */
@@ -49,10 +54,5 @@ final class FunctionLikeDocParamTypeInferer extends AbstractTypeInferer implemen
     {
         $paramNodeName = '$' . $this->nodeNameResolver->getName($param->var);
         return $paramWithTypes[$paramNodeName] ?? new MixedType();
-    }
-
-    private function resolveScopeNode(Param $param): ?FunctionLike
-    {
-        return $param->getAttribute(AttributeKey::METHOD_NODE) ?? $param->getAttribute(AttributeKey::FUNCTION_NODE);
     }
 }

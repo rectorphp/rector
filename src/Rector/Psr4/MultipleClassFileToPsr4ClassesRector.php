@@ -185,22 +185,6 @@ PHP
         return $nodes;
     }
 
-    private function removeAllClassLikesFromNamespaceNode(Namespace_ $namespaceNode): void
-    {
-        foreach ($namespaceNode->stmts as $key => $namespaceStatement) {
-            if ($namespaceStatement instanceof ClassLike) {
-                unset($namespaceNode->stmts[$key]);
-            }
-        }
-    }
-
-    private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string
-    {
-        $currentDirectory = dirname($smartFileInfo->getRealPath());
-
-        return $currentDirectory . DIRECTORY_SEPARATOR . $classLike->name . '.php';
-    }
-
     private function refactorClassLike(
         SmartFileInfo $smartFileInfo,
         bool $shouldDeleteFile,
@@ -218,6 +202,22 @@ PHP
             $this->printNewNodesToFilePath($newStmtsSet, $fileDestination);
         } else {
             $this->printNodesToFilePath($newStmtsSet, $fileDestination);
+        }
+    }
+
+    private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string
+    {
+        $currentDirectory = dirname($smartFileInfo->getRealPath());
+
+        return $currentDirectory . DIRECTORY_SEPARATOR . $classLike->name . '.php';
+    }
+
+    private function removeAllClassLikesFromNamespaceNode(Namespace_ $namespaceNode): void
+    {
+        foreach ($namespaceNode->stmts as $key => $namespaceStatement) {
+            if ($namespaceStatement instanceof ClassLike) {
+                unset($namespaceNode->stmts[$key]);
+            }
         }
     }
 }

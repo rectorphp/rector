@@ -146,11 +146,16 @@ final class PhpDocInfoPrinter
         }
 
         // fix missing end
-        if (Strings::match($output, '#^(/\*\*)#') && $output && ! Strings::match($output, '#\s\*\/(\s+)?$#')) {
+        if (Strings::match($output, '#^(/\*\*)#') && $output && ! Strings::match($output, '#\*\/(\s+)?$#')) {
             $output .= ' */';
         }
 
         return $output;
+    }
+
+    private function removeExtraSpacesAfterAsterisk(string $phpDocString): string
+    {
+        return Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
     }
 
     private function isPhpDocNodeEmpty(PhpDocNode $phpDocNode): bool
@@ -393,10 +398,5 @@ final class PhpDocInfoPrinter
         }
 
         return implode($implodeChar, $content);
-    }
-
-    private function removeExtraSpacesAfterAsterisk(string $phpDocString): string
-    {
-        return Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
     }
 }

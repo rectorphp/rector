@@ -90,6 +90,19 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         $parameterProvider->changeParameter($name, $value);
     }
 
+    private function restoreOldParameterValues(): void
+    {
+        if ($this->oldParameterValues === []) {
+            return;
+        }
+
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+
+        foreach ($this->oldParameterValues as $name => $oldParameterValue) {
+            $parameterProvider->changeParameter($name, $oldParameterValue);
+        }
+    }
+
     private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
     {
         if (is_a($rectorClass, $this->getRectorInterface(), true)) {
@@ -102,18 +115,5 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
             $methodName,
             $this->getRectorInterface()
         ));
-    }
-
-    private function restoreOldParameterValues(): void
-    {
-        if ($this->oldParameterValues === []) {
-            return;
-        }
-
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-
-        foreach ($this->oldParameterValues as $name => $oldParameterValue) {
-            $parameterProvider->changeParameter($name, $oldParameterValue);
-        }
     }
 }

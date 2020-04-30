@@ -81,29 +81,14 @@ final class CompileCommand extends Command
         $this->symfonyStyle->section('Loading and updating ' . $composerJsonFile);
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
-        // 2.
-        $this->symfonyStyle->section('Updating root rector/rector dependencies, without require-dev');
-        // @see https://github.com/dotherightthing/wpdtrt-plugin-boilerplate/issues/52
-        $process = new Process([
-            'composer',
-            'update',
-            '--no-dev',
-            '--prefer-dist',
-            '--no-interaction',
-            '--classmap-authoritative',
-        ], $this->buildDir, null, null, null);
-        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
-            $output->write($buffer);
-        });
-
         // debug
         $this->fileLister->listFilesInDirectory($this->buildDir . '/vendor/jetbrains');
 
-        // 3.
+        // 2.
         $this->symfonyStyle->section('Renaming PHPStorm stubs from "*.php" to ".stub"');
         $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
 
-        // 4.
+        // 3.
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
         // and "Nette\Neon\Neon" class can be used there
         $this->symfonyStyle->section('Packing and prefixing rector.phar with Box and PHP Scoper');
@@ -112,7 +97,7 @@ final class CompileCommand extends Command
             $output->write($buffer);
         });
 
-        // 5.
+        // 4.
         $this->symfonyStyle->section('Restoring root composer.json with "require-dev"');
         $this->symfonyStyle->note('You still need to run "composer update" to install those dependencies');
         $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);

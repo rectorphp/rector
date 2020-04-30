@@ -11,7 +11,10 @@ services:
     Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector: null
     Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector: null
     Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector: null
-    Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector: null
+
+    Rector\Nette\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector: null
     Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector: null
+
+    Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector: null
     Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector: null
     Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector: null

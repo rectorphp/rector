@@ -111,6 +111,7 @@ final class FilesFinder
         $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
 
         $finder = Finder::create()
+            ->followLinks()
             ->files()
             ->in($absoluteDirectories)
             ->name($suffixesPattern)

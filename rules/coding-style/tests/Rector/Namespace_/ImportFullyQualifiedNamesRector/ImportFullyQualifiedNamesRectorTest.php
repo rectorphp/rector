@@ -43,7 +43,7 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        // the must be any rector class to run
+        // the must be some Rector class to run
         return RenameClassRector::class;
     }
 }

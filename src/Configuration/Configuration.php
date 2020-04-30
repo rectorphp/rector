@@ -53,16 +53,6 @@ final class Configuration
     private $outputFile;
 
     /**
-     * @var CiDetector
-     */
-    private $ciDetector;
-
-    /**
-     * @var SmartFileInfo[]
-     */
-    private $fileInfos = [];
-
-    /**
      * @var bool
      */
     private $shouldClearCache = false;
@@ -78,9 +68,19 @@ final class Configuration
     private $isCacheEnabled = false;
 
     /**
+     * @var SmartFileInfo[]
+     */
+    private $fileInfos = [];
+
+    /**
      * @var string[]
      */
     private $fileExtensions = [];
+
+    /**
+     * @var CiDetector
+     */
+    private $ciDetector;
 
     /**
      * @param string[] $fileExtensions

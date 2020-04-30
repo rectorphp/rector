@@ -4,162 +4,80 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
-use Nette\Utils\Strings;
+use Doctrine\ORM\Mapping\Column;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
+use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
+use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
 
-final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
+final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface
 {
-    /**
-     * @var string|null
-     */
-    private $name;
+    use PhpAttributePhpDocNodePrintTrait;
 
     /**
-     * @var string|null
+     * @var mixed[]
      */
-    private $type;
+    private $items = [];
 
-    /**
-     * @var mixed|null
-     */
-    private $length;
-
-    /**
-     * @var int|null
-     */
-    private $precision;
-
-    /**
-     * @var int|null
-     */
-    private $scale;
-
-    /**
-     * @var bool|null
-     */
-    private $unique;
-
-    /**
-     * @var bool|null
-     */
-    private $nullable;
-
-    /**
-     * @var string|null
-     */
-    private $columnDefinition;
-
-    /**
-     * @var mixed[]|null
-     */
-    private $options;
-
-    /**
-     * @var bool
-     */
-    private $isNullableUppercase = false;
-
-    /**
-     * @param mixed[] $options
-     * @param mixed|null $length
-     */
-    public function __construct(
-        ?string $name,
-        ?string $type,
-        $length,
-        ?int $precision = null,
-        ?int $scale = null,
-        ?bool $unique = null,
-        ?bool $nullable = null,
-        ?array $options = null,
-        ?string $columnDefinition = null,
-        ?string $originalContent = null
-    ) {
-        $this->name = $name;
-        $this->type = $type;
-        $this->length = $length;
-        $this->precision = $precision;
-        $this->scale = $scale;
-        $this->unique = $unique;
-        $this->nullable = $nullable;
-        $this->options = $options;
-        $this->columnDefinition = $columnDefinition;
-
-        if ($originalContent !== null) {
-            $this->resolveOriginalContentSpacingAndOrder($originalContent);
-
-            $matchIsNullable = Strings::match($originalContent, '#nullable(\s+)?=(\s+)?(?<value>false|true)#si');
-            if ($matchIsNullable) {
-                $this->isNullableUppercase = ctype_upper($matchIsNullable['value']);
-            }
-        }
+    public function __construct($items, ?string $originalContent = null)
+    {
+        $this->items = $items;
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string
     {
-        $contentItems = [];
+        $items = $this->completeItemsQuotes($this->items);
+        $items = $this->makeKeysExplicit($items);
 
-        if ($this->type !== null) {
-            $contentItems['type'] = sprintf('type="%s"', $this->type);
-        }
+        return $this->printContentItems($items);
+    }
 
-        if ($this->name !== null) {
-            $contentItems['name'] = sprintf('name="%s"', $this->name);
-        }
+    public static function fromColumnAndOriginalContent(Column $column, string $originalContent): self
+    {
+        $items = get_object_vars($column);
 
-        if ($this->length !== null) {
-            $contentItems['length'] = sprintf('length=%s', $this->length);
-        }
-
-        if ($this->precision !== null) {
-            $contentItems['precision'] = sprintf('precision=%s', $this->precision);
-        }
-
-        if ($this->scale !== null) {
-            $contentItems['scale'] = sprintf('scale=%s', $this->scale);
-        }
-
-        if ($this->columnDefinition !== null) {
-            $contentItems['columnDefinition'] = sprintf('columnDefinition="%s"', $this->columnDefinition);
-        }
-
-        if ($this->options) {
-            $contentItems['options'] = $this->printArrayItem($this->options, 'options');
-        }
-
-        if ($this->unique !== null) {
-            $contentItems['unique'] = sprintf('unique=%s', $this->unique ? 'true' : 'false');
-        }
-
-        if ($this->nullable !== null) {
-            $nullableValue = $this->nullable ? 'true' : 'false';
-            if ($this->isNullableUppercase) {
-                $nullableValue = strtoupper($nullableValue);
-            }
-
-            $contentItems['nullable'] = sprintf('nullable=%s', $nullableValue);
-        }
-
-        return $this->printContentItems($contentItems);
+        return new self($items, $originalContent);
     }
 
     public function changeType(string $type): void
     {
-        $this->type = $type;
+        $this->items['type'] = $type;
     }
 
     public function getType(): ?string
     {
-        return $this->type;
+        return $this->items['type'];
     }
 
     public function isNullable(): ?bool
     {
-        return $this->nullable;
+        return $this->items['nullable'];
     }
 
     public function getShortName(): string
     {
         return '@ORM\Column';
+    }
+
+    public function toAttributeString(): string
+    {
+        $items = $this->filterOutMissingItems($this->items);
+        $items = $this->completeItemsQuotes($items);
+
+        foreach ($items as $key => $value) {
+            if ($key !== 'unique') {
+                continue;
+            }
+
+            if ($value !== true) {
+                continue;
+            }
+
+            $items[$key] = 'ORM\Column::UNIQUE';
+        }
+
+        $content = $this->printPhpAttributeItems($items);
+
+        return $this->printAttributeContent($content);
     }
 }

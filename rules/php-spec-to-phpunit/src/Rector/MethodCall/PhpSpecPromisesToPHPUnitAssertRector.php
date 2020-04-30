@@ -324,6 +324,20 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         return $assetMethodCall;
     }
 
+    private function shouldSkip(MethodCall $methodCall): bool
+    {
+        if (! $methodCall->var instanceof Variable) {
+            return true;
+        }
+
+        if (! $this->isName($methodCall->var, 'this')) {
+            return true;
+        }
+
+        // skip "createMock" method
+        return $this->isName($methodCall->name, 'createMock');
+    }
+
     private function createTestedObjectPropertyFetch(Class_ $class): PropertyFetch
     {
         $propertyName = $this->phpSpecRenaming->resolveObjectPropertyName($class);
@@ -378,19 +392,5 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         return $this->testedObjectPropertyFetch;
-    }
-
-    private function shouldSkip(MethodCall $methodCall): bool
-    {
-        if (! $methodCall->var instanceof Variable) {
-            return true;
-        }
-
-        if (! $this->isName($methodCall->var, 'this')) {
-            return true;
-        }
-
-        // skip "createMock" method
-        return $this->isName($methodCall->name, 'createMock');
     }
 }

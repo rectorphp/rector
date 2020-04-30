@@ -35,18 +35,6 @@ final class SymfonyRoutePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
-
-        return new SymfonyRouteTagValueNode(
-            $route->getPath(),
-            method_exists($route, 'getLocalizedPaths') ? $route->getLocalizedPaths() : [],
-            $route->getName(),
-            $route->getMethods(),
-            $route->getOptions(),
-            $route->getDefaults(),
-            $route->getHost(),
-            $route->getRequirements(),
-            $route->getCondition(),
-            $annotationContent
-        );
+        return SymfonyRouteTagValueNode::createFromAnnotationAndAnnotatoinContent($route, $annotationContent);
     }
 }

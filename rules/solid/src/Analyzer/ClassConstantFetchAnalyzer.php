@@ -91,6 +91,29 @@ final class ClassConstantFetchAnalyzer
         );
     }
 
+    private function resolveClassTypeThatContainsConstantOrFirstUnioned(
+        Type $resolvedClassType,
+        string $constantName
+    ): ?string {
+        $className = $this->matchClassTypeThatContainsConstant($resolvedClassType, $constantName);
+        if ($className !== null) {
+            return $className;
+        }
+
+        // we need at least one original user class
+        if ($resolvedClassType instanceof UnionType) {
+            foreach ($resolvedClassType->getTypes() as $unionedType) {
+                if (! $unionedType instanceof ObjectType) {
+                    continue;
+                }
+
+                return $unionedType->getClassName();
+            }
+        }
+
+        return null;
+    }
+
     private function matchClassTypeThatContainsConstant(Type $type, string $constant): ?string
     {
         if ($type instanceof ObjectType) {
@@ -109,29 +132,6 @@ final class ClassConstantFetchAnalyzer
                 if ($this->nodeNameResolver->isName($classConstant, $constant)) {
                     return $className;
                 }
-            }
-        }
-
-        return null;
-    }
-
-    private function resolveClassTypeThatContainsConstantOrFirstUnioned(
-        Type $resolvedClassType,
-        string $constantName
-    ): ?string {
-        $className = $this->matchClassTypeThatContainsConstant($resolvedClassType, $constantName);
-        if ($className !== null) {
-            return $className;
-        }
-
-        // we need at least one original user class
-        if ($resolvedClassType instanceof UnionType) {
-            foreach ($resolvedClassType->getTypes() as $unionedType) {
-                if (! $unionedType instanceof ObjectType) {
-                    continue;
-                }
-
-                return $unionedType->getClassName();
             }
         }
 

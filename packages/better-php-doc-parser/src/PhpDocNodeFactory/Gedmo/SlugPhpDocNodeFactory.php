@@ -35,19 +35,6 @@ final class SlugPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         $annotationContent = $this->annotationContentResolver->resolveFromTokenIterator($tokenIterator);
-
-        return new SlugTagValueNode(
-            $slug->fields,
-            $slug->updatable,
-            $slug->style,
-            $slug->unique,
-            $slug->unique_base,
-            $slug->separator,
-            $slug->prefix,
-            $slug->suffix,
-            $slug->handlers,
-            $slug->dateFormat,
-            $annotationContent
-        );
+        return new SlugTagValueNode($slug, $annotationContent);
     }
 }

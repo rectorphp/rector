@@ -16,7 +16,7 @@ class AssertChoice
     public const SMALL_ONE = 'small_one';
 
     /**
-     * @Assert\Choice(choices=AssertChoice::RATINGS_DISCRIMINATOR_MAP, groups=AssertChoice::SMALL_ONE)
+     * @Assert\Choice(choices=AssertChoice::RATINGS_DISCRIMINATOR_MAP, groups={AssertChoice::SMALL_ONE})
      */
     private $ratingType;
 }

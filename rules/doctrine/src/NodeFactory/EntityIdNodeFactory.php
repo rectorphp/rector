@@ -54,7 +54,9 @@ final class EntityIdNodeFactory
         $idColumnTagValueNode = $this->phpDocTagNodeFactory->createIdColumnTagValueNode();
         $phpDocInfo->addTagValueNodeWithShortName($idColumnTagValueNode);
 
-        $generatedValueTagValueNode = new GeneratedValueTagValueNode('AUTO');
+        $generatedValueTagValueNode = new GeneratedValueTagValueNode([
+            'strategy' => 'AUTO',
+        ]);
         $phpDocInfo->addTagValueNodeWithShortName($generatedValueTagValueNode);
     }
 }

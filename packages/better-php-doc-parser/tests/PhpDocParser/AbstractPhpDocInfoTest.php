@@ -81,13 +81,6 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         return StaticFixtureProvider::findFilesFromDirectory($directory, $suffix);
     }
 
-    private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType): void
-    {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType));
-    }
-
     /**
      * @param class-string $nodeType
      */
@@ -112,5 +105,12 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         $fileInfo = new SmartFileInfo($filePath);
 
         return 'Caused by: ' . $fileInfo->getRelativeFilePathFromCwd() . PHP_EOL;
+    }
+
+    private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType): void
+    {
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType));
     }
 }
