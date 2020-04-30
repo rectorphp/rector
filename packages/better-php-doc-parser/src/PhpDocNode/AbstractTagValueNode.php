@@ -12,6 +12,8 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
+use ReflectionObject;
+use Symfony\Component\Routing\Annotation\Route;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
@@ -297,6 +299,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     }
 
     /**
+     * @todo decouple to service
      * @param object|mixed[] $annotationOrItems
      */
     private function resolveItems($annotationOrItems): array
@@ -306,9 +309,31 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         }
 
         if (is_object($annotationOrItems)) {
+            // special case for private property annotations
+            if ($annotationOrItems instanceof Route) {
+                return $this->resolvePrivatePropertyAndValues($annotationOrItems);
+            }
+
             return get_object_vars($annotationOrItems);
         }
 
         return [];
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function resolvePrivatePropertyAndValues(object $object): array
+    {
+        $items = [];
+
+        $propertyReflections = (new ReflectionObject($object))->getProperties();
+
+        foreach ($propertyReflections as $property) {
+            $property->setAccessible(true);
+            $items[$property->name] = $property->getValue($object);
+        }
+
+        return $items;
     }
 }

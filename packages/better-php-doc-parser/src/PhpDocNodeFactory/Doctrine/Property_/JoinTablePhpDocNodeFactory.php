@@ -53,7 +53,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var JoinTable|null $joinTable */
-        $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
+        $joinTable = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
         if ($joinTable === null) {
             return null;
         }

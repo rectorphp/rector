@@ -46,7 +46,7 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Inject|null $inject */
-        $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
+        $inject = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
         if ($inject === null) {
             return null;
         }
