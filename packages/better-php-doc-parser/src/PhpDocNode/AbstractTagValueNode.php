@@ -12,7 +12,6 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
-use ReflectionObject;
 use Symfony\Component\Routing\Annotation\Route;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
@@ -321,17 +320,15 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     }
 
     /**
+     * @see https://ocramius.github.io/blog/fast-php-object-to-array-conversion/
      * @return mixed[]
      */
     private function resolvePrivatePropertyAndValues(object $object): array
     {
         $items = [];
-
-        $propertyReflections = (new ReflectionObject($object))->getProperties();
-
-        foreach ($propertyReflections as $property) {
-            $property->setAccessible(true);
-            $items[$property->name] = $property->getValue($object);
+        foreach ((array) $object as $messedPropertyName => $value) {
+            $propertyName = Strings::after($messedPropertyName, "\x00", -1);
+            $items[$propertyName] = $value;
         }
 
         return $items;
