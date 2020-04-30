@@ -15,19 +15,25 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class ColumnPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Column::class;
+        return [Column::class];
     }
 
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             throw new ShouldNotHappenException();
         }
 
         /** @var Column|null $column */
-        $column = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $column = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($column === null) {
             return null;
         }

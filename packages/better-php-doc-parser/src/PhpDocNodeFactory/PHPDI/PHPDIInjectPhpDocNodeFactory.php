@@ -14,22 +14,28 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 
 final class PHPDIInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Inject::class;
+        return [Inject::class];
     }
 
     /**
      * @return PHPDIInjectTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             return null;
         }
 
         /** @var Inject|null $inject */
-        $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($inject === null) {
             return null;
         }

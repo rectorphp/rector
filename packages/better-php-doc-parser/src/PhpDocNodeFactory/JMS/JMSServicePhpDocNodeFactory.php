@@ -15,25 +15,31 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 
 final class JMSServicePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Service::class;
+        return [Service::class];
     }
 
     /**
      * @return JMSServiceValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if ($node instanceof ClassMethod) {
             /** @var Service|null $service */
-            $service = $this->nodeAnnotationReader->readMethodAnnotation($node, $this->getClass());
+            $service = $this->nodeAnnotationReader->readMethodAnnotation($node, $annotationClass);
             if ($service === null) {
                 return null;
             }
         } elseif ($node instanceof Class_) {
             /** @var Service|null $service */
-            $service = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
+            $service = $this->nodeAnnotationReader->readClassAnnotation($node, $annotationClass);
             if ($service === null) {
                 return null;
             }

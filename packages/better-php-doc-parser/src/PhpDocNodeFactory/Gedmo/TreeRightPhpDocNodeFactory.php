@@ -13,17 +13,23 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractBasicPropertyPhpDocNodeF
 
 final class TreeRightPhpDocNodeFactory extends AbstractBasicPropertyPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return TreeRight::class;
+        return [TreeRight::class];
     }
 
     /**
      * @return TreeRightTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
-        return $this->createFromPropertyNode($node);
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
+        return $this->createFromPropertyNode($node, $annotationClass);
     }
 
     protected function getTagValueNodeClass(): string

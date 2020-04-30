@@ -15,19 +15,25 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class InheritanceTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return InheritanceType::class;
+        return [InheritanceType::class];
     }
 
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Class_) {
             throw new ShouldNotHappenException();
         }
 
         /** @var InheritanceType|null $inheritanceType */
-        $inheritanceType = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
+        $inheritanceType = $this->nodeAnnotationReader->readClassAnnotation($node, $annotationClass);
         if ($inheritanceType === null) {
             return null;
         }

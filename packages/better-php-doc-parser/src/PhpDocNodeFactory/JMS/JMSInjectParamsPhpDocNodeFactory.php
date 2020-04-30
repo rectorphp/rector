@@ -14,22 +14,28 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 
 final class JMSInjectParamsPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return InjectParams::class;
+        return [InjectParams::class];
     }
 
     /**
      * @return JMSInjectParamsTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof ClassMethod) {
             return null;
         }
 
         /** @var InjectParams|null $injectParams */
-        $injectParams = $this->nodeAnnotationReader->readMethodAnnotation($node, $this->getClass());
+        $injectParams = $this->nodeAnnotationReader->readMethodAnnotation($node, $annotationClass);
         if ($injectParams === null) {
             return null;
         }

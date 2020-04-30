@@ -15,19 +15,25 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class GeneratedValuePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return GeneratedValue::class;
+        return [GeneratedValue::class];
     }
 
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             throw new ShouldNotHappenException();
         }
 
         /** @var GeneratedValue|null $generatedValue */
-        $generatedValue = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $generatedValue = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($generatedValue === null) {
             return null;
         }

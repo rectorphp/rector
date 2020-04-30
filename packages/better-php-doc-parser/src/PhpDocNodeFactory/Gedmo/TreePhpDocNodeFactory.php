@@ -14,22 +14,28 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 
 final class TreePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Tree::class;
+        return [Tree::class];
     }
 
     /**
      * @return TreeTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Class_) {
             return null;
         }
 
         /** @var Tree|null $tree */
-        $tree = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
+        $tree = $this->nodeAnnotationReader->readClassAnnotation($node, $annotationClass);
         if ($tree === null) {
             return null;
         }

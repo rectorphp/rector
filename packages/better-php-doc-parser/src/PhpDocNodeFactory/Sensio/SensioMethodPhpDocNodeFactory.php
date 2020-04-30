@@ -14,22 +14,28 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 final class SensioMethodPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Method::class;
+        return [Method::class];
     }
 
     /**
      * @return SensioMethodTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof ClassMethod) {
             return null;
         }
 
         /** @var Method|null $method */
-        $method = $this->nodeAnnotationReader->readMethodAnnotation($node, $this->getClass());
+        $method = $this->nodeAnnotationReader->readMethodAnnotation($node, $annotationClass);
         if ($method === null) {
             return null;
         }

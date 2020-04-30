@@ -14,22 +14,28 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractBasicPropertyPhpDocNodeF
 
 final class SoftDeleteablePhpDocNodeFactory extends AbstractBasicPropertyPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return SoftDeleteable::class;
+        return [SoftDeleteable::class];
     }
 
     /**
      * @return SoftDeleteableTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Class_) {
             return null;
         }
 
         /** @var SoftDeleteable|null $softDeletable */
-        $softDeletable = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
+        $softDeletable = $this->nodeAnnotationReader->readClassAnnotation($node, $annotationClass);
         if ($softDeletable === null) {
             return null;
         }

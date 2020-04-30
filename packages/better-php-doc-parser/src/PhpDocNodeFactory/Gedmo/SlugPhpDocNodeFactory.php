@@ -14,22 +14,28 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 
 final class SlugPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Slug::class;
+        return [Slug::class];
     }
 
     /**
      * @return SlugTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             return null;
         }
 
         /** @var Slug|null $slug */
-        $slug = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $slug = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($slug === null) {
             return null;
         }

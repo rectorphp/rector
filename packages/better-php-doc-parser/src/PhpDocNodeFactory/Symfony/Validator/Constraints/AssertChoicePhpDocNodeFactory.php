@@ -14,22 +14,28 @@ use Symfony\Component\Validator\Constraints\Choice;
 
 final class AssertChoicePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Choice::class;
+        return [Choice::class];
     }
 
     /**
      * @return AssertChoiceTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             return null;
         }
 
         /** @var Choice|null $choice */
-        $choice = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $choice = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($choice === null) {
             return null;
         }

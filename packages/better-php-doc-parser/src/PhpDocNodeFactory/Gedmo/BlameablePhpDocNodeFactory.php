@@ -14,22 +14,28 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractBasicPropertyPhpDocNodeF
 
 final class BlameablePhpDocNodeFactory extends AbstractBasicPropertyPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Blameable::class;
+        return [Blameable::class];
     }
 
     /**
      * @return BlameableTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             return null;
         }
 
         /** @var Blameable|null $blameable */
-        $blameable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $blameable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($blameable === null) {
             return null;
         }

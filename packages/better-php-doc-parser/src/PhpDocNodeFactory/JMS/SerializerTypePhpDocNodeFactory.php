@@ -16,15 +16,21 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class SerializerTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Type::class;
+        return [Type::class];
     }
 
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         /** @var Type|null $type */
-        $type = $this->resolveTypeAnnotation($node);
+        $type = $this->resolveTypeAnnotation($node, $annotationClass);
         if ($type === null) {
             return null;
         }
@@ -37,14 +43,14 @@ final class SerializerTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
      * Can be even ClassMethod for virtual property
      * @see https://github.com/rectorphp/rector/issues/2086
      */
-    private function resolveTypeAnnotation(Node $node): ?Type
+    private function resolveTypeAnnotation(Node $node, string $annotationClass): ?Type
     {
         if ($node instanceof Property) {
-            return $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+            return $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         }
 
         if ($node instanceof ClassMethod) {
-            return $this->nodeAnnotationReader->readMethodAnnotation($node, $this->getClass());
+            return $this->nodeAnnotationReader->readMethodAnnotation($node, $annotationClass);
         }
 
         throw new ShouldNotHappenException();

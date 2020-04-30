@@ -15,19 +15,25 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class EmbeddablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Embeddable::class;
+        return [Embeddable::class];
     }
 
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Class_) {
             throw new ShouldNotHappenException();
         }
 
         /** @var Embeddable|null $embeddable */
-        $embeddable = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
+        $embeddable = $this->nodeAnnotationReader->readClassAnnotation($node, $annotationClass);
         if ($embeddable === null) {
             return null;
         }

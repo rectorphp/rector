@@ -14,22 +14,28 @@ use Symfony\Component\Validator\Constraints\Range;
 
 final class AssertRangePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Range::class;
+        return [Range::class];
     }
 
     /**
      * @return AssertRangeTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             return null;
         }
 
         /** @var Range|null $range */
-        $range = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $range = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($range === null) {
             return null;
         }

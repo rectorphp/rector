@@ -13,17 +13,23 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractBasicPropertyPhpDocNodeF
 
 final class LocalePhpDocNodeFactory extends AbstractBasicPropertyPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Locale::class;
+        return [Locale::class];
     }
 
     /**
      * @return LocaleTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
-        return $this->createFromPropertyNode($node);
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
+        return $this->createFromPropertyNode($node, $annotationClass);
     }
 
     protected function getTagValueNodeClass(): string

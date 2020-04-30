@@ -11,14 +11,14 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 
 abstract class AbstractBasicPropertyPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    protected function createFromPropertyNode(Node $node): ?PhpDocTagValueNode
+    protected function createFromPropertyNode(Node $node, string $annotationClass): ?PhpDocTagValueNode
     {
         if (! $node instanceof Property) {
             return null;
         }
 
         /** @var Annotation|null $annotation */
-        $annotation = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $annotation = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($annotation === null) {
             return null;
         }

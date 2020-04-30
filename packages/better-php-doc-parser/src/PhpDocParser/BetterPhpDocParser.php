@@ -115,7 +115,9 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
 
         foreach ($phpDocNodeFactories as $phpDocNodeFactory) {
-            $this->phpDocNodeFactories[$phpDocNodeFactory->getClass()] = $phpDocNodeFactory;
+            foreach ($phpDocNodeFactory->getClasses() as $class) {
+                $this->phpDocNodeFactories[$class] = $phpDocNodeFactory;
+            }
         }
     }
 
@@ -196,7 +198,16 @@ final class BetterPhpDocParser extends PhpDocParser
             // class-annotation
             $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);
             if ($phpDocNodeFactory !== null) {
-                $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens($currentPhpNode, $tokenIterator);
+                $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName(
+                    $tag,
+                    $currentPhpNode
+                );
+
+                $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens(
+                    $currentPhpNode,
+                    $tokenIterator,
+                    $fullyQualifiedAnnotationClass
+                );
             }
         }
 

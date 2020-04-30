@@ -14,22 +14,28 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 
 final class LoggablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Loggable::class;
+        return [Loggable::class];
     }
 
     /**
      * @return LoggableTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Class_) {
             return null;
         }
 
         /** @var Loggable|null $loggable */
-        $loggable = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
+        $loggable = $this->nodeAnnotationReader->readClassAnnotation($node, $annotationClass);
         if ($loggable === null) {
             return null;
         }

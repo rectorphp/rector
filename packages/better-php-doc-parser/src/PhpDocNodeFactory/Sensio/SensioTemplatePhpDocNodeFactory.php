@@ -14,22 +14,28 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 final class SensioTemplatePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Template::class;
+        return [Template::class];
     }
 
     /**
      * @return SensioTemplateTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof ClassMethod) {
             return null;
         }
 
         /** @var Template|null $template */
-        $template = $this->nodeAnnotationReader->readMethodAnnotation($node, $this->getClass());
+        $template = $this->nodeAnnotationReader->readMethodAnnotation($node, $annotationClass);
         if ($template === null) {
             return null;
         }

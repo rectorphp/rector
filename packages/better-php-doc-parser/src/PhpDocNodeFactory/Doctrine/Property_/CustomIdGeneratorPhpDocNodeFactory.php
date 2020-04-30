@@ -15,13 +15,19 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class CustomIdGeneratorPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return CustomIdGenerator::class;
+        return [CustomIdGenerator::class];
     }
 
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             throw new ShouldNotHappenException();
         }
@@ -29,7 +35,7 @@ final class CustomIdGeneratorPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
         /** @var CustomIdGenerator|null $customIdGenerator */
-        $customIdGenerator = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $customIdGenerator = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($customIdGenerator === null) {
             return null;
         }
