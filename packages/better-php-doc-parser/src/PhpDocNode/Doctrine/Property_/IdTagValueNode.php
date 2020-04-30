@@ -12,11 +12,6 @@ final class IdTagValueNode extends AbstractDoctrineTagValueNode implements PhpAt
 {
     use PhpAttributePhpDocNodePrintTrait;
 
-    public function __construct(array $items = [], ?string $originalContent = null)
-    {
-        parent::__construct($items, $originalContent);
-    }
-
     public function getShortName(): string
     {
         return '@ORM\Id';

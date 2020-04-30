@@ -15,13 +15,19 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class ManyToOnePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return ManyToOne::class;
+        return [ManyToOne::class];
     }
 
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             throw new ShouldNotHappenException();
         }
@@ -29,7 +35,7 @@ final class ManyToOnePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
         /** @var ManyToOne|null $manyToOne */
-        $manyToOne = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $manyToOne = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($manyToOne === null) {
             return null;
         }

@@ -2,7 +2,10 @@ imports:
     - { resource: "create-rector.yaml", ignore_errors: 'not_found' }
 
 services:
-    Rector\Php80\Rector\Class_\AnnotationToAttributeRector: null
+    Rector\Core\Rector\ClassMethod\ChangeContractMethodSingleToManyRector:
+        $oldToNewMethodByType:
+            Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface:
+                getClass: 'getClasses'
 
 parameters:
     # bleeding edge feature

@@ -89,7 +89,7 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         $this->uniqueConstraints = $uniqueConstraints;
         $this->options = $options;
 
-        $this->resolveOriginalContentSpacingAndOrder($originalContent, 'name');
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
 
         $this->haveIndexesFinalComma = $haveIndexesFinalComma;
         $this->haveUniqueConstraintsFinalComma = $haveUniqueConstraintsFinalComma;

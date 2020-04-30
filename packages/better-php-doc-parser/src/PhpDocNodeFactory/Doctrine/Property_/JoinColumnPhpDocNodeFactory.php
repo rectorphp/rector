@@ -15,22 +15,28 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class JoinColumnPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return JoinColumn::class;
+        return [JoinColumn::class];
     }
 
     /**
      * @return JoinColumnTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             throw new ShouldNotHappenException();
         }
 
         /** @var JoinColumn|null $joinColumn */
-        $joinColumn = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $joinColumn = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($joinColumn === null) {
             return null;
         }

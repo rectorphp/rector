@@ -34,19 +34,25 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         $this->uniqueConstraintPhpDocNodeFactory = $uniqueConstraintPhpDocNodeFactory;
     }
 
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Table::class;
+        return [Table::class];
     }
 
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Class_) {
             throw new ShouldNotHappenException();
         }
 
         /** @var Table|null $table */
-        $table = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
+        $table = $this->nodeAnnotationReader->readClassAnnotation($node, $annotationClass);
         if ($table === null) {
             return null;
         }

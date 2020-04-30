@@ -15,19 +15,25 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class OneToOnePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return OneToOne::class;
+        return [OneToOne::class];
     }
 
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             throw new ShouldNotHappenException();
         }
 
         /** @var OneToOne|null $oneToOne */
-        $oneToOne = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $oneToOne = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($oneToOne === null) {
             return null;
         }

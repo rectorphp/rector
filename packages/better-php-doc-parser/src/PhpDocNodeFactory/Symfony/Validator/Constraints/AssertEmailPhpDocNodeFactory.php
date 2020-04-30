@@ -14,22 +14,28 @@ use Symfony\Component\Validator\Constraints\Email;
 
 final class AssertEmailPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Email::class;
+        return [Email::class];
     }
 
     /**
      * @return AssertEmailTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof Property) {
             return null;
         }
 
         /** @var Email|null $email */
-        $email = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        $email = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($email === null) {
             return null;
         }

@@ -14,22 +14,28 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class SymfonyRoutePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getClass(): string
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
     {
-        return Route::class;
+        return [Route::class];
     }
 
     /**
      * @return SymfonyRouteTagValueNode|null
      */
-    public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
-    {
+    public function createFromNodeAndTokens(
+        Node $node,
+        TokenIterator $tokenIterator,
+        string $annotationClass
+    ): ?PhpDocTagValueNode {
         if (! $node instanceof ClassMethod) {
             return null;
         }
 
         /** @var Route|null $route */
-        $route = $this->nodeAnnotationReader->readMethodAnnotation($node, $this->getClass());
+        $route = $this->nodeAnnotationReader->readMethodAnnotation($node, $annotationClass);
         if ($route === null) {
             return null;
         }

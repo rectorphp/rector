@@ -15,34 +15,27 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ClassAnnotationMatcher
 {
-    public function isTagMatchToNodeAndClass(string $tag, Node $node, string $matchingClass): bool
-    {
-        $fullyQualifiedAnnotationClass = $this->resolveTagFullyQualifiedName($tag, $node);
+    /**
+     * @var string[]
+     */
+    private $fullyQualifiedNameByHash = [];
 
-        return Strings::lower($fullyQualifiedAnnotationClass) === Strings::lower($matchingClass);
-    }
-
-    private function resolveTagFullyQualifiedName(string $tag, Node $node): string
+    public function resolveTagFullyQualifiedName(string $tag, Node $node): string
     {
+        $uniqueHash = $tag . spl_object_hash($node);
+        if (isset($this->fullyQualifiedNameByHash[$uniqueHash])) {
+            return $this->fullyQualifiedNameByHash[$uniqueHash];
+        }
+
         $tag = ltrim($tag, '@');
 
         /** @var Use_[]|null $useNodes */
         $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
 
-        if ($useNodes === null) {
-            /** @var string|null $namespace */
-            $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
-            if ($namespace !== null) {
-                $namespacedTag = $namespace . '\\' . $tag;
-                if (class_exists($namespacedTag)) {
-                    return $namespacedTag;
-                }
-            }
+        $fullyQualifiedClass = $this->resolveFullyQualifiedClass($useNodes, $node, $tag);
+        $this->fullyQualifiedNameByHash[$uniqueHash] = $fullyQualifiedClass;
 
-            return $tag;
-        }
-
-        return $this->matchFullAnnotationClassWithUses($tag, $useNodes) ?? $tag;
+        return $fullyQualifiedClass;
     }
 
     /**
@@ -83,5 +76,23 @@ final class ClassAnnotationMatcher
         }
 
         return $useUse->name . '\\' . $unaliasedShortClass;
+    }
+
+    private function resolveFullyQualifiedClass(?array $useNodes, Node $node, string $tag): string
+    {
+        if ($useNodes === null) {
+            /** @var string|null $namespace */
+            $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
+            if ($namespace !== null) {
+                $namespacedTag = $namespace . '\\' . $tag;
+                if (class_exists($namespacedTag)) {
+                    return $namespacedTag;
+                }
+            }
+
+            return $tag;
+        }
+
+        return $this->matchFullAnnotationClassWithUses($tag, $useNodes) ?? $tag;
     }
 }

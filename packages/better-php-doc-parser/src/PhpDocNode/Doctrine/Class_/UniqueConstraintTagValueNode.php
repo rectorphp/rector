@@ -17,13 +17,11 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode im
 
     public function __construct(
         UniqueConstraint $uniqueConstraint,
-        ?string $originalContent = null,
+        ?string $content = null,
         ?string $originalTag = null
     ) {
-        $this->items = get_object_vars($uniqueConstraint);
         $this->tag = $originalTag;
-
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
+        parent::__construct($uniqueConstraint, $content);
     }
 
     public function getTag(): ?string
