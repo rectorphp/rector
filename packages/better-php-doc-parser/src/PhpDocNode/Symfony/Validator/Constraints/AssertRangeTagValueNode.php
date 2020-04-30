@@ -9,18 +9,10 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
-use Symfony\Component\Validator\Constraints\Range;
 
 final class AssertRangeTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface, PhpAttributableTagNodeInterface
 {
     use PhpAttributePhpDocNodePrintTrait;
-
-    public function __construct(Range $range, string $originalContent)
-    {
-        $this->items = get_object_vars($range);
-
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
 
     public function getShortName(): string
     {

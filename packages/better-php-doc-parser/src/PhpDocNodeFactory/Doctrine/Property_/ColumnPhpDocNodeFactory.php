@@ -34,6 +34,6 @@ final class ColumnPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return ColumnTagValueNode::fromColumnAndOriginalContent($column, $annotationContent);
+        return new ColumnTagValueNode($column, $annotationContent);
     }
 }

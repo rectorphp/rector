@@ -5,17 +5,11 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNode\Sensio;
 
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-final class SensioTemplateTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
+final class SensioTemplateTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface
 {
-    public function __construct(Template $template, string $content)
-    {
-        $this->items = get_object_vars($template);
-        $this->resolveOriginalContentSpacingAndOrder($content, 'template');
-    }
-
     public function getTemplate(): ?string
     {
         return $this->items['template'];
@@ -24,5 +18,10 @@ final class SensioTemplateTagValueNode extends AbstractTagValueNode implements S
     public function getShortName(): string
     {
         return '@Template';
+    }
+
+    public function getSilentKey(): string
+    {
+        return 'template';
     }
 }

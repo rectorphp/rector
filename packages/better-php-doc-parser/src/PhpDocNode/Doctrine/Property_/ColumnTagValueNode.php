@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
-use Doctrine\ORM\Mapping\Column;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
@@ -12,18 +11,6 @@ use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
 final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface
 {
     use PhpAttributePhpDocNodePrintTrait;
-
-    public function __construct($items, ?string $originalContent = null)
-    {
-        $this->items = $items;
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
-
-    public static function fromColumnAndOriginalContent(Column $column, string $originalContent): self
-    {
-        $items = get_object_vars($column);
-        return new self($items, $originalContent);
-    }
 
     public function changeType(string $type): void
     {

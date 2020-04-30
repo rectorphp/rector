@@ -31,11 +31,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ProcessCommand extends AbstractCommand
 {
     /**
-     * @var string[]
-     */
-    private $paths = [];
-
-    /**
      * @var FilesFinder
      */
     private $filesFinder;
@@ -105,9 +100,6 @@ final class ProcessCommand extends AbstractCommand
      */
     private $symfonyStyle;
 
-    /**
-     * @param string[] $paths
-     */
     public function __construct(
         FilesFinder $phpFilesFinder,
         AdditionalAutoloader $additionalAutoloader,
@@ -122,8 +114,7 @@ final class ProcessCommand extends AbstractCommand
         YamlProcessor $yamlProcessor,
         ChangedFilesDetector $changedFilesDetector,
         UnchangedFilesFilter $unchangedFilesFilter,
-        SymfonyStyle $symfonyStyle,
-        array $paths
+        SymfonyStyle $symfonyStyle
     ) {
         $this->filesFinder = $phpFilesFinder;
         $this->additionalAutoloader = $additionalAutoloader;
@@ -135,7 +126,6 @@ final class ProcessCommand extends AbstractCommand
         $this->reportingExtensionRunner = $reportingExtensionRunner;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->stubLoader = $stubLoader;
-        $this->paths = $paths;
         $this->yamlProcessor = $yamlProcessor;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
 
@@ -219,7 +209,7 @@ final class ProcessCommand extends AbstractCommand
         $this->rectorGuard->ensureGetNodeTypesAreNodes();
         $this->stubLoader->loadStubs();
 
-        $source = $this->resolvesSourcePaths($input);
+        $source = $this->configuration->getPaths();
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
             $source,
@@ -264,22 +254,6 @@ final class ProcessCommand extends AbstractCommand
         }
 
         return ShellCode::SUCCESS;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolvesSourcePaths(InputInterface $input): array
-    {
-        $commandLinePaths = (array) $input->getArgument(Option::SOURCE);
-
-        // manual command line value has priority
-        if (count($commandLinePaths) > 0) {
-            return $commandLinePaths;
-        }
-
-        // fallback to config defined paths
-        return $this->paths;
     }
 
     /**

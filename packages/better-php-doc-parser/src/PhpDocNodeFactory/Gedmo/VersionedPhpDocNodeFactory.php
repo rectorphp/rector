@@ -28,12 +28,13 @@ final class VersionedPhpDocNodeFactory extends AbstractPhpDocNodeFactory
             return null;
         }
 
-        /** @var Versioned|null $loggable */
-        $loggable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
-        if ($loggable === null) {
+        /** @var Versioned|null $versioned */
+        $versioned = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
+        if ($versioned === null) {
             return null;
         }
 
-        return new VersionedTagValueNode();
+        $content = $this->resolveContentFromTokenIterator($tokenIterator);
+        return new VersionedTagValueNode($versioned, $content);
     }
 }

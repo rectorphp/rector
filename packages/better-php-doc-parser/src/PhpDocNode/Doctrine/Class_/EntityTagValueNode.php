@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_;
 
-use Doctrine\ORM\Mapping\Entity;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
@@ -12,15 +11,6 @@ use Rector\PhpAttribute\PhpDocNode\PhpAttributePhpDocNodePrintTrait;
 final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements PhpAttributableTagNodeInterface
 {
     use PhpAttributePhpDocNodePrintTrait;
-
-    public function __construct(?Entity $entity = null, ?string $originalContent = null)
-    {
-        if ($entity !== null) {
-            $this->items = get_object_vars($entity);
-        }
-
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
-    }
 
     public function removeRepositoryClass(): void
     {

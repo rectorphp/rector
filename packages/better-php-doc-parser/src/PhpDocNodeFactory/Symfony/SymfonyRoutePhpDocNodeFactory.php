@@ -35,6 +35,6 @@ final class SymfonyRoutePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
-        return SymfonyRouteTagValueNode::createFromAnnotationAndAnnotatoinContent($route, $annotationContent);
+        return new SymfonyRouteTagValueNode($route, $annotationContent);
     }
 }

@@ -25,28 +25,24 @@ final class JMSServicePhpDocNodeFactory extends AbstractPhpDocNodeFactory
      */
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
     {
-        if (! $node instanceof ClassMethod && ! $node instanceof Class_) {
-            return null;
-        }
-
         if ($node instanceof ClassMethod) {
             /** @var Service|null $service */
             $service = $this->nodeAnnotationReader->readMethodAnnotation($node, $this->getClass());
             if ($service === null) {
                 return null;
             }
-        }
-
-        if ($node instanceof Class_) {
+        } elseif ($node instanceof Class_) {
             /** @var Service|null $service */
             $service = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
             if ($service === null) {
                 return null;
             }
+        } else {
+            return null;
         }
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new JMSServiceValueNode($annotationContent);
+        return new JMSServiceValueNode($service, $annotationContent);
     }
 }

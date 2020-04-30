@@ -83,13 +83,20 @@ final class Configuration
     private $ciDetector;
 
     /**
-     * @param string[] $fileExtensions
+     * @var string[]
      */
-    public function __construct(CiDetector $ciDetector, bool $isCacheEnabled, array $fileExtensions)
+    private $paths = [];
+
+    /**
+     * @param string[] $fileExtensions
+     * @param string[] $paths
+     */
+    public function __construct(CiDetector $ciDetector, bool $isCacheEnabled, array $fileExtensions, array $paths)
     {
         $this->ciDetector = $ciDetector;
         $this->isCacheEnabled = $isCacheEnabled;
         $this->fileExtensions = $fileExtensions;
+        $this->paths = $paths;
     }
 
     /**
@@ -110,6 +117,12 @@ final class Configuration
         $onlyRector = $input->getOption(Option::OPTION_ONLY);
 
         $this->setOnlyRector($onlyRector);
+
+        $commandLinePaths = (array) $input->getArgument(Option::SOURCE);
+        // manual command line value has priority
+        if (count($commandLinePaths) > 0) {
+            $this->paths = $commandLinePaths;
+        }
     }
 
     /**
@@ -224,6 +237,14 @@ final class Configuration
     public function getFileExtensions(): array
     {
         return $this->fileExtensions;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getPaths(): array
+    {
+        return $this->paths;
     }
 
     private function canShowProgressBar(InputInterface $input): bool

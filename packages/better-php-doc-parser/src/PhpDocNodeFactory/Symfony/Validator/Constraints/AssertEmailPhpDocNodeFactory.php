@@ -35,7 +35,6 @@ final class AssertEmailPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
-
         return new AssertEmailTagValueNode($email, $annotationContent);
     }
 }

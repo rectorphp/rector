@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_;
 
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
-final class TableTagValueNode extends AbstractDoctrineTagValueNode
+final class TableTagValueNode extends AbstractDoctrineTagValueNode implements SilentKeyNodeInterface
 {
     /**
      * @var string|null
@@ -102,13 +103,17 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
     {
         $items = $this->createItems();
         $items = $this->makeKeysExplicit($items);
-
         return $this->printContentItems($items);
     }
 
     public function getShortName(): string
     {
         return '@ORM\Table';
+    }
+
+    public function getSilentKey(): string
+    {
+        return 'name';
     }
 
     private function createItems(): array
