@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DoctrineAnnotationGenerated\PhpDocNode;
 
 use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
+use Rector\BetterPhpDocParser\Annotation\AnnotationVisibilityDetector;
 use Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector;
-use Symfony\Component\Routing\Annotation\Route;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
@@ -24,10 +24,19 @@ final class ConstantReferenceIdentifierRestorer
      */
     private $annotationItemsResolver;
 
-    public function __construct(PrivatesAccessor $privatesAccessor, AnnotationItemsResolver $annotationItemsResolver)
-    {
+    /**
+     * @var AnnotationVisibilityDetector
+     */
+    private $annotationVisibilityDetector;
+
+    public function __construct(
+        PrivatesAccessor $privatesAccessor,
+        AnnotationItemsResolver $annotationItemsResolver,
+        AnnotationVisibilityDetector $annotationVisibilityDetector
+    ) {
         $this->privatesAccessor = $privatesAccessor;
         $this->annotationItemsResolver = $annotationItemsResolver;
+        $this->annotationVisibilityDetector = $annotationVisibilityDetector;
     }
 
     public function restoreObject(object $annotation): void
@@ -40,7 +49,7 @@ final class ConstantReferenceIdentifierRestorer
 
         $propertyNameToValues = $this->annotationItemsResolver->resolve($annotation);
 
-        $isPrivate = $annotation instanceof Route;
+        $isPrivate = $this->annotationVisibilityDetector->isPrivate($annotation);
 
         foreach ($propertyNameToValues as $propertyName => $value) {
             $originalIdentifier = $this->matchIdentifierBasedOnResolverValue($identifierToResolvedValues, $value);

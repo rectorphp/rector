@@ -6,10 +6,19 @@ namespace Rector\BetterPhpDocParser\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 use Nette\Utils\Strings;
-use Symfony\Component\Routing\Annotation\Route;
 
 final class AnnotationItemsResolver
 {
+    /**
+     * @var AnnotationVisibilityDetector
+     */
+    private $annotationVisibilityDetector;
+
+    public function __construct(AnnotationVisibilityDetector $annotationVisibilityDetector)
+    {
+        $this->annotationVisibilityDetector = $annotationVisibilityDetector;
+    }
+
     /**
      * @param object|Annotation|mixed[] $annotationOrItems
      */
@@ -21,7 +30,7 @@ final class AnnotationItemsResolver
 
         if (is_object($annotationOrItems)) {
             // special case for private property annotations
-            if ($annotationOrItems instanceof Route) {
+            if ($this->annotationVisibilityDetector->isPrivate($annotationOrItems)) {
                 return $this->resolvePrivatePropertyValues($annotationOrItems);
             }
 
