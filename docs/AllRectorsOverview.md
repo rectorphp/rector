@@ -1,4 +1,4 @@
-# All 508 Rectors Overview
+# All 509 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -35,6 +35,7 @@
 - [PHPUnit](#phpunit)
 - [PHPUnitSymfony](#phpunitsymfony)
 - [PSR4](#psr4)
+- [Performance](#performance)
 - [Phalcon](#phalcon)
 - [Php52](#php52)
 - [Php53](#php53)
@@ -6446,6 +6447,28 @@ Add response content to response code assert, so it is easier to debug
 - class: [`Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector`](/../master/rules/psr4/src/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
 
 Changes namespace and class names to match PSR-4 in composer.json autoload section
+
+<br>
+
+## Performance
+
+### `PreslashSimpleFunctionRector`
+
+- class: [`Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector`](/../master/rules/performance/src/Rector/FuncCall/PreslashSimpleFunctionRector.php)
+- [test fixtures](/../master/rules/performance/tests/Rector/FuncCall/PreslashSimpleFunctionRector/Fixture)
+
+Add pre-slash to short named functions to improve performance
+
+```diff
+ class SomeClass
+ {
+     public function shorten($value)
+     {
+-        return trim($value);
++        return \trim($value);
+     }
+ }
+```
 
 <br>
 

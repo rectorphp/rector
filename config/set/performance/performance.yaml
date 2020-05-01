@@ -1,0 +1,2 @@
+services:
+    Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector: null
