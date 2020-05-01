@@ -11,7 +11,6 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Extension\FinishingExtensionRunner;
-use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -71,11 +70,6 @@ final class RectorApplication
     private $removedAndAddedFilesProcessor;
 
     /**
-     * @var EnabledRectorsProvider
-     */
-    private $enabledRectorsProvider;
-
-    /**
      * @var NodeScopeResolver
      */
     private $nodeScopeResolver;
@@ -91,7 +85,6 @@ final class RectorApplication
         ErrorAndDiffCollector $errorAndDiffCollector,
         Configuration $configuration,
         FileProcessor $fileProcessor,
-        EnabledRectorsProvider $enabledRectorsProvider,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         NodeScopeResolver $nodeScopeResolver,
@@ -104,7 +97,6 @@ final class RectorApplication
         $this->fileProcessor = $fileProcessor;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
-        $this->enabledRectorsProvider = $enabledRectorsProvider;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->finishingExtensionRunner = $finishingExtensionRunner;
     }
@@ -134,12 +126,6 @@ final class RectorApplication
             $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
             }, 'parsing');
-        }
-
-        // active only one rule
-        if ($this->configuration->getOnlyRector() !== null) {
-            $onlyRector = $this->configuration->getOnlyRector();
-            $this->enabledRectorsProvider->addEnabledRector($onlyRector);
         }
 
         // 2. change nodes with Rectors
