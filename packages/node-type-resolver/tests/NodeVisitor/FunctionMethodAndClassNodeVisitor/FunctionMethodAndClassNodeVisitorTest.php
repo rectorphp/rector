@@ -8,15 +8,26 @@ use Iterator;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
-use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Testing\PHPUnit\AbstractNodeVisitorTestCase;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 
 final class FunctionMethodAndClassNodeVisitorTest extends AbstractNodeVisitorTestCase
 {
+    /**
+     * @var FunctionMethodAndClassNodeVisitor
+     */
+    private $functionMethodAndClassNodeVisitor;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->bootKernel(RectorKernel::class);
+        $this->functionMethodAndClassNodeVisitor = self::$container->get(FunctionMethodAndClassNodeVisitor::class);
+    }
+
     /**
      * @dataProvider provideData();
      */
@@ -37,9 +48,7 @@ final class FunctionMethodAndClassNodeVisitorTest extends AbstractNodeVisitorTes
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver());
-        $nodeTraverser->addVisitor(
-            new FunctionMethodAndClassNodeVisitor(new ClassNaming(new NodeNameResolver(new RegexPatternDetector())))
-        );
+        $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->traverse($nodes);
     }
 

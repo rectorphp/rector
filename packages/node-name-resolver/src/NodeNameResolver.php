@@ -14,8 +14,11 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;
+use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeNameResolver
 {
@@ -30,12 +33,28 @@ final class NodeNameResolver
     private $regexPatternDetector;
 
     /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
-    public function __construct(RegexPatternDetector $regexPatternDetector, array $nodeNameResolvers = [])
-    {
+    public function __construct(
+        RegexPatternDetector $regexPatternDetector,
+        BetterStandardPrinter $betterStandardPrinter,
+        CurrentFileInfoProvider $currentFileInfoProvider,
+        array $nodeNameResolvers = []
+    ) {
         $this->regexPatternDetector = $regexPatternDetector;
         $this->nodeNameResolvers = $nodeNameResolvers;
+        $this->currentFileInfoProvider = $currentFileInfoProvider;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -93,7 +112,7 @@ final class NodeNameResolver
                 return null;
             }
 
-            throw new ShouldNotHappenException(sprintf('Pick more specific node than "%s"', get_class($node)));
+            $this->reportInvalidNodeForName($node);
         }
 
         foreach ($this->nodeNameResolvers as $nodeNameResolver) {
@@ -174,5 +193,35 @@ final class NodeNameResolver
         }
 
         return $this->getName($classLike->name);
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function reportInvalidNodeForName(Node $node): void
+    {
+        $message = sprintf('Pick more specific node than "%s", e.g. "$node->name"', get_class($node));
+
+        $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        if ($fileInfo instanceof SmartFileInfo) {
+            $message .= PHP_EOL . PHP_EOL;
+            $message .= sprintf(
+                'Caused in "%s" file on line %d on code "%s"',
+                $fileInfo->getRelativeFilePathFromCwd(),
+                $node->getStartLine(),
+                $this->betterStandardPrinter->print($node)
+            );
+        }
+
+        $backtrace = debug_backtrace();
+        if (isset($backtrace[1])) {
+            $fileInfo = new SmartFileInfo($backtrace[1]['file']);
+            $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $backtrace[1]['line'];
+
+            $message .= PHP_EOL . PHP_EOL;
+            $message .= sprintf('Look at %s', $fileAndLine);
+        }
+
+        throw new ShouldNotHappenException($message);
     }
 }

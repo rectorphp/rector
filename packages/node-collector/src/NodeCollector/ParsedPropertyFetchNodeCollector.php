@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\NodeCollector\NodeCollector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
@@ -53,6 +55,12 @@ final class ParsedPropertyFetchNodeCollector
         }
 
         $propertyType = $this->nodeTypeResolver->getStaticType($node->var);
+
+        // make sure name is valid
+        if ($node->name instanceof StaticCall || $node->name instanceof MethodCall) {
+            return;
+        }
+
         $propertyName = $this->nodeNameResolver->getName($node->name);
 
         if ($propertyType instanceof TypeWithClassName) {
