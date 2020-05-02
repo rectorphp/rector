@@ -35,7 +35,7 @@ jobs:
                     php-version: 7.3
                     coverage: none
 
-            -   run: composer install --no-progress
+            -   run: composer install --no-progress --ansi
 
             ## First run Rector
             -   run: composer rector

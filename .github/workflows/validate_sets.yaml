@@ -16,7 +16,7 @@ jobs:
                     php-version: 7.4
                     coverage: none
 
-            -   run: composer install --no-progress
+            -   run: composer install --no-progress --ansi
 
             # this is very slow, so it has to be in own workflow
             -   run: bin/rector validate-sets --ansi

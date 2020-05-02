@@ -18,7 +18,7 @@ jobs:
                     php-version: 7.3
                     coverage: none
 
-            -   run: composer install --no-progress --no-dev
+            -   run: composer install --no-progress --ansi --no-dev
             -   run: |
                     # needs to remove, add dev dependencies are missing and phpstan.neon includes them
                     rm phpstan.neon

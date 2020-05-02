@@ -24,8 +24,8 @@ jobs:
             # https://github.com/actions/toolkit/blob/master/docs/problem-matchers.md
             -   name: Setup Problem Matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-                
-            -   run: composer install --no-progress
+
+            -   run: composer install --no-progress --ansi
             -   run: vendor/bin/phpunit
 
     test_lowest_dependencies:

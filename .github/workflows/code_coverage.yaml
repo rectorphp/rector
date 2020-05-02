@@ -15,7 +15,7 @@ jobs:
                     php-version: 7.3
                     coverage: pcov
 
-            -   run: composer install --no-progress
+            -   run: composer install --no-progress --ansi
 
             # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
             -   run: |

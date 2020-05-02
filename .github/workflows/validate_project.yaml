@@ -16,7 +16,7 @@ jobs:
                     php-version: 7.4
                     coverage: none
 
-            -   run: composer install --no-progress
+            -   run: composer install --no-progress --ansi
 
             -   run: bin/rector validate-fixtures --ansi
 

@@ -15,7 +15,7 @@ jobs:
                 with:
                     php-version: 7.2
                     coverage: none # disable xdebug, pcov
-            -   run: composer install --no-progress
+            -   run: composer install --no-progress --ansi
             -   run: |
                     bin/rector sync-types
             -   run: |

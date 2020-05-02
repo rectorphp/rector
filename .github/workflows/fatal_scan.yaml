@@ -15,5 +15,5 @@ jobs:
                 with:
                     php-version: 7.3
                     coverage: none # disable xdebug, pcov
-            -   run: composer install --no-progress
+            -   run: composer install --no-progress --ansi
             -   run: bin/rector scan-fatal-errors tests/Source/FatalErrors

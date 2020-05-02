@@ -16,6 +16,6 @@ jobs:
                     php-version: 7.4
                     coverage: none
                     tools: cs2pr
-            -   run: composer install --no-progress
+            -   run: composer install --no-progress --ansi
             # turn the phpstan errors (formatted in checkstyle-format) into github pull request check annotations
             -   run: composer phpstan # -- --error-format=checkstyle | cs2pr
