@@ -1,4 +1,4 @@
-# All 509 Rectors Overview
+# All 510 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -9095,6 +9095,26 @@ Remove final from Doctrine entities
 <br>
 
 ## SOLID
+
+### `AddFalseDefaultToBoolPropertyRector`
+
+- class: [`Rector\SOLID\Rector\Property\AddFalseDefaultToBoolPropertyRector`](/../master/rules/solid/src/Rector/Property/AddFalseDefaultToBoolPropertyRector.php)
+- [test fixtures](/../master/rules/solid/tests/Rector/Property/AddFalseDefaultToBoolPropertyRector/Fixture)
+
+Add false default to bool properties, to prevent null compare errors
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var bool
+      */
+-    private $isDisabled;
++    private $isDisabled = false;
+ }
+```
+
+<br>
 
 ### `ChangeIfElseValueAssignToEarlyReturnRector`
 
