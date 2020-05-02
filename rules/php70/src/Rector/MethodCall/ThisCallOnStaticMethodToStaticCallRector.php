@@ -6,7 +6,6 @@ namespace Rector\Php70\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -77,11 +76,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->var instanceof Variable) {
-            return null;
-        }
-
-        if (! $this->isName($node->var, 'this')) {
+        if (! $this->isVariableName($node->var, 'this')) {
             return null;
         }
 

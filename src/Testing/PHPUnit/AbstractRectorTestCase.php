@@ -247,6 +247,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         // life-cycle trio :)
         $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
         $this->fileProcessor->refactor($smartFileInfo);
+
         $changedContent = $this->fileProcessor->printToString($smartFileInfo);
 
         $causedByFixtureMessage = $this->createCausedByFixtureMessage($fixtureFile);

@@ -1,4 +1,4 @@
-# All 510 Rectors Overview
+# All 511 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -26,6 +26,7 @@
 - [Legacy](#legacy)
 - [MinimalScope](#minimalscope)
 - [MysqlToMysqli](#mysqltomysqli)
+- [Naming](#naming)
 - [Nette](#nette)
 - [NetteTesterToPHPUnit](#nettetestertophpunit)
 - [NetteToSymfony](#nettetosymfony)
@@ -4542,6 +4543,35 @@ Add mysql_query and mysql_error with connection
 
 -        return mysql_query($sql);
 +        return mysqli_query($conn, $sql);
+     }
+ }
+```
+
+<br>
+
+## Naming
+
+### `RenamePropertyToMatchTypeRector`
+
+- class: [`Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector`](/../master/rules/naming/src/Rector/Class_/RenamePropertyToMatchTypeRector.php)
+- [test fixtures](/../master/rules/naming/tests/Rector/Class_/RenamePropertyToMatchTypeRector/Fixture)
+
+Rename property and method param to match its type
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var EntityManager
+      */
+-    private $eventManager;
++    private $entityManager;
+
+-    public function __construct(EntityManager $eventManager)
++    public function __construct(EntityManager $entityManager)
+     {
+-        $this->eventManager = $eventManager;
++        $this->entityManager = $entityManager;
      }
  }
 ```

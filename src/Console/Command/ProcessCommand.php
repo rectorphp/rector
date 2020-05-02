@@ -200,6 +200,7 @@ final class ProcessCommand extends AbstractCommand
 
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
         $this->rectorGuard->ensureGetNodeTypesAreNodes();
+
         $this->stubLoader->loadStubs();
 
         $source = $this->configuration->getPaths();
@@ -228,6 +229,7 @@ final class ProcessCommand extends AbstractCommand
 
         // report diffs and errors
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
+
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
         $outputFormatter->report($this->errorAndDiffCollector);
 

@@ -182,11 +182,7 @@ PHP
             return null;
         }
 
-        if (! $comparedNode->var->var instanceof Variable) {
-            return null;
-        }
-
-        if (! $this->isName($comparedNode->var->var, 'crawler')) {
+        if (! $this->isVariableName($comparedNode->var->var, 'crawler')) {
             return null;
         }
 

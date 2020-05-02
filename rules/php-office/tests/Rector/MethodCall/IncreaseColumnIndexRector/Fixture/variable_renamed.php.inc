@@ -2,7 +2,7 @@
 
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
 
-final class Variable
+final class VariableRenamed
 {
     public function run(): void
     {
@@ -19,7 +19,7 @@ final class Variable
 
 namespace Rector\PHPOffice\Tests\Rector\MethodCall\IncreaseColumnIndexRector\Fixture;
 
-final class Variable
+final class VariableRenamed
 {
     public function run(): void
     {

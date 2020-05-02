@@ -233,6 +233,7 @@ PHP
         $classShortName = (string) $class->name;
         // remove suffix
         $classShortName = Strings::replace($classShortName, '#^(.*?)(Listener)?$#', '$1');
+
         $class->name = new Identifier($classShortName . 'EventSubscriber');
 
         $classMethod = $this->createGetSubscribedEventsClassMethod($eventsToMethods);

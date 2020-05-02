@@ -326,11 +326,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $methodCall->var instanceof Variable) {
-            return true;
-        }
-
-        if (! $this->isName($methodCall->var, 'this')) {
+        if (! $this->isVariableName($methodCall->var, 'this')) {
             return true;
         }
 
@@ -383,11 +379,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
 
     private function thisToTestedObjectPropertyFetch(Expr $expr): Expr
     {
-        if (! $expr instanceof Variable) {
-            return $expr;
-        }
-
-        if (! $this->isName($expr, 'this')) {
+        if (! $this->isVariableName($expr, 'this')) {
             return $expr;
         }
 

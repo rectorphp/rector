@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
@@ -130,12 +129,8 @@ PHP
      */
     private function shouldSkipLeftVariable(Node $node): bool
     {
-        if (! $node->var instanceof Variable) {
-            return true;
-        }
-
         // local method call
-        return $this->isName($node->var, 'this');
+        return $this->isVariableName($node->var, 'this');
     }
 
     /**

@@ -85,11 +85,7 @@ PHP
         }
 
         // @todo better check type in the future with custom PHPStan type extension
-        if (! $possibleRedirector->var instanceof Variable) {
-            return null;
-        }
-
-        if (! $this->isName($possibleRedirector->var, 'redirector')) {
+        if (! $this->isVariableName($possibleRedirector->var, 'redirector')) {
             return null;
         }
 
