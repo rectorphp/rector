@@ -18,6 +18,3 @@ create-rector.yaml
 /compiler/composer.lock
 /compiler/vendor
 /tmp
-
-# from "scan-fatal-errors" command
-rector-types.yaml
