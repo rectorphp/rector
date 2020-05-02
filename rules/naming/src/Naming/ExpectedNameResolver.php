@@ -39,30 +39,23 @@ final class ExpectedNameResolver
         $this->staticTypeMapper = $staticTypeMapper;
     }
 
-    public function resolveForProperty(Property $property): ?string
+    public function resolveForPropertyIfNotYet(Property $property): ?string
     {
-        $currentName = $this->nodeNameResolver->getName($property);
+        $expectedName = $this->resolveForProperty($property);
+        if ($expectedName === null) {
+            return null;
+        }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $expectedName = $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
-
-        if ($expectedName === $currentName) {
+        if ($this->nodeNameResolver->isName($property, $expectedName)) {
             return null;
         }
 
         return $expectedName;
     }
 
-    public function resolveForParam(Param $param): ?string
+    public function resolveForParamIfNotYet(Param $param): ?string
     {
-        // nothing to verify
-        if ($param->type === null) {
-            return null;
-        }
-
-        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        $expectedName = $this->propertyNaming->getExpectedNameFromType($staticType);
+        $expectedName = $this->resolveForParam($param);
         if ($expectedName === null) {
             return null;
         }
@@ -78,6 +71,28 @@ final class ExpectedNameResolver
         }
 
         return $expectedName;
+    }
+
+    public function resolveForParam(Param $param): ?string
+    {
+        // nothing to verify
+        if ($param->type === null) {
+            return null;
+        }
+
+        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        return $this->propertyNaming->getExpectedNameFromType($staticType);
+    }
+
+    public function resolveForProperty(Property $property): ?string
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
+
+        return $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
     }
 
     /**
