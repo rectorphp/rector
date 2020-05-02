@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    Rector\Naming\:
+        resource: '../src'
+        exclude:
+            - '../src/Rector/**/*Rector.php'

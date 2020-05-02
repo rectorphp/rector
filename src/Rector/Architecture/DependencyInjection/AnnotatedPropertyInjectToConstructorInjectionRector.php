@@ -83,7 +83,6 @@ PHP
 
         // set to private
         $this->makePrivate($node);
-        $node->flags = Class_::MODIFIER_PRIVATE;
 
         $this->addPropertyToCollector($node);
 

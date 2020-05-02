@@ -121,11 +121,7 @@ PHP
     private function findVariableByName(Stmt $stmt, string $docVariableName): ?Variable
     {
         return $this->betterNodeFinder->findFirst($stmt, function (Node $stmt) use ($docVariableName): bool {
-            if (! $stmt instanceof Variable) {
-                return false;
-            }
-
-            return $this->isName($stmt, $docVariableName);
+            return $this->isVariableName($stmt, $docVariableName);
         });
     }
 

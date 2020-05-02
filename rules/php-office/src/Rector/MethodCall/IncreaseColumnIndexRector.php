@@ -149,11 +149,7 @@ PHP
                 return false;
             }
 
-            if (! $node->var instanceof Variable) {
-                return false;
-            }
-
-            return $this->isName($node->var, $variableName);
+            return $this->isVariableName($node->var, $variableName);
         });
     }
 }

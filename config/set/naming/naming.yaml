@@ -1,0 +1,3 @@
+services:
+    Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector: null
+

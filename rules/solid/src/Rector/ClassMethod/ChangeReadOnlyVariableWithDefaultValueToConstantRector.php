@@ -249,11 +249,7 @@ PHP
         }
 
         $this->traverseNodesWithCallable($classMethod, function (Node $node) use ($variableName, $constantName) {
-            if (! $node instanceof Variable) {
-                return null;
-            }
-
-            if (! $this->isName($node, $variableName)) {
+            if (! $this->isVariableName($node, $variableName)) {
                 return null;
             }
 

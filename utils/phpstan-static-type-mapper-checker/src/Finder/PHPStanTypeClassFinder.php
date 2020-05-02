@@ -18,6 +18,7 @@ final class PHPStanTypeClassFinder
         $robotLoader->addDirectory($this->getPHPStanPharSrcTypeDirectoryPath());
 
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_phpstan_types');
+
         $robotLoader->acceptFiles = ['*Type.php'];
         $robotLoader->rebuild();
 

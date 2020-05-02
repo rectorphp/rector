@@ -86,15 +86,13 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->expr instanceof Variable) {
+        if (! $this->isVariableName($node->expr, 'this')) {
             return null;
         }
 
-        if (! $this->isName($node->expr, 'this')) {
-            return null;
-        }
-
-        if (! $this->isObjectTypes($node->expr, $this->classesToDefluent)) {
+        /** @var Variable $variable */
+        $variable = $node->expr;
+        if (! $this->isObjectTypes($variable, $this->classesToDefluent)) {
             return null;
         }
 

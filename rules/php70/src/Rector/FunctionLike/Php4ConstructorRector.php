@@ -7,7 +7,6 @@ namespace Rector\Php70\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
@@ -147,11 +146,7 @@ PHP
             return false;
         }
 
-        if (! $node->var instanceof Variable) {
-            return false;
-        }
-
-        if (! $this->isName($node->var, 'this')) {
+        if (! $this->isVariableName($node->var, 'this')) {
             return false;
         }
 

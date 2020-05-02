@@ -19,7 +19,6 @@ use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
@@ -130,7 +129,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
             return true;
         }
 
-        return $node instanceof Variable && $this->isName($node, 'exp*');
+        return $this->isVariableName($node, 'exp*');
     }
 
     /**
