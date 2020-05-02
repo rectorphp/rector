@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming;
+namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
 use PHPStan\Type\StaticType;

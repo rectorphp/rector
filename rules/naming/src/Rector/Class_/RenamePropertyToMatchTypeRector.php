@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Rector\Class_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
@@ -15,12 +14,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Naming\Naming\ConflictingNameResolver;
+use Rector\Naming\Naming\ExpectedNameResolver;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\RenamePropertyToMatchTypeRectorTest
@@ -28,13 +26,21 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RenamePropertyToMatchTypeRector extends AbstractRector
 {
     /**
-     * @var PropertyNaming
+     * @var ConflictingNameResolver
      */
-    private $propertyNaming;
+    private $conflictingNameResolver;
 
-    public function __construct(PropertyNaming $propertyNaming)
-    {
-        $this->propertyNaming = $propertyNaming;
+    /**
+     * @var ExpectedNameResolver
+     */
+    private $expectedNameResolver;
+
+    public function __construct(
+        ConflictingNameResolver $conflictingNameResolver,
+        ExpectedNameResolver $expectedNameResolver
+    ) {
+        $this->conflictingNameResolver = $conflictingNameResolver;
+        $this->expectedNameResolver = $expectedNameResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -88,57 +94,19 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $this->refactorClassMethods((array) $node->getMethods());
-        $this->refactorClassProperties((array) $node->getProperties(), $node);
+        $this->refactorClassMethods($node);
+        $this->refactorClassProperties($node);
 
         return $node;
     }
 
-    private function matchExpectedParamNameIfNotYet(Param $param): ?string
+    private function refactorClassMethods(ClassLike $classLike): void
     {
-        // nothing to verify
-        if ($param->type === null) {
-            return null;
-        }
-
-        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        $expectedName = $this->propertyNaming->getExpectedNameFromType($staticType);
-        if ($expectedName === null) {
-            return null;
-        }
-
-        /** @var string $currentName */
-        $currentName = $this->getName($param->var);
-        if ($currentName === $expectedName) {
-            return null;
-        }
-
-        if ($this->endsWith($currentName, $expectedName)) {
-            return null;
-        }
-
-        return $expectedName;
-    }
-
-    /**
-     * Ends with ucname
-     * Starts with adjective, e.g. (Post $firstPost, Post $secondPost)
-     */
-    private function endsWith(string $currentName, string $expectedName): bool
-    {
-        return (bool) Strings::match($currentName, '#\w+' . lcfirst($expectedName) . '#');
-    }
-
-    /**
-     * @param ClassMethod[] $classMethods
-     */
-    private function refactorClassMethods(array $classMethods): void
-    {
-        foreach ($classMethods as $classMethod) {
-            $conflictingNames = $this->resolveConflictingNamesFromClassMethod($classMethod);
+        foreach ($classLike->getMethods() as $classMethod) {
+            $conflictingNames = $this->conflictingNameResolver->resolveConflictingVariableNames($classMethod);
 
             foreach ($classMethod->params as $param) {
-                $expectedName = $this->matchExpectedParamNameIfNotYet($param);
+                $expectedName = $this->expectedNameResolver->resolveForParam($param);
                 if ($expectedName === null) {
                     continue;
                 }
@@ -158,20 +126,17 @@ PHP
         }
     }
 
-    /**
-     * @param Property[] $properties
-     */
-    private function refactorClassProperties(array $properties, ClassLike $classLike): void
+    private function refactorClassProperties(ClassLike $classLike): void
     {
-        $conflictingPropertyNames = $this->resolveConflictingPropertyNamesFromClass($classLike);
+        $conflictingPropertyNames = $this->conflictingNameResolver->resolveConflictingPropertyNames($classLike);
 
-        foreach ($properties as $property) {
+        foreach ($classLike->getProperties() as $property) {
             if (count($property->props) !== 1) {
                 continue;
             }
 
             $oldName = $this->getName($property);
-            $expectedName = $this->matchExpectedPropertyNameIfNotYet($property);
+            $expectedName = $this->expectedNameResolver->resolveForProperty($property);
             if ($expectedName === null) {
                 continue;
             }
@@ -187,21 +152,6 @@ PHP
         }
     }
 
-    private function matchExpectedPropertyNameIfNotYet(Property $property): ?string
-    {
-        $currentName = $this->getName($property);
-
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $expectedName = $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
-
-        if ($expectedName === $currentName) {
-            return null;
-        }
-
-        return $expectedName;
-    }
-
     private function renameVariableInClassMethod(ClassMethod $classMethod, string $oldName, string $expectedName): void
     {
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
@@ -215,60 +165,6 @@ PHP
             $node->name = new Identifier($expectedName);
             return $node;
         });
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveConflictingNamesFromClassMethod(ClassMethod $classMethod): array
-    {
-        $expectedNames = [];
-        foreach ($classMethod->params as $param) {
-            $expectedName = $this->matchExpectedParamNameIfNotYet($param);
-            if ($expectedName === null) {
-                continue;
-            }
-
-            $expectedNames[] = $expectedName;
-        }
-
-        $expectedNamesToCount = array_count_values($expectedNames);
-
-        $conflictingExpectedNames = [];
-        foreach ($expectedNamesToCount as $expectedName => $count) {
-            if ($count >= 2) {
-                $conflictingExpectedNames[] = $expectedName;
-            }
-        }
-
-        return $conflictingExpectedNames;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveConflictingPropertyNamesFromClass(ClassLike $classLike): array
-    {
-        $expectedNames = [];
-        foreach ($classLike->getProperties() as $property) {
-            $expectedName = $this->matchExpectedPropertyNameIfNotYet($property);
-            if ($expectedName === null) {
-                continue;
-            }
-
-            $expectedNames[] = $expectedName;
-        }
-
-        $expectedNamesToCount = array_count_values($expectedNames);
-
-        $conflictingExpectedNames = [];
-        foreach ($expectedNamesToCount as $expectedName => $count) {
-            if ($count >= 2) {
-                $conflictingExpectedNames[] = $expectedName;
-            }
-        }
-
-        return $conflictingExpectedNames;
     }
 
     private function renamePropertyFetchesInClass(ClassLike $classLike, ?string $oldName, string $expectedName): void
