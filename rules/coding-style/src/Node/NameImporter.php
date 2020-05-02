@@ -16,6 +16,7 @@ use Rector\Core\Configuration\Option;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -81,6 +82,12 @@ final class NameImporter
         }
 
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
+
+        // propagate to fqn, that's what we need here
+        if ($staticType instanceof AliasedObjectType) {
+            $staticType = new FullyQualifiedObjectType($staticType->getFullyQualifiedClass());
+        }
+
         if (! $staticType instanceof FullyQualifiedObjectType) {
             return null;
         }

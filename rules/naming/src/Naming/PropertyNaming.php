@@ -59,7 +59,6 @@ final class PropertyNaming
 
         // remove "_"
         $shortClassName = Strings::replace($shortClassName, '#_#', '');
-
         $shortClassName = $this->normalizeUpperCase($shortClassName);
 
         return lcfirst($shortClassName);
