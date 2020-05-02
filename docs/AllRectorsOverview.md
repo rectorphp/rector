@@ -9635,8 +9635,11 @@ Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 Turns old default value to parameter in ContinerBuilder->build() method in DI in Symfony
 
 ```diff
--$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile();
-+$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile(true);
+ use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+ $containerBuilder = new ContainerBuilder();
+-$containerBuilder->compile();
++$containerBuilder->compile(true);
 ```
 
 <br>

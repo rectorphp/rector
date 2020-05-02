@@ -22,8 +22,19 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
             'Turns old default value to parameter in ContinerBuilder->build() method in DI in Symfony',
             [
                 new CodeSample(
-                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile();',
-                    '$containerBuilder = new Symfony\Component\DependencyInjection\ContainerBuilder(); $containerBuilder->compile(true);'
+                    <<<'CODE_SAMPLE'
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+$containerBuilder = new ContainerBuilder();
+$containerBuilder->compile();
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+$containerBuilder = new ContainerBuilder();
+$containerBuilder->compile(true);
+CODE_SAMPLE
                 ),
             ]
         );
