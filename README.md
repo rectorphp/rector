@@ -125,7 +125,7 @@ services:
     Rector\Php74\Rector\Property\TypedPropertyRector: null
 ```
 
-Then just Rector to refactor your code:
+Then let Rector refactor your code:
 
 ```bash
 vendor/bin/rector process src
