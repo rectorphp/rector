@@ -18,7 +18,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\FrameworkMigration\Symfony\ImplicitToExplicitRoutingAnnotationDecorator;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
@@ -330,7 +330,7 @@ PHP
 
         /** @var string $presenterPart */
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
-        $presenterPart = RectorStrings::camelCaseToDashes($presenterPart);
+        $presenterPart = StaticRectorStrings::camelCaseToDashes($presenterPart);
 
         $match = (array) Strings::match($this->getName($classMethod), '#^(action|render)(?<short_action_name>.*?$)#sm');
         $actionPart = lcfirst($match['short_action_name']);

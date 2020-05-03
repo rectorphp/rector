@@ -22,7 +22,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassMethodAssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -200,7 +200,7 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        $constantName = RectorStrings::camelCaseToUnderscore($variableName);
+        $constantName = StaticRectorStrings::camelCaseToUnderscore($variableName);
 
         return strtoupper($constantName);
     }

@@ -5,24 +5,12 @@ declare(strict_types=1);
 namespace Rector\Core\Util;
 
 use Nette\Utils\Strings;
-use Symfony\Component\Console\Input\StringInput;
-use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 /**
  * @see \Rector\Core\Tests\Util\RectorStringsTest
  */
-final class RectorStrings
+final class StaticRectorStrings
 {
-    /**
-     * @return string[]
-     */
-    public static function splitCommandToItems(string $command): array
-    {
-        $privatesCaller = new PrivatesCaller();
-
-        return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', $command);
-    }
-
     /**
      * @param string[] $array
      */

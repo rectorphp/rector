@@ -20,7 +20,7 @@ use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -182,7 +182,7 @@ PHP
     private function createConstantNameFromProperty(PropertyProperty $propertyProperty): string
     {
         $propertyName = $this->getName($propertyProperty);
-        $constantName = RectorStrings::camelCaseToUnderscore($propertyName);
+        $constantName = StaticRectorStrings::camelCaseToUnderscore($propertyName);
 
         return strtoupper($constantName);
     }

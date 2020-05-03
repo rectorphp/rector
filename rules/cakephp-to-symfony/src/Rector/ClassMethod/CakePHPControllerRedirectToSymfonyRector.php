@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -143,7 +143,7 @@ PHP
         }
 
         $composedRouteName = $argumentValue['controller'] . '_' . $argumentValue['action'];
-        $composedRouteName = RectorStrings::camelCaseToUnderscore($composedRouteName);
+        $composedRouteName = StaticRectorStrings::camelCaseToUnderscore($composedRouteName);
 
         $methodCall->args[0]->value = new String_($composedRouteName);
         $methodCall->name = new Identifier('redirectToRoute');

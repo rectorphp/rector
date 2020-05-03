@@ -6,7 +6,7 @@ namespace Rector\ZendToSymfony\ValueObject;
 
 use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 
 final class RouteValueObject
 {
@@ -64,9 +64,9 @@ final class RouteValueObject
     private function getPath(): string
     {
         $controllerPath = $this->resolveControllerPath();
-        $controllerPath = RectorStrings::camelCaseToDashes($controllerPath);
+        $controllerPath = StaticRectorStrings::camelCaseToDashes($controllerPath);
 
-        $methodPath = RectorStrings::camelCaseToDashes($this->methodName);
+        $methodPath = StaticRectorStrings::camelCaseToDashes($this->methodName);
 
         $path = '/' . $controllerPath . '/' . $methodPath;
         $path = strtolower($path);

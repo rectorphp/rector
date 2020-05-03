@@ -18,9 +18,10 @@ use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Util\RectorStrings;
 use Symfony\Component\Console\Helper\ProcessHelper;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Process\Process;
+use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27821/files
@@ -124,7 +125,7 @@ PHP
                 $node->args[$argumentPosition]->value = $arrayNode;
             }
         } elseif ($firstArgument instanceof String_) {
-            $parts = RectorStrings::splitCommandToItems($firstArgument->value);
+            $parts = $this->splitProcessCommandToItems($firstArgument->value);
             $node->args[$argumentPosition]->value = $this->createArray($parts);
         }
 
@@ -163,5 +164,14 @@ PHP
 
             return $checkedNode;
         });
+    }
+
+    /**
+     * @return string[]
+     */
+    private function splitProcessCommandToItems(string $process): array
+    {
+        $privatesCaller = new PrivatesCaller();
+        return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', $process);
     }
 }

@@ -7,6 +7,10 @@ includes:
     # see https://github.com/symplify/coding-standard
     - vendor/symplify/coding-standard/config/symplify-rules.neon
 
+rules:
+    # should be fixed in next part of symplify CS release
+    - Symplify\CodingStandard\Rules\NoClassWithStaticMethodWithoutStaticNameRule
+
 parameters:
     level: max
 

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\Cast\Unset_ as UnsetCast;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
@@ -183,7 +184,7 @@ PHP
             return true;
         }
 
-        if ($parentNode instanceof Unset_ || $parentNode instanceof Node\Expr\Cast\Unset_) {
+        if ($parentNode instanceof Unset_ || $parentNode instanceof UnsetCast) {
             return true;
         }
 

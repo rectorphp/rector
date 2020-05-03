@@ -10,7 +10,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\FrameworkMigration\Symfony\ImplicitToExplicitRoutingAnnotationDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -91,9 +91,9 @@ PHP
 
             $methodName = $this->getName($classMethod);
 
-            $combined = RectorStrings::removeSuffixes($shortClassName, ['Controller']) . '/' . $methodName;
-            $path = '/' . RectorStrings::camelCaseToSlashes($combined);
-            $name = RectorStrings::camelCaseToUnderscore($combined);
+            $combined = StaticRectorStrings::removeSuffixes($shortClassName, ['Controller']) . '/' . $methodName;
+            $path = '/' . StaticRectorStrings::camelCaseToSlashes($combined);
+            $name = StaticRectorStrings::camelCaseToUnderscore($combined);
 
             $symfonyRoutePhpDocTagValueNode = $this->createSymfonyRoutePhpDocTagValueNode($path, $name);
 

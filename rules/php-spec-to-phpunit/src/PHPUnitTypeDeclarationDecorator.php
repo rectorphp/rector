@@ -6,7 +6,7 @@ namespace Rector\PhpSpecToPHPUnit;
 
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use ReflectionMethod;
 
 /**
@@ -21,7 +21,7 @@ final class PHPUnitTypeDeclarationDecorator
         }
 
         // skip test run
-        if (PHPUnitEnvironment::isPHPUnitRun()) {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return;
         }
 

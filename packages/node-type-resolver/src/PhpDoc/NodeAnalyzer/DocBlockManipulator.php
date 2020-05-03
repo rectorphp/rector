@@ -10,7 +10,7 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
+use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -57,8 +57,8 @@ final class DocBlockManipulator
 
     public function replaceTagByAnother(PhpDocNode $phpDocNode, string $oldTag, string $newTag): void
     {
-        $oldTag = AnnotationNaming::normalizeName($oldTag);
-        $newTag = AnnotationNaming::normalizeName($newTag);
+        $oldTag = StaticAnnotationNaming::normalizeName($oldTag);
+        $newTag = StaticAnnotationNaming::normalizeName($newTag);
 
         foreach ($phpDocNode->children as $phpDocChildNode) {
             if (! $phpDocChildNode instanceof PhpDocTagNode) {

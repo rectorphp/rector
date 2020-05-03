@@ -6,7 +6,7 @@ namespace Rector\CakePHPToSymfony;
 
 use Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RouteResolver
@@ -16,11 +16,11 @@ final class RouteResolver
         $routeName = '';
 
         if (isset($parameters['controller'])) {
-            $routeName = RectorStrings::camelCaseToUnderscore($parameters['controller']);
+            $routeName = StaticRectorStrings::camelCaseToUnderscore($parameters['controller']);
         }
 
         if (isset($parameters['action'])) {
-            $actionUnderscored = RectorStrings::camelCaseToUnderscore($parameters['action']);
+            $actionUnderscored = StaticRectorStrings::camelCaseToUnderscore($parameters['action']);
 
             if ($routeName !== '') {
                 return $routeName . '_' . $actionUnderscored;
@@ -31,7 +31,7 @@ final class RouteResolver
                 throw new ShouldNotHappenException();
             }
 
-            $shortDirectoryNameUnderscored = RectorStrings::camelCaseToUnderscore($shortDirectoryName);
+            $shortDirectoryNameUnderscored = StaticRectorStrings::camelCaseToUnderscore($shortDirectoryName);
 
             return $shortDirectoryNameUnderscored . '_' . $actionUnderscored;
         }

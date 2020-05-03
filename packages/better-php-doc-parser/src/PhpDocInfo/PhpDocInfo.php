@@ -24,7 +24,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
-use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
+use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
@@ -155,7 +155,7 @@ final class PhpDocInfo
      */
     public function getTagsByName(string $name): array
     {
-        $name = AnnotationNaming::normalizeName($name);
+        $name = StaticAnnotationNaming::normalizeName($name);
 
         /** @var AttributeAwareNodeInterface[]|PhpDocTagNode[] $tags */
         $tags = $this->phpDocNode->getTags();

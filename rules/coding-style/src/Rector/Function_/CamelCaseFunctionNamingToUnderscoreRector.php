@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector\CamelCaseFunctionNamingToUnderscoreRectorTest
@@ -62,7 +62,7 @@ PHP
             return null;
         }
 
-        $underscoredName = RectorStrings::camelCaseToUnderscore($shortName);
+        $underscoredName = StaticRectorStrings::camelCaseToUnderscore($shortName);
         if ($underscoredName === $shortName) {
             return null;
         }

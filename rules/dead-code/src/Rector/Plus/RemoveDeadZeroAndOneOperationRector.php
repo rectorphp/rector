@@ -7,6 +7,10 @@ namespace Rector\DeadCode\Rector\Plus;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\AssignOp;
+use PhpParser\Node\Expr\AssignOp\Div as AssignDiv;
+use PhpParser\Node\Expr\AssignOp\Minus as AssignMinus;
+use PhpParser\Node\Expr\AssignOp\Mul as AssignMul;
+use PhpParser\Node\Expr\AssignOp\Plus as AssignPlus;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\BinaryOp\Minus;
@@ -19,6 +23,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/I0BGs
+ *
  * @see \Rector\DeadCode\Tests\Rector\Plus\RemoveDeadZeroAndOneOperationRector\RemoveDeadZeroAndOneOperationRectorTest
  */
 final class RemoveDeadZeroAndOneOperationRector extends AbstractRector
@@ -62,10 +67,10 @@ PHP
             Minus::class,
             Mul::class,
             Div::class,
-            AssignOp\Plus::class,
-            AssignOp\Minus::class,
-            AssignOp\Mul::class,
-            AssignOp\Div::class,
+            AssignPlus::class,
+            AssignMinus::class,
+            AssignMul::class,
+            AssignDiv::class,
         ];
     }
 
@@ -106,7 +111,7 @@ PHP
     private function processAssignOp(Node $node): ?Expr
     {
         // +=, -=
-        if ($node instanceof AssignOp\Plus || $node instanceof AssignOp\Minus) {
+        if ($node instanceof AssignPlus || $node instanceof AssignMinus) {
             if (! $this->isValue($node->expr, 0)) {
                 return null;
             }
@@ -117,7 +122,7 @@ PHP
         }
 
         // *, /
-        if ($node instanceof AssignOp\Mul || $node instanceof AssignOp\Div) {
+        if ($node instanceof AssignMul || $node instanceof AssignDiv) {
             if (! $this->isValue($node->expr, 1)) {
                 return null;
             }

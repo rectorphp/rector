@@ -25,15 +25,10 @@ parameters:
       - "clean-code"
 
     exclude_files:
-        - '*tests/**Source/*.php'
         # tests files
-        - '*tests/*/Fixture/*'
-        - '*tests/*/Expected/*'
-        - '*utils/ContributorTools/templates/*'
-        - 'stubs/*'
-        # exclude
-        - 'src/Rector/AbstractRector.php'
-        - 'src/PhpParser/BetterNodeDumper.php'
+        - '*/Source/*'
+        - '*/Fixture/*'
+        - '*/Expected/*'
         # generated
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
@@ -52,26 +47,6 @@ parameters:
 
         PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer:
             - 'rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'
-
-        Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff: null
-
-        Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
-            - 'src/Util/*.php'
-            - 'packages/better-php-doc-parser/src/Annotation/AnnotationNaming.php'
-            - 'src/Testing/PHPUnit/PHPUnitEnvironment.php'
-            # honesty first
-            - 'src/*Static*.php'
-            # static ctor
-            - 'packages/better-php-doc-parser/src/PhpDocNode/**/*TagValueNode.php'
-
-        Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
-            - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
-            - 'compiler/src/*'
-
-        Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
-            # hidden API
-            - 'src/Rector/AbstractRector.php'
-            - 'packages/post-rector/src/Rector/AbstractPostRector.php'
 
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition: null
 
@@ -98,20 +73,11 @@ parameters:
             - 'tests/PhpParser/Node/NodeFactoryTest.php'
             - '*TypeResolverTest.php'
 
-        Symplify\CodingStandard\Sniffs\Commenting\AnnotationTypeExistsSniff:
-            - '*PhpDocNodeFactory.php'
-            - '*AnnotationReader.php'
-            - 'compiler/src/*'
-
         # conflicts with "PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer"
         PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer: null
 
         PhpCsFixer\Fixer\Strict\StrictComparisonFixer:
             # part of the comparison logic
             - 'packages/polyfill/src/ConditionEvaluator.php'
-
-        SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse:
-            - "rules/dead-code/src/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php"
-            - "rules/php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php"
 
     line_ending: "\n"

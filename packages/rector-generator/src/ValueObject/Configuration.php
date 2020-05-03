@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\ValueObject;
 
 use Nette\Utils\Strings;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 
 final class Configuration
 {
@@ -118,7 +118,7 @@ final class Configuration
             return 'phpunit';
         }
 
-        return RectorStrings::camelCaseToDashes($this->package);
+        return StaticRectorStrings::camelCaseToDashes($this->package);
     }
 
     public function getName(): string

@@ -6,5 +6,4 @@ namespace Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjec
 
 interface SomeTranslatorInterface
 {
-
 }

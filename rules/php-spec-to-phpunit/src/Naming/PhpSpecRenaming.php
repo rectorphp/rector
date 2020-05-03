@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Strings\StringFormatConverter;
@@ -73,7 +73,7 @@ final class PhpSpecRenaming
             return;
         }
 
-        $newNamespaceName = RectorStrings::removePrefixes($namespace->name->toString(), ['spec\\']);
+        $newNamespaceName = StaticRectorStrings::removePrefixes($namespace->name->toString(), ['spec\\']);
 
         $namespace->name = new Name('Tests\\' . $newNamespaceName);
     }
@@ -86,7 +86,7 @@ final class PhpSpecRenaming
         }
 
         // 2. change class name
-        $newClassName = RectorStrings::removeSuffixes($class->name->toString(), ['Spec']);
+        $newClassName = StaticRectorStrings::removeSuffixes($class->name->toString(), ['Spec']);
         $newTestClassName = $newClassName . 'Test';
 
         $class->name = new Identifier($newTestClassName);
@@ -99,7 +99,7 @@ final class PhpSpecRenaming
             throw new ShouldNotHappenException();
         }
 
-        $bareClassName = RectorStrings::removeSuffixes($class->name->toString(), ['Spec', 'Test']);
+        $bareClassName = StaticRectorStrings::removeSuffixes($class->name->toString(), ['Spec', 'Test']);
 
         return lcfirst($bareClassName);
     }
@@ -109,16 +109,16 @@ final class PhpSpecRenaming
         /** @var string $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
-        $newClassName = RectorStrings::removePrefixes($className, ['spec\\']);
+        $newClassName = StaticRectorStrings::removePrefixes($className, ['spec\\']);
 
-        return RectorStrings::removeSuffixes($newClassName, ['Spec']);
+        return StaticRectorStrings::removeSuffixes($newClassName, ['Spec']);
     }
 
     private function removeNamePrefixes(string $name): string
     {
         $originalName = $name;
 
-        $name = RectorStrings::removePrefixes(
+        $name = StaticRectorStrings::removePrefixes(
             $name,
             ['it_should_have_', 'it_should_be', 'it_should_', 'it_is_', 'it_', 'is_']
         );

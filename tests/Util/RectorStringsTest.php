@@ -6,7 +6,7 @@ namespace Rector\Core\Tests\Util;
 
 use Iterator;
 use PHPUnit\Framework\TestCase;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 
 final class RectorStringsTest extends TestCase
 {
@@ -15,7 +15,7 @@ final class RectorStringsTest extends TestCase
      */
     public function testCamelCaseToUnderscore(string $content, string $expected): void
     {
-        $this->assertSame($expected, RectorStrings::camelCaseToUnderscore($content));
+        $this->assertSame($expected, StaticRectorStrings::camelCaseToUnderscore($content));
     }
 
     public function provideDataForCamelCaseToUnderscore(): Iterator
@@ -36,7 +36,7 @@ final class RectorStringsTest extends TestCase
      */
     public function testUnderscoreToCamelCase(string $content, string $expected): void
     {
-        $this->assertSame($expected, RectorStrings::underscoreToCamelCase($content));
+        $this->assertSame($expected, StaticRectorStrings::underscoreToCamelCase($content));
     }
 
     public function provideDataForUnderscoreToCamelCase(): Iterator

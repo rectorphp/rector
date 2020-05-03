@@ -8,7 +8,7 @@ use Jean85\PrettyVersions;
 use OndraM\CiDetector\CiDetector;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
-use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -160,7 +160,7 @@ final class Configuration
 
     public function areAnyPhpRectorsLoaded(): bool
     {
-        if (PHPUnitEnvironment::isPHPUnitRun()) {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return true;
         }
 
