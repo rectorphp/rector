@@ -8,13 +8,19 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\Rules\RuleError;
-use PHPStan\Rules\RuleErrorBuilder;
 use Rector\Core\Exception\NotImplementedException;
 use ReflectionMethod;
 
+/**
+ * @see \Rector\PHPStanExtensions\Tests\Rule\ClassMethod\PreventParentMethodVisibilityOverrideRuleTest
+ */
 final class PreventParentMethodVisibilityOverrideRule implements Rule
 {
+    /**
+     * @var string
+     */
+    public const ERROR_MESSAGE = 'Change "%s()" method visibility to "%s" to respect parent method visibility.';
+
     public function getNodeType(): string
     {
         return ClassMethod::class;
@@ -22,7 +28,7 @@ final class PreventParentMethodVisibilityOverrideRule implements Rule
 
     /**
      * @param ClassMethod $node
-     * @return RuleError[]
+     * @return string[]
      */
     public function processNode(Node $node, Scope $scope): array
     {
@@ -49,8 +55,8 @@ final class PreventParentMethodVisibilityOverrideRule implements Rule
 
             $methodVisibility = $this->resolveReflectionMethodVisibilityAsStrings($parentReflectionMethod);
 
-            $ruleError = $this->createRuleError($node, $scope, $methodName, $methodVisibility);
-            return [$ruleError];
+            $errorMessage = sprintf(self::ERROR_MESSAGE, $methodName, $methodVisibility);
+            return [$errorMessage];
         }
 
         return [];
@@ -86,20 +92,5 @@ final class PreventParentMethodVisibilityOverrideRule implements Rule
         }
 
         throw new NotImplementedException();
-    }
-
-    private function createRuleError(Node $node, Scope $scope, string $methodName, string $methodVisibility): RuleError
-    {
-        $message = sprintf(
-            'Change "%s()" method visibility to "%s" to respect parent method visibility.',
-            $methodName,
-            $methodVisibility
-        );
-
-        $ruleErrorBuilder = RuleErrorBuilder::message($message);
-        $ruleErrorBuilder->line($node->getLine());
-        $ruleErrorBuilder->file($scope->getFile());
-
-        return $ruleErrorBuilder->build();
     }
 }

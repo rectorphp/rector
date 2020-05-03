@@ -252,3 +252,8 @@ parameters:
         - '#Class (.*?) should be written with \:\:class notation, string found#'
         - '#Parameter \#2 \$key of method Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode\:\:printArrayItem\(\) expects string\|null, int\|string given#'
         - '#Method Rector\\Naming\\Naming\\PropertyNaming\:\:resolveShortClassName\(\) should return string but returns string\|null#'
+
+        -
+            message: "#^Class \"Rector\\\\PSR4\\\\Rector\\\\Namespace_\\\\NormalizeNamespaceByPSR4ComposerAutoloadRector\" is missing @see annotation with test case class reference$#"
+            count: 1
+            path: rules/psr4/src/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector.php

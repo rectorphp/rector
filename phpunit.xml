@@ -13,6 +13,7 @@
             <directory>rules/*/tests</directory>
             <directory>packages/*/tests</directory>
             <directory>tests</directory>
+            <directory>utils/*/tests</directory>
         </testsuite>
     </testsuites>
 

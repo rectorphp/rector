@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanExtensions\Tests\Rule\ClassMethod\Source;
 
-final class ClassWithOverridingVisibility extends GoodVisibility
+abstract class GoodVisibility
 {
-    public function run()
+    protected function run()
     {
+
     }
 }

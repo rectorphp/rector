@@ -4,18 +4,25 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanExtensions\Tests\Rule\ClassMethod;
 
+use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Rector\PHPStanExtensions\Rule\ClassMethod\PreventParentMethodVisibilityOverrideRule;
 
 final class PreventParentMethodVisibilityOverrideRuleTest extends RuleTestCase
 {
-    public function testRule(): void
+    /**
+     * @dataProvider provideData()
+     */
+    public function testRule(string $filePath, array $expectedErrorsWithLines): void
     {
-        $this->analyse(
-            [__DIR__ . '/Source/ClassWithOverridingVisibility.php'],
-            [['Change "run()" method visibility to "protected" to respect parent method visibility.', 10]]
-        );
+        $this->analyse([$filePath], $expectedErrorsWithLines);
+    }
+
+    public function provideData(): Iterator
+    {
+        $errorMessage = sprintf(PreventParentMethodVisibilityOverrideRule::ERROR_MESSAGE, 'run', 'protected');
+        yield [__DIR__ . '/Source/ClassWithOverridingVisibility.php', [[$errorMessage, 9]]];
     }
 
     protected function getRule(): Rule
