@@ -25,15 +25,12 @@ parameters:
       - "clean-code"
 
     exclude_files:
-        - '*tests/**Source/*.php'
         # tests files
-        - '*tests/*/Fixture/*'
-        - '*tests/*/Expected/*'
-        - '*utils/ContributorTools/templates/*'
-        - 'stubs/*'
+        - '*/Source/*'
+        - '*/Fixture/*'
+        - '*/Expected/*'
         # exclude
-        - 'src/Rector/AbstractRector.php'
-        - 'src/PhpParser/BetterNodeDumper.php'
+#        - 'src/Rector/AbstractRector.php'
         # generated
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'

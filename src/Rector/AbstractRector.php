@@ -23,11 +23,11 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -35,51 +35,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
     use AbstractRectorTrait;
-
-    /**
-     * @var BuilderFactory
-     */
-    protected $builderFactory;
-
-    /**
-     * @var ParameterProvider
-     */
-    protected $parameterProvider;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
-     * @var PhpVersionProvider
-     */
-    protected $phpVersionProvider;
-
-    /**
-     * @var ExclusionManager
-     */
-    private $exclusionManager;
-
-    /**
-     * @var PhpDocInfoPrinter
-     */
-    protected $phpDocInfoPrinter;
-
-    /**
-     * @var DocBlockManipulator
-     */
-    protected $docBlockManipulator;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    protected $staticTypeMapper;
-
-    /**
-     * @var CurrentRectorProvider
-     */
-    private $currentRectorProvider;
 
     /**
      * @var string[]
@@ -97,6 +52,51 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         AttributeKey::NAMESPACE_NODE,
         AttributeKey::RESOLVED_NAME,
     ];
+
+    /**
+     * @var BuilderFactory
+     */
+    protected $builderFactory;
+
+    /**
+     * @var ParameterProvider
+     */
+    protected $parameterProvider;
+
+    /**
+     * @var PhpVersionProvider
+     */
+    protected $phpVersionProvider;
+
+    /**
+     * @var PhpDocInfoPrinter
+     */
+    protected $phpDocInfoPrinter;
+
+    /**
+     * @var DocBlockManipulator
+     */
+    protected $docBlockManipulator;
+
+    /**
+     * @var StaticTypeMapper
+     */
+    protected $staticTypeMapper;
+
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
+
+    /**
+     * @var ExclusionManager
+     */
+    private $exclusionManager;
+
+    /**
+     * @var CurrentRectorProvider
+     */
+    private $currentRectorProvider;
 
     /**
      * @required
@@ -206,43 +206,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return $this->phpVersionProvider->isAtLeast($version);
     }
 
-    private function isMatchingNodeType(string $nodeClass): bool
-    {
-        foreach ($this->getNodeTypes() as $nodeType) {
-            if (is_a($nodeClass, $nodeType, true)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function keepFileInfoAttribute(Node $node, Node $originalNode): void
-    {
-        if ($node->getAttribute(AttributeKey::FILE_INFO) instanceof SmartFileInfo) {
-            return;
-        }
-
-        if ($originalNode->getAttribute(AttributeKey::FILE_INFO) !== null) {
-            $node->setAttribute(AttributeKey::FILE_INFO, $originalNode->getAttribute(AttributeKey::FILE_INFO));
-        } elseif ($originalNode->getAttribute(AttributeKey::PARENT_NODE) !== null) {
-            /** @var Node $parentOriginalNode */
-            $parentOriginalNode = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
-            $node->setAttribute(AttributeKey::FILE_INFO, $parentOriginalNode->getAttribute(AttributeKey::FILE_INFO));
-        }
-    }
-
-    private function mirrorAttributes(Node $oldNode, Node $newNode): void
-    {
-        foreach ($oldNode->getAttributes() as $attributeName => $oldNodeAttributeValue) {
-            if (! in_array($attributeName, self::ATTRIBUTES_TO_MIRROR, true)) {
-                continue;
-            }
-
-            $newNode->setAttribute($attributeName, $oldNodeAttributeValue);
-        }
-    }
-
     protected function isAnonymousClass(Node $node): bool
     {
         if (! $node instanceof Class_) {
@@ -252,23 +215,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $className = $this->nodeNameResolver->getName($node);
 
         return $className === null || Strings::contains($className, 'AnonymousClass');
-    }
-
-    private function updateAttributes(Node $node): void
-    {
-        // update Resolved name attribute if name is changed
-        if ($node instanceof Name) {
-            $node->setAttribute(AttributeKey::RESOLVED_NAME, $node->toString());
-        }
-    }
-
-    private function hasNodeChanged(Node $originalNode, Node $node): bool
-    {
-        if ($this->isNameIdentical($node, $originalNode)) {
-            return false;
-        }
-
-        return ! $this->areNodesEqual($originalNode, $node);
     }
 
     protected function createCountedValueName(string $countedValueName, ?Scope $scope): string
@@ -331,16 +277,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return $this->isName($node->name, $methodName);
     }
 
-    private function isNameIdentical(Node $node, Node $originalNode): bool
-    {
-        if (! $originalNode instanceof Name) {
-            return false;
-        }
-
-        // names are the same
-        return $this->areNodesEqual($originalNode->getAttribute('originalName'), $node);
-    }
-
     protected function isOpenSourceProjectType(): bool
     {
         $projectType = $this->parameterProvider->provideParameter(Option::PROJECT_TYPE);
@@ -363,5 +299,69 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return new Bool_($expr);
+    }
+
+    private function isMatchingNodeType(string $nodeClass): bool
+    {
+        foreach ($this->getNodeTypes() as $nodeType) {
+            if (is_a($nodeClass, $nodeType, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function keepFileInfoAttribute(Node $node, Node $originalNode): void
+    {
+        if ($node->getAttribute(AttributeKey::FILE_INFO) instanceof SmartFileInfo) {
+            return;
+        }
+
+        if ($originalNode->getAttribute(AttributeKey::FILE_INFO) !== null) {
+            $node->setAttribute(AttributeKey::FILE_INFO, $originalNode->getAttribute(AttributeKey::FILE_INFO));
+        } elseif ($originalNode->getAttribute(AttributeKey::PARENT_NODE) !== null) {
+            /** @var Node $parentOriginalNode */
+            $parentOriginalNode = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
+            $node->setAttribute(AttributeKey::FILE_INFO, $parentOriginalNode->getAttribute(AttributeKey::FILE_INFO));
+        }
+    }
+
+    private function mirrorAttributes(Node $oldNode, Node $newNode): void
+    {
+        foreach ($oldNode->getAttributes() as $attributeName => $oldNodeAttributeValue) {
+            if (! in_array($attributeName, self::ATTRIBUTES_TO_MIRROR, true)) {
+                continue;
+            }
+
+            $newNode->setAttribute($attributeName, $oldNodeAttributeValue);
+        }
+    }
+
+    private function updateAttributes(Node $node): void
+    {
+        // update Resolved name attribute if name is changed
+        if ($node instanceof Name) {
+            $node->setAttribute(AttributeKey::RESOLVED_NAME, $node->toString());
+        }
+    }
+
+    private function hasNodeChanged(Node $originalNode, Node $node): bool
+    {
+        if ($this->isNameIdentical($node, $originalNode)) {
+            return false;
+        }
+
+        return ! $this->areNodesEqual($originalNode, $node);
+    }
+
+    private function isNameIdentical(Node $node, Node $originalNode): bool
+    {
+        if (! $originalNode instanceof Name) {
+            return false;
+        }
+
+        // names are the same
+        return $this->areNodesEqual($originalNode->getAttribute('originalName'), $node);
     }
 }

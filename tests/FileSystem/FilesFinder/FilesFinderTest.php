@@ -29,7 +29,7 @@ final class FilesFinderTest extends AbstractKernelTestCase
      */
     public function testSingleSuffix(string $suffix, int $count, string $expectedFileName): void
     {
-        $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([__DIR__ . '/FilesFinderSource'], [$suffix]);
+        $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([__DIR__ . '/Source'], [$suffix]);
         $this->assertCount($count, $foundFiles);
 
         /** @var SmartFileInfo $foundFile */
@@ -47,7 +47,7 @@ final class FilesFinderTest extends AbstractKernelTestCase
 
     public function testMultipleSuffixes(): void
     {
-        $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([__DIR__ . '/FilesFinderSource'], ['yaml', 'yml']);
+        $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([__DIR__ . '/Source'], ['yaml', 'yml']);
         $this->assertCount(2, $foundFiles);
 
         $foundFileNames = [];
