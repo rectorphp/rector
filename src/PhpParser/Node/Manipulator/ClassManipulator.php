@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -37,11 +36,6 @@ final class ClassManipulator
     private $nodeTypeResolver;
 
     /**
-     * @var PropertyFetchManipulator
-     */
-    private $propertyFetchManipulator;
-
-    /**
      * @var NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;
@@ -50,13 +44,11 @@ final class ClassManipulator
         NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
         NodesToRemoveCollector $nodesToRemoveCollector,
-        NodeTypeResolver $nodeTypeResolver,
-        PropertyFetchManipulator $propertyFetchManipulator
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->propertyFetchManipulator = $propertyFetchManipulator;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
 
@@ -228,30 +220,6 @@ final class ClassManipulator
 
             $this->nodesToRemoveCollector->addNodeToRemove($implement);
         }
-    }
-
-    /**
-     * @param string[] $oldToNewPropertyNames
-     */
-    public function renamePropertyFetches(Class_ $class, array $oldToNewPropertyNames): void
-    {
-        $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use (
-            $oldToNewPropertyNames
-        ) {
-            if (! $this->propertyFetchManipulator->isLocalPropertyFetch($node)) {
-                return null;
-            }
-
-            foreach ($oldToNewPropertyNames as $oldPropertyName => $newPropertyName) {
-                if (! $this->nodeNameResolver->isName($node->name, $oldPropertyName)) {
-                    continue;
-                }
-
-                $node->name = new Identifier($newPropertyName);
-            }
-
-            return null;
-        });
     }
 
     /**
