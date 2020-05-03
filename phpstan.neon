@@ -305,3 +305,4 @@ parameters:
 
 
         - '#Use explicit return value over magic &reference#'
+        - '#Method Rector\\Order\\Rector\\Class_\\OrderPrivateMethodsByUseRector\:\:createOldToNewKeys\(\) should return array<int\> but returns array\|false#'

@@ -1,4 +1,4 @@
-# All 511 Rectors Overview
+# All 512 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -30,6 +30,7 @@
 - [Nette](#nette)
 - [NetteTesterToPHPUnit](#nettetestertophpunit)
 - [NetteToSymfony](#nettetosymfony)
+- [Order](#order)
 - [Oxid](#oxid)
 - [PHPOffice](#phpoffice)
 - [PHPStan](#phpstan)
@@ -5155,6 +5156,38 @@ Adds %% to placeholder name of trans() method if missing
 -            ['name' => $name]
 +            ['%name%' => $name]
          );
+     }
+ }
+```
+
+<br>
+
+## Order
+
+### `OrderPrivateMethodsByUseRector`
+
+- class: [`Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector`](/../master/rules/order/src/Rector/Class_/OrderPrivateMethodsByUseRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderPrivateMethodsByUseRector/Fixture)
+
+Order private methods in order of their use
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $this->call1();
+         $this->call2();
+     }
+
+-    private function call2()
++    private function call1()
+     {
+     }
+
+-    private function call1()
++    private function call2()
+     {
      }
  }
 ```
