@@ -1,4 +1,6 @@
 parameters:
+    is_cache_enabled: true
+
     sets:
         - 'coding-style'
         - 'code-quality'

@@ -128,7 +128,7 @@ PHP
         return null;
     }
 
-    private function refactorFuncCall(FuncCall $funcCall): FuncCall
+    private function refactorFuncCall(FuncCall $funcCall): ?FuncCall
     {
         foreach (self::FUNCTIONS_WITH_REGEX_PATTERN as $function => $position) {
             if (! $this->isName($funcCall, $function)) {
@@ -136,9 +136,11 @@ PHP
             }
 
             $this->refactorArgument($funcCall->args[$position]);
+
+            return $funcCall;
         }
 
-        return $funcCall;
+        return null;
     }
 
     private function refactorArgument(Arg $arg): void
