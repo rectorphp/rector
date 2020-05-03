@@ -6,7 +6,7 @@ namespace Rector\Core\ValueObject\Application;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class Error
+final class RectorError
 {
     /**
      * @var int|null
