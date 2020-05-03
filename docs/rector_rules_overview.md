@@ -1,4 +1,4 @@
-# All 499 Rectors Overview
+# All 500 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -4866,6 +4866,41 @@ Order private methods in order of their use
 
 -    private function call1()
 +    private function call2()
+     {
+     }
+ }
+```
+
+<br>
+
+### `OrderPublicInterfaceMethodRector`
+
+- class: [`Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector`](/../master/rules/order/src/Rector/Class_/OrderPublicInterfaceMethodRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderPublicInterfaceMethodRector/Fixture)
+
+Order public methods required by interface in custom orderer
+
+```yaml
+services:
+    Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector:
+        $methodOrderByInterfaces:
+            FoodRecipeInterface:
+                - getDescription
+                - process
+```
+
+↓
+
+```diff
+ class SomeClass implements FoodRecipeInterface
+ {
+-    public function process()
++    public function getDescription()
+     {
+     }
+-
+-    public function getDescription()
++    public function process()
      {
      }
  }
