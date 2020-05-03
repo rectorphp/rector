@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
@@ -24,6 +25,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see https://wiki.php.net/rfc/combined-comparison-operator
  * @see https://3v4l.org/LPbA0
+ *
  * @see \Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector\IfToSpaceshipRectorTest
  */
 final class IfToSpaceshipRector extends AbstractRector
@@ -52,6 +54,11 @@ final class IfToSpaceshipRector extends AbstractRector
      * @var Expr|null
      */
     private $secondValue;
+
+    /**
+     * @var Node|null
+     */
+    private $nextNode;
 
     public function getDefinition(): RectorDefinition
     {
@@ -105,38 +112,13 @@ PHP
             return null;
         }
 
-        $this->reset();
-
-        if ($node->cond instanceof Equal || $node->cond instanceof Identical) {
-            if ($node->stmts[0] instanceof Return_) {
-                if ($node->stmts[0]->expr === null) {
-                    return null;
-                }
-
-                $this->onEqual = $this->getValue($node->stmts[0]->expr);
-            }
-        } else {
+        if (! $node->cond instanceof Equal && ! $node->cond instanceof Identical) {
             return null;
         }
 
-        if ($node->else !== null) {
-            if (count($node->else->stmts) !== 1) {
-                return null;
-            }
+        $this->reset();
 
-            if ($node->else->stmts[0] instanceof Return_) {
-                /** @var Return_ $returnNode */
-                $returnNode = $node->else->stmts[0];
-                if ($returnNode->expr instanceof Ternary) {
-                    $this->processTernary($returnNode->expr);
-                }
-            }
-        } else {
-            $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-            if ($nextNode instanceof Return_ && $nextNode->expr instanceof Ternary) {
-                $this->processTernary($nextNode->expr);
-            }
-        }
+        $this->matchOnEqualFirstValueAndSecondValue($node);
 
         if ($this->firstValue === null || $this->secondValue === null) {
             return null;
@@ -146,13 +128,13 @@ PHP
             return null;
         }
 
-        // is spaceship retun values?
+        // is spaceship return values?
         if ([$this->onGreater, $this->onEqual, $this->onSmaller] !== [-1, 0, 1]) {
             return null;
         }
 
-        if (isset($nextNode)) {
-            $this->removeNode($nextNode);
+        if ($this->nextNode !== null) {
+            $this->removeNode($this->nextNode);
         }
 
         // spaceship ready!
@@ -210,5 +192,55 @@ PHP
             $binaryOp->left,
             $secondValue
         );
+    }
+
+    private function matchOnEqualFirstValueAndSecondValue(If_ $if): void
+    {
+        $this->matchOnEqual($if);
+
+        if ($if->else !== null) {
+            $this->processElse($if->else);
+        } else {
+            $this->nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+            if ($this->nextNode instanceof Return_ && $this->nextNode->expr instanceof Ternary) {
+                /** @var Ternary $ternary */
+                $ternary = $this->nextNode->expr;
+                $this->processTernary($ternary);
+            }
+        }
+    }
+
+    private function matchOnEqual(If_ $if): void
+    {
+        if (count($if->stmts) !== 1) {
+            return;
+        }
+
+        $onlyIfStmt = $if->stmts[0];
+
+        if ($onlyIfStmt instanceof Return_) {
+            if ($onlyIfStmt->expr === null) {
+                return;
+            }
+
+            $this->onEqual = $this->getValue($onlyIfStmt->expr);
+        }
+    }
+
+    private function processElse(Else_ $else): void
+    {
+        if (count($else->stmts) !== 1) {
+            return;
+        }
+
+        if (! $else->stmts[0] instanceof Return_) {
+            return;
+        }
+
+        /** @var Return_ $returnNode */
+        $returnNode = $else->stmts[0];
+        if ($returnNode->expr instanceof Ternary) {
+            $this->processTernary($returnNode->expr);
+        }
     }
 }

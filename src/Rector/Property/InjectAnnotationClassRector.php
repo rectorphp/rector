@@ -229,10 +229,12 @@ PHP
         $serviceName = $jmsInjectTagValueNode->getServiceName();
 
         if ($serviceName) {
+            // 1. service class
             if (class_exists($serviceName)) {
                 return new ObjectType($serviceName);
             }
 
+            // 2. service name
             if ($serviceMap->hasService($serviceName)) {
                 $serviceType = $serviceMap->getServiceType($serviceName);
                 if ($serviceType !== null) {
@@ -241,6 +243,7 @@ PHP
             }
         }
 
+        // 3. service is in @var annotation
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
@@ -250,17 +253,24 @@ PHP
         }
 
         // the @var is missing and service name was not found → report it
-        if ($serviceName) {
-            /** @var SmartFileInfo $fileInfo */
-            $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-
-            $this->errorAndDiffCollector->addErrorWithRectorClassMessageAndFileInfo(
-                self::class,
-                sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName),
-                $fileInfo
-            );
-        }
+        $this->reportServiceNotFound($serviceName, $node);
 
         return new MixedType();
+    }
+
+    private function reportServiceNotFound(?string $serviceName, Node $node): void
+    {
+        if ($serviceName !== null) {
+            return;
+        }
+
+        /** @var SmartFileInfo $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+
+        $this->errorAndDiffCollector->addErrorWithRectorClassMessageAndFileInfo(
+            self::class,
+            sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName),
+            $fileInfo
+        );
     }
 }

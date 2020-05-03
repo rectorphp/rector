@@ -86,17 +86,17 @@ PHP
         $implementedInterfaceNames = $this->classManipulator->getImplementedInterfaceNames($node);
 
         foreach (array_keys($usedTraitNames) as $traitName) {
-            foreach ($this->interfaceByTrait as $seekedTraitName => $interfaceName) {
-                if ($traitName !== $seekedTraitName) {
-                    continue;
-                }
-
-                if (in_array($interfaceName, $implementedInterfaceNames, true)) {
-                    continue;
-                }
-
-                $node->implements[] = new FullyQualified($interfaceName);
+            if (! isset($this->interfaceByTrait[$traitName])) {
+                continue;
             }
+
+            $interfaceNameToAdd = $this->interfaceByTrait[$traitName];
+
+            if (in_array($interfaceNameToAdd, $implementedInterfaceNames, true)) {
+                continue;
+            }
+
+            $node->implements[] = new FullyQualified($interfaceNameToAdd);
         }
 
         return $node;

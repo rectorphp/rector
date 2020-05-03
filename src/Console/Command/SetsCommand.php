@@ -44,12 +44,16 @@ final class SetsCommand extends AbstractCommand
     {
         $sets = $this->setProvider->provide();
 
-        if ($input->getArgument('name')) {
-            $sets = $this->filterSetsByName($input, $sets);
+        $name = (string) $input->getArgument('name');
+        if ($name) {
+            $sets = $this->filterSetsByName($name, $sets);
         }
-
         $this->symfonyStyle->title(sprintf('%d available sets:', count($sets)));
         $this->symfonyStyle->listing($sets);
+
+        if ($name === '') {
+            $this->symfonyStyle->note('Tip: filter sets by name, e.g. "vendor/bin/rector sets symfony"');
+        }
 
         return ShellCode::SUCCESS;
     }
@@ -58,10 +62,8 @@ final class SetsCommand extends AbstractCommand
      * @param string[] $sets
      * @return string[]
      */
-    private function filterSetsByName(InputInterface $input, array $sets): array
+    private function filterSetsByName(string $name, array $sets): array
     {
-        $name = (string) $input->getArgument('name');
-
         return array_filter($sets, function (string $set) use ($name): bool {
             return (bool) Strings::match($set, sprintf('#%s#', $name));
         });

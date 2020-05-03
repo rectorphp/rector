@@ -84,17 +84,7 @@ PHP
                 continue;
             }
 
-            foreach ($methodNameAndNewArgumentPositions as $methodName => $newArgumentPositions) {
-                if (! $this->isMethodStaticCallOrClassMethodName($node, $methodName)) {
-                    continue;
-                }
-
-                if ($node instanceof ClassMethod) {
-                    $this->swapParameters($node, $newArgumentPositions);
-                } else {
-                    $this->swapArguments($node, $newArgumentPositions);
-                }
-            }
+            $this->refactorArgumentPositions($methodNameAndNewArgumentPositions, $node);
         }
 
         return $node;
@@ -136,6 +126,24 @@ PHP
 
         foreach ($newArguments as $newPosition => $argument) {
             $classMethod->params[$newPosition] = $argument;
+        }
+    }
+
+    /**
+     * @param StaticCall|MethodCall|ClassMethod $node
+     */
+    private function refactorArgumentPositions(array $methodNameAndNewArgumentPositions, Node $node): void
+    {
+        foreach ($methodNameAndNewArgumentPositions as $methodName => $newArgumentPositions) {
+            if (! $this->isMethodStaticCallOrClassMethodName($node, $methodName)) {
+                continue;
+            }
+
+            if ($node instanceof ClassMethod) {
+                $this->swapParameters($node, $newArgumentPositions);
+            } else {
+                $this->swapArguments($node, $newArgumentPositions);
+            }
         }
     }
 

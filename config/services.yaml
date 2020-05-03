@@ -8,6 +8,7 @@ services:
         exclude:
             - '../src/Rector/**/*Rector.php'
             - '../src/Testing/PHPUnit/*'
+            - '../src/Testing/Dumper/*'
             - '../src/RectorDefinition/*'
             - '../src/Exception/*'
             - '../src/DependencyInjection/CompilerPass/*'
