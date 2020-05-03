@@ -6,6 +6,7 @@ parameters:
         - 'nette-utils-code-quality'
         - 'solid'
         - 'privatization'
+        - 'naming'
 
     paths:
         - 'src'

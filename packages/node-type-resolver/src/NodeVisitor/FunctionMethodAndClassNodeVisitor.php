@@ -44,12 +44,12 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     /**
      * @var ClassLike|null
      */
-    private $classNode;
+    private $classLike;
 
     /**
      * @var ClassMethod|null
      */
-    private $methodNode;
+    private $classMethod;
 
     /**
      * @var Function_|null
@@ -72,10 +72,10 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
      */
     public function beforeTraverse(array $nodes): ?array
     {
-        $this->classNode = null;
+        $this->classLike = null;
         $this->className = null;
         $this->methodName = null;
-        $this->methodNode = null;
+        $this->classMethod = null;
         $this->functionNode = null;
 
         return null;
@@ -99,7 +99,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
             $this->setClassNodeAndName(array_pop($this->classStack));
         }
         if ($node instanceof ClassMethod) {
-            $this->methodNode = array_pop($this->methodStack);
+            $this->classMethod = array_pop($this->methodStack);
             $this->methodName = (string) $this->methodName;
         }
         return null;
@@ -108,30 +108,30 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     private function processClass(Node $node): void
     {
         if ($node instanceof ClassLike) {
-            $this->classStack[] = $this->classNode;
+            $this->classStack[] = $this->classLike;
             $this->setClassNodeAndName($node);
         }
 
-        $node->setAttribute(AttributeKey::CLASS_NODE, $this->classNode);
+        $node->setAttribute(AttributeKey::CLASS_NODE, $this->classLike);
         $node->setAttribute(AttributeKey::CLASS_NAME, $this->className);
         $node->setAttribute(AttributeKey::CLASS_SHORT_NAME, $this->classShortName);
 
-        if ($this->classNode instanceof Class_) {
-            $this->setParentClassName($this->classNode, $node);
+        if ($this->classLike instanceof Class_) {
+            $this->setParentClassName($this->classLike, $node);
         }
     }
 
     private function processMethod(Node $node): void
     {
         if ($node instanceof ClassMethod) {
-            $this->methodStack[] = $this->methodNode;
+            $this->methodStack[] = $this->classMethod;
 
-            $this->methodNode = $node;
+            $this->classMethod = $node;
             $this->methodName = (string) $node->name;
         }
 
         $node->setAttribute(AttributeKey::METHOD_NAME, $this->methodName);
-        $node->setAttribute(AttributeKey::METHOD_NODE, $this->methodNode);
+        $node->setAttribute(AttributeKey::METHOD_NODE, $this->classMethod);
     }
 
     private function processFunction(Node $node): void
@@ -145,7 +145,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 
     private function setClassNodeAndName(?ClassLike $classLike): void
     {
-        $this->classNode = $classLike;
+        $this->classLike = $classLike;
         if ($classLike === null || $classLike->name === null) {
             $this->className = null;
         } elseif (isset($classLike->namespacedName)) {

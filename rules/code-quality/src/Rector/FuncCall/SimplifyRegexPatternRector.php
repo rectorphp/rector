@@ -83,6 +83,9 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $patterns = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
+        if ($patterns === []) {
+            return null;
+        }
 
         foreach ($patterns as $pattern) {
             foreach (self::COMPLEX_PATTERN_TO_SIMPLE as $complexPattern => $simple) {

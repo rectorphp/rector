@@ -6,13 +6,12 @@ namespace Rector\Naming\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -106,7 +105,7 @@ PHP
             $conflictingNames = $this->conflictingNameResolver->resolveConflictingVariableNames($classMethod);
 
             foreach ($classMethod->params as $param) {
-                $expectedName = $this->expectedNameResolver->resolveForParam($param);
+                $expectedName = $this->expectedNameResolver->resolveForParamIfNotYet($param);
                 if ($expectedName === null) {
                     continue;
                 }
@@ -136,7 +135,7 @@ PHP
             }
 
             $oldName = $this->getName($property);
-            $expectedName = $this->expectedNameResolver->resolveForProperty($property);
+            $expectedName = $this->expectedNameResolver->resolveForPropertyIfNotYet($property);
             if ($expectedName === null) {
                 continue;
             }
@@ -162,7 +161,9 @@ PHP
                 return null;
             }
 
+            /** @var Variable $node */
             $node->name = new Identifier($expectedName);
+
             return $node;
         });
     }

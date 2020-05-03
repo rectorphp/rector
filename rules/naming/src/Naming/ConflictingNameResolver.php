@@ -6,6 +6,7 @@ namespace Rector\Naming\Naming;
 
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ConflictingNameResolver
 {
@@ -14,9 +15,15 @@ final class ConflictingNameResolver
      */
     private $expectedNameResolver;
 
-    public function __construct(ExpectedNameResolver $expectedNameResolver)
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(ExpectedNameResolver $expectedNameResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->expectedNameResolver = $expectedNameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -28,7 +35,8 @@ final class ConflictingNameResolver
         foreach ($classLike->getProperties() as $property) {
             $expectedName = $this->expectedNameResolver->resolveForProperty($property);
             if ($expectedName === null) {
-                continue;
+                /** @var string $expectedName */
+                $expectedName = $this->nodeNameResolver->getName($property);
             }
 
             $expectedNames[] = $expectedName;

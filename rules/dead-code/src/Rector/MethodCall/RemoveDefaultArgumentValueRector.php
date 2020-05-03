@@ -92,6 +92,10 @@ PHP
         $defaultValues = $this->resolveDefaultValuesFromCall($node);
 
         $keysToRemove = $this->resolveKeysToRemove($node, $defaultValues);
+        if ($keysToRemove === []) {
+            return null;
+        }
+
         foreach ($keysToRemove as $keyToRemove) {
             $this->removeArg($node, $keyToRemove);
         }
