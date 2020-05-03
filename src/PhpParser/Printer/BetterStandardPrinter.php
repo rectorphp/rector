@@ -235,13 +235,13 @@ final class BetterStandardPrinter extends Standard
     /**
      * Emulates 1_000 in PHP 7.3- version
      */
-    protected function pScalar_DNumber(DNumber $DNumber): string
+    protected function pScalar_DNumber(DNumber $dNumber): string
     {
-        if (is_string($DNumber->value)) {
-            return $DNumber->value;
+        if (is_string($dNumber->value)) {
+            return $dNumber->value;
         }
 
-        return parent::pScalar_DNumber($DNumber);
+        return parent::pScalar_DNumber($dNumber);
     }
 
     /**

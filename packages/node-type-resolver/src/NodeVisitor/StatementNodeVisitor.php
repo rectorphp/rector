@@ -15,7 +15,7 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
     /**
      * @var Stmt|null
      */
-    private $previousStatement;
+    private $previousStmt;
 
     /**
      * @param Node[] $nodes
@@ -23,7 +23,7 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
      */
     public function beforeTraverse(array $nodes): ?array
     {
-        $this->previousStatement = null;
+        $this->previousStmt = null;
 
         return null;
     }
@@ -39,9 +39,9 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
                 throw new ShouldNotHappenException('Only statement can appear at top level');
             }
 
-            $node->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $this->previousStatement);
+            $node->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $this->previousStmt);
             $node->setAttribute(AttributeKey::CURRENT_STATEMENT, $node);
-            $this->previousStatement = $node;
+            $this->previousStmt = $node;
         }
 
         if (isset($node->stmts)) {

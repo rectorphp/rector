@@ -21,7 +21,7 @@ final class ParentAndNextNodeVisitor extends NodeVisitorAbstract
     /**
      * @var Node|null
      */
-    private $prev;
+    private $previousNode;
 
     /**
      * @param Node[] $nodes
@@ -30,7 +30,7 @@ final class ParentAndNextNodeVisitor extends NodeVisitorAbstract
     public function afterTraverse(array $nodes): ?array
     {
         $this->stack = [];
-        $this->prev = null;
+        $this->previousNode = null;
 
         return null;
     }
@@ -44,11 +44,13 @@ final class ParentAndNextNodeVisitor extends NodeVisitorAbstract
             $node->setAttribute(AttributeKey::PARENT_NODE, $this->stack[count($this->stack) - 1]);
         }
 
-        if ($this->prev &&
-            $this->prev->getAttribute(AttributeKey::PARENT_NODE) === $node->getAttribute(AttributeKey::PARENT_NODE)
+        if ($this->previousNode &&
+            $this->previousNode->getAttribute(AttributeKey::PARENT_NODE) === $node->getAttribute(
+                AttributeKey::PARENT_NODE
+            )
         ) {
-            $node->setAttribute(AttributeKey::PREVIOUS_NODE, $this->prev);
-            $this->prev->setAttribute(AttributeKey::NEXT_NODE, $node);
+            $node->setAttribute(AttributeKey::PREVIOUS_NODE, $this->previousNode);
+            $this->previousNode->setAttribute(AttributeKey::NEXT_NODE, $node);
         }
 
         $this->stack[] = $node;
@@ -61,7 +63,7 @@ final class ParentAndNextNodeVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        $this->prev = $node;
+        $this->previousNode = $node;
         array_pop($this->stack);
 
         return null;

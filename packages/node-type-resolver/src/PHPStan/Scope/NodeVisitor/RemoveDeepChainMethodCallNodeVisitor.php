@@ -30,7 +30,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
     /**
      * @var Expression|null
      */
-    private $nodeToRemove;
+    private $removingExpression;
 
     public function __construct(BetterNodeFinder $betterNodeFinder, int $nestedChainMethodCallLimit)
     {
@@ -50,7 +50,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
         if ($node->expr instanceof MethodCall && $node->expr->var instanceof MethodCall) {
             $nestedChainMethodCalls = $this->betterNodeFinder->findInstanceOf([$node->expr], MethodCall::class);
             if (count($nestedChainMethodCalls) > $this->nestedChainMethodCallLimit) {
-                $this->nodeToRemove = $node;
+                $this->removingExpression = $node;
 
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
@@ -64,7 +64,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node === $this->nodeToRemove) {
+        if ($node === $this->removingExpression) {
             // keep any node, so we don't remove it permanently
             $nopNode = new Nop();
             $nopNode->setAttributes($node->getAttributes());
