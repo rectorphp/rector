@@ -11,7 +11,6 @@ class Fixture3291KeepPrivateProperty
      * @noRector \Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector
      */
     private $anotherUnusedProperty = [];
-
 }
 
 ?>
@@ -27,7 +26,6 @@ class Fixture3291KeepPrivateProperty
      * @noRector \Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector
      */
     private $anotherUnusedProperty = [];
-
 }
 
 ?>
