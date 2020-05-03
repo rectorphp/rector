@@ -65,7 +65,6 @@ parameters:
             - 'rules/php72/src/Rector/Each/ListEachRector.php'
             - 'rules/dead-code/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php'
             - 'rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
-            - 'rules/cakephp-to-symfony/tests/Rector/Class_/CakePHPModelToDoctrineRepositoryRector/CakePHPModelToDoctrineRepositoryRectorTest.php'
 
         PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer:
             - 'packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php'
