@@ -11,6 +11,9 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteTesterToPHPUnit\AssertManipulator;
 
+/**
+ * @see \Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\NetteTesterPHPUnitRectorTest
+ */
 final class NetteAssertToPHPUnitAssertRector extends AbstractRector
 {
     /**

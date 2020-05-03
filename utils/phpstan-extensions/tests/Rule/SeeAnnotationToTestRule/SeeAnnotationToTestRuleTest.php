@@ -24,10 +24,10 @@ final class SeeAnnotationToTestRuleTest extends AbstractServiceAwareRuleTestCase
     public function provideData(): Iterator
     {
         $errorMessage = sprintf(SeeAnnotationToTestRule::ERROR_MESSAGE, ClassMissingDocBlockRector::class);
-        yield [__DIR__ . '/Fixture/ClassMissingDocBlockRector.php', [[$errorMessage, 7]]];
+        yield [__DIR__ . '/Fixture/ClassMissingDocBlockRector.php', [[$errorMessage, 12]]];
 
         $errorMessage = sprintf(SeeAnnotationToTestRule::ERROR_MESSAGE, ClassMissingSeeAnnotationRector::class);
-        yield [__DIR__ . '/Fixture/ClassMissingSeeAnnotationRector.php', [[$errorMessage, 10]]];
+        yield [__DIR__ . '/Fixture/ClassMissingSeeAnnotationRector.php', [[$errorMessage, 15]]];
     }
 
     protected function getRule(): Rule

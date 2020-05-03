@@ -18,6 +18,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @source https://wiki.php.net/rfc/deprecations_php_7_2#each
+ *
+ * @see \Rector\Php72\Tests\Rector\Each\EachRectorTest
  */
 final class ListEachRector extends AbstractRector
 {

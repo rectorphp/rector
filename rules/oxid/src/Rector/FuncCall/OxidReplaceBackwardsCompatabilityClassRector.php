@@ -15,6 +15,9 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Oxid\Tests\Rector\FuncCall\OxidReplaceBackwardsCompatabilityClassRector\OxidReplaceBackwardsCompatabilityClassRectorTest
+ */
 final class OxidReplaceBackwardsCompatabilityClassRector extends AbstractRector
 {
     /**
