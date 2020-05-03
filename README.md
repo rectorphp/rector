@@ -65,11 +65,9 @@ It supports all versions of PHP from 5.2 and many open-source projects:
 
 ## How to Apply Coding Standards?
 
-The AST libraries that Rector uses aren't well-suited for coding standards, so it's better to let coding standard tools do that.
+Rector uses [nikic/php-parser](https://github.com/nikic/PHP-Parser/), that build on technology called *abstract syntax tree*) technology* (AST). AST doesn't care about spaces and produces mall-formatted code. That's why your project needs to have coding standard tool and set of rules, so it can make refactored nice and shiny again.
 
-Don't have a coding standard tool for your project? Consider adding [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard), [PHP CS Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) or [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
-
-*Tip: If you have EasyCodingStandard, you can start your set with [`ecs-after-rector.yaml`](/ecs-after-rector.yaml).*
+Don't have any coding standard tool? Add [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) and use prepared [`ecs-after-rector.yaml`](/ecs-after-rector.yaml) set.
 
 ## Install
 
