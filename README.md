@@ -31,7 +31,7 @@ Thank you:
 
 ## Open-Source First
 
-Rector **instantly upgrades and instantly refactors the PHP code of your application**. It supports all modern versions of PHP and many open-source projects:
+Rector **instantly upgrades and instantly refactors the PHP code of your application**. It supports all versions of PHP from 5.2 and many open-source projects:
 
 <br>
 
@@ -59,11 +59,7 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
 - [Migrate your project from Nette to Symfony](https://www.tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
 - [Complete PHP 7.4 property type declarations](https://www.tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
 - [Refactor Laravel facades to dependency injection](https://www.tomasvotruba.com/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
-- [Prepare a codebase before huge upgrades](https://www.tomasvotruba.com/blog/2019/12/16/8-steps-you-can-make-before-huge-upgrade-to-make-it-faster-cheaper-and-more-stable/)
-- [Get rid of technical debt](https://www.tomasvotruba.com/blog/2019/12/09/how-to-get-rid-of-technical-debt-or-what-we-would-have-done-differently-2-years-ago/)
 - And much more...
-
-...**look at the overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
 
 ## How to Apply Coding Standards?
 
@@ -73,36 +69,18 @@ Don't have a coding standard tool for your project? Consider adding [EasyCodingS
 
 Tip: If you have EasyCodingStandard, you can start your set with [`ecs-after-rector.yaml`](/ecs-after-rector.yaml).
 
-## Try Rector Online
-
-No time to try Rector locally?
-
-We have **[an online demo](https://getrector.org/demo) just for you!**
-
 ## Install
 
 ```bash
 composer require rector/rector --dev
 ```
 
-**Having conflicts during `composer require` or on run?**
-
-- Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed)
-
-**Using a different PHP version than Rector supports?**
-
-- Use the [Docker image](#run-rector-in-docker)
+- **Having conflicts during `composer require` or on run?** → Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed)
+- **Using a different PHP version than Rector supports?** → Use the [Docker image](#run-rector-in-docker)
 
 ## Running Rector
 
-### A. Get Started
-
-Try the demo and get familiar with rector
-
-- [Rector demo](https://github.com/rectorphp/demo)
-- [Rector training](https://github.com/rectorphp/rector-training)
-
-### B. Prepared Sets
+### A. Prepared Sets
 
 Featured open-source projects have **prepared sets**. You can find them in [`/config/set`](/config/set) or by running:
 
@@ -117,43 +95,47 @@ Let's say you pick the [`symfony40`](/config/set/symfony) set and you want to up
 vendor/bin/rector process src --set symfony40 --dry-run
 ```
 
+Rector will show you diff of files that it *would* change. To *make* the changes, run same command without `--dry-run`:
+
 ```bash
 # apply upgrades to your code
 vendor/bin/rector process src --set symfony40
 ```
 
-Some sets, such as [`code-quality`](/config/set/code-quality) can be
-used on a regular basis. You can include them in your `rector.yaml` to
-run them by default:
+Some sets, such as [`code-quality`](/config/set/code-quality) can be used on a regular basis. **The best practise is to use config over CLI**, here in `sets` parameter:
 
 ```yaml
 # rector.yaml
 parameters:
     sets:
-        - 'code-quality'
-        - 'php71'
-        - 'php72'
-        - 'php73'
+        - code-quality
 ```
 
-### C. Custom Sets
+### B. Standalone Rules
 
-1. Create a `rector.yaml` configuration file with your desired Rectors or provide another configuration file with `--config`:
+In the end, it's best to combine few of basic sets and drop [particular rules](https://github.com/rectorphp/rector/blob/master/docs/AllRectorsOverview.md) that you want to try:
 
-    ```yaml
-    services:
-        Rector\Core\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector:
-            $annotation: "inject"
-    ```
+```yaml
+# rector.yaml
+parameters:
+    sets:
+        - code-quality
 
-2. Run Rector on your `/src` directory:
+services:
+    Rector\Php74\Rector\Property\TypedPropertyRector: null
+```
 
-    ```bash
-    vendor/bin/rector process src --dry-run
-    # apply
-    vendor/bin/rector process src
-    ```
+Then just Rector to refactor your code:
 
+```bash
+vendor/bin/rector process src
+```
+
+:+1:
+
+<br>
+
+*Note: `rector.yaml` is loaded by default. For different location, use `--config` option.*
 
 ## Features
 
@@ -279,152 +261,10 @@ parameters:
     symfony_container_xml_path: 'var/cache/dev/AppKernelDevDebugContainer.xml'
 ```
 
-## 3 Steps to Create Your Own Rector
-
-First, make sure it's not covered by [any existing Rectors](/docs/AllRectorsOverview.md).
-
-Let's say we want to **change method calls from `set*` to `change*`**.
-
-```diff
- $user = new User();
--$user->setPassword('123456');
-+$user->changePassword('123456');
-```
-
-### 1. Create a New Rector and Implement Methods
-
-Create a class that extends [`Rector\Core\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It will inherit useful methods e.g. to check node type and name. See the source (or type `$this->` in an IDE) for a list of available methods.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace Utils\Rector;
-
-use Nette\Utils\Strings;
-use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Expr\MethodCall;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
-
-final class MyFirstRector extends AbstractRector
-{
-    /**
-     * @return string[]
-     */
-    public function getNodeTypes(): array
-    {
-        // what node types are we looking for?
-        // pick any node from https://github.com/rectorphp/rector/blob/master/docs/NodesOverview.md
-        return [MethodCall::class];
-    }
-
-    /**
-     * @param MethodCall $node - we can add "MethodCall" type here, because
-     *                         only this node is in "getNodeTypes()"
-     */
-    public function refactor(Node $node): ?Node
-    {
-        // we only care about "set*" method names
-        if (! $this->isName($node->name, 'set*')) {
-            // return null to skip it
-            return null;
-        }
-
-        $methodCallName = $this->getName($node);
-        $newMethodCallName = Strings::replace($methodCallName, '#^set#', 'change');
-
-        $node->name = new Identifier($newMethodCallName);
-
-        // return $node if you modified it
-        return $node;
-    }
-
-    /**
-     * From this method documentation is generated.
-     */
-    public function getDefinition(): RectorDefinition
-    {
-        return new RectorDefinition(
-            'Change method calls from set* to change*.', [
-                new CodeSample(
-                    // code before
-                    '$user->setPassword("123456");',
-                    // code after
-                    '$user->changePassword("123456");'
-                ),
-            ]
-        );
-    }
-}
-```
-
-This is how the file structure should look like:
-
-```bash
-/src/YourCode.php
-/utils/Rector/MyFirstRector.php
-rector.yaml
-composer.json
-```
-
-We also need to load Rector rules in `composer.json`:
-
-```json
-{
-    "autoload": {
-        "psr-4": {
-            "App\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Utils\\": "utils"
-        }
-    }
-}
-```
-
-After adding this to `composer.json`, be sure to reload Composer's class map:
-
-```bash
-composer dump-autoload
-```
-
-### 2. Register It
-
-```yaml
-# rector.yaml
-services:
-    Utils\Rector\MyFirstRector: ~
-```
-
-### 3. Let Rector Refactor Your Code
-
-The `rector.yaml` configuration is loaded by default, so we can skip it.
-
-```bash
-# see the diff first
-vendor/bin/rector process src --dry-run
-
-# if it's ok, apply
-vendor/bin/rector process src
-```
-
-That's it!
-
-### Generating a Rector Rule
-
-Do you want to save time with making rules and tests?
-
-Use [the `create` command](/docs/RectorRecipe.md).
-
 ## More Detailed Documentation
 
 - **[All Rectors Overview](/docs/AllRectorsOverview.md)**
+- [Create own Rector](/docs/create_own_rector.md)
 - [How Does Rector Work?](/docs/HowItWorks.md)
 - [PHP Parser Nodes Overview](/docs/NodesOverview.md)
 - [Generate Rector from Recipe](/docs/RectorRecipe.md)
@@ -435,6 +275,7 @@ Use [the `create` command](/docs/RectorRecipe.md).
 See [the contribution guide](/CONTRIBUTING.md).
 
 ## Run Rector in Docker
+
 You can run Rector on your project using Docker:
 
 ```bash
