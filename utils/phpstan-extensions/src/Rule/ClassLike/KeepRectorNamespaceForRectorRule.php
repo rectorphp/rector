@@ -9,11 +9,17 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\Rules\RuleError;
-use PHPStan\Rules\RuleErrorBuilder;
 
+/**
+ * @see \Rector\PHPStanExtensions\Tests\Rule\ClassLike\KeepRectorNamespaceForRectorRuleTest
+ */
 final class KeepRectorNamespaceForRectorRule implements Rule
 {
+    /**
+     * @var string
+     */
+    public const ERROR_MESSAGE = 'Change namespace for "%s". It cannot be in "Rector" namespace, unless Rector rule.';
+
     public function getNodeType(): string
     {
         return ClassLike::class;
@@ -21,7 +27,7 @@ final class KeepRectorNamespaceForRectorRule implements Rule
 
     /**
      * @param ClassLike $node
-     * @return RuleError[]
+     * @return string[]
      */
     public function processNode(Node $node, Scope $scope): array
     {
@@ -32,20 +38,23 @@ final class KeepRectorNamespaceForRectorRule implements Rule
         /** @var string $classLikeName */
         $classLikeName = $node->name->toString();
 
-        $ruleError = $this->createRuleError($node, $scope, $classLikeName);
+        $errorMessage = sprintf(self::ERROR_MESSAGE, $classLikeName);
 
-        return [$ruleError];
+        return [$errorMessage];
     }
 
-    private function shouldSkip(Node $node, Scope $scope): bool
+    private function shouldSkip(ClassLike $classLike, Scope $scope): bool
     {
         $namespace = $scope->getNamespace();
         if ($namespace === null) {
             return true;
         }
 
-        // skip interface and tests
-        if (Strings::match($namespace, '#\\\\(Contract|Exception|Tests)\\\\#')) {
+        // skip interface and tests, except tests here
+        if (Strings::match($namespace, '#\\\\(Contract|Exception|Tests)\\\\#') && ! Strings::contains(
+            $namespace,
+            'PHPStanExtensions'
+        )) {
             return true;
         }
 
@@ -53,7 +62,7 @@ final class KeepRectorNamespaceForRectorRule implements Rule
             return true;
         }
 
-        $name = $node->name;
+        $name = $classLike->name;
         if ($name === null) {
             return true;
         }
@@ -62,19 +71,5 @@ final class KeepRectorNamespaceForRectorRule implements Rule
         $classLikeName = $name->toString();
 
         return (bool) Strings::match($classLikeName, '#(Rector|Test|Trait)$#');
-    }
-
-    private function createRuleError(Node $node, Scope $scope, string $classLikeName): RuleError
-    {
-        $message = sprintf(
-            'Change namespace for "%s". It cannot be in "Rector" namespace, unless Rector rule.',
-            $classLikeName
-        );
-
-        $ruleErrorBuilder = RuleErrorBuilder::message($message);
-        $ruleErrorBuilder->line($node->getLine());
-        $ruleErrorBuilder->file($scope->getFile());
-
-        return $ruleErrorBuilder->build();
     }
 }
