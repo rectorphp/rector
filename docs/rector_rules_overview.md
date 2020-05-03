@@ -1,4 +1,4 @@
-# All 500 Rectors Overview
+# All 501 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -4868,6 +4868,40 @@ Order private methods in order of their use
 +    private function call2()
      {
      }
+ }
+```
+
+<br>
+
+### `OrderPropertyByComplexityRector`
+
+- class: [`Rector\Order\Rector\Class_\OrderPropertyByComplexityRector`](/../master/rules/order/src/Rector/Class_/OrderPropertyByComplexityRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderPropertyByComplexityRector/Fixture)
+
+Order properties by complexity, from the simplest like scalars to the most complex, like union or collections
+
+```diff
+-class SomeClass
++class SomeClass implements FoodRecipeInterface
+ {
+     /**
+      * @var string
+      */
+     private $name;
+
+     /**
+-     * @var Type
++     * @var int
+      */
+-    private $service;
++    private $price;
+
+     /**
+-     * @var int
++     * @var Type
+      */
+-    private $price;
++    private $service;
  }
 ```
 
