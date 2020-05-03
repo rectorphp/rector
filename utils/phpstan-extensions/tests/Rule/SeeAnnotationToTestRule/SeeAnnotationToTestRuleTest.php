@@ -7,9 +7,9 @@ namespace Rector\PHPStanExtensions\Tests\Rule\SeeAnnotationToTestRule;
 use Iterator;
 use PHPStan\Rules\Rule;
 use Rector\PHPStanExtensions\Rule\SeeAnnotationToTestRule;
-use Rector\PHPStanExtensions\Tests\AbstractServiceAwareRuleTestCase;
 use Rector\PHPStanExtensions\Tests\Rule\SeeAnnotationToTestRule\Fixture\ClassMissingDocBlockRector;
 use Rector\PHPStanExtensions\Tests\Rule\SeeAnnotationToTestRule\Fixture\ClassMissingSeeAnnotationRector;
+use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
 final class SeeAnnotationToTestRuleTest extends AbstractServiceAwareRuleTestCase
 {

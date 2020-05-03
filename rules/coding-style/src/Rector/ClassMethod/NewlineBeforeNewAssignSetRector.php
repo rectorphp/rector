@@ -82,16 +82,10 @@ PHP
 
         $hasChanged = false;
 
-        if ($node->stmts === null) {
-            return null;
-        }
-
-        foreach ($node->stmts as $key => $stmt) {
+        foreach ((array) $node->stmts as $key => $stmt) {
             $currentStmtVariableName = null;
 
-            if ($stmt instanceof Expression) {
-                $stmt = $stmt->expr;
-            }
+            $stmt = $this->unwrapExpression($stmt);
 
             if ($stmt instanceof Assign || $stmt instanceof MethodCall) {
                 if ($this->shouldSkipLeftVariable($stmt)) {
@@ -111,11 +105,7 @@ PHP
             $this->previousStmtVariableName = $currentStmtVariableName;
         }
 
-        if (! $hasChanged) {
-            return null;
-        }
-
-        return $node;
+        return $hasChanged ? $node : null;
     }
 
     private function reset(): void
@@ -179,5 +169,14 @@ PHP
         $currentNode = $node->stmts[$key];
 
         return abs($currentNode->getLine() - $previousNode->getLine()) >= 2;
+    }
+
+    private function unwrapExpression(Node $node): Node
+    {
+        if ($node instanceof Expression) {
+            return $node->expr;
+        }
+
+        return $node;
     }
 }

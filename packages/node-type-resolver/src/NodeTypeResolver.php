@@ -284,14 +284,9 @@ final class NodeTypeResolver
 
     private function resolveFirstType(Node $node): Type
     {
-        foreach ($this->nodeTypeResolvers as $nodeTypeResolver) {
-            foreach ($nodeTypeResolver->getNodeClasses() as $nodeClass) {
-                if (! is_a($node, $nodeClass)) {
-                    continue;
-                }
-
-                return $nodeTypeResolver->resolve($node);
-            }
+        $type = $this->resolveByNodeTypeResolvers($node);
+        if ($type !== null) {
+            return $type;
         }
 
         /** @var Scope|null $nodeScope */
@@ -345,5 +340,18 @@ final class NodeTypeResolver
         $className = $this->nodeNameResolver->getName($node);
 
         return $className === null || Strings::contains($className, 'AnonymousClass');
+    }
+
+    private function resolveByNodeTypeResolvers(Node $node): ?Type
+    {
+        foreach ($this->nodeTypeResolvers as $nodeClass => $nodeTypeResolver) {
+            if (! is_a($node, $nodeClass)) {
+                continue;
+            }
+
+            return $nodeTypeResolver->resolve($node);
+        }
+
+        return null;
     }
 }

@@ -39,6 +39,11 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const LIST_SWAP_ORDER = '7.0';
+
+    /**
+     * @var string
+     */
     public const SPACESHIP = '7.0';
 
     /**

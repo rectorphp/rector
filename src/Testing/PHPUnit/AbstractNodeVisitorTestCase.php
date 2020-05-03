@@ -7,10 +7,9 @@ namespace Rector\Core\Testing\PHPUnit;
 use Iterator;
 use Nette\Utils\FileSystem;
 use PhpParser\Node;
-use PhpParser\NodeDumper;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\PhpParser\BetterNodeDumper;
 use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\Testing\Dumper\AttributeFilteringNodeDumper;
 use Rector\Core\Testing\StaticFixtureProvider;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -23,9 +22,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase
 {
     /**
-     * @var NodeDumper
+     * @var AttributeFilteringNodeDumper
      */
-    protected $nodeDumper;
+    protected $attributeFilteringNodeDumper;
 
     /**
      * @var Parser
@@ -39,19 +38,18 @@ abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->bootKernelWithConfigs(RectorKernel::class, []);
+
         $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
         $this->parser = static::$container->get(Parser::class);
 
-        $this->nodeDumper = new BetterNodeDumper();
-        $this->nodeDumper->setFilterAttributes($this->getRelevantAttributes());
+        $this->attributeFilteringNodeDumper = new AttributeFilteringNodeDumper($this->getRelevantAttributes());
     }
 
     /**
      * @param Node[] $nodes
      */
-    abstract protected function visitNodes(array $nodes): void;
+    abstract protected function traverseNodes(array $nodes): void;
 
     /**
      * @return string[]
@@ -73,19 +71,19 @@ abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase
             $smartFileInfo,
             true
         );
-        $smartFileInfo2 = new SmartFileInfo($expectedNodesFile);
 
         $originalFileInfo = new SmartFileInfo($originalFile);
+        $expectedNodesFileInfo = new SmartFileInfo($expectedNodesFile);
+
         $nodes = $this->parser->parseFileInfo($originalFileInfo);
+        $this->traverseNodes($nodes);
 
-        $this->visitNodes($nodes);
-
-        $dumpedNodes = $this->nodeDumper->dump($nodes);
+        $dumpedNodes = $this->attributeFilteringNodeDumper->dump($nodes);
 
         if (getenv('UPDATE_FIXTURE')) {
             FileSystem::write($file, FileSystem::read($originalFile) . "-----\n" . $dumpedNodes);
         } else {
-            $this->assertSame(trim($smartFileInfo2->getContents()), $dumpedNodes, 'Caused by ' . $file);
+            $this->assertSame(trim($expectedNodesFileInfo->getContents()), $dumpedNodes, 'Caused by ' . $file);
         }
     }
 

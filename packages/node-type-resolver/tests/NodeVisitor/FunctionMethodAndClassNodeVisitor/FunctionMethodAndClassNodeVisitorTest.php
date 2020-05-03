@@ -44,7 +44,7 @@ final class FunctionMethodAndClassNodeVisitorTest extends AbstractNodeVisitorTes
     /**
      * @param Node[] $nodes
      */
-    protected function visitNodes(array $nodes): void
+    protected function traverseNodes(array $nodes): void
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver());

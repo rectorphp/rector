@@ -48,17 +48,10 @@ final class RectorsFinder
      */
     public function findInDirectories(array $directories): array
     {
-        $robotLoader = new RobotLoader();
-        foreach ($directories as $directory) {
-            $robotLoader->addDirectory($directory);
-        }
-
-        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_finder');
-        $robotLoader->acceptFiles = ['*Rector.php'];
-        $robotLoader->rebuild();
+        $foundClasses = $this->findClassesInDirectoriesByName($directories, '*Rector.php');
 
         $rectors = [];
-        foreach (array_keys($robotLoader->getIndexedClasses()) as $class) {
+        foreach ($foundClasses as $class) {
             // special case, because robot loader is case insensitive
             if ($class === ExceptionCorrector::class) {
                 continue;
@@ -86,16 +79,43 @@ final class RectorsFinder
             $rectors[] = $rector;
         }
 
+        return $this->sortObjectsByShortClassName($rectors);
+    }
+
+    /**
+     * @param string[] $directories
+     * @return string[]
+     */
+    private function findClassesInDirectoriesByName(array $directories, string $name): array
+    {
+        $robotLoader = new RobotLoader();
+        foreach ($directories as $directory) {
+            $robotLoader->addDirectory($directory);
+        }
+
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_finder');
+        $robotLoader->acceptFiles = [$name];
+        $robotLoader->rebuild();
+
+        return array_keys($robotLoader->getIndexedClasses());
+    }
+
+    /**
+     * @param object[] $objects
+     * @return object[]
+     */
+    private function sortObjectsByShortClassName(array $objects): array
+    {
         usort(
-            $rectors,
-            function (RectorInterface $firstRector, RectorInterface $secondRector): int {
-                $firstRectorShortClass = Strings::after(get_class($firstRector), '\\', -1);
-                $secondRectorShortClass = Strings::after(get_class($secondRector), '\\', -1);
+            $objects,
+            function (object $firstObject, object $secondObject): int {
+                $firstRectorShortClass = Strings::after(get_class($firstObject), '\\', -1);
+                $secondRectorShortClass = Strings::after(get_class($secondObject), '\\', -1);
 
                 return $firstRectorShortClass <=> $secondRectorShortClass;
             }
         );
 
-        return $rectors;
+        return $objects;
     }
 }

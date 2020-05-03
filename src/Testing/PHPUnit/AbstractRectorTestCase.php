@@ -68,17 +68,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             $enabledRectorsProvider = static::$container->get(EnabledRectorsProvider::class);
             $enabledRectorsProvider->reset();
         } else {
-            // repare contains with all rectors
+            // prepare container with all rectors
             // cache only rector tests - defined in phpunit.xml
             if (defined('RECTOR_REPOSITORY')) {
-                if (self::$allRectorContainer === null) {
-                    $this->createContainerWithAllRectors();
-
-                    self::$allRectorContainer = self::$container;
-                } else {
-                    // load from cache
-                    self::$container = self::$allRectorContainer;
-                }
+                $this->createRectorRepositoryContainer();
             } else {
                 // 3rd party
                 $configFileTempPath = $this->getConfigFor3rdPartyTest();
@@ -204,10 +197,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     private function getConfigFor3rdPartyTest(): string
     {
-        if ($this->provideConfig() !== '') {
-            return $this->provideConfig();
-        }
-
         $rectorClassWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
         $yamlContent = Yaml::dump([
             'services' => $rectorClassWithConfiguration,
@@ -264,5 +253,18 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     private function createCausedByFixtureMessage(string $fixtureFile): string
     {
         return (new SmartFileInfo($fixtureFile))->getRelativeFilePathFromCwd();
+    }
+
+    private function createRectorRepositoryContainer(): void
+    {
+        if (self::$allRectorContainer === null) {
+            $this->createContainerWithAllRectors();
+
+            self::$allRectorContainer = self::$container;
+            return;
+        }
+
+        // load from cache
+        self::$container = self::$allRectorContainer;
     }
 }

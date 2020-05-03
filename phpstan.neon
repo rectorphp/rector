@@ -4,8 +4,17 @@ includes:
     - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
     - vendor/slam/phpstan-extensions/conf/slam-rules.neon
 
+    # see https://github.com/symplify/coding-standard
+    - vendor/symplify/coding-standard/config/symplify-rules.neon
+
 parameters:
     level: max
+
+    # see https://github.com/symplify/coding-standard
+    symplify:
+        max_cognitive_complexity: 9 # default: 8
+        parent_classes:
+            - Rector
 
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
@@ -27,10 +36,8 @@ parameters:
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
 
-        - ci/check_services_in_yaml_configs.php
         - "*/Expected/*"
         # complex printer
-        - "utils/phpstan/generate-paths.php"
         - '*tests/Rector/MethodCall/RenameMethodRector/**/SomeClass.php'
         # tests files
         - '*tests/*/Fixture/*'
@@ -38,8 +45,6 @@ parameters:
         - '*tests/Source/*'
         # part of composer
         - '*/tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Expected/Just*ExceptionWithoutNamespace.php'
-        # stubs
-        - 'stubs/*'
 
     ignoreErrors:
         # false positive
@@ -257,3 +262,42 @@ parameters:
             message: "#^Class \"Rector\\\\PSR4\\\\Rector\\\\Namespace_\\\\NormalizeNamespaceByPSR4ComposerAutoloadRector\" is missing @see annotation with test case class reference$#"
             count: 1
             path: rules/psr4/src/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector.php
+
+        - '#Method Rector\\Core\\Testing\\Finder\\RectorsFinder\:\:findInDirectories\(\) should return array<Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<object\>#'
+
+        -
+            message: "#^Class cognitive complexity for \"PhpDocInfo\" is 53, keep it under 50$#"
+            count: 1
+            path: packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php
+
+        -
+            message: "#^Cognitive complexity for \"Rector\\\\BetterPhpDocParser\\\\Printer\\\\WhitespaceDetector\\:\\:detectOldWhitespaces\\(\\)\" is 18, keep it under 9$#"
+            count: 1
+            path: packages/better-php-doc-parser/src/Printer/WhitespaceDetector.php
+
+        -
+            message: "#^Parameter \\#1 \\$input of function array_splice expects array, array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null given\\.$#"
+            count: 1
+            path: rules/coding-style/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php
+
+        -
+            message: "#^Cognitive complexity for \"Rector\\\\PhpSpecToPHPUnit\\\\Rector\\\\MethodCall\\\\PhpSpecPromisesToPHPUnitAssertRector\\:\\:refactor\\(\\)\" is 13, keep it under 9$#"
+            count: 1
+            path: rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
+
+        -
+            message: "#^Class cognitive complexity for \"EregToPcreTransformer\" is 77, keep it under 50$#"
+            count: 1
+            path: rules/php70/src/EregToPcreTransformer.php
+
+        -
+            message: "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
+            path: rules/php70/src/EregToPcreTransformer.php
+
+        -
+            message: "#^Cognitive complexity for \"Rector\\\\Core\\\\Testing\\\\Dumper\\\\AttributeFilteringNodeDumper\\:\\:dumpSubNodes\\(\\)\" is 16, keep it under 9$#"
+            count: 1
+            path: src/Testing/Dumper/AttributeFilteringNodeDumper.php
+
+
+        - '#Use explicit return value over magic &reference#'

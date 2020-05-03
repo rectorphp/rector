@@ -10,7 +10,7 @@ use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Core\ValueObject\Application\Error;
+use Rector\Core\ValueObject\Application\RectorError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -122,7 +122,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     }
 
     /**
-     * @param Error[] $errors
+     * @param RectorError[] $errors
      */
     private function reportErrors(array $errors): void
     {

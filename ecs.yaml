@@ -1,25 +1,10 @@
 services:
-    Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
-        max_class_cognitive_complexity: 50
-
-    Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
-        max_cognitive_complexity: 9
-
     Symplify\CodingStandard\Fixer\Order\MethodOrderByTypeFixer:
         method_order_by_type:
             Rector\Contract\Rector\PhpRectorInterface:
                 - 'getDefinition'
                 - 'getNodeTypes'
                 - 'refactor'
-
-    Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
-        extra_skipped_classes:
-            - 'PhpParser\PrettyPrinter\Standard'
-            - '?string' # bug probably
-
-    Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
-        extra_parent_types_to_suffixes:
-            - 'Rector'
 
 parameters:
     paths:
@@ -87,33 +72,6 @@ parameters:
             # hidden API
             - 'src/Rector/AbstractRector.php'
             - 'packages/post-rector/src/Rector/AbstractPostRector.php'
-
-        Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
-            # complex case
-            - 'packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php'
-            # node printing
-            - 'utils/documentation-generator/src/Command/DumpNodesCommand.php'
-            # 3rd party code
-            - 'rules/php70/src/EregToPcreTransformer.php'
-
-        Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
-            # todo
-            - "packages/better-php-doc-parser/src/Printer/WhitespaceDetector.php"
-            - "packages/node-type-resolver/src/NodeTypeResolver.php"
-            - "packages/better-php-doc-parser/src/Printer/OriginalSpacingRestorer.php"
-            # @todo split to multiple rectors
-            - "rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php"
-
-            - 'packages/better-php-doc-parser/src/PhpDocNode/**/*TagValueNode.php'
-            - "rules/coding-style/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php"
-
-            # per node logic
-            - 'utils/documentation-generator/src/Command/DumpNodesCommand.php'
-            # copied 3rd party logic
-            - 'rules/php70/src/EregToPcreTransformer.php'
-            # dev
-            - 'packages/type-declaration/src/Rector/FunctionLike/*TypeDeclarationRector.php'
-            - 'rules/php70/src/Rector/If_/IfToSpaceshipRector.php'
 
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition: null
 

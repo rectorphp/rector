@@ -11,7 +11,7 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Error\ExceptionCorrector;
-use Rector\Core\ValueObject\Application\Error;
+use Rector\Core\ValueObject\Application\RectorError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -20,7 +20,7 @@ use Throwable;
 final class ErrorAndDiffCollector
 {
     /**
-     * @var Error[]
+     * @var RectorError[]
      */
     private $errors = [];
 
@@ -69,7 +69,7 @@ final class ErrorAndDiffCollector
     }
 
     /**
-     * @return Error[]
+     * @return RectorError[]
      */
     public function getErrors(): array
     {
@@ -141,7 +141,7 @@ final class ErrorAndDiffCollector
     {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
 
-        $this->errors[] = new Error($fileInfo, $message);
+        $this->errors[] = new RectorError($fileInfo, $message);
     }
 
     public function addErrorWithRectorClassMessageAndFileInfo(
@@ -149,7 +149,7 @@ final class ErrorAndDiffCollector
         string $message,
         SmartFileInfo $smartFileInfo
     ): void {
-        $this->errors[] = new Error($smartFileInfo, $message, null, $rectorClass);
+        $this->errors[] = new RectorError($smartFileInfo, $message, null, $rectorClass);
     }
 
     public function addThrowableWithFileInfo(Throwable $throwable, SmartFileInfo $fileInfo): void
@@ -158,7 +158,7 @@ final class ErrorAndDiffCollector
         if ($rectorClass) {
             $this->addErrorWithRectorClassMessageAndFileInfo($rectorClass, $throwable->getMessage(), $fileInfo);
         } else {
-            $this->errors[] = new Error($fileInfo, $throwable->getMessage(), $throwable->getCode());
+            $this->errors[] = new RectorError($fileInfo, $throwable->getMessage(), $throwable->getCode());
         }
     }
 }
