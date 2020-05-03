@@ -13,7 +13,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Exception\NotImplementedException;
-use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -66,7 +66,7 @@ final class UnusedClassResolver
      */
     private function getUsedClassNames(): array
     {
-        if (! PHPUnitEnvironment::isPHPUnitRun() && $this->cachedUsedClassNames !== []) {
+        if (! StaticPHPUnitEnvironment::isPHPUnitRun() && $this->cachedUsedClassNames !== []) {
             return $this->cachedUsedClassNames;
         }
 

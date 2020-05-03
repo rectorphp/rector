@@ -7,7 +7,7 @@ namespace Rector\Core\Php;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class PhpVersionProvider
@@ -31,7 +31,7 @@ final class PhpVersionProvider
         }
 
         // for tests
-        if (PHPUnitEnvironment::isPHPUnitRun()) {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return '10.0'; // so we don't have to up
         }
 

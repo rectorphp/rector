@@ -9,7 +9,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
-use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -53,7 +53,7 @@ final class ClassConstantFetchAnalyzer
      */
     public function provideClassConstantFetchByClassAndName(): array
     {
-        if ($this->classConstantFetchByClassAndName !== [] && ! PHPUnitEnvironment::isPHPUnitRun()) {
+        if ($this->classConstantFetchByClassAndName !== [] && ! StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return $this->classConstantFetchByClassAndName;
         }
 

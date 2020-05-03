@@ -11,13 +11,14 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use ReflectionClass;
 
 /**
  * @see https://wiki.php.net/rfc/class_name_scalars
+ *
  * @see \Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\StringClassNameToClassConstantRectorTest
  */
 final class StringClassNameToClassConstantRector extends AbstractRector
@@ -111,7 +112,7 @@ PHP
             return null;
         }
 
-        if (RectorStrings::isInArrayInsensitive($classLikeName, $this->classesToSkip)) {
+        if (StaticRectorStrings::isInArrayInsensitive($classLikeName, $this->classesToSkip)) {
             return null;
         }
 

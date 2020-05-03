@@ -6,7 +6,7 @@ namespace Rector\PHPUnit\Composer;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
-use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class ComposerAutoloadedDirectoryProvider
 {
@@ -30,7 +30,7 @@ final class ComposerAutoloadedDirectoryProvider
      */
     public function provide(): array
     {
-        if (PHPUnitEnvironment::isPHPUnitRun()) {
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return [getcwd() . '/src', getcwd() . '/tests', getcwd() . '/packages', getcwd() . '/rules'];
         }
 
