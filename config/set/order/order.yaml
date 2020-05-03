@@ -1,2 +1,3 @@
 services:
     Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector: null
+    Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector: null

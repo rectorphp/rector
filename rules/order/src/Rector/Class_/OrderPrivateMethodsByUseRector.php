@@ -11,12 +11,23 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Order\StmtOrder;
 
 /**
  * @see \Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\OrderPrivateMethodsByUseRectorTest
  */
 final class OrderPrivateMethodsByUseRector extends AbstractRector
 {
+    /**
+     * @var StmtOrder
+     */
+    private $stmtOrder;
+
+    public function __construct(StmtOrder $stmtOrder)
+    {
+        $this->stmtOrder = $stmtOrder;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Order private methods in order of their use', [
@@ -77,26 +88,10 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $desiredClassMethodOrder = $this->getLocalMethodCallOrder($node);
-
-        $privateClassMethods = [];
-        foreach ($node->stmts as $key => $classStmt) {
-            if (! $classStmt instanceof ClassMethod) {
-                continue;
-            }
-
-            if (! $classStmt->isPrivate()) {
-                continue;
-            }
-
-            /** @var string $classMethodName */
-            $classMethodName = $this->getName($classStmt);
-            $privateClassMethods[$key] = $classMethodName;
-        }
-
-        //$privateClassMethodsNames = array_keys($privateClassMethods);
+        $privateClassMethodsByKey = $this->resolvePrivateClassMethods($node);
 
         // order is correct, nothing to change
-        if ($privateClassMethods === $desiredClassMethodOrder) {
+        if ($privateClassMethodsByKey === $desiredClassMethodOrder) {
             return null;
         }
 
@@ -105,19 +100,9 @@ PHP
             return null;
         }
 
-        $oldToNewKeys = $this->createOldToNewKeys($desiredClassMethodOrder, $privateClassMethods);
+        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($desiredClassMethodOrder, $privateClassMethodsByKey);
 
-        foreach ($node->stmts as $key => $stmt) {
-            if (! isset($oldToNewKeys[$key])) {
-                continue;
-            }
-
-            // reodre here
-            $newKey = $oldToNewKeys[$key];
-            $node->stmts[$newKey] = $stmt;
-        }
-
-        return $node;
+        return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
     }
 
     /**
@@ -149,24 +134,24 @@ PHP
         return array_unique($localMethodCallInOrder);
     }
 
-    /**
-     * @param string[] $desiredClassMethodOrder
-     * @return int[]
-     */
-    private function createOldToNewKeys(array $desiredClassMethodOrder, array $privateClassMethods): array
+    private function resolvePrivateClassMethods(Class_ $class): array
     {
-        $newKeys = [];
-        foreach ($desiredClassMethodOrder as $desiredClassMethod) {
-            foreach ($privateClassMethods as $currentKey => $classMethodName) {
-                if ($classMethodName === $desiredClassMethod) {
-                    $newKeys[] = $currentKey;
-                }
+        $privateClassMethods = [];
+
+        foreach ($class->stmts as $key => $classStmt) {
+            if (! $classStmt instanceof ClassMethod) {
+                continue;
             }
+
+            if (! $classStmt->isPrivate()) {
+                continue;
+            }
+
+            /** @var string $classMethodName */
+            $classMethodName = $this->getName($classStmt);
+            $privateClassMethods[$key] = $classMethodName;
         }
 
-        $oldKeys = array_values($newKeys);
-        sort($oldKeys);
-
-        return array_combine($oldKeys, $newKeys);
+        return $privateClassMethods;
     }
 }
