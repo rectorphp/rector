@@ -46,6 +46,12 @@ final class ExpectedNameResolver
             return null;
         }
 
+        /** @var string $propertyName */
+        $propertyName = $this->nodeNameResolver->getName($property);
+        if ($this->endsWith($propertyName, $expectedName)) {
+            return null;
+        }
+
         if ($this->nodeNameResolver->isName($property, $expectedName)) {
             return null;
         }
@@ -101,6 +107,7 @@ final class ExpectedNameResolver
      */
     private function endsWith(string $currentName, string $expectedName): bool
     {
-        return (bool) Strings::match($currentName, '#\w+' . lcfirst($expectedName) . '#');
+        $suffixNamePattern = '#\w+' . ucfirst($expectedName) . '#';
+        return (bool) Strings::match($currentName, $suffixNamePattern);
     }
 }
