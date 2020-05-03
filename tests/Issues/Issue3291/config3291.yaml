@@ -1,3 +1,2 @@
-parameters:
-    sets:
-        - "RemoveUnusedPrivatePropertyRector"
+services:
+    Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector: null
