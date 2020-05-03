@@ -140,26 +140,6 @@ final class PropertyFetchManipulator
         return $this->nodeNameResolver->isName($node->var, 'this');
     }
 
-    /**
-     * Matches:
-     * "$this->someValue = $<variableName>;"
-     */
-    public function isToThisPropertyFetchOfSpecificNameAssign(Node $node, string $propertyName): bool
-    {
-        if (! $node instanceof Assign) {
-            return false;
-        }
-
-        if (! $this->isLocalPropertyFetch($node->var)) {
-            return false;
-        }
-
-        /** @var PropertyFetch $propertyFetch */
-        $propertyFetch = $node->var;
-
-        return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
-    }
-
     private function hasPublicProperty(PropertyFetch $propertyFetch, string $propertyName): bool
     {
         $nodeScope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
