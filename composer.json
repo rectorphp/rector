@@ -267,12 +267,12 @@
             "vendor/bin/changelog-linker cleanup --ansi"
         ],
         "check-docs": [
-            "bin/rector dump-rectors | diff --ignore-space-change docs/AllRectorsOverview.md - ",
-            "bin/rector dump-nodes | diff --ignore-space-change docs/NodesOverview.md - "
+            "bin/rector dump-rectors | diff --ignore-space-change docs/rector_rules_overview.md - ",
+            "bin/rector dump-nodes | diff --ignore-space-change docs/nodes_overview.md - "
         ],
         "docs": [
-            "bin/rector dump-rectors > docs/AllRectorsOverview.md",
-            "bin/rector dump-nodes > docs/NodesOverview.md"
+            "bin/rector dump-rectors > docs/rector_rules_overview.md",
+            "bin/rector dump-nodes > docs/nodes_overview.md"
         ],
         "rector-ci": "bin/rector process --config rector-ci.yaml --dry-run --ansi",
         "rector": "bin/rector process --config rector-ci.yaml --ansi"

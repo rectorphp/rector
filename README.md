@@ -9,8 +9,8 @@ Why refactor manually if Rector can handle 80% of the task for you?
 
 <br>
 
-- **[Overview of all 500+ Rectors](/docs/AllRectorsOverview.md)**
 - **[Online DEMO](https://getrector.org/demo)**
+- [Overview of all 500+ Rector Rules](/docs/rector_rules_overview.md)
 
 <br>
 
@@ -113,7 +113,7 @@ parameters:
 
 ### B. Standalone Rules
 
-In the end, it's best to combine few of basic sets and drop [particular rules](https://github.com/rectorphp/rector/blob/master/docs/AllRectorsOverview.md) that you want to try:
+In the end, it's best to combine few of basic sets and drop [particular rules](/docs/rector_rules_overview.md) that you want to try:
 
 ```yaml
 # rector.yaml
@@ -263,12 +263,12 @@ parameters:
 
 ## More Detailed Documentation
 
-- **[All Rectors Overview](/docs/AllRectorsOverview.md)**
-- [Create own Rector](/docs/create_own_rector.md)
-- [How Does Rector Work?](/docs/HowItWorks.md)
-- [PHP Parser Nodes Overview](/docs/NodesOverview.md)
-- [Generate Rector from Recipe](/docs/RectorRecipe.md)
-- [Add Checkstyle with your CI](/docs/Checkstyle.md)
+- **[All Rectors Overview](/docs/rector_rules_overview.md)**
+- [Create own Rule](/docs/create_own_rule.md)
+- [Generate Rector from Recipe](/docs/rector_recipe.md)
+- [How Does Rector Work?](/docs/how_it_works.md)
+- [PHP Parser Nodes Overview](/docs/nodes_overview.md)
+- [Add Checkstyle with your CI](/docs/checkstyle.md)
 
 ## How to Contribute
 
