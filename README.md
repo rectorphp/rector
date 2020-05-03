@@ -31,7 +31,9 @@ Thank you:
 
 ## Open-Source First
 
-Rector **instantly upgrades and instantly refactors the PHP code of your application**. It supports all versions of PHP from 5.2 and many open-source projects:
+Rector **instantly upgrades and instantly refactors the PHP code of your application**.
+
+It supports all versions of PHP from 5.2 and many open-source projects:
 
 <br>
 
