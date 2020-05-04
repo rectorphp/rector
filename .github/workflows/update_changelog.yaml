@@ -23,5 +23,8 @@ jobs:
                 with:
                     commit_message: Generate changelog
                     branch: "master"
+                    commit_user_name: TomasVotruba
+                    commit_user_email: tomas.vot@gmail.com
+
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
