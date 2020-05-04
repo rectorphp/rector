@@ -8,10 +8,13 @@ use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
+use Symfony\Component\Routing\Annotation\Route;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
@@ -101,6 +104,12 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         // cleanup json encoded extra slashes
         $json = Strings::replace($json, '#\\\\\\\\#', '\\');
+
+        // replace ":" with "=" for @Route
+        if ($this instanceof SymfonyRouteTagValueNode || $this instanceof DoctrineTagNodeInterface) {
+            // @see https://regex101.com/r/XfKi4A/1/
+            $json = Strings::replace($json, '#(\"|\w)\:(\"|\w)#', '$1=$2');
+        }
 
         $keyPart = $this->createKeyPart($key);
 
