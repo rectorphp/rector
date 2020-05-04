@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\Foreach_;
 
-use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
@@ -17,6 +16,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\PhpDoc\CommentCombiner;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -29,18 +29,19 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ForeachToInArrayRector extends AbstractRector
 {
     /**
-     * @var Comment[]
-     */
-    private $comments = [];
-
-    /**
      * @var BinaryOpManipulator
      */
     private $binaryOpManipulator;
 
-    public function __construct(BinaryOpManipulator $binaryOpManipulator)
+    /**
+     * @var CommentCombiner
+     */
+    private $commentCombiner;
+
+    public function __construct(BinaryOpManipulator $binaryOpManipulator, CommentCombiner $commentCombiner)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
+        $this->commentCombiner = $commentCombiner;
     }
 
     public function getDefinition(): RectorDefinition
@@ -81,8 +82,6 @@ PHP
         if ($this->shouldSkipForeach($node)) {
             return null;
         }
-
-        $this->comments = [];
 
         /** @var If_ $firstNodeInsideForeach */
         $firstNodeInsideForeach = $node->stmts[0];
@@ -135,7 +134,7 @@ PHP
             $inArrayFunctionCall
         ) : $inArrayFunctionCall);
 
-        $this->combineCommentsToNode($node, $return);
+        $this->commentCombiner->combineCommentsToNode($node, $return);
 
         return $return;
     }
@@ -219,28 +218,5 @@ PHP
         }
 
         return $this->createFuncCall('in_array', $arguments);
-    }
-
-    /**
-     * @todo decouple to CommentAttributeManipulator service
-     */
-    private function combineCommentsToNode(Node $originalNode, Node $newNode): void
-    {
-        $this->traverseNodesWithCallable($originalNode, function (Node $node): void {
-            if ($node->hasAttribute('comments')) {
-                $this->comments = array_merge($this->comments, $node->getComments());
-            }
-        });
-
-        if ($this->comments === []) {
-            return;
-        }
-
-        $commentContent = '';
-        foreach ($this->comments as $comment) {
-            $commentContent .= $comment->getText() . PHP_EOL;
-        }
-
-        $newNode->setAttribute('comments', [new Comment($commentContent)]);
     }
 }
