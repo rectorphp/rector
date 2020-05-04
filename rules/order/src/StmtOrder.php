@@ -31,14 +31,28 @@ final class StmtOrder
 
     public function reorderClassStmtsByOldToNewKeys(Class_ $node, array $oldToNewKeys): Class_
     {
+        $reorderedStmts = [];
+
+        $stmtCount = count($node->stmts);
+
         foreach ($node->stmts as $key => $stmt) {
-            if (! isset($oldToNewKeys[$key])) {
+            if (! array_key_exists($key, $oldToNewKeys)) {
+                $reorderedStmts[$key] = $stmt;
                 continue;
             }
 
             // reorder here
             $newKey = $oldToNewKeys[$key];
-            $node->stmts[$newKey] = $stmt;
+
+            $reorderedStmts[$newKey] = $stmt;
+        }
+
+        for ($i = 0; $i < $stmtCount; ++$i) {
+            if (! array_key_exists($i, $reorderedStmts)) {
+                continue;
+            }
+
+            $node->stmts[$i] = $reorderedStmts[$i];
         }
 
         return $node;
