@@ -19,7 +19,7 @@ jobs:
 
             -   run: composer docs
 
-            -   uses: stefanzweifel/git-auto-commit-action@v2.5.0
+            -   uses: stefanzweifel/git-auto-commit-action@v4.1.6
                 with:
                     commit_message: Generate documentation
                     branch: "master"
