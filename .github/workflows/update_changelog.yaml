@@ -25,6 +25,7 @@ jobs:
                     branch: "master"
                     commit_user_name: TomasVotruba
                     commit_user_email: tomas.vot@gmail.com
+                    commit_author: TomasVotruba <tomas.vot@gmail.com>
 
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
