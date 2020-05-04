@@ -36,6 +36,9 @@ use Nette\Utils\Strings;
 class ReplaceInArgs
 {
     // this prevents miss matching like "aMethoda"
+    /**
+     * @var string[]
+     */
     private const POSSIBLE_DELIMITERS = ['#', '~', '/'];
     public function isRegexPattern(string $name): bool
     {

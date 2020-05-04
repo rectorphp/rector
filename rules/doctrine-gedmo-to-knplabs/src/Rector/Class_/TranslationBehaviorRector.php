@@ -9,7 +9,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\LocaleTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TranslatableTagValueNode;
@@ -38,22 +37,15 @@ final class TranslationBehaviorRector extends AbstractRector
     private $classManipulator;
 
     /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
      * @var ClassInsertManipulator
      */
     private $classInsertManipulator;
 
     public function __construct(
         ClassManipulator $classManipulator,
-        PhpDocInfoFactory $phpDocInfoFactory,
         ClassInsertManipulator $classInsertManipulator
     ) {
         $this->classManipulator = $classManipulator;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->classInsertManipulator = $classInsertManipulator;
     }
 

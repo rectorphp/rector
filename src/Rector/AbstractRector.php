@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
@@ -74,6 +75,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $phpDocInfoPrinter;
 
     /**
+     * @var PhpDocInfoFactory
+     */
+    protected $phpDocInfoFactory;
+
+    /**
      * @var DocBlockManipulator
      */
     protected $docBlockManipulator;
@@ -107,6 +113,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager,
         PhpDocInfoPrinter $phpDocInfoPrinter,
+        PhpDocInfoFactory $phpDocInfoFactory,
         DocBlockManipulator $docBlockManipulator,
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
@@ -117,6 +124,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->builderFactory = $builderFactory;
         $this->exclusionManager = $exclusionManager;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
@@ -134,12 +142,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         $this->currentRectorProvider->changeCurrentRector($this);
 
-        // show current Rector class on --debug
-        if ($this->symfonyStyle->isDebug()) {
-            // indented on purpose to improve log nesting under [refactoring]
-            $this->symfonyStyle->writeln('    [applying] ' . static::class);
-        }
-
         // already removed
         if ($this->isNodeRemoved($node)) {
             return null;
@@ -147,6 +149,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         if ($this->exclusionManager->isNodeSkippedByRector($this, $node)) {
             return null;
+        }
+
+        // show current Rector class on --debug
+        if ($this->symfonyStyle->isDebug()) {
+            // indented on purpose to improve log nesting under [refactoring]
+            $this->symfonyStyle->writeln('    [applying] ' . static::class);
         }
 
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;

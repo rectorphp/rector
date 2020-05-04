@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\SlugTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -29,20 +28,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class SluggableBehaviorRector extends AbstractRector
 {
     /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
      * @var ClassInsertManipulator
      */
     private $classInsertManipulator;
 
-    public function __construct(
-        PhpDocInfoFactory $phpDocInfoFactory,
-        ClassInsertManipulator $classInsertManipulator
-    ) {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    public function __construct(ClassInsertManipulator $classInsertManipulator)
+    {
         $this->classInsertManipulator = $classInsertManipulator;
     }
 

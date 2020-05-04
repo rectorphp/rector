@@ -215,8 +215,7 @@ PHP
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
-            // prevent comments override
-            return;
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
         }
 
         $phpDocInfo->changeVarType($constStaticType);

@@ -19,7 +19,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -83,15 +82,9 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      */
     private $applicationServiceMapProvider;
 
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(ServiceMapProvider $applicationServiceMapProvider, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(ServiceMapProvider $applicationServiceMapProvider)
     {
         $this->applicationServiceMapProvider = $applicationServiceMapProvider;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function getDefinition(): RectorDefinition
