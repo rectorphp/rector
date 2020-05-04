@@ -96,6 +96,13 @@ final class DocBlockManipulator
 
         $phpDoc = $this->printPhpDocInfoToString($phpDocInfo);
 
+        // make sure, that many separated comments are not removed
+        if ($phpDoc === '' && count($node->getComments()) > 1) {
+            foreach ($node->getComments() as $comment) {
+                $phpDoc .= $comment->getText() . PHP_EOL;
+            }
+        }
+
         if ($phpDoc === '') {
             if ($phpDocInfo->getOriginalPhpDocNode()->children !== []) {
                 // all comments were removed → null

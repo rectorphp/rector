@@ -96,21 +96,17 @@ final class PhpDocInfoFactory
             $this->setPositionOfLastToken($phpDocNode);
         }
 
-        /** @var AttributeAwarePhpDocNode $phpDocNode */
-        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $content);
+        return $this->createFromPhpDocNode($phpDocNode, $content, $tokens, $node);
+    }
 
-        $phpDocInfo = new PhpDocInfo(
-            $phpDocNode,
-            $tokens,
-            $content,
-            $this->staticTypeMapper,
-            $node,
-            $this->typeComparator,
-            $this->paramPhpDocNodeFactory
-        );
-        $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+    public function createEmpty(Node $node): PhpDocInfo
+    {
+        /** needed for @see PhpDocNodeFactoryInterface */
+        $this->currentNodeProvider->setNode($node);
 
-        return $phpDocInfo;
+        $phpDocNode = new AttributeAwarePhpDocNode([]);
+
+        return $this->createFromPhpDocNode($phpDocNode, '', [], $node);
     }
 
     private function parseTokensToPhpDocNode(array $tokens): AttributeAwarePhpDocNode
@@ -139,5 +135,31 @@ final class PhpDocInfoFactory
         if ($startEndValueObject !== null) {
             $attributeAwarePhpDocNode->setAttribute(Attribute::LAST_TOKEN_POSITION, $startEndValueObject->getEnd());
         }
+    }
+
+    private function createFromPhpDocNode(
+        AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
+        string $content,
+        array $tokens,
+        Node $node
+    ): PhpDocInfo {
+        /** @var AttributeAwarePhpDocNode $attributeAwarePhpDocNode */
+        $attributeAwarePhpDocNode = $this->attributeAwareNodeFactory->createFromNode(
+            $attributeAwarePhpDocNode,
+            $content
+        );
+
+        $phpDocInfo = new PhpDocInfo(
+            $attributeAwarePhpDocNode,
+            $tokens,
+            $content,
+            $this->staticTypeMapper,
+            $node,
+            $this->typeComparator,
+            $this->paramPhpDocNodeFactory
+        );
+        $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+
+        return $phpDocInfo;
     }
 }

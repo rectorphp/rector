@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -23,16 +22,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class PHPStormVarAnnotationRector extends AbstractRector
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change various @var annotation formats to one PHPStorm understands', [

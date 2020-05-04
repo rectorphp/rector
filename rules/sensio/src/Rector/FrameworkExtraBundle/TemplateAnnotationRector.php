@@ -128,6 +128,7 @@ PHP
     private function classHasTemplateAnnotations(Class_ $node): bool
     {
         foreach ($node->getMethods() as $classMethod) {
+            /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($phpDocInfo === null) {
                 continue;
