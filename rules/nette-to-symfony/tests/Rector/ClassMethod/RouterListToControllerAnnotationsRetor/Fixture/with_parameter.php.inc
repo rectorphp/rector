@@ -22,7 +22,7 @@ final class WithParameterRouterFactory
 final class WithParameterSomePresenter implements IPresenter
 {
     /**
-     * @todo
+     * @doto
      */
     public function run(\Nette\Application\Request $request): IResponse
     {
@@ -53,7 +53,7 @@ final class WithParameterRouterFactory
 final class WithParameterSomePresenter implements IPresenter
 {
     /**
-     * @todo
+     * @doto
      * @Route(path="some-path/{id}")
      */
     public function run(\Nette\Application\Request $request): IResponse

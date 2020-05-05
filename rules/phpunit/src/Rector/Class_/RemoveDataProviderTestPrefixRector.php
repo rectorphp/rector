@@ -104,6 +104,10 @@ PHP
             $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
 
             $dataProviderTags = $phpDocInfo->getTagsByName('dataProvider');
+
+            dump($dataProviderTags);
+            die;
+
             if ($dataProviderTags === []) {
                 continue;
             }
