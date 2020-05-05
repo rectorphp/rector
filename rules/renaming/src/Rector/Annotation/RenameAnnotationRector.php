@@ -15,7 +15,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Core\Tests\Rector\Annotation\RenameAnnotationRector\RenameAnnotationRectorTest
+ * @see \Rector\Renaming\Tests\Rector\Annotation\RenameAnnotationRector\RenameAnnotationRectorTest
  */
 final class RenameAnnotationRector extends AbstractPHPUnitRector
 {

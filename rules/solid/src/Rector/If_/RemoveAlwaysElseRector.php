@@ -17,7 +17,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\SplitIfsRectorTest
+ * @see \Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\RemoveAlwaysElseRectorTest
  */
 final class RemoveAlwaysElseRector extends AbstractRector
 {

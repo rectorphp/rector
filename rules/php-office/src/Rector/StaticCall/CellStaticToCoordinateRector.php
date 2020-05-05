@@ -13,6 +13,8 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#dedicated-class-to-manipulate-coordinates
+ *
+ * @see \Rector\PHPOffice\Tests\Rector\StaticCall\CellStaticToCoordinateRector\CellStaticToCoordinateRectorTest
  */
 final class CellStaticToCoordinateRector extends AbstractRector
 {

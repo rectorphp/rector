@@ -32,6 +32,8 @@ final class SeeAnnotationToTestRuleTest extends AbstractServiceAwareRuleTestCase
 
         $errorMessage = sprintf(SeeAnnotationToTestRule::ERROR_MESSAGE, ClassSeeAnnotationSomewhereElseRector::class);
         yield [__DIR__ . '/Fixture/ClassSeeAnnotationSomewhereElseRector.php', [[$errorMessage, 15]]];
+
+        yield [__DIR__ . '/Fixture/CorrectSeeRector.php', []];
     }
 
     protected function getRule(): Rule

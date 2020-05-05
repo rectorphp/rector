@@ -153,7 +153,7 @@ final class SeeAnnotationToTestRule implements Rule
                 continue;
             }
 
-            if (is_a($seeTag->value, TestCase::class, true)) {
+            if (is_a($seeTag->value->value, TestCase::class, true)) {
                 return true;
             }
         }
