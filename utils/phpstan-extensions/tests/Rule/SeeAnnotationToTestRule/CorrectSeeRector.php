@@ -6,6 +6,6 @@ namespace Rector\PHPStanExtensions\Tests\Rule\SeeAnnotationToTestRule;
 
 use PHPUnit\Framework\TestCase;
 
-final class CorrectSeeRectorTest extends TestCase
+final class CorrectSeeRector extends TestCase
 {
 }

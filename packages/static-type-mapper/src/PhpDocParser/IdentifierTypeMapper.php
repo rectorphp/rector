@@ -16,6 +16,7 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\BetterPhpDocParser\Type\PreSlashStringType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\ParentStaticType;
 use Rector\PHPStan\Type\SelfObjectType;
@@ -59,11 +60,6 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         }
 
         $loweredName = strtolower($typeNode->name);
-
-        // @todo for all scalars
-        if ($loweredName === '\string') {
-            return new PreSlashStringType();
-        }
 
         if ($loweredName === 'class-string') {
             return new ClassStringType();

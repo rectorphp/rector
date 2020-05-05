@@ -10,7 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\PHPStanExtensions\Tests\Rule\SeeAnnotationToTestRule\CorrectSeeRectorTest
+ * @see \Rector\PHPStanExtensions\Tests\Rule\SeeAnnotationToTestRule\CorrectSeeRector
  */
 final class CorrectSeeRector extends AbstractRector implements PhpRectorInterface
 {
