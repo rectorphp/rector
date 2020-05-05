@@ -118,7 +118,6 @@ parameters:
         - '#Parameter (.*?) expects array<PhpParser\\Node\\Stmt\>, array<PhpParser\\Node\> given#'
 
         # known value
-        - '#Parameter \#1 \$node of method Rector\\Core\\Rector\\AbstractRector\:\:getName\(\) expects PhpParser\\Node, PhpParser\\Node\\Identifier\|null given#'
         - '#Cannot cast array<string\>\|bool\|string\|null to string#'
         - '#Method Rector\\Legacy\\Rector\\ClassMethod\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
 
@@ -181,9 +180,6 @@ parameters:
 
         - '#Method Rector\\Symfony\\Rector\\FrameworkBundle\\AbstractToConstructorInjectionRector\:\:getServiceTypeFromMethodCallArgument\(\) should return PHPStan\\Type\\Type but returns PHPStan\\Type\\Type\|null#'
 
-        - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\(int, string, string, int, array\)\: bool\)\|null, Closure\(int, string\)\: void given#'
-
-
         - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
         - '#Unable to resolve the template type ExpectedType in call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)#'
 
@@ -195,7 +191,6 @@ parameters:
         - '#Cannot cast \(array<string\>\)\|string\|true to string#'
 
         - '#In method "Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createPropertyReflectionFromPropertyNode", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
-        - '#Method Rector\\CakePHPToSymfony\\Template\\TemplateMethodCallManipulator\:\:matchThisRenderMethodCallBareOrInReturn\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\\Expr#'
         # doc is not enough
         - '#Result of \|\| is always true#'
 
@@ -220,7 +215,6 @@ parameters:
         - '#Method Rector\\Core\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
 
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
-        - '#Strict comparison using \=\=\= between mixed and null will always evaluate to false#'
         - '#Cannot call method (.*?)\(\) on Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\|null#'
 
         - '#Right side of && is always true#'
@@ -298,12 +292,5 @@ parameters:
             message: "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
             path: rules/php70/src/EregToPcreTransformer.php
 
-        -
-            message: "#^Cognitive complexity for \"Rector\\\\Core\\\\Testing\\\\Dumper\\\\AttributeFilteringNodeDumper\\:\\:dumpSubNodes\\(\\)\" is 16, keep it under 9$#"
-            count: 1
-            path: src/Testing/Dumper/AttributeFilteringNodeDumper.php
-
-
         - '#Use explicit return value over magic &reference#'
-        - '#Method Rector\\Order\\Rector\\Class_\\OrderPrivateMethodsByUseRector\:\:createOldToNewKeys\(\) should return array<int\> but returns array\|false#'
         - '#Method Rector\\Order\\StmtOrder\:\:createOldToNewKeys\(\) should return array<int\> but returns array\|false#'
