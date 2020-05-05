@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\Console\Command;
 
+use OndraM\CiDetector\CiDetector;
 use Rector\Compiler\Composer\ComposerJsonManipulator;
 use Rector\Compiler\Debug\FileLister;
 use Rector\Compiler\Renaming\JetbrainsStubsRenamer;
@@ -49,13 +50,19 @@ final class CompileCommand extends Command
      */
     private $fileLister;
 
+    /**
+     * @var CiDetector
+     */
+    private $ciDetector;
+
     public function __construct(
         string $dataDir,
         string $buildDir,
         ComposerJsonManipulator $composerJsonManipulator,
         SymfonyStyle $symfonyStyle,
         JetbrainsStubsRenamer $jetbrainsStubsRenamer,
-        FileLister $fileLister
+        FileLister $fileLister,
+        CiDetector $ciDetector
     ) {
         $this->dataDir = $dataDir;
         $this->buildDir = $buildDir;
@@ -64,6 +71,7 @@ final class CompileCommand extends Command
         $this->jetbrainsStubsRenamer = $jetbrainsStubsRenamer;
         $this->fileLister = $fileLister;
         $this->symfonyStyle = $symfonyStyle;
+        $this->ciDetector = $ciDetector;
 
         parent::__construct();
     }
@@ -102,6 +110,20 @@ final class CompileCommand extends Command
         $this->symfonyStyle->note('You still need to run "composer update" to install those dependencies');
         $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);
 
+        $this->restoreDependenciesLocallyIfNotCi($output);
+
         return ShellCode::SUCCESS;
+    }
+
+    private function restoreDependenciesLocallyIfNotCi(OutputInterface $output): void
+    {
+        if ($this->ciDetector->isCiDetected()) {
+            return;
+        }
+
+        $process = new Process(['composer', 'install'], $this->buildDir, null, null, null);
+        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
+            $output->write($buffer);
+        });
     }
 }
