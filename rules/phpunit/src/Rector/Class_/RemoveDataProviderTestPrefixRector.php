@@ -105,9 +105,7 @@ PHP
 
             $dataProviderTags = $phpDocInfo->getTagsByName('dataProvider');
 
-            dump($dataProviderTags);
-            die;
-
+            // @todo
             if ($dataProviderTags === []) {
                 continue;
             }

@@ -102,6 +102,7 @@
             "Rector\\Php55\\": "rules/php55/src",
             "Rector\\Php56\\": "rules/php56/src",
             "Rector\\Php70\\": "rules/php70/src",
+            "Rector\\Php\\": "rules/php/src",
             "Rector\\Php71\\": "rules/php71/src",
             "Rector\\Php72\\": "rules/php72/src",
             "Rector\\Php73\\": "rules/php73/src",
