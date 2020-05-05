@@ -15,6 +15,9 @@ use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\PHPStan\TypeFactoryStaticHelper;
 use Rector\TypeDeclaration\ValueObject\NestedArrayTypeValueObject;
 
+/**
+ * @see \Rector\TypeDeclaration\Tests\TypeNormalizerTest
+ */
 final class TypeNormalizer
 {
     /**
