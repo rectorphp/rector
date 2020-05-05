@@ -45,7 +45,6 @@ final class AttributeKey
     public const CLASS_SHORT_NAME = 'classShortName';
 
     /**
-     * @todo split Class node, interface node and trait node, to be compatible with other SpecificNode|null, values
      * @var string
      */
     public const CLASS_NODE = ClassLike::class;
