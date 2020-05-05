@@ -9,17 +9,17 @@ final class ShouldNotRemoveComment extends ParentTestCase
     public function provideData(): array
     {
         /**
-         * @todo Let's pretend that this comment is extremely important and meaningful.
+         * @doto Let's pretend that this comment is extremely important and meaningful.
          *
          * It should not be removed by Rector.
          */
         return [
             /**
-             * @todo Yet another important comment
+             * @doto Yet another important comment
              */
             ['item1'],
             /**
-             * @todo One final important comment
+             * @doto One final important comment
              */
             ['item2']
         ];
@@ -37,18 +37,18 @@ use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRec
 final class ShouldNotRemoveComment extends ParentTestCase
 {
     /**
-     * @todo Let's pretend that this comment is extremely important and meaningful.
+     * @doto Let's pretend that this comment is extremely important and meaningful.
      *
      * It should not be removed by Rector.
      */
     public function provideData(): \Iterator
     {
         /**
-         * @todo Yet another important comment
+         * @doto Yet another important comment
          */
         yield ['item1'];
         /**
-         * @todo One final important comment
+         * @doto One final important comment
          */
         yield ['item2'];
     }

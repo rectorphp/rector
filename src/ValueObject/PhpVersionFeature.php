@@ -161,4 +161,9 @@ final class PhpVersionFeature
      * @var string
      */
     public const STATIC_RETURN_TYPE = '8.0';
+
+    /**
+     * @var string
+     */
+    public const IS_ITERABLE = '7.1';
 }

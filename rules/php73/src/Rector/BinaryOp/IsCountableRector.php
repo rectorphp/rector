@@ -4,28 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\Php73\Rector\BinaryOp;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Php71\IsArrayAndDualCheckToAble;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Php\Rector\AbstractIsAbleRector;
 
 /**
  * @see \Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector\IsCountableRectorTest
  */
-final class IsCountableRector extends AbstractRector
+final class IsCountableRector extends AbstractIsAbleRector
 {
-    /**
-     * @var IsArrayAndDualCheckToAble
-     */
-    private $isArrayAndDualCheckToAble;
-
-    public function __construct(IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble)
-    {
-        $this->isArrayAndDualCheckToAble = $isArrayAndDualCheckToAble;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -44,32 +32,18 @@ PHP
         );
     }
 
-    /**
-     * @return string[]
-     */
-    public function getNodeTypes(): array
+    protected function getType(): string
     {
-        return [BooleanOr::class];
+        return 'Countable';
     }
 
-    /**
-     * @param BooleanOr $node
-     */
-    public function refactor(Node $node): ?Node
+    protected function getFuncName(): string
     {
-        if ($this->shouldSkip()) {
-            return null;
-        }
-
-        return $this->isArrayAndDualCheckToAble->processBooleanOr($node, 'Countable', 'is_countable') ?: $node;
+        return 'is_countable';
     }
 
-    private function shouldSkip(): bool
+    protected function getPhpVersion(): string
     {
-        if (function_exists('is_countable')) {
-            return false;
-        }
-
-        return $this->isAtLeastPhpVersion('7.3');
+        return PhpVersionFeature::IS_COUNTABLE;
     }
 }
