@@ -7,7 +7,6 @@ namespace Rector\Compiler\Composer;
 use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
 use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 
 final class ComposerJsonManipulator
