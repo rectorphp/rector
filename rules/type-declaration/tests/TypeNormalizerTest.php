@@ -58,5 +58,8 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
         $arrayType = new ArrayType(new MixedType(), new UnionType([new StringType(), new IntegerType()]));
         $moreNestedArrayType = new ArrayType(new MixedType(), $arrayType);
         yield [$moreNestedArrayType, 'int[][]|string[][]'];
+
+        $evenMoreNestedArrayType = new ArrayType(new MixedType(), $moreNestedArrayType);
+        yield [$evenMoreNestedArrayType, 'int[][][]|string[][][]'];
     }
 }

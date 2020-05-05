@@ -6,8 +6,8 @@ namespace Rector\Compiler\Composer;
 
 use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;
-use Rector\Compiler\Differ\ConsoleDiffer;
 use Symfony\Component\Filesystem\Filesystem;
+use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 
 final class ComposerJsonManipulator
 {
@@ -61,7 +61,6 @@ final class ComposerJsonManipulator
     public function restoreComposerJson(string $composerJsonFile): void
     {
         $this->filesystem->dumpFile($composerJsonFile, $this->originalComposerJsonFileContent);
-
         // re-run @todo composer update on root
     }
 

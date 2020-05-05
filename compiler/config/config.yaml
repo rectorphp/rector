@@ -13,10 +13,4 @@ services:
             - '../src/Exception/*'
             - '../src/HttpKernel/*'
 
-    Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory: null
-    Symfony\Component\Console\Style\SymfonyStyle:
-        factory: ['@Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory', 'create']
-
-    SebastianBergmann\Diff\Differ: null
-
     Symfony\Component\Filesystem\Filesystem: null

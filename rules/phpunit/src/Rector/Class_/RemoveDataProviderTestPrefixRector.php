@@ -8,9 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareDataProviderTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -100,36 +98,27 @@ PHP
     private function renameDataProviderAnnotationsAndCollectRenamedMethods(Class_ $class): void
     {
         foreach ($class->getMethods() as $classMethod) {
-            /** @var PhpDocInfo $phpDocInfo */
+
+            /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-            $dataProviderTags = $phpDocInfo->getTagsByName('dataProvider');
-
-            // @todo
-            if ($dataProviderTags === []) {
+            if ($phpDocInfo === null) {
                 continue;
             }
 
-            foreach ($dataProviderTags as $dataProviderTag) {
-                // @todo use custom annotation object!
-                /** @var PhpDocTagNode $dataProviderTag */
-                if (! $dataProviderTag->value instanceof GenericTagValueNode) {
-                    continue;
-                }
+            /** @var AttributeAwareDataProviderTagValueNode[] $dataProviderTagValueNodes */
+            $dataProviderTagValueNodes = $phpDocInfo->findAllByType(AttributeAwareDataProviderTagValueNode::class);
+            if ($dataProviderTagValueNodes === []) {
+                continue;
+            }
 
-                $oldMethodName = $dataProviderTag->value->value;
+            foreach ($dataProviderTagValueNodes as $dataProviderTagValueNode) {
+                $oldMethodName = $dataProviderTagValueNode->getMethod();
                 if (! Strings::startsWith($oldMethodName, 'test')) {
                     continue;
                 }
 
                 $newMethodName = $this->createNewMethodName($oldMethodName);
-
-                // @todo create @dataProvider custom tag!
-                /** @var AttributeAwareGenericTagValueNode $genericTagValueNode */
-                $genericTagValueNode = $dataProviderTag->value;
-                // change value - keep original for format preserving
-                $genericTagValueNode->setAttribute('original_value', $genericTagValueNode->value);
-                $genericTagValueNode->value = $newMethodName;
+                $dataProviderTagValueNode->changeMethod($newMethodName);
 
                 $oldMethodName = trim($oldMethodName, '()');
                 $newMethodName = trim($newMethodName, '()');

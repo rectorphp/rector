@@ -1,4 +1,4 @@
-# All 501 Rectors Overview
+# All 500 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -4288,7 +4288,7 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
 - class: [`Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/Identical/EndsWithFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/Identical/EndsWithFunctionToNetteUtilsStringsRector/Fixture)
 
-Use Nette\Utils\Strings over bare string-functions
+Use Nette\Utils\Strings::endWith() over bare string-functions
 
 ```diff
  class SomeClass
@@ -4298,9 +4298,7 @@ Use Nette\Utils\Strings over bare string-functions
          $content = 'Hi, my name is Tom';
 
 -        $yes = substr($content, -strlen($needle)) === $needle;
--        $no = $needle !== substr($content, -strlen($needle));
 +        $yes = \Nette\Utils\Strings::endsWith($content, $needle);
-+        $no = !\Nette\Utils\Strings::endsWith($content, $needle);
      }
  }
 ```
@@ -4437,7 +4435,7 @@ Change setClass with class and arguments to separated methods
 - class: [`Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/Identical/StartsWithFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/Identical/StartsWithFunctionToNetteUtilsStringsRector/Fixture)
 
-Use Nette\Utils\Strings over bare string-functions
+Use Nette\Utils\Strings::startsWith() over bare string-functions
 
 ```diff
  class SomeClass
@@ -4447,9 +4445,7 @@ Use Nette\Utils\Strings over bare string-functions
          $content = 'Hi, my name is Tom';
 
 -        $yes = substr($content, 0, strlen($needle)) === $needle;
--        $no = $needle !== substr($content, 0, strlen($needle));
-+        $yes = \Nette\Utils\Strings::startwith($content, $needle);
-+        $no = !\Nette\Utils\Strings::startwith($content, $needle);
++        $yes = \Nette\Utils\Strings::startsWith($content, $needle);
      }
  }
 ```
@@ -5771,29 +5767,6 @@ Use explicit API for expecting PHP errors, warnings, and notices
 +        $this->expectError();
 +        $this->expectNotice();
 +        $this->expectWarning();
-     }
- }
-```
-
-<br>
-
-### `FixDataProviderAnnotationTypoRector`
-
-- class: [`Rector\PHPUnit\Rector\ClassMethod\FixDataProviderAnnotationTypoRector`](/../master/rules/phpunit/src/Rector/ClassMethod/FixDataProviderAnnotationTypoRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/ClassMethod/FixDataProviderAnnotationTypoRector/Fixture)
-
-Fix data provider annotation typos
-
-```diff
- class SomeClass extends \PHPUnit\Framework\TestCase
- {
-     /**
--     * @dataProvidor testProvideData()
-+     * @dataProvider testProvideData()
-      */
-     public function test()
-     {
-         $nothing = 5;
      }
  }
 ```

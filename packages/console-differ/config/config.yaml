@@ -25,7 +25,7 @@ services:
         arguments:
             - '@diffOutputBuilder'
 
-    # makrdown differ
+    # markdown differ
     markdownDiffOutputBuilder:
         class: SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder
         factory: ['@Rector\ConsoleDiffer\Diff\Output\CompleteUnifiedDiffOutputBuilderFactory', 'create']

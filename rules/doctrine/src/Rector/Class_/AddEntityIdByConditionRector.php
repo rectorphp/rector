@@ -119,7 +119,7 @@ PHP
             return true;
         }
 
-        return $this->classManipulator->hasPropertyName($class, 'id');
+        return (bool) $class->getProperty('id');
     }
 
     private function isTraitMatch(Class_ $class): bool

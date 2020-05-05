@@ -15,6 +15,7 @@ use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\TypeDeclaration\TypeNormalizer;
 
 final class ArrayTypeMapper implements TypeMapperInterface
 {
@@ -24,11 +25,19 @@ final class ArrayTypeMapper implements TypeMapperInterface
     private $phpStanStaticTypeMapper;
 
     /**
+     * @var TypeNormalizer
+     */
+    private $typeNormalizer;
+
+    /**
      * @required
      */
-    public function autowireArrayTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
-    {
+    public function autowireArrayTypeMapper(
+        PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
+        TypeNormalizer $typeNormalizer
+    ): void {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+        $this->typeNormalizer = $typeNormalizer;
     }
 
     public function getNodeClass(): string
@@ -65,21 +74,12 @@ final class ArrayTypeMapper implements TypeMapperInterface
     {
         $itemType = $type->getItemType();
 
-        if ($itemType instanceof UnionType) {
-            return $this->mapArrayUnionTypeToDocString($type, $itemType);
+        $normalizedType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($type);
+        if ($normalizedType instanceof UnionType) {
+            return $this->mapArrayUnionTypeToDocString($type, $normalizedType);
         }
 
-        $docString = $this->phpStanStaticTypeMapper->mapToDocString($type->getItemType(), $parentType);
-
-        // @todo improve this
-        $docStringTypes = explode('|', $docString);
-        $docStringTypes = array_filter($docStringTypes);
-
-        foreach ($docStringTypes as $key => $docStringType) {
-            $docStringTypes[$key] = $docStringType . '[]';
-        }
-
-        return implode('|', $docStringTypes);
+        return $this->phpStanStaticTypeMapper->mapToDocString($itemType, $parentType) . '[]';
     }
 
     /**
@@ -113,7 +113,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
             $unionedTypesAsString[] = $this->phpStanStaticTypeMapper->mapToDocString(
                 $unionedArrayItemType,
                 $arrayType
-            ) . '[]';
+            );
         }
 
         $unionedTypesAsString = array_values($unionedTypesAsString);
