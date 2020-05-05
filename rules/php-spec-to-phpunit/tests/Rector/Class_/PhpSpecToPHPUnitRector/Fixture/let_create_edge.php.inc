@@ -37,7 +37,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
      */
     private $currency;
     /**
-     * @var CurrencyData|\PHPUnit\Framework\MockObject\MockObject
+     * @var \CurrencyData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $data;
     protected function setUp()

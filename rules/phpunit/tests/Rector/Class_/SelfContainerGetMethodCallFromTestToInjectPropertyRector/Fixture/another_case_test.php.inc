@@ -26,7 +26,7 @@ use Rector\PHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToInjec
 class AnotherCaseTest extends TestCaseWithGetContainer
 {
     /**
-     * @var Rector\PHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToInjectPropertyRector\Fixture\Domain
+     * @var \Rector\PHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToInjectPropertyRector\Fixture\Domain
      * @inject
      */
     private $domain;

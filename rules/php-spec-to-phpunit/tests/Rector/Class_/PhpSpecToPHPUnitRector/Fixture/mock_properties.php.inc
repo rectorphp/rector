@@ -33,7 +33,7 @@ class MockPropertiesTest extends \PHPUnit\Framework\TestCase
      */
     private $mockProperties;
     /**
-     * @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \OrderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factory;
     protected function setUp()

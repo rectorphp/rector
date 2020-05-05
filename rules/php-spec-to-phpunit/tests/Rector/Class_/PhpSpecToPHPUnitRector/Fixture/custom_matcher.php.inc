@@ -68,7 +68,7 @@ class RatesTest extends \PHPUnit\Framework\TestCase
      */
     private $rates;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Provider
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Provider
      */
     private $provider;
     protected function setUp()

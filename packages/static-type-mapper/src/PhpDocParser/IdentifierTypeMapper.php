@@ -15,8 +15,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
-use Rector\BetterPhpDocParser\Type\PreSlashStringType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\ParentStaticType;
 use Rector\PHPStan\Type\SelfObjectType;
