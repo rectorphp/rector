@@ -7,7 +7,9 @@ namespace Rector\Core\Exclusion\Check;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Const_;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Contract\Exclusion\ExclusionCheckInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -16,6 +18,12 @@ final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
 {
     public function isNodeSkippedByRector(PhpRectorInterface $phpRector, Node $node): bool
     {
+        if ($node instanceof PropertyProperty || $node instanceof Const_) {
+            $node = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($node === null) {
+                return false;
+            }
+        }
         $comment = $node->getDocComment();
         if ($comment !== null && $this->checkCommentForIgnore($phpRector, $comment)) {
             return true;
