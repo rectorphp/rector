@@ -11,8 +11,9 @@
         "symfony/process": "^4.4|^5.0",
         "symfony/filesystem": "^4.4|^5.0",
         "symfony/finder": "^4.4|^5.0",
-        "symplify/auto-bind-parameter": "^7.2",
-        "symplify/package-builder": "^7.2"
+        "symplify/console-color-diff": "^7.3",
+        "symplify/auto-bind-parameter": "^7.3",
+        "symplify/package-builder": "^7.3"
     },
     "autoload": {
         "psr-4": {

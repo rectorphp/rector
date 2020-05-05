@@ -35,6 +35,7 @@
         "symplify/autowire-array-parameter": "^7.3.5",
         "symplify/package-builder": "^7.3.5",
         "symplify/set-config-resolver": "^7.3.5",
+        "symplify/console-color-diff": "^7.3.5",
         "tracy/tracy": "^2.7"
     },
     "require-dev": {

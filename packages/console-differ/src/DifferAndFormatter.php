@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\ConsoleDiffer;
 
-use Rector\ConsoleDiffer\Console\Formatter\DiffConsoleFormatter;
 use SebastianBergmann\Diff\Differ;
+use Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter;
 
 final class DifferAndFormatter
 {
@@ -15,14 +15,14 @@ final class DifferAndFormatter
     private $differ;
 
     /**
-     * @var DiffConsoleFormatter
+     * @var ColorConsoleDiffFormatter
      */
-    private $diffConsoleFormatter;
+    private $colorConsoleDiffFormatter;
 
-    public function __construct(Differ $differ, DiffConsoleFormatter $diffConsoleFormatter)
+    public function __construct(Differ $differ, ColorConsoleDiffFormatter $colorConsoleDiffFormatter)
     {
         $this->differ = $differ;
-        $this->diffConsoleFormatter = $diffConsoleFormatter;
+        $this->colorConsoleDiffFormatter = $colorConsoleDiffFormatter;
     }
 
     public function diff(string $old, string $new): string
@@ -42,6 +42,6 @@ final class DifferAndFormatter
 
         $diff = $this->diff($old, $new);
 
-        return $this->diffConsoleFormatter->format($diff);
+        return $this->colorConsoleDiffFormatter->format($diff);
     }
 }
