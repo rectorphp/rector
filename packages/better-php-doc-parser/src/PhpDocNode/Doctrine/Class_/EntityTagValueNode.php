@@ -25,11 +25,7 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
     public function toAttributeString(): string
     {
         $items = $this->createAttributeItems();
-        $items = $this->filterOutMissingItems($items);
-
-        $content = $this->printPhpAttributeItems($items);
-
-        return $this->printAttributeContent($content);
+        return $this->printItemsToAttributeString($items);
     }
 
     private function createAttributeItems(): array

@@ -9,6 +9,7 @@ use PHPStan\Rules\Rule;
 use Rector\PHPStanExtensions\Rule\SeeAnnotationToTestRule;
 use Rector\PHPStanExtensions\Tests\Rule\SeeAnnotationToTestRule\Fixture\ClassMissingDocBlockRector;
 use Rector\PHPStanExtensions\Tests\Rule\SeeAnnotationToTestRule\Fixture\ClassMissingSeeAnnotationRector;
+use Rector\PHPStanExtensions\Tests\Rule\SeeAnnotationToTestRule\Fixture\ClassSeeAnnotationSomewhereElseRector;
 use Symplify\PHPStanExtensions\Testing\AbstractServiceAwareRuleTestCase;
 
 final class SeeAnnotationToTestRuleTest extends AbstractServiceAwareRuleTestCase
@@ -28,6 +29,11 @@ final class SeeAnnotationToTestRuleTest extends AbstractServiceAwareRuleTestCase
 
         $errorMessage = sprintf(SeeAnnotationToTestRule::ERROR_MESSAGE, ClassMissingSeeAnnotationRector::class);
         yield [__DIR__ . '/Fixture/ClassMissingSeeAnnotationRector.php', [[$errorMessage, 15]]];
+
+        $errorMessage = sprintf(SeeAnnotationToTestRule::ERROR_MESSAGE, ClassSeeAnnotationSomewhereElseRector::class);
+        yield [__DIR__ . '/Fixture/ClassSeeAnnotationSomewhereElseRector.php', [[$errorMessage, 15]]];
+
+        yield [__DIR__ . '/Fixture/CorrectSeeRector.php', []];
     }
 
     protected function getRule(): Rule

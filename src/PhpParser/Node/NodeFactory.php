@@ -6,7 +6,6 @@ namespace Rector\Core\PhpParser\Node;
 
 use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -173,17 +172,12 @@ final class NodeFactory
         $propertyBuilder = $this->builderFactory->property($name);
         $propertyBuilder->makePrivate();
 
-        if ($type !== null) {
-            // @todo use PhpDocInfo approach
-            $docComment = $this->createVarDoc($type);
-            $propertyBuilder->setDocComment($docComment);
-        }
-
         $property = $propertyBuilder->getNode();
 
-        // add PHP_DOC_INFO
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-        $property->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+        if ($type !== null) {
+            $phpDocInfo->changeVarType($type);
+        }
 
         $this->decorateParentPropertyProperty($property);
 
@@ -328,13 +322,6 @@ final class NodeFactory
             __METHOD__,
             is_object($item) ? get_class($item) : $item
         ));
-    }
-
-    private function createVarDoc(Type $type): Doc
-    {
-        $docString = $this->staticTypeMapper->mapPHPStanTypeToDocString($type);
-
-        return new Doc(sprintf('/**%s * @var %s%s */', PHP_EOL, $docString, PHP_EOL));
     }
 
     private function decorateParentPropertyProperty(Property $property): void

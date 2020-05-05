@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
  *
- * @see \Rector\Doctrine\Rector\Property\RemoveTemporaryUuidColumnPropertyRector
+ * @see \Rector\Doctrine\Tests\Rector\Property\RemoveTemporaryUuidColumnPropertyRector\RemoveTemporaryUuidColumnPropertyRectorTest
  */
 final class RemoveTemporaryUuidColumnPropertyRector extends AbstractRector
 {

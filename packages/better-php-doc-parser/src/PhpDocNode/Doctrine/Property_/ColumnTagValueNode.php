@@ -34,8 +34,13 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements P
 
     public function toAttributeString(): string
     {
-        $items = $this->filterOutMissingItems($this->items);
-        $items = $this->completeItemsQuotes($items);
+        $items = $this->createAttributeItems();
+        return $this->printItemsToAttributeString($items);
+    }
+
+    private function createAttributeItems(): array
+    {
+        $items = $this->items;
 
         foreach ($items as $key => $value) {
             if ($key !== 'unique') {
@@ -49,8 +54,6 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements P
             $items[$key] = 'ORM\Column::UNIQUE';
         }
 
-        $content = $this->printPhpAttributeItems($items);
-
-        return $this->printAttributeContent($content);
+        return $items;
     }
 }

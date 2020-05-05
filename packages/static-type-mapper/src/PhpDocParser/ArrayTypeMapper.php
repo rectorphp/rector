@@ -41,7 +41,6 @@ final class ArrayTypeMapper implements PhpDocTypeMapperInterface
     {
         $nestedType = $this->phpDocTypeMapper->mapToPHPStanType($typeNode->type, $node, $nameScope);
 
-        // @todo improve for key!
         return new ArrayType(new MixedType(), $nestedType);
     }
 }

@@ -56,8 +56,12 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function toAttributeString(): string
     {
-        $items = $this->filterOutMissingItems($this->items);
-        $items = $this->completeItemsQuotes($items);
+        return $this->printItemsToAttributeString($this->createAttributeItems());
+    }
+
+    private function createAttributeItems(): array
+    {
+        $items = $this->items;
 
         // specific for attributes
         foreach ($items as $key => $value) {
@@ -70,8 +74,6 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
             $items[$key] = 'ORM\JoinColumn::UNIQUE';
         }
 
-        $content = $this->printPhpAttributeItems($items);
-
-        return $this->printAttributeContent($content);
+        return $items;
     }
 }

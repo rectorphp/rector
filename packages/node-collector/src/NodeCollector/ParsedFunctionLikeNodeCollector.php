@@ -6,12 +6,10 @@ namespace Rector\NodeCollector\NodeCollector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
@@ -19,6 +17,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\NodeCollector\NodeAnalyzer\ArrayCallableClassMethodReferenceAnalyzer;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -65,9 +64,17 @@ final class ParsedFunctionLikeNodeCollector
      */
     private $nodeTypeResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var ArrayCallableClassMethodReferenceAnalyzer
+     */
+    private $arrayCallableClassMethodReferenceAnalyzer;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        ArrayCallableClassMethodReferenceAnalyzer $arrayCallableClassMethodReferenceAnalyzer
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->arrayCallableClassMethodReferenceAnalyzer = $arrayCallableClassMethodReferenceAnalyzer;
     }
 
     /**
@@ -88,7 +95,7 @@ final class ParsedFunctionLikeNodeCollector
 
         // array callable - [$this, 'someCall']
         if ($node instanceof Array_) {
-            $arrayCallableClassAndMethod = $this->matchArrayCallableClassAndMethod($node);
+            $arrayCallableClassAndMethod = $this->arrayCallableClassMethodReferenceAnalyzer->match($node);
             if ($arrayCallableClassAndMethod === null) {
                 return;
             }
@@ -173,47 +180,6 @@ final class ParsedFunctionLikeNodeCollector
     }
 
     /**
-     * @todo decouple to NodeAnalyzer
-     * Matches array like: "[$this, 'methodName']" → ['ClassName', 'methodName']
-     * @return string[]|null
-     */
-    private function matchArrayCallableClassAndMethod(Array_ $array): ?array
-    {
-        if (count($array->items) !== 2) {
-            return null;
-        }
-
-        if ($array->items[0] === null) {
-            return null;
-        }
-
-        // $this, self, static, FQN
-        if (! $this->isThisVariable($array->items[0]->value)) {
-            return null;
-        }
-
-        if ($array->items[1] === null) {
-            return null;
-        }
-
-        if (! $array->items[1]->value instanceof String_) {
-            return null;
-        }
-
-        /** @var String_ $string */
-        $string = $array->items[1]->value;
-
-        $methodName = $string->value;
-        $className = $array->getAttribute(AttributeKey::CLASS_NAME);
-
-        if ($className === null) {
-            return null;
-        }
-
-        return [$className, $methodName];
-    }
-
-    /**
      * @param MethodCall|StaticCall $node
      */
     private function addCall(Node $node): void
@@ -236,36 +202,6 @@ final class ParsedFunctionLikeNodeCollector
         }
 
         $this->addCallByType($node, $classType, $methodName);
-    }
-
-    private function isThisVariable(Node $node): bool
-    {
-        // $this
-        if ($node instanceof Variable && $this->nodeNameResolver->isName($node, 'this')) {
-            return true;
-        }
-
-        if ($node instanceof ClassConstFetch) {
-            if (! $this->nodeNameResolver->isName($node->name, 'class')) {
-                return false;
-            }
-
-            // self::class, static::class
-            if ($this->nodeNameResolver->isNames($node->class, ['self', 'static'])) {
-                return true;
-            }
-
-            /** @var string|null $className */
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-
-            if ($className === null) {
-                return false;
-            }
-
-            return $this->nodeNameResolver->isName($node->class, $className);
-        }
-
-        return false;
     }
 
     private function resolveNodeClassTypes(Node $node): Type

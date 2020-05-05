@@ -11,9 +11,12 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\FileTypeMapper;
+use PHPUnit\Framework\TestCase;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 
@@ -75,10 +78,10 @@ final class SeeAnnotationToTestRule implements Rule
 
         $resolvedPhpDoc = $this->resolvePhpDoc($scope, $classReflection, $docComment);
 
+        /** @var PhpDocTagNode[] $seeTags */
         $seeTags = $resolvedPhpDoc->getPhpDocNode()->getTagsByName('@see');
 
-        // @todo validate to refer a TestCase class
-        if ($seeTags !== []) {
+        if ($this->containsSeeTestCase($seeTags)) {
             return [];
         }
 
@@ -138,5 +141,23 @@ final class SeeAnnotationToTestRule implements Rule
             null,
             $doc->getText()
         );
+    }
+
+    /**
+     * @param PhpDocTagNode[] $seeTags
+     */
+    private function containsSeeTestCase(array $seeTags): bool
+    {
+        foreach ($seeTags as $seeTag) {
+            if (! $seeTag->value instanceof GenericTagValueNode) {
+                continue;
+            }
+
+            if (is_a($seeTag->value->value, TestCase::class, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -80,7 +80,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
         return $this->resolveFromFunctionDocBlock($node);
     }
 
-    private function resolveFromType(Node $node)
+    private function resolveFromType(Node $node): Type
     {
         if ($node->type !== null && ! $node->type instanceof Identifier) {
             $resolveTypeName = $this->nodeNameResolver->getName($node->type);

@@ -282,14 +282,12 @@ PHP
         }
 
         $methodReflection = new ReflectionMethod($className, $methodName);
-        if ($methodReflection->getReturnType() !== null) {
-            $staticCallReturnType = (string) $methodReflection->getReturnType();
-            if (is_a($staticCallReturnType, IRouter::class, true)) {
-                return true;
-            }
+        if ($methodReflection->getReturnType() === null) {
+            return false;
         }
 
-        return false;
+        $staticCallReturnType = (string) $methodReflection->getReturnType();
+        return is_a($staticCallReturnType, IRouter::class, true);
     }
 
     private function shouldSkipClassStmt(Node $node): bool

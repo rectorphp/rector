@@ -16,7 +16,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class UseNodesToAddCollector implements NodeCollectorInterface
 {
     /**
-     * @todo use value object
      * @var FullyQualifiedObjectType[][]|AliasedObjectType[][]
      */
     private $useImportTypesInFilePath = [];
@@ -28,7 +27,6 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     private $removedShortUsesInFilePath = [];
 
     /**
-     * @todo use value object
      * @var FullyQualifiedObjectType[][]
      */
     private $functionUseImportTypesInFilePath = [];

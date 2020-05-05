@@ -24,7 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class StringServiceName extends KernelTestCase
 {
     /**
-     * @var some_value
+     * @var \some_value
      */
     private $someValue;
     protected function setUp()

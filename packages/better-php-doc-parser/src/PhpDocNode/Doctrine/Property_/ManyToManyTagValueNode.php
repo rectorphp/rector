@@ -72,11 +72,7 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function toAttributeString(): string
     {
-        $items = $this->createAttributeItems();
-        $items = $this->filterOutMissingItems($items);
-
-        $content = $this->printPhpAttributeItems($items);
-        return $this->printAttributeContent($content);
+        return $this->printItemsToAttributeString($this->createAttributeItems());
     }
 
     private function createAttributeItems(): array
