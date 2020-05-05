@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
+ * @see \Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
  */
 final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {
