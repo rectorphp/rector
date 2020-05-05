@@ -152,21 +152,6 @@ final class ClassManipulator
         return $this->nodeNameResolver->haveName($class->implements, $desiredInterface);
     }
 
-    /**
-     * @todo simplify
-     * Waits on https://github.com/nikic/PHP-Parser/pull/646
-     */
-    public function hasPropertyName(Class_ $node, string $name): bool
-    {
-        foreach ($node->getProperties() as $property) {
-            if ($this->nodeNameResolver->haveName($property->props, $name)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function hasTrait(Class_ $class, string $desiredTrait): bool
     {
         foreach ($class->getTraitUses() as $traitUse) {
