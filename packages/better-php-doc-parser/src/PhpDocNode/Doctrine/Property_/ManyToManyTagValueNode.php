@@ -76,7 +76,7 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
         $items = $this->filterOutMissingItems($items);
 
         $content = $this->printPhpAttributeItems($items);
-        return $this->printAttributeContent($content);
+        return $this->printPhpAttributeContent($content);
     }
 
     private function createAttributeItems(): array

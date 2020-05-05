@@ -108,7 +108,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
 
         $content = $this->printPhpAttributeItems($items);
 
-        $joinTableAttributeContent = $this->printAttributeContent($content);
+        $joinTableAttributeContent = $this->printPhpAttributeContent($content);
 
         foreach ($this->joinColumns as $joinColumn) {
             $joinTableAttributeContent .= PHP_EOL . $joinColumn->toAttributeString();

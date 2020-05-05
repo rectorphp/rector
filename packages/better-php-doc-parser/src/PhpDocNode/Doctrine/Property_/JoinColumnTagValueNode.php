@@ -72,6 +72,6 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
 
         $content = $this->printPhpAttributeItems($items);
 
-        return $this->printAttributeContent($content);
+        return $this->printPhpAttributeContent($content);
     }
 }

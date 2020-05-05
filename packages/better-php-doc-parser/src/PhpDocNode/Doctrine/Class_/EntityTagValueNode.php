@@ -29,7 +29,7 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
 
         $content = $this->printPhpAttributeItems($items);
 
-        return $this->printAttributeContent($content);
+        return $this->printPhpAttributeContent($content);
     }
 
     private function createAttributeItems(): array

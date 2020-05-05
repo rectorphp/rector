@@ -51,6 +51,6 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements P
 
         $content = $this->printPhpAttributeItems($items);
 
-        return $this->printAttributeContent($content);
+        return $this->printPhpAttributeContent($content);
     }
 }

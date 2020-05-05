@@ -26,6 +26,6 @@ final class AssertRangeTagValueNode extends AbstractTagValueNode implements Type
 
         $content = $this->printPhpAttributeItemsAsArray($items);
 
-        return $this->printAttributeContent($content);
+        return $this->printPhpAttributeContent($content);
     }
 }

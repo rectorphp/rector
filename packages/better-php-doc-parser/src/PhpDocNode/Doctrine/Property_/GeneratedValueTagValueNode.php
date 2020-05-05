@@ -23,8 +23,10 @@ final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode impl
 
     public function toAttributeString(): string
     {
-        // @todo add strategy
-        return $this->printAttributeContent();
+        $items = $this->filterOutMissingItems($this->items);
+        $content = $this->printPhpAttributeItems($items);
+
+        return $this->printPhpAttributeContent($content);
     }
 
     public function getSilentKey(): string

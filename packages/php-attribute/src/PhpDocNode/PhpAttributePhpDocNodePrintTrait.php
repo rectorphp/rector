@@ -6,12 +6,6 @@ namespace Rector\PhpAttribute\PhpDocNode;
 
 trait PhpAttributePhpDocNodePrintTrait
 {
-    public function printAttributeContent(string $content = ''): string
-    {
-        $attributeStart = '<<' . ltrim($this->getShortName(), '@');
-        return $attributeStart . $content . '>>';
-    }
-
     /**
      * @param string[] $items
      */
@@ -24,10 +18,16 @@ trait PhpAttributePhpDocNodePrintTrait
         return '(' . implode(', ', $items) . ')';
     }
 
+    protected function printPhpAttributeContent(string $content = ''): string
+    {
+        $attributeStart = '<<' . ltrim($this->getShortName(), '@');
+        return $attributeStart . $content . '>>';
+    }
+
     /**
      * @param string[] $items
      */
-    public function printPhpAttributeItemsAsArray(array $items): string
+    protected function printPhpAttributeItemsAsArray(array $items): string
     {
         if ($items === []) {
             return '';

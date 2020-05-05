@@ -19,6 +19,6 @@ final class IdTagValueNode extends AbstractDoctrineTagValueNode implements PhpAt
 
     public function toAttributeString(): string
     {
-        return $this->printAttributeContent();
+        return $this->printPhpAttributeContent();
     }
 }
