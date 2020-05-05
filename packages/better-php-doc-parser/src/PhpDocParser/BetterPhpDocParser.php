@@ -20,6 +20,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\ParamPhpDocNodeFactory;
+use Rector\BetterPhpDocParser\PhpDocNodeFactory\PHPUnitDataProviderDocNodeFactory;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
 use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -88,6 +89,11 @@ final class BetterPhpDocParser extends PhpDocParser
     private $paramPhpDocNodeFactory;
 
     /**
+     * @var PHPUnitDataProviderDocNodeFactory
+     */
+    private $phpUnitDataProviderDocNodeFactory;
+
+    /**
      * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
      */
     public function __construct(
@@ -100,6 +106,7 @@ final class BetterPhpDocParser extends PhpDocParser
         Lexer $lexer,
         AnnotationContentResolver $annotationContentResolver,
         ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
+        PHPUnitDataProviderDocNodeFactory $phpUnitDataProviderDocNodeFactory,
         array $phpDocNodeFactories = []
     ) {
         parent::__construct($typeParser, $constExprParser);
@@ -113,6 +120,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->lexer = $lexer;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
+        $this->phpUnitDataProviderDocNodeFactory = $phpUnitDataProviderDocNodeFactory;
 
         foreach ($phpDocNodeFactories as $phpDocNodeFactory) {
             foreach ($phpDocNodeFactory->getClasses() as $class) {
@@ -194,6 +202,9 @@ final class BetterPhpDocParser extends PhpDocParser
             // to prevent circular reference of this service
             $this->paramPhpDocNodeFactory->setPhpDocParser($this);
             $tagValueNode = $this->paramPhpDocNodeFactory->createFromTokens($tokenIterator);
+        } elseif (strtolower($tag) === '@dataprovider') {
+            $this->phpUnitDataProviderDocNodeFactory->setPhpDocParser($this);
+            $tagValueNode = $this->phpUnitDataProviderDocNodeFactory->createFromTokens($tokenIterator);
         } else {
             // class-annotation
             $phpDocNodeFactory = $this->matchTagToPhpDocNodeFactory($tag);

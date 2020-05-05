@@ -37,7 +37,7 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
         TokenIterator $tokenIterator,
         string $annotationClass
     ): ?PhpDocTagValueNode {
-        /** @var OneToOne|OneToMany|ManyToMany|null $annotation */
+        /** @var OneToOne|OneToMany|ManyToMany|ManyToOne|null $annotation */
         $annotation = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
         if ($annotation === null) {
             return null;
