@@ -25,12 +25,7 @@ final class AssertEmailTagValueNode extends AbstractTagValueNode implements Type
 
     public function toAttributeString(): string
     {
-        $items = $this->filterOutMissingItems($this->items);
-        $items = $this->completeItemsQuotes($items);
-
-        $content = $this->printPhpAttributeItemsAsArray($items);
-
-        return $this->printPhpAttributeContent($content);
+        return $this->printItemsToAttributeAsArrayString($this->items);
     }
 
     public function getSilentKey(): string

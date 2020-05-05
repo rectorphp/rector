@@ -47,10 +47,6 @@ final class ArrayCallableClassMethodReferenceAnalyzer
             return null;
         }
 
-        if ($array->items[1] === null) {
-            return null;
-        }
-
         if (! $array->items[1]->value instanceof String_) {
             return null;
         }
