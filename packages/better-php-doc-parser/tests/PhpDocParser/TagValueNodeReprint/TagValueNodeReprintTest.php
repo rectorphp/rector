@@ -28,10 +28,6 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
      */
     public function test(string $filePath, string $tagValueNodeClass): void
     {
-        if (Strings::endsWith($filePath, 'QuotesInNestedArray.php')) {
-            $this->markTestSkipped('Quoting nested keys in annotations is in progress');
-        }
-
         $this->doTestPrintedPhpDocInfo($filePath, $tagValueNodeClass);
     }
 

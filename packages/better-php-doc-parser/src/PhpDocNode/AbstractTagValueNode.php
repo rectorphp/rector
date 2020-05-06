@@ -83,7 +83,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     public function __toString(): string
     {
         $items = $this->completeItemsQuotes($this->items);
+        $items = $this->filterOutMissingItems($items);
         $items = $this->makeKeysExplicit($items);
+
         return $this->printContentItems($items);
     }
 
@@ -119,6 +121,14 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             $json = Strings::replace($json, '#"#');
         }
 
+        // @todo, quote keys!
+        foreach (array_keys($item) as $key) {
+            $isKeyQuoted = (bool) Strings::match($this->originalContent, '#\"' . $key . '\"#');
+            if ($isKeyQuoted) {
+                $json = Strings::replace($json, '#' . $key . '#', '"' . $key . '"');
+            }
+        }
+
         return $keyPart . $json;
     }
 
@@ -146,8 +156,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
                 continue;
             }
 
+            $arrayItemAsString = $this->printArrayItem($value, $key);
             /** @var string $key */
-            $items[$key] = $this->printArrayItem($value, $key);
+            $items[$key] = $arrayItemAsString;
         }
 
         return sprintf(

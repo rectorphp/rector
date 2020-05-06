@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 final class QuotesInNestedArray
 {
     /**
-     * @ORM\Column(options={"unsigned":true, "default":0})
+     * @ORM\Column(options={"unsigned"=true, "default"=0})
      */
     private $loginCount;
 }
