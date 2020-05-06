@@ -34,6 +34,11 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
      */
     private $expectedNameResolver;
 
+    /**
+     * @var bool
+     */
+    private $hasChange = false;
+
     public function __construct(
         ConflictingNameResolver $conflictingNameResolver,
         ExpectedNameResolver $expectedNameResolver
@@ -96,6 +101,10 @@ PHP
         $this->refactorClassMethods($node);
         $this->refactorClassProperties($node);
 
+        if ($this->hasChange === false) {
+            return null;
+        }
+
         return $node;
     }
 
@@ -121,6 +130,8 @@ PHP
 
                 // 2. rename param in the rest of the method
                 $this->renameVariableInClassMethod($classMethod, $oldName, $expectedName);
+
+                $this->hasChange = true;
             }
         }
     }
@@ -148,6 +159,8 @@ PHP
             $onlyPropertyProperty = $property->props[0];
             $onlyPropertyProperty->name = new VarLikeIdentifier($expectedName);
             $this->renamePropertyFetchesInClass($classLike, $oldName, $expectedName);
+
+            $this->hasChange = true;
         }
     }
 
