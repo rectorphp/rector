@@ -141,7 +141,6 @@ PHP
     {
         $this->processGetPresenterGetSessionMethodCall($classMethod);
 
-        // rename method - @todo pick
         $classMethod->name = new Identifier('action');
 
         $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectTemplateFileNameVariablesAndNodesToRemove(

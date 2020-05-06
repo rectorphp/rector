@@ -403,9 +403,6 @@ final class DumpNodesCommand extends AbstractCommand
                     trim($this->betterStandardPrinter->print($node)),
                     true
                 ));
-
-                // @todo print also the node structure, how it was made! basically 1:1 how it was created here; so people have the idea what everything they can/need put in it
-                // @todo maybe show naked + full use + printed version :)
             }
         }
 

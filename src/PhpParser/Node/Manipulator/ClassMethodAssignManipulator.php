@@ -157,7 +157,6 @@ final class ClassMethodAssignManipulator
                 $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             }
 
-            // @todo improve, possibly extract to own services
             if (! $parentNode instanceof FuncCall) {
                 return null;
             }

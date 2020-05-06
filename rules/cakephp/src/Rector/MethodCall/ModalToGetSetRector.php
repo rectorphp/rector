@@ -80,7 +80,6 @@ PHP
             return null;
         }
 
-        // @todo important, maybe unique condition
         $newName = $this->resolveNewMethodNameByCondition($node, $typeAndMethodNames);
         $node->name = new Identifier($newName);
 

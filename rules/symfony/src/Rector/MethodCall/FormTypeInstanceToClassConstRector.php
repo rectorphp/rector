@@ -159,7 +159,6 @@ PHP
             $methodCall->args[$position + 1] = new Arg($this->createNull());
         }
 
-        // @todo extend current options - array analyzer
         if (! isset($methodCall->args[$optionsPosition])) {
             $optionsArrayNode = new Array_();
             foreach ($namesToArgs as $name => $arg) {
@@ -215,7 +214,6 @@ PHP
     private function addBuildFormMethod(Class_ $classNode, ClassMethod $classMethod): void
     {
         if ($classNode->getMethod('buildForm') !== null) {
-            // @todo
             return;
         }
 
@@ -233,7 +231,8 @@ PHP
         $buildFormClassMethodBuilder->makePublic();
         $buildFormClassMethodBuilder->addParam($formBuilderParam);
         $buildFormClassMethodBuilder->addParam($optionsParam);
-        // raw copy stmts from ctor @todo improve
+
+        // raw copy stmts from ctor
         $buildFormClassMethodBuilder->addStmts(
             $this->replaceParameterAssignWithOptionAssign((array) $classMethod->stmts, $optionsParam)
         );
@@ -249,7 +248,6 @@ PHP
     private function addConfigureOptionsMethod(Class_ $classNode, array $namesToArgs): void
     {
         if ($classNode->getMethod('configureOptions') !== null) {
-            // @todo
             return;
         }
 

@@ -96,7 +96,6 @@ final class RouteInfoFactory
         $targetNode = $node->args[1]->value;
         if ($targetNode instanceof ClassConstFetch) {
             return $this->createForClassConstFetch($node, $methods, $routePath);
-            // @todo method specific route
         }
 
         if ($targetNode instanceof String_) {

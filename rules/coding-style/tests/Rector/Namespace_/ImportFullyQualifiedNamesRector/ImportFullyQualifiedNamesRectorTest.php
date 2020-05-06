@@ -35,12 +35,6 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureFunction');
     }
 
-    public function skippedProviderPartials(): Iterator
-    {
-        // @todo fix later
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePartial');
-    }
-
     protected function getRectorClass(): string
     {
         // the must be some Rector class to run

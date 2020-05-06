@@ -276,7 +276,6 @@ PHP
             return false;
         }
 
-        // @todo decouple - resolve method return type
         if (! method_exists($className, $methodName)) {
             return false;
         }

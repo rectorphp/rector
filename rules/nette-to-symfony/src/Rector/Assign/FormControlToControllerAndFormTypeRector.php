@@ -143,7 +143,6 @@ PHP
 
             $this->dumpFormController($node, $formTypeClass);
 
-            // @todo dump to new file? or the symfony controller?
             return $formTypeClass;
         }
 
@@ -257,7 +256,6 @@ PHP
 
     private function createActionWithFormProcess(string $formTypeClass): ClassMethod
     {
-        // @todo make dynamic
         $classMethod = $this->nodeFactory->createPublicMethod('actionSomeForm');
 
         $requestVariable = new Variable('request');

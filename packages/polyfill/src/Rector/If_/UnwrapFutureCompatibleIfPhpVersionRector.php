@@ -70,7 +70,6 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        // has some elseif, we need to check them too later @todo
         if ((bool) $node->elseifs) {
             return null;
         }
@@ -97,7 +96,6 @@ PHP
 
     private function refactorIsMatch(If_ $if): void
     {
-        // has some elseif, we need to check them too @todo
         if ((bool) $if->elseifs) {
             return;
         }

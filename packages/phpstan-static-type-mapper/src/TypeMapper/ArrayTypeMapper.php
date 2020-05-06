@@ -82,9 +82,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return $this->phpStanStaticTypeMapper->mapToDocString($itemType, $parentType) . '[]';
     }
 
-    /**
-     * @todo improve
-     */
     private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes(
         UnionTypeNode $unionTypeNode
     ): AttributeAwareUnionTypeNode {

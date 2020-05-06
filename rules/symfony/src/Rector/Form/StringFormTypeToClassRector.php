@@ -29,9 +29,6 @@ final class StringFormTypeToClassRector extends AbstractRector
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
 
-    /**
-     * @todo add custom form types
-     */
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(

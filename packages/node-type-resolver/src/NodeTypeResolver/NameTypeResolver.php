@@ -61,7 +61,6 @@ final class NameTypeResolver implements NodeTypeResolverInterface
 
         $type = new ObjectType($parentClassName);
 
-        // @todo abstract
         $parentParentClass = get_parent_class($parentClassName);
         if ($parentParentClass) {
             $type = new UnionType([$type, new ObjectType($parentParentClass)]);

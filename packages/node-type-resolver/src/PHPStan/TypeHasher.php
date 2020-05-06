@@ -33,7 +33,6 @@ final class TypeHasher
         }
 
         if ($type instanceof ArrayType) {
-            // @todo sort to make different order identical
             return $this->createTypeHash($type->getItemType()) . '[]';
         }
 

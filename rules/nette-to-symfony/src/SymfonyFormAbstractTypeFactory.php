@@ -84,7 +84,6 @@ final class SymfonyFormAbstractTypeFactory
                 $methodCall = new MethodCall($formBuilderVariable, 'add', $args);
                 $buildFormMethodCalls[] = new Expression($methodCall);
             }
-            // @todo
         }
 
         return $buildFormMethodCalls;

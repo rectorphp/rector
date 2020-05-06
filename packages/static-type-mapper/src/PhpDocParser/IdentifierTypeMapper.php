@@ -79,7 +79,6 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
             return new IterableType(new MixedType(), new MixedType());
         }
 
-        // @todo improve - making many false positives now
         $objectType = new ObjectType($typeNode->name);
 
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $objectType);

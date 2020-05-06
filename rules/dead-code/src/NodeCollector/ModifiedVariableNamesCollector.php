@@ -74,9 +74,6 @@ final class ModifiedVariableNamesCollector
         return $node->var instanceof Variable;
     }
 
-    /**
-     * @todo decouple to changed variable service
-     */
     private function isVariableChangedInReference(Node $node): bool
     {
         if (! $node instanceof Arg) {

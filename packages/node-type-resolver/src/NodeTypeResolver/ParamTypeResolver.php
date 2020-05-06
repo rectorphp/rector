@@ -11,7 +11,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -19,6 +18,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver\ParamTypeResolverTest
@@ -40,6 +40,11 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
     public function __construct(NodeNameResolver $nodeNameResolver, CallableNodeTraverser $callableNodeTraverser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -49,9 +54,12 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     /**
      * @required
      */
-    public function autowirePropertyTypeResolver(NodeTypeResolver $nodeTypeResolver): void
-    {
+    public function autowirePropertyTypeResolver(
+        NodeTypeResolver $nodeTypeResolver,
+        StaticTypeMapper $staticTypeMapper
+    ): void {
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**
@@ -83,11 +91,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     private function resolveFromType(Node $node): Type
     {
         if ($node->type !== null && ! $node->type instanceof Identifier) {
-            $resolveTypeName = $this->nodeNameResolver->getName($node->type);
-            if ($resolveTypeName) {
-                // @todo map the other way every type :)
-                return new ObjectType($resolveTypeName);
-            }
+            return $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->type);
         }
 
         return new MixedType();

@@ -96,7 +96,6 @@ PHP
 
             if (count($parameterData) > 1) {
                 // is union or nullable type?
-                // @todo
                 continue;
             }
 

@@ -10,7 +10,6 @@ use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 final class NodesToReplaceCollector implements NodeCollectorInterface
 {
     /**
-     * @todo use value object
      * @var Node[][]
      */
     private $nodesToReplace = [];
