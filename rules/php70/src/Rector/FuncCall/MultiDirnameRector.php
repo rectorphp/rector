@@ -19,6 +19,11 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 final class MultiDirnameRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const DIRNAME = 'dirname';
+
+    /**
      * @var int
      */
     private $nestingLevel = 0;
@@ -50,7 +55,7 @@ final class MultiDirnameRector extends AbstractRector
 
         $this->nestingLevel = 0;
 
-        if (! $this->isName($node, 'dirname')) {
+        if (! $this->isName($node, self::DIRNAME)) {
             return null;
         }
 
@@ -74,7 +79,7 @@ final class MultiDirnameRector extends AbstractRector
 
     private function matchNestedDirnameFuncCall(FuncCall $funcCall): ?FuncCall
     {
-        if (! $this->isName($funcCall, 'dirname')) {
+        if (! $this->isName($funcCall, self::DIRNAME)) {
             return null;
         }
 
@@ -101,7 +106,7 @@ final class MultiDirnameRector extends AbstractRector
             return null;
         }
 
-        if ($this->isName($nestedFuncCallNode, 'dirname')) {
+        if ($this->isName($nestedFuncCallNode, self::DIRNAME)) {
             return $nestedFuncCallNode;
         }
 

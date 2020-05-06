@@ -112,6 +112,31 @@ use Symplify\PackageBuilder\Console\ShellCode;
 final class DumpNodesCommand extends AbstractCommand
 {
     /**
+     * @var string
+     */
+    private const VARIABLE = 'variable';
+
+    /**
+     * @var string
+     */
+    private const VALUE = 'value';
+
+    /**
+     * @var string
+     */
+    private const SOME_VARIABLE = 'someVariable';
+
+    /**
+     * @var string
+     */
+    private const STRING = 'string';
+
+    /**
+     * @var string
+     */
+    private const SOME_CLASS = 'SomeClass';
+
+    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -189,14 +214,14 @@ final class DumpNodesCommand extends AbstractCommand
                     true
                 ));
             } elseif (is_a($nodeClass, AssignOp::class, true)) {
-                $node = new $nodeClass(new Variable('variable'), new String_('value'));
+                $node = new $nodeClass(new Variable(self::VARIABLE), new String_(self::VALUE));
                 $this->nodeInfoResult->addNodeInfo(AssignOp::class, new NodeInfo(
                     $nodeClass,
                     $this->betterStandardPrinter->print($node),
                     true
                 ));
             } elseif (is_a($nodeClass, Cast::class, true)) {
-                $node = new $nodeClass(new Variable('value'));
+                $node = new $nodeClass(new Variable(self::VALUE));
                 $this->nodeInfoResult->addNodeInfo(Cast::class, new NodeInfo(
                     $nodeClass,
                     $this->betterStandardPrinter->print($node),
@@ -215,7 +240,7 @@ final class DumpNodesCommand extends AbstractCommand
                 }
 
                 $useUseNode = new UseUse(new Name('UsedNamespace'));
-                $someVariableNode = new Variable('someVariable');
+                $someVariableNode = new Variable(self::SOME_VARIABLE);
 
                 if ($nodeClass === NullableType::class) {
                     $node = new NullableType('SomeType');
@@ -226,7 +251,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === DNumber::class) {
                     $node = new DNumber(10.5);
                 } elseif ($nodeClass === String_::class) {
-                    $node = new String_('string');
+                    $node = new String_(self::STRING);
                 } elseif ($nodeClass === Encapsed::class) {
                     $node = new Encapsed([new Variable('enscapsed')]);
                 } elseif ($nodeClass === LNumber::class) {
@@ -236,21 +261,21 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === DeclareDeclare::class) {
                     $node = new DeclareDeclare('strict_types', new LNumber(1));
                 } elseif ($nodeClass === Do_::class) {
-                    $node = new Do_(new Variable('variable'));
+                    $node = new Do_(new Variable(self::VARIABLE));
                 } elseif ($nodeClass === Static_::class) {
                     $node = new Static_([new StaticVar(new Variable('static'))]);
                 } elseif ($nodeClass === TraitUse::class) {
                     $node = new TraitUse([new Name('trait')]);
                 } elseif ($nodeClass === Switch_::class) {
-                    $node = new Switch_(new Variable('variable'), [new Case_(new LNumber(1))]);
+                    $node = new Switch_(new Variable(self::VARIABLE), [new Case_(new LNumber(1))]);
                 } elseif ($nodeClass === Echo_::class) {
                     $node = new Echo_([new String_('hello')]);
                 } elseif ($nodeClass === StaticVar::class) {
-                    $node = new StaticVar(new Variable('variable'));
+                    $node = new StaticVar(new Variable(self::VARIABLE));
                 } elseif ($nodeClass === Property::class) {
                     $node = new Property(0, [new PropertyProperty('property')]);
                 } elseif ($nodeClass === Unset_::class) {
-                    $node = new Unset_([new Variable('variable')]);
+                    $node = new Unset_([new Variable(self::VARIABLE)]);
                 } elseif ($nodeClass === Label::class) {
                     $node = new Label('label');
                 } elseif ($nodeClass === If_::class) {
@@ -265,7 +290,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Use_::class) {
                     $node = new Use_([$useUseNode]);
                 } elseif ($nodeClass === Foreach_::class) {
-                    $node = new Foreach_(new Variable('variables'), new Variable('value'));
+                    $node = new Foreach_(new Variable('variables'), new Variable(self::VALUE));
                 } elseif ($nodeClass === Catch_::class) {
                     $node = new Catch_([new Name('CatchedType')], new Variable('catchedVariable'));
                 } elseif ($nodeClass === ConstStmt::class) {
@@ -281,7 +306,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === UseUse::class) {
                     $node = $useUseNode;
                 } elseif ($nodeClass === Expression::class) {
-                    $node = new Expression(new Variable('someVariable'));
+                    $node = new Expression(new Variable(self::SOME_VARIABLE));
                 } elseif ($nodeClass === PropertyProperty::class) {
                     $node = new PropertyProperty('someProperty');
                 } elseif ($nodeClass === Global_::class) {
@@ -306,37 +331,37 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Trait_::class) {
                     $node = new Trait_('TraitName');
                 } elseif ($nodeClass === While_::class) {
-                    $node = new While_(new Variable('variable'));
+                    $node = new While_(new Variable(self::VARIABLE));
                 } elseif ($nodeClass === Class_::class) {
                     $node = new Class_(new Identifier('ClassName'));
                 } elseif ($nodeClass === PostDec::class) {
-                    $node = new PostDec(new Variable('someVariable'));
+                    $node = new PostDec(new Variable(self::SOME_VARIABLE));
                 } elseif ($nodeClass === PreInc::class) {
-                    $node = new PreInc(new Variable('someVariable'));
+                    $node = new PreInc(new Variable(self::SOME_VARIABLE));
                 } elseif ($nodeClass === PostInc::class) {
-                    $node = new PostInc(new Variable('someVariable'));
+                    $node = new PostInc(new Variable(self::SOME_VARIABLE));
                 } elseif ($nodeClass === PreDec::class) {
-                    $node = new PreDec(new Variable('someVariable'));
+                    $node = new PreDec(new Variable(self::SOME_VARIABLE));
                 } elseif ($nodeClass === List_::class) {
-                    $node = new List_([new ArrayItem(new Variable('someVariable'))]);
+                    $node = new List_([new ArrayItem(new Variable(self::SOME_VARIABLE))]);
                 } elseif ($nodeClass === Instanceof_::class) {
-                    $node = new Instanceof_($someVariableNode, new Name('SomeClass'));
+                    $node = new Instanceof_($someVariableNode, new Name(self::SOME_CLASS));
                 } elseif ($nodeClass === FuncCall::class) {
                     $node = new FuncCall(new Name('functionCall'));
                 } elseif ($nodeClass === Empty_::class) {
                     $node = new Empty_($someVariableNode);
                 } elseif ($nodeClass === StaticCall::class) {
-                    $node = new StaticCall(new Name('SomeClass'), 'methodName');
+                    $node = new StaticCall(new Name(self::SOME_CLASS), 'methodName');
                 } elseif ($nodeClass === MethodCall::class) {
                     $node = new MethodCall(new Variable('someObject'), 'methodName');
                 } elseif ($nodeClass === ShellExec::class) {
-                    $node = new ShellExec([new EncapsedStringPart('encapsed'), new EncapsedStringPart('string')]);
+                    $node = new ShellExec([new EncapsedStringPart('encapsed'), new EncapsedStringPart(self::STRING)]);
                 } elseif ($nodeClass === New_::class) {
-                    $node = new New_(new Class_('SomeClass'));
+                    $node = new New_(new Class_(self::SOME_CLASS));
                 } elseif ($nodeClass === PropertyFetch::class) {
                     $node = new PropertyFetch($someVariableNode, 'propertyName');
                 } elseif ($nodeClass === Isset_::class) {
-                    $node = new Isset_([new Variable('variable')]);
+                    $node = new Isset_([new Variable(self::VARIABLE)]);
                 } elseif ($nodeClass === ArrayDimFetch::class) {
                     $node = new ArrayDimFetch($someVariableNode, new LNumber(0));
                 } elseif ($nodeClass === Print_::class) {
@@ -351,7 +376,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === UnaryMinus::class) {
                     $node = new UnaryMinus($someVariableNode);
                 } elseif ($nodeClass === StaticPropertyFetch::class) {
-                    $node = new StaticPropertyFetch(new Name('SomeClass'), new VarLikeIdentifier('someProperty'));
+                    $node = new StaticPropertyFetch(new Name(self::SOME_CLASS), new VarLikeIdentifier('someProperty'));
                 } elseif ($nodeClass === Variable::class) {
                     $node = $someVariableNode;
                 } elseif ($nodeClass === ClosureUse::class) {
@@ -381,13 +406,13 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === UnaryMinus::class) {
                     $node = new UnaryMinus($someVariableNode);
                 } elseif ($nodeClass === ClassConstFetch::class) {
-                    $node = new ClassConstFetch(new Name('SomeClass'), new Identifier('SOME_CONSTANT'));
+                    $node = new ClassConstFetch(new Name(self::SOME_CLASS), new Identifier('SOME_CONSTANT'));
                 } elseif ($nodeClass === Param::class) {
                     $node = new Param($someVariableNode);
                 } elseif ($nodeClass === Arg::class) {
                     $node = new Arg($someVariableNode);
                 } elseif ($nodeClass === UnionType::class) {
-                    $node = new UnionType([new Identifier('string'), new Identifier('null')]);
+                    $node = new UnionType([new Identifier(self::STRING), new Identifier('null')]);
                 } else {
                     throw new ShouldNotHappenException(sprintf(
                         'Implement a new printer for "%s" node in "%s"',

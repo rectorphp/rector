@@ -21,6 +21,11 @@ use Symplify\PackageBuilder\Strings\StringFormatConverter;
 final class PhpSpecRenaming
 {
     /**
+     * @var string
+     */
+    private const SPEC = 'Spec';
+
+    /**
      * @var StringFormatConverter
      */
     private $stringFormatConverter;
@@ -86,7 +91,7 @@ final class PhpSpecRenaming
         }
 
         // 2. change class name
-        $newClassName = StaticRectorStrings::removeSuffixes($class->name->toString(), ['Spec']);
+        $newClassName = StaticRectorStrings::removeSuffixes($class->name->toString(), [self::SPEC]);
         $newTestClassName = $newClassName . 'Test';
 
         $class->name = new Identifier($newTestClassName);
@@ -99,7 +104,7 @@ final class PhpSpecRenaming
             throw new ShouldNotHappenException();
         }
 
-        $bareClassName = StaticRectorStrings::removeSuffixes($class->name->toString(), ['Spec', 'Test']);
+        $bareClassName = StaticRectorStrings::removeSuffixes($class->name->toString(), [self::SPEC, 'Test']);
 
         return lcfirst($bareClassName);
     }
@@ -111,7 +116,7 @@ final class PhpSpecRenaming
 
         $newClassName = StaticRectorStrings::removePrefixes($className, ['spec\\']);
 
-        return StaticRectorStrings::removeSuffixes($newClassName, ['Spec']);
+        return StaticRectorStrings::removeSuffixes($newClassName, [self::SPEC]);
     }
 
     private function removeNamePrefixes(string $name): string

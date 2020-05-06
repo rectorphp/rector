@@ -1,4 +1,4 @@
-# All 493 Rectors Overview
+# All 494 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -9120,6 +9120,33 @@ Split if statement, when if condition always break execution flow
          }
 +
 +        return 10;
+     }
+ }
+```
+
+<br>
+
+### `RepeatedLiteralToClassConstantRector`
+
+- class: [`Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector`](/../master/rules/solid/src/Rector/Class_/RepeatedLiteralToClassConstantRector.php)
+- [test fixtures](/../master/rules/solid/tests/Rector/Class_/RepeatedLiteralToClassConstantRector/Fixture)
+
+Replace repeated strings with constant
+
+```diff
+ class SomeClass
+ {
++    /**
++     * @var string
++     */
++    private const REQUIRES = 'requires';
+     public function run($key, $items)
+     {
+-        if ($key === 'requires') {
+-            return $items['requires'];
++        if ($key === self::REQUIRES) {
++            return $items[self::REQUIRES];
+         }
      }
  }
 ```

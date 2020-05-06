@@ -21,6 +21,16 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class ArgumentDefaultValueReplacerRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const BEFORE = 'before';
+
+    /**
+     * @var string
+     */
+    private const AFTER = 'after';
+
+    /**
      * @var mixed[]
      */
     private $replacesByMethodAndTypes = [];
@@ -54,8 +64,8 @@ PHP
                             'someMethod' => [
                                 0 => [
                                     [
-                                        'before' => 'SomeClass::OLD_CONSTANT',
-                                        'after' => 'false',
+                                        self::BEFORE => 'SomeClass::OLD_CONSTANT',
+                                        self::AFTER => 'false',
                                     ],
                                 ],
                             ],
@@ -123,14 +133,14 @@ PHP
     {
         $argValue = $this->resolveArgumentValue($node->args[$position]);
         foreach ($oldToNewValues as $oldToNewValue) {
-            if (is_scalar($oldToNewValue['before']) && $argValue === $oldToNewValue['before']) {
-                $node->args[$position] = $this->normalizeValueToArgument($oldToNewValue['after']);
-            } elseif (is_array($oldToNewValue['before'])) {
+            if (is_scalar($oldToNewValue[self::BEFORE]) && $argValue === $oldToNewValue[self::BEFORE]) {
+                $node->args[$position] = $this->normalizeValueToArgument($oldToNewValue[self::AFTER]);
+            } elseif (is_array($oldToNewValue[self::BEFORE])) {
                 $newArgs = $this->processArrayReplacement(
                     $node->args,
                     $position,
-                    $oldToNewValue['before'],
-                    $oldToNewValue['after']
+                    $oldToNewValue[self::BEFORE],
+                    $oldToNewValue[self::AFTER]
                 );
 
                 if ($newArgs) {
@@ -161,7 +171,7 @@ PHP
         // class constants → turn string to composite
         if (is_string($value) && Strings::contains($value, '::')) {
             [$class, $constant] = explode('::', $value);
-            $classConstantFetchNode = $this->createClassConstant($class, $constant);
+            $classConstantFetchNode = $this->createClassConstFetch($class, $constant);
 
             return new Arg($classConstantFetchNode);
         }

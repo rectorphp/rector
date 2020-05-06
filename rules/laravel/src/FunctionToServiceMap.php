@@ -10,6 +10,36 @@ use Rector\Laravel\ValueObject\FunctionToMethodCall;
 final class FunctionToServiceMap
 {
     /**
+     * @var string
+     */
+    private const MAKE = 'make';
+
+    /**
+     * @var string
+     */
+    private const PUT = 'put';
+
+    /**
+     * @var string
+     */
+    private const ROUTER = 'router';
+
+    /**
+     * @var string
+     */
+    private const GET = 'get';
+
+    /**
+     * @var string
+     */
+    private const BACK = 'back';
+
+    /**
+     * @var string
+     */
+    private const URL_GENERATOR = 'urlGenerator';
+
+    /**
      * @var FunctionToMethodCall[]
      */
     private $functionToMethodCalls = [];
@@ -60,36 +90,36 @@ final class FunctionToServiceMap
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'cookie', 'Illuminate\Contracts\Cookie\Factory', 'cookieFactory', 'make'
+            'cookie', 'Illuminate\Contracts\Cookie\Factory', 'cookieFactory', self::MAKE
         );
 
         // router
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'put', 'Illuminate\Routing\Router', 'router', 'put'
+            self::PUT, 'Illuminate\Routing\Router', self::ROUTER, self::PUT
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'get', 'Illuminate\Routing\Router', 'router', 'get'
+            self::GET, 'Illuminate\Routing\Router', self::ROUTER, self::GET
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'post', 'Illuminate\Routing\Router', 'router', 'post'
+            'post', 'Illuminate\Routing\Router', self::ROUTER, 'post'
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'patch', 'Illuminate\Routing\Router', 'router', 'patch'
+            'patch', 'Illuminate\Routing\Router', self::ROUTER, 'patch'
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'delete', 'Illuminate\Routing\Router', 'router', 'delete'
+            'delete', 'Illuminate\Routing\Router', self::ROUTER, 'delete'
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'resource', 'Illuminate\Routing\Router', 'router', 'resource'
+            'resource', 'Illuminate\Routing\Router', self::ROUTER, 'resource'
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'response', 'Illuminate\Contracts\Routing\ResponseFactory', 'responseFactory', 'make'
+            'response', 'Illuminate\Contracts\Routing\ResponseFactory', 'responseFactory', self::MAKE
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
@@ -97,15 +127,15 @@ final class FunctionToServiceMap
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'
+            'view', 'Illuminate\Contracts\View\Factory', 'viewFactory', self::MAKE
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'bcrypt', 'Illuminate\Hashing\BcryptHasher', 'bcryptHasher', 'make'
+            'bcrypt', 'Illuminate\Hashing\BcryptHasher', 'bcryptHasher', self::MAKE
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'redirect', 'Illuminate\Routing\Redirector', 'redirector', 'back'
+            'redirect', 'Illuminate\Routing\Redirector', 'redirector', self::BACK
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
@@ -121,19 +151,19 @@ final class FunctionToServiceMap
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'route', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'route'
+            'route', 'Illuminate\Routing\UrlGenerator', self::URL_GENERATOR, 'route'
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'asset', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'asset'
+            'asset', 'Illuminate\Routing\UrlGenerator', self::URL_GENERATOR, 'asset'
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'url', 'Illuminate\Contracts\Routing\UrlGenerator', 'urlGenerator', 'to'
+            'url', 'Illuminate\Contracts\Routing\UrlGenerator', self::URL_GENERATOR, 'to'
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'action', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'action'
+            'action', 'Illuminate\Routing\UrlGenerator', self::URL_GENERATOR, 'action'
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
@@ -149,7 +179,7 @@ final class FunctionToServiceMap
         );
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
-            'back', 'Illuminate\Routing\Redirector', 'redirector', 'back', 'back'
+            self::BACK, 'Illuminate\Routing\Redirector', 'redirector', self::BACK, self::BACK
         );
     }
 
@@ -160,15 +190,15 @@ final class FunctionToServiceMap
             'Illuminate\Contracts\Config\Repository',
             'configRepository',
             'set',
-            'get'
+            self::GET
         );
 
         $this->arrayFunctionToMethodCalls[] = new ArrayFunctionToMethodCall(
             'session',
             'Illuminate\Session\SessionManager',
             'sessionManager',
-            'put',
-            'get'
+            self::PUT,
+            self::GET
         );
     }
 }

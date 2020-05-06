@@ -280,7 +280,7 @@ PHP
         if (isset(self::EVENT_NAMES_TO_CLASS_CONSTANTS[$eventName])) {
             [$class, $constant] = self::EVENT_NAMES_TO_CLASS_CONSTANTS[$eventName];
 
-            return $this->createClassConstant($class, $constant);
+            return $this->createClassConstFetch($class, $constant);
         }
 
         return new String_($eventName);

@@ -23,6 +23,11 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class ReplaceEnlightResponseWithSymfonyResponseRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const HEADERS = 'headers';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replace Enlight Response methods with Symfony Response methods', [
@@ -93,7 +98,7 @@ PHP
 
     private function modifySetHeader(MethodCall $methodCall): MethodCall
     {
-        $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
+        $methodCall->var = new PropertyFetch($methodCall->var, self::HEADERS);
         $methodCall->name = new Identifier('set');
 
         if (! $methodCall->args[0]->value instanceof String_) {
@@ -114,7 +119,7 @@ PHP
 
     private function modifyHeader(MethodCall $methodCall, string $newMethodName): MethodCall
     {
-        $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
+        $methodCall->var = new PropertyFetch($methodCall->var, self::HEADERS);
         $methodCall->name = new Identifier($newMethodName);
 
         return $methodCall;
@@ -122,7 +127,7 @@ PHP
 
     private function modifyRawHeader(MethodCall $methodCall, string $newMethodName): MethodCall
     {
-        $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
+        $methodCall->var = new PropertyFetch($methodCall->var, self::HEADERS);
         $methodCall->name = new Identifier($newMethodName);
 
         if ($methodCall->args[0]->value instanceof String_) {
@@ -145,7 +150,7 @@ PHP
 
     private function modifySetCookie(MethodCall $methodCall): MethodCall
     {
-        $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
+        $methodCall->var = new PropertyFetch($methodCall->var, self::HEADERS);
         $methodCall->name = new Identifier('setCookie');
 
         $new = new New_(new FullyQualified('Symfony\Component\HttpFoundation\Cookie'), $methodCall->args);

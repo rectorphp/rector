@@ -8,6 +8,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -26,8 +27,11 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\NotImplementedException;
@@ -67,7 +71,7 @@ final class NodeFactory
     /**
      * Creates "\SomeClass::CONSTANT"
      */
-    public function createClassConstant(string $className, string $constantName): ClassConstFetch
+    public function createClassConstFetch(string $className, string $constantName): ClassConstFetch
     {
         $classNameNode = in_array($className, ['static', 'parent', 'self'], true) ? new Name(
             $className
@@ -82,11 +86,9 @@ final class NodeFactory
     /**
      * Creates "\SomeClass::class"
      */
-    public function createClassConstantReference(string $className): ClassConstFetch
+    public function createClassConstReference(string $className): ClassConstFetch
     {
-        $nameNode = new FullyQualified($className);
-
-        return $this->builderFactory->classConstFetch($nameNode, 'class');
+        return $this->createClassConstFetch($className, 'class');
     }
 
     /**
@@ -275,6 +277,22 @@ final class NodeFactory
         $this->phpDocInfoFactory->createFromNode($property);
 
         return $property;
+    }
+
+    public function createPrivateClassConst(string $name, $value): ClassConst
+    {
+        $const = new Const_($name, $value);
+        $classConst = new ClassConst([$const]);
+        $classConst->flags |= Class_::MODIFIER_PRIVATE;
+
+        // add @var type by default
+        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($value);
+        if (! $staticType instanceof MixedType) {
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
+            $phpDocInfo->changeVarType($staticType);
+        }
+
+        return $classConst;
     }
 
     /**

@@ -12,6 +12,11 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class SerializerTypeTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface, SilentKeyNodeInterface
 {
+    /**
+     * @var string
+     */
+    private const NAME = 'name';
+
     public function getShortName(): string
     {
         return '@Serializer\Type';
@@ -19,20 +24,20 @@ final class SerializerTypeTagValueNode extends AbstractTagValueNode implements T
 
     public function changeName(string $newName): void
     {
-        $this->items['name'] = $newName;
+        $this->items[self::NAME] = $newName;
     }
 
     public function getName(): string
     {
-        return $this->items['name'];
+        return $this->items[self::NAME];
     }
 
     public function replaceName(string $oldName, string $newName): bool
     {
         $oldNamePattern = '#\b' . preg_quote($oldName, '#') . '\b#';
 
-        $newNameValue = Strings::replace($this->items['name'], $oldNamePattern, $newName);
-        if ($newNameValue !== $this->items['name']) {
+        $newNameValue = Strings::replace($this->items[self::NAME], $oldNamePattern, $newName);
+        if ($newNameValue !== $this->items[self::NAME]) {
             $this->changeName($newNameValue);
             return true;
         }
@@ -42,6 +47,6 @@ final class SerializerTypeTagValueNode extends AbstractTagValueNode implements T
 
     public function getSilentKey(): string
     {
-        return 'name';
+        return self::NAME;
     }
 }

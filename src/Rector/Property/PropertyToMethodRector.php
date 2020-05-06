@@ -19,6 +19,11 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class PropertyToMethodRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const GET = 'get';
+
+    /**
      * @var string[][][]
      */
     private $perClassPropertyToMethods = [];
@@ -49,7 +54,7 @@ PHP
                     '$perClassPropertyToMethods' => [
                         'SomeObject' => [
                             'property' => [
-                                'get' => 'getProperty',
+                                self::GET => 'getProperty',
                                 'set' => 'setProperty',
                             ],
                         ],
@@ -69,7 +74,7 @@ PHP
                     '$perClassPropertyToMethods' => [
                         'SomeObject' => [
                             'property' => [
-                                'get' => [
+                                self::GET => [
                                     'method' => 'getConfig',
                                     'arguments' => ['someArg'],
                                 ],
@@ -134,20 +139,20 @@ PHP
         }
 
         // simple method name
-        if (is_string($newMethodMatch['get'])) {
-            $assign->expr = $this->createMethodCall($propertyFetchNode->var, $newMethodMatch['get']);
+        if (is_string($newMethodMatch[self::GET])) {
+            $assign->expr = $this->createMethodCall($propertyFetchNode->var, $newMethodMatch[self::GET]);
 
             return $assign;
 
             // method with argument
         }
 
-        if (is_array($newMethodMatch['get'])) {
-            $args = $this->createArgs($newMethodMatch['get']['arguments']);
+        if (is_array($newMethodMatch[self::GET])) {
+            $args = $this->createArgs($newMethodMatch[self::GET]['arguments']);
 
             $assign->expr = $this->createMethodCall(
                 $propertyFetchNode->var,
-                $newMethodMatch['get']['method'],
+                $newMethodMatch[self::GET]['method'],
                 $args
             );
 

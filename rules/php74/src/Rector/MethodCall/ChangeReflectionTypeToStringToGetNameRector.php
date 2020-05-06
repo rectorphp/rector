@@ -28,6 +28,11 @@ use ReflectionParameter;
 final class ChangeReflectionTypeToStringToGetNameRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const GET_NAME = 'getName';
+
+    /**
      * Possibly extract node decorator with scope breakers (Function_, If_) to respect node flow
      * @var string[][]
      */
@@ -98,7 +103,7 @@ PHP
             }
 
             if ($node->expr instanceof Variable && $this->isObjectType($node->expr, 'ReflectionType')) {
-                return $this->createMethodCall($node->expr, 'getName');
+                return $this->createMethodCall($node->expr, self::GET_NAME);
             }
         }
 
@@ -136,7 +141,7 @@ PHP
 
         // we already know it has return type
         if (in_array('hasReturnType', $callsByVariable, true)) {
-            return $this->createMethodCall($methodCall, 'getName');
+            return $this->createMethodCall($methodCall, self::GET_NAME);
         }
 
         return null;
@@ -182,7 +187,7 @@ PHP
 
     private function refactorReflectionParameterGetName(MethodCall $methodCall): Ternary
     {
-        $getNameMethodCall = $this->createMethodCall($methodCall, 'getName');
+        $getNameMethodCall = $this->createMethodCall($methodCall, self::GET_NAME);
         $ternary = new Ternary($methodCall, $getNameMethodCall, $this->createNull());
 
         // to prevent looping
@@ -207,7 +212,7 @@ PHP
             return $refactoredMethodCall;
         }
 
-        $getNameMethodCall = $this->createMethodCall($methodCall, 'getName');
+        $getNameMethodCall = $this->createMethodCall($methodCall, self::GET_NAME);
         $ternary = new Ternary($methodCall, $getNameMethodCall, $this->createNull());
 
         // to prevent looping

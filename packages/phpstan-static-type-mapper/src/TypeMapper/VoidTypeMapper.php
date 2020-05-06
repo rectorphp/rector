@@ -17,6 +17,11 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 final class VoidTypeMapper implements TypeMapperInterface
 {
     /**
+     * @var string
+     */
+    private const VOID = 'void';
+
+    /**
      * @var PhpVersionProvider
      */
     private $phpVersionProvider;
@@ -36,7 +41,7 @@ final class VoidTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
-        return new IdentifierTypeNode('void');
+        return new IdentifierTypeNode(self::VOID);
     }
 
     /**
@@ -52,7 +57,7 @@ final class VoidTypeMapper implements TypeMapperInterface
             return null;
         }
 
-        return new Identifier('void');
+        return new Identifier(self::VOID);
     }
 
     public function mapToDocString(Type $type, ?Type $parentType = null): string
@@ -63,6 +68,6 @@ final class VoidTypeMapper implements TypeMapperInterface
         }
 
         // fallback for PHP 7.0 and older, where void type was only in docs
-        return 'void';
+        return self::VOID;
     }
 }

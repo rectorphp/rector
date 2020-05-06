@@ -29,6 +29,11 @@ use ReflectionClass;
 final class AttributeAwareClassFactoryFactory
 {
     /**
+     * @var string
+     */
+    private const NODE = 'node';
+
+    /**
      * @var BuilderFactory
      */
     private $builderFactory;
@@ -77,7 +82,7 @@ final class AttributeAwareClassFactoryFactory
 
         $classMethods[] = $this->createGetOriginalNodeClass($nodeClass);
 
-        $nodeParam = $this->builderFactory->param('node');
+        $nodeParam = $this->builderFactory->param(self::NODE);
         $nodeParam->setType(new FullyQualified(Node::class));
 
         $classMethods[] = $this->createIsMatchClassMethod($nodeClass, $nodeParam);
@@ -145,7 +150,7 @@ final class AttributeAwareClassFactoryFactory
     private function createIsAFuncCall(string $nodeClass): FuncCall
     {
         return new FuncCall(new Name('is_a'), [
-            new Variable('node'),
+            new Variable(self::NODE),
             $this->createClassReference($nodeClass),
             new ConstFetch(new Name('true')),
         ]);
@@ -162,7 +167,7 @@ final class AttributeAwareClassFactoryFactory
             return;
         }
 
-        $phpDocParserNodeVariable = new Variable('node');
+        $phpDocParserNodeVariable = new Variable(self::NODE);
 
         foreach ($constructorReflectionMethod->getParameters() as $parameter) {
             $parameterName = $parameter->getName();

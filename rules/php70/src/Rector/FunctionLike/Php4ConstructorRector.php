@@ -23,6 +23,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class Php4ConstructorRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const __CONSTRUCT = '__construct';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -82,8 +87,8 @@ PHP
         }
 
         // does it already have a __construct method?
-        if ($classNode->getMethod('__construct') === null) {
-            $node->name = new Identifier('__construct');
+        if ($classNode->getMethod(self::__CONSTRUCT) === null) {
+            $node->name = new Identifier(self::__CONSTRUCT);
         }
 
         if ($node->stmts === null) {
@@ -150,7 +155,7 @@ PHP
             return false;
         }
 
-        return $this->isName($node->name, '__construct');
+        return $this->isName($node->name, self::__CONSTRUCT);
     }
 
     private function processParentPhp4ConstructCall(Node $node): void
@@ -184,6 +189,6 @@ PHP
             return;
         }
 
-        $node->name = new Identifier('__construct');
+        $node->name = new Identifier(self::__CONSTRUCT);
     }
 }

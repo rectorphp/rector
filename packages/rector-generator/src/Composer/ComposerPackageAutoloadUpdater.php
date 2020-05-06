@@ -13,6 +13,11 @@ use Symfony\Component\Process\Process;
 final class ComposerPackageAutoloadUpdater
 {
     /**
+     * @var string
+     */
+    private const PSR_4 = 'psr-4';
+
+    /**
      * @var JsonFileSystem
      */
     private $jsonFileSystem;
@@ -54,8 +59,8 @@ final class ComposerPackageAutoloadUpdater
             return;
         }
 
-        $composerJson['autoload']['psr-4'][$package->getSrcNamespace()] = $package->getSrcDirectory();
-        $composerJson['autoload-dev']['psr-4'][$package->getTestsNamespace()] = $package->getTestsDirectory();
+        $composerJson['autoload'][self::PSR_4][$package->getSrcNamespace()] = $package->getSrcDirectory();
+        $composerJson['autoload-dev'][self::PSR_4][$package->getTestsNamespace()] = $package->getTestsDirectory();
 
         $this->jsonFileSystem->saveJsonToFile($composerJsonFilePath, $composerJson);
 
@@ -83,7 +88,7 @@ final class ComposerPackageAutoloadUpdater
 
     private function isPackageAlreadyLoaded(array $composerJson, Package $package): bool
     {
-        return isset($composerJson['autoload']['psr-4'][$package->getSrcNamespace()]);
+        return isset($composerJson['autoload'][self::PSR_4][$package->getSrcNamespace()]);
     }
 
     private function rebuildAutoload(): void

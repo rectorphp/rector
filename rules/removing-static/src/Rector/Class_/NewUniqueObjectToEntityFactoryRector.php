@@ -27,6 +27,11 @@ use Rector\RemovingStatic\StaticTypesInClassResolver;
 final class NewUniqueObjectToEntityFactoryRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const FACTORY = 'Factory';
+
+    /**
      * @var ObjectType[]
      */
     private $matchedObjectTypes = [];
@@ -146,15 +151,15 @@ PHP
             $objectType = new FullyQualifiedObjectType($class);
             $this->matchedObjectTypes[] = $objectType;
 
-            $propertyName = $this->propertyNaming->fqnToVariableName($objectType) . 'Factory';
+            $propertyName = $this->propertyNaming->fqnToVariableName($objectType) . self::FACTORY;
             $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
             return new MethodCall($propertyFetch, 'create', $node->args);
         });
 
         foreach ($this->matchedObjectTypes as $matchedObjectType) {
-            $propertyName = $this->propertyNaming->fqnToVariableName($matchedObjectType) . 'Factory';
-            $propertyType = new FullyQualifiedObjectType($matchedObjectType->getClassName() . 'Factory');
+            $propertyName = $this->propertyNaming->fqnToVariableName($matchedObjectType) . self::FACTORY;
+            $propertyType = new FullyQualifiedObjectType($matchedObjectType->getClassName() . self::FACTORY);
 
             $this->addPropertyToClass($node, $propertyType, $propertyName);
         }

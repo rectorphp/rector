@@ -20,6 +20,21 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class ModalToGetSetRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const SET = 'set';
+
+    /**
+     * @var string
+     */
+    private const GET = 'get';
+
+    /**
+     * @var string
+     */
+    private const MINIMAL_ARGUMENT_COUNT = 'minimal_argument_count';
+
+    /**
      * @var mixed[]
      */
     private $methodNamesByTypes = [];
@@ -110,11 +125,11 @@ PHP
             $config = $methodNamesToGetAndSetNames[$currentMethodName];
 
             // default
-            $config['set'] = $config['set'] ?? 'set' . ucfirst($currentMethodName);
-            $config['get'] = $config['get'] ?? 'get' . ucfirst($currentMethodName);
+            $config[self::SET] = $config[self::SET] ?? self::SET . ucfirst($currentMethodName);
+            $config[self::GET] = $config[self::GET] ?? self::GET . ucfirst($currentMethodName);
 
             // default minimal argument count for setter
-            $config['minimal_argument_count'] = $config['minimal_argument_count'] ?? 1;
+            $config[self::MINIMAL_ARGUMENT_COUNT] = $config[self::MINIMAL_ARGUMENT_COUNT] ?? 1;
 
             return $config;
         }
@@ -127,26 +142,26 @@ PHP
      */
     private function resolveNewMethodNameByCondition(MethodCall $methodCall, array $config): string
     {
-        if (count($methodCall->args) >= $config['minimal_argument_count']) {
-            return $config['set'];
+        if (count($methodCall->args) >= $config[self::MINIMAL_ARGUMENT_COUNT]) {
+            return $config[self::SET];
         }
 
         if (! isset($methodCall->args[0])) {
-            return $config['get'];
+            return $config[self::GET];
         }
 
         // first argument type that is considered setter
         if (! isset($config['first_argument_type_to_set'])) {
-            return $config['get'];
+            return $config[self::GET];
         }
 
         $argumentType = $config['first_argument_type_to_set'];
         $argumentValue = $methodCall->args[0]->value;
 
         if ($argumentType === 'array' && $argumentValue instanceof Array_) {
-            return $config['set'];
+            return $config[self::SET];
         }
 
-        return $config['get'];
+        return $config[self::GET];
     }
 }

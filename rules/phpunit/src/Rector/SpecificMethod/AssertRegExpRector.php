@@ -21,6 +21,26 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class AssertRegExpRector extends AbstractPHPUnitRector
 {
+    /**
+     * @var string
+     */
+    private const ASSERT_SAME = 'assertSame';
+
+    /**
+     * @var string
+     */
+    private const ASSERT_EQUALS = 'assertEquals';
+
+    /**
+     * @var string
+     */
+    private const ASSERT_NOT_SAME = 'assertNotSame';
+
+    /**
+     * @var string
+     */
+    private const ASSERT_NOT_EQUALS = 'assertNotEquals';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -51,7 +71,10 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals'])) {
+        if (! $this->isPHPUnitMethodNames(
+            $node,
+            [self::ASSERT_SAME, self::ASSERT_EQUALS, self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS]
+        )) {
             return null;
         }
 
@@ -98,14 +121,14 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
      */
     private function renameMethod(Node $node, string $oldMethodName, int $oldCondition): void
     {
-        if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 1
-            || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 0
+        if (in_array($oldMethodName, [self::ASSERT_SAME, self::ASSERT_EQUALS], true) && $oldCondition === 1
+            || in_array($oldMethodName, [self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS], true) && $oldCondition === 0
         ) {
             $node->name = new Identifier('assertRegExp');
         }
 
-        if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 0
-            || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 1
+        if (in_array($oldMethodName, [self::ASSERT_SAME, self::ASSERT_EQUALS], true) && $oldCondition === 0
+            || in_array($oldMethodName, [self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS], true) && $oldCondition === 1
         ) {
             $node->name = new Identifier('assertNotRegExp');
         }

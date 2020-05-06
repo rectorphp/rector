@@ -37,6 +37,11 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const SET_UP = 'setUp';
+
+    /**
      * @var mixed[]
      */
     private $staticClassTypes = [];
@@ -208,7 +213,7 @@ PHP
             // container fetch assign
             $assign = $this->createContainerGetTypeToPropertyAssign($type);
 
-            $setupClassMethod = $class->getMethod('setUp');
+            $setupClassMethod = $class->getMethod(self::SET_UP);
 
             // get setup or create a setup add add it there
             if ($setupClassMethod !== null) {
@@ -285,7 +290,7 @@ PHP
 
     private function createParentSetUpStaticCall(): Expression
     {
-        $parentSetupStaticCall = $this->createStaticCall('parent', 'setUp');
+        $parentSetupStaticCall = $this->createStaticCall('parent', self::SET_UP);
         return new Expression($parentSetupStaticCall);
     }
 
@@ -317,7 +322,7 @@ PHP
 
     private function createSetUpMethod(Expression $parentSetupStaticCall, Expression $assign): ClassMethod
     {
-        $classMethodBuilder = $this->builderFactory->method('setUp');
+        $classMethodBuilder = $this->builderFactory->method(self::SET_UP);
         $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmt($parentSetupStaticCall);
         $classMethodBuilder->addStmt($assign);
@@ -357,7 +362,7 @@ PHP
                 $methodStmt = $methodStmt->expr;
             }
 
-            if (! $this->isStaticCallNamed($methodStmt, 'parent', 'setUp')) {
+            if (! $this->isStaticCallNamed($methodStmt, 'parent', self::SET_UP)) {
                 continue;
             }
 

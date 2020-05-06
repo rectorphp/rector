@@ -19,6 +19,11 @@ use Rector\Doctrine\Uuid\JoinTableNameResolver;
 final class PhpDocTagNodeFactory
 {
     /**
+     * @var string
+     */
+    private const UUID = 'uuid';
+
+    /**
      * @var JoinTableNameResolver
      */
     private $joinTableNameResolver;
@@ -63,8 +68,8 @@ final class PhpDocTagNodeFactory
         $joinTableTagValueNode = new JoinTableTagValueNode(
             $uuidJoinTable,
             null,
-            [new JoinColumnTagValueNode(['referencedColumnName' => 'uuid'])],
-            [new JoinColumnTagValueNode(['referencedColumnName' => 'uuid'])]
+            [new JoinColumnTagValueNode(['referencedColumnName' => self::UUID])],
+            [new JoinColumnTagValueNode(['referencedColumnName' => self::UUID])]
         );
 
         return new SpacelessPhpDocTagNode($joinTableTagValueNode->getShortName(), $joinTableTagValueNode);
@@ -73,7 +78,7 @@ final class PhpDocTagNodeFactory
     public function createJoinColumnTagNode(bool $isNullable): JoinColumnTagValueNode
     {
         return new JoinColumnTagValueNode([
-            'referencedColumn' => 'uuid',
+            'referencedColumn' => self::UUID,
             'nullable' => $isNullable,
         ]);
     }

@@ -11,6 +11,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class TestClassResolver
 {
     /**
+     * @var string
+     */
+    private const TEST = 'Test';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -31,12 +36,12 @@ final class TestClassResolver
     public function resolveFromClassName(string $className): ?string
     {
         // fallback for unit tests that only have extra "Test" suffix
-        if (class_exists($className . 'Test')) {
-            return $className . 'Test';
+        if (class_exists($className . self::TEST)) {
+            return $className . self::TEST;
         }
 
         $shortClassName = Strings::after($className, '\\', -1);
-        $testShortClassName = $shortClassName . 'Test';
+        $testShortClassName = $shortClassName . self::TEST;
 
         $phpUnitTestCaseClasses = $this->phpUnitTestCaseClassesProvider->provide();
         foreach ($phpUnitTestCaseClasses as $declaredClass) {

@@ -59,6 +59,6 @@ final class ConstraintUrlOptionRector extends AbstractRector
             return null;
         }
 
-        return $this->createClassConstant(self::URL_CONSTRAINT_CLASS, 'CHECK_DNS_TYPE_ANY');
+        return $this->createClassConstFetch(self::URL_CONSTRAINT_CLASS, 'CHECK_DNS_TYPE_ANY');
     }
 }
