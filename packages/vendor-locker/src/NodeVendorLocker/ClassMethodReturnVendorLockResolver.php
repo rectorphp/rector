@@ -55,12 +55,8 @@ final class ClassMethodReturnVendorLockResolver extends AbstractNodeVendorLockRe
             // if not, look for it's parent parent
         }
 
-        if (method_exists($parentClassName, $methodName)) {
-            // validate type is conflicting
-            // parent class method in external scope → it's not ok
-            return true;
-        }
-
-        return false;
+        // validate type is conflicting
+        // parent class method in external scope → it's not ok
+        return method_exists($parentClassName, $methodName);
     }
 }
