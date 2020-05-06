@@ -61,7 +61,6 @@ final class ComposerJsonManipulator
     public function restoreComposerJson(string $composerJsonFile): void
     {
         $this->filesystem->dumpFile($composerJsonFile, $this->originalComposerJsonFileContent);
-        // re-run @todo composer update on root
     }
 
     private function removeDevKeys(array $json): array

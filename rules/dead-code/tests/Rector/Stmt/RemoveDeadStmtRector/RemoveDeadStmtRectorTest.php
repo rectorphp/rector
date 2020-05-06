@@ -28,7 +28,6 @@ final class RemoveDeadStmtRectorTest extends AbstractRectorTestCase
      */
     public function testKeepComments(string $file): void
     {
-        $this->markTestSkipped('Temporary skip removed docs');
         $this->doTestFile($file);
     }
 

@@ -26,10 +26,8 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        // @todo extract to some "inherited parent method" service
         /** @var string|null $parentClassName */
         $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-
         if ($parentClassName !== null) {
             $vendorLock = $this->isParentClassVendorLocking($paramPosition, $parentClassName, $methodName);
             if ($vendorLock !== null) {
@@ -50,7 +48,6 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
         $parentClassNode = $this->parsedNodeCollector->findClass($parentClassName);
         if ($parentClassNode !== null) {
             $parentMethodNode = $parentClassNode->getMethod($methodName);
-            // @todo validate type is conflicting
             // parent class method in local scope → it's ok
             if ($parentMethodNode !== null) {
                 // parent method has no type → we cannot change it here
@@ -58,14 +55,11 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
             }
         }
 
-        // if not, look for it's parent parent - @todo recursion
-
+        // if not, look for it's parent parent
         if (method_exists($parentClassName, $methodName)) {
-            // @todo validate type is conflicting
             // parent class method in external scope → it's not ok
+            // if not, look for it's parent parent
             return true;
-
-            // if not, look for it's parent parent - @todo recursion
         }
 
         return null;

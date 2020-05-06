@@ -2,7 +2,6 @@
 
 namespace Rector\Core\Tests\Issues\Issue3291\Fixture;
 
-
 class Fixture3291KeepPrivateProperty
 {
     private $unusedProperty = [];
@@ -15,11 +14,10 @@ class Fixture3291KeepPrivateProperty
 }
 
 ?>
-    -----
+-----
 <?php
 
 namespace Rector\Core\Tests\Issues\Issue3291\Fixture;
-
 
 class Fixture3291KeepPrivateProperty
 {

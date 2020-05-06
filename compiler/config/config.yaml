@@ -14,3 +14,5 @@ services:
             - '../src/HttpKernel/*'
 
     Symfony\Component\Filesystem\Filesystem: null
+
+    OndraM\CiDetector\CiDetector: null

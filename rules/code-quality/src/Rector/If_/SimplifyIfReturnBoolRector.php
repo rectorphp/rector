@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\Comment\MergedNodeCommentPreserver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -34,9 +35,17 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
      */
     private $staticTypeAnalyzer;
 
-    public function __construct(StaticTypeAnalyzer $staticTypeAnalyzer)
-    {
+    /**
+     * @var MergedNodeCommentPreserver
+     */
+    private $mergedNodeCommentPreserver;
+
+    public function __construct(
+        StaticTypeAnalyzer $staticTypeAnalyzer,
+        MergedNodeCommentPreserver $mergedNodeCommentPreserver
+    ) {
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
+        $this->mergedNodeCommentPreserver = $mergedNodeCommentPreserver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -94,7 +103,7 @@ PHP
             return null;
         }
 
-        $this->keepComments($node, $nextNode, $newReturnNode);
+        $this->mergedNodeCommentPreserver->keepComments($newReturnNode, $node, $ifInnerNode, $nextNode, $newReturnNode);
         $this->removeNode($nextNode);
 
         return $newReturnNode;
@@ -161,18 +170,6 @@ PHP
         }
 
         return new Return_($this->boolCastOrNullCompareIfNeeded(new BooleanNot($ifNode->cond)));
-    }
-
-    private function keepComments(Node $oldNode, Node $nextNode, Node $newNode): void
-    {
-        /** @var Node $node */
-        foreach ([$oldNode, $nextNode] as $node) {
-            $newNode->setAttribute('comments', array_merge($newNode->getComments(), $node->getComments()));
-        }
-
-        if ($nextNode->getDocComment() !== null) {
-            $newNode->setDocComment($nextNode->getDocComment());
-        }
     }
 
     private function isIfWithSingleReturnExpr(If_ $if): bool
