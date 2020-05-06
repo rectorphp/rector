@@ -20,23 +20,6 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
 
         // test factory content
-        $this->assertFileExists($this->getTempPath() . '/AnotherClassFactory.php');
-        $this->assertFileEquals(
-            __DIR__ . '/Source/ExpectedAnotherClassFactory.php',
-            $this->getTempPath() . '/AnotherClassFactory.php'
-        );
-    }
-
-    /**
-     * @dataProvider provideDataMultipleArguments()
-     */
-    public function testMultipleArguments(string $file): void
-    {
-        $this->markTestSkipped('Conflicting with previous test() for unknown reason. Works well separately');
-
-        $this->doTestFile($file);
-
-        // test factory content
         $this->assertFileExists($this->getTempPath() . '/AnotherClassWithMoreArgumentsFactory.php');
         $this->assertFileEquals(
             __DIR__ . '/Source/ExpectedAnotherClassWithMoreArgumentsFactory.php',
@@ -45,11 +28,6 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
     }
 
     public function provideData(): Iterator
-    {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
-    }
-
-    public function provideDataMultipleArguments(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithMultipleArguments');
     }

@@ -6,6 +6,7 @@ namespace Rector\Php74\Rector\Function_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
@@ -18,6 +19,19 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class ReservedFnFunctionRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private $reservedNamesToNewOnes = [];
+
+    public function __construct(array $reservedNamesToNewOnes = [
+        // PHP 7.4
+        'fn' => 'f',
+    ])
+    {
+        $this->reservedNamesToNewOnes = $reservedNamesToNewOnes;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change fn() function name, since it will be reserved keyword', [
@@ -68,12 +82,20 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'fn')) {
-            return null;
+        foreach ($this->reservedNamesToNewOnes as $reservedName => $newName) {
+            if (! $this->isName($node->name, $reservedName)) {
+                continue;
+            }
+
+            if ($node instanceof FuncCall) {
+                $node->name = new Name($newName);
+            } else {
+                $node->name = new Identifier($newName);
+            }
+
+            return $node;
         }
 
-        $node->name = new Name('f');
-
-        return $node;
+        return null;
     }
 }

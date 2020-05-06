@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\PhpAttribute\PhpDocNode;
 
+/**
+ * @see https://wiki.php.net/rfc/attributes_v2
+ */
 trait PhpAttributePhpDocNodePrintTrait
 {
     /**

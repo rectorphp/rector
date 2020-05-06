@@ -6,12 +6,12 @@ class SomeClass
 {
     public function run()
     {
-        function fn($value)
+        function reservedFn($value)
         {
             return $value;
         }
 
-        fn(5);
+        reservedFn(5);
     }
 }
 

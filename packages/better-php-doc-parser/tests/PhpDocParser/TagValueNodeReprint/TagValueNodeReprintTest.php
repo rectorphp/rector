@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint;
 
 use Iterator;
-use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
@@ -28,10 +27,6 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
      */
     public function test(string $filePath, string $tagValueNodeClass): void
     {
-        if (Strings::endsWith($filePath, 'QuotesInNestedArray.php')) {
-            $this->markTestSkipped('Quoting nested keys in annotations is in progress');
-        }
-
         $this->doTestPrintedPhpDocInfo($filePath, $tagValueNodeClass);
     }
 
