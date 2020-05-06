@@ -318,7 +318,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             // @see https://regex101.com/r/V7nq5D/1
             $quotedKeyPattern = '#' . $key . '={(.*?)?\"' . $itemKey . '\"(.*?)?}#';
             $isKeyQuoted = (bool) Strings::match($originalContent, $quotedKeyPattern);
-            if ($isKeyQuoted === false) {
+            if (!$isKeyQuoted) {
                 continue;
             }
 
