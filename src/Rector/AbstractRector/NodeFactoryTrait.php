@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\PhpParser\Node\NodeFactory;
@@ -123,6 +124,15 @@ trait NodeFactoryTrait
     protected function createMethodCall($variable, string $method, array $arguments = []): MethodCall
     {
         return $this->nodeFactory->createMethodCall($variable, $method, $arguments);
+    }
+
+    /**
+     * @param mixed[] $arguments
+     */
+    protected function createLocalMethodCall(string $method, array $arguments = []): MethodCall
+    {
+        $thisVariable = new Variable('this');
+        return $this->createMethodCall($thisVariable, $method, $arguments);
     }
 
     /**
