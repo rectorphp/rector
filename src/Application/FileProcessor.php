@@ -111,8 +111,6 @@ final class FileProcessor
 
         // store tokens by absolute path, so we don't have to print them right now
         $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];
-
-        // @todo use filesystem cache to save parsing?
     }
 
     public function printToFile(SmartFileInfo $smartFileInfo): string

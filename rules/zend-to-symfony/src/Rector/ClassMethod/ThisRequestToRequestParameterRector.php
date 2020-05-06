@@ -76,7 +76,6 @@ PHP
 
             $hasRequest = true;
 
-            // @todo rename method call based on Zend → Symfony
             // "isXmlHttpRequest()" →
             // "isPost()" →
             // "getPosts()" →

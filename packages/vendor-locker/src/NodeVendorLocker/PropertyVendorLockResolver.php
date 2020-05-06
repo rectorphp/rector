@@ -29,27 +29,27 @@ final class PropertyVendorLockResolver extends AbstractNodeVendorLockResolver
             throw new ShouldNotHappenException();
         }
 
-        // @todo extract to some "inherited parent method" service
+        // extract to some "inherited parent method" service
         /** @var string|null $parentClassName */
         $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
 
         if ($parentClassName !== null) {
             $parentClassProperty = $this->findParentProperty($parentClassName, $propertyName);
 
-            // @todo validate type is conflicting
+            // validate type is conflicting
             // parent class property in local scope → it's ok
             if ($parentClassProperty !== null) {
                 return $parentClassProperty->type !== null;
             }
 
-            // if not, look for it's parent parent - @todo recursion
+            // if not, look for it's parent parent - recursion
 
             if (property_exists($parentClassName, $propertyName)) {
-                // @todo validate type is conflicting
+                // validate type is conflicting
                 // parent class property in external scope → it's not ok
                 return true;
 
-                // if not, look for it's parent parent - @todo recursion
+                // if not, look for it's parent parent
             }
         }
 

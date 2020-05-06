@@ -56,7 +56,7 @@ class SomeController
     public function someAction()
     {
         $this->_helper->onlinePayment(1000);
-        
+
         $this->_helper->onlinePayment()->isPaid();
     }
 }
@@ -69,7 +69,7 @@ class SomeController
      * @var Zend_Controller_Action_HelperBroker
      */
     private $_helper;
-    
+
     /**
      * @var Zend_Controller_Action_Helper_OnlinePayment
      */
@@ -147,7 +147,6 @@ PHP
 
     private function resolveHelperClassType(string $helperName): Type
     {
-        // @todo make configurable/adaptable for custom helper override in own namespace
         $possibleClasses = [sprintf('Zend_Controller_Action_Helper_%s', ucfirst($helperName))];
 
         foreach ($possibleClasses as $possibleClass) {

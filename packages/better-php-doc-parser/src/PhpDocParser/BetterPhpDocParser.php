@@ -313,7 +313,6 @@ final class BetterPhpDocParser extends PhpDocParser
 
     private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
     {
-        // @todo iterate through tokens...
         $originalTokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
         $originalContent = '';
 

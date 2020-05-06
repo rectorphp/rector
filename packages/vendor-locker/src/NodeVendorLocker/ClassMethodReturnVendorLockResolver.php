@@ -25,10 +25,8 @@ final class ClassMethodReturnVendorLockResolver extends AbstractNodeVendorLockRe
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        // @todo extract to some "inherited parent method" service
         /** @var string|null $parentClassName */
         $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-
         if ($parentClassName !== null) {
             return $this->isVendorLockedByParentClass($parentClassName, $methodName);
         }

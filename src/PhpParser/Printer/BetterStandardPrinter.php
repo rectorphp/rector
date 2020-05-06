@@ -418,9 +418,6 @@ final class BetterStandardPrinter extends Standard
         return Strings::replace($printerNode, '#\/\/(.*?)$#m');
     }
 
-    /**
-     * @todo decopule
-     */
     private function moveCommentsFromAttributeObjectToCommentsAttribute(array $nodes): void
     {
         // move phpdoc from node to "comment" attribute

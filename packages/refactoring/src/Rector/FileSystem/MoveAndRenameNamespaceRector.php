@@ -62,10 +62,6 @@ final class MoveAndRenameNamespaceRector extends AbstractFileSystemRector
             $renamedNamespaceValueObject
         );
 
-        // @todo
-        // create helping rename class rector.yaml + class_alias autoload file
-        // $this->renamedClassesCollector->addClassRename($oldClass, $newClass);
-
         $this->moveFile($smartFileInfo, $newFileLocation);
     }
 

@@ -140,7 +140,6 @@ final class ClassInsertManipulator
     }
 
     /**
-     * @todo simplify
      * Waits on https://github.com/nikic/PHP-Parser/pull/646
      */
     private function hasClassProperty(Class_ $classNode, string $name): bool

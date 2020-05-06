@@ -131,12 +131,12 @@ final class AnotherClassFactory
      * @var StaticClass
      */
     private $staticClass;
-    
+
     public function __construct(StaticClass $staticClass)
     {
         $this->staticClass = $staticClass;
     }
-    
+
     public function create(): AnotherClass
     {
         return new AnotherClass($this->staticClass);
@@ -145,7 +145,7 @@ final class AnotherClassFactory
 PHP
                 ,
                 [
-                    'typesToServices' => ['StaticClass'],
+                    '$typesToServices' => ['StaticClass'],
                 ]
             ), ]);
     }
@@ -203,7 +203,6 @@ PHP
             }
         }
 
-        // @todo 3. iterate parents with same effect etc.
         return $class;
     }
 }

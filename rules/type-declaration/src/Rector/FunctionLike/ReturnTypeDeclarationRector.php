@@ -169,7 +169,7 @@ PHP
      */
     private function shouldSkipInferredReturnNode(FunctionLike $functionLike, ?Node $inferredReturnNode): bool
     {
-        // nothing to change in PHP code - @todo add @var annotation fallback?
+        // nothing to change in PHP code
         if ($inferredReturnNode === null) {
             return true;
         }

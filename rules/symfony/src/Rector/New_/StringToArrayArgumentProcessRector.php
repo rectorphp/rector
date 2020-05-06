@@ -160,8 +160,6 @@ PHP
                 return null;
             }
 
-            // @todo check out of scope assign, e.g. in previous method
-
             return $checkedNode;
         });
     }

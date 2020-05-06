@@ -21,7 +21,6 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     private $useImportTypesInFilePath = [];
 
     /**
-     * @todo use value object
      * @var string[][]
      */
     private $removedShortUsesInFilePath = [];

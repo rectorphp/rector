@@ -103,11 +103,7 @@ PHP
             return null;
         }
 
-        $this->addPropertyToClass(
-            $classNode,
-            new StringType(), // @todo: resolve type from container provider? see parameter autowire compiler pass
-            $propertyName
-        );
+        $this->addPropertyToClass($classNode, new StringType(), $propertyName);
 
         return $this->createPropertyFetch('this', $propertyName);
     }

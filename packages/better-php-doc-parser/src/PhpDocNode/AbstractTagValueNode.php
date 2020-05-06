@@ -122,7 +122,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         // should unquote
         if ($this->isValueWithoutQuotes($key)) {
-            // @todo resolve per key item
             $json = Strings::replace($json, '#"#');
         }
 

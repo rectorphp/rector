@@ -67,7 +67,6 @@ PHP
             return null;
         }
 
-        // @todo maybe solve in generic way as attribute?
         $nextExpression = $expression->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextExpression === null) {
             return null;

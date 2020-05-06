@@ -63,8 +63,6 @@ final class ClassDependencyManipulator
 
     public function addConstructorDependency(Class_ $classNode, string $name, ?Type $type): void
     {
-        // add property
-        // @todo should be factory
         $this->classInsertManipulator->addPropertyToClass($classNode, $name, $type);
 
         $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($name);

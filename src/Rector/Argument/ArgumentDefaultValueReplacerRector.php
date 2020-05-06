@@ -107,8 +107,6 @@ PHP
                 if (! isset($node->params[$position])) {
                     continue;
                 }
-
-                // @todo
             } elseif (isset($node->args[$position])) {
                 $this->processArgs($node, $position, $oldToNewValues);
             }
