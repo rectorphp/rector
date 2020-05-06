@@ -50,9 +50,25 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        $arrayItemsWithDuplicatedKey = $this->getArrayItemsWithDuplicatedKey($node);
+        if ($arrayItemsWithDuplicatedKey === []) {
+            return null;
+        }
+
+        foreach ($arrayItemsWithDuplicatedKey as $arrayItems) {
+            // keep last item
+            array_pop($arrayItems);
+            $this->removeNodes($arrayItems);
+        }
+
+        return $node;
+    }
+
+    private function getArrayItemsWithDuplicatedKey(Array_ $array)
+    {
         $arrayItemsByKeys = [];
 
-        foreach ($node->items as $arrayItem) {
+        foreach ($array->items as $arrayItem) {
             if (! $arrayItem instanceof ArrayItem) {
                 continue;
             }
@@ -65,18 +81,7 @@ PHP
             $arrayItemsByKeys[$keyValue][] = $arrayItem;
         }
 
-        $arrayItemsByKeys = $this->filterItemsWithSameKey($arrayItemsByKeys);
-        if ($arrayItemsByKeys === []) {
-            return null;
-        }
-
-        foreach ($arrayItemsByKeys as $arrayItems) {
-            // keep last item
-            array_pop($arrayItems);
-            $this->removeNodes($arrayItems);
-        }
-
-        return $node;
+        return $this->filterItemsWithSameKey($arrayItemsByKeys);
     }
 
     /**
