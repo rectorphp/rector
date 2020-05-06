@@ -1,4 +1,4 @@
-# All 500 Rectors Overview
+# All 493 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -69,7 +69,6 @@
 - [SymfonyPHPUnit](#symfonyphpunit)
 - [Twig](#twig)
 - [TypeDeclaration](#typedeclaration)
-- [ZendToSymfony](#zendtosymfony)
 
 ## Architecture
 
@@ -8423,7 +8422,7 @@ Convert new X/Static::call() to factories in entities, pass them via constructor
 ```yaml
 services:
     Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector:
-        typesToServices:
+        $typesToServices:
             - StaticClass
 ```
 
@@ -10248,152 +10247,6 @@ Change @return types and type from static analysis to type declarations if not a
 +    public function getCount(): int
      {
      }
- }
-```
-
-<br>
-
-## ZendToSymfony
-
-### `ChangeZendControllerClassToSymfonyControllerClassRector`
-
-- class: [`Rector\ZendToSymfony\Rector\Class_\ChangeZendControllerClassToSymfonyControllerClassRector`](/../master/rules/zend-to-symfony/src/Rector/Class_/ChangeZendControllerClassToSymfonyControllerClassRector.php)
-- [test fixtures](/../master/rules/zend-to-symfony/tests/Rector/Class_/ChangeZendControllerClassToSymfonyControllerClassRector/Fixture)
-
-Change Zend 1 controller to Symfony 4 controller
-
-```diff
--class SomeAction extends Zend_Controller_Action
-+final class SomeAction extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
- {
- }
-```
-
-<br>
-
-### `GetParamToClassMethodParameterAndRouteRector`
-
-- class: [`Rector\ZendToSymfony\Rector\ClassMethod\GetParamToClassMethodParameterAndRouteRector`](/../master/rules/zend-to-symfony/src/Rector/ClassMethod/GetParamToClassMethodParameterAndRouteRector.php)
-- [test fixtures](/../master/rules/zend-to-symfony/tests/Rector/ClassMethod/GetParamToClassMethodParameterAndRouteRector/Fixture)
-
-Change $this->getParam() calls to action method arguments + Sdd symfony @Route
-
-```diff
--public function someAction()
-+public function someAction($id)
- {
--    $id = $this->getParam('id');
- }
-```
-
-<br>
-
-### `RedirectorToRedirectToUrlRector`
-
-- class: [`Rector\ZendToSymfony\Rector\Expression\RedirectorToRedirectToUrlRector`](/../master/rules/zend-to-symfony/src/Rector/Expression/RedirectorToRedirectToUrlRector.php)
-- [test fixtures](/../master/rules/zend-to-symfony/tests/Rector/Expression/RedirectorToRedirectToUrlRector/Fixture)
-
-Change $redirector helper to Symfony\Controller call redirect()
-
-```diff
- public function someAction()
- {
-     $redirector = $this->_helper->redirector;
--    $redirector->goToUrl('abc');
-+    $this->redirect('abc');
- }
-```
-
-<br>
-
-### `RemoveAutoloadingIncludeRector`
-
-- class: [`Rector\ZendToSymfony\Rector\Include_\RemoveAutoloadingIncludeRector`](/../master/rules/zend-to-symfony/src/Rector/Include_/RemoveAutoloadingIncludeRector.php)
-- [test fixtures](/../master/rules/zend-to-symfony/tests/Rector/Include_/RemoveAutoloadingIncludeRector/Fixture)
-
-Remove include/require statements, that supply autoloading (PSR-4 composer autolaod is going to be used instead)
-
-```diff
--include 'SomeFile.php';
--require_once 'AnotherFile.php';
--
- $values = require_once 'values.txt';
-```
-
-<br>
-
-### `ThisHelperToServiceMethodCallRector`
-
-- class: [`Rector\ZendToSymfony\Rector\MethodCall\ThisHelperToServiceMethodCallRector`](/../master/rules/zend-to-symfony/src/Rector/MethodCall/ThisHelperToServiceMethodCallRector.php)
-- [test fixtures](/../master/rules/zend-to-symfony/tests/Rector/MethodCall/ThisHelperToServiceMethodCallRector/Fixture)
-
-Change magic $this->_helper->calls() to constructor injection of helper services
-
-```diff
- class SomeController
- {
-     /**
-      * @var Zend_Controller_Action_HelperBroker
-      */
-     private $_helper;
-+
-+    /**
-+     * @var Zend_Controller_Action_Helper_OnlinePayment
-+     */
-+    private $onlinePaymentHelper;
-
-+    public function __construct(Zend_Controller_Action_Helper_OnlinePayment $onlinePaymentHelper)
-+    {
-+        $this->onlinePaymentHelper = onlinePaymentHelper;
-+    }
-+
-     public function someAction()
-     {
--        $this->_helper->onlinePayment(1000);
--
--        $this->_helper->onlinePayment()->isPaid();
-+        $this->onlinePaymentHelper->direct(1000);
-+
-+        $this->onlinePaymentHelper->direct()->isPaid();
-     }
- }
-```
-
-<br>
-
-### `ThisRequestToRequestParameterRector`
-
-- class: [`Rector\ZendToSymfony\Rector\ClassMethod\ThisRequestToRequestParameterRector`](/../master/rules/zend-to-symfony/src/Rector/ClassMethod/ThisRequestToRequestParameterRector.php)
-- [test fixtures](/../master/rules/zend-to-symfony/tests/Rector/ClassMethod/ThisRequestToRequestParameterRector/Fixture)
-
-Change $this->_request in action method to $request parameter
-
-```diff
--public function someAction()
-+public function someAction(\Symfony\Component\HttpFoundation\Request $request)
- {
--    $isGet = $this->_request->isGet();
-+    $isGet = $request->isGet();
- }
-```
-
-<br>
-
-### `ThisViewToThisRenderResponseRector`
-
-- class: [`Rector\ZendToSymfony\Rector\ClassMethod\ThisViewToThisRenderResponseRector`](/../master/rules/zend-to-symfony/src/Rector/ClassMethod/ThisViewToThisRenderResponseRector.php)
-- [test fixtures](/../master/rules/zend-to-symfony/tests/Rector/ClassMethod/ThisViewToThisRenderResponseRector/Fixture)
-
-Change $this->_view->assign = 5; to $this->render("...", $templateData);
-
-```diff
- public function someAction()
- {
--    $this->_view->value = 5;
-+    $templateData = [];
-+    $templateData['value']; = 5;
-+
-+    return $this->render("...", $templateData);
  }
 ```
 
