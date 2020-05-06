@@ -23,7 +23,7 @@ final class KeepRectorNamespaceForRectorRuleTest extends RuleTestCase
     {
         yield [__DIR__ . '/Source/Rector/ClassInCorrectNamespaceRector.php', []];
 
-        $errorMessage = sprintf(KeepRectorNamespaceForRectorRule::ERROR_MESSAGE, 'WrongClass', 'Rector');
+        $errorMessage = sprintf(KeepRectorNamespaceForRectorRule::ERROR_MESSAGE, 'WrongClass');
         yield [__DIR__ . '/Source/Rector/WrongClass.php', [[$errorMessage, 7]]];
     }
 

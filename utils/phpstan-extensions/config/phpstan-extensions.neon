@@ -27,18 +27,18 @@ services:
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 
     # $node->getAttribute($1) => Type|null by $1
-    - { class: Rector\PHPStanExtensions\Rector\Type\GetAttributeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\GetAttributeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
 
     # ParsedNodesByType->getNodesByType($1) => $1[]
-    - { class: Rector\PHPStanExtensions\Rector\Type\ParsedNodesByTypeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\ParsedNodesByTypeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
 
     # $nameResolver->getName() => in some cases always string
-    - { class: Rector\PHPStanExtensions\Rector\Type\NameResolverReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
     # $nameResolverTrait->getName() => in some cases always string
-    - { class: Rector\PHPStanExtensions\Rector\Type\NameResolverTraitReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverTraitReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
 
     # $betterNodeFinder->findByInstance(..., $1) => $1[]
-    - { class: Rector\PHPStanExtensions\Rector\Type\BetterNodeFinderReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\BetterNodeFinderReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
 
     # $phpDocInfo->getByType($1) => Type|null by $1
-    - { class: Rector\PHPStanExtensions\Rector\Type\PhpDocInfoGetByTypeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\PhpDocInfoGetByTypeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }

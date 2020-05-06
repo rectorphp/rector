@@ -36,7 +36,7 @@ final class KeepRectorNamespaceForRectorRule implements Rule
         }
 
         /** @var string $classLikeName */
-        $classLikeName = $node->name->toString();
+        $classLikeName = (string) $node->name;
 
         $errorMessage = sprintf(self::ERROR_MESSAGE, $classLikeName);
 

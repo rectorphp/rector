@@ -93,6 +93,7 @@ final class SeeAnnotationToTestRule implements Rule
         }
 
         foreach ($this->requiredSeeTypes as $requiredSeeType) {
+            dump($requiredSeeType);
             if ($classReflection->isSubclassOf($requiredSeeType)) {
                 return false;
             }

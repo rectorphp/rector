@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanExtensions\Rector\Type;
+namespace Rector\PHPStanExtensions\ReturnTypeExtension;
 
+use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Reflection\MethodReflection;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class NameResolverReturnTypeExtension extends AbstractResolvedNameReturnTypeExtension
 {

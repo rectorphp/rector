@@ -23,6 +23,8 @@ parameters:
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
 
+    checkGenericClassInNonGenericObjectType: false
+
     autoload_directories:
         - stubs
         - compiler/src
@@ -34,6 +36,7 @@ parameters:
         - packages
         - tests
         - compiler/src
+        - utils
 
     excludes_analyse:
         # generated files
@@ -294,3 +297,7 @@ parameters:
 
         - '#Use explicit return value over magic &reference#'
         - '#Method Rector\\Order\\StmtOrder\:\:createOldToNewKeys\(\) should return array<int\> but returns array\|false#'
+
+        - '#In method "Rector\\Utils\\ProjectValidator\\Process\\ParallelTaskRunner\:\:evaluateRunningProcesses", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
+        # weird
+        - '#Method (.*?) specified in iterable type Symfony\\Component\\Process\\Process#'

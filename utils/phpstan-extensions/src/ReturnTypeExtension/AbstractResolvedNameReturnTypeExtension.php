@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanExtensions\Rector\Type;
+namespace Rector\PHPStanExtensions\ReturnTypeExtension;
 
 use PhpParser\Node\Const_ as NodeConst;
 use PhpParser\Node\Expr\MethodCall;
@@ -23,7 +23,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 
 /**
- * @see \Rector\PhpParser\Node\Resolver\NameResolver::getName()
+ * @see \Rector\NodeNameResolver\NodeNameResolver::getName()
  * @see \Rector\Core\Rector\AbstractRector\NameResolverTrait::getName()
  *
  * These returns always strings for nodes with required names, e.g. for @see ClassMethod

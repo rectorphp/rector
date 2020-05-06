@@ -122,6 +122,7 @@ final class ParallelTaskRunner
     private function startProcess(int $maxProcesses, int $total): void
     {
         if ($this->canStartAnotherProcess($maxProcesses)) {
+            /** @var string $setName */
             $setName = array_key_first($this->remainingTasks);
             $task = array_shift($this->remainingTasks);
 
