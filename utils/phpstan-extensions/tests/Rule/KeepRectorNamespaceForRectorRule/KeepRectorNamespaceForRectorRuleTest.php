@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanExtensions\Tests\Rule\ClassLike;
+namespace Rector\PHPStanExtensions\Tests\Rule\KeepRectorNamespaceForRectorRule;
 
 use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use Rector\PHPStanExtensions\Rule\ClassLike\KeepRectorNamespaceForRectorRule;
+use Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule;
 
 final class KeepRectorNamespaceForRectorRuleTest extends RuleTestCase
 {

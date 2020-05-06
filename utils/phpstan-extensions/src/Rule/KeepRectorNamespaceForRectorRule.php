@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanExtensions\Rule\ClassLike;
+namespace Rector\PHPStanExtensions\Rule;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -11,7 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 
 /**
- * @see \Rector\PHPStanExtensions\Tests\Rule\ClassLike\KeepRectorNamespaceForRectorRuleTest
+ * @see \Rector\PHPStanExtensions\Tests\Rule\KeepRectorNamespaceForRectorRule\KeepRectorNamespaceForRectorRuleTest
  */
 final class KeepRectorNamespaceForRectorRule implements Rule
 {

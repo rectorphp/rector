@@ -4,11 +4,11 @@ services:
         tags: [phpstan.rules.rule]
 
     -
-        class: Rector\PHPStanExtensions\Rule\ClassMethod\PreventParentMethodVisibilityOverrideRule
+        class: Rector\PHPStanExtensions\Rule\PreventParentMethodVisibilityOverrideRule
         tags: [phpstan.rules.rule]
 
     -
-         class: Rector\PHPStanExtensions\Rule\ClassLike\KeepRectorNamespaceForRectorRule
+         class: Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule
          tags: [phpstan.rules.rule]
 
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver

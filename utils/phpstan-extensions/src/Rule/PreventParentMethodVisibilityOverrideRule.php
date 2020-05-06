@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanExtensions\Rule\ClassMethod;
+namespace Rector\PHPStanExtensions\Rule;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -12,7 +12,7 @@ use Rector\Core\Exception\NotImplementedException;
 use ReflectionMethod;
 
 /**
- * @see \Rector\PHPStanExtensions\Tests\Rule\ClassMethod\PreventParentMethodVisibilityOverrideRuleTest
+ * @see \Rector\PHPStanExtensions\Tests\Rule\PreventParentMethodVisibilityOverrideRule\PreventParentMethodVisibilityOverrideRuleTest
  */
 final class PreventParentMethodVisibilityOverrideRule implements Rule
 {

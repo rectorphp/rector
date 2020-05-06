@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanExtensions\Tests\Rule\ClassMethod;
+namespace Rector\PHPStanExtensions\Tests\Rule\PreventParentMethodVisibilityOverrideRule;
 
 use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use Rector\PHPStanExtensions\Rule\ClassMethod\PreventParentMethodVisibilityOverrideRule;
+use Rector\PHPStanExtensions\Rule\PreventParentMethodVisibilityOverrideRule;
 
 final class PreventParentMethodVisibilityOverrideRuleTest extends RuleTestCase
 {
