@@ -7,7 +7,6 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -72,9 +71,9 @@ trait NameResolverTrait
         return $this->classNaming->getShortName($name);
     }
 
-    protected function isLocalPropertyFetchName(Node $node, string $name): bool
+    protected function isLocalMethodCallNamed(Node $node, string $name): bool
     {
-        if (! $node instanceof PropertyFetch) {
+        if (! $node instanceof MethodCall) {
             return false;
         }
 
@@ -83,6 +82,17 @@ trait NameResolverTrait
         }
 
         return $this->isName($node->name, $name);
+    }
+
+    protected function isLocalMethodCallsNamed(Node $node, array $names): bool
+    {
+        foreach ($names as $name) {
+            if ($this->isLocalMethodCallNamed($node, $name)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function isFuncCallName(Node $node, string $name): bool

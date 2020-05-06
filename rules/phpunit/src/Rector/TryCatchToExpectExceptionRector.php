@@ -22,11 +22,6 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class TryCatchToExpectExceptionRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string
-     */
-    private const THIS = 'this';
-
-    /**
      * @var Expression[]
      */
     private $newExpressions = [];
@@ -143,11 +138,7 @@ PHP
 
     private function processAssertInstanceOf(MethodCall $methodCall, Variable $variable): void
     {
-        if (! $this->isName($methodCall->var, self::THIS)) {
-            return;
-        }
-
-        if (! $this->isName($methodCall->name, 'assertInstanceOf')) {
+        if (! $this->isLocalMethodCallNamed($methodCall, 'assertInstanceOf')) {
             return;
         }
 
@@ -169,11 +160,7 @@ PHP
 
     private function processExceptionMessage(MethodCall $methodCall, Variable $exceptionVariable): void
     {
-        if (! $this->isName($methodCall->var, self::THIS)) {
-            return;
-        }
-
-        if (! $this->isNames($methodCall->name, ['assertSame', 'assertEquals'])) {
+        if (! $this->isLocalMethodCallsNamed($methodCall, ['assertSame', 'assertEquals'])) {
             return;
         }
 
@@ -198,11 +185,7 @@ PHP
 
     private function processExceptionCode(MethodCall $methodCall, Variable $exceptionVariable): void
     {
-        if (! $this->isName($methodCall->var, self::THIS)) {
-            return;
-        }
-
-        if (! $this->isNames($methodCall->name, ['assertSame', 'assertEquals'])) {
+        if (! $this->isLocalMethodCallsNamed($methodCall, ['assertSame', 'assertEquals'])) {
             return;
         }
 
@@ -225,11 +208,7 @@ PHP
 
     private function processExceptionMessageContains(MethodCall $methodCall, Variable $exceptionVariable): void
     {
-        if (! $this->isName($methodCall->var, self::THIS)) {
-            return;
-        }
-
-        if (! $this->isName($methodCall->name, 'assertContains')) {
+        if (! $this->isLocalMethodCallNamed($methodCall, 'assertContains')) {
             return;
         }
 
