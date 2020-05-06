@@ -166,7 +166,7 @@ PHP
             return null;
         }
 
-        $classConstant = $this->createClassConstant(self::RESPONSE_CLASS, self::CODE_TO_CONST[$statusCode->value]);
+        $classConstant = $this->createClassConstFetch(self::RESPONSE_CLASS, self::CODE_TO_CONST[$statusCode->value]);
         $methodCall->args[0] = new Arg($classConstant);
 
         return $methodCall;
@@ -215,6 +215,6 @@ PHP
             return $lNumber;
         }
 
-        return $this->createClassConstant(self::RESPONSE_CLASS, self::CODE_TO_CONST[$lNumber->value]);
+        return $this->createClassConstFetch(self::RESPONSE_CLASS, self::CODE_TO_CONST[$lNumber->value]);
     }
 }

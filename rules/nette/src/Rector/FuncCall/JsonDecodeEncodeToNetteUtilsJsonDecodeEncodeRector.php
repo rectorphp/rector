@@ -100,7 +100,7 @@ PHP
             $secondArgumentValue = $args[1]->value;
 
             if ($this->isName($secondArgumentValue, 'JSON_PRETTY_PRINT')) {
-                $prettyClassConstant = $this->createClassConstant('Nette\Utils\Json', 'PRETTY');
+                $prettyClassConstant = $this->createClassConstFetch('Nette\Utils\Json', 'PRETTY');
                 $args[1] = new Arg($prettyClassConstant);
             }
         }
@@ -118,7 +118,7 @@ PHP
             if ($this->isFalse($secondArgumentValue)) {
                 unset($args[1]);
             } elseif ($this->isTrue($secondArgumentValue)) {
-                $forceArrayClassConstant = $this->createClassConstant('Nette\Utils\Json', 'FORCE_ARRAY');
+                $forceArrayClassConstant = $this->createClassConstFetch('Nette\Utils\Json', 'FORCE_ARRAY');
                 $args[1] = new Arg($forceArrayClassConstant);
             }
         }

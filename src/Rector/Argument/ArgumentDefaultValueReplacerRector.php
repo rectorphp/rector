@@ -161,7 +161,7 @@ PHP
         // class constants → turn string to composite
         if (is_string($value) && Strings::contains($value, '::')) {
             [$class, $constant] = explode('::', $value);
-            $classConstantFetchNode = $this->createClassConstant($class, $constant);
+            $classConstantFetchNode = $this->createClassConstFetch($class, $constant);
 
             return new Arg($classConstantFetchNode);
         }

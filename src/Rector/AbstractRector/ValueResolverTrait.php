@@ -35,4 +35,15 @@ trait ValueResolverTrait
     {
         return $this->getValue($expr) === $expectedValue;
     }
+
+    protected function isValues(Expr $expr, $expectedValues): bool
+    {
+        foreach ($expectedValues as $expectedValue) {
+            if ($this->isValue($expr, $expectedValue)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

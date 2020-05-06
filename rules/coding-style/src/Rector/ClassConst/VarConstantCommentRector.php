@@ -70,8 +70,12 @@ PHP
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            $this->phpDocInfoFactory->createEmpty($node);
+        }
+
         $phpDocInfo->changeVarType($constStaticType);
 
         return $node;

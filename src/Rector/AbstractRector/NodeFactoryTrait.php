@@ -54,9 +54,9 @@ trait NodeFactoryTrait
         return new StaticCall($class, $method, $args);
     }
 
-    protected function createClassConstant(string $class, string $constant): ClassConstFetch
+    protected function createClassConstFetch(string $class, string $constant): ClassConstFetch
     {
-        return $this->nodeFactory->createClassConstant($class, $constant);
+        return $this->nodeFactory->createClassConstFetch($class, $constant);
     }
 
     protected function createNull(): ConstFetch
@@ -108,7 +108,7 @@ trait NodeFactoryTrait
 
     protected function createClassConstantReference(string $class): ClassConstFetch
     {
-        return $this->nodeFactory->createClassConstantReference($class);
+        return $this->nodeFactory->createClassConstReference($class);
     }
 
     protected function createPropertyAssignmentWithExpr(string $propertyName, Expr $expr): Assign

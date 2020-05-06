@@ -84,7 +84,7 @@ PHP
 
         $node->name = new Identifier('addQuery');
 
-        $classConstFetch = $this->createClassConstant('ONGR\ElasticsearchDSL\Query\Compound\BoolQuery', 'FILTER');
+        $classConstFetch = $this->createClassConstFetch('ONGR\ElasticsearchDSL\Query\Compound\BoolQuery', 'FILTER');
 
         $node->args[1] = new Arg($classConstFetch);
 

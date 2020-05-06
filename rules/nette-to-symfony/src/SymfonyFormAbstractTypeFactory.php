@@ -73,7 +73,7 @@ final class SymfonyFormAbstractTypeFactory
             if ($this->nodeNameResolver->isName($methodCall->name, 'addText')) {
                 $optionsArray = $this->createOptionsArray($methodCall);
 
-                $formTypeClassConstant = $this->nodeFactory->createClassConstantReference(TextType::class);
+                $formTypeClassConstant = $this->nodeFactory->createClassConstReference(TextType::class);
 
                 $args = [$methodCall->args[0], new Arg($formTypeClassConstant)];
 

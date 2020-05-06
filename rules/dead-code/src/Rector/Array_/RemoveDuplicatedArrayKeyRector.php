@@ -65,6 +65,11 @@ PHP
             $arrayItemsByKeys[$keyValue][] = $arrayItem;
         }
 
+        $arrayItemsByKeys = $this->filterItemsWithSameKey($arrayItemsByKeys);
+        if ($arrayItemsByKeys === []) {
+            return null;
+        }
+
         foreach ($arrayItemsByKeys as $arrayItems) {
             // keep last item
             array_pop($arrayItems);
@@ -72,5 +77,16 @@ PHP
         }
 
         return $node;
+    }
+
+    /**
+     * @param ArrayItem[][] $arrayItemsByKeys
+     * @return ArrayItem[][]
+     */
+    private function filterItemsWithSameKey(array $arrayItemsByKeys): array
+    {
+        return array_filter($arrayItemsByKeys, function (array $arrayItems) {
+            return count($arrayItems) > 1;
+        });
     }
 }

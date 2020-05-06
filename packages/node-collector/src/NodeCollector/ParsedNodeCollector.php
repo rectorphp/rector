@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -232,7 +231,7 @@ final class ParsedNodeCollector
 
         $class = $this->resolveClassConstant($classConstFetch, $className);
         if ($class === null) {
-            throw new NotImplementedException();
+            return null;
         }
 
         /** @var string $constantName */

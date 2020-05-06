@@ -66,6 +66,6 @@ PHP
             return null;
         }
 
-        return $this->createClassConstant('static', 'class');
+        return $this->createClassConstFetch('static', 'class');
     }
 }
