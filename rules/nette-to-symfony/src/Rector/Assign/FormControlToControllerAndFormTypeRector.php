@@ -257,7 +257,6 @@ PHP
 
     private function createActionWithFormProcess(string $formTypeClass): ClassMethod
     {
-        // @todo make dynamic
         $classMethod = $this->nodeFactory->createPublicMethod('actionSomeForm');
 
         $requestVariable = new Variable('request');
