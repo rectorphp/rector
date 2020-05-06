@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
@@ -28,23 +27,12 @@ final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
     /**
      * @var string
      */
-    private const THIS = 'this';
-
-    /**
-     * @var string
-     */
     private const ASSERT_SAME = 'assertSame';
 
     /**
      * @var MethodCall
      */
     private $getStatusCodeMethodCall;
-
-    public function __construct()
-    {
-        $clientGetResponse = new MethodCall(new Variable('client'), 'getResponse');
-        $this->getStatusCodeMethodCall = new MethodCall($clientGetResponse, 'getStatusCode');
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -111,6 +99,9 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        $clientGetResponse = $this->createMethodCall('client', 'getResponse');
+        $this->getStatusCodeMethodCall = $this->createMethodCall($clientGetResponse, 'getStatusCode');
+
         if (! $this->isInWebTestCase($node)) {
             return null;
         }
@@ -119,9 +110,9 @@ PHP
         $args = [];
         $args[] = new Arg(new LNumber(200));
         $args[] = new Arg($this->getStatusCodeMethodCall);
-        $match = new MethodCall(new Variable(self::THIS), self::ASSERT_SAME, $args);
+        $match = $this->createLocalMethodCall(self::ASSERT_SAME, $args);
         if ($this->areNodesEqual($node, $match)) {
-            return new MethodCall(new Variable(self::THIS), 'assertResponseIsSuccessful');
+            return $this->createLocalMethodCall('assertResponseIsSuccessful');
         }
 
         // assertResponseStatusCodeSame
@@ -133,7 +124,7 @@ PHP
         // assertSelectorTextContains
         $args = $this->matchAssertContainsCrawlerArg($node);
         if ($args !== null) {
-            return new MethodCall(new Variable(self::THIS), 'assertSelectorTextContains', $args);
+            return $this->createLocalMethodCall('assertSelectorTextContains', $args);
         }
 
         // 3. assertResponseRedirects
@@ -171,7 +162,7 @@ PHP
             return null;
         }
 
-        return new MethodCall(new Variable(self::THIS), 'assertResponseStatusCodeSame', [$node->args[0]]);
+        return $this->createLocalMethodCall('assertResponseStatusCodeSame', [$node->args[0]]);
     }
 
     /**
@@ -224,13 +215,12 @@ PHP
         $args[] = new Arg(new LNumber(301));
         $args[] = new Arg($this->getStatusCodeMethodCall);
 
-        $match = new MethodCall(new Variable(self::THIS), self::ASSERT_SAME, $args);
+        $match = $this->createLocalMethodCall(self::ASSERT_SAME, $args);
 
         if ($this->areNodesEqual($previousNode, $match)) {
-            $clientGetLocation = new MethodCall(new PropertyFetch(new MethodCall(
-                new Variable('client'),
-                'getResponse'
-            ), 'headers'), 'get', [new Arg(new String_('Location'))]);
+            $getResponseMethodCall = $this->createMethodCall('client', 'getResponse');
+            $propertyFetch = new PropertyFetch($getResponseMethodCall, 'headers');
+            $clientGetLocation = $this->createMethodCall($propertyFetch, 'get', [new Arg(new String_('Location'))]);
 
             if (! isset($methodCall->args[1])) {
                 return null;
@@ -243,7 +233,7 @@ PHP
 
                 $this->removeNode($previousNode);
 
-                return new MethodCall(new Variable(self::THIS), 'assertResponseRedirects', $args);
+                return $this->createLocalMethodCall('assertResponseRedirects', $args);
             }
         }
 
