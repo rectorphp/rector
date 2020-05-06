@@ -82,7 +82,12 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      */
     public function __toString(): string
     {
-        $items = $this->completeItemsQuotes($this->items);
+        return $this->printItems($this->items);
+    }
+
+    protected function printItems(array $items): string
+    {
+        $items = $this->completeItemsQuotes($items);
         $items = $this->filterOutMissingItems($items);
         $items = $this->makeKeysExplicit($items);
 

@@ -21,14 +21,12 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
     public function __toString(): string
     {
-        if (isset($this->items['path']) || isset($this->items['localizedPaths'])) {
-            $this->items['path'] = $this->items['path'] ?? $this->items['localizedPaths'];
+        $items = $this->items;
+        if (isset($items['path']) || isset($items['localizedPaths'])) {
+            $items['path'] = $items['path'] ?? $this->items['localizedPaths'];
         }
 
-        $items = $this->completeItemsQuotes($this->items);
-        $items = $this->makeKeysExplicit($items);
-
-        return $this->printContentItems($items);
+        return $this->printItems($items);
     }
 
     public function changeMethods(array $methods): void
