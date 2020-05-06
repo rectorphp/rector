@@ -12,9 +12,19 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
 {
     use PhpAttributePhpDocNodePrintTrait;
 
+    /**
+     * @var string
+     */
+    private const REPOSITORY_CLASS = 'repositoryClass';
+
+    /**
+     * @var string
+     */
+    private const READ_ONLY = 'readOnly';
+
     public function removeRepositoryClass(): void
     {
-        $this->items['repositoryClass'] = null;
+        $this->items[self::REPOSITORY_CLASS] = null;
     }
 
     public function getShortName(): string
@@ -32,12 +42,12 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode implements P
     {
         $items = $this->items;
 
-        if ($items['repositoryClass'] !== null) {
-            $items['repositoryClass'] .= '::class';
+        if ($items[self::REPOSITORY_CLASS] !== null) {
+            $items[self::REPOSITORY_CLASS] .= '::class';
         }
 
-        if ($items['readOnly'] !== null) {
-            $items['readOnly'] = $items['readOnly'] ? 'ORM\Entity::READ_ONLY' : '';
+        if ($items[self::READ_ONLY] !== null) {
+            $items[self::READ_ONLY] = $items[self::READ_ONLY] ? 'ORM\Entity::READ_ONLY' : '';
         }
 
         return $items;

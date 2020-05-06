@@ -16,6 +16,11 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     use PhpAttributePhpDocNodePrintTrait;
 
     /**
+     * @var string
+     */
+    private const TARGET_ENTITY = 'targetEntity';
+
+    /**
      * @var string|null
      */
     private $fullyQualifiedTargetEntity;
@@ -32,7 +37,7 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function getTargetEntity(): string
     {
-        return $this->items['targetEntity'];
+        return $this->items[self::TARGET_ENTITY];
     }
 
     public function getFullyQualifiedTargetEntity(): ?string
@@ -62,7 +67,7 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function changeTargetEntity(string $targetEntity): void
     {
-        $this->items['targetEntity'] = $targetEntity;
+        $this->items[self::TARGET_ENTITY] = $targetEntity;
     }
 
     public function getShortName(): string
@@ -78,7 +83,7 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     private function createAttributeItems(): array
     {
         $items = $this->items;
-        $items['targetEntity'] .= '::class';
+        $items[self::TARGET_ENTITY] .= '::class';
 
         return $items;
     }

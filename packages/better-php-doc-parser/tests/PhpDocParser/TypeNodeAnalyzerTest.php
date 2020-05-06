@@ -18,6 +18,11 @@ use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
 {
     /**
+     * @var string
+     */
+    private const INT = 'int';
+
+    /**
      * @var TypeNodeAnalyzer
      */
     private $typeNodeAnalyzer;
@@ -38,9 +43,9 @@ final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
 
     public function provideDataForArrayType(): Iterator
     {
-        $arrayTypeNode = new ArrayTypeNode(new IdentifierTypeNode('int'));
+        $arrayTypeNode = new ArrayTypeNode(new IdentifierTypeNode(self::INT));
 
-        yield [new IdentifierTypeNode('int'), false];
+        yield [new IdentifierTypeNode(self::INT), false];
         yield [$arrayTypeNode, true];
         yield [new UnionTypeNode([$arrayTypeNode]), true];
     }
@@ -55,7 +60,7 @@ final class TypeNodeAnalyzerTest extends AbstractKernelTestCase
 
     public function provideDataForIntersectionAndNotNullable(): Iterator
     {
-        yield [new IntersectionTypeNode([new IdentifierTypeNode('int')]), true];
-        yield [new IntersectionTypeNode([new NullableTypeNode(new IdentifierTypeNode('int'))]), false];
+        yield [new IntersectionTypeNode([new IdentifierTypeNode(self::INT)]), true];
+        yield [new IntersectionTypeNode([new NullableTypeNode(new IdentifierTypeNode(self::INT))]), false];
     }
 }

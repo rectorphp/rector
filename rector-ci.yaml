@@ -1,12 +1,15 @@
+services:
+    Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector: null
+
 parameters:
-    sets:
-        - 'coding-style'
-        - 'code-quality'
-        - 'dead-code'
-        - 'nette-utils-code-quality'
-        - 'solid'
-        - 'privatization'
-        - 'naming'
+#    sets:
+#        - 'coding-style'
+#        - 'code-quality'
+#        - 'dead-code'
+#        - 'nette-utils-code-quality'
+#        - 'solid'
+#        - 'privatization'
+#        - 'naming'
 
     paths:
         - 'src'
@@ -23,9 +26,9 @@ parameters:
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
 
-    exclude_rectors:
-        # @todo needs to check for "autoload-dev" local dependency
-        - 'Rector\Php55\Rector\String_\StringClassNameToClassConstantRector'
-        - 'Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector'
-        # fix in separated PR
-        - 'Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector'
+#    exclude_rectors:
+#        # @todo needs to check for "autoload-dev" local dependency
+#        - 'Rector\Php55\Rector\String_\StringClassNameToClassConstantRector'
+#        - 'Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector'
+#        # fix in separated PR
+#        - 'Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector'

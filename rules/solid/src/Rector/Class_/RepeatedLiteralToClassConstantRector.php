@@ -92,7 +92,7 @@ PHP
     public function refactor(Node $class): ?Node
     {
         // skip tests, where string values are often used as fixtures
-        if ($this->isName($class, 'Test')) {
+        if ($this->isName($class, '*Test')) {
             return null;
         }
 
