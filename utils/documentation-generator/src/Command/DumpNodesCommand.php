@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Utils\DocumentationGenerator\Command;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -194,6 +195,7 @@ final class DumpNodesCommand extends AbstractCommand
             $constructorReflection = $nodeClassReflection->getConstructor();
 
             if ($constructorReflection->getNumberOfRequiredParameters() === 0) {
+                /** @var Node $node */
                 $node = $nodeClassReflection->newInstance();
                 // special case
                 if ($node instanceof ArrowFunction) {

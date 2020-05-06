@@ -149,11 +149,12 @@ final class AttributeAwareClassFactoryFactory
 
     private function createIsAFuncCall(string $nodeClass): FuncCall
     {
-        return new FuncCall(new Name('is_a'), [
-            new Variable(self::NODE),
-            $this->createClassReference($nodeClass),
-            new ConstFetch(new Name('true')),
-        ]);
+        $variable = new Variable(self::NODE);
+        $true = new ConstFetch(new Name('true'));
+
+        $args = [new Arg($variable), new Arg($this->createClassReference($nodeClass)), new Arg($true)];
+
+        return new FuncCall(new Name('is_a'), $args);
     }
 
     private function completeNewArgs(New_ $new, string $phpDocParserNodeClass): void

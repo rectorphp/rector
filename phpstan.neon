@@ -208,9 +208,7 @@ parameters:
         - '#Parameter \#1 \$typeNode of method Rector\\StaticTypeMapper\\StaticTypeMapper\:\:mapPHPStanPhpDocTypeNodeToPHPStanType\(\) expects PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode, PHPStan\\PhpDocParser\\Ast\\Node given#'
         - '#Parameter \#1 \$str of function preg_quote expects string, int\|string given#'
 
-        - '#Parameter \#2 \$propertyName of method Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\SingleMethodAssignedNodePropertyTypeInferer\:\:resolveAssignedNodeToProperty\(\) expects string, string\|null given#'
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\Core\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
-        - '#Parameter \#1 \$nodes of method Rector\\CodeQuality\\Rector\\Array_\\CallableThisArrayToAnonymousFunctionRector\:\:hasClassMethodReturn\(\) expects array<PhpParser\\Node\\Stmt\\Return_\>, array<PhpParser\\Node\> given#'
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         - '#PHPDoc tag @return with type iterable<object\> is not subtype of native type array#'
         - '#Method Rector\\SOLID\\Reflection\\ParentConstantReflectionResolver\:\:(.*?)\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
@@ -230,10 +228,6 @@ parameters:
         - '#Parameter \#2 \$name of method Rector\\Core\\Rector\\AbstractRector\:\:isVariableName\(\) expects string, string\|null given#'
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
-
-        # generics
-        - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createClassReflectionFromNode\(\) return type with generic class ReflectionClass does not specify its types\: T#'
-        - '#Method Rector\\NodeCollector\\StaticAnalyzer\:\:hasStaticAnnotation\(\) has parameter \$reflectionClass with generic class ReflectionClass but does not specify its types\: T#'
 
         # mixed
         - '#Property Rector\\Polyfill\\ValueObject\\BinaryToVersionCompareCondition\:\:\$expectedValue has no typehint specified#'
@@ -291,13 +285,20 @@ parameters:
             count: 1
             path: rules/php70/src/EregToPcreTransformer.php
 
-        -
-            message: "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
-            path: rules/php70/src/EregToPcreTransformer.php
+        - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
 
         - '#Use explicit return value over magic &reference#'
         - '#Method Rector\\Order\\StmtOrder\:\:createOldToNewKeys\(\) should return array<int\> but returns array\|false#'
 
-        - '#In method "Rector\\Utils\\ProjectValidator\\Process\\ParallelTaskRunner\:\:evaluateRunningProcesses", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
+        - '#In method "Rector\\Utils\\ProjectValidator\\Process\\ParallelTaskRunner\:\:(.*?)", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception#'
         # weird
+
         - '#Method (.*?) specified in iterable type Symfony\\Component\\Process\\Process#'
+        - '#Cannot cast PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier to string#'
+        - '#Class cognitive complexity for "DumpNodesCommand" is 103, keep it under 50#'
+        - '#Cognitive complexity for "Rector\\Utils\\DocumentationGenerator\\Command\\DumpNodesCommand\:\:execute\(\)" is \d+, keep it under 9#'
+
+        # just for utils
+        - '#Class "Rector\\Utils\\DoctrineAnnotationParserSyncer\\Rector\\(.*?)" is missing @see annotation with test case class reference#'
+
+        - '#Method Rector\\Utils\\DocumentationGenerator\\Node\\NodeClassProvider\:\:getNodeClasses\(\) should return array<class\-string\> but returns array<int, \(int\|string\)\>#'
