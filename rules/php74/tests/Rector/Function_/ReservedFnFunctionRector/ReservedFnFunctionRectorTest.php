@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php74\Tests\Rector\Function_\ReservedFnFunctionRector;
 
 use Iterator;
-use PhpParser\Parser\Tokens;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\Function_\ReservedFnFunctionRector;
 
@@ -16,10 +15,6 @@ final class ReservedFnFunctionRectorTest extends AbstractRectorTestCase
      */
     public function test(string $file): void
     {
-        if (defined(Tokens::class . '::T_FN')) {
-            $this->markTestSkipped('fn is reserved name in PHP 7.4');
-        }
-
         $this->doTestFile($file);
     }
 
@@ -28,8 +23,15 @@ final class ReservedFnFunctionRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    protected function getRectorsWithConfiguration(): array
     {
-        return ReservedFnFunctionRector::class;
+        return [
+            ReservedFnFunctionRector::class => [
+                '$reservedNamesToNewOnes' => [
+                    // for testing purposes of "fn" even on PHP 7.3-
+                    'reservedFn' => 'f',
+                ],
+            ],
+        ];
     }
 }
