@@ -19,14 +19,7 @@ final class CpuCoreCountResolver
     public function resolve(): int
     {
         if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-            $str = trim(shell_exec('wmic cpu get NumberOfCores 2>&1'));
-
-            $matches = Strings::match($str, '#(\d+)#');
-            if (! $matches) {
-                throw new CouldNotDeterminedCpuCoresException('wmic failed to get number of cpu cores on windows!');
-            }
-
-            return (int) $matches[1];
+            return $this->resolveForWindows();
         }
 
         $ret = @shell_exec('nproc');
@@ -46,5 +39,22 @@ final class CpuCoreCountResolver
         }
 
         throw new CouldNotDeterminedCpuCoresException('Failed to detect number of CPUs');
+    }
+
+    private function resolveForWindows(): int
+    {
+        $numberOfCores = shell_exec('wmic cpu get NumberOfCores 2>&1');
+        if ($numberOfCores === null) {
+            throw new CouldNotDeterminedCpuCoresException('wmic failed to get number of cpu cores on windows!');
+        }
+
+        $str = trim($numberOfCores);
+
+        $matches = Strings::match($str, '#(\d+)#');
+        if (! $matches) {
+            throw new CouldNotDeterminedCpuCoresException('wmic failed to get number of cpu cores on windows!');
+        }
+
+        return (int) $matches[1];
     }
 }

@@ -42,3 +42,14 @@ services:
 
     # $phpDocInfo->getByType($1) => Type|null by $1
     - { class: Rector\PHPStanExtensions\ReturnTypeExtension\PhpDocInfoGetByTypeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+
+   # $<type>builder->getNode() => Type
+    -
+         class: Rector\PHPStanExtensions\ReturnTypeExtension\Builder\NamespaceBuilderReturnTypeExtension
+         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+         class: Rector\PHPStanExtensions\ReturnTypeExtension\Builder\ClassMethodBuilderReturnTypeExtension
+         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    -
+         class: Rector\PHPStanExtensions\ReturnTypeExtension\Builder\ClassBuilderReturnTypeExtension
+         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

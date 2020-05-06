@@ -23,6 +23,8 @@ final class PHPStanTypeClassFinder
         $robotLoader->rebuild();
 
         $classLikesToFilePaths = $robotLoader->getIndexedClasses();
+
+        /** @var class-string[] $classLikes */
         $classLikes = array_keys($classLikesToFilePaths);
 
         return $this->filterClassesOnly($classLikes);

@@ -48,7 +48,7 @@ final class LogIdentifierAndResolverValueInConstantClassMethodRector extends Abs
         $firstStmt = $node->stmts[0];
         unset($node->stmts[0]);
         $assignExpression = $this->createAssignOriginalIdentifierExpression();
-        $node->stmts = array_merge([$firstStmt], [$assignExpression], $node->stmts);
+        $node->stmts = array_merge([$firstStmt], [$assignExpression], (array) $node->stmts);
 
         // 2. record value in each return
         $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) {
@@ -56,10 +56,15 @@ final class LogIdentifierAndResolverValueInConstantClassMethodRector extends Abs
                 return null;
             }
 
+            if ($node->expr === null) {
+                return null;
+            }
+
             // assign resolved value to temporary variable
             $resolvedValueVariable = new Variable('resolvedValue');
             $assign = new Assign($resolvedValueVariable, $node->expr);
             $assignExpression = new Expression($assign);
+
             $this->addNodeBeforeNode($assignExpression, $node);
 
             // log the value in static call
