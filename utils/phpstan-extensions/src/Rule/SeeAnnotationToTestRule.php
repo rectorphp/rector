@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanExtensions\Rule;
 
-use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -27,11 +26,6 @@ final class SeeAnnotationToTestRule implements Rule
      * @var string
      */
     public const ERROR_MESSAGE = 'Class "%s" is missing @see annotation with test case class reference';
-
-    /**
-     * @var string[]
-     */
-    private const CLASS_SUFFIXES = ['Rector'];
 
     /**
      * @var FileTypeMapper
@@ -92,23 +86,8 @@ final class SeeAnnotationToTestRule implements Rule
         return [sprintf(self::ERROR_MESSAGE, $classReflection->getName())];
     }
 
-    private function isClassMatch(string $className): bool
-    {
-        foreach (self::CLASS_SUFFIXES as $classSuffix) {
-            if (Strings::endsWith($className, $classSuffix)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private function shouldSkipClassReflection(ClassReflection $classReflection): bool
     {
-        if (! $this->isClassMatch($classReflection->getName())) {
-            return true;
-        }
-
         if ($classReflection->isAbstract()) {
             return true;
         }
