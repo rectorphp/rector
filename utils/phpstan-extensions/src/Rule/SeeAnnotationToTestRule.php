@@ -17,8 +17,6 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\FileTypeMapper;
 use PHPUnit\Framework\TestCase;
-use Rector\Core\Contract\Rector\PhpRectorInterface;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
 
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\SeeAnnotationToTestRule\SeeAnnotationToTestRuleTest
@@ -45,10 +43,16 @@ final class SeeAnnotationToTestRule implements Rule
      */
     private $broker;
 
-    public function __construct(Broker $broker, FileTypeMapper $fileTypeMapper)
+    /**
+     * @var class-string[]
+     */
+    private $requiredSeeTypes = [];
+
+    public function __construct(Broker $broker, FileTypeMapper $fileTypeMapper, array $requiredSeeTypes = [])
     {
         $this->fileTypeMapper = $fileTypeMapper;
         $this->broker = $broker;
+        $this->requiredSeeTypes = $requiredSeeTypes;
     }
 
     public function getNodeType(): string
@@ -109,13 +113,13 @@ final class SeeAnnotationToTestRule implements Rule
             return true;
         }
 
-        // meta-Rector
-        if ($classReflection->isSubclassOf(PostRectorInterface::class)) {
-            return true;
+        foreach ($this->requiredSeeTypes as $requiredSeeType) {
+            if ($classReflection->isSubclassOf($requiredSeeType)) {
+                return false;
+            }
         }
 
-        // skip filesystem for now
-        return ! $classReflection->isSubclassOf(PhpRectorInterface::class);
+        return true;
     }
 
     private function matchClassReflection(Class_ $node): ?ClassReflection
