@@ -121,12 +121,8 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             $json = Strings::replace($json, '#"#');
         }
 
-        // @todo, quote keys!
-        foreach (array_keys($item) as $key) {
-            $isKeyQuoted = (bool) Strings::match($this->originalContent, '#\"' . $key . '\"#');
-            if ($isKeyQuoted) {
-                $json = Strings::replace($json, '#' . $key . '#', '"' . $key . '"');
-            }
+        if ($this->originalContent !== null && $key !== null) {
+            $json = $this->quoteKeys($item, $key, $json, $this->originalContent);
         }
 
         return $keyPart . $json;
@@ -314,5 +310,20 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         // @see https://regex101.com/r/VgvK8C/3/
         return sprintf('#%s="#', $escapedKey);
+    }
+
+    private function quoteKeys(array $item, string $key, string $json, string $originalContent): string
+    {
+        foreach (array_keys($item) as $itemKey) {
+            // @see https://regex101.com/r/V7nq5D/1
+            $quotedKeyPattern = '#' . $key . '={(.*?)?\"' . $itemKey . '\"(.*?)?}#';
+            $isKeyQuoted = (bool) Strings::match($originalContent, $quotedKeyPattern);
+            if ($isKeyQuoted === false) {
+                continue;
+            }
+
+            $json = Strings::replace($json, '#([^\"])' . $itemKey . '([^\"])#', '$1"' . $itemKey . '"$2');
+        }
+        return $json;
     }
 }

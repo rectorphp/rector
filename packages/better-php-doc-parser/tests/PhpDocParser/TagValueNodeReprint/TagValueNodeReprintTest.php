@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint;
 
 use Iterator;
-use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
