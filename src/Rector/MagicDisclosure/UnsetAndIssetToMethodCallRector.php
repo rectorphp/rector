@@ -18,6 +18,16 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class UnsetAndIssetToMethodCallRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const ISSET = 'isset';
+
+    /**
+     * @var string
+     */
+    private const UNSET = 'unset';
+
+    /**
      * @var string[][]
      */
     private $typeToMethodCalls = [];
@@ -48,7 +58,7 @@ PHP
                 ,
                 [
                     'SomeContainer' => [
-                        'isset' => 'hasService',
+                        self::ISSET => 'hasService',
                     ],
                 ]
             ),
@@ -65,7 +75,7 @@ PHP
                 ,
                 [
                     'SomeContainer' => [
-                        'unset' => 'removeService',
+                        self::UNSET => 'removeService',
                     ],
                 ]
             ),
@@ -114,25 +124,25 @@ PHP
         array $methodsNamesByType
     ): ?Node {
         if ($node instanceof Isset_) {
-            if (! isset($methodsNamesByType['isset'])) {
+            if (! isset($methodsNamesByType[self::ISSET])) {
                 return null;
             }
 
             return $this->createMethodCall(
                 $arrayDimFetch->var,
-                $methodsNamesByType['isset'],
+                $methodsNamesByType[self::ISSET],
                 [$arrayDimFetch->dim]
             );
         }
 
         if ($node instanceof Unset_) {
-            if (! isset($methodsNamesByType['unset'])) {
+            if (! isset($methodsNamesByType[self::UNSET])) {
                 return null;
             }
 
             return $this->createMethodCall(
                 $arrayDimFetch->var,
-                $methodsNamesByType['unset'],
+                $methodsNamesByType[self::UNSET],
                 [$arrayDimFetch->dim]
             );
         }

@@ -23,6 +23,16 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
+     * @var string
+     */
+    private const ASSERT_TRUE = 'assertTrue';
+
+    /**
+     * @var string
+     */
+    private const ASSERT_FALSE = 'assertFalse';
+
+    /**
      * @var IdentifierManipulator
      */
     private $identifierManipulator;
@@ -59,7 +69,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, ['assertTrue', 'assertFalse'])) {
+        if (! $this->isPHPUnitMethodNames($node, [self::ASSERT_TRUE, self::ASSERT_FALSE])) {
             return null;
         }
 
@@ -98,8 +108,8 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         $this->identifierManipulator->renameNodeWithMap($node, [
-            'assertTrue' => 'assertObjectHasAttribute',
-            'assertFalse' => 'assertObjectNotHasAttribute',
+            self::ASSERT_TRUE => 'assertObjectHasAttribute',
+            self::ASSERT_FALSE => 'assertObjectNotHasAttribute',
         ]);
 
         $oldArgs = $node->args;
@@ -114,8 +124,8 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
     private function refactorArrayDimFetchNode(Node $node, ArrayDimFetch $arrayDimFetch): void
     {
         $this->identifierManipulator->renameNodeWithMap($node, [
-            'assertTrue' => 'assertArrayHasKey',
-            'assertFalse' => 'assertArrayNotHasKey',
+            self::ASSERT_TRUE => 'assertArrayHasKey',
+            self::ASSERT_FALSE => 'assertArrayNotHasKey',
         ]);
 
         $oldArgs = $node->args;

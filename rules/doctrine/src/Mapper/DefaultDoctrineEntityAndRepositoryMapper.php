@@ -9,10 +9,15 @@ use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
 
 final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAndRepositoryMapperInterface
 {
+    /**
+     * @var string
+     */
+    private const REPOSITORY = 'Repository';
+
     public function mapRepositoryToEntity(string $repository): ?string
     {
         // "SomeRepository" => "Some"
-        $withoutSuffix = Strings::substring($repository, 0, - strlen('Repository'));
+        $withoutSuffix = Strings::substring($repository, 0, - strlen(self::REPOSITORY));
 
         // "App\Repository\Some" => "App\Entity\Some"
         return Strings::replace($withoutSuffix, '#Repository#', 'Entity');
@@ -21,9 +26,9 @@ final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAn
     public function mapEntityToRepository(string $entity): ?string
     {
         // "Some" => "SomeRepository"
-        $withSuffix = $entity . 'Repository';
+        $withSuffix = $entity . self::REPOSITORY;
 
         // "App\Entity\SomeRepository" => "App\Repository\SomeRepository"
-        return Strings::replace($withSuffix, '#Entity#', 'Repository');
+        return Strings::replace($withSuffix, '#Entity#', self::REPOSITORY);
     }
 }

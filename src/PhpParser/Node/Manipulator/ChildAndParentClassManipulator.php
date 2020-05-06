@@ -16,6 +16,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ChildAndParentClassManipulator
 {
     /**
+     * @var string
+     */
+    private const __CONSTRUCT = '__construct';
+
+    /**
      * @var NodeFactory
      */
     private $nodeFactory;
@@ -66,7 +71,7 @@ final class ChildAndParentClassManipulator
         }
 
         // complete parent call for __construct()
-        if ($parentClassName !== '' && method_exists($parentClassName, '__construct')) {
+        if ($parentClassName !== '' && method_exists($parentClassName, self::__CONSTRUCT)) {
             $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams([]);
             $classMethod->stmts[] = new Expression($parentConstructCallNode);
         }
@@ -82,12 +87,12 @@ final class ChildAndParentClassManipulator
         $childClassNodes = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
 
         foreach ($childClassNodes as $childClassNode) {
-            if ($childClassNode->getMethod('__construct') === null) {
+            if ($childClassNode->getMethod(self::__CONSTRUCT) === null) {
                 continue;
             }
 
             /** @var ClassMethod $childClassConstructorMethodNode */
-            $childClassConstructorMethodNode = $childClassNode->getMethod('__construct');
+            $childClassConstructorMethodNode = $childClassNode->getMethod(self::__CONSTRUCT);
 
             // replicate parent parameters
             $childClassConstructorMethodNode->params = array_merge(
@@ -130,7 +135,7 @@ final class ChildAndParentClassManipulator
     private function findFirstParentConstructor(Class_ $classNode): ?ClassMethod
     {
         while ($classNode !== null) {
-            $constructMethodNode = $classNode->getMethod('__construct');
+            $constructMethodNode = $classNode->getMethod(self::__CONSTRUCT);
             if ($constructMethodNode !== null) {
                 return $constructMethodNode;
             }

@@ -22,6 +22,11 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class TryCatchToExpectExceptionRector extends AbstractPHPUnitRector
 {
     /**
+     * @var string
+     */
+    private const THIS = 'this';
+
+    /**
      * @var Expression[]
      */
     private $newExpressions = [];
@@ -138,7 +143,7 @@ PHP
 
     private function processAssertInstanceOf(MethodCall $methodCall, Variable $variable): void
     {
-        if (! $this->isName($methodCall->var, 'this')) {
+        if (! $this->isName($methodCall->var, self::THIS)) {
             return;
         }
 
@@ -164,7 +169,7 @@ PHP
 
     private function processExceptionMessage(MethodCall $methodCall, Variable $exceptionVariable): void
     {
-        if (! $this->isName($methodCall->var, 'this')) {
+        if (! $this->isName($methodCall->var, self::THIS)) {
             return;
         }
 
@@ -193,7 +198,7 @@ PHP
 
     private function processExceptionCode(MethodCall $methodCall, Variable $exceptionVariable): void
     {
-        if (! $this->isName($methodCall->var, 'this')) {
+        if (! $this->isName($methodCall->var, self::THIS)) {
             return;
         }
 
@@ -220,7 +225,7 @@ PHP
 
     private function processExceptionMessageContains(MethodCall $methodCall, Variable $exceptionVariable): void
     {
-        if (! $this->isName($methodCall->var, 'this')) {
+        if (! $this->isName($methodCall->var, self::THIS)) {
             return;
         }
 

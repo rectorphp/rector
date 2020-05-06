@@ -88,7 +88,7 @@ final class ComposerPackageAutoloadUpdater
 
     private function isPackageAlreadyLoaded(array $composerJson, Package $package): bool
     {
-        return isset($composerJson['autoload'][self::PSR - 4][$package->getSrcNamespace()]);
+        return isset($composerJson['autoload'][self::PSR_4][$package->getSrcNamespace()]);
     }
 
     private function rebuildAutoload(): void

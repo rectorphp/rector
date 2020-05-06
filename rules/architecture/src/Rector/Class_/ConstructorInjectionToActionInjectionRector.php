@@ -26,6 +26,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ConstructorInjectionToActionInjectionRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const __CONSTRUCT = '__construct';
+
+    /**
      * @var Param[]
      */
     private $propertyFetchToParams = [];
@@ -118,12 +123,12 @@ PHP
 
         // traverse constructor dependencies and names of their properties
         /** @var ClassMethod $constructMethod */
-        $constructMethod = $node->getMethod('__construct');
+        $constructMethod = $node->getMethod(self::__CONSTRUCT);
         $this->collectPropertyFetchToParams($constructMethod);
 
         // replace them in property fetches with particular class methods and use variable instead
         foreach ($node->getMethods() as $classMethod) {
-            if ($this->isName($classMethod, '__construct')) {
+            if ($this->isName($classMethod, self::__CONSTRUCT)) {
                 continue;
             }
 
@@ -177,7 +182,7 @@ PHP
             return true;
         }
 
-        $constructMethod = $class->getMethod('__construct');
+        $constructMethod = $class->getMethod(self::__CONSTRUCT);
         // no constructor, nothing to do
 
         return $constructMethod === null;

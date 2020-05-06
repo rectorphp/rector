@@ -26,6 +26,16 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const THIS = 'this';
+
+    /**
+     * @var string
+     */
+    private const ASSERT_SAME = 'assertSame';
+
+    /**
      * @var MethodCall
      */
     private $getStatusCodeMethodCall;
@@ -109,9 +119,9 @@ PHP
         $args = [];
         $args[] = new Arg(new LNumber(200));
         $args[] = new Arg($this->getStatusCodeMethodCall);
-        $match = new MethodCall(new Variable('this'), 'assertSame', $args);
+        $match = new MethodCall(new Variable(self::THIS), self::ASSERT_SAME, $args);
         if ($this->areNodesEqual($node, $match)) {
-            return new MethodCall(new Variable('this'), 'assertResponseIsSuccessful');
+            return new MethodCall(new Variable(self::THIS), 'assertResponseIsSuccessful');
         }
 
         // assertResponseStatusCodeSame
@@ -123,7 +133,7 @@ PHP
         // assertSelectorTextContains
         $args = $this->matchAssertContainsCrawlerArg($node);
         if ($args !== null) {
-            return new MethodCall(new Variable('this'), 'assertSelectorTextContains', $args);
+            return new MethodCall(new Variable(self::THIS), 'assertSelectorTextContains', $args);
         }
 
         // 3. assertResponseRedirects
@@ -146,7 +156,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($node->name, 'assertSame')) {
+        if (! $this->isName($node->name, self::ASSERT_SAME)) {
             return null;
         }
 
@@ -161,7 +171,7 @@ PHP
             return null;
         }
 
-        return new MethodCall(new Variable('this'), 'assertResponseStatusCodeSame', [$node->args[0]]);
+        return new MethodCall(new Variable(self::THIS), 'assertResponseStatusCodeSame', [$node->args[0]]);
     }
 
     /**
@@ -214,7 +224,7 @@ PHP
         $args[] = new Arg(new LNumber(301));
         $args[] = new Arg($this->getStatusCodeMethodCall);
 
-        $match = new MethodCall(new Variable('this'), 'assertSame', $args);
+        $match = new MethodCall(new Variable(self::THIS), self::ASSERT_SAME, $args);
 
         if ($this->areNodesEqual($previousNode, $match)) {
             $clientGetLocation = new MethodCall(new PropertyFetch(new MethodCall(
@@ -233,7 +243,7 @@ PHP
 
                 $this->removeNode($previousNode);
 
-                return new MethodCall(new Variable('this'), 'assertResponseRedirects', $args);
+                return new MethodCall(new Variable(self::THIS), 'assertResponseRedirects', $args);
             }
         }
 

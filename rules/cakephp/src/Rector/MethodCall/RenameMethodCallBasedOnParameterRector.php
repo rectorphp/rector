@@ -20,6 +20,16 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class RenameMethodCallBasedOnParameterRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const MATCH_PARAMETER = 'match_parameter';
+
+    /**
+     * @var string
+     */
+    private const REPLACE_WITH = 'replace_with';
+
+    /**
      * @var mixed[]
      */
     private $methodNamesByTypes = [];
@@ -55,12 +65,12 @@ PHP
                     [
                         '$methodNamesByTypes' => [
                             'getParam' => [
-                                'match_parameter' => 'paging',
-                                'replace_with' => 'getAttribute',
+                                self::MATCH_PARAMETER => 'paging',
+                                self::REPLACE_WITH => 'getAttribute',
                             ],
                             'withParam' => [
-                                'match_parameter' => 'paging',
-                                'replace_with' => 'withAttribute',
+                                self::MATCH_PARAMETER => 'paging',
+                                self::REPLACE_WITH => 'withAttribute',
                             ],
                         ],
                     ]
@@ -87,7 +97,7 @@ PHP
             return null;
         }
 
-        $node->name = new Identifier($config['replace_with']);
+        $node->name = new Identifier($config[self::REPLACE_WITH]);
 
         return $node;
     }
@@ -113,7 +123,7 @@ PHP
                 continue;
             }
             $config = $methodMapping[$currentMethodName];
-            if (empty($config['match_parameter'])) {
+            if (empty($config[self::MATCH_PARAMETER])) {
                 continue;
             }
             if (count($methodCall->args) < 1) {
@@ -123,7 +133,7 @@ PHP
             if (! ($arg->value instanceof String_)) {
                 continue;
             }
-            if ($arg->value->value !== $config['match_parameter']) {
+            if ($arg->value->value !== $config[self::MATCH_PARAMETER]) {
                 continue;
             }
 

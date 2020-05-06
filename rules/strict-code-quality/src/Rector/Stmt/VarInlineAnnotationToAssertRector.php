@@ -31,6 +31,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class VarInlineAnnotationToAssertRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const ASSERT = 'assert';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turn @var inline checks above code to assert() of hte type', [
@@ -180,27 +185,27 @@ PHP
     {
         if ($type instanceof ObjectType) {
             $instanceOf = new Instanceof_($variable, new FullyQualified($type->getClassName()));
-            return $this->createFuncCall('assert', [$instanceOf]);
+            return $this->createFuncCall(self::ASSERT, [$instanceOf]);
         }
 
         if ($type instanceof IntegerType) {
             $isInt = $this->createFuncCall('is_int', [$variable]);
-            return $this->createFuncCall('assert', [$isInt]);
+            return $this->createFuncCall(self::ASSERT, [$isInt]);
         }
 
         if ($type instanceof FloatType) {
             $isFloat = $this->createFuncCall('is_float', [$variable]);
-            return $this->createFuncCall('assert', [$isFloat]);
+            return $this->createFuncCall(self::ASSERT, [$isFloat]);
         }
 
         if ($type instanceof StringType) {
             $isString = $this->createFuncCall('is_string', [$variable]);
-            return $this->createFuncCall('assert', [$isString]);
+            return $this->createFuncCall(self::ASSERT, [$isString]);
         }
 
         if ($type instanceof BooleanType) {
             $isInt = $this->createFuncCall('is_bool', [$variable]);
-            return $this->createFuncCall('assert', [$isInt]);
+            return $this->createFuncCall(self::ASSERT, [$isInt]);
         }
 
         return null;

@@ -30,6 +30,16 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
  */
 final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const GET_MANAGER = 'getManager';
+
+    /**
+     * @var string
+     */
+    private const ENTITY_MANAGER = 'entityManager';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('', [
@@ -102,7 +112,7 @@ PHP
 
         // collect on registry method calls, so we know if the manager registry is needed
         $registryCalledMethods = $this->resolveManagerRegistryCalledMethodNames($node);
-        if (! in_array('getManager', $registryCalledMethods, true)) {
+        if (! in_array(self::GET_MANAGER, $registryCalledMethods, true)) {
             return null;
         }
 
@@ -113,7 +123,7 @@ PHP
             return null;
         }
 
-        if ($registryCalledMethods === ['getManager']) {
+        if ($registryCalledMethods === [self::GET_MANAGER]) {
             // the manager registry is needed only get entity manager → we don't need it now
             $this->removeManagerRegistryDependency($node, $constructMethodNode, $managerRegistryParam);
         }
@@ -125,7 +135,7 @@ PHP
         $this->addConstructorDependencyWithProperty(
             $node,
             $constructMethodNode,
-            'entityManager',
+            self::ENTITY_MANAGER,
             new FullyQualifiedObjectType(EntityManagerInterface::class)
         );
 
@@ -216,7 +226,7 @@ PHP
                 return null;
             }
 
-            return new PropertyFetch(new Variable('this'), 'entityManager');
+            return new PropertyFetch(new Variable('this'), self::ENTITY_MANAGER);
         });
     }
 
@@ -249,7 +259,7 @@ PHP
 
     private function createEntityManagerParam(): Param
     {
-        return new Param(new Variable('entityManager'), null, new FullyQualified(EntityManagerInterface::class));
+        return new Param(new Variable(self::ENTITY_MANAGER), null, new FullyQualified(EntityManagerInterface::class));
     }
 
     private function removeRegistryDependencyAssign(Class_ $class, ClassMethod $classMethod, Param $registryParam): void
@@ -283,7 +293,7 @@ PHP
         if (! $this->isObjectType($assign->expr->var, ManagerRegistry::class)) {
             return false;
         }
-        return $this->isName($assign->expr->name, 'getManager');
+        return $this->isName($assign->expr->name, self::GET_MANAGER);
     }
 
     /**
