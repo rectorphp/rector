@@ -174,7 +174,6 @@ PHP
         $removedPropertyNameToPhpDocInfo = $this->collectAndRemoveTranslatableProperties($node);
         $removePropertyNames = array_keys($removedPropertyNameToPhpDocInfo);
 
-        // @todo add them as a @method annotation, so the autocomplete still works?
         $this->removeSetAndGetMethods($node, $removePropertyNames);
 
         $this->dumpEntityTranslation($node, $removedPropertyNameToPhpDocInfo);

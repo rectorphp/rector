@@ -71,7 +71,6 @@ final class RouteValueObject
         $path = '/' . $controllerPath . '/' . $methodPath;
         $path = strtolower($path);
 
-        // @todo solve required/optional/type of params
         foreach ($this->params as $param) {
             $path .= '/{' . $param . '}';
         }

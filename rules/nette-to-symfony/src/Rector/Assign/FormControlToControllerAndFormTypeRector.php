@@ -143,7 +143,6 @@ PHP
 
             $this->dumpFormController($node, $formTypeClass);
 
-            // @todo dump to new file? or the symfony controller?
             return $formTypeClass;
         }
 

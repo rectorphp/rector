@@ -84,7 +84,6 @@ PHP
             return null;
         }
 
-        // @todo better check type in the future with custom PHPStan type extension
         if (! $this->isVariableName($possibleRedirector->var, 'redirector')) {
             return null;
         }
