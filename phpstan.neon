@@ -281,9 +281,12 @@ parameters:
             path: rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
 
         -
-            message: "#^Class cognitive complexity for \"EregToPcreTransformer\" is 77, keep it under 50$#"
-            count: 1
+            message: "#^Class cognitive complexity for \"EregToPcreTransformer\" is (.*?), keep it under 50$#"
             path: rules/php70/src/EregToPcreTransformer.php
+
+        -
+            message: "#Use explicit property fetch names over dynamic#"
+            path: packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
 
