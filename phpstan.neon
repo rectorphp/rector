@@ -10,6 +10,7 @@ includes:
 rules:
     # should be fixed in next part of symplify CS release
     - Symplify\CodingStandard\Rules\NoClassWithStaticMethodWithoutStaticNameRule
+    - Symplify\CodingStandard\Rules\SeeAnnotationToTestRule
 
 parameters:
     level: max
@@ -19,6 +20,8 @@ parameters:
         max_cognitive_complexity: 9 # default: 8
         parent_classes:
             - Rector
+        required_see_types:
+            - PHPStan\Rules\Rule
 
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false

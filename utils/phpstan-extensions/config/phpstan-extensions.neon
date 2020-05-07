@@ -1,21 +1,4 @@
-parameters:
-    rector:
-        required_see_types:
-            - Rector\Core\Contract\Rector\PhpRectorInterface
-            - PHPStan\Rules\Rule
-
-parametersSchema:
-    rector: structure([
-        required_see_types: arrayOf(string())
-    ])
-
 services:
-    -
-        class: Rector\PHPStanExtensions\Rule\SeeAnnotationToTestRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            requiredSeeTypes: %rector.required_see_types%
-
     -
         class: Rector\PHPStanExtensions\Rule\PreventParentMethodVisibilityOverrideRule
         tags: [phpstan.rules.rule]
