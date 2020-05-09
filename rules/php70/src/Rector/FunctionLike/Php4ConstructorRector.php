@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php70\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -99,7 +98,7 @@ PHP
             /** @var Expression $stmt */
             $stmt = $node->stmts[0];
 
-            if ($this->isThisConstructCall($stmt->expr)) {
+            if ($this->isLocalMethodCallNamed($stmt->expr, self::__CONSTRUCT)) {
                 $this->removeNode($node);
 
                 return null;
@@ -143,19 +142,6 @@ PHP
 
             $this->processParentPhp4ConstructCall($methodStmt);
         }
-    }
-
-    private function isThisConstructCall(Node $node): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isVariableName($node->var, 'this')) {
-            return false;
-        }
-
-        return $this->isName($node->name, self::__CONSTRUCT);
     }
 
     private function processParentPhp4ConstructCall(Node $node): void
