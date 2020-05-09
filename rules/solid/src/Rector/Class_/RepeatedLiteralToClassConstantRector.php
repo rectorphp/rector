@@ -6,16 +6,17 @@ namespace Rector\SOLID\Rector\Class_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
+use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Class_\RepeatedLiteralToClassConstantRector\RepeatedLiteralToClassConstantRectorTest
@@ -37,9 +38,17 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
      */
     private $classInsertManipulator;
 
-    public function __construct(ClassInsertManipulator $classInsertManipulator)
-    {
+    /**
+     * @var ScopeAwareNodeFinder
+     */
+    private $scopeAwareNodeFinder;
+
+    public function __construct(
+        ClassInsertManipulator $classInsertManipulator,
+        ScopeAwareNodeFinder $scopeAwareNodeFinder
+    ) {
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
     }
 
     public function getDefinition(): RectorDefinition
@@ -87,27 +96,27 @@ PHP
     }
 
     /**
-     * @param Class_ $class
+     * @param Class_ $node
      */
-    public function refactor(Node $class): ?Node
+    public function refactor(Node $node): ?Node
     {
         // skip tests, where string values are often used as fixtures
-        if ($this->isName($class, '*Test')) {
+        if ($this->isName($node, '*Test')) {
             return null;
         }
 
         /** @var String_[] $strings */
-        $strings = $this->betterNodeFinder->findInstanceOf($class, String_::class);
+        $strings = $this->betterNodeFinder->findInstanceOf($node, String_::class);
 
         $stringsToReplace = $this->resolveStringsToReplace($strings);
         if ($stringsToReplace === []) {
             return null;
         }
 
-        $this->replaceStringsWithClassConstReferences($class, $stringsToReplace);
-        $this->addClassConsts($stringsToReplace, $class);
+        $this->replaceStringsWithClassConstReferences($node, $stringsToReplace);
+        $this->addClassConsts($stringsToReplace, $node);
 
-        return $class;
+        return $node;
     }
 
     /**
@@ -182,14 +191,14 @@ PHP
         }
 
         // is replaceable value?
-        $matches = Strings::match($value, '#(?<' . self::VALUE . '>[\w\-_]+)#');
+        $matches = Strings::match($value, '#(?<' . self::VALUE . '>[\w\-\/\\_]+)#');
         if (! isset($matches[self::VALUE])) {
             return true;
         }
 
         // skip values in another constants
-        $parentConst = $this->betterNodeFinder->findFirstPreviousOfTypes($string, [Const_::class]);
-        if ($parentConst) {
+        $parentConst = $this->scopeAwareNodeFinder->findParentType($string, [ClassConst::class]);
+        if ($parentConst !== null) {
             return true;
         }
 
@@ -199,7 +208,7 @@ PHP
     private function createConstName(string $value): string
     {
         $value = StaticRectorStrings::camelCaseToUnderscore($value);
-        $value = Strings::replace($value, '#-#', '_');
+        $value = Strings::replace($value, '#[-\\\/]#', '_');
 
         return strtoupper($value);
     }

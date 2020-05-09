@@ -12,6 +12,21 @@ use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 final class ComposerJsonManipulator
 {
     /**
+     * @var string[]
+     */
+    private const KEYS_TO_REMOVE = ['replace'];
+
+    /**
+     * @var string
+     */
+    private const REQUIRE = 'require';
+
+    /**
+     * @var string
+     */
+    private const PHPSTAN_PHPSTAN = 'phpstan/phpstan';
+
+    /**
      * @var string
      */
     private $originalComposerJsonFileContent;
@@ -65,12 +80,9 @@ final class ComposerJsonManipulator
 
     private function removeDevKeys(array $json): array
     {
-        $keysToRemove = ['replace'];
-
-        foreach ($keysToRemove as $keyToRemove) {
+        foreach (self::KEYS_TO_REMOVE as $keyToRemove) {
             unset($json[$keyToRemove]);
         }
-
         return $json;
     }
 
@@ -80,13 +92,13 @@ final class ComposerJsonManipulator
     private function replacePHPStanWithPHPStanSrc(array $json): array
     {
         // already replaced
-        if (! isset($json['require']['phpstan/phpstan'])) {
+        if (! isset($json[self::REQUIRE][self::PHPSTAN_PHPSTAN])) {
             return $json;
         }
 
-        $phpstanVersion = $json['require']['phpstan/phpstan'];
-        $json['require']['phpstan/phpstan-src'] = $phpstanVersion;
-        unset($json['require']['phpstan/phpstan']);
+        $phpstanVersion = $json[self::REQUIRE][self::PHPSTAN_PHPSTAN];
+        $json[self::REQUIRE]['phpstan/phpstan-src'] = $phpstanVersion;
+        unset($json[self::REQUIRE][self::PHPSTAN_PHPSTAN]);
 
         $json['repositories'][] = [
             'type' => 'vcs',

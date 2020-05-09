@@ -35,10 +35,8 @@ final class PhpParserNodeMapper
 
             // do not let Expr collect all the types
             // note: can be solve later with priorities on mapper interface, making this last
-            if ($phpParserNodeMapper->getNodeType() === Expr::class) {
-                if (is_a($node, String_::class)) {
-                    continue;
-                }
+            if ($phpParserNodeMapper->getNodeType() === Expr::class && is_a($node, String_::class)) {
+                continue;
             }
 
             return $phpParserNodeMapper->mapToPHPStan($node);

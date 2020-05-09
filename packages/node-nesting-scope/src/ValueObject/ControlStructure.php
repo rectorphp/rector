@@ -20,7 +20,7 @@ final class ControlStructure
     /**
      * @var class-string[]
      */
-    public const NODE_TYPES = [
+    public const BREAKING_SCOPE_NODE_TYPES = [
         For_::class,
         Foreach_::class,
         If_::class,

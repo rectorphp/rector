@@ -55,6 +55,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     ];
 
     /**
+     * @var string
+     */
+    private const COMMENTS = 'comments';
+
+    /**
      * @var BuilderFactory
      */
     protected $builderFactory;
@@ -250,7 +255,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected function mirrorComments(Node $newNode, Node $oldNode): void
     {
         $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $oldNode->getAttribute(AttributeKey::PHP_DOC_INFO));
-        $newNode->setAttribute('comments', $oldNode->getAttribute('comments'));
+        $newNode->setAttribute(self::COMMENTS, $oldNode->getAttribute(self::COMMENTS));
     }
 
     /**
@@ -265,7 +270,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
                 $ifStmt->setAttribute(AttributeKey::PHP_DOC_INFO, $currentPhpDocInfo);
 
                 // move // comments
-                $ifStmt->setAttribute('comments', $node->getComments());
+                $ifStmt->setAttribute(self::COMMENTS, $node->getComments());
             }
 
             $this->addNodeAfterNode($ifStmt, $node);

@@ -41,6 +41,11 @@ final class ScreenFileCommand extends AbstractCommand
     private const FILE_ARGUMENT = 'file';
 
     /**
+     * @var string
+     */
+    private const NAME = 'name';
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -242,7 +247,7 @@ final class ScreenFileCommand extends AbstractCommand
      */
     private function decorateClassLike(ClassLike $classLike, array $data): array
     {
-        $data['name'] = $this->nodeNameResolver->getName($classLike);
+        $data[self::NAME] = $this->nodeNameResolver->getName($classLike);
 
         $parentClassName = $classLike->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if ($parentClassName) {
@@ -267,15 +272,15 @@ final class ScreenFileCommand extends AbstractCommand
     private function addNameData(Node $node, array $data): array
     {
         if ($node instanceof Variable) {
-            $data['name'] = $this->nodeNameResolver->getName($node);
+            $data[self::NAME] = $this->nodeNameResolver->getName($node);
         }
 
         if ($node instanceof Namespace_ && $node->name !== null) {
-            $data['name'] = $this->nodeNameResolver->getName($node->name);
+            $data[self::NAME] = $this->nodeNameResolver->getName($node->name);
         }
 
         if ($node instanceof FuncCall && $node->name !== null) {
-            $data['name'] = $this->nodeNameResolver->getName($node->name);
+            $data[self::NAME] = $this->nodeNameResolver->getName($node->name);
         }
 
         return $data;

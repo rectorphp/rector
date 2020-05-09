@@ -78,6 +78,11 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     /**
      * @var string
      */
+    private const THIS = 'this';
+
+    /**
+     * @var string
+     */
     private $testedClass;
 
     /**
@@ -281,7 +286,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             }
 
             // 1. assign callable to variable
-            $thisGetMatchers = $this->createMethodCall('this', 'getMatchers');
+            $thisGetMatchers = $this->createMethodCall(self::THIS, 'getMatchers');
             $arrayDimFetch = new ArrayDimFetch($thisGetMatchers, new String_($matcherKey));
             $matcherCallableVariable = new Variable('matcherCallable');
             $assign = new Assign($matcherCallableVariable, $arrayDimFetch);
@@ -313,7 +318,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             $name = $this->resolveBoolMethodName($name, $expected);
         }
 
-        $assetMethodCall = $this->createMethodCall('this', $name);
+        $assetMethodCall = $this->createMethodCall(self::THIS, $name);
 
         if (! $this->isBoolAssert && $expected) {
             $assetMethodCall->args[] = new Arg($this->thisToTestedObjectPropertyFetch($expected));
@@ -326,7 +331,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isVariableName($methodCall->var, 'this')) {
+        if (! $this->isVariableName($methodCall->var, self::THIS)) {
             return true;
         }
 
@@ -338,7 +343,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     {
         $propertyName = $this->phpSpecRenaming->resolveObjectPropertyName($class);
 
-        return new PropertyFetch(new Variable('this'), $propertyName);
+        return new PropertyFetch(new Variable(self::THIS), $propertyName);
     }
 
     private function moveConstructorArguments(MethodCall $methodCall, StaticCall $staticCall): void
@@ -379,7 +384,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
 
     private function thisToTestedObjectPropertyFetch(Expr $expr): Expr
     {
-        if (! $this->isVariableName($expr, 'this')) {
+        if (! $this->isVariableName($expr, self::THIS)) {
             return $expr;
         }
 

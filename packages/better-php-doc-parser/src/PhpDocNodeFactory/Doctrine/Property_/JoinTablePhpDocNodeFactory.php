@@ -116,11 +116,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             throw new ShouldNotHappenException();
         }
 
-        if ($type === self::JOIN_COLUMNS) {
-            $joinColumns = $joinTable->joinColumns;
-        } else {
-            $joinColumns = $joinTable->inverseJoinColumns;
-        }
+        $joinColumns = $type === self::JOIN_COLUMNS ? $joinTable->joinColumns : $joinTable->inverseJoinColumns;
 
         foreach ($joinColumns as $key => $joinColumn) {
             $subAnnotation = $joinColumnContents[$key];

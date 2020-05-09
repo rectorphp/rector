@@ -19,11 +19,26 @@ final class VisibilityManipulator
     private const ALLOWED_NODE_TYPES = [ClassMethod::class, Property::class, ClassConst::class, Class_::class];
 
     /**
+     * @var string
+     */
+    private const STATIC = 'static';
+
+    /**
+     * @var string
+     */
+    private const FINAL = 'final';
+
+    /**
+     * @var string
+     */
+    private const ABSTRACT = 'abstract';
+
+    /**
      * @param ClassMethod|Property|ClassConst $node
      */
     public function makeStatic(Node $node): void
     {
-        $this->addVisibilityFlag($node, 'static');
+        $this->addVisibilityFlag($node, self::STATIC);
     }
 
     /**
@@ -31,7 +46,7 @@ final class VisibilityManipulator
      */
     public function makeAbstract(Node $node): void
     {
-        $this->addVisibilityFlag($node, 'abstract');
+        $this->addVisibilityFlag($node, self::ABSTRACT);
     }
 
     /**
@@ -39,7 +54,7 @@ final class VisibilityManipulator
      */
     public function makeFinal(Node $node): void
     {
-        $this->addVisibilityFlag($node, 'final');
+        $this->addVisibilityFlag($node, self::FINAL);
     }
 
     /**
@@ -49,7 +64,7 @@ final class VisibilityManipulator
     {
         $visibility = strtolower($visibility);
 
-        if ($visibility !== 'static' && $visibility !== 'abstract' && $visibility !== 'final') {
+        if ($visibility !== self::STATIC && $visibility !== self::ABSTRACT && $visibility !== self::FINAL) {
             $this->removeOriginalVisibilityFromFlags($node);
         }
 
@@ -75,15 +90,15 @@ final class VisibilityManipulator
             $node->flags |= Class_::MODIFIER_PRIVATE;
         }
 
-        if ($visibility === 'static') {
+        if ($visibility === self::STATIC) {
             $node->flags |= Class_::MODIFIER_STATIC;
         }
 
-        if ($visibility === 'abstract') {
+        if ($visibility === self::ABSTRACT) {
             $node->flags |= Class_::MODIFIER_ABSTRACT;
         }
 
-        if ($visibility === 'final') {
+        if ($visibility === self::FINAL) {
             $node->flags |= Class_::MODIFIER_FINAL;
         }
     }

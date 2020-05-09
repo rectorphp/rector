@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
@@ -101,7 +100,7 @@ PHP
         $this->refactorClassMethods($node);
         $this->refactorClassProperties($node);
 
-        if ($this->hasChange === false) {
+        if (! $this->hasChange) {
             return null;
         }
 
@@ -145,6 +144,7 @@ PHP
                 continue;
             }
 
+            /** @var string $oldName */
             $oldName = $this->getName($property);
             $expectedName = $this->expectedNameResolver->resolveForPropertyIfNotYet($property);
             if ($expectedName === null) {
@@ -181,20 +181,11 @@ PHP
         });
     }
 
-    private function renamePropertyFetchesInClass(ClassLike $classLike, ?string $oldName, string $expectedName): void
+    private function renamePropertyFetchesInClass(ClassLike $classLike, string $oldName, string $expectedName): void
     {
         // 1. replace property fetch rename in whole class
         $this->traverseNodesWithCallable([$classLike], function (Node $node) use ($oldName, $expectedName) {
-            if (! $node instanceof PropertyFetch) {
-                return null;
-            }
-
-            // local property
-            if (! $this->isVariableName($node->var, 'this')) {
-                return null;
-            }
-
-            if (! $this->isName($node->name, $oldName)) {
+            if (! $this->isLocalPropertyFetchNamed($node, $oldName)) {
                 return null;
             }
 

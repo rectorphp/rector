@@ -57,7 +57,7 @@ final class JetbrainsStubsRenamer
         }
 
         $stubsMapContents = FileSystem::read($stubsMapPath);
-        $stubsMapContents = Strings::replace($stubsMapContents, '#\.php\',#m', '.stub\',');
+        $stubsMapContents = Strings::replace($stubsMapContents, '#\.php\',#m', ".stub',");
 
         FileSystem::write($stubsMapPath, $stubsMapContents);
     }
