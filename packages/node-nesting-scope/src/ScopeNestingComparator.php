@@ -31,6 +31,6 @@ final class ScopeNestingComparator
 
     private function findParentControlStructure(Node $node): ?Node
     {
-        return $this->betterNodeFinder->findFirstParentInstanceOf($node, ControlStructure::NODE_TYPES);
+        return $this->betterNodeFinder->findFirstParentInstanceOf($node, ControlStructure::BREAKING_SCOPE_NODE_TYPES);
     }
 }

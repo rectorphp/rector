@@ -11,11 +11,13 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
+use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Class_\RepeatedLiteralToClassConstantRector\RepeatedLiteralToClassConstantRectorTest
@@ -36,10 +38,15 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
      * @var ClassInsertManipulator
      */
     private $classInsertManipulator;
+    /**
+     * @var ScopeAwareNodeFinder
+     */
+    private $scopeAwareNodeFinder;
 
-    public function __construct(ClassInsertManipulator $classInsertManipulator)
+    public function __construct(ClassInsertManipulator $classInsertManipulator, ScopeAwareNodeFinder $scopeAwareNodeFinder)
     {
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
     }
 
     public function getDefinition(): RectorDefinition
@@ -188,7 +195,7 @@ PHP
         }
 
         // skip values in another constants
-        $parentConst = $this->betterNodeFinder->findFirstPreviousOfTypes($string, [Const_::class]);
+        $parentConst = $this->scopeAwareNodeFinder->findParentType($string, [ClassConst::class]);
         if ($parentConst) {
             return true;
         }
