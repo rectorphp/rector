@@ -6225,6 +6225,36 @@ Add response content to response code assert, so it is easier to debug
 
 ## PSR4
 
+### `MultipleClassFileToPsr4ClassesRector`
+
+- class: [`Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector`](/../master/rules/psr4/src/Rector/MultipleClassFileToPsr4ClassesRector.php)
+
+Turns namespaced classes in one file to standalone PSR-4 classes.
+
+```diff
++// new file: "app/Exceptions/FirstException.php"
+ namespace App\Exceptions;
+
+ use Exception;
+
+ final class FirstException extends Exception
+ {
+
+ }
++
++// new file: "app/Exceptions/SecondException.php"
++namespace App\Exceptions;
++
++use Exception;
+
+ final class SecondException extends Exception
+ {
+
+ }
+```
+
+<br>
+
 ### `NormalizeNamespaceByPSR4ComposerAutoloadRector`
 
 - class: [`Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector`](/../master/rules/psr4/src/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
@@ -10908,36 +10938,6 @@ services:
      {
          return 1;
      }
- }
-```
-
-<br>
-
-### `MultipleClassFileToPsr4ClassesRector`
-
-- class: [`Rector\Core\Rector\Psr4\MultipleClassFileToPsr4ClassesRector`](/../master/src/Rector/Psr4/MultipleClassFileToPsr4ClassesRector.php)
-
-Turns namespaced classes in one file to standalone PSR-4 classes.
-
-```diff
-+// new file: "app/Exceptions/FirstException.php"
- namespace App\Exceptions;
-
- use Exception;
-
- final class FirstException extends Exception
- {
-
- }
-+
-+// new file: "app/Exceptions/SecondException.php"
-+namespace App\Exceptions;
-+
-+use Exception;
-
- final class SecondException extends Exception
- {
-
  }
 ```
 

@@ -1,2 +1,3 @@
 services:
     Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector: null
+    Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector: null

@@ -149,6 +149,9 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     {
         $nodes = $this->postFileProcessor->traverse($nodes);
 
+        // re-index keys from 0
+        $nodes = array_values($nodes);
+
         // 1. if nodes are the same, prefer format preserving printer
         try {
             $dummyLexer = new Lexer();

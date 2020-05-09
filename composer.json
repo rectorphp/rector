@@ -219,7 +219,7 @@
             "rules/autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
             "rules/cakephp/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source",
             "tests/Source",
-            "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source",
+            "rules/psr4/tests/Rector/MultipleClassFileToPsr4ClassesRector/Source",
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source",
             "tests/Issues/Issue1243/Source"
         ],
