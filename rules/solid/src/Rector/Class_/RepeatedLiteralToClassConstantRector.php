@@ -96,27 +96,27 @@ PHP
     }
 
     /**
-     * @param Class_ $class
+     * @param Class_ $node
      */
-    public function refactor(Node $class): ?Node
+    public function refactor(Node $node): ?Node
     {
         // skip tests, where string values are often used as fixtures
-        if ($this->isName($class, '*Test')) {
+        if ($this->isName($node, '*Test')) {
             return null;
         }
 
         /** @var String_[] $strings */
-        $strings = $this->betterNodeFinder->findInstanceOf($class, String_::class);
+        $strings = $this->betterNodeFinder->findInstanceOf($node, String_::class);
 
         $stringsToReplace = $this->resolveStringsToReplace($strings);
         if ($stringsToReplace === []) {
             return null;
         }
 
-        $this->replaceStringsWithClassConstReferences($class, $stringsToReplace);
-        $this->addClassConsts($stringsToReplace, $class);
+        $this->replaceStringsWithClassConstReferences($node, $stringsToReplace);
+        $this->addClassConsts($stringsToReplace, $node);
 
-        return $class;
+        return $node;
     }
 
     /**
@@ -198,7 +198,7 @@ PHP
 
         // skip values in another constants
         $parentConst = $this->scopeAwareNodeFinder->findParentType($string, [ClassConst::class]);
-        if ($parentConst) {
+        if ($parentConst !== null) {
             return true;
         }
 

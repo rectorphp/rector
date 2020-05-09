@@ -19,11 +19,16 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
      */
     public const CLASS_NAME = Route::class;
 
+    /**
+     * @var string
+     */
+    private const PATH = 'path';
+
     public function __toString(): string
     {
         $items = $this->items;
-        if (isset($items['path']) || isset($items['localizedPaths'])) {
-            $items['path'] = $items['path'] ?? $this->items['localizedPaths'];
+        if (isset($items[self::PATH]) || isset($items['localizedPaths'])) {
+            $items[self::PATH] = $items[self::PATH] ?? $this->items['localizedPaths'];
         }
 
         return $this->printItems($items);
@@ -42,6 +47,6 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
     public function getSilentKey(): string
     {
-        return 'path';
+        return self::PATH;
     }
 }

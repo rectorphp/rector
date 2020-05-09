@@ -168,15 +168,7 @@ PHP
         // "$this->get('request')"
         /** @var MethodCall[] $getMethodCalls */
         $getMethodCalls = $this->betterNodeFinder->find($node, function (Node $node): bool {
-            if (! $node instanceof MethodCall) {
-                return false;
-            }
-
-            if (! $this->isVariableName($node->var, 'this')) {
-                return false;
-            }
-
-            return $this->isName($node->name, 'get');
+            return $this->isLocalMethodCallNamed($node, 'get');
         });
 
         foreach ($getMethodCalls as $getMethodCall) {
@@ -212,15 +204,7 @@ PHP
     {
         // "$this->getRequest()"
         return (bool) $this->betterNodeFinder->find($node, function (Node $node): bool {
-            if (! $node instanceof MethodCall) {
-                return false;
-            }
-
-            if (! $this->isVariableName($node->var, 'this')) {
-                return false;
-            }
-
-            return $this->isName($node->name, 'getRequest');
+            return $this->isLocalMethodCallNamed($node, 'getRequest');
         });
     }
 }

@@ -66,6 +66,21 @@ final class AssertManipulator
     ];
 
     /**
+     * @var string
+     */
+    private const CONTAINS = 'contains';
+
+    /**
+     * @var string
+     */
+    private const THIS = 'this';
+
+    /**
+     * @var string
+     */
+    private const SELF = 'self';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -120,7 +135,7 @@ final class AssertManipulator
             return $this->processTruthyOrFalseyCall($staticCall);
         }
 
-        if ($this->nodeNameResolver->isNames($staticCall->name, ['contains', 'notContains'])) {
+        if ($this->nodeNameResolver->isNames($staticCall->name, [self::CONTAINS, 'notContains'])) {
             $this->processContainsCall($staticCall);
         } elseif ($this->nodeNameResolver->isNames($staticCall->name, ['exception', 'throws'])) {
             $this->processExceptionCall($staticCall);
@@ -135,7 +150,7 @@ final class AssertManipulator
         // self or class, depending on the context
         // prefer $this->assertSame() as more conventional and explicit in class-context
         if (! $this->sholdBeStaticCall($staticCall)) {
-            $methodCall = new MethodCall(new Variable('this'), $staticCall->name);
+            $methodCall = new MethodCall(new Variable(self::THIS), $staticCall->name);
             $methodCall->args = $staticCall->args;
             $methodCall->setAttributes($staticCall->getAttributes());
             $methodCall->setAttribute(AttributeKey::ORIGINAL_NODE, null);
@@ -156,7 +171,7 @@ final class AssertManipulator
         $method = $this->nodeNameResolver->isName($staticCall->name, 'truthy') ? 'assertTrue' : 'assertFalse';
 
         if (! $this->sholdBeStaticCall($staticCall)) {
-            $call = new MethodCall(new Variable('this'), $method);
+            $call = new MethodCall(new Variable(self::THIS), $method);
             $call->args = $staticCall->args;
             $call->setAttributes($staticCall->getAttributes());
             $call->setAttribute(AttributeKey::ORIGINAL_NODE, null);
@@ -177,12 +192,12 @@ final class AssertManipulator
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($staticCall->args[1]->value)) {
             $name = $this->nodeNameResolver->isName(
                 $staticCall->name,
-                'contains'
+                self::CONTAINS
             ) ? 'assertStringContainsString' : 'assertStringNotContainsString';
         } else {
             $name = $this->nodeNameResolver->isName(
                 $staticCall->name,
-                'contains'
+                self::CONTAINS
             ) ? 'assertContains' : 'assertNotContains';
         }
 
@@ -195,9 +210,9 @@ final class AssertManipulator
 
         // expect exception
         if ($this->sholdBeStaticCall($staticCall)) {
-            $expectException = new StaticCall(new Name('self'), $method);
+            $expectException = new StaticCall(new Name(self::SELF), $method);
         } else {
-            $expectException = new MethodCall(new Variable('this'), $method);
+            $expectException = new MethodCall(new Variable(self::THIS), $method);
         }
 
         $expectException->args[] = $staticCall->args[1];
@@ -282,9 +297,9 @@ final class AssertManipulator
         $method = 'expectExceptionMessage';
 
         if ($this->sholdBeStaticCall($staticCall)) {
-            $expectExceptionMessage = new StaticCall(new Name('self'), $method);
+            $expectExceptionMessage = new StaticCall(new Name(self::SELF), $method);
         } else {
-            $expectExceptionMessage = new MethodCall(new Variable('this'), $method);
+            $expectExceptionMessage = new MethodCall(new Variable(self::THIS), $method);
         }
 
         $expectExceptionMessage->args[] = $staticCall->args[2];
@@ -297,9 +312,9 @@ final class AssertManipulator
         $method = 'expectExceptionCode';
 
         if ($this->sholdBeStaticCall($staticCall)) {
-            $expectExceptionCode = new StaticCall(new Name('self'), $method);
+            $expectExceptionCode = new StaticCall(new Name(self::SELF), $method);
         } else {
-            $expectExceptionCode = new MethodCall(new Variable('this'), $method);
+            $expectExceptionCode = new MethodCall(new Variable(self::THIS), $method);
         }
 
         $expectExceptionCode->args[] = $staticCall->args[3];

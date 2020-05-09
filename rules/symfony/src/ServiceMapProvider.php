@@ -27,6 +27,11 @@ final class ServiceMapProvider
     private const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
 
     /**
+     * @var string
+     */
+    private const TAG = 'tag';
+
+    /**
      * @var ParameterProvider
      */
     private $parameterProvider;
@@ -114,17 +119,17 @@ final class ServiceMapProvider
 
     private function createTagFromXmlElement($def): array
     {
-        if (! isset($def['tag'])) {
+        if (! isset($def[self::TAG])) {
             return [];
         }
 
         $tags = [];
-        if (is_array($def['tag'])) {
-            foreach ($def['tag'] as $tag) {
+        if (is_array($def[self::TAG])) {
+            foreach ($def[self::TAG] as $tag) {
                 $tags[] = $tag;
             }
         } else {
-            $tags[] = $def['tag'];
+            $tags[] = $def[self::TAG];
         }
 
         return $tags;
