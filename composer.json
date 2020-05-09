@@ -31,11 +31,11 @@
         "symfony/dependency-injection": "^4.4.6|^5.0.6",
         "symfony/finder": "^4.4.6|^5.0.6",
         "symfony/process": "^4.4.6|^5.0.6",
-        "symplify/auto-bind-parameter": "^7.3.5",
-        "symplify/autowire-array-parameter": "^7.3.5",
-        "symplify/package-builder": "^7.3.5",
-        "symplify/set-config-resolver": "^7.3.5",
-        "symplify/console-color-diff": "^7.3.5",
+        "symplify/auto-bind-parameter": "^7.3.10",
+        "symplify/autowire-array-parameter": "^7.3.10",
+        "symplify/package-builder": "^7.3.10",
+        "symplify/set-config-resolver": "^7.3.10",
+        "symplify/console-color-diff": "^7.3.10",
         "tracy/tracy": "^2.7"
     },
     "require-dev": {
@@ -43,10 +43,10 @@
         "ocramius/package-versions": "^1.4|^1.5",
         "phpunit/phpunit": "^8.4|^9.0",
         "slam/phpstan-extensions": "^5.0",
-        "symplify/changelog-linker": "^7.3.5",
-        "symplify/easy-coding-standard": "^7.3.5",
-        "symplify/monorepo-builder": "^7.3.5",
-        "symplify/phpstan-extensions": "^7.3.5",
+        "symplify/changelog-linker": "^7.3.10",
+        "symplify/easy-coding-standard": "^7.3.10",
+        "symplify/monorepo-builder": "^7.3.10",
+        "symplify/phpstan-extensions": "^7.3.10",
         "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
     "replace": {
