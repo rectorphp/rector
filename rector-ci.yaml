@@ -14,6 +14,10 @@ parameters:
         - 'packages'
         - 'tests'
         - 'utils'
+        - 'compiler/src'
+
+    autoload_paths:
+        - 'compiler/src'
 
     exclude_paths:
         - '/Fixture/'
@@ -21,6 +25,7 @@ parameters:
         - '/Expected/'
         # generated
         - 'packages/doctrine-annotation-generated/src/*'
+        - 'compiler/build/*'
 
 #    exclude_rectors:
 #        # @todo needs to check for "autoload-dev" local dependency
