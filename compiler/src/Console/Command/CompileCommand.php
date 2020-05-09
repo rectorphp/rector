@@ -108,6 +108,7 @@ final class CompileCommand extends Command
         // 4.
         $this->symfonyStyle->section('Restoring root composer.json with "require-dev"');
         $this->symfonyStyle->note('You still need to run "composer update" to install those dependencies');
+
         $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);
 
         $this->restoreDependenciesLocallyIfNotCi($output);

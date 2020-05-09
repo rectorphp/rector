@@ -27,9 +27,7 @@ parameters:
         - 'packages/doctrine-annotation-generated/src/*'
         - 'compiler/build/*'
 
-#    exclude_rectors:
-#        # @todo needs to check for "autoload-dev" local dependency
-#        - 'Rector\Php55\Rector\String_\StringClassNameToClassConstantRector'
-#        - 'Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector'
-#        # fix in separated PR
-#        - 'Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector'
+    exclude_rectors:
+        # @todo needs to check for "autoload-dev" local dependency
+        - 'Rector\Php55\Rector\String_\StringClassNameToClassConstantRector'
+        - 'Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector'

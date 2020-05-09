@@ -33,7 +33,7 @@ final class ScopeAwareNodeFinder
     {
         $callable = function (Node $node) use ($allowedTypes) {
             foreach ($allowedTypes as $allowedType) {
-                if (!is_a($node, $allowedType)) {
+                if (! is_a($node, $allowedType)) {
                     continue;
                 }
 

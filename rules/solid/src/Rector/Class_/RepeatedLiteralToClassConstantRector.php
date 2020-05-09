@@ -6,7 +6,6 @@ namespace Rector\SOLID\Rector\Class_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
@@ -38,13 +37,16 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
      * @var ClassInsertManipulator
      */
     private $classInsertManipulator;
+
     /**
      * @var ScopeAwareNodeFinder
      */
     private $scopeAwareNodeFinder;
 
-    public function __construct(ClassInsertManipulator $classInsertManipulator, ScopeAwareNodeFinder $scopeAwareNodeFinder)
-    {
+    public function __construct(
+        ClassInsertManipulator $classInsertManipulator,
+        ScopeAwareNodeFinder $scopeAwareNodeFinder
+    ) {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
     }
