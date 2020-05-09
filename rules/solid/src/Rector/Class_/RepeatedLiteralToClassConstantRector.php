@@ -182,7 +182,7 @@ PHP
         }
 
         // is replaceable value?
-        $matches = Strings::match($value, '#(?<' . self::VALUE . '>[\w\-_]+)#');
+        $matches = Strings::match($value, '#(?<' . self::VALUE . '>[\w\-\/\\_]+)#');
         if (! isset($matches[self::VALUE])) {
             return true;
         }
@@ -199,7 +199,7 @@ PHP
     private function createConstName(string $value): string
     {
         $value = StaticRectorStrings::camelCaseToUnderscore($value);
-        $value = Strings::replace($value, '#-#', '_');
+        $value = Strings::replace($value, '#[-\\\/]#', '_');
 
         return strtoupper($value);
     }
