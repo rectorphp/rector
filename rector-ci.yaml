@@ -25,7 +25,6 @@ parameters:
         - '/Expected/'
         # generated
         - 'packages/doctrine-annotation-generated/src/*'
-        - 'compiler/build/*'
 
     exclude_rectors:
         # @todo needs to check for "autoload-dev" local dependency
