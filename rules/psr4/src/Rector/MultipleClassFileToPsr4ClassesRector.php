@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Rector\Psr4;
+namespace Rector\PSR4\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -16,7 +16,7 @@ use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @see \Rector\Core\Tests\Rector\Psr4\MultipleClassFileToPsr4ClassesRector\MultipleClassFileToPsr4ClassesRectorTest
+ * @see \Rector\PSR4\Tests\Rector\MultipleClassFileToPsr4ClassesRector\MultipleClassFileToPsr4ClassesRectorTest
  */
 final class MultipleClassFileToPsr4ClassesRector extends AbstractFileSystemRector
 {
