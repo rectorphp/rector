@@ -1,21 +1,4 @@
-parameters:
-    rector:
-        required_see_types:
-            - Rector\Core\Contract\Rector\PhpRectorInterface
-            - PHPStan\Rules\Rule
-
-parametersSchema:
-    rector: structure([
-        required_see_types: arrayOf(string())
-    ])
-
 services:
-    -
-        class: Rector\PHPStanExtensions\Rule\SeeAnnotationToTestRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            requiredSeeTypes: %rector.required_see_types%
-
     -
         class: Rector\PHPStanExtensions\Rule\PreventParentMethodVisibilityOverrideRule
         tags: [phpstan.rules.rule]
@@ -27,21 +10,28 @@ services:
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 
     # $node->getAttribute($1) => Type|null by $1
-    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\GetAttributeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    -
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\GetAttributeReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
     # ParsedNodesByType->getNodesByType($1) => $1[]
-    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\ParsedNodesByTypeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    -
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\ParsedNodesByTypeReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
     # $nameResolver->getName() => in some cases always string
-    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    -
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
     # $nameResolverTrait->getName() => in some cases always string
-    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverTraitReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
-
-    # $betterNodeFinder->findByInstance(..., $1) => $1[]
-    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\BetterNodeFinderReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    -
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\NameResolverTraitReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
     # $phpDocInfo->getByType($1) => Type|null by $1
-    - { class: Rector\PHPStanExtensions\ReturnTypeExtension\PhpDocInfoGetByTypeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+    -
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\PhpDocInfoGetByTypeReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
 
    # $<type>builder->getNode() => Type
     -
@@ -53,3 +43,13 @@ services:
     -
          class: Rector\PHPStanExtensions\ReturnTypeExtension\Builder\ClassBuilderReturnTypeExtension
          tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+
+    # node finder
+    -
+         class: Rector\PHPStanExtensions\ReturnTypeExtension\NodeFinder\FindFirstInstanceOfReturnTypeExtension
+         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+
+    # $betterNodeFinder->findByInstance(..., $1) => $1[]
+    -
+        class: Rector\PHPStanExtensions\ReturnTypeExtension\NodeFinder\FindInstanceOfReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

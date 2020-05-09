@@ -10,6 +10,7 @@ includes:
 rules:
     # should be fixed in next part of symplify CS release
     - Symplify\CodingStandard\Rules\NoClassWithStaticMethodWithoutStaticNameRule
+    - Symplify\CodingStandard\Rules\SeeAnnotationToTestRule
 
 parameters:
     level: max
@@ -19,6 +20,8 @@ parameters:
         max_cognitive_complexity: 9 # default: 8
         parent_classes:
             - Rector
+        required_see_types:
+            - PHPStan\Rules\Rule
 
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
@@ -145,7 +148,6 @@ parameters:
 
         # bugs
         - '#Parameter \#1 \$items of class PhpParser\\Node\\Expr\\Array_ constructor expects array<PhpParser\\Node\\Expr\\ArrayItem\>, array<PhpParser\\Node\\Expr\\ArrayItem\|null\> given#'
-        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
 
         # known value
         - '#Method Rector\\StrictCodeQuality\\Rector\\Stmt\\VarInlineAnnotationToAssertRector\:\:findVariableByName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'
@@ -227,8 +229,6 @@ parameters:
 
         - '#Parameter \#2 \$name of method Rector\\Core\\Rector\\AbstractRector\:\:isVariableName\(\) expects string, string\|null given#'
 
-        - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
-
         # mixed
         - '#Property Rector\\Polyfill\\ValueObject\\BinaryToVersionCompareCondition\:\:\$expectedValue has no typehint specified#'
         # node finder
@@ -281,9 +281,12 @@ parameters:
             path: rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
 
         -
-            message: "#^Class cognitive complexity for \"EregToPcreTransformer\" is 77, keep it under 50$#"
-            count: 1
+            message: "#^Class cognitive complexity for \"EregToPcreTransformer\" is (.*?), keep it under 50$#"
             path: rules/php70/src/EregToPcreTransformer.php
+
+        -
+            message: "#Use explicit property fetch names over dynamic#"
+            path: packages/doctrine-annotation-generated/src/PhpDocNode/ConstantReferenceIdentifierRestorer.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
 
@@ -302,3 +305,7 @@ parameters:
         - '#Class "Rector\\Utils\\DoctrineAnnotationParserSyncer\\Rector\\(.*?)" is missing @see annotation with test case class reference#'
 
         - '#Method Rector\\Utils\\DocumentationGenerator\\Node\\NodeClassProvider\:\:getNodeClasses\(\) should return array<class\-string\> but returns array<int, \(int\|string\)\>#'
+
+        - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
+        - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
+        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
