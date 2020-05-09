@@ -131,7 +131,6 @@ PHP
 
             /** @var string $aliasName */
             $aliasName = $this->getName($use->alias);
-
             if ($this->shouldSkip($lastName, $aliasName)) {
                 continue;
             }
@@ -165,8 +164,13 @@ PHP
 
     private function shouldSkip(string $lastName, string $aliasName): bool
     {
+        // PHP is case insensitive
+        $loweredLastName = strtolower($lastName);
+        $loweredAliasName = strtolower($aliasName);
+        $this->resolvedNodeNames = array_change_key_case($this->resolvedNodeNames, CASE_LOWER);
+
         // both are used → nothing to remove
-        if (isset($this->resolvedNodeNames[$lastName], $this->resolvedNodeNames[$aliasName])) {
+        if (isset($this->resolvedNodeNames[$loweredLastName], $this->resolvedNodeNames[$loweredAliasName])) {
             return true;
         }
 
