@@ -15,7 +15,7 @@ final class PSR4AutoloadPathsProvider
     private $cachedComposerJsonPSR4AutoloadPaths = [];
 
     /**
-     * @return string[]
+     * @return string[]|string[][]
      */
     public function provide(): array
     {
