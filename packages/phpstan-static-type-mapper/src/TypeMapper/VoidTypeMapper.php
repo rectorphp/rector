@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
@@ -57,7 +57,7 @@ final class VoidTypeMapper implements TypeMapperInterface
             return null;
         }
 
-        return new Identifier(self::VOID);
+        return new Name(self::VOID);
     }
 
     public function mapToDocString(Type $type, ?Type $parentType = null): string

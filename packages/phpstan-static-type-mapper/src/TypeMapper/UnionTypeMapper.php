@@ -153,7 +153,10 @@ final class UnionTypeMapper implements TypeMapperInterface
         return $unionTypeAnalysis->hasIterable() && $unionTypeAnalysis->hasArray();
     }
 
-    private function matchArrayTypes(UnionType $unionType): ?Identifier
+    /**
+     * @return Name|NullableType|null
+     */
+    private function matchArrayTypes(UnionType $unionType): ?Node
     {
         $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
         if ($unionTypeAnalysis === null) {
@@ -162,10 +165,10 @@ final class UnionTypeMapper implements TypeMapperInterface
 
         $type = $unionTypeAnalysis->hasIterable() ? 'iterable' : 'array';
         if ($unionTypeAnalysis->isNullableType()) {
-            return new Identifier('?' . $type);
+            return new NullableType($type);
         }
 
-        return new Identifier($type);
+        return new Name($type);
     }
 
     private function matchTypeForNullableUnionType(UnionType $unionType): ?Type

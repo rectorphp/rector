@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\IntegerType;
@@ -49,7 +49,7 @@ final class IntegerTypeMapper implements TypeMapperInterface
             return null;
         }
 
-        return new Identifier('int');
+        return new Name('int');
     }
 
     public function mapToDocString(Type $type, ?Type $parentType = null): string
