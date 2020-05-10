@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -36,6 +37,7 @@ final class PhpDocTypeRenamer
      */
     public function changeUnderscoreType(Node $node, string $namespacePrefix, array $excludedClasses): void
     {
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return;

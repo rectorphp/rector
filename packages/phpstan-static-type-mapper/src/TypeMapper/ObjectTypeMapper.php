@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -50,7 +49,7 @@ final class ObjectTypeMapper implements TypeMapperInterface
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
         if ($type instanceof SelfObjectType) {
-            return new Identifier('self');
+            return new Name('self');
         }
 
         if ($type instanceof ShortenedObjectType) {
@@ -66,7 +65,7 @@ final class ObjectTypeMapper implements TypeMapperInterface
         }
 
         if ($type instanceof GenericObjectType && $type->getClassName() === 'object') {
-            return new Identifier('object');
+            return new Name('object');
         }
 
         // fallback

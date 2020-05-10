@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\FloatType;
@@ -49,7 +49,7 @@ final class FloatTypeMapper implements TypeMapperInterface
             return null;
         }
 
-        return new Identifier('float');
+        return new Name('float');
     }
 
     public function mapToDocString(Type $type, ?Type $parentType = null): string

@@ -42,6 +42,10 @@ parameters:
         - utils
 
     excludes_analyse:
+        # phsptan bug
+        - utils/phpstan-extensions/src/Rule/PreventParentMethodVisibilityOverrideRule.php
+        - utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
+
         # generated files
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php'
         - 'packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'

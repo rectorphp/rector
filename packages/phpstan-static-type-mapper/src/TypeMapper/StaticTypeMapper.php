@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
@@ -49,10 +49,10 @@ final class StaticTypeMapper implements TypeMapperInterface
         if ($type instanceof ThisType) {
             // @todo wait for PHPStan to differentiate between self/static
             if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::STATIC_RETURN_TYPE)) {
-                return new Identifier('static');
+                return new Name('static');
             }
 
-            return new Identifier('self');
+            return new Name('self');
         }
 
         return null;
