@@ -122,7 +122,12 @@ final class AttributeAwareClassFactoryFactory
     {
         $createClassMethod = $this->builderFactory->method('create');
 
+        $paramBuilder = new Param('docContent');
+        $paramBuilder->setType('string');
+        $docContentParam = $paramBuilder->getNode();
+
         $createClassMethod->addParam($nodeParam);
+        $createClassMethod->addParam($docContentParam);
         $createClassMethod->makePublic();
         $createClassMethod->setReturnType(new FullyQualified(AttributeAwareNodeInterface::class));
 
