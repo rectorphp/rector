@@ -42,7 +42,11 @@ parameters:
 ## 2. Generate it
 
 ```bash
-vendor/bin/rector create
+vendor/bin/rector create-rector
+```
+There is also a shortcut command:
+```bash
+vendor/bin/rector c
 ```
 
 That's it :)
