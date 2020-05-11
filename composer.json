@@ -33,9 +33,10 @@
         "symfony/process": "^4.4.6|^5.0.6",
         "symplify/auto-bind-parameter": "^7.3.10",
         "symplify/autowire-array-parameter": "^7.3.10",
-        "symplify/package-builder": "^7.3.10",
-        "symplify/set-config-resolver": "^7.3.10",
         "symplify/console-color-diff": "^7.3.10",
+        "symplify/package-builder": "^7.3.10",
+        "symplify/parameter-name-guard": "@dev",
+        "symplify/set-config-resolver": "^7.3.10",
         "tracy/tracy": "^2.7"
     },
     "require-dev": {
