@@ -141,4 +141,4 @@ That's it!
 
 Do you want to save time with making rules and tests?
 
-Use [the `create` command](/docs/RectorRecipe.md).
+Use [the `create-rector` command](/docs/rector_recipe.md).
