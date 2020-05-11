@@ -7,6 +7,7 @@ namespace Rector\Core\Console\Command;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Php\TypeAnalyzer;
 use Rector\Core\Yaml\YamlPrinter;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 use Symfony\Component\Console\Input\InputInterface;
@@ -62,9 +63,9 @@ final class ShowCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        sort($this->rectors);
+        $rectors = $this->filterAndSortRectors($this->rectors);
 
-        foreach ($this->rectors as $rector) {
+        foreach ($rectors as $rector) {
             $this->symfonyStyle->writeln(' * ' . get_class($rector));
             $configuration = $this->resolveConfiguration($rector);
             if ($configuration === []) {
@@ -79,7 +80,7 @@ final class ShowCommand extends AbstractCommand
             $this->symfonyStyle->writeln($indentedContent);
         }
 
-        $this->symfonyStyle->success(sprintf('%d loaded Rectors', count($this->rectors)));
+        $this->symfonyStyle->success(sprintf('%d loaded Rectors', count($rectors)));
 
         return ShellCode::SUCCESS;
     }
@@ -117,5 +118,19 @@ final class ShowCommand extends AbstractCommand
         }
 
         return $configuration;
+    }
+
+    /**
+     * @param RectorInterface[] $rectors
+     * @return RectorInterface[]
+     */
+    private function filterAndSortRectors(array $rectors): array
+    {
+        sort($rectors);
+
+        return array_filter($rectors, function (RectorInterface $rector) {
+            // skip as internal and always run
+            return ! $rector instanceof PostRectorInterface;
+        });
     }
 }
