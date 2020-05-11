@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+
+    Rector\Renaming\:
+        resource: '../src'
+        exclude:
+            - '../src/Rector/**/*Rector.php'

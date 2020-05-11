@@ -125,11 +125,13 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
             foreach ($paths as $path) {
                 $path = rtrim($path, '/');
 
-                if (Strings::startsWith($smartFileInfo->getRelativeDirectoryPath(), $path)) {
-                    $expectedNamespace = $namespace . $this->resolveExtraNamespace($smartFileInfo, $path);
-
-                    return rtrim($expectedNamespace, '\\');
+                if (! Strings::startsWith($smartFileInfo->getRelativeDirectoryPath(), $path)) {
+                    continue;
                 }
+
+                $expectedNamespace = $namespace . $this->resolveExtraNamespace($smartFileInfo, $path);
+
+                return rtrim($expectedNamespace, '\\');
             }
         }
 
