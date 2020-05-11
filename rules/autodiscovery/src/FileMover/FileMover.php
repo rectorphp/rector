@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\Autodiscovery\Configuration\CategoryNamespaceProvider;
 use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\FileRelocationResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -27,11 +26,6 @@ final class FileMover
     private $fileRelocationResolver;
 
     /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-
-    /**
      * @var CategoryNamespaceProvider
      */
     private $categoryNamespaceProvider;
@@ -39,12 +33,10 @@ final class FileMover
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         FileRelocationResolver $fileRelocationResolver,
-        RenamedClassesCollector $renamedClassesCollector,
         CategoryNamespaceProvider $categoryNamespaceProvider
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->fileRelocationResolver = $fileRelocationResolver;
-        $this->renamedClassesCollector = $renamedClassesCollector;
         $this->categoryNamespaceProvider = $categoryNamespaceProvider;
     }
 
@@ -75,17 +67,14 @@ final class FileMover
             return null;
         }
 
-        // 1. create helping rename class rector.yaml + class_alias autoload file
-        $this->renamedClassesCollector->addClassRename($currentClassName, $newClassName);
-
-        // 2. rename namespace
+        // 1. rename namespace
         foreach ($nodes as $node) {
             if ($node instanceof Namespace_) {
                 $node->name = new Name($newNamespaceName);
             }
         }
 
-        // 3. return changed nodes and new file destination
+        // 2. return changed nodes and new file destination
         $newFileDestination = $this->fileRelocationResolver->createNewFileDestination(
             $smartFileInfo,
             $desiredGroupName,
