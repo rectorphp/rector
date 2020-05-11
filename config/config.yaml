@@ -2,6 +2,7 @@ imports:
     - { resource: '../packages/**/config/config.yaml' }
     - { resource: '../rules/**/config/config.yaml' }
     - { resource: 'services.yaml' }
+    - { resource: 'parameters/parameter_name_guard.yaml' }
     # only in local repository
     # ignore errors, because utils are not part of composer package nor rector.phar
     - { resource: '../utils/**/config/config.yaml', ignore_errors: true }
