@@ -14,7 +14,7 @@ final class NodeClassProvider
     public function getNodeClasses(): array
     {
         $robotLoader = new RobotLoader();
-        $robotLoader->addDirectory(__DIR__ . '/../../../../vendor/nikic/php-parser/lib/PhpParser/Node');
+        $robotLoader->addDirectory(__DIR__ . '/../../../../../../nikic/php-parser/lib/PhpParser/Node');
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_robotloader_nodes');
         $robotLoader->rebuild();
 
