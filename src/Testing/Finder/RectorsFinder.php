@@ -9,6 +9,7 @@ use Nette\Utils\Strings;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Error\ExceptionCorrector;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use ReflectionClass;
 
 final class RectorsFinder
@@ -52,6 +53,11 @@ final class RectorsFinder
 
         $rectors = [];
         foreach ($foundClasses as $class) {
+            // not relevant for documentation
+            if (is_a($class, PostRectorInterface::class, true)) {
+                continue;
+            }
+
             // special case, because robot loader is case insensitive
             if ($class === ExceptionCorrector::class) {
                 continue;

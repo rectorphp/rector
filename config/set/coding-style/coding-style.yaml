@@ -34,3 +34,4 @@ services:
             php_sapi_name: PHP_SAPI
             pi: M_PI
     Rector\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector: null
+    Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector: null

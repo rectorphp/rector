@@ -1,4 +1,4 @@
-# All 494 Rectors Overview
+# All 489 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -52,7 +52,6 @@
 - [PhpDeglobalize](#phpdeglobalize)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
 - [Polyfill](#polyfill)
-- [PostRector](#postrector)
 - [Privatization](#privatization)
 - [Refactoring](#refactoring)
 - [RemovingStatic](#removingstatic)
@@ -2033,6 +2032,28 @@ Separate constant and properties to own lines
 +     * @var string
 +     */
 +    public $isIsThough;
+ }
+```
+
+<br>
+
+### `SplitGroupedUseImportsRector`
+
+- class: [`Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector`](/../master/rules/coding-style/src/Rector/Use_/SplitGroupedUseImportsRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/Use_/SplitGroupedUseImportsRector/Fixture)
+
+Split grouped use imports and trait statements to standalone lines
+
+```diff
+-use A, B;
++use A;
++use B;
+
+ class SomeClass
+ {
+-    use SomeTrait, AnotherTrait;
++    use SomeTrait;
++    use AnotherTrait;
  }
 ```
 
@@ -8190,56 +8211,6 @@ Remove php version checks if they are passed
 -}
 +return 'is PHP 7.2+';
 ```
-
-<br>
-
-## PostRector
-
-### `NameImportingPostRector`
-
-- class: [`Rector\PostRector\Rector\NameImportingPostRector`](/../master/packages/post-rector/src/Rector/NameImportingPostRector.php)
-
-Imports names
-
-<br>
-
-### `NodeAddingPostRector`
-
-- class: [`Rector\PostRector\Rector\NodeAddingPostRector`](/../master/packages/post-rector/src/Rector/NodeAddingPostRector.php)
-
-Post Rector that adds nodes
-
-<br>
-
-### `NodeRemovingRector`
-
-- class: [`Rector\PostRector\Rector\NodeRemovingRector`](/../master/packages/post-rector/src/Rector/NodeRemovingRector.php)
-
-PostRector that removes nodes
-
-<br>
-
-### `NodeToReplacePostRector`
-
-- class: [`Rector\PostRector\Rector\NodeToReplacePostRector`](/../master/packages/post-rector/src/Rector/NodeToReplacePostRector.php)
-
-Post Rector that replaces one nodes  with another
-
-<br>
-
-### `PropertyAddingPostRector`
-
-- class: [`Rector\PostRector\Rector\PropertyAddingPostRector`](/../master/packages/post-rector/src/Rector/PropertyAddingPostRector.php)
-
-Post Rector that adds properties
-
-<br>
-
-### `UseAddingPostRector`
-
-- class: [`Rector\PostRector\Rector\UseAddingPostRector`](/../master/packages/post-rector/src/Rector/UseAddingPostRector.php)
-
-Post Rector that adds use statements
 
 <br>
 
