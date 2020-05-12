@@ -1,4 +1,4 @@
-# All 494 Rectors Overview
+# All 496 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2033,6 +2033,28 @@ Separate constant and properties to own lines
 +     * @var string
 +     */
 +    public $isIsThough;
+ }
+```
+
+<br>
+
+### `SplitGroupedUseImportsRector`
+
+- class: [`Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector`](/../master/rules/coding-style/src/Rector/Use_/SplitGroupedUseImportsRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/Use_/SplitGroupedUseImportsRector/Fixture)
+
+Split grouped use imports and trait statements to standalone lines
+
+```diff
+-use A, B;
++use A;
++use B;
+
+ class SomeClass
+ {
+-    use SomeTrait, AnotherTrait;
++    use SomeTrait;
++    use AnotherTrait;
  }
 ```
 
@@ -8194,6 +8216,14 @@ Remove php version checks if they are passed
 <br>
 
 ## PostRector
+
+### `ClassRenamingPostRector`
+
+- class: [`Rector\PostRector\Rector\ClassRenamingPostRector`](/../master/packages/post-rector/src/Rector/ClassRenamingPostRector.php)
+
+Post Rector that renames classes
+
+<br>
 
 ### `NameImportingPostRector`
 
