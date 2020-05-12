@@ -95,11 +95,11 @@ final class MarkdownDumpRectorsOutputFormatter
      */
     private function printGroupsMenu(array $rectorsByGroup): void
     {
-        foreach (array_keys($rectorsByGroup) as $group) {
+        foreach ($rectorsByGroup as $group => $rectors) {
             $escapedGroup = str_replace('\\', '', $group);
             $escapedGroup = Strings::webalize($escapedGroup, '_');
 
-            $this->symfonyStyle->writeln(sprintf('- [%s](#%s)', $group, $escapedGroup));
+            $this->symfonyStyle->writeln(sprintf('- [%s](#%s) (%d)', $group, $escapedGroup, count($rectors)));
         }
 
         $this->symfonyStyle->newLine();
