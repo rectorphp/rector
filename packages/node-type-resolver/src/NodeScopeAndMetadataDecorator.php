@@ -134,7 +134,8 @@ final class NodeScopeAndMetadataDecorator
         $nodes = $nodeTraverser->traverse($nodes);
 
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->cloningVisitor); // needed also for format preserving printing
+        // needed also for format preserving printing
+        $nodeTraverser->addVisitor($this->cloningVisitor);
         $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);

@@ -181,7 +181,8 @@ PHP
             /** @var Identifier $identifierNode */
             $identifierNode = $propertyFetch->name;
 
-            return $propertyToMethods[$identifierNode->toString()]; //[$type];
+            //[$type];
+            return $propertyToMethods[$identifierNode->toString()];
         }
 
         return null;

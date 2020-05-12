@@ -69,7 +69,8 @@ PHP
         }
 
         if ($this->isName($node->var->name, 'disableOriginalConstructor')) {
-            $getMockBuilderMethodCall = $node->var->var; // null;
+            // null;
+            $getMockBuilderMethodCall = $node->var->var;
         } else {
             $getMockBuilderMethodCall = $node->var;
         }

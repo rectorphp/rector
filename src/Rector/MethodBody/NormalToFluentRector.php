@@ -179,7 +179,8 @@ PHP
         $methodCallsToAdd = array_reverse($methodCallsToAdd);
 
         foreach ($methodCallsToAdd as $methodCallToAdd) {
-            $fluentMethodCall->var = new MethodCall( // make var a parent method call
+            // make var a parent method call
+            $fluentMethodCall->var = new MethodCall(
                 $fluentMethodCall->var,
                 $methodCallToAdd->name,
                 $methodCallToAdd->args

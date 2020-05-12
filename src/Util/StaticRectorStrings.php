@@ -40,6 +40,13 @@ final class StaticRectorStrings
         return self::camelCaseToGlue($input, '_');
     }
 
+    public static function underscoreToPascalCase(string $string): string
+    {
+        $string = self::underscoreToCamelCase($string);
+
+        return lcfirst($string);
+    }
+
     public static function underscoreToCamelCase(string $input): string
     {
         $nameParts = explode('_', $input);

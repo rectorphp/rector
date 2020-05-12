@@ -171,7 +171,8 @@ final class ParsedFunctionLikeNodeCollector
     private function addMethod(ClassMethod $classMethod): void
     {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) { // anonymous
+        // anonymous
+        if ($className === null) {
             return;
         }
 
@@ -192,7 +193,8 @@ final class ParsedFunctionLikeNodeCollector
             $classType = $this->resolveNodeClassTypes($node->class);
         }
 
-        if ($classType instanceof MixedType) { // anonymous
+        // anonymous
+        if ($classType instanceof MixedType) {
             return;
         }
 

@@ -152,7 +152,8 @@ PHP
 
         /** @var string|null $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) { // anonymous class
+        // anonymous class
+        if ($className === null) {
             return [];
         }
 
