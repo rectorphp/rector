@@ -109,9 +109,11 @@ PHP
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->changeReturnType($inferedType);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            $phpDocInfo->changeReturnType($inferedType);
+        }
 
         return $node;
     }
