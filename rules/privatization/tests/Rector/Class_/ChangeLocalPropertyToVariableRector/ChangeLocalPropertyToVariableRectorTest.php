@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Privatization\Tests\Rector\Class_\ChangeLocalPropertyToVariableRector;
 
-use MIterator;
+use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector;
 
