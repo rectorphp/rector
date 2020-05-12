@@ -73,7 +73,7 @@ PHP
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
-            $this->phpDocInfoFactory->createEmpty($node);
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
         }
 
         $phpDocInfo->changeVarType($constStaticType);
