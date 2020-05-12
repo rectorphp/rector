@@ -4150,7 +4150,7 @@ Change singleton class to normal class that can be registered as a service
 
 ### `ChangeLocalPropertyToVariableRector`
 
-- class: [`Rector\MinimalScope\Rector\Class_\ChangeLocalPropertyToVariableRector`](/../master/rules/minimal-scope/src/Rector/Class_/ChangeLocalPropertyToVariableRector.php)
+- class: [`Rector\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector`](/../master/rules/minimal-scope/src/Rector/Class_/ChangeLocalPropertyToVariableRector.php)
 - [test fixtures](/../master/rules/minimal-scope/tests/Rector/Class_/ChangeLocalPropertyToVariableRector/Fixture)
 
 Change local property used in single method to local variable

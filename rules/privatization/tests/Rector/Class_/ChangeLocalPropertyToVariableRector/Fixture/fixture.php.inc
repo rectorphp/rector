@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\MinimalScope\Tests\Rector\Class_\ChangeLocalPropertyToVariableRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\Class_\ChangeLocalPropertyToVariableRector\Fixture;
 
 class SomeClass
 {
@@ -16,7 +16,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\MinimalScope\Tests\Rector\Class_\ChangeLocalPropertyToVariableRector\Fixture;
+namespace Rector\Privatization\Tests\Rector\Class_\ChangeLocalPropertyToVariableRector\Fixture;
 
 class SomeClass
 {

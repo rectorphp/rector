@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MinimalScope\Rector\Class_;
+namespace Rector\Privatization\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
