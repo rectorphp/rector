@@ -10,17 +10,18 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/3120
+ * "If, and only if, the expects() method is called on this stub to set up expectations then that stub becomes a mock."
  *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\CreateMockToCreateStubRector\CreateMockToCreateStubRectorTest
  */
-final class CreateMockToCreateStubRector extends AbstractRector
+final class CreateMockToCreateStubRector extends AbstractPHPUnitRector
 {
     /**
      * @var MethodCallManipulator
@@ -96,6 +97,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isInTestClass($node)) {
+            return null;
+        }
+
         if (! $this->isName($node->name, 'createMock')) {
             return null;
         }
