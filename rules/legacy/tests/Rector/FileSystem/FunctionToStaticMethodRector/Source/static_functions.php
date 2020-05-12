@@ -8,4 +8,5 @@ function first_static_function()
 {
     return 5;
 }
+
 $value = first_static_function();
