@@ -111,6 +111,14 @@ PHP
 
     private function shouldSkip(If_ $ifNode): bool
     {
+        if (count($ifNode->elseifs) > 0) {
+            return true;
+        }
+
+        if ($this->isElseSeparatedThenIf($ifNode)) {
+            return true;
+        }
+
         if (! $this->isIfWithSingleReturnExpr($ifNode)) {
             return true;
         }
@@ -241,5 +249,23 @@ PHP
         }
 
         return ! $expr instanceof BinaryOp;
+    }
+
+    /**
+     * Matches: "else if"
+     */
+    private function isElseSeparatedThenIf(If_ $if): bool
+    {
+        if ($if->else === null) {
+            return false;
+        }
+
+        if (count($if->else->stmts) !== 1) {
+            return false;
+        }
+
+        $onlyStmt = $if->else->stmts[0];
+
+        return $onlyStmt instanceof If_;
     }
 }
