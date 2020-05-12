@@ -23,7 +23,6 @@
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (1)
-- [MinimalScope](#minimalscope) (1)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
 - [Nette](#nette) (11)
@@ -52,7 +51,7 @@
 - [PhpDeglobalize](#phpdeglobalize) (1)
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
-- [Privatization](#privatization) (4)
+- [Privatization](#privatization) (5)
 - [Refactoring](#refactoring) (2)
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (10)
@@ -4146,31 +4145,6 @@ Change singleton class to normal class that can be registered as a service
 
 <br>
 
-## MinimalScope
-
-### `ChangeLocalPropertyToVariableRector`
-
-- class: [`Rector\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector`](/../master/rules/minimal-scope/src/Rector/Class_/ChangeLocalPropertyToVariableRector.php)
-- [test fixtures](/../master/rules/minimal-scope/tests/Rector/Class_/ChangeLocalPropertyToVariableRector/Fixture)
-
-Change local property used in single method to local variable
-
-```diff
- class SomeClass
- {
--    private $count;
-     public function run()
-     {
--        $this->count = 5;
--        return $this->count;
-+        $count = 5;
-+        return $count;
-     }
- }
-```
-
-<br>
-
 ## MysqlToMysqli
 
 ### `MysqlAssignToMysqliRector`
@@ -8215,6 +8189,29 @@ Remove php version checks if they are passed
 <br>
 
 ## Privatization
+
+### `ChangeLocalPropertyToVariableRector`
+
+- class: [`Rector\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector`](/../master/rules/privatization/src/Rector/Class_/ChangeLocalPropertyToVariableRector.php)
+- [test fixtures](/../master/rules/privatization/tests/Rector/Class_/ChangeLocalPropertyToVariableRector/Fixture)
+
+Change local property used in single method to local variable
+
+```diff
+ class SomeClass
+ {
+-    private $count;
+     public function run()
+     {
+-        $this->count = 5;
+-        return $this->count;
++        $count = 5;
++        return $count;
+     }
+ }
+```
+
+<br>
 
 ### `PrivatizeLocalClassConstantRector`
 
