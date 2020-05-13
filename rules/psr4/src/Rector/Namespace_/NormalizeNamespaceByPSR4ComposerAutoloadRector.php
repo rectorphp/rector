@@ -30,14 +30,14 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
     /**
      * @var PSR4AutoloadNamespaceMatcherInterface
      */
-    private $psr4NamespaceMatcher;
+    private $psr4AutoloadNamespaceMatcher;
 
     public function __construct(
-        PSR4AutoloadNamespaceMatcherInterface $psr4NamespaceMatcher,
+        PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher,
         RenamedClassesCollector $renamedClassesCollector
     ) {
         $this->renamedClassesCollector = $renamedClassesCollector;
-        $this->psr4NamespaceMatcher = $psr4NamespaceMatcher;
+        $this->psr4AutoloadNamespaceMatcher = $psr4AutoloadNamespaceMatcher;
     }
 
     public function getDefinition(): RectorDefinition
@@ -60,7 +60,7 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
      */
     public function refactor(Node $node): ?Node
     {
-        $expectedNamespace = $this->psr4NamespaceMatcher->getExpectedNamespace($node);
+        $expectedNamespace = $this->psr4AutoloadNamespaceMatcher->getExpectedNamespace($node);
         if ($expectedNamespace === null) {
             return null;
         }
