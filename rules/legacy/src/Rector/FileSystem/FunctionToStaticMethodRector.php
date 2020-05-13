@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Legacy\Rector\Node;
+namespace Rector\Legacy\Rector\FileSystem;
 
 use PhpParser\Builder\Class_ as ClassBuilder;
 use PhpParser\Builder\Method;
@@ -50,7 +50,7 @@ function some_function()
 
 some_function('lol');
 PHP
-,
+                ,
                 <<<'PHP'
 class SomeUtilsClass
 {
