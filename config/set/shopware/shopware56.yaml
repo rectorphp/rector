@@ -4,8 +4,6 @@ imports:
     - { resource: '../elasticsearch-dsl/elasticsearch-dsl50.yaml' }
 
 services:
-    Rector\Shopware\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector: null
-
     Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
         $oldToNewMethodsByClass:
             Enlight_Controller_Response_Response:
@@ -13,6 +11,3 @@ services:
                 setHttpResponseCode: setStatusCode
                 sendCookies: sendHeaders
                 setBody: setContent
-
-    Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector: null
-    Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector: null
