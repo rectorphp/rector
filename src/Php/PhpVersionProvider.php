@@ -32,7 +32,8 @@ final class PhpVersionProvider
 
         // for tests
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            return '10.0'; // so we don't have to up
+            // so we don't have to up
+            return '10.0';
         }
 
         // see https://getcomposer.org/doc/06-config.md#platform

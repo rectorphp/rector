@@ -42,7 +42,8 @@ final class StringClassNameToClassConstantRector extends AbstractRector
      * @param string[] $classesToSkip
      */
     public function __construct(array $classesToSkip = [
-        'Error', // can be string
+        // can be string
+        'Error',
     ])
     {
         $this->classesToSkip = $classesToSkip;

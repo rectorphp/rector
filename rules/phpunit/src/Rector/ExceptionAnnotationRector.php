@@ -113,7 +113,8 @@ PHP
     private function createMethodCallExpressionFromTag(PhpDocTagNode $phpDocTagNode, string $method): MethodCall
     {
         $annotationContent = (string) $phpDocTagNode->value;
-        $annotationContent = ltrim($annotationContent, '\\'); // this is needed due to BuilderHelpers
+        // this is needed due to BuilderHelpers
+        $annotationContent = ltrim($annotationContent, '\\');
 
         return $this->createMethodCall('this', $method, [$annotationContent]);
     }

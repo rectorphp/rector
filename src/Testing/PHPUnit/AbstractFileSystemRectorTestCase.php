@@ -8,6 +8,7 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\FileSystemRector\FileSystemFileProcessor;
@@ -55,6 +56,15 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
     protected function doTestFileWithoutAutoload(string $file): string
     {
         $temporaryFilePath = $this->createTemporaryFilePathFromFilePath($file);
+
+        if ($temporaryFilePath === $file) {
+            $message = sprintf(
+                'File %s is about to be copied to itself. Move it out of "/Fixture" directory to "/Source"',
+                $file
+            );
+
+            throw new ShouldNotHappenException($message);
+        }
 
         $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($temporaryFilePath));
         $this->removedAndAddedFilesProcessor->run();
@@ -133,7 +143,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
             $fileInfo->getBasename()
         );
 
-        FileSystem::copy($file, $temporaryFilePath);
+        FileSystem::copy($file, $temporaryFilePath, true);
 
         return $temporaryFilePath;
     }

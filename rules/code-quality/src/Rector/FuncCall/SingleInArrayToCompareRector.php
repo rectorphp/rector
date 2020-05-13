@@ -77,7 +77,8 @@ PHP
         }
 
         $onlyArrayItem = $arrayNode->items[0]->value;
-        if (isset($node->args[2])) { // strict
+        // strict
+        if (isset($node->args[2])) {
             return new Identical($node->args[0]->value, $onlyArrayItem);
         }
 

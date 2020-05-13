@@ -30,7 +30,8 @@ final class MethodCallParsedNodesFinder
     {
         /** @var string|null $className */
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) { // anonymous
+        // anonymous
+        if ($className === null) {
             return [];
         }
 

@@ -1,4 +1,4 @@
-# All 489 Rectors Overview
+# All 490 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -22,7 +22,7 @@
 - [Guzzle](#guzzle) (1)
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
-- [Legacy](#legacy) (1)
+- [Legacy](#legacy) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
 - [Nette](#nette) (11)
@@ -4141,6 +4141,27 @@ Change singleton class to normal class that can be registered as a service
 -        return static::$instance;
      }
  }
+```
+
+<br>
+
+### `FunctionToStaticMethodRector`
+
+- class: [`Rector\Legacy\Rector\Node\FunctionToStaticMethodRector`](/../master/rules/legacy/src/Rector/Node/FunctionToStaticMethodRector.php)
+
+Change functions to static calls, so composer can autoload them
+
+```diff
+-function some_function()
++class SomeUtilsClass
+ {
++    public static function someFunction()
++    {
++    }
+ }
+
+-some_function('lol');
++SomeUtilsClass::someFunction('lol');
 ```
 
 <br>

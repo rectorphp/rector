@@ -7,8 +7,11 @@ namespace Rector\CodingStyle\Naming;
 use Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ClassNaming
 {
@@ -44,5 +47,21 @@ final class ClassNaming
         $fullyQualifiedName = trim($fullyQualifiedName, '\\');
 
         return Strings::before($fullyQualifiedName, '\\', -1) ?: null;
+    }
+
+    public function getNameFromFileInfo(SmartFileInfo $smartFileInfo): string
+    {
+        $basename = $smartFileInfo->getBasenameWithoutSuffix();
+
+        return StaticRectorStrings::underscoreToCamelCase($basename);
+    }
+
+    /**
+     * "some_function" → "someFunction"
+     */
+    public function createMethodNameFromFunction(Function_ $function): string
+    {
+        $functionName = (string) $function->name;
+        return StaticRectorStrings::underscoreToPascalCase($functionName);
     }
 }

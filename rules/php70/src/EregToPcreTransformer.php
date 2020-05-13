@@ -28,7 +28,8 @@ final class EregToPcreTransformer
         ':lower:' => '[:lower:]',
         ':print:' => '[:print:]',
         ':punct:' => '[:punct:]',
-        ':space:' => '\013\s', // should include VT
+        // should include VT
+        ':space:' => '\013\s',
         ':upper:' => '[:upper:]',
         ':xdigit:' => '[:xdigit:]',
     ];
@@ -153,7 +154,8 @@ final class EregToPcreTransformer
                     throw new InvalidEregException('an invalid escape sequence at the end');
                 }
                 $r[$rr] .= $this->_ere2pcre_escape($content[$i]);
-            } else { // including ] and } which are allowed as a literal character
+            } else {
+                // including ] and } which are allowed as a literal character
                 $r[$rr] .= $this->_ere2pcre_escape($char);
             }
             ++$i;
@@ -181,7 +183,8 @@ final class EregToPcreTransformer
 
     private function processBracket(string $content, int $i, int $l, array &$r, int $rr)
     {
-        if ($i + 1 < $l && $content[$i + 1] === ')') { // special case
+        // special case
+        if ($i + 1 < $l && $content[$i + 1] === ')') {
             $r[$rr] .= '()';
             ++$i;
         } else {

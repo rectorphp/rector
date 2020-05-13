@@ -1,3 +1,7 @@
+services:
+    SlevomatCodingStandard\Sniffs\Commenting\DisallowCommentAfterCodeSniff: null
+    SlevomatCodingStandard\Sniffs\Whitespaces\DuplicateSpacesSniff: null
+
 parameters:
     paths:
         - "bin"

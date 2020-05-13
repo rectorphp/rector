@@ -69,7 +69,7 @@ final class TypeComparator
     }
 
     /**
-     * E.g.  class A extends B, class B → A[] is subtype of B[] → keep A[]
+     * E.g. class A extends B, class B → A[] is subtype of B[] → keep A[]
      */
     private function areArrayTypeWithSingleObjectChildToParent(Type $firstType, Type $secondType): bool
     {

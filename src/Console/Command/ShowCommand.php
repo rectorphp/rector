@@ -8,6 +8,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Php\TypeAnalyzer;
 use Rector\Core\Yaml\YamlPrinter;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 use Symfony\Component\Console\Input\InputInterface;
@@ -129,6 +130,11 @@ final class ShowCommand extends AbstractCommand
         sort($rectors);
 
         return array_filter($rectors, function (RectorInterface $rector) {
+            // utils rules
+            if ($rector instanceof ClassSyncerRectorInterface) {
+                return false;
+            }
+
             // skip as internal and always run
             return ! $rector instanceof PostRectorInterface;
         });

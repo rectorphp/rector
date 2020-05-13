@@ -94,7 +94,8 @@ PHP
     {
         return [
             'Illuminate\Support\Facades\Cache' => [
-                'put' => 2, // time argument position
+                // time argument position
+                'put' => 2,
                 'add' => 2,
             ],
             Store::class => [
