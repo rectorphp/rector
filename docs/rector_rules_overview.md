@@ -1,4 +1,4 @@
-# All 487 Rectors Overview
+# All 484 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -58,7 +58,6 @@
 - [Restoration](#restoration) (3)
 - [SOLID](#solid) (11)
 - [Sensio](#sensio) (1)
-- [Shopware](#shopware) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
 - [Symfony](#symfony) (29)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
@@ -9212,69 +9211,6 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
  public function indexAction()
  {
 +    return $this->render("index.html.twig");
- }
-```
-
-<br>
-
-## Shopware
-
-### `ReplaceEnlightResponseWithSymfonyResponseRector`
-
-- class: [`Rector\Shopware\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector`](/../master/rules/shopware/src/Rector/MethodCall/ReplaceEnlightResponseWithSymfonyResponseRector.php)
-- [test fixtures](/../master/rules/shopware/tests/Rector/MethodCall/ReplaceEnlightResponseWithSymfonyResponseRector/Fixture)
-
-Replace Enlight Response methods with Symfony Response methods
-
-```diff
- class FrontendController extends \Enlight_Controller_Action
- {
-     public function run()
-     {
--        $this->Response()->setHeader('Foo', 'Yea');
-+        $this->Response()->headers->set('Foo', 'Yea');
-     }
- }
-```
-
-<br>
-
-### `ShopRegistrationServiceRector`
-
-- class: [`Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector`](/../master/rules/shopware/src/Rector/MethodCall/ShopRegistrationServiceRector.php)
-- [test fixtures](/../master/rules/shopware/tests/Rector/MethodCall/ShopRegistrationServiceRector/Fixture)
-
-Replace $shop->registerResources() with ShopRegistrationService
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $shop = new \Shopware\Models\Shop\Shop();
--        $shop->registerResources();
-+        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
-     }
- }
-```
-
-<br>
-
-### `ShopwareVersionConstsRector`
-
-- class: [`Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector`](/../master/rules/shopware/src/Rector/ClassConstFetch/ShopwareVersionConstsRector.php)
-- [test fixtures](/../master/rules/shopware/tests/Rector/ClassConstFetch/ShopwareVersionConstsRector/Fixture)
-
-Use version from di parameter
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        echo \Shopware::VERSION;
-+        echo Shopware()->Container()->getParameter('shopware.release.version');
-     }
  }
 ```
 

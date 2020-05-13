@@ -20,5 +20,3 @@ services:
             Shopware_Components_Config:
                 isset: 'offsetExists'
                 unset: 'offsetUnset'
-
-    Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector: null
