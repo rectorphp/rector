@@ -1,5 +1,0 @@
-# various versions
-services:
-    # https://github.com/silverstripe/silverstripe-upgrader/issues/76
-    Rector\Silverstripe\Rector\ConstantToStaticCallRector: null
-    Rector\Silverstripe\Rector\DefineConstantToStaticCallRector: null
