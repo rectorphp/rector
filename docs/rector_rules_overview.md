@@ -1,4 +1,4 @@
-# All 490 Rectors Overview
+# All 488 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -59,7 +59,6 @@
 - [SOLID](#solid) (11)
 - [Sensio](#sensio) (1)
 - [Shopware](#shopware) (3)
-- [Silverstripe](#silverstripe) (2)
 - [StrictCodeQuality](#strictcodequality) (1)
 - [Sylius](#sylius) (1)
 - [Symfony](#symfony) (29)
@@ -4147,7 +4146,7 @@ Change singleton class to normal class that can be registered as a service
 
 ### `FunctionToStaticMethodRector`
 
-- class: [`Rector\Legacy\Rector\Node\FunctionToStaticMethodRector`](/../master/rules/legacy/src/Rector/Node/FunctionToStaticMethodRector.php)
+- class: [`Rector\Legacy\Rector\FileSystem\FunctionToStaticMethodRector`](/../master/rules/legacy/src/Rector/FileSystem/FunctionToStaticMethodRector.php)
 
 Change functions to static calls, so composer can autoload them
 
@@ -9278,36 +9277,6 @@ Use version from di parameter
 +        echo Shopware()->Container()->getParameter('shopware.release.version');
      }
  }
-```
-
-<br>
-
-## Silverstripe
-
-### `ConstantToStaticCallRector`
-
-- class: [`Rector\Silverstripe\Rector\ConstantToStaticCallRector`](/../master/rules/silverstripe/src/Rector/ConstantToStaticCallRector.php)
-- [test fixtures](/../master/rules/silverstripe/tests/Rector/ConstantToStaticCallRector/Fixture)
-
-Turns defined constant to static method call.
-
-```diff
--SS_DATABASE_NAME;
-+Environment::getEnv("SS_DATABASE_NAME");
-```
-
-<br>
-
-### `DefineConstantToStaticCallRector`
-
-- class: [`Rector\Silverstripe\Rector\DefineConstantToStaticCallRector`](/../master/rules/silverstripe/src/Rector/DefineConstantToStaticCallRector.php)
-- [test fixtures](/../master/rules/silverstripe/tests/Rector/DefineConstantToStaticCallRector/Fixture)
-
-Turns defined function call to static method call.
-
-```diff
--defined("SS_DATABASE_NAME");
-+Environment::getEnv("SS_DATABASE_NAME");
 ```
 
 <br>
