@@ -1,4 +1,4 @@
-# All 488 Rectors Overview
+# All 487 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -60,7 +60,6 @@
 - [Sensio](#sensio) (1)
 - [Shopware](#shopware) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
-- [Sylius](#sylius) (1)
 - [Symfony](#symfony) (29)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
@@ -9300,22 +9299,6 @@ Turn @var inline checks above code to assert() of hte type
          $value->call();
      }
  }
-```
-
-<br>
-
-## Sylius
-
-### `ReplaceCreateMethodWithoutReviewerRector`
-
-- class: [`Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector`](/../master/rules/sylius/src/Rector/Review/ReplaceCreateMethodWithoutReviewerRector.php)
-- [test fixtures](/../master/rules/sylius/tests/Rector/Review/Fixture)
-
-Turns `createForSubjectWithReviewer()` with null review to standalone method in Sylius
-
-```diff
--$this->createForSubjectWithReviewer($subject, null)
-+$this->createForSubject($subject)
 ```
 
 <br>
