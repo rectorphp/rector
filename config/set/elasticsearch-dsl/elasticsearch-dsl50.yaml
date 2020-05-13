@@ -1,7 +1,5 @@
 # https://github.com/ongr-io/ElasticsearchDSL/blob/5.x/CHANGELOG.md
 services:
-    Rector\ElasticSearchDSL\Rector\MethodCall\MigrateFilterToQueryRector: null
-
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
             ONGR\ElasticsearchDSL\Query\BoolQuery: 'ONGR\ElasticsearchDSL\Query\Compound\BoolQuery'
@@ -44,4 +42,3 @@ services:
             ONGR\ElasticsearchDSL\Query\MoreLikeThisQuery: 'ONGR\ElasticsearchDSL\Query\Specialized\MoreLikeThisQuery'
             ONGR\ElasticsearchDSL\Query\ScriptQuery: 'ONGR\ElasticsearchDSL\Query\Specialized\ScriptQuery'
             ONGR\ElasticsearchDSL\Query\TemplateQuery: 'ONGR\ElasticsearchDSL\Query\Specialized\TemplateQuery'
-
