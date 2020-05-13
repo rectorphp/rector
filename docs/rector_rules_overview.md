@@ -1,4 +1,4 @@
-# All 483 Rectors Overview
+# All 482 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -17,7 +17,6 @@
 - [DoctrineCodeQuality](#doctrinecodequality) (2)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
-- [ElasticSearchDSL](#elasticsearchdsl) (1)
 - [FileSystemRector](#filesystemrector) (1)
 - [Guzzle](#guzzle) (1)
 - [JMS](#jms) (2)
@@ -3842,38 +3841,6 @@ Clean up probe that records argument types
      public function run($arg)
      {
 -        TypeStaticProbe::recordArgumentType($arg, __METHOD__, 0);
-     }
- }
-```
-
-<br>
-
-## ElasticSearchDSL
-
-### `MigrateFilterToQueryRector`
-
-- class: [`Rector\ElasticSearchDSL\Rector\MethodCall\MigrateFilterToQueryRector`](/../master/rules/elastic-search-dsl/src/Rector/MethodCall/MigrateFilterToQueryRector.php)
-- [test fixtures](/../master/rules/elastic-search-dsl/tests/Rector/MethodCall/MigrateFilterToQueryRector/Fixture)
-
-Migrates addFilter to addQuery
-
-```diff
- use ONGR\ElasticsearchDSL\Search;
- use ONGR\ElasticsearchDSL\Query\TermsQuery;
-+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
-
- class SomeClass
- {
-     public function run()
-     {
-         $search = new Search();
-
--        $search->addFilter(
--            new TermsQuery('categoryIds', [1, 2])
-+        $search->addQuery(
-+            new TermsQuery('categoryIds', [1, 2]),
-+            BoolQuery::FILTER
-         );
      }
  }
 ```
