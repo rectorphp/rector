@@ -9,3 +9,5 @@ services:
         exclude:
             - '../src/Rector/**/*Rector.php'
             - '../src/ValueObject/*'
+
+    Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface: '@Rector\PSR4\Composer\PSR4NamespaceMatcher'

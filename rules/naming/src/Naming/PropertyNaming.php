@@ -125,12 +125,13 @@ final class PropertyNaming
     {
         // turns $SOMEUppercase => $someUppercase
         for ($i = 0; $i <= strlen($shortClassName); ++$i) {
-            if (ctype_upper($shortClassName[$i]) && ctype_upper($shortClassName[$i + 1])) {
+            if (ctype_upper($shortClassName[$i]) && $this->isNumberOrUpper($shortClassName[$i + 1])) {
                 $shortClassName[$i] = strtolower($shortClassName[$i]);
             } else {
                 break;
             }
         }
+
         return $shortClassName;
     }
 
@@ -156,5 +157,14 @@ final class PropertyNaming
         }
 
         return null;
+    }
+
+    private function isNumberOrUpper(string $char): bool
+    {
+        if (ctype_upper($char)) {
+            return true;
+        }
+
+        return ctype_digit($char);
     }
 }

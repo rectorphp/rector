@@ -1,0 +1,8 @@
+parameters:
+    auto_import_names: true
+
+services:
+    Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector: null
+
+    Rector\PSR4\Tests\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector\Source\DummyPSR4AutoloadNamespaceMatcher: null
+    Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface: '@Rector\PSR4\Tests\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector\Source\DummyPSR4AutoloadNamespaceMatcher'

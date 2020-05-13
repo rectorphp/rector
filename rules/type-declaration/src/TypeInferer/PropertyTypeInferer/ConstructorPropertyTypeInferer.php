@@ -110,7 +110,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
             return null;
         }
 
-        $originalName = $param->type->getAttribute('originalName');
+        $originalName = $param->type->getAttribute(AttributeKey::ORIGINAL_NAME);
         if (! $originalName instanceof Name) {
             return null;
         }

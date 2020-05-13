@@ -4,40 +4,40 @@ declare(strict_types=1);
 
 namespace Rector\PSR4\Rector\Namespace_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PSR4\Collector\RenamedClassesCollector;
-use Rector\PSR4\Composer\PSR4AutoloadPathsProvider;
+use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ *
+ * @see \Rector\PSR4\Tests\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector\NormalizeNamespaceByPSR4ComposerAutoloadRectorTest
  */
 final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRector
 {
-    /**
-     * @var PSR4AutoloadPathsProvider
-     */
-    private $psR4AutoloadPathsProvider;
-
     /**
      * @var RenamedClassesCollector
      */
     private $renamedClassesCollector;
 
+    /**
+     * @var PSR4AutoloadNamespaceMatcherInterface
+     */
+    private $psr4AutoloadNamespaceMatcher;
+
     public function __construct(
-        PSR4AutoloadPathsProvider $psR4AutoloadPathsProvider,
+        PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher,
         RenamedClassesCollector $renamedClassesCollector
     ) {
-        $this->psR4AutoloadPathsProvider = $psR4AutoloadPathsProvider;
         $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->psr4AutoloadNamespaceMatcher = $psr4AutoloadNamespaceMatcher;
     }
 
     public function getDefinition(): RectorDefinition
@@ -60,7 +60,7 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
      */
     public function refactor(Node $node): ?Node
     {
-        $expectedNamespace = $this->getExpectedNamespace($node);
+        $expectedNamespace = $this->psr4AutoloadNamespaceMatcher->getExpectedNamespace($node);
         if ($expectedNamespace === null) {
             return null;
         }
@@ -76,28 +76,27 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
         $node->name = new Name($expectedNamespace);
 
         // add use import for classes from the same namespace
-        $newUseImports = [];
-        $this->traverseNodesWithCallable($node, function (Node $node) use ($currentNamespace, &$newUseImports) {
+        $this->traverseNodesWithCallable($node, function (Node $node) use ($currentNamespace) {
             if (! $node instanceof Name) {
                 return null;
             }
 
             /** @var Name|null $originalName */
-            $originalName = $node->getAttribute('originalName');
-            if ($originalName instanceof Name &&
-                $currentNamespace . '\\' . $originalName->toString() === $this->getName($node)
-            ) {
-                // this needs to be imported
-                $newUseImports[] = $this->getName($node);
+            $originalName = $node->getAttribute(AttributeKey::ORIGINAL_NAME);
+            if (! $originalName instanceof Name) {
+                return null;
             }
+
+            $sameNamespacedName = $currentNamespace . '\\' . $originalName->toString();
+
+            if (! $this->isName($node, $sameNamespacedName)) {
+                return null;
+            }
+
+            // this needs to be imported
+            $objectType = $this->getName($node);
+            $this->addUseType(new FullyQualifiedObjectType($objectType), $node);
         });
-
-        $newUseImports = array_unique($newUseImports);
-
-        if ($newUseImports !== []) {
-            $useImports = $this->createUses($newUseImports);
-            $node->stmts = array_merge($useImports, $node->stmts);
-        }
 
         /** @var SmartFileInfo $smartFileInfo */
         $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
@@ -108,60 +107,5 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
 
         // collect changed class
         return $node;
-    }
-
-    private function getExpectedNamespace(Node $node): ?string
-    {
-        /** @var SmartFileInfo $smartFileInfo */
-        $smartFileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-
-        $psr4Autoloads = $this->psR4AutoloadPathsProvider->provide();
-
-        foreach ($psr4Autoloads as $namespace => $path) {
-            // remove extra slash
-            /** @var string[] $paths */
-            $paths = is_array($path) ? $path : [$path];
-
-            foreach ($paths as $path) {
-                $path = rtrim($path, '/');
-
-                if (! Strings::startsWith($smartFileInfo->getRelativeDirectoryPath(), $path)) {
-                    continue;
-                }
-
-                $expectedNamespace = $namespace . $this->resolveExtraNamespace($smartFileInfo, $path);
-
-                return rtrim($expectedNamespace, '\\');
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string[] $newUseImports
-     * @return Use_[]
-     */
-    private function createUses(array $newUseImports): array
-    {
-        $uses = [];
-
-        foreach ($newUseImports as $newUseImport) {
-            $useUse = new UseUse(new Name($newUseImport));
-            $uses[] = new Use_([$useUse]);
-        }
-
-        return $uses;
-    }
-
-    /**
-     * Get the extra path that is not included in root PSR-4 namespace
-     */
-    private function resolveExtraNamespace(SmartFileInfo $smartFileInfo, string $path): string
-    {
-        $extraNamespace = Strings::substring($smartFileInfo->getRelativeDirectoryPath(), Strings::length($path) + 1);
-        $extraNamespace = Strings::replace($extraNamespace, '#/#', '\\');
-
-        return trim($extraNamespace);
     }
 }
