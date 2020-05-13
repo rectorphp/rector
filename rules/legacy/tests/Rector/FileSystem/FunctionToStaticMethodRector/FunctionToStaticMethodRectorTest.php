@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Legacy\Tests\Rector\FileSystem\FunctionToStaticMethodRector;
 
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
-use Rector\Legacy\Rector\Node\FunctionToStaticMethodRector;
+use Rector\Legacy\Rector\FileSystem\FunctionToStaticMethodRector;
 
 final class FunctionToStaticMethodRectorTest extends AbstractFileSystemRectorTestCase
 {

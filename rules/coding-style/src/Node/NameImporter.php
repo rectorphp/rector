@@ -108,6 +108,8 @@ final class NameImporter
             return true;
         }
 
+        // namespace <name>
+        // use <name>;
         if ($this->isNamespaceOrUseImportName($name)) {
             return true;
         }

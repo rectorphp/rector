@@ -14,6 +14,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 
 /**
@@ -117,7 +118,11 @@ PHP
             return null;
         }
 
-        return new ClassConstFetch(new FullyQualified($classLikeName), 'class');
+        $name = new FullyQualified($classLikeName);
+        /** @see \Rector\PostRector\Collector\UseNodesToAddCollector::isShortImported() */
+        $name->setAttribute(AttributeKey::FILE_INFO, $node->getAttribute(AttributeKey::FILE_INFO));
+
+        return new ClassConstFetch($name, 'class');
     }
 
     private function classLikeSensitiveExists(string $classLikeName): bool
