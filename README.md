@@ -139,6 +139,18 @@ vendor/bin/rector process src
 
 ## Features
 
+### Paths
+
+If you're annoyed by repeating paths in arguments, you can move them to config instead:
+
+```yaml
+# rector.yaml
+parameters:
+    paths:
+        - 'src'
+        - 'tests'
+```
+
 ### Extra Autoloading
 
 Rector relies on whatever autoload setup the project it is fixing is using by using the Composer autoloader as default. To specify your own autoload file, use `--autoload-file` option:
@@ -168,7 +180,7 @@ parameters:
         - '*/src/*/Tests/*'
 ```
 
-You can use a whole ruleset, except one rule:
+You can use a whole set, except 1 rule:
 
 ```yaml
 # rector.yaml
@@ -177,9 +189,7 @@ parameters:
         - 'Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector'
 ```
 
-### How to Skip Specific Line + Specific Rule?
-
-Use `@noRector \FQN name` annotation:
+For in-file exclusion, use `@noRector \FQN name` annotation:
 
 ```php
 class SomeClass
@@ -203,18 +213,6 @@ By default Rector uses the language features matching your system version of PHP
 # rector.yaml
 parameters:
     php_version_features: '7.2' # your version is 7.3
-```
-
-### Paths
-
-If you're annoyed by repeating paths in arguments, you can move them to config instead:
-
-```yaml
-# rector.yaml
-parameters:
-    paths:
-        - 'src'
-        - 'tests'
 ```
 
 ### Import Use Statements
@@ -261,6 +259,8 @@ parameters:
     symfony_container_xml_path: 'var/cache/dev/AppKernelDevDebugContainer.xml'
 ```
 
+<br>
+
 ## More Detailed Documentation
 
 - **[All Rectors Overview](/docs/rector_rules_overview.md)**
@@ -270,9 +270,13 @@ parameters:
 - [PHP Parser Nodes Overview](/docs/nodes_overview.md)
 - [Add Checkstyle with your CI](/docs/checkstyle.md)
 
+<br>
+
 ## How to Contribute
 
 See [the contribution guide](/CONTRIBUTING.md).
+
+<br>
 
 ## Run Rector in Docker
 
@@ -293,7 +297,9 @@ docker run -v $(pwd):/project rector/rector:latest process /project/app \
 --dry-run
 ```
 
-### Community Packages
+<br>
+
+## Community Packages
 
 Do you use Rector to upgrade your code? Add it here:
 
