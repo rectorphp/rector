@@ -1,4 +1,4 @@
-# All 482 Rectors Overview
+# All 483 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -32,7 +32,7 @@
 - [PHPStan](#phpstan) (3)
 - [PHPUnit](#phpunit) (37)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
-- [PSR4](#psr4) (2)
+- [PSR4](#psr4) (3)
 - [Performance](#performance) (1)
 - [Phalcon](#phalcon) (4)
 - [Php52](#php52) (2)
@@ -6218,9 +6218,18 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 
 <br>
 
+### `NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector`
+
+- class: [`Rector\PSR4\Rector\FileSystem\NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector`](/../master/rules/psr4/src/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector.php)
+
+Adds namespace to namespace-less files to match PSR-4 in composer.json autoload section. Run with combination with Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector
+
+<br>
+
 ### `NormalizeNamespaceByPSR4ComposerAutoloadRector`
 
 - class: [`Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector`](/../master/rules/psr4/src/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
+- [test fixtures](/../master/rules/psr4/tests/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector/Fixture)
 
 Changes namespace and class names to match PSR-4 in composer.json autoload section
 
