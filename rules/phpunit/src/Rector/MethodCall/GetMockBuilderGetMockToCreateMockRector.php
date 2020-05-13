@@ -68,12 +68,7 @@ PHP
             return null;
         }
 
-        if ($this->isName($node->var->name, 'disableOriginalConstructor')) {
-            // null;
-            $getMockBuilderMethodCall = $node->var->var;
-        } else {
-            $getMockBuilderMethodCall = $node->var;
-        }
+        $getMockBuilderMethodCall = $this->isName($node->var->name, 'disableOriginalConstructor') ? $node->var->var : $node->var;
 
         /** @var MethodCall|null $getMockBuilderMethodCall */
         if ($getMockBuilderMethodCall === null) {
