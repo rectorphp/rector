@@ -59,7 +59,7 @@ final class UseManipulator
 
         foreach ($namedNodes as $nameNode) {
             /** node name before becoming FQN - attribute from @see NameResolver */
-            $originalName = $nameNode->getAttribute('originalName');
+            $originalName = $nameNode->getAttribute(AttributeKey::ORIGINAL_NAME);
             if (! $originalName instanceof Name) {
                 continue;
             }

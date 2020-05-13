@@ -375,6 +375,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         // names are the same
-        return $this->areNodesEqual($originalNode->getAttribute('originalName'), $node);
+        return $this->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
     }
 }

@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
@@ -24,7 +25,7 @@ final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
      */
     public function mapToPHPStan(Node $node): Type
     {
-        $originalName = (string) $node->getAttribute('originalName');
+        $originalName = (string) $node->getAttribute(AttributeKey::ORIGINAL_NAME);
         $fullyQualifiedName = $node->toString();
 
         // is aliased?

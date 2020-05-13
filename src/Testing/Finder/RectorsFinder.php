@@ -82,6 +82,7 @@ final class RectorsFinder
                 ));
             }
 
+            /** @var RectorInterface[] $rectors */
             $rectors[] = $rector;
         }
 

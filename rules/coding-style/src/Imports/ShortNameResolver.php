@@ -107,7 +107,7 @@ final class ShortNameResolver
                 return;
             }
 
-            $originalName = $node->getAttribute('originalName');
+            $originalName = $node->getAttribute(AttributeKey::ORIGINAL_NAME);
             if (! $originalName instanceof Name) {
                 return;
             }

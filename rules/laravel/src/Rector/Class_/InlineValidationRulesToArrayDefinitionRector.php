@@ -180,7 +180,7 @@ PHP
                 $output .= $this->transformConcatExpressionToSingleString($expressionPart);
             } elseif ($expressionPart instanceof ClassConstFetch) {
                 /** @var Name $name */
-                $name = $expressionPart->class->getAttribute('originalName');
+                $name = $expressionPart->class->getAttribute(AttributeKey::ORIGINAL_NAME);
 
                 $output .= implode('\\', $name->parts);
             } else {

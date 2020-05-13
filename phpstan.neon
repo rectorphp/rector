@@ -258,13 +258,6 @@ parameters:
         - '#Method Rector\\Naming\\Naming\\PropertyNaming\:\:resolveShortClassName\(\) should return string but returns string\|null#'
 
         -
-            message: "#^Class \"Rector\\\\PSR4\\\\Rector\\\\Namespace_\\\\NormalizeNamespaceByPSR4ComposerAutoloadRector\" is missing @see annotation with test case class reference$#"
-            count: 1
-            path: rules/psr4/src/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector.php
-
-        - '#Method Rector\\Core\\Testing\\Finder\\RectorsFinder\:\:findInDirectories\(\) should return array<Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<object\>#'
-
-        -
             message: "#^Class cognitive complexity for \"PhpDocInfo\" is 53, keep it under 50$#"
             count: 1
             path: packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php
@@ -313,3 +306,4 @@ parameters:
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\Core\\Testing\\Finder\\RectorsFinder\:\:findInDirectories\(\) should return array<Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<object\>#'

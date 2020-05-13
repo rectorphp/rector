@@ -78,6 +78,14 @@ final class AttributeKey
     public const ORIGINAL_NODE = 'origNode';
 
     /**
+     * Internal php-parser name.
+     * Do not change this even if you want!
+     *
+     * @var string
+     */
+    public const ORIGINAL_NAME = 'originalName';
+
+    /**
      * Internal php-parser name. @see \PhpParser\NodeVisitor\NameResolver
      * Do not change this even if you want!
      *
