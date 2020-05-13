@@ -1,4 +1,4 @@
-# All 484 Rectors Overview
+# All 483 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -29,7 +29,6 @@
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [Order](#order) (3)
-- [Oxid](#oxid) (1)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
 - [PHPUnit](#phpunit) (37)
@@ -4946,22 +4945,6 @@ services:
      {
      }
  }
-```
-
-<br>
-
-## Oxid
-
-### `OxidReplaceBackwardsCompatabilityClassRector`
-
-- class: [`Rector\Oxid\Rector\FuncCall\OxidReplaceBackwardsCompatabilityClassRector`](/../master/rules/oxid/src/Rector/FuncCall/OxidReplaceBackwardsCompatabilityClassRector.php)
-- [test fixtures](/../master/rules/oxid/tests/Rector/FuncCall/OxidReplaceBackwardsCompatabilityClassRector/Fixture)
-
-Replaces deprecated backwards compatability classes with namespaces ones in oxNew
-
-```diff
--oxNew("oxcmp_basket");
-+oxNew(\OxidEsales\Eshop\Application\Component\BasketComponent::class);
 ```
 
 <br>
