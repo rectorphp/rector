@@ -101,7 +101,6 @@ final class FileProcessor
         $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
 
         [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
-
         if ($newStmts === null) {
             throw new ShouldNotHappenException(sprintf(
                 'Parsing of file "%s" went wrong. Might be caused by inlinced html. Does it have full "<?php" openings? Try re-run with --debug option to find out more.',

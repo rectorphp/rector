@@ -307,3 +307,4 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
         - '#Method Rector\\Core\\Testing\\Finder\\RectorsFinder\:\:findInDirectories\(\) should return array<Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<object\>#'
+        - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
