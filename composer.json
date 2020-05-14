@@ -130,7 +130,8 @@
             "Rector\\VendorLocker\\": "packages/vendor-locker/src",
             "Rector\\Performance\\": "rules/performance/src",
             "Rector\\Naming\\": "rules/naming/src",
-            "Rector\\Order\\": "rules/order/src"
+            "Rector\\Order\\": "rules/order/src",
+            "Rector\\MockistaToMockery\\": "rules/mockista-to-mockery/src"
         }
     },
     "autoload-dev": {
@@ -199,7 +200,8 @@
             "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/phpstan-static-type-mapper-checker/src",
             "Rector\\Performance\\Tests\\": "rules/performance/tests",
             "Rector\\Naming\\Tests\\": "rules/naming/tests",
-            "Rector\\Order\\Tests\\": "rules/order/tests"
+            "Rector\\Order\\Tests\\": "rules/order/tests",
+            "Rector\\MockistaToMockery\\Tests\\": "rules/mockista-to-mockery/tests"
         },
         "classmap": [
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",

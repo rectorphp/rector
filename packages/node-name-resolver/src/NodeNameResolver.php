@@ -13,6 +13,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
@@ -214,14 +215,34 @@ final class NodeNameResolver
         }
 
         $backtrace = debug_backtrace();
-        if (isset($backtrace[1])) {
-            $fileInfo = new SmartFileInfo($backtrace[1]['file']);
-            $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $backtrace[1]['line'];
+        $rectorBacktrace = $this->matchRectorBacktraceCall($backtrace);
+
+        if ($rectorBacktrace) {
+            $fileInfo = new SmartFileInfo($rectorBacktrace['file']);
+            $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
 
             $message .= PHP_EOL . PHP_EOL;
             $message .= sprintf('Look at %s', $fileAndLine);
         }
 
         throw new ShouldNotHappenException($message);
+    }
+
+    private function matchRectorBacktraceCall(array $backtrace): ?array
+    {
+        foreach ($backtrace as $singleTrace) {
+            if (! isset($singleTrace['object'])) {
+                continue;
+            }
+
+            // match a Rector class
+            if (! is_a($singleTrace['object'], RectorInterface::class)) {
+                continue;
+            }
+
+            return $singleTrace;
+        }
+
+        return $backtrace[1] ?? null;
     }
 }
