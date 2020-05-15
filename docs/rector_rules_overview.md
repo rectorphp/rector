@@ -1,4 +1,4 @@
-# All 483 Rectors Overview
+# All 485 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -22,6 +22,7 @@
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (2)
+- [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
 - [Nette](#nette) (11)
@@ -4125,6 +4126,56 @@ Change functions to static calls, so composer can autoload them
 
 -some_function('lol');
 +SomeUtilsClass::someFunction('lol');
+```
+
+<br>
+
+## MockistaToMockery
+
+### `MockeryTearDownRector`
+
+- class: [`Rector\MockistaToMockery\Rector\Class_\MockeryTearDownRector`](/../master/rules/mockista-to-mockery/src/Rector/Class_/MockeryTearDownRector.php)
+- [test fixtures](/../master/rules/mockista-to-mockery/tests/Rector/Class_/MockeryTearDownRector/Fixture)
+
+Add Mockery::close() in tearDown() method if not yet
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ class SomeTest extends TestCase
+ {
++    protected function tearDown(): void
++    {
++        Mockery::close();
++    }
+     public function test()
+     {
+         $mockUser = mock(User::class);
+     }
+ }
+```
+
+<br>
+
+### `MockistaMockToMockeryMockRector`
+
+- class: [`Rector\MockistaToMockery\Rector\ClassMethod\MockistaMockToMockeryMockRector`](/../master/rules/mockista-to-mockery/src/Rector/ClassMethod/MockistaMockToMockeryMockRector.php)
+- [test fixtures](/../master/rules/mockista-to-mockery/tests/Rector/ClassMethod/MockistaMockToMockeryMockRector/Fixture)
+
+Change functions to static calls, so composer can autoload them
+
+```diff
+ class SomeTest
+ {
+     public function run()
+     {
+-        $mockUser = mock(User::class);
+-        $mockUser->getId()->once->andReturn(1);
+-        $mockUser->freeze();
++        $mockUser = Mockery::mock(User::class);
++        $mockUser->expects()->getId()->once()->andReturn(1);
+     }
+ }
 ```
 
 <br>
