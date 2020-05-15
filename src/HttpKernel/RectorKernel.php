@@ -22,7 +22,6 @@ use Symplify\AutoBindParameter\DependencyInjection\CompilerPass\AutoBindParamete
 use Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use Symplify\ConsoleColorDiff\ConsoleColorDiffBundle;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
-use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoReturnFactoryCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Symplify\ParameterNameGuard\ParameterNameGuardBundle;
 
@@ -86,7 +85,6 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
     {
         $containerBuilder->addCompilerPass(new RemoveExcludedRectorsCompilerPass());
 
-        $containerBuilder->addCompilerPass(new AutoReturnFactoryCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireArrayParameterCompilerPass());
 
         // autowire Rectors by default (mainly for 3rd party code)

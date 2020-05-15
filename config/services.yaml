@@ -26,6 +26,12 @@ services:
     PhpParser\NodeVisitor\CloningVisitor:
     PhpParser\NodeFinder: null
 
+    PhpParser\Parser:
+        factory: ['@Rector\Core\PhpParser\Parser\ParserFactory', 'create']
+
+    PhpParser\Lexer:
+        factory: ['@Rector\Core\PhpParser\Parser\LexerFactory', 'create']
+
     # value resolver
     Symfony\Component\Filesystem\Filesystem: null
     Symplify\PackageBuilder\Reflection\PrivatesAccessor: null
