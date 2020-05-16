@@ -186,6 +186,16 @@ PHP
 
         $classMethodName = $this->getName($classMethod);
 
-        return (bool) Strings::match($classMethodName, '#^(render|action)#');
+        if ((bool) Strings::match($classMethodName, '#^(render|action|handle|inject)#')) {
+            return true;
+        }
+
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return false;
+        }
+
+        return $phpDocInfo->hasByName('inject');
     }
 }
