@@ -31,6 +31,7 @@ final class AttributeAwareParamTagValueNode extends ParamTagValueNode implements
         bool $isReference
     ) {
         parent::__construct($typeNode, $isVariadic, $parameterName, $description);
+
         $this->isReference = $isReference;
     }
 

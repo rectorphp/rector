@@ -22,6 +22,7 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
         ?string $fullyQualifiedTargetEntity = null
     ) {
         $this->fullyQualifiedTargetEntity = $fullyQualifiedTargetEntity;
+
         parent::__construct($items, $content);
     }
 

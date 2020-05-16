@@ -101,6 +101,7 @@ final class CreateRectorCommand extends Command
         array $rectorRecipe
     ) {
         parent::__construct();
+
         $this->symfonyStyle = $symfonyStyle;
         $this->configurationFactory = $configurationFactory;
         $this->templateVariablesFactory = $templateVariablesFactory;

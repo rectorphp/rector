@@ -130,6 +130,7 @@ final class ProcessCommand extends AbstractCommand
         $this->unchangedFilesFilter = $unchangedFilesFilter;
 
         parent::__construct();
+
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
     }

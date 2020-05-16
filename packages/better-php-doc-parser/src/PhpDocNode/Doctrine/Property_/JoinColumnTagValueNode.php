@@ -26,6 +26,7 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
     public function __construct(array $items, ?string $content = null, ?string $originalTag = null)
     {
         $this->tag = $originalTag;
+
         parent::__construct($items, $content);
     }
 

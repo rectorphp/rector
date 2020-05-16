@@ -20,6 +20,7 @@ final class AliasedObjectType extends ObjectType
     public function __construct(string $alias, string $fullyQualifiedClass)
     {
         parent::__construct($alias);
+
         $this->fullyQualifiedClass = $fullyQualifiedClass;
     }
 

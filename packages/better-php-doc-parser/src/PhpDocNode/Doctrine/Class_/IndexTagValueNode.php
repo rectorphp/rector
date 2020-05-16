@@ -17,6 +17,7 @@ final class IndexTagValueNode extends AbstractDoctrineTagValueNode implements Ta
     public function __construct(array $items, ?string $content = null, ?string $originalTag = null)
     {
         $this->tag = $originalTag;
+
         parent::__construct($items, $content);
     }
 
