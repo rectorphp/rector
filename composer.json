@@ -21,7 +21,7 @@
         "nette/utils": "^3.1",
         "nikic/php-parser": "^4.4",
         "ondram/ci-detector": "^3.1",
-        "phpstan/phpdoc-parser": "^0.4.4",
+        "phpstan/phpdoc-parser": "^0.4.7",
         "phpstan/phpstan": "^0.12.25",
         "phpstan/phpstan-phpunit": "^0.12",
         "psr/simple-cache": "^1.0",
@@ -49,7 +49,8 @@
         "symplify/monorepo-builder": "^7.4",
         "symplify/phpstan-extensions": "^7.4",
         "thecodingmachine/phpstan-strict-rules": "^0.12",
-        "psr/event-dispatcher": "^1.0"
+        "psr/event-dispatcher": "^1.0",
+        "slevomat/coding-standard": "dev-master"
     },
     "replace": {
         "rector/rector-prefixed": "self.version"
