@@ -35,8 +35,7 @@ final class TagValueToPhpParserNodeMap
 
         // doctrine
         ColumnTagValueNode::class => Property::class,
-        JoinTableTagValueNode
-::class => Property::class,
+        JoinTableTagValueNode::class => Property::class,
         EntityTagValueNode::class => Class_::class,
         TableTagValueNode::class => Class_::class,
         CustomIdGeneratorTagValueNode::class => Property::class,
