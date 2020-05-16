@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Privatization\Rector\ClassMethod;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -127,6 +128,10 @@ PHP
             return true;
         }
 
+        if ($this->isControllerAction($class, $classMethod)) {
+            return true;
+        }
+
         if ($this->shouldSkipClassMethod($classMethod)) {
             return true;
         }
@@ -170,5 +175,17 @@ PHP
 
         // possibly container service factories
         return $this->isNames($classMethod, ['create', 'create*']);
+    }
+
+    private function isControllerAction(Class_ $class, ClassMethod $classMethod): bool
+    {
+        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+        if (! Strings::match($className, '#(Controller|Presenter)$#')) {
+            return false;
+        }
+
+        $classMethodName = $this->getName($classMethod);
+
+        return (bool) Strings::match($classMethodName, '#^(render|action)#');
     }
 }
