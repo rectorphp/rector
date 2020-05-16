@@ -7,7 +7,7 @@ on:
             - master
 
 jobs:
-    phpstan_types_checks:
+    phpstan_compatibility_check:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
@@ -16,7 +16,5 @@ jobs:
                     php-version: 7.2
                     coverage: none # disable xdebug, pcov
             -   run: composer install --no-progress --ansi
-            -   run: |
-                    bin/rector sync-types
-            -   run: |
-                    bin/rector check-static-type-mappers
+            -   run: bin/rector sync-types
+            -   run: bin/rector check-static-type-mappers
