@@ -7,7 +7,7 @@ namespace Rector\Core\FileSystem;
 use Nette\Utils\Strings;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symplify\PackageBuilder\FileSystem\FileSystem;
+use Symplify\SmartFileSystem\FileSystemFilter;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -37,9 +37,9 @@ final class FilesFinder
     private $finderSanitizer;
 
     /**
-     * @var FileSystem
+     * @var FileSystemFilter
      */
-    private $fileSystem;
+    private $fileSystemFilter;
 
     /**
      * @param string[] $excludePaths
@@ -48,12 +48,12 @@ final class FilesFinder
         array $excludePaths,
         FilesystemTweaker $filesystemTweaker,
         FinderSanitizer $finderSanitizer,
-        FileSystem $fileSystem
+        FileSystemFilter $fileSystemFilter
     ) {
         $this->excludePaths = $excludePaths;
         $this->filesystemTweaker = $filesystemTweaker;
         $this->finderSanitizer = $finderSanitizer;
-        $this->fileSystem = $fileSystem;
+        $this->fileSystemFilter = $fileSystemFilter;
     }
 
     /**
@@ -68,7 +68,8 @@ final class FilesFinder
             return $this->fileInfosBySourceAndSuffixes[$cacheKey];
         }
 
-        [$files, $directories] = $this->fileSystem->separateFilesAndDirectories($source);
+        $files = $this->fileSystemFilter->filterFiles($source);
+        $directories = $this->fileSystemFilter->filterDirectories($source);
 
         $smartFileInfos = [];
         foreach ($files as $file) {

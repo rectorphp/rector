@@ -36,8 +36,8 @@ services:
     Symfony\Component\Filesystem\Filesystem: null
     Symplify\PackageBuilder\Reflection\PrivatesAccessor: null
 
-    Symplify\PackageBuilder\FileSystem\FileSystem: null
     Symplify\SmartFileSystem\Finder\FinderSanitizer: null
+    Symplify\SmartFileSystem\FileSystemFilter: null
 
     Symplify\PackageBuilder\Parameter\ParameterProvider: null
     Symplify\PackageBuilder\Reflection\PrivatesCaller: null
