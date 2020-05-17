@@ -102,6 +102,7 @@ final class DocBlockNameImporter
             }
 
             $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($docNode, $phpParserNode);
+
             if (! $staticType instanceof FullyQualifiedObjectType) {
                 return $docNode;
             }

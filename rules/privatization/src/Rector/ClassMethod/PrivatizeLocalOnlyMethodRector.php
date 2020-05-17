@@ -180,6 +180,10 @@ PHP
     private function isControllerAction(Class_ $class, ClassMethod $classMethod): bool
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return false;
+        }
+
         if (! Strings::match($className, '#(Controller|Presenter)$#')) {
             return false;
         }
