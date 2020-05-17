@@ -108,7 +108,11 @@ final class ObjectTypeSpecifier
                 }
 
                 $partialNamespaceObjectType = $this->matchClassWithLastUseImportPart($objectType, $useUse);
-                if ($partialNamespaceObjectType !== null) {
+                if ($partialNamespaceObjectType instanceof FullyQualifiedObjectType) {
+                    return $partialNamespaceObjectType->getShortNameType();
+                }
+
+                if ($partialNamespaceObjectType instanceof ShortenedObjectType) {
                     return $partialNamespaceObjectType;
                 }
             }
@@ -147,10 +151,17 @@ final class ObjectTypeSpecifier
             return null;
         }
 
+        if ($objectType->getClassName() === $connectedClassName) {
+            return null;
+        }
+
         return new ShortenedObjectType($objectType->getClassName(), $connectedClassName);
     }
 
-    private function matchClassWithLastUseImportPart(ObjectType $objectType, UseUse $useUse): ?ShortenedObjectType
+    /**
+     * @return FullyQualifiedObjectType|ShortenedObjectType|null
+     */
+    private function matchClassWithLastUseImportPart(ObjectType $objectType, UseUse $useUse): ?ObjectType
     {
         if ($useUse->name->getLast() !== $objectType->getClassName()) {
             return null;
@@ -158,6 +169,10 @@ final class ObjectTypeSpecifier
 
         if (! ClassExistenceStaticHelper::doesClassLikeExist($useUse->name->toString())) {
             return null;
+        }
+
+        if ($objectType->getClassName() === $useUse->name->toString()) {
+            return new FullyQualifiedObjectType($objectType->getClassName());
         }
 
         return new ShortenedObjectType($objectType->getClassName(), $useUse->name->toString());
