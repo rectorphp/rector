@@ -20,12 +20,12 @@ final class NodeClassProvider
 
         return array_keys($robotLoader->getIndexedClasses());
     }
-    
+
     private function getDirectoryPath(): string
     {
         $pathUsedAsStandaloneProject = __DIR__ . '/../../../../vendor/nikic/php-parser/lib/PhpParser/Node';
         $pathUsedAsDependency = __DIR__ . '/../../../../../../nikic/php-parser/lib/PhpParser/Node';
-        
+
         return ! file_exists($pathUsedAsStandaloneProject)
             ? $pathUsedAsDependency
             : $pathUsedAsStandaloneProject;
