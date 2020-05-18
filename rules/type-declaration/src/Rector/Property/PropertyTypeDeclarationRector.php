@@ -53,9 +53,9 @@ final class PropertyTypeDeclarationRector extends AbstractRector
         }
 
         // is already set
-        /** @var PhpDocInfo $phpDocInfo */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo->getVarType() instanceof MixedType) {
+        if ($phpDocInfo !== null && ! $phpDocInfo->getVarType() instanceof MixedType) {
             return null;
         }
 
