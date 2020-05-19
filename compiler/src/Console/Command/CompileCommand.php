@@ -89,6 +89,19 @@ final class CompileCommand extends Command
         $this->symfonyStyle->section('Loading and updating ' . $composerJsonFile);
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
+        $process = new Process([
+            'composer',
+            'update',
+            '--no-dev',
+            '--prefer-dist',
+            '--no-interaction',
+            '--classmap-authoritative',
+            '--ansi',
+        ], $this->buildDir, null, null, null);
+        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
+            $output->write($buffer);
+        });
+
         // debug
         if (file_exists($this->buildDir . '/vendor/jetbrains')) {
             $this->fileLister->listFilesInDirectory($this->buildDir . '/vendor/jetbrains');
