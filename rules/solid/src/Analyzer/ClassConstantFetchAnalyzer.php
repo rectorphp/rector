@@ -14,6 +14,7 @@ use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 
 final class ClassConstantFetchAnalyzer
 {
@@ -48,20 +49,27 @@ final class ClassConstantFetchAnalyzer
     }
 
     /**
-     * Returns class constant usages for the declaring class name and constant name
-     * @return string[][][]
+     * This is needed to run BEFORE process of nodes,
+     * because @see PostRectorInterface can modify nodes and names of class constants
      */
-    public function provideClassConstantFetchByClassAndName(): array
+    public function warmup(): void
     {
         if ($this->classConstantFetchByClassAndName !== [] && ! StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            return $this->classConstantFetchByClassAndName;
+            return;
         }
 
         $classConstFetches = $this->parsedNodeCollector->getNodesByType(ClassConstFetch::class);
         foreach ($classConstFetches as $classConstantFetch) {
             $this->addClassConstantFetch($classConstantFetch);
         }
+    }
 
+    /**
+     * Returns class constant usages for the declaring class name and constant name
+     * @return string[][][]
+     */
+    public function provideClassConstantFetchByClassAndName(): array
+    {
         return $this->classConstantFetchByClassAndName;
     }
 

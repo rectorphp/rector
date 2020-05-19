@@ -12,6 +12,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Extension\FinishingExtensionRunner;
 use Rector\FileSystemRector\FileSystemFileProcessor;
+use Rector\SOLID\Analyzer\ClassConstantFetchAnalyzer;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -79,6 +80,11 @@ final class RectorApplication
      */
     private $finishingExtensionRunner;
 
+    /**
+     * @var ClassConstantFetchAnalyzer
+     */
+    private $classConstantFetchAnalyzer;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileSystemFileProcessor $fileSystemFileProcessor,
@@ -88,7 +94,8 @@ final class RectorApplication
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         NodeScopeResolver $nodeScopeResolver,
-        FinishingExtensionRunner $finishingExtensionRunner
+        FinishingExtensionRunner $finishingExtensionRunner,
+        ClassConstantFetchAnalyzer $classConstantFetchAnalyzer
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
@@ -99,6 +106,7 @@ final class RectorApplication
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->finishingExtensionRunner = $finishingExtensionRunner;
+        $this->classConstantFetchAnalyzer = $classConstantFetchAnalyzer;
     }
 
     /**
@@ -127,6 +135,8 @@ final class RectorApplication
                 $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
             }, 'parsing');
         }
+
+        $this->classConstantFetchAnalyzer->warmup();
 
         // 2. change nodes with Rectors
         foreach ($fileInfos as $fileInfo) {
