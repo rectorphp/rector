@@ -149,6 +149,13 @@ return [
                     if (array_key_exists('factory', $service) && is_string($service['factory'])) {
                         $service['factory'] = $prefixClass($service['factory']);
                     }
+
+                    if (array_key_exists('autowired', $service) && is_array($service['autowired'])) {
+                        foreach ($service['autowired'] as $i => $autowiredName) {
+                            $service['autowired'][$i] = $prefixClass($autowiredName);
+                        }
+                    }
+
                     $updatedNeon['services'][$key] = $service;
                 }
             }
