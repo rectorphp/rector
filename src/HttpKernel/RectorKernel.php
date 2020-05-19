@@ -23,7 +23,7 @@ use Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArr
 use Symplify\ConsoleColorDiff\ConsoleColorDiffBundle;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
-use Symplify\ParameterNameGuard\ParameterNameGuardBundle;
+use Symplify\ParameterNameGuard\Bundle\ParameterNameGuardBundle;
 
 final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterface
 {
