@@ -90,7 +90,9 @@ final class CompileCommand extends Command
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
         // debug
-        $this->fileLister->listFilesInDirectory($this->buildDir . '/vendor/jetbrains');
+        if (file_exists($this->buildDir . '/vendor/jetbrains')) {
+            $this->fileLister->listFilesInDirectory($this->buildDir . '/vendor/jetbrains');
+        }
 
         // 2.
         $this->symfonyStyle->section('Renaming PHPStorm stubs from "*.php" to ".stub"');
