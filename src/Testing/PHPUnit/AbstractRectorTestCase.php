@@ -16,6 +16,7 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\Finder\RectorsFinder;
+use Rector\SOLID\Analyzer\ClassConstantFetchAnalyzer;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
@@ -55,6 +56,11 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      */
     private $nodeScopeResolver;
 
+    /**
+     * @var ClassConstantFetchAnalyzer
+     */
+    private $classConstantFetchAnalyzer;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -88,6 +94,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
 
         $this->fileProcessor = static::$container->get(FileProcessor::class);
+        $this->classConstantFetchAnalyzer = static::$container->get(ClassConstantFetchAnalyzer::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
 
         // needed for PHPStan, because the analyzed file is just create in /temp
@@ -235,6 +242,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
         // life-cycle trio :)
         $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
+        // race condition inter-mezzo
+        $this->classConstantFetchAnalyzer->warmup();
         $this->fileProcessor->refactor($smartFileInfo);
 
         $changedContent = $this->fileProcessor->printToString($smartFileInfo);
