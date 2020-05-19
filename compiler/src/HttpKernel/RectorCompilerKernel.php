@@ -35,7 +35,7 @@ final class RectorCompilerKernel extends Kernel
      */
     public function registerBundles(): array
     {
-        return [new ConsoleColorDiffBundle];
+        return [new ConsoleColorDiffBundle()];
     }
 
     protected function build(ContainerBuilder $containerBuilder): void
