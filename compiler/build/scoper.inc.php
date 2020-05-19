@@ -23,15 +23,18 @@ final class WhitelistedStubsProvider
         ];
 
         // mirrors https://github.com/phpstan/phpstan-src/commit/04f777bc4445725d17dac65c989400485454b145
-        $stubFinder = Finder::create()
-            ->files()
-            ->name('*.php')
-            ->in(__DIR__ . '/../../vendor/jetbrains/phpstorm-stubs')
-            ->notName('#PhpStormStubsMap\.php$#');
+        $stubsDirectory = __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
+        if (file_exists($stubsDirectory)) {
+            $stubFinder = Finder::create()
+                ->files()
+                ->name('*.php')
+                ->in($stubsDirectory)
+                ->notName('#PhpStormStubsMap\.php$#');
 
-        foreach ($stubFinder->getIterator() as $fileInfo) {
-            /** @var SplFileInfo $fileInfo */
-            $stubs[] = $fileInfo->getPathName();
+            foreach ($stubFinder->getIterator() as $fileInfo) {
+                /** @var SplFileInfo $fileInfo */
+                $stubs[] = $fileInfo->getPathName();
+            }
         }
 
         return $stubs;
