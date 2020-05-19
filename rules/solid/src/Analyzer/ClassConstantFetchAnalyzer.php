@@ -51,6 +51,8 @@ final class ClassConstantFetchAnalyzer
     /**
      * This is needed to run BEFORE process of nodes,
      * because @see PostRectorInterface can modify nodes and names of class constants
+     *
+     * @todo this should be resolved on constant adding
      */
     public function warmup(): void
     {
