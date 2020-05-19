@@ -90,8 +90,11 @@ PHP
         /** @var Class_ $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-        /** @var PhpDocInfo $phpDocInfo */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
 
         foreach ($this->classToAnnotationMap as $type => $annotationMap) {
             /** @var string $type */
