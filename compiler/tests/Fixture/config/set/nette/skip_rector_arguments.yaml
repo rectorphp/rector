@@ -1,0 +1,9 @@
+services:
+    Rector\Core\Rector\Function_\FunctionToStaticCallRector:
+        $functionToStaticCall:
+            file_get_contents: ['Nette\Utils\FileSystem', 'read']
+-----
+services:
+    Rector\Core\Rector\Function_\FunctionToStaticCallRector:
+        $functionToStaticCall:
+            file_get_contents: ['Nette\Utils\FileSystem', 'read']

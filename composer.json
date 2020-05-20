@@ -203,7 +203,8 @@
             "Rector\\Performance\\Tests\\": "rules/performance/tests",
             "Rector\\Naming\\Tests\\": "rules/naming/tests",
             "Rector\\Order\\Tests\\": "rules/order/tests",
-            "Rector\\MockistaToMockery\\Tests\\": "rules/mockista-to-mockery/tests"
+            "Rector\\MockistaToMockery\\Tests\\": "rules/mockista-to-mockery/tests",
+            "Rector\\Compiler\\Tests\\": "compiler/tests"
         },
         "classmap": [
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",

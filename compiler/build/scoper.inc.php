@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Isolated\Symfony\Component\Finder\Finder;
 use Nette\Neon\Neon;
+use Nette\Utils\Strings;
+use Symfony\Component\Finder\Finder;
 
 final class WhitelistedStubsProvider
 {
@@ -48,26 +49,21 @@ final class EasyPrefixer
     /**
      * @var string[]
      */
-    public const ALLOWED_PREFIXES = ['Hoa\*', 'PhpParser\*', 'PHPStan\*', 'Rector\*'];
+    public const EXCLUDED_NAMESPACES = ['Hoa\*', 'PhpParser\*', 'PHPStan\*', 'Rector\*'];
 
     public static function prefixClass(string $class, string $prefix): string
     {
-        // @todo move to allowed prefixes
-        if (strpos($class, 'PHPStan\\') === 0) {
-            return $class;
+        foreach (self::EXCLUDED_NAMESPACES as $excludedNamespace) {
+            $excludedNamespace = Strings::substring($excludedNamespace, 0, -2) . '\\';
+            if (Strings::startsWith($class, $excludedNamespace)) {
+                return $class;
+            }
         }
-        if (strpos($class, 'PhpParser\\') === 0) {
-            return $class;
-        }
-        if (strpos($class, 'Rector\\') === 0) {
-            return $class;
-        }
-        if (strpos($class, 'Hoa\\') === 0) {
-            return $class;
-        }
+
         if (strpos($class, '@') === 0) {
             return $class;
         }
+
         return $prefix . '\\' . $class;
     }
 }
@@ -81,12 +77,14 @@ return [
             if ($filePath !== 'bin/rector') {
                 return $content;
             }
+
             return str_replace('__DIR__ . \'/..', '\'phar://rector.phar', $content);
         },
         function (string $filePath, string $prefix, string $content): string {
             if ($filePath !== 'vendor/nette/di/src/DI/Compiler.php') {
                 return $content;
             }
+
             return str_replace(
                 '|Nette\\\\DI\\\\Statement',
                 sprintf('|\\\\%s\\\\Nette\\\\DI\\\\Statement', $prefix),
@@ -108,6 +106,7 @@ return [
             if ($filePath !== 'vendor/nette/di/src/DI/Extensions/ExtensionsExtension.php') {
                 return $content;
             }
+
             $content = str_replace(sprintf('\'%s\\\\string', $prefix), '\'string', $content);
             return str_replace(
                 '|Nette\\\\DI\\\\Definitions\\\\Statement',
@@ -119,6 +118,7 @@ return [
             if ($filePath !== 'src/Testing/TestCase.php') {
                 return $content;
             }
+
             return str_replace(
                 sprintf('\\%s\\PHPUnit\\Framework\\TestCase', $prefix),
                 '\\PHPUnit\\Framework\\TestCase',
@@ -129,6 +129,7 @@ return [
             if ($filePath !== 'src/Testing/LevelsTestCase.php') {
                 return $content;
             }
+
             return str_replace(
                 [
                     sprintf('\\%s\\PHPUnit\\Framework\\AssertionFailedError', $prefix),
@@ -141,14 +142,17 @@ return [
 
         function (string $filePath, string $prefix, string $content): string {
             // only *.yaml files
-            if (strpos($filePath, '.yaml') === false) {
+            if (! Strings::endsWith($filePath, '.yaml')) {
                 return $content;
             }
 
             // @see https://github.com/rectorphp/rector/issues/3227
-            if (strpos($filePath, 'config/set/') !== 0) {
+            if (Strings::startsWith($filePath, 'config/set/')) {
                 return $content;
             }
+
+            var_dump($content);
+            die;
 
             // @todo - prefix classes in yaml files?
             return $content;
@@ -157,7 +161,7 @@ return [
         // mimics https://github.com/phpstan/phpstan-src/commit/5a6a22e5c4d38402c8cc888d8732360941c33d43#diff-463a36e4a5687fb2366b5ee56cdad92d
         function (string $filePath, string $prefix, string $content): string {
             // only *.neon files
-            if (strpos($filePath, '.neon') === false) {
+            if (! Strings::endsWith($filePath, '.neon')) {
                 return $content;
             }
 
@@ -188,7 +192,10 @@ return [
                 }
             }
 
-            return Neon::encode($updatedNeon, Neon::BLOCK);
+            $updatedContent = Neon::encode($updatedNeon, Neon::BLOCK);
+
+            // default indent is tab, we have spaces
+            return Strings::replace($updatedContent, '#\t#', '    ');
         },
 
         // mimics https://github.com/phpstan/phpstan-src/commit/fd8f0a852207a1724ae4a262f47d9a449de70da4#diff-463a36e4a5687fb2366b5ee56cdad92d
@@ -200,5 +207,5 @@ return [
             return str_replace(sprintf('\'%s\\\\', $prefix), '\'', $content);
         },
     ],
-    'whitelist' => EasyPrefixer::ALLOWED_PREFIXES,
+    'whitelist' => EasyPrefixer::EXCLUDED_NAMESPACES,
 ];
