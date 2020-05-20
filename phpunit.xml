@@ -14,6 +14,7 @@
             <directory>packages/*/tests</directory>
             <directory>tests</directory>
             <directory>utils/*/tests</directory>
+            <directory>compiler/tests</directory>
         </testsuite>
     </testsuites>
 
