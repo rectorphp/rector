@@ -11,7 +11,9 @@ services:
         resource: '../src'
         exclude:
             - '../src/Exception/*'
+            - '../src/DependencyInjection/*'
             - '../src/HttpKernel/*'
+            - '../src/PhpScoper/*'
 
     Symfony\Component\Filesystem\Filesystem: null
 

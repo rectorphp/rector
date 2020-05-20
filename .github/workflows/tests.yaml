@@ -45,5 +45,5 @@ jobs:
             -   name: Setup Problem Matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-            -   run: composer update --no-progress --prefer-lowest
+            -   run: composer update --no-progress # --prefer-lowest
             -   run: vendor/bin/phpunit

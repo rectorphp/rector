@@ -3,23 +3,10 @@
 
 declare(strict_types = 1);
 
-use Psr\Container\ContainerInterface;
 use Rector\Compiler\Console\RectorCompilerConsoleApplication;
-use Rector\Compiler\HttpKernel\RectorCompilerKernel;
+use Rector\Compiler\DependencyInjection\ContainerFactory;
 
 require_once __DIR__ . '/../vendor/autoload.php';
-
-final class ContainerFactory
-{
-    public function create(): ContainerInterface
-    {
-        $environment = 'prod' . random_int(1, 10000000);
-        $rectorCompilerKernel = new RectorCompilerKernel($environment, true);
-        $rectorCompilerKernel->boot();
-
-        return $rectorCompilerKernel->getContainer();
-    }
-}
 
 $containerFactory = new ContainerFactory();
 $container = $containerFactory->create();

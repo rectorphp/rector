@@ -1,0 +1,7 @@
+services:
+    -
+        class: SomeService
+-----
+services:
+    -
+        class: Prefix__\SomeService
