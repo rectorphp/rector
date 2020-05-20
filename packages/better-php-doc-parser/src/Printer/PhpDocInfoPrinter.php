@@ -122,11 +122,6 @@ final class PhpDocInfoPrinter
 
     private function printPhpDocNode(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): string
     {
-        // no nodes were, so empty doc
-        if ($this->isPhpDocNodeEmpty($attributeAwarePhpDocNode)) {
-            return '';
-        }
-
         $this->currentTokenPosition = 0;
 
         $output = '';
