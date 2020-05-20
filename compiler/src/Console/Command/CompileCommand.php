@@ -84,6 +84,7 @@ final class CompileCommand extends Command
         $this->symfonyStyle->newLine(2);
 
         $this->symfonyStyle->title('2. Running "composer update" without dev');
+
         $process = new Process([
             'composer',
             'update',
@@ -93,6 +94,7 @@ final class CompileCommand extends Command
             '--classmap-authoritative',
             '--ansi',
         ], $this->buildDir, null, null, null);
+
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
@@ -100,6 +102,7 @@ final class CompileCommand extends Command
         $this->symfonyStyle->newLine(2);
 
         $this->symfonyStyle->title('3. Renaming PHPStorm stubs from "*.php" to ".stub"');
+
         $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
 
         $this->symfonyStyle->newLine(2);
@@ -107,7 +110,9 @@ final class CompileCommand extends Command
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
         // and "Nette\Neon\Neon" class can be used there
         $this->symfonyStyle->title('4. Packing and prefixing rector.phar with Box and PHP Scoper');
+
         $process = new Process(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir, null, null, null);
+
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });

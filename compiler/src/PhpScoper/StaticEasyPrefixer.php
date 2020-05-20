@@ -36,6 +36,6 @@ final class StaticEasyPrefixer
 
         $match = sprintf('\'%s\\\\', $prefix);
 
-        return Strings::replace($content, '#' . $match . '#', '\'');
+        return Strings::replace($content, '#' . $match . '#', "'");
     }
 }

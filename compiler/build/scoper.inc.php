@@ -24,7 +24,7 @@ return [
                 return $content;
             }
 
-            return str_replace('__DIR__ . \'/..', '\'phar://rector.phar', $content);
+            return str_replace("__DIR__ . '/..", '\'phar://rector.phar', $content);
         },
         function (string $filePath, string $prefix, string $content): string {
             if ($filePath !== 'vendor/nette/di/src/DI/Compiler.php') {
@@ -41,7 +41,7 @@ return [
             if ($filePath !== 'vendor/nette/di/src/DI/Config/DefinitionSchema.php') {
                 return $content;
             }
-            $content = str_replace(sprintf('\'%s\\\\callable', $prefix), '\'callable', $content);
+            $content = str_replace(sprintf('\'%s\\\\callable', $prefix), "'callable", $content);
             return str_replace(
                 '|Nette\\\\DI\\\\Definitions\\\\Statement',
                 sprintf('|%s\\\\Nette\\\\DI\\\\Definitions\\\\Statement', $prefix),
