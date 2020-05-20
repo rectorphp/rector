@@ -82,13 +82,8 @@ final class BetterStandardPrinter extends Standard
         // php attributes
         $content = $this->contentPhpAttributePlaceholderReplacer->decorateContent($content);
 
-        // remove dead <?php structures
-        $clearContent = Strings::replace($content, '#\<\?php(\s)\?\>\n?#');
-
-        $clearContent = Strings::replace($clearContent, '#\<\?php(\s+)\?\>#');
-
         // keep EOL
-        return rtrim($clearContent) . $this->nl;
+        return rtrim($content) . $this->nl;
     }
 
     /**
