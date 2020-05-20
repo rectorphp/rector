@@ -43,6 +43,36 @@ final class WhitelistedStubsProvider
 
 $whitelistedStubsProvider = new WhitelistedStubsProvider();
 
+final class EasyPrefixer
+{
+    /**
+     * @var string[]
+     */
+    public const ALLOWED_PREFIXES = ['Hoa\*', 'PhpParser\*', 'PHPStan\*', 'Rector\*'];
+
+
+    public static function prefixClass(string $class, string $prefix): string
+    {
+        // @todo move to allowed prefixes
+        if (strpos($class, 'PHPStan\\') === 0) {
+            return $class;
+        }
+        if (strpos($class, 'PhpParser\\') === 0) {
+            return $class;
+        }
+        if (strpos($class, 'Rector\\') === 0) {
+            return $class;
+        }
+        if (strpos($class, 'Hoa\\') === 0) {
+            return $class;
+        }
+        if (strpos($class, '@') === 0) {
+            return $class;
+        }
+        return $prefix . '\\' . $class;
+    }
+}
+
 return [
     'prefix' => null,
     'finders' => [],
@@ -110,52 +140,48 @@ return [
             );
         },
 
-        // mimics https://github.com/phpstan/phpstan-src/commit/5a6a22e5c4d38402c8cc888d8732360941c33d43#diff-463a36e4a5687fb2366b5ee56cdad92d
         function (string $filePath, string $prefix, string $content): string {
-            if (strpos($filePath, '.neon') === false) {
+            // only *.yaml files
+            if (strpos($filePath, '.yaml') === false) {
                 return $content;
             }
+
             // @see https://github.com/rectorphp/rector/issues/3227
             if (strpos($filePath, 'config/set/') !== 0) {
                 return $content;
             }
+
+            // @todo - prefix classes in yaml files?
+            return $content;
+        },
+
+        // mimics https://github.com/phpstan/phpstan-src/commit/5a6a22e5c4d38402c8cc888d8732360941c33d43#diff-463a36e4a5687fb2366b5ee56cdad92d
+        function (string $filePath, string $prefix, string $content): string {
+            // only *.neon files
+            if (strpos($filePath, '.neon') === false) {
+                return $content;
+            }
+
             if ($content === '') {
                 return $content;
             }
-            $prefixClass = function (string $class) use ($prefix): string {
-                if (strpos($class, 'PHPStan\\') === 0) {
-                    return $class;
-                }
-                if (strpos($class, 'PhpParser\\') === 0) {
-                    return $class;
-                }
-                if (strpos($class, 'Rector\\') === 0) {
-                    return $class;
-                }
-                // mimics https://github.com/phpstan/phpstan-src/commit/23d5ca04ab6213f53a0e6c2e77857b23a73aa41d
-                if (strpos($class, 'Hoa\\') === 0) {
-                    return $class;
-                }
-                if (strpos($class, '@') === 0) {
-                    return $class;
-                }
-                return $prefix . '\\' . $class;
-            };
 
             $neon = Neon::decode($content);
             $updatedNeon = $neon;
+
             if (array_key_exists('services', $neon)) {
                 foreach ($neon['services'] as $key => $service) {
                     if (array_key_exists('class', $service) && is_string($service['class'])) {
-                        $service['class'] = $prefixClass($service['class']);
+                        $service['class'] = EasyPrefixer::prefixClass($service['class'], $prefix);
                     }
+
                     if (array_key_exists('factory', $service) && is_string($service['factory'])) {
-                        $service['factory'] = $prefixClass($service['factory']);
+                        $service['factory'] = EasyPrefixer::prefixClass($service['factory'], $prefix);
                     }
 
                     if (array_key_exists('autowired', $service) && is_array($service['autowired'])) {
                         foreach ($service['autowired'] as $i => $autowiredName) {
-                            $service['autowired'][$i] = $prefixClass($autowiredName);
+                            $service['autowired'][$i] = EasyPrefixer::prefixClass($autowiredName, $prefix);
                         }
                     }
 
@@ -175,11 +201,5 @@ return [
             return str_replace(sprintf('\'%s\\\\', $prefix), '\'', $content);
         },
     ],
-    'whitelist' => [
-        'Rector\*',
-        'PHPStan\*',
-        'PhpParser\*',
-        // mimics https://github.com/phpstan/phpstan-src/commit/23d5ca04ab6213f53a0e6c2e77857b23a73aa41d
-        'Hoa\*',
-    ],
+    'whitelist' => EasyPrefixer::ALLOWED_PREFIXES,
 ];
