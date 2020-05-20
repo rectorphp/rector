@@ -7,7 +7,6 @@ namespace Rector\Compiler\Tests;
 use Iterator;
 use Nette\Utils\Strings;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Tests\StaticFixtureLoader;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

@@ -12,6 +12,7 @@ services:
         exclude:
             - '../src/Exception/*'
             - '../src/HttpKernel/*'
+            - '../src/PhpScoper/*'
 
     Symfony\Component\Filesystem\Filesystem: null
 
