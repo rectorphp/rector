@@ -60,7 +60,7 @@ final class EasyPrefixer
             }
         }
 
-        if (strpos($class, '@') === 0) {
+        if (Strings::startsWith($class, '@')) {
             return $class;
         }
 
@@ -203,6 +203,7 @@ return [
             if (strpos($filePath, 'src/') !== 0) {
                 return $content;
             }
+
             $content = str_replace(sprintf('\'%s\\\\r\\\\n\'', $prefix), '\'\\\\r\\\\n\'', $content);
             return str_replace(sprintf('\'%s\\\\', $prefix), '\'', $content);
         },
