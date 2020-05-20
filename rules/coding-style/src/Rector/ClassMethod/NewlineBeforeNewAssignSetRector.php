@@ -92,7 +92,9 @@ PHP
                     continue;
                 }
 
-                $currentStmtVariableName = $this->getName($stmt->var);
+                if (! $stmt->var instanceof MethodCall) {
+                    $currentStmtVariableName = $this->getName($stmt->var);
+                }
             }
 
             if ($this->shouldAddEmptyLine($currentStmtVariableName, $node, $key)) {
