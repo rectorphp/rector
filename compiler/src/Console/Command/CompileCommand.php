@@ -120,6 +120,7 @@ final class CompileCommand extends Command
         $this->symfonyStyle->newLine(2);
 
         $this->symfonyStyle->title('5. Restoring root composer.json with "require-dev"');
+
         $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);
 
         $this->restoreDependenciesLocallyIfNotCi($output);
