@@ -8,6 +8,7 @@ use Iterator;
 use Nette\Utils\Strings;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
+use Symplify\PackageBuilder\Tests\StaticFixtureLoader;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ScopingTest extends TestCase
@@ -28,36 +29,26 @@ final class ScopingTest extends TestCase
         $this->patcherCallbacks = $scoper['patchers'];
     }
 
-    public function test(): void
+    /**
+     * @dataProvider provideData()
+     */
+    public function test(SmartFileInfo $fileInfo): void
     {
-        /** @var SmartFileInfo[] $fileInfos */
-        $fileInfos = self::loadFromDirectory(__DIR__ . '/Fixture/');
+        [$content, $expectedContent] = Strings::split($fileInfo->getContents(), "#-----\n#");
 
-        foreach ($fileInfos as $fileInfo) {
-            [$content, $expectedContent] = Strings::split($fileInfo->getContents(), "#-----\n#");
-
-            foreach ($this->patcherCallbacks as $patcherCallback) {
-                $relativeFilePath = $fileInfo->getRelativeFilePathFromDirectory(__DIR__ . '/Fixture');
-                $content = $patcherCallback($relativeFilePath, self::PREFIX, $content);
-            }
-
-            // normalize end-line spaces
-            $expectedContent = rtrim($expectedContent);
-            $content = rtrim($content);
-            $this->assertSame($expectedContent, $content);
+        foreach ($this->patcherCallbacks as $patcherCallback) {
+            $relativeFilePath = $fileInfo->getRelativeFilePathFromDirectory(__DIR__ . '/Fixture');
+            $content = $patcherCallback($relativeFilePath, self::PREFIX, $content);
         }
+
+        // normalize end-line spaces
+        $expectedContent = rtrim($expectedContent);
+        $content = rtrim($content);
+        $this->assertSame($expectedContent, $content, $fileInfo->getRelativeFilePath());
     }
 
-    /**
-     * @return Iterator<SmartFileInfo>
-     */
-    private static function loadFromDirectory(string $directory): Iterator
+    public function provideData(): Iterator
     {
-        $finder = (new Finder())->files()
-            ->in($directory);
-
-        foreach ($finder as $fileInfo) {
-            yield new SmartFileInfo($fileInfo->getRealPath());
-        }
+        return StaticFixtureLoader::loadFromDirectory(__DIR__ . '/Fixture');
     }
 }

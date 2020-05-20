@@ -66,6 +66,12 @@ final class EasyPrefixer
 
         return $prefix . '\\' . $class;
     }
+
+    public static function unprefixQuotedValues(string $prefix, string $content): string
+    {
+        $content = str_replace(sprintf('\'%s\\\\r\\\\n\'', $prefix), '\'\\\\r\\\\n\'', $content);
+        return str_replace(sprintf('\'%s\\\\', $prefix), '\'', $content);
+    }
 }
 
 return [
@@ -151,10 +157,7 @@ return [
                 return $content;
             }
 
-            var_dump($content);
-            die;
-
-            // @todo - prefix classes in yaml files?
+            // @todo - unprefix classes in yaml files?
             return $content;
         },
 
@@ -200,12 +203,15 @@ return [
 
         // mimics https://github.com/phpstan/phpstan-src/commit/fd8f0a852207a1724ae4a262f47d9a449de70da4#diff-463a36e4a5687fb2366b5ee56cdad92d
         function (string $filePath, string $prefix, string $content): string {
-            if (strpos($filePath, 'src/') !== 0) {
+            if (! Strings::contains($filePath, 'src/')) {
                 return $content;
             }
 
-            $content = str_replace(sprintf('\'%s\\\\r\\\\n\'', $prefix), '\'\\\\r\\\\n\'', $content);
-            return str_replace(sprintf('\'%s\\\\', $prefix), '\'', $content);
+            if (Strings::startsWith($filePath, 'src/')) {
+                return $content;
+            }
+
+            return EasyPrefixer::unprefixQuotedValues($prefix, $content);
         },
     ],
     'whitelist' => EasyPrefixer::EXCLUDED_NAMESPACES,

@@ -5,20 +5,22 @@
     "require": {
         "php": "^7.2",
         "nette/neon": "^3.0",
-        "nette/utils": "^3.0",
-        "ondram/ci-detector": "^3.3",
+        "nette/utils": "^3.1",
+        "ondram/ci-detector": "^3.4",
         "sebastian/diff": "^3.0|^4.0",
         "symfony/console": "^4.4|^5.0",
         "symfony/process": "^4.4|^5.0",
         "symfony/filesystem": "^4.4|^5.0",
         "symfony/finder": "^4.4|^5.0",
-        "symplify/console-color-diff": "^7.3",
-        "symplify/auto-bind-parameter": "^7.3",
-        "symplify/package-builder": "^7.3"
+        "symplify/console-color-diff": "^8.0",
+        "symplify/auto-bind-parameter": "^8.0",
+        "symplify/package-builder": "^8.0"
     },
     "autoload": {
         "psr-4": {
             "Rector\\Compiler\\": "src"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
