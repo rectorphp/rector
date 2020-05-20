@@ -37,11 +37,15 @@ final class JetbrainsStubsRenamer
     private function renameStubFileSuffixes(string $directory): void
     {
         $stubFileInfos = $this->getStubFileInfos($directory);
+        $message = sprintf(
+            'Renaming "%d" stub files from "%s"',
+            count($stubFileInfos),
+            'vendor/jetbrains/phpstorm-stubs̈́'
+        );
+        $this->symfonyStyle->note($message);
 
         foreach ($stubFileInfos as $stubFileInfo) {
             $path = $stubFileInfo->getPathname();
-
-            $this->symfonyStyle->note(sprintf('Renaming "%s"', $stubFileInfo->getRelativePathname()));
 
             $filenameWithStubSuffix = dirname($path) . '/' . $stubFileInfo->getBasename('.php') . '.stub';
             FileSystem::rename($path, $filenameWithStubSuffix);

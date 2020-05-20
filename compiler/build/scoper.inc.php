@@ -50,7 +50,6 @@ final class EasyPrefixer
      */
     public const ALLOWED_PREFIXES = ['Hoa\*', 'PhpParser\*', 'PHPStan\*', 'Rector\*'];
 
-
     public static function prefixClass(string $class, string $prefix): string
     {
         // @todo move to allowed prefixes
