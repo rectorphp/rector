@@ -92,7 +92,7 @@ PHP
                     continue;
                 }
 
-                if (!$stmt->var instanceof MethodCall) {
+                if (! $stmt->var instanceof MethodCall) {
                     $currentStmtVariableName = $this->getName($stmt->var);
                 }
             }
