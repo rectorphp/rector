@@ -6,7 +6,6 @@ namespace Rector\Compiler\Console\Command;
 
 use OndraM\CiDetector\CiDetector;
 use Rector\Compiler\Composer\ComposerJsonManipulator;
-use Rector\Compiler\Debug\FileLister;
 use Rector\Compiler\Renaming\JetbrainsStubsRenamer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,11 +45,6 @@ final class CompileCommand extends Command
     private $jetbrainsStubsRenamer;
 
     /**
-     * @var FileLister
-     */
-    private $fileLister;
-
-    /**
      * @var CiDetector
      */
     private $ciDetector;
@@ -61,7 +55,6 @@ final class CompileCommand extends Command
         ComposerJsonManipulator $composerJsonManipulator,
         SymfonyStyle $symfonyStyle,
         JetbrainsStubsRenamer $jetbrainsStubsRenamer,
-        FileLister $fileLister,
         CiDetector $ciDetector
     ) {
         $this->dataDir = $dataDir;
@@ -69,7 +62,6 @@ final class CompileCommand extends Command
 
         $this->composerJsonManipulator = $composerJsonManipulator;
         $this->jetbrainsStubsRenamer = $jetbrainsStubsRenamer;
-        $this->fileLister = $fileLister;
         $this->symfonyStyle = $symfonyStyle;
         $this->ciDetector = $ciDetector;
 
@@ -84,11 +76,14 @@ final class CompileCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // 1.
         $composerJsonFile = $this->buildDir . '/composer.json';
-        $this->symfonyStyle->section('Loading and updating ' . $composerJsonFile);
+
+        $this->symfonyStyle->title('1. Adding "phpstan/phpstan-src" to ' . $composerJsonFile);
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
+        $this->symfonyStyle->newLine(2);
+
+        $this->symfonyStyle->title('2. Running "composer update" without dev');
         $process = new Process([
             'composer',
             'update',
@@ -102,28 +97,24 @@ final class CompileCommand extends Command
             $output->write($buffer);
         });
 
-        // debug
-        if (file_exists($this->buildDir . '/vendor/jetbrains')) {
-            $this->fileLister->listFilesInDirectory($this->buildDir . '/vendor/jetbrains');
-        }
+        $this->symfonyStyle->newLine(2);
 
-        // 2.
-        $this->symfonyStyle->section('Renaming PHPStorm stubs from "*.php" to ".stub"');
+        $this->symfonyStyle->title('3. Renaming PHPStorm stubs from "*.php" to ".stub"');
         $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
 
-        // 3.
+        $this->symfonyStyle->newLine(2);
+
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
         // and "Nette\Neon\Neon" class can be used there
-        $this->symfonyStyle->section('Packing and prefixing rector.phar with Box and PHP Scoper');
+        $this->symfonyStyle->title('4. Packing and prefixing rector.phar with Box and PHP Scoper');
         $process = new Process(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir, null, null, null);
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
 
-        // 4.
-        $this->symfonyStyle->section('Restoring root composer.json with "require-dev"');
-        $this->symfonyStyle->note('You still need to run "composer update" to install those dependencies');
+        $this->symfonyStyle->newLine(2);
 
+        $this->symfonyStyle->title('5. Restoring root composer.json with "require-dev"');
         $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);
 
         $this->restoreDependenciesLocallyIfNotCi($output);
