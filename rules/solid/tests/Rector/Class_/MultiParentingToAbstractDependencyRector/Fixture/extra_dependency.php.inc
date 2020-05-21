@@ -53,9 +53,13 @@ abstract class AbstractParentClassWithExtraDependency
 {
     /**
      * @var SomeDependency
-     * @inject
      */
-    public $someDependency;
+    private $someDependency;
+
+    public function injectAbstractParentClassWithExtraDependency(\Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency $someDependency)
+    {
+        $this->someDependency = $someDependency;
+    }
 }
 
 class FirstChildWithExtraDependency extends AbstractParentClassWithExtraDependency

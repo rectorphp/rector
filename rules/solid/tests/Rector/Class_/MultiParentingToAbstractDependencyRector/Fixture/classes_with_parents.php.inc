@@ -45,9 +45,13 @@ abstract class AbstractParentClassWithParents
 {
     /**
      * @var ClassWithParent
-     * @inject
      */
-    public $implement;
+    private $implement;
+
+    public function injectAbstractParentClassWithParents(\Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\ClassWithParent $classWithParent)
+    {
+        $this->classWithParent = $classWithParent;
+    }
 }
 
 class FirstChildClassWithParent extends AbstractParentClassWithParents

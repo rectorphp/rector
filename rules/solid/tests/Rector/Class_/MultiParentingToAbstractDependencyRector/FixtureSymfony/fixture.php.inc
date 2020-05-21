@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\FixtureSymfony;
 
 use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
 
@@ -37,7 +37,7 @@ class SecondChild extends AbstractParentClass
 -----
 <?php
 
-namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\FixtureSymfony;
 
 use Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency;
 
@@ -48,6 +48,9 @@ abstract class AbstractParentClass
      */
     private $someDependency;
 
+    /**
+     * @required
+     */
     public function injectAbstractParentClass(\Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency $someDependency)
     {
         $this->someDependency = $someDependency;
