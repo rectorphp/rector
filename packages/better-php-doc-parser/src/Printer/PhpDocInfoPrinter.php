@@ -153,25 +153,6 @@ final class PhpDocInfoPrinter
         return Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
     }
 
-    private function isPhpDocNodeEmpty(PhpDocNode $phpDocNode): bool
-    {
-        if (count($phpDocNode->children) === 0) {
-            return true;
-        }
-
-        foreach ($phpDocNode->children as $phpDocChildNode) {
-            if ($phpDocChildNode instanceof PhpDocTextNode) {
-                if ($phpDocChildNode->text !== '') {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private function printNode(
         AttributeAwareNodeInterface $attributeAwareNode,
         ?StartEndValueObject $startEndValueObject = null,
