@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
@@ -138,19 +137,6 @@ final class ParsedNodeCollector
         return null;
     }
 
-    /**
-     * @return Class_|Interface_|null
-     */
-    public function findClassOrInterface(string $type): ?ClassLike
-    {
-        $class = $this->findClass($type);
-        if ($class !== null) {
-            return $class;
-        }
-
-        return $this->findInterface($type);
-    }
-
     public function findClassConstant(string $className, string $constantName): ?ClassConst
     {
         if (Strings::contains($constantName, '\\')) {
@@ -228,6 +214,9 @@ final class ParsedNodeCollector
     public function findClassConstantByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
     {
         $className = $this->nodeNameResolver->getName($classConstFetch->class);
+        if ($className === null) {
+            return null;
+        }
 
         $class = $this->resolveClassConstant($classConstFetch, $className);
         if ($class === null) {
@@ -267,7 +256,7 @@ final class ParsedNodeCollector
         $this->constantsByType[$className][$constantName] = $classConst;
     }
 
-    private function resolveClassConstant(ClassConstFetch $classConstFetch, ?string $className): ?string
+    private function resolveClassConstant(ClassConstFetch $classConstFetch, string $className): ?string
     {
         if ($className === 'self') {
             return $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
