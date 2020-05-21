@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Rector\NodeCollector\NodeFinder;
 
-use Rector\SOLID\Analyzer\ClassConstantFetchAnalyzer;
+use Rector\NodeCollector\NodeCollector\ParsedClassConstFetchNodeCollector;
 
 final class ClassConstParsedNodesFinder
 {
     /**
-     * @var ClassConstantFetchAnalyzer
+     * @var ParsedClassConstFetchNodeCollector
      */
-    private $classConstantFetchAnalyzer;
+    private $parsedClassConstFetchNodeCollector;
 
-    public function __construct(ClassConstantFetchAnalyzer $classConstantFetchAnalyzer)
+    public function __construct(ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector)
     {
-        $this->classConstantFetchAnalyzer = $classConstantFetchAnalyzer;
+        $this->parsedClassConstFetchNodeCollector = $parsedClassConstFetchNodeCollector;
     }
 
     /**
@@ -23,7 +23,7 @@ final class ClassConstParsedNodesFinder
      */
     public function findDirectClassConstantFetches(string $desiredClassName, string $desiredConstantName): array
     {
-        $classConstantFetchByClassAndName = $this->classConstantFetchAnalyzer->provideClassConstantFetchByClassAndName();
+        $classConstantFetchByClassAndName = $this->parsedClassConstFetchNodeCollector->getClassConstantFetchByClassAndName();
 
         return $classConstantFetchByClassAndName[$desiredClassName][$desiredConstantName] ?? [];
     }
@@ -33,7 +33,8 @@ final class ClassConstParsedNodesFinder
      */
     public function findIndirectClassConstantFetches(string $desiredClassName, string $desiredConstantName): array
     {
-        $classConstantFetchByClassAndName = $this->classConstantFetchAnalyzer->provideClassConstantFetchByClassAndName();
+        $classConstantFetchByClassAndName = $this->parsedClassConstFetchNodeCollector->getClassConstantFetchByClassAndName();
+
         foreach ($classConstantFetchByClassAndName as $className => $classesByConstantName) {
             if (! isset($classesByConstantName[$desiredConstantName])) {
                 continue;
