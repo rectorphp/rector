@@ -29,30 +29,37 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector
      * @var string
      */
     public const FRAMEWORK_SYMFONY = 'symfony';
+
     /**
      * @var string
      */
     private const CONSTRUCTOR_METHOD_NAME = '__construct';
+
     /**
      * @var string
      */
     private $framework;
+
     /**
      * @var ObjectType[]
      */
     private $objectTypesToInject = [];
+
     /**
      * @var ClassMethodNodeRemover
      */
     private $classMethodNodeRemover;
+
     /**
      * @var InjectMethodFactory
      */
     private $injectMethodFactory;
+
     /**
      * @var ClassInsertManipulator
      */
     private $classInsertManipulator;
+
     public function __construct(
         ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
         ClassMethodNodeRemover $classMethodNodeRemover,
@@ -68,6 +75,7 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->classInsertManipulator = $classInsertManipulator;
     }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -126,6 +134,7 @@ PHP
             ]
         );
     }
+
     /**
      * @return string[]
      */
@@ -133,6 +142,7 @@ PHP
     {
         return [Class_::class];
     }
+
     /**
      * @param Class_ $node
      */
@@ -182,6 +192,7 @@ PHP
 
         return $node;
     }
+
     /**
      * @return ObjectType[]
      */
@@ -206,6 +217,7 @@ PHP
 
         return $objectTypes;
     }
+
     private function addInjectOrRequiredClassMethod(Class_ $class): void
     {
         /** @var string $className */
@@ -223,6 +235,7 @@ PHP
 
         $this->classInsertManipulator->addAsFirstMethod($class, $injectClassMethod);
     }
+
     private function clearAbstractClassConstructor(ClassMethod $classMethod): void
     {
         foreach ($classMethod->getParams() as $key => $param) {
@@ -236,6 +249,7 @@ PHP
 
         $this->classMethodNodeRemover->removeClassMethodIfUseless($classMethod);
     }
+
     /**
      * @param ObjectType[] $abstractClassConstructorParamTypes
      */
@@ -261,6 +275,7 @@ PHP
             $this->objectTypesToInject[] = $paramType;
         }
     }
+
     private function popFirstObjectTypeFromUnionType(Type $paramType): Type
     {
         if (! $paramType instanceof UnionType) {
