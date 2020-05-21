@@ -45,9 +45,13 @@ abstract class AbstractParentClass
 {
     /**
      * @var SomeDependency
-     * @inject
      */
-    public $someDependency;
+    private $someDependency;
+
+    public function injectAbstractParentClass(\Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\Source\SomeDependency $someDependency)
+    {
+        $this->someDependency = $someDependency;
+    }
 }
 
 class FirstChild extends AbstractParentClass
