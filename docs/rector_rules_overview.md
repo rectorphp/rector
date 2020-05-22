@@ -1,4 +1,4 @@
-# All 485 Rectors Overview
+# All 487 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -25,7 +25,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
-- [Nette](#nette) (11)
+- [Nette](#nette) (12)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [Order](#order) (3)
@@ -55,7 +55,7 @@
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (10)
 - [Restoration](#restoration) (3)
-- [SOLID](#solid) (11)
+- [SOLID](#solid) (12)
 - [Sensio](#sensio) (1)
 - [StrictCodeQuality](#strictcodequality) (1)
 - [Symfony](#symfony) (29)
@@ -4306,6 +4306,41 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
          $form = new Form();
 -        $form->addDatePicker('key', 'Label');
 +        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+     }
+ }
+```
+
+<br>
+
+### `ContextGetByTypeToConstructorInjectionRector`
+
+- class: [`Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector`](/../master/rules/nette/src/Rector/MethodCall/ContextGetByTypeToConstructorInjectionRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/MethodCall/ContextGetByTypeToConstructorInjectionRector/Fixture)
+
+Move dependency passed to all children to parent as @inject/@required dependency
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var \Nette\DI\Container
+      */
+     private $context;
+
++    /**
++     * @var SomeTypeToInject
++     */
++    private $someTypeToInject;
++
++    public function __construct(SomeTypeToInject $someTypeToInject)
++    {
++        $this->someTypeToInject = $someTypeToInject;
++    }
++
+     public function run()
+     {
+-        $someTypeToInject = $this->context->getByType(SomeTypeToInject::class);
++        $someTypeToInject = $this->someTypeToInject;
      }
  }
 ```
@@ -9122,6 +9157,56 @@ Classes that have no children nor are used, should have abstract
 -class PossibleAbstractClass
 +abstract class PossibleAbstractClass
  {
+ }
+```
+
+<br>
+
+### `MultiParentingToAbstractDependencyRector`
+
+- class: [`Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector`](/../master/rules/solid/src/Rector/Class_/MultiParentingToAbstractDependencyRector.php)
+- [test fixtures](/../master/rules/solid/tests/Rector/Class_/MultiParentingToAbstractDependencyRector/Fixture)
+
+Move dependency passed to all children to parent as @inject/@required dependency
+
+```yaml
+services:
+    Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector:
+        $framework: nette
+```
+
+↓
+
+```diff
+ abstract class AbstractParentClass
+ {
+-    private $someDependency;
+-
+-    public function __construct(SomeDependency $someDependency)
+-    {
+-        $this->someDependency = $someDependency;
+-    }
++    /**
++     * @inject
++     * @var SomeDependency
++     */
++    public $someDependency;
+ }
+
+ class FirstChild extends AbstractParentClass
+ {
+-    public function __construct(SomeDependency $someDependency)
+-    {
+-        parent::__construct($someDependency);
+-    }
+ }
+
+ class SecondChild extends AbstractParentClass
+ {
+-    public function __construct(SomeDependency $someDependency)
+-    {
+-        parent::__construct($someDependency);
+-    }
  }
 ```
 
