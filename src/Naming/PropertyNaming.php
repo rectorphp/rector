@@ -14,11 +14,7 @@ final class PropertyNaming
      */
     public function fqnToVariableName($objectType): string
     {
-        if ($objectType instanceof ObjectType) {
-            $className = $objectType->getClassName();
-        } else {
-            $className = $objectType;
-        }
+        $className = $this->resolveClassName($objectType);
 
         $shortName = $this->fqnToShortName($className);
         $shortName = $this->removeInterfaceSuffixPrefix($className, $shortName);
@@ -68,5 +64,17 @@ final class PropertyNaming
         }
 
         return $shortName;
+    }
+
+    /**
+     * @param ObjectType|string $objectType
+     */
+    private function resolveClassName($objectType): string
+    {
+        if ($objectType instanceof ObjectType) {
+            return $objectType->getClassName();
+        }
+
+        return $objectType;
     }
 }
