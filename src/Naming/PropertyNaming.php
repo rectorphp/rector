@@ -10,6 +10,11 @@ use PHPStan\Type\ObjectType;
 final class PropertyNaming
 {
     /**
+     * @var string
+     */
+    private const INTERFACE = 'Interface';
+
+    /**
      * @param ObjectType|string $objectType
      */
     public function fqnToVariableName($objectType): string
@@ -40,8 +45,8 @@ final class PropertyNaming
 
         /** @var string $lastNamePart */
         $lastNamePart = Strings::after($fqn, '\\', - 1);
-        if (Strings::endsWith($lastNamePart, 'Interface')) {
-            return Strings::substring($lastNamePart, 0, - strlen('Interface'));
+        if (Strings::endsWith($lastNamePart, self::INTERFACE)) {
+            return Strings::substring($lastNamePart, 0, - strlen(self::INTERFACE));
         }
 
         return $lastNamePart;
@@ -60,7 +65,7 @@ final class PropertyNaming
         }
 
         if (Strings::match($shortName, '#Interface$#')) {
-            return Strings::substring($shortName, -strlen('Interface'));
+            return Strings::substring($shortName, -strlen(self::INTERFACE));
         }
 
         return $shortName;
