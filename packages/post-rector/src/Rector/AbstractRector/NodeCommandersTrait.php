@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\NodesToAddCollector;
@@ -120,6 +121,13 @@ trait NodeCommandersTrait
 
     protected function removeNode(Node $node): void
     {
+        // this make sure to keep just added nodes, e.g. added class constant, that doesn't have analysis of full code in this run
+        // if this is missing, there are false positive e.g. for unused private constant
+        $isJustAddedNode = ! (bool) $node->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if ($isJustAddedNode) {
+            return;
+        }
+
         $this->nodesToRemoveCollector->addNodeToRemove($node);
         $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }

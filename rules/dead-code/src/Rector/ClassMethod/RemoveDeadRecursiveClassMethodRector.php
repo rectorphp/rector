@@ -134,6 +134,10 @@ PHP
         /** @var string $methodCallMethodName */
         $methodCallMethodName = $methodCall->getAttribute(AttributeKey::METHOD_NAME);
 
+        if ($methodCall->name instanceof MethodCall) {
+            return false;
+        }
+
         // is method called not in itself
         if (! $this->isName($methodCall->name, $methodCallMethodName)) {
             return true;
