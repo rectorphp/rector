@@ -58,7 +58,7 @@ class SomeClass
     {
         $isMatch = str_starts_with($haystack, $needle);
 
-        $isMatch = ! str_starts_with($haystack, $needle);
+        $isNotMatch = ! str_starts_with($haystack, $needle);
     }
 }
 PHP

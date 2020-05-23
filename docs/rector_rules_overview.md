@@ -7910,7 +7910,7 @@ Change helper functions to str_starts_with()
 +        $isMatch = str_starts_with($haystack, $needle);
 
 -        $isNotMatch = substr($haystack, 0, strlen($needle)) !== $needle;
-+        $isMatch = ! str_starts_with($haystack, $needle);
++        $isNotMatch = ! str_starts_with($haystack, $needle);
      }
  }
 ```
