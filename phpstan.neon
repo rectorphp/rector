@@ -298,9 +298,6 @@ parameters:
         - '#Class cognitive complexity for "DumpNodesCommand" is 103, keep it under 50#'
         - '#Cognitive complexity for "Rector\\Utils\\DocumentationGenerator\\Command\\DumpNodesCommand\:\:execute\(\)" is \d+, keep it under 9#'
 
-        # just for utils
-        - '#Class "Rector\\Utils\\DoctrineAnnotationParserSyncer\\Rector\\(.*?)" is missing @see annotation with test case class reference#'
-
         - '#Method Rector\\Utils\\DocumentationGenerator\\Node\\NodeClassProvider\:\:getNodeClasses\(\) should return array<class\-string\> but returns array<int, \(int\|string\)\>#'
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
@@ -308,6 +305,6 @@ parameters:
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
         - '#Method Rector\\Core\\Testing\\Finder\\RectorsFinder\:\:findInDirectories\(\) should return array<Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<object\>#'
         - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
-        - '#Call to function method_exists\(\) with \$this\(Rector\\PSR4\\Tests\\Rector\\MultipleClassFileToPsr4ClassesRector\\MultipleClassFileToPsr4ClassesRectorTest\) (.*?) will always evaluate to false#'
 
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is 10, keep it under 9#'
+        - '#Parameter \#1 \$objectType of method Rector\\Core\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'

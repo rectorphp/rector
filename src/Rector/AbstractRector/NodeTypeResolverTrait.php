@@ -68,12 +68,26 @@ trait NodeTypeResolverTrait
     }
 
     /**
-     * @param string[] $requiredTypes
+     * @param string[]|ObjectType[] $requiredTypes
      */
     protected function isObjectTypes(Node $node, array $requiredTypes): bool
     {
         foreach ($requiredTypes as $requiredType) {
             if ($this->isObjectType($node, $requiredType)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Type[] $desiredTypes
+     */
+    protected function isSameObjectTypes(ObjectType $objectType, array $desiredTypes): bool
+    {
+        foreach ($desiredTypes as $abstractClassConstructorParamType) {
+            if ($abstractClassConstructorParamType->equals($objectType)) {
                 return true;
             }
         }
