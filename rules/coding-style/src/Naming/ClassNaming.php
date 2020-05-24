@@ -28,6 +28,15 @@ final class ClassNaming
     /**
      * @param string|Name|Identifier $name
      */
+    public function getVariableName($name): string
+    {
+        $shortName = $this->getShortName($name);
+        return lcfirst($shortName);
+    }
+
+    /**
+     * @param string|Name|Identifier $name
+     */
     public function getShortName($name): string
     {
         if ($name instanceof Name || $name instanceof Identifier) {
