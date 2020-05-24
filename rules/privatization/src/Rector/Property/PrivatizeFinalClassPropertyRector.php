@@ -85,7 +85,7 @@ PHP
             return true;
         }
 
-        return $property->isPrivate();
+        return ! $property->isProtected();
     }
 
     private function isPropertyVisibilityGuardedByParent(Property $property, Class_ $class): bool
