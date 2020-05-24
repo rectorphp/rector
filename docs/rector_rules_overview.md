@@ -1063,12 +1063,12 @@ Simplify array_search to in_array
 
 ```diff
 -array_search("searching", $array) !== false;
-+in_array("searching", $array, true);
++in_array("searching", $array);
 ```
 
 ```diff
--array_search("searching", $array) != false;
-+in_array("searching", $array);
+-array_search("searching", $array, true) !== false;
++in_array("searching", $array, true);
 ```
 
 <br>

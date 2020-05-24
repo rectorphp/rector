@@ -5,14 +5,9 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -39,11 +34,11 @@ final class SimplifyArraySearchRector extends AbstractRector
         return new RectorDefinition(
             'Simplify array_search to in_array',
             [
+                new CodeSample('array_search("searching", $array) !== false;', 'in_array("searching", $array);'),
                 new CodeSample(
-                    'array_search("searching", $array) !== false;',
+                    'array_search("searching", $array, true) !== false;',
                     'in_array("searching", $array, true);'
                 ),
-                new CodeSample('array_search("searching", $array) != false;', 'in_array("searching", $array);'),
             ]
         );
     }
@@ -53,11 +48,11 @@ final class SimplifyArraySearchRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Identical::class, NotIdentical::class, Equal::class, NotEqual::class];
+        return [Identical::class, NotIdentical::class];
     }
 
     /**
-     * @param Identical|NotIdentical|Equal|NotIdentical $node
+     * @param Identical|NotIdentical $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -67,7 +62,7 @@ final class SimplifyArraySearchRector extends AbstractRector
                 return $this->isFuncCallName($node, 'array_search');
             },
             function (Node $node): bool {
-                return $this->isBool($node);
+                return $this->isFalse($node);
             }
         );
 
@@ -76,36 +71,14 @@ final class SimplifyArraySearchRector extends AbstractRector
         }
 
         /** @var FuncCall $arraySearchFuncCall */
-        /** @var ConstFetch $boolConstFetch */
-        [$arraySearchFuncCall, $boolConstFetch] = $matchedNodes;
+        [$arraySearchFuncCall, ] = $matchedNodes;
 
-        $inArrayFuncCall = $this->createFuncCall('in_array', [
-            $arraySearchFuncCall->args[0],
-            $arraySearchFuncCall->args[1],
-        ]);
+        $inArrayFuncCall = $this->createFuncCall('in_array', $arraySearchFuncCall->args);
 
-        if ($this->shouldBeStrict($node)) {
-            $inArrayFuncCall->args[2] = new Arg($this->createTrue());
-        }
-
-        if ($this->resolveIsNot($node, $boolConstFetch)) {
+        if ($node instanceof Identical) {
             return new BooleanNot($inArrayFuncCall);
         }
 
         return $inArrayFuncCall;
-    }
-
-    private function shouldBeStrict(BinaryOp $binaryOp): bool
-    {
-        return $binaryOp instanceof Identical || $binaryOp instanceof NotIdentical;
-    }
-
-    private function resolveIsNot(BinaryOp $binaryOp, ConstFetch $constFetch): bool
-    {
-        if ($binaryOp instanceof Identical || $binaryOp instanceof Equal) {
-            return $this->isFalse($constFetch);
-        }
-
-        return $this->isTrue($constFetch);
     }
 }
