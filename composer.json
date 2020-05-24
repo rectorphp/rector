@@ -133,7 +133,8 @@
             "Rector\\Performance\\": "rules/performance/src",
             "Rector\\Naming\\": "rules/naming/src",
             "Rector\\Order\\": "rules/order/src",
-            "Rector\\MockistaToMockery\\": "rules/mockista-to-mockery/src"
+            "Rector\\MockistaToMockery\\": "rules/mockista-to-mockery/src",
+            "Rector\\NetteKdyby\\": "rules/nette-kdyby/src"
         }
     },
     "autoload-dev": {
@@ -204,7 +205,8 @@
             "Rector\\Naming\\Tests\\": "rules/naming/tests",
             "Rector\\Order\\Tests\\": "rules/order/tests",
             "Rector\\MockistaToMockery\\Tests\\": "rules/mockista-to-mockery/tests",
-            "Rector\\Compiler\\Tests\\": "compiler/tests"
+            "Rector\\Compiler\\Tests\\": "compiler/tests",
+            "Rector\\NetteKdyby\\Tests\\": "rules/nette-kdyby/tests"
         },
         "classmap": [
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
