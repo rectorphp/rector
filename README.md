@@ -49,6 +49,8 @@ It supports all versions of PHP from 5.2 and many open-source projects:
     <a href="/config/set/phpunit"><img src="/docs/images/phpunit.png"></a>
     <img src="/docs/images/space.png" width=40>
     <a href="/config/set/twig"><img src="/docs/images/twig.png"></a>
+    <img src="/docs/images/space.png" width=40>
+    <a href="https://github.com/palantirnet/drupal-rector/tree/master/config/drupal-8"><img src="/docs/images/drupal.png" alt="Drupal Rector rules"></a>
 </p>
 
 <br>
