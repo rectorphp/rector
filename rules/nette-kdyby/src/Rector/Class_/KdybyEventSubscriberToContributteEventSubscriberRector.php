@@ -9,6 +9,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -21,6 +22,7 @@ use Rector\NetteKdyby\NodeManipulator\GetSubscribedEventsArrayManipulator;
 use Rector\NetteKdyby\NodeManipulator\SubscriberMethodArgumentToContributteEventObjectManipulator;
 use Rector\NetteKdyby\NodeResolver\ListeningMethodsCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * @see \Rector\NetteKdyby\Tests\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector\KdybyEventSubscriberToContributteEventSubscriberRectorTest
@@ -85,10 +87,10 @@ PHP
 ,
                 <<<'PHP'
 use Contributte\Events\Extra\Event\Application\ShutdownEvent;
-use Kdyby\Events\Subscriber;
 use Nette\Application\Application;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class GetApplesSubscriber implements Subscriber
+class GetApplesSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -119,14 +121,18 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Class_::class, ClassMethod::class];
     }
 
     /**
-     * @param ClassMethod $node
+     * @param Class_|ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof Class_) {
+            return $this->refactorClass($node);
+        }
+
         if ($this->shouldSkipClassMethod($node)) {
             return null;
         }
@@ -207,5 +213,27 @@ PHP
 
             $this->getSubscribedEventsArrayManipulator->change($returnedExpr);
         });
+    }
+
+    private function refactorClass(Class_ $class): ?Node
+    {
+        if (! $this->isObjectType($class, Subscriber::class)) {
+            return null;
+        }
+
+        if ($class->implements === null) {
+            return null;
+        }
+
+        foreach ($class->implements as $key => $implementedInterfaceName) {
+            if (! $this->isName($implementedInterfaceName, Subscriber::class)) {
+                continue;
+            }
+
+            $class->implements[$key] = new FullyQualified(EventSubscriberInterface::class);
+            return $class;
+        }
+
+        return null;
     }
 }

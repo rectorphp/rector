@@ -34,7 +34,7 @@ namespace Rector\NetteKdyby\Tests\Rector\Class_\KdybyEventSubscriberToContributt
 use Kdyby\Events\Subscriber;
 use Nette\Application\Application;
 
-class GetApplesSubscriber implements Subscriber
+class GetApplesSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {

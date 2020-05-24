@@ -4591,12 +4591,14 @@ Change $this->templates->{magic} to $this->template->render(..., $values)
 Change EventSubscriber from Kdyby to Contributte
 
 ```diff
+-use Kdyby\Events\Subscriber;
 +use Contributte\Events\Extra\Event\Application\ShutdownEvent;
- use Kdyby\Events\Subscriber;
  use Nette\Application\Application;
 -use Nette\Application\UI\Presenter;
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
- class GetApplesSubscriber implements Subscriber
+-class GetApplesSubscriber implements Subscriber
++class GetApplesSubscriber implements EventSubscriberInterface
  {
 -    public function getSubscribedEvents()
 +    public static function getSubscribedEvents()
