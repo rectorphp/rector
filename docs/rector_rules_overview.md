@@ -1,4 +1,4 @@
-# All 488 Rectors Overview
+# All 490 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -26,7 +26,7 @@
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
 - [Nette](#nette) (12)
-- [NetteKdyby](#nettekdyby) (1)
+- [NetteKdyby](#nettekdyby) (2)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [Order](#order) (3)
@@ -51,7 +51,7 @@
 - [PhpDeglobalize](#phpdeglobalize) (1)
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
-- [Privatization](#privatization) (5)
+- [Privatization](#privatization) (6)
 - [Refactoring](#refactoring) (2)
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (10)
@@ -4626,6 +4626,29 @@ Change EventSubscriber from Kdyby to Contributte
 
 <br>
 
+### `ReplaceMagicPropertyEventWithEventClassRector`
+
+- class: [`Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector`](/../master/rules/nette-kdyby/src/Rector/MethodCall/ReplaceMagicPropertyEventWithEventClassRector.php)
+- [test fixtures](/../master/rules/nette-kdyby/tests/Rector/MethodCall/ReplaceMagicPropertyEventWithEventClassRector/Fixture)
+
+Change $onProperty magic call with event disptacher and class dispatch
+
+```diff
+ final class FileManager
+ {
+-    public $onUpload;
+-
+     public function run(User $user)
+     {
+-        $this->onUpload($user);
++        $onFileManagerUploadEvent = new FileManagerUploadEvent($user);
++        $this->eventDispatcher->dispatch($onFileManagerUploadEvent);
+     }
+ }
+```
+
+<br>
+
 ## NetteTesterToPHPUnit
 
 ### `NetteAssertToPHPUnitAssertRector`
@@ -8317,6 +8340,23 @@ Change local property used in single method to local variable
 +        $count = 5;
 +        return $count;
      }
+ }
+```
+
+<br>
+
+### `PrivatizeFinalClassPropertyRector`
+
+- class: [`Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector`](/../master/rules/privatization/src/Rector/Property/PrivatizeFinalClassPropertyRector.php)
+- [test fixtures](/../master/rules/privatization/tests/Rector/Property/PrivatizeFinalClassPropertyRector/Fixture)
+
+Change property to private if possible
+
+```diff
+ final class SomeClass
+ {
+-    protected $value;
++    private $value;
  }
 ```
 
