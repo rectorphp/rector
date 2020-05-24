@@ -1,47 +1,41 @@
 <?php
 
-function simplifyArraySearch()
+function simplifyArraySearch($mixed, array $array, bool $bool)
 {
-    $array = [];
-    if (array_search('searching', $array) !== false) {
-        echo 'yes!';
-    }
-
-    if (array_search('searching', $array) === true) {
-        echo 'yes!';
-    }
-
-    if (array_search('searching', $array) === false) {
-        echo 'no!';
-    }
-
-    if (array_search('searching', $array) !== true) {
-        echo 'no!';
-    }
+    return [
+        array_search('searching', $array) !== false,
+        array_search('searching', $array, true) !== false,
+        // ---
+        array_search($mixed, $array) !== false,
+        false !== array_search($mixed, $array),
+        array_search($mixed, $array) === false,
+        false === array_search($mixed, $array),
+        array_search($mixed, $array, $bool) !== false,
+        false !== array_search($mixed, $array, $bool),
+        array_search($mixed, $array, $bool) === false,
+        false === array_search($mixed, $array, $bool),
+    ];
 }
 
 ?>
 -----
 <?php
 
-function simplifyArraySearch()
+function simplifyArraySearch($mixed, array $array, bool $bool)
 {
-    $array = [];
-    if (in_array('searching', $array, true)) {
-        echo 'yes!';
-    }
-
-    if (in_array('searching', $array, true)) {
-        echo 'yes!';
-    }
-
-    if (!in_array('searching', $array, true)) {
-        echo 'no!';
-    }
-
-    if (!in_array('searching', $array, true)) {
-        echo 'no!';
-    }
+    return [
+        in_array('searching', $array),
+        in_array('searching', $array, true),
+        // ---
+        in_array($mixed, $array),
+        in_array($mixed, $array),
+        !in_array($mixed, $array),
+        !in_array($mixed, $array),
+        in_array($mixed, $array, $bool),
+        in_array($mixed, $array, $bool),
+        !in_array($mixed, $array, $bool),
+        !in_array($mixed, $array, $bool),
+    ];
 }
 
 ?>
