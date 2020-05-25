@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\NetteKdyby\NodeFactory;
 
 use Nette\Utils\Strings;
-use PhpParser\Builder\Class_ as ClassBuilder;
+use PhpParser\Builder\Class_;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Namespace_ as NamespaceBuilder;
 use PhpParser\Builder\Property as PropertyBuilder;
@@ -50,7 +50,7 @@ final class CustomEventFactory
         $namespaceBuilder = new NamespaceBuilder($namespace);
 
         $shortClassName = $this->classNaming->getShortName($className);
-        $classBuilder = new ClassBuilder($shortClassName);
+        $classBuilder = new Class_($shortClassName);
         $classBuilder->makeFinal();
         $classBuilder->extend(new FullyQualified('Symfony\Contracts\EventDispatcher\Event'));
 
@@ -58,7 +58,7 @@ final class CustomEventFactory
         // 2. add getters
         // 3. add property
 
-        if (count($args)) {
+        if (count($args) > 0) {
             $methodBuilder = $this->createConstructClassMethod($args);
             $classBuilder->addStmt($methodBuilder);
 
