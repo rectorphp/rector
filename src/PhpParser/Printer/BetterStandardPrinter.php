@@ -331,8 +331,8 @@ final class BetterStandardPrinter extends Standard
             . '(' . $this->pCommaSeparated($classMethod->params) . ')'
             . ($classMethod->returnType !== null ? ': ' . $this->p($classMethod->returnType) : '')
             . ($classMethod->stmts !== null ? $this->nl . '{' . $this->pStmts(
-                $classMethod->stmts
-            ) . $this->nl . '}' : ';');
+                    $classMethod->stmts
+                ) . $this->nl . '}' : ';');
     }
 
     /**
@@ -452,11 +452,7 @@ final class BetterStandardPrinter extends Standard
             return;
         }
 
-        if ($node->getComments() !== []) {
-            return;
-        }
-
-        if ($node->expr->getComments() === []) {
+        if ($node->getComments() === $node->expr->getComments()) {
             return;
         }
 
@@ -470,6 +466,7 @@ final class BetterStandardPrinter extends Standard
             return;
         }
 
-        $node->setAttribute(AttributeKey::COMMENTS, $node->expr->getComments());
+        $mergedComments = array_merge($node->expr->getComments(), $node->getComments());
+        $node->setAttribute(AttributeKey::COMMENTS, $mergedComments);
     }
 }
