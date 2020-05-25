@@ -50,6 +50,11 @@ final class Configuration
     private $shouldClearCache = false;
 
     /**
+     * @var string
+     */
+    private $outputFormat;
+
+    /**
      * @var bool
      */
     private $isCacheDebug = false;
@@ -104,6 +109,8 @@ final class Configuration
 
         $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
         $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
+
+        $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
 
         $commandLinePaths = (array) $input->getArgument(Option::SOURCE);
         // manual command line value has priority
@@ -227,6 +234,11 @@ final class Configuration
     public function getPaths(): array
     {
         return $this->paths;
+    }
+
+    public function getOutputFormat(): string
+    {
+        return $this->outputFormat;
     }
 
     private function canShowProgressBar(InputInterface $input): bool
