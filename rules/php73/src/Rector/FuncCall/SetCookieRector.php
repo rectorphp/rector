@@ -98,9 +98,9 @@ PHP
             return true;
         }
 
-        $args_count = count($funcCall->args);
+        $argsCount = count($funcCall->args);
 
-        if ($args_count <= 2) {
+        if ($argsCount <= 2) {
             return true;
         }
 
@@ -108,7 +108,7 @@ PHP
             return true;
         }
 
-        if ($args_count === 3) {
+        if ($argsCount === 3) {
             return $funcCall->args[2]->value instanceof Variable;
         }
 
