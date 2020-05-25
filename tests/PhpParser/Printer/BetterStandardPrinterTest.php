@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class BetterStandardPrinterTest extends AbstractKernelTestCase
@@ -28,7 +29,7 @@ final class BetterStandardPrinterTest extends AbstractKernelTestCase
     public function testNodeWithComment(): void
     {
         $string = new String_('value');
-        $string->setAttribute('comments', [new Comment('// todo: fix')]);
+        $string->setAttribute(AttributeKey::COMMENTS, [new Comment('// todo: fix')]);
         $printed = $this->betterStandardPrinter->print($string) . PHP_EOL;
 
         $this->assertStringEqualsFile(__DIR__ . '/Source/expected_code_with_comment.php.inc', $printed);

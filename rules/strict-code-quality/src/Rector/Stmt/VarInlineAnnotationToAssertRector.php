@@ -148,7 +148,7 @@ PHP
 
     private function refactorFreshlyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
     {
-        $node->setAttribute('comments', null);
+        $node->setAttribute(AttributeKey::COMMENTS, null);
         $type = $phpDocInfo->getVarType();
 
         $assertFuncCall = $this->createFuncCallBasedOnType($type, $variable);

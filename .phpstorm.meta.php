@@ -43,6 +43,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::CLASS_SHORT_NAME,
     \Rector\NodeTypeResolver\Node\AttributeKey::IS_REGULAR_PATTERN,
     \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME,
+    \Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS,
 );
 
 expectedArguments(
@@ -71,6 +72,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::CLASS_SHORT_NAME,
     \Rector\NodeTypeResolver\Node\AttributeKey::IS_REGULAR_PATTERN,
     \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME,
+    \Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS,
 );
 
 expectedArguments(

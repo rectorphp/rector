@@ -7,6 +7,7 @@ namespace Rector\Core\PhpDoc;
 use PhpParser\Comment;
 use PhpParser\Node;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class CommentCombiner
 {
@@ -44,6 +45,6 @@ final class CommentCombiner
             $commentContent .= $comment->getText() . PHP_EOL;
         }
 
-        $newNode->setAttribute('comments', [new Comment($commentContent)]);
+        $newNode->setAttribute(AttributeKey::COMMENTS, [new Comment($commentContent)]);
     }
 }

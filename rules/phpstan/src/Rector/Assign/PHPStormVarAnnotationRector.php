@@ -102,7 +102,7 @@ PHP
 
         // remove commnets
         $nextNode->setAttribute(AttributeKey::PHP_DOC_INFO, null);
-        $nextNode->setAttribute('comments', null);
+        $nextNode->setAttribute(AttributeKey::COMMENTS, null);
 
         return $node;
     }

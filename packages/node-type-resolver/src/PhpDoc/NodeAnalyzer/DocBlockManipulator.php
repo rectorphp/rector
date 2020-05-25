@@ -106,7 +106,7 @@ final class DocBlockManipulator
         if ($phpDoc === '') {
             if ($phpDocInfo->getOriginalPhpDocNode()->children !== []) {
                 // all comments were removed → null
-                $node->setAttribute('comments', null);
+                $node->setAttribute(AttributeKey::COMMENTS, null);
             }
 
             return;
