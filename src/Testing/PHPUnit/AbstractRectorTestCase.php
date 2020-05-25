@@ -235,7 +235,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
         // life-cycle trio :)
         $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
-        // race condition inter-mezzo
         $this->fileProcessor->refactor($smartFileInfo);
 
         $changedContent = $this->fileProcessor->printToString($smartFileInfo);

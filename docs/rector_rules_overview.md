@@ -1,4 +1,4 @@
-# All 487 Rectors Overview
+# All 488 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -26,6 +26,7 @@
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
 - [Nette](#nette) (12)
+- [NetteKdyby](#nettekdyby) (1)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [Order](#order) (3)
@@ -1063,12 +1064,12 @@ Simplify array_search to in_array
 
 ```diff
 -array_search("searching", $array) !== false;
-+in_array("searching", $array, true);
++in_array("searching", $array);
 ```
 
 ```diff
--array_search("searching", $array) != false;
-+in_array("searching", $array);
+-array_search("searching", $array, true) !== false;
++in_array("searching", $array, true);
 ```
 
 <br>
@@ -4574,6 +4575,51 @@ Change $this->templates->{magic} to $this->template->render(..., $values)
 -        $this->template->param = 'some value';
 -        $this->template->render(__DIR__ . '/poll.latte');
 +        $this->template->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
+     }
+ }
+```
+
+<br>
+
+## NetteKdyby
+
+### `KdybyEventSubscriberToContributteEventSubscriberRector`
+
+- class: [`Rector\NetteKdyby\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector`](/../master/rules/nette-kdyby/src/Rector/Class_/KdybyEventSubscriberToContributteEventSubscriberRector.php)
+- [test fixtures](/../master/rules/nette-kdyby/tests/Rector/Class_/KdybyEventSubscriberToContributteEventSubscriberRector/Fixture)
+
+Change EventSubscriber from Kdyby to Contributte
+
+```diff
+-use Kdyby\Events\Subscriber;
++use Contributte\Events\Extra\Event\Application\ShutdownEvent;
+ use Nette\Application\Application;
+-use Nette\Application\UI\Presenter;
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+-class GetApplesSubscriber implements Subscriber
++class GetApplesSubscriber implements EventSubscriberInterface
+ {
+-    public function getSubscribedEvents()
++    public static function getSubscribedEvents()
+     {
+         return [
+-            Application::class . '::onShutdown',
++            ShutdownEvent::class => 'onShutdown',
+             CustomService::class . '::onCopy' => 'onCustomCopy',
+         ];
+     }
+
+-    public function onShutdown(Presenter $presenter)
++    public function onShutdown(ShutdownEvent $shutdownEvent)
+     {
++        $presenter = $shutdownEvent->getPresenter();
+         $presenterName = $presenter->getName();
+         // ...
+     }
+
+     public function onCustomCopy()
+     {
      }
  }
 ```
