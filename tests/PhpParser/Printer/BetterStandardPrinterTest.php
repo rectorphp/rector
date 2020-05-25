@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\PhpParser\Printer;
 
 use Iterator;
+use PhpParser\Comment;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\HttpKernel\RectorKernel;
@@ -22,6 +23,15 @@ final class BetterStandardPrinterTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
         $this->betterStandardPrinter = self::$container->get(BetterStandardPrinter::class);
+    }
+
+    public function testNodeWithComment(): void
+    {
+        $string = new String_('value');
+        $string->setAttribute('comments', [new Comment('// todo: fix')]);
+        $printed = $this->betterStandardPrinter->print($string) . PHP_EOL;
+
+        $this->assertStringEqualsFile(__DIR__ . '/Source/expected_code_with_comment.php.inc', $printed);
     }
 
     /**
