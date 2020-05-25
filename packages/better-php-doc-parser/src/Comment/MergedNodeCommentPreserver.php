@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Comment;
 
 use PhpParser\Node;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MergedNodeCommentPreserver
 {
@@ -21,6 +22,6 @@ final class MergedNodeCommentPreserver
         }
 
         $comments = array_merge($newNode->getComments(), $comments);
-        $newNode->setAttribute('comments', $comments);
+        $newNode->setAttribute(AttributeKey::COMMENTS, $comments);
     }
 }

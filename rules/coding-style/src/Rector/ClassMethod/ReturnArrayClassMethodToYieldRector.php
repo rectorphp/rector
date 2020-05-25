@@ -176,6 +176,6 @@ PHP
         }
 
         $classMethod->setAttribute(AttributeKey::PHP_DOC_INFO, $this->returnPhpDocInfo);
-        $classMethod->setAttribute('comments', $this->returnComments);
+        $classMethod->setAttribute(AttributeKey::COMMENTS, $this->returnComments);
     }
 }

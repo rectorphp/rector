@@ -109,7 +109,7 @@ PHP
             return;
         }
 
-        $firstNode->setAttribute('comments', $comments);
+        $firstNode->setAttribute(AttributeKey::COMMENTS, $comments);
         $firstNode->setAttribute(AttributeKey::PHP_DOC_INFO, null);
     }
 }

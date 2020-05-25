@@ -6,6 +6,7 @@ namespace Rector\PhpAttribute\Printer;
 
 use PhpParser\Comment;
 use PhpParser\Node\Stmt\Nop;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\Collector\PlaceholderToValueCollector;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
@@ -37,7 +38,7 @@ final class PlaceholderNodeFactory
         // 2. create placeholder node
         $placeholderNop = new Nop();
         $placeholderName = $this->createPlaceholderName();
-        $placeholderNop->setAttribute('comments', [new Comment($placeholderName)]);
+        $placeholderNop->setAttribute(AttributeKey::COMMENTS, [new Comment($placeholderName)]);
 
         // 3. store key/value placeholder
         $this->placeholderToValueCollector->add($placeholderName, $phpAttributesString);

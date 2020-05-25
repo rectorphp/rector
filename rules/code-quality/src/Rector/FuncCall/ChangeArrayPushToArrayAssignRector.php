@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://stackoverflow.com/questions/559844/whats-better-to-use-in-php-array-value-or-array-pusharray-value
@@ -81,7 +82,7 @@ PHP
             // keep comments of first line
             if ($position === 1) {
                 $assign = new Expression($assign);
-                $assign->setAttribute('comments', $node->getComments());
+                $assign->setAttribute(AttributeKey::COMMENTS, $node->getComments());
             }
 
             $this->addNodeAfterNode($assign, $node);

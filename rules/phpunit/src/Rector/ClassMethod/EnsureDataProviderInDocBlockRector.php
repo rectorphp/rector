@@ -91,7 +91,7 @@ PHP
         $newCommentText = Strings::replace($singleComment->getText(), '#^\/\*(\s|b)#', '/**$1');
         $comments[0] = new Comment($newCommentText);
 
-        $node->setAttribute('comments', $comments);
+        $node->setAttribute(AttributeKey::COMMENTS, $comments);
 
         return $node;
     }

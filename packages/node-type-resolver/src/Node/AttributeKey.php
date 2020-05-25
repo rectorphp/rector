@@ -83,6 +83,14 @@ final class AttributeKey
      *
      * @var string
      */
+    public const COMMENTS = 'comments';
+
+    /**
+     * Internal php-parser name.
+     * Do not change this even if you want!
+     *
+     * @var string
+     */
     public const ORIGINAL_NAME = 'originalName';
 
     /**

@@ -421,6 +421,8 @@ final class BetterStandardPrinter extends Standard
                 continue;
             }
 
+            $this->makeSureCommentWasNotAddedOnWrongPlace($node);
+
             $this->docBlockManipulator->updateNodeWithPhpDocInfo($node);
         }
     }
@@ -442,5 +444,32 @@ final class BetterStandardPrinter extends Standard
     private function wrapValueWith(String_ $node, string $wrap): string
     {
         return $wrap . $node->value . $wrap;
+    }
+
+    private function makeSureCommentWasNotAddedOnWrongPlace(Node $node): void
+    {
+        if (! $node instanceof Expression) {
+            return;
+        }
+
+        if ($node->getComments() !== []) {
+            return;
+        }
+
+        if ($node->expr->getComments() === []) {
+            return;
+        }
+
+        $commentsString = '';
+        foreach ($node->expr->getComments() as $comment) {
+            $commentsString .= $comment->getText() . PHP_EOL;
+        }
+
+        // docblocks are handled somewhere else
+        if (Strings::startsWith($commentsString, '/*')) {
+            return;
+        }
+
+        $node->setAttribute(AttributeKey::COMMENTS, $node->expr->getComments());
     }
 }

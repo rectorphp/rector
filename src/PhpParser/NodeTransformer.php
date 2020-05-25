@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NodeTransformer
 {
@@ -91,7 +92,7 @@ final class NodeTransformer
         foreach ($arrayNode->items as $arrayItem) {
             $expressionNode = new Expression(new Yield_($arrayItem->value, $arrayItem->key));
             if ($arrayItem->getComments() !== []) {
-                $expressionNode->setAttribute('comments', $arrayItem->getComments());
+                $expressionNode->setAttribute(AttributeKey::COMMENTS, $arrayItem->getComments());
             }
 
             $yieldNodes[] = $expressionNode;
