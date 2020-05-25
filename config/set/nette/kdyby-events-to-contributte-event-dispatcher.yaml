@@ -6,3 +6,4 @@ services:
             Kdyby\Events\Subscriber: 'Symfony\Component\EventDispatcher\EventSubscriberInterface'
 
     Rector\NetteKdyby\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector: null
+    Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector: null

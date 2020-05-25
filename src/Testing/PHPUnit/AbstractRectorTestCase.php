@@ -36,6 +36,11 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     protected $parameterProvider;
 
     /**
+     * @var string
+     */
+    protected $originalTempFile;
+
+    /**
      * @var bool
      */
     private $autoloadTestFixture = true;
@@ -132,6 +137,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             $changedFile,
             $smartFileInfo->getRelativeFilePathFromCwd()
         );
+
+        $this->originalTempFile = $originalFile;
     }
 
     protected function getTempPath(): string
