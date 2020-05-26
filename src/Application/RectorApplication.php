@@ -10,10 +10,11 @@ use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Extension\FinishingExtensionRunner;
+use Rector\Core\EventDispatcher\Event\AfterProcessEvent;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
@@ -75,9 +76,9 @@ final class RectorApplication
     private $nodeScopeResolver;
 
     /**
-     * @var FinishingExtensionRunner
+     * @var EventDispatcherInterface
      */
-    private $finishingExtensionRunner;
+    private $eventDispatcher;
 
     public function __construct(
         SymfonyStyle $symfonyStyle,
@@ -88,7 +89,7 @@ final class RectorApplication
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         NodeScopeResolver $nodeScopeResolver,
-        FinishingExtensionRunner $finishingExtensionRunner
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
@@ -98,7 +99,7 @@ final class RectorApplication
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->nodeScopeResolver = $nodeScopeResolver;
-        $this->finishingExtensionRunner = $finishingExtensionRunner;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -150,7 +151,7 @@ final class RectorApplication
         $this->removedAndAddedFilesProcessor->run();
 
         // 5. various extensions on finish
-        $this->finishingExtensionRunner->run();
+        $this->eventDispatcher->dispatch(new AfterProcessEvent());
     }
 
     /**
