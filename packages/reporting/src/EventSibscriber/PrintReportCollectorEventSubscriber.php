@@ -58,6 +58,8 @@ final class PrintReportCollectorEventSubscriber implements EventSubscriberInterf
             $this->symfonyStyle->writeln($report->getRelativeFilePath() . ':' . $report->getLine());
             $this->symfonyStyle->writeln('* ' . $report->getReport());
             $this->symfonyStyle->writeln('* ' . $report->getRectorClass());
+
+            $this->symfonyStyle->newLine(2);
         }
     }
 
