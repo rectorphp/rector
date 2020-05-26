@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Fixture;
 
-use Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\AbstractClassWithProtectedProperty;
+use Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Source\AbstractClassWithProtectedProperty;
 
 final class ChangeParentWithoutCare extends AbstractClassWithProtectedProperty
 {
@@ -15,7 +15,7 @@ final class ChangeParentWithoutCare extends AbstractClassWithProtectedProperty
 
 namespace Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Fixture;
 
-use Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\AbstractClassWithProtectedProperty;
+use Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Source\AbstractClassWithProtectedProperty;
 
 final class ChangeParentWithoutCare extends AbstractClassWithProtectedProperty
 {

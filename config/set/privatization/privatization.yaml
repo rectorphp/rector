@@ -4,3 +4,4 @@ services:
     Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivatePropertyRector: null
     Rector\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector: null
     Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector: null
+    Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector: null
