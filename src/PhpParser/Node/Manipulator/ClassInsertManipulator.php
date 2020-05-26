@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TraitUse;
 use PHPStan\Type\Type;
@@ -50,17 +49,6 @@ final class ClassInsertManipulator
         $class->stmts[] = $stmt;
     }
 
-    /**
-     * @param Stmt[] $nodes
-     * @return Stmt[]
-     */
-    public function insertBeforeAndFollowWithNewline(array $nodes, Stmt $stmt, int $key): array
-    {
-        $nodes = $this->insertBefore($nodes, $stmt, $key);
-
-        return $this->insertBefore($nodes, new Nop(), $key);
-    }
-
     public function addConstantToClass(Class_ $class, string $constantName, ClassConst $classConst): void
     {
         if ($this->hasClassConstant($class, $constantName)) {
@@ -85,6 +73,17 @@ final class ClassInsertManipulator
         $trait = new TraitUse([new FullyQualified($traitName)]);
 
         $this->addStatementToClassBeforeTypes($class, $trait, TraitUse::class, Property::class, ClassMethod::class);
+    }
+
+    /**
+     * @param Stmt[] $nodes
+     * @return Stmt[]
+     */
+    public function insertBefore(array $nodes, Stmt $stmt, int $key): array
+    {
+        array_splice($nodes, $key, 0, [$stmt]);
+
+        return $nodes;
     }
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
@@ -115,17 +114,6 @@ final class ClassInsertManipulator
         }
 
         return false;
-    }
-
-    /**
-     * @param Stmt[] $nodes
-     * @return Stmt[]
-     */
-    private function insertBefore(array $nodes, Stmt $stmt, int $key): array
-    {
-        array_splice($nodes, $key, 0, [$stmt]);
-
-        return $nodes;
     }
 
     private function hasClassConstant(Class_ $class, string $constantName)

@@ -79,11 +79,13 @@ final class BetterStandardPrinter extends Standard
 
         $content = parent::printFormatPreserving($stmts, $origStmts, $origTokens);
 
-        // php attributes
-        $content = $this->contentPhpAttributePlaceholderReplacer->decorateContent($content);
+        // add new line in case of added stmts
+        if (count($stmts) !== count($origStmts) && ! (bool) Strings::match($content, "#\n$#")) {
+            $content .= $this->nl;
+        }
 
-        // keep EOL
-        return rtrim($content) . $this->nl;
+        // php attributes
+        return $this->contentPhpAttributePlaceholderReplacer->decorateContent($content);
     }
 
     /**
