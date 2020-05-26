@@ -66,6 +66,7 @@
             "Rector\\Celebrity\\": "rules/celebrity/src",
             "Rector\\ChangesReporting\\": "packages/changes-reporting/src",
             "Rector\\CodeQuality\\": "rules/code-quality/src",
+            "Rector\\Reporting\\": "packages/reporting/src",
             "Rector\\CodingStyle\\": "rules/coding-style/src",
             "Rector\\ConsoleDiffer\\": "packages/console-differ/src",
             "Rector\\Core\\": "src",

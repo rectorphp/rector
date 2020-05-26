@@ -13,7 +13,7 @@ use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
-use Rector\Core\Extension\ReportingExtensionRunner;
+use Rector\Core\EventDispatcher\Event\AfterReportEvent;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\Guard\RectorGuard;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
@@ -24,6 +24,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -66,11 +67,6 @@ final class ProcessCommand extends AbstractCommand
     private $outputFormatterCollector;
 
     /**
-     * @var ReportingExtensionRunner
-     */
-    private $reportingExtensionRunner;
-
-    /**
      * @var RectorNodeTraverser
      */
     private $rectorNodeTraverser;
@@ -100,6 +96,11 @@ final class ProcessCommand extends AbstractCommand
      */
     private $symfonyStyle;
 
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
     public function __construct(
         FilesFinder $phpFilesFinder,
         AdditionalAutoloader $additionalAutoloader,
@@ -108,13 +109,13 @@ final class ProcessCommand extends AbstractCommand
         Configuration $configuration,
         RectorApplication $rectorApplication,
         OutputFormatterCollector $outputFormatterCollector,
-        ReportingExtensionRunner $reportingExtensionRunner,
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
         YamlProcessor $yamlProcessor,
         ChangedFilesDetector $changedFilesDetector,
         UnchangedFilesFilter $unchangedFilesFilter,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->filesFinder = $phpFilesFinder;
         $this->additionalAutoloader = $additionalAutoloader;
@@ -123,7 +124,6 @@ final class ProcessCommand extends AbstractCommand
         $this->configuration = $configuration;
         $this->rectorApplication = $rectorApplication;
         $this->outputFormatterCollector = $outputFormatterCollector;
-        $this->reportingExtensionRunner = $reportingExtensionRunner;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->stubLoader = $stubLoader;
         $this->yamlProcessor = $yamlProcessor;
@@ -133,6 +133,7 @@ final class ProcessCommand extends AbstractCommand
 
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     protected function configure(): void
@@ -234,7 +235,7 @@ final class ProcessCommand extends AbstractCommand
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
         $outputFormatter->report($this->errorAndDiffCollector);
 
-        $this->reportingExtensionRunner->run();
+        $this->eventDispatcher->dispatch(new AfterReportEvent());
 
         // invalidate affected files
         $this->invalidateAffectedCacheFiles();

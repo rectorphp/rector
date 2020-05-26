@@ -44,3 +44,5 @@ services:
     Symplify\PackageBuilder\Strings\StringFormatConverter: null
 
     OndraM\CiDetector\CiDetector: null
+
+    Symfony\Component\EventDispatcher\EventDispatcherInterface: '@Rector\Core\EventDispatcher\AutowiredEventDispatcher'
