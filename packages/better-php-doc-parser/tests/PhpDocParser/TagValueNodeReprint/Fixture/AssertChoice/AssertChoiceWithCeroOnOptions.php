@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\Fixtu
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class AssertChoiceWithMessage
+class AssertChoiceWithCeroOnOptions
 {
     /**
      * @Assert\Choice(choices={"0", "3023", "3610"})
