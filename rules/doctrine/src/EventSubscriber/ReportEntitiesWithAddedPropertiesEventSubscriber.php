@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Doctrine\Extension;
+namespace Rector\Doctrine\EventSubscriber;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
+use Rector\Core\EventDispatcher\Event\AfterProcessEvent;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
-use Rector\Extension\Contract\FinishingExtensionInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class ReportEntitiesWithAddedPropertiesFinishExtension implements FinishingExtensionInterface
+final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSubscriberInterface
 {
     /**
      * @var UuidMigrationDataCollector
@@ -30,7 +31,7 @@ final class ReportEntitiesWithAddedPropertiesFinishExtension implements Finishin
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function run(): void
+    public function reportEntities(): void
     {
         $this->generatePropertiesJsonWithFileName(
             'uuid-migration-new-column-properties.json',
@@ -41,6 +42,11 @@ final class ReportEntitiesWithAddedPropertiesFinishExtension implements Finishin
             'uuid-migration-new-relation-properties.json',
             $this->uuidMigrationDataCollector->getRelationPropertiesByClass()
         );
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [AfterProcessEvent::class => 'reportEntities'];
     }
 
     /**
