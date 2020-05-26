@@ -74,6 +74,13 @@ PHP
                 <<<'PHP'
 final class FileManager
 {
+    use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     public function run(User $user)
     {
         $onFileManagerUploadEvent = new FileManagerUploadEvent($user);
