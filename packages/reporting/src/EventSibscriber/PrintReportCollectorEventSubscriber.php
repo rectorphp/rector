@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Reporting\Extension;
+namespace Rector\Reporting\EventSibscriber;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\Configuration;
-use Rector\Extension\Contract\ReportingExtensionInterface;
+use Rector\Core\EventDispatcher\Event\AfterReportEvent;
 use Rector\Reporting\DataCollector\ReportCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class GenericReportMessageReportingExtension implements ReportingExtensionInterface
+final class PrintReportCollectorEventSubscriber implements EventSubscriberInterface
 {
     /**
      * @var ReportCollector
@@ -37,7 +38,15 @@ final class GenericReportMessageReportingExtension implements ReportingExtension
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function run(): void
+    /**
+     * @return string[]
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [AfterReportEvent::class => 'printReportCollector'];
+    }
+
+    public function printReportCollector(): void
     {
         if ($this->shouldSkip()) {
             return;
