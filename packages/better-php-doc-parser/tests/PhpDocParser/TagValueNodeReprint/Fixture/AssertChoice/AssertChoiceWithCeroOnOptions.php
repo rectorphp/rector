@@ -11,5 +11,5 @@ class AssertChoiceWithMessage
     /**
      * @Assert\Choice(choices={"0", "3023", "3610"})
      */
-    private $ratingType;
+    public $ratingType;
 }
