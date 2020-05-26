@@ -27,6 +27,7 @@ trait AbstractRectorTrait
     use NodeCollectorTrait;
     use NotifyingRemovingNodeTrait;
     use NodeCommentingTrait;
+    use NodeReportCollectorTrait;
 
     protected function isNonAnonymousClass(?Node $node): bool
     {

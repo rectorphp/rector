@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Extension;
+namespace Rector\Extension\Runner;
 
-use Rector\Core\Contract\Extension\ReportingExtensionInterface;
+use Rector\Extension\Contract\ReportingExtensionInterface;
 
 final class ReportingExtensionRunner
 {

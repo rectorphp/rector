@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Extension;
 
-use Rector\Core\Contract\Extension\FinishingExtensionInterface;
+use Rector\Extension\Contract\FinishingExtensionInterface;
 
 final class FinishingExtensionRunner
 {
