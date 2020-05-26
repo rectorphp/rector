@@ -467,6 +467,8 @@ final class BetterStandardPrinter extends Standard
         }
 
         $mergedComments = array_merge($node->expr->getComments(), $node->getComments());
+        $mergedComments = array_unique($mergedComments);
+
         $node->setAttribute(AttributeKey::COMMENTS, $mergedComments);
     }
 }
