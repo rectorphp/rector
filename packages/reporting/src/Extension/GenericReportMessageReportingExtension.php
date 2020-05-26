@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Extension\Extension;
+namespace Rector\Reporting\Extension;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Report\ReportCollector;
 use Rector\Extension\Contract\ReportingExtensionInterface;
+use Rector\Reporting\DataCollector\ReportCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class GenericReportMessageReportingExtension implements ReportingExtensionInterface

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Report;
+namespace Rector\Reporting\DataCollector;
 
 use PhpParser\Node;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\ValueObject\Reporting\Report;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Reporting\ValueObject\Report;
 
 final class ReportCollector
 {

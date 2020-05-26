@@ -6,6 +6,9 @@ namespace Rector\Extension\Runner;
 
 use Rector\Extension\Contract\ReportingExtensionInterface;
 
+/**
+ * @todo refactor to event system
+ */
 final class ReportingExtensionRunner
 {
     /**

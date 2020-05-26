@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\ChangesReporting\Rector\AbstractRector\NotifyingRemovingNodeTrait;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
 use Rector\PostRector\Rector\AbstractRector\NodeCommandersTrait;
+use Rector\Reporting\Rector\AbstractRector\NodeReportCollectorTrait;
 
 trait AbstractRectorTrait
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\ValueObject\Reporting;
+namespace Rector\Reporting\ValueObject;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -34,11 +34,6 @@ final class Report
         $this->line = $line;
         $this->report = $report;
         $this->rectorClass = $rectorClass;
-    }
-
-    public function getSmartFileInfo(): SmartFileInfo
-    {
-        return $this->smartFileInfo;
     }
 
     public function getRelativeFilePath(): string

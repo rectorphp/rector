@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Rector\AbstractRector;
+namespace Rector\Reporting\Rector\AbstractRector;
 
 use PhpParser\Node;
-use Rector\Core\Report\ReportCollector;
+use Rector\Reporting\DataCollector\ReportCollector;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
