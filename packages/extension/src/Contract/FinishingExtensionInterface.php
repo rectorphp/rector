@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Contract\Extension;
+namespace Rector\Extension\Contract;
 
 interface FinishingExtensionInterface
 {

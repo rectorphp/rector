@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    Rector\Reporting\:
+        resource: '../src'
+        exclude:
+            - '../src/ValueObject/*'

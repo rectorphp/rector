@@ -131,8 +131,11 @@ PHP
             return true;
         }
 
-        /** @var string $methodCallMethodName */
+        /** @var string|null $methodCallMethodName */
         $methodCallMethodName = $methodCall->getAttribute(AttributeKey::METHOD_NAME);
+        if ($methodCallMethodName === null) {
+            return true;
+        }
 
         if ($methodCall->name instanceof MethodCall) {
             return false;

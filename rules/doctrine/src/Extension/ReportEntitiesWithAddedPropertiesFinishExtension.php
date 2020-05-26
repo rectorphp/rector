@@ -6,8 +6,8 @@ namespace Rector\Doctrine\Extension;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
-use Rector\Core\Contract\Extension\FinishingExtensionInterface;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
+use Rector\Extension\Contract\FinishingExtensionInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ReportEntitiesWithAddedPropertiesFinishExtension implements FinishingExtensionInterface
