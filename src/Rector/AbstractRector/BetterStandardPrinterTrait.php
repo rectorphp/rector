@@ -48,6 +48,14 @@ trait BetterStandardPrinterTrait
     /**
      * @param Node|Node[]|null $node
      */
+    public function printFile($node): string
+    {
+        return $this->betterStandardPrinter->prettyPrintFile($node);
+    }
+
+    /**
+     * @param Node|Node[]|null $node
+     */
     public function printWithoutComments($node): string
     {
         return $this->betterStandardPrinter->printWithoutComments($node);

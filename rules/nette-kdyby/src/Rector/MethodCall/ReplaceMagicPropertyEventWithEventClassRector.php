@@ -124,7 +124,7 @@ PHP
 
         // 3. create new event class with args
         $eventClass = $this->customEventFactory->create($eventClassName, (array) $node->args);
-        $eventContent = $this->print($eventClass);
+        $eventContent = $this->printFile($eventClass);
         $this->removedAndAddedFilesCollector->addFileWithContent($eventFileLocation, $eventContent);
 
         // 4. ad disatch method call

@@ -9,6 +9,8 @@ use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
 use Rector\Core\Application\FileProcessor;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
+use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -103,6 +105,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $stubLoader->loadStubs();
 
         $this->configurePhpVersionFeatures();
+
+        // so the files are removed and added
+        $configuration = static::$container->get(Configuration::class);
+        $configuration->setIsDryRun(false);
     }
 
     protected function tearDown(): void
@@ -247,6 +253,9 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $changedContent = $this->fileProcessor->printToString($smartFileInfo);
 
         $causedByFixtureMessage = $this->createCausedByFixtureMessage($fixtureFile);
+
+        $removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
+        $removedAndAddedFilesProcessor->run();
 
         try {
             $this->assertStringEqualsFile($expectedFile, $changedContent, $causedByFixtureMessage);
