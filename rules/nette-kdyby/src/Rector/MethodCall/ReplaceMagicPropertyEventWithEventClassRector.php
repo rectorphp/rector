@@ -15,6 +15,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -44,14 +45,21 @@ final class ReplaceMagicPropertyEventWithEventClassRector extends AbstractRector
      */
     private $classNaming;
 
+    /**
+     * @var RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+
     public function __construct(
         EventClassNaming $eventClassNaming,
         CustomEventFactory $customEventFactory,
-        ClassNaming $classNaming
+        ClassNaming $classNaming,
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
     ) {
         $this->eventClassNaming = $eventClassNaming;
         $this->customEventFactory = $customEventFactory;
         $this->classNaming = $classNaming;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -115,14 +123,15 @@ PHP
 
         // 3. create new event class with args
         $eventClass = $this->customEventFactory->create($eventClassName, (array) $node->args);
-        $this->printToFile($eventClass, $eventFileLocation);
+        $eventContent = $this->print($eventClass);
+        $this->removedAndAddedFilesCollector->addFileWithContent($eventFileLocation, $eventContent);
 
         // 4. ad disatch method call
         $dispatchMethodCall = $this->createDispatchMethodCall($eventClassName);
         $this->addNodeAfterNode($dispatchMethodCall, $node);
 
-        // 5. return evnet addign
-        // add event dispathcer depdency if needed
+        // 5. return event adding
+        // add event dispatcher dependency if needed
         $assign = $this->createEventInstanceAssign($eventClassName, $node);
 
         /** @var Class_ $class */
