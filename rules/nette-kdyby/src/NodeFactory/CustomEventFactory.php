@@ -10,6 +10,7 @@ use PhpParser\Builder\Method;
 use PhpParser\Builder\Namespace_ as NamespaceBuilder;
 use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -90,9 +91,8 @@ final class CustomEventFactory
         $methodBuilder->makePublic();
 
         foreach ($args as $arg) {
-            $paramName = $this->nodeNameResolver->getName($arg->value);
+            $paramName = $this->resolveParamNameFromArg($arg);
             if ($paramName === null) {
-                // @todo
                 throw new NotImplementedException();
             }
 
@@ -108,7 +108,7 @@ final class CustomEventFactory
 
     private function createProperty(Arg $arg): Property
     {
-        $paramName = $this->nodeNameResolver->getName($arg->value);
+        $paramName = $this->resolveParamNameFromArg($arg);
         if ($paramName === null) {
             // @todo
             throw new NotImplementedException();
@@ -122,9 +122,8 @@ final class CustomEventFactory
 
     private function createGetterClassMethod(Arg $arg): ClassMethod
     {
-        $paramName = $this->nodeNameResolver->getName($arg->value);
+        $paramName = $this->resolveParamNameFromArg($arg);
         if ($paramName === null) {
-            // @todo
             throw new NotImplementedException();
         }
 
@@ -135,5 +134,15 @@ final class CustomEventFactory
         $methodBuilder->makePublic();
 
         return $methodBuilder->getNode();
+    }
+
+    private function resolveParamNameFromArg(Arg $arg): ?string
+    {
+        $argValue = $arg->value;
+        while ($argValue instanceof ArrayDimFetch) {
+            $argValue = $argValue->var;
+        }
+
+        return $this->nodeNameResolver->getName($argValue);
     }
 }

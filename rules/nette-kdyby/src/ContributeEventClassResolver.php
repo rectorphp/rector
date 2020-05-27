@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby;
 
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -86,26 +85,28 @@ final class ContributeEventClassResolver
     {
         $getterMethodsWithType = self::GETTER_METHODS_WITH_TYPE_BY_EVENT_CLASS[$eventClass] ?? null;
 
-        if ($param->type === null) {
-            throw new NotImplementedException();
+        $paramType = $param->type;
+
+        // unwrap nullable type
+        if ($paramType instanceof NullableType) {
+            $paramType = $paramType->type;
         }
 
-        $type = $this->nodeNameResolver->getName($param->type);
+        if ($paramType === null || $paramType instanceof Identifier) {
+            $variable = $param->var;
+            /** @var string $variableName */
+            $variableName = $this->nodeNameResolver->getName($variable);
+
+            return 'get' . ucfirst($variableName);
+        }
+
+        $type = $this->nodeNameResolver->getName($paramType);
         if ($type === null) {
             throw new ShouldNotHappenException();
         }
 
         if (isset($getterMethodsWithType[$type])) {
             return $getterMethodsWithType[$type];
-        }
-
-        // simple type
-        if ($param->type instanceof Identifier) {
-            /** @var Variable $variable */
-            $variable = $param->var;
-            /** @var string $variableName */
-            $variableName = $this->nodeNameResolver->getName($variable);
-            return 'get' . ucfirst($variableName);
         }
 
         // dummy fallback
