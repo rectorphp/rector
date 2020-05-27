@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby;
 
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ContributeEventClassResolver
@@ -67,9 +71,15 @@ final class ContributeEventClassResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, ClassNaming $classNaming)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->classNaming = $classNaming;
     }
 
     public function resolveGetterMethodByEventClassAndParam(string $eventClass, Param $param): string
@@ -81,10 +91,25 @@ final class ContributeEventClassResolver
         }
 
         $type = $this->nodeNameResolver->getName($param->type);
+        if ($type === null) {
+            throw new ShouldNotHappenException();
+        }
+
         if (isset($getterMethodsWithType[$type])) {
             return $getterMethodsWithType[$type];
         }
 
-        throw new NotImplementedException();
+        // simple type
+        if ($param->type instanceof Identifier) {
+            /** @var Variable $variable */
+            $variable = $param->var;
+            /** @var string $variableName */
+            $variableName = $this->nodeNameResolver->getName($variable);
+            return 'get' . ucfirst($variableName);
+        }
+
+        // dummy fallback
+        $shortClass = $this->classNaming->getShortName($type);
+        return 'get' . $shortClass;
     }
 }

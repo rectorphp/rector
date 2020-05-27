@@ -29,20 +29,19 @@ final class EventClassNaming
         $this->classNaming = $classNaming;
     }
 
-    public function getShortEventClassName(MethodCall $methodCall): string
+    /**
+     * "App\SomeNamespace\SomeClass::onUpload"
+     * ↓
+     * "App\SomeNamespace\Event\SomeClassUploadEvent"
+     */
+    public function createEventClassNameFromMethodCall(MethodCall $methodCall): string
     {
-        /** @var string $methodName */
-        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        $shortEventClassName = $this->getShortEventClassName($methodCall);
 
         /** @var string $className */
         $className = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
 
-        $shortClassName = $this->classNaming->getShortName($className);
-
-        // "onMagic" => "Magic"
-        $shortPropertyName = Strings::substring($methodName, strlen('on'));
-
-        return $shortClassName . $shortPropertyName . 'Event';
+        return $this->prependShortClassEventWithNamespace($shortEventClassName, $className);
     }
 
     public function resolveEventFileLocation(MethodCall $methodCall): string
@@ -53,5 +52,45 @@ final class EventClassNaming
         $fileInfo = $methodCall->getAttribute(AttributeKey::FILE_INFO);
 
         return $fileInfo->getPath() . DIRECTORY_SEPARATOR . 'Event' . DIRECTORY_SEPARATOR . $shortEventClassName . '.php';
+    }
+
+    /**
+     * TomatoMarket, onBuy
+     * ↓
+     * TomatoMarketBuyEvent
+     */
+    public function createShortEventClassNameFromClassAndProperty(string $class, string $property): string
+    {
+        $shortClassName = $this->classNaming->getShortName($class);
+
+        // "onMagic" => "Magic"
+        $shortPropertyName = Strings::substring($property, strlen('on'));
+
+        return $shortClassName . $shortPropertyName . 'Event';
+    }
+
+    public function createEventClassNameFromClassAndProperty(string $className, string $methodName): string
+    {
+        $shortEventClass = $this->createShortEventClassNameFromClassAndProperty($className, $methodName);
+
+        return $this->prependShortClassEventWithNamespace($shortEventClass, $className);
+    }
+
+    private function getShortEventClassName(MethodCall $methodCall): string
+    {
+        /** @var string $methodName */
+        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+
+        /** @var string $className */
+        $className = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
+
+        return $this->createShortEventClassNameFromClassAndProperty($className, $methodName);
+    }
+
+    private function prependShortClassEventWithNamespace(string $shortEventClassName, string $orinalClassName): string
+    {
+        $namespaceAbove = Strings::before($orinalClassName, '\\', -1);
+
+        return $namespaceAbove . '\\Event\\' . $shortEventClassName;
     }
 }

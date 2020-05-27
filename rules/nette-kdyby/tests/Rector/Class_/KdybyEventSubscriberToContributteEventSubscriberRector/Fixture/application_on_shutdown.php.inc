@@ -50,7 +50,7 @@ class GetApplesSubscriber implements \Symfony\Component\EventDispatcher\EventSub
         $presenter = $application->getPresenter();
     }
 
-    public function onCustomCopy()
+    public function onCustomCopy(\Rector\NetteKdyby\Tests\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector\Fixture\Event\CustomServiceCopyEvent $customServiceCopyEvent)
     {
     }
 }
