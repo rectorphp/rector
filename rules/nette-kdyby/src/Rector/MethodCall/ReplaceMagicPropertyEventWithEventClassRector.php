@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -146,6 +147,14 @@ PHP
 
     private function isLocalOnPropertyCall(MethodCall $methodCall): bool
     {
+        if ($methodCall->var instanceof StaticCall) {
+            return false;
+        }
+
+        if ($methodCall->var instanceof MethodCall) {
+            return false;
+        }
+
         if (! $this->isName($methodCall->var, 'this')) {
             return false;
         }
