@@ -137,10 +137,8 @@ PHP
             return null;
         }
 
+        /** @var Class_ $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
-            return null;
-        }
 
         $this->makeStatic($node);
 
@@ -217,15 +215,7 @@ PHP
 
     private function refactorClass(Class_ $class): ?Node
     {
-        if (! $this->isObjectType($class, Subscriber::class)) {
-            return null;
-        }
-
-        if ($class->implements === null) {
-            return null;
-        }
-
-        foreach ($class->implements as $key => $implementedInterfaceName) {
+        foreach ((array) $class->implements as $key => $implementedInterfaceName) {
             if (! $this->isName($implementedInterfaceName, Subscriber::class)) {
                 continue;
             }

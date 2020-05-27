@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Rector\MethodCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
@@ -111,7 +110,7 @@ PHP
         }
 
         // 2. guess event name
-        $eventClassName = $this->createEventClassName($node);
+        $eventClassName = $this->eventClassNaming->createEventClassNameFromMethodCall($node);
         $eventFileLocation = $this->eventClassNaming->resolveEventFileLocation($node);
 
         // 3. create new event class with args
@@ -161,22 +160,6 @@ PHP
         }
 
         return property_exists($className, $methodName);
-    }
-
-    /**
-     * "App\SomeNamespace\SomeClass"
-     * ↓
-     * "App\SomeNamespace\Event\SomeClassUploadEvent"
-     */
-    private function createEventClassName(MethodCall $methodCall): string
-    {
-        $shortEventClassName = $this->eventClassNaming->getShortEventClassName($methodCall);
-
-        /** @var string $className */
-        $className = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
-        $namespaceAbove = Strings::before($className, '\\', -1);
-
-        return $namespaceAbove . '\\Event\\' . $shortEventClassName;
     }
 
     private function removeMagicProperty(MethodCall $methodCall): void

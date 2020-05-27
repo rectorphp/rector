@@ -5,3 +5,4 @@ services:
     Rector\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector: null
     Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector: null
     Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector: null
+    Rector\NetteKdyby\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector: null
