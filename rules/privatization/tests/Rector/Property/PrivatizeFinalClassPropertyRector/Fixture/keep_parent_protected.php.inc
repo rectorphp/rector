@@ -2,7 +2,7 @@
 
 namespace Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Fixture;
 
-use Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\AbstractClassWithProtectedProperty;
+use Rector\Privatization\Tests\Rector\Property\PrivatizeFinalClassPropertyRector\Source\AbstractClassWithProtectedProperty;
 
 final class KeepParentProtected extends AbstractClassWithProtectedProperty
 {
