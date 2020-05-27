@@ -21,10 +21,10 @@ namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWit
 final class FileManager
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcher
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     private $eventDispatcher;
-    public function __construct(\Symfony\Component\EventDispatcher\EventDispatcher $eventDispatcher)
+    public function __construct(\Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
     }

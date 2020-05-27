@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Symfony\Component\EventDispatcher;
+namespace Symfony\Contracts\EventDispatcher;
 
 if (interface_exists('Symfony\Contracts\EventDispatcher\EventDispatcherInterface')) {
     return;

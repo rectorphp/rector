@@ -24,7 +24,7 @@ use Rector\NetteKdyby\Naming\EventClassNaming;
 use Rector\NetteKdyby\NodeFactory\CustomEventFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @see \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\ReplaceMagicPropertyEventWithEventClassRectorTest
@@ -137,7 +137,11 @@ PHP
 
         /** @var Class_ $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        $this->addPropertyToClass($class, new FullyQualifiedObjectType(EventDispatcher::class), 'eventDispatcher');
+        $this->addPropertyToClass(
+            $class,
+            new FullyQualifiedObjectType(EventDispatcherInterface::class),
+            'eventDispatcher'
+        );
 
         // 6. remove property
         $this->removeMagicProperty($node);
