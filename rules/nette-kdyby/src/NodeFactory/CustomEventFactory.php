@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\NetteKdyby\NodeFactory;
 
 use Nette\Utils\Strings;
-use PhpParser\Builder\Class_;
+use PhpParser\Builder\Class_ as ClassBuilder;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Namespace_ as NamespaceBuilder;
 use PhpParser\Builder\Property as PropertyBuilder;
@@ -20,6 +20,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
@@ -51,13 +52,7 @@ final class CustomEventFactory
      */
     public function create(string $className, array $args): Namespace_
     {
-        $namespace = Strings::before($className, '\\', -1);
-        $namespaceBuilder = new NamespaceBuilder($namespace);
-
-        $shortClassName = $this->classNaming->getShortName($className);
-        $classBuilder = new Class_($shortClassName);
-        $classBuilder->makeFinal();
-        $classBuilder->extend(new FullyQualified('Symfony\Contracts\EventDispatcher\Event'));
+        $classBuilder = $this->createEventClassBuilder($className);
 
         // 1. add __construct if args?
         // 2. add getters
@@ -81,9 +76,8 @@ final class CustomEventFactory
         }
 
         $class = $classBuilder->getNode();
-        $namespaceBuilder->addStmt($class);
 
-        return $namespaceBuilder->getNode();
+        return $this->wrapClassToNamespace($className, $class);
     }
 
     /**
@@ -197,5 +191,25 @@ final class CustomEventFactory
         }
 
         return $varName . ucfirst($methodName);
+    }
+
+    private function createEventClassBuilder(string $className): ClassBuilder
+    {
+        $shortClassName = $this->classNaming->getShortName($className);
+
+        $classBuilder = new ClassBuilder($shortClassName);
+        $classBuilder->makeFinal();
+        $classBuilder->extend(new FullyQualified('Symfony\Contracts\EventDispatcher\Event'));
+
+        return $classBuilder;
+    }
+
+    private function wrapClassToNamespace(string $className, Class_ $class): Namespace_
+    {
+        $namespace = Strings::before($className, '\\', -1);
+        $namespaceBuilder = new NamespaceBuilder($namespace);
+        $namespaceBuilder->addStmt($class);
+
+        return $namespaceBuilder->getNode();
     }
 }

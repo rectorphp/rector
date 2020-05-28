@@ -2,11 +2,13 @@
 
 namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Fixture;
 
+use Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Source\SomeUser;
+
 final class FileManager
 {
     public $onUpload;
 
-    public function run(User $user)
+    public function run(SomeUser $user)
     {
         $this->onUpload($user);
     }
@@ -18,6 +20,8 @@ final class FileManager
 
 namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Fixture;
 
+use Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Source\SomeUser;
+
 final class FileManager
 {
     /**
@@ -28,7 +32,7 @@ final class FileManager
     {
         $this->eventDispatcher = $eventDispatcher;
     }
-    public function run(User $user)
+    public function run(SomeUser $user)
     {
         $fileManagerUploadEvent = new \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Fixture\Event\FileManagerUploadEvent($user);
         $this->eventDispatcher->dispatch($fileManagerUploadEvent);

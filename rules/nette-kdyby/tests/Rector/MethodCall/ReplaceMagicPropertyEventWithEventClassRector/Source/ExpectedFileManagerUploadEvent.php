@@ -5,7 +5,7 @@ namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWit
 final class FileManagerUploadEvent extends \Symfony\Contracts\EventDispatcher\Event
 {
     private $user;
-    public function __construct($user)
+    public function __construct(\Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Source\SomeUser $user)
     {
         $this->user = $user;
     }
