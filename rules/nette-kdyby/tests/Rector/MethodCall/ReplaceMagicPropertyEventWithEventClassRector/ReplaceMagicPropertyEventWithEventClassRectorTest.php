@@ -18,6 +18,18 @@ final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRe
         $this->assertFileEquals(__DIR__ . '/Source/ExpectedFileManagerUploadEvent.php', $expectedEventFilePath);
     }
 
+    public function testDuplicatedEventParams(): void
+    {
+        $this->doTestFile(__DIR__ . '/Fixture/duplicated_event_params.php.inc');
+
+        $expectedEventFilePath = dirname($this->originalTempFile) . '/Event/DuplicatedEventParamsUploadEvent.php';
+        $this->assertFileExists($expectedEventFilePath);
+        $this->assertFileEquals(
+            __DIR__ . '/Source/ExpectedDuplicatedEventParamsUploadEvent.php',
+            $expectedEventFilePath
+        );
+    }
+
     protected function getRectorClass(): string
     {
         return ReplaceMagicPropertyEventWithEventClassRector::class;
