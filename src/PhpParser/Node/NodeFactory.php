@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Node;
 
+use PhpParser\Builder\Method;
 use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
@@ -24,6 +25,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
@@ -31,6 +33,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\UnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -293,6 +297,28 @@ final class NodeFactory
         }
 
         return $classConst;
+    }
+
+    /**
+     * @param Identifier|Name|NullableType|UnionType|null $typeNode
+     */
+    public function createGetterClassMethodFromNameAndType(string $propertyName, ?Node $typeNode): ClassMethod
+    {
+        $getterMethod = 'get' . ucfirst($propertyName);
+
+        $methodBuilder = new Method($getterMethod);
+        $methodBuilder->makePublic();
+
+        $localPropertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+
+        $return = new Return_($localPropertyFetch);
+        $methodBuilder->addStmt($return);
+
+        if ($typeNode !== null) {
+            $methodBuilder->setReturnType($typeNode);
+        }
+
+        return $methodBuilder->getNode();
     }
 
     /**

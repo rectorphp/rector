@@ -15,7 +15,7 @@ final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRe
 
         $expectedEventFilePath = dirname($this->originalTempFile) . '/Event/FileManagerUploadEvent.php';
         $this->assertFileExists($expectedEventFilePath);
-        $this->assertFileEquals(__DIR__ . '/Source/ExpectedClass.php', $expectedEventFilePath);
+        $this->assertFileEquals(__DIR__ . '/Source/ExpectedFileManagerUploadEvent.php', $expectedEventFilePath);
     }
 
     protected function getRectorClass(): string

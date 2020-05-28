@@ -5,25 +5,26 @@ declare(strict_types=1);
 namespace Rector\NetteKdyby\NodeFactory;
 
 use Nette\Utils\Strings;
-use PhpParser\Builder\Class_;
+use PhpParser\Builder\Class_ as ClassBuilder;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Namespace_ as NamespaceBuilder;
-use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Return_;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\Exception\NotImplementedException;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\NetteKdyby\BlueprintFactory\VariableWithTypesFactory;
+use Rector\NetteKdyby\ValueObject\VariableWithType;
 
+/**
+ * @todo decouple to generic object factory for better re-use, e.g. this is just value object pattern
+ */
 final class CustomEventFactory
 {
     /**
@@ -32,14 +33,23 @@ final class CustomEventFactory
     private $classNaming;
 
     /**
-     * @var NodeNameResolver
+     * @var VariableWithTypesFactory
      */
-    private $nodeNameResolver;
+    private $variableWithTypesFactory;
 
-    public function __construct(ClassNaming $classNaming, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    public function __construct(
+        ClassNaming $classNaming,
+        VariableWithTypesFactory $variableWithTypesFactory,
+        NodeFactory $nodeFactory
+    ) {
         $this->classNaming = $classNaming;
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->variableWithTypesFactory = $variableWithTypesFactory;
+        $this->nodeFactory = $nodeFactory;
     }
 
     /**
@@ -47,36 +57,56 @@ final class CustomEventFactory
      */
     public function create(string $className, array $args): Namespace_
     {
-        $namespace = Strings::before($className, '\\', -1);
-        $namespaceBuilder = new NamespaceBuilder($namespace);
+        $classBuilder = $this->createEventClassBuilder($className);
 
+        $this->decorateWithConstructorIfHasArgs($classBuilder, $args);
+
+        $class = $classBuilder->getNode();
+
+        return $this->wrapClassToNamespace($className, $class);
+    }
+
+    /**
+     * @param VariableWithType[] $variableWithTypes
+     */
+    private function createConstructClassMethod(array $variableWithTypes): ClassMethod
+    {
+        $methodBuilder = new Method('__construct');
+        $methodBuilder->makePublic();
+
+        foreach ($variableWithTypes as $variableWithType) {
+            $param = new Param(new Variable($variableWithType->getName()));
+
+            if ($variableWithType->getPhpParserTypeNode() !== null) {
+                $param->type = $variableWithType->getPhpParserTypeNode();
+            }
+
+            $methodBuilder->addParam($param);
+
+            $assign = new Assign(new PropertyFetch(new Variable('this'), $variableWithType->getName()), new Variable(
+                $variableWithType->getName()
+            ));
+            $methodBuilder->addStmt($assign);
+        }
+
+        return $methodBuilder->getNode();
+    }
+
+    private function createEventClassBuilder(string $className): ClassBuilder
+    {
         $shortClassName = $this->classNaming->getShortName($className);
-        $classBuilder = new Class_($shortClassName);
+
+        $classBuilder = new ClassBuilder($shortClassName);
         $classBuilder->makeFinal();
         $classBuilder->extend(new FullyQualified('Symfony\Contracts\EventDispatcher\Event'));
 
-        // 1. add __construct if args?
-        // 2. add getters
-        // 3. add property
+        return $classBuilder;
+    }
 
-        if (count($args) > 0) {
-            $methodBuilder = $this->createConstructClassMethod($args);
-            $classBuilder->addStmt($methodBuilder);
-
-            // add properties
-            foreach ($args as $arg) {
-                $property = $this->createProperty($arg);
-                $classBuilder->addStmt($property);
-            }
-
-            // add getters
-            foreach ($args as $arg) {
-                $getterClassMethod = $this->createGetterClassMethod($arg);
-                $classBuilder->addStmt($getterClassMethod);
-            }
-        }
-
-        $class = $classBuilder->getNode();
+    private function wrapClassToNamespace(string $className, Class_ $class): Namespace_
+    {
+        $namespace = Strings::before($className, '\\', -1);
+        $namespaceBuilder = new NamespaceBuilder($namespace);
         $namespaceBuilder->addStmt($class);
 
         return $namespaceBuilder->getNode();
@@ -85,64 +115,34 @@ final class CustomEventFactory
     /**
      * @param Arg[] $args
      */
-    private function createConstructClassMethod(array $args): ClassMethod
+    private function decorateWithConstructorIfHasArgs(ClassBuilder $classBuilder, array $args): void
     {
-        $methodBuilder = new Method('__construct');
-        $methodBuilder->makePublic();
-
-        foreach ($args as $arg) {
-            $paramName = $this->resolveParamNameFromArg($arg);
-            if ($paramName === null) {
-                throw new NotImplementedException();
-            }
-
-            $param = new Param(new Variable($paramName));
-            $methodBuilder->addParam($param);
-
-            $assign = new Assign(new PropertyFetch(new Variable('this'), $paramName), new Variable($paramName));
-            $methodBuilder->addStmt($assign);
+        if (count($args) === 0) {
+            return;
         }
 
-        return $methodBuilder->getNode();
-    }
+        $variablesWithTypes = $this->variableWithTypesFactory->createVariablesWithTypesFromArgs($args);
 
-    private function createProperty(Arg $arg): Property
-    {
-        $paramName = $this->resolveParamNameFromArg($arg);
-        if ($paramName === null) {
-            // @todo
-            throw new NotImplementedException();
+        $methodBuilder = $this->createConstructClassMethod($variablesWithTypes);
+        $classBuilder->addStmt($methodBuilder);
+
+        // add properties
+        foreach ($variablesWithTypes as $variableWithType) {
+            $property = $this->nodeFactory->createPrivatePropertyFromNameAndType(
+                $variableWithType->getName(),
+                $variableWithType->getType()
+            );
+
+            $classBuilder->addStmt($property);
         }
 
-        $propertyBuilder = new PropertyBuilder($paramName);
-        $propertyBuilder->makePrivate();
-
-        return $propertyBuilder->getNode();
-    }
-
-    private function createGetterClassMethod(Arg $arg): ClassMethod
-    {
-        $paramName = $this->resolveParamNameFromArg($arg);
-        if ($paramName === null) {
-            throw new NotImplementedException();
+        // add getters
+        foreach ($variablesWithTypes as $variableWithType) {
+            $getterClassMethod = $this->nodeFactory->createGetterClassMethodFromNameAndType(
+                $variableWithType->getName(),
+                $variableWithType->getPhpParserTypeNode()
+            );
+            $classBuilder->addStmt($getterClassMethod);
         }
-
-        $methodBuilder = new Method($paramName);
-
-        $return = new Return_(new PropertyFetch(new Variable('this'), $paramName));
-        $methodBuilder->addStmt($return);
-        $methodBuilder->makePublic();
-
-        return $methodBuilder->getNode();
-    }
-
-    private function resolveParamNameFromArg(Arg $arg): ?string
-    {
-        $argValue = $arg->value;
-        while ($argValue instanceof ArrayDimFetch) {
-            $argValue = $argValue->var;
-        }
-
-        return $this->nodeNameResolver->getName($argValue);
     }
 }

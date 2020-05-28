@@ -1,10 +1,6 @@
 # from: https://github.com/Kdyby/Events/
 # to: https://github.com/contributte/event-dispatcher/
 services:
-    Rector\Renaming\Rector\Class_\RenameClassRector:
-        $oldToNewClasses:
-            Kdyby\Events\Subscriber: 'Symfony\Component\EventDispatcher\EventSubscriberInterface'
-
     Rector\NetteKdyby\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector: null
     Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector: null
     Rector\NetteKdyby\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector: null
