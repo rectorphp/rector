@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NetteKdyby\BlueprintFactory\VariableWithTypesFactory;
 use Rector\NetteKdyby\ValueObject\VariableWithType;
@@ -123,6 +124,8 @@ final class CustomEventFactory
 
         $variablesWithTypes = $this->variableWithTypesFactory->createVariablesWithTypesFromArgs($args);
 
+        $this->ensureVariablesAreUnique($variablesWithTypes, $classBuilder);
+
         $methodBuilder = $this->createConstructClassMethod($variablesWithTypes);
         $classBuilder->addStmt($methodBuilder);
 
@@ -143,6 +146,29 @@ final class CustomEventFactory
                 $variableWithType->getPhpParserTypeNode()
             );
             $classBuilder->addStmt($getterClassMethod);
+        }
+    }
+
+    /**
+     * @param VariableWithType[] $variablesWithTypes
+     */
+    private function ensureVariablesAreUnique(array $variablesWithTypes, ClassBuilder $classBuilder): void
+    {
+        $variableNames = [];
+
+        $className = $classBuilder->getNode()->name;
+
+        foreach ($variablesWithTypes as $variablesWithType) {
+            if (in_array($variablesWithType->getName(), $variableNames, true)) {
+                $message = sprintf(
+                    'Variable "$%s" is duplicated in to be created "%s" class',
+                    $variablesWithType->getName(),
+                    $className
+                );
+                throw new ShouldNotHappenException($message);
+            }
+
+            $variableNames[] = $variablesWithType->getName();
         }
     }
 }
