@@ -9,8 +9,6 @@ use PhpParser\Builder\Class_ as ClassBuilder;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Namespace_ as NamespaceBuilder;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -84,9 +82,7 @@ final class CustomEventFactory
 
             $methodBuilder->addParam($param);
 
-            $assign = new Assign(new PropertyFetch(new Variable('this'), $variableWithType->getName()), new Variable(
-                $variableWithType->getName()
-            ));
+            $assign = $this->nodeFactory->createPropertyAssignment($variableWithType->getName());
             $methodBuilder->addStmt($assign);
         }
 
@@ -145,6 +141,7 @@ final class CustomEventFactory
                 $variableWithType->getName(),
                 $variableWithType->getPhpParserTypeNode()
             );
+
             $classBuilder->addStmt($getterClassMethod);
         }
     }
@@ -154,21 +151,22 @@ final class CustomEventFactory
      */
     private function ensureVariablesAreUnique(array $variablesWithTypes, ClassBuilder $classBuilder): void
     {
-        $variableNames = [];
+        $usedVariableNames = [];
 
         $className = $classBuilder->getNode()->name;
 
         foreach ($variablesWithTypes as $variablesWithType) {
-            if (in_array($variablesWithType->getName(), $variableNames, true)) {
+            if (in_array($variablesWithType->getName(), $usedVariableNames, true)) {
                 $message = sprintf(
                     'Variable "$%s" is duplicated in to be created "%s" class',
                     $variablesWithType->getName(),
                     $className
                 );
+
                 throw new ShouldNotHappenException($message);
             }
 
-            $variableNames[] = $variablesWithType->getName();
+            $usedVariableNames[] = $variablesWithType->getName();
         }
     }
 }

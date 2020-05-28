@@ -46,7 +46,7 @@ final class VariableWithTypesFactory
         $variablesWithTypes = [];
 
         foreach ($args as $arg) {
-            $variableName = $this->variableNaming->resolveParamNameFromArg($arg);
+            $variableName = $this->variableNaming->resolveFromNode($arg);
             $staticType = $this->nodeTypeResolver->getStaticType($arg->value);
             $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType);
 
