@@ -17,6 +17,11 @@ use Rector\NetteKdyby\ValueObject\NetteEventToContributeEventClass;
 final class ListeningMethodsCollector
 {
     /**
+     * @var string
+     */
+    public const EVENT_TYPE_CONTRIBUTTE = 'contributte';
+
+    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -44,13 +49,17 @@ final class ListeningMethodsCollector
     /**
      * @return array<string, ClassMethod>
      */
-    public function collectFromClassAndGetSubscribedEventClassMethod(Class_ $class, ClassMethod $classMethod): array
-    {
+    public function collectFromClassAndGetSubscribedEventClassMethod(
+        Class_ $class,
+        ClassMethod $classMethod,
+        string $type
+    ): array {
         $classMethodsByEventClass = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
             $class,
-            &$classMethodsByEventClass
+            &$classMethodsByEventClass,
+            $type
         ) {
             if (! $node instanceof ArrayItem) {
                 return null;
@@ -73,7 +82,11 @@ final class ListeningMethodsCollector
             $eventClass = $this->valueResolver->getValue($node->key);
 
             $contributeEventClasses = NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS;
-            if (! in_array($eventClass, $contributeEventClasses, true)) {
+            if ($type === self::EVENT_TYPE_CONTRIBUTTE) {
+                if (! in_array($eventClass, $contributeEventClasses, true)) {
+                    return null;
+                }
+            } else {
                 [$classMethod, $eventClass] = $this->resolveCustomClassMethodAndEventClass($node, $class, $eventClass);
             }
 

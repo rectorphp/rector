@@ -11,17 +11,12 @@ class GetApplesSubscriber implements Subscriber
     {
         return [
             Application::class . '::onShutdown',
-            CustomService::class . '::onCopy' => 'onCustomCopy',
         ];
     }
 
     public function onShutdown(Application $application): void
     {
         $presenter = $application->getPresenter();
-    }
-
-    public function onCustomCopy()
-    {
     }
 }
 
@@ -40,7 +35,6 @@ class GetApplesSubscriber implements \Symfony\Component\EventDispatcher\EventSub
     {
         return [
             \Contributte\Events\Extra\Event\Application\ShutdownEvent::class => 'onShutdown',
-            CustomService::class . '::onCopy' => 'onCustomCopy',
         ];
     }
 
@@ -48,10 +42,6 @@ class GetApplesSubscriber implements \Symfony\Component\EventDispatcher\EventSub
     {
         $application = $shutdownEvent->getApplication();
         $presenter = $application->getPresenter();
-    }
-
-    public function onCustomCopy(\Rector\NetteKdyby\Tests\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector\Fixture\Event\CustomServiceCopyEvent $customServiceCopyEvent)
-    {
     }
 }
 
