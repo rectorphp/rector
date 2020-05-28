@@ -69,7 +69,6 @@ class GetApplesSubscriber implements Subscriber
     {
         return [
             Application::class . '::onShutdown',
-            CustomService::class . '::onCopy' => 'onCustomCopy',
         ];
     }
 
@@ -77,10 +76,6 @@ class GetApplesSubscriber implements Subscriber
     {
         $presenterName = $presenter->getName();
         // ...
-    }
-
-    public function onCustomCopy()
-    {
     }
 }
 PHP
@@ -96,7 +91,6 @@ class GetApplesSubscriber implements EventSubscriberInterface
     {
         return [
             ShutdownEvent::class => 'onShutdown',
-            CustomService::class . '::onCopy' => 'onCustomCopy',
         ];
     }
 
@@ -105,10 +99,6 @@ class GetApplesSubscriber implements EventSubscriberInterface
         $presenter = $shutdownEvent->getPresenter();
         $presenterName = $presenter->getName();
         // ...
-    }
-
-    public function onCustomCopy()
-    {
     }
 }
 PHP
@@ -146,7 +136,8 @@ PHP
 
         $listeningClassMethods = $this->listeningMethodsCollector->collectFromClassAndGetSubscribedEventClassMethod(
             $class,
-            $node
+            $node,
+            ListeningMethodsCollector::EVENT_TYPE_CONTRIBUTTE
         );
 
         $this->subscriberMethodArgumentToContributteEventObjectManipulator->change($listeningClassMethods);

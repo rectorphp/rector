@@ -6,6 +6,7 @@ namespace Rector\NetteKdyby\NodeResolver;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -16,6 +17,16 @@ use Rector\NetteKdyby\ValueObject\NetteEventToContributeEventClass;
 
 final class ListeningMethodsCollector
 {
+    /**
+     * @var string
+     */
+    public const EVENT_TYPE_CONTRIBUTTE = 'contributte';
+
+    /**
+     * @var string
+     */
+    public const EVENT_TYPE_CUSTOM = 'custom';
+
     /**
      * @var CallableNodeTraverser
      */
@@ -31,6 +42,11 @@ final class ListeningMethodsCollector
      */
     private $eventClassNaming;
 
+    /**
+     * @var array<string, ClassMethod>
+     */
+    private $classMethodsByEventClass = [];
+
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
         ValueResolver $valueResolver,
@@ -44,25 +60,18 @@ final class ListeningMethodsCollector
     /**
      * @return array<string, ClassMethod>
      */
-    public function collectFromClassAndGetSubscribedEventClassMethod(Class_ $class, ClassMethod $classMethod): array
-    {
-        $classMethodsByEventClass = [];
+    public function collectFromClassAndGetSubscribedEventClassMethod(
+        Class_ $class,
+        ClassMethod $classMethod,
+        string $type
+    ): array {
+        $this->classMethodsByEventClass = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
             $class,
-            &$classMethodsByEventClass
+            $type
         ) {
             if (! $node instanceof ArrayItem) {
-                return null;
-            }
-
-            $possibleMethodName = $this->valueResolver->getValue($node->value);
-            if (! is_string($possibleMethodName)) {
-                return null;
-            }
-
-            $classMethod = $class->getMethod($possibleMethodName);
-            if ($classMethod === null) {
                 return null;
             }
 
@@ -70,13 +79,20 @@ final class ListeningMethodsCollector
                 return null;
             }
 
-            $eventClass = $this->valueResolver->getValue($node->key);
-
-            $contributeEventClasses = NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS;
-            if (! in_array($eventClass, $contributeEventClasses, true)) {
-                [$classMethod, $eventClass] = $this->resolveCustomClassMethodAndEventClass($node, $class, $eventClass);
+            $classMethod = $this->matchClassMethodByNodeValue($class, $node->value);
+            if ($classMethod === null) {
+                return null;
             }
 
+            $eventClass = $this->valueResolver->getValue($node->key);
+
+            if ($type === self::EVENT_TYPE_CONTRIBUTTE) {
+                /** @var string $eventClass */
+                $this->resolveContributeEventClassAndSubscribedClassMethod($eventClass, $classMethod);
+                return;
+            }
+
+            [$classMethod, $eventClass] = $this->resolveCustomClassMethodAndEventClass($node, $class, $eventClass);
             if ($classMethod === null) {
                 return null;
             }
@@ -85,10 +101,10 @@ final class ListeningMethodsCollector
                 return null;
             }
 
-            $classMethodsByEventClass[$eventClass] = $classMethod;
+            $this->classMethodsByEventClass[$eventClass] = $classMethod;
         });
 
-        return $classMethodsByEventClass;
+        return $this->classMethodsByEventClass;
     }
 
     private function resolveCustomClassMethodAndEventClass(
@@ -109,5 +125,28 @@ final class ListeningMethodsCollector
         }
 
         return [$classMethod, $eventClass];
+    }
+
+    private function matchClassMethodByNodeValue(Class_ $class, Expr $expr): ?ClassMethod
+    {
+        $possibleMethodName = $this->valueResolver->getValue($expr);
+        if (! is_string($possibleMethodName)) {
+            return null;
+        }
+
+        return $class->getMethod($possibleMethodName);
+    }
+
+    private function resolveContributeEventClassAndSubscribedClassMethod(
+        string $eventClass,
+        ClassMethod $classMethod
+    ): void {
+        $contributeEventClasses = NetteEventToContributeEventClass::PROPERTY_TO_EVENT_CLASS;
+
+        if (! in_array($eventClass, $contributeEventClasses, true)) {
+            return;
+        }
+
+        $this->classMethodsByEventClass[$eventClass] = $classMethod;
     }
 }

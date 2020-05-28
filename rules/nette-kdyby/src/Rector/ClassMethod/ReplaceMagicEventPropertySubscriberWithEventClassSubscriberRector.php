@@ -117,7 +117,8 @@ PHP
 
         $listeningClassMethods = $this->listeningMethodsCollector->collectFromClassAndGetSubscribedEventClassMethod(
             $class,
-            $node
+            $node,
+            ListeningMethodsCollector::EVENT_TYPE_CUSTOM
         );
 
         $this->subscriberMethodArgumentToContributteEventObjectManipulator->change($listeningClassMethods);

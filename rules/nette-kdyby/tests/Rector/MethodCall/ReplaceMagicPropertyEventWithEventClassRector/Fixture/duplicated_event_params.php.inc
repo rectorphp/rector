@@ -10,7 +10,7 @@ final class DuplicatedEventParams
 
     public function run(SomeUser $user)
     {
-        $this->onUpload($user['id'], $user['name']);
+        $this->onUpload($user['owner_id'], $user['name']);
     }
 }
 
@@ -34,7 +34,7 @@ final class DuplicatedEventParams
     }
     public function run(SomeUser $user)
     {
-        $duplicatedEventParamsUploadEvent = new \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Fixture\Event\DuplicatedEventParamsUploadEvent($user['id'], $user['name']);
+        $duplicatedEventParamsUploadEvent = new \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Fixture\Event\DuplicatedEventParamsUploadEvent($user['owner_id'], $user['name']);
         $this->eventDispatcher->dispatch($duplicatedEventParamsUploadEvent);
     }
 }
