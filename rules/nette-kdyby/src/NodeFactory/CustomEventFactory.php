@@ -12,10 +12,13 @@ use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Cast\String_ as StringCast;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
@@ -92,9 +95,6 @@ final class CustomEventFactory
 
         foreach ($args as $arg) {
             $paramName = $this->resolveParamNameFromArg($arg);
-            if ($paramName === null) {
-                throw new NotImplementedException();
-            }
 
             $param = new Param(new Variable($paramName));
             $methodBuilder->addParam($param);
@@ -109,10 +109,6 @@ final class CustomEventFactory
     private function createProperty(Arg $arg): Property
     {
         $paramName = $this->resolveParamNameFromArg($arg);
-        if ($paramName === null) {
-            // @todo
-            throw new NotImplementedException();
-        }
 
         $propertyBuilder = new PropertyBuilder($paramName);
         $propertyBuilder->makePrivate();
@@ -123,9 +119,6 @@ final class CustomEventFactory
     private function createGetterClassMethod(Arg $arg): ClassMethod
     {
         $paramName = $this->resolveParamNameFromArg($arg);
-        if ($paramName === null) {
-            throw new NotImplementedException();
-        }
 
         $methodBuilder = new Method($paramName);
 
@@ -136,13 +129,53 @@ final class CustomEventFactory
         return $methodBuilder->getNode();
     }
 
-    private function resolveParamNameFromArg(Arg $arg): ?string
+    private function resolveParamNameFromArg(Arg $arg): string
     {
-        $argValue = $arg->value;
-        while ($argValue instanceof ArrayDimFetch) {
-            $argValue = $argValue->var;
+        $value = $arg->value;
+        if ($value instanceof StringCast) {
+            $value = $value->expr;
         }
 
-        return $this->nodeNameResolver->getName($argValue);
+        if ($value instanceof Ternary) {
+            $value = $value->if;
+        }
+
+        while ($value instanceof ArrayDimFetch) {
+            $value = $value->var;
+        }
+
+        if ($value instanceof PropertyFetch) {
+            return $this->resolveParamNameFromPropertyFetch($value);
+        }
+
+        if ($value === null) {
+            throw new NotImplementedException();
+        }
+
+        $paramName = $this->nodeNameResolver->getName($value);
+        if ($paramName !== null) {
+            return $paramName;
+        }
+
+        if ($value instanceof String_) {
+            return $value->value;
+        }
+
+        throw new NotImplementedException();
+    }
+
+    private function resolveParamNameFromPropertyFetch(PropertyFetch $propertyFetch): string
+    {
+        $varName = $this->nodeNameResolver->getName($propertyFetch->var);
+        if (! is_string($varName)) {
+            throw new NotImplementedException();
+        }
+
+        $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
+        if (! is_string($propertyName)) {
+            throw new NotImplementedException();
+        }
+
+        return $varName . ucfirst($propertyName);
     }
 }
