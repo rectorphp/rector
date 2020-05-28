@@ -12,7 +12,7 @@ final class FileManagerUploadEvent extends \Symfony\Contracts\EventDispatcher\Ev
     {
         $this->user = $user;
     }
-    public function user(): \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Source\SomeUser
+    public function getUser(): \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Source\SomeUser
     {
         return $this->user;
     }

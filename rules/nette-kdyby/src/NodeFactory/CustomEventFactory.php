@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Builder\Class_ as ClassBuilder;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Namespace_ as NamespaceBuilder;
-use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -18,13 +17,14 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Return_;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\NetteKdyby\Naming\ParamNaming;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\NetteKdyby\BlueprintFactory\VariableWithTypesFactory;
+use Rector\NetteKdyby\ValueObject\VariableWithType;
 
+/**
+ * @todo decouple to generic object factory for better re-use, e.g. this is just value object pattern
+ */
 final class CustomEventFactory
 {
     /**
@@ -33,30 +33,23 @@ final class CustomEventFactory
     private $classNaming;
 
     /**
-     * @var ParamNaming
+     * @var VariableWithTypesFactory
      */
-    private $paramNaming;
+    private $variableWithTypesFactory;
 
     /**
-     * @var NodeTypeResolver
+     * @var NodeFactory
      */
-    private $nodeTypeResolver;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
+    private $nodeFactory;
 
     public function __construct(
         ClassNaming $classNaming,
-        ParamNaming $paramNaming,
-        NodeTypeResolver $nodeTypeResolver,
-        StaticTypeMapper $staticTypeMapper
+        VariableWithTypesFactory $variableWithTypesFactory,
+        NodeFactory $nodeFactory
     ) {
         $this->classNaming = $classNaming;
-        $this->paramNaming = $paramNaming;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->staticTypeMapper = $staticTypeMapper;
+        $this->variableWithTypesFactory = $variableWithTypesFactory;
+        $this->nodeFactory = $nodeFactory;
     }
 
     /**
@@ -74,52 +67,27 @@ final class CustomEventFactory
     }
 
     /**
-     * @param Arg[] $args
+     * @param VariableWithType[] $variableWithTypes
      */
-    private function createConstructClassMethod(array $args): ClassMethod
+    private function createConstructClassMethod(array $variableWithTypes): ClassMethod
     {
         $methodBuilder = new Method('__construct');
         $methodBuilder->makePublic();
 
-        foreach ($args as $arg) {
-            $paramName = $this->paramNaming->resolveParamNameFromArg($arg);
+        foreach ($variableWithTypes as $variableWithType) {
+            $param = new Param(new Variable($variableWithType->getName()));
 
-            $param = new Param(new Variable($paramName));
-
-            $argStaticType = $this->nodeTypeResolver->getStaticType($arg->value);
-            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argStaticType);
-            if ($phpParserTypeNode !== null) {
-                $param->type = $phpParserTypeNode;
+            if ($variableWithType->getPhpParserTypeNode() !== null) {
+                $param->type = $variableWithType->getPhpParserTypeNode();
             }
 
             $methodBuilder->addParam($param);
 
-            $assign = new Assign(new PropertyFetch(new Variable('this'), $paramName), new Variable($paramName));
+            $assign = new Assign(new PropertyFetch(new Variable('this'), $variableWithType->getName()), new Variable(
+                $variableWithType->getName()
+            ));
             $methodBuilder->addStmt($assign);
         }
-
-        return $methodBuilder->getNode();
-    }
-
-    private function createProperty(Arg $arg): Property
-    {
-        $paramName = $this->paramNaming->resolveParamNameFromArg($arg);
-
-        $propertyBuilder = new PropertyBuilder($paramName);
-        $propertyBuilder->makePrivate();
-
-        return $propertyBuilder->getNode();
-    }
-
-    private function createGetterClassMethod(Arg $arg): ClassMethod
-    {
-        $paramName = $this->paramNaming->resolveParamNameFromArg($arg);
-
-        $methodBuilder = new Method($paramName);
-
-        $return = new Return_(new PropertyFetch(new Variable('this'), $paramName));
-        $methodBuilder->addStmt($return);
-        $methodBuilder->makePublic();
 
         return $methodBuilder->getNode();
     }
@@ -153,18 +121,27 @@ final class CustomEventFactory
             return;
         }
 
-        $methodBuilder = $this->createConstructClassMethod($args);
+        $variablesWithTypes = $this->variableWithTypesFactory->createVariablesWithTypesFromArgs($args);
+
+        $methodBuilder = $this->createConstructClassMethod($variablesWithTypes);
         $classBuilder->addStmt($methodBuilder);
 
         // add properties
-        foreach ($args as $arg) {
-            $property = $this->createProperty($arg);
+        foreach ($variablesWithTypes as $variableWithType) {
+            $property = $this->nodeFactory->createPrivatePropertyFromNameAndType(
+                $variableWithType->getName(),
+                $variableWithType->getType()
+            );
+
             $classBuilder->addStmt($property);
         }
 
         // add getters
-        foreach ($args as $arg) {
-            $getterClassMethod = $this->createGetterClassMethod($arg);
+        foreach ($variablesWithTypes as $variableWithType) {
+            $getterClassMethod = $this->nodeFactory->createGetterClassMethodFromNameAndType(
+                $variableWithType->getName(),
+                $variableWithType->getPhpParserTypeNode()
+            );
             $classBuilder->addStmt($getterClassMethod);
         }
     }

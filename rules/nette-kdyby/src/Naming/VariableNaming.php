@@ -6,7 +6,7 @@ namespace Rector\NetteKdyby\Naming;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Cast\String_ as StringCasting;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
@@ -14,7 +14,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-final class ParamNaming
+final class VariableNaming
 {
     /**
      * @var NodeNameResolver
@@ -29,7 +29,8 @@ final class ParamNaming
     public function resolveParamNameFromArg(Arg $arg): string
     {
         $value = $arg->value;
-        if ($value instanceof StringCasting) {
+
+        if ($value instanceof Cast) {
             $value = $value->expr;
         }
 
@@ -65,7 +66,7 @@ final class ParamNaming
         throw new NotImplementedException();
     }
 
-    public function resolveParamNameFromPropertyFetch(PropertyFetch $propertyFetch): string
+    private function resolveParamNameFromPropertyFetch(PropertyFetch $propertyFetch): string
     {
         $varName = $this->nodeNameResolver->getName($propertyFetch->var);
         if (! is_string($varName)) {
@@ -80,7 +81,7 @@ final class ParamNaming
         return $varName . ucfirst($propertyName);
     }
 
-    public function resolveParamNameFromMethodCall(MethodCall $methodCall): string
+    private function resolveParamNameFromMethodCall(MethodCall $methodCall): string
     {
         $varName = $this->nodeNameResolver->getName($methodCall->var);
         if (! is_string($varName)) {
