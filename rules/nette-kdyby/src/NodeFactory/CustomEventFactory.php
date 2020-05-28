@@ -13,6 +13,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\String_ as StringCast;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
@@ -148,6 +149,10 @@ final class CustomEventFactory
             return $this->resolveParamNameFromPropertyFetch($value);
         }
 
+        if ($value instanceof MethodCall) {
+            return $this->resolveParamNameFromMethodCall($value);
+        }
+
         if ($value === null) {
             throw new NotImplementedException();
         }
@@ -177,5 +182,20 @@ final class CustomEventFactory
         }
 
         return $varName . ucfirst($propertyName);
+    }
+
+    private function resolveParamNameFromMethodCall(MethodCall $methodCall): string
+    {
+        $varName = $this->nodeNameResolver->getName($methodCall->var);
+        if (! is_string($varName)) {
+            throw new NotImplementedException();
+        }
+
+        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        if (! is_string($methodName)) {
+            throw new NotImplementedException();
+        }
+
+        return $varName . ucfirst($methodName);
     }
 }
