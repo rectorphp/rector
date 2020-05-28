@@ -7,19 +7,19 @@ final class DuplicatedEventParamsUploadEvent extends \Symfony\Contracts\EventDis
     /**
      * @var mixed
      */
-    private $userId;
+    private $userOwnerId;
     /**
      * @var mixed
      */
     private $userName;
-    public function __construct($userId, $userName)
+    public function __construct($userOwnerId, $userName)
     {
-        $this->userId = $userId;
+        $this->userOwnerId = $userOwnerId;
         $this->userName = $userName;
     }
-    public function getUserId()
+    public function getUserOwnerId()
     {
-        return $this->userId;
+        return $this->userOwnerId;
     }
     public function getUserName()
     {

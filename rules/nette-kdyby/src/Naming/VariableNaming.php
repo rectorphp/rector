@@ -15,6 +15,7 @@ use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class VariableNaming
@@ -114,7 +115,9 @@ final class VariableNaming
                 $valueName = $this->nodeNameResolver->getName($arrayDimFetch->var);
                 $dimName = $this->valueResolver->getValue($arrayDimFetch->dim);
 
-                return $valueName . ucfirst($dimName);
+                $dimName = StaticRectorStrings::underscoreToCamelCase($dimName);
+
+                return $valueName . $dimName;
             }
 
             $arrayDimFetch = $arrayDimFetch->var;
