@@ -22,6 +22,8 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NetteKdyby\Naming\ParamNaming;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class CustomEventFactory
 {
@@ -35,10 +37,26 @@ final class CustomEventFactory
      */
     private $paramNaming;
 
-    public function __construct(ClassNaming $classNaming, ParamNaming $paramNaming)
-    {
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
+    public function __construct(
+        ClassNaming $classNaming,
+        ParamNaming $paramNaming,
+        NodeTypeResolver $nodeTypeResolver,
+        StaticTypeMapper $staticTypeMapper
+    ) {
         $this->classNaming = $classNaming;
         $this->paramNaming = $paramNaming;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**
@@ -67,6 +85,13 @@ final class CustomEventFactory
             $paramName = $this->paramNaming->resolveParamNameFromArg($arg);
 
             $param = new Param(new Variable($paramName));
+
+            $argStaticType = $this->nodeTypeResolver->getStaticType($arg->value);
+            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argStaticType);
+            if ($phpParserTypeNode !== null) {
+                $param->type = $phpParserTypeNode;
+            }
+
             $methodBuilder->addParam($param);
 
             $assign = new Assign(new PropertyFetch(new Variable('this'), $paramName), new Variable($paramName));
