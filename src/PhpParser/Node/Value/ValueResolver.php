@@ -7,6 +7,7 @@ namespace Rector\Core\PhpParser\Node\Value;
 use PhpParser\ConstExprEvaluationException;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\MagicConst\Dir;
@@ -63,8 +64,24 @@ final class ValueResolver
     /**
      * @return mixed|null
      */
-    public function getValue(Expr $expr)
+    public function getValue(Expr $expr, bool $resolvedClassReference = false)
     {
+        if ($expr instanceof Concat) {
+            return $this->processConcat($expr, $resolvedClassReference);
+        }
+
+        if ($expr instanceof ClassConstFetch && $resolvedClassReference) {
+            $class = $this->nodeNameResolver->getName($expr->class);
+
+            if (in_array($class, ['self', 'static'], true)) {
+                return $expr->getAttribute(AttributeKey::CLASS_NAME);
+            }
+
+            if ($this->nodeNameResolver->isName($expr->name, 'class')) {
+                return $class;
+            }
+        }
+
         try {
             $value = $this->getConstExprEvaluator()->evaluateDirectly($expr);
         } catch (ConstExprEvaluationException $constExprEvaluationException) {
@@ -200,5 +217,13 @@ final class ValueResolver
         }
 
         return $this->constExprEvaluator->evaluateDirectly($classConstNode->consts[0]->value);
+    }
+
+    private function processConcat($expr, bool $resolvedClassReference): string
+    {
+        return $this->getValue($expr->left, $resolvedClassReference) . $this->getValue(
+                $expr->right,
+                $resolvedClassReference
+            );
     }
 }

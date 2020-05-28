@@ -251,7 +251,7 @@ PHP
         string $name,
         ObjectType $objectType
     ): void {
-        $assign = $this->createSameNameThisAssign($name);
+        $assign = $this->nodeFactory->createPropertyAssignment($name);
         $classMethod->stmts[] = new Expression($assign);
 
         $this->addPropertyToClass($class, $objectType, $name);
@@ -294,16 +294,6 @@ PHP
             return false;
         }
         return $this->isName($assign->expr->name, self::GET_MANAGER);
-    }
-
-    /**
-     * Creates: "$this->value = $value;"
-     */
-    private function createSameNameThisAssign(string $name): Assign
-    {
-        $propertyFetch = new PropertyFetch(new Variable('this'), $name);
-
-        return new Assign($propertyFetch, new Variable($name));
     }
 
     private function removeManagerRegistryProperty(Class_ $class, Assign $assign): void

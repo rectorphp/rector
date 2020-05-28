@@ -54,12 +54,28 @@ final class EventClassNaming
         return $fileInfo->getPath() . DIRECTORY_SEPARATOR . 'Event' . DIRECTORY_SEPARATOR . $shortEventClassName . '.php';
     }
 
+    public function createEventClassNameFromClassAndProperty(string $className, string $methodName): string
+    {
+        $shortEventClass = $this->createShortEventClassNameFromClassAndProperty($className, $methodName);
+
+        return $this->prependShortClassEventWithNamespace($shortEventClass, $className);
+    }
+
+    public function createEventClassNameFromClassPropertyReference(string $classAndPropertyName): string
+    {
+        [$class, $property] = Strings::split($classAndPropertyName, '#::#');
+
+        $shortEventClass = $this->createShortEventClassNameFromClassAndProperty($class, $property);
+
+        return $this->prependShortClassEventWithNamespace($shortEventClass, $class);
+    }
+
     /**
      * TomatoMarket, onBuy
      * ↓
      * TomatoMarketBuyEvent
      */
-    public function createShortEventClassNameFromClassAndProperty(string $class, string $property): string
+    private function createShortEventClassNameFromClassAndProperty(string $class, string $property): string
     {
         $shortClassName = $this->classNaming->getShortName($class);
 
@@ -67,13 +83,6 @@ final class EventClassNaming
         $shortPropertyName = Strings::substring($property, strlen('on'));
 
         return $shortClassName . $shortPropertyName . 'Event';
-    }
-
-    public function createEventClassNameFromClassAndProperty(string $className, string $methodName): string
-    {
-        $shortEventClass = $this->createShortEventClassNameFromClassAndProperty($className, $methodName);
-
-        return $this->prependShortClassEventWithNamespace($shortEventClass, $className);
     }
 
     private function getShortEventClassName(MethodCall $methodCall): string

@@ -4,3 +4,4 @@ services:
     Rector\NetteKdyby\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector: null
     Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector: null
     Rector\NetteKdyby\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector: null
+    Rector\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector: null
