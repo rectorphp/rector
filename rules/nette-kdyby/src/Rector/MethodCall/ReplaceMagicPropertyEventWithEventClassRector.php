@@ -16,7 +16,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -46,21 +45,14 @@ final class ReplaceMagicPropertyEventWithEventClassRector extends AbstractRector
      */
     private $classNaming;
 
-    /**
-     * @var RemovedAndAddedFilesCollector
-     */
-    private $removedAndAddedFilesCollector;
-
     public function __construct(
         EventClassNaming $eventClassNaming,
         CustomEventFactory $customEventFactory,
-        ClassNaming $classNaming,
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
+        ClassNaming $classNaming
     ) {
         $this->eventClassNaming = $eventClassNaming;
         $this->customEventFactory = $customEventFactory;
         $this->classNaming = $classNaming;
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -123,9 +115,8 @@ PHP
         $eventFileLocation = $this->eventClassNaming->resolveEventFileLocationFromMethodCall($node);
 
         // 3. create new event class with args
-        $eventClass = $this->customEventFactory->create($eventClassName, (array) $node->args);
-        $eventContent = $this->printFile($eventClass);
-        $this->removedAndAddedFilesCollector->addFileWithContent($eventFileLocation, $eventContent);
+        $eventClassInNamespace = $this->customEventFactory->create($eventClassName, (array) $node->args);
+        $this->printNodesToFilePath($eventClassInNamespace, $eventFileLocation);
 
         // 4. ad disatch method call
         $dispatchMethodCall = $this->createDispatchMethodCall($eventClassName);
