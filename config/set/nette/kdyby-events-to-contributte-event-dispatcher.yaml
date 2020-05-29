@@ -5,3 +5,8 @@ services:
     Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector: null
     Rector\NetteKdyby\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector: null
     Rector\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector: null
+
+    Rector\Renaming\Rector\Class_\RenameClassRector:
+        $oldToNewClasses:
+            Kdyby\Events\Subscriber: 'Symfony\Component\EventDispatcher\EventSubscriberInterface'
+            Kdyby\Events\EventManager: 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface'
