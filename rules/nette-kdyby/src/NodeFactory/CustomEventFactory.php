@@ -57,7 +57,6 @@ final class CustomEventFactory
     public function create(string $className, array $args): Namespace_
     {
         $classBuilder = $this->createEventClassBuilder($className);
-
         $this->decorateWithConstructorIfHasArgs($classBuilder, $args);
 
         $class = $classBuilder->getNode();

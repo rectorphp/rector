@@ -14,6 +14,7 @@ use Rector\Reporting\Rector\AbstractRector\NodeReportCollectorTrait;
 
 trait AbstractRectorTrait
 {
+    use RemovedAndAddedFilesTrait;
     use DoctrineTrait;
     use NodeTypeResolverTrait;
     use NameResolverTrait;

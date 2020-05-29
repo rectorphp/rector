@@ -4,23 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector;
 
-use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector;
 
 final class ReplaceEventManagerWithEventSubscriberRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideData()
-     */
-    public function test(string $file): void
+    public function test(): void
     {
-        $this->doTestFile($file);
-    }
+        $this->doTestFile(__DIR__ . '/Fixture/fixture.php.inc');
 
-    public function provideData(): Iterator
-    {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        $expectedEventFilePath = dirname($this->originalTempFile) . '/Event/SomeClassCopyEvent.php';
+
+        $this->assertFileExists($expectedEventFilePath);
+        $this->assertFileEquals(__DIR__ . '/Source/ExpectedSomeClassCopyEvent.php', $expectedEventFilePath);
     }
 
     protected function getRectorClass(): string

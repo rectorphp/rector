@@ -9,7 +9,6 @@ use PhpParser\Lexer;
 use PhpParser\Node;
 use PhpParser\ParserFactory;
 use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\PhpParser\Parser\Parser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -62,11 +61,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     private $nodeScopeAndMetadataDecorator;
 
     /**
-     * @var RemovedAndAddedFilesCollector
-     */
-    private $removedAndAddedFilesCollector;
-
-    /**
      * @var ParserFactory
      */
     private $parserFactory;
@@ -85,7 +79,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         Lexer $lexer,
         FormatPerservingPrinter $formatPerservingPrinter,
         NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         Configuration $configuration,
         BetterStandardPrinter $betterStandardPrinter,
         ParameterProvider $parameterProvider,
@@ -96,7 +89,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->lexer = $lexer;
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->configuration = $configuration;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parameterProvider = $parameterProvider;
@@ -195,21 +187,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $nodesWithFileDestinationValueObject->getNodes(),
             $nodesWithFileDestinationValueObject->getFileDestination()
         );
-    }
-
-    protected function moveFile(SmartFileInfo $oldFileInfo, string $newFileLocation, ?string $fileContent = null): void
-    {
-        $this->removedAndAddedFilesCollector->addMovedFile($oldFileInfo, $newFileLocation, $fileContent);
-    }
-
-    protected function removeFile(SmartFileInfo $smartFileInfo): void
-    {
-        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
-    }
-
-    private function addFile(string $filePath, string $content): void
-    {
-        $this->removedAndAddedFilesCollector->addFileWithContent($filePath, $content);
     }
 
     /**

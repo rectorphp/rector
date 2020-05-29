@@ -14,6 +14,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class EventClassNaming
 {
     /**
+     * @var string
+     */
+    private const EVENT = 'Event';
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -44,14 +49,23 @@ final class EventClassNaming
         return $this->prependShortClassEventWithNamespace($shortEventClassName, $className);
     }
 
-    public function resolveEventFileLocation(MethodCall $methodCall): string
+    public function resolveEventFileLocationFromMethodCall(MethodCall $methodCall): string
     {
         $shortEventClassName = $this->getShortEventClassName($methodCall);
 
         /** @var SmartFileInfo $fileInfo */
         $fileInfo = $methodCall->getAttribute(AttributeKey::FILE_INFO);
 
-        return $fileInfo->getPath() . DIRECTORY_SEPARATOR . 'Event' . DIRECTORY_SEPARATOR . $shortEventClassName . '.php';
+        return $fileInfo->getPath() . DIRECTORY_SEPARATOR . self::EVENT . DIRECTORY_SEPARATOR . $shortEventClassName . '.php';
+    }
+
+    public function resolveEventFileLocationFromClassNameAndFileInfo(
+        string $className,
+        SmartFileInfo $smartFileInfo
+    ): string {
+        $shortClassName = $this->classNaming->getShortName($className);
+
+        return $smartFileInfo->getPath() . DIRECTORY_SEPARATOR . self::EVENT . DIRECTORY_SEPARATOR . $shortClassName . '.php';
     }
 
     public function createEventClassNameFromClassAndProperty(string $className, string $methodName): string
@@ -82,7 +96,7 @@ final class EventClassNaming
         // "onMagic" => "Magic"
         $shortPropertyName = Strings::substring($property, strlen('on'));
 
-        return $shortClassName . $shortPropertyName . 'Event';
+        return $shortClassName . $shortPropertyName . self::EVENT;
     }
 
     private function getShortEventClassName(MethodCall $methodCall): string
