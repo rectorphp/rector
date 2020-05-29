@@ -42,7 +42,7 @@ final class ActionLogEventSubscriber implements Subscriber
 
     public function onTomatoBuy(\Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\Source\Event\VegetableMarketTomatoBuyEvent $vegetableMarketTomatoBuyEvent): void
     {
-        $anotherTomato = $vegetableMarketTomatoBuyEvent->getTomato();
+        $anotherTomato = $vegetableMarketTomatoBuyEvent->getAnotherTomato();
         $anotherTomato->unwrap();
     }
 }

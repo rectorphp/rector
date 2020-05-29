@@ -119,7 +119,7 @@ PHP
         $eventClassInNamespace = $this->customEventFactory->create($eventClassName, (array) $node->args);
         $this->printNodesToFilePath($eventClassInNamespace, $eventFileLocation);
 
-        // 4. ad disatch method call
+        // 4. ad dispatch method call
         $dispatchMethodCall = $this->createDispatchMethodCall($eventClassName);
         $this->addNodeAfterNode($dispatchMethodCall, $node);
 

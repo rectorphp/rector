@@ -7,7 +7,6 @@ namespace Rector\NetteKdyby\BlueprintFactory;
 use PhpParser\Node\Arg;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NetteKdyby\ValueObject\VariableWithType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -30,21 +29,14 @@ final class VariableWithTypesFactory
      */
     private $staticTypeMapper;
 
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
     public function __construct(
         VariableNaming $variableNaming,
         NodeTypeResolver $nodeTypeResolver,
-        StaticTypeMapper $staticTypeMapper,
-        ClassNaming $classNaming
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->variableNaming = $variableNaming;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->classNaming = $classNaming;
     }
 
     /**
@@ -56,17 +48,12 @@ final class VariableWithTypesFactory
         $variablesWithTypes = [];
 
         foreach ($args as $arg) {
-            $variableName = $this->variableNaming->resolveFromNode($arg);
             $staticType = $this->nodeTypeResolver->getStaticType($arg->value);
+            $variableName = $this->variableNaming->resolveFromNode($arg, $staticType);
 
             // compensate for static
             if ($staticType instanceof StaticType) {
                 $staticType = new ObjectType($staticType->getClassName());
-            }
-
-            if ($variableName === 'this') {
-                $shortClassName = $this->classNaming->getShortName($staticType->getClassName());
-                $variableName = lcfirst($shortClassName);
             }
 
             $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType);

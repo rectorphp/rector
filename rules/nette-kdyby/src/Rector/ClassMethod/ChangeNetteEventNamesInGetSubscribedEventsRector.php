@@ -23,9 +23,9 @@ use Rector\NetteKdyby\NodeResolver\ListeningMethodsCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\NetteKdyby\Tests\Rector\ClassMethod\KdybyEventSubscriberToContributteEventSubscriberRector\KdybyEventSubscriberToContributteEventSubscriberRectorTest
+ * @see \Rector\NetteKdyby\Tests\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector\ChangeNetteEventNamesInGetSubscribedEventsRectorTest
  */
-final class KdybyEventSubscriberToContributteEventSubscriberRector extends AbstractRector
+final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractRector
 {
     /**
      * @var GetSubscribedEventsArrayManipulator

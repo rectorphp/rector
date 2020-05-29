@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\KdybyEventSubscriberToContributteEventSubscriberRector\Fixture;
+namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector\Fixture;
 
 use Kdyby\Events\Subscriber;
 use Nette\Application\Application;
@@ -24,7 +24,7 @@ class GetApplesSubscriber implements Subscriber
 -----
 <?php
 
-namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\KdybyEventSubscriberToContributteEventSubscriberRector\Fixture;
+namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector\Fixture;
 
 use Kdyby\Events\Subscriber;
 use Nette\Application\Application;

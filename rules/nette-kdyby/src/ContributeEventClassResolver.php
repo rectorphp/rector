@@ -7,16 +7,19 @@ namespace Rector\NetteKdyby;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use Rector\CodingStyle\Naming\ClassNaming;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class ContributeEventClassResolver
 {
     /**
      * @var string[][]
      */
-    private const GETTER_METHODS_WITH_TYPE_BY_EVENT_CLASS = [
+    private const CONTRIBUTTE_EVENT_GETTER_METHODS_WITH_TYPE = [
         // application
         'Contributte\Events\Extra\Event\Application\ShutdownEvent' => [
             'Nette\Application\Application' => 'getApplication',
@@ -71,19 +74,28 @@ final class ContributeEventClassResolver
     private $nodeNameResolver;
 
     /**
-     * @var ClassNaming
+     * @var VariableNaming
      */
-    private $classNaming;
+    private $variableNaming;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, ClassNaming $classNaming)
-    {
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        VariableNaming $variableNaming,
+        StaticTypeMapper $staticTypeMapper
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->classNaming = $classNaming;
+        $this->variableNaming = $variableNaming;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function resolveGetterMethodByEventClassAndParam(string $eventClass, Param $param): string
     {
-        $getterMethodsWithType = self::GETTER_METHODS_WITH_TYPE_BY_EVENT_CLASS[$eventClass] ?? null;
+        $getterMethodsWithType = self::CONTRIBUTTE_EVENT_GETTER_METHODS_WITH_TYPE[$eventClass] ?? null;
 
         $paramType = $param->type;
 
@@ -93,11 +105,13 @@ final class ContributeEventClassResolver
         }
 
         if ($paramType === null || $paramType instanceof Identifier) {
-            $variable = $param->var;
-            /** @var string $variableName */
-            $variableName = $this->nodeNameResolver->getName($variable);
+            if ($paramType === null) {
+                $staticType = new MixedType();
+            } else {
+                $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($paramType);
+            }
 
-            return 'get' . ucfirst($variableName);
+            return $this->createGetterFromParamAndStaticType($param, $staticType);
         }
 
         $type = $this->nodeNameResolver->getName($paramType);
@@ -105,12 +119,18 @@ final class ContributeEventClassResolver
             throw new ShouldNotHappenException();
         }
 
+        // system contribute event
         if (isset($getterMethodsWithType[$type])) {
             return $getterMethodsWithType[$type];
         }
 
-        // dummy fallback
-        $shortClass = $this->classNaming->getShortName($type);
-        return 'get' . $shortClass;
+        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($paramType);
+        return $this->createGetterFromParamAndStaticType($param, $staticType);
+    }
+
+    private function createGetterFromParamAndStaticType(Param $param, Type $type): string
+    {
+        $variableName = $this->variableNaming->resolveFromNode($param, $type);
+        return 'get' . ucfirst($variableName);
     }
 }
