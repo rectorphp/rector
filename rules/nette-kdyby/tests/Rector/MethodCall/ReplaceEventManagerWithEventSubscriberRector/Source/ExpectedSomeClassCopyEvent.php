@@ -5,21 +5,21 @@ namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEvent
 final class SomeClassCopyEvent extends \Symfony\Contracts\EventDispatcher\Event
 {
     /**
-     * @var $this
+     * @var \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\SomeClass
      */
-    private $this;
+    private $someClass;
     /**
      * @var string
      */
     private $key;
-    public function __construct(static $this, string $key)
+    public function __construct(\Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\SomeClass $someClass, string $key)
     {
-        $this->this = $this;
+        $this->someClass = $someClass;
         $this->key = $key;
     }
-    public function getThis(): static
+    public function getSomeClass(): \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\Fixture\SomeClass
     {
-        return $this->this;
+        return $this->someClass;
     }
     public function getKey(): string
     {
