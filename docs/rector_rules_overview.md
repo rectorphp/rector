@@ -1,4 +1,4 @@
-# All 490 Rectors Overview
+# All 494 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -11,7 +11,7 @@
 - [CakePHP](#cakephp) (5)
 - [Celebrity](#celebrity) (3)
 - [CodeQuality](#codequality) (53)
-- [CodingStyle](#codingstyle) (30)
+- [CodingStyle](#codingstyle) (31)
 - [DeadCode](#deadcode) (40)
 - [Doctrine](#doctrine) (16)
 - [DoctrineCodeQuality](#doctrinecodequality) (2)
@@ -26,7 +26,7 @@
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
 - [Nette](#nette) (12)
-- [NetteKdyby](#nettekdyby) (2)
+- [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [Order](#order) (3)
@@ -51,7 +51,7 @@
 - [PhpDeglobalize](#phpdeglobalize) (1)
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
-- [Privatization](#privatization) (6)
+- [Privatization](#privatization) (7)
 - [Refactoring](#refactoring) (2)
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (10)
@@ -2110,6 +2110,30 @@ Prefer quote that are not inside the string
 -         $name = '\' Sara';
 +         $name = '" Tom';
 +         $name = "' Sara";
+     }
+ }
+```
+
+<br>
+
+### `UnderscoreToPascalCaseVariableAndPropertyNameRector`
+
+- class: [`Rector\CodingStyle\Rector\Variable\UnderscoreToPascalCaseVariableAndPropertyNameRector`](/../master/rules/coding-style/src/Rector/Variable/UnderscoreToPascalCaseVariableAndPropertyNameRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/Variable/UnderscoreToPascalCaseVariableAndPropertyNameRector/Fixture)
+
+Change under_score names to pascalCase
+
+```diff
+ final class SomeClass
+ {
+-    public function run($a_b)
++    public function run($aB)
+     {
+-        $some_value = 5;
++        $someValue = 5;
+
+-        $this->run($a_b);
++        $this->run($aB);
      }
  }
 ```
@@ -4606,7 +4630,6 @@ Change EventSubscriber from Kdyby to Contributte
          return [
 -            Application::class . '::onShutdown',
 +            ShutdownEvent::class => 'onShutdown',
-             CustomService::class . '::onCopy' => 'onCustomCopy',
          ];
      }
 
@@ -4617,9 +4640,69 @@ Change EventSubscriber from Kdyby to Contributte
          $presenterName = $presenter->getName();
          // ...
      }
+ }
+```
 
-     public function onCustomCopy()
+<br>
+
+### `ReplaceEventManagerWithEventSubscriberRector`
+
+- class: [`Rector\NetteKdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector`](/../master/rules/nette-kdyby/src/Rector/MethodCall/ReplaceEventManagerWithEventSubscriberRector.php)
+- [test fixtures](/../master/rules/nette-kdyby/tests/Rector/MethodCall/ReplaceEventManagerWithEventSubscriberRector/Fixture)
+
+Change Kdyby EventManager to EventDispatcher
+
+```diff
+ use Kdyby\Events\EventManager;
+
+ final class SomeClass
+ {
+     /**
+      * @var EventManager
+      */
+     private $eventManager;
+
+     public function __construct(EventManager $eventManager)
      {
+         $this->eventManager = eventManager;
+     }
+
+     public function run()
+     {
+         $key = '2000';
+-        $this->eventManager->dispatchEvent(static::class . '::onCopy', new EventArgsList([$this, $key]));
++        $this->eventManager->dispatch(new SomeClassCopyEvent($this, $key));
+     }
+ }
+```
+
+<br>
+
+### `ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector`
+
+- class: [`Rector\NetteKdyby\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector`](/../master/rules/nette-kdyby/src/Rector/ClassMethod/ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector.php)
+- [test fixtures](/../master/rules/nette-kdyby/tests/Rector/ClassMethod/ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector/Fixture)
+
+Change getSubscribedEvents() from on magic property, to Event class
+
+```diff
+ use Kdyby\Events\Subscriber;
+
+ final class ActionLogEventSubscriber implements Subscriber
+ {
+     public function getSubscribedEvents(): array
+     {
+         return [
+-            AlbumService::class . '::onApprove' => 'onAlbumApprove',
++            AlbumServiceApproveEvent::class => 'onAlbumApprove',
+         ];
+     }
+
+-    public function onAlbumApprove(Album $album, int $adminId): void
++    public function onAlbumApprove(AlbumServiceApproveEventAlbum $albumServiceApproveEventAlbum): void
+     {
++        $album = $albumServiceApproveEventAlbum->getAlbum();
+         $album->play();
      }
  }
 ```
@@ -4637,7 +4720,13 @@ Change $onProperty magic call with event disptacher and class dispatch
  final class FileManager
  {
 -    public $onUpload;
--
++    use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
++    public function __construct(EventDispatcherInterface $eventDispatcher)
++    {
++        $this->eventDispatcher = $eventDispatcher;
++    }
++
      public function run(User $user)
      {
 -        $this->onUpload($user);
@@ -8339,6 +8428,25 @@ Change local property used in single method to local variable
 -        return $this->count;
 +        $count = 5;
 +        return $count;
+     }
+ }
+```
+
+<br>
+
+### `PrivatizeFinalClassMethodRector`
+
+- class: [`Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector`](/../master/rules/privatization/src/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php)
+- [test fixtures](/../master/rules/privatization/tests/Rector/ClassMethod/PrivatizeFinalClassMethodRector/Fixture)
+
+Change protected class method to private if possible
+
+```diff
+ final class SomeClass
+ {
+-    protected function someMethod()
++    private function someMethod()
+     {
      }
  }
 ```

@@ -66,6 +66,7 @@ final class ActionLogEventSubscriber implements Subscriber
 
     public function onAlbumApprove(Album $album, int $adminId): void
     {
+        $album->play();
     }
 }
 PHP
@@ -85,7 +86,7 @@ final class ActionLogEventSubscriber implements Subscriber
     public function onAlbumApprove(AlbumServiceApproveEventAlbum $albumServiceApproveEventAlbum): void
     {
         $album = $albumServiceApproveEventAlbum->getAlbum();
-        $adminId = $albumServiceApproveEventAlbum->getAdminId();
+        $album->play();
     }
 }
 PHP
