@@ -16,7 +16,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteKdyby\Naming\EventClassNaming;
-use Rector\NetteKdyby\NodeFactory\CustomEventFactory;
+use Rector\NetteKdyby\NodeFactory\EventValueObjectClassFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -31,14 +31,16 @@ final class ReplaceEventManagerWithEventSubscriberRector extends AbstractRector
     private $eventClassNaming;
 
     /**
-     * @var CustomEventFactory
+     * @var EventValueObjectClassFactory
      */
-    private $customEventFactory;
+    private $eventValueObjectClassFactory;
 
-    public function __construct(EventClassNaming $eventClassNaming, CustomEventFactory $customEventFactory)
-    {
+    public function __construct(
+        EventClassNaming $eventClassNaming,
+        EventValueObjectClassFactory $eventValueObjectClassFactory
+    ) {
         $this->eventClassNaming = $eventClassNaming;
-        $this->customEventFactory = $customEventFactory;
+        $this->eventValueObjectClassFactory = $eventValueObjectClassFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -145,7 +147,7 @@ PHP
         $node->args[] = new Arg($class);
 
         // 3. create new event class with args
-        $eventClassInNamespace = $this->customEventFactory->create($eventClassName, $args);
+        $eventClassInNamespace = $this->eventValueObjectClassFactory->create($eventClassName, $args);
 
         /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);

@@ -24,7 +24,7 @@ use Rector\NetteKdyby\ValueObject\VariableWithType;
 /**
  * @todo decouple to generic object factory for better re-use, e.g. this is just value object pattern
  */
-final class CustomEventFactory
+final class EventValueObjectClassFactory
 {
     /**
      * @var ClassNaming

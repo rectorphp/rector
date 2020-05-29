@@ -310,3 +310,5 @@ parameters:
         - '#Parameter \#1 \$objectType of method Rector\\Core\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
         - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\NetteKdyby\\NodeResolver\\ListeningMethodsCollector\:\:collectFromClassAndGetSubscribedEventClassMethod\(\)" is 11, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\NetteKdyby\\ContributeEventClassResolver\:\:resolveGetterMethodByEventClassAndParam\(\)" is \d+, keep it under 9#'

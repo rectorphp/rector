@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeCollector\NodeCollector;
 
+use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
@@ -147,6 +148,28 @@ final class ParsedFunctionLikeNodeCollector
         return $this->methodsCallsByTypeAndMethod[$className][$methodName] ?? $this->arrayCallablesByTypeAndMethod[$className][$methodName] ?? [];
     }
 
+    /**
+     * @return ClassMethod[]
+     */
+    public function findClassMethodByTypeAndMethod(string $desiredType, string $desiredMethodName): array
+    {
+        $classMethods = [];
+
+        foreach ($this->methodsByType as $className => $classMethodByMethodName) {
+            if (! is_a($className, $desiredType, true)) {
+                continue;
+            }
+
+            if (! isset($classMethodByMethodName[$desiredMethodName])) {
+                continue;
+            }
+
+            $classMethods[] = $classMethodByMethodName[$desiredMethodName];
+        }
+
+        return $classMethods;
+    }
+
     public function findMethod(string $className, string $methodName): ?ClassMethod
     {
         if (isset($this->methodsByType[$className][$methodName])) {
@@ -166,6 +189,18 @@ final class ParsedFunctionLikeNodeCollector
     public function isFunctionUsed(string $functionName): bool
     {
         return isset($this->funcCallsByName[$functionName]);
+    }
+
+    /**
+     * @return MethodCall[]
+     */
+    public function getMethodsCalls(): array
+    {
+        $calls = Arrays::flatten($this->methodsCallsByTypeAndMethod);
+
+        return array_filter($calls, function (Node $node) {
+            return $node instanceof MethodCall;
+        });
     }
 
     private function addMethod(ClassMethod $classMethod): void
