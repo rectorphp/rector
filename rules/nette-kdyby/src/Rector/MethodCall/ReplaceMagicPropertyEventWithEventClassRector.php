@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Rector\MethodCall;
 
+use Nette\Application\UI\Control;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
@@ -165,6 +166,11 @@ PHP
 
         $className = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
+            return false;
+        }
+
+        // control event, inner only
+        if (is_a($className, Control::class, true)) {
             return false;
         }
 

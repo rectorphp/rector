@@ -9,9 +9,14 @@ use Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassR
 
 final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    public function testSkip(): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/fixture.php.inc');
+        $this->doTestFile(__DIR__ . '/Fixture/skip_on_success_in_control.php.inc');
+    }
+
+    public function testSimpleEvent(): void
+    {
+        $this->doTestFile(__DIR__ . '/Fixture/simple_event.php.inc');
 
         $expectedEventFilePath = dirname($this->originalTempFile) . '/Event/FileManagerUploadEvent.php';
         $this->assertFileExists($expectedEventFilePath);
