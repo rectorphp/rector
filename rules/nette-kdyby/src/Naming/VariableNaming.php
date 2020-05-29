@@ -68,7 +68,7 @@ final class VariableNaming
 
         $paramName = $this->nodeNameResolver->getName($node);
         if ($paramName !== null) {
-            return $paramName;
+            return StaticRectorStrings::underscoreToPascalCase($paramName);
         }
 
         if ($node instanceof String_) {
