@@ -44,7 +44,7 @@ final class EventClassNaming
         return $this->prependShortClassEventWithNamespace($shortEventClassName, $className);
     }
 
-    public function resolveEventFileLocation(MethodCall $methodCall): string
+    public function resolveEventFileLocationFromMethodCall(MethodCall $methodCall): string
     {
         $shortEventClassName = $this->getShortEventClassName($methodCall);
 
@@ -52,6 +52,15 @@ final class EventClassNaming
         $fileInfo = $methodCall->getAttribute(AttributeKey::FILE_INFO);
 
         return $fileInfo->getPath() . DIRECTORY_SEPARATOR . 'Event' . DIRECTORY_SEPARATOR . $shortEventClassName . '.php';
+    }
+
+    public function resolveEventFileLocationFromClassNameAndFileInfo(
+        string $className,
+        SmartFileInfo $smartFileInfo
+    ): string {
+        $shortClassName = $this->classNaming->getShortName($className);
+
+        return $smartFileInfo->getPath() . DIRECTORY_SEPARATOR . 'Event' . DIRECTORY_SEPARATOR . $shortClassName . '.php';
     }
 
     public function createEventClassNameFromClassAndProperty(string $className, string $methodName): string

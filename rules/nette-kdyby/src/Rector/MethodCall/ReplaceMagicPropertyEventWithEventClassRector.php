@@ -120,7 +120,7 @@ PHP
 
         // 2. guess event name
         $eventClassName = $this->eventClassNaming->createEventClassNameFromMethodCall($node);
-        $eventFileLocation = $this->eventClassNaming->resolveEventFileLocation($node);
+        $eventFileLocation = $this->eventClassNaming->resolveEventFileLocationFromMethodCall($node);
 
         // 3. create new event class with args
         $eventClass = $this->customEventFactory->create($eventClassName, (array) $node->args);

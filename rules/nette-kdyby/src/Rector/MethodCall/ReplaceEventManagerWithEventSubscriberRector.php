@@ -11,10 +11,14 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteKdyby\Naming\EventClassNaming;
+use Rector\NetteKdyby\NodeFactory\CustomEventFactory;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector\ReplaceEventManagerWithEventSubscriberRectorTest
@@ -26,9 +30,15 @@ final class ReplaceEventManagerWithEventSubscriberRector extends AbstractRector
      */
     private $eventClassNaming;
 
-    public function __construct(EventClassNaming $eventClassNaming)
+    /**
+     * @var CustomEventFactory
+     */
+    private $customEventFactory;
+
+    public function __construct(EventClassNaming $eventClassNaming, CustomEventFactory $customEventFactory)
     {
         $this->eventClassNaming = $eventClassNaming;
+        $this->customEventFactory = $customEventFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -114,7 +124,9 @@ PHP
         $eventReference = $oldArgs[0]->value;
 
         $classAndStaticProperty = $this->getValue($eventReference, true);
-        $eventCass = $this->eventClassNaming->createEventClassNameFromClassPropertyReference($classAndStaticProperty);
+        $eventClassName = $this->eventClassNaming->createEventClassNameFromClassPropertyReference(
+            $classAndStaticProperty
+        );
 
         $args = [];
         if ($oldArgs[1]->value instanceof New_) {
@@ -129,8 +141,24 @@ PHP
             }
         }
 
-        $class = new New_(new FullyQualified($eventCass), $args);
+        $class = new New_(new FullyQualified($eventClassName), $args);
         $node->args[] = new Arg($class);
+
+        // 3. create new event class with args
+        $eventClassInNamespace = $this->customEventFactory->create($eventClassName, $args);
+
+        /** @var SmartFileInfo|null $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        if ($fileInfo === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $eventFileLocation = $this->eventClassNaming->resolveEventFileLocationFromClassNameAndFileInfo(
+            $eventClassName,
+            $fileInfo
+        );
+
+        $this->printNodesToFilePath($eventClassInNamespace, $eventFileLocation);
 
         return $node;
     }
