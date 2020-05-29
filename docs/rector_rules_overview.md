@@ -1,4 +1,4 @@
-# All 494 Rectors Overview
+# All 495 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -55,7 +55,7 @@
 - [Refactoring](#refactoring) (2)
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (10)
-- [Restoration](#restoration) (3)
+- [Restoration](#restoration) (4)
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (1)
 - [StrictCodeQuality](#strictcodequality) (1)
@@ -9086,6 +9086,42 @@ services:
       * @ORM\Id
       */
      public $id;
+ }
+```
+
+<br>
+
+### `CompleteMissingDependencyInNewRector`
+
+- class: [`Rector\Restoration\Rector\New_\CompleteMissingDependencyInNewRector`](/../master/rules/restoration/src/Rector/New_/CompleteMissingDependencyInNewRector.php)
+- [test fixtures](/../master/rules/restoration/tests/Rector/New_/CompleteMissingDependencyInNewRector/Fixture)
+
+Complete missing constructor dependency instance by type
+
+```yaml
+services:
+    Rector\Restoration\Rector\New_\CompleteMissingDependencyInNewRector:
+        $classToInstantiateByType:
+            RandomDependency: RandomDependency
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        $valueObject = new RandomValueObject();
++        $valueObject = new RandomValueObject(new RandomDependency());
+     }
+ }
+
+ class RandomValueObject
+ {
+     public function __construct(RandomDependency $randomDependency)
+     {
+     }
  }
 ```
 
