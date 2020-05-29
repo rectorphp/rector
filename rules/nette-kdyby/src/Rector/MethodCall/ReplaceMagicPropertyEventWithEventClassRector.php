@@ -194,6 +194,7 @@ PHP
         $shortEventClassName = $this->classNaming->getVariableName($eventClassName);
 
         $new = new New_(new FullyQualified($eventClassName));
+
         if ($methodCall->args) {
             $new->args = $methodCall->args;
         }

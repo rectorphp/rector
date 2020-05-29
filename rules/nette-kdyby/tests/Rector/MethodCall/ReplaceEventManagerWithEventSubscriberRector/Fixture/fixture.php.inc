@@ -13,7 +13,7 @@ final class SomeClass
 
     public function __construct(EventManager $eventManager)
     {
-        $this->eventManager = eventManager;
+        $this->eventManager = $eventManager;
     }
 
     public function run()
@@ -40,7 +40,7 @@ final class SomeClass
 
     public function __construct(EventManager $eventManager)
     {
-        $this->eventManager = eventManager;
+        $this->eventManager = $eventManager;
     }
 
     public function run()
