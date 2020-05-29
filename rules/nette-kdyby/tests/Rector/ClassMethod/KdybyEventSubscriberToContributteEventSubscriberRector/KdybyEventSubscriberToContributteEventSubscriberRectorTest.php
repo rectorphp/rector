@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteKdyby\Tests\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector;
+namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\KdybyEventSubscriberToContributteEventSubscriberRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\NetteKdyby\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector;
+use Rector\NetteKdyby\Rector\ClassMethod\KdybyEventSubscriberToContributteEventSubscriberRector;
 
 final class KdybyEventSubscriberToContributteEventSubscriberRectorTest extends AbstractRectorTestCase
 {

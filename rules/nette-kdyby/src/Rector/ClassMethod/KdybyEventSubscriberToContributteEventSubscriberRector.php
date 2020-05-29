@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteKdyby\Rector\Class_;
+namespace Rector\NetteKdyby\Rector\ClassMethod;
 
 use Kdyby\Events\Subscriber;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -22,10 +21,9 @@ use Rector\NetteKdyby\NodeManipulator\GetSubscribedEventsArrayManipulator;
 use Rector\NetteKdyby\NodeManipulator\SubscriberMethodArgumentToContributteEventObjectManipulator;
 use Rector\NetteKdyby\NodeResolver\ListeningMethodsCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * @see \Rector\NetteKdyby\Tests\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector\KdybyEventSubscriberToContributteEventSubscriberRectorTest
+ * @see \Rector\NetteKdyby\Tests\Rector\ClassMethod\KdybyEventSubscriberToContributteEventSubscriberRector\KdybyEventSubscriberToContributteEventSubscriberRectorTest
  */
 final class KdybyEventSubscriberToContributteEventSubscriberRector extends AbstractRector
 {
@@ -82,10 +80,10 @@ PHP
 ,
                 <<<'PHP'
 use Contributte\Events\Extra\Event\Application\ShutdownEvent;
+use Kdyby\Events\Subscriber;
 use Nette\Application\Application;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class GetApplesSubscriber implements EventSubscriberInterface
+class GetApplesSubscriber implements Subscriber
 {
     public static function getSubscribedEvents()
     {
@@ -111,18 +109,14 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class, ClassMethod::class];
+        return [ClassMethod::class];
     }
 
     /**
-     * @param Class_|ClassMethod $node
+     * @param ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Class_) {
-            return $this->refactorClass($node);
-        }
-
         if ($this->shouldSkipClassMethod($node)) {
             return null;
         }
@@ -155,9 +149,9 @@ PHP
         throw new NotImplementedException($kdybyEventName);
     }
 
-    private function shouldSkipClassMethod($node): bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         if ($class === null) {
             return true;
         }
@@ -166,7 +160,7 @@ PHP
             return true;
         }
 
-        return ! $this->isName($node, 'getSubscribedEvents');
+        return ! $this->isName($classMethod, 'getSubscribedEvents');
     }
 
     private function refactorArrayWithEventTable(Array_ $array): void
@@ -202,19 +196,5 @@ PHP
 
             $this->getSubscribedEventsArrayManipulator->change($returnedExpr);
         });
-    }
-
-    private function refactorClass(Class_ $class): ?Node
-    {
-        foreach ((array) $class->implements as $key => $implementedInterfaceName) {
-            if (! $this->isName($implementedInterfaceName, Subscriber::class)) {
-                continue;
-            }
-
-            $class->implements[$key] = new FullyQualified(EventSubscriberInterface::class);
-            return $class;
-        }
-
-        return null;
     }
 }

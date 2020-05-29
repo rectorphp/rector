@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteKdyby\Tests\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector\Fixture;
+namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\KdybyEventSubscriberToContributteEventSubscriberRector\Fixture;
 
 use Kdyby\Events\Subscriber;
 use Nette\Application\Application;
@@ -24,12 +24,12 @@ class GetApplesSubscriber implements Subscriber
 -----
 <?php
 
-namespace Rector\NetteKdyby\Tests\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector\Fixture;
+namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\KdybyEventSubscriberToContributteEventSubscriberRector\Fixture;
 
 use Kdyby\Events\Subscriber;
 use Nette\Application\Application;
 
-class GetApplesSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
+class GetApplesSubscriber implements Subscriber
 {
     public static function getSubscribedEvents()
     {
