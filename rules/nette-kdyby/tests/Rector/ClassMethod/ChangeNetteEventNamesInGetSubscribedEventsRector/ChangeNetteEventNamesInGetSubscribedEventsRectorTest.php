@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteKdyby\Tests\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector;
+namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\NetteKdyby\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector;
+use Rector\NetteKdyby\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector;
 
-final class KdybyEventSubscriberToContributteEventSubscriberRectorTest extends AbstractRectorTestCase
+final class ChangeNetteEventNamesInGetSubscribedEventsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -25,6 +25,6 @@ final class KdybyEventSubscriberToContributteEventSubscriberRectorTest extends A
 
     protected function getRectorClass(): string
     {
-        return KdybyEventSubscriberToContributteEventSubscriberRector::class;
+        return ChangeNetteEventNamesInGetSubscribedEventsRector::class;
     }
 }

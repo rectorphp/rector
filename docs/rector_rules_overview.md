@@ -4609,7 +4609,7 @@ Change $this->templates->{magic} to $this->template->render(..., $values)
 
 ### `KdybyEventSubscriberToContributteEventSubscriberRector`
 
-- class: [`Rector\NetteKdyby\Rector\Class_\KdybyEventSubscriberToContributteEventSubscriberRector`](/../master/rules/nette-kdyby/src/Rector/Class_/KdybyEventSubscriberToContributteEventSubscriberRector.php)
+- class: [`Rector\NetteKdyby\Rector\ClassMethod\KdybyEventSubscriberToContributteEventSubscriberRector`](/../master/rules/nette-kdyby/src/Rector/Class_/KdybyEventSubscriberToContributteEventSubscriberRector.php)
 - [test fixtures](/../master/rules/nette-kdyby/tests/Rector/Class_/KdybyEventSubscriberToContributteEventSubscriberRector/Fixture)
 
 Change EventSubscriber from Kdyby to Contributte
