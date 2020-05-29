@@ -26,9 +26,9 @@ trait ValueResolverTrait
         $this->valueResolver = $valueResolver;
     }
 
-    protected function getValue(Expr $expr)
+    protected function getValue(Expr $expr, bool $resolvedClassReference = false)
     {
-        return $this->valueResolver->getValue($expr);
+        return $this->valueResolver->getValue($expr, $resolvedClassReference);
     }
 
     protected function isValue(Expr $expr, $expectedValue): bool

@@ -150,8 +150,7 @@ PHP
             $paramBuilder->setType(new FullyQualified($staticType));
             $param = $paramBuilder->getNode();
 
-            $propertyFetch = new PropertyFetch(new Variable('this'), $variableName);
-            $assign = new Assign($propertyFetch, new Variable($variableName));
+            $assign = $this->nodeFactory->createPropertyAssignment($variableName);
 
             $setEntityFactoryMethod = $this->createSetEntityFactoryClassMethod($variableName, $param, $assign);
 

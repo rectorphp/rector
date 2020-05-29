@@ -159,13 +159,12 @@ PHP
                 return null;
             }
 
-            [$class, $property] = Strings::split($eventPropertyReferenceName, '#::#');
-
-            if (! property_exists($class, $property)) {
+            $eventClassName = $this->eventClassNaming->createEventClassNameFromClassPropertyReference(
+                $eventPropertyReferenceName
+            );
+            if ($eventClassName === null) {
                 return null;
             }
-
-            $eventClassName = $this->eventClassNaming->createEventClassNameFromClassAndProperty($class, $property);
 
             $node->key = $this->createClassConstantReference($eventClassName);
         });
