@@ -51,15 +51,18 @@ final class VariableNaming
         }
 
         if ($node instanceof ArrayDimFetch) {
-            return $this->resolveParamNameFromArrayDimFetch($node);
+            $variableName = $this->resolveParamNameFromArrayDimFetch($node);
+            return StaticRectorStrings::underscoreToPascalCase($variableName);
         }
 
         if ($node instanceof PropertyFetch) {
-            return $this->resolveFromPropertyFetch($node);
+            $variableName = $this->resolveFromPropertyFetch($node);
+            return StaticRectorStrings::underscoreToPascalCase($variableName);
         }
 
         if ($node instanceof MethodCall) {
-            return $this->resolveFromMethodCall($node);
+            $variableName = $this->resolveFromMethodCall($node);
+            return StaticRectorStrings::underscoreToPascalCase($variableName);
         }
 
         if ($node === null) {
@@ -72,7 +75,8 @@ final class VariableNaming
         }
 
         if ($node instanceof String_) {
-            return $node->value;
+            $variableName = $node->value;
+            return StaticRectorStrings::underscoreToPascalCase($variableName);
         }
 
         throw new NotImplementedException();

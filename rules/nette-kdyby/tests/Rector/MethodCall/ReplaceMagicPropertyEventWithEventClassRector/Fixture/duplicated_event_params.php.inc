@@ -10,7 +10,7 @@ final class DuplicatedEventParams
 
     public function run(SomeUser $user, string $some_underscore)
     {
-        $this->onUpload($user['owner_id'], $user['name'], $some_underscore);
+        $this->onUpload($user['owner_id'], $user->name_value, $some_underscore);
     }
 }
 
@@ -34,7 +34,7 @@ final class DuplicatedEventParams
     }
     public function run(SomeUser $user, string $some_underscore)
     {
-        $duplicatedEventParamsUploadEvent = new \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Fixture\Event\DuplicatedEventParamsUploadEvent($user['owner_id'], $user['name'], $some_underscore);
+        $duplicatedEventParamsUploadEvent = new \Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector\Fixture\Event\DuplicatedEventParamsUploadEvent($user['owner_id'], $user->name_value, $some_underscore);
         $this->eventDispatcher->dispatch($duplicatedEventParamsUploadEvent);
     }
 }

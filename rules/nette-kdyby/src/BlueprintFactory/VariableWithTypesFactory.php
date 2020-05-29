@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NetteKdyby\ValueObject\VariableWithType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
