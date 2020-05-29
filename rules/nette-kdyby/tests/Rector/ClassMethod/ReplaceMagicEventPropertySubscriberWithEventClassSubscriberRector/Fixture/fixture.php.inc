@@ -17,6 +17,7 @@ final class ActionLogEventSubscriber implements Subscriber
 
     public function onTomatoBuy(Tomato $tomato, int $adminId): void
     {
+        $tomato->unwrap();
     }
 }
 
@@ -41,8 +42,8 @@ final class ActionLogEventSubscriber implements Subscriber
 
     public function onTomatoBuy(\Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\Source\Event\VegetableMarketTomatoBuyEvent $vegetableMarketTomatoBuyEvent): void
     {
-        $adminId = $vegetableMarketTomatoBuyEvent->getAdminId();
         $tomato = $vegetableMarketTomatoBuyEvent->getTomato();
+        $tomato->unwrap();
     }
 }
 

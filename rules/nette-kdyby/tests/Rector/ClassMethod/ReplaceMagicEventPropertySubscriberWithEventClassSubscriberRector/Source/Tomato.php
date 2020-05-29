@@ -6,5 +6,7 @@ namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySu
 
 final class Tomato
 {
-
+    public function unwrap()
+    {
+    }
 }
