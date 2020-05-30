@@ -17,11 +17,15 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NetteKdyby\ContributeEventClassResolver;
 use Rector\NetteKdyby\ValueObject\EventAndListenerTree;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Symfony\Contracts\EventDispatcher\Event;
 
 final class ListeningClassMethodArgumentManipulator
 {
+    /**
+     * @var string
+     */
+    private const EVENT_PARAMETER_REPLACED = 'event_parameter_replaced';
+
     /**
      * @var ClassNaming
      */
@@ -42,23 +46,16 @@ final class ListeningClassMethodArgumentManipulator
      */
     private $betterStandardPrinter;
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         ClassNaming $classNaming,
         ContributeEventClassResolver $contributeEventClassResolver,
-        BetterStandardPrinter $betterStandardPrinter,
-        NodeNameResolver $nodeNameResolver
+        BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->classNaming = $classNaming;
         $this->contributeEventClassResolver = $contributeEventClassResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function changeFromEventAndListenerTreeAndCurrentClassName(
@@ -79,6 +76,11 @@ final class ListeningClassMethodArgumentManipulator
     public function change(array $classMethodsByEventClass, ?EventAndListenerTree $eventAndListenerTree = null): void
     {
         foreach ($classMethodsByEventClass as $eventClass => $classMethod) {
+            // are attributes already replaced
+            if ($classMethod->getAttribute(self::EVENT_PARAMETER_REPLACED)) {
+                continue;
+            }
+
             /** @var ClassMethod $classMethod */
             $oldParams = $classMethod->params;
 
@@ -88,11 +90,6 @@ final class ListeningClassMethodArgumentManipulator
 
             // move params to getter on event
             foreach ($oldParams as $oldParam) {
-                // skip self event
-                if ($this->shouldSkipForSelfEvent($oldParam)) {
-                    continue;
-                }
-
                 if (! $this->isParamUsedInClassMethodBody($classMethod, $oldParam)) {
                     continue;
                 }
@@ -102,10 +99,13 @@ final class ListeningClassMethodArgumentManipulator
                     $oldParam,
                     $eventAndListenerTree
                 );
+
                 $expression = new Expression($eventGetterToVariableAssign);
 
                 $classMethod->stmts = array_merge([$expression], (array) $classMethod->stmts);
             }
+
+            $classMethod->setAttribute(self::EVENT_PARAMETER_REPLACED, true);
         }
     }
 
@@ -148,19 +148,5 @@ final class ListeningClassMethodArgumentManipulator
         $methodCall = new MethodCall($eventVariable, $getterMethod);
 
         return new Assign($param->var, $methodCall);
-    }
-
-    private function shouldSkipForSelfEvent(Param $oldParam): bool
-    {
-        if ($oldParam->type === null) {
-            return false;
-        }
-
-        $typeName = $this->nodeNameResolver->getName($oldParam->type);
-        if ($typeName === null) {
-            return false;
-        }
-
-        return is_a($typeName, Event::class, true);
     }
 }
