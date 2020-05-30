@@ -8,14 +8,13 @@ use Kdyby\Events\Subscriber;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NetteKdyby\DataProvider\EventAndListenerTreeProvider;
 use Rector\NetteKdyby\Naming\EventClassNaming;
-use Rector\NetteKdyby\NodeManipulator\SubscriberMethodArgumentToContributteEventObjectManipulator;
-use Rector\NetteKdyby\NodeResolver\ListeningMethodsCollector;
+use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -29,23 +28,23 @@ final class ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector ex
     private $eventClassNaming;
 
     /**
-     * @var ListeningMethodsCollector
+     * @var ListeningClassMethodArgumentManipulator
      */
-    private $listeningMethodsCollector;
+    private $listeningClassMethodArgumentManipulator;
 
     /**
-     * @var SubscriberMethodArgumentToContributteEventObjectManipulator
+     * @var EventAndListenerTreeProvider
      */
-    private $subscriberMethodArgumentToContributteEventObjectManipulator;
+    private $eventAndListenerTreeProvider;
 
     public function __construct(
         EventClassNaming $eventClassNaming,
-        ListeningMethodsCollector $listeningMethodsCollector,
-        SubscriberMethodArgumentToContributteEventObjectManipulator $subscriberMethodArgumentToContributteEventObjectManipulator
+        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
+        EventAndListenerTreeProvider $eventAndListenerTreeProvider
     ) {
         $this->eventClassNaming = $eventClassNaming;
-        $this->listeningMethodsCollector = $listeningMethodsCollector;
-        $this->subscriberMethodArgumentToContributteEventObjectManipulator = $subscriberMethodArgumentToContributteEventObjectManipulator;
+        $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
+        $this->eventAndListenerTreeProvider = $eventAndListenerTreeProvider;
     }
 
     public function getDefinition(): RectorDefinition
@@ -113,16 +112,17 @@ PHP
 
         $this->replaceEventPropertyReferenceWithEventClassReference($node);
 
-        /** @var Class_ $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $eventAndListenerTrees = $this->eventAndListenerTreeProvider->provide();
 
-        $listeningClassMethods = $this->listeningMethodsCollector->collectFromClassAndGetSubscribedEventClassMethod(
-            $class,
-            $node,
-            ListeningMethodsCollector::EVENT_TYPE_CUSTOM
-        );
+        /** @var string $className */
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
-        $this->subscriberMethodArgumentToContributteEventObjectManipulator->change($listeningClassMethods);
+        foreach ($eventAndListenerTrees as $eventAndListenerTree) {
+            $this->listeningClassMethodArgumentManipulator->changeFromEventAndListenerTreeAndCurrentClassName(
+                $eventAndListenerTree,
+                $className
+            );
+        }
 
         return $node;
     }

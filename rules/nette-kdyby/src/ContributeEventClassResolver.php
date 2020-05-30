@@ -10,7 +10,9 @@ use PhpParser\Node\Param;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NetteKdyby\Naming\VariableNaming;
+use Rector\NetteKdyby\ValueObject\EventAndListenerTree;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -83,18 +85,28 @@ final class ContributeEventClassResolver
      */
     private $staticTypeMapper;
 
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         VariableNaming $variableNaming,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableNaming = $variableNaming;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
-    public function resolveGetterMethodByEventClassAndParam(string $eventClass, Param $param): string
-    {
+    public function resolveGetterMethodByEventClassAndParam(
+        string $eventClass,
+        Param $param,
+        ?EventAndListenerTree $eventAndListenerTree = null
+    ): string {
         $getterMethodsWithType = self::CONTRIBUTTE_EVENT_GETTER_METHODS_WITH_TYPE[$eventClass] ?? null;
 
         $paramType = $param->type;
@@ -102,6 +114,19 @@ final class ContributeEventClassResolver
         // unwrap nullable type
         if ($paramType instanceof NullableType) {
             $paramType = $paramType->type;
+        }
+
+        if ($eventAndListenerTree !== null) {
+            $getterMethodBlueprints = $eventAndListenerTree->getGetterMethodBlueprints();
+
+            foreach ($getterMethodBlueprints as $getterMethodBlueprint) {
+                if ($this->betterStandardPrinter->areNodesEqual(
+                    $getterMethodBlueprint->getReturnTypeNode(),
+                    $paramType
+                )) {
+                    return $getterMethodBlueprint->getMethodName();
+                }
+            }
         }
 
         if ($paramType === null || $paramType instanceof Identifier) {
@@ -124,7 +149,19 @@ final class ContributeEventClassResolver
             return $getterMethodsWithType[$type];
         }
 
+        $paramName = $this->nodeNameResolver->getName($param->var);
+        if ($eventAndListenerTree !== null) {
+            $getterMethodBlueprints = $eventAndListenerTree->getGetterMethodBlueprints();
+
+            foreach ($getterMethodBlueprints as $getterMethodBlueprint) {
+                if ($getterMethodBlueprint->getVariableName() === $paramName) {
+                    return $getterMethodBlueprint->getMethodName();
+                }
+            }
+        }
+
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($paramType);
+
         return $this->createGetterFromParamAndStaticType($param, $staticType);
     }
 

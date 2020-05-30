@@ -4,7 +4,16 @@ namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySu
 
 use Kdyby\Events\Subscriber;
 use Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\Source\Tomato;
-use Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\Source\VegetableMarket;
+
+class VegetableMarket
+{
+    public $onTomatoBuy;
+
+    public function run(Tomato $tomato, int $userId)
+    {
+        $this->onTomatoBuy($tomato, $userId);
+    }
+}
 
 final class ActionLogEventSubscriber implements Subscriber
 {
@@ -29,20 +38,29 @@ namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySu
 
 use Kdyby\Events\Subscriber;
 use Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\Source\Tomato;
-use Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\Source\VegetableMarket;
+
+class VegetableMarket
+{
+    public $onTomatoBuy;
+
+    public function run(Tomato $tomato, int $userId)
+    {
+        $this->onTomatoBuy($tomato, $userId);
+    }
+}
 
 final class ActionLogEventSubscriber implements Subscriber
 {
     public function getSubscribedEvents(): array
     {
         return [
-            \Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\Source\Event\VegetableMarketTomatoBuyEvent::class => 'onTomatoBuy',
+            \Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\Fixture\Event\VegetableMarketTomatoBuyEvent::class => 'onTomatoBuy',
         ];
     }
 
-    public function onTomatoBuy(\Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\Source\Event\VegetableMarketTomatoBuyEvent $vegetableMarketTomatoBuyEvent): void
+    public function onTomatoBuy(\Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector\Fixture\Event\VegetableMarketTomatoBuyEvent $vegetableMarketTomatoBuyEvent): void
     {
-        $anotherTomato = $vegetableMarketTomatoBuyEvent->getAnotherTomato();
+        $anotherTomato = $vegetableMarketTomatoBuyEvent->getTomato();
         $anotherTomato->unwrap();
     }
 }

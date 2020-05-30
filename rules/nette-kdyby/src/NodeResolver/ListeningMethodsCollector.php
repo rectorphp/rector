@@ -10,10 +10,12 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NetteKdyby\Naming\EventClassNaming;
 use Rector\NetteKdyby\ValueObject\NetteEventToContributeEventClass;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ListeningMethodsCollector
 {
@@ -61,48 +63,62 @@ final class ListeningMethodsCollector
      * @return array<string, ClassMethod>
      */
     public function collectFromClassAndGetSubscribedEventClassMethod(
-        Class_ $class,
-        ClassMethod $classMethod,
-        string $type
+        ClassMethod $getSubscribedEventsClassMethod,
+        string $type,
+        ?string $eventClassName = null
     ): array {
+        /** @var Class_ $class */
+        $class = $getSubscribedEventsClassMethod->getAttribute(AttributeKey::CLASS_NODE);
+
         $this->classMethodsByEventClass = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $class,
-            $type
-        ) {
-            if (! $node instanceof ArrayItem) {
-                return null;
+        $this->callableNodeTraverser->traverseNodesWithCallable(
+            (array) $getSubscribedEventsClassMethod->stmts,
+            function (Node $node) use ($class, $type) {
+                if (! $node instanceof ArrayItem) {
+                    return null;
+                }
+
+                if ($node->key === null) {
+                    return null;
+                }
+
+                $classMethod = $this->matchClassMethodByNodeValue($class, $node->value);
+                if ($classMethod === null) {
+                    return null;
+                }
+
+                $eventClass = $this->valueResolver->getValue($node->key);
+
+                if ($type === self::EVENT_TYPE_CONTRIBUTTE) {
+                    /** @var string $eventClass */
+                    $this->resolveContributeEventClassAndSubscribedClassMethod($eventClass, $classMethod);
+                    return;
+                }
+
+                [$classMethod,
+            $eventClass] = $this->resolveCustomClassMethodAndEventClass($node, $class, $eventClass);
+                if ($classMethod === null) {
+                    return null;
+                }
+
+                if (! is_string($eventClass)) {
+                    return null;
+                }
+
+                if (isset($this->classMethodsByEventClass[$eventClass])) {
+                    throw new ShouldNotHappenException(sprintf('"%s" class already has its class method', $eventClass));
+                }
+
+                $this->classMethodsByEventClass[$eventClass] = $classMethod;
             }
+        );
 
-            if ($node->key === null) {
-                return null;
-            }
-
-            $classMethod = $this->matchClassMethodByNodeValue($class, $node->value);
-            if ($classMethod === null) {
-                return null;
-            }
-
-            $eventClass = $this->valueResolver->getValue($node->key);
-
-            if ($type === self::EVENT_TYPE_CONTRIBUTTE) {
-                /** @var string $eventClass */
-                $this->resolveContributeEventClassAndSubscribedClassMethod($eventClass, $classMethod);
-                return;
-            }
-
-            [$classMethod, $eventClass] = $this->resolveCustomClassMethodAndEventClass($node, $class, $eventClass);
-            if ($classMethod === null) {
-                return null;
-            }
-
-            if (! is_string($eventClass)) {
-                return null;
-            }
-
-            $this->classMethodsByEventClass[$eventClass] = $classMethod;
-        });
+        if ($eventClassName) {
+            return isset($this->classMethodsByEventClass[$eventClassName]) ? [
+                $this->classMethodsByEventClass[$eventClassName],
+            ] : [];
+        }
 
         return $this->classMethodsByEventClass;
     }

@@ -10,7 +10,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\NotImplementedException;
@@ -18,7 +17,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteKdyby\NodeManipulator\GetSubscribedEventsArrayManipulator;
-use Rector\NetteKdyby\NodeManipulator\SubscriberMethodArgumentToContributteEventObjectManipulator;
+use Rector\NetteKdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
 use Rector\NetteKdyby\NodeResolver\ListeningMethodsCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -33,9 +32,9 @@ final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractRec
     private $getSubscribedEventsArrayManipulator;
 
     /**
-     * @var SubscriberMethodArgumentToContributteEventObjectManipulator
+     * @var ListeningClassMethodArgumentManipulator
      */
-    private $subscriberMethodArgumentToContributteEventObjectManipulator;
+    private $listeningClassMethodArgumentManipulator;
 
     /**
      * @var ListeningMethodsCollector
@@ -44,11 +43,11 @@ final class ChangeNetteEventNamesInGetSubscribedEventsRector extends AbstractRec
 
     public function __construct(
         GetSubscribedEventsArrayManipulator $getSubscribedEventsArrayManipulator,
-        SubscriberMethodArgumentToContributteEventObjectManipulator $subscriberMethodArgumentToContributteEventObjectManipulator,
+        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
         ListeningMethodsCollector $listeningMethodsCollector
     ) {
         $this->getSubscribedEventsArrayManipulator = $getSubscribedEventsArrayManipulator;
-        $this->subscriberMethodArgumentToContributteEventObjectManipulator = $subscriberMethodArgumentToContributteEventObjectManipulator;
+        $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
         $this->listeningMethodsCollector = $listeningMethodsCollector;
     }
 
@@ -121,20 +120,15 @@ PHP
             return null;
         }
 
-        /** @var Class_ $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-
         $this->makeStatic($node);
-
         $this->refactorEventNames($node);
 
         $listeningClassMethods = $this->listeningMethodsCollector->collectFromClassAndGetSubscribedEventClassMethod(
-            $class,
             $node,
             ListeningMethodsCollector::EVENT_TYPE_CONTRIBUTTE
         );
 
-        $this->subscriberMethodArgumentToContributteEventObjectManipulator->change($listeningClassMethods);
+        $this->listeningClassMethodArgumentManipulator->change($listeningClassMethods);
 
         return $node;
     }

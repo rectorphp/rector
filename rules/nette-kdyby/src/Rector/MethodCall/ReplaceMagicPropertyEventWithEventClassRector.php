@@ -4,24 +4,18 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Rector\MethodCall;
 
-use Nette\Application\UI\Control;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NetteKdyby\Naming\EventClassNaming;
-use Rector\NetteKdyby\NodeFactory\CustomEventFactory;
+use Rector\NetteKdyby\DataProvider\EventAndListenerTreeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -32,28 +26,21 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final class ReplaceMagicPropertyEventWithEventClassRector extends AbstractRector
 {
     /**
-     * @var EventClassNaming
-     */
-    private $eventClassNaming;
-
-    /**
-     * @var CustomEventFactory
-     */
-    private $customEventFactory;
-
-    /**
      * @var ClassNaming
      */
     private $classNaming;
 
+    /**
+     * @var EventAndListenerTreeProvider
+     */
+    private $eventAndListenerTreeProvider;
+
     public function __construct(
-        EventClassNaming $eventClassNaming,
-        CustomEventFactory $customEventFactory,
-        ClassNaming $classNaming
+        ClassNaming $classNaming,
+        EventAndListenerTreeProvider $eventAndListenerTreeProvider
     ) {
-        $this->eventClassNaming = $eventClassNaming;
-        $this->customEventFactory = $customEventFactory;
         $this->classNaming = $classNaming;
+        $this->eventAndListenerTreeProvider = $eventAndListenerTreeProvider;
     }
 
     public function getDefinition(): RectorDefinition
@@ -107,20 +94,20 @@ PHP
     public function refactor(Node $node): ?Node
     {
         // 1. is onProperty? call
-        if (! $this->isLocalOnPropertyCall($node)) {
+        $eventAndListenerTree = $this->eventAndListenerTreeProvider->matchMethodCall($node);
+        if ($eventAndListenerTree === null) {
             return null;
         }
 
         // 2. guess event name
-        $eventClassName = $this->eventClassNaming->createEventClassNameFromMethodCall($node);
-        $eventFileLocation = $this->eventClassNaming->resolveEventFileLocationFromMethodCall($node);
+        $eventClassName = $eventAndListenerTree->getEventClassName();
 
         // 3. create new event class with args
-        $eventClassInNamespace = $this->customEventFactory->create($eventClassName, (array) $node->args);
-        $this->printNodesToFilePath($eventClassInNamespace, $eventFileLocation);
+        $eventClassInNamespace = $eventAndListenerTree->getEventClassInNamespace();
+        $this->printNodesToFilePath($eventClassInNamespace, $eventAndListenerTree->getEventFileLocation());
 
         // 4. ad dispatch method call
-        $dispatchMethodCall = $this->createDispatchMethodCall($eventClassName);
+        $dispatchMethodCall = $eventAndListenerTree->getEventDispatcherDispatchMethodCall();
         $this->addNodeAfterNode($dispatchMethodCall, $node);
 
         // 5. return event adding
@@ -136,63 +123,11 @@ PHP
         );
 
         // 6. remove property
-        $this->removeMagicProperty($node);
+        if ($eventAndListenerTree->getOnMagicProperty() !== null) {
+            $this->removeNode($eventAndListenerTree->getOnMagicProperty());
+        }
 
         return $assign;
-    }
-
-    private function isLocalOnPropertyCall(MethodCall $methodCall): bool
-    {
-        if ($methodCall->var instanceof StaticCall) {
-            return false;
-        }
-
-        if ($methodCall->var instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isName($methodCall->var, 'this')) {
-            return false;
-        }
-
-        if (! $this->isName($methodCall->name, 'on*')) {
-            return false;
-        }
-
-        $methodName = $this->getName($methodCall->name);
-        if ($methodName === null) {
-            return false;
-        }
-
-        $className = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return false;
-        }
-
-        // control event, inner only
-        if (is_a($className, Control::class, true)) {
-            return false;
-        }
-
-        if (method_exists($className, $methodName)) {
-            return false;
-        }
-
-        return property_exists($className, $methodName);
-    }
-
-    private function removeMagicProperty(MethodCall $methodCall): void
-    {
-        /** @var string $methodName */
-        $methodName = $this->getName($methodCall->name);
-
-        /** @var Class_ $class */
-        $class = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
-
-        /** @var Property $property */
-        $property = $class->getProperty($methodName);
-
-        $this->removeNode($property);
     }
 
     private function createEventInstanceAssign(string $eventClassName, MethodCall $methodCall): Assign
@@ -206,16 +141,5 @@ PHP
         }
 
         return new Assign(new Variable($shortEventClassName), $new);
-    }
-
-    private function createDispatchMethodCall(string $eventClassName): MethodCall
-    {
-        $shortEventClassName = $this->classNaming->getVariableName($eventClassName);
-
-        $eventDispatcherPropertyFetch = new PropertyFetch(new Variable('this'), 'eventDispatcher');
-        $dispatchMethodCall = new MethodCall($eventDispatcherPropertyFetch, 'dispatch');
-        $dispatchMethodCall->args[] = new Arg(new Variable($shortEventClassName));
-
-        return $dispatchMethodCall;
     }
 }
