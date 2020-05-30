@@ -4607,22 +4607,20 @@ Change $this->templates->{magic} to $this->template->render(..., $values)
 
 ## NetteKdyby
 
-### `KdybyEventSubscriberToContributteEventSubscriberRector`
+### `ChangeNetteEventNamesInGetSubscribedEventsRector`
 
-- class: [`Rector\NetteKdyby\Rector\ClassMethod\KdybyEventSubscriberToContributteEventSubscriberRector`](/../master/rules/nette-kdyby/src/Rector/Class_/KdybyEventSubscriberToContributteEventSubscriberRector.php)
-- [test fixtures](/../master/rules/nette-kdyby/tests/Rector/Class_/KdybyEventSubscriberToContributteEventSubscriberRector/Fixture)
+- class: [`Rector\NetteKdyby\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector`](/../master/rules/nette-kdyby/src/Rector/ClassMethod/ChangeNetteEventNamesInGetSubscribedEventsRector.php)
+- [test fixtures](/../master/rules/nette-kdyby/tests/Rector/ClassMethod/ChangeNetteEventNamesInGetSubscribedEventsRector/Fixture)
 
 Change EventSubscriber from Kdyby to Contributte
 
 ```diff
--use Kdyby\Events\Subscriber;
 +use Contributte\Events\Extra\Event\Application\ShutdownEvent;
+ use Kdyby\Events\Subscriber;
  use Nette\Application\Application;
 -use Nette\Application\UI\Presenter;
-+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
--class GetApplesSubscriber implements Subscriber
-+class GetApplesSubscriber implements EventSubscriberInterface
+ class GetApplesSubscriber implements Subscriber
  {
 -    public function getSubscribedEvents()
 +    public static function getSubscribedEvents()
