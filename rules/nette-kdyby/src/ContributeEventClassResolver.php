@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NetteKdyby;
 
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PHPStan\Type\MixedType;
@@ -120,6 +121,10 @@ final class ContributeEventClassResolver
             $getterMethodBlueprints = $eventAndListenerTree->getGetterMethodBlueprints();
 
             foreach ($getterMethodBlueprints as $getterMethodBlueprint) {
+                if (! $getterMethodBlueprint->getReturnTypeNode() instanceof Name) {
+                    continue;
+                }
+
                 if ($this->betterStandardPrinter->areNodesEqual(
                     $getterMethodBlueprint->getReturnTypeNode(),
                     $paramType
