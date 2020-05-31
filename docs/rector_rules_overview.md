@@ -1,4 +1,4 @@
-# All 499 Rectors Overview
+# All 500 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -11,7 +11,7 @@
 - [CakePHP](#cakephp) (5)
 - [Celebrity](#celebrity) (3)
 - [CodeQuality](#codequality) (53)
-- [CodingStyle](#codingstyle) (31)
+- [CodingStyle](#codingstyle) (32)
 - [DeadCode](#deadcode) (40)
 - [Doctrine](#doctrine) (16)
 - [DoctrineCodeQuality](#doctrinecodequality) (2)
@@ -1913,6 +1913,27 @@ services:
      {
 -        $this->assertThis();
 +        self::assertThis();
+     }
+ }
+```
+
+<br>
+
+### `RemoveDoubleUnderscoreInMethodNameRector`
+
+- class: [`Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector`](/../master/rules/coding-style/src/Rector/ClassMethod/RemoveDoubleUnderscoreInMethodNameRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/ClassMethod/RemoveDoubleUnderscoreInMethodNameRector/Fixture)
+
+Non-magic PHP object methods cannot start with "__"
+
+```diff
+ class SomeClass
+ {
+-    public function __getName($anotherObject)
++    public function getName($anotherObject)
+     {
+-        $anotherObject->__getSurname();
++        $anotherObject->getSurname();
      }
  }
 ```
