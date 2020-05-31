@@ -2,8 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\Each\Fixture;
 
-function each2
-()
+function each2()
 {
     list($key, $val) = each($opt->option);
 
@@ -18,8 +17,7 @@ function each2
 
 namespace Rector\Php72\Tests\Rector\Each\Fixture;
 
-function each2
-()
+function each2()
 {
     $key = key($opt->option);
     $val = current($opt->option);
