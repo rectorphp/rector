@@ -1,4 +1,4 @@
-# All 495 Rectors Overview
+# All 498 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -38,7 +38,7 @@
 - [Performance](#performance) (1)
 - [Phalcon](#phalcon) (4)
 - [Php52](#php52) (2)
-- [Php53](#php53) (2)
+- [Php53](#php53) (3)
 - [Php54](#php54) (2)
 - [Php55](#php55) (2)
 - [Php56](#php56) (2)
@@ -6632,6 +6632,20 @@ Remove unused private method
 
 ## Php53
 
+### `ClearReturnNewByReferenceRector`
+
+- class: [`Rector\Php53\Rector\Assign\ClearReturnNewByReferenceRector`](/../master/rules/php53/src/Rector/Assign/ClearReturnNewByReferenceRector.php)
+- [test fixtures](/../master/rules/php53/tests/Rector/Assign/ClearReturnNewByReferenceRector/Fixture)
+
+Remove reference from "$assign = &new Value;"
+
+```diff
+-$assign = &new Value;
++$assign = new Value;
+```
+
+<br>
+
 ### `DirNameFileConstantToDirConstantRector`
 
 - class: [`Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector`](/../master/rules/php53/src/Rector/FuncCall/DirNameFileConstantToDirConstantRector.php)
@@ -10514,7 +10528,7 @@ Change @return types and type from static analysis to type declarations if not a
 
 ## General
 
-- [Core](#core) (42)
+- [Core](#core) (44)
 
 ## Core
 
@@ -11358,6 +11372,53 @@ services:
 +/** @var Some\Chicken $someService */
 +$someService = new Some\Chicken;
  $someClassToKeep = new Some_Class_To_Keep;
+```
+
+<br>
+
+### `RemoveFuncCallArgRector`
+
+- class: [`Rector\Core\Rector\FuncCall\RemoveFuncCallArgRector`](/../master/src/Rector/FuncCall/RemoveFuncCallArgRector.php)
+- [test fixtures](/../master/tests/Rector/FuncCall/RemoveFuncCallArgRector/Fixture)
+
+Remove argument by position by function name
+
+```yaml
+services:
+    Rector\Core\Rector\FuncCall\RemoveFuncCallArgRector:
+        $argumentPositionByFunctionName:
+            remove_last_arg:
+                - 1
+```
+
+↓
+
+```diff
+-remove_last_arg(1, 2);
++remove_last_arg(1);
+```
+
+<br>
+
+### `RemoveIniGetSetFuncCallRector`
+
+- class: [`Rector\Core\Rector\FuncCall\RemoveIniGetSetFuncCallRector`](/../master/src/Rector/FuncCall/RemoveIniGetSetFuncCallRector.php)
+- [test fixtures](/../master/tests/Rector/FuncCall/RemoveIniGetSetFuncCallRector/Fixture)
+
+Remove ini_get by configuration
+
+```yaml
+services:
+    Rector\Core\Rector\FuncCall\RemoveIniGetSetFuncCallRector:
+        $keysToRemove:
+            - y2k_compliance
+```
+
+↓
+
+```diff
+-ini_get('y2k_compliance');
+-ini_set('y2k_compliance', 1);
 ```
 
 <br>
