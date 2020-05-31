@@ -22,7 +22,7 @@ final class FixtureSplitter
     }
 
     /**
-     * @return string[]
+     * @return SmartFileInfo[]
      */
     public function splitContentToOriginalFileAndExpectedFile(
         SmartFileInfo $smartFileInfo,
@@ -41,7 +41,10 @@ final class FixtureSplitter
             require_once $originalFile;
         }
 
-        return [$originalFile, $expectedFile];
+        $originalFileInfo = new SmartFileInfo($originalFile);
+        $expectedFileInfo = new SmartFileInfo($expectedFile);
+
+        return [$originalFileInfo, $expectedFileInfo];
     }
 
     public function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix): string
