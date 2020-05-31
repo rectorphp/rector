@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php72\Tests\Rector\Each;
+namespace Rector\Php72\Tests\Rector\Each\ListEachRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php72\Rector\Each\ListEachRector;
-use Rector\Php72\Rector\Each\WhileEachToForeachRector;
 
 /**
  * Test battery inspired by:
  * - https://stackoverflow.com/q/46492621/1348344 + Drupal refactorings
  * - https://stackoverflow.com/a/51278641/1348344
  */
-final class EachRectorTest extends AbstractRectorTestCase
+final class ListEachRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -29,14 +28,8 @@ final class EachRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            WhileEachToForeachRector::class => [],
-            ListEachRector::class => [],
-        ];
+        return ListEachRector::class;
     }
 }

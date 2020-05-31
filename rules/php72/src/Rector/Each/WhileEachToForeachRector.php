@@ -19,7 +19,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @source https://wiki.php.net/rfc/deprecations_php_7_2#each
  *
- * @see \Rector\Php72\Tests\Rector\Each\EachRectorTest
+ * @see \Rector\Php72\Tests\Rector\Each\WhileEachToForeachRector\WhileEachToForeachRectorTest
  */
 final class WhileEachToForeachRector extends AbstractRector
 {
@@ -110,9 +110,12 @@ PHP
 
         // is key included? add it to foreach
         if (count($listNode->items) > 0) {
-            /** @var ArrayItem $keyItem */
+            /** @var ArrayItem|null $keyItem */
             $keyItem = array_pop($listNode->items);
-            $foreachNode->keyVar = $keyItem->value;
+
+            if ($keyItem !== null) {
+                $foreachNode->keyVar = $keyItem->value;
+            }
         }
 
         return $foreachNode;

@@ -4,9 +4,6 @@ namespace Rector\Php72\Tests\Rector\Each\Fixture;
 
 function each1()
 {
-    while (list($module) = each($module_list)) {
-    }
-
     while (list($key, $callback) = each($callbacks)) {
         // comment
     }
@@ -26,9 +23,6 @@ namespace Rector\Php72\Tests\Rector\Each\Fixture;
 
 function each1()
 {
-    foreach (array_keys($module_list) as $module) {
-    }
-
     foreach ($callbacks as $key => $callback) {
         // comment
     }
