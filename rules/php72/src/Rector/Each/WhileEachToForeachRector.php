@@ -110,9 +110,12 @@ PHP
 
         // is key included? add it to foreach
         if (count($listNode->items) > 0) {
-            /** @var ArrayItem $keyItem */
+            /** @var ArrayItem|null $keyItem */
             $keyItem = array_pop($listNode->items);
-            $foreachNode->keyVar = $keyItem->value;
+
+            if ($keyItem !== null) {
+                $foreachNode->keyVar = $keyItem->value;
+            }
         }
 
         return $foreachNode;
