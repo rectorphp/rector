@@ -1,0 +1,15 @@
+{
+    "name": "vendor_name/MethodCall",
+    "description": "description",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "tomas",
+            "email": "email@example.com"
+        }
+    ],
+    "require": {
+
+    }
+}

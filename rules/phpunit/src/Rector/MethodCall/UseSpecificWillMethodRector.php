@@ -85,10 +85,7 @@ PHP
         }
 
         $callerNode = $node instanceof StaticCall ? $node->class : $node->var;
-
-        $callerNodeStaticType = $this->getStaticType($callerNode);
-
-        if (! $callerNodeStaticType->isSuperTypeOf(new ObjectType('PHPUnit\Framework\MockObject\MockObject'))->yes()) {
+        if (! $this->isObjectType($callerNode, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
             return null;
         }
 
