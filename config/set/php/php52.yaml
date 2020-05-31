@@ -1,3 +1,8 @@
 services:
     Rector\Php52\Rector\Property\VarToPublicPropertyRector: null
     Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector: null
+
+    # see https://www.php.net/manual/en/function.ldap-first-attribute.php
+    Rector\Core\Rector\FuncCall\RemoveFuncCallArgRector:
+        $argumentPositionByFunctionName:
+            ldap_first_attribute: [2]
