@@ -4,7 +4,7 @@ namespace Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector\Fixture;
 
 use Traversable;
 
-class PolyfillFunction
+class IsIterablePolyfillFunction
 {
     public function run($foo)
     {
@@ -28,7 +28,7 @@ namespace Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector\Fixture;
 
 use Traversable;
 
-class PolyfillFunction
+class IsIterablePolyfillFunction
 {
     public function run($foo)
     {

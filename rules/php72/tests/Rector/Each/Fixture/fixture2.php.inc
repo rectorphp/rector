@@ -23,6 +23,7 @@ function each2
 {
     $key = key($opt->option);
     $val = current($opt->option);
+    next($opt->option);
 
     $tid = key($option->option);
 

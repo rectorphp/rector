@@ -13,7 +13,7 @@ final class ReplaceEventManagerWithEventSubscriberRectorTest extends AbstractRec
     {
         $this->doTestFile(__DIR__ . '/Fixture/fixture.php.inc');
 
-        $expectedEventFilePath = dirname($this->originalTempFile) . '/Event/SomeClassCopyEvent.php';
+        $expectedEventFilePath = $this->originalTempFileInfo->getPath() . '/Event/SomeClassCopyEvent.php';
 
         $this->assertFileExists($expectedEventFilePath);
         $this->assertFileEquals(__DIR__ . '/Source/ExpectedSomeClassCopyEvent.php', $expectedEventFilePath);

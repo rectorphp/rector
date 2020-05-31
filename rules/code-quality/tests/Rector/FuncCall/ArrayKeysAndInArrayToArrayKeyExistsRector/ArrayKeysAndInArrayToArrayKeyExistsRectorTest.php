@@ -6,9 +6,9 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToArrayKey
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector;
-use Rector\Core\Testing\PHPUnit\AbstractRunnableRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ArrayKeysAndInArrayToArrayKeyExistsRectorTest extends AbstractRunnableRectorTestCase
+final class ArrayKeysAndInArrayToArrayKeyExistsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -16,7 +16,6 @@ final class ArrayKeysAndInArrayToArrayKeyExistsRectorTest extends AbstractRunnab
     public function test(string $file): void
     {
         $this->doTestFile($file);
-        $this->assertOriginalAndFixedFileResultEquals($file);
     }
 
     public function provideData(): Iterator

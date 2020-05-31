@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -44,8 +43,9 @@ list($key, $callback) = each($callbacks);
 PHP
                     ,
                     <<<'PHP'
-$key = key($opt->option);
-$val = current($opt->option);
+$key = key($callbacks);
+$callback = current($callbacks);
+next($callbacks);
 PHP
                 ),
             ]
@@ -94,15 +94,13 @@ PHP
         // ↓
         // $key = key($values);
         // $value = current($values);
-        // next($values); - only inside a loop
+        // next($values);
         $currentFuncCall = $this->createFuncCall('current', $eachFuncCall->args);
         $assignCurrentNode = new Assign($listNode->items[1]->value, $currentFuncCall);
         $this->addNodeAfterNode($assignCurrentNode, $node);
 
-        if ($this->isInsideDoWhile($node)) {
-            $nextFuncCall = $this->createFuncCall('next', $eachFuncCall->args);
-            $this->addNodeAfterNode($nextFuncCall, $node);
-        }
+        $nextFuncCall = $this->createFuncCall('next', $eachFuncCall->args);
+        $this->addNodeAfterNode($nextFuncCall, $node);
 
         $keyFuncCall = $this->createFuncCall('key', $eachFuncCall->args);
         return new Assign($listNode->items[0]->value, $keyFuncCall);
@@ -129,20 +127,5 @@ PHP
 
         // empty list → cannot handle
         return $listNode->items[0] === null && $listNode->items[1] === null;
-    }
-
-    /**
-     * Is inside the "do {} while ();" loop → need to add "next()"
-     */
-    private function isInsideDoWhile(Node $assignNode): bool
-    {
-        $parentNode = $assignNode->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Expression) {
-            return false;
-        }
-
-        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-
-        return $parentParentNode instanceof Do_;
     }
 }

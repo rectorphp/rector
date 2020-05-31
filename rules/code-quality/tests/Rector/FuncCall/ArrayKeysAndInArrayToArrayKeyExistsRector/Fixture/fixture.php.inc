@@ -2,16 +2,17 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector\Fixture;
 
-use Rector\Core\Testing\PHPUnit\RunnableInterface;
+use Rector\Core\Testing\Contract\RunnableInterface;
 
 class SomeClass implements RunnableInterface
 {
     public function run()
     {
         $packageName = "foo";
-        $values      = ["foo" => "bar"];
-        
+        $values = ["foo" => "bar"];
+
         $keys = array_keys($values);
+
         return in_array($packageName, $keys, true);
     }
 }
@@ -22,14 +23,15 @@ class SomeClass implements RunnableInterface
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector\Fixture;
 
-use Rector\Core\Testing\PHPUnit\RunnableInterface;
+use Rector\Core\Testing\Contract\RunnableInterface;
 
 class SomeClass implements RunnableInterface
 {
     public function run()
     {
         $packageName = "foo";
-        $values      = ["foo" => "bar"];
+        $values = ["foo" => "bar"];
+
         return array_key_exists($packageName, $values);
     }
 }

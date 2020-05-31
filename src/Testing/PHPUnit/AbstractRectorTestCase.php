@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
@@ -17,6 +18,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
+use Rector\Core\Testing\Contract\RunnableInterface;
 use Rector\Core\Testing\Finder\RectorsFinder;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -27,6 +29,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 {
+    use RunnableRectorTrait;
+
     /**
      * @var FileProcessor
      */
@@ -38,19 +42,19 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     protected $parameterProvider;
 
     /**
-     * @var string
+     * @var SmartFileInfo
      */
-    protected $originalTempFile;
+    protected $originalTempFileInfo;
+
+    /**
+     * @var FixtureSplitter
+     */
+    protected $fixtureSplitter;
 
     /**
      * @var bool
      */
     private $autoloadTestFixture = true;
-
-    /**
-     * @var FixtureSplitter
-     */
-    private $fixtureSplitter;
 
     /**
      * @var Container|ContainerInterface|null
@@ -130,21 +134,23 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     protected function doTestFile(string $fixtureFile): void
     {
-        $smartFileInfo = new SmartFileInfo($fixtureFile);
-        [$originalFile, $changedFile] = $this->fixtureSplitter->splitContentToOriginalFileAndExpectedFile(
-            $smartFileInfo,
+        $fixtureFileInfo = new SmartFileInfo($fixtureFile);
+
+        [$originalFileInfo, $expectedFileInfo] = $this->fixtureSplitter->splitContentToOriginalFileAndExpectedFile(
+            $fixtureFileInfo,
             $this->autoloadTestFixture
         );
 
-        $this->nodeScopeResolver->setAnalysedFiles([$originalFile]);
+        $this->nodeScopeResolver->setAnalysedFiles([$originalFileInfo->getRealPath()]);
 
-        $this->doTestFileMatchesExpectedContent(
-            $originalFile,
-            $changedFile,
-            $smartFileInfo->getRelativeFilePathFromCwd()
-        );
+        $this->doTestFileMatchesExpectedContent($originalFileInfo, $expectedFileInfo, $fixtureFileInfo);
 
-        $this->originalTempFile = $originalFile;
+        $this->originalTempFileInfo = $originalFileInfo;
+
+        // runnable?
+        if (Strings::contains($originalFileInfo->getContents(), RunnableInterface::class)) {
+            $this->assertOriginalAndFixedFileResultEquals($originalFileInfo, $expectedFileInfo);
+        }
     }
 
     protected function getTempPath(): string
@@ -238,37 +244,30 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     }
 
     private function doTestFileMatchesExpectedContent(
-        string $originalFile,
-        string $expectedFile,
-        string $fixtureFile
+        SmartFileInfo $originalFileInfo,
+        SmartFileInfo $expectedFileInfo,
+        SmartFileInfo $fixtureFileInfo
     ): void {
-        $this->setParameter(Option::SOURCE, [$originalFile]);
-
-        $smartFileInfo = new SmartFileInfo($originalFile);
+        $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
         // life-cycle trio :)
-        $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
-        $this->fileProcessor->refactor($smartFileInfo);
+        $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
+        $this->fileProcessor->refactor($originalFileInfo);
 
-        $changedContent = $this->fileProcessor->printToString($smartFileInfo);
+        $changedContent = $this->fileProcessor->printToString($originalFileInfo);
 
-        $causedByFixtureMessage = $this->createCausedByFixtureMessage($fixtureFile);
+        $causedByFixtureMessage = $fixtureFileInfo->getRelativeFilePathFromCwd();
 
         $removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
         $removedAndAddedFilesProcessor->run();
 
         try {
-            $this->assertStringEqualsFile($expectedFile, $changedContent, $causedByFixtureMessage);
+            $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $causedByFixtureMessage);
         } catch (ExpectationFailedException $expectationFailedException) {
-            $expectedFileContent = FileSystem::read($expectedFile);
+            $expectedFileContent = $expectedFileInfo->getContents();
 
             $this->assertStringMatchesFormat($expectedFileContent, $changedContent, $causedByFixtureMessage);
         }
-    }
-
-    private function createCausedByFixtureMessage(string $fixtureFile): string
-    {
-        return (new SmartFileInfo($fixtureFile))->getRelativeFilePathFromCwd();
     }
 
     private function createRectorRepositoryContainer(): void
