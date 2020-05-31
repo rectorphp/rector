@@ -1,4 +1,4 @@
-# All 498 Rectors Overview
+# All 499 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -38,7 +38,7 @@
 - [Performance](#performance) (1)
 - [Phalcon](#phalcon) (4)
 - [Php52](#php52) (2)
-- [Php53](#php53) (3)
+- [Php53](#php53) (4)
 - [Php54](#php54) (2)
 - [Php55](#php55) (2)
 - [Php56](#php56) (2)
@@ -6662,6 +6662,20 @@ Convert dirname(__FILE__) to __DIR__
 +        return __DIR__;
      }
  }
+```
+
+<br>
+
+### `ReplaceHttpServerVarsByServerRector`
+
+- class: [`Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector`](/../master/rules/php53/src/Rector/Variable/ReplaceHttpServerVarsByServerRector.php)
+- [test fixtures](/../master/rules/php53/tests/Rector/Variable/ReplaceHttpServerVarsByServerRector/Fixture)
+
+Rename old $HTTP_* variable names to new replacements
+
+```diff
+-$serverVars = $HTTP_SERVER_VARS;
++$serverVars = $_SERVER;
 ```
 
 <br>
