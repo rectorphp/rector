@@ -37,7 +37,7 @@ final class MyFirstRector extends AbstractRector
     public function getNodeTypes(): array
     {
         // what node types are we looking for?
-        // pick any node from https://github.com/rectorphp/rector/blob/master/docs/NodesOverview.md
+        // pick any node from https://github.com/rectorphp/rector/blob/master/docs/nodes_overview.md
         return [MethodCall::class];
     }
 
