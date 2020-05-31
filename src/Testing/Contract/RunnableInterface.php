@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Testing\PHPUnit;
+namespace Rector\Core\Testing\Contract;
 
 interface RunnableInterface
 {

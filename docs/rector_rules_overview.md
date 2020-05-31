@@ -7371,8 +7371,9 @@ each() function is deprecated, use key() and current() instead
 
 ```diff
 -list($key, $callback) = each($callbacks);
-+$key = key($opt->option);
-+$val = current($opt->option);
++$key = key($callbacks);
++$callback = current($callbacks);
++next($callbacks);
 ```
 
 <br>

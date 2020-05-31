@@ -28,14 +28,7 @@ final class FixtureSplitter
         SmartFileInfo $smartFileInfo,
         bool $autoloadTestFixture
     ): array {
-        if (Strings::match($smartFileInfo->getContents(), SplitLine::SPLIT_LINE)) {
-            // original → expected
-            [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), SplitLine::SPLIT_LINE);
-        } else {
-            // no changes
-            $originalContent = $smartFileInfo->getContents();
-            $expectedContent = $originalContent;
-        }
+        [$originalContent, $expectedContent] = $this->resolveBeforeAfterFixtureContent($smartFileInfo);
 
         $originalFile = $this->createTemporaryPathWithPrefix($smartFileInfo, 'original');
         $expectedFile = $this->createTemporaryPathWithPrefix($smartFileInfo, 'expected');
@@ -51,11 +44,28 @@ final class FixtureSplitter
         return [$originalFile, $expectedFile];
     }
 
-    private function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix): string
+    public function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix): string
     {
         // warning: if this hash is too short, the file can becom "identical"; took me 1 hour to find out
-        $hash = Strings::substring(md5($smartFileInfo->getRealPath()), 0, 12);
+        $hash = Strings::substring(md5($smartFileInfo->getRealPath()), 0, 15);
 
         return sprintf($this->tempPath . '/%s_%s_%s', $prefix, $hash, $smartFileInfo->getBasename('.inc'));
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveBeforeAfterFixtureContent(SmartFileInfo $smartFileInfo): array
+    {
+        if (Strings::match($smartFileInfo->getContents(), SplitLine::SPLIT_LINE)) {
+            // original → expected
+            [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), SplitLine::SPLIT_LINE);
+        } else {
+            // no changes
+            $originalContent = $smartFileInfo->getContents();
+            $expectedContent = $originalContent;
+        }
+
+        return [$originalContent, $expectedContent];
     }
 }

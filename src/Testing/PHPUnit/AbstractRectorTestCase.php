@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
@@ -17,6 +18,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
+use Rector\Core\Testing\Contract\RunnableInterface;
 use Rector\Core\Testing\Finder\RectorsFinder;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -27,6 +29,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 {
+    use RunnableRectorTrait;
+
     /**
      * @var FileProcessor
      */
@@ -43,14 +47,14 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     protected $originalTempFile;
 
     /**
+     * @var FixtureSplitter
+     */
+    protected $fixtureSplitter;
+
+    /**
      * @var bool
      */
     private $autoloadTestFixture = true;
-
-    /**
-     * @var FixtureSplitter
-     */
-    private $fixtureSplitter;
 
     /**
      * @var Container|ContainerInterface|null
@@ -145,6 +149,14 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         );
 
         $this->originalTempFile = $originalFile;
+
+        // runnable?
+        if (Strings::contains(FileSystem::read($originalFile), RunnableInterface::class)) {
+            $originalFileInfo = new SmartFileInfo($originalFile);
+            $changedFileInfo = new SmartFileInfo($changedFile);
+
+            $this->assertOriginalAndFixedFileResultEquals($originalFileInfo, $changedFileInfo);
+        }
     }
 
     protected function getTempPath(): string
