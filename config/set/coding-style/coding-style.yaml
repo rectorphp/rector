@@ -36,3 +36,5 @@ services:
     Rector\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector: null
     Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector: null
     Rector\CodingStyle\Rector\Variable\UnderscoreToPascalCaseVariableAndPropertyNameRector: null
+
+    Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector: null

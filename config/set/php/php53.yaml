@@ -1,3 +1,5 @@
 services:
     Rector\Php53\Rector\Ternary\TernaryToElvisRector: null
     Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector: null
+    Rector\Php53\Rector\Assign\ClearReturnNewByReferenceRector: null
+    Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector: null
