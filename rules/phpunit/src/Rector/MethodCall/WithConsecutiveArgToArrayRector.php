@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\PHPUnit\Rector\MethodCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\Generic\GenericObjectType;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
@@ -218,15 +216,5 @@ PHP
         }
 
         return $currentMethodCallee;
-    }
-
-    private function isMockType(MethodCall $methodCall): bool
-    {
-        $nodeStaticType = $this->getObjectType($methodCall);
-        if (! $nodeStaticType instanceof GenericObjectType) {
-            return false;
-        }
-
-        return (bool) Strings::match($nodeStaticType->getClassName(), '#InvocationMocker$#');
     }
 }
