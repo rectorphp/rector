@@ -69,7 +69,7 @@ class SomeClass
 PHP
                 ,
                 [
-                    '$useImportToRestore' => [['Doctrine\ORM\Mapping', 'ORM']],
+                    '$useImportsToRestore' => [['Doctrine\ORM\Mapping', 'ORM']],
                 ]
             ),
         ]);
