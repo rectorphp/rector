@@ -75,4 +75,7 @@ parameters:
             # part of the comparison logic
             - 'packages/polyfill/src/ConditionEvaluator.php'
 
+        # often soo many cases that need manual attention → skip and resole in automated way
+        SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse: null
+
     line_ending: "\n"

@@ -7,3 +7,4 @@ services:
     Rector\Php80\Rector\Class_\AnnotationToAttributeRector: null
     Rector\Php80\Rector\FuncCall\ClassOnObjectRector: null
     Rector\Php80\Rector\Ternary\GetDebugTypeRector: null
+    Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector: null
