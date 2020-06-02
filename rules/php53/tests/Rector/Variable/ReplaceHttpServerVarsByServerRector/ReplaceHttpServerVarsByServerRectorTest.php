@@ -24,7 +24,7 @@ final class ReplaceHttpServerVarsByServerRectorTest extends AbstractRectorTestCa
      */
     public function provideDataForTest(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixtures');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

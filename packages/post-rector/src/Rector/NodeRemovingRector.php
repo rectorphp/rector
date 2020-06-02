@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class NodeRemovingRector extends AbstractPostRector
@@ -64,7 +66,11 @@ final class NodeRemovingRector extends AbstractPostRector
             return $this->nodeFactory->createMethodCall($nestedMethodCall->var, $methodName, $node->args);
         }
 
-        return null;
+        if (! $node instanceof BinaryOp) {
+            return null;
+        }
+
+        return $this->removePartOfBinaryOp($node);
     }
 
     /**
@@ -73,6 +79,11 @@ final class NodeRemovingRector extends AbstractPostRector
     public function leaveNode(Node $node)
     {
         foreach ($this->nodesToRemoveCollector->getNodesToRemove() as $key => $nodeToRemove) {
+            $nodeToRemoveParent = $nodeToRemove->getAttribute(AttributeKey::PARENT_NODE);
+            if ($nodeToRemoveParent instanceof BinaryOp) {
+                continue;
+            }
+
             if ($node === $nodeToRemove) {
                 $this->nodesToRemoveCollector->unset($key);
 
@@ -100,5 +111,29 @@ final class NodeRemovingRector extends AbstractPostRector
         $methodName = $this->getName($node->name);
 
         return $methodName !== null;
+    }
+
+    private function removePartOfBinaryOp(BinaryOp $binaryOp): ?Node
+    {
+        // handle left/right binary remove, e.g. "true && false" → remove false → "true"
+        foreach ($this->nodesToRemoveCollector->getNodesToRemove() as $key => $nodeToRemove) {
+            // remove node
+            $nodeToRemoveParentNode = $nodeToRemove->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $nodeToRemoveParentNode instanceof BinaryOp) {
+                continue;
+            }
+
+            if ($binaryOp->left === $nodeToRemove) {
+                $this->nodesToRemoveCollector->unset($key);
+                return $binaryOp->right;
+            }
+
+            if ($binaryOp->right === $nodeToRemove) {
+                $this->nodesToRemoveCollector->unset($key);
+                return $binaryOp->left;
+            }
+        }
+
+        return null;
     }
 }
