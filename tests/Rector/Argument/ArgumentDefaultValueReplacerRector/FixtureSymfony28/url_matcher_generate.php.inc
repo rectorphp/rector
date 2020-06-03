@@ -9,7 +9,7 @@ class UrlMatcherGenerate
     public function run()
     {
         $router = new Router();
-        $router->generate('name', [], 1);
+        $router->generate('name', [], false);
         $router->generate('name', [], true);
     }
 }
@@ -27,8 +27,8 @@ class UrlMatcherGenerate
     public function run()
     {
         $router = new Router();
-        $router->generate('name', [], 1);
-        $router->generate('name', [], 0);
+        $router->generate('name', [], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH);
+        $router->generate('name', [], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }
 

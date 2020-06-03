@@ -11,13 +11,13 @@ services:
                     2:
                         -
                             before: true
-                            after: 0
+                            after: Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
                         -
                             before: false
-                            after: 1
+                            after: Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH
                         -
                             before: 'relative'
-                            after: 2
+                            after: Symfony\Component\Routing\Generator\UrlGeneratorInterface::RELATIVE_PATH
                         -
                             before: 'network'
-                            after: 3
+                            after: Symfony\Component\Routing\Generator\UrlGeneratorInterface::NETWORK_PATH
