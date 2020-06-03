@@ -70,6 +70,10 @@ PHP
         $type = $node->types[0];
         $typeShortName = $this->getShortName($type);
 
+        if ($node->var === null) {
+            return null;
+        }
+
         $oldVariableName = $this->getName($node->var);
         if (! $oldVariableName) {
             return null;

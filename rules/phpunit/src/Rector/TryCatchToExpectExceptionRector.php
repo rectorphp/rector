@@ -101,6 +101,9 @@ PHP
         $this->newExpressions = [];
 
         $exceptionVariable = $tryCatch->catches[0]->var;
+        if ($exceptionVariable === null) {
+            return null;
+        }
 
         // we look for:
         // - instance of $exceptionVariableName
