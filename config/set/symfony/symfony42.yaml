@@ -106,10 +106,13 @@ services:
         $replacesByMethodAndTypes:
             # https://github.com/symfony/symfony/commit/9493cfd5f2366dab19bbdde0d0291d0575454567
             Symfony\Component\HttpFoundation\Cookie:
-                $secure:
-                    'false': null
-                $samesite:
-                    'null': 'lax'
+                __construct:
+                    5:
+                        before: false
+                        after: null
+                    8:
+                        before: null
+                        after: 'lax'
 
     Rector\Core\Rector\Argument\ArgumentRemoverRector:
         $positionsByMethodNameByClassType:

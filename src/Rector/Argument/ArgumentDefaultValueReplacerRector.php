@@ -131,17 +131,16 @@ PHP
      */
     private function processArgs(Node $node, int $position, array $oldToNewValues): void
     {
-        $argValue = $this->resolveArgumentValue($node->args[$position]);
+        $argValue = $this->getValue($node->args[$position]->value);
+
         foreach ($oldToNewValues as $oldToNewValue) {
-            if (is_scalar($oldToNewValue[self::BEFORE]) && $argValue === $oldToNewValue[self::BEFORE]) {
-                $node->args[$position] = $this->normalizeValueToArgument($oldToNewValue[self::AFTER]);
-            } elseif (is_array($oldToNewValue[self::BEFORE])) {
-                $newArgs = $this->processArrayReplacement(
-                    $node->args,
-                    $position,
-                    $oldToNewValue[self::BEFORE],
-                    $oldToNewValue[self::AFTER]
-                );
+            $oldValue = $oldToNewValue[self::BEFORE];
+            $newValue = $oldToNewValue[self::AFTER];
+
+            if (is_scalar($oldValue) && $argValue === $oldValue) {
+                $node->args[$position] = $this->normalizeValueToArgument($newValue);
+            } elseif (is_array($oldValue)) {
+                $newArgs = $this->processArrayReplacement($node->args, $position, $oldValue, $newValue);
 
                 if ($newArgs) {
                     $node->args = $newArgs;
@@ -149,21 +148,6 @@ PHP
                 }
             }
         }
-    }
-
-    private function resolveArgumentValue(Arg $arg)
-    {
-        $resolvedValue = $this->getValue($arg->value);
-
-        if ($resolvedValue === true) {
-            return 'true';
-        }
-
-        if (! $resolvedValue) {
-            return 'false';
-        }
-
-        return $resolvedValue;
     }
 
     private function normalizeValueToArgument($value): Arg
@@ -216,9 +200,12 @@ PHP
         $beforeArgumentCount = count($before);
 
         for ($i = 0; $i < $beforeArgumentCount; ++$i) {
-            if (isset($argumentNodes[$position + $i])) {
-                $argumentValues[] = $this->resolveArgumentValue($argumentNodes[$position + $i]);
+            if (! isset($argumentNodes[$position + $i])) {
+                continue;
             }
+
+            $nextArg = $argumentNodes[$position + $i];
+            $argumentValues[] = $this->getValue($nextArg->value);
         }
 
         return $argumentValues;

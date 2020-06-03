@@ -1,3 +1,23 @@
 services:
     # Yaml::parse('file.yml')   →   Yaml::parse(file_get_contents('file.yml'))
     Rector\Symfony\Rector\Yaml\ParseFileRector: null
+
+    #  UrlGenerator constants change
+    # https://github.com/symfony/symfony/commit/912fc4de8fd6de1e5397be4a94d39091423e5188
+    Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector:
+        $replacesByMethodAndTypes:
+            Symfony\Component\Routing\Generator\UrlGeneratorInterface:
+                generate:
+                    2:
+                        -
+                            before: true
+                            after: 0
+                        -
+                            before: false
+                            after: 1
+                        -
+                            before: 'relative'
+                            after: 2
+                        -
+                            before: 'network'
+                            after: 3
