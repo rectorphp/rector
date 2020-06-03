@@ -285,7 +285,7 @@ See [the contribution guide](/CONTRIBUTING.md).
 You can run Rector on your project using Docker:
 
 ```bash
-docker run -v $(pwd):/project rector/rector:latest process /project/src --set symfony40 --dry-run
+docker run --rm -v $(pwd):/project rector/rector:latest process /project/src --set symfony40 --dry-run
 
 # Note that a volume is mounted from `pwd` (the current directory) into `/project` which can be accessed later.
 ```
@@ -293,7 +293,7 @@ docker run -v $(pwd):/project rector/rector:latest process /project/src --set sy
 Using `rector.yaml`:
 
 ```bash
-docker run -v $(pwd):/project rector/rector:latest process /project/app \
+docker run --rm -v $(pwd):/project rector/rector:latest process /project/app \
 --config /project/rector.yaml \
 --autoload-file /project/vendor/autoload.php \
 --dry-run
