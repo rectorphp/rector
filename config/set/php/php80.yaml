@@ -8,3 +8,4 @@ services:
     Rector\Php80\Rector\FuncCall\ClassOnObjectRector: null
     Rector\Php80\Rector\Ternary\GetDebugTypeRector: null
     Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector: null
+    Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector: null
