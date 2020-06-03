@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use function strtolower;
 
 /**
@@ -61,6 +62,10 @@ PHP
         }
 
         if (strtolower((string) $defaultValueNode->name) !== 'null') {
+            return null;
+        }
+
+        if ($node->getAttribute(AttributeKey::PREVIOUS_NODE) instanceof Node\NullableType) {
             return null;
         }
 
