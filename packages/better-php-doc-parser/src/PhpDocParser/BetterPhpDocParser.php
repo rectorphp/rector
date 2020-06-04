@@ -124,6 +124,8 @@ final class BetterPhpDocParser extends PhpDocParser
 
         foreach ($phpDocNodeFactories as $phpDocNodeFactory) {
             foreach ($phpDocNodeFactory->getClasses() as $class) {
+                // clean from prefixer extra slashes, as we need to match exact class name stirng
+                $class = ltrim($class, '\\');
                 $this->phpDocNodeFactories[$class] = $phpDocNodeFactory;
             }
         }
