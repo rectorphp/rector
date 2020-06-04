@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Property_;
 
-use Doctrine\ORM\Mapping\JoinTable;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
@@ -37,7 +36,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
      */
     public function getClasses(): array
     {
-        return [JoinTable::class];
+        return ['Doctrine\ORM\Mapping\JoinTable'];
     }
 
     /**
@@ -52,7 +51,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             throw new ShouldNotHappenException();
         }
 
-        /** @var JoinTable|null $joinTable */
+        /** @var \Doctrine\ORM\Mapping\JoinTable|null $joinTable */
         $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($joinTable === null) {
             return null;
