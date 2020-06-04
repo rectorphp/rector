@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use Ramsey\Uuid\UuidInterface;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
@@ -40,7 +39,7 @@ final class PhpDocTagNodeFactory
 
     public function createUuidInterfaceVarTagValueNode(): AttributeAwareVarTagValueNode
     {
-        $identifierTypeNode = new IdentifierTypeNode('\\' . UuidInterface::class);
+        $identifierTypeNode = new IdentifierTypeNode('\Ramsey\Uuid\UuidInterface');
 
         return $this->createVarTagValueNodeWithType($identifierTypeNode);
     }
