@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
-use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
@@ -33,11 +32,6 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
  */
 final class BetterPhpDocParser extends PhpDocParser
 {
-    /**
-     * @var bool
-     */
-    private $isComment = false;
-
     /**
      * @var PhpDocNodeFactoryInterface[]
      */
@@ -146,15 +140,7 @@ final class BetterPhpDocParser extends PhpDocParser
     {
         $originalTokenIterator = clone $tokenIterator;
 
-        $this->isComment = false;
-
-        try {
-            $tokenIterator->consumeTokenType(Lexer::TOKEN_OPEN_PHPDOC);
-        } catch (ParserException $parserException) {
-            // probably "//" start
-            $this->isComment = true;
-            $tokenIterator->consumeTokenType(Lexer::TOKEN_OTHER);
-        }
+        $tokenIterator->consumeTokenType(Lexer::TOKEN_OPEN_PHPDOC);
 
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
 
@@ -169,10 +155,8 @@ final class BetterPhpDocParser extends PhpDocParser
             }
         }
 
-        if (! $this->isComment) {
-            // might be in the middle of annotations
-            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
-        }
+        // might be in the middle of annotations
+        $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
 
         $phpDocNode = new PhpDocNode(array_values($children));
 
