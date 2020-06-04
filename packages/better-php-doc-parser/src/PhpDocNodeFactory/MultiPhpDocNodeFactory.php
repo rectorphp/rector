@@ -4,31 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 
-use DI\Annotation\Inject;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
-use Doctrine\ORM\Mapping\Embeddable;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\InheritanceType;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Gedmo\Mapping\Annotation\Blameable;
-use Gedmo\Mapping\Annotation\Locale;
-use Gedmo\Mapping\Annotation\Loggable;
-use Gedmo\Mapping\Annotation\Slug;
-use Gedmo\Mapping\Annotation\SoftDeleteable;
-use Gedmo\Mapping\Annotation\Translatable;
-use Gedmo\Mapping\Annotation\Tree;
-use Gedmo\Mapping\Annotation\TreeLeft;
-use Gedmo\Mapping\Annotation\TreeLevel;
-use Gedmo\Mapping\Annotation\TreeParent;
-use Gedmo\Mapping\Annotation\TreeRight;
-use Gedmo\Mapping\Annotation\TreeRoot;
-use Gedmo\Mapping\Annotation\Versioned;
-use JMS\DiExtraBundle\Annotation\InjectParams;
-use JMS\DiExtraBundle\Annotation\Service;
-use JMS\Serializer\Annotation\Type;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
@@ -64,13 +39,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertCho
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertEmailTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertRangeTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\Range;
-use Symfony\Component\Validator\Constraints\Type as SymfonyValidationType;
 
 final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
@@ -82,50 +50,50 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         return [
             // tag value node class => annotation class
 
-            // doctrine
-            EmbeddableTagValueNode::class => Embeddable::class,
-            EntityTagValueNode::class => Entity::class,
-            InheritanceTypeTagValueNode::class => InheritanceType::class,
-            ColumnTagValueNode::class => Column::class,
-            CustomIdGeneratorTagValueNode::class => CustomIdGenerator::class,
-            IdTagValueNode::class => Id::class,
-            GeneratedValueTagValueNode::class => GeneratedValue::class,
-            JoinColumnTagValueNode::class => JoinColumn::class,
+            // doctrine - intentionally in string, so prefixer of rector.phar doesn't prefix it
+            EmbeddableTagValueNode::class => 'Doctrine\ORM\Mapping\Embeddable',
+            EntityTagValueNode::class => 'Doctrine\ORM\Mapping\Entity',
+            InheritanceTypeTagValueNode::class => 'Doctrine\ORM\Mapping\InheritanceType',
+            ColumnTagValueNode::class => 'Doctrine\ORM\Mapping\Column',
+            CustomIdGeneratorTagValueNode::class => 'Doctrine\ORM\Mapping\CustomIdGenerator',
+            IdTagValueNode::class => 'Doctrine\ORM\Mapping\Id',
+            GeneratedValueTagValueNode::class => 'Doctrine\ORM\Mapping\GeneratedValue',
+            JoinColumnTagValueNode::class => 'Doctrine\ORM\Mapping\JoinColumn',
 
             // symfony/http-kernel
-            SymfonyRouteTagValueNode::class => Route::class,
+            SymfonyRouteTagValueNode::class => 'Symfony\Component\Routing\Annotation\Route',
 
             // symfony/validator
-            AssertRangeTagValueNode::class => Range::class,
-            AssertTypeTagValueNode::class => SymfonyValidationType::class,
-            AssertChoiceTagValueNode::class => Choice::class,
-            AssertEmailTagValueNode::class => Email::class,
+            AssertRangeTagValueNode::class => 'Symfony\Component\Validator\Constraints\Range',
+            AssertTypeTagValueNode::class => 'Symfony\Component\Validator\Constraints\Type',
+            AssertChoiceTagValueNode::class => 'Symfony\Component\Validator\Constraints\Choice',
+            AssertEmailTagValueNode::class => 'Symfony\Component\Validator\Constraints\Email',
 
             // gedmo
-            LocaleTagValueNode::class => Locale::class,
-            BlameableTagValueNode::class => Blameable::class,
-            SlugTagValueNode::class => Slug::class,
-            SoftDeleteableTagValueNode::class => SoftDeleteable::class,
-            TreeRootTagValueNode::class => TreeRoot::class,
-            TreeLeftTagValueNode::class => TreeLeft::class,
-            TreeLevelTagValueNode::class => TreeLevel::class,
-            TreeParentTagValueNode::class => TreeParent::class,
-            TreeRightTagValueNode::class => TreeRight::class,
-            VersionedTagValueNode::class => Versioned::class,
-            TranslatableTagValueNode::class => Translatable::class,
-            LoggableTagValueNode::class => Loggable::class,
-            TreeTagValueNode::class => Tree::class,
+            LocaleTagValueNode::class => 'Gedmo\Mapping\Annotation\Locale',
+            BlameableTagValueNode::class => 'Gedmo\Mapping\Annotation\Blameable',
+            SlugTagValueNode::class => 'Gedmo\Mapping\Annotation\Slug',
+            SoftDeleteableTagValueNode::class => 'Gedmo\Mapping\Annotation\SoftDeleteable',
+            TreeRootTagValueNode::class => 'Gedmo\Mapping\Annotation\TreeRoot',
+            TreeLeftTagValueNode::class => 'Gedmo\Mapping\Annotation\TreeLeft',
+            TreeLevelTagValueNode::class => 'Gedmo\Mapping\Annotation\TreeLevel',
+            TreeParentTagValueNode::class => 'Gedmo\Mapping\Annotation\TreeParent',
+            TreeRightTagValueNode::class => 'Gedmo\Mapping\Annotation\TreeRight',
+            VersionedTagValueNode::class => 'Gedmo\Mapping\Annotation\Versioned',
+            TranslatableTagValueNode::class => 'Gedmo\Mapping\Annotation\Translatable',
+            LoggableTagValueNode::class => 'Gedmo\Mapping\Annotation\Loggable',
+            TreeTagValueNode::class => 'Gedmo\Mapping\Annotation\Tree',
 
             // Sensio
-            SensioTemplateTagValueNode::class => Template::class,
-            SensioMethodTagValueNode::class => Method::class,
+            SensioTemplateTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template',
+            SensioMethodTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method',
 
             // JMS
-            JMSInjectParamsTagValueNode::class => InjectParams::class,
-            JMSServiceValueNode::class => Service::class,
-            SerializerTypeTagValueNode::class => Type::class,
+            JMSInjectParamsTagValueNode::class => 'JMS\DiExtraBundle\Annotation\InjectParams',
+            JMSServiceValueNode::class => 'JMS\DiExtraBundle\Annotation\Service',
+            SerializerTypeTagValueNode::class => 'JMS\Serializer\Annotation\Type',
 
-            PHPDIInjectTagValueNode::class => Inject::class,
+            PHPDIInjectTagValueNode::class => 'DI\Annotation\Inject',
         ];
     }
 
