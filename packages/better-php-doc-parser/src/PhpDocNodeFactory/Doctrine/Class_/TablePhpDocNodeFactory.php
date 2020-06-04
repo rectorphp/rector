@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_;
 
-use Doctrine\ORM\Mapping\Table;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -39,7 +38,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
      */
     public function getClasses(): array
     {
-        return [Table::class];
+        return ['Doctrine\ORM\Mapping\Table'];
     }
 
     public function createFromNodeAndTokens(
@@ -51,7 +50,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             throw new ShouldNotHappenException();
         }
 
-        /** @var Table|null $table */
+        /** @var \Doctrine\ORM\Mapping\Table|null $table */
         $table = $this->nodeAnnotationReader->readClassAnnotation($node, $annotationClass);
         if ($table === null) {
             return null;

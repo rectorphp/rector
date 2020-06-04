@@ -78,4 +78,11 @@ parameters:
         # often soo many cases that need manual attention → skip and resole in automated way
         SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse: null
 
+        SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.ReferenceViaFullyQualifiedName:
+            # special case for optional entity classes in refactored project
+            - 'packages/better-php-doc-parser/src/PhpDocNodeFactory/Doctrine/Property_/DoctrineTargetEntityPhpDocNodeFactory.php'
+            - 'packages/better-php-doc-parser/src/PhpDocNodeFactory/Doctrine/Property_/JoinTablePhpDocNodeFactory.php'
+            - 'packages/better-php-doc-parser/src/PhpDocNodeFactory/Doctrine/Class_/TablePhpDocNodeFactory.php'
+            - 'packages/better-php-doc-parser/src/PhpDocNodeFactory/JMS/JMSInjectPhpDocNodeFactory.php'
+
     line_ending: "\n"
