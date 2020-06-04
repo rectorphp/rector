@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\JMS;
 
-use JMS\DiExtraBundle\Annotation\Inject;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -30,7 +29,7 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
      */
     public function getClasses(): array
     {
-        return [Inject::class];
+        return ['JMS\DiExtraBundle\Annotation\Inject'];
     }
 
     /**
@@ -45,7 +44,7 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
             return null;
         }
 
-        /** @var Inject|null $inject */
+        /** @var \JMS\DiExtraBundle\Annotation\Inject|null $inject */
         $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($inject === null) {
             return null;
