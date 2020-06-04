@@ -3,20 +3,20 @@
 services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            Cake\Form\Form:
+            'Cake\Form\Form':
                 'errors': 'getErrors'
-            Cake\Validation\Validation:
+            'Cake\Validation\Validation':
                 cc: 'creditCard'
-            Cake\Filesystem\Folder:
+            'Cake\Filesystem\Folder':
                 normalizePath: 'correctSlashFor'
-            Cake\Http\Client\Response:
+            'Cake\Http\Client\Response':
                 body: 'getStringBody'
-            Cake\Core\Plugin:
+            'Cake\Core\Plugin':
                 unload: 'clear'
 
     Rector\Core\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
-            Cake\Http\Client\Response:
+            'Cake\Http\Client\Response':
                 body:
                     get: 'getStringBody'
                 json:
@@ -27,7 +27,7 @@ services:
                     get: 'getCookies'
                 code:
                     get: 'getStatusCode'
-            Cake\View\View:
+            'Cake\View\View':
                 request:
                     get: 'getRequest'
                     set: 'setRequest'
@@ -69,17 +69,17 @@ services:
 
     Rector\Core\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector:
         $oldMethodsToNewMethodsWithArgsByType:
-            Cake\Database\Query:
+            'Cake\Database\Query':
                 join: ['clause', ['join']]
                 from: ['clause', ['from']]
 
     Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
         $methodNamesByTypes:
-            Cake\Database\Connection:
+            'Cake\Database\Connection':
                 logQueries:
                     set: 'enableQueryLogging'
                     get: 'isQueryLoggingEnabled'
-            Cake\ORM\Association:
+            'Cake\ORM\Association':
                 className:
                     set: 'setClassName'
                     get: 'getClassName'

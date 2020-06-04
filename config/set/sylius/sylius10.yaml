@@ -17,18 +17,18 @@ services:
 
     Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
         $typehintForParameterByMethodByClass:
-            Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext:
+            'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext':
                 __construct:
                     0: 'Sylius\Component\Core\Storage\CartStorageInterface'
 
     Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
-            Sylius\Component\Mailer\Sender\SenderInterface:
+            'Sylius\Component\Mailer\Sender\SenderInterface':
                 send:
                     0:
                         name: 'code'
                         default_value: '[]'
-            Sylius\Component\Core\Repository\ProductRepositoryInterface:
+            'Sylius\Component\Core\Repository\ProductRepositoryInterface':
                 findOneBySlug:
                     2:
                         name: '__unknown__'
@@ -36,15 +36,15 @@ services:
 
     Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
-            Sylius\Component\Order\Model\OrderInterface:
+            'Sylius\Component\Order\Model\OrderInterface':
                 getAdjustmentsRecursively:
                     'array': 'Doctrine\Common\Collections\Collection'
 
-            Sylius\Component\Order\Model\OrderItemInterface:
+            'Sylius\Component\Order\Model\OrderItemInterface':
                 getAdjustmentsRecursively:
                     'array': 'Doctrine\Common\Collections\Collection'
 
-            Sylius\Component\Registry\PrioritizedServiceRegistryInterface:
+            'Sylius\Component\Registry\PrioritizedServiceRegistryInterface':
                 all:
                     'Zend\Stdlib\PriorityQueue': 'iterable'
 

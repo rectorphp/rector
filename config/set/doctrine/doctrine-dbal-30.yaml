@@ -2,13 +2,13 @@ services:
     # https://github.com/doctrine/dbal/blob/master/UPGRADE.md#bc-break-changes-in-handling-string-and-binary-columns
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            DBAL\Platforms\AbstractPlatform:
+            'DBAL\Platforms\AbstractPlatform':
                 getVarcharTypeDeclarationSQL: 'getStringTypeDeclarationSQL'
-            Doctrine\DBAL\Driver\DriverException:
+            'Doctrine\DBAL\Driver\DriverException':
                 getErrorCode: 'getCode'
 
     Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
-            Doctrine\DBAL\Connection:
+            'Doctrine\DBAL\Connection':
                 ping: 'void'
 

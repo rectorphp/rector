@@ -8,5 +8,5 @@ services:
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Kdyby\Events\Subscriber: 'Symfony\Component\EventDispatcher\EventSubscriberInterface'
-            Kdyby\Events\EventManager: 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface'
+            'Kdyby\Events\Subscriber': 'Symfony\Component\EventDispatcher\EventSubscriberInterface'
+            'Kdyby\Events\EventManager': 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface'

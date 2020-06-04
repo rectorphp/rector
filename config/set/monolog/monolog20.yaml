@@ -2,7 +2,7 @@ services:
     # https://github.com/Seldaek/monolog/commit/39f8a20e6dadc0194e846b254c5f23d1c732290b#diff-dce565f403e044caa5e6a0d988339430
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            Monolog\Logger:
+            'Monolog\Logger':
                 addDebug: 'debug'
                 addInfo: 'info'
                 addNotice: 'notice'

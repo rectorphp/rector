@@ -5,10 +5,10 @@ services:
     # https://github.com/symfony/symfony/blob/5.0/UPGRADE-5.0.md
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Symfony\Component\Debug\Debug: 'Symfony\Component\ErrorHandler\Debug'
+            'Symfony\Component\Debug\Debug': 'Symfony\Component\ErrorHandler\Debug'
 
     Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
         $oldToNewMethodsByClass:
-            Symfony\Component\Console\Application:
+            'Symfony\Component\Console\Application':
                 renderException: 'renderThrowable'
                 doRenderException: 'doRenderThrowable'

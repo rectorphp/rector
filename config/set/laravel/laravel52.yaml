@@ -2,9 +2,9 @@
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Illuminate\Auth\Access\UnauthorizedException: 'Illuminate\Auth\Access\AuthorizationException'
-            Illuminate\Http\Exception\HttpResponseException: 'Illuminate\Foundation\Validation\ValidationException'
-            Illuminate\Foundation\Composer: 'Illuminate\Support\Composer'
+            'Illuminate\Auth\Access\UnauthorizedException': 'Illuminate\Auth\Access\AuthorizationException'
+            'Illuminate\Http\Exception\HttpResponseException': 'Illuminate\Foundation\Validation\ValidationException'
+            'Illuminate\Foundation\Composer': 'Illuminate\Support\Composer'
 
     Rector\Core\Rector\String_\StringToClassConstantRector:
         $stringsToClassConstants:

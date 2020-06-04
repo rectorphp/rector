@@ -8,4 +8,4 @@ services:
     # then rename the "EasyCorp\Bundle\EasyAdminBundle\AdminController" class
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            EasyCorp\Bundle\EasyAdminBundle\AdminController: 'EasyCorp\Bundle\EasyAdminBundle\EasyAdminController'
+            'EasyCorp\Bundle\EasyAdminBundle\AdminController': 'EasyCorp\Bundle\EasyAdminBundle\EasyAdminController'

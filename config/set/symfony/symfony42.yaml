@@ -2,15 +2,15 @@ services:
     # https://github.com/symfony/symfony/pull/28447
     Rector\Core\Rector\New_\NewToStaticCallRector:
         $typeToStaticCalls:
-            Symfony\Component\HttpFoundation\Cookie: ['Symfony\Component\HttpFoundation\Cookie', 'create']
+            'Symfony\Component\HttpFoundation\Cookie': ['Symfony\Component\HttpFoundation\Cookie', 'create']
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
             # https://github.com/symfony/symfony/commit/a7e319d9e1316e2e18843f8ce15b67a8693e5bf9
-            Symfony\Bundle\FrameworkBundle\Controller\Controller: 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController'
+            'Symfony\Bundle\FrameworkBundle\Controller\Controller': 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController'
             # https://github.com/symfony/symfony/commit/744bf0e7ac3ecf240d0bf055cc58f881bb0b3ec0
-            Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand: 'Symfony\Component\Console\Command\Command'
-            Symfony\Component\Translation\TranslatorInterface: 'Symfony\Contracts\Translation\TranslatorInterface'
+            'Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand': 'Symfony\Component\Console\Command\Command'
+            'Symfony\Component\Translation\TranslatorInterface': 'Symfony\Contracts\Translation\TranslatorInterface'
 
     # related to "Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand" deprecation, see https://github.com/rectorphp/rector/issues/1629
     Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector: null
@@ -23,7 +23,7 @@ services:
         $positionWithDefaultValueByMethodNamesByClassTypes:
             # https://github.com/symfony/symfony/commit/fa2063efe43109aea093d6fbfc12d675dba82146
             # https://github.com/symfony/symfony/commit/e3aa90f852f69040be19da3d8729cdf02d238ec7
-            Symfony\Component\BrowserKit\Client:
+            'Symfony\Component\BrowserKit\Client':
                 submit:
                     2:
                         name: 'serverParameters'
@@ -31,21 +31,21 @@ services:
                         scope: ['method_call']
 
             # https://github.com/symfony/symfony/commit/f634afdb6f573e4af8d89aaa605e0c7d4058676d
-            Symfony\Component\DomCrawler\Crawler:
+            'Symfony\Component\DomCrawler\Crawler':
                 children:
                     0:
                         # $selector
                         default_value: null
                         scope: ['method_call']
 
-            Symfony\Component\Finder\Finder:
+            'Symfony\Component\Finder\Finder':
                 sortByName:
                     0:
                         # $useNaturalSort
                         default_value: false
                         scope: ['method_call']
 
-            Symfony\Bridge\Monolog\Processor\DebugProcessor:
+            'Symfony\Bridge\Monolog\Processor\DebugProcessor':
                 getLogs:
                     0:
                         # $request
@@ -57,7 +57,7 @@ services:
                         default_value: null
                         scope: ['method_call']
 
-            Symfony\Bridge\Monolog\Logger:
+            'Symfony\Bridge\Monolog\Logger':
                 getLogs:
                     0:
                         # $request
@@ -69,7 +69,7 @@ services:
                         default_value: null
                         scope: ['method_call']
 
-            Symfony\Component\Serializer\Normalizer:
+            'Symfony\Component\Serializer\Normalizer':
                 handleCircularReference:
                     1:
                         # $format
@@ -82,30 +82,30 @@ services:
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            Symfony\Component\Cache\CacheItem:
+            'Symfony\Component\Cache\CacheItem':
                 getPreviousTags: 'getMetadata'
-            Symfony\Component\Form\AbstractTypeExtension:
+            'Symfony\Component\Form\AbstractTypeExtension':
                 getExtendedType: 'getExtendedTypes'
 
     Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
-            Symfony\Component\Form\AbstractTypeExtension:
+            'Symfony\Component\Form\AbstractTypeExtension':
                 getExtendedTypes: 'iterable'
 
     Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
-            Symfony\Component\Form\AbstractTypeExtension:
+            'Symfony\Component\Form\AbstractTypeExtension':
                 getExtendedTypes: 'static'
 
     Rector\Core\Rector\ClassMethod\WrapReturnRector:
         $typeToMethodToWrap:
-            Symfony\Component\Form\AbstractTypeExtension:
+            'Symfony\Component\Form\AbstractTypeExtension':
                 getExtendedTypes: 'array'
 
     Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector:
         $replacesByMethodAndTypes:
             # https://github.com/symfony/symfony/commit/9493cfd5f2366dab19bbdde0d0291d0575454567
-            Symfony\Component\HttpFoundation\Cookie:
+            'Symfony\Component\HttpFoundation\Cookie':
                 __construct:
                     5:
                         before: false
@@ -117,7 +117,7 @@ services:
     Rector\Core\Rector\Argument\ArgumentRemoverRector:
         $positionsByMethodNameByClassType:
             # https://github.com/symfony/symfony/commit/f5c355e1ba399a1b3512367647d902148bdaf09f
-            Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector:
+            'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector':
                 __construct:
                     0: null
                     1: null

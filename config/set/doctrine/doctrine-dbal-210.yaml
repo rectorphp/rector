@@ -2,4 +2,4 @@ services:
     # https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecated-type-constants
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Doctrine\DBAL\Types\Type: 'Doctrine\DBAL\Types\Types'
+            'Doctrine\DBAL\Types\Type': 'Doctrine\DBAL\Types\Types'

@@ -2,16 +2,16 @@
 services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            Illuminate\Validation\ValidatesWhenResolvedTrait:
+            'Illuminate\Validation\ValidatesWhenResolvedTrait':
                 validate: 'validateResolved'
-            Illuminate\Contracts\Validation\ValidatesWhenResolved:
+            'Illuminate\Contracts\Validation\ValidatesWhenResolved':
                 validate: 'validateResolved'
 
     Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
-            Illuminate\Routing\Router:
+            'Illuminate\Routing\Router':
                 addRoute: 'public'
-            Illuminate\Contracts\Auth\Access\Gate:
+            'Illuminate\Contracts\Auth\Access\Gate':
                 raw: 'public'
-            Illuminate\Database\Grammar:
+            'Illuminate\Database\Grammar':
                 getDateFormat: 'public'

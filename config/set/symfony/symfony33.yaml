@@ -43,5 +43,5 @@ services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
             # dependency-injection
-            Symfony\Component\DependencyInjection\Container:
+            'Symfony\Component\DependencyInjection\Container':
                 isFrozen: 'isCompiled'

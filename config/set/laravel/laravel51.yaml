@@ -2,4 +2,4 @@
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Illuminate\Validation\Validator: 'Illuminate\Contracts\Validation\Validator'
+            'Illuminate\Validation\Validator': 'Illuminate\Contracts\Validation\Validator'
