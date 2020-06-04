@@ -13,11 +13,11 @@ services:
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:
         $oldToNewConstantsByClass:
             # form
-            Symfony\Component\Form\FormEvents:
+            'Symfony\Component\Form\FormEvents':
                 PRE_BIND: 'PRE_SUBMIT'
                 BIND: 'SUBMIT'
                 POST_BIND: 'POST_SUBMIT'
-            Symfony\Component\Form\Extension\Core\DataTransformer:
+            'Symfony\Component\Form\Extension\Core\DataTransformer':
                 ROUND_HALFEVEN: 'ROUND_HALF_EVEN'
                 ROUND_HALFUP: 'ROUND_HALF_UP'
                 ROUND_HALFDOWN: 'ROUND_HALF_DOWN'
@@ -25,14 +25,14 @@ services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
             # class loader
-            Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader:
-                  'registerNamespaces': 'addPrefixes'
-                  'registerPrefixes': 'addPrefixes'
-                  'registerNamespace': 'addPrefix'
-                  'registerPrefix': 'addPrefix'
-                  'getNamespaces': 'getPrefixes'
-                  'getNamespaceFallbacks': 'getFallbackDirs'
-                  'getPrefixFallbacks': 'getFallbackDirs'
+            'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader':
+                'registerNamespaces': 'addPrefixes'
+                'registerPrefixes': 'addPrefixes'
+                'registerNamespace': 'addPrefix'
+                'registerPrefix': 'addPrefix'
+                'getNamespaces': 'getPrefixes'
+                'getNamespaceFallbacks': 'getFallbackDirs'
+                'getPrefixFallbacks': 'getFallbackDirs'
 
             # form
             'Symfony\Component\Form\AbstractType':

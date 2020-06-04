@@ -190,14 +190,14 @@ services:
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            Cake\Network\Request:
+            'Cake\Network\Request':
                 param: 'getParam'
                 data: 'getData'
                 query: 'getQuery'
                 cookie: 'getCookie'
                 method: 'getMethod'
                 setInput: 'withBody'
-            Cake\Network\Response:
+            'Cake\Network\Response':
                 location: 'withLocation'
                 disableCache: 'withDisabledCache'
                 type: 'withType'
@@ -221,36 +221,36 @@ services:
                 body: 'withBody'
                 statusCode: 'getStatusCode'
                 protocol: 'getProtocolVersion'
-            Cake\Event\Event:
+            'Cake\Event\Event':
                 'name': 'getName'
                 'subject': 'getSubject'
                 'result': 'getResult'
                 'data': 'getData'
-            Cake\View\Helper\FormHelper:
+            'Cake\View\Helper\FormHelper':
                 input: 'control'
                 inputs: 'controls'
                 allInputs: 'allControls'
-            Cake\Mailer\Mailer:
+            'Cake\Mailer\Mailer':
                 layout: 'setLayout'
-            Cake\Routing\Route\Route:
+            'Cake\Routing\Route\Route':
                 parse: 'parseRequest'
-            Cake\Routing\Router:
+            'Cake\Routing\Router':
                 parse: 'parseRequest'
 
     Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
-            Cake\Mailer\MailerAwareTrait:
+            'Cake\Mailer\MailerAwareTrait':
                 getMailer: 'protected'
-            Cake\View\CellTrait:
+            'Cake\View\CellTrait':
                 cell: 'protected'
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Cake\Database\Schema\Table: 'Cake\Database\Schema\TableSchema'
+            'Cake\Database\Schema\Table': 'Cake\Database\Schema\TableSchema'
 
     Rector\Core\Rector\MethodBody\NormalToFluentRector:
         $fluentMethodsByType:
-            Cake\Network\Response:
+            'Cake\Network\Response':
                 # https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#adopting-immutable-responses
                 # renames are done by RenameMethodRector above
                 - 'withLocation'

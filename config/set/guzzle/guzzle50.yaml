@@ -14,19 +14,19 @@ services:
 
     Rector\Core\Rector\Function_\FunctionToMethodCallRector:
         $functionToMethodCall:
-            GuzzleHttp\json_decode: ['GuzzleHttp\Utils', 'jsonDecode']
-            GuzzleHttp\get_path: ['GuzzleHttp\Utils', 'getPath']
+            'GuzzleHttp\json_decode': ['GuzzleHttp\Utils', 'jsonDecode']
+            'GuzzleHttp\get_path': ['GuzzleHttp\Utils', 'getPath']
 
     Rector\Core\Rector\StaticCall\StaticCallToFunctionRector:
         $staticCallToFunctionByType:
-            GuzzleHttp\Utils:
+            'GuzzleHttp\Utils':
                 setPath: 'GuzzleHttp\set_path'
-            GuzzleHttp\Pool:
+            'GuzzleHttp\Pool':
                 batch: 'GuzzleHttp\Pool\batch'
 
     Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector: null
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            GuzzleHttp\Message\MessageInterface:
+            'GuzzleHttp\Message\MessageInterface':
                 getHeaderLines: 'getHeaderAsArray'

@@ -2,21 +2,21 @@
 services:
     Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
-            Illuminate\Routing\Router:
+            'Illuminate\Routing\Router':
                 addRoute: 'public'
-            Illuminate\Contracts\Auth\Access\Gate:
+            'Illuminate\Contracts\Auth\Access\Gate':
                 raw: 'public'
 
     Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
-            Illuminate\Auth\Middleware\Authenticate:
+            'Illuminate\Auth\Middleware\Authenticate':
                 authenticate:
                     name: 'request'
-            Illuminate\Foundation\Auth\ResetsPasswords:
+            'Illuminate\Foundation\Auth\ResetsPasswords':
                 sendResetResponse:
                     name: 'request'
                     type: 'Illuminate\Http\Illuminate\Http'
-            Illuminate\Foundation\Auth\SendsPasswordResetEmails:
+            'Illuminate\Foundation\Auth\SendsPasswordResetEmails':
                 sendResetLinkResponse:
                     name: 'request'
                     type: 'Illuminate\Http\Illuminate\Http'
@@ -25,7 +25,7 @@ services:
 
     Rector\Core\Rector\Argument\ArgumentRemoverRector:
         $positionsByMethodNameByClassType:
-            Illuminate\Foundation\Application:
+            'Illuminate\Foundation\Application':
                 register:
                     1:
                         name: 'options'

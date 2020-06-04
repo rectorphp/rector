@@ -3,15 +3,15 @@
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Cake\Database\Type: 'Cake\Database\TypeFactory'
-            Cake\Console\ConsoleErrorHandler: 'Cake\Error\ConsoleErrorHandler'
+            'Cake\Database\Type': 'Cake\Database\TypeFactory'
+            'Cake\Console\ConsoleErrorHandler': 'Cake\Error\ConsoleErrorHandler'
 
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:
         $oldToNewConstantsByClass:
-            Cake\View\View:
+            'Cake\View\View':
                 NAME_ELEMENT: 'TYPE_ELEMENT'
                 NAME_LAYOUT: 'TYPE_LAYOUT'
-            Cake\Mailer\Email:
+            'Cake\Mailer\Email':
                 MESSAGE_HTML: 'Cake\Mailer\Message::MESSAGE_HTML'
                 MESSAGE_TEXT: 'Cake\Mailer\Message::MESSAGE_TEXT'
                 MESSAGE_BOTH: 'Cake\Mailer\Message::MESSAGE_BOTH'
@@ -19,59 +19,59 @@ services:
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            Cake\Form\Form:
+            'Cake\Form\Form':
                 errors: 'getErrors'
-            Cake\Mailer\Email:
+            'Cake\Mailer\Email':
                 set: 'setViewVars'
-            Cake\ORM\EntityInterface:
+            'Cake\ORM\EntityInterface':
                 unsetProperty: 'unset'
-            Cake\Cache\Cache:
+            'Cake\Cache\Cache':
                 engine: 'pool'
-            Cake\Http\Cookie\Cookie:
+            'Cake\Http\Cookie\Cookie':
                 getStringValue: 'getScalarValue'
-            Cake\Validation\Validator:
+            'Cake\Validation\Validator':
                 containsNonAlphaNumeric: 'notAlphaNumeric'
                 errors: 'validate'
 
     Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
         $oldToNewMethodByClasses:
-            Router:
+            'Router':
                 pushRequest: setRequest
                 setRequestInfo: setRequest
                 setRequestContext: setRequest
 
     Rector\Core\Rector\Property\RenamePropertyRector:
         $oldToNewPropertyByTypes:
-            Cake\ORM\Entity:
+            'Cake\ORM\Entity':
                 _properties: _fields
 
     Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
-            Cake\Http\BaseApplication:
+            'Cake\Http\BaseApplication':
                 bootstrap: 'void'
                 bootstrapCli: 'void'
                 middleware: 'Cake\Http\MiddlewareQueue'
-            Cake\Console\Shell:
+            'Cake\Console\Shell':
                 initialize: 'void'
-            Cake\Controller\Component:
+            'Cake\Controller\Component':
                 initialize: 'void'
-            Cake\Controller\Controller:
+            'Cake\Controller\Controller':
                 initialize: 'void'
                 render: 'Cake\Http\Response'
-            Cake\ORM\Behavior:
+            'Cake\ORM\Behavior':
                 initialize: 'void'
-            Cake\ORM\Table:
+            'Cake\ORM\Table':
                 initialize: 'void'
                 updateAll: 'int'
                 deleteAll: 'int'
                 validationDefault: 'Cake\Validation\Validator'
                 buildRules: 'Cake\ORM\RulesChecker'
-            Cake\View\Helper:
+            'Cake\View\Helper':
                 initialize: 'void'
 
     Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
         $typehintForParameterByMethodByClass:
-            Cake\ORM\Behavior:
+            'Cake\ORM\Behavior':
                 beforeFind:
                     0: 'Cake\Event\EventInterface'
                 buildValidator:
@@ -90,7 +90,7 @@ services:
                     0: 'Cake\Event\EventInterface'
                 afterDelete:
                     0: 'Cake\Event\EventInterface'
-            Cake\ORM\Table:
+            'Cake\ORM\Table':
                 beforeFind:
                     0: 'Cake\Event\EventInterface'
                 buildValidator:
@@ -109,7 +109,7 @@ services:
                     0: 'Cake\Event\EventInterface'
                 afterDelete:
                     0: 'Cake\Event\EventInterface'
-            Cake\Controller\Controller:
+            'Cake\Controller\Controller':
                 beforeFilter:
                     0: 'Cake\Event\EventInterface'
                 afterFilter:
@@ -118,7 +118,7 @@ services:
                     0: 'Cake\Event\EventInterface'
                 beforeRedirect:
                     0: 'Cake\Event\EventInterface'
-            Cake\Controller\Component:
+            'Cake\Controller\Component':
                 shutdown:
                     0: 'Cake\Event\EventInterface'
                 startup:
@@ -133,23 +133,23 @@ services:
     Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector:
         $methodNamesByTypes:
             getParam:
-              match_parameter: 'paging'
-              replace_with: 'getAttribute'
+                match_parameter: 'paging'
+                replace_with: 'getAttribute'
             withParam:
-              match_parameter: 'paging'
-              replace_with: 'withAttribute'
+                match_parameter: 'paging'
+                replace_with: 'withAttribute'
 
     Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
         $methodNamesByTypes:
-            Cake\Console\ConsoleIo:
+            'Cake\Console\ConsoleIo':
                 styles:
                     set: 'setStyle'
                     get: 'getStyle'
-            Cake\Console\ConsoleOutput:
+            'Cake\Console\ConsoleOutput':
                 styles:
                     set: 'setStyle'
                     get: 'getStyle'
-            Cake\ORM\EntityInterface:
+            'Cake\ORM\EntityInterface':
                 isNew:
                     set: 'setNew'
                     get: 'isNew'

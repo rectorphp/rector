@@ -1,13 +1,13 @@
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Gmagick: Imagick
-            GmagickPixel: ImagickPixel
+            'Gmagick': 'Imagick'
+            'GmagickPixel': 'ImagickPixel'
 
     # https://www.php.net/manual/en/book.gmagick.php → https://www.php.net/manual/en/book.imagick.php
     Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
         $oldToNewMethodsByClass:
-            Gmagick:
+            'Gmagick':
                 addimage: addImage
                 addnoiseimage: addNoiseImage
                 annotateimage: annotateImage
@@ -144,7 +144,7 @@ services:
                 trimimage: trimImage
                 writeimage: writeImage
 
-            GmagickPixel:
+            'GmagickPixel':
                 getcolor: getColor
                 getcolorcount: getColorCount
                 getcolorvalue: getColorValue

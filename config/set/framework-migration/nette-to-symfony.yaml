@@ -17,9 +17,9 @@ services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
             # run(Request $appRequest) -> run(\Symfony\Component\HttpFoundation\Request $appRequest)
-            Nette\Application\Request: Symfony\Component\HttpFoundation\Request
-            Nette\Http\Request: Symfony\Component\HttpFoundation\Request
-            Nette\Http\IRequest: Symfony\Component\HttpFoundation\Request
+            'Nette\Application\Request': 'Symfony\Component\HttpFoundation\Request'
+            'Nette\Http\Request': 'Symfony\Component\HttpFoundation\Request'
+            'Nette\Http\IRequest': 'Symfony\Component\HttpFoundation\Request'
 
             # extends Nette\Application\UI\Presenter -> extends Symfony\Bundle\FrameworkBundle\Controller\AbstractController
             Nette\Application\UI\Presenter: Symfony\Bundle\FrameworkBundle\Controller\AbstractController
@@ -30,22 +30,23 @@ services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
             # IPresenter::run() -> IPresenter->__invoke
-            Nette\Application\IPresenter:
+            'Nette\Application\IPresenter':
                 run: __invoke
 
-            Nette\DI\Container:
+            'Nette\DI\Container':
                 getByType: get
 
             # load configs
-            Nette\Configurator:
+            'Nette\Configurator':
                 addConfig: load
-            Symfony\Component\Config\Loader\LoaderInterface:
+
+            'Symfony\Component\Config\Loader\LoaderInterface':
                 addConfig: load
 
     Rector\Core\Rector\Interface_\RemoveInterfacesRector:
         $interfacesToRemove:
             # Removes "implements IPresenter"
-            - Nette\Application\IPresenter
+            - 'Nette\Application\IPresenter'
 
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:
         $oldToNewConstantsByClass:

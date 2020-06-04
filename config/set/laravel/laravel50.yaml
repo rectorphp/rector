@@ -2,13 +2,13 @@
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Illuminate\Cache\CacheManager: 'Illuminate\Contracts\Cache\Repository'
+            'Illuminate\Cache\CacheManager': 'Illuminate\Contracts\Cache\Repository'
             # https://stackoverflow.com/a/24949656/1348344
-            Illuminate\Database\Eloquent\SoftDeletingTrait: 'Illuminate\Database\Eloquent\SoftDeletes'
+            'Illuminate\Database\Eloquent\SoftDeletingTrait': 'Illuminate\Database\Eloquent\SoftDeletes'
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            Illuminate\Contracts\Pagination\Paginator:
+            'Illuminate\Contracts\Pagination\Paginator':
                 links: 'render'
                 getFrom: 'firstItem'
                 getTo: 'lastItem'

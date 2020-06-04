@@ -2,16 +2,16 @@
 services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            Illuminate\Console\Command:
+            'Illuminate\Console\Command':
                 fire: 'handle'
 
     Rector\Core\Rector\Property\RenamePropertyRector:
         $oldToNewPropertyByTypes:
-            Illuminate\Database\Eloquent\Concerns\HasEvents:
+            'Illuminate\Database\Eloquent\Concerns\HasEvents':
                 events: 'dispatchesEvents'
-            Illuminate\Database\Eloquent\Relations\Pivot:
+            'Illuminate\Database\Eloquent\Relations\Pivot':
                 parent: 'pivotParent'
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Illuminate\Translation\LoaderInterface: 'Illuminate\Contracts\Translation\Loader'
+            'Illuminate\Translation\LoaderInterface': 'Illuminate\Contracts\Translation\Loader'

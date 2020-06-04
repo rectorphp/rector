@@ -3,7 +3,7 @@ services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
             # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
-            Symfony\Component\Console\Helper\TableStyle:
+            'Symfony\Component\Console\Helper\TableStyle':
                 setHorizontalBorderChar: 'setHorizontalBorderChars'
                 setVerticalBorderChar: 'setVerticalBorderChars'
                 # special case to "getVerticalBorderChar" → "getBorderChars()[3]"
@@ -16,15 +16,16 @@ services:
 
                 setCrossingChar: 'setDefaultCrossingChar'
 
-            Symfony\Component\HttpFoundation\File\UploadedFile:
+            'Symfony\Component\HttpFoundation\File\UploadedFile':
                 getClientSize: 'getSize'
-            Symfony\Component\Workflow\DefinitionBuilder:
+
+            'Symfony\Component\Workflow\DefinitionBuilder':
                 reset: 'clear'
                 add: 'addWorkflow'
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
             # https://github.com/symfony/symfony/commit/07dd09db59e2f2a86a291d00d978169d9059e307
-            Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector: 'Symfony\Component\HttpKernel\DataCollector\RequestDataCollector'
-            Symfony\Component\Workflow\SupportStrategy\SupportStrategyInterface: 'Symfony\Component\Workflow\SupportStrategy\WorkflowSupportStrategyInterface'
-            Symfony\Component\Workflow\SupportStrategy\ClassInstanceSupportStrategy: 'Symfony\Component\Workflow\SupportStrategy\InstanceOfSupportStrategy'
+            'Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector': 'Symfony\Component\HttpKernel\DataCollector\RequestDataCollector'
+            'Symfony\Component\Workflow\SupportStrategy\SupportStrategyInterface': 'Symfony\Component\Workflow\SupportStrategy\WorkflowSupportStrategyInterface'
+            'Symfony\Component\Workflow\SupportStrategy\ClassInstanceSupportStrategy': 'Symfony\Component\Workflow\SupportStrategy\InstanceOfSupportStrategy'

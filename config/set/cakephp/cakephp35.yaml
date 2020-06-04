@@ -3,83 +3,83 @@
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            Cake\Http\Client\CookieCollection: 'Cake\Http\Cookie\CookieCollection'
-            Cake\Console\ShellDispatcher: 'Cake\Console\CommandRunner'
+            'Cake\Http\Client\CookieCollection': 'Cake\Http\Cookie\CookieCollection'
+            'Cake\Console\ShellDispatcher': 'Cake\Console\CommandRunner'
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            Cake\Database\Schema\TableSchema:
+            'Cake\Database\Schema\TableSchema':
                 column: 'getColumn'
                 constraint: 'getConstraint'
                 index: 'getIndex'
 
     Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
         $methodNamesByTypes:
-            Cake\Cache\Cache:
+            'Cake\Cache\Cache':
                 config: null
                 registry: null
-            Cake\Console\Shell:
+            'Cake\Console\Shell':
                 io: null
-            Cake\Console\ConsoleIo:
+            'Cake\Console\ConsoleIo':
                 outputAs: null
-            Cake\Console\ConsoleOutput:
+            'Cake\Console\ConsoleOutput':
                 outputAs: null
-            Cake\Database\Connection:
+            'Cake\Database\Connection':
                 logger: null
-            Cake\Database\TypedResultInterface:
+            'Cake\Database\TypedResultInterface':
                 returnType: null
-            Cake\Database\TypedResultTrait:
+            'Cake\Database\TypedResultTrait':
                 returnType: null
-            Cake\Database\Log\LoggingStatement:
+            'Cake\Database\Log\LoggingStatement':
                 logger: null
-            Cake\Datasource\ModelAwareTrait:
+            'Cake\Datasource\ModelAwareTrait':
                 modelType: null
-            Cake\Database\Query:
-                valueBinder:
+            'Cake\Database\Query':
+                'valueBinder':
                     get: 'getValueBinder'
                     set: 'valueBinder'
-            Cake\Database\Schema\TableSchema:
+            'Cake\Database\Schema\TableSchema':
                 columnType: null
-            Cake\Datasource\QueryTrait:
-                eagerLoaded:
+            'Cake\Datasource\QueryTrait':
+                'eagerLoaded':
                     get: 'isEagerLoaded'
                     set: 'eagerLoaded'
-            Cake\Event\EventDispatcherInterface:
+            'Cake\Event\EventDispatcherInterface':
                 eventManager: null
-            Cake\Event\EventDispatcherTrait:
+            'Cake\Event\EventDispatcherTrait':
                 eventManager: null
-            Cake\Error\Debugger:
-                outputAs:
+            'Cake\Error\Debugger':
+                'outputAs':
                     get: 'getOutputFormat'
                     set: 'setOutputFormat'
-            Cake\Http\ServerRequest:
-                env:
+            'Cake\Http\ServerRequest':
+                'env':
                     get: 'getEnv'
                     set: 'withEnv'
-                charset:
+                'charset':
                     get: 'getCharset'
                     set: 'withCharset'
-            Cake\I18n\I18n:
+            'Cake\I18n\I18n':
                 locale: null
                 translator: null
                 defaultLocale: null
                 defaultFormatter: null
-            Cake\ORM\Association\BelongsToMany:
+            'Cake\ORM\Association\BelongsToMany':
                 sort: null
-            Cake\ORM\LocatorAwareTrait:
+            'Cake\ORM\LocatorAwareTrait':
                 tableLocator: null
-            Cake\ORM\Table:
+            'Cake\ORM\Table':
                 validator: null
-            Cake\Routing\RouteBuilder:
+            'Cake\Routing\RouteBuilder':
                 extensions: null
                 routeClass: null
-            Cake\Routing\RouteCollection:
+            'Cake\Routing\RouteCollection':
                 extensions: null
-            Cake\TestSuite\TestFixture:
+            'Cake\TestSuite\TestFixture':
                 schema: null
-            Cake\Utility\Security:
+            'Cake\Utility\Security':
                 salt: null
-            Cake\View\View:
+            'Cake\View\View':
                 template: null
                 layout: null
                 theme: null

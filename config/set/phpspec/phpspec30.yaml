@@ -2,23 +2,23 @@
 services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            PhpSpec\ServiceContainer:
+            'PhpSpec\ServiceContainer':
                 set: 'define'
                 setShared: 'define'
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            PhpSpec\Console\IO: 'PhpSpec\Console\ConsoleIO'
-            PhpSpec\IO\IOInterface: 'PhpSpec\IO\IO'
-            PhpSpec\Locator\ResourceInterface: 'PhpSpec\Locator\Resource'
-            PhpSpec\Locator\ResourceLocatorInterface: 'PhpSpec\Locator\ResourceLocator'
-            PhpSpec\Formatter\Presenter\PresenterInterface: 'PhpSpec\Formatter\Presenter\Presenter'
-            PhpSpec\CodeGenerator\Generator\GeneratorInterface: 'PhpSpec\CodeGenerator\Generator\Generator'
-            PhpSpec\Extension\ExtensionInterface: 'PhpSpec\Extension'
-            Phpspec\CodeAnalysis\AccessInspectorInterface: 'Phpspec\CodeAnalysis\AccessInspector'
-            Phpspec\Event\EventInterface: 'Phpspec\Event\PhpSpecEvent'
-            PhpSpec\Formatter\Presenter\Differ\EngineInterface: 'PhpSpec\Formatter\Presenter\Differ\DifferEngine'
-            PhpSpec\Matcher\MatcherInterface: 'PhpSpec\Matcher\Matcher'
-            PhpSpec\Matcher\MatchersProviderInterface: 'PhpSpec\Matcher\MatchersProvider'
-            PhpSpec\SpecificationInterface: 'PhpSpec\Specification'
-            PhpSpec\Runner\Maintainer\MaintainerInterface: 'PhpSpec\Runner\Maintainer\Maintainer'
+            'PhpSpec\Console\IO': 'PhpSpec\Console\ConsoleIO'
+            'PhpSpec\IO\IOInterface': 'PhpSpec\IO\IO'
+            'PhpSpec\Locator\ResourceInterface': 'PhpSpec\Locator\Resource'
+            'PhpSpec\Locator\ResourceLocatorInterface': 'PhpSpec\Locator\ResourceLocator'
+            'PhpSpec\Formatter\Presenter\PresenterInterface': 'PhpSpec\Formatter\Presenter\Presenter'
+            'PhpSpec\CodeGenerator\Generator\GeneratorInterface': 'PhpSpec\CodeGenerator\Generator\Generator'
+            'PhpSpec\Extension\ExtensionInterface': 'PhpSpec\Extension'
+            'Phpspec\CodeAnalysis\AccessInspectorInterface': 'Phpspec\CodeAnalysis\AccessInspector'
+            'Phpspec\Event\EventInterface': 'Phpspec\Event\PhpSpecEvent'
+            'PhpSpec\Formatter\Presenter\Differ\EngineInterface': 'PhpSpec\Formatter\Presenter\Differ\DifferEngine'
+            'PhpSpec\Matcher\MatcherInterface': 'PhpSpec\Matcher\Matcher'
+            'PhpSpec\Matcher\MatchersProviderInterface': 'PhpSpec\Matcher\MatchersProvider'
+            'PhpSpec\SpecificationInterface': 'PhpSpec\Specification'
+            'PhpSpec\Runner\Maintainer\MaintainerInterface': 'PhpSpec\Runner\Maintainer\Maintainer'
