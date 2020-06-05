@@ -6,7 +6,7 @@ imports:
 services:
     Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
         $oldToNewMethodsByClass:
-            Enlight_Controller_Response_Response:
+            'Enlight_Controller_Response_Response':
                 getHttpResponseCode: getStatusCode
                 setHttpResponseCode: setStatusCode
                 sendCookies: sendHeaders

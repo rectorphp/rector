@@ -3,5 +3,5 @@ services:
 
     Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
         $oldToNewMethodsByClass:
-            PHPUnit\Framework\TestCase:
+            'PHPUnit\Framework\TestCase':
                 assertFileNotExists: 'assertFileDoesNotExist'

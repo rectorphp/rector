@@ -22,10 +22,10 @@ services:
             'Nette\Http\IRequest': 'Symfony\Component\HttpFoundation\Request'
 
             # extends Nette\Application\UI\Presenter -> extends Symfony\Bundle\FrameworkBundle\Controller\AbstractController
-            Nette\Application\UI\Presenter: Symfony\Bundle\FrameworkBundle\Controller\AbstractController
+            'Nette\Application\UI\Presenter': 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController'
 
             # Nette\Application\IResponse-> Symfony\Component\HttpFoundation\Response
-            Nette\Application\IResponse: Symfony\Component\HttpFoundation\Response
+            'Nette\Application\IResponse': 'Symfony\Component\HttpFoundation\Response'
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
