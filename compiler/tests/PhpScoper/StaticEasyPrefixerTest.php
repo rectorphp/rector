@@ -23,4 +23,18 @@ final class StaticEasyPrefixerTest extends TestCase
     {
         yield ["'Prefix\\SomeNamespace\\", '\'SomeNamespace\\'];
     }
+
+    /**
+     * @dataProvider provideDataForSlashes()
+     */
+    public function testUnPreslashQuotedValues(string $inputContent, string $expected): void
+    {
+        $inputContent = StaticEasyPrefixer::unPreSlashQuotedValues($inputContent);
+        $this->assertSame($expected, $inputContent);
+    }
+
+    public function provideDataForSlashes(): Iterator
+    {
+        yield ["'\@ORM\Entity", "'@ORM\Entity"];
+    }
 }

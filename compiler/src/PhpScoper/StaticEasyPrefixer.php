@@ -38,4 +38,9 @@ final class StaticEasyPrefixer
 
         return Strings::replace($content, '#' . $match . '#', "'");
     }
+
+    public static function unPreSlashQuotedValues(string $content): string
+    {
+        return Strings::replace($content, '#\'\\\\#', "'");
+    }
 }
