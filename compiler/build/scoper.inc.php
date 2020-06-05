@@ -147,9 +147,8 @@ return [
             }
 
             $content = StaticEasyPrefixer::unPrefixQuotedValues($prefix, $content);
-            $content = StaticEasyPrefixer::unPreSlashQuotedValues($content);
 
-            return $content;
+            return StaticEasyPrefixer::unPreSlashQuotedValues($content);
         },
     ],
     'whitelist' => StaticEasyPrefixer::EXCLUDED_NAMESPACES,

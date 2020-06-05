@@ -36,5 +36,6 @@ final class StaticEasyPrefixerTest extends TestCase
     public function provideDataForSlashes(): Iterator
     {
         yield ["'\@ORM\Entity", "'@ORM\Entity"];
+        yield ["'\\", "'\\"];
     }
 }
