@@ -3,7 +3,7 @@ services:
     # see https://github.com/symfony/symfony/issues/32179:
     Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
         $typehintForParameterByMethodByClass:
-            Symfony\Component\EventDispatcher\EventDispatcherInterface:
+            'Symfony\Component\EventDispatcher\EventDispatcherInterface':
                 addListener:
                     0: string
                     2: int
@@ -16,7 +16,7 @@ services:
                 hasListeners:
                     0: string
 
-            Symfony\Component\Console\Application:
+            'Symfony\Component\Console\Application':
                 setCatchExceptions:
                     0: bool
                 setAutoExit:
@@ -46,7 +46,7 @@ services:
                     0: string
                     1: bool
 
-            Symfony\Component\Console\Command\Command:
+            'Symfony\Component\Console\Command\Command':
                 mergeApplicationDefinition:
                     0: bool
                 addArgument:
@@ -76,13 +76,13 @@ services:
                 getHelper:
                     0: string
 
-            Symfony\Component\Console\CommandLoader\CommandLoaderInterface:
+            'Symfony\Component\Console\CommandLoader\CommandLoaderInterface':
                 get:
                     0: string
                 has:
                     0: string
 
-            Symfony\Component\Console\Input\InputInterface:
+            'Symfony\Component\Console\Input\InputInterface':
                 getArgument:
                     0: string
                 setArgument:
@@ -96,7 +96,7 @@ services:
                 setInteractive:
                     0: bool
 
-            Symfony\Component\Console\Output\OutputInterface:
+            'Symfony\Component\Console\Output\OutputInterface':
                 write:
                     1: bool
                     2: int
@@ -107,7 +107,7 @@ services:
                 setDecorated:
                     0: bool
 
-            Symfony\Component\Process\Process:
+            'Symfony\Component\Process\Process':
                 signal:
                     0: int
                 stop:
@@ -124,11 +124,11 @@ services:
                 updateStatus:
                     0: bool
 
-            Symfony\Component\EventDispatcher\EventDispatcher:
+            'Symfony\Component\EventDispatcher\EventDispatcher':
                 dispatch:
                     0: object
 
-            Symfony\Contracts\Translation\TranslatorInterface:
+            'Symfony\Contracts\Translation\TranslatorInterface':
                 setLocale:
                     0: string
                 trans:
@@ -136,7 +136,7 @@ services:
                     2: string
                     3: string
 
-            Symfony\Component\Form\AbstractExtension:
+            'Symfony\Component\Form\AbstractExtension':
                 getType:
                     0: string
                 hasType:
@@ -146,13 +146,13 @@ services:
                 hasTypeExtensions:
                     0: string
 
-            Symfony\Component\Form\DataMapperInterface:
+            'Symfony\Component\Form\DataMapperInterface':
                 mapFormsToData:
                     0: iterable
                 mapDataToForms:
                     1: iterable
 
-            Symfony\Component\Form\Form:
+            'Symfony\Component\Form\Form':
                 add:
                     1: string
                 remove:
@@ -162,7 +162,7 @@ services:
                 get:
                     0: string
 
-            Symfony\Component\Form\FormBuilderInterface:
+            'Symfony\Component\Form\FormBuilderInterface':
                 add:
                     1: string
                 create:
@@ -175,13 +175,13 @@ services:
                 has:
                     0: string
 
-            Symfony\Component\Form\FormExtensionInterface:
+            'Symfony\Component\Form\FormExtensionInterface':
                 getTypeExtensions:
                     0: string
                 hasTypeExtensions:
                     0: string
 
-            Symfony\Component\Form\FormFactory:
+            'Symfony\Component\Form\FormFactory':
                 create:
                     0: string
                 createNamed:

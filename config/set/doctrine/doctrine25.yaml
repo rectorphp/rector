@@ -1,15 +1,15 @@
 services:
     Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
         $typehintForParameterByMethodByClass:
-            Doctrine\ORM\Mapping\ClassMetadataFactory:
+            'Doctrine\ORM\Mapping\ClassMetadataFactory':
                 setEntityManager:
                     0: 'Doctrine\ORM\EntityManagerInterface'
-            Doctrine\ORM\Tools\DebugUnitOfWorkListener:
+            'Doctrine\ORM\Tools\DebugUnitOfWorkListener':
                 dumpIdentityMap:
                     0: 'Doctrine\ORM\EntityManagerInterface'
 
     Rector\Core\Rector\Argument\ArgumentRemoverRector:
         $positionsByMethodNameByClassType:
-            Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister:
+            'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister':
                 getSelectJoinColumnSQL:
                      4: null
