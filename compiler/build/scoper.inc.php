@@ -97,7 +97,7 @@ return [
                 return $content;
             }
 
-            return StaticEasyPrefixer::unprefixQuotedValues($prefix, $content);
+            return StaticEasyPrefixer::unPrefixQuotedValues($prefix, $content);
         },
 
         // mimics https://github.com/phpstan/phpstan-src/commit/5a6a22e5c4d38402c8cc888d8732360941c33d43#diff-463a36e4a5687fb2366b5ee56cdad92d
@@ -150,7 +150,7 @@ return [
                 return $content;
             }
 
-            return StaticEasyPrefixer::unprefixQuotedValues($prefix, $content);
+            return StaticEasyPrefixer::unPrefixQuotedValues($prefix, $content);
         },
     ],
     'whitelist' => StaticEasyPrefixer::EXCLUDED_NAMESPACES,
