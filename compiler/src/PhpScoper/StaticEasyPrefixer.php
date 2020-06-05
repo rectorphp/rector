@@ -29,7 +29,7 @@ final class StaticEasyPrefixer
         return $prefix . '\\' . $class;
     }
 
-    public static function unprefixQuotedValues(string $prefix, string $content): string
+    public static function unPrefixQuotedValues(string $prefix, string $content): string
     {
         $match = sprintf('\'%s\\\\r\\\\n\'', $prefix);
         $content = Strings::replace($content, '#' . $match . '#', '\'\\\\r\\\\n\'');
@@ -37,5 +37,10 @@ final class StaticEasyPrefixer
         $match = sprintf('\'%s\\\\', $prefix);
 
         return Strings::replace($content, '#' . $match . '#', "'");
+    }
+
+    public static function unPreSlashQuotedValues(string $content): string
+    {
+        return Strings::replace($content, '#\'\\\\#', "'");
     }
 }
