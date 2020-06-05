@@ -142,11 +142,7 @@ return [
 
         // mimics https://github.com/phpstan/phpstan-src/commit/fd8f0a852207a1724ae4a262f47d9a449de70da4#diff-463a36e4a5687fb2366b5ee56cdad92d
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::contains($filePath, 'src/')) {
-                return $content;
-            }
-
-            if (Strings::startsWith($filePath, 'src/')) {
+            if (! Strings::match($filePath, '#^(src|rules|packages)/#')) {
                 return $content;
             }
 
