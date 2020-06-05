@@ -1,4 +1,4 @@
-# All 500 Rectors Overview
+# All 502 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -47,7 +47,7 @@
 - [Php72](#php72) (10)
 - [Php73](#php73) (10)
 - [Php74](#php74) (15)
-- [Php80](#php80) (8)
+- [Php80](#php80) (10)
 - [PhpDeglobalize](#phpdeglobalize) (1)
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
@@ -5955,7 +5955,7 @@ Data provider annotation must be in doc block
 - class: [`Rector\PHPUnit\Rector\ExceptionAnnotationRector`](/../master/rules/phpunit/src/Rector/ExceptionAnnotationRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/ExceptionAnnotationRector/Fixture)
 
-Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
+Changes `@expectedException annotations to expectException*() methods
 
 ```diff
 -/**
@@ -7415,6 +7415,7 @@ Incomplete class returns inverted bool on is_object()
 ### `ListEachRector`
 
 - class: [`Rector\Php72\Rector\Each\ListEachRector`](/../master/rules/php72/src/Rector/Each/ListEachRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/Each/ListEachRector/Fixture)
 
 each() function is deprecated, use key() and current() instead
 
@@ -7503,6 +7504,7 @@ Removes (unset) cast
 ### `WhileEachToForeachRector`
 
 - class: [`Rector\Php72\Rector\Each\WhileEachToForeachRector`](/../master/rules/php72/src/Rector/Each/WhileEachToForeachRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/Each/WhileEachToForeachRector/Fixture)
 
 each() function is deprecated, use foreach() instead.
 
@@ -8060,6 +8062,28 @@ Change ternary type resolve to get_debug_type()
 
 <br>
 
+### `RemoveUnusedVariableInCatchRector`
+
+- class: [`Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector`](/../master/rules/php80/src/Rector/Catch_/RemoveUnusedVariableInCatchRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Catch_/RemoveUnusedVariableInCatchRector/Fixture)
+
+Remove unused variable in catch()
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+         try {
+-        } catch (Throwable $notUsedThrowable) {
++        } catch (Throwable) {
+         }
+     }
+ }
+```
+
+<br>
+
 ### `StrContainsRector`
 
 - class: [`Rector\Php80\Rector\NotIdentical\StrContainsRector`](/../master/rules/php80/src/Rector/NotIdentical/StrContainsRector.php)
@@ -8138,6 +8162,38 @@ Add `Stringable` interface to classes with `__toString()` method
 +    public function __toString(): string
      {
          return 'I can stringz';
+     }
+ }
+```
+
+<br>
+
+### `TokenGetAllToObjectRector`
+
+- class: [`Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector`](/../master/rules/php80/src/Rector/FuncCall/TokenGetAllToObjectRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/FuncCall/TokenGetAllToObjectRector/Fixture)
+
+Complete missing constructor dependency instance by type
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        $tokens = token_get_all($code);
+-        foreach ($tokens as $token) {
+-            if (is_array($token)) {
+-               $name = token_name($token[0]);
+-               $text = $token[1];
+-            } else {
+-               $name = null;
+-               $text = $token;
+-            }
++        $tokens = \PhpToken::getAll($code);
++        foreach ($tokens as $phpToken) {
++           $name = $phpToken->getTokenName();
++           $text = $phpToken->text;
+         }
      }
  }
 ```
@@ -9117,7 +9173,7 @@ In case you have accidentally removed use imports but code still contains partia
 ```yaml
 services:
     Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector:
-        $useImportToRestore:
+        $useImportsToRestore:
             -
                 - Doctrine\ORM\Mapping
                 - ORM
