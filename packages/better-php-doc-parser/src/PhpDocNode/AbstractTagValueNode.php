@@ -85,6 +85,44 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         return $this->printItems($this->items);
     }
 
+    /**
+     * @return mixed[]
+     */
+    public function getItems(): array
+    {
+        return $this->items;
+    }
+
+    public function isSilentKeyExplicit(): bool
+    {
+        return $this->isSilentKeyExplicit;
+    }
+
+    public function setIsSilentKeyExplicit(bool $isSilentKeyExplicit): void
+    {
+        $this->isSilentKeyExplicit = $isSilentKeyExplicit;
+    }
+
+    public function hasOpeningBracket(): bool
+    {
+        return $this->hasOpeningBracket;
+    }
+
+    public function hasClosingBracket(): bool
+    {
+        return $this->hasClosingBracket;
+    }
+
+    public function setHasOpeningBracket(bool $hasOpeningBracket): void
+    {
+        $this->hasOpeningBracket = $hasOpeningBracket;
+    }
+
+    public function setHasClosingBracket(bool $hasClosingBracket): void
+    {
+        $this->hasClosingBracket = $hasClosingBracket;
+    }
+
     protected function printItems(array $items): string
     {
         $items = $this->completeItemsQuotes($items);
@@ -143,7 +181,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $items = array_filter($items);
 
         if ($items === []) {
-            if ($this->originalContent !== null && Strings::endsWith($this->originalContent, '()')) {
+            if ($this->shouldPrintEmptyBrackets()) {
                 return '()';
             }
 
@@ -157,7 +195,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             }
 
             $arrayItemAsString = $this->printArrayItem($value, $key);
-
             $arrayItemAsString = $this->correctArraySingleItemPrint($value, $arrayItemAsString);
 
             /** @var string $key */
@@ -358,5 +395,14 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         }
 
         return $nakedItem;
+    }
+
+    private function shouldPrintEmptyBrackets(): bool
+    {
+        if ($this->originalContent !== null && Strings::endsWith($this->originalContent, '()')) {
+            return true;
+        }
+
+        return $this->hasOpeningBracket && $this->hasClosingBracket;
     }
 }

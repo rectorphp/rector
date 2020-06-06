@@ -20,7 +20,7 @@ namespace Rector\Doctrine\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotati
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  */
 class Product
 {

@@ -33,6 +33,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\JMS\JMSServiceValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioMethodTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioRouteTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertChoiceTagValueNode;
@@ -87,6 +88,7 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory
             // Sensio
             SensioTemplateTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template',
             SensioMethodTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method',
+            SensioRouteTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route',
 
             // JMS
             JMSInjectParamsTagValueNode::class => 'JMS\DiExtraBundle\Annotation\InjectParams',
