@@ -1,4 +1,4 @@
-# All 502 Rectors Overview
+# All 503 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -57,7 +57,7 @@
 - [Renaming](#renaming) (10)
 - [Restoration](#restoration) (4)
 - [SOLID](#solid) (12)
-- [Sensio](#sensio) (1)
+- [Sensio](#sensio) (2)
 - [StrictCodeQuality](#strictcodequality) (1)
 - [Symfony](#symfony) (29)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
@@ -9626,6 +9626,30 @@ Use interface instead of specific class
 <br>
 
 ## Sensio
+
+### `ReplaceSensioRouteAnnotationWithSymfonyRector`
+
+- class: [`Rector\Sensio\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector`](/../master/rules/sensio/src/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php)
+- [test fixtures](/../master/rules/sensio/tests/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector/Fixture)
+
+Replace Sensio @Route annotation with Symfony one
+
+```diff
+-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
++use Symfony\Component\Routing\Annotation\Route;
+
+ final class SomeClass
+ {
+     /**
+      * @Route()
+      */
+     public function run()
+     {
+     }
+ }
+```
+
+<br>
 
 ### `TemplateAnnotationRector`
 
