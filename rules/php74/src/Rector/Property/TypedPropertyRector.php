@@ -124,7 +124,7 @@ PHP
             return null;
         }
 
-        if ($this->vendorLockResolver->isPropertyChangeVendorLockedIn($node)) {
+        if ($this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($node)) {
             return null;
         }
 

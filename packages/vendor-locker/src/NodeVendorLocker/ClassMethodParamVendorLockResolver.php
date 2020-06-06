@@ -19,7 +19,7 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
             return false;
         }
 
-        if (! $this->hasParentClassOrImplementsInterface($classNode)) {
+        if (! $this->hasParentClassChildrenClassesOrImplementsInterface($classNode)) {
             return false;
         }
 
