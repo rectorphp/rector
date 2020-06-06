@@ -1,4 +1,4 @@
-# All 504 Rectors Overview
+# All 505 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -29,6 +29,7 @@
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
+- [NetteUtilsCodeQuality](#netteutilscodequality) (1)
 - [Order](#order) (3)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
@@ -5072,6 +5073,28 @@ Adds %% to placeholder name of trans() method if missing
 -            ['name' => $name]
 +            ['%name%' => $name]
          );
+     }
+ }
+```
+
+<br>
+
+## NetteUtilsCodeQuality
+
+### `ReplaceTimeNumberWithDateTimeConstantRector`
+
+- class: [`Rector\NetteUtilsCodeQuality\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector`](/../master/rules/nette-utils-code-quality/src/Rector/LNumber/ReplaceTimeNumberWithDateTimeConstantRector.php)
+- [test fixtures](/../master/rules/nette-utils-code-quality/tests/Rector/LNumber/ReplaceTimeNumberWithDateTimeConstantRector/Fixture)
+
+Replace time numbers with Nette\Utils\DateTime constants
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        return 86400;
++        return \Nette\Utils\DateTime::DAY;
      }
  }
 ```
