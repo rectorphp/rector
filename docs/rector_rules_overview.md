@@ -1,4 +1,4 @@
-# All 503 Rectors Overview
+# All 504 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -57,7 +57,7 @@
 - [Renaming](#renaming) (10)
 - [Restoration](#restoration) (4)
 - [SOLID](#solid) (12)
-- [Sensio](#sensio) (2)
+- [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
 - [Symfony](#symfony) (29)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
@@ -9626,6 +9626,30 @@ Use interface instead of specific class
 <br>
 
 ## Sensio
+
+### `RemoveServiceFromSensioRouteRector`
+
+- class: [`Rector\Sensio\Rector\ClassMethod\RemoveServiceFromSensioRouteRector`](/../master/rules/sensio/src/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php)
+- [test fixtures](/../master/rules/sensio/tests/Rector/ClassMethod/RemoveServiceFromSensioRouteRector/Fixture)
+
+Remove service from Sensio @Route
+
+```diff
+ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+ final class SomeClass
+ {
+     /**
+-     * @Route(service="some_service")
++     * @Route()
+      */
+     public function run()
+     {
+     }
+ }
+```
+
+<br>
 
 ### `ReplaceSensioRouteAnnotationWithSymfonyRector`
 
