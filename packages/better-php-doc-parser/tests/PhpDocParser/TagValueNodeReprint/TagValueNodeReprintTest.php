@@ -14,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagVal
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\BlameableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\SlugTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertChoiceTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
@@ -60,6 +61,8 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
 
             // special case
             GenericTagValueNode::class => __DIR__ . '/Fixture/ConstantReference',
+
+            SensioTemplateTagValueNode::class => __DIR__ . '/Fixture/SensioTemplate',
         ];
     }
 }
