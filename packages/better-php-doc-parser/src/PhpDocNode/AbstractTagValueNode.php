@@ -157,6 +157,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             }
 
             $arrayItemAsString = $this->printArrayItem($value, $key);
+
+            $arrayItemAsString = $this->correctArraySingleItemPrint($value, $arrayItemAsString);
+
             /** @var string $key */
             $items[$key] = $arrayItemAsString;
         }
@@ -328,6 +331,32 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
             $json = Strings::replace($json, '#([^\"])' . $itemKey . '([^\"])#', '$1"' . $itemKey . '"$2');
         }
+
         return $json;
+    }
+
+    private function correctArraySingleItemPrint($value, string $arrayItemAsString): string
+    {
+        if (count($value) !== 1) {
+            return $arrayItemAsString;
+        }
+
+        if ($this->originalContent === null) {
+            return $arrayItemAsString;
+        }
+
+        // item is in the original in same format → use it
+        if (Strings::contains($this->originalContent, $arrayItemAsString)) {
+            return $arrayItemAsString;
+        }
+
+        // is original item used the same, just without {} brackets?
+        $nakedItem = trim($arrayItemAsString, '{}');
+
+        if (! Strings::contains($this->originalContent, '(' . $nakedItem . ')')) {
+            return $arrayItemAsString;
+        }
+
+        return $nakedItem;
     }
 }

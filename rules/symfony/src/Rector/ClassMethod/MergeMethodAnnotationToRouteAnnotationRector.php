@@ -77,10 +77,6 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($classNode, '*Controller')) {
-            return null;
-        }
-
         if (! $node->isPublic()) {
             return null;
         }
@@ -99,8 +95,12 @@ PHP
 
         $methods = $symfonyMethodPhpDocTagValueNode->getMethods();
 
-        /** @var SymfonyRouteTagValueNode $symfonyRoutePhpDocTagValueNode */
+        /** @var SymfonyRouteTagValueNode|null $symfonyRoutePhpDocTagValueNode */
         $symfonyRoutePhpDocTagValueNode = $phpDocInfo->getByType(SymfonyRouteTagValueNode::class);
+        if ($symfonyRoutePhpDocTagValueNode === null) {
+            return null;
+        }
+
         $symfonyRoutePhpDocTagValueNode->changeMethods($methods);
 
         $phpDocInfo->removeTagValueNodeFromNode($symfonyMethodPhpDocTagValueNode);
