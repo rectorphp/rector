@@ -33,8 +33,8 @@ trait PrintTagValueNodeTrait
                 continue;
             }
 
-            // do not quote constant references
-            if (Strings::match($item, '#\w+::\w+#')) {
+            // do not quote constant references... unless twig template
+            if (Strings::match($item, '#\w+::\w+#') && ! Strings::endsWith($item, '.twig')) {
                 continue;
             }
 
