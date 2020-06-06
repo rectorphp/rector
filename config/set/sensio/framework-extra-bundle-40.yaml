@@ -1,2 +1,3 @@
 services:
     Rector\Sensio\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector: null
+    Rector\Sensio\Rector\ClassMethod\RemoveServiceFromSensioRouteRector: null

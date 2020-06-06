@@ -19,4 +19,9 @@ final class SensioRouteTagValueNode extends AbstractTagValueNode implements Shor
     {
         return 'path';
     }
+
+    public function removeService(): void
+    {
+        unset($this->items['service']);
+    }
 }

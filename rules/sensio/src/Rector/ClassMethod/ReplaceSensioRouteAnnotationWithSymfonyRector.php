@@ -100,8 +100,6 @@ PHP
 
         // unset service, that is deprecated
         $items = $sensioRouteTagValueNode->getItems();
-        unset($items['service']);
-
         $symfonyRouteTagValueNode = new SymfonyRouteTagValueNode($items);
 
         // mimic previous behaviors
