@@ -93,6 +93,7 @@ final class ImportSkipper
         FullyQualifiedObjectType $fullyQualifiedObjectType
     ): bool {
         $classLikeNames = $this->shortNameResolver->resolveShortClassLikeNamesForNode($node);
+
         return in_array($fullyQualifiedObjectType->getShortName(), $classLikeNames, true);
     }
 }
