@@ -9,25 +9,34 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ShortNameResolver
 {
     /**
      * @var string[][]
      */
-    private $shortNamesByNamespaceObjectHash = [];
+    private $shortNamesByFilePath = [];
 
     /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
-    {
+    /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
+
+    public function __construct(
+        CallableNodeTraverser $callableNodeTraverser,
+        CurrentFileInfoProvider $currentFileInfoProvider
+    ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
     /**
@@ -35,21 +44,16 @@ final class ShortNameResolver
      */
     public function resolveForNode(Node $node): array
     {
-        /** @var Namespace_|null $namespace */
-        $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NODE);
-        if ($namespace === null) {
-            // only namespaced classes are supported
-            return [];
+        $realPath = $this->getNodeRealPath($node);
+
+        if (isset($this->shortNamesByFilePath[$realPath])) {
+            return $this->shortNamesByFilePath[$realPath];
         }
 
-        // must be hash → unique per file
-        $namespaceHash = spl_object_hash($namespace);
-        if (isset($this->shortNamesByNamespaceObjectHash[$namespaceHash])) {
-            return $this->shortNamesByNamespaceObjectHash[$namespaceHash];
-        }
+        $currentStmts = $this->currentFileInfoProvider->getCurrentStmts();
 
-        $shortNames = $this->resolveForNamespace($namespace);
-        $this->shortNamesByNamespaceObjectHash[$namespaceHash] = $shortNames;
+        $shortNames = $this->resolveForStmts($currentStmts);
+        $this->shortNamesByFilePath[$realPath] = $shortNames;
 
         return $shortNames;
     }
@@ -88,13 +92,14 @@ final class ShortNameResolver
     }
 
     /**
+     * @param Node[] $stmts
      * @return string[]
      */
-    private function resolveForNamespace(Namespace_ $node): array
+    private function resolveForStmts(array $stmts): array
     {
         $shortNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) use (
+        $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (
             &$shortNames
         ): void {
             // class name is used!
@@ -121,5 +126,21 @@ final class ShortNameResolver
         });
 
         return $shortNames;
+    }
+
+    private function getNodeRealPath(Node $node): ?string
+    {
+        /** @var SmartFileInfo|null $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        if ($fileInfo !== null) {
+            return $fileInfo->getRealPath();
+        }
+
+        $currentFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        if ($currentFileInfo !== null) {
+            return $currentFileInfo->getRealPath();
+        }
+
+        return null;
     }
 }

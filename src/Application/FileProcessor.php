@@ -137,6 +137,9 @@ final class FileProcessor
         $this->makeSureFileIsParsed($smartFileInfo);
 
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
+
+        $this->currentFileInfoProvider->setCurrentStmt($newStmts);
+
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
         $newStmts = $this->postFileProcessor->traverse($newStmts);
 
