@@ -183,11 +183,16 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     {
         /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo === null) {
+        if ($fileInfo !== null) {
+            return $fileInfo->getRealPath();
+        }
+
+        $currentFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        if ($currentFileInfo === null) {
             return null;
         }
 
-        return $fileInfo->getRealPath();
+        return $currentFileInfo->getRealPath();
     }
 
     private function isShortClassImported(string $filePath, string $shortName): bool

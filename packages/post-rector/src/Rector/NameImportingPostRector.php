@@ -83,6 +83,8 @@ final class NameImportingPostRector extends AbstractPostRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Imports names');
+        return new RectorDefinition(
+            'Imports fully qualified class names in parameter types, return types, extended classes, implemented, interfaces and even docblocks'
+        );
     }
 }
