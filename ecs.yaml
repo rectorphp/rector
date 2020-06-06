@@ -56,6 +56,9 @@ parameters:
             # false positive
             - 'src/Testing/PHPUnit/AbstractRectorTestCase.php'
 
+        SlevomatCodingStandard\Sniffs\Variables\UnusedVariableSniff.UnusedVariable:
+            - 'rules/php-office/src/Rector/MethodCall/IncreaseColumnIndexRector.php'
+
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff.Found:
             # notes
             - 'rules/php72/src/Rector/Each/ListEachRector.php'
