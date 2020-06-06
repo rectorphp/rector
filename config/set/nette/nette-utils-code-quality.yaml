@@ -18,3 +18,5 @@ services:
     Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector: null
     Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector: null
     Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector: null
+
+    Rector\NetteUtilsCodeQuality\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector: null
