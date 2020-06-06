@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractNodeVendorLockResolver
 {
@@ -41,14 +42,19 @@ abstract class AbstractNodeVendorLockResolver
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    protected function hasParentClassOrImplementsInterface(ClassLike $classLike): bool
+    protected function hasParentClassChildrenClassesOrImplementsInterface(ClassLike $classLike): bool
     {
         if (($classLike instanceof Class_ || $classLike instanceof Interface_) && $classLike->extends) {
             return true;
         }
 
         if ($classLike instanceof Class_) {
-            return (bool) $classLike->implements;
+            if ((bool) $classLike->implements) {
+                return true;
+            }
+
+            /** @var Class_ $classLike */
+            return $this->getChildrenClassesByClass($classLike) !== [];
         }
 
         return false;
@@ -70,6 +76,32 @@ abstract class AbstractNodeVendorLockResolver
         }
 
         return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getChildrenClassesByClass(Class_ $class): array
+    {
+        $desiredClassName = $class->getAttribute(AttributeKey::CLASS_NAME);
+        if ($desiredClassName === null) {
+            return [];
+        }
+
+        $childrenClasses = [];
+        foreach (get_declared_classes() as $declaredClass) {
+            if ($declaredClass === $desiredClassName) {
+                continue;
+            }
+
+            if (! is_a($declaredClass, $desiredClassName, true)) {
+                continue;
+            }
+
+            $childrenClasses[] = $declaredClass;
+        }
+
+        return $childrenClasses;
     }
 
     private function hasInterfaceMethod(string $methodName, string $interfaceName): bool
