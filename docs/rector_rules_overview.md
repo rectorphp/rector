@@ -1,4 +1,4 @@
-# All 505 Rectors Overview
+# All 506 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -56,7 +56,7 @@
 - [Refactoring](#refactoring) (2)
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (10)
-- [Restoration](#restoration) (4)
+- [Restoration](#restoration) (5)
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
@@ -9248,6 +9248,30 @@ services:
  {
      public function __construct(RandomDependency $randomDependency)
      {
+     }
+ }
+```
+
+<br>
+
+### `MakeTypedPropertyNullableIfCheckedRector`
+
+- class: [`Rector\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector`](/../master/rules/restoration/src/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php)
+- [test fixtures](/../master/rules/restoration/tests/Rector/Property/MakeTypedPropertyNullableIfCheckedRector/Fixture)
+
+Make typed property nullable if checked
+
+```diff
+ final class SomeClass
+ {
+-    private AnotherClass $anotherClass;
++    private ?AnotherClass $anotherClass = null;
+
+     public function run()
+     {
+         if ($this->anotherClass === null) {
+             $this->anotherClass = new AnotherClass;
+         }
      }
  }
 ```
