@@ -16,6 +16,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PHPStan\TypeFactoryStaticHelper;
 
@@ -73,7 +74,7 @@ final class TypeFactory
                 $type = $this->removeValueFromConstantType($type);
             }
 
-            $typeHash = md5(serialize($type));
+            $typeHash = md5($type->describe(VerbosityLevel::cache()));
 
             $uniqueTypes[$typeHash] = $type;
         }
