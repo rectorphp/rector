@@ -11,11 +11,19 @@ final class StaticEasyPrefixer
     /**
      * @var string[]
      */
-    public const EXCLUDED_NAMESPACES = ['Hoa\*', 'PhpParser\*', 'PHPStan\*', 'Rector\*', 'Symplify\SmartFileSystem\*', 'Symfony\Component\EventDispatcher\*'];
+    public const EXCLUDED_NAMESPACES_AND_CLASSES = [
+        'Hoa\*',
+        'PhpParser\*',
+        'PHPStan\*',
+        'Rector\*',
+        'Symplify\SmartFileSystem\SmartFileInfo',
+        'Symfony\Component\EventDispatcher\EventSubscriberInterface',
+        'Symfony\Component\Console\Style\SymfonyStyle',
+    ];
 
     public static function prefixClass(string $class, string $prefix): string
     {
-        foreach (self::EXCLUDED_NAMESPACES as $excludedNamespace) {
+        foreach (self::EXCLUDED_NAMESPACES_AND_CLASSES as $excludedNamespace) {
             $excludedNamespace = Strings::substring($excludedNamespace, 0, -2) . '\\';
             if (Strings::startsWith($class, $excludedNamespace)) {
                 return $class;

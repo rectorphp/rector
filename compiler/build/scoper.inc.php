@@ -151,5 +151,5 @@ return [
             return StaticEasyPrefixer::unPreSlashQuotedValues($content);
         },
     ],
-    'whitelist' => StaticEasyPrefixer::EXCLUDED_NAMESPACES,
+    'whitelist' => StaticEasyPrefixer::EXCLUDED_NAMESPACES_AND_CLASSES,
 ];
