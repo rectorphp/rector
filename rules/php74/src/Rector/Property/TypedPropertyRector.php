@@ -31,6 +31,10 @@ use Rector\VendorLocker\VendorLockResolver;
  * @source https://wiki.php.net/rfc/typed_properties_v2#proposal
  *
  * @see \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\TypedPropertyRectorTest
+ * @see \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\ClassLikeTypesOnlyTest
+ * @see \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\DoctrineTypedPropertyRectorTest
+ * @see \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\ImportedTest
+ * @see \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\UnionTypedPropertyRectorTest
  */
 final class TypedPropertyRector extends AbstractRector
 {
@@ -237,8 +241,13 @@ PHP
      */
     private function shouldSkipNonClassLikeType(Node $node): bool
     {
-        if ($this->classLikeTypeOnly === false) {
+        if (! $this->classLikeTypeOnly) {
             return false;
+        }
+
+        // unwrap nullable type
+        if ($node instanceof NullableType) {
+            $node = $node->type;
         }
 
         $typeName = $this->getName($node);
