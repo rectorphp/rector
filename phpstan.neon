@@ -28,9 +28,8 @@ parameters:
 
     checkGenericClassInNonGenericObjectType: false
 
-    autoload_directories:
+    scanDirectories:
         - stubs
-        - compiler/src
 
     paths:
         - bin
