@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PHPUnit\Framework;
 
-if (class_exists('PHPUnit\Framework\TestListener')) {
+if (interface_exists('PHPUnit\Framework\TestListener')) {
     return;
 }
 
-final class TestListener
+interface TestListener
 {
 
 }
