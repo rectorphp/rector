@@ -24,9 +24,13 @@ final class DoctrineTypedPropertyRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureDoctrine');
     }
 
-    protected function getRectorClass(): string
+    protected function getRectorsWithConfiguration(): array
     {
-        return TypedPropertyRector::class;
+        return [
+            TypedPropertyRector::class => [
+                '$classLikeTypeOnly' => false,
+            ],
+        ];
     }
 
     protected function getPhpVersion(): string

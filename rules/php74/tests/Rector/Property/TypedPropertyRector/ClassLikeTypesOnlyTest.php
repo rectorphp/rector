@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 
-final class TypedPropertyRectorTest extends AbstractRectorTestCase
+final class ClassLikeTypesOnlyTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -20,14 +20,14 @@ final class TypedPropertyRectorTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureClassLikeTypeOnly');
     }
 
     protected function getRectorsWithConfiguration(): array
     {
         return [
             TypedPropertyRector::class => [
-                '$classLikeTypeOnly' => false,
+                '$classLikeTypeOnly' => true,
             ],
         ];
     }
