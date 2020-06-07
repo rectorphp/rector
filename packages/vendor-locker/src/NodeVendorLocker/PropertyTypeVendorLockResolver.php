@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use ReflectionProperty;
 
 final class PropertyTypeVendorLockResolver extends AbstractNodeVendorLockResolver
 {
@@ -83,10 +84,19 @@ final class PropertyTypeVendorLockResolver extends AbstractNodeVendorLockResolve
         }
 
         $childrenClassNames = $this->getChildrenClassesByClass($classLike);
+
         foreach ($childrenClassNames as $childClassName) {
-            if (property_exists($childClassName, $propertyName)) {
-                return true;
+            if (! property_exists($childClassName, $propertyName)) {
+                continue;
             }
+
+            // ensure the property is not in the parent class
+            $reflectionProperty = new ReflectionProperty($childClassName, $propertyName);
+            if ($reflectionProperty->class !== $childClassName) {
+                continue;
+            }
+
+            return true;
         }
 
         return false;
