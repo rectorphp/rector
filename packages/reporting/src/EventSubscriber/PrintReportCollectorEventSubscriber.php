@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Reporting\EventSibscriber;
+namespace Rector\Reporting\EventSubscriber;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\Configuration;
