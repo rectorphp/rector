@@ -11,7 +11,7 @@ final class StaticEasyPrefixer
     /**
      * @var string[]
      */
-    public const EXCLUDED_NAMESPACES = ['Hoa\*', 'PhpParser\*', 'PHPStan\*', 'Rector\*'];
+    public const EXCLUDED_NAMESPACES = ['Hoa\*', 'PhpParser\*', 'PHPStan\*', 'Rector\*', 'Symplify\SmartFileSystem\*'];
 
     public static function prefixClass(string $class, string $prefix): string
     {
