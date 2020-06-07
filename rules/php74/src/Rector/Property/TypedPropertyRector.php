@@ -6,7 +6,9 @@ namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
@@ -18,6 +20,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -46,14 +49,22 @@ final class TypedPropertyRector extends AbstractRector
      */
     private $doctrineTypeAnalyzer;
 
+    /**
+     * Useful for refactoring of huge applications. Taking types first narrows scope
+     * @var bool
+     */
+    private $classLikeTypeOnly = false;
+
     public function __construct(
         PropertyTypeInferer $propertyTypeInferer,
         VendorLockResolver $vendorLockResolver,
-        DoctrineTypeAnalyzer $doctrineTypeAnalyzer
+        DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        bool $classLikeTypeOnly = false
     ) {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
+        $this->classLikeTypeOnly = $classLikeTypeOnly;
     }
 
     public function getDefinition(): RectorDefinition
@@ -115,12 +126,17 @@ PHP
             PHPStanStaticTypeMapper::KIND_PROPERTY
         );
 
-        // false positive
-        if ($propertyTypeNode instanceof Name && $this->isName($propertyTypeNode, 'mixed')) {
+        if ($propertyTypeNode === null) {
             return null;
         }
 
-        if ($propertyTypeNode === null) {
+        // is not class-type and should be skipped
+        if ($this->shouldSkipNonClassLikeType($propertyTypeNode)) {
+            return null;
+        }
+
+        // false positive
+        if ($propertyTypeNode instanceof Name && $this->isName($propertyTypeNode, 'mixed')) {
             return null;
         }
 
@@ -214,5 +230,22 @@ PHP
     private function isArrayTypeNode(VarTagValueNode $varTagValueNode): bool
     {
         return $varTagValueNode->type instanceof ArrayTypeNode;
+    }
+
+    /**
+     * @param Name|NullableType|PhpParserUnionType $node
+     */
+    private function shouldSkipNonClassLikeType(Node $node): bool
+    {
+        if ($this->classLikeTypeOnly === false) {
+            return false;
+        }
+
+        $typeName = $this->getName($node);
+        if ($typeName === null) {
+            return false;
+        }
+
+        return ! ClassExistenceStaticHelper::doesClassLikeExist($typeName);
     }
 }

@@ -171,12 +171,12 @@ PHP
         return $isIdenticalOrNotIdenticalToNull;
     }
 
-    private function isBooleanNot(Class_ $class, PropertyProperty $onlyPropertyProprety)
+    private function isBooleanNot(Class_ $class, PropertyProperty $onlyPropertyProperty)
     {
         $isBooleanNot = false;
 
         $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (
-            $onlyPropertyProprety,
+            $onlyPropertyProperty,
             &$isBooleanNot
         ) {
             if (! $node instanceof BooleanNot) {
@@ -192,7 +192,7 @@ PHP
             }
 
             $propertyFetchName = $this->getName($node->expr->name);
-            if (! $this->isName($onlyPropertyProprety, $propertyFetchName)) {
+            if (! $this->isName($onlyPropertyProperty, $propertyFetchName)) {
                 return null;
             }
 
