@@ -24,6 +24,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * @see https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
+ * @see https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
+ * @see https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues/641
+ *
  * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationVersion3RectorTest
  * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationVersion5RectorTest
  */
@@ -109,6 +113,10 @@ PHP
 
     private function replaceTemplateAnnotation(ClassMethod $classMethod): ?Node
     {
+        if (! $classMethod->isPublic()) {
+            return null;
+        }
+
         /** @var SensioTemplateTagValueNode|null $sensioTemplateTagValueNode */
         $sensioTemplateTagValueNode = $this->getSensioTemplateTagValueNode($classMethod);
         if ($sensioTemplateTagValueNode === null) {
@@ -125,9 +133,9 @@ PHP
         return $classMethod;
     }
 
-    private function classHasTemplateAnnotations(Class_ $node): bool
+    private function classHasTemplateAnnotations(Class_ $class): bool
     {
-        foreach ($node->getMethods() as $classMethod) {
+        foreach ($class->getMethods() as $classMethod) {
             /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($phpDocInfo === null) {
