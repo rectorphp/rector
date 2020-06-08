@@ -11770,7 +11770,7 @@ services:
 ↓
 
 ```diff
- class SomeClass
+ class SomeExampleClass
  {
      public function someFunction()
      {
