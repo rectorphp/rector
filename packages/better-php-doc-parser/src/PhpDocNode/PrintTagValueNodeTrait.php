@@ -27,10 +27,17 @@ trait PrintTagValueNodeTrait
         return $items;
     }
 
-    protected function completeItemsQuotes(array $items): array
+    /**
+     * @param string[] $skipKeys
+     */
+    protected function completeItemsQuotes(array $items, array $skipKeys = []): array
     {
         foreach ($items as $key => $item) {
             if (! is_string($item)) {
+                continue;
+            }
+
+            if (in_array($key, $skipKeys, true)) {
                 continue;
             }
 

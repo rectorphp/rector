@@ -10,16 +10,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 final class TableTagValueNode extends AbstractDoctrineTagValueNode implements SilentKeyNodeInterface
 {
     /**
-     * @var string|null
-     */
-    private $name;
-
-    /**
-     * @var string|null
-     */
-    private $schema;
-
-    /**
      * @var bool
      */
     private $haveIndexesFinalComma = false;
@@ -60,11 +50,6 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
     private $uniqueConstraints = [];
 
     /**
-     * @var mixed[]
-     */
-    private $options = [];
-
-    /**
      * @param mixed[] $options
      * @param IndexTagValueNode[] $indexes
      * @param UniqueConstraintTagValueNode[] $uniqueConstraints
@@ -83,11 +68,12 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         ?string $uniqueConstraintsOpeningSpace = null,
         ?string $uniqueConstraintsClosingSpace = null
     ) {
-        $this->name = $name;
-        $this->schema = $schema;
+        $this->items['name'] = $name;
+        $this->items['schema'] = $schema;
+        $this->items['options'] = $options;
+
         $this->indexes = $indexes;
         $this->uniqueConstraints = $uniqueConstraints;
-        $this->options = $options;
 
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
 
@@ -101,8 +87,13 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
 
     public function __toString(): string
     {
-        $items = $this->createItems();
+        $items = $this->items;
+        $items = $this->addCustomItems($items);
+
+        $items = $this->completeItemsQuotes($items, ['indexes', 'uniqueConstraints']);
+        $items = $this->filterOutMissingItems($items);
         $items = $this->makeKeysExplicit($items);
+
         return $this->printContentItems($items);
     }
 
@@ -116,18 +107,8 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         return 'name';
     }
 
-    private function createItems(): array
+    private function addCustomItems(array $items): array
     {
-        $items = [];
-
-        if ($this->name !== null) {
-            $items['name'] = sprintf('"%s"', $this->name);
-        }
-
-        if ($this->schema !== null) {
-            $items['schema'] = sprintf('"%s"', $this->schema);
-        }
-
         if ($this->indexes !== []) {
             $items['indexes'] = $this->printNestedTag(
                 $this->indexes,
@@ -144,10 +125,6 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
                 $this->uniqueConstraintsOpeningSpace,
                 $this->uniqueConstraintsClosingSpace
             );
-        }
-
-        if ($this->options !== []) {
-            $items['options'] = $this->printArrayItem($this->options, 'options');
         }
 
         return $items;
