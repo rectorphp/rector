@@ -7,13 +7,18 @@ namespace Rector\Sensio\Rector\FrameworkExtraBundle;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
+use Rector\Core\PhpParser\Node\Manipulator\FuncCallManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -24,6 +29,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * @see https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
+ * @see https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
+ * @see https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues/641
+ *
  * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationVersion3RectorTest
  * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationVersion5RectorTest
  */
@@ -39,10 +48,19 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     private $templateGuesser;
 
-    public function __construct(TemplateGuesser $templateGuesser, int $version = 3)
-    {
+    /**
+     * @var FuncCallManipulator
+     */
+    private $funcCallManipulator;
+
+    public function __construct(
+        TemplateGuesser $templateGuesser,
+        FuncCallManipulator $funcCallManipulator,
+        int $version = 3
+    ) {
         $this->templateGuesser = $templateGuesser;
         $this->version = $version;
+        $this->funcCallManipulator = $funcCallManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -109,6 +127,10 @@ PHP
 
     private function replaceTemplateAnnotation(ClassMethod $classMethod): ?Node
     {
+        if (! $classMethod->isPublic()) {
+            return null;
+        }
+
         /** @var SensioTemplateTagValueNode|null $sensioTemplateTagValueNode */
         $sensioTemplateTagValueNode = $this->getSensioTemplateTagValueNode($classMethod);
         if ($sensioTemplateTagValueNode === null) {
@@ -125,9 +147,9 @@ PHP
         return $classMethod;
     }
 
-    private function classHasTemplateAnnotations(Class_ $node): bool
+    private function classHasTemplateAnnotations(Class_ $class): bool
     {
-        foreach ($node->getMethods() as $classMethod) {
+        foreach ($class->getMethods() as $classMethod) {
             /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($phpDocInfo === null) {
@@ -161,7 +183,6 @@ PHP
 
         if ($classMethod->returnType !== null) {
             $returnTypeName = $this->getName($classMethod->returnType);
-
             if ($returnTypeName !== null && is_a($returnTypeName, Response::class, true)) {
                 return;
             }
@@ -193,12 +214,20 @@ PHP
         if ($returnNode === null) {
             // or add as last statement in the method
             $classMethod->stmts[] = new Return_($thisRenderMethodCall);
+        } elseif ($returnNode->expr !== null) {
+            if ($this->isFuncCallName($returnNode->expr, 'compact')) {
+                /** @var FuncCall $compactFunCall */
+                $compactFunCall = $returnNode->expr;
+
+                $array = $this->createArrayFromCompactFuncCall($compactFunCall);
+                $thisRenderMethodCall->args[1] = new Arg($array);
+                $returnNode->expr = $thisRenderMethodCall;
+            } elseif (! $returnNode->expr instanceof MethodCall) {
+                $returnNode->expr = $thisRenderMethodCall;
+            }
         }
 
         // replace Return_ node value if exists and is not already in correct format
-        if ($returnNode && ! $returnNode->expr instanceof MethodCall) {
-            $returnNode->expr = $thisRenderMethodCall;
-        }
 
         $this->updateReturnType($classMethod);
     }
@@ -268,5 +297,17 @@ PHP
         }
 
         return $arguments;
+    }
+
+    private function createArrayFromCompactFuncCall(FuncCall $compactFuncCall): Array_
+    {
+        $compactVariableNames = $this->funcCallManipulator->extractArgumentsFromCompactFuncCalls([$compactFuncCall]);
+
+        $array = new Array_();
+        foreach ($compactVariableNames as $compactVariableName) {
+            $arrayItem = new ArrayItem(new Variable($compactVariableName), new String_($compactVariableName));
+            $array->items[] = $arrayItem;
+        }
+        return $array;
     }
 }
