@@ -40,7 +40,7 @@ final class ReturnThisRemoveRector extends AbstractRector
             [
                 new ConfiguredCodeSample(
                     <<<'PHP'
-class SomeClass
+class SomeExampleClass
 {
     public function someFunction()
     {
@@ -55,7 +55,7 @@ class SomeClass
 PHP
                     ,
                     <<<'PHP'
-class SomeClass
+class SomeExampleClass
 {
     public function someFunction()
     {
