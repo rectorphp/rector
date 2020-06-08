@@ -8,8 +8,10 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
+use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class DocBlockClassRenamer
@@ -50,6 +52,12 @@ final class DocBlockClassRenamer
                 }
 
                 $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $phpParserNode);
+
+                // make sure to compare FQNs
+                if ($staticType instanceof ShortenedObjectType) {
+                    $staticType = new ObjectType($staticType->getFullyQualifiedName());
+                }
+
                 if (! $staticType->equals($oldType)) {
                     return $node;
                 }

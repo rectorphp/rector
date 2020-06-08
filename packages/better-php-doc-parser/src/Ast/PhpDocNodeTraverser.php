@@ -9,6 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -47,7 +48,8 @@ final class PhpDocNodeTraverser
 
     private function isValueNodeWithType(PhpDocTagValueNode $phpDocTagValueNode): bool
     {
-        return $phpDocTagValueNode instanceof ReturnTagValueNode ||
+        return $phpDocTagValueNode instanceof PropertyTagValueNode ||
+            $phpDocTagValueNode instanceof ReturnTagValueNode ||
             $phpDocTagValueNode instanceof ParamTagValueNode ||
             $phpDocTagValueNode instanceof VarTagValueNode ||
             $phpDocTagValueNode instanceof ThrowsTagValueNode;
