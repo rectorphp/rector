@@ -1718,7 +1718,7 @@ catch (CatchedType $catchedVariable) {
 #### Public Properties
 
  * `$types` - `/** @var Node\Name[] Types of exceptions to catch */`
- * `$var` - `/** @var Expr\Variable Variable for exception */`
+ * `$var` - `/** @var Expr\Variable|null Variable for exception */`
  * `$stmts` - `/** @var Node\Stmt[] Statements */`
 <br>
 
