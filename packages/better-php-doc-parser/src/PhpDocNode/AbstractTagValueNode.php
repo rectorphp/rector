@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioRouteTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 use Symfony\Component\Routing\Annotation\Route;
@@ -151,7 +152,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $json = Strings::replace($json, '#\\\\\\\\#', '\\');
 
         // replace ":" with "=" for @Route
-        if ($this instanceof SymfonyRouteTagValueNode || $this instanceof DoctrineTagNodeInterface) {
+        if ($this instanceof SymfonyRouteTagValueNode || $this instanceof DoctrineTagNodeInterface || $this instanceof SensioRouteTagValueNode) {
             // @see https://regex101.com/r/XfKi4A/1/
             $json = Strings::replace($json, '#(\"|\w)\:(\"|\w)#', '$1=$2');
         }
