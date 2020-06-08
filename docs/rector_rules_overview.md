@@ -1,4 +1,4 @@
-# All 506 Rectors Overview
+# All 507 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -56,7 +56,7 @@
 - [Refactoring](#refactoring) (2)
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (10)
-- [Restoration](#restoration) (5)
+- [Restoration](#restoration) (6)
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
@@ -9314,6 +9314,33 @@ Remove final from Doctrine entities
 -final class SomeClass
 +class SomeClass
  {
+ }
+```
+
+<br>
+
+### `RemoveUselessJustForSakeInterfaceRector`
+
+- class: [`Rector\Restoration\Rector\Class_\RemoveUselessJustForSakeInterfaceRector`](/../master/rules/restoration/src/Rector/Class_/RemoveUselessJustForSakeInterfaceRector.php)
+
+Remove interface, that are added just for its sake, but nowhere useful
+
+```diff
+-class SomeClass implements OnlyHereUsedInterface
++class SomeClass
+ {
+ }
+
+-interface OnlyHereUsedInterface
+-{
+-}
+-
+ class SomePresenter
+ {
+-    public function __construct(OnlyHereUsedInterface $onlyHereUsed)
++    public function __construct(SomeClass $onlyHereUsed)
+     {
+     }
  }
 ```
 
