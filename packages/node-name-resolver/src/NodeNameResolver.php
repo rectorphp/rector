@@ -26,7 +26,7 @@ final class NodeNameResolver
     /**
      * @var string
      */
-    public const FILE = 'file';
+    private const FILE = 'file';
 
     /**
      * @var NodeNameResolverInterface[]
