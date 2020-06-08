@@ -24,6 +24,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class NodeNameResolver
 {
     /**
+     * @var string
+     */
+    public const FILE = 'file';
+
+    /**
      * @var NodeNameResolverInterface[]
      */
     private $nodeNameResolvers = [];
@@ -218,8 +223,13 @@ final class NodeNameResolver
         $rectorBacktrace = $this->matchRectorBacktraceCall($backtrace);
 
         if ($rectorBacktrace) {
-            $fileInfo = new SmartFileInfo($rectorBacktrace['file']);
-            $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
+            // issues to find the file in prefixed
+            if (file_exists($rectorBacktrace[self::FILE])) {
+                $fileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);
+                $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
+            } else {
+                $fileAndLine = $rectorBacktrace[self::FILE] . ':' . $rectorBacktrace['line'];
+            }
 
             $message .= PHP_EOL . PHP_EOL;
             $message .= sprintf('Look at %s', $fileAndLine);
