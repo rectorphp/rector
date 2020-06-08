@@ -16,6 +16,10 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\FuncCallManipulator;
@@ -177,10 +181,13 @@ PHP
 
     private function updateReturnType(ClassMethod $classMethod): void
     {
+        $this->updateReturnPhpDoc($classMethod);
+
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return;
         }
 
+        // change return type
         if ($classMethod->returnType !== null) {
             $returnTypeName = $this->getName($classMethod->returnType);
             if ($returnTypeName !== null && is_a($returnTypeName, Response::class, true)) {
@@ -309,5 +316,28 @@ PHP
             $array->items[] = $arrayItem;
         }
         return $array;
+    }
+
+    private function updateReturnPhpDoc(ClassMethod $classMethod): void
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return;
+        }
+
+        $returnTagValueNode = $phpDocInfo->getByType(ReturnTagValueNode::class);
+        if ($returnTagValueNode === null) {
+            return;
+        }
+
+        $returnStaticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
+            $returnTagValueNode->type,
+            $classMethod
+        );
+
+        if ($returnStaticType instanceof ArrayType || $returnStaticType instanceof UnionType) {
+            $returnTagValueNode->type = new IdentifierTypeNode('\Symfony\Component\HttpFoundation\Response');
+        }
     }
 }
