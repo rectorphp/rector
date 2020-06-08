@@ -218,8 +218,13 @@ final class NodeNameResolver
         $rectorBacktrace = $this->matchRectorBacktraceCall($backtrace);
 
         if ($rectorBacktrace) {
-            $fileInfo = new SmartFileInfo($rectorBacktrace['file']);
-            $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
+            // issues to find the file in prefixed
+            if (file_exists($rectorBacktrace['file'])) {
+                $fileInfo = new SmartFileInfo($rectorBacktrace['file']);
+                $fileAndLine = $fileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
+            } else {
+                $fileAndLine = $rectorBacktrace['file'] . ':' . $rectorBacktrace['line'];
+            }
 
             $message .= PHP_EOL . PHP_EOL;
             $message .= sprintf('Look at %s', $fileAndLine);
