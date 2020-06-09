@@ -1,5 +1,8 @@
 <?php
 
+namespace Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
+
+use DateTimeInterface;
 use Rector\Core\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeProduct;
 
 class ClassWithInjects9 extends ClassWithInjects9Parent
@@ -24,6 +27,9 @@ class ClassWithInjects9Parent
 -----
 <?php
 
+namespace Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
+
+use DateTimeInterface;
 use Rector\Core\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeProduct;
 
 class ClassWithInjects9 extends ClassWithInjects9Parent
