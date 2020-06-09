@@ -98,7 +98,7 @@ PHP
         }
 
         // it needs @var tag as well, to get the type
-        if ($phpDocInfo->getVarTagValue()) {
+        if ($phpDocInfo->getVarTagValue() !== null) {
             return false;
         }
 
