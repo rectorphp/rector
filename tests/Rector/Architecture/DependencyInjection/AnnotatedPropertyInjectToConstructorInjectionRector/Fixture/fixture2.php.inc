@@ -1,5 +1,10 @@
 <?php
 
+namespace Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
+
+use DateTimeInterface;
+use stdClass;
+
 class ClassWithInjects2
 {
     /**
@@ -18,6 +23,11 @@ class ClassWithInjects2
 ?>
 -----
 <?php
+
+namespace Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
+
+use DateTimeInterface;
+use stdClass;
 
 class ClassWithInjects2
 {
