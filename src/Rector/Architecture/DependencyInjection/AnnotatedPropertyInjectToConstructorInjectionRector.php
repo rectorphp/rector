@@ -92,8 +92,12 @@ PHP
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-
         if (! $phpDocInfo->hasByName(self::INJECT_ANNOTATION)) {
+            return true;
+        }
+
+        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($class instanceof Class_ && $class->isAbstract()) {
             return true;
         }
 
