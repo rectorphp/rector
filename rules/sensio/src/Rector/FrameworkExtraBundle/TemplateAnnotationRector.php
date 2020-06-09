@@ -17,9 +17,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\UnionType;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Core\PhpParser\Node\Manipulator\FuncCallManipulator;
@@ -337,7 +337,9 @@ PHP
         );
 
         if ($returnStaticType instanceof ArrayType || $returnStaticType instanceof UnionType) {
-            $returnTagValueNode->type = new IdentifierTypeNode('\Symfony\Component\HttpFoundation\Response');
+            $returnTagValueNode->type = new AttributeAwareFullyQualifiedIdentifierTypeNode(
+                'Symfony\Component\HttpFoundation\Response'
+            );
         }
     }
 }
