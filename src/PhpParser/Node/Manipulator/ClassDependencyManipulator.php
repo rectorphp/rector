@@ -77,7 +77,7 @@ final class ClassDependencyManipulator
     ): void {
         $constructorMethod = $classNode->getMethod(self::CONSTRUCTOR);
 
-        /** @var ClassMethod $constructorMethod */
+        /** @var ClassMethod|null $constructorMethod */
         if ($constructorMethod !== null) {
             $this->classMethodAssignManipulator->addParameterAndAssignToMethod(
                 $constructorMethod,
