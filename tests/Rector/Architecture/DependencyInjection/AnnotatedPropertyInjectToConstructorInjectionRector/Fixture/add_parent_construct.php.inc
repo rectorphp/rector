@@ -4,13 +4,23 @@ namespace Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPro
 
 use Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithParent;
 
-class ClassWithInjects6
+class ClassWithParentWithConstructor extends SomeClassWithParent
 {
     /**
      * @var SomeProductWithParent
      * @inject
      */
     protected $property;
+}
+
+class SomeClassWithParent
+{
+    private $value;
+
+    public function __construct()
+    {
+        $this->value = '123';
+    }
 }
 
 ?>
@@ -21,7 +31,7 @@ namespace Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPro
 
 use Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithParent;
 
-class ClassWithInjects6
+class ClassWithParentWithConstructor extends SomeClassWithParent
 {
     /**
      * @var SomeProductWithParent
@@ -30,6 +40,17 @@ class ClassWithInjects6
     public function __construct(\Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithParent $property)
     {
         $this->property = $property;
+        parent::__construct();
+    }
+}
+
+class SomeClassWithParent
+{
+    private $value;
+
+    public function __construct()
+    {
+        $this->value = '123';
     }
 }
 
