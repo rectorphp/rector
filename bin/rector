@@ -8,6 +8,7 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Console\Application;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
+use Rector\Core\Exception\Application\PHPVersionException;
 use Rector\Core\Set\Set;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
@@ -163,8 +164,26 @@ final class RectorConfigsResolver
      */
     private $configResolver;
 
+    /**
+     * @var string
+     * minimum php version
+     */
+    private $MINIMUM_PHP_VERSION = '7.2';
+
     public function __construct()
     {
+        // Check minimum required PHP version (7.2)
+        if (version_compare(PHP_VERSION, $this->MINIMUM_PHP_VERSION) < 0) {
+            echo "You have version " . $this->MINIMUM_PHP_VERSION . "installed";
+            // exit (1);
+            throw new \Rector\Core\Exception\PHPVersionException(sprintf(
+                'PHP version %s or higher is required',
+                $this->MINIMUM_PHP_VERSION
+            ));
+        }
+        else {
+            echo "fine...";
+        }
         $this->configResolver = new ConfigResolver();
     }
 
