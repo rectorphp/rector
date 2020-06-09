@@ -83,23 +83,26 @@ PHP
 
         // set to private
         $this->makePrivate($node);
-
         $this->addPropertyToCollector($node);
 
         return $node;
     }
 
-    private function shouldSkipProperty(Node $node): bool
+    private function shouldSkipProperty(Property $property): bool
     {
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         if (! $phpDocInfo->hasByName(self::INJECT_ANNOTATION)) {
             return true;
         }
 
         // it needs @var tag as well, to get the type
-        return ! $phpDocInfo->getVarTagValue();
+        if ($phpDocInfo->getVarTagValue()) {
+            return false;
+        }
+
+        return $property->type === null;
     }
 
     private function addPropertyToCollector(Property $property): void

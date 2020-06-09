@@ -1,29 +1,29 @@
 <?php
 
-use Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithTrait;
+namespace Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTypedProperty;
 
-class ClassWithInjects5
+use stdClass;
+
+class TypedProperty
 {
     /**
-     * @var SomeProductWithTrait
      * @inject
      */
-    protected $property;
+    public stdClass $property;
 }
 
 ?>
 -----
 <?php
 
-use Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithTrait;
+namespace Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\FixtureTypedProperty;
 
-class ClassWithInjects5
+use stdClass;
+
+class TypedProperty
 {
-    /**
-     * @var SomeProductWithTrait
-     */
-    private $property;
-    public function __construct(\Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithTrait $property)
+    private stdClass $property;
+    public function __construct(\stdClass $property)
     {
         $this->property = $property;
     }
