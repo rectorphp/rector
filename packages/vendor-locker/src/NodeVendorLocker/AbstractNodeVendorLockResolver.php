@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\Reflection\StaticRelationsHelper;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -88,20 +89,7 @@ abstract class AbstractNodeVendorLockResolver
             return [];
         }
 
-        $childrenClasses = [];
-        foreach (get_declared_classes() as $declaredClass) {
-            if ($declaredClass === $desiredClassName) {
-                continue;
-            }
-
-            if (! is_a($declaredClass, $desiredClassName, true)) {
-                continue;
-            }
-
-            $childrenClasses[] = $declaredClass;
-        }
-
-        return $childrenClasses;
+        return StaticRelationsHelper::getChildrenOfClass($desiredClassName);
     }
 
     private function hasInterfaceMethod(string $methodName, string $interfaceName): bool

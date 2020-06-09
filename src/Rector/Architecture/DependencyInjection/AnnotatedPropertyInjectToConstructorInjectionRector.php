@@ -12,6 +12,8 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\Reflection\StaticRelationsHelper;
+use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -29,6 +31,11 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      * @var string
      */
     private const INJECT_ANNOTATION = 'inject';
+
+    public function __construct(ClassLikeParsedNodesFinder $classLikeParsedNodesFinder)
+    {
+        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -81,8 +88,12 @@ PHP
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         $phpDocInfo->removeByName(self::INJECT_ANNOTATION);
 
-        // set to private
-        $this->makePrivate($node);
+        if ($this->isPropertyFectechInChildClass($node)) {
+            $this->makeProtected($node);
+        } else {
+            $this->makePrivate($node);
+        }
+
         $this->addPropertyToCollector($node);
 
         return $node;
@@ -126,5 +137,39 @@ PHP
         $propertyName = $this->getName($property);
 
         $this->addPropertyToClass($classNode, $propertyType, $propertyName);
+    }
+
+    private function isPropertyFectechInChildClass(Property $property): bool
+    {
+        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return false;
+        }
+
+        $propertyName = $this->getName($property);
+        if ($propertyName === null) {
+            return false;
+        }
+
+        $childrenClassNames = StaticRelationsHelper::getChildrenOfClass($className);
+        foreach ($childrenClassNames as $childClassName) {
+            $childClass = $this->classLikeParsedNodesFinder->findClass($childClassName);
+            if ($childClass === null) {
+                continue;
+            }
+
+            $isPropertyFetched = (bool) $this->betterNodeFinder->findFirst(
+                (array) $childClass->stmts,
+                function (Node $node) use ($propertyName) {
+                    return $this->isLocalPropertyFetchNamed($node, $propertyName);
+                }
+            );
+
+            if ($isPropertyFetched) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
