@@ -312,3 +312,4 @@ parameters:
         - '#Cognitive complexity for "Rector\\NetteKdyby\\NodeResolver\\ListeningMethodsCollector\:\:collectFromClassAndGetSubscribedEventClassMethod\(\)" is 11, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NetteKdyby\\ContributeEventClassResolver\:\:resolveGetterMethodByEventClassAndParam\(\)" is \d+, keep it under 9#'
         - '#Parameter \#1 \$type of class PhpParser\\Node\\NullableType constructor expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
+        - '#Parameter \#1 \$oldMethod of class Rector\\PHPOffice\\ValueObject\\ConditionalSetValue constructor expects string, bool\|int\|string given#'

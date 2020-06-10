@@ -11,13 +11,18 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRectorTest extends
 {
     public function test(): void
     {
-        $this->doTestFile(__DIR__ . '/Source/namespace_less_class.php.inc');
+        $this->doTestFile(__DIR__ . '/Fixture/namespace_less_class.php.inc');
+        $this->assertFileExists($this->getFixtureTempDirectory() . '/Fixture/namespace_less_class.php.inc');
 
-        $this->assertFileExists(__DIR__ . '/Fixture/namespace_less_class.php.inc');
         $this->assertFileEquals(
             __DIR__ . '/Source/ExpectedNamespaceLessClass.php',
-            __DIR__ . '/Fixture/namespace_less_class.php.inc'
+            $this->getFixtureTempDirectory() . '/Fixture/namespace_less_class.php.inc'
         );
+    }
+
+    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config/normalize_namespace_without_namespace_config.yaml';
     }
 
     protected function getRectorClass(): string

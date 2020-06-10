@@ -99,7 +99,13 @@ PHP
                 preg_quote($groupName, '#'),
                 preg_quote($suffixPattern, '#')
             );
+
             if (Strings::match($smartFileInfo->getRealPath(), $expectedLocationFilePattern)) {
+                continue;
+            }
+
+            // file is already in the group
+            if (Strings::match($smartFileInfo->getPath(), '#' . $groupName . '$#')) {
                 continue;
             }
 
