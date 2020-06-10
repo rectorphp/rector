@@ -125,6 +125,7 @@ PHP
                 return true;
             }
         }
+
         return $this->containsAssertCall($classMethod);
     }
 
@@ -164,11 +165,6 @@ PHP
             }
 
             return $this->isNames($node->name, [
-                // prophecy
-                'should*',
-                'should',
-                'expect*',
-                'expect',
                 // phpunit
                 '*assert',
                 'assert*',
