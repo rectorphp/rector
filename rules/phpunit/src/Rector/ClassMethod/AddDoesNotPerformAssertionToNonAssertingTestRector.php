@@ -28,6 +28,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractPHPUnitRector
 {
     /**
+     * @var int
+     */
+    private const MAX_LOOKING_FOR_ASSERT_METHOD_CALL_NESTING_LEVEL = 3;
+
+    /**
      * @var bool[]
      */
     private $containsAssertCallByClassMethod = [];
@@ -46,6 +51,13 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
      * @var ClassMethodReflectionFactory
      */
     private $classMethodReflectionFactory;
+
+    /**
+     * This should prevent segfaults while going too deep into to parsed code.
+     * Without it, it might end-up with segfault
+     * @var int
+     */
+    private $classMethodNestingLevel = 0;
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
@@ -100,6 +112,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        $this->classMethodNestingLevel = 0;
+
         if ($this->shouldSkipClassMethod($node)) {
             return null;
         }
@@ -138,6 +152,13 @@ PHP
 
     private function containsAssertCall(ClassMethod $classMethod): bool
     {
+        ++$this->classMethodNestingLevel;
+
+        // probably no assert method in the end
+        if ($this->classMethodNestingLevel > self::MAX_LOOKING_FOR_ASSERT_METHOD_CALL_NESTING_LEVEL) {
+            return false;
+        }
+
         $cacheHash = md5($this->print($classMethod));
         if (isset($this->containsAssertCallByClassMethod[$cacheHash])) {
             return $this->containsAssertCallByClassMethod[$cacheHash];
