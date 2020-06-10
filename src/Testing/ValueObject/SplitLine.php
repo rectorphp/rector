@@ -9,5 +9,5 @@ final class SplitLine
     /**
      * @var string
      */
-    public const SPLIT_LINE = '#-----' . PHP_EOL . '#';
+    public const SPLIT_LINE = "#-----\r?\n#";
 }
