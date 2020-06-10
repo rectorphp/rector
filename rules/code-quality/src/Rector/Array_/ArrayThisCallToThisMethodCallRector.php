@@ -95,6 +95,10 @@ PHP
 
         [$class, $method] = $arrayCallable;
 
+        if (! method_exists($class, $method)) {
+            return null;
+        }
+
         $methodReflection = new ReflectionMethod($class, $method);
         if ($methodReflection->getNumberOfParameters() > 0) {
             return null;
