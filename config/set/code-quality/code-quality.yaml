@@ -56,3 +56,4 @@ services:
     Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector: null
     Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector: null
     Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector: null
+    Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector: null

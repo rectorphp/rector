@@ -1,4 +1,4 @@
-# All 507 Rectors Overview
+# All 508 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -10,7 +10,7 @@
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (5)
 - [Celebrity](#celebrity) (3)
-- [CodeQuality](#codequality) (53)
+- [CodeQuality](#codequality) (54)
 - [CodingStyle](#codingstyle) (32)
 - [DeadCode](#deadcode) (40)
 - [Doctrine](#doctrine) (16)
@@ -554,6 +554,31 @@ Change array_merge of non arrays to array directly
 
 -        return array_merge([$value], [$value2]);
 +        return [$value, $value2];
+     }
+ }
+```
+
+<br>
+
+### `ArrayThisCallToThisMethodCallRector`
+
+- class: [`Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector`](/../master/rules/code-quality/src/Rector/Array_/ArrayThisCallToThisMethodCallRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/Array_/ArrayThisCallToThisMethodCallRector/Fixture)
+
+Change [$this, someMethod] without any args to $this->someMethod()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $values = [$this, 'giveMeMore'];
++        $values = $this->giveMeMore();
+     }
+
+     public function giveMeMore()
+     {
+         return 'more';
      }
  }
 ```
@@ -6507,6 +6532,7 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 ### `NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector`
 
 - class: [`Rector\PSR4\Rector\FileSystem\NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector`](/../master/rules/psr4/src/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector.php)
+- [test fixtures](/../master/rules/psr4/tests/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector/Fixture)
 
 Adds namespace to namespace-less files to match PSR-4 in composer.json autoload section. Run with combination with Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector
 
@@ -9322,6 +9348,7 @@ Remove final from Doctrine entities
 ### `RemoveUselessJustForSakeInterfaceRector`
 
 - class: [`Rector\Restoration\Rector\Class_\RemoveUselessJustForSakeInterfaceRector`](/../master/rules/restoration/src/Rector/Class_/RemoveUselessJustForSakeInterfaceRector.php)
+- [test fixtures](/../master/rules/restoration/tests/Rector/Class_/RemoveUselessJustForSakeInterfaceRector/Fixture)
 
 Remove interface, that are added just for its sake, but nowhere useful
 
