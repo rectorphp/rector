@@ -8,7 +8,6 @@ use Iterator;
 use Manual\Twig\TwigFilter;
 use Manual_Twig_Filter;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Renaming\Exception\InvalidPhpCodeException;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Fixture\DuplicatedClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\AbstractManualExtension;
@@ -37,7 +36,6 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
      */
     public function testClassNameDuplication(): void
     {
-        $this->expectException(InvalidPhpCodeException::class);
         $this->doTestFile(__DIR__ . '/FixtureDuplication/skip_duplicated_class.php.inc');
     }
 
