@@ -15,7 +15,7 @@ final class MoveAndRenameClassRector extends AbstractFileSystemRector
     /**
      * @var string[]
      */
-    private $oldClassToNewClass = [];
+    private $oldToNewClass = [];
 
     /**
      * @var FileRelocationResolver
@@ -28,16 +28,16 @@ final class MoveAndRenameClassRector extends AbstractFileSystemRector
     private $renamedClassesCollector;
 
     /**
-     * @param string[] $oldClassToNewClass
+     * @param string[] $oldToNewClass
      */
     public function __construct(
         FileRelocationResolver $fileRelocationResolver,
         RenamedClassesCollector $renamedClassesCollector,
-        array $oldClassToNewClass = []
+        array $oldToNewClass = []
     ) {
         $this->fileRelocationResolver = $fileRelocationResolver;
         $this->renamedClassesCollector = $renamedClassesCollector;
-        $this->oldClassToNewClass = $oldClassToNewClass;
+        $this->oldToNewClass = $oldToNewClass;
     }
 
     public function refactor(SmartFileInfo $smartFileInfo): void
@@ -53,7 +53,7 @@ final class MoveAndRenameClassRector extends AbstractFileSystemRector
         $className = $this->getName($class);
 
         /** @var string $oldClass */
-        foreach ($this->oldClassToNewClass as $oldClass => $newClass) {
+        foreach ($this->oldToNewClass as $oldClass => $newClass) {
             if ($className !== $oldClass) {
                 continue;
             }

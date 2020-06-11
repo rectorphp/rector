@@ -24,8 +24,6 @@ use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Rector\Renaming\Exception\InvalidPhpCodeException;
-use ReflectionClass;
 
 final class ClassRenamer
 {
@@ -197,7 +195,9 @@ final class ClassRenamer
         $newClassNamePart = $this->classNaming->getShortName($newName);
         $newNamespacePart = $this->classNaming->getNamespace($newName);
 
-        $this->ensureClassWillNotBeDuplicate($newName, $name);
+        if ($this->isClassAboutToBeDuplicated($newName)) {
+            return null;
+        }
 
         $classLike->name = new Identifier($newClassNamePart);
 
@@ -260,20 +260,9 @@ final class ClassRenamer
         return $foundClass instanceof ClassLike ? $foundClass : null;
     }
 
-    private function ensureClassWillNotBeDuplicate(string $newName, string $oldName): void
+    private function isClassAboutToBeDuplicated(string $newName): bool
     {
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($newName)) {
-            return;
-        }
-
-        $classReflection = new ReflectionClass($newName);
-
-        throw new InvalidPhpCodeException(sprintf(
-            'Renaming class "%s" to "%s" would create a duplicated class/interface/trait (already existing in "%s") and cause PHP code to be invalid.',
-            $oldName,
-            $newName,
-            $classReflection->getFileName()
-        ));
+        return ClassExistenceStaticHelper::doesClassLikeExist($newName);
     }
 
     private function changeNameToFullyQualifiedName(ClassLike $classLike): void

@@ -43,10 +43,10 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         yield [
             __DIR__ . '/Source/nette-exceptions.php',
             [
-                __DIR__ . '/Fixture/ArgumentOutOfRangeException.php' => __DIR__ . '/Expected/ArgumentOutOfRangeException.php',
-                __DIR__ . '/Fixture/InvalidStateException.php' => __DIR__ . '/Expected/InvalidStateException.php',
-                __DIR__ . '/Fixture/RegexpException.php' => __DIR__ . '/Expected/RegexpException.php',
-                __DIR__ . '/Fixture/UnknownImageFileException.php' => __DIR__ . '/Expected/UnknownImageFileException.php',
+                $this->getFixtureTempDirectory() . '/Source/ArgumentOutOfRangeException.php' => __DIR__ . '/Expected/ArgumentOutOfRangeException.php',
+                $this->getFixtureTempDirectory() . '/Source/InvalidStateException.php' => __DIR__ . '/Expected/InvalidStateException.php',
+                $this->getFixtureTempDirectory() . '/Source/RegexpException.php' => __DIR__ . '/Expected/RegexpException.php',
+                $this->getFixtureTempDirectory() . '/Source/UnknownImageFileException.php' => __DIR__ . '/Expected/UnknownImageFileException.php',
             ],
             true,
         ];
@@ -54,8 +54,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         yield [
             __DIR__ . '/Source/exceptions.php',
             [
-                __DIR__ . '/Fixture/FirstException.php' => __DIR__ . '/Expected/FirstException.php',
-                __DIR__ . '/Fixture/SecondException.php' => __DIR__ . '/Expected/SecondException.php',
+                $this->getFixtureTempDirectory() . '/Source/FirstException.php' => __DIR__ . '/Expected/FirstException.php',
+                $this->getFixtureTempDirectory() . '/Source/SecondException.php' => __DIR__ . '/Expected/SecondException.php',
             ],
             true,
         ];
@@ -63,8 +63,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         yield [
             __DIR__ . '/Source/exceptions-without-namespace.php',
             [
-                __DIR__ . '/Fixture/JustOneExceptionWithoutNamespace.php' => __DIR__ . '/Expected/JustOneExceptionWithoutNamespace.php',
-                __DIR__ . '/Fixture/JustTwoExceptionWithoutNamespace.php' => __DIR__ . '/Expected/JustTwoExceptionWithoutNamespace.php',
+                $this->getFixtureTempDirectory() . '/Source/JustOneExceptionWithoutNamespace.php' => __DIR__ . '/Expected/JustOneExceptionWithoutNamespace.php',
+                $this->getFixtureTempDirectory() . '/Source/JustTwoExceptionWithoutNamespace.php' => __DIR__ . '/Expected/JustTwoExceptionWithoutNamespace.php',
             ],
             true,
         ];
@@ -72,8 +72,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         yield [
             __DIR__ . '/Source/MissNamed.php',
             [
-                __DIR__ . '/Fixture/Miss.php' => __DIR__ . '/Expected/Miss.php',
-                __DIR__ . '/Fixture/Named.php' => __DIR__ . '/Expected/Named.php',
+                $this->getFixtureTempDirectory() . '/Source/Miss.php' => __DIR__ . '/Expected/Miss.php',
+                $this->getFixtureTempDirectory() . '/Source/Named.php' => __DIR__ . '/Expected/Named.php',
             ],
             true,
         ];
@@ -81,9 +81,9 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         yield [
             __DIR__ . '/Source/ClassLike.php',
             [
-                __DIR__ . '/Fixture/MyTrait.php' => __DIR__ . '/Expected/MyTrait.php',
-                __DIR__ . '/Fixture/MyClass.php' => __DIR__ . '/Expected/MyClass.php',
-                __DIR__ . '/Fixture/MyInterface.php' => __DIR__ . '/Expected/MyInterface.php',
+                $this->getFixtureTempDirectory() . '/Source/MyTrait.php' => __DIR__ . '/Expected/MyTrait.php',
+                $this->getFixtureTempDirectory() . '/Source/MyClass.php' => __DIR__ . '/Expected/MyClass.php',
+                $this->getFixtureTempDirectory() . '/Source/MyInterface.php' => __DIR__ . '/Expected/MyInterface.php',
             ],
             true,
         ];
@@ -91,8 +91,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         yield [
             __DIR__ . '/Source/SomeClass.php',
             [
-                __DIR__ . '/Fixture/SomeClass.php' => __DIR__ . '/Expected/SomeClass.php',
-                __DIR__ . '/Fixture/SomeClass_Exception.php' => __DIR__ . '/Expected/SomeClass_Exception.php',
+                $this->getFixtureTempDirectory() . '/Source/SomeClass.php' => __DIR__ . '/Expected/SomeClass.php',
+                $this->getFixtureTempDirectory() . '/Source/SomeClass_Exception.php' => __DIR__ . '/Expected/SomeClass_Exception.php',
             ],
             false,
         ];

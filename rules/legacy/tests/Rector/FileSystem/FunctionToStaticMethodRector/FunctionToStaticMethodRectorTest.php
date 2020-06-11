@@ -13,10 +13,10 @@ final class FunctionToStaticMethodRectorTest extends AbstractFileSystemRectorTes
     {
         $this->doTestFile(__DIR__ . '/Source/static_functions.php');
 
-        $this->assertFileExists(__DIR__ . '/Fixture/StaticFunctions.php');
+        $this->assertFileExists($this->getFixtureTempDirectory() . '/Source/StaticFunctions.php');
         $this->assertFileEquals(
             __DIR__ . '/Source/ExpectedStaticFunctions.php',
-            __DIR__ . '/Fixture/StaticFunctions.php'
+            $this->getFixtureTempDirectory() . '/Source/StaticFunctions.php'
         );
     }
 
