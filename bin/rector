@@ -31,6 +31,8 @@ $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 $autoloadIncluder->autoloadFromCommandLine();
 
 try {
+    checkMinimumPHPVersion();
+
     $rectorConfigsResolver = new RectorConfigsResolver();
     $configs = $rectorConfigsResolver->provide();
 
@@ -47,6 +49,9 @@ try {
         $changedFilesDetector = $container->get(ChangedFilesDetector::class);
         $changedFilesDetector->setFirstUsedConfig(realpath($rectorConfigsResolver->getFirstResolvedConfig()));
     }
+} catch (PHPVersionException $exception) {
+    print $exception->getMessage() . PHP_EOL;
+    exit(1);
 } catch (Throwable $throwable) {
     $symfonyStyle = (new SymfonyStyleFactory(new PrivatesCaller()))->create();
     $symfonyStyle->error($throwable->getMessage());
@@ -164,26 +169,9 @@ final class RectorConfigsResolver
      */
     private $configResolver;
 
-    /**
-     * @var string
-     * minimum php version
-     */
-    private $MINIMUM_PHP_VERSION = '7.2';
 
     public function __construct()
     {
-        // Check minimum required PHP version (7.2)
-        if (version_compare(PHP_VERSION, $this->MINIMUM_PHP_VERSION) < 0) {
-            echo "You have version " . $this->MINIMUM_PHP_VERSION . "installed";
-            // exit (1);
-            throw new \Rector\Core\Exception\PHPVersionException(sprintf(
-                'PHP version %s or higher is required',
-                $this->MINIMUM_PHP_VERSION
-            ));
-        }
-        else {
-            echo "fine...";
-        }
         $this->configResolver = new ConfigResolver();
     }
 
@@ -226,5 +214,19 @@ final class RectorConfigsResolver
     public function getFirstResolvedConfig(): ?string
     {
         return $this->configResolver->getFirstResolvedConfig();
+    }
+}
+
+function checkMinimumPHPVersion() {
+    $minimumPHPVersion = '7.2.4';
+    $installedPHPVersion = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION;
+
+    // Check minimum required PHP version (7.2.4)
+    if (version_compare(PHP_VERSION, $minimumPHPVersion, '<')) {
+        throw new PHPVersionException(sprintf(
+            'PHP version %s or higher is required, but you currently have %s installed.',
+            $minimumPHPVersion,
+            $installedPHPVersion
+        ));
     }
 }
