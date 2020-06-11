@@ -169,7 +169,6 @@ final class RectorConfigsResolver
      */
     private $configResolver;
 
-
     public function __construct()
     {
         $this->configResolver = new ConfigResolver();
