@@ -20,6 +20,7 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Rector\TypeDeclaration\ValueObject\NewType;
+use ReflectionClass;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
@@ -149,7 +150,7 @@ PHP
             $fqcn = $inferedType instanceof ShortenedObjectType
                 ? $inferedType->getFullyQualifiedName()
                 : $inferedType->getClassName();
-            $reflectionClass = new \ReflectionClass($fqcn);
+            $reflectionClass = new ReflectionClass($fqcn);
             if ($reflectionClass->isTrait()) {
                 return;
             }
