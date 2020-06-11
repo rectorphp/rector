@@ -1,4 +1,4 @@
-# source: https://book.cakephp.org/4.0/en/appendices/4-0-migration-guide.html
+# source: https://book.cakephp.org/4/en/appendices/4-0-migration-guide.html
 
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
