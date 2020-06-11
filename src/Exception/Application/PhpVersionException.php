@@ -6,6 +6,6 @@ namespace Rector\Core\Exception\Application;
 
 use Exception;
 
-final class PHPVersionException extends Exception
+final class PhpVersionException extends Exception
 {
 }
