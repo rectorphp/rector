@@ -1,0 +1,25 @@
+# source: https://book.cakephp.org/4/en/appendices/4-1-migration-guide.html
+
+services:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
+        $oldToNewClasses:
+            'Cake\Routing\Exception\RedirectException': 'Cake\Http\Exception\RedirectException'
+
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
+        $oldToNewMethodsByClass:
+            'Cake\Database\Schema\TableSchema':
+                getPrimary: 'getPrimaryKey'
+            'Cake\Database\Type\DateTimeType':
+                setTimezone: 'setDatabaseTimezone'
+            'Cake\Database\Expression\QueryExpression':
+                or_: 'or'
+                and_: 'and'
+            'Cake\View\Form\ContextInterface':
+                primaryKey: 'getPrimaryKey'
+
+    Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
+        $methodNamesByTypes:
+            'Cake\Form\Form':
+                schema:
+                    set: 'setSchema'
+                    get: 'getSchema'
