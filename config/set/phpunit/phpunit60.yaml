@@ -2,12 +2,26 @@ imports:
     - { resource: 'phpunit-exception.yaml' }
 
 services:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
+        $oldToNewClasses:
+            'PHPUnit_Framework_MockObject_Stub': 'PHPUnit\Framework\MockObject\Stub'
+            'PHPUnit_Framework_MockObject_Stub_Return': 'PHPUnit\Framework\MockObject\Stub\ReturnStub'
+            'PHPUnit_Framework_MockObject_Matcher_Parameters': 'PHPUnit\Framework\MockObject\Matcher\Parameters'
+            'PHPUnit_Framework_MockObject_Matcher_Invocation': 'PHPUnit\Framework\MockObject\Matcher\Invocation'
+            'PHPUnit_Framework_MockObject_MockObject': 'PHPUnit\Framework\MockObject\MockObject'
+            'PHPUnit_Framework_MockObject_Invocation_Object': 'PHPUnit\Framework\MockObject\Invocation\ObjectInvocation'
+
     # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
     Rector\Core\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
         $namespacePrefixesWithExcludedClasses:
             PHPUnit_:
                 # exclude this class, since it has no namespaced replacement
                 - 'PHPUnit_Framework_MockObject_MockObject'
+                - 'PHPUnit_Framework_MockObject_Invocation_Object'
+                - 'PHPUnit_Framework_MockObject_Matcher_Invocation'
+                - 'PHPUnit_Framework_MockObject_Matcher_Parameters'
+                - 'PHPUnit_Framework_MockObject_Stub_Return'
+                - 'PHPUnit_Framework_MockObject_Stub'
 
     Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector: null
     Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector: null
