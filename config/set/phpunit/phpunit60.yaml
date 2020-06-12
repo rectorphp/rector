@@ -2,6 +2,11 @@ imports:
     - { resource: 'phpunit-exception.yaml' }
 
 services:
+    Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
+        $oldToNewMethodsByClass:
+            'PHPUnit\Framework\TestCase':
+                'createMockBuilder': 'getMockBuilder'
+
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
             'PHPUnit_Framework_MockObject_Stub': 'PHPUnit\Framework\MockObject\Stub'
