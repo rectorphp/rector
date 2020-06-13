@@ -132,12 +132,6 @@ trait NodeCommandersTrait
         $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
 
-    protected function replaceNode(Node $node, Node $replaceWith): void
-    {
-        $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($node, $replaceWith);
-        $this->rectorChangeCollector->notifyNodeFileInfo($replaceWith);
-    }
-
     /**
      * @param ClassLike|FunctionLike $nodeWithStatements
      */

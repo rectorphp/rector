@@ -142,7 +142,8 @@ trait ComplexRemovalTrait
             $this->addLivingCodeBeforeNode($assign->expr, $currentStatement);
             $this->removeNode($assign);
         } else {
-            $this->replaceNode($assign, $assign->expr);
+            $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($assign, $assign->expr);
+            $this->rectorChangeCollector->notifyNodeFileInfo($assign->expr);
         }
     }
 

@@ -126,6 +126,22 @@ trait NameResolverTrait
         return $this->isName($node, $name);
     }
 
+    /**
+     * Detects "SomeClass::class"
+     */
+    protected function isClassConstReference(Node $node, string $className): bool
+    {
+        if (! $node instanceof Node\Expr\ClassConstFetch) {
+            return false;
+        }
+
+        if (! $this->isName($node->name, 'class')) {
+            return false;
+        }
+
+        return $this->isName($node->class, $className);
+    }
+
     protected function isStaticCallNamed(Node $node, string $className, string $methodName): bool
     {
         if (! $node instanceof StaticCall) {
