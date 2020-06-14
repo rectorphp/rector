@@ -10,14 +10,17 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\ChildPopulator\ChildParamPopulator;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Rector\TypeDeclaration\ValueObject\NewType;
+use ReflectionClass;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
@@ -141,6 +144,16 @@ PHP
         $inferedType = $this->paramTypeInferer->inferParam($param);
         if ($inferedType instanceof MixedType) {
             return;
+        }
+
+        if ($inferedType instanceof ObjectType) {
+            $fqcn = $inferedType instanceof ShortenedObjectType
+                ? $inferedType->getFullyQualifiedName()
+                : $inferedType->getClassName();
+            $reflectionClass = new ReflectionClass($fqcn);
+            if ($reflectionClass->isTrait()) {
+                return;
+            }
         }
 
         $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
