@@ -1,4 +1,4 @@
-# All 508 Rectors Overview
+# All 510 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -8,7 +8,7 @@
 
 - [Architecture](#architecture) (4)
 - [Autodiscovery](#autodiscovery) (4)
-- [CakePHP](#cakephp) (5)
+- [CakePHP](#cakephp) (6)
 - [Celebrity](#celebrity) (3)
 - [CodeQuality](#codequality) (54)
 - [CodingStyle](#codingstyle) (32)
@@ -56,7 +56,7 @@
 - [Refactoring](#refactoring) (2)
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (10)
-- [Restoration](#restoration) (6)
+- [Restoration](#restoration) (7)
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
@@ -276,6 +276,31 @@ Change App::uses() to use imports
 +use Event\NotificationListener;
 
  CakeEventManager::instance()->attach(new NotificationListener());
+```
+
+<br>
+
+### `ArrayToFluentCallRector`
+
+- class: [`Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector`](/../master/rules/cakephp/src/Rector/MethodCall/ArrayToFluentCallRector.php)
+- [test fixtures](/../master/rules/cakephp/tests/Rector/MethodCall/ArrayToFluentCallRector/Fixture)
+
+Moves array options to fluent setter method calls.
+
+```diff
+ class ArticlesTable extends \Cake\ORM\Table
+ {
+     public function initialize(array $config)
+     {
+-        $this->belongsTo('Authors', [
+-            'foreignKey' => 'author_id',
+-            'propertyName' => 'person'
+-        ]);
++        $this->belongsTo('Authors')
++            ->setForeignKey('author_id')
++            ->setProperty('person');
+     }
+ }
 ```
 
 <br>
@@ -9370,6 +9395,15 @@ Remove interface, that are added just for its sake, but nowhere useful
      }
  }
 ```
+
+<br>
+
+### `UpdateFileNameByClassNameFileSystemRector`
+
+- class: [`Rector\Restoration\Rector\FileSystem\UpdateFileNameByClassNameFileSystemRector`](/../master/rules/restoration/src/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector.php)
+- [test fixtures](/../master/rules/restoration/tests/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector/Fixture)
+
+Rename file to respect class name
 
 <br>
 
