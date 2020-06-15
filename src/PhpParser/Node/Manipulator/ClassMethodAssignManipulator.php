@@ -71,6 +71,7 @@ final class ClassMethodAssignManipulator
         );
 
         $readOnlyVariableAssigns = $this->filterOutReferencedVariables($readOnlyVariableAssigns, $classMethod);
+        $readOnlyVariableAssigns = $this->filterOutMultiAssigns($readOnlyVariableAssigns);
 
         return $this->variableManipulator->filterOutReadOnlyVariables($readOnlyVariableAssigns, $classMethod);
     }
@@ -195,5 +196,20 @@ final class ClassMethodAssignManipulator
         }
 
         return false;
+    }
+
+    /**
+     * E.g. $a = $b = $c = '...';
+     *
+     * @param Assign[] $readOnlyVariableAssigns
+     * @return Assign[]
+     */
+    private function filterOutMultiAssigns(array $readOnlyVariableAssigns): array
+    {
+        return array_filter($readOnlyVariableAssigns, function (Assign $assign) {
+            $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
+
+            return ! $parentNode instanceof Assign;
+        });
     }
 }
