@@ -75,7 +75,6 @@ final class TypeFactory
             }
 
             $typeHash = md5($type->describe(VerbosityLevel::cache()));
-
             $uniqueTypes[$typeHash] = $type;
         }
 
