@@ -29,7 +29,3 @@ parameters:
 
     # so Rector code is still PHP 7.2 compatible
     php_version_features: '7.2'
-
-services:
-    Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector: null
-    Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector: null
