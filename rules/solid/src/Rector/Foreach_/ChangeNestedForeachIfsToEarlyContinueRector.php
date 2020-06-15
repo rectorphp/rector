@@ -14,6 +14,7 @@ use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeTransformer\ConditionInverter;
 
 /**
@@ -102,15 +103,13 @@ PHP
             return null;
         }
 
-        $this->processNestedIfsWithNonBreaking($node, $nestedIfsWithOnlyNonReturn);
-
-        return $node;
+        return $this->processNestedIfsWithNonBreaking($node, $nestedIfsWithOnlyNonReturn);
     }
 
     /**
      * @param If_[] $nestedIfsWithOnlyReturn
      */
-    private function processNestedIfsWithNonBreaking(Foreach_ $foreach, array $nestedIfsWithOnlyReturn): void
+    private function processNestedIfsWithNonBreaking(Foreach_ $foreach, array $nestedIfsWithOnlyReturn): Foreach_
     {
         // add nested if openly after this
         $nestedIfsWithOnlyReturnCount = count($nestedIfsWithOnlyReturn);
@@ -130,6 +129,8 @@ PHP
                 $this->addInvertedIfStmtWithContinue($nestedIfWithOnlyReturn, $foreach);
             }
         }
+
+        return $foreach;
     }
 
     private function addInvertedIfStmtWithContinue(If_ $nestedIfWithOnlyReturn, Foreach_ $foreach): void
@@ -146,6 +147,8 @@ PHP
 
             return;
         }
+
+        $nestedIfWithOnlyReturn->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         $nestedIfWithOnlyReturn->cond = $invertedCondition;
         $nestedIfWithOnlyReturn->stmts = [new Continue_()];

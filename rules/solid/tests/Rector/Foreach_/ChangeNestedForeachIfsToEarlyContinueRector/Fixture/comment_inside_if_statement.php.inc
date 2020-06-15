@@ -4,14 +4,14 @@ namespace Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContin
 
 class CommentInsideIfStatement
 {
-    public function run()
+    public function run($values)
     {
         $items = [];
 
         foreach ($values as $value) {
-            if ($value === 5) //why am I doing this?
+            if ($value === 5) // why am I doing this?
             {
-                if ($value2 === 10) {
+                if ($value === 10) {
                     $items[] = 'maybe';
                 }
             }
@@ -27,16 +27,16 @@ namespace Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContin
 
 class CommentInsideIfStatement
 {
-    public function run()
+    public function run($values)
     {
         $items = [];
 
         foreach ($values as $value) {
             if ($value !== 5) {
-                //why am I doing this?
                 continue;
             }
-            if ($value2 !== 10) {
+            // why am I doing this?
+            if ($value !== 10) {
                 continue;
             }
             $items[] = 'maybe';
