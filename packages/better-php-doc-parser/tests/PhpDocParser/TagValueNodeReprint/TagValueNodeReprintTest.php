@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint;
 use Iterator;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
@@ -49,7 +50,7 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
     {
         return [
             BlameableTagValueNode::class => __DIR__ . '/Fixture/Blameable',
-            SlugTagValueNode::class => __DIR__ . '/Fixture/Slug',
+            SlugTagValueNode::class => __DIR__ . '/Fixture/Gedmo',
             AssertChoiceTagValueNode::class => __DIR__ . '/Fixture/AssertChoice',
             AssertTypeTagValueNode::class => __DIR__ . '/Fixture/AssertType',
             SymfonyRouteTagValueNode::class => __DIR__ . '/Fixture/SymfonyRoute',
@@ -68,6 +69,7 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
             SensioMethodTagValueNode::class => __DIR__ . '/Fixture/SensioMethod',
 
             TemplateTagValueNode::class => __DIR__ . '/Fixture/Native/Template',
+            VarTagValueNode::class => __DIR__ . '/Fixture/Native/VarTag',
         ];
     }
 }
