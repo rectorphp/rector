@@ -15,7 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\StringType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -145,7 +145,12 @@ PHP
             return true;
         }
 
-        return $arrayStaticType instanceof ArrayType && $arrayStaticType->getKeyType() instanceof StringType;
+        if (! $arrayStaticType instanceof ArrayType) {
+            return true;
+        }
+
+        // integer key type is required, @see https://twitter.com/nikita_ppv/status/1126470222838366209
+        return ! $arrayStaticType->getKeyType() instanceof IntegerType;
     }
 
     private function resolveValue(Expr $expr): Expr
