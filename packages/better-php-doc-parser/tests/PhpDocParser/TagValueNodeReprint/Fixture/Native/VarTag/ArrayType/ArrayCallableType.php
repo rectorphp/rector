@@ -7,7 +7,7 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint\Fixtu
 final class ArrayCallableType
 {
     /**
-     * @var (callable(mixed $value, string $typeName): mixed)[]
+     * @var (callable(mixed $value, string $typeName):mixed)[]
      */
     private $mappings = [];
 }
