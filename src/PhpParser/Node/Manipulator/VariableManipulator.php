@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -84,6 +85,10 @@ final class VariableManipulator
             }
 
             if (! $node->expr instanceof Array_ && ! $node->expr instanceof Scalar) {
+                return null;
+            }
+
+            if ($node->expr instanceof Encapsed) {
                 return null;
             }
 
