@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\TagValueNodeReprint;
 
 use Iterator;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
@@ -65,6 +66,8 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
 
             SensioTemplateTagValueNode::class => __DIR__ . '/Fixture/SensioTemplate',
             SensioMethodTagValueNode::class => __DIR__ . '/Fixture/SensioMethod',
+
+            TemplateTagValueNode::class => __DIR__ . '/Fixture/Native/Template',
         ];
     }
 }
