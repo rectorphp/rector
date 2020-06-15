@@ -2,3 +2,9 @@ services:
     Rector\PHPUnit\Rector\Class_\TestListenerToHooksRector: null
     Rector\PHPUnit\Rector\MethodCall\ExplicitPhpErrorApiRector: null
     Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector: null
+
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
+        $oldToNewMethodsByClass:
+            # see https://github.com/sebastianbergmann/phpunit/issues/3957
+            'expectExceptionMessageRegExp': 'expectExceptionMessageMatches'
+            'assertRegExp': 'assertMatchesRegularExpression'
