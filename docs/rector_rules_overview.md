@@ -1,4 +1,4 @@
-# All 510 Rectors Overview
+# All 511 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -30,7 +30,7 @@
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [NetteUtilsCodeQuality](#netteutilscodequality) (1)
-- [Order](#order) (3)
+- [Order](#order) (4)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
 - [PHPUnit](#phpunit) (37)
@@ -5152,6 +5152,28 @@ Replace time numbers with Nette\Utils\DateTime constants
 <br>
 
 ## Order
+
+### `OrderClassConstantsByIntegerValueRector`
+
+- class: [`Rector\Order\Rector\Class_\OrderClassConstantsByIntegerValueRector`](/../master/rules/order/src/Rector/Class_/OrderClassConstantsByIntegerValueRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderClassConstantsByIntegerValueRector/Fixture)
+
+Order class constant order by their integer value
+
+```diff
+ class SomeClass
+ {
+     const MODE_ON = 0;
+
++    const MODE_MAYBE = 1;
++
+     const MODE_OFF = 2;
+-
+-    const MODE_MAYBE = 1;
+ }
+```
+
+<br>
 
 ### `OrderPrivateMethodsByUseRector`
 
