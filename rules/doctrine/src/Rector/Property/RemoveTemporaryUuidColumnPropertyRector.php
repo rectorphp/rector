@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -20,7 +21,44 @@ final class RemoveTemporaryUuidColumnPropertyRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Remove temporary $uuid property');
+        return new RectorDefinition('Remove temporary $uuid property', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class Column
+{
+    /**
+     * @ORM\Column
+     */
+    public $id;
+
+    /**
+     * @ORM\Column
+     */
+    public $uuid;
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class Column
+{
+    /**
+     * @ORM\Column
+     */
+    public $id;
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     /**

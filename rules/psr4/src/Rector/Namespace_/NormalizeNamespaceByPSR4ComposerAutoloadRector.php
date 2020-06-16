@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -43,8 +44,39 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Changes namespace and class names to match PSR-4 in composer.json autoload section'
-        );
+            'Changes namespace and class names to match PSR-4 in composer.json autoload section', [
+                new ComposerJsonAwareCodeSample(
+                <<<'CODE_SAMPLE'
+// src/SomeClass.php
+
+namespace App\DifferentNamespace;
+
+class SomeClass
+{
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+// src/SomeClass.php
+
+namespace App\CustomNamespace;
+
+class SomeClass
+{
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+{
+    "autoload": {
+        "psr-4": {
+            "App\\CustomNamespace\\": "src"
+        }
+    }
+}
+CODE_SAMPLE
+            ),
+            ]);
     }
 
     /**

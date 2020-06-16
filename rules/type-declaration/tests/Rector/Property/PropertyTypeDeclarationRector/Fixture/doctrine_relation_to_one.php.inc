@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,7 +28,7 @@ class DoctrineRelationToOne
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
 

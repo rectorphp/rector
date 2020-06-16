@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -43,7 +44,45 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Add uuid initializion to all entities that misses it');
+        return new RectorDefinition('Add uuid initializion to all entities that misses it', [
+            new CodeSample(
+<<<'CODE_SAMPLE'
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class AddUuidInit
+{
+    /**
+     * @ORM\Id
+     * @var UuidInterface
+     */
+    private $superUuid;
+}
+CODE_SAMPLE
+                ,
+<<<'CODE_SAMPLE'
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class AddUuidInit
+{
+    /**
+     * @ORM\Id
+     * @var UuidInterface
+     */
+    private $superUuid;
+    public function __construct()
+    {
+        $this->superUuid = \Ramsey\Uuid\Uuid::uuid4();
+    }
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Refactoring\Rector\FileSystem;
 
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
@@ -40,6 +41,50 @@ final class MoveAndRenameClassRector extends AbstractFileSystemRector
         $this->oldToNewClass = $oldToNewClass;
     }
 
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Move class to respect new location with respect to PSR-4 + follow up with class rename', [
+                new ConfiguredCodeSample(
+                    <<<'CODE_SAMPLE'
+// src/SomeClass.php
+class SomeClass
+{
+}
+
+class AnotherClass
+{
+    public function create()
+    {
+        return new SomeClass;
+    }
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+// src/DifferentClass.php
+class DifferentClass
+{
+}
+
+class AnotherClass
+{
+    public function create()
+    {
+        return new DifferentClass;
+    }
+}
+CODE_SAMPLE
+                    , [
+                        '$oldToNewClass' => [
+                            'SomeClass' => 'DifferentClass',
+                        ],
+                    ]
+                ),
+            ]
+        );
+    }
+
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
         $fileNodes = $this->parseFileInfoToNodes($smartFileInfo);
@@ -69,12 +114,5 @@ final class MoveAndRenameClassRector extends AbstractFileSystemRector
 
             $this->moveFile($smartFileInfo, $newFileLocation, $fileContent);
         }
-    }
-
-    public function getDefinition(): RectorDefinition
-    {
-        return new RectorDefinition(
-            'Move class to respect new location with respect to PSR-4 + follow up with class rename'
-        );
     }
 }

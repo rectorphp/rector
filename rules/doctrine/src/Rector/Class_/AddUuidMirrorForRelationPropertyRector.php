@@ -16,6 +16,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\OneToOneTagValueNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
@@ -50,8 +51,80 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
     {
         return new RectorDefinition(
             'Adds $uuid property to entities, that already have $id with integer type.' .
-            'Require for step-by-step migration from int to uuid.'
-        );
+            'Require for step-by-step migration from int to uuid.',
+            [
+                new CodeSample(
+                <<<'CODE_SAMPLE'
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class SomeEntity
+{
+    /**
+     * @ORM\ManyToOne(targetEntity="AnotherEntity", cascade={"persist", "merge"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $amenity;
+}
+
+/**
+ * @ORM\Entity
+ */
+class AnotherEntity
+{
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    private $uuid;
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class SomeEntity
+{
+    /**
+     * @ORM\ManyToOne(targetEntity="AnotherEntity", cascade={"persist", "merge"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $amenity;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AnotherEntity", cascade={"persist", "merge"})
+     * @ORM\JoinColumn(nullable=true, referencedColumnName="uuid")
+     */
+    private $amenityUuid;
+}
+
+/**
+ * @ORM\Entity
+ */
+class AnotherEntity
+{
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    private $uuid;
+}
+CODE_SAMPLE
+    ), ]
+    );
     }
 
     /**

@@ -10,14 +10,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * Nette to Symfony
- */
 final class DeleteFactoryInterfaceRector extends AbstractFileSystemRector
 {
     /**
@@ -33,7 +31,19 @@ final class DeleteFactoryInterfaceRector extends AbstractFileSystemRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Interface factories are not needed in Symfony. Clear constructor injection is used instead'
+            'Interface factories are not needed in Symfony. Clear constructor injection is used instead', [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
+interface SomeControlFactoryInterface
+{
+    public function create();
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+CODE_SAMPLE
+                ),
+            ]
         );
     }
 

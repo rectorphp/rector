@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -25,7 +26,46 @@ final class AddUuidAnnotationsToIdPropertyRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Add uuid annotations to $id property');
+        return new RectorDefinition('Add uuid annotations to $id property', [
+            new CodeSample(
+            <<<'CODE_SAMPLE'
+use Doctrine\ORM\Attributes as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class SomeClass
+{
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @Serializer\Type("int")
+     */
+    public $id;
+}
+CODE_SAMPLE
+            ,
+            <<<'CODE_SAMPLE'
+use Doctrine\ORM\Attributes as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class SomeClass
+{
+    /**
+     * @var \Ramsey\Uuid\UuidInterface
+     * @ORM\Id
+     * @ORM\Column(type="uuid_binary")
+     * @Serializer\Type("string")
+     */
+    public $id;
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     /**

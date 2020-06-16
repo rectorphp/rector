@@ -7,6 +7,7 @@ namespace Rector\Restoration\Rector\FileSystem;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -29,7 +30,23 @@ final class UpdateFileNameByClassNameFileSystemRector extends AbstractFileSystem
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Rename file to respect class name');
+        return new RectorDefinition('Rename file to respect class name', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+// app/SomeClass.php
+class AnotherClass
+{
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+// app/AnotherClass.php
+class AnotherClass
+{
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     public function refactor(SmartFileInfo $smartFileInfo): void

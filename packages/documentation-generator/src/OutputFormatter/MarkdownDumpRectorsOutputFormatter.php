@@ -9,7 +9,9 @@ use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DocumentationGenerator\RectorMetadataResolver;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
 use ReflectionClass;
@@ -134,14 +136,12 @@ final class MarkdownDumpRectorsOutputFormatter
         }
 
         $rectorDefinition = $rector->getDefinition();
-        if ($rectorDefinition->getDescription() === '') {
-            throw new ShouldNotHappenException(sprintf('Rector "%s" is missing description.', get_class($rector)));
-        }
+        $this->ensureRectorDefinitionExists($rectorDefinition, $rector);
 
-        if ($rectorDefinition->getDescription() !== '') {
-            $this->symfonyStyle->newLine();
-            $this->symfonyStyle->writeln($rectorDefinition->getDescription());
-        }
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->writeln($rectorDefinition->getDescription());
+
+        $this->ensureCodeSampleExists($rectorDefinition, $rector);
 
         foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
             $this->symfonyStyle->newLine();
@@ -217,6 +217,14 @@ final class MarkdownDumpRectorsOutputFormatter
             $this->symfonyStyle->newLine();
             $this->printCodeWrapped($extraFileContent, 'php');
         }
+
+        if ($codeSample instanceof ComposerJsonAwareCodeSample) {
+            $composerJsonContent = $codeSample->getComposerJsonContent();
+            $this->symfonyStyle->newLine();
+            $this->symfonyStyle->write('`composer.json`');
+            $this->printCodeWrapped($composerJsonContent, 'json');
+            $this->symfonyStyle->newLine();
+        }
     }
 
     private function printCodeWrapped(string $content, string $format): void
@@ -270,6 +278,31 @@ final class MarkdownDumpRectorsOutputFormatter
             foreach ($rectors as $rector) {
                 $this->printRector($rector, $isRectorProject);
             }
+        }
+    }
+
+    private function ensureRectorDefinitionExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
+    {
+        if ($rectorDefinition->getDescription() !== '') {
+            return;
+        }
+
+        $message = sprintf(
+            'Rector "%s" must have description. Complete it in "%s()" method.',
+            get_class($rector),
+            'getDefinition'
+        );
+        throw new ShouldNotHappenException($message);
+    }
+
+    private function ensureCodeSampleExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
+    {
+        if (count($rectorDefinition->getCodeSamples()) === 0) {
+            throw new ShouldNotHappenException(sprintf(
+                'Rector "%s" must have at least one code sample. Complete it in "%s()" method.',
+                get_class($rector),
+                'getDefinition'
+            ));
         }
     }
 }
