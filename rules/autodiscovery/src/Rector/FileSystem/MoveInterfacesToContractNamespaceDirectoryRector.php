@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Rector\Autodiscovery\Rector\FileSystem;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Autodiscovery\FileMover\FileMover;
+use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
@@ -68,9 +71,14 @@ PHP
      */
     private function processInterfacesToContract(SmartFileInfo $smartFileInfo, array $nodes): void
     {
-        $interfaceNode = $this->betterNodeFinder->findFirstInstanceOf($nodes, Interface_::class);
-        if ($interfaceNode === null) {
+        $interface = $this->betterNodeFinder->findFirstInstanceOf($nodes, Interface_::class);
+        if ($interface === null) {
             return;
+        }
+
+        $oldInterfaceName = $this->getName($interface);
+        if ($oldInterfaceName === null) {
+            throw new ShouldNotHappenException();
         }
 
         $nodesWithFileDestination = $this->fileMover->createMovedNodesAndFilePath($smartFileInfo, $nodes, 'Contract');
@@ -80,8 +88,27 @@ PHP
             return;
         }
 
+        $newInterfaceName = $this->resolveNewClassLikeName($nodesWithFileDestination);
+
         $this->removeFile($smartFileInfo);
+        $this->addClassRename($oldInterfaceName, $newInterfaceName);
 
         $this->printNodesWithFileDestination($nodesWithFileDestination);
+    }
+
+    private function resolveNewClassLikeName(NodesWithFileDestinationValueObject $nodesWithFileDestination): string
+    {
+        /** @var ClassLike $classLike */
+        $classLike = $this->betterNodeFinder->findFirstInstanceOf(
+            $nodesWithFileDestination->getNodes(),
+            ClassLike::class
+        );
+
+        $classLikeName = $this->getName($classLike);
+        if ($classLikeName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $classLikeName;
     }
 }

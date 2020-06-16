@@ -17,6 +17,7 @@ use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PostRector\Application\PostFileProcessor;
+use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use TypeError;
@@ -71,6 +72,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     private $postFileProcessor;
 
     /**
+     * @var RenamedClassesCollector
+     */
+    private $renamedClassesCollector;
+
+    /**
      * @required
      */
     public function autowireAbstractFileSystemRector(
@@ -82,7 +88,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         Configuration $configuration,
         BetterStandardPrinter $betterStandardPrinter,
         ParameterProvider $parameterProvider,
-        PostFileProcessor $postFileProcessor
+        PostFileProcessor $postFileProcessor,
+        RenamedClassesCollector $renamedClassesCollector
     ): void {
         $this->parser = $parser;
         $this->parserFactory = $parserFactory;
@@ -93,6 +100,12 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parameterProvider = $parameterProvider;
         $this->postFileProcessor = $postFileProcessor;
+        $this->renamedClassesCollector = $renamedClassesCollector;
+    }
+
+    protected function addClassRename(string $oldClass, string $newClass): void
+    {
+        $this->renamedClassesCollector->addClassRename($oldClass, $newClass);
     }
 
     /**
