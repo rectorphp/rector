@@ -64,10 +64,8 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
 
             // special case
             GenericTagValueNode::class => __DIR__ . '/Fixture/ConstantReference',
-
             SensioTemplateTagValueNode::class => __DIR__ . '/Fixture/SensioTemplate',
             SensioMethodTagValueNode::class => __DIR__ . '/Fixture/SensioMethod',
-
             TemplateTagValueNode::class => __DIR__ . '/Fixture/Native/Template',
             VarTagValueNode::class => __DIR__ . '/Fixture/Native/VarTag',
         ];

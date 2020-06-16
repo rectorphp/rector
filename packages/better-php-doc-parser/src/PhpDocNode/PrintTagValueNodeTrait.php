@@ -6,7 +6,11 @@ namespace Rector\BetterPhpDocParser\PhpDocNode;
 
 use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
+use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
 
+/**
+ * @property TagValueNodeConfiguration $tagValueNodeConfiguration
+ */
 trait PrintTagValueNodeTrait
 {
     protected function makeKeysExplicit(array $items): array
@@ -47,7 +51,8 @@ trait PrintTagValueNodeTrait
             }
 
             // no original quoting
-            if ((isset($this->keysByQuotedStatus[$key]) && ! $this->keysByQuotedStatus[$key])) {
+            $keysByQuotedStatus = $this->tagValueNodeConfiguration->getKeysByQuotedStatus();
+            if ((isset($keysByQuotedStatus[$key]) && ! $keysByQuotedStatus[$key])) {
                 continue;
             }
 
@@ -76,6 +81,6 @@ trait PrintTagValueNodeTrait
             return false;
         }
 
-        return ! $this->isSilentKeyExplicit;
+        return ! $this->tagValueNodeConfiguration->isSilentKeyExplicit();
     }
 }
