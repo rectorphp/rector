@@ -262,6 +262,25 @@ services:
 
 Move value object to ValueObject namespace/directory
 
+```diff
+-// app/Exception/Name.php
++// app/ValueObject/Name.php
+ class Name
+ {
+     private $name;
+
+     public function __construct(string $name)
+     {
+         $this->name = $name;
+     }
+
+     public function getName()
+     {
+         return $this->name;
+     }
+ }
+```
+
 <br>
 
 ## CakePHP
@@ -3229,6 +3248,28 @@ services:
 
 Add uuid annotations to $id property
 
+```diff
+ use Doctrine\ORM\Attributes as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class SomeClass
+ {
+     /**
+-     * @var int
++     * @var \Ramsey\Uuid\UuidInterface
+      * @ORM\Id
+-     * @ORM\Column(type="integer")
+-     * @ORM\GeneratedValue(strategy="AUTO")
+-     * @Serializer\Type("int")
++     * @ORM\Column(type="uuid_binary")
++     * @Serializer\Type("string")
+      */
+     public $id;
+ }
+```
+
 <br>
 
 ### `AddUuidMirrorForRelationPropertyRector`
@@ -3237,6 +3278,44 @@ Add uuid annotations to $id property
 - [test fixtures](/../master/rules/doctrine/tests/Rector/Class_/AddUuidMirrorForRelationPropertyRector/Fixture)
 
 Adds $uuid property to entities, that already have $id with integer type.Require for step-by-step migration from int to uuid.
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class SomeEntity
+ {
+     /**
+      * @ORM\ManyToOne(targetEntity="AnotherEntity", cascade={"persist", "merge"})
+      * @ORM\JoinColumn(nullable=false)
+      */
+     private $amenity;
++
++    /**
++     * @ORM\ManyToOne(targetEntity="AnotherEntity", cascade={"persist", "merge"})
++     * @ORM\JoinColumn(nullable=true, referencedColumnName="uuid")
++     */
++    private $amenityUuid;
+ }
+
+ /**
+  * @ORM\Entity
+  */
+ class AnotherEntity
+ {
+     /**
+      * @var int
+      * @ORM\Id
+      * @ORM\Column(type="integer")
+      * @ORM\GeneratedValue(strategy="AUTO")
+      */
+     private $id;
+
+     private $uuid;
+ }
+```
 
 <br>
 
@@ -3247,6 +3326,29 @@ Adds $uuid property to entities, that already have $id with integer type.Require
 
 Adds $uuid property to entities, that already have $id with integer type.Require for step-by-step migration from int to uuid. In following step it should be renamed to $id and replace it
 
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class SomeEntityWithIntegerId
+ {
+     /**
++     * @var \Ramsey\Uuid\UuidInterface
++     * @ORM\Column(type="uuid_binary", unique=true, nullable=true)
++     */
++    private $uuid;
++    /**
+      * @var int
+      * @ORM\Id
+      * @ORM\Column(type="integer")
+      * @ORM\GeneratedValue(strategy="AUTO")
+      */
+     private $id;
+ }
+```
+
 <br>
 
 ### `AlwaysInitializeUuidInEntityRector`
@@ -3256,6 +3358,26 @@ Adds $uuid property to entities, that already have $id with integer type.Require
 
 Add uuid initializion to all entities that misses it
 
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class AddUuidInit
+ {
+     /**
+      * @ORM\Id
+      * @var UuidInterface
+      */
+     private $superUuid;
++    public function __construct()
++    {
++        $this->superUuid = \Ramsey\Uuid\Uuid::uuid4();
++    }
+ }
+```
+
 <br>
 
 ### `ChangeGetIdTypeToUuidRector`
@@ -3264,6 +3386,22 @@ Add uuid initializion to all entities that misses it
 - [test fixtures](/../master/rules/doctrine/tests/Rector/ClassMethod/ChangeGetIdTypeToUuidRector/Fixture)
 
 Change return type of getId() to uuid interface
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class GetId
+ {
+-    public function getId(): int
++    public function getId(): \Ramsey\Uuid\UuidInterface
+     {
+         return $this->id;
+     }
+ }
+```
 
 <br>
 
@@ -3388,6 +3526,24 @@ Change set id to uuid values
 
 Change param type of setId() to uuid interface
 
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class SetId
+ {
+     private $id;
+
+-    public function setId(int $uuid): int
++    public function setId(\Ramsey\Uuid\UuidInterface $uuid): int
+     {
+         return $this->id = $uuid;
+     }
+ }
+```
+
 <br>
 
 ### `EntityAliasToClassConstantReferenceRector`
@@ -3471,6 +3627,26 @@ Removes repository class from @Entity annotation
 
 Remove temporary $uuid property
 
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class Column
+ {
+     /**
+      * @ORM\Column
+      */
+     public $id;
+-
+-    /**
+-     * @ORM\Column
+-     */
+-    public $uuid;
+ }
+```
+
 <br>
 
 ### `RemoveTemporaryUuidRelationPropertyRector`
@@ -3479,6 +3655,26 @@ Remove temporary $uuid property
 - [test fixtures](/../master/rules/doctrine/tests/Rector/Property/RemoveTemporaryUuidRelationPropertyRector/Fixture)
 
 Remove temporary *Uuid relation properties
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class Column
+ {
+     /**
+      * @ORM\ManyToMany(targetEntity="Phonenumber")
+      */
+     private $apple;
+-
+-    /**
+-     * @ORM\ManyToMany(targetEntity="Phonenumber")
+-     */
+-    private $appleUuid;
+ }
+```
 
 <br>
 
@@ -3966,6 +4162,10 @@ Clean up probe that records argument types
 - class: [`Rector\FileSystemRector\Rector\Removing\RemoveProjectFileRector`](/../master/packages/file-system-rector/src/Rector/Removing/RemoveProjectFileRector.php)
 
 Remove file relative to project directory
+
+```diff
+-// someFile/ToBeRemoved.txt
+```
 
 <br>
 
@@ -4882,6 +5082,11 @@ Migrate Nette Tester test case to PHPUnit
 
 Rename "*.phpt" file to "*Test.php" file
 
+```diff
+-// tests/SomeTestCase.phpt
++// tests/SomeTestCase.php
+```
+
 <br>
 
 ## NetteToSymfony
@@ -4891,6 +5096,13 @@ Rename "*.phpt" file to "*Test.php" file
 - class: [`Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector`](/../master/rules/nette-to-symfony/src/Rector/FileSystem/DeleteFactoryInterfaceRector.php)
 
 Interface factories are not needed in Symfony. Clear constructor injection is used instead
+
+```diff
+-interface SomeControlFactoryInterface
+-{
+-    public function create();
+-}
+```
 
 <br>
 
@@ -6595,7 +6807,28 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 - class: [`Rector\PSR4\Rector\FileSystem\NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector`](/../master/rules/psr4/src/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector.php)
 - [test fixtures](/../master/rules/psr4/tests/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector/Fixture)
 
-Adds namespace to namespace-less files to match PSR-4 in composer.json autoload section. Run with combination with Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector
+Adds namespace to namespace-less files to match PSR-4 in ``composer.json`` autoload section. Run with combination with Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector
+
+```diff
+ // src/SomeClass.php
+
++namespace App\CustomNamespace;
++
+ class SomeClass
+ {
+ }
+```
+
+`composer.json````json
+{
+    "autoload": {
+        "psr-4": {
+            "App\\CustomNamespace\\": "src"
+        }
+    }
+}
+```
+
 
 <br>
 
@@ -6604,7 +6837,29 @@ Adds namespace to namespace-less files to match PSR-4 in composer.json autoload 
 - class: [`Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector`](/../master/rules/psr4/src/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
 - [test fixtures](/../master/rules/psr4/tests/Rector/Namespace_/NormalizeNamespaceByPSR4ComposerAutoloadRector/Fixture)
 
-Changes namespace and class names to match PSR-4 in composer.json autoload section
+Changes namespace and class names to match PSR-4 in `composer.json` autoload section
+
+```diff
+ // src/SomeClass.php
+
+-namespace App\DifferentNamespace;
++namespace App\CustomNamespace;
+
+ class SomeClass
+ {
+ }
+```
+
+`composer.json````json
+{
+    "autoload": {
+        "psr-4": {
+            "App\\CustomNamespace\\": "src"
+        }
+    }
+}
+```
+
 
 <br>
 
@@ -8577,6 +8832,11 @@ Migrate PhpSpec behavior to PHPUnit test
 
 Rename "*Spec.php" file to "*Test.php" file
 
+```diff
+-// tests/SomeSpec.php
++// tests/SomeTest.php
+```
+
 <br>
 
 ## Polyfill
@@ -8792,6 +9052,33 @@ Privatize local-only property to private property
 
 Move class to respect new location with respect to PSR-4 + follow up with class rename
 
+```yaml
+services:
+    Rector\Refactoring\Rector\FileSystem\MoveAndRenameClassRector:
+        $oldToNewClass:
+            SomeClass: DifferentClass
+```
+
+↓
+
+```diff
+-// src/SomeClass.php
+-class SomeClass
++// src/DifferentClass.php
++class DifferentClass
+ {
+ }
+
+ class AnotherClass
+ {
+     public function create()
+     {
+-        return new SomeClass;
++        return new DifferentClass;
+     }
+ }
+```
+
 <br>
 
 ### `MoveAndRenameNamespaceRector`
@@ -8799,6 +9086,27 @@ Move class to respect new location with respect to PSR-4 + follow up with class 
 - class: [`Rector\Refactoring\Rector\FileSystem\MoveAndRenameNamespaceRector`](/../master/packages/refactoring/src/Rector/FileSystem/MoveAndRenameNamespaceRector.php)
 
 Move namespace to new location with respect to PSR-4 + follow up with files in the namespace move
+
+```yaml
+services:
+    Rector\Refactoring\Rector\FileSystem\MoveAndRenameNamespaceRector:
+        $oldToNewNamespace:
+            App\Entity: App\ValueObject
+```
+
+↓
+
+```diff
+-// app/Entity/SomeClass.php
++// app/ValueObject/SomeClass.php
+
+-namespace App\Entity;
++namespace App\ValueObject;
+
+ class SomeClass
+ {
+ }
+```
 
 <br>
 
@@ -9442,6 +9750,14 @@ Remove interface, that are added just for its sake, but nowhere useful
 - [test fixtures](/../master/rules/restoration/tests/Rector/FileSystem/UpdateFileNameByClassNameFileSystemRector/Fixture)
 
 Rename file to respect class name
+
+```diff
+-// app/SomeClass.php
++// app/AnotherClass.php
+ class AnotherClass
+ {
+ }
+```
 
 <br>
 
@@ -10809,6 +11125,21 @@ Change @param types to type declarations if not a BC-break
 - [test fixtures](/../master/rules/type-declaration/tests/Rector/Property/PropertyTypeDeclarationRector/Fixture)
 
 Add @var to properties that are missing it
+
+```diff
+ class SomeClass
+ {
++    /**
++     * @var int
++     */
+     private $value;
+
+     public function run()
+     {
+         $this->value = 123;
+     }
+ }
+```
 
 <br>
 

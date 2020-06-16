@@ -139,7 +139,10 @@ final class MarkdownDumpRectorsOutputFormatter
         $this->ensureRectorDefinitionExists($rectorDefinition, $rector);
 
         $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln($rectorDefinition->getDescription());
+
+        $description = $rectorDefinition->getDescription();
+        $codeHighlightedDescription = $this->highlightCodeKeywordForMarkdown($description);
+        $this->symfonyStyle->writeln($codeHighlightedDescription);
 
         $this->ensureCodeSampleExists($rectorDefinition, $rector);
 
@@ -304,5 +307,10 @@ final class MarkdownDumpRectorsOutputFormatter
                 'getDefinition'
             ));
         }
+    }
+
+    private function highlightCodeKeywordForMarkdown(string $description): string
+    {
+        return Strings::replace($description, '#\b(composer.json)\b#', '`$1`');
     }
 }
