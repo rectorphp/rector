@@ -231,8 +231,9 @@ final class MarkdownDumpRectorsOutputFormatter
 
         if ($codeSample instanceof ComposerJsonAwareCodeSample) {
             $composerJsonContent = $codeSample->getComposerJsonContent();
-            $this->symfonyStyle->newLine();
-            $this->symfonyStyle->write('`composer.json`');
+            $this->symfonyStyle->newLine(1);
+            $this->symfonyStyle->writeln('`composer.json`');
+            $this->symfonyStyle->newLine(1);
             $this->printCodeWrapped($composerJsonContent, 'json');
             $this->symfonyStyle->newLine();
         }

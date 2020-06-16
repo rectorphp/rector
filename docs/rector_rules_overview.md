@@ -2658,7 +2658,7 @@ Simplify useless double assigns
 - class: [`Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector`](/../master/rules/dead-code/src/Rector/Array_/RemoveDuplicatedArrayKeyRector.php)
 - [test fixtures](/../master/rules/dead-code/tests/Rector/Array_/RemoveDuplicatedArrayKeyRector/Fixture)
 
-Remove duplicated `key` in `defined` arrays.
+Remove duplicated `key` in defined arrays.
 
 ```diff
  $item = [
@@ -6819,7 +6819,9 @@ Adds namespace to namespace-less files to match PSR-4 in `composer.json` autoloa
  }
 ```
 
-`composer.json````json
+`composer.json`
+
+```json
 {
     "autoload": {
         "psr-4": {
@@ -6850,7 +6852,9 @@ Changes namespace and class names to match PSR-4 in `composer.json` autoload sec
  }
 ```
 
-`composer.json````json
+`composer.json`
+
+```json
 {
     "autoload": {
         "psr-4": {
@@ -9050,7 +9054,7 @@ Privatize local-only property to private property
 
 - class: [`Rector\Refactoring\Rector\FileSystem\MoveAndRenameClassRector`](/../master/packages/refactoring/src/Rector/FileSystem/MoveAndRenameClassRector.php)
 
-Move class to respect new location with respect to PSR-4 + follow up with class `rename`
+Move class to respect new location with respect to PSR-4 + follow up with class rename
 
 ```yaml
 services:
@@ -9307,7 +9311,7 @@ services:
 - class: [`Rector\Renaming\Rector\Annotation\RenameAnnotationRector`](/../master/rules/renaming/src/Rector/Annotation/RenameAnnotationRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Annotation/RenameAnnotationRector/Fixture)
 
-Turns `defined` annotations above properties and methods to their new values.
+Turns defined annotations above properties and methods to their new values.
 
 ```yaml
 services:
@@ -9339,7 +9343,7 @@ services:
 - class: [`Rector\Renaming\Rector\Constant\RenameClassConstantRector`](/../master/rules/renaming/src/Rector/Constant/RenameClassConstantRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Constant/RenameClassConstantRector/Fixture)
 
-Replaces `defined` class constants in their calls.
+Replaces defined class constants in their calls.
 
 ```yaml
 services:
@@ -9365,7 +9369,7 @@ services:
 - class: [`Rector\Renaming\Rector\Class_\RenameClassRector`](/../master/rules/renaming/src/Rector/Class_/RenameClassRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Class_/RenameClassRector/Fixture)
 
-Replaces `defined` classes by new ones.
+Replaces defined classes by new ones.
 
 ```yaml
 services:
@@ -9451,7 +9455,7 @@ services:
 - class: [`Rector\Renaming\Rector\Function_\RenameFunctionRector`](/../master/rules/renaming/src/Rector/Function_/RenameFunctionRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Function_/RenameFunctionRector/Fixture)
 
-Turns `defined` function call new one.
+Turns defined function call new one.
 
 ```yaml
 services:
@@ -11257,7 +11261,7 @@ Add method parent call, in case new parent method is added
 - class: [`Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector`](/../master/src/Rector/ClassMethod/AddReturnTypeDeclarationRector.php)
 - [test fixtures](/../master/tests/Rector/ClassMethod/AddReturnTypeDeclarationRector/Fixture)
 
-Changes `defined` return typehint of method and class.
+Changes defined return typehint of method and class.
 
 ```yaml
 services:
@@ -11309,7 +11313,7 @@ Turns non-private properties with `@annotation` to private properties and constr
 - class: [`Rector\Core\Rector\Argument\ArgumentAdderRector`](/../master/src/Rector/Argument/ArgumentAdderRector.php)
 - [test fixtures](/../master/tests/Rector/Argument/ArgumentAdderRector/Fixture)
 
-This Rector adds new default arguments in calls of `defined` methods and class types.
+This Rector adds new default arguments in calls of defined methods and class types.
 
 ```yaml
 services:
@@ -11362,7 +11366,7 @@ services:
 - class: [`Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector`](/../master/src/Rector/Argument/ArgumentDefaultValueReplacerRector.php)
 - [test fixtures](/../master/tests/Rector/Argument/ArgumentDefaultValueReplacerRector/Fixture)
 
-Replaces `defined` map of arguments in `defined` methods and their calls.
+Replaces defined map of arguments in defined methods and their calls.
 
 ```yaml
 services:
@@ -11390,7 +11394,7 @@ services:
 - class: [`Rector\Core\Rector\Argument\ArgumentRemoverRector`](/../master/src/Rector/Argument/ArgumentRemoverRector.php)
 - [test fixtures](/../master/tests/Rector/Argument/ArgumentRemoverRector/Fixture)
 
-Removes `defined` arguments in `defined` methods and their calls.
+Removes defined arguments in defined methods and their calls.
 
 ```yaml
 services:
@@ -11574,7 +11578,7 @@ services:
 - class: [`Rector\Core\Rector\Function_\FunctionToMethodCallRector`](/../master/src/Rector/Function_/FunctionToMethodCallRector.php)
 - [test fixtures](/../master/tests/Rector/Function_/FunctionToMethodCallRector/Fixture)
 
-Turns `defined` function calls to local method calls.
+Turns defined function calls to local method calls.
 
 ```yaml
 services:
@@ -11618,7 +11622,7 @@ Change configured function calls to new Instance
 - class: [`Rector\Core\Rector\Function_\FunctionToStaticCallRector`](/../master/src/Rector/Function_/FunctionToStaticCallRector.php)
 - [test fixtures](/../master/tests/Rector/Function_/FunctionToStaticCallRector/Fixture)
 
-Turns `defined` function call to static method call.
+Turns defined function call to static method call.
 
 ```yaml
 services:
@@ -11642,7 +11646,7 @@ services:
 - class: [`Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector`](/../master/src/Rector/MagicDisclosure/GetAndSetToMethodCallRector.php)
 - [test fixtures](/../master/tests/Rector/MagicDisclosure/GetAndSetToMethodCallRector/Fixture)
 
-Turns `defined` `__get`/`__set` to specific method calls.
+Turns defined `__get`/`__set` to specific method calls.
 
 ```yaml
 services:
@@ -11950,7 +11954,7 @@ services:
 - class: [`Rector\Core\Rector\Property\PropertyToMethodRector`](/../master/src/Rector/Property/PropertyToMethodRector.php)
 - [test fixtures](/../master/tests/Rector/Property/PropertyToMethodRector/Fixture)
 
-Replaces properties assign calls be `defined` methods.
+Replaces properties assign calls be defined methods.
 
 ```yaml
 services:
@@ -11997,7 +12001,7 @@ services:
 - class: [`Rector\Core\Rector\Namespace_\PseudoNamespaceToNamespaceRector`](/../master/src/Rector/Namespace_/PseudoNamespaceToNamespaceRector.php)
 - [test fixtures](/../master/tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Fixture)
 
-Replaces `defined` Pseudo_Namespaces by Namespace\Ones.
+Replaces defined Pseudo_Namespaces by Namespace\Ones.
 
 ```yaml
 services:
@@ -12135,7 +12139,7 @@ services:
 - class: [`Rector\Core\Rector\Property\RenamePropertyRector`](/../master/src/Rector/Property/RenamePropertyRector.php)
 - [test fixtures](/../master/tests/Rector/Property/RenamePropertyRector/Fixture)
 
-Replaces `defined` old properties by new ones.
+Replaces defined old properties by new ones.
 
 ```yaml
 services:
@@ -12391,7 +12395,7 @@ Swap arguments in function calls
 - class: [`Rector\Core\Rector\MagicDisclosure\ToStringToMethodCallRector`](/../master/src/Rector/MagicDisclosure/ToStringToMethodCallRector.php)
 - [test fixtures](/../master/tests/Rector/MagicDisclosure/ToStringToMethodCallRector/Fixture)
 
-Turns `defined` code uses of "__toString()" method  to specific method calls.
+Turns defined code uses of "__toString()" method  to specific method calls.
 
 ```yaml
 services:
@@ -12416,7 +12420,7 @@ services:
 - class: [`Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector`](/../master/src/Rector/MagicDisclosure/UnsetAndIssetToMethodCallRector.php)
 - [test fixtures](/../master/tests/Rector/MagicDisclosure/UnsetAndIssetToMethodCallRector/Fixture)
 
-Turns `defined` `__isset`/`__unset` calls to specific method calls.
+Turns defined `__isset`/`__unset` calls to specific method calls.
 
 ```yaml
 services:
