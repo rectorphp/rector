@@ -15,7 +15,6 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioRouteTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
-use Symfony\Component\Routing\Annotation\Route;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
@@ -151,11 +150,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         // cleanup json encoded extra slashes
         $json = Strings::replace($json, '#\\\\\\\\#', '\\');
 
-        // replace ":" with "=" for @Route
-        if ($this instanceof SymfonyRouteTagValueNode || $this instanceof DoctrineTagNodeInterface || $this instanceof SensioRouteTagValueNode) {
-            // @see https://regex101.com/r/XfKi4A/1/
-            $json = Strings::replace($json, '#(\"|\w)\:(\"|\w)#', '$1=$2');
-        }
+        $json = $this->replaceColonWithEqualInSymfonyAndDoctrine($json);
 
         $keyPart = $this->createKeyPart($key);
 
@@ -405,5 +400,25 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         }
 
         return $this->hasOpeningBracket && $this->hasClosingBracket;
+    }
+
+    /**
+     * Before:
+     * (options={"key": "value"})
+     *
+     * After:
+     * (options={"key"="value"})
+     *
+     * @see https://github.com/rectorphp/rector/issues/3225
+     * @see https://github.com/rectorphp/rector/pull/3241
+     */
+    private function replaceColonWithEqualInSymfonyAndDoctrine(string $json): string
+    {
+        if (! $this instanceof SymfonyRouteTagValueNode && ! $this instanceof DoctrineTagNodeInterface && ! $this instanceof SensioRouteTagValueNode) {
+            return $json;
+        }
+
+        // @see https://regex101.com/r/XfKi4A/1/
+        return Strings::replace($json, '#(\"|\w)\:(\"|\w)#', '$1=$2');
     }
 }
