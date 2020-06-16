@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\DocumentationGenerator\RectorMetadataResolver;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
@@ -133,6 +134,10 @@ final class MarkdownDumpRectorsOutputFormatter
         }
 
         $rectorDefinition = $rector->getDefinition();
+        if ($rectorDefinition->getDescription() === '') {
+            throw new ShouldNotHappenException(sprintf('Rector "%s" is missing description.', get_class($rector)));
+        }
+
         if ($rectorDefinition->getDescription() !== '') {
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln($rectorDefinition->getDescription());

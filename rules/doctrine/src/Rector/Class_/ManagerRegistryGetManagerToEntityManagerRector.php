@@ -42,7 +42,7 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRecto
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('', [
+        return new RectorDefinition('Changes ManagerRegistry intermediate calls directly to EntityManager calls', [
             new CodeSample(
                 <<<'PHP'
 use Doctrine\Common\Persistence\ManagerRegistry;

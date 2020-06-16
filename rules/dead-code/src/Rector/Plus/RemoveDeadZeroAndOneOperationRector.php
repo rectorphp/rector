@@ -30,7 +30,7 @@ final class RemoveDeadZeroAndOneOperationRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('', [
+        return new RectorDefinition('Remove operation with 1 and 0, that have no effect on the value', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass

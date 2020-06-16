@@ -19,7 +19,7 @@ final class RenameMktimeWithoutArgsToTimeRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('', [
+        return new RectorDefinition('Renames mktime() without arguments to time()', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass

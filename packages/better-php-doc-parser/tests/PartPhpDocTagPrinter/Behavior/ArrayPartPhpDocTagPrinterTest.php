@@ -38,6 +38,19 @@ final class ArrayPartPhpDocTagPrinterTest extends TestCase
     public function provideData(): Iterator
     {
         yield [['strict' => 'yes'], 'option', 'option={"strict":"yes"}'];
+
+        // bool
         yield [['strict' => false], 'option', 'option={"strict":false}'];
+
+        // multiple items, separated by comma
+        yield [[
+            'less' => 'NO',
+            'more' => 'YES',
+        ], 'what', 'what={"less":"NO", "more":"YES"}'];
+
+        // preslash
+        yield [['\John'], 'name', 'name={"\John"}'];
+
+        yield [['0', '3023', '3610'], 'choices', 'choices={"0", "3023", "3610"}'];
     }
 }

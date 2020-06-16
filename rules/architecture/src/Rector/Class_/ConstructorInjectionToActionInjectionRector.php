@@ -67,7 +67,7 @@ final class ConstructorInjectionToActionInjectionRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('', [
+        return new RectorDefinition('Move constructor injection dependency in Controller to action injection', [
             new CodeSample(
                 <<<'PHP'
 final class SomeController

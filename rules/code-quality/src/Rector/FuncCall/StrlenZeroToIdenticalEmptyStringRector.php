@@ -20,7 +20,7 @@ final class StrlenZeroToIdenticalEmptyStringRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('', [
+        return new RectorDefinition('Changes strlen comparison to 0 to direct empty string compare', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass

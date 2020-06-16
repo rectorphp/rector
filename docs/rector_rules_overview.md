@@ -73,6 +73,8 @@
 - class: [`Rector\Architecture\Rector\Class_\ConstructorInjectionToActionInjectionRector`](/../master/rules/architecture/src/Rector/Class_/ConstructorInjectionToActionInjectionRector.php)
 - [test fixtures](/../master/rules/architecture/tests/Rector/Class_/ConstructorInjectionToActionInjectionRector/Fixture)
 
+Move constructor injection dependency in Controller to action injection
+
 ```diff
  final class SomeController
  {
@@ -993,6 +995,8 @@ Change intval() to faster and readable (int) $value
 - class: [`Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector`](/../master/rules/code-quality/src/Rector/FuncCall/IsAWithStringWithThirdArgumentRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/IsAWithStringWithThirdArgumentRector/Fixture)
 
+Complete missing 3rd argument in case is_a() function in case of strings
+
 ```diff
  class SomeClass
  {
@@ -1479,6 +1483,8 @@ Splits [$a, $b] = [5, 10] scalar assign to standalone lines
 
 - class: [`Rector\CodeQuality\Rector\FuncCall\StrlenZeroToIdenticalEmptyStringRector`](/../master/rules/code-quality/src/Rector/FuncCall/StrlenZeroToIdenticalEmptyStringRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/StrlenZeroToIdenticalEmptyStringRector/Fixture)
+
+Changes strlen comparison to 0 to direct empty string compare
 
 ```diff
  class SomeClass
@@ -2546,6 +2552,8 @@ Remove dead try/catch
 - class: [`Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector`](/../master/rules/dead-code/src/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php)
 - [test fixtures](/../master/rules/dead-code/tests/Rector/Plus/RemoveDeadZeroAndOneOperationRector/Fixture)
 
+Remove operation with 1 and 0, that have no effect on the value
+
 ```diff
  class SomeClass
  {
@@ -2597,6 +2605,8 @@ Remove argument value, if it is the same as default value
 
 - class: [`Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector`](/../master/rules/dead-code/src/Rector/ClassMethod/RemoveDelegatingParentCallRector.php)
 - [test fixtures](/../master/rules/dead-code/tests/Rector/ClassMethod/RemoveDelegatingParentCallRector/Fixture)
+
+Removed dead parent call, that does not change anything
 
 ```diff
  class SomeClass
@@ -2699,6 +2709,8 @@ Remove duplicated if stmt with return in function/method body
 
 - class: [`Rector\DeadCode\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector`](/../master/rules/dead-code/src/Rector/Instanceof_/RemoveDuplicatedInstanceOfRector.php)
 - [test fixtures](/../master/rules/dead-code/tests/Rector/Instanceof_/RemoveDuplicatedInstanceOfRector/Fixture)
+
+Remove duplicated instanceof in one call
 
 ```diff
  class SomeClass
@@ -3397,6 +3409,8 @@ Replaces doctrine alias with class.
 
 - class: [`Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector`](/../master/rules/doctrine/src/Rector/Class_/ManagerRegistryGetManagerToEntityManagerRector.php)
 - [test fixtures](/../master/rules/doctrine/tests/Rector/Class_/ManagerRegistryGetManagerToEntityManagerRector/Fixture)
+
+Changes ManagerRegistry intermediate calls directly to EntityManager calls
 
 ```diff
 -use Doctrine\Common\Persistence\ManagerRegistry;
@@ -7174,6 +7188,8 @@ Remove first default switch, that is ignored
 
 - class: [`Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector`](/../master/rules/php70/src/Rector/FuncCall/RenameMktimeWithoutArgsToTimeRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/RenameMktimeWithoutArgsToTimeRector/Fixture)
+
+Renames mktime() without arguments to time()
 
 ```diff
  class SomeClass
