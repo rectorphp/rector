@@ -6,6 +6,8 @@ namespace Rector\Autodiscovery\FileMover;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Autodiscovery\Configuration\CategoryNamespaceProvider;
 use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
@@ -80,6 +82,11 @@ final class FileMover
             $desiredGroupName,
             $this->categoryNamespaceProvider->provide()
         );
+
+        // 3. update fully qualifed name of the class like - will be used further
+        /** @var ClassLike $classLike */
+        $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, ClassLike::class);
+        $classLike->namespacedName = new FullyQualified($newClassName);
 
         return new NodesWithFileDestinationValueObject($nodes, $newFileDestination);
     }

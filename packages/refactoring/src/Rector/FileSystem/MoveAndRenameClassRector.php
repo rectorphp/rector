@@ -7,7 +7,6 @@ namespace Rector\Refactoring\Rector\FileSystem;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\FileRelocationResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -24,20 +23,11 @@ final class MoveAndRenameClassRector extends AbstractFileSystemRector
     private $fileRelocationResolver;
 
     /**
-     * @var RenamedClassesCollector
-     */
-    private $renamedClassesCollector;
-
-    /**
      * @param string[] $oldToNewClass
      */
-    public function __construct(
-        FileRelocationResolver $fileRelocationResolver,
-        RenamedClassesCollector $renamedClassesCollector,
-        array $oldToNewClass = []
-    ) {
+    public function __construct(FileRelocationResolver $fileRelocationResolver, array $oldToNewClass = [])
+    {
         $this->fileRelocationResolver = $fileRelocationResolver;
-        $this->renamedClassesCollector = $renamedClassesCollector;
         $this->oldToNewClass = $oldToNewClass;
     }
 
@@ -110,7 +100,7 @@ CODE_SAMPLE
             );
 
             // create helping rename class rector.yaml + class_alias autoload file
-            $this->renamedClassesCollector->addClassRename($oldClass, $newClass);
+            $this->addClassRename($oldClass, $newClass);
 
             $this->moveFile($smartFileInfo, $newFileLocation, $fileContent);
         }

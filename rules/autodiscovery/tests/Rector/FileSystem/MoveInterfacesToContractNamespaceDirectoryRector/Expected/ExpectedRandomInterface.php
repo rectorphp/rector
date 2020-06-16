@@ -6,5 +6,5 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveEntitiesToEntityDirec
 
 interface RandomInterface
 {
-
+    public function returnAnother(): \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveEntitiesToEntityDirectoryRector\Source\Contract\RandomInterface;
 }
