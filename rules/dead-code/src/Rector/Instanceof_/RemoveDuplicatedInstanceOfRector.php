@@ -25,7 +25,7 @@ final class RemoveDuplicatedInstanceOfRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('', [
+        return new RectorDefinition('Remove duplicated instanceof in one call', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass

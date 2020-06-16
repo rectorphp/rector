@@ -30,7 +30,7 @@ final class RemoveDelegatingParentCallRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('', [
+        return new RectorDefinition('Removed dead parent call, that does not change anything', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass

@@ -19,7 +19,7 @@ final class IsAWithStringWithThirdArgumentRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('', [
+        return new RectorDefinition('Complete missing 3rd argument in case is_a() function in case of strings', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
