@@ -133,40 +133,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     }
 
     /**
-     * @param mixed[] $item
-     */
-    protected function printArrayItem(array $item, ?string $key = null): string
-    {
-        $json = Json::encode($item);
-
-        // separate by space only items separated by comma, not in "quotes"
-        $json = Strings::replace($json, '#,#', ', ');
-        // @see https://regex101.com/r/C2fDQp/2
-        $json = Strings::replace($json, '#("[^",]+)(\s+)?,(\s+)?([^"]+")#', '$1,$4');
-
-        // change brackets from json to annotations
-        $json = Strings::replace($json, '#^\[(.*?)\]$#', '{$1}');
-
-        // cleanup json encoded extra slashes
-        $json = Strings::replace($json, '#\\\\\\\\#', '\\');
-
-        $json = $this->replaceColonWithEqualInSymfonyAndDoctrine($json);
-
-        $keyPart = $this->createKeyPart($key);
-
-        // should unquote
-        if ($this->isValueWithoutQuotes($key)) {
-            $json = Strings::replace($json, '#"#');
-        }
-
-        if ($this->originalContent !== null && $key !== null) {
-            $json = $this->quoteKeys($item, $key, $json, $this->originalContent);
-        }
-
-        return $keyPart . $json;
-    }
-
-    /**
      * @param string[] $items
      */
     protected function printContentItems(array $items): string
@@ -276,6 +242,40 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         return ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
     }
 
+    /**
+     * @param mixed[] $item
+     */
+    private function printArrayItem(array $item, ?string $key = null): string
+    {
+        $json = Json::encode($item);
+
+        // separate by space only items separated by comma, not in "quotes"
+        $json = Strings::replace($json, '#,#', ', ');
+        // @see https://regex101.com/r/C2fDQp/2
+        $json = Strings::replace($json, '#("[^",]+)(\s+)?,(\s+)?([^"]+")#', '$1,$4');
+
+        // change brackets from json to annotations
+        $json = Strings::replace($json, '#^\[(.*?)\]$#', '{$1}');
+
+        // cleanup json encoded extra slashes
+        $json = Strings::replace($json, '#\\\\\\\\#', '\\');
+
+        $json = $this->replaceColonWithEqualInSymfonyAndDoctrine($json);
+
+        $keyPart = $this->createKeyPart($key);
+
+        // should unquote
+        if ($this->isValueWithoutQuotes($key)) {
+            $json = Strings::replace($json, '#"#');
+        }
+
+        if ($this->originalContent !== null && $key !== null) {
+            $json = $this->quoteKeys($item, $key, $json, $this->originalContent);
+        }
+
+        return $keyPart . $json;
+    }
+
     private function createKeyPart(?string $key = null): string
     {
         if (empty($key)) {
@@ -356,7 +356,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     {
         foreach (array_keys($item) as $itemKey) {
             // @see https://regex101.com/r/V7nq5D/1
-            $quotedKeyPattern = '#' . $key . '={(.*?)?\"' . $itemKey . '\"(.*?)?}#';
+            $quotedKeyPattern = '#' . $key . '={(.*?)?\"' . $itemKey . '\"(=|:)(.*?)?}#';
             $isKeyQuoted = (bool) Strings::match($originalContent, $quotedKeyPattern);
             if (! $isKeyQuoted) {
                 continue;
@@ -404,10 +404,12 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
     /**
      * Before:
-     * (options={"key": "value"})
+     * (options={"key":"value"})
      *
      * After:
      * (options={"key"="value"})
+     *
+     * @see regex https://regex101.com/r/XfKi4A/1/
      *
      * @see https://github.com/rectorphp/rector/issues/3225
      * @see https://github.com/rectorphp/rector/pull/3241
@@ -418,7 +420,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             return $json;
         }
 
-        // @see https://regex101.com/r/XfKi4A/1/
         return Strings::replace($json, '#(\"|\w)\:(\"|\w)#', '$1=$2');
     }
 }
