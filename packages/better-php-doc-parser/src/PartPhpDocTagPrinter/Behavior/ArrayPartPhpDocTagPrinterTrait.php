@@ -6,11 +6,11 @@ namespace Rector\BetterPhpDocParser\PartPhpDocTagPrinter\Behavior;
 
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
-use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioRouteTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
 
+/**
+ * @see \Rector\BetterPhpDocParser\Tests\PartPhpDocTagPrinter\Behavior\ArrayPartPhpDocTagPrinterTest
+ */
 trait ArrayPartPhpDocTagPrinterTrait
 {
     /**
@@ -21,33 +21,34 @@ trait ArrayPartPhpDocTagPrinterTrait
         ?string $key,
         TagValueNodeConfiguration $tagValueNodeConfiguration
     ): string {
-        $json = Json::encode($item);
+        $content = Json::encode($item);
 
         // separate by space only items separated by comma, not in "quotes"
-        $json = Strings::replace($json, '#,#', ', ');
+        $content = Strings::replace($content, '#,#', ', ');
+
         // @see https://regex101.com/r/C2fDQp/2
-        $json = Strings::replace($json, '#("[^",]+)(\s+)?,(\s+)?([^"]+")#', '$1,$4');
+        $content = Strings::replace($content, '#("[^",]+)(\s+)?,(\s+)?([^"]+")#', '$1,$4');
 
-        // change brackets from json to annotations
-        $json = Strings::replace($json, '#^\[(.*?)\]$#', '{$1}');
+        // change brackets from content to annotations
+        $content = Strings::replace($content, '#^\[(.*?)\]$#', '{$1}');
 
-        // cleanup json encoded extra slashes
-        $json = Strings::replace($json, '#\\\\\\\\#', '\\');
+        // cleanup content encoded extra slashes
+        $content = Strings::replace($content, '#\\\\\\\\#', '\\');
 
-        $json = $this->replaceColonWithEqualInSymfonyAndDoctrine($json);
+        $content = $this->replaceColonWithEqualInSymfonyAndDoctrine($content, $tagValueNodeConfiguration);
 
         $keyPart = $this->createKeyPart($key, $tagValueNodeConfiguration);
 
         // should unquote
         if ($this->isValueWithoutQuotes($key, $tagValueNodeConfiguration)) {
-            $json = Strings::replace($json, '#"#');
+            $content = Strings::replace($content, '#"#');
         }
 
         if ($tagValueNodeConfiguration->getOriginalContent() !== null && $key !== null) {
-            $json = $this->quoteKeys($item, $key, $json, $tagValueNodeConfiguration->getOriginalContent());
+            $content = $this->quoteKeys($item, $key, $content, $tagValueNodeConfiguration->getOriginalContent());
         }
 
-        return $keyPart . $json;
+        return $keyPart . $content;
     }
 
     /**
@@ -62,13 +63,15 @@ trait ArrayPartPhpDocTagPrinterTrait
      * @see https://github.com/rectorphp/rector/issues/3225
      * @see https://github.com/rectorphp/rector/pull/3241
      */
-    private function replaceColonWithEqualInSymfonyAndDoctrine(string $json): string
-    {
-        if (! $this instanceof SymfonyRouteTagValueNode && ! $this instanceof DoctrineTagNodeInterface && ! $this instanceof SensioRouteTagValueNode) {
-            return $json;
-        }
-
-        return Strings::replace($json, '#(\"|\w)\:(\"|\w)#', '$1=$2');
+    private function replaceColonWithEqualInSymfonyAndDoctrine(
+        string $content,
+        TagValueNodeConfiguration $tagValueNodeConfiguration
+    ): string {
+        return Strings::replace(
+            $content,
+            '#(\"|\w)\:(\"|\w)#',
+            '$1' . $tagValueNodeConfiguration->getArrayEqualSign() . '$2'
+        );
     }
 
     private function isValueWithoutQuotes(?string $key, TagValueNodeConfiguration $tagValueNodeConfiguration): bool

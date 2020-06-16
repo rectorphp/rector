@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\PartPhpDocTagPrinter\Behavior\ArrayPartPhpDocTagPrinterTrait;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
@@ -132,12 +131,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
     protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
     {
-        if ($this instanceof SilentKeyNodeInterface) {
-            $silentKey = $this->getSilentKey();
-        } else {
-            $silentKey = null;
-        }
-
         $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory();
 
         // prevent override
@@ -147,7 +140,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         $this->tagValueNodeConfiguration = $tagValueNodeConfigurationFactory->createFromOriginalContent(
             $originalContent,
-            $silentKey
+            $this
         );
     }
 
@@ -198,14 +191,14 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         }
 
         // item is in the original in same format → use it
-        if (Strings::contains($this->tagValueNodeConfiguration->getOriginalContent(), $arrayItemAsString)) {
+        if ($this->tagValueNodeConfiguration->originalContentContains($arrayItemAsString)) {
             return $arrayItemAsString;
         }
 
         // is original item used the same, just without {} brackets?
         $nakedItem = trim($arrayItemAsString, '{}');
 
-        if (! Strings::contains($this->tagValueNodeConfiguration->getOriginalContent(), '(' . $nakedItem . ')')) {
+        if (! $this->tagValueNodeConfiguration->originalContentContains('(' . $nakedItem . ')')) {
             return $arrayItemAsString;
         }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject;
 
+use Nette\Utils\Strings;
+
 final class TagValueNodeConfiguration
 {
     /**
@@ -51,6 +53,11 @@ final class TagValueNodeConfiguration
      */
     private $isSilentKeyExplicit = false;
 
+    /**
+     * @var string
+     */
+    private $arrayEqualSign;
+
     public function __construct(
         ?string $originalContent = null,
         ?array $orderedVisibleItems = null,
@@ -60,7 +67,8 @@ final class TagValueNodeConfiguration
         bool $hasClosingBracket = false,
         array $keysByQuotedStatus = [],
         ?string $silentKey = null,
-        bool $isSilentKeyExplicit = true
+        bool $isSilentKeyExplicit = true,
+        string $arrayEqualSign = ':'
     ) {
         $this->originalContent = $originalContent;
         $this->orderedVisibleItems = $orderedVisibleItems;
@@ -71,6 +79,7 @@ final class TagValueNodeConfiguration
         $this->keysByQuotedStatus = $keysByQuotedStatus;
         $this->silentKey = $silentKey;
         $this->isSilentKeyExplicit = $isSilentKeyExplicit;
+        $this->arrayEqualSign = $arrayEqualSign;
     }
 
     public function getOriginalContent(): ?string
@@ -127,5 +136,19 @@ final class TagValueNodeConfiguration
         }
 
         return ! $this->isSilentKeyExplicit;
+    }
+
+    public function getArrayEqualSign(): string
+    {
+        return $this->arrayEqualSign;
+    }
+
+    public function originalContentContains(string $needle): bool
+    {
+        if ($this->originalContent === null) {
+            return false;
+        }
+
+        return Strings::contains($this->originalContent, $needle);
     }
 }
