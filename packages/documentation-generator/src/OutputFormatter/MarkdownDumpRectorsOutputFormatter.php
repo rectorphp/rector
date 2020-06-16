@@ -12,6 +12,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\DocumentationGenerator\PhpKeywordHighlighter;
 use Rector\DocumentationGenerator\RectorMetadataResolver;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
 use ReflectionClass;
@@ -41,16 +42,23 @@ final class MarkdownDumpRectorsOutputFormatter
      */
     private $testClassResolver;
 
+    /**
+     * @var PhpKeywordHighlighter
+     */
+    private $phpKeywordHighlighter;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         MarkdownDifferAndFormatter $markdownDifferAndFormatter,
         RectorMetadataResolver $rectorMetadataResolver,
-        TestClassResolver $testClassResolver
+        TestClassResolver $testClassResolver,
+        PhpKeywordHighlighter $phpKeywordHighlighter
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
         $this->rectorMetadataResolver = $rectorMetadataResolver;
         $this->testClassResolver = $testClassResolver;
+        $this->phpKeywordHighlighter = $phpKeywordHighlighter;
     }
 
     /**
@@ -141,7 +149,7 @@ final class MarkdownDumpRectorsOutputFormatter
         $this->symfonyStyle->newLine();
 
         $description = $rectorDefinition->getDescription();
-        $codeHighlightedDescription = $this->highlightCodeKeywordForMarkdown($description);
+        $codeHighlightedDescription = $this->phpKeywordHighlighter->highlight($description);
         $this->symfonyStyle->writeln($codeHighlightedDescription);
 
         $this->ensureCodeSampleExists($rectorDefinition, $rector);
@@ -300,17 +308,14 @@ final class MarkdownDumpRectorsOutputFormatter
 
     private function ensureCodeSampleExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
     {
-        if (count($rectorDefinition->getCodeSamples()) === 0) {
-            throw new ShouldNotHappenException(sprintf(
-                'Rector "%s" must have at least one code sample. Complete it in "%s()" method.',
-                get_class($rector),
-                'getDefinition'
-            ));
+        if (count($rectorDefinition->getCodeSamples()) !== 0) {
+            return;
         }
-    }
 
-    private function highlightCodeKeywordForMarkdown(string $description): string
-    {
-        return Strings::replace($description, '#\b(composer.json)\b#', '`$1`');
+        throw new ShouldNotHappenException(sprintf(
+            'Rector "%s" must have at least one code sample. Complete it in "%s()" method.',
+            get_class($rector),
+            'getDefinition'
+        ));
     }
 }

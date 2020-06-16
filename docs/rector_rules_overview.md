@@ -463,7 +463,7 @@ Change OR, AND to ||, && with more common understanding
 - class: [`Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector`](/../master/rules/celebrity/src/Rector/FuncCall/SetTypeToCastRector.php)
 - [test fixtures](/../master/rules/celebrity/tests/Rector/FuncCall/SetTypeToCastRector/Fixture)
 
-Changes settype() to (type) where possible
+Changes `settype()` to (type) where possible
 
 ```diff
  class SomeClass
@@ -511,7 +511,7 @@ include/require to absolute path. This Rector might introduce backwards incompat
 - class: [`Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector`](/../master/rules/code-quality/src/Rector/FuncCall/AddPregQuoteDelimiterRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/AddPregQuoteDelimiterRector/Fixture)
 
-Add preg_quote delimiter when missing
+Add `preg_quote` delimiter when missing
 
 ```diff
 -'#' . preg_quote('name') . '#';
@@ -547,7 +547,7 @@ Split 2 assigns ands to separate line
 - class: [`Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector`](/../master/rules/code-quality/src/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector/Fixture)
 
-Change array_key_exists() ternary to coalesing
+Change `array_key_exists()` ternary to coalesing
 
 ```diff
  class SomeClass
@@ -567,7 +567,7 @@ Change array_key_exists() ternary to coalesing
 - class: [`Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector`](/../master/rules/code-quality/src/Rector/FuncCall/ArrayKeysAndInArrayToArrayKeyExistsRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/ArrayKeysAndInArrayToArrayKeyExistsRector/Fixture)
 
-Replace array_keys() and in_array() to array_key_exists()
+Replace `array_keys()` and `in_array()` to `array_key_exists()`
 
 ```diff
  class SomeClass
@@ -588,7 +588,7 @@ Replace array_keys() and in_array() to array_key_exists()
 - class: [`Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector`](/../master/rules/code-quality/src/Rector/FuncCall/ArrayMergeOfNonArraysToSimpleArrayRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/ArrayMergeOfNonArraysToSimpleArrayRector/Fixture)
 
-Change array_merge of non arrays to array directly
+Change `array_merge` of non arrays to array directly
 
 ```diff
  class SomeClass
@@ -692,7 +692,7 @@ Convert [$this, "method"] to proper anonymous function
 - class: [`Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector`](/../master/rules/code-quality/src/Rector/FuncCall/ChangeArrayPushToArrayAssignRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/ChangeArrayPushToArrayAssignRector/Fixture)
 
-Change array_push() to direct variable assign
+Change `array_push()` to direct variable assign
 
 ```diff
  class SomeClass
@@ -751,7 +751,7 @@ Simplify $value = $value + 5; assignments to shorter ones
 - class: [`Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector`](/../master/rules/code-quality/src/Rector/FuncCall/CompactToVariablesRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/CompactToVariablesRector/Fixture)
 
-Change compact() call to own array
+Change `compact()` call to own array
 
 ```diff
  class SomeClass
@@ -847,7 +847,7 @@ Make if conditions more explicit
 - class: [`Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector`](/../master/rules/code-quality/src/Rector/For_/ForRepeatedCountToOwnVariableRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/For_/ForRepeatedCountToOwnVariableRector/Fixture)
 
-Change count() in for function to own variable
+Change `count()` in for function to own variable
 
 ```diff
  class SomeClass
@@ -942,7 +942,7 @@ Simplify `foreach` loops into `in_array` when possible
 - class: [`Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector`](/../master/rules/code-quality/src/Rector/Identical/GetClassToInstanceOfRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/Identical/GetClassToInstanceOfRector/Fixture)
 
-Changes comparison with get_class to instanceof
+Changes comparison with `get_class` to instanceof
 
 ```diff
 -if (EventsListener::class === get_class($event->job)) { }
@@ -994,7 +994,7 @@ Change inline if to explicit if
 - class: [`Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector`](/../master/rules/code-quality/src/Rector/FuncCall/IntvalToTypeCastRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/IntvalToTypeCastRector/Fixture)
 
-Change intval() to faster and readable (int) $value
+Change `intval()` to faster and readable (int) $value
 
 ```diff
  class SomeClass
@@ -1014,7 +1014,7 @@ Change intval() to faster and readable (int) $value
 - class: [`Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector`](/../master/rules/code-quality/src/Rector/FuncCall/IsAWithStringWithThirdArgumentRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/IsAWithStringWithThirdArgumentRector/Fixture)
 
-Complete missing 3rd argument in case is_a() function in case of strings
+Complete missing 3rd argument in case `is_a()` function in case of strings
 
 ```diff
  class SomeClass
@@ -1083,7 +1083,7 @@ If conditions is always true, perform the content right away
 - class: [`Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector`](/../master/rules/code-quality/src/Rector/FuncCall/RemoveSoleValueSprintfRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/RemoveSoleValueSprintfRector/Fixture)
 
-Remove sprintf() wrapper if not needed
+Remove `sprintf()` wrapper if not needed
 
 ```diff
  class SomeClass
@@ -1134,7 +1134,7 @@ Shortens else/if to elseif
 - class: [`Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector`](/../master/rules/code-quality/src/Rector/Identical/SimplifyArraySearchRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/Identical/SimplifyArraySearchRector/Fixture)
 
-Simplify array_search to in_array
+Simplify `array_search` to `in_array`
 
 ```diff
 -array_search("searching", $array) !== false;
@@ -1282,7 +1282,7 @@ Changes foreach that returns set value to ??
 - class: [`Rector\CodeQuality\Rector\FuncCall\SimplifyFuncGetArgsCountRector`](/../master/rules/code-quality/src/Rector/FuncCall/SimplifyFuncGetArgsCountRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/SimplifyFuncGetArgsCountRector/Fixture)
 
-Simplify count of func_get_args() to fun_num_args()
+Simplify `count` of `func_get_args()` to `func_num_args()`
 
 ```diff
 -count(func_get_args());
@@ -1381,7 +1381,7 @@ Shortens if return false/true to direct return
 - class: [`Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector`](/../master/rules/code-quality/src/Rector/FuncCall/SimplifyInArrayValuesRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/SimplifyInArrayValuesRector/Fixture)
 
-Removes unneeded array_values() in in_array() call
+Removes unneeded `array_values()` in `in_array()` call
 
 ```diff
 -in_array("key", array_values($array), true);
@@ -1460,7 +1460,7 @@ Removes useless variable assigns
 - class: [`Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector`](/../master/rules/code-quality/src/Rector/FuncCall/SingleInArrayToCompareRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/SingleInArrayToCompareRector/Fixture)
 
-Changes in_array() with single element to ===
+Changes `in_array()` with single element to ===
 
 ```diff
  class SomeClass
@@ -1503,7 +1503,7 @@ Splits [$a, $b] = [5, 10] scalar assign to standalone lines
 - class: [`Rector\CodeQuality\Rector\FuncCall\StrlenZeroToIdenticalEmptyStringRector`](/../master/rules/code-quality/src/Rector/FuncCall/StrlenZeroToIdenticalEmptyStringRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/StrlenZeroToIdenticalEmptyStringRector/Fixture)
 
-Changes strlen comparison to 0 to direct empty string compare
+Changes `strlen` comparison to 0 to direct empty string compare
 
 ```diff
  class SomeClass
@@ -1561,7 +1561,7 @@ Remove unnecessary ternary expressions.
 - class: [`Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector`](/../master/rules/code-quality/src/Rector/Foreach_/UnusedForeachValueToArrayKeysRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/Foreach_/UnusedForeachValueToArrayKeysRector/Fixture)
 
-Change foreach with unused $value but only $key, to array_keys()
+Change foreach with unused $value but only $key, to `array_keys()`
 
 ```diff
  class SomeClass
@@ -1747,7 +1747,7 @@ Type and name of catch exception should match
 - class: [`Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector`](/../master/rules/coding-style/src/Rector/FuncCall/ConsistentImplodeRector.php)
 - [test fixtures](/../master/rules/coding-style/tests/Rector/FuncCall/ConsistentImplodeRector/Fixture)
 
-Changes various implode forms to consistent one
+Changes various `implode` forms to consistent one
 
 ```diff
  class SomeClass
@@ -1793,7 +1793,7 @@ Replace PREG delimiter with configured one
 - class: [`Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector`](/../master/rules/coding-style/src/Rector/Encapsed/EncapsedStringsToSprintfRector.php)
 - [test fixtures](/../master/rules/coding-style/tests/Rector/Encapsed/EncapsedStringsToSprintfRector/Fixture)
 
-Convert enscaped {$string} to more readable sprintf
+Convert enscaped {$string} to more readable `sprintf`
 
 ```diff
  final class SomeClass
@@ -2085,7 +2085,7 @@ Changes redundant anonymous bool functions to simple calls
 - class: [`Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`](/../master/rules/coding-style/src/Rector/Assign/SplitDoubleAssignRector.php)
 - [test fixtures](/../master/rules/coding-style/tests/Rector/Assign/SplitDoubleAssignRector/Fixture)
 
-Split multiple inline assigns to each own lines default value, to prevent undefined array issues
+Split multiple inline assigns to `each` own lines default value, to prevent undefined array issues
 
 ```diff
  class SomeClass
@@ -2182,7 +2182,7 @@ Separate class constant in a string to class constant fetch and string
 - class: [`Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector`](/../master/rules/coding-style/src/Rector/FuncCall/StrictArraySearchRector.php)
 - [test fixtures](/../master/rules/coding-style/tests/Rector/FuncCall/StrictArraySearchRector/Fixture)
 
-Makes array_search search for identical elements
+Makes `array_search` search for identical elements
 
 ```diff
 -array_search($value, $items);
@@ -2262,7 +2262,7 @@ Use ++ increment instead of $var += 1.
 - class: [`Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector`](/../master/rules/coding-style/src/Rector/ClassConst/VarConstantCommentRector.php)
 - [test fixtures](/../master/rules/coding-style/tests/Rector/ClassConst/VarConstantCommentRector/Fixture)
 
-Constant should have a @var comment with type
+`Constant` should have a @var comment with type
 
 ```diff
  class SomeClass
@@ -2658,7 +2658,7 @@ Simplify useless double assigns
 - class: [`Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector`](/../master/rules/dead-code/src/Rector/Array_/RemoveDuplicatedArrayKeyRector.php)
 - [test fixtures](/../master/rules/dead-code/tests/Rector/Array_/RemoveDuplicatedArrayKeyRector/Fixture)
 
-Remove duplicated key in defined arrays.
+Remove duplicated `key` in `defined` arrays.
 
 ```diff
  $item = [
@@ -2984,7 +2984,7 @@ Removes unused methods and properties from Doctrine entity classes
 - class: [`Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector`](/../master/rules/dead-code/src/Rector/Foreach_/RemoveUnusedForeachKeyRector.php)
 - [test fixtures](/../master/rules/dead-code/tests/Rector/Foreach_/RemoveUnusedForeachKeyRector/Fixture)
 
-Remove unused key in foreach
+Remove unused `key` in foreach
 
 ```diff
  $items = [];
@@ -4120,7 +4120,7 @@ Add argument type based on probed data
 - class: [`Rector\DynamicTypeAnalysis\Rector\ClassMethod\DecorateMethodWithArgumentTypeProbeRector`](/../master/packages/dynamic-type-analysis/src/Rector/ClassMethod/DecorateMethodWithArgumentTypeProbeRector.php)
 - [test fixtures](/../master/packages/dynamic-type-analysis/tests/Rector/ClassMethod/DecorateMethodWithArgumentTypeProbeRector/Fixture)
 
-Add probe that records argument types to each method
+Add probe that records argument types to `each` method
 
 ```diff
  class SomeClass
@@ -4528,7 +4528,7 @@ Converts more complex mysql functions to mysqli
 - class: [`Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector`](/../master/rules/mysql-to-mysqli/src/Rector/FuncCall/MysqlPConnectToMysqliConnectRector.php)
 - [test fixtures](/../master/rules/mysql-to-mysqli/tests/Rector/FuncCall/MysqlPConnectToMysqliConnectRector/Fixture)
 
-Replace mysql_pconnect() with mysqli_connect() with host p: prefix
+Replace mysql_pconnect() with `mysqli_connect()` with host p: prefix
 
 ```diff
  final class SomeClass
@@ -4685,7 +4685,7 @@ Use Nette\Utils\Strings::endWith() over bare string-functions
 - class: [`Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector`](/../master/rules/nette/src/Rector/FuncCall/FilePutContentsToFileSystemWriteRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/FilePutContentsToFileSystemWriteRector/Fixture)
 
-Change file_put_contents() to FileSystem::write()
+Change `file_put_contents()` to FileSystem::write()
 
 ```diff
  class SomeClass
@@ -4741,7 +4741,7 @@ Changes json_encode()/json_decode() to safer and more verbose Nette\Utils\Json::
 - class: [`Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/FuncCall/PregFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/PregFunctionToNetteUtilsStringsRector/Fixture)
 
-Use Nette\Utils\Strings over bare preg_split() and preg_replace() functions
+Use `Nette\Utils\Strings` over bare `preg_split()` and `preg_replace()` functions
 
 ```diff
 +use Nette\Utils\Strings;
@@ -4764,7 +4764,7 @@ Use Nette\Utils\Strings over bare preg_split() and preg_replace() functions
 - class: [`Rector\Nette\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector/Fixture)
 
-Use Nette\Utils\Strings over bare preg_match() and preg_match_all() functions
+Use `Nette\Utils\Strings` over bare `preg_match()` and `preg_match_all()` functions
 
 ```diff
 +use Nette\Utils\Strings;
@@ -4832,7 +4832,7 @@ Use Nette\Utils\Strings::startsWith() over bare string-functions
 - class: [`Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector`](/../master/rules/nette/src/Rector/NotIdentical/StrposToStringsContainsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/NotIdentical/StrposToStringsContainsRector/Fixture)
 
-Use Nette\Utils\Strings over bare string-functions
+Use `Nette\Utils\Strings` over bare string-functions
 
 ```diff
  class SomeClass
@@ -4853,7 +4853,7 @@ Use Nette\Utils\Strings over bare string-functions
 - class: [`Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/FuncCall/SubstrStrlenFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/SubstrStrlenFunctionToNetteUtilsStringsRector/Fixture)
 
-Use Nette\Utils\Strings over bare string-functions
+Use `Nette\Utils\Strings` over bare string-functions
 
 ```diff
  class SomeClass
@@ -5362,7 +5362,7 @@ Adds %% to placeholder name of trans() method if missing
 - class: [`Rector\NetteUtilsCodeQuality\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector`](/../master/rules/nette-utils-code-quality/src/Rector/LNumber/ReplaceTimeNumberWithDateTimeConstantRector.php)
 - [test fixtures](/../master/rules/nette-utils-code-quality/tests/Rector/LNumber/ReplaceTimeNumberWithDateTimeConstantRector/Fixture)
 
-Replace time numbers with Nette\Utils\DateTime constants
+Replace `time` numbers with `Nette\Utils\DateTime` constants
 
 ```diff
  final class SomeClass
@@ -6807,7 +6807,7 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 - class: [`Rector\PSR4\Rector\FileSystem\NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector`](/../master/rules/psr4/src/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector.php)
 - [test fixtures](/../master/rules/psr4/tests/Rector/FileSystem/NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector/Fixture)
 
-Adds namespace to namespace-less files to match PSR-4 in ``composer.json`` autoload section. Run with combination with Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector
+Adds namespace to namespace-less files to match PSR-4 in `composer.json` autoload section. Run with combination with `Rector\PSR4\Rector\MultipleClassFileToPsr4ClassesRector`
 
 ```diff
  // src/SomeClass.php
@@ -7141,7 +7141,7 @@ Remove 0 from break and continue
 - class: [`Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`](/../master/rules/php55/src/Rector/FuncCall/PregReplaceEModifierRector.php)
 - [test fixtures](/../master/rules/php55/tests/Rector/FuncCall/PregReplaceEModifierRector/Fixture)
 
-The /e modifier is no longer supported, use preg_replace_callback instead
+The /e modifier is no longer supported, use `preg_replace_callback` instead
 
 ```diff
  class SomeClass
@@ -7212,7 +7212,7 @@ Adds default value for undefined variable
 - class: [`Rector\Php56\Rector\FuncCall\PowToExpRector`](/../master/rules/php56/src/Rector/FuncCall/PowToExpRector.php)
 - [test fixtures](/../master/rules/php56/tests/Rector/FuncCall/PowToExpRector/Fixture)
 
-Changes pow(val, val2) to ** (exp) parameter
+Changes pow(val, val2) to ** `(exp)` parameter
 
 ```diff
 -pow(1, 2);
@@ -7335,7 +7335,7 @@ Changes if/else to spaceship <=> where useful
 - class: [`Rector\Php70\Rector\List_\ListSplitStringRector`](/../master/rules/php70/src/Rector/List_/ListSplitStringRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/List_/ListSplitStringRector/Fixture)
 
-list() cannot split string directly anymore, use str_split()
+list() cannot split string directly anymore, use `str_split()`
 
 ```diff
 -list($foo) = "string";
@@ -7363,7 +7363,7 @@ list() assigns variables in reverse order - relevant in array assign
 - class: [`Rector\Php70\Rector\FuncCall\MultiDirnameRector`](/../master/rules/php70/src/Rector/FuncCall/MultiDirnameRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/MultiDirnameRector/Fixture)
 
-Changes multiple dirname() calls to one with nesting level
+Changes multiple `dirname()` calls to one with nesting level
 
 ```diff
 -dirname(dirname($path));
@@ -7410,7 +7410,7 @@ Changes PHP 4 style constructor to __construct.
 - class: [`Rector\Php70\Rector\FuncCall\RandomFunctionRector`](/../master/rules/php70/src/Rector/FuncCall/RandomFunctionRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/RandomFunctionRector/Fixture)
 
-Changes rand, srand and getrandmax by new mt_* alternatives.
+Changes rand, `srand` and `getrandmax` by new mt_* alternatives.
 
 ```diff
 -rand();
@@ -7444,7 +7444,7 @@ Remove first default switch, that is ignored
 - class: [`Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector`](/../master/rules/php70/src/Rector/FuncCall/RenameMktimeWithoutArgsToTimeRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/RenameMktimeWithoutArgsToTimeRector/Fixture)
 
-Renames mktime() without arguments to time()
+Renames `mktime()` without arguments to `time()`
 
 ```diff
  class SomeClass
@@ -7590,7 +7590,7 @@ Change binary operation between some number + string to PHP 7.1 compatible versi
 - class: [`Rector\Php71\Rector\FuncCall\CountOnNullRector`](/../master/rules/php71/src/Rector/FuncCall/CountOnNullRector.php)
 - [test fixtures](/../master/rules/php71/tests/Rector/FuncCall/CountOnNullRector/Fixture)
 
-Changes count() on null to safe ternary check
+Changes `count()` on null to safe ternary check
 
 ```diff
  $values = null;
@@ -7605,7 +7605,7 @@ Changes count() on null to safe ternary check
 - class: [`Rector\Php71\Rector\BinaryOp\IsIterableRector`](/../master/rules/php71/src/Rector/BinaryOp/IsIterableRector.php)
 - [test fixtures](/../master/rules/php71/tests/Rector/BinaryOp/IsIterableRector/Fixture)
 
-Changes is_array + Traversable check to is_iterable
+Changes `is_array` + Traversable check to `is_iterable`
 
 ```diff
 -is_array($foo) || $foo instanceof Traversable;
@@ -7726,7 +7726,7 @@ Changes unquoted non-existing constants to strings
 - class: [`Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector`](/../master/rules/php72/src/Rector/FuncCall/CreateFunctionToAnonymousFunctionRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/CreateFunctionToAnonymousFunctionRector/Fixture)
 
-Use anonymous functions instead of deprecated create_function()
+Use anonymous functions instead of deprecated `create_function()`
 
 ```diff
  class ClassWithCreateFunction
@@ -7748,7 +7748,7 @@ Use anonymous functions instead of deprecated create_function()
 - class: [`Rector\Php72\Rector\FuncCall\GetClassOnNullRector`](/../master/rules/php72/src/Rector/FuncCall/GetClassOnNullRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/GetClassOnNullRector/Fixture)
 
-Null is no more allowed in get_class()
+Null is no more allowed in `get_class()`
 
 ```diff
  final class SomeClass
@@ -7769,7 +7769,7 @@ Null is no more allowed in get_class()
 - class: [`Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector`](/../master/rules/php72/src/Rector/FuncCall/IsObjectOnIncompleteClassRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/IsObjectOnIncompleteClassRector/Fixture)
 
-Incomplete class returns inverted bool on is_object()
+Incomplete class returns inverted bool on `is_object()`
 
 ```diff
  $incompleteObject = new __PHP_Incomplete_Class;
@@ -7784,7 +7784,7 @@ Incomplete class returns inverted bool on is_object()
 - class: [`Rector\Php72\Rector\Each\ListEachRector`](/../master/rules/php72/src/Rector/Each/ListEachRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/Each/ListEachRector/Fixture)
 
-each() function is deprecated, use key() and current() instead
+`each()` function is deprecated, use `key()` and `current()` instead
 
 ```diff
 -list($key, $callback) = each($callbacks);
@@ -7800,7 +7800,7 @@ each() function is deprecated, use key() and current() instead
 - class: [`Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector`](/../master/rules/php72/src/Rector/FuncCall/ParseStrWithResultArgumentRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/ParseStrWithResultArgumentRector/Fixture)
 
-Use $result argument in parse_str() function
+Use $result argument in `parse_str()` function
 
 ```diff
 -parse_str($this->query);
@@ -7816,7 +7816,7 @@ Use $result argument in parse_str() function
 - class: [`Rector\Php72\Rector\FuncCall\StringifyDefineRector`](/../master/rules/php72/src/Rector/FuncCall/StringifyDefineRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/StringifyDefineRector/Fixture)
 
-Make first argument of define() string
+Make first argument of `define()` string
 
 ```diff
  class SomeClass
@@ -7837,7 +7837,7 @@ Make first argument of define() string
 - class: [`Rector\Php72\Rector\FuncCall\StringsAssertNakedRector`](/../master/rules/php72/src/Rector/FuncCall/StringsAssertNakedRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/StringsAssertNakedRector/Fixture)
 
-String asserts must be passed directly to assert()
+String asserts must be passed directly to `assert()`
 
 ```diff
  function nakedAssert()
@@ -7873,7 +7873,7 @@ Removes (unset) cast
 - class: [`Rector\Php72\Rector\Each\WhileEachToForeachRector`](/../master/rules/php72/src/Rector/Each/WhileEachToForeachRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/Each/WhileEachToForeachRector/Fixture)
 
-each() function is deprecated, use foreach() instead.
+`each()` function is deprecated, use foreach() instead.
 
 ```diff
 -while (list($key, $callback) = each($callbacks)) {
@@ -7898,7 +7898,7 @@ each() function is deprecated, use foreach() instead.
 - class: [`Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector`](/../master/rules/php73/src/Rector/FuncCall/ArrayKeyFirstLastRector.php)
 - [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/ArrayKeyFirstLastRector/Fixture)
 
-Make use of array_key_first() and array_key_last()
+Make use of `array_key_first()` and `array_key_last()`
 
 ```diff
 -reset($items);
@@ -7919,7 +7919,7 @@ Make use of array_key_first() and array_key_last()
 - class: [`Rector\Php73\Rector\BinaryOp\IsCountableRector`](/../master/rules/php73/src/Rector/BinaryOp/IsCountableRector.php)
 - [test fixtures](/../master/rules/php73/tests/Rector/BinaryOp/IsCountableRector/Fixture)
 
-Changes is_array + Countable check to is_countable
+Changes `is_array` + Countable check to `is_countable`
 
 ```diff
 -is_array($foo) || $foo instanceof Countable;
@@ -7933,7 +7933,7 @@ Changes is_array + Countable check to is_countable
 - class: [`Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector`](/../master/rules/php73/src/Rector/FuncCall/JsonThrowOnErrorRector.php)
 - [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/JsonThrowOnErrorRector/Fixture)
 
-Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error
+Adds JSON_THROW_ON_ERROR to `json_encode()` and `json_decode()` to throw JsonException on error
 
 ```diff
 -json_encode($content);
@@ -7963,7 +7963,7 @@ Escape - in some cases
 - class: [`Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector`](/../master/rules/php73/src/Rector/FuncCall/RemoveMissingCompactVariableRector.php)
 - [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/RemoveMissingCompactVariableRector/Fixture)
 
-Remove non-existing vars from compact()
+Remove non-existing vars from `compact()`
 
 ```diff
  class SomeClass
@@ -8032,7 +8032,7 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
 - class: [`Rector\Php73\Rector\FuncCall\SetCookieRector`](/../master/rules/php73/src/Rector/FuncCall/SetCookieRector.php)
 - [test fixtures](/../master/rules/php73/tests/Rector/FuncCall/SetcookieRector/Fixture)
 
-Convert setcookie argument to PHP7.3 option array
+Convert `setcookie` argument to PHP7.3 option array
 
 ```diff
 -setcookie('name', $value, 360);
@@ -8090,7 +8090,7 @@ Add "_" as thousands separator in numbers
 - class: [`Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector`](/../master/rules/php74/src/Rector/FuncCall/ArrayKeyExistsOnPropertyRector.php)
 - [test fixtures](/../master/rules/php74/tests/Rector/FuncCall/ArrayKeyExistsOnPropertyRector/Fixture)
 
-Change array_key_exists() on property to property_exists()
+Change `array_key_exists()` on property to `property_exists()`
 
 ```diff
  class SomeClass {
@@ -8109,7 +8109,7 @@ Change array_key_exists() on property to property_exists()
 - class: [`Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector`](/../master/rules/php74/src/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php)
 - [test fixtures](/../master/rules/php74/tests/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector/Fixture)
 
-Change array_merge() to spread operator, except values with possible string key values
+Change `array_merge()` to spread operator, except values with possible string `key` values
 
 ```diff
  class SomeClass
@@ -8222,7 +8222,7 @@ Change export() to ReflectionFunction alternatives
 - class: [`Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector`](/../master/rules/php74/src/Rector/FuncCall/FilterVarToAddSlashesRector.php)
 - [test fixtures](/../master/rules/php74/tests/Rector/FuncCall/FilterVarToAddSlashesRector/Fixture)
 
-Change filter_var() with slash escaping to addslashes()
+Change `filter_var()` with slash escaping to `addslashes()`
 
 ```diff
  $var= "Satya's here!";
@@ -8257,7 +8257,7 @@ Change __CLASS__ to self::class
 - class: [`Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector`](/../master/rules/php74/src/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php)
 - [test fixtures](/../master/rules/php74/tests/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector/Fixture)
 
-Change mb_strrpos() encoding argument position
+Change `mb_strrpos()` encoding argument position
 
 ```diff
 -mb_strrpos($text, "abc", "UTF-8");
@@ -8414,7 +8414,7 @@ Change get_class($object) to faster $object::class
 - class: [`Rector\Php80\Rector\Ternary\GetDebugTypeRector`](/../master/rules/php80/src/Rector/Ternary/GetDebugTypeRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/Ternary/GetDebugTypeRector/Fixture)
 
-Change ternary type resolve to get_debug_type()
+Change ternary type resolve to `get_debug_type()`
 
 ```diff
  class SomeClass
@@ -8456,7 +8456,7 @@ Remove unused variable in catch()
 - class: [`Rector\Php80\Rector\NotIdentical\StrContainsRector`](/../master/rules/php80/src/Rector/NotIdentical/StrContainsRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/NotIdentical/StrContainsRector/Fixture)
 
-Replace strpos() !== false and strstr()  with str_contains()
+Replace `strpos()` !== false and `strstr()`  with `str_contains()`
 
 ```diff
  class SomeClass
@@ -8476,7 +8476,7 @@ Replace strpos() !== false and strstr()  with str_contains()
 - class: [`Rector\Php80\Rector\Identical\StrEndsWithRector`](/../master/rules/php80/src/Rector/Identical/StrEndsWithRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/Identical/StrEndsWithRector/Fixture)
 
-Change helper functions to str_ends_with()
+Change helper functions to `str_ends_with()`
 
 ```diff
  class SomeClass
@@ -8496,7 +8496,7 @@ Change helper functions to str_ends_with()
 - class: [`Rector\Php80\Rector\Identical\StrStartsWithRector`](/../master/rules/php80/src/Rector/Identical/StrStartsWithRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/Identical/StrStartsWithRector/Fixture)
 
-Change helper functions to str_starts_with()
+Change helper functions to `str_starts_with()`
 
 ```diff
  class SomeClass
@@ -9050,7 +9050,7 @@ Privatize local-only property to private property
 
 - class: [`Rector\Refactoring\Rector\FileSystem\MoveAndRenameClassRector`](/../master/packages/refactoring/src/Rector/FileSystem/MoveAndRenameClassRector.php)
 
-Move class to respect new location with respect to PSR-4 + follow up with class rename
+Move class to respect new location with respect to PSR-4 + follow up with class `rename`
 
 ```yaml
 services:
@@ -9196,7 +9196,7 @@ services:
 
 - class: [`Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector`](/../master/rules/removing-static/src/Rector/Class_/PassFactoryToUniqueObjectRector.php)
 
-Convert new X/Static::call() to factories in entities, pass them via constructor to each other
+Convert new X/Static::call() to factories in entities, pass them via constructor to `each` other
 
 ```yaml
 services:
@@ -9307,7 +9307,7 @@ services:
 - class: [`Rector\Renaming\Rector\Annotation\RenameAnnotationRector`](/../master/rules/renaming/src/Rector/Annotation/RenameAnnotationRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Annotation/RenameAnnotationRector/Fixture)
 
-Turns defined annotations above properties and methods to their new values.
+Turns `defined` annotations above properties and methods to their new values.
 
 ```yaml
 services:
@@ -9339,7 +9339,7 @@ services:
 - class: [`Rector\Renaming\Rector\Constant\RenameClassConstantRector`](/../master/rules/renaming/src/Rector/Constant/RenameClassConstantRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Constant/RenameClassConstantRector/Fixture)
 
-Replaces defined class constants in their calls.
+Replaces `defined` class constants in their calls.
 
 ```yaml
 services:
@@ -9365,7 +9365,7 @@ services:
 - class: [`Rector\Renaming\Rector\Class_\RenameClassRector`](/../master/rules/renaming/src/Rector/Class_/RenameClassRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Class_/RenameClassRector/Fixture)
 
-Replaces defined classes by new ones.
+Replaces `defined` classes by new ones.
 
 ```yaml
 services:
@@ -9451,7 +9451,7 @@ services:
 - class: [`Rector\Renaming\Rector\Function_\RenameFunctionRector`](/../master/rules/renaming/src/Rector/Function_/RenameFunctionRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Function_/RenameFunctionRector/Fixture)
 
-Turns defined function call new one.
+Turns `defined` function call new one.
 
 ```yaml
 services:
@@ -10189,7 +10189,7 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
 - class: [`Rector\StrictCodeQuality\Rector\Stmt\VarInlineAnnotationToAssertRector`](/../master/rules/strict-code-quality/src/Rector/Stmt/VarInlineAnnotationToAssertRector.php)
 - [test fixtures](/../master/rules/strict-code-quality/tests/Rector/Stmt/VarInlineAnnotationToAssertRector/Fixture)
 
-Turn @var inline checks above code to assert() of hte type
+Turn @var inline checks above code to `assert()` of hte type
 
 ```diff
  class SomeClass
@@ -10396,7 +10396,7 @@ Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form i
 - class: [`Rector\Symfony\Rector\Form\FormTypeGetParentRector`](/../master/rules/symfony/src/Rector/Form/FormTypeGetParentRector.php)
 - [test fixtures](/../master/rules/symfony/tests/Rector/Form/FormTypeGetParentRector/Fixture)
 
-Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
+Turns string Form Type references to their `CONSTANT` alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
 
 ```diff
 -function getParent() { return "collection"; }
@@ -10757,7 +10757,7 @@ Simplify use of assertions in WebTestCase
 - class: [`Rector\Symfony\Rector\Form\StringFormTypeToClassRector`](/../master/rules/symfony/src/Rector/Form/StringFormTypeToClassRector.php)
 - [test fixtures](/../master/rules/symfony/tests/Rector/Form/StringFormTypeToClassRector/Fixture)
 
-Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony
+Turns string Form Type references to their `CONSTANT` alternatives in FormTypes in Form in Symfony
 
 ```diff
  $formBuilder = new Symfony\Component\Form\FormBuilder;
@@ -11257,7 +11257,7 @@ Add method parent call, in case new parent method is added
 - class: [`Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector`](/../master/src/Rector/ClassMethod/AddReturnTypeDeclarationRector.php)
 - [test fixtures](/../master/tests/Rector/ClassMethod/AddReturnTypeDeclarationRector/Fixture)
 
-Changes defined return typehint of method and class.
+Changes `defined` return typehint of method and class.
 
 ```yaml
 services:
@@ -11309,7 +11309,7 @@ Turns non-private properties with `@annotation` to private properties and constr
 - class: [`Rector\Core\Rector\Argument\ArgumentAdderRector`](/../master/src/Rector/Argument/ArgumentAdderRector.php)
 - [test fixtures](/../master/tests/Rector/Argument/ArgumentAdderRector/Fixture)
 
-This Rector adds new default arguments in calls of defined methods and class types.
+This Rector adds new default arguments in calls of `defined` methods and class types.
 
 ```yaml
 services:
@@ -11362,7 +11362,7 @@ services:
 - class: [`Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector`](/../master/src/Rector/Argument/ArgumentDefaultValueReplacerRector.php)
 - [test fixtures](/../master/tests/Rector/Argument/ArgumentDefaultValueReplacerRector/Fixture)
 
-Replaces defined map of arguments in defined methods and their calls.
+Replaces `defined` map of arguments in `defined` methods and their calls.
 
 ```yaml
 services:
@@ -11390,7 +11390,7 @@ services:
 - class: [`Rector\Core\Rector\Argument\ArgumentRemoverRector`](/../master/src/Rector/Argument/ArgumentRemoverRector.php)
 - [test fixtures](/../master/tests/Rector/Argument/ArgumentRemoverRector/Fixture)
 
-Removes defined arguments in defined methods and their calls.
+Removes `defined` arguments in `defined` methods and their calls.
 
 ```yaml
 services:
@@ -11574,7 +11574,7 @@ services:
 - class: [`Rector\Core\Rector\Function_\FunctionToMethodCallRector`](/../master/src/Rector/Function_/FunctionToMethodCallRector.php)
 - [test fixtures](/../master/tests/Rector/Function_/FunctionToMethodCallRector/Fixture)
 
-Turns defined function calls to local method calls.
+Turns `defined` function calls to local method calls.
 
 ```yaml
 services:
@@ -11618,7 +11618,7 @@ Change configured function calls to new Instance
 - class: [`Rector\Core\Rector\Function_\FunctionToStaticCallRector`](/../master/src/Rector/Function_/FunctionToStaticCallRector.php)
 - [test fixtures](/../master/tests/Rector/Function_/FunctionToStaticCallRector/Fixture)
 
-Turns defined function call to static method call.
+Turns `defined` function call to static method call.
 
 ```yaml
 services:
@@ -11642,7 +11642,7 @@ services:
 - class: [`Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector`](/../master/src/Rector/MagicDisclosure/GetAndSetToMethodCallRector.php)
 - [test fixtures](/../master/tests/Rector/MagicDisclosure/GetAndSetToMethodCallRector/Fixture)
 
-Turns defined `__get`/`__set` to specific method calls.
+Turns `defined` `__get`/`__set` to specific method calls.
 
 ```yaml
 services:
@@ -11950,7 +11950,7 @@ services:
 - class: [`Rector\Core\Rector\Property\PropertyToMethodRector`](/../master/src/Rector/Property/PropertyToMethodRector.php)
 - [test fixtures](/../master/tests/Rector/Property/PropertyToMethodRector/Fixture)
 
-Replaces properties assign calls be defined methods.
+Replaces properties assign calls be `defined` methods.
 
 ```yaml
 services:
@@ -11997,7 +11997,7 @@ services:
 - class: [`Rector\Core\Rector\Namespace_\PseudoNamespaceToNamespaceRector`](/../master/src/Rector/Namespace_/PseudoNamespaceToNamespaceRector.php)
 - [test fixtures](/../master/tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Fixture)
 
-Replaces defined Pseudo_Namespaces by Namespace\Ones.
+Replaces `defined` Pseudo_Namespaces by Namespace\Ones.
 
 ```yaml
 services:
@@ -12048,7 +12048,7 @@ services:
 - class: [`Rector\Core\Rector\FuncCall\RemoveIniGetSetFuncCallRector`](/../master/src/Rector/FuncCall/RemoveIniGetSetFuncCallRector.php)
 - [test fixtures](/../master/tests/Rector/FuncCall/RemoveIniGetSetFuncCallRector/Fixture)
 
-Remove ini_get by configuration
+Remove `ini_get` by configuration
 
 ```yaml
 services:
@@ -12135,7 +12135,7 @@ services:
 - class: [`Rector\Core\Rector\Property\RenamePropertyRector`](/../master/src/Rector/Property/RenamePropertyRector.php)
 - [test fixtures](/../master/tests/Rector/Property/RenamePropertyRector/Fixture)
 
-Replaces defined old properties by new ones.
+Replaces `defined` old properties by new ones.
 
 ```yaml
 services:
@@ -12391,7 +12391,7 @@ Swap arguments in function calls
 - class: [`Rector\Core\Rector\MagicDisclosure\ToStringToMethodCallRector`](/../master/src/Rector/MagicDisclosure/ToStringToMethodCallRector.php)
 - [test fixtures](/../master/tests/Rector/MagicDisclosure/ToStringToMethodCallRector/Fixture)
 
-Turns defined code uses of "__toString()" method  to specific method calls.
+Turns `defined` code uses of "__toString()" method  to specific method calls.
 
 ```yaml
 services:
@@ -12416,7 +12416,7 @@ services:
 - class: [`Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector`](/../master/src/Rector/MagicDisclosure/UnsetAndIssetToMethodCallRector.php)
 - [test fixtures](/../master/tests/Rector/MagicDisclosure/UnsetAndIssetToMethodCallRector/Fixture)
 
-Turns defined `__isset`/`__unset` calls to specific method calls.
+Turns `defined` `__isset`/`__unset` calls to specific method calls.
 
 ```yaml
 services:
