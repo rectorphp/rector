@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNode;
 
 use Nette\Utils\Strings;
-use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
 
 /**
@@ -72,15 +71,6 @@ trait PrintTagValueNodeTrait
             return true;
         }
 
-        if (! $this instanceof SilentKeyNodeInterface) {
-            return false;
-        }
-
-        /** @var SilentKeyNodeInterface&AbstractTagValueNode $this */
-        if ($key !== $this->getSilentKey()) {
-            return false;
-        }
-
-        return ! $this->tagValueNodeConfiguration->isSilentKeyExplicit();
+        return $this->tagValueNodeConfiguration->isSilentKeyAndImplicit($key);
     }
 }

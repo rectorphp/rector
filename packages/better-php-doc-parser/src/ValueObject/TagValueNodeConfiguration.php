@@ -19,22 +19,22 @@ final class TagValueNodeConfiguration
     /**
      * @var bool
      */
-    private $hasNewlineAfterOpening;
+    private $hasNewlineAfterOpening = false;
 
     /**
      * @var bool
      */
-    private $hasNewlineBeforeClosing;
+    private $hasNewlineBeforeClosing = false;
 
     /**
      * @var bool
      */
-    private $hasOpeningBracket;
+    private $hasOpeningBracket = false;
 
     /**
      * @var bool
      */
-    private $hasClosingBracket;
+    private $hasClosingBracket = false;
 
     /**
      * @var array
@@ -49,7 +49,7 @@ final class TagValueNodeConfiguration
     /**
      * @var bool
      */
-    private $isSilentKeyExplicit;
+    private $isSilentKeyExplicit = false;
 
     public function __construct(
         ?string $originalContent = null,
@@ -108,16 +108,6 @@ final class TagValueNodeConfiguration
         return $this->keysByQuotedStatus;
     }
 
-    public function getSilentKey(): ?string
-    {
-        return $this->silentKey;
-    }
-
-    public function isSilentKeyExplicit(): bool
-    {
-        return $this->isSilentKeyExplicit;
-    }
-
     public function addOrderedVisibleItem(string $itemKey): void
     {
         $this->orderedVisibleItems[] = $itemKey;
@@ -128,5 +118,14 @@ final class TagValueNodeConfiguration
         $this->isSilentKeyExplicit = $tagValueNodeConfiguration->isSilentKeyExplicit;
         $this->hasOpeningBracket = $tagValueNodeConfiguration->hasOpeningBracket;
         $this->hasClosingBracket = $tagValueNodeConfiguration->hasClosingBracket;
+    }
+
+    public function isSilentKeyAndImplicit(string $key): bool
+    {
+        if ($key !== $this->silentKey) {
+            return false;
+        }
+
+        return ! $this->isSilentKeyExplicit;
     }
 }

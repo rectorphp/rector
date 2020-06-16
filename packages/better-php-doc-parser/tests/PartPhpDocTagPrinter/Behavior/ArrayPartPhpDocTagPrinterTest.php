@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Tests\PartPhpDocTagPrinter\Behavior;
 
+use Iterator;
 use PHPUnit\Framework\TestCase;
 use Rector\BetterPhpDocParser\Tests\PartPhpDocTagPrinter\Behavior\Source\PhpDocTagNodeWithArrayPrinter;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
@@ -34,7 +35,7 @@ final class ArrayPartPhpDocTagPrinterTest extends TestCase
         $this->assertSame($expectedContent, $output);
     }
 
-    public function provideData()
+    public function provideData(): Iterator
     {
         yield [['strict' => 'yes'], 'option', 'option={"strict":"yes"}'];
         yield [['strict' => false], 'option', 'option={"strict":false}'];

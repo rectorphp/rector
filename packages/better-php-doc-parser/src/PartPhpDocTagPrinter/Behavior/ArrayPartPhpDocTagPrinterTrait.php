@@ -90,7 +90,7 @@ trait ArrayPartPhpDocTagPrinterTrait
             return '';
         }
 
-        if ($key === $tagValueNodeConfiguration->getSilentKey() && ! $tagValueNodeConfiguration->isSilentKeyExplicit()) {
+        if ($tagValueNodeConfiguration->isSilentKeyAndImplicit($key)) {
             return '';
         }
 
