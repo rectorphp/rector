@@ -217,6 +217,67 @@ parameters:
     php_version_features: '7.2' # your version is 7.3
 ```
 
+### Safe Types
+
+In defualts setting:
+
+```yaml
+# rector.yaml
+parameters:
+    safe_types: false
+```
+
+All docblocks are taken seriously, e.g. with [typed properties](https://github.com/rectorphp/rector/blob/master/docs/rector_rules_overview.md#typedpropertyrector) rule:
+
+```diff
+ <?php
+
+ class ValueObject
+ {
+-    public $value;
++    public string $value;
+
+    /**
+     * @param string $value
+     */
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+}
+```
+
+Do you want to use only explicit PHP type declaration? Enable `safe_types`:
+
+```yaml
+# rector.yaml
+parameters:
+    safe_types: true
+```
+
+Then, docblocks are skipped:
+
+```diff
+ <?php
+
+ class ValueObject
+ {
+     public $value;
+
+-    public $count;
++    public int $count;
+
+    /**
+     * @param string $value
+     */
+    public function __construct($value, string $count)
+    {
+        $this->value = $value;
+        $this->count = $count
+    }
+}
+```
+
 ### Import Use Statements
 
 FQN classes are not imported by default. If you don't want to do it manually after every Rector run, enable it by:

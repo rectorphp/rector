@@ -10,26 +10,29 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
-use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
+use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
  * - https://github.com/silverstripe/silverstripe-upgrader/pull/57/commits/e5c7cfa166ad940d9d4ff69537d9f7608e992359#diff-5e0807bb3dc03d6a8d8b6ad049abd774
  */
-final class NodeScopeResolver
+final class PHPStanNodeScopeResolver
 {
     /**
      * @var string[]
@@ -37,9 +40,9 @@ final class NodeScopeResolver
     private $dependentFiles = [];
 
     /**
-     * @var PHPStanNodeScopeResolver
+     * @var NodeScopeResolver
      */
-    private $phpStanNodeScopeResolver;
+    private $nodeScopeResolver;
 
     /**
      * @var ScopeFactory
@@ -81,19 +84,25 @@ final class NodeScopeResolver
      */
     private $symfonyStyle;
 
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
     public function __construct(
         ChangedFilesDetector $changedFilesDetector,
         ScopeFactory $scopeFactory,
-        PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
+        NodeScopeResolver $nodeScopeResolver,
         ReflectionProvider $reflectionProvider,
         RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
         TraitNodeScopeCollector $traitNodeScopeCollector,
         DependencyResolver $dependencyResolver,
         Configuration $configuration,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        ParameterProvider $parameterProvider
     ) {
         $this->scopeFactory = $scopeFactory;
-        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
+        $this->nodeScopeResolver = $nodeScopeResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->removeDeepChainMethodCallNodeVisitor = $removeDeepChainMethodCallNodeVisitor;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
@@ -101,6 +110,7 @@ final class NodeScopeResolver
         $this->changedFilesDetector = $changedFilesDetector;
         $this->configuration = $configuration;
         $this->symfonyStyle = $symfonyStyle;
+        $this->parameterProvider = $parameterProvider;
     }
 
     /**
@@ -143,8 +153,13 @@ final class NodeScopeResolver
             $this->resolveDependentFiles($node, $scope);
         };
 
+        $safeTypes = (bool) $this->parameterProvider->provideParameter(Option::SAFE_TYPES);
+        if ($safeTypes) {
+            $this->removeCommentsFromNodes($nodes);
+        }
+
         /** @var MutatingScope $scope */
-        $this->phpStanNodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
+        $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
 
         $this->reportCacheDebugAndSaveDependentFiles($smartFileInfo, $this->dependentFiles);
 
@@ -233,5 +248,24 @@ final class NodeScopeResolver
         if ($dependentFiles !== []) {
             $this->symfonyStyle->listing($dependentFiles);
         }
+    }
+
+    /**
+     * Remove comments, to enable scope resolving only from code, not docblocks
+     *
+     * @param Node[] $nodes
+     */
+    private function removeCommentsFromNodes(array $nodes): void
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new class() extends NodeVisitorAbstract {
+            public function enterNode(Node $node): ?Node
+            {
+                $node->setAttribute('comments', null);
+                return $node;
+            }
+        });
+
+        $nodeTraverser->traverse($nodes);
     }
 }

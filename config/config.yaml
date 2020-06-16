@@ -36,3 +36,6 @@ parameters:
 
     # what PHP version is used for features, composer.json version, then local PHP version is used by default
     php_version_features: null
+
+    # false = use types from docblocks; true = only from PHP types, e.g. for typed properties
+    safe_types: false
