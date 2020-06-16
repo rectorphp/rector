@@ -96,11 +96,11 @@ PHP
         $this->printNodesWithFileDestination($nodesWithFileDestination);
     }
 
-    private function resolveNewClassLikeName(NodesWithFileDestinationValueObject $nodesWithFileDestination): string
+    private function resolveNewClassLikeName(NodesWithFileDestinationValueObject $nodesWithFileDestinationValueObject): string
     {
         /** @var ClassLike $classLike */
         $classLike = $this->betterNodeFinder->findFirstInstanceOf(
-            $nodesWithFileDestination->getNodes(),
+            $nodesWithFileDestinationValueObject->getNodes(),
             ClassLike::class
         );
 
