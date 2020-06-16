@@ -270,7 +270,7 @@ Then, docblocks are skipped:
     /**
      * @param string $value
      */
-    public function __construct($value, string $count)
+    public function __construct($value, int $count)
     {
         $this->value = $value;
         $this->count = $count
