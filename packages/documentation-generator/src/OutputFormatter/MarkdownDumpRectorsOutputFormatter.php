@@ -162,7 +162,7 @@ final class MarkdownDumpRectorsOutputFormatter
         }
 
         $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln('<br>');
+        $this->symfonyStyle->writeln('<br><br>');
         $this->symfonyStyle->newLine();
     }
 

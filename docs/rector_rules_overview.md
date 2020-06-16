@@ -97,7 +97,7 @@ Move constructor injection dependency in Controller to action injection
  }
 ```
 
-<br>
+<br><br>
 
 ### `MoveRepositoryFromParentToConstructorRector`
 
@@ -125,7 +125,7 @@ Turns parent EntityRepository class to constructor dependency
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
 
@@ -148,7 +148,7 @@ Handles method calls in child of Doctrine EntityRepository and moves them to "$t
  }
 ```
 
-<br>
+<br><br>
 
 ### `ServiceLocatorToDIRector`
 
@@ -178,7 +178,7 @@ Turns "$this->getRepository()" in Symfony Controller to constructor injection an
  }
 ```
 
-<br>
+<br><br>
 
 ## Autodiscovery
 
@@ -205,7 +205,7 @@ Move entities to Entity namespace
  }
 ```
 
-<br>
+<br><br>
 
 ### `MoveInterfacesToContractNamespaceDirectoryRector`
 
@@ -225,7 +225,7 @@ Move interface to "Contract" namespace
  }
 ```
 
-<br>
+<br><br>
 
 ### `MoveServicesBySuffixToDirectoryRector`
 
@@ -254,7 +254,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `MoveValueObjectsToValueObjectDirectoryRector`
 
@@ -281,7 +281,7 @@ Move value object to ValueObject namespace/directory
  }
 ```
 
-<br>
+<br><br>
 
 ## CakePHP
 
@@ -299,7 +299,7 @@ Change App::uses() to use imports
  CakeEventManager::instance()->attach(new NotificationListener());
 ```
 
-<br>
+<br><br>
 
 ### `ArrayToFluentCallRector`
 
@@ -324,7 +324,7 @@ Moves array options to fluent setter method calls.
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeSnakedFixtureNameToCamelRector`
 
@@ -345,7 +345,7 @@ Changes $fixtues style from snake_case to CamelCase.
      ];
 ```
 
-<br>
+<br><br>
 
 ### `ImplicitShortClassNameUseStatementRector`
 
@@ -363,7 +363,7 @@ Collect implicit class names and add imports
  }
 ```
 
-<br>
+<br><br>
 
 ### `ModalToGetSetRector`
 
@@ -386,7 +386,7 @@ Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.
 +$object->setConfig(['key' => 'value']);
 ```
 
-<br>
+<br><br>
 
 ### `RenameMethodCallBasedOnParameterRector`
 
@@ -418,7 +418,7 @@ services:
 +$object = $object->withAttribute('paging', ['a value']);
 ```
 
-<br>
+<br><br>
 
 ## Celebrity
 
@@ -440,7 +440,7 @@ Use common != instead of less known <> with same meaning
  }
 ```
 
-<br>
+<br><br>
 
 ### `LogicalToBooleanRector`
 
@@ -456,7 +456,7 @@ Change OR, AND to ||, && with more common understanding
  }
 ```
 
-<br>
+<br><br>
 
 ### `SetTypeToCastRector`
 
@@ -480,7 +480,7 @@ Changes `settype()` to (type) where possible
  }
 ```
 
-<br>
+<br><br>
 
 ## CodeQuality
 
@@ -504,7 +504,7 @@ include/require to absolute path. This Rector might introduce backwards incompat
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddPregQuoteDelimiterRector`
 
@@ -518,7 +518,7 @@ Add `preg_quote` delimiter when missing
 +'#' . preg_quote('name', '#') . '#';
 ```
 
-<br>
+<br><br>
 
 ### `AndAssignsToSeparateLinesRector`
 
@@ -540,7 +540,7 @@ Split 2 assigns ands to separate line
  }
 ```
 
-<br>
+<br><br>
 
 ### `ArrayKeyExistsTernaryThenValueToCoalescingRector`
 
@@ -560,7 +560,7 @@ Change `array_key_exists()` ternary to coalesing
  }
 ```
 
-<br>
+<br><br>
 
 ### `ArrayKeysAndInArrayToArrayKeyExistsRector`
 
@@ -581,7 +581,7 @@ Replace `array_keys()` and `in_array()` to `array_key_exists()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `ArrayMergeOfNonArraysToSimpleArrayRector`
 
@@ -604,7 +604,7 @@ Change `array_merge` of non arrays to array directly
  }
 ```
 
-<br>
+<br><br>
 
 ### `ArrayThisCallToThisMethodCallRector`
 
@@ -629,7 +629,7 @@ Change [$this, someMethod] without any args to $this->someMethod()
  }
 ```
 
-<br>
+<br><br>
 
 ### `BooleanNotIdenticalToNotIdenticalRector`
 
@@ -655,7 +655,7 @@ Negated identical boolean compare to not identical compare (does not apply to no
  }
 ```
 
-<br>
+<br><br>
 
 ### `CallableThisArrayToAnonymousFunctionRector`
 
@@ -685,7 +685,7 @@ Convert [$this, "method"] to proper anonymous function
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeArrayPushToArrayAssignRector`
 
@@ -706,7 +706,7 @@ Change `array_push()` to direct variable assign
  }
 ```
 
-<br>
+<br><br>
 
 ### `CombineIfRector`
 
@@ -730,7 +730,7 @@ Merges nested if statements
  }
 ```
 
-<br>
+<br><br>
 
 ### `CombinedAssignRector`
 
@@ -744,7 +744,7 @@ Simplify $value = $value + 5; assignments to shorter ones
 +$value += 5;
 ```
 
-<br>
+<br><br>
 
 ### `CompactToVariablesRector`
 
@@ -767,7 +767,7 @@ Change `compact()` call to own array
  }
 ```
 
-<br>
+<br><br>
 
 ### `CompleteDynamicPropertiesRector`
 
@@ -790,7 +790,7 @@ Add missing dynamic properties
  }
 ```
 
-<br>
+<br><br>
 
 ### `ConsecutiveNullCompareReturnsToNullCoalesceQueueRector`
 
@@ -818,7 +818,7 @@ Change multiple null compares to ?? queue
  }
 ```
 
-<br>
+<br><br>
 
 ### `ExplicitBoolCompareRector`
 
@@ -840,7 +840,7 @@ Make if conditions more explicit
  }
 ```
 
-<br>
+<br><br>
 
 ### `ForRepeatedCountToOwnVariableRector`
 
@@ -863,7 +863,7 @@ Change `count()` in for function to own variable
  }
 ```
 
-<br>
+<br><br>
 
 ### `ForToForeachRector`
 
@@ -892,7 +892,7 @@ Change for() to foreach() where useful
  }
 ```
 
-<br>
+<br><br>
 
 ### `ForeachItemsAssignToEmptyArrayToAssignRector`
 
@@ -915,7 +915,7 @@ Change foreach() items assign to empty array to direct assign
  }
 ```
 
-<br>
+<br><br>
 
 ### `ForeachToInArrayRector`
 
@@ -935,7 +935,7 @@ Simplify `foreach` loops into `in_array` when possible
 +in_array("something", $items, true);
 ```
 
-<br>
+<br><br>
 
 ### `GetClassToInstanceOfRector`
 
@@ -949,7 +949,7 @@ Changes comparison with `get_class` to instanceof
 +if ($event->job instanceof EventsListener) { }
 ```
 
-<br>
+<br><br>
 
 ### `InArrayAndArrayKeysToArrayKeyExistsRector`
 
@@ -963,7 +963,7 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 +array_key_exists("key", $array);
 ```
 
-<br>
+<br><br>
 
 ### `InlineIfToExplicitIfRector`
 
@@ -987,7 +987,7 @@ Change inline if to explicit if
  }
 ```
 
-<br>
+<br><br>
 
 ### `IntvalToTypeCastRector`
 
@@ -1007,7 +1007,7 @@ Change `intval()` to faster and readable (int) $value
  }
 ```
 
-<br>
+<br><br>
 
 ### `IsAWithStringWithThirdArgumentRector`
 
@@ -1027,7 +1027,7 @@ Complete missing 3rd argument in case `is_a()` function in case of strings
  }
 ```
 
-<br>
+<br><br>
 
 ### `JoinStringConcatRector`
 
@@ -1047,7 +1047,7 @@ Joins concat of 2 strings
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveAlwaysTrueConditionSetInConstructorRector`
 
@@ -1076,7 +1076,7 @@ If conditions is always true, perform the content right away
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveSoleValueSprintfRector`
 
@@ -1100,7 +1100,7 @@ Remove `sprintf()` wrapper if not needed
  }
 ```
 
-<br>
+<br><br>
 
 ### `ShortenElseIfRector`
 
@@ -1127,7 +1127,7 @@ Shortens else/if to elseif
  }
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyArraySearchRector`
 
@@ -1146,7 +1146,7 @@ Simplify `array_search` to `in_array`
 +in_array("searching", $array, true);
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyBoolIdenticalTrueRector`
 
@@ -1168,7 +1168,7 @@ Symplify bool value compare to true or false
  }
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyConditionsRector`
 
@@ -1182,7 +1182,7 @@ Simplify conditions
 +if ($foo === 'bar') {...
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyDeMorganBinaryRector`
 
@@ -1200,7 +1200,7 @@ Simplify negated conditions with de Morgan theorem
 +$result = $a <= 20 && $b > 50;
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyDuplicatedTernaryRector`
 
@@ -1221,7 +1221,7 @@ Remove ternary that duplicated return value of true : false
  }
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyEmptyArrayCheckRector`
 
@@ -1235,7 +1235,7 @@ Simplify `is_array` and `empty` functions combination into a simple identical ch
 +$values === []
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyForeachToArrayFilterRector`
 
@@ -1255,7 +1255,7 @@ Simplify foreach with function filtering to array filter
 +$directories = array_filter($possibleDirectories, 'file_exists');
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyForeachToCoalescingRector`
 
@@ -1275,7 +1275,7 @@ Changes foreach that returns set value to ??
 +return $this->oldToNewFunctions[$currentFunction] ?? null;
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyFuncGetArgsCountRector`
 
@@ -1289,7 +1289,7 @@ Simplify `count` of `func_get_args()` to `func_num_args()`
 +func_num_args();
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyIfElseToTernaryRector`
 
@@ -1313,7 +1313,7 @@ Changes if/else for same value as assign to ternary
  }
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyIfIssetToNullCoalescingRector`
 
@@ -1337,7 +1337,7 @@ Simplify binary if to null coalesce
  }
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyIfNotNullReturnRector`
 
@@ -1356,7 +1356,7 @@ Changes redundant null check to instant return
 +return $newNode;
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyIfReturnBoolRector`
 
@@ -1374,7 +1374,7 @@ Shortens if return false/true to direct return
 +return strpos($docToken->getContent(), "\n") === false;
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyInArrayValuesRector`
 
@@ -1388,7 +1388,7 @@ Removes unneeded `array_values()` in `in_array()` call
 +in_array("key", $array, true);
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyRegexPatternRector`
 
@@ -1408,7 +1408,7 @@ Simplify regex pattern to known ranges
  }
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyStrposLowerRector`
 
@@ -1422,7 +1422,7 @@ Simplify strpos(strtolower(), "...") calls
 +stripos($var, "...")"
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyTautologyTernaryRector`
 
@@ -1436,7 +1436,7 @@ Simplify tautology ternary to value
 +$value = $fullyQualifiedTypeHint;
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyUselessVariableRector`
 
@@ -1453,7 +1453,7 @@ Removes useless variable assigns
  };
 ```
 
-<br>
+<br><br>
 
 ### `SingleInArrayToCompareRector`
 
@@ -1475,7 +1475,7 @@ Changes `in_array()` with single element to ===
  }
 ```
 
-<br>
+<br><br>
 
 ### `SplitListAssignToSeparateLineRector`
 
@@ -1496,7 +1496,7 @@ Splits [$a, $b] = [5, 10] scalar assign to standalone lines
  }
 ```
 
-<br>
+<br><br>
 
 ### `StrlenZeroToIdenticalEmptyStringRector`
 
@@ -1516,7 +1516,7 @@ Changes `strlen` comparison to 0 to direct empty string compare
  }
 ```
 
-<br>
+<br><br>
 
 ### `ThrowWithPreviousExceptionRector`
 
@@ -1540,7 +1540,7 @@ When throwing into a catch block, checks that the previous exception is passed t
  }
 ```
 
-<br>
+<br><br>
 
 ### `UnnecessaryTernaryExpressionRector`
 
@@ -1554,7 +1554,7 @@ Remove unnecessary ternary expressions.
 +$foo === $bar;
 ```
 
-<br>
+<br><br>
 
 ### `UnusedForeachValueToArrayKeysRector`
 
@@ -1577,7 +1577,7 @@ Change foreach with unused $value but only $key, to `array_keys()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `UseIdenticalOverEqualWithSameTypeRector`
 
@@ -1599,7 +1599,7 @@ Use ===/!== over ==/!=, it values have the same type
  }
 ```
 
-<br>
+<br><br>
 
 ## CodingStyle
 
@@ -1627,7 +1627,7 @@ Adds array default value to property to prevent foreach over null error
  }
 ```
 
-<br>
+<br><br>
 
 ### `AnnotateThrowablesRector`
 
@@ -1652,7 +1652,7 @@ Adds @throws DocBlock comments to methods that thrwo \Throwables.
  }
 ```
 
-<br>
+<br><br>
 
 ### `BinarySwitchToIfElseRector`
 
@@ -1676,7 +1676,7 @@ Changes switch with 2 options to if-else
  }
 ```
 
-<br>
+<br><br>
 
 ### `CallUserFuncCallToVariadicRector`
 
@@ -1696,7 +1696,7 @@ Replace call_user_func_call with variadic
  }
 ```
 
-<br>
+<br><br>
 
 ### `CamelCaseFunctionNamingToUnderscoreRector`
 
@@ -1715,7 +1715,7 @@ Change CamelCase naming of functions to under_score naming
 +some_camel_case_function();
 ```
 
-<br>
+<br><br>
 
 ### `CatchExceptionNameMatchingTypeRector`
 
@@ -1740,7 +1740,7 @@ Type and name of catch exception should match
  }
 ```
 
-<br>
+<br><br>
 
 ### `ConsistentImplodeRector`
 
@@ -1764,7 +1764,7 @@ Changes various `implode` forms to consistent one
  }
 ```
 
-<br>
+<br><br>
 
 ### `ConsistentPregDelimiterRector`
 
@@ -1786,7 +1786,7 @@ Replace PREG delimiter with configured one
  }
 ```
 
-<br>
+<br><br>
 
 ### `EncapsedStringsToSprintfRector`
 
@@ -1806,7 +1806,7 @@ Convert enscaped {$string} to more readable `sprintf`
  }
 ```
 
-<br>
+<br><br>
 
 ### `FollowRequireByDirRector`
 
@@ -1826,7 +1826,7 @@ include/require should be followed by absolute path
  }
 ```
 
-<br>
+<br><br>
 
 ### `FunctionCallToConstantRector`
 
@@ -1857,7 +1857,7 @@ Changes use of function calls to use constants
  }
 ```
 
-<br>
+<br><br>
 
 ### `IdenticalFalseToBooleanNotRector`
 
@@ -1871,7 +1871,7 @@ Changes === false to negate !
 +if (! $something) {}
 ```
 
-<br>
+<br><br>
 
 ### `MakeInheritedMethodVisibilitySameAsParentRector`
 
@@ -1897,7 +1897,7 @@ Make method visibility same as parent one
  }
 ```
 
-<br>
+<br><br>
 
 ### `ManualJsonStringToJsonEncodeArrayRector`
 
@@ -1922,7 +1922,7 @@ Add extra space before new assign set
  }
 ```
 
-<br>
+<br><br>
 
 ### `NewlineBeforeNewAssignSetRector`
 
@@ -1945,7 +1945,7 @@ Add extra space before new assign set
  }
 ```
 
-<br>
+<br><br>
 
 ### `NullableCompareToNullRector`
 
@@ -1965,7 +1965,7 @@ Changes negate of empty comparison of nullable value to explicit === or !== comp
  }
 ```
 
-<br>
+<br><br>
 
 ### `PreferThisOrSelfMethodCallRector`
 
@@ -1993,7 +1993,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDoubleUnderscoreInMethodNameRector`
 
@@ -2014,7 +2014,7 @@ Non-magic PHP object methods cannot start with "__"
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedAliasRector`
 
@@ -2033,7 +2033,7 @@ Removes unused use aliases. Keep annotation aliases like "Doctrine\ORM\Mapping a
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReturnArrayClassMethodToYieldRector`
 
@@ -2062,7 +2062,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `SimpleArrayCallableToStringRector`
 
@@ -2078,7 +2078,7 @@ Changes redundant anonymous bool functions to simple calls
 +array_filter($paths, "is_dir");
 ```
 
-<br>
+<br><br>
 
 ### `SplitDoubleAssignRector`
 
@@ -2099,7 +2099,7 @@ Split multiple inline assigns to `each` own lines default value, to prevent unde
  }
 ```
 
-<br>
+<br><br>
 
 ### `SplitGroupedConstantsAndPropertiesRector`
 
@@ -2128,7 +2128,7 @@ Separate constant and properties to own lines
  }
 ```
 
-<br>
+<br><br>
 
 ### `SplitGroupedUseImportsRector`
 
@@ -2150,7 +2150,7 @@ Split grouped use imports and trait statements to standalone lines
  }
 ```
 
-<br>
+<br><br>
 
 ### `SplitStringClassConstantToClassConstFetchRector`
 
@@ -2175,7 +2175,7 @@ Separate class constant in a string to class constant fetch and string
  }
 ```
 
-<br>
+<br><br>
 
 ### `StrictArraySearchRector`
 
@@ -2189,7 +2189,7 @@ Makes `array_search` search for identical elements
 +array_search($value, $items, true);
 ```
 
-<br>
+<br><br>
 
 ### `SymplifyQuoteEscapeRector`
 
@@ -2211,7 +2211,7 @@ Prefer quote that are not inside the string
  }
 ```
 
-<br>
+<br><br>
 
 ### `UnderscoreToPascalCaseVariableAndPropertyNameRector`
 
@@ -2235,7 +2235,7 @@ Change under_score names to pascalCase
  }
 ```
 
-<br>
+<br><br>
 
 ### `UseIncrementAssignRector`
 
@@ -2255,7 +2255,7 @@ Use ++ increment instead of $var += 1.
  }
 ```
 
-<br>
+<br><br>
 
 ### `VarConstantCommentRector`
 
@@ -2274,7 +2274,7 @@ Use ++ increment instead of $var += 1.
  }
 ```
 
-<br>
+<br><br>
 
 ### `VersionCompareFuncCallToConstantRector`
 
@@ -2294,7 +2294,7 @@ Changes use of call to version compare function to use of PHP version constant
  }
 ```
 
-<br>
+<br><br>
 
 ### `YieldClassMethodToArrayClassMethodRector`
 
@@ -2323,7 +2323,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ## DeadCode
 
@@ -2349,7 +2349,7 @@ Remove if condition that is always true
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveAndTrueRector`
 
@@ -2369,7 +2369,7 @@ Remove and true that has no added value
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveAssignOfVoidReturnFunctionRector`
 
@@ -2393,7 +2393,7 @@ Remove assign of void function/method to variable
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveCodeAfterReturnRector`
 
@@ -2413,7 +2413,7 @@ Remove dead code after return statement
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveConcatAutocastRector`
 
@@ -2433,7 +2433,7 @@ Remove (string) casting when it comes to concat, that does this by default
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDeadConstructorRector`
 
@@ -2451,7 +2451,7 @@ Remove empty constructor
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDeadIfForeachForRector`
 
@@ -2480,7 +2480,7 @@ Remove if, foreach and for that does not do anything
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDeadRecursiveClassMethodRector`
 
@@ -2499,7 +2499,7 @@ Remove unused public method that only calls itself recursively
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDeadReturnRector`
 
@@ -2524,7 +2524,7 @@ Remove last return in the functions, since does not do anything
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDeadStmtRector`
 
@@ -2539,7 +2539,7 @@ Removes dead code statements
 +$value = 5;
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDeadTryCatchRector`
 
@@ -2564,7 +2564,7 @@ Remove dead try/catch
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDeadZeroAndOneOperationRector`
 
@@ -2586,7 +2586,7 @@ Remove operation with 1 and 0, that have no effect on the value
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDefaultArgumentValueRector`
 
@@ -2618,7 +2618,7 @@ Remove argument value, if it is the same as default value
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDelegatingParentCallRector`
 
@@ -2637,7 +2637,7 @@ Removed dead parent call, that does not change anything
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDoubleAssignRector`
 
@@ -2651,7 +2651,7 @@ Simplify useless double assigns
  $value = 1;
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDuplicatedArrayKeyRector`
 
@@ -2667,7 +2667,7 @@ Remove duplicated `key` in defined arrays.
  ];
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDuplicatedCaseInSwitchRector`
 
@@ -2695,7 +2695,7 @@ Remove duplicated `key` in defined arrays.
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDuplicatedIfReturnRector`
 
@@ -2722,7 +2722,7 @@ Remove duplicated if stmt with return in function/method body
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDuplicatedInstanceOfRector`
 
@@ -2744,7 +2744,7 @@ Remove duplicated instanceof in one call
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveEmptyClassMethodRector`
 
@@ -2762,7 +2762,7 @@ Remove empty method calls not required by parents
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveNullPropertyInitializationRector`
 
@@ -2779,7 +2779,7 @@ Remove initialization with null value from property declarations
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveOverriddenValuesRector`
 
@@ -2800,7 +2800,7 @@ Remove initial assigns of overridden values
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveParentCallWithoutParentRector`
 
@@ -2819,7 +2819,7 @@ Remove unused parent call with no parent class
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveSetterOnlyPropertyAndMethodCallRector`
 
@@ -2849,7 +2849,7 @@ Removes method that set values that are never used
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnreachableStatementRector`
 
@@ -2870,7 +2870,7 @@ Remove unreachable statements
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedAssignVariableRector`
 
@@ -2896,7 +2896,7 @@ Remove assigned unused variable
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedClassConstantRector`
 
@@ -2916,7 +2916,7 @@ Remove unused class constants
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedClassesRector`
 
@@ -2943,7 +2943,7 @@ Remove unused classes without interface
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedDoctrineEntityMethodAndPropertyRector`
 
@@ -2977,7 +2977,7 @@ Removes unused methods and properties from Doctrine entity classes
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedForeachKeyRector`
 
@@ -2994,7 +2994,7 @@ Remove unused `key` in foreach
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedFunctionRector`
 
@@ -3015,7 +3015,7 @@ Remove unused function
  useMe();
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedNonEmptyArrayBeforeForeachRector`
 
@@ -3041,7 +3041,7 @@ Remove unused if check to non-empty array before foreach of the array
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedParameterRector`
 
@@ -3061,7 +3061,7 @@ Remove unused parameter, if not required by interface or parent class
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedPrivateConstantRector`
 
@@ -3081,7 +3081,7 @@ Remove unused private constant
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedPrivateMethodRector`
 
@@ -3105,7 +3105,7 @@ Remove unused private method
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedPrivatePropertyRector`
 
@@ -3121,7 +3121,7 @@ Remove unused private properties
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedVariableAssignRector`
 
@@ -3140,7 +3140,7 @@ Remove unused assigns to variables
  }
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyIfElseWithSameContentRector`
 
@@ -3164,7 +3164,7 @@ Remove if/else if they have same content
  }
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyMirrorAssignRector`
 
@@ -3177,7 +3177,7 @@ Removes unneeded $a = $a assigns
 -$a = $a;
 ```
 
-<br>
+<br><br>
 
 ### `TernaryToBooleanOrFalseToBooleanAndRector`
 
@@ -3202,7 +3202,7 @@ Change ternary of bool : false to && bool
  }
 ```
 
-<br>
+<br><br>
 
 ## Doctrine
 
@@ -3239,7 +3239,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddUuidAnnotationsToIdPropertyRector`
 
@@ -3270,7 +3270,7 @@ Add uuid annotations to $id property
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddUuidMirrorForRelationPropertyRector`
 
@@ -3317,7 +3317,7 @@ Adds $uuid property to entities, that already have $id with integer type.Require
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddUuidToEntityWhereMissingRector`
 
@@ -3349,7 +3349,7 @@ Adds $uuid property to entities, that already have $id with integer type.Require
  }
 ```
 
-<br>
+<br><br>
 
 ### `AlwaysInitializeUuidInEntityRector`
 
@@ -3378,7 +3378,7 @@ Add uuid initializion to all entities that misses it
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeGetIdTypeToUuidRector`
 
@@ -3403,7 +3403,7 @@ Change return type of getId() to uuid interface
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeGetUuidMethodCallToGetIdRector`
 
@@ -3441,7 +3441,7 @@ Change getUuid() method call to getId()
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeIdenticalUuidToEqualsMethodCallRector`
 
@@ -3463,7 +3463,7 @@ Change $uuid === 1 to $uuid->equals(\Ramsey\Uuid\Uuid::fromString(1))
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeReturnTypeOfClassMethodWithGetIdRector`
 
@@ -3485,7 +3485,7 @@ Change getUuid() method call to getId()
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeSetIdToUuidValueRector`
 
@@ -3517,7 +3517,7 @@ Change set id to uuid values
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeSetIdTypeToUuidRector`
 
@@ -3544,7 +3544,7 @@ Change param type of setId() to uuid interface
  }
 ```
 
-<br>
+<br><br>
 
 ### `EntityAliasToClassConstantReferenceRector`
 
@@ -3559,7 +3559,7 @@ Replaces doctrine alias with class.
 +$entityManager->getRepository(\App\Entity\Post::class);
 ```
 
-<br>
+<br><br>
 
 ### `ManagerRegistryGetManagerToEntityManagerRector`
 
@@ -3597,7 +3597,7 @@ Changes ManagerRegistry intermediate calls directly to EntityManager calls
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveRepositoryFromEntityAnnotationRector`
 
@@ -3618,7 +3618,7 @@ Removes repository class from @Entity annotation
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveTemporaryUuidColumnPropertyRector`
 
@@ -3647,7 +3647,7 @@ Remove temporary $uuid property
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveTemporaryUuidRelationPropertyRector`
 
@@ -3676,7 +3676,7 @@ Remove temporary *Uuid relation properties
  }
 ```
 
-<br>
+<br><br>
 
 ## DoctrineCodeQuality
 
@@ -3714,7 +3714,7 @@ Change array to ArrayCollection in setParameters method of query builder
  }
 ```
 
-<br>
+<br><br>
 
 ### `InitializeDefaultEntityCollectionRector`
 
@@ -3743,7 +3743,7 @@ Initialize collection property in Entity constructor
  }
 ```
 
-<br>
+<br><br>
 
 ## DoctrineGedmoToKnplabs
 
@@ -3799,7 +3799,7 @@ Change Blameable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
  }
 ```
 
-<br>
+<br><br>
 
 ### `LoggableBehaviorRector`
 
@@ -3831,7 +3831,7 @@ Change Loggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
  }
 ```
 
-<br>
+<br><br>
 
 ### `SluggableBehaviorRector`
 
@@ -3870,7 +3870,7 @@ Change Sluggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
  }
 ```
 
-<br>
+<br><br>
 
 ### `SoftDeletableBehaviorRector`
 
@@ -3908,7 +3908,7 @@ Change SoftDeletable from gedmo/doctrine-extensions to knplabs/doctrine-behavior
  }
 ```
 
-<br>
+<br><br>
 
 ### `TimestampableBehaviorRector`
 
@@ -3930,7 +3930,7 @@ Change Timestampable from gedmo/doctrine-extensions to knplabs/doctrine-behavior
  }
 ```
 
-<br>
+<br><br>
 
 ### `TranslationBehaviorRector`
 
@@ -4010,7 +4010,7 @@ Change Translation from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
  }
 ```
 
-<br>
+<br><br>
 
 ### `TreeBehaviorRector`
 
@@ -4092,7 +4092,7 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
  }
 ```
 
-<br>
+<br><br>
 
 ## DynamicTypeAnalysis
 
@@ -4113,7 +4113,7 @@ Add argument type based on probed data
  }
 ```
 
-<br>
+<br><br>
 
 ### `DecorateMethodWithArgumentTypeProbeRector`
 
@@ -4132,7 +4132,7 @@ Add probe that records argument types to `each` method
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveArgumentTypeProbeRector`
 
@@ -4153,7 +4153,7 @@ Clean up probe that records argument types
  }
 ```
 
-<br>
+<br><br>
 
 ## FileSystemRector
 
@@ -4167,7 +4167,7 @@ Remove file relative to project directory
 -// someFile/ToBeRemoved.txt
 ```
 
-<br>
+<br><br>
 
 ## Guzzle
 
@@ -4184,7 +4184,7 @@ Changes getMessage(..., true) to getMessageAsArray()
 +$value = $message->getMessageAsArray('key');
 ```
 
-<br>
+<br><br>
 
 ## JMS
 
@@ -4213,7 +4213,7 @@ Removes JMS\DiExtraBundle\Annotation\InjectParams annotation
 +}
 ```
 
-<br>
+<br><br>
 
 ### `RemoveJmsInjectServiceAnnotationRector`
 
@@ -4233,7 +4233,7 @@ Removes JMS\DiExtraBundle\Annotation\Services annotation
  }
 ```
 
-<br>
+<br><br>
 
 ## Laravel
 
@@ -4267,7 +4267,7 @@ Move Illuminate\Support\Facades\* static calls to constructor injection
  }
 ```
 
-<br>
+<br><br>
 
 ### `HelperFunctionToConstructorInjectionRector`
 
@@ -4299,7 +4299,7 @@ Move help facade-like function calls to constructor injection
  }
 ```
 
-<br>
+<br><br>
 
 ### `InlineValidationRulesToArrayDefinitionRector`
 
@@ -4323,7 +4323,7 @@ Transforms inline validation rules to array definition
  }
 ```
 
-<br>
+<br><br>
 
 ### `MinutesToSecondsInCacheRector`
 
@@ -4343,7 +4343,7 @@ Change minutes argument to seconds in Illuminate\Contracts\Cache\Store and Illum
  }
 ```
 
-<br>
+<br><br>
 
 ### `Redirect301ToPermanentRedirectRector`
 
@@ -4363,7 +4363,7 @@ Change "redirect" call with 301 to "permanentRedirect"
  }
 ```
 
-<br>
+<br><br>
 
 ### `RequestStaticValidateToInjectRector`
 
@@ -4386,7 +4386,7 @@ Change static validate() method to $request->validate()
  }
 ```
 
-<br>
+<br><br>
 
 ## Legacy
 
@@ -4418,7 +4418,7 @@ Change singleton class to normal class that can be registered as a service
  }
 ```
 
-<br>
+<br><br>
 
 ### `FunctionToStaticMethodRector`
 
@@ -4439,7 +4439,7 @@ Change functions to static calls, so composer can autoload them
 +SomeUtilsClass::someFunction('lol');
 ```
 
-<br>
+<br><br>
 
 ## MockistaToMockery
 
@@ -4466,7 +4466,7 @@ Add Mockery::close() in tearDown() method if not yet
  }
 ```
 
-<br>
+<br><br>
 
 ### `MockistaMockToMockeryMockRector`
 
@@ -4489,7 +4489,7 @@ Change functions to static calls, so composer can autoload them
  }
 ```
 
-<br>
+<br><br>
 
 ## MysqlToMysqli
 
@@ -4507,7 +4507,7 @@ Converts more complex mysql functions to mysqli
 +$data = $fetch[0];
 ```
 
-<br>
+<br><br>
 
 ### `MysqlFuncCallToMysqliRector`
 
@@ -4521,7 +4521,7 @@ Converts more complex mysql functions to mysqli
 +mysqli_query('DROP DATABASE ' . $database);
 ```
 
-<br>
+<br><br>
 
 ### `MysqlPConnectToMysqliConnectRector`
 
@@ -4541,7 +4541,7 @@ Replace mysql_pconnect() with `mysqli_connect()` with host p: prefix
  }
 ```
 
-<br>
+<br><br>
 
 ### `MysqlQueryMysqlErrorWithLinkRector`
 
@@ -4567,7 +4567,7 @@ Add mysql_query and mysql_error with connection
  }
 ```
 
-<br>
+<br><br>
 
 ## Naming
 
@@ -4596,7 +4596,7 @@ Rename property and method param to match its type
  }
 ```
 
-<br>
+<br><br>
 
 ## Nette
 
@@ -4621,7 +4621,7 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
  }
 ```
 
-<br>
+<br><br>
 
 ### `ContextGetByTypeToConstructorInjectionRector`
 
@@ -4656,7 +4656,7 @@ Move dependency passed to all children to parent as @inject/@required dependency
  }
 ```
 
-<br>
+<br><br>
 
 ### `EndsWithFunctionToNetteUtilsStringsRector`
 
@@ -4678,7 +4678,7 @@ Use Nette\Utils\Strings::endWith() over bare string-functions
  }
 ```
 
-<br>
+<br><br>
 
 ### `FilePutContentsToFileSystemWriteRector`
 
@@ -4700,7 +4700,7 @@ Change `file_put_contents()` to FileSystem::write()
  }
 ```
 
-<br>
+<br><br>
 
 ### `JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector`
 
@@ -4734,7 +4734,7 @@ Changes json_encode()/json_decode() to safer and more verbose Nette\Utils\Json::
  }
 ```
 
-<br>
+<br><br>
 
 ### `PregFunctionToNetteUtilsStringsRector`
 
@@ -4757,7 +4757,7 @@ Use `Nette\Utils\Strings` over bare `preg_split()` and `preg_replace()` function
  }
 ```
 
-<br>
+<br><br>
 
 ### `PregMatchFunctionToNetteUtilsStringsRector`
 
@@ -4780,7 +4780,7 @@ Use `Nette\Utils\Strings` over bare `preg_match()` and `preg_match_all()` functi
  }
 ```
 
-<br>
+<br><br>
 
 ### `SetClassWithArgumentToSetFactoryRector`
 
@@ -4803,7 +4803,7 @@ Change setClass with class and arguments to separated methods
  }
 ```
 
-<br>
+<br><br>
 
 ### `StartsWithFunctionToNetteUtilsStringsRector`
 
@@ -4825,7 +4825,7 @@ Use Nette\Utils\Strings::startsWith() over bare string-functions
  }
 ```
 
-<br>
+<br><br>
 
 ### `StrposToStringsContainsRector`
 
@@ -4846,7 +4846,7 @@ Use `Nette\Utils\Strings` over bare string-functions
  }
 ```
 
-<br>
+<br><br>
 
 ### `SubstrStrlenFunctionToNetteUtilsStringsRector`
 
@@ -4866,7 +4866,7 @@ Use `Nette\Utils\Strings` over bare string-functions
  }
 ```
 
-<br>
+<br><br>
 
 ### `TemplateMagicAssignToExplicitVariableArrayRector`
 
@@ -4889,7 +4889,7 @@ Change $this->templates->{magic} to $this->template->render(..., $values)
  }
 ```
 
-<br>
+<br><br>
 
 ## NetteKdyby
 
@@ -4927,7 +4927,7 @@ Change EventSubscriber from Kdyby to Contributte
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReplaceEventManagerWithEventSubscriberRector`
 
@@ -4960,7 +4960,7 @@ Change Kdyby EventManager to EventDispatcher
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector`
 
@@ -4991,7 +4991,7 @@ Change getSubscribedEvents() from on magic property, to Event class
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReplaceMagicPropertyEventWithEventClassRector`
 
@@ -5020,7 +5020,7 @@ Change $onProperty magic call with event disptacher and class dispatch
  }
 ```
 
-<br>
+<br><br>
 
 ## NetteTesterToPHPUnit
 
@@ -5040,7 +5040,7 @@ Migrate Nette/Assert calls to PHPUnit
  }
 ```
 
-<br>
+<br><br>
 
 ### `NetteTesterClassToPHPUnitClassRector`
 
@@ -5074,7 +5074,7 @@ Migrate Nette Tester test case to PHPUnit
 +}
 ```
 
-<br>
+<br><br>
 
 ### `RenameTesterTestToPHPUnitToTestFileRector`
 
@@ -5087,7 +5087,7 @@ Rename "*.phpt" file to "*Test.php" file
 +// tests/SomeTestCase.php
 ```
 
-<br>
+<br><br>
 
 ## NetteToSymfony
 
@@ -5104,7 +5104,7 @@ Interface factories are not needed in Symfony. Clear constructor injection is us
 -}
 ```
 
-<br>
+<br><br>
 
 ### `FormControlToControllerAndFormTypeRector`
 
@@ -5162,7 +5162,7 @@ class SomeFormType extends AbstractType
 }
 ```
 
-<br>
+<br><br>
 
 ### `FromHttpRequestGetHeaderToHeadersGetRector`
 
@@ -5184,7 +5184,7 @@ Changes getHeader() to $request->headers->get()
  }
 ```
 
-<br>
+<br><br>
 
 ### `FromRequestGetParameterToAttributesGetRector`
 
@@ -5206,7 +5206,7 @@ Changes "getParameter()" to "attributes->get()" from Nette to Symfony
  }
 ```
 
-<br>
+<br><br>
 
 ### `NetteControlToSymfonyControllerRector`
 
@@ -5235,7 +5235,7 @@ Migrate Nette Component to Symfony Controller
  }
 ```
 
-<br>
+<br><br>
 
 ### `NetteFormToSymfonyFormRector`
 
@@ -5269,7 +5269,7 @@ Migrate Nette\Forms in Presenter to Symfony
  }
 ```
 
-<br>
+<br><br>
 
 ### `RenameEventNamesInEventSubscriberRector`
 
@@ -5291,7 +5291,7 @@ Changes event names from Nette ones to Symfony ones
  }
 ```
 
-<br>
+<br><br>
 
 ### `RouterListToControllerAnnotationsRector`
 
@@ -5327,7 +5327,7 @@ Change new Route() from RouteFactory to @Route annotation above controller metho
  }
 ```
 
-<br>
+<br><br>
 
 ### `WrapTransParameterNameRector`
 
@@ -5353,7 +5353,7 @@ Adds %% to placeholder name of trans() method if missing
  }
 ```
 
-<br>
+<br><br>
 
 ## NetteUtilsCodeQuality
 
@@ -5375,7 +5375,7 @@ Replace `time` numbers with `Nette\Utils\DateTime` constants
  }
 ```
 
-<br>
+<br><br>
 
 ## Order
 
@@ -5399,7 +5399,7 @@ Order class constant order by their integer value
  }
 ```
 
-<br>
+<br><br>
 
 ### `OrderPrivateMethodsByUseRector`
 
@@ -5429,7 +5429,7 @@ Order private methods in order of their use
  }
 ```
 
-<br>
+<br><br>
 
 ### `OrderPropertyByComplexityRector`
 
@@ -5463,7 +5463,7 @@ Order properties by complexity, from the simplest like scalars to the most compl
  }
 ```
 
-<br>
+<br><br>
 
 ### `OrderPublicInterfaceMethodRector`
 
@@ -5498,7 +5498,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ## PHPOffice
 
@@ -5521,7 +5521,7 @@ Complete removed default values explicitly
  }
 ```
 
-<br>
+<br><br>
 
 ### `CellStaticToCoordinateRector`
 
@@ -5541,7 +5541,7 @@ Methods to manipulate coordinates that used to exists in PHPExcel_Cell to PhpOff
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeChartRendererRector`
 
@@ -5561,7 +5561,7 @@ Change chart renderer
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeConditionalGetConditionRector`
 
@@ -5582,7 +5582,7 @@ Change argument PHPExcel_Style_Conditional->getCondition() to getConditions()
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeConditionalReturnedCellRector`
 
@@ -5603,7 +5603,7 @@ Change conditional call to getCell()
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeConditionalSetConditionRector`
 
@@ -5624,7 +5624,7 @@ Change argument PHPExcel_Style_Conditional->setCondition() to setConditions()
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeDataTypeForValueRector`
 
@@ -5644,7 +5644,7 @@ Change argument DataType::dataTypeForValue() to DefaultValueBinder
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeDuplicateStyleArrayToApplyFromArrayRector`
 
@@ -5665,7 +5665,7 @@ Change method call duplicateStyleArray() to getStyle() + applyFromArray()
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeIOFactoryArgumentRector`
 
@@ -5685,7 +5685,7 @@ Change argument of PHPExcel_IOFactory::createReader(), PHPExcel_IOFactory::creat
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangePdfWriterRector`
 
@@ -5707,7 +5707,7 @@ Change init of PDF writer
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeSearchLocationToRegisterReaderRector`
 
@@ -5727,7 +5727,7 @@ Change argument addSearchLocation() to registerReader()
  }
 ```
 
-<br>
+<br><br>
 
 ### `GetDefaultStyleToGetParentRector`
 
@@ -5748,7 +5748,7 @@ Methods to (new Worksheet())->getDefaultStyle() to getParent()->getDefaultStyle(
  }
 ```
 
-<br>
+<br><br>
 
 ### `IncreaseColumnIndexRector`
 
@@ -5769,7 +5769,7 @@ Column index changed from 0 to 1 - run only ONCE! changes current value without 
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveSetTempDirOnExcelWriterRector`
 
@@ -5789,7 +5789,7 @@ Remove setTempDir() on PHPExcel_Writer_Excel5
  }
 ```
 
-<br>
+<br><br>
 
 ## PHPStan
 
@@ -5807,7 +5807,7 @@ Change various @var annotation formats to one PHPStorm understands
 +$config = 5;
 ```
 
-<br>
+<br><br>
 
 ### `RecastingRemovalRector`
 
@@ -5826,7 +5826,7 @@ Removes recasting of the same type
 +$array = $array;
 ```
 
-<br>
+<br><br>
 
 ### `RemoveNonExistingVarAnnotationRector`
 
@@ -5846,7 +5846,7 @@ Removes non-existing @var annotations above the code
  }
 ```
 
-<br>
+<br><br>
 
 ## PHPUnit
 
@@ -5870,7 +5870,7 @@ Tests without assertion will have @doesNotPerformAssertion
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddProphecyTraitRector`
 
@@ -5894,7 +5894,7 @@ Add Prophecy trait for method using $this->prophesize()
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddSeeTestAnnotationRector`
 
@@ -5918,7 +5918,7 @@ Add @see annotation test of the class for faster jump to test. Make it FQN, so i
  }
 ```
 
-<br>
+<br><br>
 
 ### `ArrayArgumentInTestToDataProviderRector`
 
@@ -5964,7 +5964,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `AssertCompareToSpecificMethodRector`
 
@@ -5983,7 +5983,7 @@ Turns vague php-only method in PHPUnit TestCase to more specific
 +$this->assertNotInstanceOf(stdClass::class, $value);
 ```
 
-<br>
+<br><br>
 
 ### `AssertComparisonToSpecificMethodRector`
 
@@ -6002,7 +6002,7 @@ Turns comparison operations to their method name alternatives in PHPUnit TestCas
 +$this->assertLessThanOrEqual($bar, $foo, "message");
 ```
 
-<br>
+<br><br>
 
 ### `AssertEqualsParameterToSpecificMethodsTypeRector`
 
@@ -6032,7 +6032,7 @@ Change assertEquals()/assertNotEquals() method parameters to new specific altern
  }
 ```
 
-<br>
+<br><br>
 
 ### `AssertFalseStrposToContainsRector`
 
@@ -6051,7 +6051,7 @@ Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUni
 +$this->assertContains("foo", $anything, "message");
 ```
 
-<br>
+<br><br>
 
 ### `AssertInstanceOfComparisonRector`
 
@@ -6070,7 +6070,7 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 +$this->assertNotInstanceOf("Foo", $foo, "message");
 ```
 
-<br>
+<br><br>
 
 ### `AssertIssetToSpecificMethodRector`
 
@@ -6089,7 +6089,7 @@ Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 +$this->assertArrayNotHasKey("foo", $anything, "message");
 ```
 
-<br>
+<br><br>
 
 ### `AssertNotOperatorRector`
 
@@ -6108,7 +6108,7 @@ Turns not-operator comparisons to their method name alternatives in PHPUnit Test
 +$this->assertTrue($foo, "message");
 ```
 
-<br>
+<br><br>
 
 ### `AssertPropertyExistsRector`
 
@@ -6127,7 +6127,7 @@ Turns `property_exists` comparisons to their method name alternatives in PHPUnit
 +$this->assertClassNotHasAttribute("property", "Class", "message");
 ```
 
-<br>
+<br><br>
 
 ### `AssertRegExpRector`
 
@@ -6146,7 +6146,7 @@ Turns `preg_match` comparisons to their method name alternatives in PHPUnit Test
 +$this->assertNotRegExp("/^Message for ".*"\.$/", $string, $message);
 ```
 
-<br>
+<br><br>
 
 ### `AssertSameBoolNullToSpecificMethodRector`
 
@@ -6165,7 +6165,7 @@ Turns same bool and null comparisons to their method name alternatives in PHPUni
 +$this->assertNotFalse($anything);
 ```
 
-<br>
+<br><br>
 
 ### `AssertTrueFalseInternalTypeToSpecificMethodRector`
 
@@ -6184,7 +6184,7 @@ Turns true/false with internal type comparisons to their method name alternative
 +$this->assertNotInternalType({internal_type}, $anything, "message");
 ```
 
-<br>
+<br><br>
 
 ### `AssertTrueFalseToSpecificMethodRector`
 
@@ -6198,7 +6198,7 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 +$this->assertIsReadable($readmeFile, "message");
 ```
 
-<br>
+<br><br>
 
 ### `CreateMockToCreateStubRector`
 
@@ -6230,7 +6230,7 @@ Replaces createMock() with createStub() when relevant
  }
 ```
 
-<br>
+<br><br>
 
 ### `DelegateExceptionArgumentsRector`
 
@@ -6246,7 +6246,7 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 +$this->expectExceptionCode("CODE");
 ```
 
-<br>
+<br><br>
 
 ### `EnsureDataProviderInDocBlockRector`
 
@@ -6269,7 +6269,7 @@ Data provider annotation must be in doc block
  }
 ```
 
-<br>
+<br><br>
 
 ### `ExceptionAnnotationRector`
 
@@ -6291,7 +6291,7 @@ Changes `@expectedException annotations to expectException*() methods
  }
 ```
 
-<br>
+<br><br>
 
 ### `ExplicitPhpErrorApiRector`
 
@@ -6317,7 +6317,7 @@ Use explicit API for expecting PHP errors, warnings, and notices
  }
 ```
 
-<br>
+<br><br>
 
 ### `GetMockBuilderGetMockToCreateMockRector`
 
@@ -6339,7 +6339,7 @@ Remove getMockBuilder() to createMock()
  }
 ```
 
-<br>
+<br><br>
 
 ### `GetMockRector`
 
@@ -6358,7 +6358,7 @@ Turns getMock*() methods to createMock()
 +$this->createMock("Class");
 ```
 
-<br>
+<br><br>
 
 ### `RemoveDataProviderTestPrefixRector`
 
@@ -6387,7 +6387,7 @@ Data provider methods cannot start with "test" prefix
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveEmptyTestMethodRector`
 
@@ -6410,7 +6410,7 @@ Remove empty test methods
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveExpectAnyFromMockRector`
 
@@ -6435,7 +6435,7 @@ Remove `expect($this->any())` from mocks as it has no added value
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReplaceAssertArraySubsetRector`
 
@@ -6460,7 +6460,7 @@ Replace deprecated "assertArraySubset()" method with alternative methods
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReplaceAssertArraySubsetWithDmsPolyfillRector`
 
@@ -6485,7 +6485,7 @@ Change assertArraySubset() to static call of DMS\PHPUnitExtensions\ArraySubset\A
  }
 ```
 
-<br>
+<br><br>
 
 ### `SelfContainerGetMethodCallFromTestToInjectPropertyRector`
 
@@ -6511,7 +6511,7 @@ Change $container->get() calls in PHPUnit to @inject properties autowired by jak
  class SomeService { }
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyForeachInstanceOfRector`
 
@@ -6527,7 +6527,7 @@ Simplify unnecessary foreach check of instances
 +$this->assertContainsOnlyInstancesOf(\SplFileInfo::class, $foos);
 ```
 
-<br>
+<br><br>
 
 ### `SpecificAssertContainsRector`
 
@@ -6551,7 +6551,7 @@ Change assertContains()/assertNotContains() method to new string and iterable al
  }
 ```
 
-<br>
+<br><br>
 
 ### `SpecificAssertContainsWithoutIdentityRector`
 
@@ -6577,7 +6577,7 @@ Change assertContains()/assertNotContains() with non-strict comparison to new sp
  }
 ```
 
-<br>
+<br><br>
 
 ### `SpecificAssertInternalTypeRector`
 
@@ -6600,7 +6600,7 @@ Change assertInternalType()/assertNotInternalType() method to new specific alter
  }
 ```
 
-<br>
+<br><br>
 
 ### `TestListenerToHooksRector`
 
@@ -6663,7 +6663,7 @@ Refactor "*TestListener.php" to particular "*Hook.php" files
  }
 ```
 
-<br>
+<br><br>
 
 ### `TryCatchToExpectExceptionRector`
 
@@ -6684,7 +6684,7 @@ Turns try/catch to expectException() call
 +$someService->run();
 ```
 
-<br>
+<br><br>
 
 ### `UseSpecificWillMethodRector`
 
@@ -6709,7 +6709,7 @@ Changes ->will($this->xxx()) to one specific method
  }
 ```
 
-<br>
+<br><br>
 
 ### `WithConsecutiveArgToArrayRector`
 
@@ -6740,7 +6740,7 @@ Split withConsecutive() arg to array
  }
 ```
 
-<br>
+<br><br>
 
 ## PHPUnitSymfony
 
@@ -6768,7 +6768,7 @@ Add response content to response code assert, so it is easier to debug
  }
 ```
 
-<br>
+<br><br>
 
 ## PSR4
 
@@ -6800,7 +6800,7 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
  }
 ```
 
-<br>
+<br><br>
 
 ### `NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector`
 
@@ -6832,7 +6832,7 @@ Adds namespace to namespace-less files to match PSR-4 in `composer.json` autoloa
 ```
 
 
-<br>
+<br><br>
 
 ### `NormalizeNamespaceByPSR4ComposerAutoloadRector`
 
@@ -6865,7 +6865,7 @@ Changes namespace and class names to match PSR-4 in `composer.json` autoload sec
 ```
 
 
-<br>
+<br><br>
 
 ## Performance
 
@@ -6887,7 +6887,7 @@ Add pre-slash to short named functions to improve performance
  }
 ```
 
-<br>
+<br><br>
 
 ## Phalcon
 
@@ -6909,7 +6909,7 @@ Add $_SERVER REQUEST_URI to method call
  }
 ```
 
-<br>
+<br><br>
 
 ### `DecoupleSaveMethodCallWithArgumentToAssignRector`
 
@@ -6930,7 +6930,7 @@ Decouple Phalcon\Mvc\Model::save() with argument to assign()
  }
 ```
 
-<br>
+<br><br>
 
 ### `FlashWithCssClassesToExtraCallRector`
 
@@ -6951,7 +6951,7 @@ Add $cssClasses in Flash to separated method call
  }
 ```
 
-<br>
+<br><br>
 
 ### `NewApplicationToToFactoryWithDefaultContainerRector`
 
@@ -6975,7 +6975,7 @@ Change new application to default factory with application
  }
 ```
 
-<br>
+<br><br>
 
 ## Php52
 
@@ -7001,7 +7001,7 @@ Use break instead of continue in switch statements
  }
 ```
 
-<br>
+<br><br>
 
 ### `VarToPublicPropertyRector`
 
@@ -7018,7 +7018,7 @@ Remove unused private method
  }
 ```
 
-<br>
+<br><br>
 
 ## Php53
 
@@ -7034,7 +7034,7 @@ Remove reference from "$assign = &new Value;"
 +$assign = new Value;
 ```
 
-<br>
+<br><br>
 
 ### `DirNameFileConstantToDirConstantRector`
 
@@ -7054,7 +7054,7 @@ Convert dirname(__FILE__) to __DIR__
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReplaceHttpServerVarsByServerRector`
 
@@ -7068,7 +7068,7 @@ Rename old $HTTP_* variable names to new replacements
 +$serverVars = $_SERVER;
 ```
 
-<br>
+<br><br>
 
 ### `TernaryToElvisRector`
 
@@ -7085,7 +7085,7 @@ Use ?: instead of ?, where useful
  }
 ```
 
-<br>
+<br><br>
 
 ## Php54
 
@@ -7107,7 +7107,7 @@ Remove & from function and method calls
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveZeroBreakContinueRector`
 
@@ -7136,7 +7136,7 @@ Remove 0 from break and continue
  }
 ```
 
-<br>
+<br><br>
 
 ## Php55
 
@@ -7160,7 +7160,7 @@ The /e modifier is no longer supported, use `preg_replace_callback` instead
  }
 ```
 
-<br>
+<br><br>
 
 ### `StringClassNameToClassConstantRector`
 
@@ -7184,7 +7184,7 @@ Replace string class names by <class>::class constant
  }
 ```
 
-<br>
+<br><br>
 
 ## Php56
 
@@ -7209,7 +7209,7 @@ Adds default value for undefined variable
  }
 ```
 
-<br>
+<br><br>
 
 ### `PowToExpRector`
 
@@ -7223,7 +7223,7 @@ Changes pow(val, val2) to ** `(exp)` parameter
 +1**2;
 ```
 
-<br>
+<br><br>
 
 ## Php70
 
@@ -7249,7 +7249,7 @@ Convert break outside for/foreach/switch context to return
  }
 ```
 
-<br>
+<br><br>
 
 ### `CallUserMethodRector`
 
@@ -7263,7 +7263,7 @@ Changes call_user_method()/call_user_method_array() to call_user_func()/call_use
 +call_user_func(array(&$obj, "method"), "arg1", "arg2");
 ```
 
-<br>
+<br><br>
 
 ### `EmptyListRector`
 
@@ -7277,7 +7277,7 @@ list() cannot be empty
 +'list($unusedGenerated) = $values;'
 ```
 
-<br>
+<br><br>
 
 ### `EregToPregMatchRector`
 
@@ -7291,7 +7291,7 @@ Changes ereg*() to preg*() calls
 +preg_match("#hi#");
 ```
 
-<br>
+<br><br>
 
 ### `ExceptionHandlerTypehintRector`
 
@@ -7306,7 +7306,7 @@ Changes property `@var` annotations from annotation to type.
  set_exception_handler('handler');
 ```
 
-<br>
+<br><br>
 
 ### `IfToSpaceshipRector`
 
@@ -7332,7 +7332,7 @@ Changes if/else to spaceship <=> where useful
  }
 ```
 
-<br>
+<br><br>
 
 ### `ListSplitStringRector`
 
@@ -7346,7 +7346,7 @@ list() cannot split string directly anymore, use `str_split()`
 +list($foo) = str_split("string");
 ```
 
-<br>
+<br><br>
 
 ### `ListSwapArrayOrderRector`
 
@@ -7360,7 +7360,7 @@ list() assigns variables in reverse order - relevant in array assign
 +list($a[], $a[]) = array_reverse([1, 2]);
 ```
 
-<br>
+<br><br>
 
 ### `MultiDirnameRector`
 
@@ -7374,7 +7374,7 @@ Changes multiple `dirname()` calls to one with nesting level
 +dirname($path, 2);
 ```
 
-<br>
+<br><br>
 
 ### `NonVariableToVariableOnFunctionCallRector`
 
@@ -7388,7 +7388,7 @@ Transform non variable like arguments to variable where a function or method exp
 +$a = a(); reset($a);
 ```
 
-<br>
+<br><br>
 
 ### `Php4ConstructorRector`
 
@@ -7407,7 +7407,7 @@ Changes PHP 4 style constructor to __construct.
  }
 ```
 
-<br>
+<br><br>
 
 ### `RandomFunctionRector`
 
@@ -7421,7 +7421,7 @@ Changes rand, `srand` and `getrandmax` by new mt_* alternatives.
 +mt_rand();
 ```
 
-<br>
+<br><br>
 
 ### `ReduceMultipleDefaultSwitchRector`
 
@@ -7441,7 +7441,7 @@ Remove first default switch, that is ignored
  }
 ```
 
-<br>
+<br><br>
 
 ### `RenameMktimeWithoutArgsToTimeRector`
 
@@ -7462,7 +7462,7 @@ Renames `mktime()` without arguments to `time()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `StaticCallOnNonStaticToInstanceCallRector`
 
@@ -7489,7 +7489,7 @@ Changes static call to instance call, where not useful
  }
 ```
 
-<br>
+<br><br>
 
 ### `TernaryToNullCoalescingRector`
 
@@ -7508,7 +7508,7 @@ Changes unneeded null check to ?? operator
 +$value ?? 10;
 ```
 
-<br>
+<br><br>
 
 ### `TernaryToSpaceshipRector`
 
@@ -7524,7 +7524,7 @@ Use <=> spaceship instead of ternary with same effect
  }
 ```
 
-<br>
+<br><br>
 
 ### `ThisCallOnStaticMethodToStaticCallRector`
 
@@ -7548,7 +7548,7 @@ Changes $this->call() to static method to static call
  }
 ```
 
-<br>
+<br><br>
 
 ## Php71
 
@@ -7565,7 +7565,7 @@ String cannot be turned into array by assignment anymore
  $string[] = 1;
 ```
 
-<br>
+<br><br>
 
 ### `BinaryOpBetweenNumberAndStringRector`
 
@@ -7587,7 +7587,7 @@ Change binary operation between some number + string to PHP 7.1 compatible versi
  }
 ```
 
-<br>
+<br><br>
 
 ### `CountOnNullRector`
 
@@ -7602,7 +7602,7 @@ Changes `count()` on null to safe ternary check
 +$count = is_array($values) || $values instanceof Countable ? count($values) : 0;
 ```
 
-<br>
+<br><br>
 
 ### `IsIterableRector`
 
@@ -7616,7 +7616,7 @@ Changes `is_array` + Traversable check to `is_iterable`
 +is_iterable($foo);
 ```
 
-<br>
+<br><br>
 
 ### `ListToArrayDestructRector`
 
@@ -7640,7 +7640,7 @@ Remove & from new &X
  }
 ```
 
-<br>
+<br><br>
 
 ### `MultiExceptionCatchRector`
 
@@ -7660,7 +7660,7 @@ Changes multi catch of same exception to single one | separated.
  }
 ```
 
-<br>
+<br><br>
 
 ### `PublicConstantVisibilityRector`
 
@@ -7677,7 +7677,7 @@ Add explicit public constant visibility.
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveExtraParametersRector`
 
@@ -7691,7 +7691,7 @@ Remove extra parameters
 +strlen("asdf");
 ```
 
-<br>
+<br><br>
 
 ### `ReservedObjectRector`
 
@@ -7707,7 +7707,7 @@ Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configure
  }
 ```
 
-<br>
+<br><br>
 
 ## Php72
 
@@ -7723,7 +7723,7 @@ Changes unquoted non-existing constants to strings
 +var_dump("VAR");
 ```
 
-<br>
+<br><br>
 
 ### `CreateFunctionToAnonymousFunctionRector`
 
@@ -7745,7 +7745,7 @@ Use anonymous functions instead of deprecated `create_function()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `GetClassOnNullRector`
 
@@ -7766,7 +7766,7 @@ Null is no more allowed in `get_class()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `IsObjectOnIncompleteClassRector`
 
@@ -7781,7 +7781,7 @@ Incomplete class returns inverted bool on `is_object()`
 +$isObject = ! is_object($incompleteObject);
 ```
 
-<br>
+<br><br>
 
 ### `ListEachRector`
 
@@ -7797,7 +7797,7 @@ Incomplete class returns inverted bool on `is_object()`
 +next($callbacks);
 ```
 
-<br>
+<br><br>
 
 ### `ParseStrWithResultArgumentRector`
 
@@ -7813,7 +7813,7 @@ Use $result argument in `parse_str()` function
 +$data = $result;
 ```
 
-<br>
+<br><br>
 
 ### `StringifyDefineRector`
 
@@ -7834,7 +7834,7 @@ Make first argument of `define()` string
  }
 ```
 
-<br>
+<br><br>
 
 ### `StringsAssertNakedRector`
 
@@ -7853,7 +7853,7 @@ String asserts must be passed directly to `assert()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `UnsetCastRector`
 
@@ -7870,7 +7870,7 @@ Removes (unset) cast
 +unset($value);
 ```
 
-<br>
+<br><br>
 
 ### `WhileEachToForeachRector`
 
@@ -7893,7 +7893,7 @@ Removes (unset) cast
  }
 ```
 
-<br>
+<br><br>
 
 ## Php73
 
@@ -7916,7 +7916,7 @@ Make use of `array_key_first()` and `array_key_last()`
 +$lastKey = array_key_last($items);
 ```
 
-<br>
+<br><br>
 
 ### `IsCountableRector`
 
@@ -7930,7 +7930,7 @@ Changes `is_array` + Countable check to `is_countable`
 +is_countable($foo);
 ```
 
-<br>
+<br><br>
 
 ### `JsonThrowOnErrorRector`
 
@@ -7946,7 +7946,7 @@ Adds JSON_THROW_ON_ERROR to `json_encode()` and `json_decode()` to throw JsonExc
 +json_decode($json, null, null, JSON_THROW_ON_ERROR);
 ```
 
-<br>
+<br><br>
 
 ### `RegexDashEscapeRector`
 
@@ -7960,7 +7960,7 @@ Escape - in some cases
 +preg_match("#[\w\-()]#", 'some text');
 ```
 
-<br>
+<br><br>
 
 ### `RemoveMissingCompactVariableRector`
 
@@ -7982,7 +7982,7 @@ Remove non-existing vars from `compact()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `SensitiveConstantNameRector`
 
@@ -7998,7 +7998,7 @@ Changes case insensitive constants to sensitive ones.
 +var_dump(FOO);
 ```
 
-<br>
+<br><br>
 
 ### `SensitiveDefineRector`
 
@@ -8012,7 +8012,7 @@ Changes case insensitive constants to sensitive ones.
 +define('FOO', 42);
 ```
 
-<br>
+<br><br>
 
 ### `SensitiveHereNowDocRector`
 
@@ -8029,7 +8029,7 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
 +A_WRAP
 ```
 
-<br>
+<br><br>
 
 ### `SetCookieRector`
 
@@ -8048,7 +8048,7 @@ Convert `setcookie` argument to PHP7.3 option array
 +setcookie('name', $name, ['expires' => 0, 'path' => '', 'domain' => '', 'secure' => true, 'httponly' => true]);
 ```
 
-<br>
+<br><br>
 
 ### `StringifyStrNeedlesRector`
 
@@ -8063,7 +8063,7 @@ Makes needles explicit strings
 +$fivePosition = strpos('725', (string) $needle);
 ```
 
-<br>
+<br><br>
 
 ## Php74
 
@@ -8087,7 +8087,7 @@ Add "_" as thousands separator in numbers
  }
 ```
 
-<br>
+<br><br>
 
 ### `ArrayKeyExistsOnPropertyRector`
 
@@ -8106,7 +8106,7 @@ Change `array_key_exists()` on property to `property_exists()`
 +property_exists($someClass, 'value');
 ```
 
-<br>
+<br><br>
 
 ### `ArraySpreadInsteadOfArrayMergeRector`
 
@@ -8133,7 +8133,7 @@ Change `array_merge()` to spread operator, except values with possible string `k
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeReflectionTypeToStringToGetNameRector`
 
@@ -8161,7 +8161,7 @@ Change string calls on ReflectionType
  }
 ```
 
-<br>
+<br><br>
 
 ### `ClassConstantToSelfClassRector`
 
@@ -8181,7 +8181,7 @@ Change __CLASS__ to self::class
  }
 ```
 
-<br>
+<br><br>
 
 ### `ClosureToArrowFunctionRector`
 
@@ -8203,7 +8203,7 @@ Change closure to arrow function
  }
 ```
 
-<br>
+<br><br>
 
 ### `ExportToReflectionFunctionRector`
 
@@ -8219,7 +8219,7 @@ Change export() to ReflectionFunction alternatives
 +$reflectionFunctionAsString = (string) new ReflectionFunction('foo');
 ```
 
-<br>
+<br><br>
 
 ### `FilterVarToAddSlashesRector`
 
@@ -8234,7 +8234,7 @@ Change `filter_var()` with slash escaping to `addslashes()`
 +addslashes($var);
 ```
 
-<br>
+<br><br>
 
 ### `GetCalledClassToStaticClassRector`
 
@@ -8254,7 +8254,7 @@ Change __CLASS__ to self::class
  }
 ```
 
-<br>
+<br><br>
 
 ### `MbStrrposEncodingArgumentPositionRector`
 
@@ -8268,7 +8268,7 @@ Change `mb_strrpos()` encoding argument position
 +mb_strrpos($text, "abc", 0, "UTF-8");
 ```
 
-<br>
+<br><br>
 
 ### `NullCoalescingOperatorRector`
 
@@ -8283,7 +8283,7 @@ Use null coalescing operator ??=
 +$array['user_id'] ??= 'value';
 ```
 
-<br>
+<br><br>
 
 ### `RealToFloatTypeCastRector`
 
@@ -8305,7 +8305,7 @@ Change deprecated (real) to (float)
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReservedFnFunctionRector`
 
@@ -8331,7 +8331,7 @@ Change fn() function name, since it will be reserved keyword
  }
 ```
 
-<br>
+<br><br>
 
 ### `RestoreDefaultNullToNullableTypePropertyRector`
 
@@ -8348,7 +8348,7 @@ Add null default to properties with PHP 7.4 property nullable type
  }
 ```
 
-<br>
+<br><br>
 
 ### `TypedPropertyRector`
 
@@ -8368,7 +8368,7 @@ Changes property `@var` annotations from annotation to type.
  }
 ```
 
-<br>
+<br><br>
 
 ## Php80
 
@@ -8391,7 +8391,7 @@ Change annotation to attribute
  }
 ```
 
-<br>
+<br><br>
 
 ### `ClassOnObjectRector`
 
@@ -8411,7 +8411,7 @@ Change get_class($object) to faster $object::class
  }
 ```
 
-<br>
+<br><br>
 
 ### `GetDebugTypeRector`
 
@@ -8431,7 +8431,7 @@ Change ternary type resolve to `get_debug_type()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUnusedVariableInCatchRector`
 
@@ -8453,7 +8453,7 @@ Remove unused variable in catch()
  }
 ```
 
-<br>
+<br><br>
 
 ### `StrContainsRector`
 
@@ -8473,7 +8473,7 @@ Replace `strpos()` !== false and `strstr()`  with `str_contains()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `StrEndsWithRector`
 
@@ -8493,7 +8493,7 @@ Change helper functions to `str_ends_with()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `StrStartsWithRector`
 
@@ -8516,7 +8516,7 @@ Change helper functions to `str_starts_with()`
  }
 ```
 
-<br>
+<br><br>
 
 ### `StringableForToStringRector`
 
@@ -8537,7 +8537,7 @@ Add `Stringable` interface to classes with `__toString()` method
  }
 ```
 
-<br>
+<br><br>
 
 ### `TokenGetAllToObjectRector`
 
@@ -8569,7 +8569,7 @@ Complete missing constructor dependency instance by type
  }
 ```
 
-<br>
+<br><br>
 
 ### `UnionTypesRector`
 
@@ -8591,7 +8591,7 @@ Change docs types to union types, where possible (properties are covered by Type
  }
 ```
 
-<br>
+<br><br>
 
 ## PhpDeglobalize
 
@@ -8622,7 +8622,7 @@ Change global $variables to private properties
  }
 ```
 
-<br>
+<br><br>
 
 ## PhpSpecToPHPUnit
 
@@ -8658,7 +8658,7 @@ Migrate PhpSpec behavior to PHPUnit test
  }
 ```
 
-<br>
+<br><br>
 
 ### `MockVariableToPropertyFetchRector`
 
@@ -8692,7 +8692,7 @@ Migrate PhpSpec behavior to PHPUnit test
  }
 ```
 
-<br>
+<br><br>
 
 ### `PhpSpecClassToPHPUnitClassRector`
 
@@ -8726,7 +8726,7 @@ Migrate PhpSpec behavior to PHPUnit test
  }
 ```
 
-<br>
+<br><br>
 
 ### `PhpSpecMethodToPHPUnitMethodRector`
 
@@ -8760,7 +8760,7 @@ Migrate PhpSpec behavior to PHPUnit test
  }
 ```
 
-<br>
+<br><br>
 
 ### `PhpSpecMocksToPHPUnitMocksRector`
 
@@ -8794,7 +8794,7 @@ Migrate PhpSpec behavior to PHPUnit test
  }
 ```
 
-<br>
+<br><br>
 
 ### `PhpSpecPromisesToPHPUnitAssertRector`
 
@@ -8828,7 +8828,7 @@ Migrate PhpSpec behavior to PHPUnit test
  }
 ```
 
-<br>
+<br><br>
 
 ### `RenameSpecFileToTestFileRector`
 
@@ -8841,7 +8841,7 @@ Rename "*Spec.php" file to "*Test.php" file
 +// tests/SomeTest.php
 ```
 
-<br>
+<br><br>
 
 ## Polyfill
 
@@ -8868,7 +8868,7 @@ Remove functions exists if with else for always existing
  }
 ```
 
-<br>
+<br><br>
 
 ### `UnwrapFutureCompatibleIfPhpVersionRector`
 
@@ -8887,7 +8887,7 @@ Remove php version checks if they are passed
 +return 'is PHP 7.2+';
 ```
 
-<br>
+<br><br>
 
 ## Privatization
 
@@ -8912,7 +8912,7 @@ Change local property used in single method to local variable
  }
 ```
 
-<br>
+<br><br>
 
 ### `PrivatizeFinalClassMethodRector`
 
@@ -8931,7 +8931,7 @@ Change protected class method to private if possible
  }
 ```
 
-<br>
+<br><br>
 
 ### `PrivatizeFinalClassPropertyRector`
 
@@ -8948,7 +8948,7 @@ Change property to private if possible
  }
 ```
 
-<br>
+<br><br>
 
 ### `PrivatizeLocalClassConstantRector`
 
@@ -8970,7 +8970,7 @@ Finalize every class constant that is used only locally
  }
 ```
 
-<br>
+<br><br>
 
 ### `PrivatizeLocalGetterToPropertyRector`
 
@@ -8997,7 +8997,7 @@ Privatize getter of local property to property
  }
 ```
 
-<br>
+<br><br>
 
 ### `PrivatizeLocalOnlyMethodRector`
 
@@ -9024,7 +9024,7 @@ Privatize local-only use methods
  }
 ```
 
-<br>
+<br><br>
 
 ### `PrivatizeLocalPropertyToPrivatePropertyRector`
 
@@ -9046,7 +9046,7 @@ Privatize local-only property to private property
  }
 ```
 
-<br>
+<br><br>
 
 ## Refactoring
 
@@ -9083,7 +9083,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `MoveAndRenameNamespaceRector`
 
@@ -9112,7 +9112,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ## RemovingStatic
 
@@ -9148,7 +9148,7 @@ Convert new X to new factories
  }
 ```
 
-<br>
+<br><br>
 
 ### `PHPUnitStaticToKernelTestCaseGetRector`
 
@@ -9194,7 +9194,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `PassFactoryToUniqueObjectRector`
 
@@ -9261,7 +9261,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `StaticTypeToSetterInjectionRector`
 
@@ -9302,7 +9302,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ## Renaming
 
@@ -9336,7 +9336,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `RenameClassConstantRector`
 
@@ -9362,7 +9362,7 @@ services:
 +$value = DifferentClass::NEW_CONSTANT;
 ```
 
-<br>
+<br><br>
 
 ### `RenameClassRector`
 
@@ -9397,7 +9397,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `RenameConstantRector`
 
@@ -9417,7 +9417,7 @@ Replace constant by new ones
  }
 ```
 
-<br>
+<br><br>
 
 ### `RenameFuncCallToStaticCallRector`
 
@@ -9448,7 +9448,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `RenameFunctionRector`
 
@@ -9471,7 +9471,7 @@ services:
 +Laravel\Templating\render("...", []);
 ```
 
-<br>
+<br><br>
 
 ### `RenameMethodCallRector`
 
@@ -9495,7 +9495,7 @@ services:
 +$someObject->newMethod();
 ```
 
-<br>
+<br><br>
 
 ### `RenameMethodRector`
 
@@ -9520,7 +9520,7 @@ services:
 +$someObject->newMethod();
 ```
 
-<br>
+<br><br>
 
 ### `RenameNamespaceRector`
 
@@ -9543,7 +9543,7 @@ services:
 +$someObject = new SomeNewNamespace\SomeClass;
 ```
 
-<br>
+<br><br>
 
 ### `RenameStaticMethodRector`
 
@@ -9583,7 +9583,7 @@ services:
 +SomeClass::newStaticMethod();
 ```
 
-<br>
+<br><br>
 
 ## Restoration
 
@@ -9617,7 +9617,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `CompleteMissingDependencyInNewRector`
 
@@ -9653,7 +9653,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `MakeTypedPropertyNullableIfCheckedRector`
 
@@ -9677,7 +9677,7 @@ Make typed property nullable if checked
  }
 ```
 
-<br>
+<br><br>
 
 ### `MissingClassConstantReferenceToStringRector`
 
@@ -9697,7 +9697,7 @@ Convert missing class reference to string
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveFinalFromEntityRector`
 
@@ -9718,7 +9718,7 @@ Remove final from Doctrine entities
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveUselessJustForSakeInterfaceRector`
 
@@ -9746,7 +9746,7 @@ Remove interface, that are added just for its sake, but nowhere useful
  }
 ```
 
-<br>
+<br><br>
 
 ### `UpdateFileNameByClassNameFileSystemRector`
 
@@ -9763,7 +9763,7 @@ Rename file to respect class name
  }
 ```
 
-<br>
+<br><br>
 
 ## SOLID
 
@@ -9785,7 +9785,7 @@ Add false default to bool properties, to prevent null compare errors
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeIfElseValueAssignToEarlyReturnRector`
 
@@ -9812,7 +9812,7 @@ Change if/else value to early return
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeNestedForeachIfsToEarlyContinueRector`
 
@@ -9846,7 +9846,7 @@ Change nested ifs to foreach with continue
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeNestedIfsToEarlyReturnRector`
 
@@ -9877,7 +9877,7 @@ Change nested ifs to early return
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
 
@@ -9908,7 +9908,7 @@ Change property with read only status with default value to constant
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeReadOnlyVariableWithDefaultValueToConstantRector`
 
@@ -9942,7 +9942,7 @@ Change variable with read only status with default value to constant
  }
 ```
 
-<br>
+<br><br>
 
 ### `FinalizeClassesWithoutChildrenRector`
 
@@ -9967,7 +9967,7 @@ Finalize every class that has no children
  }
 ```
 
-<br>
+<br><br>
 
 ### `MakeUnusedClassesWithChildrenAbstractRector`
 
@@ -9987,7 +9987,7 @@ Classes that have no children nor are used, should have abstract
  }
 ```
 
-<br>
+<br><br>
 
 ### `MultiParentingToAbstractDependencyRector`
 
@@ -10037,7 +10037,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveAlwaysElseRector`
 
@@ -10062,7 +10062,7 @@ Split if statement, when if condition always break execution flow
  }
 ```
 
-<br>
+<br><br>
 
 ### `RepeatedLiteralToClassConstantRector`
 
@@ -10089,7 +10089,7 @@ Replace repeated strings with constant
  }
 ```
 
-<br>
+<br><br>
 
 ### `UseInterfaceOverImplementationInConstructorRector`
 
@@ -10116,7 +10116,7 @@ Use interface instead of specific class
  }
 ```
 
-<br>
+<br><br>
 
 ## Sensio
 
@@ -10142,7 +10142,7 @@ Remove service from Sensio @Route
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReplaceSensioRouteAnnotationWithSymfonyRector`
 
@@ -10166,7 +10166,7 @@ Replace Sensio @Route annotation with Symfony one
  }
 ```
 
-<br>
+<br><br>
 
 ### `TemplateAnnotationRector`
 
@@ -10184,7 +10184,7 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
  }
 ```
 
-<br>
+<br><br>
 
 ## StrictCodeQuality
 
@@ -10207,7 +10207,7 @@ Turn @var inline checks above code to `assert()` of hte type
  }
 ```
 
-<br>
+<br><br>
 
 ## Symfony
 
@@ -10228,7 +10228,7 @@ Removes Action suffixes from methods in Symfony Controllers
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddFlashRector`
 
@@ -10248,7 +10248,7 @@ Turns long flash adding to short helper method in Controller in Symfony
  }
 ```
 
-<br>
+<br><br>
 
 ### `CascadeValidationFormBuilderRector`
 
@@ -10278,7 +10278,7 @@ Change "cascade_validation" option to specific node attribute
  }
 ```
 
-<br>
+<br><br>
 
 ### `ConsoleExceptionToErrorEventConstantRector`
 
@@ -10297,7 +10297,7 @@ Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 +Symfony\Component\Console\ConsoleEvents::ERROR
 ```
 
-<br>
+<br><br>
 
 ### `ConsoleExecuteReturnIntRector`
 
@@ -10318,7 +10318,7 @@ Returns int from Command::execute command
  }
 ```
 
-<br>
+<br><br>
 
 ### `ConstraintUrlOptionRector`
 
@@ -10332,7 +10332,7 @@ Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 +$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);
 ```
 
-<br>
+<br><br>
 
 ### `ContainerBuilderCompileEnvArgumentRector`
 
@@ -10349,7 +10349,7 @@ Turns old default value to parameter in ContinerBuilder->build() method in DI in
 +$containerBuilder->compile(true);
 ```
 
-<br>
+<br><br>
 
 ### `ContainerGetToConstructorInjectionRector`
 
@@ -10378,7 +10378,7 @@ Turns fetching of dependencies via `$container->get()` in ContainerAware to cons
  }
 ```
 
-<br>
+<br><br>
 
 ### `FormIsValidRector`
 
@@ -10393,7 +10393,7 @@ Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form i
  }
 ```
 
-<br>
+<br><br>
 
 ### `FormTypeGetParentRector`
 
@@ -10412,7 +10412,7 @@ Turns string Form Type references to their `CONSTANT` alternatives in `getParent
 +function getExtendedType() { return CollectionType::class; }
 ```
 
-<br>
+<br><br>
 
 ### `FormTypeInstanceToClassConstRector`
 
@@ -10435,7 +10435,7 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
  }
 ```
 
-<br>
+<br><br>
 
 ### `GetParameterToConstructorInjectionRector`
 
@@ -10463,7 +10463,7 @@ Turns fetching of parameters via `getParameter()` in ContainerAware to construct
  }
 ```
 
-<br>
+<br><br>
 
 ### `GetRequestRector`
 
@@ -10486,7 +10486,7 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
  }
 ```
 
-<br>
+<br><br>
 
 ### `GetToConstructorInjectionRector`
 
@@ -10513,7 +10513,7 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
  }
 ```
 
-<br>
+<br><br>
 
 ### `MakeCommandLazyRector`
 
@@ -10535,7 +10535,7 @@ Make Symfony commands lazy
  }
 ```
 
-<br>
+<br><br>
 
 ### `MakeDispatchFirstArgumentEventRector`
 
@@ -10557,7 +10557,7 @@ Make event object a first argument of dispatch() method, event name as second
  }
 ```
 
-<br>
+<br><br>
 
 ### `MergeMethodAnnotationToRouteAnnotationRector`
 
@@ -10583,7 +10583,7 @@ Merge removed @Method annotation to @Route one
  }
 ```
 
-<br>
+<br><br>
 
 ### `OptionNameRector`
 
@@ -10598,7 +10598,7 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
 ```
 
-<br>
+<br><br>
 
 ### `ParseFileRector`
 
@@ -10612,7 +10612,7 @@ session > use_strict_mode is true by default and can be removed
 +session:
 ```
 
-<br>
+<br><br>
 
 ### `ProcessBuilderGetProcessRector`
 
@@ -10629,7 +10629,7 @@ Removes `$processBuilder->getProcess()` calls to $processBuilder in Process in S
 +$commamdLine = $processBuilder->getCommandLine();
 ```
 
-<br>
+<br><br>
 
 ### `ProcessBuilderInstanceRector`
 
@@ -10643,7 +10643,7 @@ Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. 
 +$processBuilder = new Symfony\Component\Process\ProcessBuilder($args);
 ```
 
-<br>
+<br><br>
 
 ### `ReadOnlyOptionToAttributeRector`
 
@@ -10662,7 +10662,7 @@ Change "read_only" option in form to attribute
  }
 ```
 
-<br>
+<br><br>
 
 ### `RedirectToRouteRector`
 
@@ -10676,7 +10676,7 @@ Turns redirect to route to short helper method in Controller in Symfony
 +$this->redirectToRoute("homepage");
 ```
 
-<br>
+<br><br>
 
 ### `ResponseStatusCodeRector`
 
@@ -10700,7 +10700,7 @@ Turns status code numbers to constants
  }
 ```
 
-<br>
+<br><br>
 
 ### `RootNodeTreeBuilderRector`
 
@@ -10719,7 +10719,7 @@ Changes  Process string argument to an array
  $rootNode->someCall();
 ```
 
-<br>
+<br><br>
 
 ### `SimplifyWebTestCaseAssertionsRector`
 
@@ -10754,7 +10754,7 @@ Simplify use of assertions in WebTestCase
  }
 ```
 
-<br>
+<br><br>
 
 ### `StringFormTypeToClassRector`
 
@@ -10769,7 +10769,7 @@ Turns string Form Type references to their `CONSTANT` alternatives in FormTypes 
 +$formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
 ```
 
-<br>
+<br><br>
 
 ### `StringToArrayArgumentProcessRector`
 
@@ -10784,7 +10784,7 @@ Changes Process string argument to an array
 +$process = new Process(['ls', '-l']);
 ```
 
-<br>
+<br><br>
 
 ### `VarDumperTestTraitMethodArgsRector`
 
@@ -10803,7 +10803,7 @@ Adds a new `$filter` argument in `VarDumperTestTrait->assertDumpEquals()` and `V
 +$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $filter = 0, $message = "");
 ```
 
-<br>
+<br><br>
 
 ## SymfonyCodeQuality
 
@@ -10843,7 +10843,7 @@ Change Symfony Event listener class to Event Subscriber based on configuration i
 +}
 ```
 
-<br>
+<br><br>
 
 ## SymfonyPHPUnit
 
@@ -10887,7 +10887,7 @@ Move self::$container service fetching from test methods up to setUp method
  }
 ```
 
-<br>
+<br><br>
 
 ## Twig
 
@@ -10919,7 +10919,7 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
  }
 ```
 
-<br>
+<br><br>
 
 ## TypeDeclaration
 
@@ -10948,7 +10948,7 @@ Adds @param annotation to array parameters inferred from the rest of the code
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddArrayReturnDocTypeRector`
 
@@ -10975,7 +10975,7 @@ Adds @return annotation to array parameters inferred from the rest of the code
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddClosureReturnTypeRector`
 
@@ -10997,7 +10997,7 @@ Add known return type to functions
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddMethodCallBasedParamTypeRector`
 
@@ -11026,7 +11026,7 @@ Change param type of passed getId() to UuidInterface type declaration
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddParamTypeDeclarationRector`
 
@@ -11056,7 +11056,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `CompleteVarDocTypePropertyRector`
 
@@ -11080,7 +11080,7 @@ Complete property `@var` annotations or correct the old ones
  }
 ```
 
-<br>
+<br><br>
 
 ### `ParamTypeDeclarationRector`
 
@@ -11121,7 +11121,7 @@ Change @param types to type declarations if not a BC-break
  }
 ```
 
-<br>
+<br><br>
 
 ### `PropertyTypeDeclarationRector`
 
@@ -11145,7 +11145,7 @@ Add @var to properties that are missing it
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReturnTypeDeclarationRector`
 
@@ -11169,7 +11169,7 @@ Change @return types and type from static analysis to type declarations if not a
  }
 ```
 
-<br>
+<br><br>
 
 ---
 
@@ -11207,7 +11207,7 @@ Turns action injection in Controllers to constructor injection
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddInterfaceByTraitRector`
 
@@ -11233,7 +11233,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddMethodParentCallRector`
 
@@ -11254,7 +11254,7 @@ Add method parent call, in case new parent method is added
  }
 ```
 
-<br>
+<br><br>
 
 ### `AddReturnTypeDeclarationRector`
 
@@ -11283,7 +11283,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `AnnotatedPropertyInjectToConstructorInjectionRector`
 
@@ -11306,7 +11306,7 @@ Turns non-private properties with `@annotation` to private properties and constr
 +}
 ```
 
-<br>
+<br><br>
 
 ### `ArgumentAdderRector`
 
@@ -11359,7 +11359,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `ArgumentDefaultValueReplacerRector`
 
@@ -11387,7 +11387,7 @@ services:
 +$someObject->someMethod(false);'
 ```
 
-<br>
+<br><br>
 
 ### `ArgumentRemoverRector`
 
@@ -11413,7 +11413,7 @@ services:
 +$someObject->someMethod();'
 ```
 
-<br>
+<br><br>
 
 ### `ChangeConstantVisibilityRector`
 
@@ -11444,7 +11444,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeContractMethodSingleToManyRector`
 
@@ -11478,7 +11478,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangeMethodVisibilityRector`
 
@@ -11514,7 +11514,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `ChangePropertyVisibilityRector`
 
@@ -11545,7 +11545,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `FluentReplaceRector`
 
@@ -11571,7 +11571,7 @@ services:
 +$someClass->otherFunction();
 ```
 
-<br>
+<br><br>
 
 ### `FunctionToMethodCallRector`
 
@@ -11595,7 +11595,7 @@ services:
 +$this->render("...", []);
 ```
 
-<br>
+<br><br>
 
 ### `FunctionToNewRector`
 
@@ -11615,7 +11615,7 @@ Change configured function calls to new Instance
  }
 ```
 
-<br>
+<br><br>
 
 ### `FunctionToStaticCallRector`
 
@@ -11639,7 +11639,7 @@ services:
 +SomeClass::render("...", []);
 ```
 
-<br>
+<br><br>
 
 ### `GetAndSetToMethodCallRector`
 
@@ -11679,7 +11679,7 @@ services:
 +$someService = $container->getService("someService");
 ```
 
-<br>
+<br><br>
 
 ### `InjectAnnotationClassRector`
 
@@ -11716,7 +11716,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `MergeInterfacesRector`
 
@@ -11740,7 +11740,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `MethodCallToAnotherMethodCallWithArgumentsRector`
 
@@ -11768,7 +11768,7 @@ services:
 +$serviceDefinition->addTag('inject');
 ```
 
-<br>
+<br><br>
 
 ### `MethodCallToReturnRector`
 
@@ -11803,7 +11803,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `NewObjectToFactoryCreateRector`
 
@@ -11837,7 +11837,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `NewToStaticCallRector`
 
@@ -11868,7 +11868,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `NormalToFluentRector`
 
@@ -11895,7 +11895,7 @@ services:
 +    ->otherFunction();
 ```
 
-<br>
+<br><br>
 
 ### `ParentClassToTraitsRector`
 
@@ -11921,7 +11921,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `PropertyAssignToMethodCallRector`
 
@@ -11947,7 +11947,7 @@ services:
 +$someObject->newMethodCall(false);
 ```
 
-<br>
+<br><br>
 
 ### `PropertyToMethodRector`
 
@@ -11994,7 +11994,7 @@ services:
 +$result = $object->getProperty('someArg');
 ```
 
-<br>
+<br><br>
 
 ### `PseudoNamespaceToNamespaceRector`
 
@@ -12021,7 +12021,7 @@ services:
  $someClassToKeep = new Some_Class_To_Keep;
 ```
 
-<br>
+<br><br>
 
 ### `RemoveFuncCallArgRector`
 
@@ -12045,7 +12045,7 @@ services:
 +remove_last_arg(1);
 ```
 
-<br>
+<br><br>
 
 ### `RemoveIniGetSetFuncCallRector`
 
@@ -12068,7 +12068,7 @@ services:
 -ini_set('y2k_compliance', 1);
 ```
 
-<br>
+<br><br>
 
 ### `RemoveInterfacesRector`
 
@@ -12092,7 +12092,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `RemoveTraitRector`
 
@@ -12108,7 +12108,7 @@ Remove specific traits from code
  }
 ```
 
-<br>
+<br><br>
 
 ### `RenameClassConstantsUseToStringsRector`
 
@@ -12132,7 +12132,7 @@ services:
 +$value === "development"
 ```
 
-<br>
+<br><br>
 
 ### `RenamePropertyRector`
 
@@ -12156,7 +12156,7 @@ services:
 +$someObject->someNewProperty;
 ```
 
-<br>
+<br><br>
 
 ### `ReplaceVariableByPropertyFetchRector`
 
@@ -12185,7 +12185,7 @@ Turns variable in controller action to property fetch, as follow up to action in
  }
 ```
 
-<br>
+<br><br>
 
 ### `ReturnThisRemoveRector`
 
@@ -12218,7 +12218,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `ServiceGetterToConstructorInjectionRector`
 
@@ -12281,7 +12281,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `StaticCallToFunctionRector`
 
@@ -12305,7 +12305,7 @@ services:
 +new_function("args");
 ```
 
-<br>
+<br><br>
 
 ### `StringToClassConstantRector`
 
@@ -12335,7 +12335,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `SwapClassMethodArgumentsRector`
 
@@ -12368,7 +12368,7 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
 ### `SwapFuncCallArgumentsRector`
 
@@ -12388,7 +12388,7 @@ Swap arguments in function calls
  }
 ```
 
-<br>
+<br><br>
 
 ### `ToStringToMethodCallRector`
 
@@ -12413,7 +12413,7 @@ services:
 +$result = $someValue->getPath();
 ```
 
-<br>
+<br><br>
 
 ### `UnsetAndIssetToMethodCallRector`
 
@@ -12452,7 +12452,7 @@ services:
 +$container->removeService("someKey");
 ```
 
-<br>
+<br><br>
 
 ### `WrapReturnRector`
 
@@ -12481,5 +12481,5 @@ services:
  }
 ```
 
-<br>
+<br><br>
 
