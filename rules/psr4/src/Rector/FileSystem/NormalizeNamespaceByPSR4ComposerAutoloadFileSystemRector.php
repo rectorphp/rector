@@ -6,6 +6,7 @@ namespace Rector\PSR4\Rector\FileSystem;
 
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
@@ -30,11 +31,41 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector extends Abs
     public function getDefinition(): RectorDefinition
     {
         $description = sprintf(
-            'Adds namespace to namespace-less files to match PSR-4 in composer.json autoload section. Run with combination with %s',
+            'Adds namespace to namespace-less files to match PSR-4 in `composer.json` autoload section. Run with combination with %s',
             MultipleClassFileToPsr4ClassesRector::class
         );
 
-        return new RectorDefinition($description);
+        return new RectorDefinition($description, [
+            new ComposerJsonAwareCodeSample(
+                <<<'CODE_SAMPLE'
+// src/SomeClass.php
+
+class SomeClass
+{
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+// src/SomeClass.php
+
+namespace App\CustomNamespace;
+
+class SomeClass
+{
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+{
+    "autoload": {
+        "psr-4": {
+            "App\\CustomNamespace\\": "src"
+        }
+    }
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     public function refactor(SmartFileInfo $smartFileInfo): void

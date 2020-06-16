@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Fixture;
 
 use App\Api\Poll\Entity\Poll;
 use App\Api\User\Entity\User;
@@ -105,7 +105,7 @@ class Complex
 -----
 <?php
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Fixture;
 
 use App\Api\Poll\Entity\Poll;
 use App\Api\User\Entity\User;

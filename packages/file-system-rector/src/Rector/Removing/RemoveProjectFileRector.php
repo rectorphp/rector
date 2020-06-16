@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\FileSystemRector\Rector\Removing;
 
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Configuration\Option;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
@@ -49,7 +50,16 @@ final class RemoveProjectFileRector extends AbstractFileSystemRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Remove file relative to project directory');
+        return new RectorDefinition('Remove file relative to project directory', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+// someFile/ToBeRemoved.txt
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     private function getProjectDirectory(): string

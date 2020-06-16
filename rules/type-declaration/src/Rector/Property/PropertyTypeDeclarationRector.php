@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
@@ -32,7 +33,36 @@ final class PropertyTypeDeclarationRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Add @var to properties that are missing it');
+        return new RectorDefinition('Add @var to properties that are missing it', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+class SomeClass
+{
+    private $value;
+
+    public function run()
+    {
+        $this->value = 123;
+    }
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+class SomeClass
+{
+    /**
+     * @var int
+     */
+    private $value;
+
+    public function run()
+    {
+        $this->value = 123;
+    }
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     /**

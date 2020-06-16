@@ -6,6 +6,7 @@ namespace Rector\Refactoring\Rector\FileSystem;
 
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Naming\NamespaceMatcher;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\PSR4\FileRelocationResolver;
@@ -41,6 +42,41 @@ final class MoveAndRenameNamespaceRector extends AbstractFileSystemRector
         $this->namespaceMatcher = $namespaceMatcher;
     }
 
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Move namespace to new location with respect to PSR-4 + follow up with files in the namespace move', [
+                new ConfiguredCodeSample(
+                    <<<'CODE_SAMPLE'
+// app/Entity/SomeClass.php
+
+namespace App\Entity;
+
+class SomeClass
+{
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+// app/ValueObject/SomeClass.php
+
+namespace App\ValueObject;
+
+class SomeClass
+{
+}
+CODE_SAMPLE
+                    ,
+                    [
+                        '$oldToNewNamespace' => [
+                            'App\Entity' => 'App\ValueObject',
+                        ],
+                    ]
+                ),
+            ]
+        );
+    }
+
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
         $namespaceName = $this->resolveNamespaceName($smartFileInfo);
@@ -63,13 +99,6 @@ final class MoveAndRenameNamespaceRector extends AbstractFileSystemRector
         );
 
         $this->moveFile($smartFileInfo, $newFileLocation);
-    }
-
-    public function getDefinition(): RectorDefinition
-    {
-        return new RectorDefinition(
-            'Move namespace to new location with respect to PSR-4 + follow up with files in the namespace move'
-        );
     }
 
     private function resolveNamespaceName(SmartFileInfo $smartFileInfo): ?string

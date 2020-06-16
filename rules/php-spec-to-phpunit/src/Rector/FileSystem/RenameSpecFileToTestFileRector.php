@@ -6,6 +6,7 @@ namespace Rector\PhpSpecToPHPUnit\Rector\FileSystem;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -19,7 +20,18 @@ final class RenameSpecFileToTestFileRector extends AbstractFileSystemRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Rename "*Spec.php" file to "*Test.php" file');
+        return new RectorDefinition('Rename "*Spec.php" file to "*Test.php" file',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
+// tests/SomeSpec.php
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+// tests/SomeTest.php
+CODE_SAMPLE
+                ),
+            ]);
     }
 
     public function refactor(SmartFileInfo $smartFileInfo): void

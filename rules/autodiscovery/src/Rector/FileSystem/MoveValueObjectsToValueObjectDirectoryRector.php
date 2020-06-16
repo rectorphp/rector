@@ -7,6 +7,7 @@ namespace Rector\Autodiscovery\Rector\FileSystem;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Autodiscovery\Analyzer\ClassAnalyzer;
 use Rector\Autodiscovery\FileMover\FileMover;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -37,7 +38,45 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileSys
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Move value object to ValueObject namespace/directory');
+        return new RectorDefinition('Move value object to ValueObject namespace/directory', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+// app/Exception/Name.php
+class Name
+{
+    private $name;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+}
+CODE_SAMPLE
+,
+                <<<'CODE_SAMPLE'
+// app/ValueObject/Name.php
+class Name
+{
+    private $name;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     public function refactor(SmartFileInfo $smartFileInfo): void

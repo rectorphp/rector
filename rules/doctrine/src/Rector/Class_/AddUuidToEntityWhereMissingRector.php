@@ -7,6 +7,7 @@ namespace Rector\Doctrine\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
@@ -51,7 +52,49 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
         return new RectorDefinition(
             'Adds $uuid property to entities, that already have $id with integer type.' .
             'Require for step-by-step migration from int to uuid. ' .
-            'In following step it should be renamed to $id and replace it'
+            'In following step it should be renamed to $id and replace it', [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class SomeEntityWithIntegerId
+{
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+}
+CODE_SAMPLE
+,
+                    <<<'CODE_SAMPLE'
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class SomeEntityWithIntegerId
+{
+    /**
+     * @var \Ramsey\Uuid\UuidInterface
+     * @ORM\Column(type="uuid_binary", unique=true, nullable=true)
+     */
+    private $uuid;
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+}
+CODE_SAMPLE
+                ), ]
         );
     }
 

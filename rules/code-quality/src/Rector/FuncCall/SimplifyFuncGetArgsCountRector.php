@@ -18,7 +18,7 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Simplify count of func_get_args() to fun_num_args()',
+            'Simplify count of func_get_args() to func_num_args()',
             [new CodeSample('count(func_get_args());', 'func_num_args();')]
         );
     }

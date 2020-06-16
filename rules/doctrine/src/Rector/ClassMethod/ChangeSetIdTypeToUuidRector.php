@@ -10,6 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use Ramsey\Uuid\UuidInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -21,7 +22,43 @@ final class ChangeSetIdTypeToUuidRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change param type of setId() to uuid interface');
+        return new RectorDefinition('Change param type of setId() to uuid interface', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class SetId
+{
+    private $id;
+
+    public function setId(int $uuid): int
+    {
+        return $this->id = $uuid;
+    }
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class SetId
+{
+    private $id;
+
+    public function setId(\Ramsey\Uuid\UuidInterface $uuid): int
+    {
+        return $this->id = $uuid;
+    }
+}
+CODE_SAMPLE
+            ),
+        ]);
     }
 
     /**
