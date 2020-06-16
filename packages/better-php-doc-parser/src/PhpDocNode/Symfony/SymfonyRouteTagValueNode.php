@@ -36,7 +36,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
 
     public function changeMethods(array $methods): void
     {
-        $this->orderedVisibleItems[] = 'methods';
+        $this->tagValueNodeConfiguration->addOrderedVisibleItem('methods');
         $this->items['methods'] = $methods;
     }
 
@@ -48,5 +48,10 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements Sho
     public function getSilentKey(): string
     {
         return self::PATH;
+    }
+
+    public function mimicTagValueNodeConfiguration(AbstractTagValueNode $abstractTagValueNode): void
+    {
+        $this->tagValueNodeConfiguration->mimic($abstractTagValueNode->tagValueNodeConfiguration);
     }
 }

@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode;
 
-use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioRouteTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
+use Rector\BetterPhpDocParser\PartPhpDocTagPrinter\Behavior\ArrayPartPhpDocTagPrinterTrait;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
-use Symfony\Component\Routing\Annotation\Route;
+use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
+use Rector\BetterPhpDocParser\ValueObjectFactory\TagValueNodeConfigurationFactory;
+use Rector\Core\Exception\ShouldNotHappenException;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
     use AttributeTrait;
     use PrintTagValueNodeTrait;
+    use ArrayPartPhpDocTagPrinterTrait;
 
     /**
      * @var mixed[]
@@ -28,49 +28,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected $items = [];
 
     /**
-     * @var bool
+     * @var TagValueNodeConfiguration
      */
-    protected $hasNewlineAfterOpening = false;
-
-    /**
-     * @var bool
-     */
-    protected $hasNewlineBeforeClosing = false;
-
-    /**
-     * @var string|null
-     */
-    protected $originalContent;
-
-    /**
-     * @var bool
-     */
-    protected $hasOpeningBracket = false;
-
-    /**
-     * @var bool
-     */
-    protected $hasClosingBracket = false;
-
-    /**
-     * @var string[]|null
-     */
-    protected $orderedVisibleItems;
-
-    /**
-     * @var bool
-     */
-    private $isSilentKeyExplicit = true;
-
-    /**
-     * @var string|null
-     */
-    private $silentKey;
-
-    /**
-     * @var bool[]
-     */
-    private $keysByQuotedStatus = [];
+    protected $tagValueNodeConfiguration;
 
     public function __construct(array $items, ?string $originalContent = null)
     {
@@ -94,36 +54,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         return $this->items;
     }
 
-    public function isSilentKeyExplicit(): bool
-    {
-        return $this->isSilentKeyExplicit;
-    }
-
-    public function setIsSilentKeyExplicit(bool $isSilentKeyExplicit): void
-    {
-        $this->isSilentKeyExplicit = $isSilentKeyExplicit;
-    }
-
-    public function hasOpeningBracket(): bool
-    {
-        return $this->hasOpeningBracket;
-    }
-
-    public function hasClosingBracket(): bool
-    {
-        return $this->hasClosingBracket;
-    }
-
-    public function setHasOpeningBracket(bool $hasOpeningBracket): void
-    {
-        $this->hasOpeningBracket = $hasOpeningBracket;
-    }
-
-    public function setHasClosingBracket(bool $hasClosingBracket): void
-    {
-        $this->hasClosingBracket = $hasClosingBracket;
-    }
-
     protected function printItems(array $items): string
     {
         $items = $this->completeItemsQuotes($items);
@@ -131,44 +61,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $items = $this->makeKeysExplicit($items);
 
         return $this->printContentItems($items);
-    }
-
-    /**
-     * @param mixed[] $item
-     */
-    protected function printArrayItem(array $item, ?string $key = null): string
-    {
-        $json = Json::encode($item);
-
-        // separate by space only items separated by comma, not in "quotes"
-        $json = Strings::replace($json, '#,#', ', ');
-        // @see https://regex101.com/r/C2fDQp/2
-        $json = Strings::replace($json, '#("[^",]+)(\s+)?,(\s+)?([^"]+")#', '$1,$4');
-
-        // change brackets from json to annotations
-        $json = Strings::replace($json, '#^\[(.*?)\]$#', '{$1}');
-
-        // cleanup json encoded extra slashes
-        $json = Strings::replace($json, '#\\\\\\\\#', '\\');
-
-        // replace ":" with "=" for @Route
-        if ($this instanceof SymfonyRouteTagValueNode || $this instanceof DoctrineTagNodeInterface || $this instanceof SensioRouteTagValueNode) {
-            // @see https://regex101.com/r/XfKi4A/1/
-            $json = Strings::replace($json, '#(\"|\w)\:(\"|\w)#', '$1=$2');
-        }
-
-        $keyPart = $this->createKeyPart($key);
-
-        // should unquote
-        if ($this->isValueWithoutQuotes($key)) {
-            $json = Strings::replace($json, '#"#');
-        }
-
-        if ($this->originalContent !== null && $key !== null) {
-            $json = $this->quoteKeys($item, $key, $json, $this->originalContent);
-        }
-
-        return $keyPart . $json;
     }
 
     /**
@@ -195,7 +87,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
                 continue;
             }
 
-            $arrayItemAsString = $this->printArrayItem($value, $key);
+            $arrayItemAsString = $this->printArrayItem($value, $key, $this->tagValueNodeConfiguration);
             $arrayItemAsString = $this->correctArraySingleItemPrint($value, $arrayItemAsString);
 
             /** @var string $key */
@@ -204,9 +96,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         return sprintf(
             '(%s%s%s)',
-            $this->hasNewlineAfterOpening ? PHP_EOL : '',
+            $this->tagValueNodeConfiguration->hasNewlineAfterOpening() ? PHP_EOL : '',
             implode(', ', $items),
-            $this->hasNewlineBeforeClosing ? PHP_EOL : ''
+            $this->tagValueNodeConfiguration->hasNewlineBeforeClosing() ? PHP_EOL : ''
         );
     }
 
@@ -240,71 +132,35 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
     protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
     {
-        $this->keysByQuotedStatus = [];
-        if ($originalContent === null) {
-            return;
-        }
-
         if ($this instanceof SilentKeyNodeInterface) {
             $silentKey = $this->getSilentKey();
         } else {
             $silentKey = null;
         }
 
-        $this->originalContent = $originalContent;
-        $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent, $silentKey);
+        $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory();
 
-        $this->hasNewlineAfterOpening = (bool) Strings::match($originalContent, '#^(\(\s+|\n)#m');
-        $this->hasNewlineBeforeClosing = (bool) Strings::match($originalContent, '#(\s+\)|\n(\s+)?)$#m');
-
-        $this->hasOpeningBracket = (bool) Strings::match($originalContent, '#^\(#');
-        $this->hasClosingBracket = (bool) Strings::match($originalContent, '#\)$#');
-
-        foreach ($this->orderedVisibleItems as $orderedVisibleItem) {
-            $this->keysByQuotedStatus[$orderedVisibleItem] = $this->isKeyQuoted(
-                $originalContent,
-                $orderedVisibleItem,
-                $silentKey
-            );
+        // prevent override
+        if ($this->tagValueNodeConfiguration !== null) {
+            throw new ShouldNotHappenException();
         }
 
-        $this->silentKey = $silentKey;
-        $this->isSilentKeyExplicit = (bool) Strings::contains($originalContent, sprintf('%s=', $silentKey));
+        $this->tagValueNodeConfiguration = $tagValueNodeConfigurationFactory->createFromOriginalContent(
+            $originalContent,
+            $silentKey
+        );
     }
 
     protected function filterOutMissingItems(array $contentItems): array
     {
-        if ($this->orderedVisibleItems === null) {
+        if ($this->tagValueNodeConfiguration->getOrderedVisibleItems() === null) {
             return $contentItems;
         }
 
-        return ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
-    }
-
-    private function createKeyPart(?string $key = null): string
-    {
-        if (empty($key)) {
-            return '';
-        }
-
-        if ($key === $this->silentKey && ! $this->isSilentKeyExplicit) {
-            return '';
-        }
-
-        return $key . '=';
-    }
-
-    private function isValueWithoutQuotes(?string $key): bool
-    {
-        if ($key === null) {
-            return false;
-        }
-
-        if (! array_key_exists($key, $this->keysByQuotedStatus)) {
-            return false;
-        }
-
-        return ! $this->keysByQuotedStatus[$key];
+        return ArrayItemStaticHelper::filterAndSortVisibleItems(
+            $contentItems,
+            $this->tagValueNodeConfiguration->getOrderedVisibleItems()
+        );
     }
 
     /**
@@ -331,67 +187,25 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         return implode(', ', $itemsAsStrings);
     }
 
-    private function isKeyQuoted(string $originalContent, string $key, ?string $silentKey): bool
-    {
-        $escapedKey = preg_quote($key, '#');
-
-        $quotedKeyPattern = $this->createQuotedKeyPattern($silentKey, $key, $escapedKey);
-        if ((bool) Strings::match($originalContent, $quotedKeyPattern)) {
-            return true;
-        }
-
-        // @see https://regex101.com/r/VgvK8C/5/
-        $quotedArrayPattern = sprintf('#%s=\{"(.*)"\}|\{"(.*)"\}#', $escapedKey);
-
-        return (bool) Strings::match($originalContent, $quotedArrayPattern);
-    }
-
-    private function createQuotedKeyPattern(?string $silentKey, string $key, string $escapedKey): string
-    {
-        if ($silentKey === $key) {
-            // @see https://regex101.com/r/VgvK8C/4/
-            return sprintf('#(%s=")|\("#', $escapedKey);
-        }
-
-        // @see https://regex101.com/r/VgvK8C/3/
-        return sprintf('#%s="#', $escapedKey);
-    }
-
-    private function quoteKeys(array $item, string $key, string $json, string $originalContent): string
-    {
-        foreach (array_keys($item) as $itemKey) {
-            // @see https://regex101.com/r/V7nq5D/1
-            $quotedKeyPattern = '#' . $key . '={(.*?)?\"' . $itemKey . '\"(.*?)?}#';
-            $isKeyQuoted = (bool) Strings::match($originalContent, $quotedKeyPattern);
-            if (! $isKeyQuoted) {
-                continue;
-            }
-
-            $json = Strings::replace($json, '#([^\"])' . $itemKey . '([^\"])#', '$1"' . $itemKey . '"$2');
-        }
-
-        return $json;
-    }
-
     private function correctArraySingleItemPrint($value, string $arrayItemAsString): string
     {
         if (count($value) !== 1) {
             return $arrayItemAsString;
         }
 
-        if ($this->originalContent === null) {
+        if ($this->tagValueNodeConfiguration->getOriginalContent() === null) {
             return $arrayItemAsString;
         }
 
         // item is in the original in same format → use it
-        if (Strings::contains($this->originalContent, $arrayItemAsString)) {
+        if (Strings::contains($this->tagValueNodeConfiguration->getOriginalContent(), $arrayItemAsString)) {
             return $arrayItemAsString;
         }
 
         // is original item used the same, just without {} brackets?
         $nakedItem = trim($arrayItemAsString, '{}');
 
-        if (! Strings::contains($this->originalContent, '(' . $nakedItem . ')')) {
+        if (! Strings::contains($this->tagValueNodeConfiguration->getOriginalContent(), '(' . $nakedItem . ')')) {
             return $arrayItemAsString;
         }
 
@@ -400,10 +214,14 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
     private function shouldPrintEmptyBrackets(): bool
     {
-        if ($this->originalContent !== null && Strings::endsWith($this->originalContent, '()')) {
+        // @todo decouple
+        if ($this->tagValueNodeConfiguration->getOriginalContent() !== null && Strings::endsWith(
+            $this->tagValueNodeConfiguration->getOriginalContent(),
+            '()'
+        )) {
             return true;
         }
 
-        return $this->hasOpeningBracket && $this->hasClosingBracket;
+        return $this->tagValueNodeConfiguration->hasOpeningBracket() && $this->tagValueNodeConfiguration->hasClosingBracket();
     }
 }

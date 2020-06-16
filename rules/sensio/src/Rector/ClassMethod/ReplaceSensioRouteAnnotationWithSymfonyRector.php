@@ -101,11 +101,7 @@ PHP
         // unset service, that is deprecated
         $items = $sensioRouteTagValueNode->getItems();
         $symfonyRouteTagValueNode = new SymfonyRouteTagValueNode($items);
-
-        // mimic previous behaviors
-        $symfonyRouteTagValueNode->setIsSilentKeyExplicit($sensioRouteTagValueNode->isSilentKeyExplicit());
-        $symfonyRouteTagValueNode->setHasOpeningBracket($sensioRouteTagValueNode->hasOpeningBracket());
-        $symfonyRouteTagValueNode->setHasClosingBracket($sensioRouteTagValueNode->hasClosingBracket());
+        $symfonyRouteTagValueNode->mimicTagValueNodeConfiguration($sensioRouteTagValueNode);
 
         $phpDocInfo->addTagValueNodeWithShortName($symfonyRouteTagValueNode);
 
