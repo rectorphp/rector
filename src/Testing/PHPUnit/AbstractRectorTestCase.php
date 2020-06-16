@@ -16,6 +16,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\Set\Set;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\Contract\RunnableInterface;
@@ -25,6 +26,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\SetConfigResolver\ConfigResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
@@ -74,7 +76,9 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
         if ($this->provideConfig() !== '') {
             $this->ensureConfigFileExists();
-            $this->bootKernelWithConfigs(RectorKernel::class, [$this->provideConfig()]);
+
+            $configs = $this->resolveConfigs();
+            $this->bootKernelWithConfigs(RectorKernel::class, $configs);
 
             $enabledRectorsProvider = static::$container->get(EnabledRectorsProvider::class);
             $enabledRectorsProvider->reset();
@@ -281,5 +285,26 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
         // load from cache
         self::$container = self::$allRectorContainer;
+    }
+
+    /**
+     * Behavior duplicated from bin/rector
+     * @return string[]
+     */
+    private function resolveConfigs(): array
+    {
+        $configs = [$this->provideConfig()];
+
+        $configResolver = new ConfigResolver();
+        $parameterSetsConfigs = $configResolver->resolveFromParameterSetsFromConfigFiles(
+            $configs,
+            Set::SET_DIRECTORY
+        );
+
+        if ($parameterSetsConfigs === []) {
+            return $configs;
+        }
+
+        return array_merge($configs, $parameterSetsConfigs);
     }
 }
