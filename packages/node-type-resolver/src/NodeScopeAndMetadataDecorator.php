@@ -17,15 +17,15 @@ use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\PhpDocInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
+use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeScopeAndMetadataDecorator
 {
     /**
-     * @var NodeScopeResolver
+     * @var PHPStanNodeScopeResolver
      */
-    private $nodeScopeResolver;
+    private $phpStanNodeScopeResolver;
 
     /**
      * @var CloningVisitor
@@ -78,7 +78,7 @@ final class NodeScopeAndMetadataDecorator
     private $methodCallNodeVisitor;
 
     public function __construct(
-        NodeScopeResolver $nodeScopeResolver,
+        PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         CloningVisitor $cloningVisitor,
         FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
@@ -90,7 +90,7 @@ final class NodeScopeAndMetadataDecorator
         Configuration $configuration,
         MethodCallNodeVisitor $methodCallNodeVisitor
     ) {
-        $this->nodeScopeResolver = $nodeScopeResolver;
+        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
         $this->cloningVisitor = $cloningVisitor;
         $this->functionMethodAndClassNodeVisitor = $functionMethodAndClassNodeVisitor;
@@ -119,7 +119,7 @@ final class NodeScopeAndMetadataDecorator
 
         // node scoping is needed only for Scope
         if ($needsScope || $this->configuration->areAnyPhpRectorsLoaded()) {
-            $nodes = $this->nodeScopeResolver->processNodes($nodes, $smartFileInfo);
+            $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes, $smartFileInfo);
         }
 
         $nodeTraverser = new NodeTraverser();

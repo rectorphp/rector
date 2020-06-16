@@ -44,6 +44,11 @@ final class Option
     /**
      * @var string
      */
+    public const SAFE_TYPES = 'safe_types';
+
+    /**
+     * @var string
+     */
     public const IMPORT_SHORT_CLASSES_PARAMETER = 'import_short_classes';
 
     /**
