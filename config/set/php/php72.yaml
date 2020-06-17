@@ -1,6 +1,8 @@
 services:
     Rector\Php72\Rector\Each\WhileEachToForeachRector: null
     Rector\Php72\Rector\Each\ListEachRector: null
+    Rector\Php72\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector: null
+
     Rector\Php72\Rector\Unset_\UnsetCastRector: null
     Rector\Php72\Rector\ConstFetch\BarewordStringRector: null
 

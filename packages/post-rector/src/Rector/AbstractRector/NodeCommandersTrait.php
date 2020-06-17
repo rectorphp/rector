@@ -86,6 +86,16 @@ trait NodeCommandersTrait
         $this->useNodesToAddCollector->addUseImport($positionNode, $objectType);
     }
 
+    /**
+     * @param Node[] $newNodes
+     */
+    protected function addNodesAfterNode(array $newNodes, Node $positionNode): void
+    {
+        foreach ($newNodes as $newNode) {
+            $this->addNodeAfterNode($newNode, $positionNode);
+        }
+    }
+
     protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
     {
         $this->nodesToAddCollector->addNodeAfterNode($newNode, $positionNode);
