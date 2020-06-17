@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
@@ -92,7 +93,7 @@ PHP
                     continue;
                 }
 
-                if (! $stmt->var instanceof MethodCall) {
+                if (! $stmt->var instanceof MethodCall && ! $stmt->var instanceof StaticCall) {
                     $currentStmtVariableName = $this->getName($stmt->var);
                 }
             }
