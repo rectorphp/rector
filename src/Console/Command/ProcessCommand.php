@@ -170,7 +170,7 @@ final class ProcessCommand extends AbstractCommand
 
         $this->addOption(
             Option::OPTION_ONLY,
-            'r',
+            null,
             InputOption::VALUE_REQUIRED,
             'Run only one single Rector from the loaded Rectors (in services, sets, etc).'
         );

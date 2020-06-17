@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\Configuration;
 
 use Jean85\PrettyVersions;
-use Nette\Utils\Strings;
 use OndraM\CiDetector\CiDetector;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
-use Rector\Core\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -93,15 +90,26 @@ final class Configuration
     private $paths = [];
 
     /**
+     * @var OnlyRuleResolver
+     */
+    private $onlyRuleResolver;
+
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      */
-    public function __construct(CiDetector $ciDetector, bool $isCacheEnabled, array $fileExtensions, array $paths)
-    {
+    public function __construct(
+        CiDetector $ciDetector,
+        bool $isCacheEnabled,
+        array $fileExtensions,
+        array $paths,
+        OnlyRuleResolver $onlyRuleResolver
+    ) {
         $this->ciDetector = $ciDetector;
         $this->isCacheEnabled = $isCacheEnabled;
         $this->fileExtensions = $fileExtensions;
         $this->paths = $paths;
+        $this->onlyRuleResolver = $onlyRuleResolver;
     }
 
     /**
@@ -122,7 +130,9 @@ final class Configuration
 
         /** @var string|null $onlyRector */
         $onlyRector = $input->getOption(Option::OPTION_ONLY);
-        $this->setOnlyRector($onlyRector);
+        if ($onlyRector !== null) {
+            $this->setOnlyRector($onlyRector);
+        }
 
         $commandLinePaths = (array) $input->getArgument(Option::SOURCE);
         // manual command line value has priority
@@ -271,30 +281,8 @@ final class Configuration
         return $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== CheckstyleOutputFormatter::NAME;
     }
 
-    private function setOnlyRector(?string $rector): void
+    private function setOnlyRector(string $rector): void
     {
-        if ($rector) {
-            $this->ensureIsValidRectorClass($rector);
-            $this->onlyRector = $rector;
-        } else {
-            $this->onlyRector = null;
-        }
-    }
-
-    private function ensureIsValidRectorClass(string $rector): void
-    {
-        // simple check
-        if (! Strings::endsWith($rector, 'Rector')) {
-            throw new RectorNotFoundOrNotValidRectorClassException($rector);
-        }
-
-        if (! class_exists($rector)) {
-            throw new RectorNotFoundOrNotValidRectorClassException($rector);
-        }
-
-        // must inherit from AbstractRector
-        if (! in_array(AbstractRector::class, class_parents($rector), true)) {
-            throw new RectorNotFoundOrNotValidRectorClassException($rector);
-        }
+        $this->onlyRector = $this->onlyRuleResolver->resolve($rector);
     }
 }

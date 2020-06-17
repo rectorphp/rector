@@ -6,6 +6,7 @@ namespace Rector\Core\HttpKernel;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\Collector\RectorServiceArgumentCollector;
+use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorServiceArgumentsCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
 use Rector\Core\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
@@ -91,6 +92,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
         $containerBuilder->addCompilerPass(new AutowireInterfacesCompilerPass([RectorInterface::class]));
 
         $containerBuilder->addCompilerPass(new AutoBindParameterCompilerPass());
+        $containerBuilder->addCompilerPass(new MakeRectorsPublicCompilerPass());
 
         // add all merged arguments of Rector services
         $containerBuilder->addCompilerPass(
