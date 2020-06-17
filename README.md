@@ -211,6 +211,22 @@ class SomeClass
 }
 ```
 
+### Run Just 1 Rector Rule
+
+Do you have config that includes many sets and Rectors? You might want to run only a single Rector. The `--only` argument allows that, e.g.:
+
+```bash
+vendor/bin/rector process src --set solid --only Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector
+```
+
+Or just short name:
+
+```bash
+vendor/bin/rector process src --set solid --only FinalizeClassesWithoutChildrenRector
+```
+
+Both will run only `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`.
+
 ### Provide PHP Version
 
 By default Rector uses the language features matching your system version of PHP. You can configure it for a different PHP version:

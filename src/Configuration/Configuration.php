@@ -30,6 +30,11 @@ final class Configuration
     private $showProgressBar = true;
 
     /**
+     * @var string|null
+     */
+    private $onlyRector;
+
+    /**
      * @var bool
      */
     private $areAnyPhpRectorsLoaded = false;
@@ -85,15 +90,26 @@ final class Configuration
     private $paths = [];
 
     /**
+     * @var OnlyRuleResolver
+     */
+    private $onlyRuleResolver;
+
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      */
-    public function __construct(CiDetector $ciDetector, bool $isCacheEnabled, array $fileExtensions, array $paths)
-    {
+    public function __construct(
+        CiDetector $ciDetector,
+        bool $isCacheEnabled,
+        array $fileExtensions,
+        array $paths,
+        OnlyRuleResolver $onlyRuleResolver
+    ) {
         $this->ciDetector = $ciDetector;
         $this->isCacheEnabled = $isCacheEnabled;
         $this->fileExtensions = $fileExtensions;
         $this->paths = $paths;
+        $this->onlyRuleResolver = $onlyRuleResolver;
     }
 
     /**
@@ -111,6 +127,12 @@ final class Configuration
         $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
 
         $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
+
+        /** @var string|null $onlyRector */
+        $onlyRector = $input->getOption(Option::OPTION_ONLY);
+        if ($onlyRector !== null) {
+            $this->setOnlyRector($onlyRector);
+        }
 
         $commandLinePaths = (array) $input->getArgument(Option::SOURCE);
         // manual command line value has priority
@@ -184,6 +206,11 @@ final class Configuration
         return $this->mustMatchGitDiff;
     }
 
+    public function getOnlyRector(): ?string
+    {
+        return $this->onlyRector;
+    }
+
     public function getOutputFile(): ?string
     {
         return $this->outputFile;
@@ -252,5 +279,10 @@ final class Configuration
             return false;
         }
         return $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== CheckstyleOutputFormatter::NAME;
+    }
+
+    private function setOnlyRector(string $rector): void
+    {
+        $this->onlyRector = $this->onlyRuleResolver->resolve($rector);
     }
 }
