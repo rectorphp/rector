@@ -1,4 +1,4 @@
-# All 511 Rectors Overview
+# All 512 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -45,7 +45,7 @@
 - [Php56](#php56) (2)
 - [Php70](#php70) (18)
 - [Php71](#php71) (9)
-- [Php72](#php72) (10)
+- [Php72](#php72) (11)
 - [Php73](#php73) (10)
 - [Php74](#php74) (15)
 - [Php80](#php80) (10)
@@ -7811,6 +7811,25 @@ Use $result argument in `parse_str()` function
 -$data = get_defined_vars();
 +parse_str($this->query, $result);
 +$data = $result;
+```
+
+<br><br>
+
+### `ReplaceEachAssignmentWithKeyCurrentRector`
+
+- class: [`Rector\Php72\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector`](/../master/rules/php72/src/Rector/Each/ReplaceEachAssignmentWithKeyCurrentRector.php)
+- [test fixtures](/../master/rules/php72/tests/Rector/Each/ReplaceEachAssignmentWithKeyCurrentRector/Fixture)
+
+Replace `each()` assign outside loop
+
+```diff
+ $array = ['b' => 1, 'a' => 2];
+-$eachedArray = each($array);
++$eachedArray[1] = current($array);
++$eachedArray['value'] = current($array);
++$eachedArray[0] = key($array);
++$eachedArray['key'] = key($array);
++next($array);
 ```
 
 <br><br>

@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @sponsor Thanks https://twitter.com/afilina for sponsoring this rule
+ * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
  *
  * @see https://3v4l.org/UJN6H
  * @see \Rector\Php53\Rector\Assign\ClearReturnNewByReferenceRector
