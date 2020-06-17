@@ -19,10 +19,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
+ * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
+ *
  * @see \Rector\Php72\Tests\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector\ReplaceEachAssignmentWithKeyCurrentRectorTest
  */
 final class ReplaceEachAssignmentWithKeyCurrentRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const KEY = 'key';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replace each() assign outside loop', [
@@ -88,11 +95,7 @@ CODE_SAMPLE
         }
 
         // skip assign to List
-        if ($parentNode instanceof Assign && $parentNode->var instanceof List_) {
-            return true;
-        }
-
-        return false;
+        return $parentNode instanceof Assign && $parentNode->var instanceof List_;
     }
 
     /**
@@ -101,10 +104,13 @@ CODE_SAMPLE
     private function createNewNodes(Expr $assignVariable, Expr $eachedVariable): array
     {
         $newNodes = [];
+
         $newNodes[] = $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 1, 'current');
         $newNodes[] = $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 'value', 'current');
-        $newNodes[] = $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 0, 'key');
-        $newNodes[] = $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 'key', 'key');
+
+        $newNodes[] = $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 0, self::KEY);
+        $newNodes[] = $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, self::KEY, self::KEY);
+
         $newNodes[] = $this->createFuncCall('next', [new Arg($eachedVariable)]);
 
         return $newNodes;
