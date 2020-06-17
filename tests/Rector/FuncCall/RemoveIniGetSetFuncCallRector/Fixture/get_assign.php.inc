@@ -1,0 +1,31 @@
+<?php
+
+namespace Rector\Core\Tests\Rector\FuncCall\RemoveIniGetSetFuncCallRector\Fixture;
+
+class GetAssign
+{
+    public function run()
+    {
+        $getAssign = ini_get('safe_mode');
+
+        $notGetAssign = ! ini_get('safe_mode');
+    }
+}
+
+?>
+-----
+<?php
+
+namespace Rector\Core\Tests\Rector\FuncCall\RemoveIniGetSetFuncCallRector\Fixture;
+
+class GetAssign
+{
+    public function run()
+    {
+        $getAssign = ini_get('safe_mode');
+
+        $notGetAssign = !ini_get('safe_mode');
+    }
+}
+
+?>
