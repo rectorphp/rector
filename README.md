@@ -10,7 +10,7 @@ Why refactor manually if Rector can handle 80% of the task for you?
 <br>
 
 - **[Online DEMO](https://getrector.org/demo)**
-- [Overview 500+ Rector Rules](/docs/rector_rules_overview.md)
+- [Explore 500+ Rector Rules](/docs/rector_rules_overview.md)
 
 ---
 
@@ -57,11 +57,11 @@ It supports all versions of PHP from 5.2 and many open-source projects:
 
 ## What Can Rector Do for You?
 
-- Rename classes, methods, properties, namespaces or constants
-- Complete [parameter, var or return type declarations](https://www.tomasvotruba.com/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/) based on static analysis of your code
-- Upgrade your code from PHP 5.3 to PHP 7.4
-- [Migrate your project from Nette to Symfony](https://www.tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
+- [Upgrade 30 000 unit tests from PHPUnit 6 to 9 in 2 weeks](https://twitter.com/LBajsarowicz/status/1272947900016967683)
+- Complete [@var annotations or parameter/return type declarations](https://www.tomasvotruba.com/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/)
 - [Complete PHP 7.4 property type declarations](https://www.tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
+- Upgrade your code from **PHP 5.3 to 8.0**
+- [Migrate your project from Nette to Symfony](https://www.tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
 - [Refactor Laravel facades to dependency injection](https://www.tomasvotruba.com/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
 - And much more...
 
