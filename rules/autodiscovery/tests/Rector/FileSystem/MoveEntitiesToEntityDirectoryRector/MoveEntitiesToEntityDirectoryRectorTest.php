@@ -15,6 +15,7 @@ final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractFileSystemRe
      */
     public function test(string $originalFile, string $expectedFileLocation, string $expectedFileContent): void
     {
+        // @todo add extra files too, wehre the calass name will be changed
         $this->doTestFile($originalFile);
 
         $this->assertFileExists($expectedFileLocation);
@@ -25,7 +26,7 @@ final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractFileSystemRe
     {
         yield [
             __DIR__ . '/Source/Controller/RandomEntity.php',
-            __DIR__ . '/Source/Entity/Fixture/RandomEntity.php',
+            $this->getFixtureTempDirectory() . '/Source/Entity/RandomEntity.php',
             __DIR__ . '/Expected/ExpectedRandomEntity.php',
         ];
     }

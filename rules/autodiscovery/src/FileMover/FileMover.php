@@ -59,12 +59,13 @@ final class FileMover
             return null;
         }
 
-        $currentClassName = $currentNamespace->name->toString() . '\\' . $smartFileInfo->getBasenameWithoutSuffix();
-
         // is already in the right group
-        if (Strings::endsWith((string) $currentNamespace->name, '\\' . $desiredGroupName)) {
+        $currentNamespaceName = (string) $currentNamespace->name;
+        if (Strings::endsWith($currentNamespaceName, '\\' . $desiredGroupName)) {
             return null;
         }
+
+        $currentClassName = $currentNamespaceName . '\\' . $smartFileInfo->getBasenameWithoutSuffix();
 
         // change namespace to new one
         $newNamespaceName = $this->createNewNamespaceName($desiredGroupName, $currentNamespace);
@@ -76,11 +77,7 @@ final class FileMover
         }
 
         // 1. rename namespace
-        foreach ($nodes as $node) {
-            if ($node instanceof Namespace_) {
-                $node->name = new Name($newNamespaceName);
-            }
-        }
+        $this->renameNamespace($nodes, $newNamespaceName);
 
         // 2. return changed nodes and new file destination
         $newFileDestination = $this->fileRelocationResolver->createNewFileDestination(
@@ -109,5 +106,20 @@ final class FileMover
     private function createNewClassName(SmartFileInfo $smartFileInfo, string $newNamespaceName): string
     {
         return $newNamespaceName . '\\' . $smartFileInfo->getBasenameWithoutSuffix();
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function renameNamespace(array $nodes, string $newNamespaceName): void
+    {
+        foreach ($nodes as $node) {
+            if (! $node instanceof Namespace_) {
+                continue;
+            }
+
+            $node->name = new Name($newNamespaceName);
+            break;
+        }
     }
 }

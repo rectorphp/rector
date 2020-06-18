@@ -6,6 +6,7 @@ namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
+use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\HttpKernel\RectorKernel;
@@ -27,6 +28,11 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
      */
     private $removedAndAddedFilesProcessor;
 
+    /**
+     * @var FileProcessor
+     */
+    private $fileProcessor;
+
     protected function setUp(): void
     {
         $this->createContainerWithProvidedRector();
@@ -35,6 +41,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $configuration = self::$container->get(Configuration::class);
         $configuration->setIsDryRun(false);
 
+        $this->fileProcessor = self::$container->get(FileProcessor::class);
         $this->fileSystemFileProcessor = self::$container->get(FileSystemFileProcessor::class);
         $this->removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
     }
@@ -49,13 +56,36 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         return $temporaryFilePath;
     }
 
-    protected function doTestFile(string $file): string
+    /**
+     * @param string[] $extraFiles
+     */
+    protected function doTestFile(string $file, array $extraFiles = []): string
     {
         $temporaryFilePath = $this->createTemporaryFilePathFromFilePath($file);
-
         require_once $temporaryFilePath;
+        $fileInfo = new SmartFileInfo($temporaryFilePath);
+        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
 
-        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($temporaryFilePath));
+        $filesInfos = [$fileInfo];
+
+        foreach ($extraFiles as $extraFile) {
+            $temporaryExtraFilePath = $this->createTemporaryFilePathFromFilePath($extraFile);
+            require_once $temporaryExtraFilePath;
+            $extraFileInfo = new SmartFileInfo($temporaryExtraFilePath);
+            $this->fileSystemFileProcessor->processFileInfo($extraFileInfo);
+
+            $filesInfos[] = $extraFileInfo;
+        }
+
+        foreach ($filesInfos as $fileInfo) {
+            if (! file_exists($fileInfo->getPathname())) {
+                continue;
+            }
+
+            $this->fileProcessor->postFileRefactor($fileInfo);
+            $this->fileProcessor->printToFile($fileInfo);
+        }
+
         $this->removedAndAddedFilesProcessor->run();
 
         return $temporaryFilePath;
@@ -107,6 +137,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $relativeFilePath = $fileInfo->getRelativeFilePathFromDirectory($testCaseDirectory);
         $temporaryFilePath = $this->getFixtureTempDirectory() . '/' . $relativeFilePath;
 
+        FileSystem::delete($temporaryFilePath);
         FileSystem::copy($file, $temporaryFilePath, true);
 
         return $temporaryFilePath;

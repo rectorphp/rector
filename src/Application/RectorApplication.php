@@ -121,8 +121,8 @@ final class RectorApplication
         }
 
         if (! $this->symfonyStyle->isVerbose() && $this->configuration->showProgressBar()) {
-            // why 3? one for each cycle, so user sees some activity all the time
-            $this->symfonyStyle->progressStart($fileCount * 3);
+            // why 5? one for each cycle, so user sees some activity all the time
+            $this->symfonyStyle->progressStart($fileCount * 5);
 
             $this->configureStepCount($this->symfonyStyle);
         }
@@ -130,17 +130,17 @@ final class RectorApplication
         // PHPStan has to know about all files!
         $this->configurePHPStanNodeScopeResolver($fileInfos);
 
+        // active only one rule
+        if ($this->configuration->getOnlyRector() !== null) {
+            $onlyRector = $this->configuration->getOnlyRector();
+            $this->enabledRectorsProvider->addEnabledRector($onlyRector);
+        }
+
         // 1. parse files to nodes
         foreach ($fileInfos as $fileInfo) {
             $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
             }, 'parsing');
-        }
-
-        // active only one rule
-        if ($this->configuration->getOnlyRector() !== null) {
-            $onlyRector = $this->configuration->getOnlyRector();
-            $this->enabledRectorsProvider->addEnabledRector($onlyRector);
         }
 
         // 2. change nodes with Rectors
@@ -150,10 +150,24 @@ final class RectorApplication
             }, 'refactoring');
         }
 
-        // 3. print to file or string
+        // 3. process file system rectors
         foreach ($fileInfos as $fileInfo) {
             $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->processFileInfo($smartFileInfo);
+                $this->processFileSystemRectors($smartFileInfo);
+            }, 'refactoring with file system');
+        }
+
+        // 4. apply post rectors
+        foreach ($fileInfos as $fileInfo) {
+            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->fileProcessor->postFileRefactor($smartFileInfo);
+            }, 'post rectors');
+        }
+
+        // 5. print to file or string
+        foreach ($fileInfos as $fileInfo) {
+            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->printFileInfo($smartFileInfo);
             }, 'printing');
         }
 
@@ -222,7 +236,7 @@ final class RectorApplication
         }
     }
 
-    private function processFileInfo(SmartFileInfo $fileInfo): void
+    private function printFileInfo(SmartFileInfo $fileInfo): void
     {
         if ($this->removedAndAddedFilesCollector->isFileRemoved($fileInfo)) {
             // skip, because this file exists no more
@@ -235,8 +249,6 @@ final class RectorApplication
             : $this->fileProcessor->printToFile($fileInfo);
 
         $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
-
-        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
     }
 
     private function advance(SmartFileInfo $smartFileInfo, string $phase): void
@@ -247,5 +259,15 @@ final class RectorApplication
         } elseif ($this->configuration->showProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }
+    }
+
+    private function processFileSystemRectors(SmartFileInfo $smartFileInfo): void
+    {
+        if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
+            // skip, because this file exists no more
+            return;
+        }
+
+        $this->fileSystemFileProcessor->processFileInfo($smartFileInfo);
     }
 }
