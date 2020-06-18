@@ -2,11 +2,7 @@ imports:
     - { resource: "create-rector.yaml", ignore_errors: 'not_found' }
 
 services:
-    # @todo add compiler pass that makes every Rector public service
-#    _defaults:
-#        public: true
-
-    Rector\Php72\Rector\Each\ListEachRector: null
+    Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector: null
 
 parameters:
     # bleeding edge feature
