@@ -23,6 +23,20 @@ final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRector
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @dataProvider provideDataPhp74()
+     * @requires PHP >= 7.4
+     */
+    public function testPhp74(string $file): void
+    {
+        $this->doTestFile($file);
+    }
+
+    public function provideDataPhp74(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp74');
+    }
+
     protected function getRectorClass(): string
     {
         return AddDefaultValueForUndefinedVariableRector::class;
