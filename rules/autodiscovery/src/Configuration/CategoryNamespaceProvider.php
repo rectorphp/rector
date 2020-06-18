@@ -17,6 +17,7 @@ final class CategoryNamespaceProvider
     public function provide(): array
     {
         return [
+            'Command',
             'Controller',
             'Exception',
             'Facade',

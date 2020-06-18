@@ -82,7 +82,7 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        if ($this->isControlFactory($oldInterfaceName)) {
+        if ($this->isNetteControlFactory($oldInterfaceName)) {
             return;
         }
 
@@ -118,7 +118,7 @@ PHP
         return $classLikeName;
     }
 
-    private function isControlFactory(string $interfaceName): bool
+    private function isNetteControlFactory(string $interfaceName): bool
     {
         $reflectionClass = new ReflectionClass($interfaceName);
         foreach ($reflectionClass->getMethods() as $methodReflection) {

@@ -29,7 +29,7 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystem
             __DIR__ . '/Expected/Repository/ExpectedAppleRepository.php',
         ];
 
-        yield 'prefix_same_namespace' => [
+        yield [
             __DIR__ . '/Source/Controller/BananaCommand.php',
             $this->getFixtureTempDirectory() . '/Source/Command/BananaCommand.php',
             __DIR__ . '/Expected/Command/ExpectedBananaCommand.php',
@@ -41,13 +41,20 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystem
             // same content, no change
             __DIR__ . '/Source/Mapper/CorrectMapper.php',
         ];
+
+        yield [
+            __DIR__ . '/Source/Command/MissPlacedController.php',
+            $this->getFixtureTempDirectory() . '/Source/Controller/MissPlacedController.php',
+            // same content, no change
+            __DIR__ . '/Expected/Controller/ExpectedMissPlacedController.php',
+        ];
     }
 
     protected function getRectorsWithConfiguration(): array
     {
         return [
             MoveServicesBySuffixToDirectoryRector::class => [
-                '$groupNamesBySuffix' => ['Repository', 'Command', 'Mapper'],
+                '$groupNamesBySuffix' => ['Repository', 'Command', 'Mapper', 'Controller'],
             ],
         ];
     }

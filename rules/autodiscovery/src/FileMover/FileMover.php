@@ -88,7 +88,7 @@ final class FileMover
         $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, ClassLike::class);
         $classLike->namespacedName = new FullyQualified($newClassName);
 
-        return new NodesWithFileDestinationValueObject($nodes, $newFileDestination);
+        return new NodesWithFileDestinationValueObject($nodes, $newFileDestination, $currentClassName, $newClassName);
     }
 
     private function createNewNamespaceName(string $desiredGroupName, Namespace_ $currentNamespace): string
