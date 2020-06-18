@@ -82,7 +82,7 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        if ($this->isNetteControlFactory($oldInterfaceName)) {
+        if ($this->isNetteMagicGeneratedFactory($oldInterfaceName)) {
             return;
         }
 
@@ -118,7 +118,10 @@ PHP
         return $classLikeName;
     }
 
-    private function isNetteControlFactory(string $interfaceName): bool
+    /**
+     * @see https://doc.nette.org/en/3.0/components#toc-components-with-dependencies
+     */
+    private function isNetteMagicGeneratedFactory(string $interfaceName): bool
     {
         $reflectionClass = new ReflectionClass($interfaceName);
         foreach ($reflectionClass->getMethods() as $methodReflection) {
@@ -126,11 +129,15 @@ PHP
                 continue;
             }
 
-            if (! is_a((string) $methodReflection->getReturnType(), 'Nette\Application\UI\Control', true)) {
-                continue;
+            $returnType = (string) $methodReflection->getReturnType();
+
+            if (is_a($returnType, 'Nette\Application\UI\Control', true)) {
+                return true;
             }
 
-            return true;
+            if (is_a($returnType, 'Nette\Application\UI\Form', true)) {
+                return true;
+            }
         }
 
         return false;

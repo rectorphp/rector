@@ -29,11 +29,18 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
             __DIR__ . '/Expected/ExpectedRandomInterface.php',
         ];
 
-        // test skipped control factory
+        // skip nette control factory
         yield [
             __DIR__ . '/Source/Control/ControlFactory.php',
             $this->getFixtureTempDirectory() . '/Source/Control/ControlFactory.php',
             __DIR__ . '/Source/Control/ControlFactory.php',
+        ];
+
+        // skip form control factory
+        yield [
+            __DIR__ . '/Source/Control/FormFactory.php',
+            $this->getFixtureTempDirectory() . '/Source/Control/FormFactory.php',
+            __DIR__ . '/Source/Control/FormFactory.php',
         ];
     }
 
