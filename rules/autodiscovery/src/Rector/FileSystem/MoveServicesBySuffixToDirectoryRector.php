@@ -93,14 +93,7 @@ PHP
                 continue;
             }
 
-            // is suffix in the same category, e.g. "Exception/SomeException.php"
-            $expectedLocationFilePattern = sprintf(
-                '#\/%s\/.+%s#',
-                preg_quote($groupName, '#'),
-                preg_quote($suffixPattern, '#')
-            );
-
-            if (Strings::match($smartFileInfo->getRealPath(), $expectedLocationFilePattern)) {
+            if ($this->isLocatedInExpectedLocation($groupName, $suffixPattern, $smartFileInfo)) {
                 continue;
             }
 
@@ -131,6 +124,28 @@ PHP
         }
 
         $this->removeFile($smartFileInfo);
+        $this->addClassRename(
+            $nodesWithFileDestination->getOldClassName(),
+            $nodesWithFileDestination->getNewClassName()
+        );
         $this->printNodesWithFileDestination($nodesWithFileDestination);
+    }
+
+    /**
+     * Checks if is suffix in the same category, e.g. "Exception/SomeException.php"
+     */
+    private function createExpectedFileLocationPattern(string $groupName, string $suffixPattern): string
+    {
+        return sprintf('#\/%s\/.+%s#', preg_quote($groupName, '#'), preg_quote($suffixPattern, '#'));
+    }
+
+    private function isLocatedInExpectedLocation(
+        string $groupName,
+        string $suffixPattern,
+        SmartFileInfo $smartFileInfo
+    ): bool {
+        $expectedLocationFilePattern = $this->createExpectedFileLocationPattern($groupName, $suffixPattern);
+
+        return (bool) Strings::match($smartFileInfo->getRealPath(), $expectedLocationFilePattern);
     }
 }

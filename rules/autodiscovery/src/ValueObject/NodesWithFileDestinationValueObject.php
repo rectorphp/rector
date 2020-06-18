@@ -19,12 +19,24 @@ final class NodesWithFileDestinationValueObject
     private $nodes = [];
 
     /**
+     * @var string
+     */
+    private $oldClassName;
+
+    /**
+     * @var string
+     */
+    private $newClassName;
+
+    /**
      * @param Node[] $nodes
      */
-    public function __construct(array $nodes, string $fileDestination)
+    public function __construct(array $nodes, string $fileDestination, string $oldClassName, string $newClassName)
     {
         $this->nodes = $nodes;
         $this->fileDestination = $fileDestination;
+        $this->oldClassName = $oldClassName;
+        $this->newClassName = $newClassName;
     }
 
     /**
@@ -38,5 +50,15 @@ final class NodesWithFileDestinationValueObject
     public function getFileDestination(): string
     {
         return $this->fileDestination;
+    }
+
+    public function getOldClassName(): string
+    {
+        return $this->oldClassName;
+    }
+
+    public function getNewClassName(): string
+    {
+        return $this->newClassName;
     }
 }
