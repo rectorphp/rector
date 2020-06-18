@@ -1,4 +1,4 @@
-# All 512 Rectors Overview
+# All 511 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -53,7 +53,7 @@
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
 - [Privatization](#privatization) (7)
-- [Refactoring](#refactoring) (2)
+- [Refactoring](#refactoring) (1)
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (10)
 - [Restoration](#restoration) (7)
@@ -9099,35 +9099,6 @@ services:
 -        return new SomeClass;
 +        return new DifferentClass;
      }
- }
-```
-
-<br><br>
-
-### `MoveAndRenameNamespaceRector`
-
-- class: [`Rector\Refactoring\Rector\FileSystem\MoveAndRenameNamespaceRector`](/../master/packages/refactoring/src/Rector/FileSystem/MoveAndRenameNamespaceRector.php)
-
-Move namespace to new location with respect to PSR-4 + follow up with files in the namespace move
-
-```yaml
-services:
-    Rector\Refactoring\Rector\FileSystem\MoveAndRenameNamespaceRector:
-        $oldToNewNamespace:
-            App\Entity: App\ValueObject
-```
-
-↓
-
-```diff
--// app/Entity/SomeClass.php
-+// app/ValueObject/SomeClass.php
-
--namespace App\Entity;
-+namespace App\ValueObject;
-
- class SomeClass
- {
  }
 ```
 

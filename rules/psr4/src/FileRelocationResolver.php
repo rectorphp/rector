@@ -7,7 +7,6 @@ namespace Rector\PSR4;
 use Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\Core\ValueObject\RenamedNamespaceValueObject;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileRelocationResolver
@@ -45,18 +44,6 @@ final class FileRelocationResolver
             self::NAMESPACE_SEPARATOR,
             $groupNames
         );
-    }
-
-    public function resolveNewFileLocationFromRenamedNamespace(
-        SmartFileInfo $smartFileInfo,
-        RenamedNamespaceValueObject $renamedNamespaceValueObject
-    ): string {
-        $beforeToAfterPart = $this->resolveBeforeToAfterPartBetweenClassNames(
-            $renamedNamespaceValueObject->getOldNamespace(),
-            $renamedNamespaceValueObject->getNewNamespace()
-        );
-
-        return $this->replaceRelativeFilePathsWithBeforeAfter($smartFileInfo, $beforeToAfterPart);
     }
 
     public function resolveNewFileLocationFromOldClassToNewClass(

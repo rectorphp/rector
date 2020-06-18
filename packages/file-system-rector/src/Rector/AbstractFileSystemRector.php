@@ -134,22 +134,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     }
 
     /**
-     * @return Node[]
-     */
-    protected function parseFileInfoToNodesWithoutScope(SmartFileInfo $smartFileInfo): array
-    {
-        if (! $this->tokensByFilePathStorage->hasForFileInfo($smartFileInfo)) {
-            $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
-        }
-
-        [, $oldStmts] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
-
-        $this->oldStmts = $oldStmts;
-
-        return $oldStmts;
-    }
-
-    /**
      * @param Node[] $nodes
      */
     protected function printNodesToFilePath(array $nodes, string $fileDestination): void
