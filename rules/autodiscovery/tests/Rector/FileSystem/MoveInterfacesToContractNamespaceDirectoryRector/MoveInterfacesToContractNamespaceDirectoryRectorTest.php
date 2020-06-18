@@ -12,13 +12,28 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
 {
     /**
      * @dataProvider provideData()
+     * @param string[] $extraFiles
      */
-    public function test(string $originalFile, string $expectedFileLocation, string $expectedFileContent): void
-    {
-        $this->doTestFile($originalFile);
+    public function test(
+        string $originalFile,
+        string $expectedFileLocation,
+        string $expectedFileContent,
+        array $extraFiles = [],
+        ?string $extraExpectedFileLocation = null,
+        ?string $expectedExtraFileContent = null
+    ): void {
+        $this->doTestFile($originalFile, $extraFiles);
 
         $this->assertFileExists($expectedFileLocation);
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
+
+        if ($extraExpectedFileLocation !== null) {
+            $this->assertFileExists($extraExpectedFileLocation);
+
+            if ($expectedExtraFileContent !== null) {
+                $this->assertFileEquals($expectedExtraFileContent, $extraExpectedFileLocation);
+            }
+        }
     }
 
     public function provideData(): Iterator
@@ -27,6 +42,10 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
             __DIR__ . '/Source/Entity/RandomInterface.php',
             $this->getFixtureTempDirectory() . '/Source/Contract/RandomInterface.php',
             __DIR__ . '/Expected/ExpectedRandomInterface.php',
+            // extra file
+            [__DIR__ . '/Source/RandomInterfaceUseCase.php'],
+            $this->getFixtureTempDirectory() . '/Source/RandomInterfaceUseCase.php',
+            __DIR__ . '/Expected/ExpectedRandomInterfaceUseCase.php',
         ];
 
         // skip nette control factory

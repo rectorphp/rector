@@ -315,3 +315,4 @@ parameters:
         - '#Parameter \#1 \$oldMethod of class Rector\\PHPOffice\\ValueObject\\ConditionalSetValue constructor expects string, bool\|int\|string given#'
         - '#Parameter \#2 \$scope of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects PHPStan\\Analyser\\MutatingScope, PHPStan\\Analyser\\Scope given#'
         - '#Parameter \#1 \$object of function get_class expects object, PhpParser\\Node\|null given#'
+        - '#Cognitive complexity for "Rector\\Core\\Application\\RectorApplication\:\:runOnFileInfos\(\)" is 10, keep it under 9#'

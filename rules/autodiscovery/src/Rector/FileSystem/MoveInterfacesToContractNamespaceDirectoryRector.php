@@ -7,11 +7,8 @@ namespace Rector\Autodiscovery\Rector\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Autodiscovery\FileMover\FileMover;
-use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
@@ -82,13 +79,9 @@ PHP
     {
         /** @var Interface_|null $interface */
         $interface = $this->betterNodeFinder->findFirstInstanceOf($nodes, Interface_::class);
+
         if ($interface === null) {
             return;
-        }
-
-        $oldInterfaceName = $this->getName($interface);
-        if ($oldInterfaceName === null) {
-            throw new ShouldNotHappenException();
         }
 
         if ($this->isNetteMagicGeneratedFactory($interface)) {
@@ -102,29 +95,14 @@ PHP
             return;
         }
 
-        $newInterfaceName = $this->resolveNewClassLikeName($nodesWithFileDestination);
-
         $this->removeFile($smartFileInfo);
-        $this->addClassRename($oldInterfaceName, $newInterfaceName);
 
-        $this->printNodesWithFileDestination($nodesWithFileDestination);
-    }
-
-    private function resolveNewClassLikeName(
-        NodesWithFileDestinationValueObject $nodesWithFileDestinationValueObject
-    ): string {
-        /** @var ClassLike $classLike */
-        $classLike = $this->betterNodeFinder->findFirstInstanceOf(
-            $nodesWithFileDestinationValueObject->getNodes(),
-            ClassLike::class
+        $this->addClassRename(
+            $nodesWithFileDestination->getOldClassName(),
+            $nodesWithFileDestination->getNewClassName()
         );
 
-        $classLikeName = $this->getName($classLike);
-        if ($classLikeName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $classLikeName;
+        $this->printNodesWithFileDestination($nodesWithFileDestination);
     }
 
     /**
@@ -138,11 +116,13 @@ PHP
                 continue;
             }
 
-            if ($returnType->isSuperTypeOf(new ObjectType('Nette\Application\UI\Control'))) {
+            $className = $returnType->getClassName();
+
+            if (is_a($className, 'Nette\Application\UI\Control', true)) {
                 return true;
             }
 
-            if ($returnType->isSuperTypeOf(new ObjectType('Nette\Application\UI\Form'))) {
+            if (is_a($className, 'Nette\Application\UI\Form', true)) {
                 return true;
             }
         }

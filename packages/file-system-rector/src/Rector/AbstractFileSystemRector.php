@@ -9,8 +9,9 @@ use PhpParser\Lexer;
 use PhpParser\Node;
 use PhpParser\ParserFactory;
 use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
+use Rector\Core\Application\FileProcessor;
+use Rector\Core\Application\TokensByFilePathStorage;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\PhpParser\Parser\Parser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
@@ -40,11 +41,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      * @var Node[]
      */
     private $oldStmts = [];
-
-    /**
-     * @var Parser
-     */
-    private $parser;
 
     /**
      * @var Lexer
@@ -77,10 +73,19 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     private $renamedClassesCollector;
 
     /**
+     * @var TokensByFilePathStorage
+     */
+    private $tokensByFilePathStorage;
+
+    /**
+     * @var FileProcessor
+     */
+    private $fileProcessor;
+
+    /**
      * @required
      */
     public function autowireAbstractFileSystemRector(
-        Parser $parser,
         ParserFactory $parserFactory,
         Lexer $lexer,
         FormatPerservingPrinter $formatPerservingPrinter,
@@ -89,9 +94,10 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         BetterStandardPrinter $betterStandardPrinter,
         ParameterProvider $parameterProvider,
         PostFileProcessor $postFileProcessor,
-        RenamedClassesCollector $renamedClassesCollector
+        RenamedClassesCollector $renamedClassesCollector,
+        TokensByFilePathStorage $tokensByFilePathStorage,
+        FileProcessor $fileProcessor
     ): void {
-        $this->parser = $parser;
         $this->parserFactory = $parserFactory;
         $this->lexer = $lexer;
         $this->formatPerservingPrinter = $formatPerservingPrinter;
@@ -101,6 +107,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->parameterProvider = $parameterProvider;
         $this->postFileProcessor = $postFileProcessor;
         $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->tokensByFilePathStorage = $tokensByFilePathStorage;
+        $this->fileProcessor = $fileProcessor;
     }
 
     protected function addClassRename(string $oldClass, string $newClass): void
@@ -113,7 +121,12 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function parseFileInfoToNodes(SmartFileInfo $smartFileInfo): array
     {
-        $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
+        if (! $this->tokensByFilePathStorage->hasForRealPath($smartFileInfo->getRealPath())) {
+            $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
+        }
+
+        [, $oldStmts] = $this->tokensByFilePathStorage->getForRealPath($smartFileInfo->getRealPath());
+
         // needed for format preserving
         $this->oldStmts = $oldStmts;
 
@@ -125,7 +138,12 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function parseFileInfoToNodesWithoutScope(SmartFileInfo $smartFileInfo): array
     {
-        $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
+        if (! $this->tokensByFilePathStorage->hasForRealPath($smartFileInfo->getRealPath())) {
+            $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
+        }
+
+        [, $oldStmts] = $this->tokensByFilePathStorage->getForRealPath($smartFileInfo->getRealPath());
+
         $this->oldStmts = $oldStmts;
 
         return $oldStmts;
