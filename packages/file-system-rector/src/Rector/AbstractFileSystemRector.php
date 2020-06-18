@@ -16,7 +16,6 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
-use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -53,11 +52,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     private $formatPerservingPrinter;
 
     /**
-     * @var NodeScopeAndMetadataDecorator
-     */
-    private $nodeScopeAndMetadataDecorator;
-
-    /**
      * @var ParserFactory
      */
     private $parserFactory;
@@ -89,7 +83,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         ParserFactory $parserFactory,
         Lexer $lexer,
         FormatPerservingPrinter $formatPerservingPrinter,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         Configuration $configuration,
         BetterStandardPrinter $betterStandardPrinter,
         ParameterProvider $parameterProvider,
@@ -101,7 +94,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->parserFactory = $parserFactory;
         $this->lexer = $lexer;
         $this->formatPerservingPrinter = $formatPerservingPrinter;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->configuration = $configuration;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parameterProvider = $parameterProvider;
@@ -125,12 +117,12 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
         }
 
-        [, $oldStmts] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
+        [$newStmts, $oldStmts] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
         // needed for format preserving
         $this->oldStmts = $oldStmts;
 
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $smartFileInfo);
+        return $newStmts;
     }
 
     /**

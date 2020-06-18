@@ -1,4 +1,4 @@
-# All 511 Rectors Overview
+# All 510 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -53,7 +53,6 @@
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
 - [Privatization](#privatization) (7)
-- [Refactoring](#refactoring) (1)
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (10)
 - [Restoration](#restoration) (7)
@@ -9061,43 +9060,6 @@ Privatize local-only property to private property
      public function run()
      {
          return $this->value;
-     }
- }
-```
-
-<br><br>
-
-## Refactoring
-
-### `MoveAndRenameClassRector`
-
-- class: [`Rector\Refactoring\Rector\FileSystem\MoveAndRenameClassRector`](/../master/packages/refactoring/src/Rector/FileSystem/MoveAndRenameClassRector.php)
-
-Move class to respect new location with respect to PSR-4 + follow up with class rename
-
-```yaml
-services:
-    Rector\Refactoring\Rector\FileSystem\MoveAndRenameClassRector:
-        $oldToNewClass:
-            SomeClass: DifferentClass
-```
-
-↓
-
-```diff
--// src/SomeClass.php
--class SomeClass
-+// src/DifferentClass.php
-+class DifferentClass
- {
- }
-
- class AnotherClass
- {
-     public function create()
-     {
--        return new SomeClass;
-+        return new DifferentClass;
      }
  }
 ```
