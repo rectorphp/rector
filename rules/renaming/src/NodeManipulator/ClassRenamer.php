@@ -173,6 +173,9 @@ final class ClassRenamer
 
     private function refactorClassLikeNode(ClassLike $classLike, array $oldToNewClasses): ?Node
     {
+        // rename interfaces
+        $this->renameClassImplements($classLike, $oldToNewClasses);
+
         $name = $this->nodeNameResolver->getName($classLike);
         if ($name === null) {
             return null;
@@ -301,5 +304,34 @@ final class ClassRenamer
         }
 
         return true;
+    }
+
+    /**
+     * @param string[] $oldToNewClasses
+     */
+    private function renameClassImplements(ClassLike $classLike, array $oldToNewClasses): void
+    {
+        if (! $classLike instanceof Class_) {
+            return;
+        }
+
+        foreach ((array) $classLike->implements as $key => $implementName) {
+            if (! $implementName instanceof Name) {
+                continue;
+            }
+
+            if (! $implementName->getAttribute('virtual_node')) {
+                continue;
+            }
+
+            $namespaceName = $classLike->getAttribute(AttributeKey::NAMESPACE_NAME);
+            $fullyQualifiedName = $namespaceName . '\\' . $implementName->toString();
+            $newName = $oldToNewClasses[$fullyQualifiedName] ?? null;
+            if ($newName === null) {
+                continue;
+            }
+
+            $classLike->implements[$key] = new FullyQualified($newName);
+        }
     }
 }
