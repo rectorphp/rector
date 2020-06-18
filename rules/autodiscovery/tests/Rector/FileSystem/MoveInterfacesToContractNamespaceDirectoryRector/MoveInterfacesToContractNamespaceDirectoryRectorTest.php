@@ -28,6 +28,13 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
             $this->getFixtureTempDirectory() . '/Source/Contract/RandomInterface.php',
             __DIR__ . '/Expected/ExpectedRandomInterface.php',
         ];
+
+        // test skipped control factory
+        yield [
+            __DIR__ . '/Source/Control/ControlFactory.php',
+            $this->getFixtureTempDirectory() . '/Source/Control/ControlFactory.php',
+            __DIR__ . '/Source/Control/ControlFactory.php',
+        ];
     }
 
     protected function getRectorClass(): string

@@ -13,6 +13,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
+use ReflectionClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -81,6 +82,10 @@ PHP
             throw new ShouldNotHappenException();
         }
 
+        if ($this->isControlFactory($oldInterfaceName)) {
+            return;
+        }
+
         $nodesWithFileDestination = $this->fileMover->createMovedNodesAndFilePath($smartFileInfo, $nodes, 'Contract');
 
         // nothing to move
@@ -111,5 +116,23 @@ PHP
         }
 
         return $classLikeName;
+    }
+
+    private function isControlFactory(string $interfaceName): bool
+    {
+        $reflectionClass = new ReflectionClass($interfaceName);
+        foreach ($reflectionClass->getMethods() as $methodReflection) {
+            if ($methodReflection->getReturnType() === null) {
+                continue;
+            }
+
+            if (! is_a((string) $methodReflection->getReturnType(), 'Nette\Application\UI\Control', true)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
