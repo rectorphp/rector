@@ -16,7 +16,7 @@ final class StaticEasyPrefixer
         'PhpParser\*',
         'PHPStan\*',
         'Rector\*',
-        'Symplify\SmartFileSystem\SmartFileInfo',
+        'Symplify\SmartFileSystem\*',
         'Symfony\Component\EventDispatcher\EventSubscriberInterface',
         'Symfony\Component\Console\Style\SymfonyStyle',
     ];
