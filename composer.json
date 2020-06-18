@@ -117,7 +117,6 @@
             "Rector\\Polyfill\\": "packages/polyfill/src",
             "Rector\\Privatization\\": "rules/privatization/src",
             "Rector\\RectorGenerator\\": "packages/rector-generator/src",
-            "Rector\\Refactoring\\": "packages/refactoring/src",
             "Rector\\RemovingStatic\\": "rules/removing-static/src",
             "Rector\\Renaming\\": "rules/renaming/src",
             "Rector\\Restoration\\": "rules/restoration/src",
