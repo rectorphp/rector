@@ -6,6 +6,7 @@ namespace Rector\Php56\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Cast\Unset_ as UnsetCast;
@@ -79,7 +80,7 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [FunctionLike::class];
+        return [ClassMethod::class, Function_::class, Closure::class];
     }
 
     /**
@@ -117,7 +118,7 @@ PHP
         $undefinedVariables = [];
         $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (&$undefinedVariables): ?int {
             // entering new scope - break!
-            if ($node instanceof FunctionLike) {
+            if ($node instanceof FunctionLike && ! $node instanceof ArrowFunction) {
                 return NodeTraverser::STOP_TRAVERSAL;
             }
 
