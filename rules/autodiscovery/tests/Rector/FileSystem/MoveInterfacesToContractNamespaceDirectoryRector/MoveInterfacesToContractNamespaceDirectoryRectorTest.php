@@ -12,27 +12,22 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
 {
     /**
      * @dataProvider provideData()
-     * @param string[] $extraFiles
+     * @param string[][] $extraFiles
      */
     public function test(
         string $originalFile,
         string $expectedFileLocation,
         string $expectedFileContent,
-        array $extraFiles = [],
-        ?string $extraExpectedFileLocation = null,
-        ?string $expectedExtraFileContent = null
+        array $extraFiles = []
     ): void {
-        $this->doTestFile($originalFile, $extraFiles);
+        $this->doTestFile($originalFile, array_keys($extraFiles));
 
         $this->assertFileExists($expectedFileLocation);
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
 
-        if ($extraExpectedFileLocation !== null) {
-            $this->assertFileExists($extraExpectedFileLocation);
-
-            if ($expectedExtraFileContent !== null) {
-                $this->assertFileEquals($expectedExtraFileContent, $extraExpectedFileLocation);
-            }
+        foreach ($extraFiles as $extraFile) {
+            $this->assertFileExists($extraFile['location']);
+            $this->assertFileEquals($extraFile['content'], $extraFile['location']);
         }
     }
 
@@ -42,10 +37,18 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
             __DIR__ . '/Source/Entity/RandomInterface.php',
             $this->getFixtureTempDirectory() . '/Source/Contract/RandomInterface.php',
             __DIR__ . '/Expected/ExpectedRandomInterface.php',
-            // extra file
-            [__DIR__ . '/Source/RandomInterfaceUseCase.php'],
-            $this->getFixtureTempDirectory() . '/Source/RandomInterfaceUseCase.php',
-            __DIR__ . '/Expected/ExpectedRandomInterfaceUseCase.php',
+            // extra files
+            [
+                __DIR__ . '/Source/RandomInterfaceUseCase.php' => [
+                    'location' => $this->getFixtureTempDirectory() . '/Source/RandomInterfaceUseCase.php',
+                    'content' => __DIR__ . '/Expected/ExpectedRandomInterfaceUseCase.php',
+                ],
+
+                __DIR__ . '/Source/Entity/SameClassImplementEntity.php' => [
+                    'location' => $this->getFixtureTempDirectory() . '/Source/Entity/SameClassImplementEntity.php',
+                    'content' => __DIR__ . '/Expected/Entity/ExpectedSameClassImplementEntity.php',
+                ],
+            ],
         ];
 
         // skip nette control factory
