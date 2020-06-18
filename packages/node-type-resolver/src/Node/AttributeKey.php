@@ -17,6 +17,11 @@ final class AttributeKey
     /**
      * @var string
      */
+    public const VIRTUAL_NODE = 'virtual_node';
+
+    /**
+     * @var string
+     */
     public const SCOPE = Scope::class;
 
     /**

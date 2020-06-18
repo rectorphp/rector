@@ -258,6 +258,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
         $this->fileProcessor->refactor($originalFileInfo);
 
+        $this->fileProcessor->postFileRefactor($originalFileInfo);
+
+        // mimic post-rectors
+
         $changedContent = $this->fileProcessor->printToString($originalFileInfo);
 
         $causedByFixtureMessage = $fixtureFileInfo->getRelativeFilePathFromCwd();

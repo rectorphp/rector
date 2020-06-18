@@ -142,7 +142,6 @@ final class FileProcessor
         $this->currentFileInfoProvider->setCurrentStmt($newStmts);
 
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
-        $newStmts = $this->postFileProcessor->traverse($newStmts);
 
         // this is needed for new tokens added in "afterTraverse()"
         $this->tokensByFilePathStorage->addForRealPath($smartFileInfo, $newStmts, $oldStmts, $oldTokens);

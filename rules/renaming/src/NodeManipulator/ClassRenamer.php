@@ -320,7 +320,7 @@ final class ClassRenamer
                 continue;
             }
 
-            if (! $implementName->getAttribute('virtual_node')) {
+            if (! $implementName->getAttribute(AttributeKey::VIRTUAL_NODE)) {
                 continue;
             }
 
