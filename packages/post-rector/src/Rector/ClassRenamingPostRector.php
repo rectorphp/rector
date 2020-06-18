@@ -34,7 +34,12 @@ final class ClassRenamingPostRector extends AbstractPostRector
 
     public function enterNode(Node $node): ?Node
     {
-        return $this->classRenamer->renameNode($node, $this->renamedClassesCollector->getOldToNewClasses());
+        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
+        if ($oldToNewClasses === []) {
+            return $node;
+        }
+
+        return $this->classRenamer->renameNode($node, $oldToNewClasses);
     }
 
     public function getDefinition(): RectorDefinition
