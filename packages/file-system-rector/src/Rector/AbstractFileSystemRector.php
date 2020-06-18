@@ -121,11 +121,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function parseFileInfoToNodes(SmartFileInfo $smartFileInfo): array
     {
-        if (! $this->tokensByFilePathStorage->hasForRealPath($smartFileInfo->getRealPath())) {
+        if (! $this->tokensByFilePathStorage->hasForFileInfo($smartFileInfo)) {
             $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
         }
 
-        [, $oldStmts] = $this->tokensByFilePathStorage->getForRealPath($smartFileInfo->getRealPath());
+        [, $oldStmts] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
         // needed for format preserving
         $this->oldStmts = $oldStmts;
@@ -138,11 +138,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     protected function parseFileInfoToNodesWithoutScope(SmartFileInfo $smartFileInfo): array
     {
-        if (! $this->tokensByFilePathStorage->hasForRealPath($smartFileInfo->getRealPath())) {
+        if (! $this->tokensByFilePathStorage->hasForFileInfo($smartFileInfo)) {
             $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
         }
 
-        [, $oldStmts] = $this->tokensByFilePathStorage->getForRealPath($smartFileInfo->getRealPath());
+        [, $oldStmts] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
         $this->oldStmts = $oldStmts;
 

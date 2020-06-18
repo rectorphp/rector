@@ -6,6 +6,7 @@ namespace Rector\Core\Application;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TokensByFilePathStorage
 {
@@ -22,26 +23,25 @@ final class TokensByFilePathStorage
      * @param Node[]|Stmt[] $oldStmts
      * @param Node[]|Stmt[] $oldTokens
      */
-    public function addForRealPath(string $realPath, array $newStmts, array $oldStmts, array $oldTokens): void
+    public function addForRealPath(
+        SmartFileInfo $smartFileInfo,
+        array $newStmts,
+        array $oldStmts,
+        array $oldTokens
+    ): void {
+        $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];
+    }
+
+    public function hasForFileInfo(SmartFileInfo $smartFileInfo): bool
     {
-        $this->tokensByFilePath[$realPath] = [$newStmts, $oldStmts, $oldTokens];
+        return isset($this->tokensByFilePath[$smartFileInfo->getRealPath()]);
     }
 
     /**
-     * @todo replace with SmartFileInfo $realPath
-     */
-    public function hasForRealPath(string $realPath): bool
-    {
-        return isset($this->tokensByFilePath[$realPath]);
-    }
-
-    /**
-     * @todo replace with SmartFileInfo $realPath
-     *
      * @return Node[][]|Stmt[][]
      */
-    public function getForRealPath(string $realPath): array
+    public function getForFileInfo(SmartFileInfo $smartFileInfo): array
     {
-        return $this->tokensByFilePath[$realPath];
+        return $this->tokensByFilePath[$smartFileInfo->getRealPath()];
     }
 }
