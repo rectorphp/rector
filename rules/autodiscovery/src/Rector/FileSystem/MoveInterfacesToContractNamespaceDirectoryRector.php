@@ -7,13 +7,15 @@ namespace Rector\Autodiscovery\Rector\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Autodiscovery\FileMover\FileMover;
 use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use ReflectionClass;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -30,9 +32,15 @@ final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractFil
      */
     private $fileMover;
 
-    public function __construct(FileMover $fileMover)
+    /**
+     * @var ReturnTypeInferer
+     */
+    private $returnTypeInferer;
+
+    public function __construct(FileMover $fileMover, ReturnTypeInferer $returnTypeInferer)
     {
         $this->fileMover = $fileMover;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -72,6 +80,7 @@ PHP
      */
     private function processInterfacesToContract(SmartFileInfo $smartFileInfo, array $nodes): void
     {
+        /** @var Interface_|null $interface */
         $interface = $this->betterNodeFinder->findFirstInstanceOf($nodes, Interface_::class);
         if ($interface === null) {
             return;
@@ -82,7 +91,7 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        if ($this->isNetteMagicGeneratedFactory($oldInterfaceName)) {
+        if ($this->isNetteMagicGeneratedFactory($interface)) {
             return;
         }
 
@@ -121,21 +130,19 @@ PHP
     /**
      * @see https://doc.nette.org/en/3.0/components#toc-components-with-dependencies
      */
-    private function isNetteMagicGeneratedFactory(string $interfaceName): bool
+    private function isNetteMagicGeneratedFactory(ClassLike $classLike): bool
     {
-        $reflectionClass = new ReflectionClass($interfaceName);
-        foreach ($reflectionClass->getMethods() as $methodReflection) {
-            if ($methodReflection->getReturnType() === null) {
+        foreach ($classLike->getMethods() as $classMethod) {
+            $returnType = $this->returnTypeInferer->inferFunctionLike($classMethod);
+            if (! $returnType instanceof TypeWithClassName) {
                 continue;
             }
 
-            $returnType = (string) $methodReflection->getReturnType();
-
-            if (is_a($returnType, 'Nette\Application\UI\Control', true)) {
+            if ($returnType->isSuperTypeOf(new ObjectType('Nette\Application\UI\Control'))) {
                 return true;
             }
 
-            if (is_a($returnType, 'Nette\Application\UI\Form', true)) {
+            if ($returnType->isSuperTypeOf(new ObjectType('Nette\Application\UI\Form'))) {
                 return true;
             }
         }

@@ -6,5 +6,8 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractN
 
 interface FormFactory
 {
-    public function create(): SomeForm;
+    /**
+     * @return SomeForm
+     */
+    public function create();
 }

@@ -36,7 +36,7 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
             __DIR__ . '/Source/Control/ControlFactory.php',
         ];
 
-        // skip form control factory
+        // skip form control factory, even in docblock
         yield [
             __DIR__ . '/Source/Control/FormFactory.php',
             $this->getFixtureTempDirectory() . '/Source/Control/FormFactory.php',
