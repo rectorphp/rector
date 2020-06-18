@@ -32,14 +32,4 @@ final class RenamedNamespaceValueObject
     {
         return str_replace($this->oldNamespace, $this->newNamespace, $this->currentName);
     }
-
-    public function getOldNamespace(): string
-    {
-        return $this->oldNamespace;
-    }
-
-    public function getNewNamespace(): string
-    {
-        return $this->newNamespace;
-    }
 }
