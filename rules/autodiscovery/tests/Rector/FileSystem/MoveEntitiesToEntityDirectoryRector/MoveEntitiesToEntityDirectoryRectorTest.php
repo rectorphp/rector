@@ -26,7 +26,7 @@ final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractFileSystemRe
     {
         yield [
             __DIR__ . '/Source/Controller/RandomEntity.php',
-            __DIR__ . '/Source/Entity/Fixture/RandomEntity.php',
+            $this->getFixtureTempDirectory() . '/Source/Entity/RandomEntity.php',
             __DIR__ . '/Expected/ExpectedRandomEntity.php',
         ];
     }
