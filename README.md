@@ -26,6 +26,8 @@ Check out [Rector's Patreon](https://www.patreon.com/rectorphp). One-time donati
 Thank you:
 
 <p>
+    <a href="https://www.startupjobs.cz/en/startup/scrumworks-s-r-o"><img src="/docs/images/amateri.png"></a>
+    <img src="/docs/images/space.png" width=40>
     <a href="https://zenika.ca/en/en"><img src="/docs/images/zenika.png"></a>
     <img src="/docs/images/space.png" width=40>
     <a href="https://spaceflow.io/en"><img src="/docs/images/spaceflow.png"></a>
