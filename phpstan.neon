@@ -314,3 +314,4 @@ parameters:
         - '#Parameter \#1 \$type of class PhpParser\\Node\\NullableType constructor expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Parameter \#1 \$oldMethod of class Rector\\PHPOffice\\ValueObject\\ConditionalSetValue constructor expects string, bool\|int\|string given#'
         - '#Parameter \#2 \$scope of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects PHPStan\\Analyser\\MutatingScope, PHPStan\\Analyser\\Scope given#'
+        - '#Parameter \#1 \$object of function get_class expects object, PhpParser\\Node\|null given#'

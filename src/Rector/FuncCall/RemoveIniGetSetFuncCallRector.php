@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\Core\Rector\FuncCall;
 
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\Comments\CommentableNodeResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeRemoval\BreakingRemovalGuard;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
@@ -23,11 +27,26 @@ final class RemoveIniGetSetFuncCallRector extends AbstractRector
     private $keysToRemove = [];
 
     /**
+     * @var BreakingRemovalGuard
+     */
+    private $breakingRemovalGuard;
+
+    /**
+     * @var CommentableNodeResolver
+     */
+    private $commentableNodeResolver;
+
+    /**
      * @param string[] $keysToRemove
      */
-    public function __construct(array $keysToRemove = [])
-    {
+    public function __construct(
+        BreakingRemovalGuard $breakingRemovalGuard,
+        CommentableNodeResolver $commentableNodeResolver,
+        array $keysToRemove = []
+    ) {
         $this->keysToRemove = $keysToRemove;
+        $this->breakingRemovalGuard = $breakingRemovalGuard;
+        $this->commentableNodeResolver = $commentableNodeResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -73,7 +92,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->removeNode($node);
+        if ($this->breakingRemovalGuard->isLegalNodeRemoval($node)) {
+            $this->removeNode($node);
+        } else {
+            $commentableNode = $this->commentableNodeResolver->resolve($node);
+            $commentableNode->setAttribute(AttributeKey::COMMENTS, [new Comment('// @fixme')]);
+        }
 
         return null;
     }
