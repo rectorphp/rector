@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Autodiscovery\FileMover;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -59,6 +60,11 @@ final class FileMover
         }
 
         $currentClassName = $currentNamespace->name->toString() . '\\' . $smartFileInfo->getBasenameWithoutSuffix();
+
+        // is already in the right group
+        if (Strings::endsWith((string) $currentNamespace->name, '\\' . $desiredGroupName)) {
+            return null;
+        }
 
         // change namespace to new one
         $newNamespaceName = $this->createNewNamespaceName($desiredGroupName, $currentNamespace);

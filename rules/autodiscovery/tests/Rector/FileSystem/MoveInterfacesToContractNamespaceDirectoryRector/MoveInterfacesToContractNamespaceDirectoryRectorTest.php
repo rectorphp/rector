@@ -42,6 +42,14 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
             $this->getFixtureTempDirectory() . '/Source/Control/FormFactory.php',
             __DIR__ . '/Source/Control/FormFactory.php',
         ];
+
+        // skip already in correct location
+        yield [
+            __DIR__ . '/Source/Contract/KeepThisSomeInterface.php',
+            $this->getFixtureTempDirectory() . '/Source/Contract/KeepThisSomeInterface.php',
+            // no change
+            __DIR__ . '/Source/Contract/KeepThisSomeInterface.php',
+        ];
     }
 
     protected function getRectorClass(): string
