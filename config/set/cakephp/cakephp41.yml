@@ -16,6 +16,8 @@ services:
                 and_: 'and'
             'Cake\View\Form\ContextInterface':
                 primaryKey: 'getPrimaryKey'
+            'Cake\Http\Middleware\CsrfProtectionMiddleware':
+                whitelistCallback: 'skipCheckCallback'
 
     Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
         $methodNamesByTypes:
