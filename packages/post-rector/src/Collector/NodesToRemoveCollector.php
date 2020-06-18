@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -26,9 +27,17 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
      */
     private $affectedFilesCollector;
 
-    public function __construct(AffectedFilesCollector $affectedFilesCollector)
-    {
+    /**
+     * @var BreakingRemovalGuard
+     */
+    private $breakingRemovalGuard;
+
+    public function __construct(
+        AffectedFilesCollector $affectedFilesCollector,
+        BreakingRemovalGuard $breakingRemovalGuard
+    ) {
         $this->affectedFilesCollector = $affectedFilesCollector;
+        $this->breakingRemovalGuard = $breakingRemovalGuard;
     }
 
     public function addNodeToRemove(Node $node): void
@@ -40,6 +49,8 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
         if (! $node instanceof Expression && $parentNode instanceof Expression) {
             // only expressions can be removed
             $node = $parentNode;
+        } else {
+            $this->breakingRemovalGuard->ensureNodeCanBeRemove($node);
         }
 
         /** @var SmartFileInfo|null $fileInfo */

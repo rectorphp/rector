@@ -84,19 +84,7 @@ PHP
         $hasChanged = false;
 
         foreach ((array) $node->stmts as $key => $stmt) {
-            $currentStmtVariableName = null;
-
-            $stmt = $this->unwrapExpression($stmt);
-
-            if ($stmt instanceof Assign || $stmt instanceof MethodCall) {
-                if ($this->shouldSkipLeftVariable($stmt)) {
-                    continue;
-                }
-
-                if (! $stmt->var instanceof MethodCall && ! $stmt->var instanceof StaticCall) {
-                    $currentStmtVariableName = $this->getName($stmt->var);
-                }
-            }
+            $currentStmtVariableName = $this->resolveCurrentStmtVariableName($stmt);
 
             if ($this->shouldAddEmptyLine($currentStmtVariableName, $node, $key)) {
                 $hasChanged = true;
@@ -134,6 +122,7 @@ PHP
         if (! $this->isNewVariableThanBefore($currentStmtVariableName)) {
             return false;
         }
+
         // this is already empty line before
         return ! $this->isPreceededByEmptyLine($node, $key);
     }
@@ -181,5 +170,22 @@ PHP
         }
 
         return $node;
+    }
+
+    private function resolveCurrentStmtVariableName(Node $node): ?string
+    {
+        $node = $this->unwrapExpression($node);
+
+        if ($node instanceof Assign || $node instanceof MethodCall) {
+            if ($this->shouldSkipLeftVariable($node)) {
+                return null;
+            }
+
+            if (! $node->var instanceof MethodCall && ! $node->var instanceof StaticCall) {
+                return $this->getName($node->var);
+            }
+        }
+
+        return null;
     }
 }
