@@ -19,6 +19,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -59,13 +60,19 @@ final class NameImporter
      */
     private $useNodesToAddCollector;
 
+    /**
+     * @var RenamedClassesCollector
+     */
+    private $renamedClassesCollector;
+
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         AliasUsesResolver $aliasUsesResolver,
         ImportSkipper $importSkipper,
         NodeNameResolver $nodeNameResolver,
         ParameterProvider $parameterProvider,
-        UseNodesToAddCollector $useNodesToAddCollector
+        UseNodesToAddCollector $useNodesToAddCollector,
+        RenamedClassesCollector $renamedClassesCollector
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
@@ -73,6 +80,7 @@ final class NameImporter
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parameterProvider = $parameterProvider;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
+        $this->renamedClassesCollector = $renamedClassesCollector;
     }
 
     public function importName(Name $name): ?Name
@@ -194,12 +202,20 @@ final class NameImporter
             return false;
         }
 
-        // skip-non existing class-likes and functions
-        if (ClassExistenceStaticHelper::doesClassLikeExist($name->toString())) {
+        // can be also in to be renamed classes
+        $classOrFunctionName = $name->toString();
+
+        $newClasses = $this->renamedClassesCollector->getOldToNewClasses();
+        if (in_array($classOrFunctionName, $newClasses, true)) {
             return false;
         }
 
-        return ! function_exists($name->toString());
+        // skip-non existing class-likes and functions
+        if (ClassExistenceStaticHelper::doesClassLikeExist($classOrFunctionName)) {
+            return false;
+        }
+
+        return ! function_exists($classOrFunctionName);
     }
 
     private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void

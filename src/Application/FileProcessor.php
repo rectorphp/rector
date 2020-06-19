@@ -161,6 +161,7 @@ final class FileProcessor
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
         $this->currentFileInfoProvider->setCurrentStmt($newStmts);
+        $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
 
         $newStmts = $this->postFileProcessor->traverse($newStmts);
 

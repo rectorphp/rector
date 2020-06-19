@@ -79,7 +79,6 @@ PHP
     {
         /** @var Interface_|null $interface */
         $interface = $this->betterNodeFinder->findFirstInstanceOf($nodes, Interface_::class);
-
         if ($interface === null) {
             return;
         }

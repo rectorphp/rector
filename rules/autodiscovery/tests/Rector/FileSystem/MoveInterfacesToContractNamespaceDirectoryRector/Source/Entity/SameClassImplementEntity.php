@@ -6,6 +6,10 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractN
 
 final class SameClassImplementEntity implements RandomInterface
 {
+    public function __construct(RandomInterface $random)
+    {
+    }
+
     public function returnAnother(): RandomInterface
     {
     }

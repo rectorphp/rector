@@ -212,6 +212,7 @@
             "Rector\\NetteUtilsCodeQuality\\Tests\\": "rules/nette-utils-code-quality/tests"
         },
         "classmap": [
+            "abz",
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
             "rules/symfony/tests/Rector/FrameworkBundle/ContainerGetToConstructorInjectionRector/Source",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
