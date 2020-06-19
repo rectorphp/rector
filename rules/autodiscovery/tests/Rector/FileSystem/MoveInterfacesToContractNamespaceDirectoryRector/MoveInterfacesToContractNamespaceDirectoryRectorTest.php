@@ -11,6 +11,7 @@ use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends AbstractFileSystemRectorTestCase
 {
     /**
+     * @requires PHP >= 7.4
      * @dataProvider provideData()
      * @param string[][] $extraFiles
      */
@@ -47,6 +48,11 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
                 __DIR__ . '/Source/Entity/SameClassImplementEntity.php' => [
                     'location' => $this->getFixtureTempDirectory() . '/Source/Entity/SameClassImplementEntity.php',
                     'content' => __DIR__ . '/Expected/Entity/ExpectedSameClassImplementEntity.php',
+                ],
+
+                __DIR__ . '/Source/Entity/RandomInterfaceUseCaseInTheSameNamespace.php' => [
+                    'location' => $this->getFixtureTempDirectory() . '/Source/Entity/RandomInterfaceUseCaseInTheSameNamespace.php',
+                    'content' => __DIR__ . '/Expected/Entity/RandomInterfaceUseCaseInTheSameNamespace.php',
                 ],
             ],
         ];

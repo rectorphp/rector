@@ -29,7 +29,8 @@ final class ClassRenamingPostRector extends AbstractPostRector
 
     public function getPriority(): int
     {
-        return 100;
+        // must be run before name importing, so new names are imported
+        return 650;
     }
 
     public function enterNode(Node $node): ?Node

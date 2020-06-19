@@ -6,8 +6,10 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractN
 
 use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\Source\Entity\RandomInterface;
 
-class SomeFactory
+class RandomInterfaceUseCase
 {
+    public RandomInterface $random;
+
     public function create(): RandomInterface
     {
     }
