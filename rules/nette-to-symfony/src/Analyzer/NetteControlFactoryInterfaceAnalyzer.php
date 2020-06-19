@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Type\TypeWithClassName;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
-final class ControlFactoryInterfaceAnalyzer
+final class NetteControlFactoryInterfaceAnalyzer
 {
     /**
      * @var ReturnTypeInferer

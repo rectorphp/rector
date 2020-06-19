@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\NetteToSymfony\Analyzer\ControlFactoryInterfaceAnalyzer;
+use Rector\NetteToSymfony\Analyzer\NetteControlFactoryInterfaceAnalyzer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -17,13 +17,13 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class DeleteFactoryInterfaceRector extends AbstractFileSystemRector
 {
     /**
-     * @var ControlFactoryInterfaceAnalyzer
+     * @var NetteControlFactoryInterfaceAnalyzer
      */
-    private $controlFactoryInterfaceAnalyzer;
+    private $netteControlFactoryInterfaceAnalyzer;
 
-    public function __construct(ControlFactoryInterfaceAnalyzer $controlFactoryInterfaceAnalyzer)
+    public function __construct(NetteControlFactoryInterfaceAnalyzer $netteControlFactoryInterfaceAnalyzer)
     {
-        $this->controlFactoryInterfaceAnalyzer = $controlFactoryInterfaceAnalyzer;
+        $this->netteControlFactoryInterfaceAnalyzer = $netteControlFactoryInterfaceAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -55,7 +55,7 @@ CODE_SAMPLE
             return;
         }
 
-        if (! $this->controlFactoryInterfaceAnalyzer->isComponentFactoryInterface($interface)) {
+        if (! $this->netteControlFactoryInterfaceAnalyzer->isComponentFactoryInterface($interface)) {
             return;
         }
 

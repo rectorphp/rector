@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Lexer;
 use PhpParser\Node;
 use PhpParser\ParserFactory;
-use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
+use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\TokensByFilePathStorage;
 use Rector\Core\Configuration\Configuration;
@@ -188,7 +188,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     }
 
     protected function printNodesWithFileDestination(
-        NodesWithFileDestinationValueObject $nodesWithFileDestinationValueObject
+        NodesWithFileDestination $nodesWithFileDestinationValueObject
     ): void {
         $this->printNewNodesToFilePath(
             $nodesWithFileDestinationValueObject->getNodes(),

@@ -7,12 +7,11 @@ namespace Rector\Autodiscovery\Rector\FileSystem;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Autodiscovery\FileMover\FileMover;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
+use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -23,18 +22,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveEntitiesToEntityDirectoryRector\MoveEntitiesToEntityDirectoryRectorTest
  */
-final class MoveEntitiesToEntityDirectoryRector extends AbstractFileSystemRector
+final class MoveEntitiesToEntityDirectoryRector extends AbstractFileMovingFileSystemRector
 {
-    /**
-     * @var FileMover
-     */
-    private $fileMover;
-
-    public function __construct(FileMover $fileMover)
-    {
-        $this->fileMover = $fileMover;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Move entities to Entity namespace', [new CodeSample(
@@ -84,13 +73,7 @@ PHP
 
         $nodesWithFileDestination = $this->fileMover->createMovedNodesAndFilePath($smartFileInfo, $nodes, 'Entity');
 
-        // nothing to move
-        if ($nodesWithFileDestination === null) {
-            return;
-        }
-
-        $this->removeFile($smartFileInfo);
-        $this->printNodesWithFileDestination($nodesWithFileDestination);
+        $this->processNodesWithFileDestination($nodesWithFileDestination);
     }
 
     /**

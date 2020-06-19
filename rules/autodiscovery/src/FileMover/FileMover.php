@@ -11,7 +11,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Autodiscovery\Configuration\CategoryNamespaceProvider;
-use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
+use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\PSR4\FileRelocationResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -50,7 +50,7 @@ final class FileMover
         SmartFileInfo $smartFileInfo,
         array $nodes,
         string $desiredGroupName
-    ): ?NodesWithFileDestinationValueObject {
+    ): ?NodesWithFileDestination {
         /** @var Namespace_|null $currentNamespace */
         $currentNamespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
 
@@ -91,7 +91,13 @@ final class FileMover
         $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, ClassLike::class);
         $classLike->namespacedName = new FullyQualified($newClassName);
 
-        return new NodesWithFileDestinationValueObject($nodes, $newFileDestination, $currentClassName, $newClassName);
+        return new NodesWithFileDestination(
+            $nodes,
+            $newFileDestination,
+            $currentClassName,
+            $newClassName,
+            $smartFileInfo
+        );
     }
 
     private function createNewNamespaceName(string $desiredGroupName, Namespace_ $currentNamespace): string
