@@ -136,10 +136,14 @@ final class ClassRenamer
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         // no need to preslash "use \SomeNamespace" of imported namespace
         if ($parentNode instanceof UseUse && ($parentNode->type === Use_::TYPE_NORMAL || $parentNode->type === Use_::TYPE_UNKNOWN)) {
-            return new Name($newName);
+            $name = new Name($newName);
+        } else {
+            $name = new FullyQualified($newName);
         }
 
-        return new FullyQualified($newName);
+        $name->setAttribute(AttributeKey::PARENT_NODE, $parentNode);
+
+        return $name;
     }
 
     private function refactorNamespaceNode(Namespace_ $namespace, array $oldToNewClasses): ?Node
@@ -208,7 +212,11 @@ final class ClassRenamer
         if ($newNamespacePart && ! $this->classNaming->getNamespace($name)) {
             $this->changeNameToFullyQualifiedName($classLike);
 
-            return new Namespace_(new Name($newNamespacePart), [$classLike]);
+            $nameNode = new Name($newNamespacePart);
+            $namespace = new Namespace_($nameNode, [$classLike]);
+            $nameNode->setAttribute(AttributeKey::PARENT_NODE, $namespace);
+
+            return $namespace;
         }
 
         return $classLike;
