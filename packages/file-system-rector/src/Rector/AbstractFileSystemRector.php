@@ -117,12 +117,12 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
         }
 
-        [$newStmts, $oldStmts] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
+        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
         // needed for format preserving
-        $this->oldStmts = $oldStmts;
+        $this->oldStmts = $parsedStmtsAndTokens->getOldStmts();
 
-        return $newStmts;
+        return $parsedStmtsAndTokens->getNewStmts();
     }
 
     /**

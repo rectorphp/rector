@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\Core\Application;
 
 use PhpParser\Lexer;
-use PhpParser\Node;
 use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\PhpParser\Parser\Parser;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Stubs\StubLoader;
+use Rector\Core\ValueObject\Application\ParsedStmtsAndTokens;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PostRector\Application\PostFileProcessor;
@@ -101,22 +101,15 @@ final class FileProcessor
 
         $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
 
-        [$newStmts, $oldStmts, $oldTokens] = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
-        if ($newStmts === null) {
-            throw new ShouldNotHappenException(sprintf(
-                'Parsing of file "%s" went wrong. Might be caused by inlinced html. Does it have full "<?php" openings? Try re-run with --debug option to find out more.',
-                $smartFileInfo->getRealPath()
-            ));
-        }
-
         // store tokens by absolute path, so we don't have to print them right now
-        $this->tokensByFilePathStorage->addForRealPath($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
+        $parsedStmtsAndTokens = $this->parseAndTraverseFileInfoToNodes($smartFileInfo);
+        $this->tokensByFilePathStorage->addForRealPath($smartFileInfo, $parsedStmtsAndTokens);
     }
 
     public function printToFile(SmartFileInfo $smartFileInfo): string
     {
-        [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
-        return $this->formatPerservingPrinter->printToFile($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
+        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
+        return $this->formatPerservingPrinter->printParsedStmstAndTokens($smartFileInfo, $parsedStmtsAndTokens);
     }
 
     /**
@@ -126,8 +119,8 @@ final class FileProcessor
     {
         $this->makeSureFileIsParsed($smartFileInfo);
 
-        [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
-        return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
+        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
+        return $this->formatPerservingPrinter->printParsedStmstAndTokensToString($parsedStmtsAndTokens);
     }
 
     public function refactor(SmartFileInfo $smartFileInfo): void
@@ -137,14 +130,12 @@ final class FileProcessor
 
         $this->makeSureFileIsParsed($smartFileInfo);
 
-        [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
+        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
+        $this->currentFileInfoProvider->setCurrentStmts($parsedStmtsAndTokens->getNewStmts());
 
-        $this->currentFileInfoProvider->setCurrentStmt($newStmts);
-
-        $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
-
+        $newStmts = $this->rectorNodeTraverser->traverse($parsedStmtsAndTokens->getNewStmts());
         // this is needed for new tokens added in "afterTraverse()"
-        $this->tokensByFilePathStorage->addForRealPath($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
+        $parsedStmtsAndTokens->updateNewStmts($newStmts);
 
         $this->affectedFilesCollector->removeFromList($smartFileInfo);
         while ($otherTouchedFile = $this->affectedFilesCollector->getNext()) {
@@ -158,31 +149,29 @@ final class FileProcessor
             $this->parseFileInfoToLocalCache($smartFileInfo);
         }
 
-        [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
+        $parsedStmtsAndTokens = $this->tokensByFilePathStorage->getForFileInfo($smartFileInfo);
 
-        $this->currentFileInfoProvider->setCurrentStmt($newStmts);
+        $this->currentFileInfoProvider->setCurrentStmts($parsedStmtsAndTokens->getNewStmts());
         $this->currentFileInfoProvider->setCurrentFileInfo($smartFileInfo);
 
-        $newStmts = $this->postFileProcessor->traverse($newStmts);
+        $newStmts = $this->postFileProcessor->traverse($parsedStmtsAndTokens->getNewStmts());
 
         // this is needed for new tokens added in "afterTraverse()"
-        $this->tokensByFilePathStorage->addForRealPath($smartFileInfo, $newStmts, $oldStmts, $oldTokens);
+        $parsedStmtsAndTokens->updateNewStmts($newStmts);
     }
 
-    /**
-     * @return Node[][]|mixed[]
-     */
-    private function parseAndTraverseFileInfoToNodes(SmartFileInfo $smartFileInfo): array
+    private function parseAndTraverseFileInfoToNodes(SmartFileInfo $smartFileInfo): ParsedStmtsAndTokens
     {
         $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
         $oldTokens = $this->lexer->getTokens();
 
         // needed for \Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver
-        $this->tokensByFilePathStorage->addForRealPath($smartFileInfo, $oldStmts, $oldStmts, $oldTokens);
+        $parsedStmtsAndTokens = new ParsedStmtsAndTokens($oldStmts, $oldStmts, $oldTokens);
+        $this->tokensByFilePathStorage->addForRealPath($smartFileInfo, $parsedStmtsAndTokens);
 
         $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $smartFileInfo);
 
-        return [$newStmts, $oldStmts, $oldTokens];
+        return new ParsedStmtsAndTokens($newStmts, $oldStmts, $oldTokens);
     }
 
     private function makeSureFileIsParsed(SmartFileInfo $smartFileInfo): void

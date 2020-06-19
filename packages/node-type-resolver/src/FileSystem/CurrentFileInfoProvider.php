@@ -32,7 +32,7 @@ final class CurrentFileInfoProvider
     /**
      * @param Node[] $stmts
      */
-    public function setCurrentStmt(array $stmts): void
+    public function setCurrentStmts(array $stmts): void
     {
         $this->currentStmts = $stmts;
     }
