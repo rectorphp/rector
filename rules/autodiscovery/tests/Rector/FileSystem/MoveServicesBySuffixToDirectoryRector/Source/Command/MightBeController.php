@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector\Source\Command;
 
-final class MissPlacedController
+interface MightBeController
 {
-    public function getSelf()
-    {
-        return new MissPlacedController;
-    }
+
 }

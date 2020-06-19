@@ -322,3 +322,4 @@ parameters:
         - '#Parameter \#1 \$object of function get_class expects object, PhpParser\\Node\|null given#'
         - '#Cognitive complexity for "Rector\\Core\\Application\\RectorApplication\:\:runOnFileInfos\(\)" is 10, keep it under 9#'
         - '#Class "Rector\\FileSystemRector\\Rector\\Removing\\RemoveProjectFileRector" is missing @see annotation with test case class reference#'
+        - '#Class "Rector\\Php73\\Rector\\FuncCall\\SetCookieRector" is missing @see annotation with test case class reference#'

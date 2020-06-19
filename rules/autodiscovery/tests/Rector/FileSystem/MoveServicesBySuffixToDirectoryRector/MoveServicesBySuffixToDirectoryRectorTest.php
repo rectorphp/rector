@@ -45,8 +45,15 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystem
         yield [
             __DIR__ . '/Source/Command/MissPlacedController.php',
             $this->getFixtureTempDirectory() . '/Source/Controller/MissPlacedController.php',
+            __DIR__ . '/Expected/Controller/MissPlacedController.php',
+        ];
+
+        // skip interface
+        yield [
+            __DIR__ . '/Source/Command/MightBeController.php',
+            $this->getFixtureTempDirectory() . '/Source/Command/MightBeController.php',
             // same content, no change
-            __DIR__ . '/Expected/Controller/ExpectedMissPlacedController.php',
+            __DIR__ . '/Source/Command/MightBeController.php',
         ];
     }
 
