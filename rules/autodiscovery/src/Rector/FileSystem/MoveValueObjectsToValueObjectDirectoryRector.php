@@ -17,6 +17,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  * @wip
  *
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ *
+ * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector\MoveValueObjectsToValueObjectDirectoryRectorTest
  */
 final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileSystemRector
 {
@@ -94,16 +96,18 @@ CODE_SAMPLE
             return;
         }
 
-        $moved = $this->fileMover->createMovedNodesAndFilePath($smartFileInfo, $nodes, 'ValueObject');
+        $nodesWithFileDestinationValueObject = $this->fileMover->createMovedNodesAndFilePath(
+            $smartFileInfo,
+            $nodes,
+            'ValueObject'
+        );
 
         // nothing to move
-        if ($moved === null) {
+        if ($nodesWithFileDestinationValueObject === null) {
             return;
         }
 
-        [$nodes, $newFileDestination] = $moved;
-
         $this->removeFile($smartFileInfo);
-        $this->printNewNodesToFilePath($nodes, $newFileDestination);
+        $this->printNodesWithFileDestination($nodesWithFileDestinationValueObject);
     }
 }
