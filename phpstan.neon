@@ -23,6 +23,7 @@ parameters:
         required_see_types:
             - PHPStan\Rules\Rule
             - Rector\Core\Rector\AbstractRector
+            - Rector\FileSystemRector\Rector\AbstractFileSystemRector
 
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
