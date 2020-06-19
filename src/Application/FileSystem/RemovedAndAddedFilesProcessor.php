@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Application\FileSystem;
 
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Core\ValueObject\MovedClassValueObject;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
@@ -84,12 +85,13 @@ final class RemovedAndAddedFilesProcessor
     private function processMovedFiles(): void
     {
         foreach ($this->removedAndAddedFilesCollector->getMovedFiles() as $movedClassValueObject) {
-            if ($this->configuration->isDryRun()) {
+            if ($this->configuration->isDryRun() && ! StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 $this->printFileMoveWarning($movedClassValueObject, 'will be');
             } else {
                 $this->printFileMoveWarning($movedClassValueObject, 'was');
 
                 $this->filesystem->remove($movedClassValueObject->getOldPath());
+
                 $this->filesystem->dumpFile(
                     $movedClassValueObject->getNewPath(),
                     $movedClassValueObject->getFileContent()

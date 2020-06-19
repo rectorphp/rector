@@ -64,6 +64,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $temporaryFilePath = $this->createTemporaryFilePathFromFilePath($file);
         require_once $temporaryFilePath;
         $fileInfo = new SmartFileInfo($temporaryFilePath);
+
         $this->fileSystemFileProcessor->processFileInfo($fileInfo);
 
         $filesInfos = [$fileInfo];
