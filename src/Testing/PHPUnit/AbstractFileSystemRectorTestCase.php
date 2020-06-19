@@ -78,6 +78,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         }
 
         foreach ($filesInfos as $fileInfo) {
+            // maybe the file was removed
             if (! file_exists($fileInfo->getPathname())) {
                 continue;
             }
