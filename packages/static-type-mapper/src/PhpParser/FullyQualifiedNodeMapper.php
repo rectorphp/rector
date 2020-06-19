@@ -33,7 +33,7 @@ final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
             return new AliasedObjectType($originalName, $fullyQualifiedName);
         }
 
-        return new FullyQualifiedObjectType($node->toString());
+        return new FullyQualifiedObjectType($fullyQualifiedName);
     }
 
     private function isAliasedName(string $originalName, string $fullyQualifiedName): bool
