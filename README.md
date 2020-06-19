@@ -241,7 +241,7 @@ parameters:
 
 ### Safe Types
 
-In defualts setting:
+In default setting:
 
 ```yaml
 # rector.yaml
