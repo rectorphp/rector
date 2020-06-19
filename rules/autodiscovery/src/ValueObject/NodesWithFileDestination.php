@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Rector\Autodiscovery\ValueObject;
 
 use PhpParser\Node;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class NodesWithFileDestinationValueObject
+final class NodesWithFileDestination
 {
     /**
      * @var string
@@ -29,14 +30,25 @@ final class NodesWithFileDestinationValueObject
     private $newClassName;
 
     /**
+     * @var SmartFileInfo
+     */
+    private $originalSmartFileInfo;
+
+    /**
      * @param Node[] $nodes
      */
-    public function __construct(array $nodes, string $fileDestination, string $oldClassName, string $newClassName)
-    {
+    public function __construct(
+        array $nodes,
+        string $fileDestination,
+        string $oldClassName,
+        string $newClassName,
+        SmartFileInfo $originalSmartFileInfo
+    ) {
         $this->nodes = $nodes;
         $this->fileDestination = $fileDestination;
         $this->oldClassName = $oldClassName;
         $this->newClassName = $newClassName;
+        $this->originalSmartFileInfo = $originalSmartFileInfo;
     }
 
     /**
@@ -60,5 +72,10 @@ final class NodesWithFileDestinationValueObject
     public function getNewClassName(): string
     {
         return $this->newClassName;
+    }
+
+    public function getOriginalSmartFileInfo(): SmartFileInfo
+    {
+        return $this->originalSmartFileInfo;
     }
 }

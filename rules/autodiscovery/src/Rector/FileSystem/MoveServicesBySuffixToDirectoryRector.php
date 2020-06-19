@@ -6,10 +6,10 @@ namespace Rector\Autodiscovery\Rector\FileSystem;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use Rector\Autodiscovery\FileMover\FileMover;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
+use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -20,7 +20,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector\MoveServicesBySuffixToDirectoryRectorTest
  * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector\MutualRenameTest
  */
-final class MoveServicesBySuffixToDirectoryRector extends AbstractFileSystemRector
+final class MoveServicesBySuffixToDirectoryRector extends AbstractFileMovingFileSystemRector
 {
     /**
      * @var string[]
@@ -28,29 +28,11 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractFileSystemRect
     private $groupNamesBySuffix = [];
 
     /**
-     * @var FileMover
-     */
-    private $fileMover;
-
-    /**
      * @param string[] $groupNamesBySuffix
      */
-    public function __construct(FileMover $fileMover, array $groupNamesBySuffix = [])
+    public function __construct(array $groupNamesBySuffix = [])
     {
         $this->groupNamesBySuffix = $groupNamesBySuffix;
-        $this->fileMover = $fileMover;
-    }
-
-    public function refactor(SmartFileInfo $smartFileInfo): void
-    {
-        $nodes = $this->parseFileInfoToNodes($smartFileInfo);
-
-        $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, Node\Stmt\ClassLike::class);
-        if (! $classLike instanceof Node\Stmt\Class_) {
-            return;
-        }
-
-        $this->processGroupNamesBySuffix($smartFileInfo, $nodes, $this->groupNamesBySuffix);
     }
 
     public function getDefinition(): RectorDefinition
@@ -80,6 +62,18 @@ PHP
                 '$groupNamesBySuffix' => ['Repository'],
             ]
         )]);
+    }
+
+    public function refactor(SmartFileInfo $smartFileInfo): void
+    {
+        $nodes = $this->parseFileInfoToNodes($smartFileInfo);
+
+        $class = $this->betterNodeFinder->findFirstInstanceOf($nodes, Class_::class);
+        if ($class === null) {
+            return;
+        }
+
+        $this->processGroupNamesBySuffix($smartFileInfo, $nodes, $this->groupNamesBySuffix);
     }
 
     /**
@@ -126,19 +120,7 @@ PHP
             $desiredGroupName
         );
 
-        // nothing to move
-        if ($nodesWithFileDestination === null) {
-            return;
-        }
-
-        $this->removeFile($smartFileInfo);
-
-        $this->addClassRename(
-            $nodesWithFileDestination->getOldClassName(),
-            $nodesWithFileDestination->getNewClassName()
-        );
-
-        $this->printNodesWithFileDestination($nodesWithFileDestination);
+        $this->processNodesWithFileDestination($nodesWithFileDestination);
     }
 
     /**

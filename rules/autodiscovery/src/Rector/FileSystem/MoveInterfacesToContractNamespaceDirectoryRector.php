@@ -6,11 +6,10 @@ namespace Rector\Autodiscovery\Rector\FileSystem;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
-use Rector\Autodiscovery\FileMover\FileMover;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\NetteToSymfony\Analyzer\ControlFactoryInterfaceAnalyzer;
+use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
+use Rector\NetteToSymfony\Analyzer\NetteControlFactoryInterfaceAnalyzer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -20,22 +19,16 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\MoveInterfacesToContractNamespaceDirectoryRectorTest
  */
-final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractFileSystemRector
+final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractFileMovingFileSystemRector
 {
     /**
-     * @var FileMover
+     * @var NetteControlFactoryInterfaceAnalyzer
      */
-    private $fileMover;
+    private $netteControlFactoryInterfaceAnalyzer;
 
-    /**
-     * @var ControlFactoryInterfaceAnalyzer
-     */
-    private $controlFactoryInterfaceAnalyzer;
-
-    public function __construct(FileMover $fileMover, ControlFactoryInterfaceAnalyzer $controlFactoryInterfaceAnalyzer)
+    public function __construct(NetteControlFactoryInterfaceAnalyzer $netteControlFactoryInterfaceAnalyzer)
     {
-        $this->fileMover = $fileMover;
-        $this->controlFactoryInterfaceAnalyzer = $controlFactoryInterfaceAnalyzer;
+        $this->netteControlFactoryInterfaceAnalyzer = $netteControlFactoryInterfaceAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -81,24 +74,12 @@ PHP
             return;
         }
 
-        if ($this->controlFactoryInterfaceAnalyzer->isComponentFactoryInterface($interface)) {
+        if ($this->netteControlFactoryInterfaceAnalyzer->isComponentFactoryInterface($interface)) {
             return;
         }
 
         $nodesWithFileDestination = $this->fileMover->createMovedNodesAndFilePath($smartFileInfo, $nodes, 'Contract');
 
-        // nothing to move
-        if ($nodesWithFileDestination === null) {
-            return;
-        }
-
-        $this->removeFile($smartFileInfo);
-
-        $this->addClassRename(
-            $nodesWithFileDestination->getOldClassName(),
-            $nodesWithFileDestination->getNewClassName()
-        );
-
-        $this->printNodesWithFileDestination($nodesWithFileDestination);
+        $this->processNodesWithFileDestination($nodesWithFileDestination);
     }
 }

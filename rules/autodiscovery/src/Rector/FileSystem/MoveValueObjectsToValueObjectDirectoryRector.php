@@ -6,10 +6,9 @@ namespace Rector\Autodiscovery\Rector\FileSystem;
 
 use PhpParser\Node\Stmt\Class_;
 use Rector\Autodiscovery\Analyzer\ClassAnalyzer;
-use Rector\Autodiscovery\FileMover\FileMover;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
+use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -20,21 +19,15 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector\MoveValueObjectsToValueObjectDirectoryRectorTest
  */
-final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileSystemRector
+final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMovingFileSystemRector
 {
-    /**
-     * @var FileMover
-     */
-    private $fileMover;
-
     /**
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
 
-    public function __construct(FileMover $fileMover, ClassAnalyzer $classAnalyzer)
+    public function __construct(ClassAnalyzer $classAnalyzer)
     {
-        $this->fileMover = $fileMover;
         $this->classAnalyzer = $classAnalyzer;
     }
 
@@ -96,18 +89,12 @@ CODE_SAMPLE
             return;
         }
 
-        $nodesWithFileDestinationValueObject = $this->fileMover->createMovedNodesAndFilePath(
+        $nodesWithFileDestination = $this->fileMover->createMovedNodesAndFilePath(
             $smartFileInfo,
             $nodes,
             'ValueObject'
         );
 
-        // nothing to move
-        if ($nodesWithFileDestinationValueObject === null) {
-            return;
-        }
-
-        $this->removeFile($smartFileInfo);
-        $this->printNodesWithFileDestination($nodesWithFileDestinationValueObject);
+        $this->processNodesWithFileDestination($nodesWithFileDestination);
     }
 }
