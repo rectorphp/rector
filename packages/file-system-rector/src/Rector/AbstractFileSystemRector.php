@@ -188,11 +188,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     }
 
     protected function printNodesWithFileDestination(
-        NodesWithFileDestination $nodesWithFileDestinationValueObject
+        NodesWithFileDestination $nodesWithFileDestination
     ): void {
         $this->printNewNodesToFilePath(
-            $nodesWithFileDestinationValueObject->getNodes(),
-            $nodesWithFileDestinationValueObject->getFileDestination()
+            $nodesWithFileDestination->getNodes(),
+            $nodesWithFileDestination->getFileDestination()
         );
     }
 
