@@ -6,6 +6,7 @@ namespace Rector\Core\PhpParser\Printer;
 
 use Nette\Utils\FileSystem;
 use PhpParser\Node;
+use Rector\Core\ValueObject\Application\ParsedStmtsAndTokens;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -45,5 +46,23 @@ final class FormatPerservingPrinter
     public function printToString(array $newStmts, array $oldStmts, array $oldTokens): string
     {
         return $this->betterStandardPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
+    }
+
+    public function printParsedStmstAndTokensToString(ParsedStmtsAndTokens $parsedStmtsAndTokens): string
+    {
+        return $this->betterStandardPrinter->printFormatPreserving($parsedStmtsAndTokens->getNewStmts(),
+            $parsedStmtsAndTokens->getOldStmts(), $parsedStmtsAndTokens->getOldTokens());
+    }
+
+    public function printParsedStmstAndTokens(
+        SmartFileInfo $smartFileInfo,
+        ParsedStmtsAndTokens $parsedStmtsAndTokens
+    ): string {
+        return $this->printToFile(
+            $smartFileInfo,
+            $parsedStmtsAndTokens->getNewStmts(),
+            $parsedStmtsAndTokens->getOldStmts(),
+            $parsedStmtsAndTokens->getOldTokens()
+        );
     }
 }
