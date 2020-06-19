@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Rector\Autodiscovery\Rector\FileSystem;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Autodiscovery\FileMover\FileMover;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
+use Rector\NetteToSymfony\Analyzer\ControlFactoryInterfaceAnalyzer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -30,14 +28,14 @@ final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractFil
     private $fileMover;
 
     /**
-     * @var ReturnTypeInferer
+     * @var ControlFactoryInterfaceAnalyzer
      */
-    private $returnTypeInferer;
+    private $controlFactoryInterfaceAnalyzer;
 
-    public function __construct(FileMover $fileMover, ReturnTypeInferer $returnTypeInferer)
+    public function __construct(FileMover $fileMover, ControlFactoryInterfaceAnalyzer $controlFactoryInterfaceAnalyzer)
     {
         $this->fileMover = $fileMover;
-        $this->returnTypeInferer = $returnTypeInferer;
+        $this->controlFactoryInterfaceAnalyzer = $controlFactoryInterfaceAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -83,7 +81,7 @@ PHP
             return;
         }
 
-        if ($this->isNetteMagicGeneratedFactory($interface)) {
+        if ($this->controlFactoryInterfaceAnalyzer->isComponentFactoryInterface($interface)) {
             return;
         }
 
@@ -102,30 +100,5 @@ PHP
         );
 
         $this->printNodesWithFileDestination($nodesWithFileDestination);
-    }
-
-    /**
-     * @see https://doc.nette.org/en/3.0/components#toc-components-with-dependencies
-     */
-    private function isNetteMagicGeneratedFactory(ClassLike $classLike): bool
-    {
-        foreach ($classLike->getMethods() as $classMethod) {
-            $returnType = $this->returnTypeInferer->inferFunctionLike($classMethod);
-            if (! $returnType instanceof TypeWithClassName) {
-                continue;
-            }
-
-            $className = $returnType->getClassName();
-
-            if (is_a($className, 'Nette\Application\UI\Control', true)) {
-                return true;
-            }
-
-            if (is_a($className, 'Nette\Application\UI\Form', true)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

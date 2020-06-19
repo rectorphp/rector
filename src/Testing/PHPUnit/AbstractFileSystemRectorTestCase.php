@@ -64,6 +64,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $temporaryFilePath = $this->createTemporaryFilePathFromFilePath($file);
         require_once $temporaryFilePath;
         $fileInfo = new SmartFileInfo($temporaryFilePath);
+
         $this->fileSystemFileProcessor->processFileInfo($fileInfo);
 
         $filesInfos = [$fileInfo];
@@ -78,6 +79,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         }
 
         foreach ($filesInfos as $fileInfo) {
+            // maybe the file was removed
             if (! file_exists($fileInfo->getPathname())) {
                 continue;
             }

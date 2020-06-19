@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
  *
  * @see https://3v4l.org/UJN6H
- * @see \Rector\Php53\Rector\Assign\ClearReturnNewByReferenceRector
+ * @see \Rector\Php53\Tests\Rector\Assign\ClearReturnNewByReferenceRector\ClearReturnNewByReferenceRectorTest
  */
 final class ClearReturnNewByReferenceRector extends AbstractRector
 {

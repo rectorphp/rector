@@ -19,10 +19,10 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 /**
  * Convert legacy setcookie arguments to new array options
  *
+ * @see \Rector\Php73\Tests\Rector\FuncCall\SetcookieRector\SetcookieRectorTest
+
  * @see https://www.php.net/setcookie
  * @see https://wiki.php.net/rfc/same-site-cookie
- *
- * @see \Rector\Php73\Tests\Rector\FuncCall\SetcookieRector\SetcookieRectorTest
  */
 final class SetCookieRector extends AbstractRector
 {

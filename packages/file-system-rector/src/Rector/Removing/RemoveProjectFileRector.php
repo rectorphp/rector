@@ -11,9 +11,6 @@ use Rector\FileSystemRector\Configuration\Option;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @see \Rector\FileSystemRector\Tests\Rector\Removing\RemoveProjectFileRector\RemoveProjectFileRectorTest
- */
 final class RemoveProjectFileRector extends AbstractFileSystemRector
 {
     /**

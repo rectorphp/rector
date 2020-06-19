@@ -16,6 +16,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
  *
  * Inspiration @see https://github.com/rectorphp/rector/pull/1865/files#diff-0d18e660cdb626958662641b491623f8
+ *
+ * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector\MoveServicesBySuffixToDirectoryRectorTest
+ * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector\MutualRenameTest
  */
 final class MoveServicesBySuffixToDirectoryRector extends AbstractFileSystemRector
 {
@@ -41,6 +44,11 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractFileSystemRect
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
         $nodes = $this->parseFileInfoToNodes($smartFileInfo);
+
+        $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, Node\Stmt\ClassLike::class);
+        if (! $classLike instanceof Node\Stmt\Class_) {
+            return;
+        }
 
         $this->processGroupNamesBySuffix($smartFileInfo, $nodes, $this->groupNamesBySuffix);
     }
@@ -124,10 +132,12 @@ PHP
         }
 
         $this->removeFile($smartFileInfo);
+
         $this->addClassRename(
             $nodesWithFileDestination->getOldClassName(),
             $nodesWithFileDestination->getNewClassName()
         );
+
         $this->printNodesWithFileDestination($nodesWithFileDestination);
     }
 

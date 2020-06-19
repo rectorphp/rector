@@ -22,6 +22,8 @@ parameters:
             - Rector
         required_see_types:
             - PHPStan\Rules\Rule
+            - Rector\Core\Rector\AbstractRector
+            - Rector\FileSystemRector\Rector\AbstractFileSystemRector
 
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
@@ -166,6 +168,9 @@ parameters:
         -
             message: '#Class Rector\\Core\\Tests\\Rector\\StaticCall\\SwapClassMethodArgumentsRector\\Fixture\\SomeClass not found#'
             path: tests/Rector/StaticCall/SwapClassMethodArgumentsRector/SwapClassMethodArgumentsRectorTest.php
+
+        # internal rule
+        - '#Class "Rector\\Utils\\(.*?)" is missing @see annotation with test case class reference#'
 
         # mixed
         - '#in iterable type Iterator#'
@@ -316,3 +321,5 @@ parameters:
         - '#Parameter \#2 \$scope of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects PHPStan\\Analyser\\MutatingScope, PHPStan\\Analyser\\Scope given#'
         - '#Parameter \#1 \$object of function get_class expects object, PhpParser\\Node\|null given#'
         - '#Cognitive complexity for "Rector\\Core\\Application\\RectorApplication\:\:runOnFileInfos\(\)" is 10, keep it under 9#'
+        - '#Class "Rector\\FileSystemRector\\Rector\\Removing\\RemoveProjectFileRector" is missing @see annotation with test case class reference#'
+        - '#Class "Rector\\Php73\\Rector\\FuncCall\\SetCookieRector" is missing @see annotation with test case class reference#'
