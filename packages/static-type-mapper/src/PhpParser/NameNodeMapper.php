@@ -10,10 +10,21 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 
 final class NameNodeMapper implements PhpParserNodeMapperInterface
 {
+    /**
+     * @var RenamedClassesCollector
+     */
+    private $renamedClassesCollector;
+
+    public function __construct(RenamedClassesCollector $renamedClassesCollector)
+    {
+        $this->renamedClassesCollector = $renamedClassesCollector;
+    }
+
     public function getNodeType(): string
     {
         return Name::class;
@@ -26,10 +37,22 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
     {
         $name = $node->toString();
 
-        if (ClassExistenceStaticHelper::doesClassLikeExist($name)) {
-            return new FullyQualifiedObjectType($node->toString());
+        if ($this->isExistingClass($name)) {
+            return new FullyQualifiedObjectType($name);
         }
 
         return new MixedType();
+    }
+
+    private function isExistingClass(string $name): bool
+    {
+        if (ClassExistenceStaticHelper::doesClassLikeExist($name)) {
+            return true;
+        }
+
+        // to be existing class names
+        $newClasses = $this->renamedClassesCollector->getOldToNewClasses();
+
+        return in_array($name, $newClasses, true);
     }
 }

@@ -29,10 +29,23 @@ final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
         $fullyQualifiedName = $node->toString();
 
         // is aliased?
-        if ($originalName !== $fullyQualifiedName && ! Strings::endsWith($fullyQualifiedName, '\\' . $originalName)) {
+        if ($this->isAliasedName($originalName, $fullyQualifiedName)) {
             return new AliasedObjectType($originalName, $fullyQualifiedName);
         }
 
         return new FullyQualifiedObjectType($node->toString());
+    }
+
+    private function isAliasedName(string $originalName, string $fullyQualifiedName): bool
+    {
+        if ($originalName === '') {
+            return false;
+        }
+
+        if ($originalName === $fullyQualifiedName) {
+            return false;
+        }
+
+        return ! Strings::endsWith($fullyQualifiedName, '\\' . $originalName);
     }
 }

@@ -110,6 +110,7 @@ final class UseAddingPostRector extends AbstractPostRector
 
     public function getPriority(): int
     {
+        // must be after name importing
         return 500;
     }
 
