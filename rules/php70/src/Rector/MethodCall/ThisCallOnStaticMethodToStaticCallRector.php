@@ -51,7 +51,7 @@ class SomeClass
 {
     public static function run()
     {
-        self::eat();
+        static::eat();
     }
 
     public static function eat()
@@ -100,6 +100,6 @@ PHP
             return null;
         }
 
-        return $this->createStaticCall('self', $methodName, $node->args);
+        return $this->createStaticCall('static', $methodName, $node->args);
     }
 }

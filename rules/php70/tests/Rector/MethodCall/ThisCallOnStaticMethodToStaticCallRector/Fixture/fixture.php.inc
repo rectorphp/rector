@@ -24,7 +24,7 @@ class SomeClass
 {
     public static function run()
     {
-        self::eat('something');
+        static::eat('something');
     }
 
     public static function eat(string $thing)
