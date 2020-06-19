@@ -12,7 +12,16 @@ final class DeleteFactoryInterfaceFileSystemRectorTest extends AbstractFileSyste
     public function test(): void
     {
         $this->doTestFile(__DIR__ . '/Source/SomeFactoryInterface.php');
-        $this->assertFileDoesNotExist($this->getFixtureTempDirectory() . '/Source/SomeFactoryInterface.php');
+
+        $temporaryFilePath = $this->getFixtureTempDirectory() . '/Source/SomeFactoryInterface.php';
+
+        // PHPUnit 9.0 ready
+        if (method_exists($this, 'assertFileDoesNotExist')) {
+            $this->assertFileDoesNotExist($temporaryFilePath);
+        } else {
+            // PHPUnit 8.0 ready
+            $this->assertFileNotExists($temporaryFilePath);
+        }
     }
 
     protected function getRectorClass(): string
