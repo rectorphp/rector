@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Application\FileSystem;
 
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Core\ValueObject\MovedClassValueObject;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -35,16 +36,23 @@ final class RemovedAndAddedFilesProcessor
      */
     private $filesystem;
 
+    /**
+     * @var NodesWithFileDestinationPrinter
+     */
+    private $nodesWithFileDestinationPrinter;
+
     public function __construct(
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         Configuration $configuration,
         SymfonyStyle $symfonyStyle,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+    NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter
     ) {
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->configuration = $configuration;
         $this->symfonyStyle = $symfonyStyle;
         $this->filesystem = $filesystem;
+        $this->nodesWithFileDestinationPrinter = $nodesWithFileDestinationPrinter;
     }
 
     public function run(): void
@@ -62,6 +70,25 @@ final class RemovedAndAddedFilesProcessor
             } else {
                 $this->filesystem->dumpFile($filePath, $fileContent);
                 $this->symfonyStyle->note(sprintf('File "%s" was added:', $filePath));
+            }
+
+            $this->symfonyStyle->writeln($fileContent);
+        }
+
+        foreach ($this->removedAndAddedFilesCollector->getNodesWithFileDestination() as $nodesWithFileDestination) {
+            $fileContent = $this->nodesWithFileDestinationPrinter->printNodesWithFileDestination(
+                $nodesWithFileDestination
+            );
+
+            if ($this->configuration->isDryRun()) {
+                $this->symfonyStyle->note(
+                    sprintf('File "%s" will be added:', $nodesWithFileDestination->getFileDestination())
+                );
+            } else {
+                $this->filesystem->dumpFile($nodesWithFileDestination->getFileDestination(), $fileContent);
+                $this->symfonyStyle->note(
+                    sprintf('File "%s" was added:', $nodesWithFileDestination->getFileDestination())
+                );
             }
 
             $this->symfonyStyle->writeln($fileContent);

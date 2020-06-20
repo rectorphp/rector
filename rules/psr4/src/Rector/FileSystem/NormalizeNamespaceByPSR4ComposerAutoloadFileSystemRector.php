@@ -6,6 +6,7 @@ namespace Rector\PSR4\Rector\FileSystem;
 
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
@@ -86,6 +87,9 @@ CODE_SAMPLE
         $namespace = new Namespace_(new Name($expectedNamespace));
         $namespace->stmts = $nodes;
 
-        $this->printNewNodesToFilePath([$namespace], $smartFileInfo->getRealPath());
+        $nodesWithFileDestination = new NodesWithFileDestination([
+            $namespace,
+        ], $smartFileInfo->getRealPath(), $smartFileInfo);
+        $this->printNodesWithFileDestination($nodesWithFileDestination);
     }
 }

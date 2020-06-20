@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Application\FileSystem;
 
+use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\Core\ValueObject\MovedClassValueObject;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -23,6 +24,11 @@ final class RemovedAndAddedFilesCollector
      * @var MovedClassValueObject[]
      */
     private $movedFiles = [];
+
+    /**
+     * @var NodesWithFileDestination[]
+     */
+    private $nodesWithFileDestination = [];
 
     public function removeFile(SmartFileInfo $smartFileInfo): void
     {
@@ -78,5 +84,18 @@ final class RemovedAndAddedFilesCollector
     public function getAffectedFilesCount(): int
     {
         return count($this->addedFilesWithContent) + count($this->removedFiles);
+    }
+
+    public function addNodesWithFileDestination(NodesWithFileDestination $nodesWithFileDestination): void
+    {
+        $this->nodesWithFileDestination[] = $nodesWithFileDestination;
+    }
+
+    /**
+     * @return NodesWithFileDestination[]
+     */
+    public function getNodesWithFileDestination(): array
+    {
+        return $this->nodesWithFileDestination;
     }
 }

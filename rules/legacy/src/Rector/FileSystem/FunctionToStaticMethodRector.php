@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -120,7 +121,8 @@ PHP
         });
 
         // @todo decouple to PostRectorInterface, so it's covered in external files too
-        $this->printNewNodesToFilePath($nodesToPrint, $classFilePath);
+        $nodesWithFileDestination = new NodesWithFileDestination($nodesToPrint, $classFilePath, $smartFileInfo);
+        $this->printNodesWithFileDestination($nodesWithFileDestination);
     }
 
     /**

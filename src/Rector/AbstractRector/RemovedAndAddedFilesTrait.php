@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
+use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -53,5 +54,10 @@ trait RemovedAndAddedFilesTrait
     private function addFile(string $filePath, string $content): void
     {
         $this->removedAndAddedFilesCollector->addFileWithContent($filePath, $content);
+    }
+
+    private function addNodesWithFileDestination(NodesWithFileDestination $nodesWithFileDestination): void
+    {
+        $this->removedAndAddedFilesCollector->addNodesWithFileDestination($nodesWithFileDestination);
     }
 }
