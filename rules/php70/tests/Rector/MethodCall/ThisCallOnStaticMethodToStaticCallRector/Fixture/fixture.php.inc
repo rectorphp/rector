@@ -28,7 +28,6 @@ class SomeRunnable implements RunnableInterface
 {
     public function run()
     {
-        $expectedString = "child";
         $c = new SomeChild();
         return $c->speak();
     }
@@ -40,7 +39,7 @@ class SomeRunnable implements RunnableInterface
 
 namespace Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
 
-use use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Core\Testing\Contract\RunnableInterface;
 
 class SomeParent
 {
@@ -66,7 +65,6 @@ class SomeRunnable implements RunnableInterface
 {
     public function run()
     {
-        $expectedString = "child";
         $c = new SomeChild();
         return $c->speak();
     }
