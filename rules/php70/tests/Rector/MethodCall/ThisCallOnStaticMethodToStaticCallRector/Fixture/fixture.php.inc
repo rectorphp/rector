@@ -30,7 +30,7 @@ class SomeRunnable implements RunnableInterface
     {
         $expectedString = "child";
         $c = new SomeChild();
-        return $c->speak() === $expectedString;
+        return $c->speak();
     }
 }
 
