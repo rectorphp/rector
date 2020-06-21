@@ -20,10 +20,10 @@ final class NikicPhpParserFactory
      */
     private $parserFactory;
 
-    public function __construct(Lexer $lexer, ParserFactory $nikicParserFactory)
+    public function __construct(Lexer $lexer, ParserFactory $parserFactory)
     {
         $this->lexer = $lexer;
-        $this->parserFactory = $nikicParserFactory;
+        $this->parserFactory = $parserFactory;
     }
 
     public function create(): Parser

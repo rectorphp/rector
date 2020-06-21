@@ -27,7 +27,7 @@ services:
     PhpParser\NodeFinder: null
 
     PhpParser\Parser:
-        factory: ['@Rector\Core\PhpParser\Parser\ParserFactory', 'create']
+        factory: ['@Rector\Core\PhpParser\Parser\NikicPhpParserFactory', 'create']
 
     PhpParser\Lexer:
         factory: ['@Rector\Core\PhpParser\Parser\LexerFactory', 'create']
