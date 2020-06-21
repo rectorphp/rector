@@ -46,6 +46,7 @@ final class ClassLikeNamesSuffixer
         // replace those class names in code
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new PrefixingClassLikeNamesNodeVisitor($classLikeNames, $classSuffix));
+
         $nodes = $nodeTraverser->traverse($nodes);
 
         return $this->standard->prettyPrintFile($nodes);
