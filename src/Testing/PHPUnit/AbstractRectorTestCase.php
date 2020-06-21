@@ -31,8 +31,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 {
-    use RunnableRectorTrait;
-
     /**
      * @var FileProcessor
      */
@@ -68,11 +66,17 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      */
     private $nodeScopeResolver;
 
+    /**
+     * @var RunnableRectorFactory
+     */
+    private $runnableRectorFactory;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
+        $this->runnableRectorFactory = new RunnableRectorFactory($this->fixtureSplitter);
 
         if ($this->provideConfig() !== '') {
             $this->ensureConfigFileExists();
@@ -155,6 +159,19 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         if (Strings::contains($originalFileInfo->getContents(), RunnableInterface::class)) {
             $this->assertOriginalAndFixedFileResultEquals($originalFileInfo, $expectedFileInfo);
         }
+    }
+
+    protected function assertOriginalAndFixedFileResultEquals(
+        SmartFileInfo $originalFileInfo,
+        SmartFileInfo $expectedFileInfo
+    ): void {
+        $originalInstance = $this->runnableRectorFactory->createRunnableClass($originalFileInfo);
+        $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
+
+        $actualResult = $originalInstance->run();
+        $expectedResult = $expectedInstance->run();
+
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     protected function getTempPath(): string
