@@ -80,6 +80,7 @@ PHP
             return null;
         }
 
+        // skip PHPUnit calls, as they accept both self:: and $this-> formats
         if ($this->isObjectType($node->var, 'PHPUnit\Framework\TestCase')) {
             return null;
         }
