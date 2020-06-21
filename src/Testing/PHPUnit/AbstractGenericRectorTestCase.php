@@ -73,9 +73,9 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
      */
     abstract protected function getRectorInterface(): string;
 
-    protected function yieldFilesFromDirectory(string $directory): Iterator
+    protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator
     {
-        return StaticFixtureProvider::yieldFilesFromDirectory($directory, '*.php.inc');
+        return StaticFixtureProvider::yieldFilesFromDirectory($directory, $suffix);
     }
 
     protected function setParameter(string $name, $value): void

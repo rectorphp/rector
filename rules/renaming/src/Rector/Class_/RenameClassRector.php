@@ -43,7 +43,9 @@ final class RenameClassRector extends AbstractRector
         $this->oldToNewClasses = $oldToNewClasses;
         $this->classRenamer = $classRenamer;
 
-        $changeConfiguration->setOldToNewClasses($oldToNewClasses);
+        if ($oldToNewClasses !== []) {
+            $changeConfiguration->setOldToNewClasses($oldToNewClasses);
+        }
     }
 
     public function getDefinition(): RectorDefinition

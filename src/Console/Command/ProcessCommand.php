@@ -16,9 +16,9 @@ use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\EventDispatcher\Event\AfterReportEvent;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\Guard\RectorGuard;
+use Rector\Core\NeonYaml\NeonYamlProcessor;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\Stubs\StubLoader;
-use Rector\Core\Yaml\YamlProcessor;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -77,9 +77,9 @@ final class ProcessCommand extends AbstractCommand
     private $stubLoader;
 
     /**
-     * @var YamlProcessor
+     * @var NeonYamlProcessor
      */
-    private $yamlProcessor;
+    private $neonYamlProcessor;
 
     /**
      * @var UnchangedFilesFilter
@@ -111,7 +111,7 @@ final class ProcessCommand extends AbstractCommand
         OutputFormatterCollector $outputFormatterCollector,
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
-        YamlProcessor $yamlProcessor,
+        NeonYamlProcessor $neonYamlProcessor,
         ChangedFilesDetector $changedFilesDetector,
         UnchangedFilesFilter $unchangedFilesFilter,
         SymfonyStyle $symfonyStyle,
@@ -126,7 +126,7 @@ final class ProcessCommand extends AbstractCommand
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->stubLoader = $stubLoader;
-        $this->yamlProcessor = $yamlProcessor;
+        $this->neonYamlProcessor = $neonYamlProcessor;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
 
         parent::__construct();
@@ -229,10 +229,12 @@ final class ProcessCommand extends AbstractCommand
             $this->symfonyStyle->listing($phpFileInfos);
         }
 
-        $this->yamlProcessor->run($source);
-
         $this->configuration->setFileInfos($phpFileInfos);
         $this->rectorApplication->runOnFileInfos($phpFileInfos);
+
+        // must run after PHP rectors, because they might change class names, and these class names must be changed in configs
+        $neonYamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['neon', 'yaml']);
+        $this->neonYamlProcessor->runOnFileInfos($neonYamlFileInfos);
 
         $this->reportZeroCacheRectorsCondition();
 
