@@ -51,7 +51,7 @@ class SomeClass
 {
     public static function run()
     {
-        self::eat();
+        static::eat();
     }
 
     public static function eat()
@@ -80,6 +80,7 @@ PHP
             return null;
         }
 
+        // skip PHPUnit calls, as they accept both self:: and $this-> formats
         if ($this->isObjectType($node->var, 'PHPUnit\Framework\TestCase')) {
             return null;
         }
@@ -100,6 +101,6 @@ PHP
             return null;
         }
 
-        return $this->createStaticCall('self', $methodName, $node->args);
+        return $this->createStaticCall('static', $methodName, $node->args);
     }
 }

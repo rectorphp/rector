@@ -2,15 +2,34 @@
 
 namespace Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
 
-class SomeClass
-{
-    public static function run()
-    {
-        $this->eat('something');
-    }
+use Rector\Core\Testing\Contract\RunnableInterface;
 
-    public static function eat(string $thing)
+class SomeParent
+{
+    public function speak()
     {
+        return $this->whoami();
+    }
+    public static function whoami()
+    {
+        return 'parent';
+    }
+}
+
+class SomeChild extends SomeParent
+{
+    public static function whoami()
+    {
+        return 'child';
+    }
+}
+
+class SomeRunnable implements RunnableInterface
+{
+    public function run()
+    {
+        $someChild = new SomeChild();
+        return $someChild->speak();
     }
 }
 
@@ -20,15 +39,34 @@ class SomeClass
 
 namespace Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\Fixture;
 
-class SomeClass
-{
-    public static function run()
-    {
-        self::eat('something');
-    }
+use Rector\Core\Testing\Contract\RunnableInterface;
 
-    public static function eat(string $thing)
+class SomeParent
+{
+    public function speak()
     {
+        return static::whoami();
+    }
+    public static function whoami()
+    {
+        return 'parent';
+    }
+}
+
+class SomeChild extends SomeParent
+{
+    public static function whoami()
+    {
+        return 'child';
+    }
+}
+
+class SomeRunnable implements RunnableInterface
+{
+    public function run()
+    {
+        $someChild = new SomeChild();
+        return $someChild->speak();
     }
 }
 
