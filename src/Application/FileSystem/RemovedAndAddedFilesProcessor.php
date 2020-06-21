@@ -91,7 +91,9 @@ final class RemovedAndAddedFilesProcessor
                 );
             }
 
+            $this->symfonyStyle->writeln('----------------------------------------');
             $this->symfonyStyle->writeln($fileContent);
+            $this->symfonyStyle->writeln('----------------------------------------');
         }
     }
 

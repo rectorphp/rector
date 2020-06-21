@@ -7,7 +7,6 @@ namespace Rector\FileSystemRector\Rector;
 use Nette\Utils\Strings;
 use PhpParser\Lexer;
 use PhpParser\Node;
-use PhpParser\ParserFactory;
 use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\TokensByFilePathStorage;
@@ -20,7 +19,6 @@ use Rector\PostRector\Application\PostFileProcessor;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use TypeError;
 
 abstract class AbstractFileSystemRector implements FileSystemRectorInterface
 {
@@ -52,11 +50,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     private $formatPerservingPrinter;
 
     /**
-     * @var ParserFactory
-     */
-    private $parserFactory;
-
-    /**
      * @var PostFileProcessor
      */
     private $postFileProcessor;
@@ -80,7 +73,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      * @required
      */
     public function autowireAbstractFileSystemRector(
-        ParserFactory $parserFactory,
         Lexer $lexer,
         FormatPerservingPrinter $formatPerservingPrinter,
         Configuration $configuration,
@@ -91,7 +83,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         TokensByFilePathStorage $tokensByFilePathStorage,
         FileProcessor $fileProcessor
     ): void {
-        $this->parserFactory = $parserFactory;
         $this->lexer = $lexer;
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->configuration = $configuration;
@@ -128,7 +119,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     /**
      * @param Node[] $nodes
      */
-    protected function printNodesToFilePath(array $nodes, string $fileDestination): void
+    protected function printNodesToFilePath(array $nodes, string $fileDestination, SmartFileInfo $smartFileInfo): void
     {
         $nodes = $this->postFileProcessor->traverse($nodes);
 
@@ -151,38 +142,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         // re-index keys from 0
         $nodes = array_values($nodes);
 
-        // 1. if nodes are the same, prefer format preserving printer
-        try {
-            $dummyLexer = new Lexer();
-            $dummyParser = $this->parserFactory->create(ParserFactory::PREFER_PHP7, $dummyLexer);
-            $dummyParser->parse('<?php ' . $this->print($nodes));
-
-            $dummyTokenCount = count($dummyLexer->getTokens());
-            $modelTokenCount = count($this->lexer->getTokens());
-
-            if ($dummyTokenCount > $modelTokenCount) {
-                // nothing we can do - this would end by "Undefined offset in TokenStream.php on line X" error
-                $formatPreservingContent = '';
-            } else {
-                $formatPreservingContent = $this->formatPerservingPrinter->printToString(
-                    $nodes,
-                    $this->oldStmts,
-                    $this->lexer->getTokens()
-                );
-            }
-        } catch (TypeError $typeError) {
-            // incompatible tokens, nothing we can do to preserve format
-            $formatPreservingContent = '';
-        }
-
-        $prettyPrintContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
-
-        if ($this->areStringsSameWithoutSpaces($formatPreservingContent, $prettyPrintContent)) {
-            $fileContent = $formatPreservingContent;
-        } else {
-            $prettyPrintContent = $this->resolveLastEmptyLine($prettyPrintContent);
-            $fileContent = $prettyPrintContent;
-        }
+        $fileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
+        $fileContent = $this->resolveLastEmptyLine($fileContent);
 
         $this->addFile($fileDestination, $fileContent);
     }
@@ -190,14 +151,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     protected function printNodesWithFileDestination(NodesWithFileDestination $nodesWithFileDestination): void
     {
         $this->addNodesWithFileDestination($nodesWithFileDestination);
-    }
-
-    /**
-     * Also without FQN "\" that are added by basic printer
-     */
-    private function areStringsSameWithoutSpaces(string $firstString, string $secondString): bool
-    {
-        return $this->clearString($firstString) === $this->clearString($secondString);
     }
 
     /**
@@ -212,29 +165,5 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         }
 
         return $prettyPrintContent;
-    }
-
-    private function clearString(string $string): string
-    {
-        $string = $this->removeComments($string);
-
-        // remove all spaces
-        $string = Strings::replace($string, '#\s+#', '');
-
-        // remove FQN "\" that are added by basic printer
-        $string = Strings::replace($string, '#\\\\#', '');
-
-        // remove trailing commas, as one of them doesn't have to contain them
-        return Strings::replace($string, '#\,#', '');
-    }
-
-    private function removeComments(string $string): string
-    {
-        // remove comments like this noe
-        $string = Strings::replace($string, '#\/\/(.*?)\n#', '');
-
-        $string = Strings::replace($string, '#/\*.*?\*/#s', '');
-
-        return Strings::replace($string, '#\n\s*\n#', "\n");
     }
 }
