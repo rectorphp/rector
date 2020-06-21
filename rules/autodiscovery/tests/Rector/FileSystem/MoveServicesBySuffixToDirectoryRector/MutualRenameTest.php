@@ -35,15 +35,30 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
     public function provideData(): Iterator
     {
         yield [
-            __DIR__ . '/SourceMutualRename/Controller/Nested/AbstractBaseMapper.php',
-            $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/Nested/AbstractBaseMapper.php',
-            __DIR__ . '/ExpectedMutualRename/Mapper/Nested/AbstractBaseMapper.php',
+            __DIR__ . '/SourceMutualRename/Controller/Nested/AbstractBaseWithSpaceMapper.php',
+            $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/Nested/AbstractBaseWithSpaceMapper.php',
+            __DIR__ . '/ExpectedMutualRename/Mapper/Nested/AbstractBaseWithSpaceMapper.php.inc',
 
             // extra files
             [
-                __DIR__ . '/SourceMutualRename/Entity/UserMapper.php' => [
-                    'location' => $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/UserMapper.php',
-                    'content' => __DIR__ . '/ExpectedMutualRename/Mapper/UserMapper.php.inc',
+                __DIR__ . '/SourceMutualRename/Entity/UserWithSpaceMapper.php' => [
+                    'location' => $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/UserWithSpaceMapper.php',
+                    'content' => __DIR__ . '/ExpectedMutualRename/Mapper/UserWithSpaceMapper.php.inc',
+                ],
+            ],
+        ];
+
+        // inversed order, but should have the same effect
+        yield [
+            __DIR__ . '/SourceMutualRename/Entity/UserMapper.php',
+            $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/UserMapper.php',
+            __DIR__ . '/ExpectedMutualRename/Mapper/UserMapper.php.inc',
+
+            // extra files
+            [
+                __DIR__ . '/SourceMutualRename/Controller/Nested/AbstractBaseMapper.php' => [
+                    'location' => $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/Nested/AbstractBaseMapper.php',
+                    'content' => __DIR__ . '/ExpectedMutualRename/Mapper/Nested/AbstractBaseMapper.php.inc',
                 ],
             ],
         ];

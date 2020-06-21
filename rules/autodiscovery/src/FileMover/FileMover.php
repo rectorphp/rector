@@ -92,11 +92,7 @@ final class FileMover
         $classLike->namespacedName = new FullyQualified($newClassName);
 
         return new NodesWithFileDestination(
-            $nodes,
-            $newFileDestination,
-            $currentClassName,
-            $newClassName,
-            $smartFileInfo
+            $nodes, $newFileDestination, $smartFileInfo, $currentClassName, $newClassName
         );
     }
 

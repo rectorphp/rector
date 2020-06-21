@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Autodiscovery\ValueObject;
 
 use PhpParser\Node;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodesWithFileDestination
@@ -20,12 +21,12 @@ final class NodesWithFileDestination
     private $nodes = [];
 
     /**
-     * @var string
+     * @var string|null
      */
     private $oldClassName;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $newClassName;
 
@@ -38,11 +39,7 @@ final class NodesWithFileDestination
      * @param Node[] $nodes
      */
     public function __construct(
-        array $nodes,
-        string $fileDestination,
-        string $oldClassName,
-        string $newClassName,
-        SmartFileInfo $originalSmartFileInfo
+        array $nodes, string $fileDestination, SmartFileInfo $originalSmartFileInfo, ?string $oldClassName = null, ?string $newClassName = null
     ) {
         $this->nodes = $nodes;
         $this->fileDestination = $fileDestination;
@@ -66,11 +63,19 @@ final class NodesWithFileDestination
 
     public function getOldClassName(): string
     {
+        if ($this->oldClassName === null) {
+            throw new ShouldNotHappenException();
+        }
+
         return $this->oldClassName;
     }
 
     public function getNewClassName(): string
     {
+        if ($this->newClassName === null) {
+            throw new ShouldNotHappenException();
+        }
+
         return $this->newClassName;
     }
 

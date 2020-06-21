@@ -141,9 +141,7 @@ PHP
     private function processNodesWithoutNamespace(array $nodes, SmartFileInfo $smartFileInfo, bool $shouldDelete): void
     {
         // process only files with 2 classes and more
-        $classes = $this->betterNodeFinder->findClassLikes($nodes);
-
-        if (count($classes) <= 1) {
+        if (! $this->hasAtLeast2Classes($nodes)) {
             return;
         }
 
@@ -219,5 +217,15 @@ PHP
                 unset($namespaceNode->stmts[$key]);
             }
         }
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function hasAtLeast2Classes(array $nodes): bool
+    {
+        $classes = $this->betterNodeFinder->findClassLikes($nodes);
+
+        return count($classes) > 1;
     }
 }
