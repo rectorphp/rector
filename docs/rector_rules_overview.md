@@ -4872,7 +4872,7 @@ Use `Nette\Utils\Strings` over bare string-functions
 - class: [`Rector\Nette\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector`](/../master/rules/nette/src/Rector/ClassMethod/TemplateMagicAssignToExplicitVariableArrayRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/ClassMethod/TemplateMagicAssignToExplicitVariableArrayRector/Fixture)
 
-Change $this->templates->{magic} to $this->template->render(..., $values)
+Change `$this->templates->{magic}` to `$this->template->render(..., $values)`
 
 ```diff
  use Nette\Application\UI\Control;
@@ -7538,7 +7538,7 @@ Changes $this->call() to static method to static call
      public static function run()
      {
 -        $this->eat();
-+        self::eat();
++        static::eat();
      }
 
      public static function eat()
@@ -8436,7 +8436,7 @@ Change get_class($object) to faster $object::class
 - class: [`Rector\Php80\Rector\Ternary\GetDebugTypeRector`](/../master/rules/php80/src/Rector/Ternary/GetDebugTypeRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/Ternary/GetDebugTypeRector/Fixture)
 
-Change ternary type resolve to `get_debug_type()`
+Change ternary type `resolve` to `get_debug_type()`
 
 ```diff
  class SomeClass

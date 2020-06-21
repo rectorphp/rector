@@ -42,7 +42,7 @@ final class TemplateMagicAssignToExplicitVariableArrayRector extends AbstractRec
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change $this->templates->{magic} to $this->template->render(..., $values)', [
+        return new RectorDefinition('Change `$this->templates->{magic}` to `$this->template->render(..., $values)`', [
             new CodeSample(
                 <<<'PHP'
 use Nette\Application\UI\Control;
