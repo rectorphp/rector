@@ -10,7 +10,7 @@ use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
 
-final class RenameNeonYamlRectorTest extends AbstractRectorTestCase
+final class RenameNeonYamlXmlRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -22,7 +22,7 @@ final class RenameNeonYamlRectorTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRenameNeonYaml', '#\.(neon|yaml)$#');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRenameNeonYamlXml', '#\.(neon|yaml|xml)$#');
     }
 
     /**
