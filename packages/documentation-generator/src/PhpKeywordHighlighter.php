@@ -37,7 +37,7 @@ final class PhpKeywordHighlighter
         return implode(' ', $words);
     }
 
-    private function isKeywordToHighlight($word): bool
+    private function isKeywordToHighlight(string $word): bool
     {
         // part of normal text
         if (in_array($word, self::TEXT_WORDS, true)) {
