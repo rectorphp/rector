@@ -12,7 +12,7 @@ class SomeParent
     }
     public static function whoami()
     {
-        return "parent";
+        return 'parent';
     }
 }
 
@@ -20,7 +20,7 @@ class SomeChild extends SomeParent
 {
     public static function whoami()
     {
-        return "child";
+        return 'child';
     }
 }
 
@@ -28,8 +28,8 @@ class SomeRunnable implements RunnableInterface
 {
     public function run()
     {
-        $c = new SomeChild();
-        return $c->speak();
+        $someChild = new SomeChild();
+        return $someChild->speak();
     }
 }
 
@@ -49,7 +49,7 @@ class SomeParent
     }
     public static function whoami()
     {
-        return "parent";
+        return 'parent';
     }
 }
 
@@ -57,7 +57,7 @@ class SomeChild extends SomeParent
 {
     public static function whoami()
     {
-        return "child";
+        return 'child';
     }
 }
 
@@ -65,8 +65,8 @@ class SomeRunnable implements RunnableInterface
 {
     public function run()
     {
-        $c = new SomeChild();
-        return $c->speak();
+        $someChild = new SomeChild();
+        return $someChild->speak();
     }
 }
 
