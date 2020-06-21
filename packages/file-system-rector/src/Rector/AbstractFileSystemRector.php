@@ -119,7 +119,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     /**
      * @param Node[] $nodes
      */
-    protected function printNodesToFilePath(array $nodes, string $fileDestination, SmartFileInfo $smartFileInfo): void
+    protected function printNodesToFilePath(array $nodes, string $fileDestination): void
     {
         $nodes = $this->postFileProcessor->traverse($nodes);
 

@@ -163,7 +163,7 @@ PHP
             if ($shouldDelete) {
                 $this->printNewNodesToFilePath($nodes, $fileDestination);
             } else {
-                $this->printNodesToFilePath($nodes, $fileDestination, $smartFileInfo);
+                $this->printNodesToFilePath($nodes, $fileDestination);
             }
         }
     }
@@ -199,7 +199,7 @@ PHP
         if ($shouldDeleteFile) {
             $this->printNewNodesToFilePath($newStmtsSet, $fileDestination);
         } else {
-            $this->printNodesToFilePath($newStmtsSet, $fileDestination, $smartFileInfo);
+            $this->printNodesToFilePath($newStmtsSet, $fileDestination);
         }
     }
 
