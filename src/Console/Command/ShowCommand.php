@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\Console\Command;
 
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\NeonYaml\YamlPrinter;
 use Rector\Core\Php\TypeAnalyzer;
-use Rector\Core\Yaml\YamlPrinter;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 use ReflectionClass;

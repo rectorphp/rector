@@ -16,6 +16,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\NeonYaml\NeonYamlProcessor;
 use Rector\Core\Set\Set;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
@@ -71,6 +72,11 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      */
     private $runnableRectorFactory;
 
+    /**
+     * @var NeonYamlProcessor
+     */
+    private $neonYamlProcessor;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -107,6 +113,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
 
         $this->fileProcessor = static::$container->get(FileProcessor::class);
+        $this->neonYamlProcessor = static::$container->get(NeonYamlProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
 
         // needed for PHPStan, because the analyzed file is just create in /temp
@@ -271,20 +278,26 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     ): void {
         $this->setParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
 
-        // life-cycle trio :)
-        $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
-        $this->fileProcessor->refactor($originalFileInfo);
+        if ($originalFileInfo->getSuffix() === 'php') {
+            // life-cycle trio :)
+            $this->fileProcessor->parseFileInfoToLocalCache($originalFileInfo);
+            $this->fileProcessor->refactor($originalFileInfo);
 
-        $this->fileProcessor->postFileRefactor($originalFileInfo);
+            $this->fileProcessor->postFileRefactor($originalFileInfo);
 
-        // mimic post-rectors
+            // mimic post-rectors
+            $changedContent = $this->fileProcessor->printToString($originalFileInfo);
 
-        $changedContent = $this->fileProcessor->printToString($originalFileInfo);
+            $removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
+            $removedAndAddedFilesProcessor->run();
+        } elseif (in_array($originalFileInfo->getSuffix(), ['neon', 'yaml'], true)) {
+            $changedContent = $this->neonYamlProcessor->processFileInfo($originalFileInfo);
+        } else {
+            $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());
+            throw new ShouldNotHappenException($message);
+        }
 
         $causedByFixtureMessage = $fixtureFileInfo->getRelativeFilePathFromCwd();
-
-        $removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
-        $removedAndAddedFilesProcessor->run();
 
         try {
             $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $causedByFixtureMessage);

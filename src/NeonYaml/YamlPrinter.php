@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Yaml;
+namespace Rector\Core\NeonYaml;
 
 use Symfony\Component\Yaml\Yaml;
 

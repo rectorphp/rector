@@ -60,6 +60,12 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
                     'location' => $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/Nested/AbstractBaseMapper.php',
                     'content' => __DIR__ . '/ExpectedMutualRename/Mapper/Nested/AbstractBaseMapper.php.inc',
                 ],
+
+                // includes NEON/YAML file renames
+                __DIR__ . '/SourceMutualRename/config/some_config.neon' => [
+                    'location' => $this->getFixtureTempDirectory() . '/SourceMutualRename/config/some_config.neon',
+                    'content' => __DIR__ . '/ExpectedMutualRename/config/expected_some_config.neon',
+                ],
             ],
         ];
     }

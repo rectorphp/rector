@@ -37,7 +37,7 @@ final class FixtureSplitter
         FileSystem::write($expectedFile, $expectedContent);
 
         // file needs to be autoload so PHPStan can analyze
-        if ($autoloadTestFixture) {
+        if ($autoloadTestFixture && Strings::match($smartFileInfo->getFilename(), '#\.php(\.inc)?$#')) {
             require_once $originalFile;
         }
 

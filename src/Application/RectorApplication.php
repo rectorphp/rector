@@ -111,11 +111,11 @@ final class RectorApplication
     }
 
     /**
-     * @param SmartFileInfo[] $fileInfos
+     * @param SmartFileInfo[] $phpFileInfos
      */
-    public function runOnFileInfos(array $fileInfos): void
+    public function runOnFileInfos(array $phpFileInfos): void
     {
-        $fileCount = count($fileInfos);
+        $fileCount = count($phpFileInfos);
         if ($fileCount === 0) {
             return;
         }
@@ -128,7 +128,7 @@ final class RectorApplication
         }
 
         // PHPStan has to know about all files!
-        $this->configurePHPStanNodeScopeResolver($fileInfos);
+        $this->configurePHPStanNodeScopeResolver($phpFileInfos);
 
         // active only one rule
         if ($this->configuration->getOnlyRector() !== null) {
@@ -137,36 +137,36 @@ final class RectorApplication
         }
 
         // 1. parse files to nodes
-        foreach ($fileInfos as $fileInfo) {
-            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
             }, 'parsing');
         }
 
         // 2. change nodes with Rectors
-        foreach ($fileInfos as $fileInfo) {
-            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->refactor($smartFileInfo);
             }, 'refactoring');
         }
 
         // 3. process file system rectors
-        foreach ($fileInfos as $fileInfo) {
-            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->processFileSystemRectors($smartFileInfo);
             }, 'refactoring with file system');
         }
 
         // 4. apply post rectors
-        foreach ($fileInfos as $fileInfo) {
-            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->postFileRefactor($smartFileInfo);
             }, 'post rectors');
         }
 
         // 5. print to file or string
-        foreach ($fileInfos as $fileInfo) {
-            $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->printFileInfo($smartFileInfo);
             }, 'printing');
         }
