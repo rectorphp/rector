@@ -47,7 +47,12 @@ final class IsArrayAndDualCheckToAble
         /** @var FuncCall $funcCallNode */
         [$instanceOfNode, $funcCallNode] = $matchedNodes;
 
-        if ((string) $instanceOfNode->class !== $type) {
+        $instanceOfNodeClass = $instanceOfNode->class;
+        if (! $instanceOfNodeClass instanceof Name) {
+            return null;
+        }
+
+        if ((string) $instanceOfNodeClass !== $type) {
             return null;
         }
 
