@@ -6,9 +6,9 @@ namespace Rector\Core\PhpParser\Parser;
 
 use PhpParser\Lexer;
 use PhpParser\Parser;
-use PhpParser\ParserFactory as NikicParserFactory;
+use PhpParser\ParserFactory;
 
-final class ParserFactory
+final class NikicPhpParserFactory
 {
     /**
      * @var Lexer
@@ -16,19 +16,19 @@ final class ParserFactory
     private $lexer;
 
     /**
-     * @var NikicParserFactory
+     * @var ParserFactory
      */
-    private $nikicParserFactory;
+    private $parserFactory;
 
-    public function __construct(Lexer $lexer, NikicParserFactory $nikicParserFactory)
+    public function __construct(Lexer $lexer, ParserFactory $nikicParserFactory)
     {
         $this->lexer = $lexer;
-        $this->nikicParserFactory = $nikicParserFactory;
+        $this->parserFactory = $nikicParserFactory;
     }
 
     public function create(): Parser
     {
-        return $this->nikicParserFactory->create(NikicParserFactory::PREFER_PHP7, $this->lexer, [
+        return $this->parserFactory->create(ParserFactory::PREFER_PHP7, $this->lexer, [
             'useIdentifierNodes' => true,
             'useConsistentVariableNodes' => true,
             'useExpressionStatements' => true,
