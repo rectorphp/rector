@@ -40,9 +40,6 @@ final class NodesWithFileDestinationPrinter
     {
         $nodes = $this->postFileProcessor->traverse($nodesWithFileDestination->getNodes());
 
-        // re-index keys from 0
-        $nodes = array_values($nodes);
-
         $prettyPrintContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
         return $this->resolveLastEmptyLine($prettyPrintContent);
     }

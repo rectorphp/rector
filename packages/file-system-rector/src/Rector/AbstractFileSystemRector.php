@@ -139,9 +139,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     {
         $nodes = $this->postFileProcessor->traverse($nodes);
 
-        // re-index keys from 0
-        $nodes = array_values($nodes);
-
         $fileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
         $fileContent = $this->resolveLastEmptyLine($fileContent);
 

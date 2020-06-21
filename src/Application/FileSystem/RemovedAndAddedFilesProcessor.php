@@ -46,7 +46,7 @@ final class RemovedAndAddedFilesProcessor
         Configuration $configuration,
         SymfonyStyle $symfonyStyle,
         Filesystem $filesystem,
-    NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter
+        NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter
     ) {
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->configuration = $configuration;
