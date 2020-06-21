@@ -50,7 +50,7 @@ final class FixtureSplitter
     public function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix): string
     {
         // warning: if this hash is too short, the file can becom "identical"; took me 1 hour to find out
-        $hash = Strings::substring(md5($smartFileInfo->getRealPath()), 0, 15);
+        $hash = Strings::substring(md5($smartFileInfo->getRealPath()), -15);
 
         return sprintf($this->tempPath . '/%s_%s_%s', $prefix, $hash, $smartFileInfo->getBasename('.inc'));
     }

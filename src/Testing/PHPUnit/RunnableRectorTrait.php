@@ -6,9 +6,9 @@ namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Random;
-use Nette\Utils\Strings;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Core\Testing\PHPUnit\Runnable\ClassLikeNamesSuffixer;
+use Rector\Core\Testing\PHPUnit\Runnable\RunnableClassFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -29,33 +29,27 @@ trait RunnableRectorTrait
         $this->assertSame($expectedResult, $actualResult);
     }
 
-    private function getTemporaryClassName(): string
+    private function getTemporaryClassSuffix(): string
     {
-        return 'ClassName_' . Random::generate(20);
+        return Random::generate(30);
     }
 
-    private function createRunnableClass(SmartFileInfo $classFileInfo): RunnableInterface
+    private function createRunnableClass(SmartFileInfo $classFileContent): RunnableInterface
     {
-        $temporaryPath = $this->fixtureSplitter->createTemporaryPathWithPrefix($classFileInfo, 'runnable');
+        $temporaryPath = $this->fixtureSplitter->createTemporaryPathWithPrefix($classFileContent, 'runnable');
 
-        $fileContent = $classFileInfo->getContents();
+        $fileContent = $classFileContent->getContents();
+        $classNameSuffix = $this->getTemporaryClassSuffix();
 
-        // use unique class name for before and for after class, so both can be instantiated
-        $className = $this->getTemporaryClassName();
-        $classFileInfo = Strings::replace($fileContent, '#class\\s+(\\S*)\\s+#', sprintf('class %s ', $className));
+        $classNameSufixer = new ClassLikeNamesSuffixer();
+        $suffixedFileContent = $classNameSufixer->suffixContent($fileContent, $classNameSuffix);
 
-        FileSystem::write($temporaryPath, $classFileInfo);
+        FileSystem::write($temporaryPath, $suffixedFileContent);
         include_once $temporaryPath;
 
-        $matches = Strings::match($classFileInfo, '#\bnamespace (?<namespace>.*?);#');
-        $namespace = $matches['namespace'] ?? '';
+        $runnableClassFinder = new RunnableClassFinder();
+        $runnableFullyQualifiedClassName = $runnableClassFinder->find($suffixedFileContent);
 
-        $fullyQualifiedClassName = $namespace . '\\' . $className;
-
-        if (! is_a($fullyQualifiedClassName, RunnableInterface::class, true)) {
-            throw new ShouldNotHappenException();
-        }
-
-        return new $fullyQualifiedClassName();
+        return new $runnableFullyQualifiedClassName();
     }
 }
