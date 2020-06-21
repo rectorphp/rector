@@ -289,7 +289,7 @@ Move value object to ValueObject namespace/directory
 - class: [`Rector\CakePHP\Rector\StaticCall\AppUsesStaticCallToUseStatementRector`](/../master/rules/cakephp/src/Rector/StaticCall/AppUsesStaticCallToUseStatementRector.php)
 - [test fixtures](/../master/rules/cakephp/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Fixture)
 
-Change App::uses() to use imports
+Change `App::uses()` to use imports
 
 ```diff
 -App::uses('NotificationListener', 'Event');
@@ -610,7 +610,7 @@ Change `array_merge` of non arrays to array directly
 - class: [`Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector`](/../master/rules/code-quality/src/Rector/Array_/ArrayThisCallToThisMethodCallRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/Array_/ArrayThisCallToThisMethodCallRector/Fixture)
 
-Change [$this, someMethod] without any args to $this->someMethod()
+Change `[$this, someMethod]` without any args to `$this->someMethod()`
 
 ```diff
  class SomeClass
@@ -869,7 +869,7 @@ Change `count()` in for function to own variable
 - class: [`Rector\CodeQuality\Rector\For_\ForToForeachRector`](/../master/rules/code-quality/src/Rector/For_/ForToForeachRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/For_/ForToForeachRector/Fixture)
 
-Change for() to foreach() where useful
+Change `for()` to `foreach()` where useful
 
 ```diff
  class SomeClass
@@ -898,7 +898,7 @@ Change for() to foreach() where useful
 - class: [`Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector`](/../master/rules/code-quality/src/Rector/Foreach_/ForeachItemsAssignToEmptyArrayToAssignRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/Foreach_/ForeachItemsAssignToEmptyArrayToAssignRector/Fixture)
 
-Change foreach() items assign to empty array to direct assign
+Change `foreach()` items assign to empty array to direct assign
 
 ```diff
  class SomeClass
@@ -3384,7 +3384,7 @@ Add uuid initializion to all entities that misses it
 - class: [`Rector\Doctrine\Rector\ClassMethod\ChangeGetIdTypeToUuidRector`](/../master/rules/doctrine/src/Rector/ClassMethod/ChangeGetIdTypeToUuidRector.php)
 - [test fixtures](/../master/rules/doctrine/tests/Rector/ClassMethod/ChangeGetIdTypeToUuidRector/Fixture)
 
-Change return type of getId() to uuid interface
+Change return type of `getId()` to uuid interface
 
 ```diff
  use Doctrine\ORM\Mapping as ORM;
@@ -3409,7 +3409,7 @@ Change return type of getId() to uuid interface
 - class: [`Rector\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector`](/../master/rules/doctrine/src/Rector/MethodCall/ChangeGetUuidMethodCallToGetIdRector.php)
 - [test fixtures](/../master/rules/doctrine/tests/Rector/MethodCall/ChangeGetUuidMethodCallToGetIdRector/Fixture)
 
-Change getUuid() method call to getId()
+Change `getUuid()` method call to `getId()`
 
 ```diff
  use Doctrine\ORM\Mapping as ORM;
@@ -3469,7 +3469,7 @@ Change $uuid === 1 to $uuid->equals(\Ramsey\Uuid\Uuid::fromString(1))
 - class: [`Rector\Doctrine\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector`](/../master/rules/doctrine/src/Rector/ClassMethod/ChangeReturnTypeOfClassMethodWithGetIdRector.php)
 - [test fixtures](/../master/rules/doctrine/tests/Rector/ClassMethod/ChangeReturnTypeOfClassMethodWithGetIdRector/Fixture)
 
-Change getUuid() method call to getId()
+Change `getUuid()` method call to `getId()`
 
 ```diff
  class SomeClass
@@ -3523,7 +3523,7 @@ Change set id to uuid values
 - class: [`Rector\Doctrine\Rector\ClassMethod\ChangeSetIdTypeToUuidRector`](/../master/rules/doctrine/src/Rector/ClassMethod/ChangeSetIdTypeToUuidRector.php)
 - [test fixtures](/../master/rules/doctrine/tests/Rector/ClassMethod/ChangeSetIdTypeToUuidRector/Fixture)
 
-Change param type of setId() to uuid interface
+Change param type of `setId()` to uuid interface
 
 ```diff
  use Doctrine\ORM\Mapping as ORM;
@@ -4175,7 +4175,7 @@ Remove file relative to project directory
 - class: [`Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector`](/../master/rules/guzzle/src/Rector/MethodCall/MessageAsArrayRector.php)
 - [test fixtures](/../master/rules/guzzle/tests/Rector/MethodCall/MessageAsArrayRector/Fixture)
 
-Changes getMessage(..., true) to getMessageAsArray()
+Changes getMessage(..., true) to `getMessageAsArray()`
 
 ```diff
  /** @var GuzzleHttp\Message\MessageInterface */
@@ -4369,7 +4369,7 @@ Change "redirect" call with 301 to "permanentRedirect"
 - class: [`Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector`](/../master/rules/laravel/src/Rector/StaticCall/RequestStaticValidateToInjectRector.php)
 - [test fixtures](/../master/rules/laravel/tests/Rector/StaticCall/RequestStaticValidateToInjectRector/Fixture)
 
-Change static validate() method to $request->validate()
+Change static `validate()` method to `$request->validate()`
 
 ```diff
  use Illuminate\Http\Request;
@@ -4447,7 +4447,7 @@ Change functions to static calls, so composer can autoload them
 - class: [`Rector\MockistaToMockery\Rector\Class_\MockeryTearDownRector`](/../master/rules/mockista-to-mockery/src/Rector/Class_/MockeryTearDownRector.php)
 - [test fixtures](/../master/rules/mockista-to-mockery/tests/Rector/Class_/MockeryTearDownRector/Fixture)
 
-Add Mockery::close() in tearDown() method if not yet
+Add `Mockery::close()` in `tearDown()` method if not yet
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -4527,7 +4527,7 @@ Converts more complex mysql functions to mysqli
 - class: [`Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector`](/../master/rules/mysql-to-mysqli/src/Rector/FuncCall/MysqlPConnectToMysqliConnectRector.php)
 - [test fixtures](/../master/rules/mysql-to-mysqli/tests/Rector/FuncCall/MysqlPConnectToMysqliConnectRector/Fixture)
 
-Replace mysql_pconnect() with `mysqli_connect()` with host p: prefix
+Replace `mysql_pconnect()` with `mysqli_connect()` with host p: prefix
 
 ```diff
  final class SomeClass
@@ -4662,7 +4662,7 @@ Move dependency passed to all children to parent as @inject/@required dependency
 - class: [`Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/Identical/EndsWithFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/Identical/EndsWithFunctionToNetteUtilsStringsRector/Fixture)
 
-Use Nette\Utils\Strings::endWith() over bare string-functions
+Use `Nette\Utils\Strings::endWith()` over bare string-functions
 
 ```diff
  class SomeClass
@@ -4684,7 +4684,7 @@ Use Nette\Utils\Strings::endWith() over bare string-functions
 - class: [`Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector`](/../master/rules/nette/src/Rector/FuncCall/FilePutContentsToFileSystemWriteRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/FilePutContentsToFileSystemWriteRector/Fixture)
 
-Change `file_put_contents()` to FileSystem::write()
+Change `file_put_contents()` to `FileSystem::write()`
 
 ```diff
  class SomeClass
@@ -4706,7 +4706,7 @@ Change `file_put_contents()` to FileSystem::write()
 - class: [`Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector`](/../master/rules/nette/src/Rector/FuncCall/JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/FuncCall/JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector/Fixture)
 
-Changes json_encode()/json_decode() to safer and more verbose Nette\Utils\Json::encode()/decode() calls
+Changes `json_encode()/json_decode()` to safer and more verbose `Nette\Utils\Json::encode()/decode()` calls
 
 ```diff
  class SomeClass
@@ -4809,7 +4809,7 @@ Change setClass with class and arguments to separated methods
 - class: [`Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector`](/../master/rules/nette/src/Rector/Identical/StartsWithFunctionToNetteUtilsStringsRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/Identical/StartsWithFunctionToNetteUtilsStringsRector/Fixture)
 
-Use Nette\Utils\Strings::startsWith() over bare string-functions
+Use `Nette\Utils\Strings::startsWith()` over bare string-functions
 
 ```diff
  class SomeClass
@@ -4966,7 +4966,7 @@ Change Kdyby EventManager to EventDispatcher
 - class: [`Rector\NetteKdyby\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector`](/../master/rules/nette-kdyby/src/Rector/ClassMethod/ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector.php)
 - [test fixtures](/../master/rules/nette-kdyby/tests/Rector/ClassMethod/ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector/Fixture)
 
-Change getSubscribedEvents() from on magic property, to Event class
+Change `getSubscribedEvents()` from on magic property, to Event class
 
 ```diff
  use Kdyby\Events\Subscriber;
@@ -5168,7 +5168,7 @@ class SomeFormType extends AbstractType
 - class: [`Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector`](/../master/rules/nette-to-symfony/src/Rector/MethodCall/FromHttpRequestGetHeaderToHeadersGetRector.php)
 - [test fixtures](/../master/rules/nette-to-symfony/tests/Rector/MethodCall/FromHttpRequestGetHeaderToHeadersGetRector/Fixture)
 
-Changes getHeader() to $request->headers->get()
+Changes `getHeader()` to `$request->headers->get()`
 
 ```diff
  use Nette\Request;
@@ -5297,7 +5297,7 @@ Changes event names from Nette ones to Symfony ones
 - class: [`Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector`](/../master/rules/nette-to-symfony/src/Rector/ClassMethod/RouterListToControllerAnnotationsRector.php)
 - [test fixtures](/../master/rules/nette-to-symfony/tests/Rector/ClassMethod/RouterListToControllerAnnotationsRetor/Fixture)
 
-Change new Route() from RouteFactory to @Route annotation above controller method
+Change new `Route()` from RouteFactory to @Route annotation above controller method
 
 ```diff
  final class RouterFactory
@@ -5333,7 +5333,7 @@ Change new Route() from RouteFactory to @Route annotation above controller metho
 - class: [`Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector`](/../master/rules/nette-to-symfony/src/Rector/MethodCall/WrapTransParameterNameRector.php)
 - [test fixtures](/../master/rules/nette-to-symfony/tests/Rector/MethodCall/WrapTransParameterNameRector/Fixture)
 
-Adds %% to placeholder name of trans() method if missing
+Adds %% to placeholder name of `trans()` method if missing
 
 ```diff
  use Symfony\Component\Translation\Translator;
@@ -5567,7 +5567,7 @@ Change chart renderer
 - class: [`Rector\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector`](/../master/rules/php-office/src/Rector/MethodCall/ChangeConditionalGetConditionRector.php)
 - [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/ChangeConditionalGetConditionRector/Fixture)
 
-Change argument PHPExcel_Style_Conditional->getCondition() to getConditions()
+Change argument `PHPExcel_Style_Conditional->getCondition()` to `getConditions()`
 
 ```diff
  final class SomeClass
@@ -5588,7 +5588,7 @@ Change argument PHPExcel_Style_Conditional->getCondition() to getConditions()
 - class: [`Rector\PHPOffice\Rector\MethodCall\ChangeConditionalReturnedCellRector`](/../master/rules/php-office/src/Rector/MethodCall/ChangeConditionalReturnedCellRector.php)
 - [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/ChangeConditionalReturnedCellRector/Fixture)
 
-Change conditional call to getCell()
+Change conditional call to `getCell()`
 
 ```diff
  final class SomeClass
@@ -5609,7 +5609,7 @@ Change conditional call to getCell()
 - class: [`Rector\PHPOffice\Rector\MethodCall\ChangeConditionalSetConditionRector`](/../master/rules/php-office/src/Rector/MethodCall/ChangeConditionalSetConditionRector.php)
 - [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/ChangeConditionalSetConditionRector/Fixture)
 
-Change argument PHPExcel_Style_Conditional->setCondition() to setConditions()
+Change argument `PHPExcel_Style_Conditional->setCondition()` to `setConditions()`
 
 ```diff
  final class SomeClass
@@ -5630,7 +5630,7 @@ Change argument PHPExcel_Style_Conditional->setCondition() to setConditions()
 - class: [`Rector\PHPOffice\Rector\StaticCall\ChangeDataTypeForValueRector`](/../master/rules/php-office/src/Rector/StaticCall/ChangeDataTypeForValueRector.php)
 - [test fixtures](/../master/rules/php-office/tests/Rector/StaticCall/ChangeDataTypeForValueRector/Fixture)
 
-Change argument DataType::dataTypeForValue() to DefaultValueBinder
+Change argument `DataType::dataTypeForValue()` to DefaultValueBinder
 
 ```diff
  final class SomeClass
@@ -5650,7 +5650,7 @@ Change argument DataType::dataTypeForValue() to DefaultValueBinder
 - class: [`Rector\PHPOffice\Rector\MethodCall\ChangeDuplicateStyleArrayToApplyFromArrayRector`](/../master/rules/php-office/src/Rector/MethodCall/ChangeDuplicateStyleArrayToApplyFromArrayRector.php)
 - [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/ChangeDuplicateStyleArrayToApplyFromArrayRector/Fixture)
 
-Change method call duplicateStyleArray() to getStyle() + applyFromArray()
+Change method call `duplicateStyleArray()` to `getStyle()` + `applyFromArray()`
 
 ```diff
  final class SomeClass
@@ -5671,7 +5671,7 @@ Change method call duplicateStyleArray() to getStyle() + applyFromArray()
 - class: [`Rector\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector`](/../master/rules/php-office/src/Rector/StaticCall/ChangeIOFactoryArgumentRector.php)
 - [test fixtures](/../master/rules/php-office/tests/Rector/StaticCall/ChangeIOFactoryArgumentRector/Fixture)
 
-Change argument of PHPExcel_IOFactory::createReader(), PHPExcel_IOFactory::createWriter() and PHPExcel_IOFactory::identify()
+Change argument of PHPExcel_IOFactory::createReader(), `PHPExcel_IOFactory::createWriter()` and `PHPExcel_IOFactory::identify()`
 
 ```diff
  final class SomeClass
@@ -5713,7 +5713,7 @@ Change init of PDF writer
 - class: [`Rector\PHPOffice\Rector\StaticCall\ChangeSearchLocationToRegisterReaderRector`](/../master/rules/php-office/src/Rector/StaticCall/ChangeSearchLocationToRegisterReaderRector.php)
 - [test fixtures](/../master/rules/php-office/tests/Rector/StaticCall/ChangeSearchLocationToRegisterReaderRector/Fixture)
 
-Change argument addSearchLocation() to registerReader()
+Change argument `addSearchLocation()` to `registerReader()`
 
 ```diff
  final class SomeClass
@@ -5733,7 +5733,7 @@ Change argument addSearchLocation() to registerReader()
 - class: [`Rector\PHPOffice\Rector\MethodCall\GetDefaultStyleToGetParentRector`](/../master/rules/php-office/src/Rector/MethodCall/GetDefaultStyleToGetParentRector.php)
 - [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/GetDefaultStyleToGetParentRector/Fixture)
 
-Methods to (new Worksheet())->getDefaultStyle() to getParent()->getDefaultStyle()
+Methods to (new `Worksheet())->getDefaultStyle()` to `getParent()->getDefaultStyle()`
 
 ```diff
  class SomeClass
@@ -5775,7 +5775,7 @@ Column index changed from 0 to 1 - run only ONCE! changes current value without 
 - class: [`Rector\PHPOffice\Rector\MethodCall\RemoveSetTempDirOnExcelWriterRector`](/../master/rules/php-office/src/Rector/MethodCall/RemoveSetTempDirOnExcelWriterRector.php)
 - [test fixtures](/../master/rules/php-office/tests/Rector/MethodCall/RemoveSetTempDirOnExcelWriterRector/Fixture)
 
-Remove setTempDir() on PHPExcel_Writer_Excel5
+Remove `setTempDir()` on PHPExcel_Writer_Excel5
 
 ```diff
  final class SomeClass
@@ -5876,7 +5876,7 @@ Tests without assertion will have @doesNotPerformAssertion
 - class: [`Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector`](/../master/rules/phpunit/src/Rector/Class_/AddProphecyTraitRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/Class_/AddProphecyTraitRector/Fixture)
 
-Add Prophecy trait for method using $this->prophesize()
+Add Prophecy trait for method using `$this->prophesize()`
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -6008,7 +6008,7 @@ Turns comparison operations to their method name alternatives in PHPUnit TestCas
 - class: [`Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertEqualsParameterToSpecificMethodsTypeRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertEqualsParameterToSpecificMethodsTypeRector/Fixture)
 
-Change assertEquals()/assertNotEquals() method parameters to new specific alternatives
+Change `assertEquals()/assertNotEquals()` method parameters to new specific alternatives
 
 ```diff
  final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -6204,7 +6204,7 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 - class: [`Rector\PHPUnit\Rector\MethodCall\CreateMockToCreateStubRector`](/../master/rules/phpunit/src/Rector/MethodCall/CreateMockToCreateStubRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/CreateMockToCreateStubRector/Fixture)
 
-Replaces createMock() with createStub() when relevant
+Replaces `createMock()` with `createStub()` when relevant
 
 ```diff
  use PHPUnit\Framework\TestCase
@@ -6275,7 +6275,7 @@ Data provider annotation must be in doc block
 - class: [`Rector\PHPUnit\Rector\ExceptionAnnotationRector`](/../master/rules/phpunit/src/Rector/ExceptionAnnotationRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/ExceptionAnnotationRector/Fixture)
 
-Changes `@expectedException annotations to expectException*() methods
+Changes `@expectedException annotations to `expectException*()` methods
 
 ```diff
 -/**
@@ -6323,7 +6323,7 @@ Use explicit API for expecting PHP errors, warnings, and notices
 - class: [`Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector`](/../master/rules/phpunit/src/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector/Fixture)
 
-Remove getMockBuilder() to createMock()
+Remove `getMockBuilder()` to `createMock()`
 
 ```diff
  class SomeTest extends \PHPUnit\Framework\TestCase
@@ -6345,7 +6345,7 @@ Remove getMockBuilder() to createMock()
 - class: [`Rector\PHPUnit\Rector\GetMockRector`](/../master/rules/phpunit/src/Rector/GetMockRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/GetMockRector/Fixture)
 
-Turns getMock*() methods to createMock()
+Turns `getMock*()` methods to `createMock()`
 
 ```diff
 -$this->getMock("Class");
@@ -6466,7 +6466,7 @@ Replace deprecated "assertArraySubset()" method with alternative methods
 - class: [`Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector`](/../master/rules/phpunit/src/Rector/MethodCall/ReplaceAssertArraySubsetWithDmsPolyfillRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/ReplaceAssertArraySubsetWithDmsPolyfillRector/Fixture)
 
-Change assertArraySubset() to static call of DMS\PHPUnitExtensions\ArraySubset\Assert
+Change `assertArraySubset()` to static call of DMS\PHPUnitExtensions\ArraySubset\Assert
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -6491,7 +6491,7 @@ Change assertArraySubset() to static call of DMS\PHPUnitExtensions\ArraySubset\A
 - class: [`Rector\PHPUnit\Rector\Class_\SelfContainerGetMethodCallFromTestToInjectPropertyRector`](/../master/rules/phpunit/src/Rector/Class_/SelfContainerGetMethodCallFromTestToInjectPropertyRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/Class_/SelfContainerGetMethodCallFromTestToInjectPropertyRector/Fixture)
 
-Change $container->get() calls in PHPUnit to @inject properties autowired by jakzal/phpunit-injector
+Change `$container->get()` calls in PHPUnit to @inject properties autowired by jakzal/phpunit-injector
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -6533,7 +6533,7 @@ Simplify unnecessary foreach check of instances
 - class: [`Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector`](/../master/rules/phpunit/src/Rector/MethodCall/SpecificAssertContainsRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/SpecificAssertContainsRector/Fixture)
 
-Change assertContains()/assertNotContains() method to new string and iterable alternatives
+Change `assertContains()/assertNotContains()` method to new string and iterable alternatives
 
 ```diff
  <?php
@@ -6557,7 +6557,7 @@ Change assertContains()/assertNotContains() method to new string and iterable al
 - class: [`Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector`](/../master/rules/phpunit/src/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector/Fixture)
 
-Change assertContains()/assertNotContains() with non-strict comparison to new specific alternatives
+Change `assertContains()/assertNotContains()` with non-strict comparison to new specific alternatives
 
 ```diff
  <?php
@@ -6583,7 +6583,7 @@ Change assertContains()/assertNotContains() with non-strict comparison to new sp
 - class: [`Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector`](/../master/rules/phpunit/src/Rector/MethodCall/SpecificAssertInternalTypeRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/SpecificAssertInternalTypeRector/Fixture)
 
-Change assertInternalType()/assertNotInternalType() method to new specific alternatives
+Change `assertInternalType()/assertNotInternalType()` method to new specific alternatives
 
 ```diff
  final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -6669,7 +6669,7 @@ Refactor "*TestListener.php" to particular "*Hook.php" files
 - class: [`Rector\PHPUnit\Rector\TryCatchToExpectExceptionRector`](/../master/rules/phpunit/src/Rector/TryCatchToExpectExceptionRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/TryCatchToExpectExceptionRector/Fixture)
 
-Turns try/catch to expectException() call
+Turns try/catch to `expectException()` call
 
 ```diff
 -try {
@@ -6715,7 +6715,7 @@ Changes ->will($this->xxx()) to one specific method
 - class: [`Rector\PHPUnit\Rector\MethodCall\WithConsecutiveArgToArrayRector`](/../master/rules/phpunit/src/Rector/MethodCall/WithConsecutiveArgToArrayRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/WithConsecutiveArgToArrayRector/Fixture)
 
-Split withConsecutive() arg to array
+Split `withConsecutive()` arg to array
 
 ```diff
  class SomeClass
@@ -6915,7 +6915,7 @@ Add $_SERVER REQUEST_URI to method call
 - class: [`Rector\Phalcon\Rector\MethodCall\DecoupleSaveMethodCallWithArgumentToAssignRector`](/../master/rules/phalcon/src/Rector/MethodCall/DecoupleSaveMethodCallWithArgumentToAssignRector.php)
 - [test fixtures](/../master/rules/phalcon/tests/Rector/MethodCall/DecoupleSaveMethodCallWithArgumentToAssignRector/Fixture)
 
-Decouple Phalcon\Mvc\Model::save() with argument to assign()
+Decouple `Phalcon\Mvc\Model::save()` with argument to `assign()`
 
 ```diff
  class SomeClass
@@ -7255,7 +7255,7 @@ Convert break outside for/foreach/switch context to return
 - class: [`Rector\Php70\Rector\FuncCall\CallUserMethodRector`](/../master/rules/php70/src/Rector/FuncCall/CallUserMethodRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/CallUserMethodRector/Fixture)
 
-Changes call_user_method()/call_user_method_array() to call_user_func()/call_user_func_array()
+Changes `call_user_method()/call_user_method_array()` to `call_user_func()/call_user_func_array()`
 
 ```diff
 -call_user_method($method, $obj, "arg1", "arg2");
@@ -7269,7 +7269,7 @@ Changes call_user_method()/call_user_method_array() to call_user_func()/call_use
 - class: [`Rector\Php70\Rector\List_\EmptyListRector`](/../master/rules/php70/src/Rector/List_/EmptyListRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/List_/EmptyListRector/Fixture)
 
-list() cannot be empty
+`list()` cannot be empty
 
 ```diff
 -'list() = $values;'
@@ -7283,7 +7283,7 @@ list() cannot be empty
 - class: [`Rector\Php70\Rector\FuncCall\EregToPregMatchRector`](/../master/rules/php70/src/Rector/FuncCall/EregToPregMatchRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/EregToPregMatchRector/Fixture)
 
-Changes ereg*() to preg*() calls
+Changes `ereg*()` to `preg*()` calls
 
 ```diff
 -ereg("hi")
@@ -7338,7 +7338,7 @@ Changes if/else to spaceship <=> where useful
 - class: [`Rector\Php70\Rector\List_\ListSplitStringRector`](/../master/rules/php70/src/Rector/List_/ListSplitStringRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/List_/ListSplitStringRector/Fixture)
 
-list() cannot split string directly anymore, use `str_split()`
+`list()` cannot split string directly anymore, use `str_split()`
 
 ```diff
 -list($foo) = "string";
@@ -7352,7 +7352,7 @@ list() cannot split string directly anymore, use `str_split()`
 - class: [`Rector\Php70\Rector\List_\ListSwapArrayOrderRector`](/../master/rules/php70/src/Rector/List_/ListSwapArrayOrderRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/List_/ListSwapArrayOrderRector/Fixture)
 
-list() assigns variables in reverse order - relevant in array assign
+`list()` assigns variables in reverse order - relevant in array assign
 
 ```diff
 -list($a[], $a[]) = [1, 2];
@@ -7530,7 +7530,7 @@ Use <=> spaceship instead of ternary with same effect
 - class: [`Rector\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector`](/../master/rules/php70/src/Rector/MethodCall/ThisCallOnStaticMethodToStaticCallRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/MethodCall/ThisCallOnStaticMethodToStaticCallRector/Fixture)
 
-Changes $this->call() to static method to static call
+Changes `$this->call()` to static method to static call
 
 ```diff
  class SomeClass
@@ -7895,7 +7895,7 @@ Removes (unset) cast
 - class: [`Rector\Php72\Rector\Each\WhileEachToForeachRector`](/../master/rules/php72/src/Rector/Each/WhileEachToForeachRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/Each/WhileEachToForeachRector/Fixture)
 
-`each()` function is deprecated, use foreach() instead.
+`each()` function is deprecated, use `foreach()` instead.
 
 ```diff
 -while (list($key, $callback) = each($callbacks)) {
@@ -8228,7 +8228,7 @@ Change closure to arrow function
 - class: [`Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector`](/../master/rules/php74/src/Rector/StaticCall/ExportToReflectionFunctionRector.php)
 - [test fixtures](/../master/rules/php74/tests/Rector/StaticCall/ExportToReflectionFunctionRector/Fixture)
 
-Change export() to ReflectionFunction alternatives
+Change `export()` to ReflectionFunction alternatives
 
 ```diff
 -$reflectionFunction = ReflectionFunction::export('foo');
@@ -8330,7 +8330,7 @@ Change deprecated (real) to (float)
 - class: [`Rector\Php74\Rector\Function_\ReservedFnFunctionRector`](/../master/rules/php74/src/Rector/Function_/ReservedFnFunctionRector.php)
 - [test fixtures](/../master/rules/php74/tests/Rector/Function_/ReservedFnFunctionRector/Fixture)
 
-Change fn() function name, since it will be reserved keyword
+Change `fn()` function name, since it will be reserved keyword
 
 ```diff
  class SomeClass
@@ -8456,7 +8456,7 @@ Change ternary type `resolve` to `get_debug_type()`
 - class: [`Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector`](/../master/rules/php80/src/Rector/Catch_/RemoveUnusedVariableInCatchRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/Catch_/RemoveUnusedVariableInCatchRector/Fixture)
 
-Remove unused variable in catch()
+Remove unused variable in `catch()`
 
 ```diff
  final class SomeClass
@@ -9107,7 +9107,7 @@ Convert new X to new factories
 - class: [`Rector\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector`](/../master/rules/removing-static/src/Rector/Class_/PHPUnitStaticToKernelTestCaseGetRector.php)
 - [test fixtures](/../master/rules/removing-static/tests/Rector/Class_/PHPUnitStaticToKernelTestCaseGetRector/Fixture)
 
-Convert static calls in PHPUnit test cases, to get() from the container of KernelTestCase
+Convert static calls in PHPUnit test cases, to `get()` from the container of KernelTestCase
 
 ```yaml
 services:
@@ -9152,7 +9152,7 @@ services:
 
 - class: [`Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector`](/../master/rules/removing-static/src/Rector/Class_/PassFactoryToUniqueObjectRector.php)
 
-Convert new X/Static::call() to factories in entities, pass them via constructor to `each` other
+Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
 
 ```yaml
 services:
@@ -10291,7 +10291,7 @@ Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 - class: [`Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector`](/../master/rules/symfony/src/Rector/DependencyInjection/ContainerBuilderCompileEnvArgumentRector.php)
 - [test fixtures](/../master/rules/symfony/tests/Rector/DependencyInjection/ContainerBuilderCompileEnvArgumentRector/Fixture)
 
-Turns old default value to parameter in ContinerBuilder->build() method in DI in Symfony
+Turns old default value to parameter in `ContinerBuilder->build()` method in DI in Symfony
 
 ```diff
  use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -10494,7 +10494,7 @@ Make Symfony commands lazy
 - class: [`Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector`](/../master/rules/symfony/src/Rector/MethodCall/MakeDispatchFirstArgumentEventRector.php)
 - [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/MakeDispatchFirstArgumentEventRector/Fixture)
 
-Make event object a first argument of dispatch() method, event name as second
+Make event object a first argument of `dispatch()` method, event name as second
 
 ```diff
  use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -10956,7 +10956,7 @@ Add known return type to functions
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector`](/../master/rules/type-declaration/src/Rector/ClassMethod/AddMethodCallBasedParamTypeRector.php)
 - [test fixtures](/../master/rules/type-declaration/tests/Rector/ClassMethod/AddMethodCallBasedParamTypeRector/Fixture)
 
-Change param type of passed getId() to UuidInterface type declaration
+Change param type of passed `getId()` to UuidInterface type declaration
 
 ```diff
  class SomeClass

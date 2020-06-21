@@ -35,7 +35,7 @@ final class ArrayThisCallToThisMethodCallRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change [$this, someMethod] without any args to $this->someMethod()', [
+        return new RectorDefinition('Change `[$this, someMethod]` without any args to $this->someMethod()', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass

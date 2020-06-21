@@ -57,6 +57,10 @@ final class PhpKeywordHighlighter
             return true;
         }
 
-        return $word === 'composer.json';
+        if ($word === 'composer.json') {
+            return true;
+        }
+
+        return (bool) Strings::match($word, '#($)?(.*?)\(\)$#');
     }
 }
