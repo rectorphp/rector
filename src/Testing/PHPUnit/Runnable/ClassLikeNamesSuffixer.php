@@ -22,12 +22,12 @@ final class ClassLikeNamesSuffixer
     /**
      * @var Standard
      */
-    private $standardPrinter;
+    private $standard;
 
     public function __construct()
     {
         $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $this->standardPrinter = new Standard();
+        $this->standard = new Standard();
     }
 
     public function suffixContent(string $content, string $classSuffix): string
@@ -48,6 +48,6 @@ final class ClassLikeNamesSuffixer
         $nodeTraverser->addVisitor(new PrefixingClassLikeNamesNodeVisitor($classLikeNames, $classSuffix));
         $nodes = $nodeTraverser->traverse($nodes);
 
-        return $this->standardPrinter->prettyPrintFile($nodes);
+        return $this->standard->prettyPrintFile($nodes);
     }
 }

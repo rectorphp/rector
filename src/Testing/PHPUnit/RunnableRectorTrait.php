@@ -48,6 +48,7 @@ trait RunnableRectorTrait
         include_once $temporaryPath;
 
         $runnableClassFinder = new RunnableClassFinder();
+        /** @noRector */
         $runnableFullyQualifiedClassName = $runnableClassFinder->find($suffixedFileContent);
 
         return new $runnableFullyQualifiedClassName();
