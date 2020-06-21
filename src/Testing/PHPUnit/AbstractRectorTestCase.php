@@ -16,7 +16,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\NeonYaml\NeonYamlProcessor;
+use Rector\Core\NeonYaml\NeonYamlXmlProcessor;
 use Rector\Core\Set\Set;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
@@ -73,9 +73,9 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     private $runnableRectorFactory;
 
     /**
-     * @var NeonYamlProcessor
+     * @var NeonYamlXmlProcessor
      */
-    private $neonYamlProcessor;
+    private $neonYamlXmlProcessor;
 
     protected function setUp(): void
     {
@@ -113,7 +113,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
 
         $this->fileProcessor = static::$container->get(FileProcessor::class);
-        $this->neonYamlProcessor = static::$container->get(NeonYamlProcessor::class);
+        $this->neonYamlXmlProcessor = static::$container->get(NeonYamlXmlProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
 
         // needed for PHPStan, because the analyzed file is just create in /temp
@@ -290,8 +290,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
             $removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
             $removedAndAddedFilesProcessor->run();
-        } elseif (in_array($originalFileInfo->getSuffix(), ['neon', 'yaml'], true)) {
-            $changedContent = $this->neonYamlProcessor->processFileInfo($originalFileInfo);
+        } elseif (in_array($originalFileInfo->getSuffix(), ['neon', 'yaml', 'xml'], true)) {
+            $changedContent = $this->neonYamlXmlProcessor->processFileInfo($originalFileInfo);
         } else {
             $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());
             throw new ShouldNotHappenException($message);

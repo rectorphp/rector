@@ -12,7 +12,7 @@ use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class NeonYamlProcessor
+final class NeonYamlXmlProcessor
 {
     /**
      * @var Configuration
