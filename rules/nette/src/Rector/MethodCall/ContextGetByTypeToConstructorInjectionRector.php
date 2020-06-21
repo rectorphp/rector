@@ -12,6 +12,8 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Rector\FrameworkBundle\AbstractToConstructorInjectionRector;
 
 /**
+ * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
+ *
  * @see \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\ContextGetByTypeToConstructorInjectionRectorTest
  */
 final class ContextGetByTypeToConstructorInjectionRector extends AbstractToConstructorInjectionRector

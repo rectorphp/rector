@@ -19,7 +19,7 @@ use ReflectionClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @sponsor Thanks https://amateri.com for sponsoring this rule
+ * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
  * @see \Rector\Restoration\Tests\Rector\Class_\RemoveUselessJustForSakeInterfaceRector\RemoveUselessJustForSakeInterfaceRectorTest
  */

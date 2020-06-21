@@ -21,6 +21,8 @@ use Rector\SOLID\NodeFactory\InjectMethodFactory;
 use Rector\SOLID\NodeRemover\ClassMethodNodeRemover;
 
 /**
+ * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
+ *
  * @see \Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\MultiParentingToAbstractDependencyRectorTest
  */
 final class MultiParentingToAbstractDependencyRector extends AbstractRector

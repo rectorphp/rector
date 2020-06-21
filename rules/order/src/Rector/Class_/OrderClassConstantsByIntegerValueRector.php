@@ -14,6 +14,8 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Order\StmtOrder;
 
 /**
+ * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
+ *
  * @see \Rector\Order\Tests\Rector\Class_\OrderClassConstantsByIntegerValueRector\OrderClassConstantsByIntegerValueRectorTest
  */
 final class OrderClassConstantsByIntegerValueRector extends AbstractRector
