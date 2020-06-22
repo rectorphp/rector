@@ -31,6 +31,7 @@ use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PostDec;
@@ -48,6 +49,7 @@ use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\MatchArm;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
@@ -244,6 +246,8 @@ final class DumpNodesCommand extends AbstractCommand
                 $useUseNode = new UseUse(new Name('UsedNamespace'));
                 $someVariableNode = new Variable(self::SOME_VARIABLE);
 
+                $matchArm = new MatchArm([new LNumber(1)], new String_('yes'));
+
                 if ($nodeClass === NullableType::class) {
                     $node = new NullableType('SomeType');
                 } elseif ($nodeClass === Const_::class) {
@@ -270,6 +274,10 @@ final class DumpNodesCommand extends AbstractCommand
                     $node = new TraitUse([new Name('trait')]);
                 } elseif ($nodeClass === Switch_::class) {
                     $node = new Switch_(new Variable(self::VARIABLE), [new Case_(new LNumber(1))]);
+                } elseif ($nodeClass === Match_::class) {
+                    $node = new Match_(new Variable(self::VARIABLE), [$matchArm]);
+                } elseif ($nodeClass === MatchArm::class) {
+                    $node = $matchArm;
                 } elseif ($nodeClass === Echo_::class) {
                     $node = new Echo_([new String_('hello')]);
                 } elseif ($nodeClass === StaticVar::class) {

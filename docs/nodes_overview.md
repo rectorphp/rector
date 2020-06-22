@@ -376,6 +376,25 @@ list($someVariable)
  * `$items` - `/** @var (ArrayItem|null)[] List of items to assign to */`
 <br>
 
+### `PhpParser\Node\Expr\Match_`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+match ($variable) {
+    1 => 'yes',
+}
+```
+
+#### Public Properties
+
+ * `$cond` - `/** @var Node\Expr */`
+ * `$arms` - `/** @var MatchArm[] */`
+<br>
+
 ### `PhpParser\Node\Expr\MethodCall`
 
  * requires arguments on construct
@@ -2507,6 +2526,23 @@ identifier
 
  * `$name` - `/** @var string Identifier as string */`
  * `$specialClassNames` - ``
+<br>
+
+### `PhpParser\Node\MatchArm`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+1 => 'yes'
+```
+
+#### Public Properties
+
+ * `$conds` - `/** @var null|Node\Expr[] */`
+ * `$body` - `/** @var Node\Expr */`
 <br>
 
 ### `PhpParser\Node\NullableType`
