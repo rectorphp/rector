@@ -138,8 +138,13 @@ CODE_SAMPLE
             return true;
         }
 
+        $className = $this->getName($class);
+        if ($className === null) {
+            return false;
+        }
+
         foreach ($this->types as $type) {
-            if ($this->isObjectType($class, $type)) {
+            if (is_a($className, $type, true)) {
                 return true;
             }
         }
