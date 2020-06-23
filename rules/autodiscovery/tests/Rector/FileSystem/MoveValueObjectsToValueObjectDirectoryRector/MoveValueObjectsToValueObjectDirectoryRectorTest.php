@@ -6,6 +6,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveValueObjectsToValueOb
 
 use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector;
+use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector\Source\ObviousValueObjectInterface;
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 
 final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractFileSystemRectorTestCase
@@ -25,6 +26,30 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractFil
         yield [
             __DIR__ . '/Source/Repository/PrimitiveValueObject.php',
             $this->getFixtureTempDirectory() . '/Source/ValueObject/PrimitiveValueObject.php',
+        ];
+
+        // type
+        yield [
+            __DIR__ . '/Source/Command/SomeName.php',
+            $this->getFixtureTempDirectory() . '/Source/ValueObject/SomeName.php',
+        ];
+
+        // suffix
+        yield [
+            __DIR__ . '/Source/Command/MeSearch.php',
+            $this->getFixtureTempDirectory() . '/Source/ValueObject/MeSearch.php',
+        ];
+
+        // @todo add interface by suport
+    }
+
+    protected function getRectorsWithConfiguration(): array
+    {
+        return [
+            MoveValueObjectsToValueObjectDirectoryRector::class => [
+                '$types' => [ObviousValueObjectInterface::class],
+                '$suffixes' => ['Search'],
+            ],
         ];
     }
 

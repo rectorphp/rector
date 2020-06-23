@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Autodiscovery\Rector\FileSystem;
 
+use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Autodiscovery\Analyzer\ClassAnalyzer;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -26,9 +28,25 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMov
      */
     private $classAnalyzer;
 
-    public function __construct(ClassAnalyzer $classAnalyzer)
+    /**
+     * @var string[]
+     */
+    private $types = [];
+
+    /**
+     * @var string[]
+     */
+    private $suffixes = [];
+
+    /**
+     * @param string[] $types
+     * @param string[] $suffixes
+     */
+    public function __construct(ClassAnalyzer $classAnalyzer, array $types = [], array $suffixes = [])
     {
         $this->classAnalyzer = $classAnalyzer;
+        $this->types = $types;
+        $this->suffixes = $suffixes;
     }
 
     public function getDefinition(): RectorDefinition
@@ -84,8 +102,7 @@ CODE_SAMPLE
             return;
         }
 
-        // get class
-        if (! $this->classAnalyzer->isValueObjectClass($class)) {
+        if (! $this->isValueObjectMatch($class)) {
             return;
         }
 
@@ -96,5 +113,25 @@ CODE_SAMPLE
         );
 
         $this->processNodesWithFileDestination($nodesWithFileDestination);
+    }
+
+    private function isValueObjectMatch(Class_ $class): bool
+    {
+        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className !== null) {
+            foreach ($this->suffixes as $suffix) {
+                if (Strings::endsWith($className, $suffix)) {
+                    return true;
+                }
+            }
+        }
+
+        foreach ($this->types as $type) {
+            if ($this->isObjectType($class, $type)) {
+                return true;
+            }
+        }
+
+        return $this->classAnalyzer->isValueObjectClass($class);
     }
 }
