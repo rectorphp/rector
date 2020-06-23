@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\NeonYaml;
+namespace Rector\Core\NonPhpFile;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
@@ -12,7 +12,7 @@ use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class NeonYamlXmlProcessor
+final class NonPhpFileProcessor
 {
     /**
      * @var Configuration
@@ -76,6 +76,19 @@ final class NeonYamlXmlProcessor
         foreach ($this->getOldToNewClasses() as $oldClass => $newClass) {
             /** @var string $newContent */
             $newContent = Strings::replace($newContent, '#' . preg_quote($oldClass, '#') . '#', $newClass);
+        }
+
+        // process with double quotes too, e.g. in twig
+        foreach ($this->getOldToNewClasses() as $oldClass => $newClass) {
+            $doubleSlashOldClass = str_replace('\\', '\\\\', $oldClass);
+            $doubleSlashNewClass = str_replace('\\', '\\\\\\', $newClass);
+
+            /** @var string $newContent */
+            $newContent = Strings::replace(
+                $newContent,
+                '#' . preg_quote($doubleSlashOldClass, '#') . '#',
+                $doubleSlashNewClass
+            );
         }
 
         return $newContent;

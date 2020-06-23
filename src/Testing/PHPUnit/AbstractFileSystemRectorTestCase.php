@@ -10,7 +10,8 @@ use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\NeonYaml\NeonYamlXmlProcessor;
+use Rector\Core\NonPhpFile\NonPhpFileProcessor;
+use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use ReflectionClass;
@@ -35,9 +36,9 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
     private $fileProcessor;
 
     /**
-     * @var NeonYamlXmlProcessor
+     * @var NonPhpFileProcessor
      */
-    private $neonYamlXmlProcessor;
+    private $nonPhpFileProcessor;
 
     protected function setUp(): void
     {
@@ -50,7 +51,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $this->fileProcessor = self::$container->get(FileProcessor::class);
         $this->fileSystemFileProcessor = self::$container->get(FileSystemFileProcessor::class);
         $this->removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
-        $this->neonYamlXmlProcessor = self::$container->get(NeonYamlXmlProcessor::class);
+        $this->nonPhpFileProcessor = self::$container->get(NonPhpFileProcessor::class);
     }
 
     /**
@@ -92,8 +93,8 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
                 continue;
             }
 
-            if (in_array($fileInfo->getSuffix(), ['neon', 'yaml', 'xml'], true)) {
-                $this->neonYamlXmlProcessor->processFileInfo($fileInfo);
+            if (in_array($fileInfo->getSuffix(), StaticNonPhpFileSuffixes::SUFFIXES, true)) {
+                $this->nonPhpFileProcessor->processFileInfo($fileInfo);
             } else {
                 $this->fileProcessor->postFileRefactor($fileInfo);
                 $this->fileProcessor->printToFile($fileInfo);

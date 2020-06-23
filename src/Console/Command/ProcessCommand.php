@@ -16,7 +16,7 @@ use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\EventDispatcher\Event\AfterReportEvent;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\Guard\RectorGuard;
-use Rector\Core\NeonYaml\NeonYamlXmlProcessor;
+use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\Stubs\StubLoader;
 use Symfony\Component\Console\Input\InputArgument;
@@ -77,9 +77,9 @@ final class ProcessCommand extends AbstractCommand
     private $stubLoader;
 
     /**
-     * @var NeonYamlXmlProcessor
+     * @var NonPhpFileProcessor
      */
-    private $neonYamlXmlProcessor;
+    private $nonPhpFileProcessor;
 
     /**
      * @var UnchangedFilesFilter
@@ -111,7 +111,7 @@ final class ProcessCommand extends AbstractCommand
         OutputFormatterCollector $outputFormatterCollector,
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
-        NeonYamlXmlProcessor $neonYamlXmlProcessor,
+        NonPhpFileProcessor $nonPhpFileProcessor,
         ChangedFilesDetector $changedFilesDetector,
         UnchangedFilesFilter $unchangedFilesFilter,
         SymfonyStyle $symfonyStyle,
@@ -126,7 +126,7 @@ final class ProcessCommand extends AbstractCommand
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->stubLoader = $stubLoader;
-        $this->neonYamlXmlProcessor = $neonYamlXmlProcessor;
+        $this->nonPhpFileProcessor = $nonPhpFileProcessor;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
 
         parent::__construct();
@@ -234,7 +234,7 @@ final class ProcessCommand extends AbstractCommand
 
         // must run after PHP rectors, because they might change class names, and these class names must be changed in configs
         $neonYamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['neon', 'yaml', 'xml']);
-        $this->neonYamlXmlProcessor->runOnFileInfos($neonYamlFileInfos);
+        $this->nonPhpFileProcessor->runOnFileInfos($neonYamlFileInfos);
 
         $this->reportZeroCacheRectorsCondition();
 
