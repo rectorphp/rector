@@ -16,12 +16,13 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\NeonYaml\NeonYamlXmlProcessor;
+use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\Set\Set;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\Contract\RunnableInterface;
 use Rector\Core\Testing\Finder\RectorsFinder;
+use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
@@ -73,9 +74,9 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     private $runnableRectorFactory;
 
     /**
-     * @var NeonYamlXmlProcessor
+     * @var NonPhpFileProcessor
      */
-    private $neonYamlXmlProcessor;
+    private $nonPhpFileProcessor;
 
     protected function setUp(): void
     {
@@ -113,7 +114,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
 
         $this->fileProcessor = static::$container->get(FileProcessor::class);
-        $this->neonYamlXmlProcessor = static::$container->get(NeonYamlXmlProcessor::class);
+        $this->nonPhpFileProcessor = static::$container->get(NonPhpFileProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
 
         // needed for PHPStan, because the analyzed file is just create in /temp
@@ -290,8 +291,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
             $removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
             $removedAndAddedFilesProcessor->run();
-        } elseif (in_array($originalFileInfo->getSuffix(), ['neon', 'yaml', 'xml'], true)) {
-            $changedContent = $this->neonYamlXmlProcessor->processFileInfo($originalFileInfo);
+        } elseif (in_array($originalFileInfo->getSuffix(), StaticNonPhpFileSuffixes::SUFFIXES, true)) {
+            $changedContent = $this->nonPhpFileProcessor->processFileInfo($originalFileInfo);
         } else {
             $message = sprintf('Suffix "%s" is not supported yet', $originalFileInfo->getSuffix());
             throw new ShouldNotHappenException($message);
