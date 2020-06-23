@@ -24,6 +24,13 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMovingFileSystemRector
 {
     /**
+     * @var string[]
+     */
+    private const COMMON_SERVICE_SUFFIXES = [
+        'Repository', 'Command', 'Mapper', 'Controller', 'Presenter', 'Factory', 'Test', 'TestCase', 'Service',
+    ];
+
+    /**
      * @var ClassAnalyzer
      */
     private $classAnalyzer;
@@ -39,14 +46,24 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMov
     private $suffixes = [];
 
     /**
+     * @var bool
+     */
+    private $enableValueObjectGuessing;
+
+    /**
      * @param string[] $types
      * @param string[] $suffixes
      */
-    public function __construct(ClassAnalyzer $classAnalyzer, array $types = [], array $suffixes = [])
-    {
+    public function __construct(
+        ClassAnalyzer $classAnalyzer,
+        array $types = [],
+        array $suffixes = [],
+        bool $enableValueObjectGuessing = true
+    ) {
         $this->classAnalyzer = $classAnalyzer;
         $this->types = $types;
         $this->suffixes = $suffixes;
+        $this->enableValueObjectGuessing = $enableValueObjectGuessing;
     }
 
     public function getDefinition(): RectorDefinition
@@ -117,6 +134,45 @@ CODE_SAMPLE
 
     private function isValueObjectMatch(Class_ $class): bool
     {
+        if ($this->isSuffixMatch($class)) {
+            return true;
+        }
+
+        foreach ($this->types as $type) {
+            if ($this->isObjectType($class, $type)) {
+                return true;
+            }
+        }
+
+        if ($this->isKnownServiceType($class)) {
+            return false;
+        }
+
+        if ($this->enableValueObjectGuessing === false) {
+            return false;
+        }
+
+        return $this->classAnalyzer->isValueObjectClass($class);
+    }
+
+    private function isKnownServiceType(Class_ $class): bool
+    {
+        $className = $this->getName($class);
+        if ($className === null) {
+            return false;
+        }
+
+        foreach (self::COMMON_SERVICE_SUFFIXES as $commonServiceSuffix) {
+            if (Strings::endsWith($className, $commonServiceSuffix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isSuffixMatch(Class_ $class): bool
+    {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
         if ($className !== null) {
             foreach ($this->suffixes as $suffix) {
@@ -126,12 +182,6 @@ CODE_SAMPLE
             }
         }
 
-        foreach ($this->types as $type) {
-            if ($this->isObjectType($class, $type)) {
-                return true;
-            }
-        }
-
-        return $this->classAnalyzer->isValueObjectClass($class);
+        return false;
     }
 }

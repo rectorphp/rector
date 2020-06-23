@@ -40,7 +40,11 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractFil
             $this->getFixtureTempDirectory() . '/Source/ValueObject/MeSearch.php',
         ];
 
-        // @todo add interface by suport
+        // skip known service types
+        yield [
+            __DIR__ . '/Source/Test/SomeTest.php',
+            $this->getFixtureTempDirectory() . '/Source/Test/SomeTest.php',
+        ];
     }
 
     protected function getRectorsWithConfiguration(): array
