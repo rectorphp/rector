@@ -12,14 +12,14 @@ use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDatas()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
         $this->doTestFile($file);
     }
 
-    public function provideDatas(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

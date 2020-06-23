@@ -52,6 +52,7 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
         $types = [];
         foreach ($localReturnNodes as $localReturnNode) {
             if ($localReturnNode->expr === null) {
+                $types[] = new VoidType();
                 continue;
             }
 
@@ -82,10 +83,6 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
             }
 
             if (! $node instanceof Return_) {
-                return null;
-            }
-
-            if ($node->expr === null) {
                 return null;
             }
 
