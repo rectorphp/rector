@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
@@ -30,15 +31,18 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
     {
         /** @var Class_|Trait_|Interface_|null $classLike */
         $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
+            return new MixedType();
+        }
+
         if ($functionLike instanceof ClassMethod && $classLike instanceof Interface_) {
             return new MixedType();
         }
 
         $localReturnNodes = $this->collectReturns($functionLike);
-
         if ($localReturnNodes === []) {
             // void type
-            if ($functionLike instanceof ClassMethod && ! $functionLike->isAbstract()) {
+            if (! $this->isAbstractMethod($classLike, $functionLike)) {
                 return new VoidType();
             }
 
@@ -91,5 +95,16 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
         });
 
         return $returns;
+    }
+
+    private function isAbstractMethod(ClassLike $classLike, FunctionLike $functionLike): bool
+    {
+        // abstract class method
+        if ($functionLike instanceof ClassMethod && $functionLike->isAbstract()) {
+            return true;
+        }
+
+        // abstract class
+        return $classLike instanceof Class_ && $classLike->isAbstract();
     }
 }
