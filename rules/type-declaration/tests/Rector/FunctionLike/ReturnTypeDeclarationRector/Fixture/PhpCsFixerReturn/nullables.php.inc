@@ -31,11 +31,9 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 class Bar {}
 class Foo {}
 
-/** @return null|Bar */
 function my_foo($value): ?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Nullables\Bar {
     return $value;
 }
-/** @return Bar|null */
 function my_foo2($value): ?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Nullables\Bar {
     return $value;
 }

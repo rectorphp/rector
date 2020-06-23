@@ -42,7 +42,6 @@ interface SomeInterface
 {
     /**
      * @param array $items
-     * @return int
      */
     public function getCount($items): int;
 }

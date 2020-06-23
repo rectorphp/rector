@@ -17,9 +17,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 
 interface BarInterface
 {
-    /**
-     * @return float
-     */
     public function baz(array $a, $b): float;
 }
 ?>
