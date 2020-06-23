@@ -48,7 +48,7 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMov
     /**
      * @var bool
      */
-    private $enableValueObjectGuessing;
+    private $enableValueObjectGuessing = true;
 
     /**
      * @param string[] $types
@@ -148,7 +148,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->enableValueObjectGuessing === false) {
+        if (! $this->enableValueObjectGuessing) {
             return false;
         }
 

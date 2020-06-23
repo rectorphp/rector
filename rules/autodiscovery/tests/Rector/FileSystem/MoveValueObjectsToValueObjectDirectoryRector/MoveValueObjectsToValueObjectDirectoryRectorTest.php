@@ -42,8 +42,8 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractFil
 
         // skip known service types
         yield [
-            __DIR__ . '/Source/Test/SomeTest.php',
-            $this->getFixtureTempDirectory() . '/Source/Test/SomeTest.php',
+            __DIR__ . '/Source/Utils/SomeSuffixedTest.php.inc',
+            $this->getFixtureTempDirectory() . '/Source/Test/SomeSuffixedTest.php',
         ];
     }
 
