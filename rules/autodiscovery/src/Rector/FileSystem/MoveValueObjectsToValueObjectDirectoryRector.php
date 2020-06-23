@@ -149,7 +149,7 @@ CODE_SAMPLE
             }
         }
 
-        if ($this->isKnownServiceType($class)) {
+        if ($this->isKnownServiceType($className)) {
             return false;
         }
 
@@ -160,13 +160,8 @@ CODE_SAMPLE
         return $this->classAnalyzer->isValueObjectClass($class);
     }
 
-    private function isKnownServiceType(Class_ $class): bool
+    private function isKnownServiceType(string $className): bool
     {
-        $className = $this->getName($class);
-        if ($className === null) {
-            return false;
-        }
-
         foreach (self::COMMON_SERVICE_SUFFIXES as $commonServiceSuffix) {
             if (Strings::endsWith($className, $commonServiceSuffix)) {
                 return true;
