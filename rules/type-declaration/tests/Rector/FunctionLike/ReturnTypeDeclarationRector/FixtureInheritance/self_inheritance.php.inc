@@ -35,12 +35,10 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 class P {}
 
 class A extends P {
-    /** @return self */
     public function foo($value): self {
         return $value;
     }
 
-    /** @return parent */
     public function bar($value): parent {
         return $value;
     }

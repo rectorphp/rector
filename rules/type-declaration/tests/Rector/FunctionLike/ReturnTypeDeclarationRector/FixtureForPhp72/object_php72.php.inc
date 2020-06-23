@@ -21,7 +21,6 @@ class B extends A {
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\ObjectPhp72;
 
 class A {
-    /** @return object */
     public function getObject($value): object {
         return $value;
     }

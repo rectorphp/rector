@@ -30,7 +30,6 @@ class Foo
 }
 
 class A {
-    /** @return null|Foo */
     public function test($value): ?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\NullableInheritance\Foo {
         return $value;
     }

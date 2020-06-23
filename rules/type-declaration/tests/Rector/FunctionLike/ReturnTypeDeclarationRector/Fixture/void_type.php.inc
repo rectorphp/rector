@@ -35,9 +35,6 @@ class TestVoidType
     {
     }
 
-    /**
-     * @return void
-     */
     function anotherFunction(): void
     {
         return;

@@ -117,8 +117,6 @@ interface BarInterface
     /**
      * @param array $a
      * @param int   $b
-     *
-     * @return float
      */
     public function baz(array $a, $b, $c): float;
 }

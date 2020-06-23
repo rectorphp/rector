@@ -23,6 +23,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover;
 use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
@@ -54,14 +55,21 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $returnTypeAlreadyAddedChecker;
 
+    /**
+     * @var NonInformativeReturnTagRemover
+     */
+    private $nonInformativeReturnTagRemover;
+
     public function __construct(
         ReturnTypeInferer $returnTypeInferer,
         ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker,
+        NonInformativeReturnTagRemover $nonInformativeReturnTagRemover,
         bool $overrideExistingReturnTypes = true
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->overrideExistingReturnTypes = $overrideExistingReturnTypes;
         $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
+        $this->nonInformativeReturnTagRemover = $nonInformativeReturnTagRemover;
     }
 
     public function getDefinition(): RectorDefinition
@@ -136,6 +144,7 @@ PHP
 
         /** @var Name|NullableType|PhpParserUnionType $inferredReturnNode */
         $this->addReturnType($node, $inferredReturnNode);
+        $this->nonInformativeReturnTagRemover->removeReturnTagIfNotUseful($node);
 
         if ($node instanceof ClassMethod) {
             $this->populateChildren($node, $inferedType);

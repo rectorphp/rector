@@ -40,9 +40,6 @@ function someFunction($value): array
     return $value;
 }
 
-/**
- * @return real
- */
 function someFunction2($value): float
 {
     return $value;

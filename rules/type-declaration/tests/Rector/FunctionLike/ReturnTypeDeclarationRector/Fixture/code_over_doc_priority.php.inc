@@ -21,9 +21,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 
 class CodeOverDocPriority
 {
-    /**
-     * @return bool
-     */
     public function getNumber(): int
     {
         return 5;

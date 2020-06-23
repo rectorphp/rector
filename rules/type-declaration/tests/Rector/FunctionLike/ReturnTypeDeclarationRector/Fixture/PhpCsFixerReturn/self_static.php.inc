@@ -25,7 +25,6 @@ class Foo2 {
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\SelfStatic;
 
 class Foo {
-    /** @return self */
     function my_foo($value): self
     {
         return $value;

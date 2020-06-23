@@ -22,7 +22,6 @@ class BuildOnThePreviousClass extends AnIterableClass {
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Iterable;
 
 class AnIterableClass {
-    /** @return iterable */
     public function getIterable($value): iterable {
         return $value;
     }
