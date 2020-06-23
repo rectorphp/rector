@@ -22,7 +22,6 @@ class B extends A {
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Inheritance;
 
 class A {
-    /** @return A */
     public function test(): self {
         return $this;
     }

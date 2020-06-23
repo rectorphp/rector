@@ -12,6 +12,7 @@ trait BazTrait
         return $a;
     }
 }
+
 ?>
 -----
 <?php
@@ -20,12 +21,10 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 
 trait BazTrait
 {
-    /**
-     * @return \DateTime
-     */
     protected function inTrait($a): \DateTime
     {
         return $a;
     }
 }
+
 ?>

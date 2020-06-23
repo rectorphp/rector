@@ -79,6 +79,7 @@ final class NonInformativeReturnTagRemover
         $this->removeNonUniqueUselessDocNames($returnType, $returnTagValueNode, $phpDocInfo);
         $this->removeShortObjectType($returnType, $returnTagValueNode, $phpDocInfo);
         $this->removeNullableType($returnType, $returnTagValueNode, $phpDocInfo);
+        $this->removeFullyQualifiedObjectType($returnType, $returnTagValueNode, $phpDocInfo);
     }
 
     /**
@@ -199,5 +200,39 @@ final class NonInformativeReturnTagRemover
         }
 
         $phpDocInfo->removeByType(ReturnTagValueNode::class);
+    }
+
+    private function removeFullyQualifiedObjectType(
+        Type $returnType,
+        ReturnTagValueNode $returnTagValueNode,
+        PhpDocInfo $phpDocInfo
+    ): void {
+        if (! $returnType instanceof FullyQualifiedObjectType) {
+            return;
+        }
+
+        if (! $returnTagValueNode->type instanceof IdentifierTypeNode) {
+            return;
+        }
+
+        $className = $returnType->getClassName();
+        $returnTagValueNodeType = (string) $returnTagValueNode->type;
+
+        if ($this->isClassNameAndPartMatch($className, $returnTagValueNodeType)) {
+            $phpDocInfo->removeByType(ReturnTagValueNode::class);
+        }
+    }
+
+    private function isClassNameAndPartMatch(string $className, string $returnTagValueNodeType): bool
+    {
+        if ($className === $returnTagValueNodeType) {
+            return true;
+        }
+
+        if ('\\' . $className === $returnTagValueNodeType) {
+            return true;
+        }
+
+        return Strings::endsWith($className, '\\' . $returnTagValueNodeType);
     }
 }
