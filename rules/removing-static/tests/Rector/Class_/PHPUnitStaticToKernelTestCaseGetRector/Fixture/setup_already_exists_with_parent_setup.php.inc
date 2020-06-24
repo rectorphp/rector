@@ -36,10 +36,7 @@ use PHPUnit\Framework\TestCase;
 
 final class SetupAlreadyExistsWithParentSetUpTest extends \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase
 {
-    /**
-     * @var \Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods
-     */
-    private $classWithStaticMethods;
+    private \Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\Source\ClassWithStaticMethods $classWithStaticMethods;
     /**
      * @var string
      */

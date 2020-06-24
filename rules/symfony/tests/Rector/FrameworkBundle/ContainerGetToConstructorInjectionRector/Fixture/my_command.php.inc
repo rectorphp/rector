@@ -26,10 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class MyCommand extends ContainerAwareParentCommand
 {
-    /**
-     * @var \stdClass
-     */
-    private $stdClass;
+    private \stdClass $stdClass;
     public function __construct(\stdClass $stdClass)
     {
         $this->stdClass = $stdClass;

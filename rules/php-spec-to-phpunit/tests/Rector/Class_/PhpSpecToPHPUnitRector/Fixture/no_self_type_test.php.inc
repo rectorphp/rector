@@ -24,10 +24,7 @@ use PhpSpec\ObjectBehavior;
 
 class ItIsMeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\ItIsMe
-     */
-    private $itIsMe;
+    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\ItIsMe $itIsMe;
     protected function setUp()
     {
         $this->itIsMe = new \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\ItIsMe();

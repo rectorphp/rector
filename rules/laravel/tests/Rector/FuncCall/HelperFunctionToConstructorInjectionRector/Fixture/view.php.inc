@@ -19,10 +19,7 @@ namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInject
 
 class SomeViewController
 {
-    /**
-     * @var \Illuminate\Contracts\View\Factory
-     */
-    private $viewFactory;
+    private \Illuminate\Contracts\View\Factory $viewFactory;
     public function __construct(\Illuminate\Contracts\View\Factory $viewFactory)
     {
         $this->viewFactory = $viewFactory;

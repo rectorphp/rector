@@ -51,10 +51,7 @@ use PhpSpec\ObjectBehavior;
 
 class CreateMeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\CreateMe
-     */
-    private $createMe;
+    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\CreateMe $createMe;
     protected function setUp()
     {
         $this->createMe = new \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\CreateMe(5);

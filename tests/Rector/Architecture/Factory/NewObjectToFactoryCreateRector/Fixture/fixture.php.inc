@@ -22,10 +22,7 @@ use Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector
 
 final class SomeController
 {
-    /**
-     * @var \Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory
-     */
-    private $myClassFactory;
+    private \Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory;
     public function __construct(\Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory)
     {
         $this->myClassFactory = $myClassFactory;

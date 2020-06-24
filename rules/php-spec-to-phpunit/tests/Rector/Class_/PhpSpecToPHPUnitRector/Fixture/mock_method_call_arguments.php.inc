@@ -24,10 +24,7 @@ use PhpSpec\ObjectBehavior;
 
 class DeliveryTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Delivery
-     */
-    private $delivery;
+    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Delivery $delivery;
     protected function setUp()
     {
         /** @var DeliveryFactory|\PHPUnit\Framework\MockObject\MockObject $factory */

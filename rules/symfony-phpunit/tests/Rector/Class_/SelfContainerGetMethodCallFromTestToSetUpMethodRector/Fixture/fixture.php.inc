@@ -31,10 +31,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SomeTest extends KernelTestCase
 {
-    /**
-     * @var \Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\ItemRepository
-     */
-    private $itemRepository;
+    private \Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\ItemRepository $itemRepository;
     protected function setUp()
     {
         parent::setUp();

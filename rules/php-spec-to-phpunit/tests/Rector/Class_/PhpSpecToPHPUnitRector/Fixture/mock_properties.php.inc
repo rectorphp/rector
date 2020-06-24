@@ -28,14 +28,8 @@ use PhpSpec\ObjectBehavior;
 
 class MockPropertiesTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\MockProperties
-     */
-    private $mockProperties;
-    /**
-     * @var \OrderFactory|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $factory;
+    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\MockProperties $mockProperties;
+    private \OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory;
     protected function setUp()
     {
         $this->factory = $this->createMock(OrderFactory::class);

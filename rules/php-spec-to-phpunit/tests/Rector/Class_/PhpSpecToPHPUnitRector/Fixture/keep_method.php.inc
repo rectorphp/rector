@@ -29,10 +29,7 @@ use PhpSpec\ObjectBehavior;
 
 class KeepMethodTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\KeepMethod
-     */
-    private $keepMethod;
+    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\KeepMethod $keepMethod;
     protected function setUp()
     {
         $this->keepMethod = new \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\KeepMethod(5);

@@ -23,10 +23,7 @@ namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInject
 
 class SomeConfigController
 {
-    /**
-     * @var \Illuminate\Contracts\Config\Repository
-     */
-    private $configRepository;
+    private \Illuminate\Contracts\Config\Repository $configRepository;
     public function __construct(\Illuminate\Contracts\Config\Repository $configRepository)
     {
         $this->configRepository = $configRepository;

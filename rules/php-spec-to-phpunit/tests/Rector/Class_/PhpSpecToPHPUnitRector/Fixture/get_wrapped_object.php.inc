@@ -22,10 +22,7 @@ use PhpSpec\ObjectBehavior;
 
 class BlablaTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Blabla
-     */
-    private $blabla;
+    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Blabla $blabla;
     protected function setUp()
     {
         $this->blabla = new \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Blabla();

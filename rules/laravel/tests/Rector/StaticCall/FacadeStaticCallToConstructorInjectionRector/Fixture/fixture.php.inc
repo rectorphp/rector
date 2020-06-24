@@ -24,10 +24,7 @@ use Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorInjectio
 
 class ExampleController extends LaravelController
 {
-    /**
-     * @var \Illuminate\Contracts\Routing\ResponseFactory
-     */
-    private $responseFactory;
+    private \Illuminate\Contracts\Routing\ResponseFactory $responseFactory;
     public function __construct(\Illuminate\Contracts\Routing\ResponseFactory $responseFactory)
     {
         $this->responseFactory = $responseFactory;

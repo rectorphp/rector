@@ -36,10 +36,7 @@ use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTest
 
 class ExistingSetUpTest extends KernelTestCase
 {
-    /**
-     * @var \Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\ItemRepository
-     */
-    private $itemRepository;
+    private \Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\ItemRepository $itemRepository;
     protected function setUp(): void
     {
         $value = 5;

@@ -23,10 +23,7 @@ use PhpSpec\ObjectBehavior;
 
 class OrderTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Order
-     */
-    private $order;
+    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Order $order;
     protected function setUp()
     {
         /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */

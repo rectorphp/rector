@@ -18,10 +18,7 @@ namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInject
 
 class SomeRouteController
 {
-    /**
-     * @var \Illuminate\Routing\UrlGenerator
-     */
-    private $urlGenerator;
+    private \Illuminate\Routing\UrlGenerator $urlGenerator;
     public function __construct(\Illuminate\Routing\UrlGenerator $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;

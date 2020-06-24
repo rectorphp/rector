@@ -18,10 +18,7 @@ namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInject
 
 class SomeBroadcastController
 {
-    /**
-     * @var \Illuminate\Contracts\Broadcasting\Factory
-     */
-    private $broadcastFactory;
+    private \Illuminate\Contracts\Broadcasting\Factory $broadcastFactory;
     public function __construct(\Illuminate\Contracts\Broadcasting\Factory $broadcastFactory)
     {
         $this->broadcastFactory = $broadcastFactory;

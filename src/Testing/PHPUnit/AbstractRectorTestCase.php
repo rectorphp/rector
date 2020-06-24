@@ -22,6 +22,7 @@ use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\Contract\RunnableInterface;
 use Rector\Core\Testing\Finder\RectorsFinder;
+use Rector\Core\Testing\ValueObject\SplitLine;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -304,6 +305,11 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $causedByFixtureMessage);
         } catch (ExpectationFailedException $expectationFailedException) {
             $expectedFileContent = $expectedFileInfo->getContents();
+
+            if (getenv('UPDATE_TESTS')) {
+                $newOriginalContent = $originalFileInfo->getContents() . SplitLine::LINE . $changedContent . '?>' . PHP_EOL;
+                FileSystem::write($fixtureFileInfo->getRealPath(), $newOriginalContent);
+            }
 
             $this->assertStringMatchesFormat($expectedFileContent, $changedContent, $causedByFixtureMessage);
         }
