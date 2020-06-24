@@ -29,10 +29,7 @@ use Rector\Core\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToC
 
 final class AnotherController
 {
-    /**
-     * @var \Rector\Core\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\ProductRepository
-     */
-    private $productRepository;
+    private \Rector\Core\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\ProductRepository $productRepository;
     public function __construct(\Rector\Core\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\ProductRepository $productRepository)
     {
         $this->productRepository = $productRepository;

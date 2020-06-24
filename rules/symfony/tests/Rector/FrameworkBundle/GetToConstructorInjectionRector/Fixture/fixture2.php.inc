@@ -27,14 +27,8 @@ use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 
 class ClassWithNamedService2 extends SymfonyController
 {
-    /**
-     * @var \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Something
-     */
-    private $something;
-    /**
-     * @var \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Anything
-     */
-    private $anything;
+    private \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Something $something;
+    private \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Anything $anything;
     public function __construct(\Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Something $something, \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Anything $anything)
     {
         $this->something = $something;

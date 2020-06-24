@@ -27,10 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class ClassWithNamedService1 extends Controller
 {
-    /**
-     * @var string
-     */
-    private $someParameter;
+    private string $someParameter;
     public function __construct(string $someParameter)
     {
         $this->someParameter = $someParameter;

@@ -26,10 +26,9 @@ use Rector\PHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToInjec
 class SomeClassTest extends TestCaseWithGetContainer
 {
     /**
-     * @var \Rector\PHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToInjectPropertyRector\Fixture\SomeService
      * @inject
      */
-    private $someService;
+    private \Rector\PHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToInjectPropertyRector\Fixture\SomeService $someService;
     public function test()
     {
         $this->someService->someMethod();

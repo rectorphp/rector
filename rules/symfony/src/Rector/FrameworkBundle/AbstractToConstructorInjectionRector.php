@@ -70,18 +70,13 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         }
 
         $argument = $methodCallNode->args[0]->value;
-
         $serviceMap = $this->applicationServiceMapProvider->provide();
 
         if ($argument instanceof String_) {
             return $serviceMap->getServiceType($argument->value);
         }
 
-        if (! $argument instanceof ClassConstFetch) {
-            return new MixedType();
-        }
-
-        if ($argument->class instanceof Name) {
+        if ($argument instanceof ClassConstFetch && $argument->class instanceof Name) {
             $className = $this->getName($argument->class);
 
             return new ObjectType($className);

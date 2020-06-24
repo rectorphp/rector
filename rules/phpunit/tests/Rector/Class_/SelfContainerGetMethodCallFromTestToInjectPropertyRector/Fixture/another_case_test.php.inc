@@ -26,10 +26,9 @@ use Rector\PHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToInjec
 class AnotherCaseTest extends TestCaseWithGetContainer
 {
     /**
-     * @var \Rector\PHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToInjectPropertyRector\Fixture\Domain
      * @inject
      */
-    private $domain;
+    private \Rector\PHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToInjectPropertyRector\Fixture\Domain $domain;
     protected function getDomainBaseUrl(): string
     {
         return $this->domain->getUrl();

@@ -28,10 +28,7 @@ use Nette\Application\UI\Control;
 
 class GetPresenterSessionController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
-    /**
-     * @var \Nette\Http\Session
-     */
-    private $session;
+    private \Nette\Http\Session $session;
     public function __construct(\Nette\Http\Session $session)
     {
         $this->session = $session;

@@ -39,6 +39,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -62,14 +64,21 @@ final class NodeFactory
      */
     private $phpDocInfoFactory;
 
+    /**
+     * @var PhpVersionProvider
+     */
+    private $phpVersionProvider;
+
     public function __construct(
         BuilderFactory $builderFactory,
         StaticTypeMapper $staticTypeMapper,
-        PhpDocInfoFactory $phpDocInfoFactory
+        PhpDocInfoFactory $phpDocInfoFactory,
+        PhpVersionProvider $phpVersionProvider
     ) {
         $this->builderFactory = $builderFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
 
     /**
@@ -180,10 +189,7 @@ final class NodeFactory
 
         $property = $propertyBuilder->getNode();
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-        if ($type !== null) {
-            $phpDocInfo->changeVarType($type);
-        }
+        $this->addPropertyType($property, $type);
 
         $this->decorateParentPropertyProperty($property);
 
@@ -387,5 +393,24 @@ final class NodeFactory
         }
 
         return $args;
+    }
+
+    private function addPropertyType(Property $property, ?Type $type): void
+    {
+        if ($type === null) {
+            return;
+        }
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::TYPED_PROPERTIES)) {
+            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
+
+            if ($phpParserType !== null) {
+                $property->type = $phpParserType;
+                return;
+            }
+        }
+
+        $phpDocInfo->changeVarType($type);
     }
 }

@@ -26,10 +26,7 @@ use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 
 class ClassWithNamedService extends SymfonyController
 {
-    /**
-     * @var \stdClass
-     */
-    private $stdClass;
+    private \stdClass $stdClass;
     public function __construct(\stdClass $stdClass)
     {
         $this->stdClass = $stdClass;

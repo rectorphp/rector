@@ -8,9 +8,10 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector;
 
-final class ContextGetByTypeToConstructorInjectionRectorTest extends AbstractRectorTestCase
+final class Php74Test extends AbstractRectorTestCase
 {
     /**
+     * @requires PHP >= 7.4
      * @dataProvider provideData()
      */
     public function test(string $file): void
@@ -20,12 +21,7 @@ final class ContextGetByTypeToConstructorInjectionRectorTest extends AbstractRec
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
-    }
-
-    protected function getPhpVersion(): string
-    {
-        return '7.2';
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp74');
     }
 
     protected function getRectorClass(): string

@@ -37,10 +37,7 @@ use Doctrine\ORM\EntityRepository;
 
 final class FirstPostRepository
 {
-    /**
-     * @var \Doctrine\ORM\EntityRepository
-     */
-    private $repository;
+    private \Doctrine\ORM\EntityRepository $repository;
     public function __construct(\Doctrine\ORM\EntityManager $entityManager)
     {
         $this->repository = $entityManager->getRepository(\App\Entity\FirstPost::class);

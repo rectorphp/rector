@@ -55,9 +55,9 @@ final class ValidateFixturesCommand extends Command
             $message = sprintf(
                 'The "%s" file has same content before "%s" and after it.%sRemove the content after "%s"',
                 $fixtureFileInfo->getRelativeFilePathFromCwd(),
-                SplitLine::SPLIT_LINE,
+                SplitLine::REGEX,
                 PHP_EOL,
-                SplitLine::SPLIT_LINE
+                SplitLine::REGEX
             );
 
             $this->symfonyStyle->error($message);
@@ -91,12 +91,12 @@ final class ValidateFixturesCommand extends Command
     private function hasFileIdenticalCodeBeforeAndAfter(SmartFileInfo $smartFileInfo): bool
     {
         $fileContent = $smartFileInfo->getContents();
-        if (! Strings::match($fileContent, SplitLine::SPLIT_LINE)) {
+        if (! Strings::match($fileContent, SplitLine::REGEX)) {
             return false;
         }
 
         // original → expected
-        [$originalContent, $expectedContent] = Strings::split($fileContent, SplitLine::SPLIT_LINE);
+        [$originalContent, $expectedContent] = Strings::split($fileContent, SplitLine::REGEX);
 
         return $originalContent === $expectedContent;
     }

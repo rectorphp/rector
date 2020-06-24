@@ -23,10 +23,7 @@ namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInject
 
 class SomeBackController
 {
-    /**
-     * @var \Illuminate\Routing\Redirector
-     */
-    private $redirector;
+    private \Illuminate\Routing\Redirector $redirector;
     public function __construct(\Illuminate\Routing\Redirector $redirector)
     {
         $this->redirector = $redirector;

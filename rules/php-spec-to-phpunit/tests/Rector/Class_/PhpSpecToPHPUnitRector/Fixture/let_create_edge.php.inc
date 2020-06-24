@@ -32,14 +32,8 @@ use PhpSpec\ObjectBehavior;
 
 class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Currency
-     */
-    private $currency;
-    /**
-     * @var \CurrencyData|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $data;
+    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Currency $currency;
+    private \CurrencyData|\PHPUnit\Framework\MockObject\MockObject $data;
     protected function setUp()
     {
         $this->data = $this->createMock(CurrencyData::class);

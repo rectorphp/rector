@@ -27,10 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class ParamWithDot extends Controller
 {
-    /**
-     * @var string
-     */
-    private $kernelDebug;
+    private string $kernelDebug;
     public function __construct(string $kernelDebug)
     {
         $this->kernelDebug = $kernelDebug;

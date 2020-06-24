@@ -60,9 +60,9 @@ final class FixtureSplitter
      */
     private function resolveBeforeAfterFixtureContent(SmartFileInfo $smartFileInfo): array
     {
-        if (Strings::match($smartFileInfo->getContents(), SplitLine::SPLIT_LINE)) {
+        if (Strings::match($smartFileInfo->getContents(), SplitLine::REGEX)) {
             // original → expected
-            [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), SplitLine::SPLIT_LINE);
+            [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), SplitLine::REGEX);
         } else {
             // no changes
             $originalContent = $smartFileInfo->getContents();

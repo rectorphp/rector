@@ -34,10 +34,7 @@ use PhpSpec\ObjectBehavior;
 
 class MockPropertiesNonLocalTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\MockPropertiesNonLocal
-     */
-    private $mockPropertiesNonLocal;
+    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\MockPropertiesNonLocal $mockPropertiesNonLocal;
     protected function setUp()
     {
         /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */

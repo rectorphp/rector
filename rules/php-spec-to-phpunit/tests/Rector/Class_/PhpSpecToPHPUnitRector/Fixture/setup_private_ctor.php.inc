@@ -29,10 +29,7 @@ use PhpSpec\ObjectBehavior;
 
 class ResultTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Result
-     */
-    private $result;
+    private \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Result $result;
     public function testInitializable()
     {
         $this->result = \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Result::success();

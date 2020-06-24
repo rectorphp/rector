@@ -37,10 +37,7 @@ use Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\T
 
 class SomeClassWithMoreArguments
 {
-    /**
-     * @var \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClassWithMoreArgumentsFactory
-     */
-    private $anotherClassWithMoreArgumentsFactory;
+    private \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClassWithMoreArgumentsFactory $anotherClassWithMoreArgumentsFactory;
     public function __construct(\Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Fixture\AnotherClassWithMoreArgumentsFactory $anotherClassWithMoreArgumentsFactory)
     {
         $this->anotherClassWithMoreArgumentsFactory = $anotherClassWithMoreArgumentsFactory;
@@ -54,10 +51,7 @@ class SomeClassWithMoreArguments
 class AnotherClassWithMoreArguments
 {
     private $number;
-    /**
-     * @var \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService
-     */
-    private $turnMeToService;
+    private \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService $turnMeToService;
 
     public function __construct($number, \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService $turnMeToService)
     {

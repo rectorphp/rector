@@ -33,10 +33,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 class CustomRepository
 {
-    /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    private $entityManager;
+    private \Doctrine\ORM\EntityManagerInterface $entityManager;
 
     public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
     {

@@ -20,10 +20,7 @@ namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInject
 
 class SomeSessionController
 {
-    /**
-     * @var \Illuminate\Session\SessionManager
-     */
-    private $sessionManager;
+    private \Illuminate\Session\SessionManager $sessionManager;
     public function __construct(\Illuminate\Session\SessionManager $sessionManager)
     {
         $this->sessionManager = $sessionManager;

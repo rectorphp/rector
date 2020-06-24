@@ -18,10 +18,7 @@ use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRecto
 
 final class SomeController extends ContainerAwareParentClass
 {
-    /**
-     * @var \stdClass
-     */
-    private $stdClass;
+    private \stdClass $stdClass;
     public function __construct(\stdClass $stdClass)
     {
         $this->stdClass = $stdClass;
