@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Rector\MethodBody\FluentReplaceRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClass;
+use Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClassInterface;
 
 final class FluentReplaceRectorTest extends AbstractRectorTestCase
 {
@@ -31,7 +32,7 @@ final class FluentReplaceRectorTest extends AbstractRectorTestCase
     {
         return [
             FluentReplaceRector::class => [
-                '$classesToDefluent' => [FluentInterfaceClass::class, '*Command'],
+                '$classesToDefluent' => [FluentInterfaceClassInterface::class, '*Command'],
             ],
         ];
     }
