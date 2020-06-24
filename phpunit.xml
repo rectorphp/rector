@@ -22,6 +22,10 @@
             <directory suffix=".php">rules/*/src</directory>
             <directory suffix=".php">packages/*/src</directory>
             <directory>src</directory>
+
+            <exclude>
+                <file>rules/nette-tester-to-phpunit/tests/Rector/RenameTesterTestToPHPUnitToTestFileRector/Source/SomeCase.phpt</file>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
