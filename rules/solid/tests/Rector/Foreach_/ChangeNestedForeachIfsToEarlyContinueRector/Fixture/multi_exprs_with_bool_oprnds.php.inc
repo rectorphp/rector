@@ -38,7 +38,7 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
 {
     public function run()
     {
-        $partPackageList = [ new \StdClass(), null, 'string', 0, [] ];
+        $partPackageList = [ new \StdClass(), 'string' ];
         $payload = [];
 
         foreach ($partPackageList as $partPackage) {
