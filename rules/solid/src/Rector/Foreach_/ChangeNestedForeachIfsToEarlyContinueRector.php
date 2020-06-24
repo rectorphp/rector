@@ -139,10 +139,12 @@ PHP
 
         // special case
         if ($invertedCondition instanceof BooleanNot && $invertedCondition->expr instanceof BooleanAnd) {
-            $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->left));
+            $leftExpr = $this->negateOrDeNegate($invertedCondition->expr->left);
+            $booleanNotPartIf = new If_($leftExpr);
             $foreach->stmts[] = $booleanNotPartIf;
 
-            $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
+            $rightExpr = $this->negateOrDeNegate($invertedCondition->expr->right);
+            $booleanNotPartIf = new If_($rightExpr);
             $foreach->stmts[] = $booleanNotPartIf;
 
             return;
@@ -154,5 +156,14 @@ PHP
         $nestedIfWithOnlyReturn->stmts = [new Continue_()];
 
         $foreach->stmts[] = $nestedIfWithOnlyReturn;
+    }
+
+    private function negateOrDeNegate(Node\Expr $expr): Node\Expr
+    {
+        if ($expr instanceof BooleanNot) {
+            return $expr->expr;
+        }
+
+        return new BooleanNot($expr);
     }
 }
