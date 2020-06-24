@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
@@ -24,6 +25,11 @@ use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
 final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implements ReturnTypeInfererInterface
 {
+    /**
+     * @var Type[]
+     */
+    private $types = [];
+
     /**
      * @param ClassMethod|Closure|Function_ $functionLike
      */
@@ -39,6 +45,8 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
             return new MixedType();
         }
 
+        $this->types = [];
+
         $localReturnNodes = $this->collectReturns($functionLike);
         if ($localReturnNodes === []) {
             // void type
@@ -49,17 +57,16 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
             return new MixedType();
         }
 
-        $types = [];
         foreach ($localReturnNodes as $localReturnNode) {
             if ($localReturnNode->expr === null) {
-                $types[] = new VoidType();
+                $this->types[] = new VoidType();
                 continue;
             }
 
-            $types[] = $this->nodeTypeResolver->getStaticType($localReturnNode->expr);
+            $this->types[] = $this->nodeTypeResolver->getStaticType($localReturnNode->expr);
         }
 
-        return $this->typeFactory->createMixedPassedOrUnionType($types);
+        return $this->typeFactory->createMixedPassedOrUnionType($this->types);
     }
 
     public function getPriority(): int
@@ -77,7 +84,11 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
             Node $node
         ) use (&$returns): ?int {
-            // skip Return_ nodes in nested functions
+            if ($node instanceof Switch_) {
+                $this->processSwitch($node);
+            }
+
+            // skip Return_ nodes in nested functions or switch statements
             if ($node instanceof FunctionLike) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
@@ -103,5 +114,16 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
 
         // abstract class
         return $classLike instanceof Class_ && $classLike->isAbstract();
+    }
+
+    private function processSwitch(Switch_ $switch): void
+    {
+        foreach ($switch->cases as $case) {
+            if ($case->cond === null) {
+                return;
+            }
+        }
+
+        $this->types[] = new VoidType();
     }
 }
