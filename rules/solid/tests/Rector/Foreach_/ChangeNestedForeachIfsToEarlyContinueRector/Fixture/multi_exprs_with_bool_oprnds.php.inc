@@ -40,8 +40,10 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
 
         foreach ($partPackageList as $partPackage) {
             if (is_null($partPackage)) {
+                continue;
             }
             if (is_object($partPackage)) {
+                continue;
             }
             if (1 == '1' && 2 == 't') {
                 continue;

@@ -140,12 +140,14 @@ PHP
         // special case
         if ($invertedCondition instanceof BooleanNot && $invertedCondition->expr instanceof BooleanAnd) {
             $leftExpr = $this->negateOrDeNegate($invertedCondition->expr->left);
-            $booleanNotPartIf = new If_($leftExpr);
-            $foreach->stmts[] = $booleanNotPartIf;
+            $if = new If_($leftExpr);
+            $if->stmts[] = new Continue_();
+            $foreach->stmts[] = $if;
 
             $rightExpr = $this->negateOrDeNegate($invertedCondition->expr->right);
-            $booleanNotPartIf = new If_($rightExpr);
-            $foreach->stmts[] = $booleanNotPartIf;
+            $if = new If_($rightExpr);
+            $if->stmts[] = new Continue_();
+            $foreach->stmts[] = $if;
 
             return;
         }
