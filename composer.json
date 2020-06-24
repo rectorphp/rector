@@ -80,6 +80,7 @@
             "Rector\\DoctrineAnnotationGenerated\\": "packages/doctrine-annotation-generated/src",
             "Rector\\FileSystemRector\\": "packages/file-system-rector/src",
             "Rector\\FrameworkMigration\\": "rules/framework-migration/src",
+            "Rector\\FamilyTree\\": "packages/family-tree/src",
             "Rector\\Guzzle\\": "rules/guzzle/src",
             "Rector\\JMS\\": "rules/jms/src",
             "Rector\\Laravel\\": "rules/laravel/src",
@@ -136,7 +137,8 @@
             "Rector\\Order\\": "rules/order/src",
             "Rector\\MockistaToMockery\\": "rules/mockista-to-mockery/src",
             "Rector\\NetteKdyby\\": "rules/nette-kdyby/src",
-            "Rector\\NetteUtilsCodeQuality\\": "rules/nette-utils-code-quality/src"
+            "Rector\\NetteUtilsCodeQuality\\": "rules/nette-utils-code-quality/src",
+            "Rector\\NetteCodeQuality\\": "rules/nette-code-quality/src"
         }
     },
     "autoload-dev": {
@@ -209,7 +211,8 @@
             "Rector\\MockistaToMockery\\Tests\\": "rules/mockista-to-mockery/tests",
             "Rector\\Compiler\\Tests\\": "compiler/tests",
             "Rector\\NetteKdyby\\Tests\\": "rules/nette-kdyby/tests",
-            "Rector\\NetteUtilsCodeQuality\\Tests\\": "rules/nette-utils-code-quality/tests"
+            "Rector\\NetteUtilsCodeQuality\\Tests\\": "rules/nette-utils-code-quality/tests",
+            "Rector\\NetteCodeQuality\\Tests\\": "rules/nette-code-quality/tests"
         },
         "classmap": [
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",

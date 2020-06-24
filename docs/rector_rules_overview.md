@@ -1,4 +1,4 @@
-# All 510 Rectors Overview
+# All 511 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -26,6 +26,7 @@
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
 - [Nette](#nette) (12)
+- [NetteCodeQuality](#nettecodequality) (1)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
@@ -4627,7 +4628,7 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
 - class: [`Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector`](/../master/rules/nette/src/Rector/MethodCall/ContextGetByTypeToConstructorInjectionRector.php)
 - [test fixtures](/../master/rules/nette/tests/Rector/MethodCall/ContextGetByTypeToConstructorInjectionRector/Fixture)
 
-Move dependency passed to all children to parent as @inject/@required dependency
+Move dependency get via `$context->getByType()` to constructor injection
 
 ```diff
  class SomeClass
@@ -4884,6 +4885,41 @@ Change `$this->templates->{magic}` to `$this->template->render(..., $values)`
 -        $this->template->param = 'some value';
 -        $this->template->render(__DIR__ . '/poll.latte');
 +        $this->template->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
+     }
+ }
+```
+
+<br><br>
+
+## NetteCodeQuality
+
+### `MoveInjectToExistingConstructorRector`
+
+- class: [`Rector\NetteCodeQuality\Rector\Class_\MoveInjectToExistingConstructorRector`](/../master/rules/nette-code-quality/src/Rector/Class_/MoveInjectToExistingConstructorRector.php)
+- [test fixtures](/../master/rules/nette-code-quality/tests/Rector/Class_/MoveInjectToExistingConstructorRector/Fixture)
+
+Move @inject properties to constructor, if there already is one
+
+```diff
+ final class SomeClass
+ {
+     /**
+      * @var SomeDependency
+-     * @inject
+      */
+-    public $someDependency;
++    private $someDependency;
+
+     /**
+      * @var OtherDependency
+      */
+     private $otherDependency;
+
+-    public function __construct(OtherDependency $otherDependency)
++    public function __construct(OtherDependency $otherDependency, SomeDependency $someDependency)
+     {
+         $this->otherDependency = $otherDependency;
++        $this->someDependency = $someDependency;
      }
  }
 ```
@@ -8436,7 +8472,7 @@ Change get_class($object) to faster $object::class
 - class: [`Rector\Php80\Rector\Ternary\GetDebugTypeRector`](/../master/rules/php80/src/Rector/Ternary/GetDebugTypeRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/Ternary/GetDebugTypeRector/Fixture)
 
-Change ternary type `resolve` to `get_debug_type()`
+Change ternary type resolve to `get_debug_type()`
 
 ```diff
  class SomeClass
