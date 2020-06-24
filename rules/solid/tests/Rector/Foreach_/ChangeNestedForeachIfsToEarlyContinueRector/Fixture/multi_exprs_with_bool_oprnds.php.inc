@@ -8,9 +8,6 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
 {
     public function run()
     {
-        $loaded = true;
-        $usePackages = true;
-        $notBad = true;
         $partPackageList = [ new \StdClass(), null, 'string', 0, [] ];
         $payload = [];
 
@@ -18,7 +15,7 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
         {
             if(! is_null( $partPackage ) && ! is_object($partPackage) )
             {
-                if ($loaded || ($usePackages && $notBad))
+                if (1 == '1' || 2 == 't')
                 {
                     $payload[] = $partPackage;
                 }
@@ -41,9 +38,6 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
 {
     public function run()
     {
-        $loaded = true;
-        $usePackages = true;
-        $notBad = true;
         $partPackageList = [ new \StdClass(), null, 'string', 0, [] ];
         $payload = [];
 
@@ -52,7 +46,7 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
             }
             if (!! is_object($partPackage)) {
             }
-            if ($loaded && ($usePackages && $notBad)) {
+            if (1 == '1' && 2 == 't') {
                 continue;
             }
             $payload[] = $partPackage;
