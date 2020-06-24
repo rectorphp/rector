@@ -21,7 +21,7 @@ final class ContextGetByTypeToConstructorInjectionRector extends AbstractToConst
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Move dependency passed to all children to parent as @inject/@required dependency',
+            'Move dependency get via $context->getByType() to constructor injection',
             [
                 new CodeSample(
                     <<<'PHP'
