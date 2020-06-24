@@ -4,18 +4,18 @@ namespace Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContin
 
 use Rector\Core\Testing\Contract\RunnableInterface;
 
-class MultiExprsWithBoolOprnds implements RunnableInterface
+class MultiExprsWithOrBothTruthy implements RunnableInterface
 {
     public function run()
     {
         $partPackageList = [ new \StdClass(), 'string' ];
         $payload = [];
 
-        foreach($partPackageList as $partPackage)
+        foreach( $partPackageList as $partPackage )
         {
-            if(! is_null($partPackage) && ! is_object($partPackage))
+            if(true)
             {
-                if (1 == '1' || 2 == 't')
+                if (1 === 1 || 2 === 2)
                 {
                     $payload[] = $partPackage;
                 }
@@ -34,7 +34,7 @@ namespace Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContin
 
 use Rector\Core\Testing\Contract\RunnableInterface;
 
-class MultiExprsWithBoolOprnds implements RunnableInterface
+class MultiExprsWithOrBothTruthy implements RunnableInterface
 {
     public function run()
     {
@@ -42,13 +42,10 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
         $payload = [];
 
         foreach ($partPackageList as $partPackage) {
-            if (is_null($partPackage)) {
+            if (!true) {
                 continue;
             }
-            if (is_object($partPackage)) {
-                continue;
-            }
-            if (!(1 == '1' || 2 == 't')) {
+            if (!(1 === 1 || 2 === 2)) {
                 continue;
             }
             $payload[] = $partPackage;
