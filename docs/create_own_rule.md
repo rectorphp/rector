@@ -53,7 +53,7 @@ final class MyFirstRector extends AbstractRector
             return null;
         }
 
-        $methodCallName = (string)$node->name;
+        $methodCallName = $this->getName($node->name);
         $newMethodCallName = Strings::replace($methodCallName, '#^set#', 'change');
 
         $node->name = new Identifier($newMethodCallName);
