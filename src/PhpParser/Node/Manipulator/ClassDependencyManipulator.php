@@ -13,7 +13,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use ReflectionClass;
+use ReflectionProperty;
 
 final class ClassDependencyManipulator
 {
@@ -61,12 +64,16 @@ final class ClassDependencyManipulator
         $this->classInsertManipulator = $classInsertManipulator;
     }
 
-    public function addConstructorDependency(Class_ $classNode, string $name, ?Type $type): void
+    public function addConstructorDependency(Class_ $class, string $name, ?Type $type): void
     {
-        $this->classInsertManipulator->addPropertyToClass($classNode, $name, $type);
+        if ($this->isPropertyAlreadyAvailableInTheClassOrItsParents($class, $name)) {
+            return;
+        }
+
+        $this->classInsertManipulator->addPropertyToClass($class, $name, $type);
 
         $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($name);
-        $this->addConstructorDependencyWithCustomAssign($classNode, $name, $type, $propertyAssignNode);
+        $this->addConstructorDependencyWithCustomAssign($class, $name, $type, $propertyAssignNode);
     }
 
     public function addConstructorDependencyWithCustomAssign(
@@ -132,6 +139,10 @@ final class ClassDependencyManipulator
 
     public function addInjectProperty(Class_ $class, string $propertyName, ?Type $propertyType): void
     {
+        if ($this->isPropertyAlreadyAvailableInTheClassOrItsParents($class, $propertyName)) {
+            return;
+        }
+
         $this->classInsertManipulator->addInjectPropertyToClass($class, $propertyName, $propertyType);
     }
 
@@ -150,5 +161,50 @@ final class ClassDependencyManipulator
         $staticCall = new StaticCall(new Name('parent'), $methodName);
 
         return new Expression($staticCall);
+    }
+
+    private function isPropertyAlreadyAvailableInTheClassOrItsParents(Class_ $class, string $propertyName): bool
+    {
+        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return false;
+        }
+
+        if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+            return false;
+        }
+
+        $availablePropertyReflections = $this->getParentClassPublicAndProtectedPropertyReflections($className);
+
+        foreach ($availablePropertyReflections as $availablePropertyReflection) {
+            if ($availablePropertyReflection->getName() !== $propertyName) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return ReflectionProperty[]
+     */
+    private function getParentClassPublicAndProtectedPropertyReflections(string $className): array
+    {
+        $parentClassNames = class_parents($className);
+
+        $propertyReflections = [];
+
+        foreach ($parentClassNames as $parentClassName) {
+            $parentClassReflection = new ReflectionClass($parentClassName);
+
+            $currentPropertyReflections = $parentClassReflection->getProperties(
+                ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED
+            );
+            $propertyReflections = array_merge($propertyReflections, $currentPropertyReflections);
+        }
+
+        return $propertyReflections;
     }
 }
