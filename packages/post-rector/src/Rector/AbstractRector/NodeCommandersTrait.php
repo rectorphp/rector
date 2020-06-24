@@ -9,8 +9,10 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
@@ -106,6 +108,26 @@ trait NodeCommandersTrait
     {
         $this->nodesToAddCollector->addNodeBeforeNode($newNode, $positionNode);
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
+    }
+
+    protected function addPropertyToCollector(Property $property): void
+    {
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            return;
+        }
+
+        $propertyType = $this->getObjectType($property);
+
+        // use first type - hard assumption @todo improve
+        if ($propertyType instanceof UnionType) {
+            $propertyType = $propertyType->getTypes()[0];
+        }
+
+        /** @var string $propertyName */
+        $propertyName = $this->getName($property);
+
+        $this->addPropertyToClass($classNode, $propertyType, $propertyName);
     }
 
     protected function addPropertyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void

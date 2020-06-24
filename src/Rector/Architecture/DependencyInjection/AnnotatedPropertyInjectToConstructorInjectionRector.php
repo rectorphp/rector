@@ -7,13 +7,11 @@ namespace Rector\Core\Rector\Architecture\DependencyInjection;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Reflection\StaticRelationsHelper;
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
+use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -32,9 +30,14 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     private const INJECT_ANNOTATION = 'inject';
 
-    public function __construct(ClassLikeParsedNodesFinder $classLikeParsedNodesFinder)
+    /**
+     * @var PropertyUsageAnalyzer
+     */
+    private $propertyUsageAnalyzer;
+
+    public function __construct(PropertyUsageAnalyzer $propertyUsageAnalyzer)
     {
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
+        $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -88,7 +91,7 @@ PHP
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         $phpDocInfo->removeByName(self::INJECT_ANNOTATION);
 
-        if ($this->isPropertyFectechInChildClass($node)) {
+        if ($this->propertyUsageAnalyzer->isPropertyFetchedInChildClass($node)) {
             $this->makeProtected($node);
         } else {
             $this->makePrivate($node);
@@ -118,58 +121,5 @@ PHP
         }
 
         return $property->type === null;
-    }
-
-    private function addPropertyToCollector(Property $property): void
-    {
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
-            return;
-        }
-
-        $propertyType = $this->getObjectType($property);
-
-        // use first type
-        if ($propertyType instanceof UnionType) {
-            $propertyType = $propertyType->getTypes()[0];
-        }
-
-        $propertyName = $this->getName($property);
-
-        $this->addPropertyToClass($classNode, $propertyType, $propertyName);
-    }
-
-    private function isPropertyFectechInChildClass(Property $property): bool
-    {
-        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return false;
-        }
-
-        $propertyName = $this->getName($property);
-        if ($propertyName === null) {
-            return false;
-        }
-
-        $childrenClassNames = StaticRelationsHelper::getChildrenOfClass($className);
-        foreach ($childrenClassNames as $childClassName) {
-            $childClass = $this->classLikeParsedNodesFinder->findClass($childClassName);
-            if ($childClass === null) {
-                continue;
-            }
-
-            $isPropertyFetched = (bool) $this->betterNodeFinder->findFirst(
-                (array) $childClass->stmts,
-                function (Node $node) use ($propertyName) {
-                    return $this->isLocalPropertyFetchNamed($node, $propertyName);
-                }
-            );
-
-            if ($isPropertyFetched) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
