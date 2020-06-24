@@ -9,6 +9,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
+use ReflectionMethod;
 
 final class NetteInjectDetector
 {
@@ -74,6 +75,18 @@ final class NetteInjectDetector
         // is not the nette class - we don't care about that
         if ($parentClass === 'Nette\Application\UI\Presenter') {
             return false;
+        }
+
+        // prefer local constructor
+        $classReflection = new ReflectionClass($className);
+        if ($classReflection->hasMethod('__construct')) {
+            /** @var ReflectionMethod $constructorReflectionMethod */
+            $constructorReflectionMethod = $classReflection->getConstructor();
+
+            // be sure its local constructor
+            if ($constructorReflectionMethod->class === $className) {
+                return false;
+            }
         }
 
         // has constructor
