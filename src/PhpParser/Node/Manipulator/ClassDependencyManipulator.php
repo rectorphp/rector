@@ -130,6 +130,11 @@ final class ClassDependencyManipulator
         $classMethod->stmts = array_merge($stmts, (array) $classMethod->stmts);
     }
 
+    public function addInjectProperty(Class_ $class, string $propertyName, ?Type $propertyType): void
+    {
+        $this->classInsertManipulator->addInjectPropertyToClass($class, $propertyName, $propertyType);
+    }
+
     private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
     {
         $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
