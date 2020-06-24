@@ -11,12 +11,9 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
         $partPackageList = [ new \StdClass(), 'string' ];
         $payload = [];
 
-        foreach( $partPackageList as $partPackage )
-        {
-            if(! is_null( $partPackage ) && ! is_object($partPackage) )
-            {
-                if (1 == '1' || 2 == 't')
-                {
+        foreach ($partPackageList as $partPackage) {
+            if (! is_null($partPackage) && ! is_object($partPackage)) {
+                if (1 == '1' || 2 == 't') {
                     $payload[] = $partPackage;
                 }
             }
@@ -42,7 +39,7 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
         $payload = [];
 
         foreach ($partPackageList as $partPackage) {
-            if (!! is_null( $partPackage )) {
+            if (!! is_null($partPackage)) {
             }
             if (!! is_object($partPackage)) {
             }
