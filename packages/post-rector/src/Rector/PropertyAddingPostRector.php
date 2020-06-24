@@ -83,7 +83,7 @@ final class PropertyAddingPostRector extends AbstractPostRector
         $isNetteInjectPreferred = $this->isNetteInjectPreferred($class);
 
         foreach ($properties as $propertyName => $propertyType) {
-            if ($isNetteInjectPreferred === false) {
+            if (!$isNetteInjectPreferred) {
                 $this->classDependencyManipulator->addConstructorDependency($class, $propertyName, $propertyType);
             } else {
                 $this->classDependencyManipulator->addInjectProperty($class, $propertyName, $propertyType);
