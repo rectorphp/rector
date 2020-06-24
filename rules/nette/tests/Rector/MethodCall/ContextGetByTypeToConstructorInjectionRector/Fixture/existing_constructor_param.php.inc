@@ -2,7 +2,7 @@
 
 namespace Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Fixture;
 
-use Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Fixture\Source\ISomeInterfaceToInject;
+use Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject;
 
 class ExistingConstructorParam
 {
@@ -12,7 +12,7 @@ class ExistingConstructorParam
     private $context;
 
     /**
-     * @var ISomeInterfaceToInject
+     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject
      */
     private $someInterfaceToInject;
 
@@ -33,7 +33,7 @@ class ExistingConstructorParam
 
 namespace Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Fixture;
 
-use Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Fixture\Source\ISomeInterfaceToInject;
+use Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject;
 
 class ExistingConstructorParam
 {
@@ -43,7 +43,7 @@ class ExistingConstructorParam
     private $context;
 
     /**
-     * @var ISomeInterfaceToInject
+     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject
      */
     private $someInterfaceToInject;
 
