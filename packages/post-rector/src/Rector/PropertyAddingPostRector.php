@@ -6,9 +6,11 @@ namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 
 /**
@@ -77,8 +79,15 @@ final class PropertyAddingPostRector extends AbstractPostRector
     {
         $properties = $this->propertyToAddCollector->getPropertiesByClass($class);
 
+        // is Nette @inject presenter? use @inject
+        $isNetteInjectPreferred = $this->isNetteInjectPreferred($class);
+
         foreach ($properties as $propertyName => $propertyType) {
-            $this->classDependencyManipulator->addConstructorDependency($class, $propertyName, $propertyType);
+            if (! $isNetteInjectPreferred) {
+                $this->classDependencyManipulator->addConstructorDependency($class, $propertyName, $propertyType);
+            } else {
+                $this->classDependencyManipulator->addInjectProperty($class, $propertyName, $propertyType);
+            }
         }
     }
 
@@ -91,5 +100,28 @@ final class PropertyAddingPostRector extends AbstractPostRector
         foreach ($propertiesWithoutConstructor as $propertyName => $propertyType) {
             $this->classInsertManipulator->addPropertyToClass($class, $propertyName, $propertyType);
         }
+    }
+
+    private function isNetteInjectPreferred(Class_ $class): bool
+    {
+        foreach ($class->getProperties() as $property) {
+            if (! $property->isPublic()) {
+                continue;
+            }
+
+            /** @var PhpDocInfo|null $phpDocInfo */
+            $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo === null) {
+                continue;
+            }
+
+            if ($phpDocInfo->getTagsByName('inject') === []) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

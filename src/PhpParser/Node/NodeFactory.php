@@ -37,6 +37,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Php\PhpVersionProvider;
@@ -180,6 +181,28 @@ final class NodeFactory
         }
 
         return $paramBuild->getNode();
+    }
+
+    public function createPublicInjectPropertyFromNameAndType(string $name, ?Type $type): Property
+    {
+        $propertyBuilder = $this->builderFactory->property($name);
+        $propertyBuilder->makePublic();
+
+        $property = $propertyBuilder->getNode();
+
+        $this->addPropertyType($property, $type);
+        $this->decorateParentPropertyProperty($property);
+
+        // add @inject
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+        }
+
+        $phpDocInfo->addBareTag('inject');
+
+        return $property;
     }
 
     public function createPrivatePropertyFromNameAndType(string $name, ?Type $type): Property

@@ -68,6 +68,16 @@ final class ClassInsertManipulator
         $this->addAsFirstMethod($class, $propertyNode);
     }
 
+    public function addInjectPropertyToClass(Class_ $class, string $name, ?Type $type): void
+    {
+        if ($this->hasClassProperty($class, $name)) {
+            return;
+        }
+
+        $propertyNode = $this->nodeFactory->createPublicInjectPropertyFromNameAndType($name, $type);
+        $this->addAsFirstMethod($class, $propertyNode);
+    }
+
     public function addAsFirstTrait(Class_ $class, string $traitName): void
     {
         $trait = new TraitUse([new FullyQualified($traitName)]);

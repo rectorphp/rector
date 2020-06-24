@@ -4,7 +4,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInje
 
 use Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject;
 
-class ExistingConstructorParam
+class RespectInjectPresenter
 {
     /**
      * @var \Nette\DI\Container
@@ -12,14 +12,10 @@ class ExistingConstructorParam
     private $context;
 
     /**
-     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject
+     * @inject
+     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\SomeTypeToInject
      */
-    private $someInterfaceToInject;
-
-    public function __construct(ISomeInterfaceToInject $someInterfaceToInject)
-    {
-        $this->someInterfaceToInject = $someInterfaceToInject;
-    }
+    public $otherInjectedService;
 
     public function run()
     {
@@ -35,7 +31,7 @@ namespace Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInje
 
 use Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject;
 
-class ExistingConstructorParam
+class RespectInjectPresenter
 {
     /**
      * @var \Nette\DI\Container
@@ -43,14 +39,15 @@ class ExistingConstructorParam
     private $context;
 
     /**
-     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject
+     * @inject
+     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\SomeTypeToInject
      */
-    private $someInterfaceToInject;
-
-    public function __construct(ISomeInterfaceToInject $someInterfaceToInject)
-    {
-        $this->someInterfaceToInject = $someInterfaceToInject;
-    }
+    public $otherInjectedService;
+    /**
+     * @var \Rector\Nette\Tests\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector\Source\ISomeInterfaceToInject
+     * @inject
+     */
+    public $someInterfaceToInject;
 
     public function run()
     {
