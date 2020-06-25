@@ -11,6 +11,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -35,9 +36,15 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     private $propertyUsageAnalyzer;
 
-    public function __construct(PropertyUsageAnalyzer $propertyUsageAnalyzer)
+    /**
+     * @var ClassChildAnalyzer
+     */
+    private $classChildAnalyzer;
+
+    public function __construct(PropertyUsageAnalyzer $propertyUsageAnalyzer, ClassChildAnalyzer $classChildAnalyzer)
     {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
+        $this->classChildAnalyzer = $classChildAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -111,7 +118,19 @@ PHP
         }
 
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class instanceof Class_ && $class->isAbstract()) {
+        if ($class === null) {
+            return true;
+        }
+
+        if (! $class instanceof Class_) {
+            return true;
+        }
+
+        if ($class->isAbstract()) {
+            return true;
+        }
+
+        if ($this->classChildAnalyzer->hasChildClassConstructor($class)) {
             return true;
         }
 
