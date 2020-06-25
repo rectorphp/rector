@@ -26,6 +26,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use ReflectionClass;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -90,7 +91,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isObjectType($node->var, Controller::class) && $this->isName($node->name, 'createForm')) {
+        if ($this->isObjectTypes($node->var, [Controller::class, AbstractController::class]) && $this->isName($node->name, 'createForm')) {
             return $this->processNewInstance($node, 0, 2);
         }
 
