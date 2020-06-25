@@ -9,15 +9,16 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector;
 use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
 use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactoryWithInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class StaticTypeToSetterInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

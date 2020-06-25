@@ -7,15 +7,16 @@ namespace Rector\Celebrity\Tests\Rector\BooleanOp\LogicalToBooleanRector;
 use Iterator;
 use Rector\Celebrity\Rector\BooleanOp\LogicalToBooleanRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class LogicalToBooleanRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

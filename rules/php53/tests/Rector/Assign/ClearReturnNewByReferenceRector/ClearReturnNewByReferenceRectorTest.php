@@ -8,15 +8,16 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php53\Rector\Assign\ClearReturnNewByReferenceRector;
 use SplFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ClearReturnNewByReferenceRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFileWithoutAutoload($file);
+        $this->doTestFileInfoWithoutAutoload($file);
     }
 
     /**

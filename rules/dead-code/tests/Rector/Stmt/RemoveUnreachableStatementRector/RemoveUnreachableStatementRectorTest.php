@@ -7,15 +7,16 @@ namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveUnreachableStatementRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

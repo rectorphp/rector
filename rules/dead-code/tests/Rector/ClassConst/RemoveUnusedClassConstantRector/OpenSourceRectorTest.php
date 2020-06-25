@@ -8,16 +8,17 @@ use Iterator;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class OpenSourceRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
         $this->setParameter(Option::PROJECT_TYPE, Option::PROJECT_TYPE_OPEN_SOURCE);
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

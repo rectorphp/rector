@@ -7,15 +7,16 @@ namespace Rector\CodeQuality\Tests\Rector\Equal\UseIdenticalOverEqualWithSameTyp
 use Iterator;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UseIdenticalOverEqualWithSameTypeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

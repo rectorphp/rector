@@ -7,15 +7,16 @@ namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RenameEventNamesInEvent
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteToSymfony\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameEventNamesInEventSubscriberRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

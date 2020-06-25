@@ -7,15 +7,16 @@ namespace Rector\PHPUnitSymfony\Tests\Rector\StaticCall\AddMessageToEqualsRespon
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnitSymfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddMessageToEqualsResponseCodeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

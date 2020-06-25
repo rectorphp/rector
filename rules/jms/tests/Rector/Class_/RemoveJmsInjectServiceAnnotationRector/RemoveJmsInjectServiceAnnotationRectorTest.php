@@ -7,15 +7,16 @@ namespace Rector\JMS\Tests\Rector\Class_\RemoveJmsInjectServiceAnnotationRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\JMS\Rector\Class_\RemoveJmsInjectServiceAnnotationRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveJmsInjectServiceAnnotationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

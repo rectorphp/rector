@@ -7,15 +7,16 @@ namespace Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ResponseStatusCodeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

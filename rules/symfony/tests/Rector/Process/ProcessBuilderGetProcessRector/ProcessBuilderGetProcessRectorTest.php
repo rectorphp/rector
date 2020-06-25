@@ -7,15 +7,16 @@ namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ProcessBuilderGetProcessRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

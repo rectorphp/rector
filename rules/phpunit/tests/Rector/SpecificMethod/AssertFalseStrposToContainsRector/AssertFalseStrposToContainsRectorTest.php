@@ -7,15 +7,16 @@ namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertFalseStrposToContains
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AssertFalseStrposToContainsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

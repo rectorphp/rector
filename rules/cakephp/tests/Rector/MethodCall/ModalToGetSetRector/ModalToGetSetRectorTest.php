@@ -8,15 +8,16 @@ use Iterator;
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source\SomeModelType;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ModalToGetSetRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

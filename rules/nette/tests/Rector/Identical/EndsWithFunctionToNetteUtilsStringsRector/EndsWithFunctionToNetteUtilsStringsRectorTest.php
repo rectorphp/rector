@@ -7,15 +7,16 @@ namespace Rector\Nette\Tests\Rector\Identical\EndsWithFunctionToNetteUtilsString
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class EndsWithFunctionToNetteUtilsStringsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

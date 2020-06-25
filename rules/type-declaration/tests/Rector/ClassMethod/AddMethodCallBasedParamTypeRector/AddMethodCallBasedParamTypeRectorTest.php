@@ -8,15 +8,16 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddMethodCallBasedParamTypeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

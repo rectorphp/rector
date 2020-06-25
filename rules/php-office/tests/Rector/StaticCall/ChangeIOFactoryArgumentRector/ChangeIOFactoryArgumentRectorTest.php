@@ -7,15 +7,16 @@ namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangeIOFactoryArgumentRector
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeIOFactoryArgumentRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

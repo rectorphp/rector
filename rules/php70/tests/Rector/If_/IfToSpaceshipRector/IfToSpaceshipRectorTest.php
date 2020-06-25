@@ -7,15 +7,16 @@ namespace Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\If_\IfToSpaceshipRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class IfToSpaceshipRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

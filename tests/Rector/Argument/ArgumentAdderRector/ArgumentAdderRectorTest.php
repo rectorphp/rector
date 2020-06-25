@@ -9,15 +9,16 @@ use Rector\Core\Rector\Argument\ArgumentAdderRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
 use Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeParentClient;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArgumentAdderRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

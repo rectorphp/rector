@@ -28,6 +28,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Yaml\Yaml;
+use Symplify\EasyTesting\Fixture\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SetConfigResolver\ConfigResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -48,11 +49,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      * @var SmartFileInfo
      */
     protected $originalTempFileInfo;
-
-    /**
-     * @var FixtureSplitter
-     */
-    protected $fixtureSplitter;
 
     /**
      * @var bool
@@ -83,8 +79,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     {
         parent::setUp();
 
-        $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
-        $this->runnableRectorFactory = new RunnableRectorFactory($this->fixtureSplitter);
+        $this->runnableRectorFactory = new RunnableRectorFactory();
 
         if ($this->provideConfig() !== '') {
             $this->ensureConfigFileExists();
@@ -142,18 +137,16 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         }
     }
 
-    protected function doTestFileWithoutAutoload(string $file): void
+    protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {
         $this->autoloadTestFixture = false;
-        $this->doTestFile($file);
+        $this->doTestFileInfo($fileInfo);
         $this->autoloadTestFixture = true;
     }
 
-    protected function doTestFile(string $fixtureFile): void
+    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
     {
-        $fixtureFileInfo = new SmartFileInfo($fixtureFile);
-
-        [$originalFileInfo, $expectedFileInfo] = $this->fixtureSplitter->splitContentToOriginalFileAndExpectedFile(
+        [$originalFileInfo, $expectedFileInfo] = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $fixtureFileInfo,
             $this->autoloadTestFixture
         );
@@ -201,7 +194,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
     {
-        $expectedFilePath = sys_get_temp_dir() . '/rector_temp_tests/' . $expectedExtraFileName;
+        $temporaryPath = StaticFixtureSplitter::getTemporaryPath();
+        $expectedFilePath = $temporaryPath . '/' . $expectedExtraFileName;
         $this->assertFileExists($expectedFilePath);
 
         $this->assertFileEquals($expectedExtraContentFilePath, $expectedFilePath);

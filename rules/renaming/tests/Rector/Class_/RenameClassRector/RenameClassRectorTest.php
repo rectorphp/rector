@@ -15,15 +15,16 @@ use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClassWithoutTypo;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClassWithTypo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameClassRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $filePath): void
+    public function test(SmartFileInfo $filePath): void
     {
-        $this->doTestFile($filePath);
+        $this->doTestFileInfo($filePath);
     }
 
     public function provideData(): Iterator
@@ -36,7 +37,8 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
      */
     public function testClassNameDuplication(): void
     {
-        $this->doTestFile(__DIR__ . '/FixtureDuplication/skip_duplicated_class.php.inc');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/FixtureDuplication/skip_duplicated_class.php.inc');
+        $this->doTestFileInfo($fixtureFileInfo);
     }
 
     /**

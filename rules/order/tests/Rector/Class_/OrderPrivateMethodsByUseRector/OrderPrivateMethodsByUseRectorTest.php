@@ -7,15 +7,16 @@ namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class OrderPrivateMethodsByUseRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

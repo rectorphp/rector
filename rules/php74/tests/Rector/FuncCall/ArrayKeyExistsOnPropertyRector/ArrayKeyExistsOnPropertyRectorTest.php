@@ -7,15 +7,16 @@ namespace Rector\Php74\Tests\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArrayKeyExistsOnPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

@@ -7,15 +7,16 @@ namespace Rector\Sensio\Tests\Rector\ClassMethod\RemoveServiceFromSensioRouteRec
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Sensio\Rector\ClassMethod\RemoveServiceFromSensioRouteRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveServiceFromSensioRouteRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

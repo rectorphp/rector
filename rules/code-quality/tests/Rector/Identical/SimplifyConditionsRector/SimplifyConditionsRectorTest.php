@@ -7,15 +7,16 @@ namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyConditionsRector;
 use Iterator;
 use Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SimplifyConditionsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

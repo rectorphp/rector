@@ -7,15 +7,16 @@ namespace Rector\Php70\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class BreakNotInLoopOrSwitchToReturnRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFileWithoutAutoload($file);
+        $this->doTestFileInfoWithoutAutoload($file);
     }
 
     public function provideData(): Iterator

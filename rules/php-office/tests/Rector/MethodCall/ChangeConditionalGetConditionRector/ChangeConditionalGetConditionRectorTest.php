@@ -7,15 +7,16 @@ namespace Rector\PHPOffice\Tests\Rector\MethodCall\ChangeConditionalGetCondition
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeConditionalGetConditionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

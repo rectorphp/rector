@@ -7,15 +7,16 @@ namespace Rector\Sensio\Tests\Rector\ClassMethod\ReplaceSensioRouteAnnotationWit
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Sensio\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReplaceSensioRouteAnnotationWithSymfonyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

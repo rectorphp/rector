@@ -6,12 +6,14 @@ namespace Rector\NetteTesterToPHPUnit\Tests\Rector\RenameTesterTestToPHPUnitToTe
 
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Rector\NetteTesterToPHPUnit\Rector\RenameTesterTestToPHPUnitToTestFileRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameTesterTestToPHPUnitToTestFileRectorTest extends AbstractFileSystemRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFile(__DIR__ . '/Source/SomeCase.phpt');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Source/SomeCase.phpt');
+        $this->doTestFileInfo($fixtureFileInfo);
 
         $temporaryFilePath = $this->getFixtureTempDirectory() . '/Source/SomeCase.phpt';
 

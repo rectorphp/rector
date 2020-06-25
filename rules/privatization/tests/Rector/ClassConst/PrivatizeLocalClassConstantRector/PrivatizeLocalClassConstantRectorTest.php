@@ -7,15 +7,16 @@ namespace Rector\Privatization\Tests\Rector\ClassConst\PrivatizeLocalClassConsta
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Privatization\Rector\ClassConst\PrivatizeLocalClassConstantRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PrivatizeLocalClassConstantRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

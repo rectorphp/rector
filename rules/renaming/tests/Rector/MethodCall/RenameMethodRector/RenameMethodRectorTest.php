@@ -10,15 +10,16 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\FormMacros;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameMethodRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

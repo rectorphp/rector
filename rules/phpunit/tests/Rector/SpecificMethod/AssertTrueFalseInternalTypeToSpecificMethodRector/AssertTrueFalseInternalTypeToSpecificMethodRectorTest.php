@@ -7,15 +7,16 @@ namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseInternalType
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AssertTrueFalseInternalTypeToSpecificMethodRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

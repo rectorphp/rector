@@ -7,15 +7,16 @@ namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPStan\Rector\Node\RemoveNonExistingVarAnnotationRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveNonExistingVarAnnotationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

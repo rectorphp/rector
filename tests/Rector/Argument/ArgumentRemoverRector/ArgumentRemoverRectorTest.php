@@ -10,15 +10,16 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\Argument\ArgumentRemoverRector\Source\Persister;
 use Rector\Core\Tests\Rector\Argument\ArgumentRemoverRector\Source\RemoveInTheMiddle;
 use Symfony\Component\Yaml\Yaml;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

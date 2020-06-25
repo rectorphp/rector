@@ -7,15 +7,16 @@ namespace Rector\Privatization\Tests\Rector\MethodCall\PrivatizeLocalGetterToPro
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PrivatizeLocalGetterToPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

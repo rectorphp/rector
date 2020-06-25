@@ -7,15 +7,16 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\InArrayAndArrayKeysToArrayKey
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InArrayAndArrayKeysToArrayKeyExistsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

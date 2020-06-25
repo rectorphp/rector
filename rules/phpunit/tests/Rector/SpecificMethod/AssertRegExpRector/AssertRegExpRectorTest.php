@@ -7,15 +7,16 @@ namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertRegExpRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertRegExpRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AssertRegExpRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

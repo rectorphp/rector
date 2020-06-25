@@ -7,15 +7,16 @@ namespace Rector\Phalcon\Tests\Rector\MethodCall\AddRequestToHandleMethodCallRec
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Phalcon\Rector\MethodCall\AddRequestToHandleMethodCallRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddRequestToHandleMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

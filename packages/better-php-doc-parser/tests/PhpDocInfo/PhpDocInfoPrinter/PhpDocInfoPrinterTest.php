@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter;
 
 use Iterator;
-use Nette\Utils\FileSystem;
 use PhpParser\Node\Stmt\Nop;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
 {
@@ -14,16 +14,16 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
      * @dataProvider provideData()
      * @dataProvider provideDataCallable()
      */
-    public function test(string $docFilePath): void
+    public function test(SmartFileInfo $docFileInfo): void
     {
-        $this->doComparePrintedFileEquals($docFilePath, $docFilePath);
+        $this->doComparePrintedFileEquals($docFileInfo, $docFileInfo);
     }
 
     public function testRemoveSpace(): void
     {
         $this->doComparePrintedFileEquals(
-            __DIR__ . '/FixtureChanged/with_space.txt',
-            __DIR__ . '/FixtureChangedExpected/with_space_expected.txt'
+            new SmartFileInfo(__DIR__ . '/FixtureChanged/with_space.txt'),
+            new SmartFileInfo(__DIR__ . '/FixtureChangedExpected/with_space_expected.txt')
         );
     }
 
@@ -40,10 +40,9 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
     /**
      * @dataProvider provideDataEmpty()
      */
-    public function testEmpty(string $docFilePath): void
+    public function testEmpty(SmartFileInfo $fileInfo): void
     {
-        $docComment = FileSystem::read($docFilePath);
-        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, new Nop());
+        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($fileInfo->getContents(), new Nop());
 
         $this->assertEmpty($this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
     }
@@ -53,14 +52,12 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureEmpty', '*.txt');
     }
 
-    private function doComparePrintedFileEquals(string $inputDocFile, string $expectedOutputDocFile): void
+    private function doComparePrintedFileEquals(SmartFileInfo $inputFileInfo, SmartFileInfo $expectedFileInfo): void
     {
-        $docComment = FileSystem::read($inputDocFile);
-        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, new Nop());
+        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($inputFileInfo->getContents(), new Nop());
 
         $printedDocComment = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
 
-        $expectedDocComment = FileSystem::read($expectedOutputDocFile);
-        $this->assertSame($expectedDocComment, $printedDocComment);
+        $this->assertSame($expectedFileInfo->getContents(), $printedDocComment);
     }
 }

@@ -7,15 +7,16 @@ namespace Rector\Php74\Tests\Rector\FuncCall\MbStrrposEncodingArgumentPositionRe
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MbStrrposEncodingArgumentPositionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

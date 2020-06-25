@@ -7,15 +7,16 @@ namespace Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnn
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CompleteImportForPartialAnnotationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

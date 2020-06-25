@@ -7,15 +7,16 @@ namespace Rector\Php74\Tests\Rector\Assign\NullCoalescingOperatorRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\Assign\NullCoalescingOperatorRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NullCoalescingOperatorRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

@@ -7,15 +7,16 @@ namespace Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameConstantRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

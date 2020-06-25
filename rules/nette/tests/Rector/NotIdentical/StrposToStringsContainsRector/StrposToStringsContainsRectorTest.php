@@ -7,15 +7,16 @@ namespace Rector\Nette\Tests\Rector\NotIdentical\StrposToStringsContainsRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class StrposToStringsContainsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

@@ -7,15 +7,16 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\CompactToVariablesRector;
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CompactToVariablesRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

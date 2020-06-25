@@ -8,15 +8,16 @@ use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector;
 use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector\Source\ObviousValueObjectInterface;
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractFileSystemRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $originalFile, string $expectedFileLocation): void
+    public function test(SmartFileInfo $originalFileInfo, string $expectedFileLocation): void
     {
-        $this->doTestFile($originalFile);
+        $this->doTestFileInfo($originalFileInfo);
 
         $this->assertFileExists($expectedFileLocation);
     }
@@ -24,25 +25,25 @@ final class MoveValueObjectsToValueObjectDirectoryRectorTest extends AbstractFil
     public function provideData(): Iterator
     {
         yield [
-            __DIR__ . '/Source/Repository/PrimitiveValueObject.php',
+            new SmartFileInfo(__DIR__ . '/Source/Repository/PrimitiveValueObject.php'),
             $this->getFixtureTempDirectory() . '/Source/ValueObject/PrimitiveValueObject.php',
         ];
 
         // type
         yield [
-            __DIR__ . '/Source/Command/SomeName.php',
+            new SmartFileInfo(__DIR__ . '/Source/Command/SomeName.php'),
             $this->getFixtureTempDirectory() . '/Source/ValueObject/SomeName.php',
         ];
 
         // suffix
         yield [
-            __DIR__ . '/Source/Command/MeSearch.php',
+            new SmartFileInfo(__DIR__ . '/Source/Command/MeSearch.php'),
             $this->getFixtureTempDirectory() . '/Source/ValueObject/MeSearch.php',
         ];
 
         // skip known service types
         yield [
-            __DIR__ . '/Source/Utils/SomeSuffixedTest.php.inc',
+            new SmartFileInfo(__DIR__ . '/Source/Utils/SomeSuffixedTest.php.inc'),
             $this->getFixtureTempDirectory() . '/Source/Utils/SomeSuffixedTest.php.inc',
         ];
     }

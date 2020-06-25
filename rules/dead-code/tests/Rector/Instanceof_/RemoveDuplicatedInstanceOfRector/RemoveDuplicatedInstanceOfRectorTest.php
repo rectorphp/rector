@@ -7,15 +7,16 @@ namespace Rector\DeadCode\Tests\Rector\Instanceof_\RemoveDuplicatedInstanceOfRec
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveDuplicatedInstanceOfRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

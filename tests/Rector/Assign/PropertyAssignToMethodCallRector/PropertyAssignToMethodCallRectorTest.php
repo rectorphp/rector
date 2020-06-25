@@ -9,15 +9,16 @@ use Rector\Core\Rector\Assign\PropertyAssignToMethodCallRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
 use Rector\Core\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

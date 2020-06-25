@@ -7,15 +7,16 @@ namespace Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddLiteralSeparatorToNumberRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

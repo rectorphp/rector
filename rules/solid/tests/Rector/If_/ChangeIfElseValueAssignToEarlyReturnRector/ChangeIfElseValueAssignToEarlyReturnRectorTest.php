@@ -7,15 +7,16 @@ namespace Rector\SOLID\Tests\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRect
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SOLID\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeIfElseValueAssignToEarlyReturnRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

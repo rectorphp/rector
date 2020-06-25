@@ -6,6 +6,7 @@ namespace Rector\Core\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see https://github.com/symfony/symfony/commit/912fc4de8fd6de1e5397be4a94d39091423e5188
@@ -15,9 +16,9 @@ final class Symfony28Test extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

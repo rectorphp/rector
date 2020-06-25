@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\Rector\Property\RemoveNullPropertyInitializationRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TypedPropertiesRemoveNullPropertyInitializationRectorTest extends AbstractRectorTestCase
 {
@@ -15,9 +16,9 @@ final class TypedPropertiesRemoveNullPropertyInitializationRectorTest extends Ab
      * @dataProvider provideData()
      * @requires PHP >= 7.4
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

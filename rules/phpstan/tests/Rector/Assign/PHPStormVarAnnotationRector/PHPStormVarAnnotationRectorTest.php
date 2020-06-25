@@ -7,15 +7,16 @@ namespace Rector\PHPStan\Tests\Rector\Assign\PHPStormVarAnnotationRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPStan\Rector\Assign\PHPStormVarAnnotationRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PHPStormVarAnnotationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

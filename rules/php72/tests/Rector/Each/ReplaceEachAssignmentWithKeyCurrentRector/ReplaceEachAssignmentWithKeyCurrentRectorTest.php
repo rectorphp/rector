@@ -8,15 +8,16 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php72\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector;
 use SplFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReplaceEachAssignmentWithKeyCurrentRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     /**

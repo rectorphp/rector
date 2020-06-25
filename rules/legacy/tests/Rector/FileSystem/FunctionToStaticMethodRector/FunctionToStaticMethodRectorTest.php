@@ -6,12 +6,14 @@ namespace Rector\Legacy\Tests\Rector\FileSystem\FunctionToStaticMethodRector;
 
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Rector\Legacy\Rector\FileSystem\FunctionToStaticMethodRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FunctionToStaticMethodRectorTest extends AbstractFileSystemRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFile(__DIR__ . '/Source/static_functions.php');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Source/static_functions.php');
+        $this->doTestFileInfo($fixtureFileInfo);
 
         $this->assertFileExists($this->getFixtureTempDirectory() . '/Source/StaticFunctions.php');
         $this->assertFileEquals(

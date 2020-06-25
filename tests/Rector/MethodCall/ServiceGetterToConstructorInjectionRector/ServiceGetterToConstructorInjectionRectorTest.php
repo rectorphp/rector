@@ -9,15 +9,16 @@ use Rector\Core\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService;
 use Rector\Core\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

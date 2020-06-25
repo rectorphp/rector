@@ -7,15 +7,16 @@ namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector;
 use Iterator;
 use Rector\CodeQuality\Rector\For_\ForToForeachRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ForToForeachRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

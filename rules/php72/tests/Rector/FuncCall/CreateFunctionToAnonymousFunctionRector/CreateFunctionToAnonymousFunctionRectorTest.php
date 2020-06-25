@@ -7,15 +7,16 @@ namespace Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRe
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CreateFunctionToAnonymousFunctionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

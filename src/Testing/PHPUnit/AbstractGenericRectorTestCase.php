@@ -7,7 +7,7 @@ namespace Rector\Core\Testing\PHPUnit;
 use Iterator;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Testing\StaticFixtureProvider;
+use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
@@ -75,7 +75,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
 
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator
     {
-        return StaticFixtureProvider::yieldFilesFromDirectory($directory, $suffix);
+        return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 
     protected function setParameter(string $name, $value): void

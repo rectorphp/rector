@@ -4,20 +4,28 @@ declare(strict_types=1);
 
 namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector;
 
+use Iterator;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class EventListenerToEventSubscriberRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideData()
+     */
+    public function test(SmartFileInfo $fileInfo): void
     {
         // wtf: all test have to be in single file due to autoloading race-condigition and container creating issue of fixture
         $this->setParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/config/listener_services.xml');
 
-        $this->doTestFile(__DIR__ . '/Fixture/some_listener.php.inc');
-        $this->doTestFile(__DIR__ . '/Fixture/with_priority_listener.php.inc');
-        $this->doTestFile(__DIR__ . '/Fixture/multiple_listeners.php.inc');
+        $this->doTestFileInfo($fileInfo);
+    }
+
+    public function provideData(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

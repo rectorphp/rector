@@ -7,15 +7,16 @@ namespace Rector\Php70\Tests\Rector\List_\ListSwapArrayOrderRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\List_\ListSwapArrayOrderRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ListSwapArrayOrderRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

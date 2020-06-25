@@ -7,15 +7,16 @@ namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeGetIdTypeToUuidRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\ClassMethod\ChangeGetIdTypeToUuidRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeGetIdTypeToUuidRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

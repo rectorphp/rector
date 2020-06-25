@@ -7,15 +7,16 @@ namespace Rector\Doctrine\Tests\Rector\Property\AddUuidAnnotationsToIdPropertyRe
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddUuidAnnotationsToIdPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

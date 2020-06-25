@@ -7,15 +7,16 @@ namespace Rector\Php70\Tests\Rector\Ternary\TernaryToSpaceshipRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TernaryToSpaceshipRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

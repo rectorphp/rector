@@ -7,15 +7,16 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\ChangeArrayPushToArrayAssignR
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeArrayPushToArrayAssignRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

@@ -7,15 +7,16 @@ namespace Rector\Restoration\Tests\Rector\ClassConstFetch\MissingClassConstantRe
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MissingClassConstantReferenceToStringRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

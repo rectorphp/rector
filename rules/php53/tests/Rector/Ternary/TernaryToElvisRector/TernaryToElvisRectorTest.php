@@ -7,15 +7,16 @@ namespace Rector\Php53\Tests\Rector\Ternary\TernaryToElvisRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TernaryToElvisRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

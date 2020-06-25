@@ -7,15 +7,16 @@ namespace Rector\CakePHP\Tests\Rector\Name\ImplicitShortClassNameUseStatementRec
 use Iterator;
 use Rector\CakePHP\Rector\Name\ImplicitShortClassNameUseStatementRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ImplicitShortClassNameUseStatementRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

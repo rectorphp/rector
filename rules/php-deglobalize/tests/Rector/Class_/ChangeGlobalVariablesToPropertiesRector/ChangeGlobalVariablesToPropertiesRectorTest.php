@@ -7,15 +7,16 @@ namespace Rector\PhpDeglobalize\Tests\Rector\Class_\ChangeGlobalVariablesToPrope
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PhpDeglobalize\Rector\Class_\ChangeGlobalVariablesToPropertiesRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeGlobalVariablesToPropertiesRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

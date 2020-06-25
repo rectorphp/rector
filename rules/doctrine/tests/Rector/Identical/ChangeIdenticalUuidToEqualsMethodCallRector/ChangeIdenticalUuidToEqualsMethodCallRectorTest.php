@@ -7,15 +7,16 @@ namespace Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMeth
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeIdenticalUuidToEqualsMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

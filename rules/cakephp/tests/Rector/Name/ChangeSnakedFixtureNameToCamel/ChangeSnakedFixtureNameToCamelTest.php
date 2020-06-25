@@ -7,15 +7,16 @@ namespace Rector\CakePHP\Tests\Rector\Name\ChangeSnakedFixtureNameToCamel;
 use Iterator;
 use Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeSnakedFixtureNameToCamelTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

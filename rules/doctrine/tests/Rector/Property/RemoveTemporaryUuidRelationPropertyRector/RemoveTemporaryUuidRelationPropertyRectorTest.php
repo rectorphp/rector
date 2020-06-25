@@ -7,15 +7,16 @@ namespace Rector\Doctrine\Tests\Rector\Property\RemoveTemporaryUuidRelationPrope
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\Property\RemoveTemporaryUuidRelationPropertyRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveTemporaryUuidRelationPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

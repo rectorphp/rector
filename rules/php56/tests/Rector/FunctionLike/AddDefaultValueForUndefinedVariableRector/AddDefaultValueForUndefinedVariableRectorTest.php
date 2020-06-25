@@ -7,15 +7,16 @@ namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVari
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator
@@ -27,9 +28,9 @@ final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRector
      * @dataProvider provideDataPhp74()
      * @requires PHP >= 7.4
      */
-    public function testPhp74(string $file): void
+    public function testPhp74(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideDataPhp74(): Iterator

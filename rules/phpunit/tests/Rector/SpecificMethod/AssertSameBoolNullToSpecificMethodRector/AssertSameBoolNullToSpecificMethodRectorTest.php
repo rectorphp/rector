@@ -7,15 +7,16 @@ namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertSameBoolNullToSpecifi
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AssertSameBoolNullToSpecificMethodRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

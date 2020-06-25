@@ -8,15 +8,16 @@ use Iterator;
 use Rector\Core\Rector\Visibility\ChangePropertyVisibilityRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

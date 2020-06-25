@@ -7,15 +7,16 @@ namespace Rector\Php53\Tests\Rector\FuncCall\DirNameFileConstantToDirConstantRec
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DirNameFileConstantToDirConstantRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

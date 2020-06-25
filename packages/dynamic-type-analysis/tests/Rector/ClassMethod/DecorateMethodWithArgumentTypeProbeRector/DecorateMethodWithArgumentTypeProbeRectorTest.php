@@ -7,15 +7,16 @@ namespace Rector\DynamicTypeAnalysis\Tests\Rector\ClassMethod\DecorateMethodWith
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DynamicTypeAnalysis\Rector\ClassMethod\DecorateMethodWithArgumentTypeProbeRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DecorateMethodWithArgumentTypeProbeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

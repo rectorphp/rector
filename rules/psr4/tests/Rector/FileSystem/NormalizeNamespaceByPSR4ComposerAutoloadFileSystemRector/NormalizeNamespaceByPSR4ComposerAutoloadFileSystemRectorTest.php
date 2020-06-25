@@ -6,12 +6,15 @@ namespace Rector\PSR4\Tests\Rector\FileSystem\NormalizeNamespaceByPSR4ComposerAu
 
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Rector\PSR4\Rector\FileSystem\NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRectorTest extends AbstractFileSystemRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/namespace_less_class.php.inc');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/namespace_less_class.php.inc');
+        $this->doTestFileInfo($fixtureFileInfo);
+
         $this->assertFileExists($this->getFixtureTempDirectory() . '/Fixture/namespace_less_class.php.inc');
 
         $this->assertFileEquals(

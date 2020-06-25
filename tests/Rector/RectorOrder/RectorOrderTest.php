@@ -9,6 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Covers https://github.com/rectorphp/rector/pull/266#issuecomment-355725764
@@ -18,9 +19,9 @@ final class RectorOrderTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

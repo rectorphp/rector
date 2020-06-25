@@ -7,15 +7,16 @@ namespace Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertInternalTypeRecto
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SpecificAssertInternalTypeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

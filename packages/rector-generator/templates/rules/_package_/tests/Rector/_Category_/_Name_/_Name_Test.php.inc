@@ -11,9 +11,9 @@ final class _Name_Test extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): \Iterator

@@ -7,15 +7,16 @@ namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveDuplicatedIfReturnRect
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveDuplicatedIfReturnRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

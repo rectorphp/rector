@@ -7,15 +7,16 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\RemoveSoleValueSprintfRector;
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveSoleValueSprintfRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

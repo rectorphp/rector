@@ -9,15 +9,16 @@ use Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\Klarka;
 use Rector\Core\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeContainer;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

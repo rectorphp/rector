@@ -7,15 +7,16 @@ namespace Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantRefe
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class EntityAliasToClassConstantReferenceRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

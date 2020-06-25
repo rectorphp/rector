@@ -6,12 +6,14 @@ namespace Rector\NetteToSymfony\Tests\Rector\FIleSystem\DeleteFactoryInterfaceRe
 
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DeleteFactoryInterfaceFileSystemRectorTest extends AbstractFileSystemRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFile(__DIR__ . '/Source/SomeFactoryInterface.php');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Source/SomeFactoryInterface.php');
+        $this->doTestFileInfo($fixtureFileInfo);
 
         $temporaryFilePath = $this->getFixtureTempDirectory() . '/Source/SomeFactoryInterface.php';
 
