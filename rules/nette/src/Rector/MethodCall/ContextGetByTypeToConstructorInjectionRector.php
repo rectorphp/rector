@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\Rector\FrameworkBundle\AbstractToConstructorInjectionRector;
 
 /**
@@ -82,6 +83,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->isInTestClass($node)) {
+            return null;
+        }
+
         if (! $node->var instanceof PropertyFetch) {
             return null;
         }
@@ -95,5 +100,15 @@ PHP
         }
 
         return $this->processMethodCallNode($node);
+    }
+
+    private function isInTestClass(Node $node): bool
+    {
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode === null) {
+            return false;
+        }
+
+        return $this->isObjectTypes($classNode, ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']);
     }
 }
