@@ -86,11 +86,20 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isObjectTypes($node->var, ['Symfony\Bundle\FrameworkBundle\Controller\Controller', 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController']) && $this->isName($node->name, 'createForm')) {
+        if ($this->isObjectTypes(
+            $node->var,
+            [
+                'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+                'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
+            ]
+        ) && $this->isName($node->name, 'createForm')) {
             return $this->processNewInstance($node, 0, 2);
         }
 
-        if (! $this->isObjectTypes($node->var, ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface'])) {
+        if (! $this->isObjectTypes(
+            $node->var,
+            ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface']
+        )) {
             return null;
         }
 
