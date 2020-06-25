@@ -7,7 +7,6 @@ namespace Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector;
 use Iterator;
 use Rector\Core\Rector\MethodBody\FluentReplaceRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClass;
 use Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClassInterface;
 
 final class FluentReplaceRectorTest extends AbstractRectorTestCase
