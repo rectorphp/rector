@@ -138,6 +138,10 @@ PHP
             return true;
         }
 
+        if ($this->classChildAnalyzer->hasParentClassConstructor($class)) {
+            return true;
+        }
+
         // it needs @var tag as well, to get the type
         if ($phpDocInfo->getVarTagValue() !== null) {
             return false;

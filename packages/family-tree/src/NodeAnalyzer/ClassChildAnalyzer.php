@@ -35,6 +35,31 @@ final class ClassChildAnalyzer
         return false;
     }
 
+    public function hasParentClassConstructor(Class_ $class): bool
+    {
+        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return false;
+        }
+
+        $classParents = class_parents($className);
+        foreach ($classParents as $classParent) {
+            $parentReflectionClass = new ReflectionClass($classParent);
+            $constructMethodReflection = $parentReflectionClass->getConstructor();
+            if ($constructMethodReflection === null) {
+                continue;
+            }
+
+            if ($constructMethodReflection->class !== $classParent) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     private function getChildClasses(Class_ $class): array
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
