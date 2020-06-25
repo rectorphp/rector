@@ -7,15 +7,16 @@ namespace Rector\Php73\Tests\Rector\FuncCall\SensitiveDefineRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php73\Rector\FuncCall\SensitiveDefineRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SensitiveDefineRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

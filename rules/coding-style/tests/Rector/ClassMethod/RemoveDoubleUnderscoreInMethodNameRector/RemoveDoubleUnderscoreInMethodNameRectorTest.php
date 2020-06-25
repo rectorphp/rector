@@ -8,15 +8,16 @@ use Iterator;
 use Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveDoubleUnderscoreInMethodNameRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     /**

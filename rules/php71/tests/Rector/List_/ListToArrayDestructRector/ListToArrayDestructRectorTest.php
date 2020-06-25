@@ -7,15 +7,16 @@ namespace Rector\Php71\Tests\Rector\List_\ListToArrayDestructRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php71\Rector\List_\ListToArrayDestructRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ListToArrayDestructRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

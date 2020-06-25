@@ -7,15 +7,16 @@ namespace Rector\Architecture\Tests\Rector\Class_\ConstructorInjectionToActionIn
 use Iterator;
 use Rector\Architecture\Rector\Class_\ConstructorInjectionToActionInjectionRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ConstructorInjectionToActionInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator

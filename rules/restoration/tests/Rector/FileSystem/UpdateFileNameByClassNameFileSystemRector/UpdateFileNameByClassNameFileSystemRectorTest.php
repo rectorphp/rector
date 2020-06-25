@@ -6,12 +6,15 @@ namespace Rector\Restoration\Tests\Rector\FileSystem\UpdateFileNameByClassNameFi
 
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Rector\Restoration\Rector\FileSystem\UpdateFileNameByClassNameFileSystemRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UpdateFileNameByClassNameFileSystemRectorTest extends AbstractFileSystemRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/different_class_name.php.inc');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/different_class_name.php.inc');
+        $this->doTestFileInfo($fixtureFileInfo);
+
         $this->assertFileExists($this->getFixtureTempDirectory() . '/Fixture/CorrectClassName.php');
     }
 

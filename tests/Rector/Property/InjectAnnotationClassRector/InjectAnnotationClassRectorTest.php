@@ -10,20 +10,21 @@ use JMS\DiExtraBundle\Annotation\Inject;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\Property\InjectAnnotationClassRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
         $this->setParameter(
             Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
             __DIR__ . '/../../../../rules/symfony/tests/Rector/FrameworkBundle/GetToConstructorInjectionRector/xml/services.xml'
         );
 
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

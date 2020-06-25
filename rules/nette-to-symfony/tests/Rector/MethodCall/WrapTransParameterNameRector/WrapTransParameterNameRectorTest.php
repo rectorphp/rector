@@ -7,15 +7,16 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRe
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class WrapTransParameterNameRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

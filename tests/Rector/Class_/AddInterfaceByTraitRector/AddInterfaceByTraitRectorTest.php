@@ -9,15 +9,16 @@ use Rector\Core\Rector\Class_\AddInterfaceByTraitRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface;
 use Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddInterfaceByTraitRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

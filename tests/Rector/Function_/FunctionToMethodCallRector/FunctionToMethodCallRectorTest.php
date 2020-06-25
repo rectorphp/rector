@@ -7,15 +7,16 @@ namespace Rector\Core\Tests\Rector\Function_\FunctionToMethodCallRector;
 use Iterator;
 use Rector\Core\Rector\Function_\FunctionToMethodCallRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FunctionToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

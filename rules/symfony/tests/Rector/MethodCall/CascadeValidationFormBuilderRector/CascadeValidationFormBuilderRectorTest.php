@@ -7,15 +7,16 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\CascadeValidationFormBuilderRec
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CascadeValidationFormBuilderRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

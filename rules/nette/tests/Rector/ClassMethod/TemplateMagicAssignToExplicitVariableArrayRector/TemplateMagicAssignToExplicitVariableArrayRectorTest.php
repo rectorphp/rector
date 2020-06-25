@@ -7,15 +7,16 @@ namespace Rector\Nette\Tests\Rector\ClassMethod\TemplateMagicAssignToExplicitVar
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TemplateMagicAssignToExplicitVariableArrayRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

@@ -7,15 +7,16 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclaration
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CovarianceTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

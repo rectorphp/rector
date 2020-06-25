@@ -7,15 +7,16 @@ namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeSetIdToUuidValueRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

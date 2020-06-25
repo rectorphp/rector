@@ -9,15 +9,16 @@ use Rector\Core\Rector\New_\NewToStaticCallRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
 use Rector\Core\Tests\Rector\New_\NewToStaticCallRector\Source\IntoStaticClass;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NewToStaticCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

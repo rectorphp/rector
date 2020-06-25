@@ -7,15 +7,16 @@ namespace Rector\Symfony\Tests\Rector\Form\FormIsValidRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\Form\FormIsValidRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FormIsValidRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

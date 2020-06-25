@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PropertyTypeParamTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
@@ -15,9 +16,9 @@ final class PropertyTypeParamTypeDeclarationRectorTest extends AbstractRectorTes
      * @requires PHP >= 7.4
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

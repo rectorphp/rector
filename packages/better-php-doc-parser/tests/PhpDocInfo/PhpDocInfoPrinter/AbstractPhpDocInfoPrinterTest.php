@@ -12,7 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\Testing\StaticFixtureProvider;
+use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
@@ -49,6 +49,6 @@ abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
 
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
     {
-        return StaticFixtureProvider::yieldFilesFromDirectory($directory, $suffix);
+        return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 }

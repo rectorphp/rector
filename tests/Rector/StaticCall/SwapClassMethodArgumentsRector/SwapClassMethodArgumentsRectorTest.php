@@ -8,15 +8,16 @@ use Iterator;
 use Rector\Core\Rector\StaticCall\SwapClassMethodArgumentsRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture\SomeClass;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SwapClassMethodArgumentsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

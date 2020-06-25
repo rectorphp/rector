@@ -7,6 +7,7 @@ namespace Rector\Php74\Tests\Rector\Property\RestoreDefaultNullToNullableTypePro
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RestoreDefaultNullToNullableTypePropertyRectorTest extends AbstractRectorTestCase
 {
@@ -14,9 +15,9 @@ final class RestoreDefaultNullToNullableTypePropertyRectorTest extends AbstractR
      * @requires PHP >= 7.4
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

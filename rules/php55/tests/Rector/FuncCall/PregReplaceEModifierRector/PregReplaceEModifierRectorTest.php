@@ -7,15 +7,16 @@ namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PregReplaceEModifierRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

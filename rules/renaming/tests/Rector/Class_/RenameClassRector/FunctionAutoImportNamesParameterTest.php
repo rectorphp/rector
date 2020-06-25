@@ -10,6 +10,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\PostRector\Rector\NameImportingPostRector
@@ -19,11 +20,11 @@ final class FunctionAutoImportNamesParameterTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(string $filePath): void
+    public function test(SmartFileInfo $filePath): void
     {
         $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
 
-        $this->doTestFile($filePath);
+        $this->doTestFileInfo($filePath);
     }
 
     public function provideData(): Iterator

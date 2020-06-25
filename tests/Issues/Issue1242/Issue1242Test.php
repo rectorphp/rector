@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\Issues\Issue1242;
 
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Issue1242Test extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/fixture1242.php.inc');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/fixture1242.php.inc');
+        $this->doTestFileInfo($fixtureFileInfo);
     }
 
     protected function provideConfig(): string

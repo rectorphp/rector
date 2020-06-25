@@ -7,15 +7,16 @@ namespace Rector\Phalcon\Tests\Rector\MethodCall\DecoupleSaveMethodCallWithArgum
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Phalcon\Rector\MethodCall\DecoupleSaveMethodCallWithArgumentToAssignRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DecoupleSaveMethodCallWithArgumentToAssignRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

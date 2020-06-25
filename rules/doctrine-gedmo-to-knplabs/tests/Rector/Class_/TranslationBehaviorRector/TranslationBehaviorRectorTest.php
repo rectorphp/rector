@@ -6,12 +6,15 @@ namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\TranslationBehaviorR
 
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DoctrineGedmoToKnplabs\Rector\Class_\TranslationBehaviorRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TranslationBehaviorRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/fixture.php.inc');
+        $fitureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc');
+        $this->doTestFileInfo($fitureFileInfo);
+
         $this->doTestExtraFile('SomeClassTranslation.php', __DIR__ . '/Source/SomeClassTranslation.php');
     }
 

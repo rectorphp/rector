@@ -7,15 +7,16 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeR
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddArrayReturnDocTypeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

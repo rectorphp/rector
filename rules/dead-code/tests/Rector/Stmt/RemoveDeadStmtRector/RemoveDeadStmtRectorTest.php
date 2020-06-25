@@ -7,15 +7,16 @@ namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveDeadStmtRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Stmt\RemoveDeadStmtRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveDeadStmtRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator
@@ -26,9 +27,9 @@ final class RemoveDeadStmtRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideDataForTestKeepComments()
      */
-    public function testKeepComments(string $file): void
+    public function testKeepComments(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideDataForTestKeepComments(): Iterator

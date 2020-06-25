@@ -11,19 +11,20 @@ use Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRect
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ThisClassCallsMethodInConstructor;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
         $this->setParameter(
             Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
             __DIR__ . '/../GetToConstructorInjectionRector/xml/services.xml'
         );
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

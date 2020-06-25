@@ -8,15 +8,16 @@ use Iterator;
 use Rector\Core\Rector\ClassLike\RemoveTraitRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\ClassLike\RemoveTraitRector\Source\TraitToBeRemoved;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveTraitRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

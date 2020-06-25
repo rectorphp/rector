@@ -7,15 +7,16 @@ namespace Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityM
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ManagerRegistryGetManagerToEntityManagerRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

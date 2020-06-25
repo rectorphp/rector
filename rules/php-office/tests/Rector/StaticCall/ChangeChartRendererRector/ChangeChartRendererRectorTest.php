@@ -7,15 +7,16 @@ namespace Rector\PHPOffice\Tests\Rector\StaticCall\ChangeChartRendererRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPOffice\Rector\StaticCall\ChangeChartRendererRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeChartRendererRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

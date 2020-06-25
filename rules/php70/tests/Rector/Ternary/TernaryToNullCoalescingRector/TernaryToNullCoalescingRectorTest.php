@@ -7,6 +7,7 @@ namespace Rector\Php70\Tests\Rector\Ternary\TernaryToNullCoalescingRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Some tests copied from:
@@ -18,9 +19,9 @@ final class TernaryToNullCoalescingRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

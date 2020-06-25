@@ -10,15 +10,16 @@ use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameNonPhpTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $filePath): void
+    public function test(SmartFileInfo $filePath): void
     {
-        $this->doTestFileWithoutAutoload($filePath);
+        $this->doTestFileInfoWithoutAutoload($filePath);
     }
 
     public function provideData(): Iterator

@@ -7,15 +7,16 @@ namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class StringToArrayArgumentProcessRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

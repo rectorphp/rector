@@ -7,15 +7,16 @@ namespace Rector\PHPStan\Tests\Rector\Cast\RecastingRemovalRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPStan\Rector\Cast\RecastingRemovalRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RecastingRemovalRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

@@ -7,15 +7,16 @@ namespace Rector\DeadCode\Tests\Rector\Expression\SimplifyMirrorAssignRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SimplifyMirrorAssignRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

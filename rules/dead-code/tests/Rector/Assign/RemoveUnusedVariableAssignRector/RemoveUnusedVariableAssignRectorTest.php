@@ -7,15 +7,16 @@ namespace Rector\DeadCode\Tests\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveUnusedVariableAssignRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

@@ -7,15 +7,16 @@ namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentR
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveParentCallWithoutParentRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

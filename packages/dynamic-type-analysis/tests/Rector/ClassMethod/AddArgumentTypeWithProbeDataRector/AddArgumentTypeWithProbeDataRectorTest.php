@@ -10,6 +10,7 @@ use Rector\DynamicTypeAnalysis\Probe\ProbeStaticStorage;
 use Rector\DynamicTypeAnalysis\Probe\TypeStaticProbe;
 use Rector\DynamicTypeAnalysis\Rector\ClassMethod\AddArgumentTypeWithProbeDataRector;
 use Rector\DynamicTypeAnalysis\Tests\Rector\ClassMethod\AddArgumentTypeWithProbeDataRector\Fixture\SomeClass;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddArgumentTypeWithProbeDataRectorTest extends AbstractRectorTestCase
 {
@@ -21,11 +22,11 @@ final class AddArgumentTypeWithProbeDataRectorTest extends AbstractRectorTestCas
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
         $this->initializeProbeData();
 
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

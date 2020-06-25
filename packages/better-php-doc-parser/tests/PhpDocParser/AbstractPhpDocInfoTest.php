@@ -12,9 +12,9 @@ use Rector\BetterPhpDocParser\Tests\PhpDocParser\Helper\TagValueToPhpParserNodeM
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Testing\StaticFixtureProvider;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -48,7 +48,7 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     /**
      * @param class-string $tagValueNodeType
      */
-    protected function doTestPrintedPhpDocInfo(string $filePath, string $tagValueNodeType): void
+    protected function doTestPrintedPhpDocInfo(SmartFileInfo $fileInfo, string $tagValueNodeType): void
     {
         if (! isset(TagValueToPhpParserNodeMap::MAP[$tagValueNodeType])) {
             throw new ShouldNotHappenException(sprintf(
@@ -61,41 +61,39 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
 
         $nodeType = TagValueToPhpParserNodeMap::MAP[$tagValueNodeType];
 
-        $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($filePath, $nodeType);
+        $nodeWithPhpDocInfo = $this->parseFileAndGetFirstNodeOfType($fileInfo, $nodeType);
 
         $docComment = $nodeWithPhpDocInfo->getDocComment();
         if ($docComment === null) {
-            throw new ShouldNotHappenException(sprintf('Doc comments for "%s" file cannot not be empty', $filePath));
+            throw new ShouldNotHappenException(sprintf('Doc comments for "%s" file cannot not be empty', $fileInfo));
         }
 
         $originalDocCommentText = $docComment->getText();
         $printedPhpDocInfo = $this->printNodePhpDocInfoToString($nodeWithPhpDocInfo);
 
-        $errorMessage = $this->createErrorMessage($filePath);
+        $errorMessage = $this->createErrorMessage($fileInfo);
         $this->assertSame($originalDocCommentText, $printedPhpDocInfo, $errorMessage);
 
-        $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $tagValueNodeType, $filePath);
+        $this->doTestContainsTagValueNodeType($nodeWithPhpDocInfo, $tagValueNodeType, $fileInfo);
     }
 
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
     {
-        return StaticFixtureProvider::yieldFilesFromDirectory($directory, $suffix);
+        return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 
-    /**
-     * @return string[]
-     */
-    protected function findFilesFromDirectory(string $directory, string $suffix = '*.php'): array
+    protected function findFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
     {
-        return StaticFixtureProvider::findFilesFromDirectory($directory, $suffix);
+        return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 
     /**
      * @param class-string $nodeType
      */
-    private function parseFileAndGetFirstNodeOfType(string $filePath, string $nodeType): Node
+    private function parseFileAndGetFirstNodeOfType(SmartFileInfo $fileInfo, string $nodeType): Node
     {
-        $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate(new SmartFileInfo($filePath));
+        $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($fileInfo);
+
         return $this->betterNodeFinder->findFirstInstanceOf($nodes, $nodeType);
     }
 
@@ -109,20 +107,16 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
     }
 
-    private function createErrorMessage(string $filePath): string
+    private function createErrorMessage(SmartFileInfo $fileInfo): string
     {
-        $fileInfo = new SmartFileInfo($filePath);
-
         return 'Caused by: ' . $fileInfo->getRelativeFilePathFromCwd() . PHP_EOL;
     }
 
-    private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType, string $filePath): void
+    private function doTestContainsTagValueNodeType(Node $node, string $tagValueNodeType, SmartFileInfo $fileInfo): void
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        $message = (new SmartFileInfo($filePath))->getRelativeFilePathFromCwd();
-
-        $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType), $message);
+        $this->assertTrue($phpDocInfo->hasByType($tagValueNodeType), $fileInfo->getRelativeFilePathFromCwd());
     }
 }

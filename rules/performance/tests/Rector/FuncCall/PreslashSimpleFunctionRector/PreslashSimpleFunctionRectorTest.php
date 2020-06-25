@@ -7,15 +7,16 @@ namespace Rector\Performance\Tests\Rector\FuncCall\PreslashSimpleFunctionRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Performance\Rector\FuncCall\PreslashSimpleFunctionRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PreslashSimpleFunctionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

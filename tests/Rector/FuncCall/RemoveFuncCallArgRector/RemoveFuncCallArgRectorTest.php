@@ -8,15 +8,16 @@ use Iterator;
 use Rector\Core\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use SplFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveFuncCallArgRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     /**

@@ -7,6 +7,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractN
 use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector;
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends AbstractFileSystemRectorTestCase
 {
@@ -16,12 +17,12 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
      * @param string[][] $extraFiles
      */
     public function test(
-        string $originalFile,
+        SmartFileInfo $originalFileInfo,
         string $expectedFileLocation,
         string $expectedFileContent,
         array $extraFiles = []
     ): void {
-        $this->doTestFile($originalFile, array_keys($extraFiles));
+        $this->doTestFileInfo($originalFileInfo, array_keys($extraFiles));
 
         $this->assertFileExists($expectedFileLocation);
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
@@ -35,7 +36,7 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
     public function provideData(): Iterator
     {
         yield [
-            __DIR__ . '/Source/Entity/RandomInterface.php',
+            new SmartFileInfo(__DIR__ . '/Source/Entity/RandomInterface.php'),
             $this->getFixtureTempDirectory() . '/Source/Contract/RandomInterface.php',
             __DIR__ . '/Expected/ExpectedRandomInterface.php',
             // extra files
@@ -59,21 +60,21 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
 
         // skip nette control factory
         yield [
-            __DIR__ . '/Source/Control/ControlFactory.php',
+            new SmartFileInfo(__DIR__ . '/Source/Control/ControlFactory.php'),
             $this->getFixtureTempDirectory() . '/Source/Control/ControlFactory.php',
             __DIR__ . '/Source/Control/ControlFactory.php',
         ];
 
         // skip form control factory, even in docblock
         yield [
-            __DIR__ . '/Source/Control/FormFactory.php',
+            new SmartFileInfo(__DIR__ . '/Source/Control/FormFactory.php'),
             $this->getFixtureTempDirectory() . '/Source/Control/FormFactory.php',
             __DIR__ . '/Source/Control/FormFactory.php',
         ];
 
         // skip already in correct location
         yield [
-            __DIR__ . '/Source/Contract/KeepThisSomeInterface.php',
+            new SmartFileInfo(__DIR__ . '/Source/Contract/KeepThisSomeInterface.php'),
             $this->getFixtureTempDirectory() . '/Source/Contract/KeepThisSomeInterface.php',
             // no change
             __DIR__ . '/Source/Contract/KeepThisSomeInterface.php',

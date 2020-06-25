@@ -22,6 +22,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertChoiceTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\AbstractPhpDocInfoTest;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
 {
@@ -29,16 +30,18 @@ final class TagValueNodeReprintTest extends AbstractPhpDocInfoTest
      * @dataProvider provideData()
      * @param class-string $tagValueNodeClass
      */
-    public function test(string $filePath, string $tagValueNodeClass): void
+    public function test(SmartFileInfo $fileInfo, string $tagValueNodeClass): void
     {
-        $this->doTestPrintedPhpDocInfo($filePath, $tagValueNodeClass);
+        $this->doTestPrintedPhpDocInfo($fileInfo, $tagValueNodeClass);
     }
 
     public function provideData(): Iterator
     {
         foreach ($this->getDirectoriesByTagValueNodes() as $tagValueNode => $directory) {
-            foreach ($this->findFilesFromDirectory($directory) as $filePath) {
-                yield [$filePath, $tagValueNode];
+            foreach ($this->findFilesFromDirectory($directory) as $fileInfos) {
+                foreach ($fileInfos as $fileInfo) {
+                    yield [$fileInfo, $tagValueNode];
+                }
             }
         }
     }

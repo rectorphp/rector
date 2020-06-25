@@ -7,6 +7,7 @@ namespace Rector\Php72\Tests\Rector\Each\ListEachRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php72\Rector\Each\ListEachRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Test battery inspired by:
@@ -18,9 +19,9 @@ final class ListEachRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

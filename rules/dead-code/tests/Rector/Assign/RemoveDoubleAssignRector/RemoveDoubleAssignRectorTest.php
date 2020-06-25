@@ -7,15 +7,16 @@ namespace Rector\DeadCode\Tests\Rector\Assign\RemoveDoubleAssignRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveDoubleAssignRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

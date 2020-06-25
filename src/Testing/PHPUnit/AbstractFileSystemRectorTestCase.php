@@ -57,34 +57,28 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
     /**
      * @param string[] $extraFiles
      */
-    protected function doTestFileWithoutAutoload(string $file, array $extraFiles = []): string
-    {
-        return $this->doTestFile($file, $extraFiles, false);
-    }
-
-    /**
-     * @param string[] $extraFiles
-     */
-    protected function doTestFile(string $file, array $extraFiles = [], bool $autolaod = true): string
-    {
-        $temporaryFilePath = $this->createTemporaryFilePathFromFilePath($file);
+    protected function doTestFileInfo(
+        SmartFileInfo $fileInfo,
+        array $extraFiles = [],
+        bool $autolaod = true
+    ): SmartFileInfo {
+        $temporaryFileInfo = $this->createTemporaryFilePathFromFilePath($fileInfo);
 
         if ($autolaod) {
-            require_once $temporaryFilePath;
+            require_once $temporaryFileInfo->getRealPath();
         }
 
-        $fileInfo = new SmartFileInfo($temporaryFilePath);
+        $this->fileSystemFileProcessor->processFileInfo($temporaryFileInfo);
 
-        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
-
-        $filesInfos = [$fileInfo];
+        $filesInfos = [$temporaryFileInfo];
 
         foreach ($extraFiles as $extraFile) {
-            $temporaryExtraFilePath = $this->createTemporaryFilePathFromFilePath($extraFile);
-            $extraFileInfo = new SmartFileInfo($temporaryExtraFilePath);
-            $this->fileSystemFileProcessor->processFileInfo($extraFileInfo);
+            $extraFileInfo = new SmartFileInfo($extraFile);
 
-            $filesInfos[] = $extraFileInfo;
+            $temporaryExtraFileInfo = $this->createTemporaryFilePathFromFilePath($extraFileInfo);
+            $this->fileSystemFileProcessor->processFileInfo($temporaryExtraFileInfo);
+
+            $filesInfos[] = $temporaryExtraFileInfo;
         }
 
         foreach ($filesInfos as $fileInfo) {
@@ -103,7 +97,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
 
         $this->removedAndAddedFilesProcessor->run();
 
-        return $temporaryFilePath;
+        return $temporaryFileInfo;
     }
 
     protected function getRectorInterface(): string
@@ -140,10 +134,8 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $this->bootKernelWithConfigs(RectorKernel::class, $configFilePaths);
     }
 
-    private function createTemporaryFilePathFromFilePath(string $file): string
+    private function createTemporaryFilePathFromFilePath(SmartFileInfo $fileInfo): SmartFileInfo
     {
-        $fileInfo = new SmartFileInfo($file);
-
         // 1. get test case directory
         $reflectionClass = new ReflectionClass(static::class);
         $testCaseDirectory = dirname((string) $reflectionClass->getFileName());
@@ -153,9 +145,9 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $temporaryFilePath = $this->getFixtureTempDirectory() . '/' . $relativeFilePath;
 
         FileSystem::delete($temporaryFilePath);
-        FileSystem::copy($file, $temporaryFilePath, true);
+        FileSystem::copy($fileInfo->getRealPath(), $temporaryFilePath, true);
 
-        return $temporaryFilePath;
+        return new SmartFileInfo($temporaryFilePath);
     }
 
     private function createConfigFileTempPath(): string

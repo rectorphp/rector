@@ -8,15 +8,16 @@ use Iterator;
 use Rector\Core\Rector\Property\RenamePropertyRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\Property\RenamePropertyRector\Source\ClassWithProperties;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenamePropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

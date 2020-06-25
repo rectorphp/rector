@@ -7,15 +7,16 @@ namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\SoftDeletableBehavio
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DoctrineGedmoToKnplabs\Rector\Class_\SoftDeletableBehaviorRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SoftDeletableBehaviorRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

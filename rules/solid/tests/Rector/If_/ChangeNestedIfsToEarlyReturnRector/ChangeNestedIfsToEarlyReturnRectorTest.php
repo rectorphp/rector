@@ -7,15 +7,16 @@ namespace Rector\SOLID\Tests\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SOLID\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeNestedIfsToEarlyReturnRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

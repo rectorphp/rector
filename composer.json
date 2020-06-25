@@ -41,6 +41,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
+        "johnkary/phpunit-speedtrap": "^3.2",
         "ocramius/package-versions": "^1.4|^1.5",
         "phpunit/phpunit": "^8.5|^9.0",
         "psr/event-dispatcher": "^1.0",
@@ -48,9 +49,9 @@
         "slevomat/coding-standard": "dev-master",
         "symplify/changelog-linker": "^8.1.2",
         "symplify/easy-coding-standard": "^8.1.2",
+        "symplify/easy-testing": "^8.1.2",
         "symplify/monorepo-builder": "^8.1.2",
         "symplify/phpstan-extensions": "^8.1.2",
-        "symplify/easy-testing": "^8.1.2",
         "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
     "replace": {

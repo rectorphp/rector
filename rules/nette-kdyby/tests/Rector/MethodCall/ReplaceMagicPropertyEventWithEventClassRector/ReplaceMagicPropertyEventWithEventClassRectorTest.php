@@ -6,17 +6,20 @@ namespace Rector\NetteKdyby\Tests\Rector\MethodCall\ReplaceMagicPropertyEventWit
 
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRectorTestCase
 {
     public function testSkip(): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/skip_on_success_in_control.php.inc');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/skip_on_success_in_control.php.inc');
+        $this->doTestFileInfo($fixtureFileInfo);
     }
 
     public function testSimpleEvent(): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/simple_event.php.inc');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/simple_event.php.inc');
+        $this->doTestFileInfo($fixtureFileInfo);
 
         $expectedEventFilePath = $this->originalTempFileInfo->getPath() . '/Event/FileManagerUploadEvent.php';
         $this->assertFileExists($expectedEventFilePath);
@@ -25,7 +28,8 @@ final class ReplaceMagicPropertyEventWithEventClassRectorTest extends AbstractRe
 
     public function testDuplicatedEventParams(): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/duplicated_event_params.php.inc');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/duplicated_event_params.php.inc');
+        $this->doTestFileInfo($fixtureFileInfo);
 
         $expectedEventFilePath = $this->originalTempFileInfo->getPath() . '/Event/DuplicatedEventParamsUploadEvent.php';
         $this->assertFileExists($expectedEventFilePath);

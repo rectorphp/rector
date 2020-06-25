@@ -6,12 +6,14 @@ namespace Rector\NetteKdyby\Tests\Rector\ClassMethod\ReplaceMagicEventPropertySu
 
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteKdyby\Rector\ClassMethod\ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/fixture.php.inc');
+        $fixtureFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc');
+        $this->doTestFileInfo($fixtureFileInfo);
     }
 
     protected function getRectorClass(): string

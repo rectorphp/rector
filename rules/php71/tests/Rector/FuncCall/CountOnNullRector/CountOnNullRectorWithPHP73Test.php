@@ -7,15 +7,16 @@ namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php71\Rector\FuncCall\CountOnNullRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CountOnNullRectorWithPHP73Test extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

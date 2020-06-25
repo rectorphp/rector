@@ -7,15 +7,16 @@ namespace Rector\Guzzle\Tests\Rector\MethodCall\MessageAsArrayRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MessageAsArrayRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

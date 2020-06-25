@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\PostRector\Rector\NameImportingPostRector
@@ -16,13 +17,13 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
         $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
 
         $this->setParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER, false);
 
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): iterable

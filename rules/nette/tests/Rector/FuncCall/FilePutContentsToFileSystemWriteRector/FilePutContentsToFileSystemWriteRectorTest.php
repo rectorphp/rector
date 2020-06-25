@@ -7,15 +7,16 @@ namespace Rector\Nette\Tests\Rector\FuncCall\FilePutContentsToFileSystemWriteRec
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FilePutContentsToFileSystemWriteRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

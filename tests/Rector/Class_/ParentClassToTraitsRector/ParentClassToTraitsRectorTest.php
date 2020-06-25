@@ -11,15 +11,16 @@ use Rector\Core\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherPare
 use Rector\Core\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject;
 use Rector\Core\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait;
 use Rector\Core\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

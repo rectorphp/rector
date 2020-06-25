@@ -7,15 +7,16 @@ namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector;
 use Iterator;
 use Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveUnusedAliasRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

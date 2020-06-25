@@ -7,15 +7,16 @@ namespace Rector\Php72\Tests\Rector\ConstFetch\BarewordStringRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php72\Rector\ConstFetch\BarewordStringRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class BarewordStringRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFileWithoutAutoload($file);
+        $this->doTestFileInfoWithoutAutoload($file);
     }
 
     public function provideData(): Iterator

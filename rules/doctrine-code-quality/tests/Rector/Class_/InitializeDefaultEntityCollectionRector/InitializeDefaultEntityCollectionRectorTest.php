@@ -7,15 +7,16 @@ namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\InitializeDefaultEntity
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InitializeDefaultEntityCollectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

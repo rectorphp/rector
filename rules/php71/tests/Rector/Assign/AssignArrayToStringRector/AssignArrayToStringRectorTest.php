@@ -7,15 +7,16 @@ namespace Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php71\Rector\Assign\AssignArrayToStringRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AssignArrayToStringRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

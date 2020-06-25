@@ -13,7 +13,7 @@ final class _Name_ExtraTest extends AbstractRectorTestCase
      */
     public function test(string $inputFile, string $expectedExtraFileName, string $expectedExtraContentFilePath): void
     {
-        $this->doTestFile($inputFile);
+        $this->doTestFileInfo($inputFile);
         $this->doTestExtraFile($expectedExtraFileName, $expectedExtraContentFilePath);
     }
 

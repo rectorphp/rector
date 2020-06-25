@@ -7,6 +7,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDir
 use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MutualRenameTest extends AbstractFileSystemRectorTestCase
 {
@@ -16,12 +17,12 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
      * @param string[][] $extraFiles
      */
     public function test(
-        string $originalFile,
+        SmartFileInfo $originalFileInfo,
         string $expectedFileLocation,
         string $expectedFileContent,
         array $extraFiles = []
     ): void {
-        $this->doTestFile($originalFile, array_keys($extraFiles));
+        $this->doTestFileInfo($originalFileInfo, array_keys($extraFiles));
 
         $this->assertFileExists($expectedFileLocation);
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
@@ -35,7 +36,7 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
     public function provideData(): Iterator
     {
         yield [
-            __DIR__ . '/SourceMutualRename/Controller/Nested/AbstractBaseWithSpaceMapper.php',
+            new SmartFileInfo(__DIR__ . '/SourceMutualRename/Controller/Nested/AbstractBaseWithSpaceMapper.php'),
             $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/Nested/AbstractBaseWithSpaceMapper.php',
             __DIR__ . '/ExpectedMutualRename/Mapper/Nested/AbstractBaseWithSpaceMapper.php.inc',
 
@@ -50,7 +51,7 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
 
         // inversed order, but should have the same effect
         yield [
-            __DIR__ . '/SourceMutualRename/Entity/UserMapper.php',
+            new SmartFileInfo(__DIR__ . '/SourceMutualRename/Entity/UserMapper.php'),
             $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/UserMapper.php',
             __DIR__ . '/ExpectedMutualRename/Mapper/UserMapper.php.inc',
 

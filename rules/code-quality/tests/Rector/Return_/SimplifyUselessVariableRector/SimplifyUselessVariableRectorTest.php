@@ -7,6 +7,7 @@ namespace Rector\CodeQuality\Tests\Rector\Return_\SimplifyUselessVariableRector;
 use Iterator;
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Tests copied from:
@@ -18,9 +19,9 @@ final class SimplifyUselessVariableRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

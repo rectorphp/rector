@@ -10,15 +10,16 @@ use Rector\RemovingStatic\Rector\Class_\NewUniqueObjectToEntityFactoryRector;
 use Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector;
 use Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService;
 use Symplify\EasyTesting\Fixture\StaticFixtureSplitter;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
 
         $expectedFactoryFilePath = StaticFixtureSplitter::getTemporaryPath() . '/AnotherClassWithMoreArgumentsFactory.php';
 

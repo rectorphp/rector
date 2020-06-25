@@ -7,15 +7,16 @@ namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFuncCallToStaticCallRector
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameFuncCallToStaticCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

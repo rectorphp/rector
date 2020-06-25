@@ -7,15 +7,16 @@ namespace Rector\Laravel\Tests\Rector\Class_\InlineValidationRulesToArrayDefinit
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Laravel\Rector\Class_\InlineValidationRulesToArrayDefinitionRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InlineValidationRulesToArrayDefinitionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

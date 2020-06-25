@@ -7,15 +7,16 @@ namespace Rector\PHPOffice\Tests\Rector\MethodCall\GetDefaultStyleToGetParentRec
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPOffice\Rector\MethodCall\GetDefaultStyleToGetParentRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class GetDefaultStyleToGetParentRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

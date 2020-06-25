@@ -7,6 +7,7 @@ namespace Rector\Restoration\Tests\Rector\Property\MakeTypedPropertyNullableIfCh
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MakeTypedPropertyNullableIfCheckedRectorTest extends AbstractRectorTestCase
 {
@@ -14,9 +15,9 @@ final class MakeTypedPropertyNullableIfCheckedRectorTest extends AbstractRectorT
      * @requires PHP >= 7.4
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

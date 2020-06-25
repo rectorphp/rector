@@ -7,15 +7,16 @@ namespace Rector\Php54\Tests\Rector\FuncCall\RemoveReferenceFromCallRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveReferenceFromCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFileWithoutAutoload($file);
+        $this->doTestFileInfoWithoutAutoload($file);
     }
 
     public function provideData(): Iterator

@@ -8,15 +8,16 @@ use Iterator;
 use Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

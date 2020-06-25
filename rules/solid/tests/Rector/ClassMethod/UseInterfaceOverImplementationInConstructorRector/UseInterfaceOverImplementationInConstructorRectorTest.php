@@ -7,15 +7,16 @@ namespace Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationIn
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SOLID\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UseInterfaceOverImplementationInConstructorRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

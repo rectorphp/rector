@@ -9,15 +9,16 @@ use Rector\Core\Rector\Interface_\MergeInterfacesRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeInterface;
 use Rector\Core\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeOldInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MergeInterfacesRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

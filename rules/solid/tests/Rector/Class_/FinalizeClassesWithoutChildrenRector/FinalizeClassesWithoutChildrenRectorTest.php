@@ -7,15 +7,16 @@ namespace Rector\SOLID\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FinalizeClassesWithoutChildrenRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

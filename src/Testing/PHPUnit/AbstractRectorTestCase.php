@@ -137,17 +137,15 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         }
     }
 
-    protected function doTestFileWithoutAutoload(string $file): void
+    protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {
         $this->autoloadTestFixture = false;
-        $this->doTestFile($file);
+        $this->doTestFileInfo($fileInfo);
         $this->autoloadTestFixture = true;
     }
 
-    protected function doTestFile(string $fixtureFile): void
+    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
     {
-        $fixtureFileInfo = new SmartFileInfo($fixtureFile);
-
         [$originalFileInfo, $expectedFileInfo] = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $fixtureFileInfo,
             $this->autoloadTestFixture

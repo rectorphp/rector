@@ -7,15 +7,16 @@ namespace Rector\Php74\Tests\Rector\MethodCall\ChangeReflectionTypeToStringToGet
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeReflectionTypeToStringToGetNameRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

@@ -7,6 +7,7 @@ namespace Rector\Php70\Tests\Rector\FuncCall\MultiDirnameRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Some tests copied from:
@@ -17,9 +18,9 @@ final class MultiDirnameRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

@@ -7,15 +7,16 @@ namespace Rector\Php70\Tests\Rector\List_\EmptyListRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\List_\EmptyListRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class EmptyListRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFileWithoutAutoload($file);
+        $this->doTestFileInfoWithoutAutoload($file);
     }
 
     public function provideData(): Iterator

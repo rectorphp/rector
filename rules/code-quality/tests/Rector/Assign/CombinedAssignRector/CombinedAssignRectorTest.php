@@ -7,6 +7,7 @@ namespace Rector\CodeQuality\Tests\Rector\Assign\CombinedAssignRector;
 use Iterator;
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Some tests used from:
@@ -18,9 +19,9 @@ final class CombinedAssignRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

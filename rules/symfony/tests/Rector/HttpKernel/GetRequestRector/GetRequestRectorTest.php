@@ -7,15 +7,16 @@ namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\HttpKernel\GetRequestRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class GetRequestRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator

@@ -7,15 +7,16 @@ namespace Rector\Nette\Tests\Rector\FuncCall\PregFunctionToNetteUtilsStringsRect
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PregFunctionToNetteUtilsStringsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(SmartFileInfo $file): void
     {
-        $this->doTestFile($file);
+        $this->doTestFileInfo($file);
     }
 
     public function provideData(): Iterator
