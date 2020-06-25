@@ -9,6 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\RemovingStatic\Rector\Class_\NewUniqueObjectToEntityFactoryRector;
 use Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector;
 use Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService;
+use Symplify\EasyTesting\Fixture\StaticFixtureSplitter;
 
 final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
 {
@@ -19,11 +20,12 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
     {
         $this->doTestFile($file);
 
-        // test factory content
-        $this->assertFileExists($this->getTempPath() . '/AnotherClassWithMoreArgumentsFactory.php');
+        $expectedFactoryFilePath = StaticFixtureSplitter::getTemporaryPath() . '/AnotherClassWithMoreArgumentsFactory.php';
+
+        $this->assertFileExists($expectedFactoryFilePath);
         $this->assertFileEquals(
             __DIR__ . '/Source/ExpectedAnotherClassWithMoreArgumentsFactory.php',
-            $this->getTempPath() . '/AnotherClassWithMoreArgumentsFactory.php'
+            $expectedFactoryFilePath
         );
     }
 

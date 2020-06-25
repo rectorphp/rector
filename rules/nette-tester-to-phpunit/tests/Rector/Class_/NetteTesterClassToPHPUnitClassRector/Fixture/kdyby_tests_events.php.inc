@@ -5,8 +5,6 @@ namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUn
 use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\ORMTestCase;
 use Tester\Assert;
 
-require_once __DIR__ . '/bootstrap.php';
-
 class EventsCompatibilityTest extends ORMTestCase
 {
     /**

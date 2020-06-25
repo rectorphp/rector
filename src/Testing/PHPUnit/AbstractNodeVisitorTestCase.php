@@ -28,11 +28,6 @@ abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase
      */
     protected $parser;
 
-    /**
-     * @var FixtureSplitter
-     */
-    protected $fixtureSplitter;
-
     protected function setUp(): void
     {
         $this->bootKernelWithConfigs(RectorKernel::class, []);

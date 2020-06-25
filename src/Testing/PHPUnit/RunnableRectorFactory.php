@@ -6,6 +6,7 @@ namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Random;
+use Nette\Utils\Strings;
 use Rector\Core\Testing\Contract\RunnableInterface;
 use Rector\Core\Testing\PHPUnit\Runnable\ClassLikeNamesSuffixer;
 use Rector\Core\Testing\PHPUnit\Runnable\RunnableClassFinder;
@@ -13,11 +14,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RunnableRectorFactory
 {
-    /**
-     * @var FixtureSplitter
-     */
-    private $fixtureSplitter;
-
     /**
      * @var RunnableClassFinder
      */
@@ -28,18 +24,17 @@ final class RunnableRectorFactory
      */
     private $classLikeNamesSuffixer;
 
-    public function __construct(FixtureSplitter $fixtureSplitter)
+    public function __construct()
     {
-        $this->fixtureSplitter = $fixtureSplitter;
         $this->runnableClassFinder = new RunnableClassFinder();
         $this->classLikeNamesSuffixer = new ClassLikeNamesSuffixer();
     }
 
-    public function createRunnableClass(SmartFileInfo $classFileContent): RunnableInterface
+    public function createRunnableClass(SmartFileInfo $classContentFileInfo): RunnableInterface
     {
-        $temporaryPath = $this->fixtureSplitter->createTemporaryPathWithPrefix($classFileContent, 'runnable');
+        $temporaryPath = $this->createTemporaryPathWithPrefix($classContentFileInfo);
 
-        $fileContent = $classFileContent->getContents();
+        $fileContent = $classContentFileInfo->getContents();
         $classNameSuffix = $this->getTemporaryClassSuffix();
 
         $suffixedFileContent = $this->classLikeNamesSuffixer->suffixContent($fileContent, $classNameSuffix);
@@ -55,5 +50,13 @@ final class RunnableRectorFactory
     private function getTemporaryClassSuffix(): string
     {
         return Random::generate(30);
+    }
+
+    private function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo): string
+    {
+        // warning: if this hash is too short, the file can becom "identical"; took me 1 hour to find out
+        $hash = Strings::substring(md5($smartFileInfo->getRealPath()), -15);
+
+        return sprintf(sys_get_temp_dir() . '/_rector_runnable_%s_%s', $hash, $smartFileInfo->getBasename('.inc'));
     }
 }

@@ -5,8 +5,6 @@ namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPU
 use Tester\Assert;
 use Tester\TestCase;
 
-require_once __DIR__ . '/bootstrap.php';
-
 class ExtensionTest extends TestCase
 {
     public function setUp()
