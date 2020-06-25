@@ -26,10 +26,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use ReflectionClass;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @see https://github.com/symfony/symfony/commit/adf20c86fb0d8dc2859aa0d2821fe339d3551347
@@ -90,11 +86,20 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isObjectType($node->var, Controller::class) && $this->isName($node->name, 'createForm')) {
+        if ($this->isObjectTypes(
+            $node->var,
+            [
+                'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+                'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
+            ]
+        ) && $this->isName($node->name, 'createForm')) {
             return $this->processNewInstance($node, 0, 2);
         }
 
-        if (! $this->isObjectTypes($node->var, [FormBuilderInterface::class, FormInterface::class])) {
+        if (! $this->isObjectTypes(
+            $node->var,
+            ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface']
+        )) {
             return null;
         }
 
@@ -218,7 +223,7 @@ PHP
         }
 
         $formBuilderParamBuilder = $this->builderFactory->param('builder');
-        $formBuilderParamBuilder->setType(new FullyQualified(FormBuilderInterface::class));
+        $formBuilderParamBuilder->setType(new FullyQualified('Symfony\Component\Form\FormBuilderInterface'));
 
         $formBuilderParam = $formBuilderParamBuilder->getNode();
 
@@ -252,7 +257,7 @@ PHP
         }
 
         $resolverParamBuilder = $this->builderFactory->param('resolver');
-        $resolverParamBuilder->setType(new FullyQualified(OptionsResolver::class));
+        $resolverParamBuilder->setType(new FullyQualified('Symfony\Component\OptionsResolver\OptionsResolver'));
 
         $resolverParam = $resolverParamBuilder->getNode();
 
