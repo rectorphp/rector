@@ -20,6 +20,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -145,6 +147,8 @@ PHP
         }
 
         $objectType = $this->getObjectType($objectExpr);
+        $objectType = $this->popFirstObjectType($objectType);
+
         if ($objectType instanceof ObjectType) {
             $class = $this->classLikeParsedNodesFinder->findClass($objectType->getClassName());
 
@@ -263,5 +267,20 @@ PHP
             }
         }
         return false;
+    }
+
+    private function popFirstObjectType(Type $type): Type
+    {
+        if ($type instanceof UnionType) {
+            foreach ($type->getTypes() as $unionedType) {
+                if (! $unionedType instanceof ObjectType) {
+                    continue;
+                }
+
+                return $unionedType;
+            }
+        }
+
+        return $type;
     }
 }
