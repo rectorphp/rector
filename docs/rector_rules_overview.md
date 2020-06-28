@@ -10372,6 +10372,7 @@ Replace Sensio @Route annotation with Symfony one
 ### `TemplateAnnotationRector`
 
 - class: [`Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector`](/../master/rules/sensio/src/Rector/FrameworkExtraBundle/TemplateAnnotationRector.php)
+- [test fixtures](/../master/rules/sensio/tests/Rector/FrameworkExtraBundle/TemplateAnnotationRector/Fixture)
 
 Turns `@Template` annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
 

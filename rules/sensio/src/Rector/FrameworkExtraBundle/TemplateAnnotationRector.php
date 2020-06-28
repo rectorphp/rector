@@ -37,16 +37,10 @@ use Symfony\Component\HttpFoundation\Response;
  * @see https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
  * @see https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues/641
  *
- * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationVersion3RectorTest
- * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationVersion5RectorTest
+ * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationRectorTest
  */
 final class TemplateAnnotationRector extends AbstractRector
 {
-    /**
-     * @var int
-     */
-    private $version;
-
     /**
      * @var TemplateGuesser
      */
@@ -57,13 +51,9 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     private $funcCallManipulator;
 
-    public function __construct(
-        TemplateGuesser $templateGuesser,
-        FuncCallManipulator $funcCallManipulator,
-        int $version = 3
-    ) {
+    public function __construct(TemplateGuesser $templateGuesser, FuncCallManipulator $funcCallManipulator)
+    {
         $this->templateGuesser = $templateGuesser;
-        $this->version = $version;
         $this->funcCallManipulator = $funcCallManipulator;
     }
 
@@ -280,7 +270,7 @@ PHP
             return $sensioTemplateTagValueNode->getTemplate();
         }
 
-        return $this->templateGuesser->resolveFromClassMethodNode($classMethod, $this->version);
+        return $this->templateGuesser->resolveFromClassMethodNode($classMethod);
     }
 
     /**

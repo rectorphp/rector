@@ -9,7 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class TemplateAnnotationVersion3RectorTest extends AbstractRectorTestCase
+final class TemplateAnnotationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -21,18 +21,11 @@ final class TemplateAnnotationVersion3RectorTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureVersion3');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            TemplateAnnotationRector::class => [
-                '$version' => 3,
-            ],
-        ];
+        return TemplateAnnotationRector::class;
     }
 }

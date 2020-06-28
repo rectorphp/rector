@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Core\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture;
 
 class SomeAnotherClass
 {
