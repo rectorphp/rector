@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\FixtureVersion5;
+namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +23,7 @@ final class CompactController extends AbstractController
 -----
 <?php
 
-namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\FixtureVersion5;
+namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

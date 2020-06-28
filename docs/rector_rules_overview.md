@@ -4561,6 +4561,7 @@ services:
 ### `ReturnThisRemoveRector`
 
 - class: [`Rector\MagicDisclosure\Rector\MethodBody\ReturnThisRemoveRector`](/../master/rules/magic-disclosure/src/Rector/MethodBody/ReturnThisRemoveRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodBody/ReturnThisRemoveRector/Fixture)
 
 Removes "return $this;" from *fluent interfaces* for specified classes.
 
@@ -10369,10 +10370,10 @@ Replace Sensio @Route annotation with Symfony one
 
 <br><br>
 
-### `TemplateAnnotationRector`
+### `TemplateAnnotationToThisRenderRector`
 
-- class: [`Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector`](/../master/rules/sensio/src/Rector/FrameworkExtraBundle/TemplateAnnotationRector.php)
-- [test fixtures](/../master/rules/sensio/tests/Rector/FrameworkExtraBundle/TemplateAnnotationRector/Fixture)
+- class: [`Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector`](/../master/rules/sensio/src/Rector/FrameworkExtraBundle/TemplateAnnotationToThisRenderRector.php)
+- [test fixtures](/../master/rules/sensio/tests/Rector/FrameworkExtraBundle/TemplateAnnotationToThisRenderRector/Fixture)
 
 Turns `@Template` annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
 

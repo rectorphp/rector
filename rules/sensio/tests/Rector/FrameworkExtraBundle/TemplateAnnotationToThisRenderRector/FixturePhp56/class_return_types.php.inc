@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\FixturePhp56;
+namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector\FixturePhp56;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,7 +33,7 @@ class ClassReturnTypeController extends AbstractController
 -----
 <?php
 
-namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\FixturePhp56;
+namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector\FixturePhp56;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
