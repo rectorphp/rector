@@ -1,6 +1,6 @@
 # See https://github.com/shopware/shopware/blob/5.5/UPGRADE-5.5.md
 services:
-    Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
+    Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector:
         $typeToMethodCalls:
             Enlight_View_Default:
                 get: 'getAssign'
@@ -12,7 +12,7 @@ services:
                 get: 'offsetGet'
                 set: 'offsetSet'
 
-    Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
+    Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector:
         $typeToMethodCalls:
             Enlight_Components_Session_Namespace:
                 isset: 'offsetExists'
