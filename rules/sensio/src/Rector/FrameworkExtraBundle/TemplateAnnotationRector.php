@@ -48,11 +48,11 @@ final class TemplateAnnotationRector extends AbstractRector
 
     public function __construct(
         ArrayFromCompactFactory $arrayFromCompactFactory,
-        ReturnTypeDeclarationUpdater $returnTypeDeclaratoinUpdater,
+        ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater,
         ThisRenderFactory $thisRenderFactory
     ) {
         $this->arrayFromCompactFactory = $arrayFromCompactFactory;
-        $this->returnTypeDeclarationUpdater = $returnTypeDeclaratoinUpdater;
+        $this->returnTypeDeclarationUpdater = $returnTypeDeclarationUpdater;
         $this->thisRenderFactory = $thisRenderFactory;
     }
 
@@ -125,7 +125,7 @@ PHP
         }
 
         /** @var SensioTemplateTagValueNode|null $sensioTemplateTagValueNode */
-        $sensioTemplateTagValueNode = $this->getSensioTemplateTagValueNode($classMethod);
+        $sensioTemplateTagValueNode = $this->getPhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
         if ($sensioTemplateTagValueNode === null) {
             return null;
         }
@@ -159,17 +159,6 @@ PHP
         }
 
         return false;
-    }
-
-    private function getSensioTemplateTagValueNode(ClassMethod $classMethod): ?SensioTemplateTagValueNode
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
-        return $phpDocInfo->getByType(SensioTemplateTagValueNode::class);
     }
 
     private function updateReturnType(ClassMethod $classMethod): void
