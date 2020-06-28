@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 
@@ -18,7 +18,7 @@ class MultipleSomeCommand extends Command
 -----
 <?php
 
-namespace Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 

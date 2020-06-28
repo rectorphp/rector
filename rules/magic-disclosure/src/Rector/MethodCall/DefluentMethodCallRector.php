@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Rector\MethodCall;
+namespace Rector\MagicDisclosure\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -19,7 +19,10 @@ use Rector\Core\ValueObject\AssignAndRootExpr;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\DefluentMethodCallRectorTest
+ * @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/
+ * @see https://www.yegor256.com/2018/03/13/fluent-interfaces.html
+ *
+ * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\DefluentMethodCallRectorTest
  */
 final class DefluentMethodCallRector extends AbstractRector
 {

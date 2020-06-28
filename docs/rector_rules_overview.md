@@ -23,6 +23,7 @@
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (2)
+- [MagicDisclosure](#magicdisclosure) (1)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
@@ -4494,6 +4495,25 @@ Change functions to static calls, so composer can autoload them
 
 -some_function('lol');
 +SomeUtilsClass::someFunction('lol');
+```
+
+<br><br>
+
+## MagicDisclosure
+
+### `DefluentMethodCallRector`
+
+- class: [`Rector\MagicDisclosure\Rector\MethodCall\DefluentMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/MethodCall/DefluentMethodCallRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodCall/DefluentMethodCallRector/Fixture)
+
+Turns fluent interface calls to classic ones.
+
+```diff
+ $someClass = new SomeClass();
+-$someClass->someFunction()
+-            ->otherFunction();
++$someClass->someFunction();
++$someClass->otherFunction();
 ```
 
 <br><br>
@@ -11220,7 +11240,7 @@ Change @return types and type from static analysis to type declarations if not a
 
 ## General
 
-- [Core](#core) (44)
+- [Core](#core) (43)
 
 ## Core
 
@@ -11588,23 +11608,6 @@ services:
 -    public $someProperty;
 +    protected $someProperty;
  }
-```
-
-<br><br>
-
-### `DefluentMethodCallRector`
-
-- class: [`Rector\Core\Rector\MethodCall\DefluentMethodCallRector`](/../master/src/Rector/MethodCall/DefluentMethodCallRector.php)
-- [test fixtures](/../master/tests/Rector/MethodCall/DefluentMethodCallRector/Fixture)
-
-Turns fluent interface calls to classic ones.
-
-```diff
- $someClass = new SomeClass();
--$someClass->someFunction()
--            ->otherFunction();
-+$someClass->someFunction();
-+$someClass->otherFunction();
 ```
 
 <br><br>

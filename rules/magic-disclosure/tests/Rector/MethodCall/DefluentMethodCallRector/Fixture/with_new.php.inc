@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
 
-use Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClass;
+use Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClass;
 
 class WithNew
 {
@@ -21,9 +21,9 @@ class WithNew
 -----
 <?php
 
-namespace Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
 
-use Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClass;
+use Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClass;
 
 class WithNew
 {

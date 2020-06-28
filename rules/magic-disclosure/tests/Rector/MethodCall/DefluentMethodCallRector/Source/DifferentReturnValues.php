@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Source;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Source;
 
 final class DifferentReturnValues implements FluentInterfaceClassInterface
 {

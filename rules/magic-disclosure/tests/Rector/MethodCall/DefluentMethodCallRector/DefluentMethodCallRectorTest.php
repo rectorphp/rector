@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector;
 
 use Iterator;
-use Rector\Core\Rector\MethodCall\DefluentMethodCallRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClassInterface;
+use Rector\MagicDisclosure\Rector\MethodCall\DefluentMethodCallRector;
+use Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClassInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DefluentMethodCallRectorTest extends AbstractRectorTestCase
