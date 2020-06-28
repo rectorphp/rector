@@ -6,6 +6,7 @@ namespace Rector\MockeryToProphecy\Tests\Rector\Class_\MockeryToProphecyRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\MockeryToProphecy\Rector\MethodCall\CleanUpMockeryClose;
 use Rector\MockeryToProphecy\Rector\MethodCall\MockeryCreateMockToProphizeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -30,8 +31,8 @@ final class MockeryToProphecyRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            # 1. first convert mocks
             MockeryCreateMockToProphizeRector::class => [],
+            CleanUpMockeryClose::class => []
         ];
     }
 }
