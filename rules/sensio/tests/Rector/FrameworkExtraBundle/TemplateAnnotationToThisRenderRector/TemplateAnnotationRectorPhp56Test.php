@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
+namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
+use Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TemplateAnnotationRectorPhp56Test extends AbstractRectorTestCase
@@ -26,7 +26,7 @@ final class TemplateAnnotationRectorPhp56Test extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return TemplateAnnotationRector::class;
+        return TemplateAnnotationToThisRenderRector::class;
     }
 
     protected function getPhpVersion(): string

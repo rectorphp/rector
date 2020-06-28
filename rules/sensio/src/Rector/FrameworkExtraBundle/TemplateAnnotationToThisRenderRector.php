@@ -27,9 +27,9 @@ use Rector\Sensio\TypeDeclaration\ReturnTypeDeclarationUpdater;
  * @see https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
  * @see https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues/641
  *
- * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationRectorTest
+ * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
  */
-final class TemplateAnnotationRector extends AbstractRector
+final class TemplateAnnotationToThisRenderRector extends AbstractRector
 {
     /**
      * @var ArrayFromCompactFactory

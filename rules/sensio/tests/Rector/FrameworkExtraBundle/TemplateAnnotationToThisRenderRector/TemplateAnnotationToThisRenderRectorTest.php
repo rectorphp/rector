@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
+namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
+use Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class TemplateAnnotationRectorTest extends AbstractRectorTestCase
+final class TemplateAnnotationToThisRenderRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class TemplateAnnotationRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return TemplateAnnotationRector::class;
+        return TemplateAnnotationToThisRenderRector::class;
     }
 }
