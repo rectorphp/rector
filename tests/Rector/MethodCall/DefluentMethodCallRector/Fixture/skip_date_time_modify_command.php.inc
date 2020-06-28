@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector;
+namespace Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
 
 use DateTime;
 use Symfony\Component\Console\Command\Command;

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector;
+namespace Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector;
 
 use Iterator;
-use Rector\Core\Rector\MethodBody\FluentReplaceRector;
+use Rector\Core\Rector\MethodCall\DefluentMethodCallRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClassInterface;
+use Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClassInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class FluentReplaceRectorTest extends AbstractRectorTestCase
+final class DefluentMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -31,8 +31,8 @@ final class FluentReplaceRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            FluentReplaceRector::class => [
-                '$classesToDefluent' => [FluentInterfaceClassInterface::class, '*Command'],
+            DefluentMethodCallRector::class => [
+                '$namesToDefluent' => [FluentInterfaceClassInterface::class, '*Command'],
             ],
         ];
     }

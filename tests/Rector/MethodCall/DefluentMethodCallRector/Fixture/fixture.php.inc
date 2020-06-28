@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector;
+namespace Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
 
-use Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClass;
+use Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClass;
 
 class ActionClass
 {
@@ -24,9 +24,9 @@ class ActionClass
 -----
 <?php
 
-namespace Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector;
+namespace Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
 
-use Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClass;
+use Rector\Core\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClass;
 
 class ActionClass
 {

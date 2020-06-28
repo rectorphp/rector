@@ -11592,21 +11592,12 @@ services:
 
 <br><br>
 
-### `FluentReplaceRector`
+### `DefluentMethodCallRector`
 
-- class: [`Rector\Core\Rector\MethodBody\FluentReplaceRector`](/../master/src/Rector/MethodBody/FluentReplaceRector.php)
-- [test fixtures](/../master/tests/Rector/MethodBody/FluentReplaceRector/Fixture)
+- class: [`Rector\Core\Rector\MethodCall\DefluentMethodCallRector`](/../master/src/Rector/MethodCall/DefluentMethodCallRector.php)
+- [test fixtures](/../master/tests/Rector/MethodCall/DefluentMethodCallRector/Fixture)
 
 Turns fluent interface calls to classic ones.
-
-```yaml
-services:
-    Rector\Core\Rector\MethodBody\FluentReplaceRector:
-        $classesToDefluent:
-            - SomeExampleClass
-```
-
-↓
 
 ```diff
  $someClass = new SomeClass();
