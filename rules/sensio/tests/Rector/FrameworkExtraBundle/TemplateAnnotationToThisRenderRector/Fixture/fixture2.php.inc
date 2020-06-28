@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ClassWithNamedService25Controller extends AbstractController
+final class ClassWithNamedService25Controller extends AbstractController
 {
     /**
      * @Template()
@@ -13,16 +13,6 @@ class ClassWithNamedService25Controller extends AbstractController
     public function indexAction()
     {
         return $this->render('AppBundle:ClassWithNamedService25:index.html.twig');
-    }
-
-    /**
-     * @Template()
-     */
-    public function index2Action()
-    {
-        return $this->render('AppBundle:ClassWithNamedService25:index.html.twig', array(
-            'form' => $form->createView()
-        ));
     }
 }
 
@@ -35,18 +25,11 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ClassWithNamedService25Controller extends AbstractController
+final class ClassWithNamedService25Controller extends AbstractController
 {
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('AppBundle:ClassWithNamedService25:index.html.twig');
-    }
-
-    public function index2Action(): \Symfony\Component\HttpFoundation\Response
-    {
-        return $this->render('AppBundle:ClassWithNamedService25:index.html.twig', array(
-            'form' => $form->createView()
-        ));
     }
 }
 
