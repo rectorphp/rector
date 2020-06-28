@@ -1,4 +1,4 @@
-# All 511 Rectors Overview
+# All 512 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -13,6 +13,7 @@
 - [CodeQuality](#codequality) (54)
 - [CodingStyle](#codingstyle) (32)
 - [DeadCode](#deadcode) (40)
+- [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (16)
 - [DoctrineCodeQuality](#doctrinecodequality) (2)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
@@ -3200,6 +3201,62 @@ Change ternary of bool : false to && bool
          return (bool) 5;
      }
  }
+```
+
+<br><br>
+
+## Decouple
+
+### `DecoupleClassMethodToOwnClassRector`
+
+- class: [`Rector\Decouple\Rector\DecoupleClassMethodToOwnClassRector`](/../master/rules/decouple/src/Rector/DecoupleClassMethodToOwnClassRector.php)
+- [test fixtures](/../master/rules/decouple/tests/Rector/DecoupleClassMethodToOwnClassRector/Fixture)
+
+Move class method with its all dependencies to own class by method name
+
+```yaml
+services:
+    Rector\Decouple\Rector\DecoupleClassMethodToOwnClassRector:
+        $methodNamesByClass:
+            SomeClass:
+                someMethod:
+                    class: NewDecoupledClass
+                    method: someRenamedMethod
+                    parent_class: AddedParentClass
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public function someMethod()
+-    {
+-        $this->alsoCallThis();
+-    }
+-
+-    private function alsoCallThis()
+-    {
+-    }
+ }
+```
+
+**New file**
+
+```php
+<?php
+
+class NewDecoupledClass extends AddedParentClass
+{
+    public function someRenamedMethod()
+    {
+        $this->alsoCallThis();
+    }
+
+    private function alsoCallThis()
+    {
+    }
+}
 ```
 
 <br><br>

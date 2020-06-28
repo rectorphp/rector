@@ -178,7 +178,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     protected function getTempPath(): string
     {
-        return sys_get_temp_dir() . '/rector_temp_tests';
+        return StaticFixtureSplitter::getTemporaryPath();
     }
 
     protected function getPhpVersion(): string
