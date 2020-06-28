@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Rector\MethodBody;
+namespace Rector\MagicDisclosure\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Core\Tests\Rector\MethodBody\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
+ * @see \Rector\MagicDisclosure\Tests\Rector\MethodBody\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
  */
 final class ReturnThisRemoveRector extends AbstractRector
 {

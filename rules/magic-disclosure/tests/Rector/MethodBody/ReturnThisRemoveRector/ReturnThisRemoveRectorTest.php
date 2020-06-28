@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Rector\MethodBody\ReturnThisRemoveRector;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodBody\ReturnThisRemoveRector;
 
 use Iterator;
-use Rector\Core\Rector\MethodBody\ReturnThisRemoveRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\MagicDisclosure\Rector\MethodBody\ReturnThisRemoveRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
