@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector;
+namespace Rector\MagicDisclosure\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 
 use Iterator;
-use Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Core\Tests\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
+use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
+use Rector\MagicDisclosure\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase

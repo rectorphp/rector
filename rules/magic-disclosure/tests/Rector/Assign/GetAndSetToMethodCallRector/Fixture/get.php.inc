@@ -1,6 +1,6 @@
 <?php
 
-use Rector\Core\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeContainer;
+use Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
 
 function getAndSetToMethodCall()
 {
@@ -18,7 +18,7 @@ function getAndSetToMethodCall()
 -----
 <?php
 
-use Rector\Core\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeContainer;
+use Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\Source\SomeContainer;
 
 function getAndSetToMethodCall()
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Rector\MagicDisclosure;
+namespace Rector\MagicDisclosure\Rector\Isset_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Core\Tests\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector\UnsetAndIssetToMethodCallRectorTest
+ * @see \Rector\MagicDisclosure\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\UnsetAndIssetToMethodCallRectorTest
  */
 final class UnsetAndIssetToMethodCallRector extends AbstractRector
 {

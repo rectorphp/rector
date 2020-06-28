@@ -23,7 +23,7 @@
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (2)
-- [MagicDisclosure](#magicdisclosure) (1)
+- [MagicDisclosure](#magicdisclosure) (4)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
@@ -4514,6 +4514,110 @@ Turns fluent interface calls to classic ones.
 -            ->otherFunction();
 +$someClass->someFunction();
 +$someClass->otherFunction();
+```
+
+<br><br>
+
+### `GetAndSetToMethodCallRector`
+
+- class: [`Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/Assign/GetAndSetToMethodCallRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/Assign/GetAndSetToMethodCallRector/Fixture)
+
+Turns defined `__get`/`__set` to specific method calls.
+
+```yaml
+services:
+    Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector:
+        SomeContainer:
+            set: addService
+```
+
+↓
+
+```diff
+ $container = new SomeContainer;
+-$container->someService = $someService;
++$container->setService("someService", $someService);
+```
+
+```yaml
+services:
+    Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector:
+        $typeToMethodCalls:
+            SomeContainer:
+                get: getService
+```
+
+↓
+
+```diff
+ $container = new SomeContainer;
+-$someService = $container->someService;
++$someService = $container->getService("someService");
+```
+
+<br><br>
+
+### `ToStringToMethodCallRector`
+
+- class: [`Rector\MagicDisclosure\Rector\String_\ToStringToMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/String_/ToStringToMethodCallRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/String_/ToStringToMethodCallRector/Fixture)
+
+Turns defined code uses of "__toString()" method  to specific method calls.
+
+```yaml
+services:
+    Rector\MagicDisclosure\Rector\String_\ToStringToMethodCallRector:
+        SomeObject: getPath
+```
+
+↓
+
+```diff
+ $someValue = new SomeObject;
+-$result = (string) $someValue;
+-$result = $someValue->__toString();
++$result = $someValue->getPath();
++$result = $someValue->getPath();
+```
+
+<br><br>
+
+### `UnsetAndIssetToMethodCallRector`
+
+- class: [`Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/Isset_/UnsetAndIssetToMethodCallRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/Isset_/UnsetAndIssetToMethodCallRector/Fixture)
+
+Turns defined `__isset`/`__unset` calls to specific method calls.
+
+```yaml
+services:
+    Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector:
+        SomeContainer:
+            isset: hasService
+```
+
+↓
+
+```diff
+ $container = new SomeContainer;
+-isset($container["someKey"]);
++$container->hasService("someKey");
+```
+
+```yaml
+services:
+    Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector:
+        SomeContainer:
+            unset: removeService
+```
+
+↓
+
+```diff
+ $container = new SomeContainer;
+-unset($container["someKey"]);
++$container->removeService("someKey");
 ```
 
 <br><br>
@@ -11240,7 +11344,7 @@ Change @return types and type from static analysis to type declarations if not a
 
 ## General
 
-- [Core](#core) (43)
+- [Core](#core) (40)
 
 ## Core
 
@@ -11676,46 +11780,6 @@ services:
 ```diff
 -view("...", []);
 +SomeClass::render("...", []);
-```
-
-<br><br>
-
-### `GetAndSetToMethodCallRector`
-
-- class: [`Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector`](/../master/src/Rector/MagicDisclosure/GetAndSetToMethodCallRector.php)
-- [test fixtures](/../master/tests/Rector/MagicDisclosure/GetAndSetToMethodCallRector/Fixture)
-
-Turns defined `__get`/`__set` to specific method calls.
-
-```yaml
-services:
-    Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
-        SomeContainer:
-            set: addService
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--$container->someService = $someService;
-+$container->setService("someService", $someService);
-```
-
-```yaml
-services:
-    Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
-        $typeToMethodCalls:
-            SomeContainer:
-                get: getService
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--$someService = $container->someService;
-+$someService = $container->getService("someService");
 ```
 
 <br><br>
@@ -12425,70 +12489,6 @@ Swap arguments in function calls
 +        return some_function($two, $one);
      }
  }
-```
-
-<br><br>
-
-### `ToStringToMethodCallRector`
-
-- class: [`Rector\Core\Rector\MagicDisclosure\ToStringToMethodCallRector`](/../master/src/Rector/MagicDisclosure/ToStringToMethodCallRector.php)
-- [test fixtures](/../master/tests/Rector/MagicDisclosure/ToStringToMethodCallRector/Fixture)
-
-Turns defined code uses of "__toString()" method  to specific method calls.
-
-```yaml
-services:
-    Rector\Core\Rector\MagicDisclosure\ToStringToMethodCallRector:
-        SomeObject: getPath
-```
-
-↓
-
-```diff
- $someValue = new SomeObject;
--$result = (string) $someValue;
--$result = $someValue->__toString();
-+$result = $someValue->getPath();
-+$result = $someValue->getPath();
-```
-
-<br><br>
-
-### `UnsetAndIssetToMethodCallRector`
-
-- class: [`Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector`](/../master/src/Rector/MagicDisclosure/UnsetAndIssetToMethodCallRector.php)
-- [test fixtures](/../master/tests/Rector/MagicDisclosure/UnsetAndIssetToMethodCallRector/Fixture)
-
-Turns defined `__isset`/`__unset` calls to specific method calls.
-
-```yaml
-services:
-    Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
-        SomeContainer:
-            isset: hasService
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--isset($container["someKey"]);
-+$container->hasService("someKey");
-```
-
-```yaml
-services:
-    Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
-        SomeContainer:
-            unset: removeService
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--unset($container["someKey"]);
-+$container->removeService("someKey");
 ```
 
 <br><br>

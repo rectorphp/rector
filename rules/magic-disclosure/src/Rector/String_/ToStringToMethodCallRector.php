@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Rector\MagicDisclosure;
+namespace Rector\MagicDisclosure\Rector\String_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Core\Tests\Rector\MagicDisclosure\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
+ * @see \Rector\MagicDisclosure\Tests\Rector\String_\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
  */
 final class ToStringToMethodCallRector extends AbstractRector
 {

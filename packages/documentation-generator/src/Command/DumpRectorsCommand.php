@@ -54,7 +54,7 @@ final class DumpRectorsCommand extends AbstractCommand
 
         $isRectorProject = $source === [];
 
-        if ($source === []) {
+        if ($isRectorProject) {
             // fallback to core Rectors
             $rulesRectors = $this->rectorsFinder->findInDirectories([
                 __DIR__ . '/../../../../rules',
