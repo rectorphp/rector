@@ -23,7 +23,7 @@
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (2)
-- [MagicDisclosure](#magicdisclosure) (4)
+- [MagicDisclosure](#magicdisclosure) (5)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (1)
@@ -4554,6 +4554,38 @@ services:
  $container = new SomeContainer;
 -$someService = $container->someService;
 +$someService = $container->getService("someService");
+```
+
+<br><br>
+
+### `ReturnThisRemoveRector`
+
+- class: [`Rector\MagicDisclosure\Rector\MethodBody\ReturnThisRemoveRector`](/../master/rules/magic-disclosure/src/Rector/MethodBody/ReturnThisRemoveRector.php)
+
+Removes "return $this;" from *fluent interfaces* for specified classes.
+
+```yaml
+services:
+    Rector\MagicDisclosure\Rector\MethodBody\ReturnThisRemoveRector:
+        -
+            - SomeExampleClass
+```
+
+↓
+
+```diff
+ class SomeExampleClass
+ {
+     public function someFunction()
+     {
+-        return $this;
+     }
+
+     public function otherFunction()
+     {
+-        return $this;
+     }
+ }
 ```
 
 <br><br>
@@ -11344,7 +11376,7 @@ Change @return types and type from static analysis to type declarations if not a
 
 ## General
 
-- [Core](#core) (40)
+- [Core](#core) (39)
 
 ## Core
 
@@ -12284,39 +12316,6 @@ Turns variable in controller action to property fetch, as follow up to action in
      {
 -        $products = $productRepository->fetchAll();
 +        $products = $this->productRepository->fetchAll();
-     }
- }
-```
-
-<br><br>
-
-### `ReturnThisRemoveRector`
-
-- class: [`Rector\Core\Rector\MethodBody\ReturnThisRemoveRector`](/../master/src/Rector/MethodBody/ReturnThisRemoveRector.php)
-- [test fixtures](/../master/tests/Rector/MethodBody/ReturnThisRemoveRector/Fixture)
-
-Removes "return $this;" from *fluent interfaces* for specified classes.
-
-```yaml
-services:
-    Rector\Core\Rector\MethodBody\ReturnThisRemoveRector:
-        -
-            - SomeExampleClass
-```
-
-↓
-
-```diff
- class SomeExampleClass
- {
-     public function someFunction()
-     {
--        return $this;
-     }
-
-     public function otherFunction()
-     {
--        return $this;
      }
  }
 ```
