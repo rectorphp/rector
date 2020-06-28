@@ -10,11 +10,10 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoManipulator;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class ReturnTypeDeclarationUpdater
@@ -34,14 +33,21 @@ final class ReturnTypeDeclarationUpdater
      */
     private $nodeNameResolver;
 
+    /**
+     * @var PhpDocInfoManipulator
+     */
+    private $phpDocInfoManipulator;
+
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         PhpVersionProvider $phpVersionProvider,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        PhpDocInfoManipulator $phpDocInfoManipulator
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->phpDocInfoManipulator = $phpDocInfoManipulator;
     }
 
     public function updateClassMethod(ClassMethod $classMethod, string $className): void
@@ -52,13 +58,11 @@ final class ReturnTypeDeclarationUpdater
 
     private function updatePhpDoc(ClassMethod $classMethod, string $className): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
-
-        $returnTagValueNode = $phpDocInfo->getByType(ReturnTagValueNode::class);
+        /** @var ReturnTagValueNode|null $returnTagValueNode */
+        $returnTagValueNode = $this->phpDocInfoManipulator->getPhpDocTagValueNode(
+            $classMethod,
+            ReturnTagValueNode::class
+        );
         if ($returnTagValueNode === null) {
             return;
         }

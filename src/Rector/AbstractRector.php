@@ -20,8 +20,6 @@ use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
@@ -77,16 +75,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $phpVersionProvider;
 
     /**
-     * @var PhpDocInfoPrinter
-     */
-    protected $phpDocInfoPrinter;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    protected $phpDocInfoFactory;
-
-    /**
      * @var DocBlockManipulator
      */
     protected $docBlockManipulator;
@@ -119,8 +107,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager,
-        PhpDocInfoPrinter $phpDocInfoPrinter,
-        PhpDocInfoFactory $phpDocInfoFactory,
         DocBlockManipulator $docBlockManipulator,
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
@@ -130,8 +116,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
         $this->exclusionManager = $exclusionManager;
-        $this->phpDocInfoPrinter = $phpDocInfoPrinter;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
