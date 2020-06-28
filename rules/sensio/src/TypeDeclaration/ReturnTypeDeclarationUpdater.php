@@ -1,0 +1,92 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\Sensio\TypeDeclaration;
+
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\UnionType;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\StaticTypeMapper;
+
+final class ReturnTypeDeclarationUpdater
+{
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
+    /**
+     * @var PhpVersionProvider
+     */
+    private $phpVersionProvider;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        StaticTypeMapper $staticTypeMapper,
+        PhpVersionProvider $phpVersionProvider,
+        NodeNameResolver $nodeNameResolver
+    ) {
+        $this->staticTypeMapper = $staticTypeMapper;
+        $this->phpVersionProvider = $phpVersionProvider;
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
+
+    public function updateClassMethod(ClassMethod $classMethod, string $className): void
+    {
+        $this->updatePhpDoc($classMethod, $className);
+        $this->updatePhp($classMethod, $className);
+    }
+
+    private function updatePhpDoc(ClassMethod $classMethod, string $className): void
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return;
+        }
+
+        $returnTagValueNode = $phpDocInfo->getByType(ReturnTagValueNode::class);
+        if ($returnTagValueNode === null) {
+            return;
+        }
+
+        $returnStaticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
+            $returnTagValueNode->type,
+            $classMethod
+        );
+
+        if ($returnStaticType instanceof ArrayType || $returnStaticType instanceof UnionType) {
+            $returnTagValueNode->type = new AttributeAwareFullyQualifiedIdentifierTypeNode($className);
+        }
+    }
+
+    private function updatePhp(ClassMethod $classMethod, string $className): void
+    {
+        if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
+            return;
+        }
+
+        // change return type
+        if ($classMethod->returnType !== null) {
+            $returnTypeName = $this->nodeNameResolver->getName($classMethod->returnType);
+            if ($returnTypeName !== null && is_a($returnTypeName, $className, true)) {
+                return;
+            }
+        }
+
+        $classMethod->returnType = new FullyQualified($className);
+    }
+}
