@@ -6,7 +6,6 @@ namespace Rector\Sensio\Rector\FrameworkExtraBundle;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
@@ -19,8 +18,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Sensio\Helper\TemplateGuesser;
 use Rector\Sensio\NodeFactory\ArrayFromCompactFactory;
+use Rector\Sensio\NodeFactory\ThisRenderFactory;
 use Rector\Sensio\TypeDeclaration\ReturnTypeDeclarationUpdater;
 
 /**
@@ -33,11 +32,6 @@ use Rector\Sensio\TypeDeclaration\ReturnTypeDeclarationUpdater;
 final class TemplateAnnotationRector extends AbstractRector
 {
     /**
-     * @var TemplateGuesser
-     */
-    private $templateGuesser;
-
-    /**
      * @var ArrayFromCompactFactory
      */
     private $arrayFromCompactFactory;
@@ -47,14 +41,19 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     private $returnTypeDeclarationUpdater;
 
+    /**
+     * @var ThisRenderFactory
+     */
+    private $thisRenderFactory;
+
     public function __construct(
-        TemplateGuesser $templateGuesser,
         ArrayFromCompactFactory $arrayFromCompactFactory,
-        ReturnTypeDeclarationUpdater $returnTypeDeclaratoinUpdater
+        ReturnTypeDeclarationUpdater $returnTypeDeclaratoinUpdater,
+        ThisRenderFactory $thisRenderFactory
     ) {
-        $this->templateGuesser = $templateGuesser;
         $this->arrayFromCompactFactory = $arrayFromCompactFactory;
         $this->returnTypeDeclarationUpdater = $returnTypeDeclaratoinUpdater;
+        $this->thisRenderFactory = $thisRenderFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -199,7 +198,11 @@ PHP
         }
 
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
-        $thisRenderMethodCall = $this->createThisRender($classMethod, $returnNode, $sensioTemplateTagValueNode);
+        $thisRenderMethodCall = $this->thisRenderFactory->create(
+            $classMethod,
+            $returnNode,
+            $sensioTemplateTagValueNode
+        );
 
         if ($returnNode === null) {
             // or add as last statement in the method
@@ -220,72 +223,5 @@ PHP
         // replace Return_ node value if exists and is not already in correct format
 
         $this->updateReturnType($classMethod);
-    }
-
-    private function createThisRender(
-        ClassMethod $classMethod,
-        ?Return_ $return,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
-    ): MethodCall {
-        $renderArguments = $this->resolveRenderArguments($classMethod, $return, $sensioTemplateTagValueNode);
-
-        return $this->createMethodCall('this', 'render', $renderArguments);
-    }
-
-    /**
-     * @return Arg[]
-     */
-    private function resolveRenderArguments(
-        ClassMethod $classMethod,
-        ?Return_ $return,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
-    ): array {
-        $arguments = [$this->resolveTemplateName($classMethod, $sensioTemplateTagValueNode)];
-
-        if ($return === null) {
-            return $this->createArgs($arguments);
-        }
-
-        if ($return->expr instanceof Array_ && count($return->expr->items)) {
-            $arguments[] = $return->expr;
-        }
-
-        $arguments = array_merge($arguments, $this->resolveArrayArgumentsFromMethodCall($return));
-
-        return $this->createArgs($arguments);
-    }
-
-    private function resolveTemplateName(
-        ClassMethod $classMethod,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
-    ): string {
-        if ($sensioTemplateTagValueNode->getTemplate() !== null) {
-            return $sensioTemplateTagValueNode->getTemplate();
-        }
-
-        return $this->templateGuesser->resolveFromClassMethodNode($classMethod);
-    }
-
-    /**
-     * Already existing method call
-     *
-     * @return Array_[]
-     */
-    private function resolveArrayArgumentsFromMethodCall(Return_ $returnNode): array
-    {
-        if (! $returnNode->expr instanceof MethodCall) {
-            return [];
-        }
-
-        $arguments = [];
-        foreach ($returnNode->expr->args as $arg) {
-            if (! $arg->value instanceof Array_) {
-                continue;
-            }
-
-            $arguments[] = $arg->value;
-        }
-
-        return $arguments;
     }
 }
