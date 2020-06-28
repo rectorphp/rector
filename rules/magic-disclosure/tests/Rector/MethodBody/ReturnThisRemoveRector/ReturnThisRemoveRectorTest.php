@@ -32,8 +32,8 @@ final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
         return [
             ReturnThisRemoveRector::class => [
                 '$classesToDefluent' => [
-                    'Rector\Core\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClass',
-                    'Rector\Core\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClassWithReturnAnnotations',
+                    'Rector\MagicDisclosure\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClass',
+                    'Rector\MagicDisclosure\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClassWithReturnAnnotations',
                 ],
             ],
         ];

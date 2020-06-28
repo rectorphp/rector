@@ -11,8 +11,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationVersion3RectorTest
- * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationVersion5RectorTest
+ * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationRectorTest
  */
 final class TemplateGuesser
 {
@@ -26,7 +25,7 @@ final class TemplateGuesser
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function resolveFromClassMethodNode(ClassMethod $classMethod, int $version = 5): string
+    public function resolveFromClassMethodNode(ClassMethod $classMethod): string
     {
         $namespace = $classMethod->getAttribute(AttributeKey::NAMESPACE_NAME);
         if (! is_string($namespace)) {
@@ -43,43 +42,13 @@ final class TemplateGuesser
             throw new ShouldNotHappenException();
         }
 
-        if ($version === 3) {
-            return $this->resolveForVersion3($namespace, $class, $method);
-        }
-
-        if ($version === 5) {
-            return $this->resolveForVersion5($namespace, $class, $method);
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Version "%d" is not supported in "%s". Add it.',
-            $version,
-            self::class
-        ));
-    }
-
-    /**
-     * Mimics https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/v3.0.0/Templating/TemplateGuesser.php
-     */
-    private function resolveForVersion3(string $namespace, string $class, string $method): string
-    {
-        // AppBundle\SomeNamespace\ => AppBundle
-        // App\OtherBundle\SomeNamespace\ => OtherBundle
-        $bundle = Strings::match($namespace, '#(?<bundle>[A-Za-z]*Bundle)#')['bundle'] ?? '';
-
-        // SomeSuper\ControllerClass => ControllerClass
-        $controller = Strings::match($class, '#(?<controller>[A-Za-z0-9]*)Controller$#')['controller'] ?? '';
-
-        // indexAction => index
-        $action = Strings::match($method, '#(?<method>[\w]*)Action$#')['method'] ?? '';
-
-        return sprintf('%s:%s:%s.html.twig', $bundle, $controller, $action);
+        return $this->resolve($namespace, $class, $method);
     }
 
     /**
      * Mimics https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/v5.0.0/Templating/TemplateGuesser.php
      */
-    private function resolveForVersion5(string $namespace, string $class, string $method): string
+    private function resolve(string $namespace, string $class, string $method): string
     {
         $bundle = Strings::match($namespace, '#(?<bundle>[\w]*Bundle)#')['bundle'] ?? '';
         $bundle = Strings::replace($bundle, '#Bundle$#');

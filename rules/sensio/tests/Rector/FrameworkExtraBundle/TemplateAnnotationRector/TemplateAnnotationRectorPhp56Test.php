@@ -24,16 +24,9 @@ final class TemplateAnnotationRectorPhp56Test extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp56');
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            TemplateAnnotationRector::class => [
-                '$version' => 5,
-            ],
-        ];
+        return TemplateAnnotationRector::class;
     }
 
     protected function getPhpVersion(): string
