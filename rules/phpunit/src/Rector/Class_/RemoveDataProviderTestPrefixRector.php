@@ -98,7 +98,6 @@ PHP
     private function renameDataProviderAnnotationsAndCollectRenamedMethods(Class_ $class): void
     {
         foreach ($class->getMethods() as $classMethod) {
-
             /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($phpDocInfo === null) {

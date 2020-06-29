@@ -16,12 +16,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Sensio\NodeFactory\ThisRenderFactory;
 use Rector\Sensio\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer;
 use Rector\Sensio\TypeDeclaration\ReturnTypeDeclarationUpdater;
@@ -147,13 +145,7 @@ PHP
     private function classHasTemplateAnnotations(Class_ $class): bool
     {
         foreach ($class->getMethods() as $classMethod) {
-            /** @var PhpDocInfo|null $phpDocInfo */
-            $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($phpDocInfo === null) {
-                continue;
-            }
-
-            if ($phpDocInfo->hasByType(SensioTemplateTagValueNode::class)) {
+            if ($this->hasPhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class)) {
                 return true;
             }
         }
