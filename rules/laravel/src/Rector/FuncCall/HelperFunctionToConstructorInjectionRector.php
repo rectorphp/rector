@@ -107,8 +107,8 @@ PHP
             return null;
         }
 
-        $objectType = new FullyQualifiedObjectType($functionChange->getClass());
-        $this->addPropertyToClass($classNode, $objectType, $functionChange->getProperty());
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType($functionChange->getClass());
+        $this->addPropertyToClass($classNode, $fullyQualifiedObjectType, $functionChange->getProperty());
 
         $propertyFetchNode = $this->createPropertyFetch('this', $functionChange->getProperty());
 

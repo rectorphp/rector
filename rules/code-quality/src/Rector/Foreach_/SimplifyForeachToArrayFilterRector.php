@@ -104,18 +104,18 @@ PHP
         return $this->createAssignNode($node, $name, $onlyNodeInIf->var);
     }
 
-    private function shouldSkip(Foreach_ $foreachNode): bool
+    private function shouldSkip(Foreach_ $foreach): bool
     {
-        if (count($foreachNode->stmts) !== 1) {
+        if (count($foreach->stmts) !== 1) {
             return true;
         }
 
-        if (! $foreachNode->stmts[0] instanceof If_) {
+        if (! $foreach->stmts[0] instanceof If_) {
             return true;
         }
 
         /** @var If_ $ifNode */
-        $ifNode = $foreachNode->stmts[0];
+        $ifNode = $foreach->stmts[0];
 
         if ($ifNode->else !== null) {
             return true;
@@ -128,13 +128,10 @@ PHP
         return ! $ifNode->cond instanceof FuncCall;
     }
 
-    private function createAssignNode(Foreach_ $foreachNode, string $name, ArrayDimFetch $arrayDimFetch): Assign
+    private function createAssignNode(Foreach_ $foreach, string $name, ArrayDimFetch $arrayDimFetch): Assign
     {
-        $functionNameNode = new String_($name);
-        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), [
-            new Arg($foreachNode->expr),
-            new Arg($functionNameNode),
-        ]);
+        $string = new String_($name);
+        $arrayFilterFuncCall = new FuncCall(new Name('array_filter'), [new Arg($foreach->expr), new Arg($string)]);
 
         return new Assign($arrayDimFetch->var, $arrayFilterFuncCall);
     }

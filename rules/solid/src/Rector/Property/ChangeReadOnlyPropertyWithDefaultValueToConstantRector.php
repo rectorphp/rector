@@ -169,9 +169,9 @@ PHP
 
         /** @var Expr $defaultValue */
         $defaultValue = $propertyProperty->default;
-        $constant = new Const_($constantName, $defaultValue);
+        $const = new Const_($constantName, $defaultValue);
 
-        $classConst = new ClassConst([$constant]);
+        $classConst = new ClassConst([$const]);
         $classConst->flags = $property->flags & ~ Class_::MODIFIER_STATIC;
 
         $classConst->setAttribute(AttributeKey::PHP_DOC_INFO, $property->getAttribute(AttributeKey::PHP_DOC_INFO));

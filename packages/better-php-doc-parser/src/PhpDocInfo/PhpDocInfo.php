@@ -349,8 +349,8 @@ final class PhpDocInfo
             $currentVarTagValueNode->type = $newPHPStanPhpDocType;
         } else {
             // add completely new one
-            $returnTagValueNode = new AttributeAwareVarTagValueNode($newPHPStanPhpDocType, '', '');
-            $this->addTagValueNode($returnTagValueNode);
+            $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode($newPHPStanPhpDocType, '', '');
+            $this->addTagValueNode($attributeAwareVarTagValueNode);
         }
     }
 
@@ -370,8 +370,8 @@ final class PhpDocInfo
             $currentReturnTagValueNode->type = $newPHPStanPhpDocType;
         } else {
             // add completely new one
-            $returnTagValueNode = new AttributeAwareReturnTagValueNode($newPHPStanPhpDocType, '');
-            $this->addTagValueNode($returnTagValueNode);
+            $attributeAwareReturnTagValueNode = new AttributeAwareReturnTagValueNode($newPHPStanPhpDocType, '');
+            $this->addTagValueNode($attributeAwareReturnTagValueNode);
         }
     }
 
@@ -379,16 +379,16 @@ final class PhpDocInfo
     {
         $tag = '@' . ltrim($tag, '@');
 
-        $phpDocTagNode = new AttributeAwarePhpDocTagNode($tag, new GenericTagValueNode(''));
-        $this->addPhpDocTagNode($phpDocTagNode);
+        $attributeAwarePhpDocTagNode = new AttributeAwarePhpDocTagNode($tag, new GenericTagValueNode(''));
+        $this->addPhpDocTagNode($attributeAwarePhpDocTagNode);
     }
 
     public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
     {
         $name = $this->resolveNameForPhpDocTagValueNode($phpDocTagValueNode);
 
-        $phpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
-        $this->addPhpDocTagNode($phpDocTagNode);
+        $attributeAwarePhpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
+        $this->addPhpDocTagNode($attributeAwarePhpDocTagNode);
     }
 
     public function isNewNode(): bool

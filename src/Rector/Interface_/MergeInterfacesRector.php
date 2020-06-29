@@ -86,13 +86,13 @@ PHP
         return $node;
     }
 
-    private function makeImplementsUnique(Class_ $classNode): void
+    private function makeImplementsUnique(Class_ $class): void
     {
         $alreadyAddedNames = [];
-        foreach ($classNode->implements as $key => $name) {
+        foreach ($class->implements as $key => $name) {
             $fqnName = $this->getName($name);
             if (in_array($fqnName, $alreadyAddedNames, true)) {
-                $this->removeImplements($classNode, $key);
+                $this->removeImplements($class, $key);
                 continue;
             }
 

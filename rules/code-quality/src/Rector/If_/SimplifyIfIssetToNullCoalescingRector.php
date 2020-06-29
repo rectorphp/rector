@@ -100,40 +100,40 @@ PHP
             return null;
         }
 
-        $funcCallNode = new FuncCall(new Name('array_merge'), [
+        $funcCall = new FuncCall(new Name('array_merge'), [
             new Arg(new Coalesce($valueNode, new Array_([]))),
             new Arg($secondAssign->expr),
         ]);
 
-        return new Assign($valueNode, $funcCallNode);
+        return new Assign($valueNode, $funcCall);
     }
 
-    private function shouldSkip(If_ $ifNode): bool
+    private function shouldSkip(If_ $if): bool
     {
-        if ($ifNode->else === null) {
+        if ($if->else === null) {
             return true;
         }
 
-        if (count($ifNode->elseifs) > 1) {
+        if (count($if->elseifs) > 1) {
             return true;
         }
 
-        if (! $ifNode->cond instanceof Isset_) {
+        if (! $if->cond instanceof Isset_) {
             return true;
         }
 
-        if (! $this->hasOnlyStatementAssign($ifNode)) {
+        if (! $this->hasOnlyStatementAssign($if)) {
             return true;
         }
 
-        if (! $this->hasOnlyStatementAssign($ifNode->else)) {
+        if (! $this->hasOnlyStatementAssign($if->else)) {
             return true;
         }
 
-        if (! $this->areNodesEqual($ifNode->cond->vars[0], $ifNode->stmts[0]->expr->var)) {
+        if (! $this->areNodesEqual($if->cond->vars[0], $if->stmts[0]->expr->var)) {
             return true;
         }
-        return ! $this->areNodesEqual($ifNode->cond->vars[0], $ifNode->else->stmts[0]->expr->var);
+        return ! $this->areNodesEqual($if->cond->vars[0], $if->else->stmts[0]->expr->var);
     }
 
     /**

@@ -29,13 +29,13 @@ final class StmtOrder
         return array_combine($oldKeys, $newKeys);
     }
 
-    public function reorderClassStmtsByOldToNewKeys(Class_ $node, array $oldToNewKeys): Class_
+    public function reorderClassStmtsByOldToNewKeys(Class_ $class, array $oldToNewKeys): Class_
     {
         $reorderedStmts = [];
 
-        $stmtCount = count($node->stmts);
+        $stmtCount = count($class->stmts);
 
-        foreach ($node->stmts as $key => $stmt) {
+        foreach ($class->stmts as $key => $stmt) {
             if (! array_key_exists($key, $oldToNewKeys)) {
                 $reorderedStmts[$key] = $stmt;
                 continue;
@@ -52,9 +52,9 @@ final class StmtOrder
                 continue;
             }
 
-            $node->stmts[$i] = $reorderedStmts[$i];
+            $class->stmts[$i] = $reorderedStmts[$i];
         }
 
-        return $node;
+        return $class;
     }
 }

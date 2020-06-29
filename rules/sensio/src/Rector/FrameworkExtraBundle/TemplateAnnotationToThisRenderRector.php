@@ -112,19 +112,19 @@ PHP
         return null;
     }
 
-    private function addAbstractControllerParentClassIfMissing(Class_ $node): ?Class_
+    private function addAbstractControllerParentClassIfMissing(Class_ $class): ?Class_
     {
-        if ($node->extends !== null) {
+        if ($class->extends !== null) {
             return null;
         }
 
-        if (! $this->classHasTemplateAnnotations($node)) {
+        if (! $this->classHasTemplateAnnotations($class)) {
             return null;
         }
 
-        $node->extends = new FullyQualified('Symfony\Bundle\FrameworkBundle\Controller\AbstractController');
+        $class->extends = new FullyQualified('Symfony\Bundle\FrameworkBundle\Controller\AbstractController');
 
-        return $node;
+        return $class;
     }
 
     private function replaceTemplateAnnotation(ClassMethod $classMethod): ?Node

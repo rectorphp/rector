@@ -98,8 +98,8 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
      */
     private function createPropertyDocNode(): PhpDocNode
     {
-        $nullableStringTypeNode = new NullableTypeNode(new IdentifierTypeNode('string'));
-        $propertyTagValueNode = new PropertyTagValueNode($nullableStringTypeNode, 'name', '');
+        $nullableTypeNode = new NullableTypeNode(new IdentifierTypeNode('string'));
+        $propertyTagValueNode = new PropertyTagValueNode($nullableTypeNode, 'name', '');
 
         $children = [new PhpDocTagNode('@property', $propertyTagValueNode)];
 

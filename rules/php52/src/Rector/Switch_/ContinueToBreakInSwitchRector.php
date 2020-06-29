@@ -81,22 +81,22 @@ PHP
         return $node;
     }
 
-    private function processContinueStatement(Continue_ $node): Node
+    private function processContinueStatement(Continue_ $continue): Node
     {
-        if ($node->num === null) {
+        if ($continue->num === null) {
             return new Break_();
-        } elseif ($node->num instanceof LNumber) {
-            if ($this->getValue($node->num) <= 1) {
+        } elseif ($continue->num instanceof LNumber) {
+            if ($this->getValue($continue->num) <= 1) {
                 return new Break_();
             }
-        } elseif ($node->num instanceof Variable) {
-            return $this->processVariableNum($node, $node->num);
+        } elseif ($continue->num instanceof Variable) {
+            return $this->processVariableNum($continue, $continue->num);
         }
 
-        return $node;
+        return $continue;
     }
 
-    private function processVariableNum(Continue_ $node, Variable $numVariable): Node
+    private function processVariableNum(Continue_ $continue, Variable $numVariable): Node
     {
         $staticType = $this->getStaticType($numVariable);
 
@@ -104,6 +104,6 @@ PHP
             return new Break_();
         }
 
-        return $node;
+        return $continue;
     }
 }

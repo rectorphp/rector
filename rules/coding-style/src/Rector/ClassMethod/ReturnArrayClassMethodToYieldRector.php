@@ -147,12 +147,12 @@ PHP
         return null;
     }
 
-    private function transformArrayToYieldsOnMethodNode(ClassMethod $classMethod, Array_ $arrayNode): void
+    private function transformArrayToYieldsOnMethodNode(ClassMethod $classMethod, Array_ $array): void
     {
-        $yieldNodes = $this->nodeTransformer->transformArrayToYields($arrayNode);
+        $yieldNodes = $this->nodeTransformer->transformArrayToYields($array);
 
         // remove whole return node
-        $parentNode = $arrayNode->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
             throw new ShouldNotHappenException();
         }

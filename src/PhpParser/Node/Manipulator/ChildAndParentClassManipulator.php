@@ -55,10 +55,10 @@ final class ChildAndParentClassManipulator
     /**
      * Add "parent::__construct()" where needed
      */
-    public function completeParentConstructor(Class_ $classNode, ClassMethod $classMethod): void
+    public function completeParentConstructor(Class_ $class, ClassMethod $classMethod): void
     {
         /** @var string|null $parentClassName */
-        $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if ($parentClassName === null) {
             return;
         }
@@ -77,9 +77,9 @@ final class ChildAndParentClassManipulator
         }
     }
 
-    public function completeChildConstructors(Class_ $classNode, ClassMethod $constructorClassMethod): void
+    public function completeChildConstructors(Class_ $class, ClassMethod $constructorClassMethod): void
     {
-        $className = $this->nodeNameResolver->getName($classNode);
+        $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
             return;
         }
@@ -126,21 +126,21 @@ final class ChildAndParentClassManipulator
         $classMethod->stmts[] = new Expression($parentConstructCallNode);
     }
 
-    private function findFirstParentConstructor(Class_ $classNode): ?ClassMethod
+    private function findFirstParentConstructor(Class_ $class): ?ClassMethod
     {
-        while ($classNode !== null) {
-            $constructMethodNode = $classNode->getMethod(self::CONSTRUCT);
+        while ($class !== null) {
+            $constructMethodNode = $class->getMethod(self::CONSTRUCT);
             if ($constructMethodNode !== null) {
                 return $constructMethodNode;
             }
 
             /** @var string|null $parentClassName */
-            $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+            $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
             if ($parentClassName === null) {
                 return null;
             }
 
-            $classNode = $this->parsedNodeCollector->findClass($parentClassName);
+            $class = $this->parsedNodeCollector->findClass($parentClassName);
         }
 
         return null;

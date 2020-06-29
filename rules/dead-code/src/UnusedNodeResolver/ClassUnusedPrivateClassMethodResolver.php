@@ -143,8 +143,8 @@ final class ClassUnusedPrivateClassMethodResolver
         if (! method_exists($class, $method)) {
             return false;
         }
-        $methodReflection = new ReflectionMethod($class, $method);
+        $reflectionMethod = new ReflectionMethod($class, $method);
 
-        return $methodReflection->isAbstract();
+        return $reflectionMethod->isAbstract();
     }
 }

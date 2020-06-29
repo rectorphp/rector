@@ -66,8 +66,8 @@ final class InjectMethodFactory
 
         $shortClassName = $this->classNaming->getShortName($className);
 
-        $methodBuilder = new Method('inject' . $shortClassName);
-        $methodBuilder->makePublic();
+        $method = new Method('inject' . $shortClassName);
+        $method->makePublic();
 
         foreach ($objectTypes as $objectType) {
             /** @var ObjectType $objectType */
@@ -75,14 +75,14 @@ final class InjectMethodFactory
 
             $param = new Param($propertyName);
             $param->setType(new FullyQualified($objectType->getClassName()));
-            $methodBuilder->addParam($param);
+            $method->addParam($param);
 
             $assign = $this->nodeFactory->createPropertyAssignment($propertyName);
 
-            $methodBuilder->addStmt($assign);
+            $method->addStmt($assign);
         }
 
-        $classMethod = $methodBuilder->getNode();
+        $classMethod = $method->getNode();
 
         if ($framework === MultiParentingToAbstractDependencyRector::FRAMEWORK_SYMFONY) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);

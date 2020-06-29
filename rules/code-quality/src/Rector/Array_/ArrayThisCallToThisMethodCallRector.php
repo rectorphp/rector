@@ -99,8 +99,8 @@ PHP
             return null;
         }
 
-        $methodReflection = new ReflectionMethod($class, $method);
-        if ($methodReflection->getNumberOfParameters() > 0) {
+        $reflectionMethod = new ReflectionMethod($class, $method);
+        if ($reflectionMethod->getNumberOfParameters() > 0) {
             return null;
         }
 

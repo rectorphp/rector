@@ -71,8 +71,8 @@ PHP
 
         $node->name = new Identifier('getConditions');
 
-        $dimFetch = new ArrayDimFetch($node, new LNumber(0));
+        $arrayDimFetch = new ArrayDimFetch($node, new LNumber(0));
 
-        return new Coalesce($dimFetch, new String_(''));
+        return new Coalesce($arrayDimFetch, new String_(''));
     }
 }

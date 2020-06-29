@@ -77,12 +77,12 @@ final class ClassDependencyManipulator
     }
 
     public function addConstructorDependencyWithCustomAssign(
-        Class_ $classNode,
+        Class_ $class,
         string $name,
         ?Type $type,
         Assign $assign
     ): void {
-        $constructorMethod = $classNode->getMethod(self::CONSTRUCTOR);
+        $constructorMethod = $class->getMethod(self::CONSTRUCTOR);
 
         /** @var ClassMethod|null $constructorMethod */
         if ($constructorMethod !== null) {
@@ -99,11 +99,11 @@ final class ClassDependencyManipulator
 
         $this->classMethodAssignManipulator->addParameterAndAssignToMethod($constructorMethod, $name, $type, $assign);
 
-        $this->childAndParentClassManipulator->completeParentConstructor($classNode, $constructorMethod);
+        $this->childAndParentClassManipulator->completeParentConstructor($class, $constructorMethod);
 
-        $this->classInsertManipulator->addAsFirstMethod($classNode, $constructorMethod);
+        $this->classInsertManipulator->addAsFirstMethod($class, $constructorMethod);
 
-        $this->childAndParentClassManipulator->completeChildConstructors($classNode, $constructorMethod);
+        $this->childAndParentClassManipulator->completeChildConstructors($class, $constructorMethod);
     }
 
     /**

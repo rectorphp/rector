@@ -138,9 +138,9 @@ PHP
         }
 
         // spaceship ready!
-        $spaceshipNode = new Spaceship($this->secondValue, $this->firstValue);
+        $spaceship = new Spaceship($this->secondValue, $this->firstValue);
 
-        return new Return_($spaceshipNode);
+        return new Return_($spaceship);
     }
 
     private function reset(): void

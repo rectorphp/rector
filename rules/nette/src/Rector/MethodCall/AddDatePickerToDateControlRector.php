@@ -76,15 +76,15 @@ PHP
         }
 
         $key = $node->args[0]->value;
-        $leftVariable = new ArrayDimFetch($node->var, $key);
+        $arrayDimFetch = new ArrayDimFetch($node->var, $key);
 
-        $dateControlClass = new FullyQualified('Nextras\FormComponents\Controls\DateControl');
-        $newDateControl = new New_($dateControlClass);
+        $fullyQualified = new FullyQualified('Nextras\FormComponents\Controls\DateControl');
+        $new = new New_($fullyQualified);
 
         if (isset($node->args[1])) {
-            $newDateControl->args[] = $node->args[1];
+            $new->args[] = $node->args[1];
         }
 
-        return new Assign($leftVariable, $newDateControl);
+        return new Assign($arrayDimFetch, $new);
     }
 }

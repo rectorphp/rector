@@ -105,9 +105,9 @@ final class EregToPregMatchRector extends AbstractRector
         return $node;
     }
 
-    private function processStringPattern(FuncCall $funcCall, String_ $patternNode, string $functionName): void
+    private function processStringPattern(FuncCall $funcCall, String_ $string, string $functionName): void
     {
-        $pattern = $patternNode->value;
+        $pattern = $string->value;
         $pattern = $this->eregToPcreTransformer->transform($pattern, $this->isCaseInsensitiveFunction($functionName));
 
         $funcCall->args[0]->value = new String_($pattern);

@@ -120,9 +120,9 @@ PHP
         return $node;
     }
 
-    private function getExistingFactoryPropertyName(Class_ $classNode, string $factoryClass): ?string
+    private function getExistingFactoryPropertyName(Class_ $class, string $factoryClass): ?string
     {
-        foreach ($classNode->getProperties() as $property) {
+        foreach ($class->getProperties() as $property) {
             if ($this->isObjectType($property, $factoryClass)) {
                 return (string) $property->props[0]->name;
             }

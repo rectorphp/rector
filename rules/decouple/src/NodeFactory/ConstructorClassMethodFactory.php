@@ -24,8 +24,8 @@ final class ConstructorClassMethodFactory
             return null;
         }
 
-        $methodBuilder = new Method('__construct');
-        $methodBuilder->makePublic();
+        $method = new Method('__construct');
+        $method->makePublic();
 
         foreach ($properties as $propertyName => $property) {
             /** @var string $propertyName */
@@ -36,15 +36,15 @@ final class ConstructorClassMethodFactory
                 $paramBuilder->setType($property->type);
             }
 
-            $methodBuilder->addParam($paramBuilder->getNode());
+            $method->addParam($paramBuilder->getNode());
 
             // add assign
             $assign = $this->createAssign($propertyName);
 
-            $methodBuilder->addStmt($assign);
+            $method->addStmt($assign);
         }
 
-        return $methodBuilder->getNode();
+        return $method->getNode();
     }
 
     private function createAssign(string $propertyName): Assign

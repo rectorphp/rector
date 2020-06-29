@@ -280,12 +280,12 @@ PHP
             return false;
         }
 
-        $methodReflection = new ReflectionMethod($className, $methodName);
-        if ($methodReflection->getReturnType() === null) {
+        $reflectionMethod = new ReflectionMethod($className, $methodName);
+        if ($reflectionMethod->getReturnType() === null) {
             return false;
         }
 
-        $staticCallReturnType = (string) $methodReflection->getReturnType();
+        $staticCallReturnType = (string) $reflectionMethod->getReturnType();
         return is_a($staticCallReturnType, IRouter::class, true);
     }
 
@@ -317,10 +317,10 @@ PHP
         return $phpDocInfo->hasByType(SymfonyRouteTagValueNode::class);
     }
 
-    private function resolvePathFromClassAndMethodNodes(Class_ $classNode, ClassMethod $classMethod): string
+    private function resolvePathFromClassAndMethodNodes(Class_ $class, ClassMethod $classMethod): string
     {
         /** @var string $presenterName */
-        $presenterName = $this->getName($classNode);
+        $presenterName = $this->getName($class);
 
         /** @var string $presenterPart */
         $presenterPart = Strings::after($presenterName, '\\', -1);

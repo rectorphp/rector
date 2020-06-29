@@ -254,11 +254,11 @@ PHP
         }
     }
 
-    private function renameInterface(string $lastName, Interface_ $parentNode, $usedName): void
+    private function renameInterface(string $lastName, Interface_ $interface, $usedName): void
     {
-        foreach ($parentNode->extends as $key => $extendInterfaceName) {
+        foreach ($interface->extends as $key => $extendInterfaceName) {
             if ($this->areNamesEqual($extendInterfaceName, $usedName)) {
-                $parentNode->extends[$key] = new Name($lastName);
+                $interface->extends[$key] = new Name($lastName);
             }
         }
     }

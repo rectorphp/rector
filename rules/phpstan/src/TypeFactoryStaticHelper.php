@@ -23,10 +23,10 @@ final class TypeFactoryStaticHelper
         }
 
         // this is needed to prevent missing broker static fatal error, for tests with missing class
-        $unionTypeClassReflection = new ReflectionClass(UnionType::class);
+        $reflectionClass = new ReflectionClass(UnionType::class);
 
         /** @var UnionType $unionType */
-        $unionType = $unionTypeClassReflection->newInstanceWithoutConstructor();
+        $unionType = $reflectionClass->newInstanceWithoutConstructor();
 
         $privatesAccessor = new PrivatesAccessor();
         $privatesAccessor->setPrivateProperty($unionType, 'types', $objectTypes);

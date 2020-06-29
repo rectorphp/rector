@@ -172,9 +172,9 @@ PHP
         return ! $foreach->stmts[0] instanceof If_;
     }
 
-    private function shouldSkipIf(If_ $ifNode): bool
+    private function shouldSkipIf(If_ $if): bool
     {
-        $ifCondition = $ifNode->cond;
+        $ifCondition = $if->cond;
         return ! $ifCondition instanceof Identical && ! $ifCondition instanceof Equal;
     }
 
@@ -192,9 +192,9 @@ PHP
         );
     }
 
-    private function isIfBodyABoolReturnNode(If_ $firstNodeInsideForeach): bool
+    private function isIfBodyABoolReturnNode(If_ $if): bool
     {
-        $ifStatment = $firstNodeInsideForeach->stmts[0];
+        $ifStatment = $if->stmts[0];
         if (! $ifStatment instanceof Return_) {
             return false;
         }
@@ -209,9 +209,9 @@ PHP
     /**
      * @param Identical|Equal $binaryOp
      */
-    private function createInArrayFunction(Node $node, BinaryOp $binaryOp, Foreach_ $foreachNode): FuncCall
+    private function createInArrayFunction(Node $node, BinaryOp $binaryOp, Foreach_ $foreach): FuncCall
     {
-        $arguments = $this->createArgs([$node, $foreachNode->expr]);
+        $arguments = $this->createArgs([$node, $foreach->expr]);
 
         if ($binaryOp instanceof Identical) {
             $arguments[] = $this->createArg($this->createTrue());

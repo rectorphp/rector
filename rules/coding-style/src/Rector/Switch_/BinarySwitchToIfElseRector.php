@@ -96,8 +96,8 @@ PHP
 
         if ($secondCase->cond !== null) {
             // has condition
-            $equalNode = new Equal($node->cond, $secondCase->cond);
-            $ifNode->elseifs[] = new ElseIf_($equalNode, $this->removeBreakNodes($secondCase->stmts));
+            $equal = new Equal($node->cond, $secondCase->cond);
+            $ifNode->elseifs[] = new ElseIf_($equal, $this->removeBreakNodes($secondCase->stmts));
         } else {
             // defaults
             $ifNode->else = new Else_($this->removeBreakNodes($secondCase->stmts));

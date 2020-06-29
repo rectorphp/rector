@@ -159,9 +159,9 @@ PHP
     private function createPropertyArrayCollectionAssign(string $toManyPropertyName): Expression
     {
         $propertyFetch = $this->createPropertyFetch('this', $toManyPropertyName);
-        $newCollection = new New_(new FullyQualified(ArrayCollection::class));
+        $new = new New_(new FullyQualified(ArrayCollection::class));
 
-        $assign = new Assign($propertyFetch, $newCollection);
+        $assign = new Assign($propertyFetch, $new);
 
         return new Expression($assign);
     }

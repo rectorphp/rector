@@ -47,15 +47,15 @@ final class NamespaceFactory
      */
     private function createNewClass(DecoupleClassMethodMatch $decoupleClassMethodMatch, array $classStmts): Class_
     {
-        $classBuilder = new ClassBuilder($decoupleClassMethodMatch->getClassName());
-        $classBuilder->addStmts($classStmts);
-        $classBuilder->makeFinal();
+        $class = new ClassBuilder($decoupleClassMethodMatch->getClassName());
+        $class->addStmts($classStmts);
+        $class->makeFinal();
 
         $parentClassName = $decoupleClassMethodMatch->getParentClassName();
         if ($parentClassName !== null) {
-            $classBuilder->extend(new FullyQualified($parentClassName));
+            $class->extend(new FullyQualified($parentClassName));
         }
 
-        return $classBuilder->getNode();
+        return $class->getNode();
     }
 }

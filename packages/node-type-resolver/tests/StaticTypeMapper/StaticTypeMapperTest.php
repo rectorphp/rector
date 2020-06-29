@@ -37,9 +37,9 @@ final class StaticTypeMapperTest extends AbstractKernelTestCase
      */
     public function testMapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, string $expectedType): void
     {
-        $node = new String_('hey');
+        $string = new String_('hey');
 
-        $phpStanType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $node);
+        $phpStanType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $string);
 
         $this->assertInstanceOf($expectedType, $phpStanType);
     }

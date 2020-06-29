@@ -34,20 +34,20 @@ final class StaticTypesInClassResolver
      * @param string[] $types
      * @return ObjectType[]
      */
-    public function collectStaticCallTypeInClass(Class_ $node, array $types): array
+    public function collectStaticCallTypeInClass(Class_ $class, array $types): array
     {
         $staticTypesInClass = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) use (
+        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $class) use (
             $types,
             &$staticTypesInClass
         ) {
-            if (! $node instanceof StaticCall) {
+            if (! $class instanceof StaticCall) {
                 return null;
             }
 
             foreach ($types as $type) {
-                if ($this->nodeTypeResolver->isObjectType($node->class, $type)) {
+                if ($this->nodeTypeResolver->isObjectType($class->class, $type)) {
                     $staticTypesInClass[] = new FullyQualifiedObjectType($type);
                 }
             }

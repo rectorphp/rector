@@ -115,17 +115,17 @@ PHP
         $this->removeNode($if);
     }
 
-    private function processForeach(Foreach_ $node): void
+    private function processForeach(Foreach_ $foreach): void
     {
-        if ($node->stmts !== []) {
+        if ($foreach->stmts !== []) {
             return;
         }
 
-        if ($this->isNodeWithSideEffect($node->expr)) {
+        if ($this->isNodeWithSideEffect($foreach->expr)) {
             return;
         }
 
-        $this->removeNode($node);
+        $this->removeNode($foreach);
     }
 
     private function isNodeWithSideEffect(Expr $expr): bool

@@ -144,14 +144,14 @@ PHP
      */
     private function resolveCount(bool $isNegated, Expr $expr): BinaryOp
     {
-        $valueNode = new LNumber(0);
+        $lNumber = new LNumber(0);
 
         // compare === 0, assumption
         if ($isNegated) {
-            return new Identical($expr, $valueNode);
+            return new Identical($expr, $lNumber);
         }
 
-        return new Greater($expr, $valueNode);
+        return new Greater($expr, $lNumber);
     }
 
     /**
@@ -159,14 +159,14 @@ PHP
      */
     private function resolveArray(bool $isNegated, Expr $expr): BinaryOp
     {
-        $valueNode = new Array_([]);
+        $array = new Array_([]);
 
         // compare === []
         if ($isNegated) {
-            return new Identical($expr, $valueNode);
+            return new Identical($expr, $array);
         }
 
-        return new NotIdentical($expr, $valueNode);
+        return new NotIdentical($expr, $array);
     }
 
     /**
@@ -174,14 +174,14 @@ PHP
      */
     private function resolveString(bool $isNegated, Expr $expr): BinaryOp
     {
-        $valueNode = new String_('');
+        $string = new String_('');
 
         // compare === ''
         if ($isNegated) {
-            return new Identical($expr, $valueNode);
+            return new Identical($expr, $string);
         }
 
-        return new NotIdentical($expr, $valueNode);
+        return new NotIdentical($expr, $string);
     }
 
     /**
@@ -189,24 +189,24 @@ PHP
      */
     private function resolveInteger(bool $isNegated, Expr $expr): BinaryOp
     {
-        $valueNode = new LNumber(0);
+        $lNumber = new LNumber(0);
 
         if ($isNegated) {
-            return new Identical($expr, $valueNode);
+            return new Identical($expr, $lNumber);
         }
 
-        return new NotIdentical($expr, $valueNode);
+        return new NotIdentical($expr, $lNumber);
     }
 
     private function resolveFloat(bool $isNegated, Expr $expr): BinaryOp
     {
-        $valueNode = new DNumber(0.0);
+        $dNumber = new DNumber(0.0);
 
         if ($isNegated) {
-            return new Identical($expr, $valueNode);
+            return new Identical($expr, $dNumber);
         }
 
-        return new NotIdentical($expr, $valueNode);
+        return new NotIdentical($expr, $dNumber);
     }
 
     /**

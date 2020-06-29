@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Guard;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
@@ -52,17 +54,22 @@ final class BreakingVariableRenameGuard
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function shouldSkip(
+    public function shouldSkipVariable(
         string $currentName,
         string $expectedName,
         ClassMethod $classMethod,
         Variable $variable
     ): bool {
+        // is the suffix? → also accepted
+        if (Strings::endsWith($currentName, ucfirst($expectedName))) {
+            return true;
+        }
+
         if ($this->conflictingNameResolver->checkNameIsInClassMethod($expectedName, $classMethod)) {
             return true;
         }
 
-        if ($this->overridenExistingNamesResolver->checkNameInClassMethod($currentName, $classMethod)) {
+        if ($this->overridenExistingNamesResolver->checkNameInClassMethodForNew($currentName, $classMethod)) {
             return true;
         }
 
@@ -70,11 +77,34 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        if ($this->isUsedInIfAndOtherBranches($variable, $currentName)) {
+        return $this->isUsedInIfAndOtherBranches($variable, $currentName);
+    }
+
+    public function shouldSkipParam(
+        string $currentName,
+        string $expectedName,
+        ClassMethod $classMethod,
+        Param $param
+    ): bool {
+        // is the suffix? → also accepted
+        if (Strings::endsWith($currentName, ucfirst($expectedName))) {
             return true;
         }
 
-        return false;
+        $conflictingNames = $this->conflictingNameResolver->resolveConflictingVariableNamesForParam($classMethod);
+        if (in_array($expectedName, $conflictingNames, true)) {
+            return true;
+        }
+
+        if ($this->conflictingNameResolver->checkNameIsInClassMethod($expectedName, $classMethod)) {
+            return true;
+        }
+
+        if ($this->overridenExistingNamesResolver->checkNameInClassMethodForParam($expectedName, $classMethod)) {
+            return true;
+        }
+
+        return $this->isVariableAlreadyDefined($param->var, $currentName);
     }
 
     private function isVariableAlreadyDefined(Variable $variable, string $currentVariableName): bool

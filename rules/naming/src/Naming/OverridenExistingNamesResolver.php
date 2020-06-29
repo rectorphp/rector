@@ -43,10 +43,31 @@ final class OverridenExistingNamesResolver
         $this->arrayFilter = $arrayFilter;
     }
 
-    public function checkNameInClassMethod(string $variableName, ClassMethod $classMethod): bool
+    public function checkNameInClassMethodForNew(string $variableName, ClassMethod $classMethod): bool
     {
         $overridenVariableNames = $this->resolveOveriddenNamesForNew($classMethod);
         return in_array($variableName, $overridenVariableNames, true);
+    }
+
+    public function checkNameInClassMethodForParam(string $expectedName, ClassMethod $classMethod): bool
+    {
+        /** @var Assign[] $assigns */
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
+        $usedVariableNames = [];
+        foreach ($assigns as $assign) {
+            if (! $assign->var instanceof Variable) {
+                continue;
+            }
+
+            $variableName = $this->nodeNameResolver->getName($assign->var);
+            if ($variableName === null) {
+                continue;
+            }
+
+            $usedVariableNames[] = $variableName;
+        }
+
+        return in_array($expectedName, $usedVariableNames, true);
     }
 
     /**
@@ -64,6 +85,7 @@ final class OverridenExistingNamesResolver
 
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
+
         foreach ($assigns as $assign) {
             /** @var Variable $assignVariable */
             $assignVariable = $assign->var;

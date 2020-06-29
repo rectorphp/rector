@@ -139,9 +139,9 @@ PHP
     /**
      * @param Variable|PropertyFetch $objectExpr
      */
-    private function matchCallableMethod(Expr $objectExpr, String_ $methodExpr): ?ClassMethod
+    private function matchCallableMethod(Expr $objectExpr, String_ $string): ?ClassMethod
     {
-        $methodName = $this->getValue($methodExpr);
+        $methodName = $this->getValue($string);
         if (! is_string($methodName)) {
             throw new ShouldNotHappenException();
         }

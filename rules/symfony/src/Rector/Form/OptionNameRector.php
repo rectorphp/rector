@@ -84,10 +84,10 @@ PHP
         return $node;
     }
 
-    private function processStringKey(String_ $stringKeyNode): void
+    private function processStringKey(String_ $string): void
     {
-        $currentOptionName = $stringKeyNode->value;
+        $currentOptionName = $string->value;
 
-        $stringKeyNode->value = self::OLD_TO_NEW_OPTION[$currentOptionName] ?? $stringKeyNode->value;
+        $string->value = self::OLD_TO_NEW_OPTION[$currentOptionName] ?? $string->value;
     }
 }

@@ -113,10 +113,10 @@ PHP
         return $this->classManipulator->hasTrait($class, self::PROPHECY_TRAIT);
     }
 
-    private function hasProphesizeMethodCall(Class_ $node): bool
+    private function hasProphesizeMethodCall(Class_ $class): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) {
-            return $this->isMethodCall($node, 'this', 'prophesize');
+        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $class) {
+            return $this->isMethodCall($class, 'this', 'prophesize');
         });
     }
 }

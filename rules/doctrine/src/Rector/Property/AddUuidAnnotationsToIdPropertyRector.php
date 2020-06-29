@@ -92,8 +92,8 @@ CODE_SAMPLE
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        $uuidObjectType = new FullyQualifiedObjectType(UuidInterface::class);
-        $phpDocInfo->changeVarType($uuidObjectType);
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType(UuidInterface::class);
+        $phpDocInfo->changeVarType($fullyQualifiedObjectType);
 
         $phpDocInfo->removeByType(GeneratedValueTagValueNode::class);
         $this->changeColumnTypeToUuidBinary($phpDocInfo);

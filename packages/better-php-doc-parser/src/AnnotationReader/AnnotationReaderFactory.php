@@ -69,8 +69,8 @@ final class AnnotationReaderFactory
         if (class_exists(ConstantPreservingAnnotationReader::class) && class_exists(
             ConstantPreservingDocParser::class
         )) {
-            $docParser = new ConstantPreservingDocParser();
-            return new ConstantPreservingAnnotationReader($docParser);
+            $constantPreservingDocParser = new ConstantPreservingDocParser();
+            return new ConstantPreservingAnnotationReader($constantPreservingDocParser);
         }
 
         // fallback for testing incompatibilities

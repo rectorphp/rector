@@ -176,11 +176,11 @@ PHP
 
     private function createClassMethodFromFunction(string $methodName, Function_ $function): ClassMethod
     {
-        $methodBuilder = new Method($methodName);
-        $methodBuilder->makePublic();
-        $methodBuilder->makeStatic();
-        $methodBuilder->addStmts($function->stmts);
+        $method = new Method($methodName);
+        $method->makePublic();
+        $method->makeStatic();
+        $method->addStmts($function->stmts);
 
-        return $methodBuilder->getNode();
+        return $method->getNode();
     }
 }

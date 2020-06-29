@@ -67,24 +67,24 @@ final class IfManipulator
      *     return $value;
      * }
      */
-    public function matchIfNotNullReturnValue(If_ $ifNode): ?Expr
+    public function matchIfNotNullReturnValue(If_ $if): ?Expr
     {
-        if (count($ifNode->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return null;
         }
 
-        $insideIfNode = $ifNode->stmts[0];
+        $insideIfNode = $if->stmts[0];
         if (! $insideIfNode instanceof Return_) {
             return null;
         }
 
         /** @var Return_ $returnNode */
         $returnNode = $insideIfNode;
-        if (! $ifNode->cond instanceof NotIdentical) {
+        if (! $if->cond instanceof NotIdentical) {
             return null;
         }
 
-        return $this->matchComparedAndReturnedNode($ifNode->cond, $returnNode);
+        return $this->matchComparedAndReturnedNode($if->cond, $returnNode);
     }
 
     /**
@@ -98,13 +98,13 @@ final class IfManipulator
      *     return 53;
      * }
      */
-    public function matchIfValueReturnValue(If_ $ifNode): ?Expr
+    public function matchIfValueReturnValue(If_ $if): ?Expr
     {
-        if (count($ifNode->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return null;
         }
 
-        $insideIfNode = $ifNode->stmts[0];
+        $insideIfNode = $if->stmts[0];
         if (! $insideIfNode instanceof Return_) {
             return null;
         }
@@ -112,16 +112,16 @@ final class IfManipulator
         /** @var Return_ $returnNode */
         $returnNode = $insideIfNode;
 
-        if (! $ifNode->cond instanceof Identical) {
+        if (! $if->cond instanceof Identical) {
             return null;
         }
 
-        if ($this->betterStandardPrinter->areNodesEqual($ifNode->cond->left, $returnNode->expr)) {
-            return $ifNode->cond->right;
+        if ($this->betterStandardPrinter->areNodesEqual($if->cond->left, $returnNode->expr)) {
+            return $if->cond->right;
         }
 
-        if ($this->betterStandardPrinter->areNodesEqual($ifNode->cond->right, $returnNode->expr)) {
-            return $ifNode->cond->left;
+        if ($this->betterStandardPrinter->areNodesEqual($if->cond->right, $returnNode->expr)) {
+            return $if->cond->left;
         }
 
         return null;
@@ -262,16 +262,16 @@ final class IfManipulator
         return $this->hasOnlyStmtOfType($node, Foreach_::class);
     }
 
-    private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
+    private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr
     {
         if ($this->betterStandardPrinter->areNodesEqual(
             $notIdentical->left,
-            $returnNode->expr
+            $return->expr
         ) && $this->constFetchManipulator->isNull($notIdentical->right)) {
             return $notIdentical->left;
         }
 
-        if (! $this->betterStandardPrinter->areNodesEqual($notIdentical->right, $returnNode->expr)) {
+        if (! $this->betterStandardPrinter->areNodesEqual($notIdentical->right, $return->expr)) {
             return null;
         }
         if ($this->constFetchManipulator->isNull($notIdentical->left)) {

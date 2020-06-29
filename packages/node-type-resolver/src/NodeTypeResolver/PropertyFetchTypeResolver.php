@@ -153,12 +153,12 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         }
 
         // property is used
-        $propertyReflection = new ReflectionProperty($varObjectType->getClassName(), $propertyName);
-        if (! $propertyReflection->getDocComment()) {
+        $reflectionProperty = new ReflectionProperty($varObjectType->getClassName(), $propertyName);
+        if (! $reflectionProperty->getDocComment()) {
             return new MixedType();
         }
 
-        $phpDocNode = $this->betterPhpDocParser->parseString((string) $propertyReflection->getDocComment());
+        $phpDocNode = $this->betterPhpDocParser->parseString((string) $reflectionProperty->getDocComment());
         $varTagValues = $phpDocNode->getVarTagValues();
 
         if (! isset($varTagValues[0])) {

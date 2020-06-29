@@ -288,12 +288,12 @@ final class ClassRenamer
         });
     }
 
-    private function isValidClassNameChange(Node $node, string $newName, Class_ $classNode): bool
+    private function isValidClassNameChange(Node $node, string $newName, Class_ $class): bool
     {
-        if ($classNode->extends === $node && interface_exists($newName)) {
+        if ($class->extends === $node && interface_exists($newName)) {
             return false;
         }
-        return ! (in_array($node, $classNode->implements, true) && class_exists($newName));
+        return ! (in_array($node, $class->implements, true) && class_exists($newName));
     }
 
     private function isValidUseImportChange(string $newName, UseUse $useUse): bool

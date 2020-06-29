@@ -118,11 +118,11 @@ PHP
             return null;
         }
 
-        $name = new FullyQualified($classLikeName);
+        $fullyQualified = new FullyQualified($classLikeName);
         /** @see \Rector\PostRector\Collector\UseNodesToAddCollector::isShortImported() */
-        $name->setAttribute(AttributeKey::FILE_INFO, $node->getAttribute(AttributeKey::FILE_INFO));
+        $fullyQualified->setAttribute(AttributeKey::FILE_INFO, $node->getAttribute(AttributeKey::FILE_INFO));
 
-        return new ClassConstFetch($name, 'class');
+        return new ClassConstFetch($fullyQualified, 'class');
     }
 
     private function classLikeSensitiveExists(string $classLikeName): bool
@@ -140,9 +140,9 @@ PHP
             return false;
         }
 
-        $classReflection = new ReflectionClass($classLikeName);
+        $reflectionClass = new ReflectionClass($classLikeName);
 
-        if ($classLikeName !== $classReflection->getName()) {
+        if ($classLikeName !== $reflectionClass->getName()) {
             $this->sensitiveNonExistingClasses[] = $classLikeName;
             return false;
         }

@@ -100,7 +100,7 @@ PHP
                 continue;
             }
 
-            if ($this->breakingVariableRenameGuard->shouldSkip($currentName, $expectedName, $node, $variable)) {
+            if ($this->breakingVariableRenameGuard->shouldSkipVariable($currentName, $expectedName, $node, $variable)) {
                 continue;
             }
 

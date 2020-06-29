@@ -215,14 +215,14 @@ PHP
      * After:
      * $this->entityManager->
      */
-    private function replaceEntityRegistryVariableWithEntityManagerProperty(Class_ $node): void
+    private function replaceEntityRegistryVariableWithEntityManagerProperty(Class_ $class): void
     {
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node): ?PropertyFetch {
-            if (! $node instanceof Variable) {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $class): ?PropertyFetch {
+            if (! $class instanceof Variable) {
                 return null;
             }
 
-            if (! $this->isObjectType($node, ObjectManager::class)) {
+            if (! $this->isObjectType($class, ObjectManager::class)) {
                 return null;
             }
 

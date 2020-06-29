@@ -94,16 +94,16 @@ PHP
             return null;
         }
 
-        $condition = new NotIdentical($valueNode, $this->createNull());
+        $notIdentical = new NotIdentical($valueNode, $this->createNull());
 
-        $newFuncCallNode = new FuncCall($node->name, $node->args);
-        $ternaryNode = new Ternary($condition, $newFuncCallNode, new ClassConstFetch(new Name('self'), new Identifier(
+        $funcCall = new FuncCall($node->name, $node->args);
+        $ternary = new Ternary($notIdentical, $funcCall, new ClassConstFetch(new Name('self'), new Identifier(
             'class'
         )));
 
-        $newFuncCallNode->setAttribute(AttributeKey::PARENT_NODE, $ternaryNode);
+        $funcCall->setAttribute(AttributeKey::PARENT_NODE, $ternary);
 
-        return $ternaryNode;
+        return $ternary;
     }
 
     private function shouldSkip(FuncCall $funcCall): bool

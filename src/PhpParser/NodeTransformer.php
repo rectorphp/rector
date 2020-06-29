@@ -85,11 +85,11 @@ final class NodeTransformer
     /**
      * @return Expression[]
      */
-    public function transformArrayToYields(Array_ $arrayNode): array
+    public function transformArrayToYields(Array_ $array): array
     {
         $yieldNodes = [];
 
-        foreach ($arrayNode->items as $arrayItem) {
+        foreach ($array->items as $arrayItem) {
             $expressionNode = new Expression(new Yield_($arrayItem->value, $arrayItem->key));
             if ($arrayItem->getComments() !== []) {
                 $expressionNode->setAttribute(AttributeKey::COMMENTS, $arrayItem->getComments());

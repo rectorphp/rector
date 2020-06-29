@@ -75,10 +75,10 @@ PHP
         }
 
         if ($node->elseifs !== []) {
-            $newNode = new If_($node->cond);
-            $newNode->stmts = $node->stmts;
+            $if = new If_($node->cond);
+            $if->stmts = $node->stmts;
 
-            $this->addNodeBeforeNode($newNode, $node);
+            $this->addNodeBeforeNode($if, $node);
 
             /** @var ElseIf_ $firstElseIf */
             $firstElseIf = array_shift($node->elseifs);

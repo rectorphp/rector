@@ -165,12 +165,12 @@ PHP
         }
 
         if (! isset($methodCall->args[$optionsPosition])) {
-            $optionsArrayNode = new Array_();
+            $array = new Array_();
             foreach ($namesToArgs as $name => $arg) {
-                $optionsArrayNode->items[] = new ArrayItem($arg->value, new String_($name));
+                $array->items[] = new ArrayItem($arg->value, new String_($name));
             }
 
-            $methodCall->args[$optionsPosition] = new Arg($optionsArrayNode);
+            $methodCall->args[$optionsPosition] = new Arg($array);
         }
 
         $formTypeClassNode = $this->classLikeParsedNodesFinder->findClass($className);
@@ -216,9 +216,9 @@ PHP
         return $namesToArgs;
     }
 
-    private function addBuildFormMethod(Class_ $classNode, ClassMethod $classMethod): void
+    private function addBuildFormMethod(Class_ $class, ClassMethod $classMethod): void
     {
-        if ($classNode->getMethod('buildForm') !== null) {
+        if ($class->getMethod('buildForm') !== null) {
             return;
         }
 
@@ -244,15 +244,15 @@ PHP
 
         $buildFormClassMethodNode = $buildFormClassMethodBuilder->getNode();
 
-        $classNode->stmts[] = $buildFormClassMethodNode;
+        $class->stmts[] = $buildFormClassMethodNode;
     }
 
     /**
      * @param Arg[] $namesToArgs
      */
-    private function addConfigureOptionsMethod(Class_ $classNode, array $namesToArgs): void
+    private function addConfigureOptionsMethod(Class_ $class, array $namesToArgs): void
     {
-        if ($classNode->getMethod('configureOptions') !== null) {
+        if ($class->getMethod('configureOptions') !== null) {
             return;
         }
 
@@ -261,14 +261,14 @@ PHP
 
         $resolverParam = $resolverParamBuilder->getNode();
 
-        $optionsDefaults = new Array_();
+        $array = new Array_();
 
         foreach (array_keys($namesToArgs) as $optionName) {
-            $optionsDefaults->items[] = new ArrayItem($this->createNull(), new String_($optionName));
+            $array->items[] = new ArrayItem($this->createNull(), new String_($optionName));
         }
 
         $setDefaultsMethodCall = new MethodCall($resolverParam->var, new Identifier('setDefaults'), [
-            new Arg($optionsDefaults),
+            new Arg($array),
         ]);
 
         $configureOptionsClassMethodBuilder = $this->builderFactory->method('configureOptions');
@@ -278,7 +278,7 @@ PHP
 
         $configureOptionsClassMethod = $configureOptionsClassMethodBuilder->getNode();
 
-        $classNode->stmts[] = $configureOptionsClassMethod;
+        $class->stmts[] = $configureOptionsClassMethod;
     }
 
     /**

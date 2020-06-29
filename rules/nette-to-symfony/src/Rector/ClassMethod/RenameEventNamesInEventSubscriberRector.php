@@ -115,13 +115,13 @@ PHP
         return $node;
     }
 
-    private function renameArrayKeys(Return_ $returnNode): void
+    private function renameArrayKeys(Return_ $return): void
     {
-        if (! $returnNode->expr instanceof Array_) {
+        if (! $return->expr instanceof Array_) {
             return;
         }
 
-        foreach ($returnNode->expr->items as $arrayItem) {
+        foreach ($return->expr->items as $arrayItem) {
             $eventInfo = $this->matchStringKeys($arrayItem);
             if ($eventInfo === null) {
                 $eventInfo = $this->matchClassConstKeys($arrayItem);
@@ -136,7 +136,7 @@ PHP
             ), $eventInfo->getConstant());
 
             // method name
-            $className = (string) $returnNode->getAttribute(AttributeKey::CLASS_NAME);
+            $className = (string) $return->getAttribute(AttributeKey::CLASS_NAME);
             $methodName = (string) $this->getValue($arrayItem->value);
             $this->processMethodArgument($className, $methodName, $eventInfo);
         }

@@ -122,10 +122,10 @@ final class AttributeAwareClassFactoryFactory
     {
         $createClassMethod = $this->builderFactory->method('create');
 
-        $paramBuilder = new Param('docContent');
-        $paramBuilder->setType('string');
+        $param = new Param('docContent');
+        $param->setType('string');
 
-        $docContentParam = $paramBuilder->getNode();
+        $docContentParam = $param->getNode();
 
         $createClassMethod->addParam($nodeParam);
         $createClassMethod->addParam($docContentParam);
@@ -157,9 +157,9 @@ final class AttributeAwareClassFactoryFactory
     private function createIsAFuncCall(string $nodeClass): FuncCall
     {
         $variable = new Variable(self::NODE);
-        $true = new ConstFetch(new Name('true'));
+        $constFetch = new ConstFetch(new Name('true'));
 
-        $args = [new Arg($variable), new Arg($this->createClassReference($nodeClass)), new Arg($true)];
+        $args = [new Arg($variable), new Arg($this->createClassReference($nodeClass)), new Arg($constFetch)];
 
         return new FuncCall(new Name('is_a'), $args);
     }

@@ -96,14 +96,14 @@ PHP
 
     private function createTearDownMethodWithMockeryClose(): ClassMethod
     {
-        $tearDownClassMethodBuilder = new Method('tearDown');
-        $tearDownClassMethodBuilder->setReturnType('void');
-        $tearDownClassMethodBuilder->makeProtected();
+        $method = new Method('tearDown');
+        $method->setReturnType('void');
+        $method->makeProtected();
 
         $staticCall = $this->createMockeryClose();
-        $tearDownClassMethodBuilder->addStmt($staticCall);
+        $method->addStmt($staticCall);
 
-        return $tearDownClassMethodBuilder->getNode();
+        return $method->getNode();
     }
 
     private function containsMockeryClose(ClassMethod $classMethod): bool
