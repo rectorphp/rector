@@ -17,9 +17,9 @@ final class RenameNonPhpTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $filePath): void
+    public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFileInfoWithoutAutoload($filePath);
+        $this->doTestFileInfoWithoutAutoload($fileInfo);
     }
 
     public function provideData(): Iterator

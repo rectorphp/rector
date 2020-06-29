@@ -20,11 +20,11 @@ final class FunctionAutoImportNamesParameterTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $filePath): void
+    public function test(SmartFileInfo $fileInfo): void
     {
         $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
 
-        $this->doTestFileInfo($filePath);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator

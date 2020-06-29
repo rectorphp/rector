@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class ClassWithNamedService25Controller extends AbstractController
+final class RemoveEmptyTemplateWithThisRenderController extends AbstractController
 {
     /**
      * @Template()
@@ -25,7 +25,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class ClassWithNamedService25Controller extends AbstractController
+final class RemoveEmptyTemplateWithThisRenderController extends AbstractController
 {
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
