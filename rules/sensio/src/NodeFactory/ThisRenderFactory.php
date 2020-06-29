@@ -109,14 +109,14 @@ final class ThisRenderFactory
      *
      * @return Array_[]
      */
-    private function resolveArrayArgumentsFromMethodCall(Return_ $returnNode): array
+    private function resolveArrayArgumentsFromMethodCall(Return_ $return): array
     {
-        if (! $returnNode->expr instanceof MethodCall) {
+        if (! $return->expr instanceof MethodCall) {
             return [];
         }
 
         $arguments = [];
-        foreach ($returnNode->expr->args as $arg) {
+        foreach ($return->expr->args as $arg) {
             if (! $arg->value instanceof Array_) {
                 continue;
             }

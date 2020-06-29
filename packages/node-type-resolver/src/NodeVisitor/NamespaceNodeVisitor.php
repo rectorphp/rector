@@ -26,7 +26,7 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
     /**
      * @var Namespace_|null
      */
-    private $namespaceNode;
+    private $namespace;
 
     /**
      * @var BetterNodeFinder
@@ -45,7 +45,7 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes): ?array
     {
         $this->namespaceName = null;
-        $this->namespaceNode = null;
+        $this->namespace = null;
 
         // init basic use nodes for non-namespaced code
         /** @var Use_[] $uses */
@@ -59,7 +59,7 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof Namespace_) {
             $this->namespaceName = $node->name !== null ? $node->name->toString() : null;
-            $this->namespaceNode = $node;
+            $this->namespace = $node;
 
             /** @var Use_[] $uses */
             $uses = $this->betterNodeFinder->findInstanceOf($node, Use_::class);
@@ -67,7 +67,7 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
         }
 
         $node->setAttribute(AttributeKey::NAMESPACE_NAME, $this->namespaceName);
-        $node->setAttribute(AttributeKey::NAMESPACE_NODE, $this->namespaceNode);
+        $node->setAttribute(AttributeKey::NAMESPACE_NODE, $this->namespace);
         $node->setAttribute(AttributeKey::USE_NODES, $this->useNodes);
 
         return $node;

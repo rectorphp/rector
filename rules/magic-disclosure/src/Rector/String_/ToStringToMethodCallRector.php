@@ -75,14 +75,14 @@ PHP
         return $this->processMethodCall($node);
     }
 
-    private function processStringNode(String_ $stringNode): ?Node
+    private function processStringNode(String_ $string): ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (! $this->isObjectType($stringNode, $type)) {
+            if (! $this->isObjectType($string, $type)) {
                 continue;
             }
 
-            return $this->createMethodCall($stringNode->expr, $methodName);
+            return $this->createMethodCall($string->expr, $methodName);
         }
 
         return null;

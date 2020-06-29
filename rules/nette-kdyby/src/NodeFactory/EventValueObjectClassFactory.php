@@ -69,8 +69,8 @@ final class EventValueObjectClassFactory
      */
     private function createConstructClassMethod(array $variableWithTypes): ClassMethod
     {
-        $methodBuilder = new Method('__construct');
-        $methodBuilder->makePublic();
+        $method = new Method('__construct');
+        $method->makePublic();
 
         foreach ($variableWithTypes as $variableWithType) {
             $param = new Param(new Variable($variableWithType->getName()));
@@ -79,24 +79,24 @@ final class EventValueObjectClassFactory
                 $param->type = $variableWithType->getPhpParserTypeNode();
             }
 
-            $methodBuilder->addParam($param);
+            $method->addParam($param);
 
             $assign = $this->nodeFactory->createPropertyAssignment($variableWithType->getName());
-            $methodBuilder->addStmt($assign);
+            $method->addStmt($assign);
         }
 
-        return $methodBuilder->getNode();
+        return $method->getNode();
     }
 
     private function createEventClassBuilder(string $className): ClassBuilder
     {
         $shortClassName = $this->classNaming->getShortName($className);
 
-        $classBuilder = new ClassBuilder($shortClassName);
-        $classBuilder->makeFinal();
-        $classBuilder->extend(new FullyQualified('Symfony\Contracts\EventDispatcher\Event'));
+        $class = new ClassBuilder($shortClassName);
+        $class->makeFinal();
+        $class->extend(new FullyQualified('Symfony\Contracts\EventDispatcher\Event'));
 
-        return $classBuilder;
+        return $class;
     }
 
     private function wrapClassToNamespace(string $className, Class_ $class): Namespace_

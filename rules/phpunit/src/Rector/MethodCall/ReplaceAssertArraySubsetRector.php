@@ -98,11 +98,11 @@ PHP
 
         if ($this->expectedKeys === []) {
             // no keys → intersect!
-            $arrayIntersect = new FuncCall(new Name('array_intersect'));
-            $arrayIntersect->args[] = new Arg($expectedArray);
-            $arrayIntersect->args[] = $node->args[1];
+            $funcCall = new FuncCall(new Name('array_intersect'));
+            $funcCall->args[] = new Arg($expectedArray);
+            $funcCall->args[] = $node->args[1];
 
-            $identical = new Identical($arrayIntersect, $expectedArray);
+            $identical = new Identical($funcCall, $expectedArray);
 
             $assertTrue = $this->createPHPUnitCallWithName($node, 'assertTrue');
             $assertTrue->args[] = new Arg($identical);

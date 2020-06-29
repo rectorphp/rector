@@ -45,9 +45,9 @@ final class PropertyTypeResolver implements NodeTypeResolverInterface
     public function resolve(Node $propertyNode): Type
     {
         // fake property to local PropertyFetch → PHPStan understands that
-        $propertyFetchNode = new PropertyFetch(new Variable('this'), (string) $propertyNode->props[0]->name);
-        $propertyFetchNode->setAttribute(AttributeKey::SCOPE, $propertyNode->getAttribute(AttributeKey::SCOPE));
+        $propertyFetch = new PropertyFetch(new Variable('this'), (string) $propertyNode->props[0]->name);
+        $propertyFetch->setAttribute(AttributeKey::SCOPE, $propertyNode->getAttribute(AttributeKey::SCOPE));
 
-        return $this->nodeTypeResolver->resolve($propertyFetchNode);
+        return $this->nodeTypeResolver->resolve($propertyFetch);
     }
 }

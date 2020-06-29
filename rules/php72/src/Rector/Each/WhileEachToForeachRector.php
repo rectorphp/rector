@@ -104,7 +104,7 @@ PHP
 
         /** @var ArrayItem $valueItem */
         $valueItem = array_pop($listNode->items);
-        $foreachNode = new Foreach_($foreachedExpr, $valueItem, [
+        $foreach = new Foreach_($foreachedExpr, $valueItem, [
             'stmts' => $node->stmts,
         ]);
 
@@ -114,10 +114,10 @@ PHP
             $keyItem = array_pop($listNode->items);
 
             if ($keyItem !== null) {
-                $foreachNode->keyVar = $keyItem->value;
+                $foreach->keyVar = $keyItem->value;
             }
         }
 
-        return $foreachNode;
+        return $foreach;
     }
 }

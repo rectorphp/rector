@@ -64,9 +64,9 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     public function addPropertyWithoutConstructorToClass(
         string $propertyName,
         ?Type $propertyType,
-        Class_ $classNode
+        Class_ $class
     ): void {
-        $this->propertiesWithoutConstructorByClass[spl_object_hash($classNode)][$propertyName] = $propertyType;
+        $this->propertiesWithoutConstructorByClass[spl_object_hash($class)][$propertyName] = $propertyType;
     }
 
     /**

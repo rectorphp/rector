@@ -19,6 +19,9 @@ final class StaticEasyPrefixer
         'Symplify\SmartFileSystem\*',
         'Symfony\Component\EventDispatcher\EventSubscriberInterface',
         'Symfony\Component\Console\Style\SymfonyStyle',
+        // doctrine annotations to autocomplete
+        'Doctrine\ORM\Mapping\*',
+        'JMS\DiExtraBundle\Annotation\Inject',
     ];
 
     public static function prefixClass(string $class, string $prefix): string

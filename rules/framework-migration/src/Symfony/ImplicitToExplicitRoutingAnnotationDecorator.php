@@ -39,8 +39,8 @@ final class ImplicitToExplicitRoutingAnnotationDecorator
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         $phpDocInfo->addTagValueNodeWithShortName($symfonyRouteTagValueNode);
 
-        $symfonyRouteUseObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);
-        $this->addUseType($symfonyRouteUseObjectType, $classMethod);
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);
+        $this->addUseType($fullyQualifiedObjectType, $classMethod);
 
         // remove
         $this->useNodesToAddCollector->removeShortUse($classMethod, 'Route');

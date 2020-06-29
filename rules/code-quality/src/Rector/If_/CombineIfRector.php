@@ -76,29 +76,29 @@ PHP
         return $node;
     }
 
-    private function shouldSkip(If_ $node): bool
+    private function shouldSkip(If_ $if): bool
     {
-        if ($node->else !== null) {
+        if ($if->else !== null) {
             return true;
         }
 
-        if (count($node->stmts) !== 1) {
+        if (count($if->stmts) !== 1) {
             return true;
         }
 
-        if ($node->elseifs !== []) {
+        if ($if->elseifs !== []) {
             return true;
         }
 
-        if (! $node->stmts[0] instanceof If_) {
+        if (! $if->stmts[0] instanceof If_) {
             return true;
         }
 
-        if ($node->stmts[0]->else !== null) {
+        if ($if->stmts[0]->else !== null) {
             return true;
         }
 
-        return (bool) $node->stmts[0]->elseifs;
+        return (bool) $if->stmts[0]->elseifs;
     }
 
     private function combineComments(Node $firstNode, Node $secondNode): void

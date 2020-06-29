@@ -80,21 +80,21 @@ PHP
     /**
      * Remove "./" which would break the path
      */
-    private function removeExtraDotSlash(String_ $includedPath): void
+    private function removeExtraDotSlash(String_ $string): void
     {
-        if (! Strings::startsWith($includedPath->value, './')) {
+        if (! Strings::startsWith($string->value, './')) {
             return;
         }
 
-        $includedPath->value = Strings::replace($includedPath->value, '#^\.\/#', '/');
+        $string->value = Strings::replace($string->value, '#^\.\/#', '/');
     }
 
-    private function prependSlashIfMissing(String_ $includedPath): void
+    private function prependSlashIfMissing(String_ $string): void
     {
-        if (Strings::startsWith($includedPath->value, '/')) {
+        if (Strings::startsWith($string->value, '/')) {
             return;
         }
 
-        $includedPath->value = '/' . $includedPath->value;
+        $string->value = '/' . $string->value;
     }
 }

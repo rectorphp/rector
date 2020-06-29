@@ -212,9 +212,9 @@ CODE_SAMPLE
         return $propertyWithUuid;
     }
 
-    private function hasClassPropertyName(Class_ $node, string $uuidPropertyName): bool
+    private function hasClassPropertyName(Class_ $class, string $uuidPropertyName): bool
     {
-        foreach ($node->getProperties() as $property) {
+        foreach ($class->getProperties() as $property) {
             if (! $this->isName($property, $uuidPropertyName)) {
                 continue;
             }

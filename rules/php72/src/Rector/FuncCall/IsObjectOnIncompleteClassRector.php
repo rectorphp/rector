@@ -64,10 +64,10 @@ PHP
             return null;
         }
 
-        $booleanNotNode = new BooleanNot($node);
-        $node->setAttribute(AttributeKey::PARENT_NODE, $booleanNotNode);
+        $booleanNot = new BooleanNot($node);
+        $node->setAttribute(AttributeKey::PARENT_NODE, $booleanNot);
 
-        return $booleanNotNode;
+        return $booleanNot;
     }
 
     private function shouldSkip(FuncCall $funcCall): bool

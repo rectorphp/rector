@@ -15,6 +15,7 @@ use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\ExpectedNameResolver;
 
@@ -38,12 +39,19 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
      */
     private $hasChange = false;
 
+    /**
+     * @var BreakingVariableRenameGuard
+     */
+    private $breakingVariableRenameGuard;
+
     public function __construct(
+        BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ConflictingNameResolver $conflictingNameResolver,
         ExpectedNameResolver $expectedNameResolver
     ) {
         $this->conflictingNameResolver = $conflictingNameResolver;
         $this->expectedNameResolver = $expectedNameResolver;
+        $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
     }
 
     public function getDefinition(): RectorDefinition
@@ -110,15 +118,20 @@ PHP
     private function refactorClassMethods(ClassLike $classLike): void
     {
         foreach ($classLike->getMethods() as $classMethod) {
-            $conflictingNames = $this->conflictingNameResolver->resolveConflictingVariableNames($classMethod);
-
             foreach ($classMethod->params as $param) {
                 $expectedName = $this->expectedNameResolver->resolveForParamIfNotYet($param);
                 if ($expectedName === null) {
                     continue;
                 }
 
-                if (in_array($expectedName, $conflictingNames, true)) {
+                /** @var string $paramName */
+                $paramName = $this->getName($param);
+                if ($this->breakingVariableRenameGuard->shouldSkipParam(
+                    $paramName,
+                    $expectedName,
+                    $classMethod,
+                    $param
+                )) {
                     continue;
                 }
 

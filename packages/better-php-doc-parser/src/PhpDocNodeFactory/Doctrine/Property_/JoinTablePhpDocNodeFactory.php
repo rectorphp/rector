@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Property_;
 
+use Doctrine\ORM\Mapping\JoinTable;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
@@ -103,7 +104,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
     }
 
     /**
-     * @param \Doctrine\ORM\Mapping\JoinTable $joinTable
+     * @param JoinTable $joinTable
      * @return JoinColumnTagValueNode[]
      */
     private function createJoinColumnTagValues(string $annotationContent, $joinTable, string $type): array

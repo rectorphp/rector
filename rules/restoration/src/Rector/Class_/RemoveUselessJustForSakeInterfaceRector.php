@@ -147,10 +147,10 @@ CODE_SAMPLE
 
     private function getParentInterfaceIfFound(string $implementedInterfaceName): ?string
     {
-        $interfaceReflection = new ReflectionClass($implementedInterfaceName);
+        $reflectionClass = new ReflectionClass($implementedInterfaceName);
 
         // get first parent interface
-        return $interfaceReflection->getInterfaceNames()[0] ?? null;
+        return $reflectionClass->getInterfaceNames()[0] ?? null;
     }
 
     private function removeInterfaceFile(string $interfaceName, string $classFileLocation): void
@@ -178,8 +178,8 @@ CODE_SAMPLE
 
     private function resolveClassFileLocation(string $implementedInterfaceName)
     {
-        $deadInterfaceReflection = new ReflectionClass($implementedInterfaceName);
-        return $deadInterfaceReflection->getFileName();
+        $reflectionClass = new ReflectionClass($implementedInterfaceName);
+        return $reflectionClass->getFileName();
     }
 
     private function removeOrReplaceImlementedInterface(string $implementedInterfaceName, Class_ $class, int $key): void

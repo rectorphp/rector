@@ -91,8 +91,8 @@ PHP
             ['request', 'symfonyRequest']
         );
 
-        $requestVariableNode = new Variable($requestName);
-        $headersPropertyFetch = new PropertyFetch($requestVariableNode, 'headers');
+        $variable = new Variable($requestName);
+        $headersPropertyFetch = new PropertyFetch($variable, 'headers');
 
         $node->var = $headersPropertyFetch;
         $node->name = new Identifier('get');

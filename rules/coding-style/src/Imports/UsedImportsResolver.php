@@ -104,8 +104,8 @@ final class UsedImportsResolver
     /**
      * @return FullyQualifiedObjectType[]
      */
-    private function resolveForNamespace(Namespace_ $node): array
+    private function resolveForNamespace(Namespace_ $namespace): array
     {
-        return $this->resolveForStmts($node->stmts);
+        return $this->resolveForStmts($namespace->stmts);
     }
 }

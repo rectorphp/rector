@@ -262,8 +262,8 @@ PHP
             return $expectsMethodCall;
         }
 
-        $methodReflection = new ReflectionMethod($mockVariableType, $methodName);
-        if ($methodReflection->getNumberOfRequiredParameters() === 0) {
+        $reflectionMethod = new ReflectionMethod($mockVariableType, $methodName);
+        if ($reflectionMethod->getNumberOfRequiredParameters() === 0) {
             return $expectsMethodCall;
         }
 

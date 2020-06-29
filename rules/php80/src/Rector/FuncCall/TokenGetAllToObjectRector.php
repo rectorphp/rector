@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
@@ -113,7 +114,7 @@ PHP
     private function refactorTokenInForeach(Foreach_ $tokensForeach): void
     {
         $singleToken = $tokensForeach->valueVar;
-        if (! $singleToken instanceof Expr\Variable) {
+        if (! $singleToken instanceof Variable) {
             return;
         }
 

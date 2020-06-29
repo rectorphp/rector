@@ -91,16 +91,16 @@ PHP
         }
     }
 
-    private function keepStatementsToParentCase(Case_ $caseNode): void
+    private function keepStatementsToParentCase(Case_ $case): void
     {
-        $previousNode = $caseNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $previousNode = $case->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $previousNode instanceof Case_) {
             return;
         }
 
         if ($previousNode->stmts === []) {
-            $previousNode->stmts = $caseNode->stmts;
-            $caseNode->stmts = [];
+            $previousNode->stmts = $case->stmts;
+            $case->stmts = [];
         }
     }
 }

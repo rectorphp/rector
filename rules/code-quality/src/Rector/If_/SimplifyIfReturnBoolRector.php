@@ -109,22 +109,22 @@ PHP
         return $newReturnNode;
     }
 
-    private function shouldSkip(If_ $ifNode): bool
+    private function shouldSkip(If_ $if): bool
     {
-        if (count($ifNode->elseifs) > 0) {
+        if (count($if->elseifs) > 0) {
             return true;
         }
 
-        if ($this->isElseSeparatedThenIf($ifNode)) {
+        if ($this->isElseSeparatedThenIf($if)) {
             return true;
         }
 
-        if (! $this->isIfWithSingleReturnExpr($ifNode)) {
+        if (! $this->isIfWithSingleReturnExpr($if)) {
             return true;
         }
 
         /** @var Return_ $ifInnerNode */
-        $ifInnerNode = $ifNode->stmts[0];
+        $ifInnerNode = $if->stmts[0];
 
         /** @var Expr $returnedExpr */
         $returnedExpr = $ifInnerNode->expr;
@@ -133,35 +133,35 @@ PHP
             return true;
         }
 
-        $nextNode = $ifNode->getAttribute(AttributeKey::NEXT_NODE);
+        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
         if (! $nextNode instanceof Return_ || $nextNode->expr === null) {
             return true;
         }
 
         // negate + negate → skip for now
-        if ($this->isFalse($returnedExpr) && Strings::contains($this->print($ifNode->cond), '!=')) {
+        if ($this->isFalse($returnedExpr) && Strings::contains($this->print($if->cond), '!=')) {
             return true;
         }
 
         return ! $this->isBool($nextNode->expr);
     }
 
-    private function processReturnTrue(If_ $ifNode, Return_ $nextReturnNode): Return_
+    private function processReturnTrue(If_ $if, Return_ $nextReturnNode): Return_
     {
-        if ($ifNode->cond instanceof BooleanNot && $nextReturnNode->expr !== null && $this->isTrue(
+        if ($if->cond instanceof BooleanNot && $nextReturnNode->expr !== null && $this->isTrue(
             $nextReturnNode->expr
         )) {
-            return new Return_($this->boolCastOrNullCompareIfNeeded($ifNode->cond->expr));
+            return new Return_($this->boolCastOrNullCompareIfNeeded($if->cond->expr));
         }
 
-        return new Return_($this->boolCastOrNullCompareIfNeeded($ifNode->cond));
+        return new Return_($this->boolCastOrNullCompareIfNeeded($if->cond));
     }
 
-    private function processReturnFalse(If_ $ifNode, Return_ $nextReturnNode): ?Return_
+    private function processReturnFalse(If_ $if, Return_ $nextReturnNode): ?Return_
     {
-        if ($ifNode->cond instanceof Identical) {
+        if ($if->cond instanceof Identical) {
             return new Return_($this->boolCastOrNullCompareIfNeeded(
-                new NotIdentical($ifNode->cond->left, $ifNode->cond->right)
+                new NotIdentical($if->cond->left, $if->cond->right)
             ));
         }
 
@@ -173,11 +173,11 @@ PHP
             return null;
         }
 
-        if ($ifNode->cond instanceof BooleanNot) {
-            return new Return_($this->boolCastOrNullCompareIfNeeded($ifNode->cond->expr));
+        if ($if->cond instanceof BooleanNot) {
+            return new Return_($this->boolCastOrNullCompareIfNeeded($if->cond->expr));
         }
 
-        return new Return_($this->boolCastOrNullCompareIfNeeded(new BooleanNot($ifNode->cond)));
+        return new Return_($this->boolCastOrNullCompareIfNeeded(new BooleanNot($if->cond)));
     }
 
     private function isIfWithSingleReturnExpr(If_ $if): bool

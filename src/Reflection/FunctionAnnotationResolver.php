@@ -76,10 +76,10 @@ final class FunctionAnnotationResolver
     /**
      * @return string[]
      */
-    private function getUses(Namespace_ $node): array
+    private function getUses(Namespace_ $namespace): array
     {
         $uses = [];
-        foreach ($node->stmts as $stmt) {
+        foreach ($namespace->stmts as $stmt) {
             if (! $stmt instanceof Use_) {
                 continue;
             }

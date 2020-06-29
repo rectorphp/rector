@@ -172,10 +172,10 @@ PHP
      * @param Node[] $nodes
      * @return Node[]
      */
-    private function removeAllOtherNamespaces(array $nodes, Namespace_ $namespaceNode): array
+    private function removeAllOtherNamespaces(array $nodes, Namespace_ $namespace): array
     {
         foreach ($nodes as $key => $stmt) {
-            if ($stmt instanceof Namespace_ && $stmt !== $namespaceNode) {
+            if ($stmt instanceof Namespace_ && $stmt !== $namespace) {
                 unset($nodes[$key]);
             }
         }
@@ -186,12 +186,12 @@ PHP
     private function refactorClassLike(
         SmartFileInfo $smartFileInfo,
         bool $shouldDeleteFile,
-        Namespace_ $newStmt,
+        Namespace_ $namespace,
         ClassLike $classLike,
         array $newStmtsSet
     ): void {
-        $this->removeAllClassLikesFromNamespaceNode($newStmt);
-        $newStmt->stmts[] = $classLike;
+        $this->removeAllClassLikesFromNamespaceNode($namespace);
+        $namespace->stmts[] = $classLike;
 
         $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
 
@@ -210,11 +210,11 @@ PHP
         return $currentDirectory . DIRECTORY_SEPARATOR . $classLike->name . '.php';
     }
 
-    private function removeAllClassLikesFromNamespaceNode(Namespace_ $namespaceNode): void
+    private function removeAllClassLikesFromNamespaceNode(Namespace_ $namespace): void
     {
-        foreach ($namespaceNode->stmts as $key => $namespaceStatement) {
+        foreach ($namespace->stmts as $key => $namespaceStatement) {
             if ($namespaceStatement instanceof ClassLike) {
-                unset($namespaceNode->stmts[$key]);
+                unset($namespace->stmts[$key]);
             }
         }
     }

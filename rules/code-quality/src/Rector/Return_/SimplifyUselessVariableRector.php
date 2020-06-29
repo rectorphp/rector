@@ -101,15 +101,15 @@ PHP
         return $node;
     }
 
-    private function shouldSkip(Return_ $returnNode): bool
+    private function shouldSkip(Return_ $return): bool
     {
-        if (! $returnNode->expr instanceof Variable) {
+        if (! $return->expr instanceof Variable) {
             return true;
         }
 
-        $variableNode = $returnNode->expr;
+        $variableNode = $return->expr;
 
-        $previousExpression = $returnNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $previousExpression = $return->getAttribute(AttributeKey::PREVIOUS_NODE);
         if ($previousExpression === null || ! $previousExpression instanceof Expression) {
             return true;
         }

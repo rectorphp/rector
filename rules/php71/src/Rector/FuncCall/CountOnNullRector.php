@@ -75,8 +75,8 @@ PHP
         }
 
         if ($this->isNullableType($countedNode) || $this->isStaticType($countedNode, NullType::class)) {
-            $identicalNode = new Identical($countedNode, $this->createNull());
-            $ternaryNode = new Ternary($identicalNode, new LNumber(0), $node);
+            $identical = new Identical($countedNode, $this->createNull());
+            $ternaryNode = new Ternary($identical, new LNumber(0), $node);
         } else {
             if ($this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
                 $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);

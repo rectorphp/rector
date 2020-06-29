@@ -114,13 +114,13 @@ PHP
     }
 
     private function refactorClassStmts(
-        Class_ $node,
+        Class_ $class,
         string $getSingletonMethodName,
         string $singletonPropertyName
     ): Class_ {
-        foreach ($node->getMethods() as $property) {
+        foreach ($class->getMethods() as $property) {
             if ($this->isName($property, $getSingletonMethodName)) {
-                $this->removeNodeFromStatements($node, $property);
+                $this->removeNodeFromStatements($class, $property);
                 continue;
             }
 
@@ -134,15 +134,15 @@ PHP
 
             // remove non-public empty
             if ($property->stmts === []) {
-                $this->removeNodeFromStatements($node, $property);
+                $this->removeNodeFromStatements($class, $property);
             } else {
                 $this->makePublic($property);
             }
         }
 
-        $this->removePropertyByName($node, $singletonPropertyName);
+        $this->removePropertyByName($class, $singletonPropertyName);
 
-        return $node;
+        return $class;
     }
 
     private function removePropertyByName(Class_ $class, string $propertyName): void

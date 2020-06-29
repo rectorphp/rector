@@ -90,11 +90,11 @@ PHP
 
         // there is "$string[] = ...;", which would cause error in PHP 7+
         // fallback - if no array init found, retype to (array)
-        $retypeArrayAssignNode = new Assign($arrayDimFetchNode->var, new ArrayCast($arrayDimFetchNode->var));
+        $assign = new Assign($arrayDimFetchNode->var, new ArrayCast($arrayDimFetchNode->var));
 
         $this->addNodeAfterNode(clone $node, $node);
 
-        return $retypeArrayAssignNode;
+        return $assign;
     }
 
     /**

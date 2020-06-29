@@ -92,9 +92,9 @@ final class ShowCommand extends AbstractCommand
      */
     private function resolveConfiguration(RectorInterface $rector): array
     {
-        $rectorReflection = new ReflectionClass($rector);
+        $reflectionClass = new ReflectionClass($rector);
 
-        $constructorReflection = $rectorReflection->getConstructor();
+        $constructorReflection = $reflectionClass->getConstructor();
         if ($constructorReflection === null) {
             return [];
         }
@@ -107,11 +107,11 @@ final class ShowCommand extends AbstractCommand
                 continue;
             }
 
-            if (! $rectorReflection->hasProperty($reflectionParameter->getName())) {
+            if (! $reflectionClass->hasProperty($reflectionParameter->getName())) {
                 continue;
             }
 
-            $propertyReflection = $rectorReflection->getProperty($reflectionParameter->getName());
+            $propertyReflection = $reflectionClass->getProperty($reflectionParameter->getName());
             $propertyReflection->setAccessible(true);
 
             $configurationValue = $propertyReflection->getValue($rector);

@@ -119,9 +119,9 @@ PHP
             return $expr;
         }
 
-        $newArgumentValue = new Mul($oldValue, new LNumber(60));
+        $mul = new Mul($oldValue, new LNumber(60));
 
-        $expr->args[$argumentPosition] = new Arg($newArgumentValue);
+        $expr->args[$argumentPosition] = new Arg($mul);
 
         return $expr;
     }

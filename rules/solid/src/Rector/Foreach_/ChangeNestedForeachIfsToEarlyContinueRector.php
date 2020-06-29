@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\SOLID\Rector\Foreach_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt\Continue_;
@@ -160,7 +161,7 @@ PHP
         $foreach->stmts[] = $nestedIfWithOnlyReturn;
     }
 
-    private function negateOrDeNegate(Node\Expr $expr): Node\Expr
+    private function negateOrDeNegate(Expr $expr): Expr
     {
         if ($expr instanceof BooleanNot) {
             return $expr->expr;

@@ -201,9 +201,9 @@ PHP
             return $staticCall;
         }
 
-        $delimCaptureConstant = new ConstFetch(new Name('PREG_SPLIT_DELIM_CAPTURE'));
-        $negatedDelimCaptureConstantAsInt = new BitwiseAnd(new LNumber(0), new BitwiseNot($delimCaptureConstant));
-        $staticCall->args[2] = new Arg($negatedDelimCaptureConstantAsInt);
+        $constFetch = new ConstFetch(new Name('PREG_SPLIT_DELIM_CAPTURE'));
+        $bitwiseAnd = new BitwiseAnd(new LNumber(0), new BitwiseNot($constFetch));
+        $staticCall->args[2] = new Arg($bitwiseAnd);
 
         return $staticCall;
     }

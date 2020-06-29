@@ -143,9 +143,9 @@ PHP
      * Creates:
      * "$this->repository = $entityManager->getRepository()"
      */
-    private function createRepositoryAssign(Class_ $classNode): Assign
+    private function createRepositoryAssign(Class_ $class): Assign
     {
-        $repositoryClassName = (string) $classNode->getAttribute(AttributeKey::CLASS_NAME);
+        $repositoryClassName = (string) $class->getAttribute(AttributeKey::CLASS_NAME);
         $entityClassName = $this->doctrineEntityAndRepositoryMapper->mapRepositoryToEntity($repositoryClassName);
 
         if ($entityClassName === null) {

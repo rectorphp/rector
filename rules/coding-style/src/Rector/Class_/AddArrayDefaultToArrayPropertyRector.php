@@ -147,20 +147,20 @@ PHP
     /**
      * @param string[] $propertyNames
      */
-    private function completeDefaultArrayToPropertyNames(Class_ $node, array $propertyNames): void
+    private function completeDefaultArrayToPropertyNames(Class_ $class, array $propertyNames): void
     {
-        $this->traverseNodesWithCallable($node, function (Node $node) use ($propertyNames): ?PropertyProperty {
-            if (! $node instanceof PropertyProperty) {
+        $this->traverseNodesWithCallable($class, function (Node $class) use ($propertyNames): ?PropertyProperty {
+            if (! $class instanceof PropertyProperty) {
                 return null;
             }
 
-            if (! $this->isNames($node, $propertyNames)) {
+            if (! $this->isNames($class, $propertyNames)) {
                 return null;
             }
 
-            $node->default = new Array_();
+            $class->default = new Array_();
 
-            return $node;
+            return $class;
         });
     }
 

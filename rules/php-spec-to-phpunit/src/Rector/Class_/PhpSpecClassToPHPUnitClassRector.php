@@ -117,11 +117,11 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
             throw new ShouldNotHappenException();
         }
 
-        $newClass = new New_($testedObjectType);
+        $new = new New_($testedObjectType);
 
         $letClassMethod = new ClassMethod(new Identifier('setUp'));
         $this->makeProtected($letClassMethod);
-        $letClassMethod->stmts[] = new Expression(new Assign($propertyFetch, $newClass));
+        $letClassMethod->stmts[] = new Expression(new Assign($propertyFetch, $new));
 
         $this->phpUnitTypeDeclarationDecorator->decorate($letClassMethod);
 
@@ -131,9 +131,9 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
     /**
      * This is already checked on construction of object
      */
-    private function removeSelfTypeMethod(Class_ $node): Class_
+    private function removeSelfTypeMethod(Class_ $class): Class_
     {
-        foreach ($node->getMethods() as $classMethod) {
+        foreach ($class->getMethods() as $classMethod) {
             if (count((array) $classMethod->stmts) !== 1) {
                 continue;
             }
@@ -154,9 +154,9 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
             }
 
             // remove it
-            $this->removeNodeFromStatements($node, $classMethod);
+            $this->removeNodeFromStatements($class, $classMethod);
         }
 
-        return $node;
+        return $class;
     }
 }

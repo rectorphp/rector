@@ -34,10 +34,10 @@ final class BetterStandardPrinterTest extends AbstractKernelTestCase
         $methodCall = new MethodCall(new Variable('this'), 'run');
         $methodCall->setAttribute(AttributeKey::COMMENTS, [new Comment('// todo: fix')]);
 
-        $methodBuilder = new Method('run');
-        $methodBuilder->addStmt($methodCall);
+        $method = new Method('run');
+        $method->addStmt($methodCall);
 
-        $classMethod = $methodBuilder->getNode();
+        $classMethod = $method->getNode();
 
         $printed = $this->betterStandardPrinter->print($classMethod) . PHP_EOL;
         $this->assertStringEqualsFile(

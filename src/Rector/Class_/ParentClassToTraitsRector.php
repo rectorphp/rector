@@ -98,8 +98,8 @@ PHP
         return $node;
     }
 
-    private function removeParentClass(Class_ $classNode): void
+    private function removeParentClass(Class_ $class): void
     {
-        $classNode->extends = null;
+        $class->extends = null;
     }
 }

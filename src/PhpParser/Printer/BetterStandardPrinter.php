@@ -263,20 +263,20 @@ final class BetterStandardPrinter extends Standard
      * Do not add "()" on Expressions
      * @see https://github.com/rectorphp/rector/pull/401#discussion_r181487199
      */
-    protected function pExpr_Yield(Yield_ $node): string
+    protected function pExpr_Yield(Yield_ $yield): string
     {
-        if ($node->value === null) {
+        if ($yield->value === null) {
             return 'yield';
         }
 
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $yield->getAttribute(AttributeKey::PARENT_NODE);
         $shouldAddBrackets = $parentNode instanceof Expression;
 
         return sprintf(
             '%syield %s%s%s',
             $shouldAddBrackets ? '(' : '',
-            $node->key !== null ? $this->p($node->key) . ' => ' : '',
-            $this->p($node->value),
+            $yield->key !== null ? $this->p($yield->key) . ' => ' : '',
+            $this->p($yield->value),
             $shouldAddBrackets ? ')' : ''
         );
     }
@@ -285,32 +285,32 @@ final class BetterStandardPrinter extends Standard
      * Print arrays in short [] by default,
      * to prevent manual explicit array shortening.
      */
-    protected function pExpr_Array(Array_ $node): string
+    protected function pExpr_Array(Array_ $array): string
     {
-        if (! $node->hasAttribute(AttributeKey::KIND)) {
-            $node->setAttribute(AttributeKey::KIND, Array_::KIND_SHORT);
+        if (! $array->hasAttribute(AttributeKey::KIND)) {
+            $array->setAttribute(AttributeKey::KIND, Array_::KIND_SHORT);
         }
 
-        return parent::pExpr_Array($node);
+        return parent::pExpr_Array($array);
     }
 
     /**
      * Fixes escaping of regular patterns
      */
-    protected function pScalar_String(String_ $node): string
+    protected function pScalar_String(String_ $string): string
     {
-        if ($node->getAttribute(AttributeKey::IS_REGULAR_PATTERN)) {
-            $kind = $node->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
+        if ($string->getAttribute(AttributeKey::IS_REGULAR_PATTERN)) {
+            $kind = $string->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
             if ($kind === String_::KIND_DOUBLE_QUOTED) {
-                return $this->wrapValueWith($node, '"');
+                return $this->wrapValueWith($string, '"');
             }
 
             if ($kind === String_::KIND_SINGLE_QUOTED) {
-                return $this->wrapValueWith($node, "'");
+                return $this->wrapValueWith($string, "'");
             }
         }
 
-        return parent::pScalar_String($node);
+        return parent::pScalar_String($string);
     }
 
     /**
@@ -448,9 +448,9 @@ final class BetterStandardPrinter extends Standard
         return false;
     }
 
-    private function wrapValueWith(String_ $node, string $wrap): string
+    private function wrapValueWith(String_ $string, string $wrap): string
     {
-        return $wrap . $node->value . $wrap;
+        return $wrap . $string->value . $wrap;
     }
 
     private function makeSureCommentWasNotAddedOnWrongPlace(Node $node): void

@@ -30,7 +30,7 @@ final class SimplifyForeachToCoalescingRector extends AbstractRector
     /**
      * @var Return_|null
      */
-    private $returnNode;
+    private $return;
 
     /**
      * @var ForeachManipulator
@@ -80,7 +80,7 @@ PHP
             return null;
         }
 
-        $this->returnNode = null;
+        $this->return = null;
 
         if ($node->keyVar === null) {
             return null;
@@ -108,9 +108,9 @@ PHP
     /**
      * @return Assign|Return_|null
      */
-    private function matchReturnOrAssignNode(Foreach_ $foreachNode): ?Node
+    private function matchReturnOrAssignNode(Foreach_ $foreach): ?Node
     {
-        return $this->foreachManipulator->matchOnlyStmt($foreachNode, function (Node $node): ?Node {
+        return $this->foreachManipulator->matchOnlyStmt($foreach, function (Node $node): ?Node {
             if (! $node instanceof If_) {
                 return null;
             }
@@ -133,64 +133,64 @@ PHP
         });
     }
 
-    private function processForeachNodeWithReturnInside(Foreach_ $foreachNode, Return_ $returnNode): ?Node
+    private function processForeachNodeWithReturnInside(Foreach_ $foreach, Return_ $return): ?Node
     {
-        if (! $this->areNodesEqual($foreachNode->valueVar, $returnNode->expr)) {
+        if (! $this->areNodesEqual($foreach->valueVar, $return->expr)) {
             return null;
         }
 
         /** @var If_ $ifNode */
-        $ifNode = $foreachNode->stmts[0];
+        $ifNode = $foreach->stmts[0];
 
         /** @var Identical $identicalNode */
         $identicalNode = $ifNode->cond;
 
-        if ($this->areNodesEqual($identicalNode->left, $foreachNode->keyVar)) {
+        if ($this->areNodesEqual($identicalNode->left, $foreach->keyVar)) {
             $checkedNode = $identicalNode->right;
-        } elseif ($this->areNodesEqual($identicalNode->right, $foreachNode->keyVar)) {
+        } elseif ($this->areNodesEqual($identicalNode->right, $foreach->keyVar)) {
             $checkedNode = $identicalNode->left;
         } else {
             return null;
         }
 
         // is next node Return?
-        if ($foreachNode->getAttribute(AttributeKey::NEXT_NODE) instanceof Return_) {
-            $this->returnNode = $foreachNode->getAttribute(AttributeKey::NEXT_NODE);
-            $this->removeNode($this->returnNode);
+        if ($foreach->getAttribute(AttributeKey::NEXT_NODE) instanceof Return_) {
+            $this->return = $foreach->getAttribute(AttributeKey::NEXT_NODE);
+            $this->removeNode($this->return);
         }
 
-        $coalesceNode = new Coalesce(new ArrayDimFetch(
-            $foreachNode->expr,
+        $coalesce = new Coalesce(new ArrayDimFetch(
+            $foreach->expr,
             $checkedNode
-        ), $this->returnNode && $this->returnNode->expr !== null ? $this->returnNode->expr : $checkedNode);
+        ), $this->return && $this->return->expr !== null ? $this->return->expr : $checkedNode);
 
-        if ($this->returnNode !== null) {
-            return new Return_($coalesceNode);
+        if ($this->return !== null) {
+            return new Return_($coalesce);
         }
 
         return null;
     }
 
-    private function processForeachNodeWithAssignInside(Foreach_ $foreachNode, Assign $assign): ?Node
+    private function processForeachNodeWithAssignInside(Foreach_ $foreach, Assign $assign): ?Node
     {
         /** @var If_ $ifNode */
-        $ifNode = $foreachNode->stmts[0];
+        $ifNode = $foreach->stmts[0];
 
         /** @var Identical $identicalNode */
         $identicalNode = $ifNode->cond;
 
-        if ($this->areNodesEqual($identicalNode->left, $foreachNode->keyVar)) {
+        if ($this->areNodesEqual($identicalNode->left, $foreach->keyVar)) {
             $checkedNode = $assign->var;
             $keyNode = $identicalNode->right;
-        } elseif ($this->areNodesEqual($identicalNode->right, $foreachNode->keyVar)) {
+        } elseif ($this->areNodesEqual($identicalNode->right, $foreach->keyVar)) {
             $checkedNode = $assign->var;
             $keyNode = $identicalNode->left;
         } else {
             return null;
         }
 
-        $arrayDimFetchNode = new ArrayDimFetch($foreachNode->expr, $keyNode);
+        $arrayDimFetch = new ArrayDimFetch($foreach->expr, $keyNode);
 
-        return new Assign($checkedNode, new Coalesce($arrayDimFetchNode, $checkedNode));
+        return new Assign($checkedNode, new Coalesce($arrayDimFetch, $checkedNode));
     }
 }

@@ -342,8 +342,8 @@ PHP
 
     private function createContainerGetTypeMethodCall(ObjectType $objectType): MethodCall
     {
-        $containerProperty = new StaticPropertyFetch(new Name('self'), 'container');
-        $getMethodCall = new MethodCall($containerProperty, 'get');
+        $staticPropertyFetch = new StaticPropertyFetch(new Name('self'), 'container');
+        $getMethodCall = new MethodCall($staticPropertyFetch, 'get');
 
         $className = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
         if (! $className instanceof Name) {

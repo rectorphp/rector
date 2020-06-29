@@ -11,10 +11,12 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
@@ -193,7 +195,7 @@ final class TokenManipulator
     /**
      * @param Node[] $nodes
      */
-    public function removeIsArray(array $nodes, Expr\Variable $singleTokenVariable): void
+    public function removeIsArray(array $nodes, Variable $singleTokenVariable): void
     {
         $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use (
             $singleTokenVariable
@@ -297,7 +299,7 @@ final class TokenManipulator
             return true;
         }
 
-        if ($parentNode instanceof Expr\BooleanNot) {
+        if ($parentNode instanceof BooleanNot) {
             $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentParentNode instanceof If_) {
                 $parentParentNode->cond = $parentNode;

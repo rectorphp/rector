@@ -102,7 +102,7 @@ PHP
         return $node;
     }
 
-    private function processClassMethod(Class_ $classNode, ClassMethod $classMethod): void
+    private function processClassMethod(Class_ $class, ClassMethod $classMethod): void
     {
         foreach ($classMethod->params as $key => $paramNode) {
             if (! $this->isActionInjectedParamNode($paramNode)) {
@@ -113,7 +113,7 @@ PHP
 
             /** @var string $paramName */
             $paramName = $this->getName($paramNode->var);
-            $this->addPropertyToClass($classNode, $paramNodeType, $paramName);
+            $this->addPropertyToClass($class, $paramNodeType, $paramName);
 
             $this->removeParam($classMethod, $key);
 

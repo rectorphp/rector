@@ -88,9 +88,9 @@ final class PhpSpecMockCollector
         return in_array($variableName, $this->propertyMocksByClass[$className] ?? [], true);
     }
 
-    public function getTypeForClassAndVariable(Class_ $node, string $variable): string
+    public function getTypeForClassAndVariable(Class_ $class, string $variable): string
     {
-        $className = $this->nodeNameResolver->getName($node);
+        $className = $this->nodeNameResolver->getName($class);
 
         if (! isset($this->mocksWithsTypes[$className][$variable])) {
             throw new ShouldNotHappenException();

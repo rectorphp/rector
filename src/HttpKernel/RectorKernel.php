@@ -106,11 +106,11 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
      */
     protected function getContainerLoader(ContainerInterface $container): DelegatingLoader
     {
-        $kernelFileLocator = new FileLocator($this);
+        $fileLocator = new FileLocator($this);
 
         $loaderResolver = new LoaderResolver([
-            new GlobFileLoader($kernelFileLocator),
-            new TolerantRectorYamlFileLoader($container, $kernelFileLocator, $this->rectorServiceArgumentCollector),
+            new GlobFileLoader($fileLocator),
+            new TolerantRectorYamlFileLoader($container, $fileLocator, $this->rectorServiceArgumentCollector),
         ]);
 
         return new DelegatingLoader($loaderResolver);

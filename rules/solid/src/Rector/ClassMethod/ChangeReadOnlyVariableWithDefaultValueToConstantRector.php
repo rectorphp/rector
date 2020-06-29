@@ -225,9 +225,9 @@ PHP
     {
         $constantName = $this->createConstantNameFromVariable($variable);
 
-        $constant = new Const_($constantName, $expr);
+        $const = new Const_($constantName, $expr);
 
-        $classConst = new ClassConst([$constant]);
+        $classConst = new ClassConst([$const]);
         $classConst->flags = Class_::MODIFIER_PRIVATE;
 
         $this->mirrorComments($classConst, $variable);

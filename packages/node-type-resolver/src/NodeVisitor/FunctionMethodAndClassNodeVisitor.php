@@ -54,7 +54,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     /**
      * @var Function_|null
      */
-    private $functionNode;
+    private $function;
 
     /**
      * @var ClassNaming
@@ -76,7 +76,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         $this->className = null;
         $this->methodName = null;
         $this->classMethod = null;
-        $this->functionNode = null;
+        $this->function = null;
 
         return null;
     }
@@ -137,10 +137,10 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     private function processFunction(Node $node): void
     {
         if ($node instanceof Function_) {
-            $this->functionNode = $node;
+            $this->function = $node;
         }
 
-        $node->setAttribute(AttributeKey::FUNCTION_NODE, $this->functionNode);
+        $node->setAttribute(AttributeKey::FUNCTION_NODE, $this->function);
     }
 
     private function setClassNodeAndName(?ClassLike $classLike): void
@@ -157,13 +157,13 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         }
     }
 
-    private function setParentClassName(Class_ $classNode, Node $node): void
+    private function setParentClassName(Class_ $class, Node $node): void
     {
-        if ($classNode->extends === null) {
+        if ($class->extends === null) {
             return;
         }
 
-        $parentClassResolvedName = $classNode->extends->getAttribute(AttributeKey::RESOLVED_NAME);
+        $parentClassResolvedName = $class->extends->getAttribute(AttributeKey::RESOLVED_NAME);
         if ($parentClassResolvedName instanceof FullyQualified) {
             $parentClassResolvedName = $parentClassResolvedName->toString();
         }

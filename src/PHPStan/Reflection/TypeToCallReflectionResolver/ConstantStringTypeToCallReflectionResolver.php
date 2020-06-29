@@ -49,9 +49,9 @@ final class ConstantStringTypeToCallReflectionResolver implements TypeToCallRefl
         $value = $type->getValue();
 
         // 'my_function'
-        $functionName = new Name($value);
-        if ($this->reflectionProvider->hasFunction($functionName, null)) {
-            return $this->reflectionProvider->getFunction($functionName, null);
+        $name = new Name($value);
+        if ($this->reflectionProvider->hasFunction($name, null)) {
+            return $this->reflectionProvider->getFunction($name, null);
         }
 
         // 'MyClass::myStaticFunction'

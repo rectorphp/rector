@@ -40,11 +40,11 @@ final class AliasUsesResolver
     /**
      * @return string[]
      */
-    private function resolveForNamespace(Namespace_ $node): array
+    private function resolveForNamespace(Namespace_ $namespace): array
     {
         $aliasedUses = [];
 
-        $this->useImportsTraverser->traverserStmts($node->stmts, function (
+        $this->useImportsTraverser->traverserStmts($namespace->stmts, function (
             UseUse $useUse,
             string $name
         ) use (&$aliasedUses): void {

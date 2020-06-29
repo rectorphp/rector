@@ -86,21 +86,21 @@ PHP
         return $node;
     }
 
-    private function escapeStringNode(String_ $stringNode): void
+    private function escapeStringNode(String_ $string): void
     {
-        $stringValue = $stringNode->value;
+        $stringValue = $string->value;
 
         if (Strings::match($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN)) {
-            $stringNode->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN, '$1\-');
+            $string->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_PATTERN, '$1\-');
             // helped needed to skip re-escaping regular expression
-            $stringNode->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
+            $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
             return;
         }
 
         if (Strings::match($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN)) {
-            $stringNode->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN, '\-$1]');
+            $string->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_PATTERN, '\-$1]');
             // helped needed to skip re-escaping regular expression
-            $stringNode->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
+            $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
         }
     }
 }

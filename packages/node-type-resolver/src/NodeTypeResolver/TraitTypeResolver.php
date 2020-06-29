@@ -31,12 +31,12 @@ final class TraitTypeResolver implements NodeTypeResolverInterface
      */
     public function resolve(Node $traitNode): Type
     {
-        $traitReflection = new ReflectionClass((string) $traitNode->namespacedName);
+        $reflectionClass = new ReflectionClass((string) $traitNode->namespacedName);
 
         $types = [];
-        $types[] = new ObjectType($traitReflection->getName());
+        $types[] = new ObjectType($reflectionClass->getName());
 
-        foreach ($traitReflection->getTraits() as $usedTraitReflection) {
+        foreach ($reflectionClass->getTraits() as $usedTraitReflection) {
             $types[] = new ObjectType($usedTraitReflection->getName());
         }
 

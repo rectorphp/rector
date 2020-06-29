@@ -83,12 +83,12 @@ final class GetClassToInstanceOfRector extends AbstractRector
             return null;
         }
 
-        $instanceOfNode = new Instanceof_($varNode, new FullyQualified($className));
+        $instanceof = new Instanceof_($varNode, new FullyQualified($className));
         if ($node instanceof NotIdentical) {
-            return new BooleanNot($instanceOfNode);
+            return new BooleanNot($instanceof);
         }
 
-        return $instanceOfNode;
+        return $instanceof;
     }
 
     private function isClassReference(Node $node): bool

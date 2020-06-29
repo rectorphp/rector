@@ -229,18 +229,18 @@ final class ParsedNodeCollector
         return $this->findClassConstant($class, $constantName);
     }
 
-    private function addClass(Class_ $classNode): void
+    private function addClass(Class_ $class): void
     {
-        if ($this->isClassAnonymous($classNode)) {
+        if ($this->isClassAnonymous($class)) {
             return;
         }
 
-        $className = $classNode->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             throw new ShouldNotHappenException();
         }
 
-        $this->classes[$className] = $classNode;
+        $this->classes[$className] = $class;
     }
 
     private function addClassConstant(ClassConst $classConst): void
@@ -269,13 +269,13 @@ final class ParsedNodeCollector
         return $className;
     }
 
-    private function isClassAnonymous(Class_ $classNode): bool
+    private function isClassAnonymous(Class_ $class): bool
     {
-        if ($classNode->isAnonymous() || $classNode->name === null) {
+        if ($class->isAnonymous() || $class->name === null) {
             return true;
         }
 
         // PHPStan polution
-        return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
+        return Strings::startsWith($class->name->toString(), 'AnonymousClass');
     }
 }

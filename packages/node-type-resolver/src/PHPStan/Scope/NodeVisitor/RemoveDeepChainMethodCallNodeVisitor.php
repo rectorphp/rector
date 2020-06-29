@@ -66,9 +66,9 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
     {
         if ($node === $this->removingExpression) {
             // keep any node, so we don't remove it permanently
-            $nopNode = new Nop();
-            $nopNode->setAttributes($node->getAttributes());
-            return $nopNode;
+            $nop = new Nop();
+            $nop->setAttributes($node->getAttributes());
+            return $nop;
         }
 
         return $node;

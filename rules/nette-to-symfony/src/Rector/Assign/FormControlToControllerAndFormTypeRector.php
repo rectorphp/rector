@@ -272,8 +272,11 @@ PHP
         $handleRequestMethodCall = new MethodCall($formVariable, 'handleRequest', [new Arg($requestVariable)]);
         $classMethod->stmts[] = new Expression($handleRequestMethodCall);
 
-        $cond = new BooleanAnd(new MethodCall($formVariable, 'isSuccess'), new MethodCall($formVariable, 'isValid'));
-        $if = new If_($cond);
+        $booleanAnd = new BooleanAnd(new MethodCall($formVariable, 'isSuccess'), new MethodCall(
+            $formVariable,
+            'isValid'
+        ));
+        $if = new If_($booleanAnd);
 
         $classMethod->stmts[] = $if;
 

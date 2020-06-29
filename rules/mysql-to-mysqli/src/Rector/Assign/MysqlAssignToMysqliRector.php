@@ -147,11 +147,11 @@ PHP
         unset($funcCall->args[1]);
 
         // add for
-        $xVar = new Variable('x');
-        $forNode = new For_([
-            'init' => [new Assign($xVar, new LNumber(0))],
-            'cond' => [new Smaller($xVar, new LNumber(5))],
-            'loop' => [new PostInc($xVar)],
+        $variable = new Variable('x');
+        $for = new For_([
+            'init' => [new Assign($variable, new LNumber(0))],
+            'cond' => [new Smaller($variable, new LNumber(5))],
+            'loop' => [new PostInc($variable)],
             'stmts' => [new Expression($funcCall)],
         ]);
 
@@ -160,7 +160,7 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        $this->addNodeAfterNode($forNode, $previousStatement);
+        $this->addNodeAfterNode($for, $previousStatement);
 
         return $assign;
     }

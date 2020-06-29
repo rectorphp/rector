@@ -196,8 +196,8 @@ PHP
             return 0;
         }
 
-        $reflectedFunction = new ReflectionFunction($functionFqn);
-        $foundThrownThrowables = $this->functionAnnotationResolver->extractFunctionAnnotatedThrows($reflectedFunction);
+        $reflectionFunction = new ReflectionFunction($functionFqn);
+        $foundThrownThrowables = $this->functionAnnotationResolver->extractFunctionAnnotatedThrows($reflectionFunction);
         $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($funcCall);
         return $this->diffThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
     }
@@ -216,9 +216,9 @@ PHP
 
     private function buildThrowsDocComment(string $throwableClass): AttributeAwarePhpDocTagNode
     {
-        $genericTagValueNode = new ThrowsTagValueNode(new IdentifierTypeNode($throwableClass), '');
+        $throwsTagValueNode = new ThrowsTagValueNode(new IdentifierTypeNode($throwableClass), '');
 
-        return new AttributeAwarePhpDocTagNode('@throws', $genericTagValueNode);
+        return new AttributeAwarePhpDocTagNode('@throws', $throwsTagValueNode);
     }
 
     private function identifyThrownThrowablesInStaticCall(StaticCall $staticCall): array

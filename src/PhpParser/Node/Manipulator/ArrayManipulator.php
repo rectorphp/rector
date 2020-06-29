@@ -43,9 +43,9 @@ final class ArrayManipulator
         return true;
     }
 
-    public function addItemToArrayUnderKey(Array_ $arrayNode, ArrayItem $newArrayItem, string $key): void
+    public function addItemToArrayUnderKey(Array_ $array, ArrayItem $newArrayItem, string $key): void
     {
-        foreach ($arrayNode->items as $item) {
+        foreach ($array->items as $item) {
             if ($this->hasKeyName($item, $key)) {
                 if (! $item->value instanceof Array_) {
                     continue;
@@ -56,19 +56,19 @@ final class ArrayManipulator
             }
         }
 
-        $arrayNode->items[] = new ArrayItem(new Array_([$newArrayItem]), new String_($key));
+        $array->items[] = new ArrayItem(new Array_([$newArrayItem]), new String_($key));
     }
 
-    public function findItemInInArrayByKeyAndUnset(Array_ $arrayNode, string $keyName): ?ArrayItem
+    public function findItemInInArrayByKeyAndUnset(Array_ $array, string $keyName): ?ArrayItem
     {
-        foreach ($arrayNode->items as $i => $item) {
+        foreach ($array->items as $i => $item) {
             if (! $this->hasKeyName($item, $keyName)) {
                 continue;
             }
 
             // remove + recount for the printer
-            $removedArrayItem = $arrayNode->items[$i];
-            unset($arrayNode->items[$i]);
+            $removedArrayItem = $array->items[$i];
+            unset($array->items[$i]);
             $this->rectorChangeCollector->notifyNodeFileInfo($removedArrayItem);
 
             return $item;

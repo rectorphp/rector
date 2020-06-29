@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -65,7 +66,7 @@ PHP
             return null;
         }
 
-        if ($node->getAttribute(AttributeKey::PREVIOUS_NODE) instanceof Node\NullableType) {
+        if ($node->getAttribute(AttributeKey::PREVIOUS_NODE) instanceof NullableType) {
             return null;
         }
 

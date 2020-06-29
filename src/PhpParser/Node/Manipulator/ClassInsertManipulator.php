@@ -80,9 +80,9 @@ final class ClassInsertManipulator
 
     public function addAsFirstTrait(Class_ $class, string $traitName): void
     {
-        $trait = new TraitUse([new FullyQualified($traitName)]);
+        $traitUse = new TraitUse([new FullyQualified($traitName)]);
 
-        $this->addStatementToClassBeforeTypes($class, $trait, TraitUse::class, Property::class, ClassMethod::class);
+        $this->addStatementToClassBeforeTypes($class, $traitUse, TraitUse::class, Property::class, ClassMethod::class);
     }
 
     /**
@@ -96,26 +96,26 @@ final class ClassInsertManipulator
         return $nodes;
     }
 
-    private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
+    private function tryInsertBeforeFirstMethod(Class_ $class, Stmt $stmt): bool
     {
-        foreach ($classNode->stmts as $key => $classStmt) {
+        foreach ($class->stmts as $key => $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
                 continue;
             }
 
-            $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
+            $class->stmts = $this->insertBefore($class->stmts, $stmt, $key);
             return true;
         }
 
         return false;
     }
 
-    private function tryInsertAfterLastProperty(Class_ $classNode, Stmt $stmt): bool
+    private function tryInsertAfterLastProperty(Class_ $class, Stmt $stmt): bool
     {
         $previousElement = null;
-        foreach ($classNode->stmts as $key => $classStmt) {
+        foreach ($class->stmts as $key => $classStmt) {
             if ($previousElement instanceof Property && ! $classStmt instanceof Property) {
-                $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
+                $class->stmts = $this->insertBefore($class->stmts, $stmt, $key);
 
                 return true;
             }
@@ -140,9 +140,9 @@ final class ClassInsertManipulator
     /**
      * Waits on https://github.com/nikic/PHP-Parser/pull/646
      */
-    private function hasClassProperty(Class_ $classNode, string $name): bool
+    private function hasClassProperty(Class_ $class, string $name): bool
     {
-        foreach ($classNode->getProperties() as $property) {
+        foreach ($class->getProperties() as $property) {
             if (! $this->nodeNameResolver->isName($property, $name)) {
                 continue;
             }

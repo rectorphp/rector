@@ -123,9 +123,9 @@ PHP
         }
 
         if ($this->isInstantiable($className)) {
-            $newNode = new New_($node->class);
+            $new = new New_($node->class);
 
-            return new MethodCall($newNode, $node->name, $node->args);
+            return new MethodCall($new, $node->name, $node->args);
         }
 
         // can we add static to method?

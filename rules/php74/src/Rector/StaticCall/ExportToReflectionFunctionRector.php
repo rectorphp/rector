@@ -59,12 +59,12 @@ PHP
             return null;
         }
 
-        $newNode = new New_($node->class, [new Arg($node->args[0]->value)]);
+        $new = new New_($node->class, [new Arg($node->args[0]->value)]);
 
         if (isset($node->args[1]) && $this->isTrue($node->args[1]->value)) {
-            return new String_($newNode);
+            return new String_($new);
         }
 
-        return $newNode;
+        return $new;
     }
 }

@@ -96,8 +96,8 @@ PHP
         // $value = current($values);
         // next($values);
         $currentFuncCall = $this->createFuncCall('current', $eachFuncCall->args);
-        $assignCurrentNode = new Assign($listNode->items[1]->value, $currentFuncCall);
-        $this->addNodeAfterNode($assignCurrentNode, $node);
+        $assign = new Assign($listNode->items[1]->value, $currentFuncCall);
+        $this->addNodeAfterNode($assign, $node);
 
         $nextFuncCall = $this->createFuncCall('next', $eachFuncCall->args);
         $this->addNodeAfterNode($nextFuncCall, $node);

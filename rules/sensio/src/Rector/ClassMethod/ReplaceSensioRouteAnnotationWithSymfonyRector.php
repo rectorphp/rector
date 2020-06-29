@@ -108,13 +108,13 @@ PHP
         return $node;
     }
 
-    private function refactorUse(Use_ $user): ?Use_
+    private function refactorUse(Use_ $use): ?Use_
     {
-        if ($user->type !== Use_::TYPE_NORMAL) {
+        if ($use->type !== Use_::TYPE_NORMAL) {
             return null;
         }
 
-        foreach ($user->uses as $useUse) {
+        foreach ($use->uses as $useUse) {
             if (! $this->isName($useUse->name, 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route')) {
                 continue;
             }
@@ -122,6 +122,6 @@ PHP
             $useUse->name = new Name('Symfony\Component\Routing\Annotation\Route');
         }
 
-        return $user;
+        return $use;
     }
 }
