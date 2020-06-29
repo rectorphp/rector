@@ -121,9 +121,9 @@ PHP
 
     private function createParentStaticCall(string $method): Expression
     {
-        $parentStaticCall = new StaticCall(new Name('parent'), new Identifier($method));
+        $staticCall = new StaticCall(new Name('parent'), new Identifier($method));
 
-        return new Expression($parentStaticCall);
+        return new Expression($staticCall);
     }
 
     /**

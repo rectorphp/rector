@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Naming;
 
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ConflictingNameResolver
@@ -20,10 +23,31 @@ final class ConflictingNameResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(ExpectedNameResolver $expectedNameResolver, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var string[][]
+     */
+    private $conflictingVariableNamesByClassMethod = [];
+
+    /**
+     * @var ArrayFilter
+     */
+    private $arrayFilter;
+
+    public function __construct(
+        ExpectedNameResolver $expectedNameResolver,
+        NodeNameResolver $nodeNameResolver,
+        BetterNodeFinder $betterNodeFinder,
+        ArrayFilter $arrayFilter
+    ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->arrayFilter = $arrayFilter;
     }
 
     /**
@@ -42,13 +66,13 @@ final class ConflictingNameResolver
             $expectedNames[] = $expectedName;
         }
 
-        return $this->filterConflictingNames($expectedNames);
+        return $this->arrayFilter->filterWithAtLeastTwoOccurences($expectedNames);
     }
 
     /**
      * @return string[]
      */
-    public function resolveConflictingVariableNames(ClassMethod $classMethod): array
+    public function resolveConflictingVariableNamesForParam(ClassMethod $classMethod): array
     {
         $expectedNames = [];
         foreach ($classMethod->params as $param) {
@@ -60,26 +84,92 @@ final class ConflictingNameResolver
             $expectedNames[] = $expectedName;
         }
 
-        return $this->filterConflictingNames($expectedNames);
+        return $this->arrayFilter->filterWithAtLeastTwoOccurences($expectedNames);
+    }
+
+    public function checkNameIsInClassMethod(string $variableName, ClassMethod $classMethod): bool
+    {
+        $conflictingVariableNames = $this->resolveConflictingVariableNamesForNew($classMethod);
+        return in_array($variableName, $conflictingVariableNames, true);
     }
 
     /**
-     * @param string[] $expectedNames
      * @return string[]
      */
-    private function filterConflictingNames(array $expectedNames): array
+    private function resolveConflictingVariableNamesForNew(ClassMethod $classMethod): array
     {
-        $expectedNamesToCount = array_count_values($expectedNames);
+        // cache it!
+        $classMethodHash = spl_object_hash($classMethod);
 
-        $conflictingExpectedNames = [];
-        foreach ($expectedNamesToCount as $expectedName => $count) {
-            if ($count < 2) {
+        if (isset($this->conflictingVariableNamesByClassMethod[$classMethodHash])) {
+            return $this->conflictingVariableNamesByClassMethod[$classMethodHash];
+        }
+
+        $paramNames = $this->collectParamNames($classMethod);
+        $newAssignNames = $this->resolveForNewAssigns($classMethod);
+        $nonNewAssignNames = $this->resolveForNonNewAssigns($classMethod);
+
+        $protectedNames = array_merge($paramNames, $newAssignNames, $nonNewAssignNames);
+
+        $protectedNames = $this->arrayFilter->filterWithAtLeastTwoOccurences($protectedNames);
+        $this->conflictingVariableNamesByClassMethod[$classMethodHash] = $protectedNames;
+
+        return $protectedNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function collectParamNames(ClassMethod $classMethod): array
+    {
+        $paramNames = [];
+
+        // params
+        foreach ($classMethod->params as $param) {
+            /** @var string $paramName */
+            $paramName = $this->nodeNameResolver->getName($param);
+            $paramNames[] = $paramName;
+        }
+
+        return $paramNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveForNewAssigns(ClassMethod $classMethod): array
+    {
+        $names = [];
+
+        /** @var Assign[] $assigns */
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
+        foreach ($assigns as $assign) {
+            $name = $this->expectedNameResolver->resolveForAssignNew($assign);
+            if ($name === null) {
                 continue;
             }
 
-            $conflictingExpectedNames[] = $expectedName;
+            $names[] = $name;
         }
 
-        return $conflictingExpectedNames;
+        return $names;
+    }
+
+    private function resolveForNonNewAssigns(ClassMethod $classMethod)
+    {
+        $names = [];
+
+        /** @var Assign[] $assigns */
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
+        foreach ($assigns as $assign) {
+            $name = $this->expectedNameResolver->resolveForAssignNonNew($assign);
+            if ($name === null) {
+                continue;
+            }
+
+            $names[] = $name;
+        }
+
+        return $names;
     }
 }

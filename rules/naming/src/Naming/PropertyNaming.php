@@ -18,16 +18,7 @@ final class PropertyNaming
     /**
      * @var string[]
      */
-    private const EXCLUDED_CLASSES = [
-        '#Closure#',
-        '#^Spl#',
-        '#FileInfo#',
-        '#^std#',
-        '#Iterator#',
-        '#SimpleXML#',
-        // anything that ends with underscore
-        '#_$#',
-    ];
+    private const EXCLUDED_CLASSES = ['#Closure#', '#^Spl#', '#FileInfo#', '#^std#', '#Iterator#', '#SimpleXML#'];
 
     public function getExpectedNameFromType(Type $type): ?string
     {

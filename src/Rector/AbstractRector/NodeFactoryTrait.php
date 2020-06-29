@@ -131,8 +131,8 @@ trait NodeFactoryTrait
      */
     protected function createLocalMethodCall(string $method, array $arguments = []): MethodCall
     {
-        $thisVariable = new Variable('this');
-        return $this->nodeFactory->createMethodCall($thisVariable, $method, $arguments);
+        $variable = new Variable('this');
+        return $this->nodeFactory->createMethodCall($variable, $method, $arguments);
     }
 
     /**

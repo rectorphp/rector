@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class ExpectedNameResolver
@@ -99,6 +104,48 @@ final class ExpectedNameResolver
         }
 
         return $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
+    }
+
+    public function resolveForAssignNonNew(Assign $assign): ?string
+    {
+        if ($assign->expr instanceof New_) {
+            return null;
+        }
+
+        if (! $assign->var instanceof Variable) {
+            return null;
+        }
+
+        /** @var Variable $variable */
+        $variable = $assign->var;
+
+        return $this->nodeNameResolver->getName($variable);
+    }
+
+    public function resolveForAssignNew(Assign $assign): ?string
+    {
+        if (! $assign->expr instanceof New_) {
+            return null;
+        }
+
+        if (! $assign->var instanceof Variable) {
+            return null;
+        }
+
+        /** @var New_ $new */
+        $new = $assign->expr;
+        if (! $new->class instanceof Name) {
+            return null;
+        }
+
+        $className = $this->nodeNameResolver->getName($new->class);
+        if ($className === null) {
+            return null;
+        }
+
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType($className);
+
+        return $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
     }
 
     /**

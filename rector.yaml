@@ -2,17 +2,14 @@ imports:
     - { resource: "create-rector.yaml", ignore_errors: 'not_found' }
 
 services:
-    Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector: null
+    Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector: null
+#    Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector: null
 
 parameters:
     # bleeding edge feature
     # is_cache_enabled: true
 
     auto_import_names: true
-
-#    sets:
-#        - solid
-#        - 'dead-code'
 
     paths:
         - src

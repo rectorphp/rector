@@ -25,17 +25,17 @@ final class SymfonyStyleFactory
 
     public function create(): SymfonyStyle
     {
-        $input = new ArgvInput();
-        $output = new ConsoleOutput();
+        $argvInput = new ArgvInput();
+        $consoleOutput = new ConsoleOutput();
 
         // to configure all -v, -vv, -vvv options without memory-lock to Application run() arguments
-        $this->privatesCaller->callPrivateMethod(new Application(), 'configureIO', $input, $output);
+        $this->privatesCaller->callPrivateMethod(new Application(), 'configureIO', $argvInput, $consoleOutput);
 
         // --debug is called
-        if ($input->getParameterOption('--debug') === null) {
-            $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
+        if ($argvInput->getParameterOption('--debug') === null) {
+            $consoleOutput->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
         }
 
-        return new SymfonyStyle($input, $output);
+        return new SymfonyStyle($argvInput, $consoleOutput);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -131,7 +132,7 @@ trait NameResolverTrait
      */
     protected function isClassConstReference(Node $node, string $className): bool
     {
-        if (! $node instanceof Node\Expr\ClassConstFetch) {
+        if (! $node instanceof ClassConstFetch) {
             return false;
         }
 

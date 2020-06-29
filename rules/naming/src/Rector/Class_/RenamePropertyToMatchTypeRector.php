@@ -110,7 +110,7 @@ PHP
     private function refactorClassMethods(ClassLike $classLike): void
     {
         foreach ($classLike->getMethods() as $classMethod) {
-            $conflictingNames = $this->conflictingNameResolver->resolveConflictingVariableNames($classMethod);
+            $conflictingNames = $this->conflictingNameResolver->resolveConflictingVariableNamesForParam($classMethod);
 
             foreach ($classMethod->params as $param) {
                 $expectedName = $this->expectedNameResolver->resolveForParamIfNotYet($param);

@@ -335,19 +335,19 @@ final class NodeFactory
     {
         $getterMethod = 'get' . ucfirst($propertyName);
 
-        $methodBuilder = new Method($getterMethod);
-        $methodBuilder->makePublic();
+        $method = new Method($getterMethod);
+        $method->makePublic();
 
-        $localPropertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+        $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
-        $return = new Return_($localPropertyFetch);
-        $methodBuilder->addStmt($return);
+        $return = new Return_($propertyFetch);
+        $method->addStmt($return);
 
         if ($typeNode !== null) {
-            $methodBuilder->setReturnType($typeNode);
+            $method->setReturnType($typeNode);
         }
 
-        return $methodBuilder->getNode();
+        return $method->getNode();
     }
 
     /**

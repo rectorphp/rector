@@ -80,9 +80,9 @@ final class ClassInsertManipulator
 
     public function addAsFirstTrait(Class_ $class, string $traitName): void
     {
-        $trait = new TraitUse([new FullyQualified($traitName)]);
+        $traitUse = new TraitUse([new FullyQualified($traitName)]);
 
-        $this->addStatementToClassBeforeTypes($class, $trait, TraitUse::class, Property::class, ClassMethod::class);
+        $this->addStatementToClassBeforeTypes($class, $traitUse, TraitUse::class, Property::class, ClassMethod::class);
     }
 
     /**

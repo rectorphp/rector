@@ -128,10 +128,10 @@ PHP
             return $nodes;
         }
 
-        $namespaceNode = new Namespace_(new Name($this->newNamespace));
+        $namespace = new Namespace_(new Name($this->newNamespace));
         foreach ($nodes as $key => $node) {
             if ($node instanceof Use_ || $node instanceof Class_) {
-                $nodes = $this->classInsertManipulator->insertBefore($nodes, $namespaceNode, $key);
+                $nodes = $this->classInsertManipulator->insertBefore($nodes, $namespace, $key);
 
                 break;
             }
