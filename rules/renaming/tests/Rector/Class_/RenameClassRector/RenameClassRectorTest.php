@@ -22,9 +22,9 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $filePath): void
+    public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFileInfo($filePath);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator

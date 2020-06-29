@@ -15,9 +15,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
-use Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\FixtureTypedProperty\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -141,7 +141,9 @@ PHP
 
         $this->refactorClassMethod($classMethod, $sensioTemplateTagValueNode);
 
-        $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
+        if ($this->hasThisRender($classMethod)) {
+            $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
+        }
 
         return $classMethod;
     }
@@ -180,12 +182,11 @@ PHP
                 $sensioTemplateTagValueNode
             );
 
+            $returnStaticType = $this->getStaticType($return->expr);
+
             if (! $return->expr instanceof MethodCall) {
                 $return->expr = $thisRenderMethodCall;
-            }
-
-            $returnStaticType = $this->getStaticType($return->expr);
-            if ($returnStaticType instanceof \PHPStan\Type\MixedType) {
+            } elseif ($returnStaticType instanceof MixedType) {
                 return;
             }
 
@@ -200,6 +201,7 @@ PHP
         }
 
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
+        $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
     }
 
     private function processClassMethodWithoutReturn(
@@ -228,5 +230,20 @@ PHP
 
         $returnThisRender = new Return_($thisRenderMethodCall);
         $this->addNodesAfterNode([$assign, $if, $returnThisRender], $return);
+    }
+
+    private function hasThisRender(ClassMethod $classMethod): bool
+    {
+        $hasThisRender = false;
+
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$hasThisRender) {
+            if (! $this->isLocalMethodCallNamed($node, 'render')) {
+                return null;
+            }
+
+            $hasThisRender = true;
+        });
+
+        return $hasThisRender;
     }
 }
