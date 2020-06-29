@@ -8,7 +8,7 @@ if (class_exists('Symfony\Component\HttpFoundation\Response')) {
     return;
 }
 
-final class Response
+class Response
 {
 
 }
