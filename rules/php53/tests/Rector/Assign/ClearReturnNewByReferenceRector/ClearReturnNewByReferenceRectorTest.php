@@ -15,9 +15,9 @@ final class ClearReturnNewByReferenceRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideDataForTest()
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFileInfoWithoutAutoload($file);
+        $this->doTestFileInfoWithoutAutoload($fileInfo);
     }
 
     /**

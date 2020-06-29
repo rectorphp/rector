@@ -17,9 +17,9 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFileInfo($file);
+        $this->doTestFileInfo($fileInfo);
 
         $expectedFactoryFilePath = StaticFixtureSplitter::getTemporaryPath() . '/AnotherClassWithMoreArgumentsFactory.php';
 

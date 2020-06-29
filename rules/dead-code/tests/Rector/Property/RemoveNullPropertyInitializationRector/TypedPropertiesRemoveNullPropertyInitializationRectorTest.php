@@ -16,9 +16,9 @@ final class TypedPropertiesRemoveNullPropertyInitializationRectorTest extends Ab
      * @dataProvider provideData()
      * @requires PHP >= 7.4
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFileInfo($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator

@@ -14,9 +14,9 @@ final class UnwrapFutureCompatibleIfPhpVersionRectorTest extends AbstractRectorT
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFileInfo($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator

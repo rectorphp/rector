@@ -22,11 +22,11 @@ final class AddArgumentTypeWithProbeDataRectorTest extends AbstractRectorTestCas
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
         $this->initializeProbeData();
 
-        $this->doTestFileInfo($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator
