@@ -17,13 +17,13 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
         $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
 
         $this->setParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER, false);
 
-        $this->doTestFileInfo($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): iterable

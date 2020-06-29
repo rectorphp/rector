@@ -15,10 +15,10 @@ final class SafeTypesTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
         $this->setParameter(Option::SAFE_TYPES, true);
-        $this->doTestFileInfo($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator

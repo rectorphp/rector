@@ -15,9 +15,9 @@ final class ReplaceEachAssignmentWithKeyCurrentRectorTest extends AbstractRector
     /**
      * @dataProvider provideDataForTest()
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFileInfo($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     /**

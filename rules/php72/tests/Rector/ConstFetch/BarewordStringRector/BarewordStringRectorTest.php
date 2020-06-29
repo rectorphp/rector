@@ -14,9 +14,9 @@ final class BarewordStringRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
-        $this->doTestFileInfoWithoutAutoload($file);
+        $this->doTestFileInfoWithoutAutoload($fileInfo);
     }
 
     public function provideData(): Iterator

@@ -18,13 +18,13 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
         $this->setParameter(
             Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
             __DIR__ . '/../GetToConstructorInjectionRector/xml/services.xml'
         );
-        $this->doTestFileInfo($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator

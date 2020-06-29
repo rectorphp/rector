@@ -15,10 +15,10 @@ final class OpenSourceRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $file): void
+    public function test(SmartFileInfo $fileInfo): void
     {
         $this->setParameter(Option::PROJECT_TYPE, Option::PROJECT_TYPE_OPEN_SOURCE);
-        $this->doTestFileInfo($file);
+        $this->doTestFileInfo($fileInfo);
     }
 
     public function provideData(): Iterator
