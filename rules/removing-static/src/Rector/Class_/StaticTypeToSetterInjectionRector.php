@@ -17,6 +17,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Naming\PropertyNaming;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
+use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -146,7 +148,7 @@ PHP
 
             $variableName = $this->propertyNaming->fqnToVariableName($objectType);
 
-            $paramBuilder = $this->builderFactory->param($variableName);
+            $paramBuilder = new ParamBuilder($variableName);
             $paramBuilder->setType(new FullyQualified($staticType));
             $param = $paramBuilder->getNode();
 
@@ -184,7 +186,7 @@ PHP
     ): ClassMethod {
         $setMethodName = 'set' . ucfirst($variableName);
 
-        $setEntityFactoryMethodBuilder = $this->builderFactory->method($setMethodName);
+        $setEntityFactoryMethodBuilder = new MethodBuilder($setMethodName);
         $setEntityFactoryMethodBuilder->makePublic();
         $setEntityFactoryMethodBuilder->addParam($param);
         $setEntityFactoryMethodBuilder->setReturnType('void');

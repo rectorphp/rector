@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\SymfonyPHPUnit\Node;
 
 use Nette\Utils\Strings;
-use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -22,6 +21,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
@@ -29,11 +29,6 @@ use Rector\SymfonyPHPUnit\Naming\ServiceNaming;
 
 final class KernelTestCaseNodeFactory
 {
-    /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
     /**
      * @var PHPUnitTypeDeclarationDecorator
      */
@@ -50,12 +45,10 @@ final class KernelTestCaseNodeFactory
     private $serviceNaming;
 
     public function __construct(
-        BuilderFactory $builderFactory,
         PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
         NodeFactory $nodeFactory,
         ServiceNaming $serviceNaming
     ) {
-        $this->builderFactory = $builderFactory;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
         $this->nodeFactory = $nodeFactory;
         $this->serviceNaming = $serviceNaming;
@@ -73,7 +66,7 @@ final class KernelTestCaseNodeFactory
 
         $stmts = array_merge([new StaticCall(new Name('parent'), 'setUp')], $assigns);
 
-        $classMethodBuilder = $this->builderFactory->method('setUp');
+        $classMethodBuilder = new MethodBuilder('setUp');
         $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmts($stmts);
 

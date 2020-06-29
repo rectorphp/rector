@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Node;
 
-use PhpParser\Builder\Method;
 use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
@@ -41,6 +40,9 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
+use Rector\Core\PhpParser\Builder\ParamBuilder;
+use Rector\Core\PhpParser\Builder\PropertyBuilder;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -163,7 +165,7 @@ final class NodeFactory
 
     public function createPublicMethod(string $name): ClassMethod
     {
-        $methodBuilder = $this->builderFactory->method($name);
+        $methodBuilder = new MethodBuilder($name);
         $methodBuilder->makePublic();
 
         return $methodBuilder->getNode();
@@ -171,7 +173,7 @@ final class NodeFactory
 
     public function createParamFromNameAndType(string $name, ?Type $type): Param
     {
-        $paramBuild = $this->builderFactory->param($name);
+        $paramBuild = new ParamBuilder($name);
 
         if ($type !== null) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
@@ -185,7 +187,7 @@ final class NodeFactory
 
     public function createPublicInjectPropertyFromNameAndType(string $name, ?Type $type): Property
     {
-        $propertyBuilder = $this->builderFactory->property($name);
+        $propertyBuilder = new PropertyBuilder($name);
         $propertyBuilder->makePublic();
 
         $property = $propertyBuilder->getNode();
@@ -207,7 +209,7 @@ final class NodeFactory
 
     public function createPrivatePropertyFromNameAndType(string $name, ?Type $type): Property
     {
-        $propertyBuilder = $this->builderFactory->property($name);
+        $propertyBuilder = new PropertyBuilder($name);
         $propertyBuilder->makePrivate();
 
         $property = $propertyBuilder->getNode();
@@ -274,7 +276,7 @@ final class NodeFactory
 
     public function createStaticProtectedPropertyWithDefault(string $name, Node $node): Property
     {
-        $propertyBuilder = $this->builderFactory->property($name);
+        $propertyBuilder = new PropertyBuilder($name);
         $propertyBuilder->makeProtected();
         $propertyBuilder->makeStatic();
         $propertyBuilder->setDefault($node);
@@ -288,7 +290,7 @@ final class NodeFactory
 
     public function createPrivateProperty(string $name): Property
     {
-        $propertyBuilder = $this->builderFactory->property($name);
+        $propertyBuilder = new PropertyBuilder($name);
         $propertyBuilder->makePrivate();
 
         $property = $propertyBuilder->getNode();
@@ -301,7 +303,7 @@ final class NodeFactory
 
     public function createPublicProperty(string $name): Property
     {
-        $propertyBuilder = $this->builderFactory->property($name);
+        $propertyBuilder = new PropertyBuilder($name);
         $propertyBuilder->makePublic();
 
         $property = $propertyBuilder->getNode();
@@ -335,19 +337,19 @@ final class NodeFactory
     {
         $getterMethod = 'get' . ucfirst($propertyName);
 
-        $method = new Method($getterMethod);
-        $method->makePublic();
+        $methodBuilder = new MethodBuilder($getterMethod);
+        $methodBuilder->makePublic();
 
         $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
         $return = new Return_($propertyFetch);
-        $method->addStmt($return);
+        $methodBuilder->addStmt($return);
 
         if ($typeNode !== null) {
-            $method->setReturnType($typeNode);
+            $methodBuilder->setReturnType($typeNode);
         }
 
-        return $method->getNode();
+        return $methodBuilder->getNode();
     }
 
     /**

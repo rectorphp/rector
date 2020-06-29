@@ -5,30 +5,25 @@ declare(strict_types=1);
 namespace Rector\Utils\PHPStanAttributeTypeSyncer\NodeFactory;
 
 use Nette\Utils\Strings;
-use PhpParser\Builder\Class_;
-use PhpParser\BuilderFactory;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\Core\PhpParser\Builder\ClassBuilder;
+use Rector\Core\PhpParser\Builder\NamespaceBuilder;
+use Rector\Core\PhpParser\Builder\TraitUseBuilder;
 use Rector\Utils\PHPStanAttributeTypeSyncer\ClassNaming\AttributeClassNaming;
 use Rector\Utils\PHPStanAttributeTypeSyncer\ValueObject\Paths;
 
 final class AttributeAwareClassFactory
 {
     /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
-    /**
      * @var AttributeClassNaming
      */
     private $attributeClassNaming;
 
-    public function __construct(BuilderFactory $builderFactory, AttributeClassNaming $attributeClassNaming)
+    public function __construct(AttributeClassNaming $attributeClassNaming)
     {
-        $this->builderFactory = $builderFactory;
         $this->attributeClassNaming = $attributeClassNaming;
     }
 
@@ -40,22 +35,22 @@ final class AttributeAwareClassFactory
             $namespace = Paths::NAMESPACE_PHPDOC_NODE;
         }
 
-        $namespaceBuilder = $this->builderFactory->namespace($namespace);
+        $namespaceBuilder = new NamespaceBuilder($namespace);
 
         $shortClassName = $this->attributeClassNaming->createAttributeAwareShortClassName($nodeClass);
         $classBuilder = $this->createClassBuilder($nodeClass, $shortClassName);
 
-        $useTrait = $this->builderFactory->useTrait(new FullyQualified(AttributeTrait::class));
-        $classBuilder->addStmt($useTrait);
+        $traitUseBuilder = new TraitUseBuilder(new FullyQualified(AttributeTrait::class));
+        $classBuilder->addStmt($traitUseBuilder);
 
         $namespaceBuilder->addStmt($classBuilder->getNode());
 
         return $namespaceBuilder->getNode();
     }
 
-    private function createClassBuilder(string $nodeClass, string $shortClassName): Class_
+    private function createClassBuilder(string $nodeClass, string $shortClassName): ClassBuilder
     {
-        $classBuilder = $this->builderFactory->class($shortClassName);
+        $classBuilder = new ClassBuilder($shortClassName);
         $classBuilder->makeFinal();
         $classBuilder->extend(new FullyQualified($nodeClass));
         $classBuilder->implement(new FullyQualified(AttributeAwareNodeInterface::class));
