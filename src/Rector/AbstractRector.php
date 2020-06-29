@@ -299,6 +299,17 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return $phpDocInfo->getByType($phpDocTagNodeClass);
     }
 
+    protected function removePhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): void
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return;
+        }
+
+        $phpDocInfo->removeByType($phpDocTagNodeClass);
+    }
+
     /**
      * @param Expr $expr
      */

@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
+use Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\FixtureTypedProperty\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -140,9 +141,7 @@ PHP
 
         $this->refactorClassMethod($classMethod, $sensioTemplateTagValueNode);
 
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->removeByType(SensioTemplateTagValueNode::class);
+        $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
 
         return $classMethod;
     }
@@ -186,6 +185,10 @@ PHP
             }
 
             $returnStaticType = $this->getStaticType($return->expr);
+            if ($returnStaticType instanceof \PHPStan\Type\MixedType) {
+                return;
+            }
+
             $isArrayOrResponseType = $this->arrayUnionResponseTypeAnalyzer->isArrayUnionResponseType(
                 $returnStaticType,
                 self::RESPONSE_CLASS
