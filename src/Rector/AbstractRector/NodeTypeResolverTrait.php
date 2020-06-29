@@ -10,8 +10,10 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
@@ -79,6 +81,24 @@ trait NodeTypeResolverTrait
         }
 
         return false;
+    }
+
+    protected function isReturnOfObjectType(Node $node, string $objectType): bool
+    {
+        if (! $node instanceof Return_) {
+            return false;
+        }
+
+        if ($node->expr === null) {
+            return false;
+        }
+
+        $returnType = $this->getStaticType($node->expr);
+        if (! $returnType instanceof TypeWithClassName) {
+            return false;
+        }
+
+        return is_a($returnType->getClassName(), $objectType, true);
     }
 
     /**

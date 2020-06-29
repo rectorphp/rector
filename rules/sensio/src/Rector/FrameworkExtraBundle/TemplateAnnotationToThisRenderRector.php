@@ -141,10 +141,6 @@ PHP
 
         $this->refactorClassMethod($classMethod, $sensioTemplateTagValueNode);
 
-        if ($this->hasThisRender($classMethod)) {
-            $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
-        }
-
         return $classMethod;
     }
 
@@ -169,23 +165,27 @@ PHP
         ClassMethod $classMethod,
         SensioTemplateTagValueNode $sensioTemplateTagValueNode
     ): void {
-        /** @var Return_|null $return */
-        $return = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
+        $hasThisRenderOrReturnsResponse = $this->hasLastReturnResponse($classMethod);
 
-        if ($return === null) {
+        /** @var Return_|null $lastReturn */
+        $lastReturn = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
+
+        if ($lastReturn === null) {
             $this->processClassMethodWithoutReturn($classMethod, $sensioTemplateTagValueNode);
-        } elseif ($return->expr !== null) {
+        } elseif ($lastReturn->expr !== null) {
             // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
             $thisRenderMethodCall = $this->thisRenderFactory->create(
                 $classMethod,
-                $return,
+                $lastReturn,
                 $sensioTemplateTagValueNode
             );
 
-            $returnStaticType = $this->getStaticType($return->expr);
+            $returnStaticType = $this->getStaticType($lastReturn->expr);
 
-            if (! $return->expr instanceof MethodCall) {
-                $return->expr = $thisRenderMethodCall;
+            if (! $lastReturn->expr instanceof MethodCall) {
+                if (! $hasThisRenderOrReturnsResponse) {
+                    $lastReturn->expr = $thisRenderMethodCall;
+                }
             } elseif ($returnStaticType instanceof MixedType) {
                 return;
             }
@@ -196,7 +196,7 @@ PHP
             );
 
             if ($isArrayOrResponseType) {
-                $this->processIsArrayOrResponseType($return, $return->expr, $thisRenderMethodCall);
+                $this->processIsArrayOrResponseType($lastReturn, $lastReturn->expr, $thisRenderMethodCall);
             }
         }
 
@@ -232,18 +232,14 @@ PHP
         $this->addNodesAfterNode([$assign, $if, $returnThisRender], $return);
     }
 
-    private function hasThisRender(ClassMethod $classMethod): bool
+    private function hasLastReturnResponse(ClassMethod $classMethod): bool
     {
-        $hasThisRender = false;
+        /** @var Return_|null $lastReturn */
+        $lastReturn = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
+        if ($lastReturn === null) {
+            return false;
+        }
 
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$hasThisRender) {
-            if (! $this->isLocalMethodCallNamed($node, 'render')) {
-                return null;
-            }
-
-            $hasThisRender = true;
-        });
-
-        return $hasThisRender;
+        return $this->isReturnOfObjectType($lastReturn, self::RESPONSE_CLASS);
     }
 }
