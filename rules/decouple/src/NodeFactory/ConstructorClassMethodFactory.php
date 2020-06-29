@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\Decouple\NodeFactory;
 
 use function count;
-use PhpParser\Builder\Method;
-use PhpParser\Builder\Param;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
+use Rector\Core\PhpParser\Builder\ParamBuilder;
 
 final class ConstructorClassMethodFactory
 {
@@ -24,27 +24,27 @@ final class ConstructorClassMethodFactory
             return null;
         }
 
-        $method = new Method('__construct');
-        $method->makePublic();
+        $methodBuilder = new MethodBuilder('__construct');
+        $methodBuilder->makePublic();
 
         foreach ($properties as $propertyName => $property) {
             /** @var string $propertyName */
-            $paramBuilder = new Param($propertyName);
+            $paramBuilder = new ParamBuilder($propertyName);
 
             /** @var Property $property */
             if ($property->type !== null) {
                 $paramBuilder->setType($property->type);
             }
 
-            $method->addParam($paramBuilder->getNode());
+            $methodBuilder->addParam($paramBuilder->getNode());
 
             // add assign
             $assign = $this->createAssign($propertyName);
 
-            $method->addStmt($assign);
+            $methodBuilder->addStmt($assign);
         }
 
-        return $method->getNode();
+        return $methodBuilder->getNode();
     }
 
     private function createAssign(string $propertyName): Assign

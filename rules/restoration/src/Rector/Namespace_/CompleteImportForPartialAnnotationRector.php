@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Builder\UseBuilder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -139,7 +140,7 @@ PHP
 
     private function addImportToNamespace(Namespace_ $namespace, string $name, string $alias): Namespace_
     {
-        $useBuilder = $this->builderFactory->use($name);
+        $useBuilder = new UseBuilder($name);
         if ($alias !== '') {
             $useBuilder->as($alias);
         }

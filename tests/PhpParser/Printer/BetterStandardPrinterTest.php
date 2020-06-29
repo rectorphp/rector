@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\PhpParser\Printer;
 
 use Iterator;
-use PhpParser\Builder\Method;
 use PhpParser\Comment;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
@@ -34,10 +34,10 @@ final class BetterStandardPrinterTest extends AbstractKernelTestCase
         $methodCall = new MethodCall(new Variable('this'), 'run');
         $methodCall->setAttribute(AttributeKey::COMMENTS, [new Comment('// todo: fix')]);
 
-        $method = new Method('run');
-        $method->addStmt($methodCall);
+        $methodBuilder = new MethodBuilder('run');
+        $methodBuilder->addStmt($methodCall);
 
-        $classMethod = $method->getNode();
+        $classMethod = $methodBuilder->getNode();
 
         $printed = $this->betterStandardPrinter->print($classMethod) . PHP_EOL;
         $this->assertStringEqualsFile(

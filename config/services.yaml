@@ -12,6 +12,7 @@ services:
             - '../src/Exception/*'
             - '../src/DependencyInjection/CompilerPass/*'
             - '../src/DependencyInjection/Loader/*'
+            - '../src/PhpParser/Builder/*'
             - '../src/HttpKernel/*'
             - '../src/ValueObject/*'
 

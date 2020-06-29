@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Decouple\NodeFactory;
 
-use PhpParser\Builder\Class_ as ClassBuilder;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Builder\ClassBuilder;
 use Rector\Decouple\ValueObject\DecoupleClassMethodMatch;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -47,15 +47,15 @@ final class NamespaceFactory
      */
     private function createNewClass(DecoupleClassMethodMatch $decoupleClassMethodMatch, array $classStmts): Class_
     {
-        $class = new ClassBuilder($decoupleClassMethodMatch->getClassName());
-        $class->addStmts($classStmts);
-        $class->makeFinal();
+        $classBuilder = new ClassBuilder($decoupleClassMethodMatch->getClassName());
+        $classBuilder->addStmts($classStmts);
+        $classBuilder->makeFinal();
 
         $parentClassName = $decoupleClassMethodMatch->getParentClassName();
         if ($parentClassName !== null) {
-            $class->extend(new FullyQualified($parentClassName));
+            $classBuilder->extend(new FullyQualified($parentClassName));
         }
 
-        return $class->getNode();
+        return $classBuilder->getNode();
     }
 }

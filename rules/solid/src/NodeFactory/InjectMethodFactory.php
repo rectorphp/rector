@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\SOLID\NodeFactory;
 
-use PhpParser\Builder\Method;
-use PhpParser\Builder\Param;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Naming\PropertyNaming;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
+use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector;
@@ -66,23 +66,23 @@ final class InjectMethodFactory
 
         $shortClassName = $this->classNaming->getShortName($className);
 
-        $method = new Method('inject' . $shortClassName);
-        $method->makePublic();
+        $methodBuilder = new MethodBuilder('inject' . $shortClassName);
+        $methodBuilder->makePublic();
 
         foreach ($objectTypes as $objectType) {
             /** @var ObjectType $objectType */
             $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
 
-            $param = new Param($propertyName);
-            $param->setType(new FullyQualified($objectType->getClassName()));
-            $method->addParam($param);
+            $paramBuilder = new ParamBuilder($propertyName);
+            $paramBuilder->setType(new FullyQualified($objectType->getClassName()));
+            $methodBuilder->addParam($paramBuilder);
 
             $assign = $this->nodeFactory->createPropertyAssignment($propertyName);
 
-            $method->addStmt($assign);
+            $methodBuilder->addStmt($assign);
         }
 
-        $classMethod = $method->getNode();
+        $classMethod = $methodBuilder->getNode();
 
         if ($framework === MultiParentingToAbstractDependencyRector::FRAMEWORK_SYMFONY) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);

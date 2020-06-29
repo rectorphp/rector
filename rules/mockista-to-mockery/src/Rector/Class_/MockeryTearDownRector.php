@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\MockistaToMockery\Rector\Class_;
 
-use PhpParser\Builder\Method;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -96,14 +96,14 @@ PHP
 
     private function createTearDownMethodWithMockeryClose(): ClassMethod
     {
-        $method = new Method('tearDown');
-        $method->setReturnType('void');
-        $method->makeProtected();
+        $methodBuilder = new MethodBuilder('tearDown');
+        $methodBuilder->setReturnType('void');
+        $methodBuilder->makeProtected();
 
         $staticCall = $this->createMockeryClose();
-        $method->addStmt($staticCall);
+        $methodBuilder->addStmt($staticCall);
 
-        return $method->getNode();
+        return $methodBuilder->getNode();
     }
 
     private function containsMockeryClose(ClassMethod $classMethod): bool

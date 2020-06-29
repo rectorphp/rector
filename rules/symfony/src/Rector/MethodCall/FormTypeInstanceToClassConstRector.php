@@ -22,6 +22,8 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
+use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -222,17 +224,17 @@ PHP
             return;
         }
 
-        $formBuilderParamBuilder = $this->builderFactory->param('builder');
+        $formBuilderParamBuilder = new ParamBuilder('builder');
         $formBuilderParamBuilder->setType(new FullyQualified('Symfony\Component\Form\FormBuilderInterface'));
 
         $formBuilderParam = $formBuilderParamBuilder->getNode();
 
-        $optionsParamBuilder = $this->builderFactory->param('options');
+        $optionsParamBuilder = new ParamBuilder('options');
         $optionsParamBuilder->setType('array');
 
         $optionsParam = $optionsParamBuilder->getNode();
 
-        $buildFormClassMethodBuilder = $this->builderFactory->method('buildForm');
+        $buildFormClassMethodBuilder = new MethodBuilder('buildForm');
         $buildFormClassMethodBuilder->makePublic();
         $buildFormClassMethodBuilder->addParam($formBuilderParam);
         $buildFormClassMethodBuilder->addParam($optionsParam);
@@ -256,7 +258,7 @@ PHP
             return;
         }
 
-        $resolverParamBuilder = $this->builderFactory->param('resolver');
+        $resolverParamBuilder = new ParamBuilder('resolver');
         $resolverParamBuilder->setType(new FullyQualified('Symfony\Component\OptionsResolver\OptionsResolver'));
 
         $resolverParam = $resolverParamBuilder->getNode();
@@ -271,7 +273,7 @@ PHP
             new Arg($array),
         ]);
 
-        $configureOptionsClassMethodBuilder = $this->builderFactory->method('configureOptions');
+        $configureOptionsClassMethodBuilder = new MethodBuilder('configureOptions');
         $configureOptionsClassMethodBuilder->makePublic();
         $configureOptionsClassMethodBuilder->addParam($resolverParam);
         $configureOptionsClassMethodBuilder->addStmt($setDefaultsMethodCall);

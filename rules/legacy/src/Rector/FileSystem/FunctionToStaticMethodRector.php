@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Legacy\Rector\FileSystem;
 
-use PhpParser\Builder\Class_ as ClassBuilder;
-use PhpParser\Builder\Method;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Class_;
@@ -14,6 +12,8 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Autodiscovery\ValueObject\NodesWithFileDestination;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\PhpParser\Builder\ClassBuilder;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
@@ -176,11 +176,11 @@ PHP
 
     private function createClassMethodFromFunction(string $methodName, Function_ $function): ClassMethod
     {
-        $method = new Method($methodName);
-        $method->makePublic();
-        $method->makeStatic();
-        $method->addStmts($function->stmts);
+        $methodBuilder = new MethodBuilder($methodName);
+        $methodBuilder->makePublic();
+        $methodBuilder->makeStatic();
+        $methodBuilder->addStmts($function->stmts);
 
-        return $method->getNode();
+        return $methodBuilder->getNode();
     }
 }

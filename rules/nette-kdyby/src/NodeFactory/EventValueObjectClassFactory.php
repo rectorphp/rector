@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Rector\NetteKdyby\NodeFactory;
 
 use Nette\Utils\Strings;
-use PhpParser\Builder\Class_ as ClassBuilder;
-use PhpParser\Builder\Method;
-use PhpParser\Builder\Namespace_ as NamespaceBuilder;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
@@ -17,6 +14,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Builder\ClassBuilder;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
+use Rector\Core\PhpParser\Builder\NamespaceBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NetteKdyby\BlueprintFactory\VariableWithTypesFactory;
 use Rector\NetteKdyby\ValueObject\VariableWithType;
@@ -69,8 +69,8 @@ final class EventValueObjectClassFactory
      */
     private function createConstructClassMethod(array $variableWithTypes): ClassMethod
     {
-        $method = new Method('__construct');
-        $method->makePublic();
+        $methodBuilder = new MethodBuilder('__construct');
+        $methodBuilder->makePublic();
 
         foreach ($variableWithTypes as $variableWithType) {
             $param = new Param(new Variable($variableWithType->getName()));
@@ -79,29 +79,30 @@ final class EventValueObjectClassFactory
                 $param->type = $variableWithType->getPhpParserTypeNode();
             }
 
-            $method->addParam($param);
+            $methodBuilder->addParam($param);
 
             $assign = $this->nodeFactory->createPropertyAssignment($variableWithType->getName());
-            $method->addStmt($assign);
+            $methodBuilder->addStmt($assign);
         }
 
-        return $method->getNode();
+        return $methodBuilder->getNode();
     }
 
     private function createEventClassBuilder(string $className): ClassBuilder
     {
         $shortClassName = $this->classNaming->getShortName($className);
 
-        $class = new ClassBuilder($shortClassName);
-        $class->makeFinal();
-        $class->extend(new FullyQualified('Symfony\Contracts\EventDispatcher\Event'));
+        $classBuilder = new ClassBuilder($shortClassName);
+        $classBuilder->makeFinal();
+        $classBuilder->extend(new FullyQualified('Symfony\Contracts\EventDispatcher\Event'));
 
-        return $class;
+        return $classBuilder;
     }
 
     private function wrapClassToNamespace(string $className, Class_ $class): Namespace_
     {
         $namespace = Strings::before($className, '\\', -1);
+
         $namespaceBuilder = new NamespaceBuilder($namespace);
         $namespaceBuilder->addStmt($class);
 

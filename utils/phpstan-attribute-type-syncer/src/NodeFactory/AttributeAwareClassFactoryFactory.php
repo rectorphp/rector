@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\Utils\PHPStanAttributeTypeSyncer\NodeFactory;
 
 use Nette\Utils\Strings;
-use PhpParser\Builder\Param;
-use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
@@ -22,6 +20,10 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\Core\PhpParser\Builder\ClassBuilder;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
+use Rector\Core\PhpParser\Builder\NamespaceBuilder;
+use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Utils\PHPStanAttributeTypeSyncer\ClassNaming\AttributeClassNaming;
 use Rector\Utils\PHPStanAttributeTypeSyncer\ValueObject\Paths;
 use ReflectionClass;
@@ -34,18 +36,12 @@ final class AttributeAwareClassFactoryFactory
     private const NODE = 'node';
 
     /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
-    /**
      * @var AttributeClassNaming
      */
     private $attributeClassNaming;
 
-    public function __construct(BuilderFactory $builderFactory, AttributeClassNaming $attributeClassNaming)
+    public function __construct(AttributeClassNaming $attributeClassNaming)
     {
-        $this->builderFactory = $builderFactory;
         $this->attributeClassNaming = $attributeClassNaming;
     }
 
@@ -57,11 +53,11 @@ final class AttributeAwareClassFactoryFactory
             $namespace = Paths::NAMESPACE_PHPDOC_NODE_FACTORY;
         }
 
-        $namespaceBuilder = $this->builderFactory->namespace($namespace);
+        $namespaceBuilder = new NamespaceBuilder($namespace);
 
         $shortClassName = $this->attributeClassNaming->createAttributeAwareFactoryShortClassName($nodeClass);
 
-        $classBuilder = $this->builderFactory->class($shortClassName);
+        $classBuilder = new ClassBuilder($shortClassName);
         $classBuilder->makeFinal();
         $classBuilder->implement(new FullyQualified(AttributeNodeAwareFactoryInterface::class));
 
@@ -82,19 +78,18 @@ final class AttributeAwareClassFactoryFactory
 
         $classMethods[] = $this->createGetOriginalNodeClass($nodeClass);
 
-        $nodeParam = $this->builderFactory->param(self::NODE);
-        $nodeParam->setType(new FullyQualified(Node::class));
+        $paramBuilder = new ParamBuilder(self::NODE);
+        $paramBuilder->setType(new FullyQualified(Node::class));
 
-        $classMethods[] = $this->createIsMatchClassMethod($nodeClass, $nodeParam);
-
-        $classMethods[] = $this->createCreateClassMethod($nodeClass, $nodeParam);
+        $classMethods[] = $this->createIsMatchClassMethod($nodeClass, $paramBuilder);
+        $classMethods[] = $this->createCreateClassMethod($nodeClass);
 
         return $classMethods;
     }
 
     private function createGetOriginalNodeClass(string $nodeClass): ClassMethod
     {
-        $getOriginalNodeClassClassMethod = $this->builderFactory->method('getOriginalNodeClass');
+        $getOriginalNodeClassClassMethod = new MethodBuilder('getOriginalNodeClass');
         $getOriginalNodeClassClassMethod->makePublic();
         $getOriginalNodeClassClassMethod->setReturnType('string');
 
@@ -104,11 +99,11 @@ final class AttributeAwareClassFactoryFactory
         return $getOriginalNodeClassClassMethod->getNode();
     }
 
-    private function createIsMatchClassMethod(string $nodeClass, Param $param): ClassMethod
+    private function createIsMatchClassMethod(string $nodeClass, ParamBuilder $paramBuilder): ClassMethod
     {
-        $isMatchClassMethod = $this->builderFactory->method('isMatch');
+        $isMatchClassMethod = new MethodBuilder('isMatch');
 
-        $isMatchClassMethod->addParam($param);
+        $isMatchClassMethod->addParam($paramBuilder);
         $isMatchClassMethod->makePublic();
         $isMatchClassMethod->setReturnType('bool');
 
@@ -118,23 +113,23 @@ final class AttributeAwareClassFactoryFactory
         return $isMatchClassMethod->getNode();
     }
 
-    private function createCreateClassMethod(string $nodeClass, Param $nodeParam): ClassMethod
+    private function createCreateClassMethod(string $nodeClass): ClassMethod
     {
-        $createClassMethod = $this->builderFactory->method('create');
+        $createClassMethod = new MethodBuilder('create');
 
-        $param = new Param('docContent');
-        $param->setType('string');
+        $paramBuilder = new ParamBuilder('docContent');
+        $paramBuilder->setType('string');
 
-        $docContentParam = $param->getNode();
+        $docContentParam = $paramBuilder->getNode();
 
-        $createClassMethod->addParam($nodeParam);
+        $createClassMethod->addParam($paramBuilder);
         $createClassMethod->addParam($docContentParam);
         $createClassMethod->makePublic();
 
         $createClassMethod->setReturnType(new FullyQualified(AttributeAwareNodeInterface::class));
 
-        // add @param doc with more precise type
-        $paramDocBlock = sprintf('/**%s * @param \\%s%s */', PHP_EOL, $nodeClass, PHP_EOL);
+        // add @paramBuilder doc with more precise type
+        $paramDocBlock = sprintf('/**%s * @paramBuilder \\%s%s */', PHP_EOL, $nodeClass, PHP_EOL);
         $createClassMethod->setDocComment($paramDocBlock);
 
         $attributeAwareClassName = $this->attributeClassNaming->createAttributeAwareClassName($nodeClass);

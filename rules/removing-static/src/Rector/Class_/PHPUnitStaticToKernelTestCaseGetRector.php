@@ -22,6 +22,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Naming\PropertyNaming;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -322,7 +323,7 @@ PHP
 
     private function createSetUpMethod(Expression $parentSetupStaticCall, Expression $assign): ClassMethod
     {
-        $classMethodBuilder = $this->builderFactory->method(self::SET_UP);
+        $classMethodBuilder = new MethodBuilder(self::SET_UP);
         $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmt($parentSetupStaticCall);
         $classMethodBuilder->addStmt($assign);

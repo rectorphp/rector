@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\RemovingStatic;
 
 use Nette\Utils\Strings;
-use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
@@ -21,6 +20,9 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Naming\PropertyNaming;
+use Rector\Core\PhpParser\Builder\ClassBuilder;
+use Rector\Core\PhpParser\Builder\MethodBuilder;
+use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -32,11 +34,6 @@ final class UniqueObjectFactoryFactory
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
-    /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
 
     /**
      * @var PropertyNaming
@@ -55,13 +52,11 @@ final class UniqueObjectFactoryFactory
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        BuilderFactory $builderFactory,
         PropertyNaming $propertyNaming,
         StaticTypeMapper $staticTypeMapper,
         NodeFactory $nodeFactory
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->builderFactory = $builderFactory;
         $this->propertyNaming = $propertyNaming;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeFactory = $nodeFactory;
@@ -78,7 +73,7 @@ final class UniqueObjectFactoryFactory
 
         $shortName = $this->resolveClassShortName($name);
 
-        $factoryClassBuilder = $this->builderFactory->class($shortName);
+        $factoryClassBuilder = new ClassBuilder($shortName);
         $factoryClassBuilder->makeFinal();
 
         $properties = $this->createPropertiesFromTypes($objectType);
@@ -127,7 +122,7 @@ final class UniqueObjectFactoryFactory
     private function createConstructMethod(ObjectType $objectType): ClassMethod
     {
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $paramBuilder = $this->builderFactory->param($propertyName);
+        $paramBuilder = new ParamBuilder($propertyName);
 
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
         if ($typeNode !== null) {
@@ -138,7 +133,7 @@ final class UniqueObjectFactoryFactory
 
         $assigns = $this->createAssignsFromParams($params);
 
-        $methodBuilder = $this->builderFactory->method('__construct');
+        $methodBuilder = new MethodBuilder('__construct');
         $methodBuilder->makePublic();
         $methodBuilder->addParams($params);
         $methodBuilder->addStmts($assigns);
@@ -174,7 +169,7 @@ final class UniqueObjectFactoryFactory
 
         $return = new Return_($new);
 
-        $builderMethod = $this->builderFactory->method('create');
+        $builderMethod = new MethodBuilder('create');
         $builderMethod->setReturnType(new FullyQualified($className));
         $builderMethod->makePublic();
         $builderMethod->addStmt($return);

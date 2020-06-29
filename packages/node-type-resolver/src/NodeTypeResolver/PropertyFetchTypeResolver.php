@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
-use PhpParser\Builder\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
