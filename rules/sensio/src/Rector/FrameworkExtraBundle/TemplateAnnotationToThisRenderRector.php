@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Rector\Sensio\Rector\FrameworkExtraBundle;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
@@ -18,8 +21,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Sensio\NodeFactory\ArrayFromCompactFactory;
 use Rector\Sensio\NodeFactory\ThisRenderFactory;
+use Rector\Sensio\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer;
 use Rector\Sensio\TypeDeclaration\ReturnTypeDeclarationUpdater;
 
 /**
@@ -32,9 +35,9 @@ use Rector\Sensio\TypeDeclaration\ReturnTypeDeclarationUpdater;
 final class TemplateAnnotationToThisRenderRector extends AbstractRector
 {
     /**
-     * @var ArrayFromCompactFactory
+     * @var string
      */
-    private $arrayFromCompactFactory;
+    private const RESPONSE_CLASS = 'Symfony\Component\HttpFoundation\Response';
 
     /**
      * @var ReturnTypeDeclarationUpdater
@@ -46,14 +49,19 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
      */
     private $thisRenderFactory;
 
+    /**
+     * @var ArrayUnionResponseTypeAnalyzer
+     */
+    private $arrayUnionResponseTypeAnalyzer;
+
     public function __construct(
-        ArrayFromCompactFactory $arrayFromCompactFactory,
         ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater,
-        ThisRenderFactory $thisRenderFactory
+        ThisRenderFactory $thisRenderFactory,
+        ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer
     ) {
-        $this->arrayFromCompactFactory = $arrayFromCompactFactory;
         $this->returnTypeDeclarationUpdater = $returnTypeDeclarationUpdater;
         $this->thisRenderFactory = $thisRenderFactory;
+        $this->arrayUnionResponseTypeAnalyzer = $arrayUnionResponseTypeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -130,11 +138,6 @@ PHP
             return null;
         }
 
-        $this->returnTypeDeclarationUpdater->updateClassMethod(
-            $classMethod,
-            'Symfony\Component\HttpFoundation\Response'
-        );
-
         $this->refactorClassMethod($classMethod, $sensioTemplateTagValueNode);
 
         /** @var PhpDocInfo $phpDocInfo */
@@ -161,56 +164,66 @@ PHP
         return false;
     }
 
-    private function updateReturnType(ClassMethod $classMethod): void
-    {
-        $this->returnTypeDeclarationUpdater->updateClassMethod(
-            $classMethod,
-            'Symfony\Component\HttpFoundation\Response'
-        );
-    }
-
     private function refactorClassMethod(
         ClassMethod $classMethod,
         SensioTemplateTagValueNode $sensioTemplateTagValueNode
     ): void {
-        /** @var Return_|null $returnNode */
-        $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
+        /** @var Return_|null $return */
+        $return = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
 
-        if ($returnNode !== null && $returnNode->expr instanceof MethodCall) {
-            // go inside called method
-            $innerClassMethod = $this->functionLikeParsedNodesFinder->findClassMethodByMethodCall($returnNode->expr);
-            if ($innerClassMethod !== null) {
-                $this->refactorClassMethod($innerClassMethod, $sensioTemplateTagValueNode);
+        if ($return === null) {
+            $this->processClassMethodWithoutReturn($classMethod, $sensioTemplateTagValueNode);
+        } elseif ($return->expr !== null) {
+            // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
+            $thisRenderMethodCall = $this->thisRenderFactory->create(
+                $classMethod,
+                $return,
+                $sensioTemplateTagValueNode
+            );
 
-                return;
+            if (! $return->expr instanceof MethodCall) {
+                $return->expr = $thisRenderMethodCall;
+            }
+
+            $returnStaticType = $this->getStaticType($return->expr);
+            $isArrayOrResponseType = $this->arrayUnionResponseTypeAnalyzer->isArrayUnionResponseType(
+                $returnStaticType,
+                self::RESPONSE_CLASS
+            );
+
+            if ($isArrayOrResponseType) {
+                $this->processIsArrayOrResponseType($return, $return->expr, $thisRenderMethodCall);
             }
         }
 
+        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
+    }
+
+    private function processClassMethodWithoutReturn(
+        ClassMethod $classMethod,
+        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+    ): void {
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
-        $thisRenderMethodCall = $this->thisRenderFactory->create(
-            $classMethod,
-            $returnNode,
-            $sensioTemplateTagValueNode
-        );
+        $thisRenderMethodCall = $this->thisRenderFactory->create($classMethod, null, $sensioTemplateTagValueNode);
+        $classMethod->stmts[] = new Return_($thisRenderMethodCall);
+    }
 
-        if ($returnNode === null) {
-            // or add as last statement in the method
-            $classMethod->stmts[] = new Return_($thisRenderMethodCall);
-        } elseif ($returnNode->expr !== null) {
-            if ($this->isFuncCallName($returnNode->expr, 'compact')) {
-                /** @var FuncCall $compactFunCall */
-                $compactFunCall = $returnNode->expr;
+    private function processIsArrayOrResponseType(
+        Return_ $return,
+        Expr $returnExpr,
+        MethodCall $thisRenderMethodCall
+    ): void {
+        $this->removeNode($return);
 
-                $array = $this->arrayFromCompactFactory->createArrayFromCompactFuncCall($compactFunCall);
-                $thisRenderMethodCall->args[1] = new Arg($array);
-                $returnNode->expr = $thisRenderMethodCall;
-            } elseif (! $returnNode->expr instanceof MethodCall) {
-                $returnNode->expr = $thisRenderMethodCall;
-            }
-        }
+        // create instance of Response → return response, or return $this->render
+        $responseVariable = new Variable('response');
 
-        // replace Return_ node value if exists and is not already in correct format
+        $assign = new Assign($responseVariable, $returnExpr);
 
-        $this->updateReturnType($classMethod);
+        $if = new If_(new Instanceof_($responseVariable, new FullyQualified(self::RESPONSE_CLASS)));
+        $if->stmts[] = new Return_($responseVariable);
+
+        $returnThisRender = new Return_($thisRenderMethodCall);
+        $this->addNodesAfterNode([$assign, $if, $returnThisRender], $return);
     }
 }

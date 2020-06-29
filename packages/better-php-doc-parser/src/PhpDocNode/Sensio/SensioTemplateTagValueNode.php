@@ -15,6 +15,14 @@ final class SensioTemplateTagValueNode extends AbstractTagValueNode implements S
         return $this->items['template'];
     }
 
+    /**
+     * @return string[]
+     */
+    public function getVars(): array
+    {
+        return $this->items['vars'] ?? [];
+    }
+
     public function getShortName(): string
     {
         return '@Template';
