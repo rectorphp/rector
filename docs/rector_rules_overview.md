@@ -4560,14 +4560,14 @@ services:
 
 ### `ReturnThisRemoveRector`
 
-- class: [`Rector\MagicDisclosure\Rector\MethodBody\ReturnThisRemoveRector`](/../master/rules/magic-disclosure/src/Rector/MethodBody/ReturnThisRemoveRector.php)
+- class: [`Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector`](/../master/rules/magic-disclosure/src/Rector/MethodBody/ReturnThisRemoveRector.php)
 - [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodBody/ReturnThisRemoveRector/Fixture)
 
 Removes "return $this;" from *fluent interfaces* for specified classes.
 
 ```yaml
 services:
-    Rector\MagicDisclosure\Rector\MethodBody\ReturnThisRemoveRector:
+    Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector:
         -
             - SomeExampleClass
 ```
