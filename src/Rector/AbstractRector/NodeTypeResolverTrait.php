@@ -83,17 +83,13 @@ trait NodeTypeResolverTrait
         return false;
     }
 
-    protected function isReturnOfObjectType(Node $node, string $objectType): bool
+    protected function isReturnOfObjectType(Return_ $return, string $objectType): bool
     {
-        if (! $node instanceof Return_) {
+        if ($return->expr === null) {
             return false;
         }
 
-        if ($node->expr === null) {
-            return false;
-        }
-
-        $returnType = $this->getStaticType($node->expr);
+        $returnType = $this->getStaticType($return->expr);
         if (! $returnType instanceof TypeWithClassName) {
             return false;
         }
