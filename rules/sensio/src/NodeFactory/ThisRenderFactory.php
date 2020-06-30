@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Sensio\NodeFactory;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
@@ -13,9 +14,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ArrayType;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Sensio\Helper\TemplateGuesser;
 
 final class ThisRenderFactory
@@ -40,16 +43,23 @@ final class ThisRenderFactory
      */
     private $arrayFromCompactFactory;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         NodeFactory $nodeFactory,
         TemplateGuesser $templateGuesser,
         NodeNameResolver $nodeNameResolver,
-        ArrayFromCompactFactory $arrayFromCompactFactory
+        ArrayFromCompactFactory $arrayFromCompactFactory,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->templateGuesser = $templateGuesser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayFromCompactFactory = $arrayFromCompactFactory;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function create(
@@ -71,21 +81,10 @@ final class ThisRenderFactory
         SensioTemplateTagValueNode $sensioTemplateTagValueNode
     ): array {
         $arguments = [$this->resolveTemplateName($classMethod, $sensioTemplateTagValueNode)];
-        if ($return === null) {
-            return $this->nodeFactory->createArgs($arguments);
-        }
 
-        if ($return->expr instanceof Array_ && count($return->expr->items)) {
-            $arguments[] = $return->expr;
-        } elseif ($return->expr instanceof FuncCall && $this->nodeNameResolver->isName($return->expr, 'compact')) {
-            /** @var FuncCall $compactFunCall */
-            $compactFunCall = $return->expr;
-
-            $array = $this->arrayFromCompactFactory->createArrayFromCompactFuncCall($compactFunCall);
-            $arguments[1] = new Arg($array);
-        } elseif ($sensioTemplateTagValueNode->getVars() !== []) {
-            $variableList = $this->createArrayFromVars($sensioTemplateTagValueNode->getVars());
-            $arguments[1] = new Arg($variableList);
+        $parametersExpr = $this->resolveParametersExpr($return, $sensioTemplateTagValueNode);
+        if ($parametersExpr !== null) {
+            $arguments[] = new Arg($parametersExpr);
         }
 
         return $this->nodeFactory->createArgs($arguments);
@@ -113,5 +112,37 @@ final class ThisRenderFactory
         }
 
         return new Array_($arrayItems);
+    }
+
+    private function resolveParametersExpr(
+        ?Return_ $return,
+        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+    ): ?Expr {
+        if ($return === null) {
+            return null;
+        }
+
+        if ($return->expr instanceof Array_ && count($return->expr->items)) {
+            return $return->expr;
+        }
+
+        if ($return->expr instanceof MethodCall) {
+            $returnStaticType = $this->nodeTypeResolver->getStaticType($return->expr);
+            if ($returnStaticType instanceof ArrayType) {
+                return $return->expr;
+            }
+        }
+
+        if ($return->expr instanceof FuncCall && $this->nodeNameResolver->isName($return->expr, 'compact')) {
+            /** @var FuncCall $compactFunCall */
+            $compactFunCall = $return->expr;
+            return $this->arrayFromCompactFactory->createArrayFromCompactFuncCall($compactFunCall);
+        }
+
+        if ($sensioTemplateTagValueNode->getVars() !== []) {
+            return $this->createArrayFromVars($sensioTemplateTagValueNode->getVars());
+        }
+
+        return null;
     }
 }

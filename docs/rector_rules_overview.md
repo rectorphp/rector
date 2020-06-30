@@ -1,4 +1,4 @@
-# All 512 Rectors Overview
+# All 513 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -26,7 +26,7 @@
 - [MagicDisclosure](#magicdisclosure) (5)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
-- [Naming](#naming) (1)
+- [Naming](#naming) (2)
 - [Nette](#nette) (12)
 - [NetteCodeQuality](#nettecodequality) (1)
 - [NetteKdyby](#nettekdyby) (4)
@@ -4806,6 +4806,28 @@ Rename property and method param to match its type
      {
 -        $this->eventManager = $eventManager;
 +        $this->entityManager = $entityManager;
+     }
+ }
+```
+
+<br><br>
+
+### `RenameVariableToMatchNewTypeRector`
+
+- class: [`Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector`](/../master/rules/naming/src/Rector/ClassMethod/RenameVariableToMatchNewTypeRector.php)
+- [test fixtures](/../master/rules/naming/tests/Rector/ClassMethod/RenameVariableToMatchNewTypeRector/Fixture)
+
+Rename variable to match new ClassType
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        $search = new DreamSearch();
+-        $search->advance();
++        $dreamSearch = new DreamSearch();
++        $dreamSearch->advance();
      }
  }
 ```
@@ -10383,7 +10405,7 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
 - */
  public function indexAction()
  {
-+    return $this->render("index.html.twig");
++    return $this->render('index.html.twig');
  }
 ```
 
