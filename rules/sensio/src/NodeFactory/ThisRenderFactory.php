@@ -80,7 +80,9 @@ final class ThisRenderFactory
         ?Return_ $return,
         SensioTemplateTagValueNode $sensioTemplateTagValueNode
     ): array {
-        $arguments = [$this->resolveTemplateName($classMethod, $sensioTemplateTagValueNode)];
+        $templateNameString = $this->resolveTemplateName($classMethod, $sensioTemplateTagValueNode);
+
+        $arguments = [$templateNameString];
 
         $parametersExpr = $this->resolveParametersExpr($return, $sensioTemplateTagValueNode);
         if ($parametersExpr !== null) {
@@ -118,6 +120,10 @@ final class ThisRenderFactory
         ?Return_ $return,
         SensioTemplateTagValueNode $sensioTemplateTagValueNode
     ): ?Expr {
+        if ($sensioTemplateTagValueNode->getVars() !== []) {
+            return $this->createArrayFromVars($sensioTemplateTagValueNode->getVars());
+        }
+
         if ($return === null) {
             return null;
         }
@@ -137,10 +143,6 @@ final class ThisRenderFactory
             /** @var FuncCall $compactFunCall */
             $compactFunCall = $return->expr;
             return $this->arrayFromCompactFactory->createArrayFromCompactFuncCall($compactFunCall);
-        }
-
-        if ($sensioTemplateTagValueNode->getVars() !== []) {
-            return $this->createArrayFromVars($sensioTemplateTagValueNode->getVars());
         }
 
         return null;
