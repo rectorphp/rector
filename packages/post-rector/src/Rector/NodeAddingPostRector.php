@@ -42,7 +42,6 @@ final class NodeAddingPostRector extends AbstractPostRector
     public function leaveNode(Node $node)
     {
         $nodesToAddAfter = $this->nodesToAddCollector->getNodesToAddAfterNode($node);
-
         if ($nodesToAddAfter !== []) {
             $this->nodesToAddCollector->clearNodesToAddAfter($node);
             return array_merge([$node], $nodesToAddAfter);

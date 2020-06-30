@@ -7,6 +7,10 @@ namespace Rector\Core\Naming;
 use Nette\Utils\Strings;
 use PHPStan\Type\ObjectType;
 
+/**
+ * @deprecated Merge with other
+ * @see \Rector\Naming\Naming\PropertyNaming
+ */
 final class PropertyNaming
 {
     /**
