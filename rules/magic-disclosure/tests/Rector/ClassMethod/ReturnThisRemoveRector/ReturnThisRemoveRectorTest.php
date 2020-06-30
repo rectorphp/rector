@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\MagicDisclosure\Tests\Rector\MethodBody\ReturnThisRemoveRector;
+namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\MagicDisclosure\Rector\MethodBody\ReturnThisRemoveRector;
+use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
@@ -32,8 +32,8 @@ final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
         return [
             ReturnThisRemoveRector::class => [
                 '$classesToDefluent' => [
-                    'Rector\MagicDisclosure\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClass',
-                    'Rector\MagicDisclosure\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClassWithReturnAnnotations',
+                    'Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture\SomeClass',
+                    'Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture\SomeClassWithReturnAnnotations',
                 ],
             ],
         ];

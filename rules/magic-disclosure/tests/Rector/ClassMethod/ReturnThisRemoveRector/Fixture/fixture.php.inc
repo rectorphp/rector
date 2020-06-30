@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
 
 class SomeClass
 {
@@ -27,16 +27,16 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
 
 class SomeClass
 {
-    public function someFunction()
+    public function someFunction(): void
     {
         foo();
     }
 
-    public function otherFunction()
+    public function otherFunction(): void
     {
         bar();
     }
