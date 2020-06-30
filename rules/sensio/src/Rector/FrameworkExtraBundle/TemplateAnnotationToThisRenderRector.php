@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Core\Rector\AbstractRector;
@@ -81,7 +82,7 @@ PHP
                     <<<'PHP'
 public function indexAction()
 {
-    return $this->render("index.html.twig");
+    return $this->render('index.html.twig');
 }
 PHP
                 ),
@@ -162,46 +163,35 @@ PHP
         /** @var Return_|null $lastReturn */
         $lastReturn = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
 
-        if ($lastReturn === null) {
-            $this->processClassMethodWithoutReturn($classMethod, $sensioTemplateTagValueNode);
-        } elseif ($lastReturn->expr !== null) {
-            // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
-            $thisRenderMethodCall = $this->thisRenderFactory->create(
-                $classMethod,
-                $lastReturn,
-                $sensioTemplateTagValueNode
-            );
-
-            $returnStaticType = $this->getStaticType($lastReturn->expr);
-
-            if (! $lastReturn->expr instanceof MethodCall) {
-                if (! $hasThisRenderOrReturnsResponse) {
-                    $lastReturn->expr = $thisRenderMethodCall;
-                }
-            } elseif ($returnStaticType instanceof MixedType) {
-                return;
-            }
-
-            $isArrayOrResponseType = $this->arrayUnionResponseTypeAnalyzer->isArrayUnionResponseType(
-                $returnStaticType,
-                self::RESPONSE_CLASS
-            );
-
-            if ($isArrayOrResponseType) {
-                $this->processIsArrayOrResponseType($lastReturn, $lastReturn->expr, $thisRenderMethodCall);
-            }
+        // nothing we can do
+        if ($lastReturn !== null && $lastReturn->expr === null) {
+            return;
         }
 
-        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
-        $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
+        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
+        $thisRenderMethodCall = $this->thisRenderFactory->create(
+            $classMethod,
+            $lastReturn,
+            $sensioTemplateTagValueNode
+        );
+
+        if ($lastReturn === null) {
+            $this->refactorNoReturn($classMethod, $thisRenderMethodCall);
+            return;
+        }
+
+        $this->refactorReturnWithValue(
+            $lastReturn,
+            $hasThisRenderOrReturnsResponse,
+            $thisRenderMethodCall,
+            $classMethod
+        );
     }
 
     private function processClassMethodWithoutReturn(
         ClassMethod $classMethod,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+        MethodCall $thisRenderMethodCall
     ): void {
-        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
-        $thisRenderMethodCall = $this->thisRenderFactory->create($classMethod, null, $sensioTemplateTagValueNode);
         $classMethod->stmts[] = new Return_($thisRenderMethodCall);
     }
 
@@ -233,5 +223,49 @@ PHP
         }
 
         return $this->isReturnOfObjectType($lastReturn, self::RESPONSE_CLASS);
+    }
+
+    private function refactorNoReturn(ClassMethod $classMethod, MethodCall $thisRenderMethodCall): void
+    {
+        $this->processClassMethodWithoutReturn($classMethod, $thisRenderMethodCall);
+
+        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
+
+        $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
+    }
+
+    private function refactorReturnWithValue(
+        Return_ $lastReturn,
+        bool $hasThisRenderOrReturnsResponse,
+        MethodCall $thisRenderMethodCall,
+        ClassMethod $classMethod
+    ): void {
+        /** @var Expr $lastReturnExpr */
+        $lastReturnExpr = $lastReturn->expr;
+
+        $returnStaticType = $this->getStaticType($lastReturnExpr);
+
+        if (! $lastReturn->expr instanceof MethodCall) {
+            if (! $hasThisRenderOrReturnsResponse) {
+                $lastReturn->expr = $thisRenderMethodCall;
+            }
+        } elseif ($returnStaticType instanceof ArrayType) {
+            $lastReturn->expr = $thisRenderMethodCall;
+        } elseif ($returnStaticType instanceof MixedType) {
+            // nothing we can do
+            return;
+        }
+
+        $isArrayOrResponseType = $this->arrayUnionResponseTypeAnalyzer->isArrayUnionResponseType(
+            $returnStaticType,
+            self::RESPONSE_CLASS
+        );
+
+        if ($isArrayOrResponseType) {
+            $this->processIsArrayOrResponseType($lastReturn, $lastReturnExpr, $thisRenderMethodCall);
+        }
+
+        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
+        $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
     }
 }
