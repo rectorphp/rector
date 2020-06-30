@@ -12,7 +12,6 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://github.com/Atlantic18/DoctrineExtensions/blob/v2.4.x/doc/blameable.md
@@ -124,16 +123,9 @@ PHP
     private function isGedmoBlameableClass(Class_ $class): bool
     {
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
-                continue;
+            if ($this->hasPhpDocTagValueNode($property, BlameableTagValueNode::class)) {
+                return true;
             }
-
-            if (! $propertyPhpDocInfo->hasByType(BlameableTagValueNode::class)) {
-                continue;
-            }
-
-            return true;
         }
 
         return false;
@@ -144,12 +136,7 @@ PHP
         $removedPropertyNames = [];
 
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
-                continue;
-            }
-
-            if (! $propertyPhpDocInfo->hasByType(BlameableTagValueNode::class)) {
+            if (! $this->hasPhpDocTagValueNode($property, BlameableTagValueNode::class)) {
                 continue;
             }
 

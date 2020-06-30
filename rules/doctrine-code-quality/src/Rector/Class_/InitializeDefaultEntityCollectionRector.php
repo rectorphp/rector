@@ -17,7 +17,6 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/best-practices.html#initialize-collections-in-the-constructor
@@ -91,12 +90,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($classPhpDocInfo === null) {
-            return null;
-        }
-
-        if (! $classPhpDocInfo->hasByType(EntityTagValueNode::class)) {
+        if (! $this->hasPhpDocTagValueNode($node, EntityTagValueNode::class)) {
             return null;
         }
 
@@ -124,12 +118,7 @@ PHP
                 continue;
             }
 
-            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($propertyPhpDocInfo === null) {
-                continue;
-            }
-
-            if (! $propertyPhpDocInfo->hasByType(ToManyTagNodeInterface::class)) {
+            if (! $this->hasPhpDocTagValueNode($property, ToManyTagNodeInterface::class)) {
                 continue;
             }
 

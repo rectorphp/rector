@@ -10,7 +10,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -78,12 +77,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
-        if (! $phpDocInfo->hasByType(ColumnTagValueNode::class)) {
+        if (! $this->hasPhpDocTagValueNode($node, ColumnTagValueNode::class)) {
             return null;
         }
 

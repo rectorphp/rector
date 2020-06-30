@@ -18,8 +18,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
@@ -286,39 +284,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             [Option::PROJECT_TYPE_OPEN_SOURCE, Option::PROJECT_TYPE_OPEN_SOURCE_UNDESCORED],
             true
         );
-    }
-
-    protected function getPhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): ?PhpDocTagValueNode
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
-        return $phpDocInfo->getByType($phpDocTagNodeClass);
-    }
-
-    protected function hasPhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): bool
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
-        return $phpDocInfo->hasByType($phpDocTagNodeClass);
-    }
-
-    protected function removePhpDocTagValueNode(Node $node, string $phpDocTagNodeClass): void
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
-
-        $phpDocInfo->removeByType($phpDocTagNodeClass);
     }
 
     /**

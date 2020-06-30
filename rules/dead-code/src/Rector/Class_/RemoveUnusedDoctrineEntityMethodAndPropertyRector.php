@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
@@ -167,7 +166,7 @@ PHP
     private function removeClassPrivatePropertiesByNames(Class_ $class, array $unusedPropertyNames): Class_
     {
         foreach ($class->getProperties() as $property) {
-            if ($this->isEntityId($property)) {
+            if ($this->hasPhpDocTagValueNode($property, IdTagValueNode::class)) {
                 continue;
             }
 
@@ -222,17 +221,6 @@ PHP
         });
 
         return $usedPropertyNames;
-    }
-
-    private function isEntityId(Property $property): bool
-    {
-        /** @var PhpDocInfo|null $propertyPhpDocInfo */
-        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($propertyPhpDocInfo === null) {
-            return false;
-        }
-
-        return $propertyPhpDocInfo->hasByType(IdTagValueNode::class);
     }
 
     private function removeInversedByOrMappedByOnRelatedProperty(Property $property): void

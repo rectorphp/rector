@@ -91,7 +91,6 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        // Gedmo\Mapping\Annotation\SoftDeleteable
         $classPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($classPhpDocInfo === null) {
             return null;
