@@ -10,9 +10,8 @@ class WithOnlyVarsController extends AbstractController
     /**
      * @Template(vars={"post"})
      */
-    public function index(Post $post): array
+    public function index(Post $post)
     {
-        return [];
     }
 }
 

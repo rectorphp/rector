@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Core\Rector\AbstractRector;
@@ -158,34 +159,23 @@ PHP
         ClassMethod $classMethod,
         SensioTemplateTagValueNode $sensioTemplateTagValueNode
     ): void {
+        /** @var Return_[] $returns */
+        $returns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Return_::class);
         $hasThisRenderOrReturnsResponse = $this->hasLastReturnResponse($classMethod);
 
-        /** @var Return_|null $lastReturn */
-        $lastReturn = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
-
-        // nothing we can do
-        if ($lastReturn !== null && $lastReturn->expr === null) {
-            return;
+        foreach ($returns as $return) {
+            $this->refactorReturn($return, $classMethod, $sensioTemplateTagValueNode, $hasThisRenderOrReturnsResponse);
         }
 
-        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
-        $thisRenderMethodCall = $this->thisRenderFactory->create(
-            $classMethod,
-            $lastReturn,
-            $sensioTemplateTagValueNode
-        );
+        if (count($returns) === 0) {
+            $thisRenderMethodCall = $this->thisRenderFactory->create(
+                $classMethod,
+                null,
+                $sensioTemplateTagValueNode
+            );
 
-        if ($lastReturn === null) {
             $this->refactorNoReturn($classMethod, $thisRenderMethodCall);
-            return;
         }
-
-        $this->refactorReturnWithValue(
-            $lastReturn,
-            $hasThisRenderOrReturnsResponse,
-            $thisRenderMethodCall,
-            $classMethod
-        );
     }
 
     private function processClassMethodWithoutReturn(
@@ -235,22 +225,22 @@ PHP
     }
 
     private function refactorReturnWithValue(
-        Return_ $lastReturn,
+        Return_ $return,
         bool $hasThisRenderOrReturnsResponse,
         MethodCall $thisRenderMethodCall,
         ClassMethod $classMethod
     ): void {
         /** @var Expr $lastReturnExpr */
-        $lastReturnExpr = $lastReturn->expr;
+        $lastReturnExpr = $return->expr;
 
         $returnStaticType = $this->getStaticType($lastReturnExpr);
 
-        if (! $lastReturn->expr instanceof MethodCall) {
-            if (! $hasThisRenderOrReturnsResponse) {
-                $lastReturn->expr = $thisRenderMethodCall;
+        if (! $return->expr instanceof MethodCall) {
+            if (! $hasThisRenderOrReturnsResponse || $returnStaticType instanceof ConstantArrayType) {
+                $return->expr = $thisRenderMethodCall;
             }
         } elseif ($returnStaticType instanceof ArrayType) {
-            $lastReturn->expr = $thisRenderMethodCall;
+            $return->expr = $thisRenderMethodCall;
         } elseif ($returnStaticType instanceof MixedType) {
             // nothing we can do
             return;
@@ -262,10 +252,36 @@ PHP
         );
 
         if ($isArrayOrResponseType) {
-            $this->processIsArrayOrResponseType($lastReturn, $lastReturnExpr, $thisRenderMethodCall);
+            $this->processIsArrayOrResponseType($return, $lastReturnExpr, $thisRenderMethodCall);
         }
 
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
         $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
+    }
+
+    private function refactorReturn(
+        Return_ $return,
+        ClassMethod $classMethod,
+        SensioTemplateTagValueNode $sensioTemplateTagValueNode,
+        bool $hasThisRenderOrReturnsResponse
+    ): void {
+        // nothing we can do
+        if ($return->expr === null) {
+            return;
+        }
+
+        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
+        $thisRenderMethodCall = $this->thisRenderFactory->create(
+            $classMethod,
+            $return,
+            $sensioTemplateTagValueNode
+        );
+
+        $this->refactorReturnWithValue(
+            $return,
+            $hasThisRenderOrReturnsResponse,
+            $thisRenderMethodCall,
+            $classMethod
+        );
     }
 }
