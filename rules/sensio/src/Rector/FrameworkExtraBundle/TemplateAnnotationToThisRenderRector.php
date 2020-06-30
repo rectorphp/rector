@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Sensio\Rector\FrameworkExtraBundle;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Instanceof_;
@@ -193,12 +194,14 @@ PHP
         $this->removeNode($return);
 
         // create instance of Response → return response, or return $this->render
-        $responseVariable = new Variable('response');
+        $responseVariable = new Variable('responseOrData');
 
         $assign = new Assign($responseVariable, $returnExpr);
 
         $if = new If_(new Instanceof_($responseVariable, new FullyQualified(self::RESPONSE_CLASS)));
         $if->stmts[] = new Return_($responseVariable);
+
+        $thisRenderMethodCall->args[1] = new Arg($responseVariable);
 
         $returnThisRender = new Return_($thisRenderMethodCall);
         $this->addNodesAfterNode([$assign, $if, $returnThisRender], $return);

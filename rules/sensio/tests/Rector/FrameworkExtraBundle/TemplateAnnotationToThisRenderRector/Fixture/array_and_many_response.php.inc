@@ -47,11 +47,11 @@ final class ClassWithArrayAndManyResponseController extends AbstractController
 {
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
-        $response = $this->handleStuff();
-        if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
-            return $response;
+        $responseOrData = $this->handleStuff();
+        if ($responseOrData instanceof \Symfony\Component\HttpFoundation\Response) {
+            return $responseOrData;
         }
-        return $this->render('@App/class_with_array_and_many_response/index.html.twig');
+        return $this->render('@App/class_with_array_and_many_response/index.html.twig', $responseOrData);
     }
 
     /**
