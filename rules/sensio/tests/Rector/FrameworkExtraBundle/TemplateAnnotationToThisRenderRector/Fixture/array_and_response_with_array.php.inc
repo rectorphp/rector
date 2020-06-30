@@ -13,7 +13,7 @@ final class ClassWithArrayAndResponseWithArrayController extends AbstractControl
      */
     public function indexAction()
     {
-        return $this->handleStuff(1, 2, [
+        return $this->handleStuff([
             'a' => 'b'
         ]);
     }
@@ -47,7 +47,7 @@ final class ClassWithArrayAndResponseWithArrayController extends AbstractControl
 {
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
-        $response = $this->handleStuff(1, 2, [
+        $response = $this->handleStuff([
             'a' => 'b'
         ]);
         if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
