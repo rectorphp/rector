@@ -26,8 +26,7 @@ class SomeCommand extends Command
 {
     protected function configured()
     {
-        $this
-            ->setName('push-notification-queue:compose');
+        $this->setName('push-notification-queue:compose');
         $this->setDescription('Compose push notifications to raw format to be send.');
     }
 }

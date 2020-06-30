@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PHPStan\Type\TypeWithClassName;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\AssignAndRootExpr;
+use Rector\MagicDisclosure\Matcher\ClassNameTypeMatcher;
+use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeFactory\NonFluentMethodCallFactory;
+use Rector\MagicDisclosure\NodeManipulator\ChainMethodCallRootExtractor;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -32,11 +32,40 @@ final class DefluentMethodCallRector extends AbstractRector
     private $namesToDefluent = [];
 
     /**
+     * @var ChainMethodCallNodeAnalyzer
+     */
+    private $chainMethodCallNodeAnalyzer;
+
+    /**
+     * @var ChainMethodCallRootExtractor
+     */
+    private $chainMethodCallRootExtractor;
+
+    /**
+     * @var ClassNameTypeMatcher
+     */
+    private $classNameTypeMatcher;
+
+    /**
+     * @var NonFluentMethodCallFactory
+     */
+    private $nonFluentMethodCallFactory;
+
+    /**
      * @param string[] $namesToDefluent
      */
-    public function __construct(array $namesToDefluent = [])
-    {
+    public function __construct(
+        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
+        ChainMethodCallRootExtractor $chainMethodCallRootExtractor,
+        ClassNameTypeMatcher $classNameTypeMatcher,
+        NonFluentMethodCallFactory $nonFluentMethodCallFactory,
+        array $namesToDefluent = []
+    ) {
         $this->namesToDefluent = $namesToDefluent;
+        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
+        $this->chainMethodCallRootExtractor = $chainMethodCallRootExtractor;
+        $this->classNameTypeMatcher = $classNameTypeMatcher;
+        $this->nonFluentMethodCallFactory = $nonFluentMethodCallFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -59,139 +88,76 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, Return_::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|Return_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isLastMethodCallInChainCall($node)) {
+        $methodCall = $this->matchMethodCall($node);
+        if ($methodCall === null) {
             return null;
         }
 
-        $chainMethodCalls = $this->collectAllMethodCallsInChain($node);
-        $assignAndRootExpr = $this->extractRootVar($chainMethodCalls);
-        if ($assignAndRootExpr === null) {
+        if ($this->isHandledByReturn($node)) {
             return null;
         }
 
-        if (! $this->isCalleeSingleType($assignAndRootExpr, $chainMethodCalls)) {
+        if (! $this->chainMethodCallNodeAnalyzer->isLastChainMethodCall($methodCall)) {
             return null;
         }
 
-        if (! $this->isRootVariableMatch($assignAndRootExpr->getRootExpr())) {
+        $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
+        $assignAndRootExpr = $this->chainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
+
+        if ($this->shouldSkip($assignAndRootExpr, $chainMethodCalls)) {
             return null;
         }
 
-        $decoupledMethodCalls = $this->createNonFluentMethodCalls($chainMethodCalls, $assignAndRootExpr);
-        $currentOne = array_pop($decoupledMethodCalls);
+        $nodesToAdd = $this->nonFluentMethodCallFactory->createFromAssignObjectAndMethodCalls(
+            $assignAndRootExpr,
+            $chainMethodCalls
+        );
 
-        // add separated method calls
-        /** @var MethodCall[] $decoupledMethodCalls */
-        $decoupledMethodCalls = array_reverse($decoupledMethodCalls);
-        foreach ($decoupledMethodCalls as $decoupledMethodCall) {
+        $this->removeCurrentNode($node);
+
+        foreach ($nodesToAdd as $nodeToAdd) {
             // needed to remove weird spacing
-            $decoupledMethodCall->setAttribute('origNode', null);
-            $this->addNodeAfterNode($decoupledMethodCall, $node);
+            $nodeToAdd->setAttribute('origNode', null);
+            $this->addNodeAfterNode($nodeToAdd, $node);
         }
 
-        return $currentOne;
-    }
-
-    private function isLastMethodCallInChainCall(MethodCall $methodCall): bool
-    {
-        // is chain method call
-        if (! $methodCall->var instanceof MethodCall && ! $methodCall->var instanceof New_) {
-            return false;
-        }
-        $nextNode = $methodCall->getAttribute(AttributeKey::NEXT_NODE);
-        // is last chain call
-        return $nextNode === null;
+        return $node;
     }
 
     /**
-     * @return MethodCall[]
+     * @param MethodCall|Return_ $node
      */
-    private function collectAllMethodCallsInChain(MethodCall $methodCall): array
+    private function matchMethodCall(Node $node): ?MethodCall
     {
-        $chainMethodCalls = [$methodCall];
-        $currentNode = $methodCall->var;
-        while ($currentNode instanceof MethodCall) {
-            $chainMethodCalls[] = $currentNode;
-            $currentNode = $currentNode->var;
-        }
-
-        return $chainMethodCalls;
-    }
-
-    /**
-     * @param MethodCall[] $chainMethodCalls
-     * @return Expr[]
-     */
-    private function createNonFluentMethodCalls(array $chainMethodCalls, AssignAndRootExpr $assignAndRootExpr): array
-    {
-        $decoupledMethodCalls = [];
-
-        foreach ($chainMethodCalls as $chainMethodCall) {
-            $chainMethodCall->var = $assignAndRootExpr->getAssignExpr();
-            $decoupledMethodCalls[] = $chainMethodCall;
-        }
-
-        if ($assignAndRootExpr->getRootExpr() instanceof New_) {
-            $decoupledMethodCalls[] = $assignAndRootExpr->getRootExpr();
-        }
-
-        return $decoupledMethodCalls;
-    }
-
-    /**
-     * @param MethodCall[] $methodCalls
-     */
-    private function extractRootVar(array $methodCalls): ?AssignAndRootExpr
-    {
-        foreach ($methodCalls as $methodCall) {
-            if ($methodCall->var instanceof Variable) {
-                return new AssignAndRootExpr($methodCall->var, $methodCall->var);
-            }
-
-            if ($methodCall->var instanceof PropertyFetch) {
-                return new AssignAndRootExpr($methodCall->var, $methodCall->var);
-            }
-
-            if ($methodCall->var instanceof New_) {
-                // we need assigned left variable here
-                $previousAssign = $this->betterNodeFinder->findFirstPreviousOfTypes($methodCall->var, [Assign::class]);
-                if ($previousAssign instanceof Assign) {
-                    return new AssignAndRootExpr($previousAssign->var, $methodCall->var);
-                }
-
-                // no assign, just standalone call
+        if ($node instanceof Return_) {
+            if ($node->expr === null) {
                 return null;
             }
+
+            if ($node->expr instanceof MethodCall) {
+                return $node->expr;
+            }
+            return null;
         }
 
-        return null;
+        return $node;
     }
 
-    /**
-     * @todo match type - extract to matching a service
-     */
-    private function isRootVariableMatch(Expr $expr): bool
+    private function isHandledByReturn($node): bool
     {
-        $exprType = $this->getStaticType($expr);
-
-        if ($exprType instanceof TypeWithClassName) {
-            $className = $exprType->getClassName();
-            foreach ($this->namesToDefluent as $nameToDefluent) {
-                if (is_a($className, $nameToDefluent, true)) {
-                    return true;
-                }
-
-                if (fnmatch($nameToDefluent, $className)) {
-                    return true;
-                }
+        if ($node instanceof MethodCall) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            // handled ty Return_ node
+            if ($parentNode instanceof Return_) {
+                return true;
             }
         }
 
@@ -201,17 +167,30 @@ PHP
     /**
      * @param MethodCall[] $chainMethodCalls
      */
-    private function isCalleeSingleType(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
+    private function shouldSkip(?AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
     {
-        $rootStaticType = $this->getStaticType($assignAndRootExpr->getRootExpr());
-
-        foreach ($chainMethodCalls as $chainMethodCall) {
-            $chainMethodCallStaticType = $this->getStaticType($chainMethodCall);
-            if (! $chainMethodCallStaticType->equals($rootStaticType)) {
-                return false;
-            }
+        if ($assignAndRootExpr === null) {
+            return true;
         }
 
-        return true;
+        if (! $this->chainMethodCallNodeAnalyzer->isCalleeSingleType($assignAndRootExpr, $chainMethodCalls)) {
+            return true;
+        }
+
+        return ! $this->classNameTypeMatcher->doesExprMatchNames(
+            $assignAndRootExpr->getRootExpr(),
+            $this->namesToDefluent
+        );
+    }
+
+    private function removeCurrentNode($node): void
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Assign) {
+            $this->removeNode($parentNode);
+            return;
+        }
+
+        $this->removeNode($node);
     }
 }
