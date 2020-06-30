@@ -88,8 +88,6 @@ final class ThisRenderFactory
             $arguments[1] = new Arg($variableList);
         }
 
-        $arguments = array_merge($arguments, $this->resolveArrayArgumentsFromMethodCall($return));
-
         return $this->nodeFactory->createArgs($arguments);
     }
 
@@ -102,29 +100,6 @@ final class ThisRenderFactory
         }
 
         return $this->templateGuesser->resolveFromClassMethodNode($classMethod);
-    }
-
-    /**
-     * Already existing method call
-     *
-     * @return Array_[]
-     */
-    private function resolveArrayArgumentsFromMethodCall(Return_ $return): array
-    {
-        if (! $return->expr instanceof MethodCall) {
-            return [];
-        }
-
-        $arguments = [];
-        foreach ($return->expr->args as $arg) {
-            if (! $arg->value instanceof Array_) {
-                continue;
-            }
-
-            $arguments[] = $arg->value;
-        }
-
-        return $arguments;
     }
 
     /**

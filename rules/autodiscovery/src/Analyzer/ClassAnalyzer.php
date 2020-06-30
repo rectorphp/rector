@@ -111,8 +111,12 @@ final class ClassAnalyzer
                 continue;
             }
 
-            /** @var PhpDocInfo $phpDocInfo */
+            /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo === null) {
+                continue;
+            }
+
             if ($phpDocInfo->hasByType(SerializerTypeTagValueNode::class)) {
                 continue;
             }
