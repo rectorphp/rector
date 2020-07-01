@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Array_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -93,8 +94,13 @@ PHP
             return null;
         }
 
-        [$class, $method] = $arrayCallable;
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        // skip if part of method
+        if ($parentNode instanceof Arg) {
+            return null;
+        }
 
+        [$class, $method] = $arrayCallable;
         if (! method_exists($class, $method)) {
             return null;
         }
