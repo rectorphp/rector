@@ -9,10 +9,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Naming\PropertyNaming;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
@@ -98,7 +98,7 @@ class ExampleController extends Controller
      * @var \Illuminate\Contracts\Routing\ResponseFactory
      */
     private $responseFactory;
-    
+
     public function __construct(\Illuminate\Contracts\Routing\ResponseFactory $responseFactory)
     {
         $this->responseFactory = $responseFactory;

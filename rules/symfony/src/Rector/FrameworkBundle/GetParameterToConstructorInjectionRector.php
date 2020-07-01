@@ -10,10 +10,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\StringType;
-use Rector\Core\Naming\PropertyNaming;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

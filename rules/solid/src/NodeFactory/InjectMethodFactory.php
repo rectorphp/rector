@@ -9,10 +9,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\Naming\PropertyNaming;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector;
 
