@@ -6,6 +6,7 @@ namespace Rector\Compiler\Composer;
 
 use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;
+use Nette\Utils\Strings;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 
@@ -25,6 +26,11 @@ final class ComposerJsonManipulator
      * @var string
      */
     private const PHPSTAN_PHPSTAN = 'phpstan/phpstan';
+
+    /**
+     * @var string
+     */
+    private const PHPSTAN_COMPOSER_JSON = 'https://raw.githubusercontent.com/phpstan/phpstan-src/%s/composer.json';
 
     /**
      * @var string
@@ -105,7 +111,7 @@ final class ComposerJsonManipulator
             'url' => 'https://github.com/phpstan/phpstan-src.git',
         ];
 
-        return $json;
+        return $this->addDevDependenciesFromPHPStan($json, $phpstanVersion);
     }
 
     /**
@@ -126,5 +132,31 @@ final class ComposerJsonManipulator
         $json['prefer-stable'] = true;
 
         return $json;
+    }
+
+    private function addDevDependenciesFromPHPStan(array $json, string $phpstanVersion): array
+    {
+        // add dev dependencies from PHPStan composer.json
+        $phpstanComposerJsonFilePath = sprintf(self::PHPSTAN_COMPOSER_JSON, $phpstanVersion);
+        $phpstanComposerJson = $this->readRemoteFileToJson($phpstanComposerJsonFilePath);
+
+        if (isset($phpstanComposerJson[self::REQUIRE])) {
+            foreach ($phpstanComposerJson[self::REQUIRE] as $package => $version) {
+                if (! Strings::startsWith($version, 'dev-master')) {
+                    continue;
+                }
+
+                $json[self::REQUIRE][$package] = $version;
+            }
+        }
+
+        return $json;
+    }
+
+    private function readRemoteFileToJson(string $jsonFilePath): array
+    {
+        $jsonFileContent = NetteFileSystem::read($jsonFilePath);
+
+        return (array) Json::decode($jsonFileContent, Json::FORCE_ARRAY);
     }
 }
