@@ -12,10 +12,10 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Naming\PropertyNaming;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Naming\Naming\PropertyNaming;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\RemovingStatic\StaticTypesInClassResolver;
 

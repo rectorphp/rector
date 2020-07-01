@@ -328,3 +328,4 @@ parameters:
         - '#Parameter \#1 \$assignAndRootExpr of method Rector\\MagicDisclosure\\NodeFactory\\NonFluentMethodCallFactory\:\:createFromAssignObjectAndMethodCalls\(\) expects Rector\\Core\\ValueObject\\AssignAndRootExpr, Rector\\Core\\ValueObject\\AssignAndRootExpr\|null given#'
         - '#Method Rector\\Core\\ValueObject\\AssignAndRootExpr\:\:getReturnSilentVariable\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\\Stmt\\Return_#'
         - '#Parameter \#1 \$expr of method Rector\\MagicDisclosure\\Matcher\\ClassNameTypeMatcher\:\:doesExprMatchNames\(\) expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
+        - '#Parameter \#1 \$objectType of method Rector\\Naming\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
