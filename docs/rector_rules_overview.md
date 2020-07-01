@@ -11,7 +11,7 @@
 - [CakePHP](#cakephp) (6)
 - [Celebrity](#celebrity) (3)
 - [CodeQuality](#codequality) (54)
-- [CodingStyle](#codingstyle) (32)
+- [CodingStyle](#codingstyle) (33)
 - [DeadCode](#deadcode) (40)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (16)
@@ -2235,6 +2235,19 @@ Change under_score names to pascalCase
 +        $this->run($aB);
      }
  }
+```
+
+<br><br>
+
+### `UseClassKeywordForClassNameResolutionRector`
+
+- class: [`Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector`](/../master/rules/coding-style/src/Rector/String_/UseClassKeywordForClassNameResolutionRector.php)
+
+Use `class` keyword for class name resolution in string instead of hardcoded string reference
+
+```diff
+-$value = 'App\SomeClass::someMethod()';
++$value = \App\SomeClass . '::someMethod()';
 ```
 
 <br><br>
