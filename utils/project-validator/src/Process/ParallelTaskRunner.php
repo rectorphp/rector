@@ -179,6 +179,7 @@ final class ParallelTaskRunner
             '--set',
             $setTask->getSetName(),
             '--dry-run',
+            '--debug',
         ];
 
         return new Process($command, $this->cwd);
@@ -203,15 +204,14 @@ final class ParallelTaskRunner
 
         $fullOutput = array_filter([$process->getOutput(), $process->getErrorOutput()]);
 
-        $ouptput = implode("\n", $fullOutput);
-
-        $actualErrorHappened = Strings::match($ouptput, '#(Fatal error)|(\[ERROR\])#');
+        $output = implode("\n", $fullOutput);
+        $actualErrorHappened = Strings::match($output, '#(Fatal error)|(\[ERROR\])#');
 
         if (! $actualErrorHappened) {
             return;
         }
 
-        throw new ProcessResultInvalidException($ouptput);
+        throw new ProcessResultInvalidException($output);
     }
 
     private function printSuccess(string $set, int $totalTasks): void

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\NotIdentical;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -59,7 +58,7 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [NotIdentical::class, Identical::class];
+        return [NotIdentical::class];
     }
 
     /**

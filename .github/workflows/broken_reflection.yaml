@@ -1,0 +1,20 @@
+name: Broken Reflection
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    broken_reflection:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.4
+
+            -   run: composer install --no-progress --ansi
+
+            -   run: bin/rector p src/Rector/AbstractRector.php -n --debug

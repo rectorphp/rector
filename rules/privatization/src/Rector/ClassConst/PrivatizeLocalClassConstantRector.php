@@ -100,14 +100,11 @@ PHP
             return null;
         }
 
+        /** @var string $class */
+        $class = $node->getAttribute(AttributeKey::CLASS_NAME);
+
         // Remember when we have already processed this constant recursively
         $node->setAttribute(self::HAS_NEW_ACCESS_LEVEL, true);
-
-        /** @var string|null $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NAME);
-        if ($class === null) {
-            return null;
-        }
 
         // 0. constants declared in interfaces have to be public
         if ($this->classLikeParsedNodesFinder->findInterface($class) !== null) {
@@ -150,7 +147,13 @@ PHP
             return true;
         }
 
-        return count($classConst->consts) !== 1;
+        if (count($classConst->consts) !== 1) {
+            return true;
+        }
+
+        /** @var string|null $class */
+        $class = $classConst->getAttribute(AttributeKey::CLASS_NAME);
+        return $class === null;
     }
 
     private function findParentClassConstantAndRefactorIfPossible(string $class, string $constant): ?ConstantVisibility
