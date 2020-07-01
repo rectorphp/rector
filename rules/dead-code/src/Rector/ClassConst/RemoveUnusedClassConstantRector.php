@@ -73,8 +73,11 @@ PHP
             return null;
         }
 
-        /** @var string $class */
+        /** @var string|null $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NAME);
+        if ($class === null) {
+            return null;
+        }
 
         // 0. constants declared in interfaces have to be public
         if ($this->classLikeParsedNodesFinder->findInterface($class) !== null) {
