@@ -103,6 +103,9 @@ final class ComposerJsonManipulator
         }
 
         $phpstanVersion = $json[self::REQUIRE][self::PHPSTAN_PHPSTAN];
+        // use exact version
+        $phpstanVersion = ltrim($phpstanVersion, '^');
+
         $json[self::REQUIRE]['phpstan/phpstan-src'] = $phpstanVersion;
         unset($json[self::REQUIRE][self::PHPSTAN_PHPSTAN]);
 
