@@ -11,6 +11,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
+use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -43,12 +44,19 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
      */
     private $scopeAwareNodeFinder;
 
+    /**
+     * @var ReservedKeywordAnalyzer
+     */
+    private $reservedKeywordAnalyzer;
+
     public function __construct(
         ClassInsertManipulator $classInsertManipulator,
-        ScopeAwareNodeFinder $scopeAwareNodeFinder
+        ScopeAwareNodeFinder $scopeAwareNodeFinder,
+        ReservedKeywordAnalyzer $reservedKeywordAnalyzer
     ) {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
+        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -183,6 +191,10 @@ PHP
 
         // value is too short
         if (strlen($value) < 2) {
+            return true;
+        }
+
+        if ($this->reservedKeywordAnalyzer->isReserved($value)) {
             return true;
         }
 
