@@ -63,11 +63,6 @@ final class ComposerJsonManipulator
         $json = $this->removeDevKeys($json);
 
         $json = $this->replacePHPStanWithPHPStanSrc($json);
-        $json = $this->addReplace($json);
-
-        // see https://github.com/phpstan/phpstan-src/blob/769669d4ec2a4839cb1aa25a3a29f05aa86b83ed/composer.json#L19
-        $json = $this->addAllowDevPackages($json);
-
         $encodedJson = Json::encode($json, Json::PRETTY);
 
         // show diff
@@ -115,26 +110,6 @@ final class ComposerJsonManipulator
         ];
 
         return $this->addDevDependenciesFromPHPStan($json, $phpstanVersion);
-    }
-
-    /**
-     * This prevent installing packages, that are not needed here.
-     */
-    private function addReplace(array $json): array
-    {
-        $json['replace'] = [
-            'symfony/var-dumper' => '*',
-        ];
-
-        return $json;
-    }
-
-    private function addAllowDevPackages(array $json): array
-    {
-        $json['minimum-stability'] = 'dev';
-        $json['prefer-stable'] = true;
-
-        return $json;
     }
 
     private function addDevDependenciesFromPHPStan(array $json, string $phpstanVersion): array
