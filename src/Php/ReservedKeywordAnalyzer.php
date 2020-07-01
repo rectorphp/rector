@@ -10,7 +10,7 @@ final class ReservedKeywordAnalyzer
      * @see https://www.php.net/manual/en/reserved.keywords.php
      * @var string[]
      */
-    public const RESERVED_KEYWORDS = [
+    private const RESERVED_KEYWORDS = [
         '__halt_compiler',
         'abstract',
         'and',
