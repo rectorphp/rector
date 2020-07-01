@@ -59,10 +59,9 @@ final class ComposerJsonManipulator
         $this->originalComposerJsonFileContent = $fileContent;
 
         $json = Json::decode($fileContent, Json::FORCE_ARRAY);
-
         $json = $this->removeDevKeys($json);
-
         $json = $this->replacePHPStanWithPHPStanSrc($json);
+
         $encodedJson = Json::encode($json, Json::PRETTY);
 
         // show diff
