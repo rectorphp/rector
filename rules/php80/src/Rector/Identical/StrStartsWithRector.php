@@ -88,5 +88,7 @@ PHP
 
             return $strStartWithMatchAndRefactor->refactor($strStartsWithValueObject);
         }
+
+        return null;
     }
 }
