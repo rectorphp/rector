@@ -251,7 +251,7 @@ final class ProcessCommand extends AbstractCommand
 
         // some errors were found → fail
         if ($this->errorAndDiffCollector->getErrors() !== []) {
-            return ShellCode::SUCCESS;
+            return ShellCode::ERROR;
         }
 
         // inverse error code for CI dry-run
