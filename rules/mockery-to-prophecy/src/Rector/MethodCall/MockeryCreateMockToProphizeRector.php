@@ -9,12 +9,13 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MockeryToProphecy\MockeryUtils;
 
-final class MockeryCreateMockToProphizeRector extends AbstractRector
+final class MockeryCreateMockToProphizeRector extends AbstractPHPUnitRector
 {
     use MockeryUtils;
 
@@ -28,6 +29,10 @@ final class MockeryCreateMockToProphizeRector extends AbstractRector
 
     public function refactor(Node $node): ?Node
     {
+        if (!$this->isInTestClass($node)) {
+            return null;
+        }
+
         if ($node instanceof MethodCall) {
             foreach ($node->args as $position => $arg) {
                 /** @var Node\Expr\Variable $value */
@@ -47,12 +52,11 @@ final class MockeryCreateMockToProphizeRector extends AbstractRector
 
         if ($this->isCallToMockery($node) && $node->name->toString() === 'mock') {
             if ($node->getAttribute('parentNode') instanceof Node\Arg) {
-                return $this->createMethodCall($this->createLocalMethodCall('prophesize', [$node->args[0]]), 'reveal');
+                return $this->createMethodCall($this->prophesizeCreateMock($node), 'reveal');
             }
 
-            return $this->createLocalMethodCall('prophesize', [$node->args[0]]);
+            return $this->prophesizeCreateMock($node);
         }
-
 
         return $node;
     }
@@ -68,5 +72,14 @@ final class MockeryCreateMockToProphizeRector extends AbstractRector
                 )
             ]
         );
+    }
+
+    /**
+     * @param $node
+     * @return MethodCall
+     */
+    private function prophesizeCreateMock($node): MethodCall
+    {
+        return $this->createLocalMethodCall('prophesize', [$node->args[0]]);
     }
 }

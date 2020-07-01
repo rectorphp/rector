@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MockeryToProphecy\Rector\MethodCall\CleanUpMockeryClose;
 use Rector\MockeryToProphecy\Rector\MethodCall\MockeryCreateMockToProphizeRector;
+use Rector\MockeryToProphecy\Rector\MethodCall\MockeryPredictionsToProphizeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MockeryToProphecyRectorTest extends AbstractRectorTestCase
@@ -31,8 +32,8 @@ final class MockeryToProphecyRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            MockeryCreateMockToProphizeRector::class => [],
-            CleanUpMockeryClose::class => []
+            CleanUpMockeryClose::class => [],
+            MockeryPredictionsToProphizeRector::class => []
         ];
     }
 }

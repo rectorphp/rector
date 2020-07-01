@@ -6,12 +6,13 @@ namespace Rector\MockeryToProphecy\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
+use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MockeryToProphecy\MockeryUtils;
 
-final class CleanUpMockeryClose extends AbstractRector
+final class CleanUpMockeryClose extends AbstractPHPUnitRector
 {
     use MockeryUtils;
 
@@ -25,10 +26,15 @@ final class CleanUpMockeryClose extends AbstractRector
 
     public function refactor(Node $node): ?Node
     {
-        if ($this->isCallToMockery($node) && $node->name->toString() === 'close') {
-            $this->removeNode($node);
+        if (!$this->isInTestClass($node)) {
             return null;
         }
+
+        if ($this->isCallToMockery($node) && $this->isName($node->name, 'close')) {
+            $this->removeNode($node);
+        }
+
+        return null;
     }
 
     public function getDefinition(): RectorDefinition
