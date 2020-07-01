@@ -1,4 +1,4 @@
-# All 513 Rectors Overview
+# All 514 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -4573,8 +4573,8 @@ services:
 
 ### `ReturnThisRemoveRector`
 
-- class: [`Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector`](/../master/rules/magic-disclosure/src/Rector/MethodBody/ReturnThisRemoveRector.php)
-- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodBody/ReturnThisRemoveRector/Fixture)
+- class: [`Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector`](/../master/rules/magic-disclosure/src/Rector/ClassMethod/ReturnThisRemoveRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/ClassMethod/ReturnThisRemoveRector/Fixture)
 
 Removes "return $this;" from *fluent interfaces* for specified classes.
 
