@@ -141,6 +141,11 @@ final class IfManipulator
             $currentIf = $currentIf->stmts[0];
         }
 
+        // IfManipulator is not build to handle elseif and else
+        if(! $this->isIfWithOnlyStmtIf($currentIf)){
+            return [];
+        }
+
         if ($ifs === []) {
             return [];
         }
@@ -222,6 +227,11 @@ final class IfManipulator
             $currentIf = $currentIf->stmts[0];
         }
 
+        // IfManipulator is not build to handle elseif and else
+        if(! $this->isIfWithOnlyStmtIf($currentIf)){
+            return [];
+        }
+
         if ($this->betterNodeFinder->findInstanceOf($currentIf->stmts, Return_::class) !== []) {
             return [];
         }
@@ -231,6 +241,7 @@ final class IfManipulator
         }
 
         // last node is with the expression
+
         $ifs[] = $currentIf;
 
         return $ifs;
