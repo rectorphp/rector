@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\Console\Command;
 
+use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
 use OndraM\CiDetector\CiDetector;
 use Rector\Compiler\Composer\ComposerJsonManipulator;
 use Rector\Compiler\Renaming\JetbrainsStubsRenamer;
@@ -102,6 +104,12 @@ final class CompileCommand extends Command
         $this->symfonyStyle->newLine(2);
 
         // downgrade phpstan-src code from PHP 7.4 to PHP 7.1, see https://github.com/phpstan/phpstan-src/pull/202/files
+        // fix require path first
+        $transformSourceFilePath = __DIR__ . '/../../../../vendor/phpstan/phpstan-src/bin/transform-source.php';
+        $transformSourceFileContent = FileSystem::read($transformSourceFilePath);
+        $transformSourceFileContent = str_replace("__DIR__ . '/../vendor/autoload.php'", "require_once __DIR__ . '/../../../../vendor/autoload.php';", $transformSourceFileContent);
+        FileSystem::write($transformSourceFileContent, $transformSourceFilePath);
+
         $process = new Process(['php', 'vendor/phpstan/phpstan-src/bin/transform-source.php'], $this->buildDir);
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
