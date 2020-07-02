@@ -36,10 +36,10 @@ final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
     {
         return [
             # order matters, this needs to be first to correctly detect parent repository
-            MoveRepositoryFromParentToConstructorRector::class => null,
-            ServiceLocatorToDIRector::class => null,
-            ReplaceParentRepositoryCallsByRepositoryPropertyRector::class => null,
-            RemoveRepositoryFromEntityAnnotationRector::class => null,
+            MoveRepositoryFromParentToConstructorRector::class => [],
+            ServiceLocatorToDIRector::class => [],
+            ReplaceParentRepositoryCallsByRepositoryPropertyRector::class => [],
+            RemoveRepositoryFromEntityAnnotationRector::class => [],
         ];
     }
 }
