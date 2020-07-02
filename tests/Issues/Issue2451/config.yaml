@@ -1,3 +1,0 @@
-imports:
-    - { resource: "another-config.yaml" }
-    - { resource: "second-argument-overriding-config.yaml" }
