@@ -102,7 +102,7 @@ final class CompileCommand extends Command
         $this->symfonyStyle->newLine(2);
 
         // downgrade phpstan-src code from PHP 7.4 to PHP 7.1, see https://github.com/phpstan/phpstan-src/pull/202/files
-        $process = new Process(['php', '../vendor/phpstan/phpstan-src/bin/transform-source.php']);
+        $process = new Process(['php', 'vendor/phpstan/phpstan-src/bin/transform-source.php'], $this->buildDir);
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
