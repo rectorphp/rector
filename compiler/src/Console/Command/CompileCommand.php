@@ -107,7 +107,7 @@ final class CompileCommand extends Command
         // fix require path first
         $transformSourceFilePath = __DIR__ . '/../../../../vendor/phpstan/phpstan-src/bin/transform-source.php';
         $transformSourceFileContent = FileSystem::read($transformSourceFilePath);
-        $transformSourceFileContent = str_replace("__DIR__ . '/../vendor/autoload.php'", "__DIR__ . '/../../../../vendor/autoload.php';", $transformSourceFileContent);
+        $transformSourceFileContent = str_replace("__DIR__ . '/../vendor/autoload.php'", "__DIR__ . '/../../../../vendor/autoload.php'", $transformSourceFileContent);
         FileSystem::write($transformSourceFileContent, $transformSourceFilePath);
 
         $process = new Process(['php', 'vendor/phpstan/phpstan-src/bin/transform-source.php'], $this->buildDir);
