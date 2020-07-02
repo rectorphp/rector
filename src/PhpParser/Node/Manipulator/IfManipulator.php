@@ -142,7 +142,7 @@ final class IfManipulator
         }
 
         // IfManipulator is not build to handle elseif and else
-        if(! $this->isIfWithOnlyStmtIf($currentIf)){
+        if (! $this->isIfWithOnlyStmtIf($currentIf)) {
             return [];
         }
 
@@ -228,7 +228,7 @@ final class IfManipulator
         }
 
         // IfManipulator is not build to handle elseif and else
-        if(! $this->isIfWithOnlyStmtIf($currentIf)){
+        if (! $this->isIfWithoutElseAndElseIfs($currentIf)) {
             return [];
         }
 
