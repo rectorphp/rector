@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues\Issue594;
+namespace Rector\Core\Tests\PhpParser\Printer\CommentPreserving;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Symfony\Rector\HttpKernel\GetRequestRector;
+use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class Issue594Test extends AbstractRectorTestCase
+final class CommentPreservingTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class Issue594Test extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return GetRequestRector::class;
+        return TypedPropertyRector::class;
     }
 }
