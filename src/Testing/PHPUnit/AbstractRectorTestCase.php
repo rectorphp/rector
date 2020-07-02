@@ -305,6 +305,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
                 FileSystem::write($fixtureFileInfo->getRealPath(), $newOriginalContent);
             }
 
+            // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($expectedFileContent, $changedContent, $causedByFixtureMessage);
         }
     }
