@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Core\Tests\Issues\Issue594\Fixture;
+namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\Source\AbstractSymfonyController;
 
@@ -16,7 +16,7 @@ class SomeController extends AbstractSymfonyController
 -----
 <?php
 
-namespace Rector\Core\Tests\Issues\Issue594\Fixture;
+namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\Source\AbstractSymfonyController;
 
