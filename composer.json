@@ -41,6 +41,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
+        "johnkary/phpunit-speedtrap": "^3.2",
         "ocramius/package-versions": "^1.4|^1.5",
         "phpunit/phpunit": "^8.5|^9.0",
         "psr/event-dispatcher": "^1.0",

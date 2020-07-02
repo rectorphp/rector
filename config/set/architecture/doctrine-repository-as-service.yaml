@@ -1,7 +1,3 @@
-parameters:
-    entity_repository_class: 'Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityRepositoryClass'
-    entity_manager_class: 'Doctrine\ORM\EntityManager'
-
 services:
     # order matters, this needs to be first to correctly detect parent repository
     Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRector: null
