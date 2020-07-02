@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Core\Tests\Issues\Issue2863\Fixture;
+namespace Rector\Core\Tests\PhpParser\Printer\CommentPreserving\Fixture;
 
-class Fixture2863KeepMultilineSingleAsterisk
+class KeepMultilineSingleAsterisk
 {
     public function baz($baz)
     {

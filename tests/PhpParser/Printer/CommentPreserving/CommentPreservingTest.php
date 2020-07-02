@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Issues\Issue2863;
+namespace Rector\Core\Tests\PhpParser\Printer\CommentPreserving;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class Issue2863Test extends AbstractRectorTestCase
+final class CommentPreservingTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -23,8 +24,8 @@ final class Issue2863Test extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config2863.yaml';
+        return TypedPropertyRector::class;
     }
 }
