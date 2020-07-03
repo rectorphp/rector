@@ -7,6 +7,7 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BooleanNot;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -128,6 +129,7 @@ final class BinaryOpManipulator
         if ($inversedNodeClass !== null) {
             return $inversedNodeClass;
         }
+
         if ($binaryOp instanceof BooleanOr) {
             return BooleanAnd::class;
         }
