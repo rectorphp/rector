@@ -8,14 +8,17 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeTraverser;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
@@ -161,7 +164,8 @@ PHP
         SensioTemplateTagValueNode $sensioTemplateTagValueNode
     ): void {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Return_::class);
+        $returns = $this->findReturnsInCurrentScope((array) $classMethod->stmts);
+
         $hasThisRenderOrReturnsResponse = $this->hasLastReturnResponse($classMethod);
 
         foreach ($returns as $return) {
@@ -286,5 +290,31 @@ PHP
             $thisRenderMethodCall,
             $classMethod
         );
+    }
+
+    /**
+     * This skips anonymous functions and functions, as their returns doesn't influence current code
+     *
+     * @param Node[] $stmts
+     * @return Return_[]
+     */
+    private function findReturnsInCurrentScope(array $stmts): array
+    {
+        $returns = [];
+        $this->traverseNodesWithCallable($stmts, function (Node $node) use (&$returns) {
+            if ($node instanceof Closure || $node instanceof Function_) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+
+            if (! $node instanceof Return_) {
+                return null;
+            }
+
+            $returns[] = $node;
+
+            return null;
+        });
+
+        return $returns;
     }
 }
