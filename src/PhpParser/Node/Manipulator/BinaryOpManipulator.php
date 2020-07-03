@@ -128,9 +128,8 @@ final class BinaryOpManipulator
         if ($inversedNodeClass !== null) {
             return $inversedNodeClass;
         }
-        
-        if ($binaryOp instanceof BooleanOr) {	
-            return BooleanAnd::class;	
+        if ($binaryOp instanceof BooleanOr) {
+            return BooleanAnd::class;
         }
 
         return null;
