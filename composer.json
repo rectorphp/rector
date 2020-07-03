@@ -52,7 +52,7 @@
         "symplify/parameter-name-guard": "^8.1.2",
         "symplify/set-config-resolver": "^8.1.2",
         "tracy/tracy": "^2.7",
-        "phpstan/phpstan-src": "0.12.32"
+        "phpstan/phpstan": "^0.12.32"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
@@ -301,11 +301,5 @@
         "branch-alias": {
             "dev-master": "0.8-dev"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/phpstan/phpstan-src.git"
-        }
-    ]
+    }
 }
