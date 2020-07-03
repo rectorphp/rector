@@ -103,18 +103,7 @@ final class CompileCommand extends Command
 
         $this->symfonyStyle->newLine(2);
 
-        // downgrade phpstan-src code from PHP 7.4 to PHP 7.1, see https://github.com/phpstan/phpstan-src/pull/202/files
-        // fix require path first
-        $transformSourceFilePath = __DIR__ . '/../../../../vendor/phpstan/phpstan-src/bin/transform-source.php';
-        $transformSourceFileContent = FileSystem::read($transformSourceFilePath);
-
-        $transformSourceFileContent = str_replace("__DIR__ . '/../vendor/autoload.php'", "__DIR__ . '/../../../../vendor/autoload.php'", $transformSourceFileContent);
-        FileSystem::write($transformSourceFilePath, $transformSourceFileContent);
-
-        $process = new Process(['php', 'vendor/phpstan/phpstan-src/bin/transform-source.php'], $this->buildDir);
-        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
-            $output->write($buffer);
-        });
+        $this->downgradePHPStanCodeToPHP71($output);
 
         $this->symfonyStyle->title('3. Renaming PHPStorm stubs from "*.php" to ".stub"');
 
@@ -153,5 +142,27 @@ final class CompileCommand extends Command
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
+    }
+
+    private function downgradePHPStanCodeToPHP71(OutputInterface $output): void
+    {
+        // downgrade phpstan-src code from PHP 7.4 to PHP 7.1, see https://github.com/phpstan/phpstan-src/pull/202/files
+        $this->fixRequirePath();
+
+        $process = new Process(['php', 'vendor/phpstan/phpstan-src/bin/transform-source.php'], $this->buildDir);
+        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
+            $output->write($buffer);
+        });
+    }
+
+    private function fixRequirePath(): void
+    {
+        // fix require path first
+        $filePath = __DIR__ . '/../../../../vendor/phpstan/phpstan-src/bin/transform-source.php';
+        $fileContent = FileSystem::read($filePath);
+
+        $fileContent = str_replace("__DIR__ . '/../vendor/autoload.php'", "__DIR__ . '/../../../../vendor/autoload.php'", $fileContent);
+
+        FileSystem::write($filePath, $fileContent);
     }
 }
