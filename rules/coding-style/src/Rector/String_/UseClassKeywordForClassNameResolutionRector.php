@@ -50,23 +50,40 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (substr_count($node->value, '::') !== 1) {
-            return null;
-        }
-        // a possible static call reference
         // @see https://regex101.com/r/Vv41Qr/1/
-        [$before, $possibleClass, $after] = Strings::split($node->value, '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#');
+        $matches = Strings::matchAll($node->value, '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#', PREG_PATTERN_ORDER);
 
-        if (! $possibleClass || ! class_exists($possibleClass)) {
-            return null;
+        $classNames = array_filter($matches[1], function (string $className) {
+            return class_exists($className);
+        });
+
+        if (empty($classNames)) {
+            return $node;
         }
 
-        $classConstFetch = new ClassConstFetch(new FullyQualified(ltrim($possibleClass, '\\')), 'class');
+        $classNames = array_map(function (string $className) {
+            return preg_quote($className);
+        }, $classNames);
 
-        $concat = new Concat($classConstFetch, new String_('::' . $after));
-        if (! empty($before)) {
-            $concat = new Concat(new String_($before), $classConstFetch);
-            $concat = new Concat($concat, new String_('::' . $after));
+        // @see https://regex101.com/r/8nGS0F/1
+        $splits = Strings::split($node->value, '#(' . implode('|', $classNames) . ')#');
+
+        foreach ($splits as $split) {
+            if (empty($split)) {
+                continue;
+            }
+
+            if (class_exists($split)) {
+                $returnNode = new ClassConstFetch(new FullyQualified(ltrim($split, '\\')), 'class');
+            } else {
+                $returnNode = new String_($split);
+            }
+
+            $concat = ! isset($concat) ? $returnNode : new Concat($concat, $returnNode);
+        }
+
+        if (! isset($concat)) {
+            return $node;
         }
 
         return $concat;
