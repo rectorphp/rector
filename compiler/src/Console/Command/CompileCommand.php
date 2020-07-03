@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Compiler\Console\Command;
 
 use Nette\Utils\FileSystem;
-use Nette\Utils\Strings;
 use OndraM\CiDetector\CiDetector;
 use Rector\Compiler\Composer\ComposerJsonManipulator;
 use Rector\Compiler\Renaming\JetbrainsStubsRenamer;
@@ -161,7 +160,11 @@ final class CompileCommand extends Command
         $filePath = __DIR__ . '/../../../../vendor/phpstan/phpstan-src/bin/transform-source.php';
         $fileContent = FileSystem::read($filePath);
 
-        $fileContent = str_replace("__DIR__ . '/../vendor/autoload.php'", "__DIR__ . '/../../../../vendor/autoload.php'", $fileContent);
+        $fileContent = str_replace(
+            "__DIR__ . '/../vendor/autoload.php'",
+            "__DIR__ . '/../../../../vendor/autoload.php'",
+            $fileContent
+        );
 
         FileSystem::write($filePath, $fileContent);
     }
