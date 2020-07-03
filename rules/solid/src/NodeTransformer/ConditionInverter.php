@@ -6,6 +6,7 @@ namespace Rector\SOLID\NodeTransformer;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BooleanNot;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 
@@ -26,7 +27,7 @@ final class ConditionInverter
         // inverse condition
         if ($expr instanceof BinaryOp) {
             $inversedCondition = $this->binaryOpManipulator->invertCondition($expr);
-            if ($inversedCondition === null) {
+            if ($inversedCondition === null || $inversedCondition instanceof BooleanAnd) {
                 return new BooleanNot($expr);
             }
             return $inversedCondition;
