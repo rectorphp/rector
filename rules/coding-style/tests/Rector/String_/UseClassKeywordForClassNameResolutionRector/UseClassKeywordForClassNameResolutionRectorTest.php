@@ -9,7 +9,7 @@ use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRecto
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class UseClassKeywordForClassNameResolutionTest extends AbstractRectorTestCase
+final class UseClassKeywordForClassNameResolutionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
