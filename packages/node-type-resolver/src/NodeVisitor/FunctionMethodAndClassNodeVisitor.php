@@ -148,7 +148,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         $this->classLike = $classLike;
         if ($classLike === null || $classLike->name === null) {
             $this->className = null;
-        } elseif (isset($classLike->namespacedName)) {
+        } elseif (property_exists($classLike, 'namespacedName')) {
             $this->className = $classLike->namespacedName->toString();
             $this->classShortName = $this->classNaming->getShortName($this->className);
         } else {

@@ -190,7 +190,7 @@ final class NodeNameResolver
      */
     private function resolveNamespacedNameAwareNode(ClassLike $classLike): ?string
     {
-        if (isset($classLike->namespacedName)) {
+        if (property_exists($classLike, 'namespacedName')) {
             return $classLike->namespacedName->toString();
         }
 

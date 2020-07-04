@@ -224,7 +224,7 @@ final class PHPStanNodeScopeResolver
      */
     private function resolveClassName(ClassLike $classLike): string
     {
-        if (isset($classLike->namespacedName)) {
+        if (property_exists($classLike, 'namespacedName')) {
             return (string) $classLike->namespacedName;
         }
 
