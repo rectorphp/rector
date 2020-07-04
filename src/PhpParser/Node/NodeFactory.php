@@ -353,6 +353,25 @@ final class NodeFactory
     }
 
     /**
+     * @param Expr[] $exprs
+     */
+    public function createConcat(array $exprs): ?Concat
+    {
+        if ($exprs === []) {
+            return null;
+        }
+
+        /** @var Expr $previousConcat */
+        $previousConcat = array_shift($exprs);
+
+        foreach ($exprs as $expr) {
+            $previousConcat = new Concat($previousConcat, $expr);
+        }
+
+        return $previousConcat;
+    }
+
+    /**
      * @param string|int|null $key
      */
     private function createArrayItem($item, $key = null): ArrayItem

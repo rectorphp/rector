@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Rector\String_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
@@ -15,7 +15,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\UseClassKeywordForClassNameResolutionTest
+ * @see \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\UseClassKeywordForClassNameResolutionRectorTest
  */
 final class UseClassKeywordForClassNameResolutionRector extends AbstractRector
 {
@@ -50,32 +50,24 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classNames = $this->getExistentClasses($node);
-
+        $classNames = $this->getExistingClasses($node);
         if ($classNames === []) {
             return $node;
         }
 
         $parts = $this->getParts($node, $classNames);
-
-        foreach ($parts as $part) {
-            if (class_exists($part)) {
-                $returnNode = new ClassConstFetch(new FullyQualified(ltrim($part, '\\')), 'class');
-            } else {
-                $returnNode = new String_($part);
-            }
-
-            $concat = ! isset($concat) ? $returnNode : new Concat($concat, $returnNode);
+        if ($parts === []) {
+            return null;
         }
 
-        if (! isset($concat)) {
-            return $node;
-        }
-
-        return $concat;
+        $exprsToConcat = $this->createExpressionsToConcat($parts);
+        return $this->createConcat($exprsToConcat);
     }
 
-    public function getExistentClasses(String_ $string): array
+    /**
+     * @return string[]
+     */
+    public function getExistingClasses(String_ $string): array
     {
         // @see https://regex101.com/r/Vv41Qr/1/
         $matches = Strings::matchAll($string->value, '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#', PREG_PATTERN_ORDER);
@@ -97,5 +89,22 @@ PHP
         return array_filter($parts, function (string $className) {
             return $className !== '';
         });
+    }
+
+    /**
+     * @param string[] $parts
+     * @return Expr[]
+     */
+    private function createExpressionsToConcat(array $parts): array
+    {
+        $exprsToConcat = [];
+        foreach ($parts as $part) {
+            if (class_exists($part)) {
+                $exprsToConcat[] = new ClassConstFetch(new FullyQualified(ltrim($part, '\\')), 'class');
+            } else {
+                $exprsToConcat[] = new String_($part);
+            }
+        }
+        return $exprsToConcat;
     }
 }
