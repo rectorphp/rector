@@ -271,6 +271,11 @@ parameters:
             count: 1
             path: packages/better-php-doc-parser/src/Printer/WhitespaceDetector.php
 
+        # copy-pasted magic from symfony
+        -
+            message: '#Use default null value and nullable compare instead of isset/empty on object#'
+            path: 'rules/symfony/src/ServiceMapProvider.php'
+
         -
             message: "#^Parameter \\#1 \\$input of function array_splice expects array, array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null given\\.$#"
             count: 1

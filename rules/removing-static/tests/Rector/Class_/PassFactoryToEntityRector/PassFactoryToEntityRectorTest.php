@@ -9,7 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\RemovingStatic\Rector\Class_\NewUniqueObjectToEntityFactoryRector;
 use Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector;
 use Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService;
-use Symplify\EasyTesting\Fixture\StaticFixtureSplitter;
+use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
