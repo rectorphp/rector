@@ -50,33 +50,19 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        // @see https://regex101.com/r/Vv41Qr/1/
-        $matches = Strings::matchAll($node->value, '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#', PREG_PATTERN_ORDER);
+        $classNames = $this->getExistentClasses($node);
 
-        $classNames = array_filter($matches[1], function (string $className) {
-            return class_exists($className);
-        });
-
-        if (empty($classNames)) {
+        if ($classNames === []) {
             return $node;
         }
 
-        $classNames = array_map(function (string $className) {
-            return preg_quote($className);
-        }, $classNames);
+        $parts = $this->getParts($node, $classNames);
 
-        // @see https://regex101.com/r/8nGS0F/1
-        $splits = Strings::split($node->value, '#(' . implode('|', $classNames) . ')#');
-
-        foreach ($splits as $split) {
-            if (empty($split)) {
-                continue;
-            }
-
-            if (class_exists($split)) {
-                $returnNode = new ClassConstFetch(new FullyQualified(ltrim($split, '\\')), 'class');
+        foreach ($parts as $part) {
+            if (class_exists($part)) {
+                $returnNode = new ClassConstFetch(new FullyQualified(ltrim($part, '\\')), 'class');
             } else {
-                $returnNode = new String_($split);
+                $returnNode = new String_($part);
             }
 
             $concat = ! isset($concat) ? $returnNode : new Concat($concat, $returnNode);
@@ -87,5 +73,29 @@ PHP
         }
 
         return $concat;
+    }
+
+    public function getExistentClasses(String_ $string): array
+    {
+        // @see https://regex101.com/r/Vv41Qr/1/
+        $matches = Strings::matchAll($string->value, '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#', PREG_PATTERN_ORDER);
+
+        return array_filter($matches[1], function (string $className) {
+            return class_exists($className);
+        });
+    }
+
+    public function getParts(String_ $string, array $classNames): array
+    {
+        $classNames = array_map(function (string $className) {
+            return preg_quote($className);
+        }, $classNames);
+
+        // @see https://regex101.com/r/8nGS0F/1
+        $parts = Strings::split($string->value, '#(' . implode('|', $classNames) . ')#');
+
+        return array_filter($parts, function (string $className) {
+            return $className !== '';
+        });
     }
 }
