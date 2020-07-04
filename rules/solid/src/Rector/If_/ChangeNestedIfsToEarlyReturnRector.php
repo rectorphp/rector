@@ -139,6 +139,7 @@ PHP
             $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->left));
             $booleanNotPartIf->stmts = [clone $return];
             $this->addNodeAfterNode($booleanNotPartIf, $if);
+
             $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
             $booleanNotPartIf->stmts = [clone $return];
             $this->addNodeAfterNode($booleanNotPartIf, $if);

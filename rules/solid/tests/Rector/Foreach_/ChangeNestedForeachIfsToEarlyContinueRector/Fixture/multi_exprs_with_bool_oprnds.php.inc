@@ -48,10 +48,10 @@ class MultiExprsWithBoolOprnds implements RunnableInterface
             if (is_object($partPackage)) {
                 continue;
             }
-            if (!(1 == '1' || 2 == 't')) {
-                continue;
+            if (1 == '1' || 2 == 't')
+            {
+                $payload[] = $partPackage;
             }
-            $payload[] = $partPackage;
         }
 
         return json_encode($payload);

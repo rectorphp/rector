@@ -141,11 +141,6 @@ final class IfManipulator
             $currentIf = $currentIf->stmts[0];
         }
 
-        // IfManipulator is not build to handle elseif and else
-        if (! $this->isIfWithOnlyStmtIf($currentIf)) {
-            return [];
-        }
-
         if ($ifs === []) {
             return [];
         }
