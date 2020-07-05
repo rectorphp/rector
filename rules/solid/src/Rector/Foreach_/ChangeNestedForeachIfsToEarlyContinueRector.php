@@ -210,10 +210,6 @@ PHP
             return true;
         }
 
-        if ($expr->right instanceof NotEqual) {
-            return true;
-        }
-
-        return false;
+        return $expr->right instanceof NotEqual;
     }
 }
