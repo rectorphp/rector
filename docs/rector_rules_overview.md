@@ -10577,7 +10577,7 @@ Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 - class: [`Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector`](/../master/rules/symfony/src/Rector/DependencyInjection/ContainerBuilderCompileEnvArgumentRector.php)
 - [test fixtures](/../master/rules/symfony/tests/Rector/DependencyInjection/ContainerBuilderCompileEnvArgumentRector/Fixture)
 
-Turns old default value to parameter in `ContinerBuilder->build()` method in DI in Symfony
+Turns old default value to parameter in `ContainerBuilder->build()` method in DI in Symfony
 
 ```diff
  use Symfony\Component\DependencyInjection\ContainerBuilder;

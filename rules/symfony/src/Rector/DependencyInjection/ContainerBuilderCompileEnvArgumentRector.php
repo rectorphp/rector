@@ -19,7 +19,7 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns old default value to parameter in ContinerBuilder->build() method in DI in Symfony',
+            'Turns old default value to parameter in ContainerBuilder->build() method in DI in Symfony',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
