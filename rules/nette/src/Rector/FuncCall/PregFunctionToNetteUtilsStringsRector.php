@@ -116,7 +116,8 @@ PHP
      */
     private function refactorFuncCall(FuncCall $funcCall): ?Expr
     {
-        if (! $this->isNames($funcCall, array_keys(self::FUNCTION_NAME_TO_METHOD_NAME))) {
+        $oldFunctionNames = array_keys(self::FUNCTION_NAME_TO_METHOD_NAME);
+        if (! $this->isNames($funcCall, $oldFunctionNames)) {
             return null;
         }
 

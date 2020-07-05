@@ -66,7 +66,8 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, array_keys(self::RENAME_METHODS_MAP))) {
+        $oldMethodName = array_keys(self::RENAME_METHODS_MAP);
+        if (! $this->isPHPUnitMethodNames($node, $oldMethodName)) {
             return null;
         }
 

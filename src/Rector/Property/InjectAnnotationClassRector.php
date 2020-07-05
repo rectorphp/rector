@@ -267,9 +267,11 @@ PHP
         /** @var SmartFileInfo $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
 
+        $errorMessage = sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName);
+
         $this->errorAndDiffCollector->addErrorWithRectorClassMessageAndFileInfo(
             self::class,
-            sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName),
+            $errorMessage,
             $fileInfo
         );
     }

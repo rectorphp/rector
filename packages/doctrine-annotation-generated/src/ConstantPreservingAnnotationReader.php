@@ -19,6 +19,10 @@
  */
 namespace Rector\DoctrineAnnotationGenerated;
 
+use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Annotations\PhpParser;
+use Doctrine\Common\Annotations\AnnotationException;
+use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\Common\Annotations\Annotation\Target;
 use ReflectionClass;
@@ -33,7 +37,7 @@ use ReflectionProperty;
  * @author  Roman Borschel <roman@code-factory.org>
  * @author  Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations\Reader
+class ConstantPreservingAnnotationReader implements Reader
 {
     /**
      * Global map for imports.
@@ -179,7 +183,7 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * PHP parser used to collect imports.
      *
-     * @var \Doctrine\Common\Annotations\PhpParser
+     * @var PhpParser
      */
     private $phpParser;
     /**
@@ -203,29 +207,29 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
      *
      * @throws AnnotationException
      */
-    public function __construct(\Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser $parser = null)
+    public function __construct(ConstantPreservingDocParser $parser = null)
     {
         if (extension_loaded('Zend Optimizer+') && (ini_get('zend_optimizerplus.save_comments') === "0" || ini_get('opcache.save_comments') === "0")) {
-            throw \Doctrine\Common\Annotations\AnnotationException::optimizerPlusSaveComments();
+            throw AnnotationException::optimizerPlusSaveComments();
         }
         if (extension_loaded('Zend OPcache') && ini_get('opcache.save_comments') == 0) {
-            throw \Doctrine\Common\Annotations\AnnotationException::optimizerPlusSaveComments();
+            throw AnnotationException::optimizerPlusSaveComments();
         }
         // Make sure that the IgnoreAnnotation annotation is loaded
-        class_exists(\Doctrine\Common\Annotations\Annotation\IgnoreAnnotation::class);
-        $this->parser = $parser ?: new \Doctrine\Common\Annotations\DocParser();
-        $this->preParser = new \Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser();
+        class_exists(IgnoreAnnotation::class);
+        $this->parser = $parser ?: new DocParser();
+        $this->preParser = new ConstantPreservingDocParser();
         $this->preParser->setImports(self::$globalImports);
         $this->preParser->setIgnoreNotImportedAnnotations(true);
         $this->preParser->setIgnoredAnnotationNames(self::$globalIgnoredNames);
-        $this->phpParser = new \Doctrine\Common\Annotations\PhpParser();
+        $this->phpParser = new PhpParser();
     }
     /**
      * {@inheritDoc}
      */
-    public function getClassAnnotations(\ReflectionClass $class)
+    public function getClassAnnotations(ReflectionClass $class)
     {
-        $this->parser->setTarget(\Doctrine\Common\Annotations\Annotation\Target::TARGET_CLASS);
+        $this->parser->setTarget(Target::TARGET_CLASS);
         $this->parser->setImports($this->getClassImports($class));
         $this->parser->setIgnoredAnnotationNames($this->getIgnoredAnnotationNames($class));
         $this->parser->setIgnoredAnnotationNamespaces(self::$globalIgnoredNamespaces);
@@ -234,7 +238,7 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * {@inheritDoc}
      */
-    public function getClassAnnotation(\ReflectionClass $class, $annotationName)
+    public function getClassAnnotation(ReflectionClass $class, $annotationName)
     {
         $annotations = $this->getClassAnnotations($class);
         foreach ($annotations as $annotation) {
@@ -247,11 +251,11 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * {@inheritDoc}
      */
-    public function getPropertyAnnotations(\ReflectionProperty $property)
+    public function getPropertyAnnotations(ReflectionProperty $property)
     {
         $class = $property->getDeclaringClass();
         $context = 'property ' . $class->getName() . "::\$" . $property->getName();
-        $this->parser->setTarget(\Doctrine\Common\Annotations\Annotation\Target::TARGET_PROPERTY);
+        $this->parser->setTarget(Target::TARGET_PROPERTY);
         $this->parser->setImports($this->getPropertyImports($property));
         $this->parser->setIgnoredAnnotationNames($this->getIgnoredAnnotationNames($class));
         $this->parser->setIgnoredAnnotationNamespaces(self::$globalIgnoredNamespaces);
@@ -260,7 +264,7 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * {@inheritDoc}
      */
-    public function getPropertyAnnotation(\ReflectionProperty $property, $annotationName)
+    public function getPropertyAnnotation(ReflectionProperty $property, $annotationName)
     {
         $annotations = $this->getPropertyAnnotations($property);
         foreach ($annotations as $annotation) {
@@ -273,11 +277,11 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * {@inheritDoc}
      */
-    public function getMethodAnnotations(\ReflectionMethod $method)
+    public function getMethodAnnotations(ReflectionMethod $method)
     {
         $class = $method->getDeclaringClass();
         $context = 'method ' . $class->getName() . '::' . $method->getName() . '()';
-        $this->parser->setTarget(\Doctrine\Common\Annotations\Annotation\Target::TARGET_METHOD);
+        $this->parser->setTarget(Target::TARGET_METHOD);
         $this->parser->setImports($this->getMethodImports($method));
         $this->parser->setIgnoredAnnotationNames($this->getIgnoredAnnotationNames($class));
         $this->parser->setIgnoredAnnotationNamespaces(self::$globalIgnoredNamespaces);
@@ -286,7 +290,7 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * {@inheritDoc}
      */
-    public function getMethodAnnotation(\ReflectionMethod $method, $annotationName)
+    public function getMethodAnnotation(ReflectionMethod $method, $annotationName)
     {
         $annotations = $this->getMethodAnnotations($method);
         foreach ($annotations as $annotation) {
@@ -299,11 +303,11 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * Returns the ignored annotations for the given class.
      *
-     * @param \ReflectionClass $class
+     * @param ReflectionClass $class
      *
      * @return array
      */
-    private function getIgnoredAnnotationNames(\ReflectionClass $class)
+    private function getIgnoredAnnotationNames(ReflectionClass $class)
     {
         $name = $class->getName();
         if (isset($this->ignoredAnnotationNames[$name])) {
@@ -315,11 +319,11 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * Retrieves imports.
      *
-     * @param \ReflectionClass $class
+     * @param ReflectionClass $class
      *
      * @return array
      */
-    private function getClassImports(\ReflectionClass $class)
+    private function getClassImports(ReflectionClass $class)
     {
         $name = $class->getName();
         if (isset($this->imports[$name])) {
@@ -331,11 +335,11 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * Retrieves imports for methods.
      *
-     * @param \ReflectionMethod $method
+     * @param ReflectionMethod $method
      *
      * @return array
      */
-    private function getMethodImports(\ReflectionMethod $method)
+    private function getMethodImports(ReflectionMethod $method)
     {
         $class = $method->getDeclaringClass();
         $classImports = $this->getClassImports($class);
@@ -350,11 +354,11 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * Retrieves imports for properties.
      *
-     * @param \ReflectionProperty $property
+     * @param ReflectionProperty $property
      *
      * @return array
      */
-    private function getPropertyImports(\ReflectionProperty $property)
+    private function getPropertyImports(ReflectionProperty $property)
     {
         $class = $property->getDeclaringClass();
         $classImports = $this->getClassImports($class);
@@ -369,14 +373,14 @@ class ConstantPreservingAnnotationReader implements \Doctrine\Common\Annotations
     /**
      * Collects parsing metadata for a given class.
      *
-     * @param \ReflectionClass $class
+     * @param ReflectionClass $class
      */
-    private function collectParsingMetadata(\ReflectionClass $class)
+    private function collectParsingMetadata(ReflectionClass $class)
     {
         $ignoredAnnotationNames = self::$globalIgnoredNames;
         $annotations = $this->preParser->parse($class->getDocComment(), 'class ' . $class->name);
         foreach ($annotations as $annotation) {
-            if ($annotation instanceof \Doctrine\Common\Annotations\Annotation\IgnoreAnnotation) {
+            if ($annotation instanceof IgnoreAnnotation) {
                 foreach ($annotation->names as $annot) {
                     $ignoredAnnotationNames[$annot] = true;
                 }

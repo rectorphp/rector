@@ -186,15 +186,17 @@ final class CreateRectorCommand extends Command
 
     private function printSuccess(string $name): void
     {
-        $this->symfonyStyle->title(sprintf('New files generated for "%s"', $name));
+        $message = sprintf('New files generated for "%s"', $name);
+        $this->symfonyStyle->title($message);
         sort($this->generatedFiles);
         $this->symfonyStyle->listing($this->generatedFiles);
-
-        $this->symfonyStyle->success(sprintf(
+        $message = sprintf(
             'Make tests green again:%svendor/bin/phpunit %s',
             PHP_EOL . PHP_EOL,
             $this->testCasePath
-        ));
+        );
+
+        $this->symfonyStyle->success($message);
     }
 
     private function addOneMoreRectorNesting(string $content): string

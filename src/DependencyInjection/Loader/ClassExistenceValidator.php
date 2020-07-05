@@ -29,8 +29,9 @@ final class ClassExistenceValidator
             return;
         }
 
-        foreach (array_keys($configuration[self::SERVICES_KEY]) as $class) {
-            if (empty($class) || ! is_string($class)) {
+        $classes = array_keys($configuration[self::SERVICES_KEY]);
+        foreach ($classes as $class) {
+            if ($class === '' || ! is_string($class)) {
                 continue;
             }
 

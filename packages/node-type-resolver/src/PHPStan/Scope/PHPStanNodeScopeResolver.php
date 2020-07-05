@@ -240,10 +240,13 @@ final class PHPStanNodeScopeResolver
         if (! $this->configuration->isCacheDebug()) {
             return;
         }
-
-        $this->symfonyStyle->note(
-            sprintf('[debug] %d dependencies for %s file', count($dependentFiles), $smartFileInfo->getRealPath())
+        $message = sprintf(
+            '[debug] %d dependencies for %s file',
+            count($dependentFiles),
+            $smartFileInfo->getRealPath()
         );
+
+        $this->symfonyStyle->note($message);
 
         if ($dependentFiles !== []) {
             $this->symfonyStyle->listing($dependentFiles);

@@ -121,7 +121,7 @@ PHP
             return null;
         }
 
-        if (empty($node->params)) {
+        if ($node->params === null || $node->params === []) {
             return null;
         }
 

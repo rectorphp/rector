@@ -37,7 +37,8 @@ final class MarkdownDumpNodesOutputFormatter
             $this->symfonyStyle->newLine();
 
             foreach ($nodeInfos as $nodeInfo) {
-                $this->symfonyStyle->writeln(sprintf('### `%s`', $nodeInfo->getClass()));
+                $message = sprintf('### `%s`', $nodeInfo->getClass());
+                $this->symfonyStyle->writeln($message);
                 $this->symfonyStyle->newLine();
 
                 $this->printRequiredArguments($nodeInfo);
@@ -84,7 +85,8 @@ final class MarkdownDumpNodesOutputFormatter
         $this->symfonyStyle->newLine();
         $this->symfonyStyle->writeln('#### Example PHP Code');
         $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln(sprintf('```php%s%s%s```', PHP_EOL, $nodeInfo->getPrintedContent(), PHP_EOL));
+        $message = sprintf('```php%s%s%s```', PHP_EOL, $nodeInfo->getPrintedContent(), PHP_EOL);
+        $this->symfonyStyle->writeln($message);
     }
 
     private function printPublicProperties(NodeInfo $nodeInfo): void

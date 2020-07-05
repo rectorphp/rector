@@ -40,7 +40,7 @@ final class ParentAndNextNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if (! empty($this->stack)) {
+        if ($this->stack !== []) {
             $node->setAttribute(AttributeKey::PARENT_NODE, $this->stack[count($this->stack) - 1]);
         }
 

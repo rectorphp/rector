@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\ValueObject;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\ShouldNotHappenException;
 
@@ -25,7 +27,7 @@ final class AssignAndRootExpr
      */
     private $silentVariable;
 
-    public function __construct(Expr $assignExpr, Expr $rootExpr, ?Expr\Variable $silentVariable = null)
+    public function __construct(Expr $assignExpr, Expr $rootExpr, ?Variable $silentVariable = null)
     {
         $this->assignExpr = $assignExpr;
         $this->rootExpr = $rootExpr;
@@ -37,9 +39,9 @@ final class AssignAndRootExpr
         return $this->assignExpr;
     }
 
-    public function getFirstAssign(): Expr\Assign
+    public function getFirstAssign(): Assign
     {
-        return new Expr\Assign($this->assignExpr, $this->rootExpr);
+        return new Assign($this->assignExpr, $this->rootExpr);
     }
 
     public function getRootExpr(): Expr
@@ -47,7 +49,7 @@ final class AssignAndRootExpr
         return $this->rootExpr;
     }
 
-    public function getSilentVariable(): ?Expr\Variable
+    public function getSilentVariable(): ?Variable
     {
         return $this->silentVariable;
     }

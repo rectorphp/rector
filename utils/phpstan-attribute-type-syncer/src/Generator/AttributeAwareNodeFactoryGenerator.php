@@ -43,7 +43,8 @@ final class AttributeAwareNodeFactoryGenerator extends AbstractAttributeAwareNod
         // prevent file override
         if (file_exists($targetFilePath)) {
             $realTargetFilePath = realpath($targetFilePath);
-            $this->symfonyStyle->note(sprintf('File "%s" already exists, skipping', $realTargetFilePath));
+            $message = sprintf('File "%s" already exists, skipping', $realTargetFilePath);
+            $this->symfonyStyle->note($message);
             return;
         }
 
@@ -71,12 +72,13 @@ final class AttributeAwareNodeFactoryGenerator extends AbstractAttributeAwareNod
         $attributeAwareFullyQualifiedClassName = $this->attributeClassNaming->createAttributeAwareClassName(
             $missingNodeClass
         );
-
-        $this->symfonyStyle->note(sprintf(
+        $message = sprintf(
             'Class "%s" now has freshly generated "%s" in "%s"',
             $missingNodeClass,
             $attributeAwareFullyQualifiedClassName,
             $filePath
-        ));
+        );
+
+        $this->symfonyStyle->note($message);
     }
 }

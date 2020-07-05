@@ -65,7 +65,8 @@ final class EregToPcreTransformer
         }
 
         // fallback
-        return $this->ere2pcre(preg_quote($ereg, '#'), $isCaseInsensitive);
+        $quotedEreg = preg_quote($ereg, '#');
+        return $this->ere2pcre($quotedEreg, $isCaseInsensitive);
     }
 
     // converts the ERE $s into the PCRE $r. triggers error on any invalid input.

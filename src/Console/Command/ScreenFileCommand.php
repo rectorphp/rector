@@ -161,8 +161,9 @@ final class ScreenFileCommand extends AbstractCommand
         $decoratedFileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
 
         FileSystem::write($outputFileName, $decoratedFileContent);
+        $message = sprintf('See: %s', $outputFileName);
 
-        $this->symfonyStyle->writeln(sprintf('See: %s', $outputFileName));
+        $this->symfonyStyle->writeln($message);
     }
 
     /**

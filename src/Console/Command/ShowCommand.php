@@ -80,8 +80,9 @@ final class ShowCommand extends AbstractCommand
 
             $this->symfonyStyle->writeln($indentedContent);
         }
+        $message = sprintf('%d loaded Rectors', count($rectors));
 
-        $this->symfonyStyle->success(sprintf('%d loaded Rectors', count($rectors)));
+        $this->symfonyStyle->success($message);
 
         return ShellCode::SUCCESS;
     }

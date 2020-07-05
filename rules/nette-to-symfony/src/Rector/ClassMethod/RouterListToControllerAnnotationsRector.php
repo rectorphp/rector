@@ -130,7 +130,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (empty($node->stmts)) {
+        if ($node->stmts === null || $node->stmts === []) {
             return null;
         }
 
