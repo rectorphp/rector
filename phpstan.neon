@@ -335,3 +335,5 @@ parameters:
         - '#Parameter \#1 \$expr of method Rector\\MagicDisclosure\\Matcher\\ClassNameTypeMatcher\:\:doesExprMatchNames\(\) expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Parameter \#1 \$objectType of method Rector\\Naming\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
         - '#Method Rector\\Core\\PhpParser\\Node\\NodeFactory\:\:createConcat\(\) should return PhpParser\\Node\\Expr\\BinaryOp\\Concat\|null but returns PhpParser\\Node\\Expr#'
+        - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirstNonAnonymousClass\(\) should return PhpParser\\Node\\Stmt\\Class_\|null but returns PhpParser\\Node\|null#'
+

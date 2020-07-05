@@ -44,11 +44,11 @@ class ClassIfElseArrayController extends AbstractController
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         if (mt_rand(0, 100)) {
-            return $this->render('@App/class_if_else_array/index.html.twig', [
+            return $this->render('@App/Class_If_Else_Array/index.html.twig', [
                 'key' => 'value'
             ]);
         } elseif (mt_rand(0, 200)) {
-            return $this->render('@App/class_if_else_array/index.html.twig', [
+            return $this->render('@App/Class_If_Else_Array/index.html.twig', [
                 'key' => 'value2'
             ]);
         } else {
