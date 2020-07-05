@@ -1,4 +1,4 @@
-# All 514 Rectors Overview
+# All 515 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -11,7 +11,7 @@
 - [CakePHP](#cakephp) (6)
 - [Celebrity](#celebrity) (3)
 - [CodeQuality](#codequality) (54)
-- [CodingStyle](#codingstyle) (33)
+- [CodingStyle](#codingstyle) (34)
 - [DeadCode](#deadcode) (40)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (16)
@@ -2215,10 +2215,33 @@ Prefer quote that are not inside the string
 
 <br><br>
 
-### `UnderscoreToPascalCaseVariableAndPropertyNameRector`
+### `UnderscoreToPascalCasePropertyNameRector`
 
-- class: [`Rector\CodingStyle\Rector\Variable\UnderscoreToPascalCaseVariableAndPropertyNameRector`](/../master/rules/coding-style/src/Rector/Variable/UnderscoreToPascalCaseVariableAndPropertyNameRector.php)
-- [test fixtures](/../master/rules/coding-style/tests/Rector/Variable/UnderscoreToPascalCaseVariableAndPropertyNameRector/Fixture)
+- class: [`Rector\CodingStyle\Rector\Property\UnderscoreToPascalCasePropertyNameRector`](/../master/rules/coding-style/src/Rector/Property/UnderscoreToPascalCasePropertyNameRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/Property/UnderscoreToPascalCasePropertyNameRector/Fixture)
+
+Change under_score names to pascalCase
+
+```diff
+ final class SomeClass
+ {
+-    public $property_name;
++    public $propertyName;
+
+     public function run($a)
+     {
+-        $this->property_name = 5;
++        $this->propertyName = 5;
+     }
+ }
+```
+
+<br><br>
+
+### `UnderscoreToPascalCaseVariableNameRector`
+
+- class: [`Rector\CodingStyle\Rector\Variable\UnderscoreToPascalCaseVariableNameRector`](/../master/rules/coding-style/src/Rector/Variable/UnderscoreToPascalCaseVariableNameRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/Variable/UnderscoreToPascalCaseVariableNameRector/Fixture)
 
 Change under_score names to pascalCase
 
@@ -2228,11 +2251,8 @@ Change under_score names to pascalCase
 -    public function run($a_b)
 +    public function run($aB)
      {
--        $some_value = 5;
-+        $someValue = 5;
-
--        $this->run($a_b);
-+        $this->run($aB);
+-        $some_value = $a_b;
++        $someValue = $aB;
      }
  }
 ```
@@ -2242,6 +2262,7 @@ Change under_score names to pascalCase
 ### `UseClassKeywordForClassNameResolutionRector`
 
 - class: [`Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector`](/../master/rules/coding-style/src/Rector/String_/UseClassKeywordForClassNameResolutionRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/String_/UseClassKeywordForClassNameResolutionRector/Fixture)
 
 Use `class` keyword for class name resolution in string instead of hardcoded string reference
 

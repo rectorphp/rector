@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Rector\Variable;
+namespace Rector\CodingStyle\Rector\Property;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToPascalCaseVariableAndPropertyNameRector\UnderscoreToPascalCaseVariableAndPropertyNameRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\Property\UnderscoreToPascalCasePropertyNameRector\UnderscoreToPascalCasePropertyNameRectorTest
  */
-final class UnderscoreToPascalCaseVariableAndPropertyNameRector extends AbstractRector
+final class UnderscoreToPascalCasePropertyNameRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
@@ -28,11 +28,11 @@ final class UnderscoreToPascalCaseVariableAndPropertyNameRector extends Abstract
                 <<<'PHP'
 final class SomeClass
 {
-    public function run($a_b)
-    {
-        $some_value = 5;
+    public $property_name;
 
-        $this->run($a_b);
+    public function run($a)
+    {
+        $this->property_name = 5;
     }
 }
 PHP
@@ -40,11 +40,11 @@ PHP
                 <<<'PHP'
 final class SomeClass
 {
-    public function run($aB)
-    {
-        $someValue = 5;
+    public $propertyName;
 
-        $this->run($aB);
+    public function run($a)
+    {
+        $this->propertyName = 5;
     }
 }
 PHP
@@ -58,11 +58,11 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [Variable::class, PropertyProperty::class, PropertyFetch::class, StaticPropertyFetch::class];
+        return [PropertyProperty::class, PropertyFetch::class, StaticPropertyFetch::class];
     }
 
     /**
-     * @param Variable|PropertyProperty|PropertyFetch|StaticPropertyFetch $node
+     * @param PropertyProperty|PropertyFetch|StaticPropertyFetch $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -71,7 +71,10 @@ PHP
             return null;
         }
 
-        if (Strings::startsWith($nodeName, '_')) {
+        /** @var string $class */
+        $class = $node->getAttribute(AttributeKey::CLASS_NAME);
+        // properties are accessed via magic, nothing we can do
+        if (method_exists($class, '__set') || method_exists($class, '__get')) {
             return null;
         }
 
@@ -79,26 +82,24 @@ PHP
             return null;
         }
 
-        $camelCaseName = $this->createPascalName($nodeName, $node);
-        if ($camelCaseName === 'this') {
-            return null;
-        }
+        $pascalCaseName = $this->createPascalName($nodeName, $node);
 
-        $node->name = new Identifier($camelCaseName);
+        $node->name = new Identifier($pascalCaseName);
 
         return $node;
     }
 
     /**
-     * @param Variable|PropertyProperty|PropertyFetch|StaticPropertyFetch $node
+     * @param PropertyProperty|PropertyFetch|StaticPropertyFetch $node
      */
     private function createPascalName(string $nodeName, Node $node): string
     {
-        $camelCaseName = StaticRectorStrings::underscoreToPascalCase($nodeName);
+        $pascalCaseName = StaticRectorStrings::underscoreToPascalCase($nodeName);
+
         if ($node instanceof StaticPropertyFetch || $node instanceof PropertyProperty) {
-            return '$' . $camelCaseName;
+            $pascalCaseName = '$' . $pascalCaseName;
         }
 
-        return $camelCaseName;
+        return $pascalCaseName;
     }
 }

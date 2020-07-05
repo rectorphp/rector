@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToPascalCaseVariableAndPropertyNameRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToPascalCaseVariableNameRector\Fixture;
 
 final class SomeClass
 {
@@ -16,7 +16,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToPascalCaseVariableAndPropertyNameRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToPascalCaseVariableNameRector\Fixture;
 
 final class SomeClass
 {
