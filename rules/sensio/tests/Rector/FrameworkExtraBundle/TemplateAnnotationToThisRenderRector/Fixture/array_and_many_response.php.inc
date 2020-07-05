@@ -51,7 +51,7 @@ final class ClassWithArrayAndManyResponseController extends AbstractController
         if ($responseOrData instanceof \Symfony\Component\HttpFoundation\Response) {
             return $responseOrData;
         }
-        return $this->render('@App/class_with_array_and_many_response/index.html.twig', $responseOrData);
+        return $this->render('@App/Class_With_Array_And_Many_Response/index.html.twig', $responseOrData);
     }
 
     /**

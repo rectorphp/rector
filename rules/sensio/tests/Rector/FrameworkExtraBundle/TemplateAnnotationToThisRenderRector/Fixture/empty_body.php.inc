@@ -28,7 +28,7 @@ class EmptyBodyController extends AbstractController
 {
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('@App/empty_body/index.html.twig');
+        return $this->render('@App/Empty_Body/index.html.twig');
     }
 }
 

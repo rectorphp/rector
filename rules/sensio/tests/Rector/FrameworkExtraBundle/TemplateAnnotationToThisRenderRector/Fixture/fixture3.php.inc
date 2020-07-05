@@ -49,7 +49,7 @@ class ClassWithNamedService35Controller extends AbstractController
             return $this->redirectToRoute('rector_is_cool');
         }
 
-        return $this->render('@App/class_with_named_service35/index.html.twig', array(
+        return $this->render('@App/Class_With_Named_Service35/index.html.twig', array(
             'form' => $form->createView()
         ));
     }
