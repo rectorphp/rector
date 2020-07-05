@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Rector\Variable;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
+use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -17,6 +18,16 @@ use Rector\Core\Util\StaticRectorStrings;
  */
 final class UnderscoreToPascalCaseVariableNameRector extends AbstractRector
 {
+    /**
+     * @var ReservedKeywordAnalyzer
+     */
+    private $reservedKeywordAnalyzer;
+
+    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
+    {
+        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change under_score names to pascalCase', [
@@ -64,6 +75,10 @@ PHP
         }
 
         if (! Strings::contains($nodeName, '_')) {
+            return null;
+        }
+
+        if ($this->reservedKeywordAnalyzer->isNativeVariable($nodeName)) {
             return null;
         }
 
