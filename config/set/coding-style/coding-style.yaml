@@ -35,6 +35,8 @@ services:
             pi: M_PI
     Rector\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector: null
     Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector: null
-    Rector\CodingStyle\Rector\Variable\UnderscoreToPascalCaseVariableAndPropertyNameRector: null
+
+    Rector\CodingStyle\Rector\Property\UnderscoreToPascalCasePropertyNameRector: null
+    Rector\CodingStyle\Rector\Variable\UnderscoreToPascalCaseVariableNameRector: null
 
     Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector: null

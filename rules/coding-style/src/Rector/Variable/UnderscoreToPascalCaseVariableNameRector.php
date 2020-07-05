@@ -1,0 +1,79 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\CodingStyle\Rector\Variable;
+
+use Nette\Utils\Strings;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\Util\StaticRectorStrings;
+
+/**
+ * @see \Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToPascalCaseVariableNameRector\UnderscoreToPascalCaseVariableNameRectorTest
+ */
+final class UnderscoreToPascalCaseVariableNameRector extends AbstractRector
+{
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition('Change under_score names to pascalCase', [
+            new CodeSample(
+                <<<'PHP'
+final class SomeClass
+{
+    public function run($a_b)
+    {
+        $some_value = $a_b;
+    }
+}
+PHP
+,
+                <<<'PHP'
+final class SomeClass
+{
+    public function run($aB)
+    {
+        $someValue = $aB;
+    }
+}
+PHP
+
+            ),
+        ]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [Variable::class];
+    }
+
+    /**
+     * @param Variable $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $nodeName = $this->getName($node);
+        if ($nodeName === null) {
+            return null;
+        }
+
+        if (! Strings::contains($nodeName, '_')) {
+            return null;
+        }
+
+        $pascalCaseName = StaticRectorStrings::underscoreToPascalCase($nodeName);
+        if ($pascalCaseName === 'this') {
+            return null;
+        }
+
+        $node->name = $pascalCaseName;
+
+        return $node;
+    }
+}
