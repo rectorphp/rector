@@ -61,7 +61,13 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
             return ShellCode::SUCCESS;
         }
 
-        $this->symfonyStyle->error('Some classes are missing nodes');
+        $errorMessage = sprintf(
+            'Add new class to "%s" that implements "%s" for this type',
+            'packages/phpstan-static-type-mapper/src/TypeMapper',
+            TypeMapperInterface::class
+        );
+        $this->symfonyStyle->error($errorMessage);
+
         $this->symfonyStyle->listing($missingNodeClasses);
 
         return ShellCode::ERROR;
