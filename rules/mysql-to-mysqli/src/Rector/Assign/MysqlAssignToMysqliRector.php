@@ -113,7 +113,7 @@ PHP
     {
         $funcCall->name = new Name('mysqli_data_seek');
 
-        $mysqlFetchRowFuncCall = new FuncCall(new Name('mysql_fetch_row'), [$funcCall->args[0]]);
+        $mysqlFetchRowFuncCall = new FuncCall(new Name('mysqli_fetch_row'), [$funcCall->args[0]]);
         $fetchVariable = new Variable('fetch');
         $newAssignNode = new Assign($fetchVariable, $mysqlFetchRowFuncCall);
         $this->addNodeAfterNode($newAssignNode, $assign);
