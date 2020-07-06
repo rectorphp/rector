@@ -24,13 +24,8 @@ final class MockeryToProphecyRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return string[][]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            MockeryCreateMockToProphizeRector::class => [],
-        ];
+        return MockeryCreateMockToProphizeRector::class;
     }
 }
