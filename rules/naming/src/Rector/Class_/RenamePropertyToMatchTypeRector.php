@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -126,6 +127,7 @@ PHP
 
                 /** @var string $paramName */
                 $paramName = $this->getName($param);
+
                 if ($this->breakingVariableRenameGuard->shouldSkipParam(
                     $paramName,
                     $expectedName,
@@ -164,8 +166,7 @@ PHP
                 continue;
             }
 
-            // skip conflicting
-            if (in_array($expectedName, $conflictingPropertyNames, true)) {
+            if ($this->shouldSkipPropertyRename($property, $oldName, $expectedName, $conflictingPropertyNames)) {
                 continue;
             }
 
@@ -205,5 +206,21 @@ PHP
             $node->name = new Identifier($expectedName);
             return $node;
         });
+    }
+
+    /**
+     * @param string[] $conflictingPropertyNames
+     */
+    private function shouldSkipPropertyRename(
+        Property $property,
+        string $currentName,
+        string $expectedName,
+        array $conflictingPropertyNames
+    ): bool {
+        if (in_array($expectedName, $conflictingPropertyNames, true)) {
+            return true;
+        }
+
+        return $this->breakingVariableRenameGuard->shouldSkipProperty($property, $currentName);
     }
 }

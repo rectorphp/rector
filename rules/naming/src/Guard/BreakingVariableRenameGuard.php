@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Guard;
 
+use DateTimeInterface;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
  * This class check if a variable name change breaks existing code in class method
@@ -42,16 +48,23 @@ final class BreakingVariableRenameGuard
      */
     private $nodeNameResolver;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         ConflictingNameResolver $conflictingNameResolver,
         OverridenExistingNamesResolver $overridenExistingNamesResolver,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->conflictingNameResolver = $conflictingNameResolver;
         $this->overridenExistingNamesResolver = $overridenExistingNamesResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function shouldSkipVariable(
@@ -80,6 +93,12 @@ final class BreakingVariableRenameGuard
         return $this->isUsedInIfAndOtherBranches($variable, $currentName);
     }
 
+    public function shouldSkipProperty(Property $property, string $currentName): bool
+    {
+        $propertyType = $this->nodeTypeResolver->resolve($property);
+        return $this->isDateTimeAtNamingConvention($propertyType, $currentName);
+    }
+
     public function shouldSkipParam(
         string $currentName,
         string $expectedName,
@@ -104,7 +123,13 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        return $this->isVariableAlreadyDefined($param->var, $currentName);
+        if ($this->isVariableAlreadyDefined($param->var, $currentName)) {
+            return true;
+        }
+
+        $paramType = $this->nodeTypeResolver->getStaticType($param);
+
+        return $this->isDateTimeAtNamingConvention($paramType, $currentName);
     }
 
     private function isVariableAlreadyDefined(Variable $variable, string $currentVariableName): bool
@@ -164,5 +189,34 @@ final class BreakingVariableRenameGuard
         }
 
         return $this->nodeNameResolver->isName($node, $name);
+    }
+
+    private function isDateTimeAtNamingConvention(Type $type, string $currentName): bool
+    {
+        $type = $this->unwrapUnionObjectType($type);
+        if (! $type instanceof TypeWithClassName) {
+            return false;
+        }
+
+        if (! is_a($type->getClassName(), DateTimeInterface::class, true)) {
+            return false;
+        }
+
+        return (bool) Strings::match($currentName, '#[\w+]At$#');
+    }
+
+    private function unwrapUnionObjectType(Type $type): Type
+    {
+        if (! $type instanceof UnionType) {
+            return $type;
+        }
+
+        foreach ($type->getTypes() as $unionedType) {
+            if ($unionedType instanceof TypeWithClassName) {
+                return $unionedType;
+            }
+        }
+
+        return $type;
     }
 }
