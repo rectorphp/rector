@@ -1,6 +1,11 @@
 <?php
 
 function mysql_to_mysqli_func_call() {
+    mysql_create_db('database_name');
+
+    $database = 'database_name';
+    mysql_create_db($database);
+
     mysql_drop_db('database_name');
 
     $database = 'database_name';
@@ -17,6 +22,11 @@ function mysql_to_mysqli_func_call() {
 <?php
 
 function mysql_to_mysqli_func_call() {
+    mysqli_query('CREATE DATABASE database_name');
+
+    $database = 'database_name';
+    mysqli_query('CREATE DATABASE ' . $database);
+
     mysqli_query('DROP DATABASE database_name');
 
     $database = 'database_name';

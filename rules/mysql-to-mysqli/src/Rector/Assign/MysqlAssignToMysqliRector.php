@@ -38,6 +38,11 @@ final class MysqlAssignToMysqliRector extends AbstractRector
         'mysql_field_table' => 'table',
     ];
 
+    /**
+     * @var string
+     */
+    private const MYSQLI_DATA_SEEK = 'mysqli_data_seek';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -94,12 +99,16 @@ PHP
             return $this->processMysqlFetchField($node, $funcCallNode);
         }
 
+        if ($this->isName($funcCallNode, 'mysql_result')) {
+            return $this->processMysqlResult($node, $funcCallNode);
+        }
+
         return $this->processFieldToFieldDirect($node, $funcCallNode);
     }
 
     private function processMysqlTableName(Assign $assign, FuncCall $funcCall): FuncCall
     {
-        $funcCall->name = new Name('mysqli_data_seek');
+        $funcCall->name = new Name(self::MYSQLI_DATA_SEEK);
 
         $newFuncCall = new FuncCall(new Name('mysql_fetch_array'), [$funcCall->args[0]]);
         $newAssignNode = new Assign($assign->var, new ArrayDimFetch($newFuncCall, new LNumber(0)));
@@ -111,7 +120,7 @@ PHP
 
     private function processMysqlDbName(Assign $assign, FuncCall $funcCall): FuncCall
     {
-        $funcCall->name = new Name('mysqli_data_seek');
+        $funcCall->name = new Name(self::MYSQLI_DATA_SEEK);
 
         $mysqlFetchRowFuncCall = new FuncCall(new Name('mysqli_fetch_row'), [$funcCall->args[0]]);
         $fetchVariable = new Variable('fetch');
@@ -163,6 +172,27 @@ PHP
         $this->addNodeAfterNode($for, $previousStatement);
 
         return $assign;
+    }
+
+    private function processMysqlResult(Assign $assign, FuncCall $funcCall): FuncCall
+    {
+        $fetchField = null;
+        if (isset($funcCall->args[2])) {
+            $fetchField = $funcCall->args[2]->value;
+            unset($funcCall->args[2]);
+        }
+
+        $funcCall->name = new Name(self::MYSQLI_DATA_SEEK);
+
+        $mysqlFetchArrayFuncCall = new FuncCall(new Name('mysqli_fetch_array'), [$funcCall->args[0]]);
+        $fetchVariable = new Variable('fetch');
+        $newAssignNode = new Assign($fetchVariable, $mysqlFetchArrayFuncCall);
+        $this->addNodeAfterNode($newAssignNode, $assign);
+
+        $newAssignNode = new Assign($assign->var, new ArrayDimFetch($fetchVariable, $fetchField ?? new LNumber(0)));
+        $this->addNodeAfterNode($newAssignNode, $assign);
+
+        return $funcCall;
     }
 
     private function processFieldToFieldDirect(Assign $assign, FuncCall $funcCall): ?Assign
