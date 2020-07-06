@@ -89,11 +89,7 @@ PHP
         // is variable assigned in constructor
         $propertyName = $this->getName($property);
 
-        if ($this->isPropertyInitiatedInConstuctor($property, $propertyName)) {
-            return true;
-        }
-
-        return false;
+        return $this->isPropertyInitiatedInConstuctor($property, $propertyName);
     }
 
     private function isPropertyInitiatedInConstuctor(Property $property, string $propertyName): bool

@@ -26,6 +26,7 @@ jobs:
                             bin/rector list
 
         runs-on: ubuntu-latest
+        name: ${{ matrix.actions.name }}
 
         steps:
             -   uses: actions/checkout@v2
@@ -35,6 +36,4 @@ jobs:
                     php-version: 7.4
                     coverage: none
 
-            -
-                name: ${{ matrix.actions.name }}
-                run: ${{ matrix.actions.run }}
+            -   run: ${{ matrix.actions.run }}
