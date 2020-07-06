@@ -48,7 +48,8 @@ final class SetsCommand extends AbstractCommand
         if ($name) {
             $sets = $this->filterSetsByName($name, $sets);
         }
-        $this->symfonyStyle->title(sprintf('%d available sets:', count($sets)));
+        $message = sprintf('%d available sets:', count($sets));
+        $this->symfonyStyle->title($message);
         $this->symfonyStyle->listing($sets);
 
         if ($name === '') {

@@ -111,7 +111,8 @@ PHP
 
         // remove properties
         foreach ($node->getProperties() as $property) {
-            if (! $this->isNames($property, array_keys($propertyUsageByMethods))) {
+            $classMethodNames = array_keys($propertyUsageByMethods);
+            if (! $this->isNames($property, $classMethodNames)) {
                 continue;
             }
 

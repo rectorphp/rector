@@ -1,29 +1,14 @@
 {
     "name": "rector/rector",
     "description": "Instant upgrade and refactoring of your PHP code",
-    "keywords": [
-        "instant upgrades",
-        "instant refactoring",
-        "ast",
-        "automated refactoring"
-    ],
+    "keywords": ["instant upgrades", "instant refactoring", "ast", "automated refactoring"],
     "homepage": "https://getrector.org",
     "license": "MIT",
     "authors": [
-        {
-            "name": "Tomas Votruba",
-            "email": "tomas.vot@gmail.com",
-            "homepage": "https://tomasvotruba.com"
-        },
-        {
-            "name": "Jan Mikes",
-            "email": "j.mikes@me.com",
-            "homepage": "https://janmikes.cz"
-        }
+        { "name": "Tomas Votruba", "email": "tomas.vot@gmail.com", "homepage": "https://tomasvotruba.com" },
+        { "name": "Jan Mikes", "email": "j.mikes@me.com", "homepage": "https://janmikes.cz" }
     ],
-    "bin": [
-        "bin/rector"
-    ],
+    "bin": ["bin/rector"],
     "require": {
         "php": "^7.2.4",
         "ext-json": "*",
@@ -153,7 +138,8 @@
             "Rector\\MockistaToMockery\\": "rules/mockista-to-mockery/src",
             "Rector\\NetteKdyby\\": "rules/nette-kdyby/src",
             "Rector\\NetteUtilsCodeQuality\\": "rules/nette-utils-code-quality/src",
-            "Rector\\NetteCodeQuality\\": "rules/nette-code-quality/src"
+            "Rector\\NetteCodeQuality\\": "rules/nette-code-quality/src",
+            "Rector\\Decomplex\\": "rules/decomplex/src"
         }
     },
     "autoload-dev": {
@@ -229,7 +215,8 @@
             "Rector\\Compiler\\Tests\\": "compiler/tests",
             "Rector\\NetteKdyby\\Tests\\": "rules/nette-kdyby/tests",
             "Rector\\NetteUtilsCodeQuality\\Tests\\": "rules/nette-utils-code-quality/tests",
-            "Rector\\NetteCodeQuality\\Tests\\": "rules/nette-code-quality/tests"
+            "Rector\\NetteCodeQuality\\Tests\\": "rules/nette-code-quality/tests",
+            "Rector\\Decomplex\\Tests\\": "rules/decomplex/tests"
         },
         "classmap": [
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",

@@ -116,8 +116,9 @@ final class DecoupleClassMethodToOwnClassRector extends AbstractRector
         );
 
         // 4. get class method related property fetches in the same class - add to constructor
+        $classMethods = array_merge($usedClassMethods, [$node]);
         $usedProperties = $this->usedClassPropertyExtractor->extractFromClassMethods(
-            array_merge($usedClassMethods, [$node]),
+            $classMethods,
             $matchedConfiguration->getParentClassName()
         );
 

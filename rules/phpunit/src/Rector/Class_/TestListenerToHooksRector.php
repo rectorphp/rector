@@ -157,7 +157,7 @@ PHP
             }
 
             // remove empty methods
-            if (empty($classMethod->stmts)) {
+            if ($classMethod->stmts === [] || $classMethod->stmts === null) {
                 $this->removeNode($classMethod);
             } else {
                 $class->implements[] = new FullyQualified($hookClassAndMethod[0]);

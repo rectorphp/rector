@@ -14,6 +14,7 @@ final class RectorCompilerConsoleApplication extends Application
         parent::__construct('Rector Compiler', 'v1.0');
 
         $this->add($compileCommand);
-        $this->setDefaultCommand(get_class($compileCommand), true);
+        $commandClass = get_class($compileCommand);
+        $this->setDefaultCommand($commandClass, true);
     }
 }

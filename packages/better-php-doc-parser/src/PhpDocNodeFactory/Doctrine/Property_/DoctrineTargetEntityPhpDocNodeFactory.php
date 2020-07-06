@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Property_;
 
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
@@ -33,7 +37,7 @@ final class DoctrineTargetEntityPhpDocNodeFactory extends AbstractPhpDocNodeFact
         TokenIterator $tokenIterator,
         string $annotationClass
     ): ?PhpDocTagValueNode {
-        /** @var \Doctrine\ORM\Mapping\OneToOne|\Doctrine\ORM\Mapping\OneToMany|\Doctrine\ORM\Mapping\ManyToMany|\Doctrine\ORM\Mapping\ManyToOne|null $annotation */
+        /** @var OneToOne|OneToMany|ManyToMany|ManyToOne|null $annotation */
         $annotation = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
         if ($annotation === null) {
             return null;

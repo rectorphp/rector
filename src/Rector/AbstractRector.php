@@ -125,7 +125,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     final public function enterNode(Node $node)
     {
-        if (! $this->isMatchingNodeType(get_class($node))) {
+        $nodeClass = get_class($node);
+        if (! $this->isMatchingNodeType($nodeClass)) {
             return null;
         }
 

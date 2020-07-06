@@ -76,7 +76,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         if ($firstArgumentValue instanceof StaticCall) {
             return null;
         }
-        if (! $this->isNames($firstArgumentValue, array_keys(self::OLD_TO_NEW_METHODS))) {
+
+        $oldMethods = array_keys(self::OLD_TO_NEW_METHODS);
+        if (! $this->isNames($firstArgumentValue, $oldMethods)) {
             return null;
         }
 

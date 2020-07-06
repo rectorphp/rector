@@ -56,7 +56,8 @@ final class ValidateServicesInSetsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         foreach ($this->yamlConfigFileProvider->provider() as $configFileInfo) {
-            $this->symfonyStyle->note(sprintf('Validating config "%s"', $configFileInfo->getRelativeFilePathFromCwd()));
+            $message = sprintf('Validating config "%s"', $configFileInfo->getRelativeFilePathFromCwd());
+            $this->symfonyStyle->note($message);
 
             $yamlContent = Yaml::parseFile($configFileInfo->getRealPath());
             if (! isset($yamlContent['services'])) {

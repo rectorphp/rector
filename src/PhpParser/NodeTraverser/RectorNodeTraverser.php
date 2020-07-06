@@ -120,7 +120,8 @@ final class RectorNodeTraverser extends NodeTraverser
     {
         foreach ($configuration as $property => $value) {
             /** @var string $property */
-            $this->privatesAccessor->setPrivateProperty($phpRector, ltrim($property, '$'), $value);
+            $property = ltrim($property, '$');
+            $this->privatesAccessor->setPrivateProperty($phpRector, $property, $value);
         }
     }
 }

@@ -73,7 +73,8 @@ PHP
         }
 
         foreach ($node->implements as $key => $implement) {
-            if (! $this->isNames($implement, array_keys($this->oldToNewInterfaces))) {
+            $oldInterfaces = array_keys($this->oldToNewInterfaces);
+            if (! $this->isNames($implement, $oldInterfaces)) {
                 continue;
             }
 

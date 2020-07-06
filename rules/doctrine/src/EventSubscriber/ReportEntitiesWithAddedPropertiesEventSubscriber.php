@@ -62,7 +62,8 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
 
         $filePath = getcwd() . '/' . $fileName;
         FileSystem::write($filePath, $jsonContent);
+        $message = sprintf('See freshly created "%s" file for changes on entities', $fileName);
 
-        $this->symfonyStyle->warning(sprintf('See freshly created "%s" file for changes on entities', $fileName));
+        $this->symfonyStyle->warning($message);
     }
 }

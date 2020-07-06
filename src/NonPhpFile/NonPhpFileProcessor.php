@@ -110,11 +110,11 @@ final class NonPhpFileProcessor
         $relativeFilePath = $neonYamlFileInfo->getRelativeFilePathFromCwd();
 
         if ($this->configuration->isDryRun()) {
-            $this->symfonyStyle->note(
-                sprintf('File "%s" would be changed ("dry-run" is on now)', $relativeFilePath)
-            );
+            $message = sprintf('File "%s" would be changed ("dry-run" is on now)', $relativeFilePath);
+            $this->symfonyStyle->note($message);
         } else {
-            $this->symfonyStyle->note(sprintf('File "%s" was changed', $relativeFilePath));
+            $message = sprintf('File "%s" was changed', $relativeFilePath);
+            $this->symfonyStyle->note($message);
             FileSystem::write($neonYamlFileInfo->getRealPath(), $newContent, $neonYamlFileInfo->getPerms());
         }
     }

@@ -259,7 +259,7 @@ PHP
             return false;
         }
 
-        return empty($classMethod->getStmts());
+        return $classMethod->stmts === [] || $classMethod->stmts === null;
     }
 
     private function shouldSkipOpenSourceProtectedMethod(ClassMethod $classMethod): bool

@@ -19,6 +19,13 @@
  */
 namespace Rector\DoctrineAnnotationGenerated;
 
+use Doctrine\Common\Annotations\DocLexer;
+use RuntimeException;
+use Doctrine\Common\Annotations\AnnotationException;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use ReflectionProperty;
+use stdClass;
+use Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector;
 use Doctrine\Common\Annotations\Annotation\Attribute;
 use ReflectionClass;
 use Doctrine\Common\Annotations\Annotation\Enum;
@@ -43,7 +50,7 @@ final class ConstantPreservingDocParser
      *
      * @var array
      */
-    private static $classIdentifiers = [\Doctrine\Common\Annotations\DocLexer::T_IDENTIFIER, \Doctrine\Common\Annotations\DocLexer::T_TRUE, \Doctrine\Common\Annotations\DocLexer::T_FALSE, \Doctrine\Common\Annotations\DocLexer::T_NULL];
+    private static $classIdentifiers = [DocLexer::T_IDENTIFIER, DocLexer::T_TRUE, DocLexer::T_FALSE, DocLexer::T_NULL];
     /**
      * The lexer.
      *
@@ -119,7 +126,7 @@ final class ConstantPreservingDocParser
      *
      * @var array
      */
-    private static $annotationMetadata = ['Doctrine\Common\Annotations\Annotation\Target' => ['is_annotation' => true, 'has_constructor' => true, 'properties' => [], 'targets_literal' => 'ANNOTATION_CLASS', 'targets' => \Doctrine\Common\Annotations\Annotation\Target::TARGET_CLASS, 'default_property' => 'value', 'attribute_types' => ['value' => ['required' => false, 'type' => 'array', 'array_type' => 'string', 'value' => 'array<string>']]], 'Doctrine\Common\Annotations\Annotation\Attribute' => ['is_annotation' => true, 'has_constructor' => false, 'targets_literal' => 'ANNOTATION_ANNOTATION', 'targets' => \Doctrine\Common\Annotations\Annotation\Target::TARGET_ANNOTATION, 'default_property' => 'name', 'properties' => ['name' => 'name', 'type' => 'type', 'required' => 'required'], 'attribute_types' => ['value' => ['required' => true, 'type' => 'string', 'value' => 'string'], 'type' => ['required' => true, 'type' => 'string', 'value' => 'string'], 'required' => ['required' => false, 'type' => 'boolean', 'value' => 'boolean']]], 'Doctrine\Common\Annotations\Annotation\Attributes' => ['is_annotation' => true, 'has_constructor' => false, 'targets_literal' => 'ANNOTATION_CLASS', 'targets' => \Doctrine\Common\Annotations\Annotation\Target::TARGET_CLASS, 'default_property' => 'value', 'properties' => ['value' => 'value'], 'attribute_types' => ['value' => ['type' => 'array', 'required' => true, 'array_type' => 'Doctrine\Common\Annotations\Annotation\Attribute', 'value' => 'array<Doctrine\Common\Annotations\Annotation\Attribute>']]], 'Doctrine\Common\Annotations\Annotation\Enum' => ['is_annotation' => true, 'has_constructor' => true, 'targets_literal' => 'ANNOTATION_PROPERTY', 'targets' => \Doctrine\Common\Annotations\Annotation\Target::TARGET_PROPERTY, 'default_property' => 'value', 'properties' => ['value' => 'value'], 'attribute_types' => ['value' => ['type' => 'array', 'required' => true], 'literal' => ['type' => 'array', 'required' => false]]]];
+    private static $annotationMetadata = ['Doctrine\Common\Annotations\Annotation\Target' => ['is_annotation' => true, 'has_constructor' => true, 'properties' => [], 'targets_literal' => 'ANNOTATION_CLASS', 'targets' => Target::TARGET_CLASS, 'default_property' => 'value', 'attribute_types' => ['value' => ['required' => false, 'type' => 'array', 'array_type' => 'string', 'value' => 'array<string>']]], 'Doctrine\Common\Annotations\Annotation\Attribute' => ['is_annotation' => true, 'has_constructor' => false, 'targets_literal' => 'ANNOTATION_ANNOTATION', 'targets' => Target::TARGET_ANNOTATION, 'default_property' => 'name', 'properties' => ['name' => 'name', 'type' => 'type', 'required' => 'required'], 'attribute_types' => ['value' => ['required' => true, 'type' => 'string', 'value' => 'string'], 'type' => ['required' => true, 'type' => 'string', 'value' => 'string'], 'required' => ['required' => false, 'type' => 'boolean', 'value' => 'boolean']]], 'Doctrine\Common\Annotations\Annotation\Attributes' => ['is_annotation' => true, 'has_constructor' => false, 'targets_literal' => 'ANNOTATION_CLASS', 'targets' => Target::TARGET_CLASS, 'default_property' => 'value', 'properties' => ['value' => 'value'], 'attribute_types' => ['value' => ['type' => 'array', 'required' => true, 'array_type' => 'Doctrine\Common\Annotations\Annotation\Attribute', 'value' => 'array<Doctrine\Common\Annotations\Annotation\Attribute>']]], 'Doctrine\Common\Annotations\Annotation\Enum' => ['is_annotation' => true, 'has_constructor' => true, 'targets_literal' => 'ANNOTATION_PROPERTY', 'targets' => Target::TARGET_PROPERTY, 'default_property' => 'value', 'properties' => ['value' => 'value'], 'attribute_types' => ['value' => ['type' => 'array', 'required' => true], 'literal' => ['type' => 'array', 'required' => false]]]];
     /**
      * Hash-map for handle types declaration.
      *
@@ -137,7 +144,7 @@ final class ConstantPreservingDocParser
      */
     public function __construct()
     {
-        $this->lexer = new \Doctrine\Common\Annotations\DocLexer();
+        $this->lexer = new DocLexer();
     }
     /**
      * Sets the annotation names that are ignored during the parsing process.
@@ -182,12 +189,12 @@ final class ConstantPreservingDocParser
      *
      * @return void
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function addNamespace($namespace)
     {
         if ($this->imports) {
-            throw new \RuntimeException('You must either use addNamespace(), or setImports(), but not both.');
+            throw new RuntimeException('You must either use addNamespace(), or setImports(), but not both.');
         }
         $this->namespaces[] = $namespace;
     }
@@ -198,12 +205,12 @@ final class ConstantPreservingDocParser
      *
      * @return void
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function setImports(array $imports)
     {
         if ($this->namespaces) {
-            throw new \RuntimeException('You must either use addNamespace(), or setImports(), but not both.');
+            throw new RuntimeException('You must either use addNamespace(), or setImports(), but not both.');
         }
         $this->imports = $imports;
     }
@@ -311,7 +318,7 @@ final class ConstantPreservingDocParser
             $message .= ' in ' . $this->context;
         }
         $message .= '.';
-        throw \Doctrine\Common\Annotations\AnnotationException::syntaxError($message);
+        throw AnnotationException::syntaxError($message);
     }
     /**
      * Attempts to check if a class exists or not. This never goes through the PHP autoloading mechanism
@@ -331,7 +338,7 @@ final class ConstantPreservingDocParser
             return $this->classExists[$fqcn] = true;
         }
         // final check, does this class exist?
-        return $this->classExists[$fqcn] = \Doctrine\Common\Annotations\AnnotationRegistry::loadAnnotationClass($fqcn);
+        return $this->classExists[$fqcn] = AnnotationRegistry::loadAnnotationClass($fqcn);
     }
     /**
      * Collects parsing metadata for a given annotation class
@@ -348,25 +355,25 @@ final class ConstantPreservingDocParser
             self::$metadataParser->setIgnoredAnnotationNames($this->ignoredAnnotationNames);
             self::$metadataParser->setImports(['enum' => 'Doctrine\Common\Annotations\Annotation\Enum', 'target' => 'Doctrine\Common\Annotations\Annotation\Target', 'attribute' => 'Doctrine\Common\Annotations\Annotation\Attribute', 'attributes' => 'Doctrine\Common\Annotations\Annotation\Attributes']);
             // Make sure that annotations from metadata are loaded
-            class_exists(\Doctrine\Common\Annotations\Annotation\Enum::class);
-            class_exists(\Doctrine\Common\Annotations\Annotation\Target::class);
-            class_exists(\Doctrine\Common\Annotations\Annotation\Attribute::class);
-            class_exists(\Doctrine\Common\Annotations\Annotation\Attributes::class);
+            class_exists(Enum::class);
+            class_exists(Target::class);
+            class_exists(Attribute::class);
+            class_exists(Attributes::class);
         }
-        $class = new \ReflectionClass($name);
+        $class = new ReflectionClass($name);
         $docComment = $class->getDocComment();
         // Sets default values for annotation metadata
-        $metadata = ['default_property' => null, 'has_constructor' => null !== ($constructor = $class->getConstructor()) && $constructor->getNumberOfParameters() > 0, 'properties' => [], 'property_types' => [], 'attribute_types' => [], 'targets_literal' => null, 'targets' => \Doctrine\Common\Annotations\Annotation\Target::TARGET_ALL, 'is_annotation' => false !== strpos($docComment, '@Annotation')];
+        $metadata = ['default_property' => null, 'has_constructor' => null !== ($constructor = $class->getConstructor()) && $constructor->getNumberOfParameters() > 0, 'properties' => [], 'property_types' => [], 'attribute_types' => [], 'targets_literal' => null, 'targets' => Target::TARGET_ALL, 'is_annotation' => false !== strpos($docComment, '@Annotation')];
         // verify that the class is really meant to be an annotation
         if ($metadata['is_annotation']) {
-            self::$metadataParser->setTarget(\Doctrine\Common\Annotations\Annotation\Target::TARGET_CLASS);
+            self::$metadataParser->setTarget(Target::TARGET_CLASS);
             foreach (self::$metadataParser->parse($docComment, 'class @' . $name) as $annotation) {
-                if ($annotation instanceof \Doctrine\Common\Annotations\Annotation\Target) {
+                if ($annotation instanceof Target) {
                     $metadata['targets'] = $annotation->targets;
                     $metadata['targets_literal'] = $annotation->literal;
                     continue;
                 }
-                if ($annotation instanceof \Doctrine\Common\Annotations\Annotation\Attributes) {
+                if ($annotation instanceof Attributes) {
                     foreach ($annotation->value as $attribute) {
                         $this->collectAttributeTypeMetadata($metadata, $attribute);
                     }
@@ -375,12 +382,12 @@ final class ConstantPreservingDocParser
             // if not has a constructor will inject values into public properties
             if (false === $metadata['has_constructor']) {
                 // collect all public properties
-                foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
+                foreach ($class->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
                     $metadata['properties'][$property->name] = $property->name;
                     if (false === ($propertyComment = $property->getDocComment())) {
                         continue;
                     }
-                    $attribute = new \Doctrine\Common\Annotations\Annotation\Attribute();
+                    $attribute = new Attribute();
                     $attribute->required = false !== strpos($propertyComment, '@Required');
                     $attribute->name = $property->name;
                     $attribute->type = false !== strpos($propertyComment, '@var') && preg_match('/@var\s+([^\s]+)/', $propertyComment, $matches) ? $matches[1] : 'mixed';
@@ -388,9 +395,9 @@ final class ConstantPreservingDocParser
                     // checks if the property has @Enum
                     if (false !== strpos($propertyComment, '@Enum')) {
                         $context = 'property ' . $class->name . "::\$" . $property->name;
-                        self::$metadataParser->setTarget(\Doctrine\Common\Annotations\Annotation\Target::TARGET_PROPERTY);
+                        self::$metadataParser->setTarget(Target::TARGET_PROPERTY);
                         foreach (self::$metadataParser->parse($propertyComment, $context) as $annotation) {
-                            if (!$annotation instanceof \Doctrine\Common\Annotations\Annotation\Enum) {
+                            if (!$annotation instanceof Enum) {
                                 continue;
                             }
                             $metadata['enum'][$property->name]['value'] = $annotation->value;
@@ -412,7 +419,7 @@ final class ConstantPreservingDocParser
      *
      * @return void
      */
-    private function collectAttributeTypeMetadata(&$metadata, \Doctrine\Common\Annotations\Annotation\Attribute $attribute)
+    private function collectAttributeTypeMetadata(&$metadata, Attribute $attribute)
     {
         // handle internal type declaration
         $type = self::$typeMap[$attribute->type] ?? $attribute->type;
@@ -454,7 +461,7 @@ final class ConstantPreservingDocParser
     {
         $annotations = [];
         while (null !== $this->lexer->lookahead) {
-            if (\Doctrine\Common\Annotations\DocLexer::T_AT !== $this->lexer->lookahead['type']) {
+            if (DocLexer::T_AT !== $this->lexer->lookahead['type']) {
                 $this->lexer->moveNext();
                 continue;
             }
@@ -465,7 +472,7 @@ final class ConstantPreservingDocParser
             }
             // make sure the @ is followed by either a namespace separator, or
             // an identifier token
-            if (null === ($peek = $this->lexer->glimpse()) || \Doctrine\Common\Annotations\DocLexer::T_NAMESPACE_SEPARATOR !== $peek['type'] && !in_array($peek['type'], self::$classIdentifiers, true) || $peek['position'] !== $this->lexer->lookahead['position'] + 1) {
+            if (null === ($peek = $this->lexer->glimpse()) || DocLexer::T_NAMESPACE_SEPARATOR !== $peek['type'] && !in_array($peek['type'], self::$classIdentifiers, true) || $peek['position'] !== $this->lexer->lookahead['position'] + 1) {
                 $this->lexer->moveNext();
                 continue;
             }
@@ -489,10 +496,10 @@ final class ConstantPreservingDocParser
      */
     private function Annotation()
     {
-        $this->match(\Doctrine\Common\Annotations\DocLexer::T_AT);
+        $this->match(DocLexer::T_AT);
         // check if we have an annotation
         $name = $this->Identifier();
-        if ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_MINUS) && $this->lexer->nextTokenIsAdjacent()) {
+        if ($this->lexer->isNextToken(DocLexer::T_MINUS) && $this->lexer->nextTokenIsAdjacent()) {
             // Annotations with dashes, such as "@foo-" or "@foo-bar", are to be discarded
             return false;
         }
@@ -526,12 +533,12 @@ final class ConstantPreservingDocParser
                 if ($this->isIgnoredAnnotation($name)) {
                     return false;
                 }
-                throw \Doctrine\Common\Annotations\AnnotationException::semanticalError(sprintf('The annotation "@%s" in %s was never imported. Did you maybe forget to add a "use" statement for this annotation?', $name, $this->context));
+                throw AnnotationException::semanticalError(sprintf('The annotation "@%s" in %s was never imported. Did you maybe forget to add a "use" statement for this annotation?', $name, $this->context));
             }
         }
         $name = ltrim($name, '\\');
         if (!$this->classExists($name)) {
-            throw \Doctrine\Common\Annotations\AnnotationException::semanticalError(sprintf('The annotation "@%s" in %s does not exist, or could not be auto-loaded.', $name, $this->context));
+            throw AnnotationException::semanticalError(sprintf('The annotation "@%s" in %s does not exist, or could not be auto-loaded.', $name, $this->context));
         }
         // at this point, $name contains the fully qualified class name of the
         // annotation, and it is also guaranteed that this class exists, and
@@ -545,15 +552,15 @@ final class ConstantPreservingDocParser
             if ($this->isIgnoredAnnotation($originalName) || $this->isIgnoredAnnotation($name)) {
                 return false;
             }
-            throw \Doctrine\Common\Annotations\AnnotationException::semanticalError(sprintf('The class "%s" is not annotated with @Annotation. Are you sure this class can be used as annotation? If so, then you need to add @Annotation to the _class_ doc comment of "%s". If it is indeed no annotation, then you need to add @IgnoreAnnotation("%s") to the _class_ doc comment of %s.', $name, $name, $originalName, $this->context));
+            throw AnnotationException::semanticalError(sprintf('The class "%s" is not annotated with @Annotation. Are you sure this class can be used as annotation? If so, then you need to add @Annotation to the _class_ doc comment of "%s". If it is indeed no annotation, then you need to add @IgnoreAnnotation("%s") to the _class_ doc comment of %s.', $name, $name, $originalName, $this->context));
         }
         //if target is nested annotation
-        $target = $this->isNestedAnnotation ? \Doctrine\Common\Annotations\Annotation\Target::TARGET_ANNOTATION : $this->target;
+        $target = $this->isNestedAnnotation ? Target::TARGET_ANNOTATION : $this->target;
         // Next will be nested
         $this->isNestedAnnotation = true;
         //if annotation does not support current target
         if (0 === (self::$annotationMetadata[$name]['targets'] & $target) && $target) {
-            throw \Doctrine\Common\Annotations\AnnotationException::semanticalError(sprintf('Annotation @%s is not allowed to be declared on %s. You may only use this annotation on these code elements: %s.', $originalName, $this->context, self::$annotationMetadata[$name]['targets_literal']));
+            throw AnnotationException::semanticalError(sprintf('Annotation @%s is not allowed to be declared on %s. You may only use this annotation on these code elements: %s.', $originalName, $this->context, self::$annotationMetadata[$name]['targets_literal']));
         }
         $values = $this->MethodCall();
         if (isset(self::$annotationMetadata[$name]['enum'])) {
@@ -561,7 +568,7 @@ final class ConstantPreservingDocParser
             foreach (self::$annotationMetadata[$name]['enum'] as $property => $enum) {
                 // checks if the attribute is a valid enumerator
                 if (isset($values[$property]) && !in_array($values[$property], $enum['value'])) {
-                    throw \Doctrine\Common\Annotations\AnnotationException::enumeratorError($property, $name, $this->context, $enum['literal'], $values[$property]);
+                    throw AnnotationException::enumeratorError($property, $name, $this->context, $enum['literal'], $values[$property]);
                 }
             }
         }
@@ -573,7 +580,7 @@ final class ConstantPreservingDocParser
             // handle a not given attribute or null value
             if (!isset($values[$property])) {
                 if ($type['required']) {
-                    throw \Doctrine\Common\Annotations\AnnotationException::requiredError($property, $originalName, $this->context, 'a(n) ' . $type['value']);
+                    throw AnnotationException::requiredError($property, $originalName, $this->context, 'a(n) ' . $type['value']);
                 }
                 continue;
             }
@@ -586,12 +593,12 @@ final class ConstantPreservingDocParser
                 if (isset($type['array_type'])) {
                     foreach ($values[$property] as $item) {
                         if (gettype($item) !== $type['array_type'] && !$item instanceof $type['array_type']) {
-                            throw \Doctrine\Common\Annotations\AnnotationException::attributeTypeError($property, $originalName, $this->context, 'either a(n) ' . $type['array_type'] . ', or an array of ' . $type['array_type'] . 's', $item);
+                            throw AnnotationException::attributeTypeError($property, $originalName, $this->context, 'either a(n) ' . $type['array_type'] . ', or an array of ' . $type['array_type'] . 's', $item);
                         }
                     }
                 }
             } elseif (gettype($values[$property]) !== $type['type'] && !$values[$property] instanceof $type['type']) {
-                throw \Doctrine\Common\Annotations\AnnotationException::attributeTypeError($property, $originalName, $this->context, 'a(n) ' . $type['value'], $values[$property]);
+                throw AnnotationException::attributeTypeError($property, $originalName, $this->context, 'a(n) ' . $type['value'], $values[$property]);
             }
         }
         // check if the annotation expects values via the constructor,
@@ -603,11 +610,11 @@ final class ConstantPreservingDocParser
         foreach ($values as $property => $value) {
             if (!isset(self::$annotationMetadata[$name]['properties'][$property])) {
                 if ('value' !== $property) {
-                    throw \Doctrine\Common\Annotations\AnnotationException::creationError(sprintf('The annotation @%s declared on %s does not have a property named "%s". Available properties: %s', $originalName, $this->context, $property, implode(', ', self::$annotationMetadata[$name]['properties'])));
+                    throw AnnotationException::creationError(sprintf('The annotation @%s declared on %s does not have a property named "%s". Available properties: %s', $originalName, $this->context, $property, implode(', ', self::$annotationMetadata[$name]['properties'])));
                 }
                 // handle the case if the property has no annotations
                 if (!($property = self::$annotationMetadata[$name]['default_property'])) {
-                    throw \Doctrine\Common\Annotations\AnnotationException::creationError(sprintf('The annotation @%s declared on %s does not accept any values, but got %s.', $originalName, $this->context, json_encode($values)));
+                    throw AnnotationException::creationError(sprintf('The annotation @%s declared on %s does not accept any values, but got %s.', $originalName, $this->context, json_encode($values)));
                 }
             }
             $instance->{$property} = $value;
@@ -622,14 +629,14 @@ final class ConstantPreservingDocParser
     private function MethodCall()
     {
         $values = [];
-        if (!$this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_OPEN_PARENTHESIS)) {
+        if (!$this->lexer->isNextToken(DocLexer::T_OPEN_PARENTHESIS)) {
             return $values;
         }
-        $this->match(\Doctrine\Common\Annotations\DocLexer::T_OPEN_PARENTHESIS);
-        if (!$this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_CLOSE_PARENTHESIS)) {
+        $this->match(DocLexer::T_OPEN_PARENTHESIS);
+        if (!$this->lexer->isNextToken(DocLexer::T_CLOSE_PARENTHESIS)) {
             $values = $this->Values();
         }
-        $this->match(\Doctrine\Common\Annotations\DocLexer::T_CLOSE_PARENTHESIS);
+        $this->match(DocLexer::T_CLOSE_PARENTHESIS);
         return $values;
     }
     /**
@@ -640,9 +647,9 @@ final class ConstantPreservingDocParser
     private function Values()
     {
         $values = [$this->Value()];
-        while ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_COMMA)) {
-            $this->match(\Doctrine\Common\Annotations\DocLexer::T_COMMA);
-            if ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_CLOSE_PARENTHESIS)) {
+        while ($this->lexer->isNextToken(DocLexer::T_COMMA)) {
+            $this->match(DocLexer::T_COMMA);
+            if ($this->lexer->isNextToken(DocLexer::T_CLOSE_PARENTHESIS)) {
                 break;
             }
             $token = $this->lexer->lookahead;
@@ -653,7 +660,7 @@ final class ConstantPreservingDocParser
             $values[] = $value;
         }
         foreach ($values as $k => $value) {
-            if (is_object($value) && $value instanceof \stdClass) {
+            if (is_object($value) && $value instanceof stdClass) {
                 $values[$value->name] = $value->value;
             } else {
                 if (!isset($values['value'])) {
@@ -719,19 +726,19 @@ final class ConstantPreservingDocParser
          */
         if ($this->identifierEndsWithClassConstant($identifier) && !$this->identifierStartsWithBackslash($identifier)) {
             $resolvedValue = substr($identifier, 0, $this->getClassConstantPositionInIdentifier($identifier));
-            \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
+            ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
             return $resolvedValue;
         }
         if ($this->identifierEndsWithClassConstant($identifier) && $this->identifierStartsWithBackslash($identifier)) {
             $resolvedValue = substr($identifier, 1, $this->getClassConstantPositionInIdentifier($identifier) - 1);
-            \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
+            ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
             return $resolvedValue;
         }
         if (!defined($identifier)) {
-            throw \Doctrine\Common\Annotations\AnnotationException::semanticalErrorConstants($identifier, $this->context);
+            throw AnnotationException::semanticalErrorConstants($identifier, $this->context);
         }
         $resolvedValue = constant($identifier);
-        \Rector\DoctrineAnnotationGenerated\DataCollector\ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
+        ResolvedConstantStaticCollector::collect($originalIdentifier, $resolvedValue);
         return $resolvedValue;
     }
     private function identifierStartsWithBackslash(string $identifier): bool
@@ -762,8 +769,8 @@ final class ConstantPreservingDocParser
         }
         $this->lexer->moveNext();
         $className = $this->lexer->token['value'];
-        while (null !== $this->lexer->lookahead && $this->lexer->lookahead['position'] === $this->lexer->token['position'] + strlen($this->lexer->token['value']) && $this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_NAMESPACE_SEPARATOR)) {
-            $this->match(\Doctrine\Common\Annotations\DocLexer::T_NAMESPACE_SEPARATOR);
+        while (null !== $this->lexer->lookahead && $this->lexer->lookahead['position'] === $this->lexer->token['position'] + strlen($this->lexer->token['value']) && $this->lexer->isNextToken(DocLexer::T_NAMESPACE_SEPARATOR)) {
+            $this->match(DocLexer::T_NAMESPACE_SEPARATOR);
             $this->matchAny(self::$classIdentifiers);
             $className .= '\\' . $this->lexer->token['value'];
         }
@@ -777,7 +784,7 @@ final class ConstantPreservingDocParser
     private function Value()
     {
         $peek = $this->lexer->glimpse();
-        if (\Doctrine\Common\Annotations\DocLexer::T_EQUALS === $peek['type']) {
+        if (DocLexer::T_EQUALS === $peek['type']) {
             return $this->FieldAssignment();
         }
         return $this->PlainValue();
@@ -789,33 +796,33 @@ final class ConstantPreservingDocParser
      */
     private function PlainValue()
     {
-        if ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_OPEN_CURLY_BRACES)) {
+        if ($this->lexer->isNextToken(DocLexer::T_OPEN_CURLY_BRACES)) {
             return $this->Arrayx();
         }
-        if ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_AT)) {
+        if ($this->lexer->isNextToken(DocLexer::T_AT)) {
             return $this->Annotation();
         }
-        if ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_IDENTIFIER)) {
+        if ($this->lexer->isNextToken(DocLexer::T_IDENTIFIER)) {
             return $this->Constant();
         }
         switch ($this->lexer->lookahead['type']) {
-            case \Doctrine\Common\Annotations\DocLexer::T_STRING:
-                $this->match(\Doctrine\Common\Annotations\DocLexer::T_STRING);
+            case DocLexer::T_STRING:
+                $this->match(DocLexer::T_STRING);
                 return $this->lexer->token['value'];
-            case \Doctrine\Common\Annotations\DocLexer::T_INTEGER:
-                $this->match(\Doctrine\Common\Annotations\DocLexer::T_INTEGER);
+            case DocLexer::T_INTEGER:
+                $this->match(DocLexer::T_INTEGER);
                 return (int) $this->lexer->token['value'];
-            case \Doctrine\Common\Annotations\DocLexer::T_FLOAT:
-                $this->match(\Doctrine\Common\Annotations\DocLexer::T_FLOAT);
+            case DocLexer::T_FLOAT:
+                $this->match(DocLexer::T_FLOAT);
                 return (float) $this->lexer->token['value'];
-            case \Doctrine\Common\Annotations\DocLexer::T_TRUE:
-                $this->match(\Doctrine\Common\Annotations\DocLexer::T_TRUE);
+            case DocLexer::T_TRUE:
+                $this->match(DocLexer::T_TRUE);
                 return true;
-            case \Doctrine\Common\Annotations\DocLexer::T_FALSE:
-                $this->match(\Doctrine\Common\Annotations\DocLexer::T_FALSE);
+            case DocLexer::T_FALSE:
+                $this->match(DocLexer::T_FALSE);
                 return false;
-            case \Doctrine\Common\Annotations\DocLexer::T_NULL:
-                $this->match(\Doctrine\Common\Annotations\DocLexer::T_NULL);
+            case DocLexer::T_NULL:
+                $this->match(DocLexer::T_NULL);
                 return null;
             default:
                 $this->syntaxError('PlainValue');
@@ -829,10 +836,10 @@ final class ConstantPreservingDocParser
      */
     private function FieldAssignment()
     {
-        $this->match(\Doctrine\Common\Annotations\DocLexer::T_IDENTIFIER);
+        $this->match(DocLexer::T_IDENTIFIER);
         $fieldName = $this->lexer->token['value'];
-        $this->match(\Doctrine\Common\Annotations\DocLexer::T_EQUALS);
-        $item = new \stdClass();
+        $this->match(DocLexer::T_EQUALS);
+        $item = new stdClass();
         $item->name = $fieldName;
         $item->value = $this->PlainValue();
         return $item;
@@ -845,22 +852,22 @@ final class ConstantPreservingDocParser
     private function Arrayx()
     {
         $array = $values = [];
-        $this->match(\Doctrine\Common\Annotations\DocLexer::T_OPEN_CURLY_BRACES);
+        $this->match(DocLexer::T_OPEN_CURLY_BRACES);
         // If the array is empty, stop parsing and return.
-        if ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_CLOSE_CURLY_BRACES)) {
-            $this->match(\Doctrine\Common\Annotations\DocLexer::T_CLOSE_CURLY_BRACES);
+        if ($this->lexer->isNextToken(DocLexer::T_CLOSE_CURLY_BRACES)) {
+            $this->match(DocLexer::T_CLOSE_CURLY_BRACES);
             return $array;
         }
         $values[] = $this->ArrayEntry();
-        while ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_COMMA)) {
-            $this->match(\Doctrine\Common\Annotations\DocLexer::T_COMMA);
+        while ($this->lexer->isNextToken(DocLexer::T_COMMA)) {
+            $this->match(DocLexer::T_COMMA);
             // optional trailing comma
-            if ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_CLOSE_CURLY_BRACES)) {
+            if ($this->lexer->isNextToken(DocLexer::T_CLOSE_CURLY_BRACES)) {
                 break;
             }
             $values[] = $this->ArrayEntry();
         }
-        $this->match(\Doctrine\Common\Annotations\DocLexer::T_CLOSE_CURLY_BRACES);
+        $this->match(DocLexer::T_CLOSE_CURLY_BRACES);
         foreach ($values as $value) {
             list($key, $val) = $value;
             if ($key !== null) {
@@ -881,14 +888,14 @@ final class ConstantPreservingDocParser
     private function ArrayEntry()
     {
         $peek = $this->lexer->glimpse();
-        if (\Doctrine\Common\Annotations\DocLexer::T_EQUALS === $peek['type'] || \Doctrine\Common\Annotations\DocLexer::T_COLON === $peek['type']) {
-            if ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_IDENTIFIER)) {
+        if (DocLexer::T_EQUALS === $peek['type'] || DocLexer::T_COLON === $peek['type']) {
+            if ($this->lexer->isNextToken(DocLexer::T_IDENTIFIER)) {
                 $key = $this->Constant();
             } else {
-                $this->matchAny([\Doctrine\Common\Annotations\DocLexer::T_INTEGER, \Doctrine\Common\Annotations\DocLexer::T_STRING]);
+                $this->matchAny([DocLexer::T_INTEGER, DocLexer::T_STRING]);
                 $key = $this->lexer->token['value'];
             }
-            $this->matchAny([\Doctrine\Common\Annotations\DocLexer::T_EQUALS, \Doctrine\Common\Annotations\DocLexer::T_COLON]);
+            $this->matchAny([DocLexer::T_EQUALS, DocLexer::T_COLON]);
             return [$key, $this->PlainValue()];
         }
         return [null, $this->Value()];

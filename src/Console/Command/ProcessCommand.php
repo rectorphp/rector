@@ -176,11 +176,13 @@ final class ProcessCommand extends AbstractCommand
         );
 
         $availableOutputFormatters = $this->outputFormatterCollector->getNames();
+
+        $description = sprintf('Select output format: "%s".', implode('", "', $availableOutputFormatters));
         $this->addOption(
             Option::OPTION_OUTPUT_FORMAT,
             'o',
             InputOption::VALUE_OPTIONAL,
-            sprintf('Select output format: "%s".', implode('", "', $availableOutputFormatters)),
+            $description,
             ConsoleOutputFormatter::NAME
         );
 
@@ -225,7 +227,8 @@ final class ProcessCommand extends AbstractCommand
         $phpFileInfos = $this->processWithCache($phpFileInfos);
 
         if ($this->configuration->isCacheDebug()) {
-            $this->symfonyStyle->note(sprintf('[cache] %d files after cache filter', count($phpFileInfos)));
+            $message = sprintf('[cache] %d files after cache filter', count($phpFileInfos));
+            $this->symfonyStyle->note($message);
             $this->symfonyStyle->listing($phpFileInfos);
         }
 
@@ -278,7 +281,8 @@ final class ProcessCommand extends AbstractCommand
         }
 
         if ($this->configuration->isCacheDebug()) {
-            $this->symfonyStyle->note(sprintf('[cache] %d files before cache filter', count($phpFileInfos)));
+            $message = sprintf('[cache] %d files before cache filter', count($phpFileInfos));
+            $this->symfonyStyle->note($message);
         }
 
         return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($phpFileInfos);
@@ -293,11 +297,12 @@ final class ProcessCommand extends AbstractCommand
         if (! $this->rectorNodeTraverser->hasZeroCacheRectors()) {
             return;
         }
-
-        $this->symfonyStyle->note(sprintf(
+        $message = sprintf(
             'Ruleset contains %d rules that need "--clear-cache" option to analyse full project',
             $this->rectorNodeTraverser->getZeroCacheRectorCount()
-        ));
+        );
+
+        $this->symfonyStyle->note($message);
     }
 
     private function invalidateAffectedCacheFiles(): void

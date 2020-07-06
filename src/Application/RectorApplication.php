@@ -255,7 +255,8 @@ final class RectorApplication
     {
         if ($this->symfonyStyle->isVerbose()) {
             $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
-            $this->symfonyStyle->writeln(sprintf('[%s] %s', $phase, $relativeFilePath));
+            $message = sprintf('[%s] %s', $phase, $relativeFilePath);
+            $this->symfonyStyle->writeln($message);
         } elseif ($this->configuration->showProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }

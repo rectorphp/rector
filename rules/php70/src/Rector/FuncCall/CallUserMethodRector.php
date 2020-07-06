@@ -48,7 +48,8 @@ final class CallUserMethodRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isNames($node, array_keys(self::OLD_TO_NEW_FUNCTIONS))) {
+        $oldFunctionNames = array_keys(self::OLD_TO_NEW_FUNCTIONS);
+        if (! $this->isNames($node, $oldFunctionNames)) {
             return null;
         }
 

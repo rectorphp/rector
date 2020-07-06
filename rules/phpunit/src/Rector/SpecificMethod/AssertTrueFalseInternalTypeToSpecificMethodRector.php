@@ -88,7 +88,8 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, array_keys(self::RENAME_METHODS_MAP))) {
+        $oldMethods = array_keys(self::RENAME_METHODS_MAP);
+        if (! $this->isPHPUnitMethodNames($node, $oldMethods)) {
             return null;
         }
 

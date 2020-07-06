@@ -123,7 +123,7 @@ PHP
                 continue;
             }
             $config = $methodMapping[$currentMethodName];
-            if (empty($config[self::MATCH_PARAMETER])) {
+            if (! isset($config[self::MATCH_PARAMETER])) {
                 continue;
             }
             if (count($methodCall->args) < 1) {

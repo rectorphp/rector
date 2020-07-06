@@ -114,9 +114,9 @@ PHP
             return null;
         }
 
-        $variableName = $varTagValueNode->variableName;
+        $variableName = (string) $varTagValueNode->variableName;
         // no variable
-        if (empty($variableName)) {
+        if ($variableName === '') {
             return null;
         }
 

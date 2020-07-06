@@ -66,10 +66,12 @@ final class RemovedAndAddedFilesProcessor
     {
         foreach ($this->removedAndAddedFilesCollector->getAddedFilesWithContent() as $filePath => $fileContent) {
             if ($this->configuration->isDryRun()) {
-                $this->symfonyStyle->note(sprintf('File "%s" will be added:', $filePath));
+                $message = sprintf('File "%s" will be added:', $filePath);
+                $this->symfonyStyle->note($message);
             } else {
                 $this->filesystem->dumpFile($filePath, $fileContent);
-                $this->symfonyStyle->note(sprintf('File "%s" was added:', $filePath));
+                $message = sprintf('File "%s" was added:', $filePath);
+                $this->symfonyStyle->note($message);
             }
 
             $this->symfonyStyle->writeln($fileContent);
@@ -81,14 +83,12 @@ final class RemovedAndAddedFilesProcessor
             );
 
             if ($this->configuration->isDryRun()) {
-                $this->symfonyStyle->note(
-                    sprintf('File "%s" will be added:', $nodesWithFileDestination->getFileDestination())
-                );
+                $message = sprintf('File "%s" will be added:', $nodesWithFileDestination->getFileDestination());
+                $this->symfonyStyle->note($message);
             } else {
                 $this->filesystem->dumpFile($nodesWithFileDestination->getFileDestination(), $fileContent);
-                $this->symfonyStyle->note(
-                    sprintf('File "%s" was added:', $nodesWithFileDestination->getFileDestination())
-                );
+                $message = sprintf('File "%s" was added:', $nodesWithFileDestination->getFileDestination());
+                $this->symfonyStyle->note($message);
             }
 
             $this->symfonyStyle->writeln('----------------------------------------');
@@ -103,9 +103,11 @@ final class RemovedAndAddedFilesProcessor
             $relativePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
 
             if ($this->configuration->isDryRun()) {
-                $this->symfonyStyle->warning(sprintf('File "%s" will be removed', $relativePath));
+                $message = sprintf('File "%s" will be removed', $relativePath);
+                $this->symfonyStyle->warning($message);
             } else {
-                $this->symfonyStyle->warning(sprintf('File "%s" was removed', $relativePath));
+                $message = sprintf('File "%s" was removed', $relativePath);
+                $this->symfonyStyle->warning($message);
                 $this->filesystem->remove($smartFileInfo->getRealPath());
             }
         }
@@ -131,11 +133,12 @@ final class RemovedAndAddedFilesProcessor
 
     private function printFileMoveWarning(MovedClassValueObject $movedClassValueObject, string $verb): void
     {
-        $this->symfonyStyle->warning(sprintf(
+        $message = sprintf(
             'File "%s" %s moved to "%s"',
             $movedClassValueObject->getOldPath(),
             $verb,
             $movedClassValueObject->getNewPath()
-        ));
+        );
+        $this->symfonyStyle->warning($message);
     }
 }
