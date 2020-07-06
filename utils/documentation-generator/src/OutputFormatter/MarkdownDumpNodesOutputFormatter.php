@@ -85,6 +85,7 @@ final class MarkdownDumpNodesOutputFormatter
         $this->symfonyStyle->newLine();
         $this->symfonyStyle->writeln('#### Example PHP Code');
         $this->symfonyStyle->newLine();
+
         $message = sprintf('```php%s%s%s```', PHP_EOL, $nodeInfo->getPrintedContent(), PHP_EOL);
         $this->symfonyStyle->writeln($message);
     }
