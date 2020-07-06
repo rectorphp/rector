@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\MockeryToProphecy\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -23,7 +24,7 @@ final class MockeryCreateMockToProphizeRector extends AbstractPHPUnitRector
     /**
      * @var array<string, class-string>
      */
-    private $mockVariableTypesByNames;
+    private $mockVariableTypesByNames = [];
 
     /**
      * @return string[]
@@ -33,16 +34,17 @@ final class MockeryCreateMockToProphizeRector extends AbstractPHPUnitRector
         return [ClassMethod::class];
     }
 
+    /**
+     * @param ClassMethod $node
+     */
     public function refactor(Node $node): ?Node
     {
         if (! $this->isInTestClass($node)) {
             return null;
         }
 
-        if ($node instanceof ClassMethod) {
-            $this->replaceMockCreationsAndCollectVariableNames($node);
-            $this->revealMockArguments($node);
-        }
+        $this->replaceMockCreationsAndCollectVariableNames($node);
+        $this->revealMockArguments($node);
 
         return $node;
     }
@@ -69,13 +71,13 @@ PHP
         );
     }
 
-    private function replaceMockCreationsAndCollectVariableNames(ClassMethod $node): void
+    private function replaceMockCreationsAndCollectVariableNames(ClassMethod $classMethod): void
     {
-        if ($node->stmts === null) {
+        if ($classMethod->stmts === null) {
             return;
         }
 
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) {
             if (! $this->isStaticCallNamed($node, 'Mockery', 'mock')) {
                 return null;
             }
@@ -83,12 +85,13 @@ PHP
             /** @var StaticCall $node */
             $this->collectMockVariableName($node);
 
-            if ($node->getAttribute('parentNode') instanceof Node\Arg) {
-                return $this->createMethodCall($this->prophesizeCreateMock($node), 'reveal');
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Arg) {
+                $prophesizeMethodCall = $this->createProphesizeMethodCall($node);
+                return $this->createMethodCall($prophesizeMethodCall, 'reveal');
             }
 
-            /** @var StaticCall $node */
-            return $this->prophesizeCreateMock($node);
+            return $this->createProphesizeMethodCall($node);
         });
     }
 
@@ -115,19 +118,19 @@ PHP
         $this->mockVariableTypesByNames[$variableName] = $mockedType;
     }
 
-    private function prophesizeCreateMock(StaticCall $node): MethodCall
+    private function createProphesizeMethodCall(StaticCall $staticCall): MethodCall
     {
-        return $this->createLocalMethodCall('prophesize', [$node->args[0]]);
+        return $this->createLocalMethodCall('prophesize', [$staticCall->args[0]]);
     }
 
-    private function revealMockArguments(ClassMethod $node): void
+    private function revealMockArguments(ClassMethod $classMethod): void
     {
-        if ($node->stmts === null) {
+        if ($classMethod->stmts === null) {
             return;
         }
 
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) {
-            if (! $node instanceof Node\Arg) {
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) {
+            if (! $node instanceof Arg) {
                 return null;
             }
 
