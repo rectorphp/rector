@@ -10,19 +10,16 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\Core\Rector\AbstractMockeryRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\MockeryToProphecy\MockeryUtilsTrait;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\MockeryToProphecy\Tests\Rector\MethodCall\MockeryToProphecyRector\MockeryToProphecyRectorTest
  */
-final class MockeryCreateMockToProphizeRector extends AbstractPHPUnitRector
+final class MockeryCreateMockToProphizeRector extends AbstractMockeryRector
 {
-    use MockeryUtilsTrait;
-
     /**
      * @var array<string, class-string>
      */
