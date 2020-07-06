@@ -25,6 +25,8 @@ parameters:
         - "/*Source/"
         - "/Fixture/"
         - "/Expected/"
+        # generated
+        - 'packages/doctrine-annotation-generated/src/*'
 
         # autoload-buggy cases
         - "*.php.inc"
