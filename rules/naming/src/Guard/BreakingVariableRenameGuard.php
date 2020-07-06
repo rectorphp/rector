@@ -212,9 +212,11 @@ final class BreakingVariableRenameGuard
         }
 
         foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType instanceof TypeWithClassName) {
-                return $unionedType;
+            if (! $unionedType instanceof TypeWithClassName) {
+                continue;
             }
+
+            return $unionedType;
         }
 
         return $type;
