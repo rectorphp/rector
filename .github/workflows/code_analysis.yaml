@@ -60,6 +60,4 @@ jobs:
 
             -   run: composer install --no-progress
 
-            -
-                name: ${{ matrix.actions.name }}
-                run: ${{ matrix.actions.run }}
+            -   run: ${{ matrix.actions.run }}
