@@ -16,6 +16,8 @@ use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeManipulator\ChainMethodCallRootExtractor;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MockeryPredictionsToProphizeRector extends AbstractPHPUnitRector
@@ -24,6 +26,25 @@ final class MockeryPredictionsToProphizeRector extends AbstractPHPUnitRector
      * @var string[]
      */
     private $mockVariableTypesByNames = [];
+
+    /**
+     * @var ChainMethodCallNodeAnalyzer
+     */
+    private $chainMethodCallNodeAnalyzer;
+
+    /**
+     * @var ChainMethodCallRootExtractor
+     */
+    private $chainMethodCallRootExtractor;
+
+    public function __construct(
+        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
+        ChainMethodCallRootExtractor $chainMethodCallRootExtractor
+    ) {
+        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
+        $this->chainMethodCallRootExtractor = $chainMethodCallRootExtractor;
+    }
+
 
     public function getNodeTypes(): array
     {
@@ -41,48 +62,6 @@ final class MockeryPredictionsToProphizeRector extends AbstractPHPUnitRector
             $this->replaceMockExpectations($node);
             $this->revealMockArguments($node);
         }
-
-//        if ($node instanceof MethodCall) {
-////            /** @var Scope $phpstanScope */
-////            $phpstanScope = $node->getAttribute('PHPStan\Analyser\Scope');
-////            if ($node->getAttribute('methodCallVariableName') !== null) {
-////                $variableType = $phpstanScope->getVariableType($node->getAttribute('methodCallVariableName'));
-////
-////                if ($variableType->getClassName() === 'Mockery\MockInterface') {
-//
-////                }
-////            }
-//
-//            //$node->getAttribute('origNode') => variable mock
-//
-//            if ($this->isName($node->name, 'shouldReceive')) {
-//                /** @var String_ $val */
-//                $val = $node->args[0]->value;
-//
-//                $methodCall = $this->createMethodCall(
-//                    $node->var,
-//                    (string) $val->value
-//                );
-//
-//                /** @var MethodCall $nextMethod */
-//                $nextMethod = $node->getAttribute('nextNode')->getAttribute('parentNode');
-//
-//                $this->removeNode($nextMethod);
-//
-//                if ($this->isName($node->getAttribute('nextNode'), 'never')) {
-//                    return $this->createMethodCall($methodCall, 'shouldNotBeCalled');
-//                }
-//
-//                return $methodCall;
-//            }
-//
-////             if ($this->isName($node, 'never')) {
-////                return $this->createMethodCall(
-////                    $node->var,
-////                    'shouldNotBeCalled'
-////                );
-////            }
-//        }
 
         return $node;
     }
@@ -153,45 +132,52 @@ final class MockeryPredictionsToProphizeRector extends AbstractPHPUnitRector
     private function replaceMockExpectations(ClassMethod $node)
     {
         $this->traverseNodesWithCallable($node->stmts, function (Node $node) {
-            if (!$this->isMethodCallOnMockVariable($node)) {
+
+            if (!$node instanceof MethodCall) {
                 return null;
             }
 
-            if ($node instanceof MethodCall) {
-                /** @var $node MethodCall */
-                if ($this->isName($node->name, 'shouldReceive')) {
-                    if (!isset($node->args[0]) || !$node->args[0]->value instanceof String_) {
+            if (! $this->chainMethodCallNodeAnalyzer->isLastChainMethodCall($node)) {
+                return null;
+            }
+
+            $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($node);
+            $assignAndRootExpr = $this->chainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
+            if (!$this->isMockVariable($assignAndRootExpr->getRootExpr())) {
+                return null;
+            }
+
+            $chainMethodCalls = array_reverse($chainMethodCalls);
+
+            $newChain = null;
+
+            foreach ($chainMethodCalls as $call) {
+
+                if ($this->isName($call->name, 'shouldReceive')) {
+                    if (!isset($call->args[0]) || !$call->args[0]->value instanceof String_) {
                         throw new ShouldNotHappenException();
                     }
 
-                    $methodCall = new MethodCall($node->var, $node->args[0]->value->value);
+                    $newChain = $this->createMethodCall($call->var, $call->args[0]->value->value);
+                }
 
-                    $nextCall = $node->getAttribute('nextNode');
-                    if ($nextCall instanceof Node\Identifier) {
-                        $nextParent = $nextCall->getAttribute('parentNode');
-                        if ($nextParent instanceof MethodCall && $this->isName($nextParent->name, 'never')) {
-                           return $this->createMethodCall($methodCall, 'shouldNotBeCalled');
-                        }
-                    }
-
-                    return $methodCall;
+                if ($this->isName($call->name, 'never')) {
+                    $newChain =  $this->createMethodCall($newChain, 'shouldNotBeCalled');
                 }
             }
+
+            return $newChain;
         });
     }
 
-    private function isMethodCallOnMockVariable(Node $node): bool
+    private function isMockVariable(Node $node): bool
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $node->var instanceof Variable) {
+        if (! $node instanceof Variable) {
             return false;
         }
 
         /** @var string $variableName */
-        $variableName = $this->getName($node->var);
+        $variableName = $this->getName($node);
 
         return isset($this->mockVariableTypesByNames[$variableName]);
     }
