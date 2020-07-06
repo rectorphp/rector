@@ -1,4 +1,4 @@
-name: Rector
+name: Rector Run
 
 on:
     pull_request: null
@@ -7,16 +7,34 @@ on:
             - master
 
 jobs:
-    rector:
+    matrix:
+        strategy:
+            fail-fast: false
+            matrix:
+                actions:
+                    -
+                        name: Rector CI
+                        run: |
+                            composer install --no-progress --ansi
+                            composer rector-ci
+                    -
+                        name: Rector without Dev Dependencies
+                        run: |
+                            composer install --no-progress --ansi --no-dev
+                            # needs to remove, add dev dependencies are missing and phpstan.neon includes them
+                            rm phpstan.neon
+                            bin/rector list
+
         runs-on: ubuntu-latest
+
         steps:
             -   uses: actions/checkout@v2
-
-            -
-                uses: shivammathur/setup-php@v1
+            # see https://github.com/shivammathur/setup-php
+            -   uses: shivammathur/setup-php@v1
                 with:
-                    php-version: 7.3
+                    php-version: 7.4
                     coverage: none
 
-            -   run: composer install --no-progress --ansi --no-dev
-            -   run: composer rector-ci
+            -
+                name: ${{ matrix.actions.name }}
+                run: ${{ matrix.actions.run }}
