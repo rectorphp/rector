@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Foreach_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -66,21 +68,56 @@ PHP
             return null;
         }
 
-        $valueNode = $node->valueVar;
-        $isValueUsed = (bool) $this->betterNodeFinder->findFirst($node->stmts, function (Node $node) use ($valueNode) {
-            return $this->areNodesEqual($node, $valueNode);
-        });
-
-        if ($isValueUsed) {
+        // special case of nested array items
+        if ($node->valueVar instanceof Array_) {
+            $node->valueVar = $this->refactorArrayForeachValue($node->valueVar, $node);
+            if (count($node->valueVar->items) > 0) {
+                return null;
+            }
+        } elseif ($node->valueVar instanceof Variable) {
+            if ($this->isVariableUsedInForeach($node->valueVar, $node)) {
+                return null;
+            }
+        } else {
             return null;
         }
 
-        // remove key value
-        $node->valueVar = $node->keyVar;
-        $node->keyVar = null;
-
-        $node->expr = $this->createFuncCall('array_keys', [$node->expr]);
+        $this->removeForeachValueAndUseArrayKeys($node);
 
         return $node;
+    }
+
+    private function removeForeachValueAndUseArrayKeys(Foreach_ $foreach): void
+    {
+        // remove key value
+        $foreach->valueVar = $foreach->keyVar;
+        $foreach->keyVar = null;
+
+        $foreach->expr = $this->createFuncCall('array_keys', [$foreach->expr]);
+    }
+
+    private function refactorArrayForeachValue(Array_ $array, Foreach_ $foreach): Array_
+    {
+        foreach ($array->items as $key => $arrayItem) {
+            $value = $arrayItem->value;
+            if (! $value instanceof Variable) {
+                return $array;
+            }
+
+            if ($this->isVariableUsedInForeach($value, $foreach)) {
+                continue;
+            }
+
+            unset($array->items[$key]);
+        }
+
+        return $array;
+    }
+
+    private function isVariableUsedInForeach(Variable $variable, Foreach_ $foreach): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use ($variable) {
+            return $this->areNodesEqual($node, $variable);
+        });
     }
 }
