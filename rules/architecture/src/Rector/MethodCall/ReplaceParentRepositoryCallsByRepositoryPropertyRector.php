@@ -36,7 +36,7 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.',
+            'Handles method calls in child of Doctrine EntityRepository and moves them to $this->repository property.',
             [
                 new CodeSample(
                     <<<'PHP'

@@ -1,4 +1,4 @@
-# All 515 Rectors Overview
+# All 518 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -13,6 +13,7 @@
 - [CodeQuality](#codequality) (54)
 - [CodingStyle](#codingstyle) (34)
 - [DeadCode](#deadcode) (40)
+- [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (16)
 - [DoctrineCodeQuality](#doctrinecodequality) (2)
@@ -24,6 +25,7 @@
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (2)
 - [MagicDisclosure](#magicdisclosure) (5)
+- [MockeryToProphecy](#mockerytoprophecy) (1)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (2)
@@ -62,7 +64,7 @@
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
-- [Symfony](#symfony) (29)
+- [Symfony](#symfony) (30)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [Twig](#twig) (1)
@@ -133,7 +135,7 @@ Turns parent EntityRepository class to constructor dependency
 
 - class: [`Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector`](/../master/rules/architecture/src/Rector/MethodCall/ReplaceParentRepositoryCallsByRepositoryPropertyRector.php)
 
-Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
+Handles method calls in child of Doctrine EntityRepository and moves them to `$this->repository` property.
 
 ```diff
  <?php
@@ -156,7 +158,7 @@ Handles method calls in child of Doctrine EntityRepository and moves them to "$t
 
 - class: [`Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector`](/../master/rules/architecture/src/Rector/MethodCall/ServiceLocatorToDIRector.php)
 
-Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
+Turns `$this->getRepository()` in Symfony Controller to constructor injection and private property access.
 
 ```diff
  class ProductController extends Controller
@@ -332,7 +334,7 @@ Moves array options to fluent setter method calls.
 
 - class: [`Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector`](/../master/rules/cakephp/src/Rector/Name/ChangeSnakedFixtureNameToCamelRector.php)
 
-Changes $fixtues style from snake_case to CamelCase.
+Changes `$fixtues` style from snake_case to CamelCase.
 
 ```diff
  class SomeTest
@@ -739,7 +741,7 @@ Merges nested if statements
 - class: [`Rector\CodeQuality\Rector\Assign\CombinedAssignRector`](/../master/rules/code-quality/src/Rector/Assign/CombinedAssignRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/Assign/CombinedAssignRector/Fixture)
 
-Simplify $value = $value + 5; assignments to shorter ones
+Simplify `$value` = `$value` + 5; assignments to shorter ones
 
 ```diff
 -$value = $value + 5;
@@ -996,7 +998,7 @@ Change inline if to explicit if
 - class: [`Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector`](/../master/rules/code-quality/src/Rector/FuncCall/IntvalToTypeCastRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/IntvalToTypeCastRector/Fixture)
 
-Change `intval()` to faster and readable (int) $value
+Change `intval()` to faster and readable (int) `$value`
 
 ```diff
  class SomeClass
@@ -1484,7 +1486,7 @@ Changes `in_array()` with single element to ===
 - class: [`Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector`](/../master/rules/code-quality/src/Rector/Assign/SplitListAssignToSeparateLineRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/Assign/SplitListAssignToSeparateLineRector/Fixture)
 
-Splits [$a, $b] = [5, 10] scalar assign to standalone lines
+Splits `[$a, $b] = [5, 10]` scalar assign to standalone lines
 
 ```diff
  final class SomeClass
@@ -1563,7 +1565,7 @@ Remove unnecessary ternary expressions.
 - class: [`Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector`](/../master/rules/code-quality/src/Rector/Foreach_/UnusedForeachValueToArrayKeysRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/Foreach_/UnusedForeachValueToArrayKeysRector/Fixture)
 
-Change foreach with unused $value but only $key, to `array_keys()`
+Change foreach with unused `$value` but only `$key,` to `array_keys()`
 
 ```diff
  class SomeClass
@@ -1974,7 +1976,7 @@ Changes negate of empty comparison of nullable value to explicit === or !== comp
 - class: [`Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector`](/../master/rules/coding-style/src/Rector/MethodCall/PreferThisOrSelfMethodCallRector.php)
 - [test fixtures](/../master/rules/coding-style/tests/Rector/MethodCall/PreferThisOrSelfMethodCallRector/Fixture)
 
-Changes $this->... to self:: or vise versa for specific types
+Changes `$this->...` to self:: or vise versa for specific types
 
 ```yaml
 services:
@@ -2278,7 +2280,7 @@ Use `class` keyword for class name resolution in string instead of hardcoded str
 - class: [`Rector\CodingStyle\Rector\Assign\UseIncrementAssignRector`](/../master/rules/coding-style/src/Rector/Assign/UseIncrementAssignRector.php)
 - [test fixtures](/../master/rules/coding-style/tests/Rector/Assign/UseIncrementAssignRector/Fixture)
 
-Use ++ increment instead of $var += 1.
+Use ++ increment instead of `$var` += 1.
 
 ```diff
  class SomeClass
@@ -3240,6 +3242,31 @@ Change ternary of bool : false to && bool
 
 <br><br>
 
+## Decomplex
+
+### `UseMessageVariableForSprintfInSymfonyStyleRector`
+
+- class: [`Rector\Decomplex\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector`](/../master/rules/decomplex/src/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector.php)
+- [test fixtures](/../master/rules/decomplex/tests/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector/Fixture)
+
+Decouple `$message` property from `sprintf()` calls in `$this->smyfonyStyle->method()`
+
+```diff
+ use Symfony\Component\Console\Style\SymfonyStyle;
+
+ final class SomeClass
+ {
+     public function run(SymfonyStyle $symfonyStyle)
+     {
+-        $symfonyStyle->info(sprintf('Hi %s', 'Tom'));
++        $message = sprintf('Hi %s', 'Tom');
++        $symfonyStyle->info($message);
+     }
+ }
+```
+
+<br><br>
+
 ## Decouple
 
 ### `DecoupleClassMethodToOwnClassRector`
@@ -3338,7 +3365,7 @@ services:
 - class: [`Rector\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector`](/../master/rules/doctrine/src/Rector/Property/AddUuidAnnotationsToIdPropertyRector.php)
 - [test fixtures](/../master/rules/doctrine/tests/Rector/Property/AddUuidAnnotationsToIdPropertyRector/Fixture)
 
-Add uuid annotations to $id property
+Add uuid annotations to `$id` property
 
 ```diff
  use Doctrine\ORM\Attributes as ORM;
@@ -3369,7 +3396,7 @@ Add uuid annotations to $id property
 - class: [`Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector`](/../master/rules/doctrine/src/Rector/Class_/AddUuidMirrorForRelationPropertyRector.php)
 - [test fixtures](/../master/rules/doctrine/tests/Rector/Class_/AddUuidMirrorForRelationPropertyRector/Fixture)
 
-Adds $uuid property to entities, that already have $id with integer type.Require for step-by-step migration from int to uuid.
+Adds `$uuid` property to entities, that already have `$id` with integer type.Require for step-by-step migration from int to uuid.
 
 ```diff
  use Doctrine\ORM\Mapping as ORM;
@@ -3416,7 +3443,7 @@ Adds $uuid property to entities, that already have $id with integer type.Require
 - class: [`Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector`](/../master/rules/doctrine/src/Rector/Class_/AddUuidToEntityWhereMissingRector.php)
 - [test fixtures](/../master/rules/doctrine/tests/Rector/Class_/AddUuidToEntityWhereMissingRector/Fixture)
 
-Adds $uuid property to entities, that already have $id with integer type.Require for step-by-step migration from int to uuid. In following step it should be renamed to $id and replace it
+Adds `$uuid` property to entities, that already have `$id` with integer type.Require for step-by-step migration from int to uuid. In following step it should be renamed to `$id` and replace it
 
 ```diff
  use Doctrine\ORM\Mapping as ORM;
@@ -3540,7 +3567,7 @@ Change `getUuid()` method call to `getId()`
 - class: [`Rector\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector`](/../master/rules/doctrine/src/Rector/Identical/ChangeIdenticalUuidToEqualsMethodCallRector.php)
 - [test fixtures](/../master/rules/doctrine/tests/Rector/Identical/ChangeIdenticalUuidToEqualsMethodCallRector/Fixture)
 
-Change $uuid === 1 to $uuid->equals(\Ramsey\Uuid\Uuid::fromString(1))
+Change `$uuid` === 1 to `$uuid->equals(\Ramsey\Uuid\Uuid::fromString(1))`
 
 ```diff
  class SomeClass
@@ -3717,7 +3744,7 @@ Removes repository class from @Entity annotation
 - class: [`Rector\Doctrine\Rector\Property\RemoveTemporaryUuidColumnPropertyRector`](/../master/rules/doctrine/src/Rector/Property/RemoveTemporaryUuidColumnPropertyRector.php)
 - [test fixtures](/../master/rules/doctrine/tests/Rector/Property/RemoveTemporaryUuidColumnPropertyRector/Fixture)
 
-Remove temporary $uuid property
+Remove temporary `$uuid` property
 
 ```diff
  use Doctrine\ORM\Mapping as ORM;
@@ -4597,7 +4624,7 @@ services:
 - class: [`Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector`](/../master/rules/magic-disclosure/src/Rector/ClassMethod/ReturnThisRemoveRector.php)
 - [test fixtures](/../master/rules/magic-disclosure/tests/Rector/ClassMethod/ReturnThisRemoveRector/Fixture)
 
-Removes "return $this;" from *fluent interfaces* for specified classes.
+Removes "return `$this;"` from *fluent interfaces* for specified classes.
 
 ```yaml
 services:
@@ -4685,6 +4712,25 @@ services:
  $container = new SomeContainer;
 -unset($container["someKey"]);
 +$container->removeService("someKey");
+```
+
+<br><br>
+
+## MockeryToProphecy
+
+### `MockeryCreateMockToProphizeRector`
+
+- class: [`Rector\MockeryToProphecy\Rector\MethodCall\MockeryCreateMockToProphizeRector`](/../master/rules/mockery-to-prophecy/src/Rector/MethodCall/MockeryCreateMockToProphizeRector.php)
+
+Changes mockery mock creation to Prophesize
+
+```diff
+-$mock = \Mockery::mock(\'MyClass\');
++ $mock = $this->prophesize(\'MyClass\');
++
+ $service = new Service();
+-$service->injectDependency($mock);
++$service->injectDependency($mock->reveal());
 ```
 
 <br><br>
@@ -5303,7 +5349,7 @@ Change `getSubscribedEvents()` from on magic property, to Event class
 - class: [`Rector\NetteKdyby\Rector\MethodCall\ReplaceMagicPropertyEventWithEventClassRector`](/../master/rules/nette-kdyby/src/Rector/MethodCall/ReplaceMagicPropertyEventWithEventClassRector.php)
 - [test fixtures](/../master/rules/nette-kdyby/tests/Rector/MethodCall/ReplaceMagicPropertyEventWithEventClassRector/Fixture)
 
-Change $onProperty magic call with event disptacher and class dispatch
+Change `$onProperty` magic call with event disptacher and class dispatch
 
 ```diff
  final class FileManager
@@ -6581,7 +6627,7 @@ Data provider annotation must be in doc block
 - class: [`Rector\PHPUnit\Rector\ExceptionAnnotationRector`](/../master/rules/phpunit/src/Rector/ExceptionAnnotationRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/ExceptionAnnotationRector/Fixture)
 
-Changes `@expectedException annotations to `expectException*()` methods
+Changes `@expectedException annotations to expectException*() methods
 
 ```diff
 -/**
@@ -6651,7 +6697,7 @@ Remove `getMockBuilder()` to `createMock()`
 - class: [`Rector\PHPUnit\Rector\GetMockRector`](/../master/rules/phpunit/src/Rector/GetMockRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/GetMockRector/Fixture)
 
-Turns `getMock*()` methods to `createMock()`
+Turns getMock*() methods to `createMock()`
 
 ```diff
 -$this->getMock("Class");
@@ -7242,7 +7288,7 @@ Decouple `Phalcon\Mvc\Model::save()` with argument to `assign()`
 - class: [`Rector\Phalcon\Rector\Assign\FlashWithCssClassesToExtraCallRector`](/../master/rules/phalcon/src/Rector/Assign/FlashWithCssClassesToExtraCallRector.php)
 - [test fixtures](/../master/rules/phalcon/tests/Rector/Assign/FlashWithCssClassesToExtraCallRector/Fixture)
 
-Add $cssClasses in Flash to separated method call
+Add `$cssClasses` in Flash to separated method call
 
 ```diff
  class SomeClass {
@@ -7366,7 +7412,7 @@ Convert dirname(__FILE__) to __DIR__
 - class: [`Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector`](/../master/rules/php53/src/Rector/Variable/ReplaceHttpServerVarsByServerRector.php)
 - [test fixtures](/../master/rules/php53/tests/Rector/Variable/ReplaceHttpServerVarsByServerRector/Fixture)
 
-Rename old $HTTP_* variable names to new replacements
+Rename old `$HTTP_*` variable names to new replacements
 
 ```diff
 -$serverVars = $HTTP_SERVER_VARS;
@@ -7589,7 +7635,7 @@ Changes `call_user_method()/call_user_method_array()` to `call_user_func()/call_
 - class: [`Rector\Php70\Rector\FuncCall\EregToPregMatchRector`](/../master/rules/php70/src/Rector/FuncCall/EregToPregMatchRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/FuncCall/EregToPregMatchRector/Fixture)
 
-Changes `ereg*()` to `preg*()` calls
+Changes ereg*() to preg*() calls
 
 ```diff
 -ereg("hi")
@@ -8109,7 +8155,7 @@ Incomplete class returns inverted bool on `is_object()`
 - class: [`Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector`](/../master/rules/php72/src/Rector/FuncCall/ParseStrWithResultArgumentRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/FuncCall/ParseStrWithResultArgumentRector/Fixture)
 
-Use $result argument in `parse_str()` function
+Use `$result` argument in `parse_str()` function
 
 ```diff
 -parse_str($this->query);
@@ -8722,7 +8768,7 @@ Change annotation to attribute
 - class: [`Rector\Php80\Rector\FuncCall\ClassOnObjectRector`](/../master/rules/php80/src/Rector/FuncCall/ClassOnObjectRector.php)
 - [test fixtures](/../master/rules/php80/tests/Rector/FuncCall/ClassOnObjectRector/Fixture)
 
-Change get_class($object) to faster $object::class
+Change get_class($object) to faster `$object::class`
 
 ```diff
  class SomeClass
@@ -8924,7 +8970,7 @@ Change docs types to union types, where possible (properties are covered by Type
 - class: [`Rector\PhpDeglobalize\Rector\Class_\ChangeGlobalVariablesToPropertiesRector`](/../master/rules/php-deglobalize/src/Rector/Class_/ChangeGlobalVariablesToPropertiesRector.php)
 - [test fixtures](/../master/rules/php-deglobalize/tests/Rector/Class_/ChangeGlobalVariablesToPropertiesRector/Fixture)
 
-Change global $variables to private properties
+Change global `$variables` to private properties
 
 ```diff
  class SomeClass
@@ -10539,6 +10585,36 @@ Change "cascade_validation" option to specific node attribute
 
 <br><br>
 
+### `ChangeXmlToYamlFileLoaderInExtensionRector`
+
+- class: [`Rector\Symfony\Rector\Class_\ChangeXmlToYamlFileLoaderInExtensionRector`](/../master/rules/symfony/src/Rector/Class_/ChangeXmlToYamlFileLoaderInExtensionRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/Class_/ChangeXmlToYamlFileLoaderInExtensionRector/Fixture)
+
+Change XML loader to YAML in Bundle Extension
+
+```diff
+ use Symfony\Component\Config\FileLocator;
+ use Symfony\Component\DependencyInjection\ContainerBuilder;
+-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
++use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+
+ final class SomeExtension extends Extension
+ {
+     public function load(array $configs, ContainerBuilder $container)
+     {
+-        $loader = new XmlFileLoader($container, new FileLocator());
+-        $loader->load(__DIR__ . '/../Resources/config/controller.xml');
+-        $loader->load(__DIR__ . '/../Resources/config/events.xml');
++        $loader = new YamlFileLoader($container, new FileLocator());
++        $loader->load(__DIR__ . '/../Resources/config/controller.yaml');
++        $loader->load(__DIR__ . '/../Resources/config/events.yaml');
+     }
+ }
+```
+
+<br><br>
+
 ### `ConsoleExceptionToErrorEventConstantRector`
 
 - class: [`Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector`](/../master/rules/symfony/src/Rector/Console/ConsoleExceptionToErrorEventConstantRector.php)
@@ -10878,7 +10954,7 @@ session > use_strict_mode is true by default and can be removed
 - class: [`Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector`](/../master/rules/symfony/src/Rector/Process/ProcessBuilderGetProcessRector.php)
 - [test fixtures](/../master/rules/symfony/tests/Rector/Process/ProcessBuilderGetProcessRector/Fixture)
 
-Removes `$processBuilder->getProcess()` calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
+Removes `$processBuilder->getProcess()` calls to `$processBuilder` in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
 
 ```diff
  $processBuilder = new Symfony\Component\Process\ProcessBuilder;
