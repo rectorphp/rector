@@ -2,6 +2,13 @@ services:
     SlevomatCodingStandard\Sniffs\Commenting\DisallowCommentAfterCodeSniff: null
     SlevomatCodingStandard\Sniffs\Whitespaces\DuplicateSpacesSniff: null
 
+    PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer:
+        annotations:
+            - 'throws'
+            - 'author'
+            - 'package'
+            - 'group'
+
 parameters:
     paths:
         - "bin"
