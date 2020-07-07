@@ -1,4 +1,4 @@
-# All 515 Rectors Overview
+# All 518 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -13,6 +13,7 @@
 - [CodeQuality](#codequality) (54)
 - [CodingStyle](#codingstyle) (34)
 - [DeadCode](#deadcode) (40)
+- [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (16)
 - [DoctrineCodeQuality](#doctrinecodequality) (2)
@@ -24,6 +25,7 @@
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (2)
 - [MagicDisclosure](#magicdisclosure) (5)
+- [MockeryToProphecy](#mockerytoprophecy) (1)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (2)
@@ -62,7 +64,7 @@
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
-- [Symfony](#symfony) (29)
+- [Symfony](#symfony) (30)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [Twig](#twig) (1)
@@ -3240,6 +3242,31 @@ Change ternary of bool : false to && bool
 
 <br><br>
 
+## Decomplex
+
+### `UseMessageVariableForSprintfInSymfonyStyleRector`
+
+- class: [`Rector\Decomplex\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector`](/../master/rules/decomplex/src/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector.php)
+- [test fixtures](/../master/rules/decomplex/tests/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector/Fixture)
+
+Decouple $message property from `sprintf()` calls in `$this->smyfonyStyle->method()`
+
+```diff
+ use Symfony\Component\Console\Style\SymfonyStyle;
+
+ final class SomeClass
+ {
+     public function run(SymfonyStyle $symfonyStyle)
+     {
+-        $symfonyStyle->info(sprintf('Hi %s', 'Tom'));
++        $message = sprintf('Hi %s', 'Tom');
++        $symfonyStyle->info($message);
+     }
+ }
+```
+
+<br><br>
+
 ## Decouple
 
 ### `DecoupleClassMethodToOwnClassRector`
@@ -4685,6 +4712,25 @@ services:
  $container = new SomeContainer;
 -unset($container["someKey"]);
 +$container->removeService("someKey");
+```
+
+<br><br>
+
+## MockeryToProphecy
+
+### `MockeryCreateMockToProphizeRector`
+
+- class: [`Rector\MockeryToProphecy\Rector\MethodCall\MockeryCreateMockToProphizeRector`](/../master/rules/mockery-to-prophecy/src/Rector/MethodCall/MockeryCreateMockToProphizeRector.php)
+
+Changes mockery mock creation to Prophesize
+
+```diff
+-$mock = \Mockery::mock(\'MyClass\');
++ $mock = $this->prophesize(\'MyClass\');
++
+ $service = new Service();
+-$service->injectDependency($mock);
++$service->injectDependency($mock->reveal());
 ```
 
 <br><br>
@@ -10533,6 +10579,36 @@ Change "cascade_validation" option to specific node attribute
      protected function createFormBuilder()
      {
          return new FormBuilder();
+     }
+ }
+```
+
+<br><br>
+
+### `ChangeXmlToYamlFileLoaderInExtensionRector`
+
+- class: [`Rector\Symfony\Rector\Class_\ChangeXmlToYamlFileLoaderInExtensionRector`](/../master/rules/symfony/src/Rector/Class_/ChangeXmlToYamlFileLoaderInExtensionRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/Class_/ChangeXmlToYamlFileLoaderInExtensionRector/Fixture)
+
+Change XML loader to YAML in Bundle Extension
+
+```diff
+ use Symfony\Component\Config\FileLocator;
+ use Symfony\Component\DependencyInjection\ContainerBuilder;
+-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
++use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+
+ final class SomeExtension extends Extension
+ {
+     public function load(array $configs, ContainerBuilder $container)
+     {
+-        $loader = new XmlFileLoader($container, new FileLocator());
+-        $loader->load(__DIR__ . '/../Resources/config/controller.xml');
+-        $loader->load(__DIR__ . '/../Resources/config/events.xml');
++        $loader = new YamlFileLoader($container, new FileLocator());
++        $loader->load(__DIR__ . '/../Resources/config/controller.yaml');
++        $loader->load(__DIR__ . '/../Resources/config/events.yaml');
      }
  }
 ```
