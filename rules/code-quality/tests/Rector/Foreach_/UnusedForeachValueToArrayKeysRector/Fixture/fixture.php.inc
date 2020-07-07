@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\Foreach_\UnusedForeachValueToArrayKeys
 
 class SomeClass
 {
-    public function run()
+    public function run($values)
     {
         $items = [];
         foreach ($values as $key => $value) {
@@ -21,7 +21,7 @@ namespace Rector\CodeQuality\Tests\Rector\Foreach_\UnusedForeachValueToArrayKeys
 
 class SomeClass
 {
-    public function run()
+    public function run($values)
     {
         $items = [];
         foreach (array_keys($values) as $key) {
