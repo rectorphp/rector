@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\PostDec;
+use PhpParser\Node\Expr\PostInc;
+use PhpParser\Node\Expr\PreDec;
+use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
@@ -154,6 +159,15 @@ final class PropertyManipulator
      */
     private function isReadContext(Node $node): bool
     {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof PreInc || $parentNode instanceof PreDec || $parentNode instanceof PostInc || $parentNode instanceof PostDec) {
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        if ($parentNode instanceof Arg) {
+            return true;
+        }
+
         return ! $this->assignManipulator->isNodeLeftPartOfAssign($node);
     }
 }
