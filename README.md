@@ -386,10 +386,10 @@ docker run --rm -v $(pwd):/project rector/rector:latest process /project/app \
 
 ### Debugging
 
-1. Make sure XDebug is installed and configured.
-2. Add `--xdebug` option when running Rector for
+1. Make sure XDebug is installed and configured
+2. Add `--xdebug` option when running Rector
 
-Without XDebug, you can use `--debug` option, that will print exception output.
+Without XDebug, you can use `--debug` option, that will print nested exceptions output.
 
 <br>
 
