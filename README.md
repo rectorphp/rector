@@ -384,6 +384,15 @@ docker run --rm -v $(pwd):/project rector/rector:latest process /project/app \
 
 <br>
 
+### Debugging
+
+1. Make sure XDebug is installed and configured.
+2. Add `--xdebug` option when running Rector for
+
+Without XDebug, you can use `--debug` option, that will print exception output.
+
+<br>
+
 ## Community Packages
 
 Do you use Rector to upgrade your code? Add it here:
