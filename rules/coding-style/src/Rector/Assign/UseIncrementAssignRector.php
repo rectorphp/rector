@@ -22,7 +22,7 @@ final class UseIncrementAssignRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Use ++ increment instead of $var += 1.',
+            'Use ++ increment instead of `$var += 1`',
             [
                 new CodeSample(
                     <<<'PHP'
