@@ -157,14 +157,18 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        $this->removeNode($parentNode);
-
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->removeByType(ReturnTagValueNode::class);
+        $this->removeReturnTag($classMethod);
 
         // change return typehint
         $classMethod->returnType = new FullyQualified(Iterator::class);
+
+        foreach ((array) $classMethod->stmts as $key => $classMethodStmt) {
+            if (! $classMethodStmt instanceof Return_) {
+                continue;
+            }
+
+            unset($classMethod->stmts[$key]);
+        }
 
         $classMethod->stmts = array_merge((array) $classMethod->stmts, $yieldNodes);
     }
@@ -177,5 +181,14 @@ PHP
 
         $classMethod->setAttribute(AttributeKey::PHP_DOC_INFO, $this->returnPhpDocInfo);
         $classMethod->setAttribute(AttributeKey::COMMENTS, $this->returnComments);
+    }
+
+    private function removeReturnTag(ClassMethod $classMethod): void
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo !== null) {
+            $phpDocInfo->removeByType(ReturnTagValueNode::class);
+        }
     }
 }
