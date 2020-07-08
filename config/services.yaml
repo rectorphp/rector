@@ -15,6 +15,11 @@ services:
             - '../src/PhpParser/Builder/*'
             - '../src/HttpKernel/*'
             - '../src/ValueObject/*'
+            - '../src/Configuration/MinimalVersionChecker'
+            - '../src/Configuration/MinimalVersionChecker/*'
+
+    Rector\Core\Configuration\MinimalVersionChecker:
+        autowire: false
 
     Symfony\Component\Console\Application:
         alias: 'Rector\Core\Console\Application'
