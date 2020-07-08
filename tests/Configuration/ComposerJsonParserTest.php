@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\Configuration;
 
+use Iterator;
 use Nette\Utils\Json;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
@@ -20,17 +21,15 @@ final class ComposerJsonParserTest extends AbstractKernelTestCase
         $this->assertSame($expectedVersion, $actualPhpVersion);
     }
 
-    public function dataProvider()
+    public function dataProvider(): Iterator
     {
-        return [
-            ['7.2.0', '7.2.0'],
-            ['7.2.0', '~7.2.0'],
-            ['7.2', '7.2.*'],
-            ['7', '7.*.*'],
-            ['7.2.0', '~7.2.0'],
-            ['7.2.0', '^7.2.0'],
-            ['7.2.0', '>=7.2.0'],
-        ];
+        yield ['7.2.0', '7.2.0'];
+        yield ['7.2.0', '~7.2.0'];
+        yield ['7.2', '7.2.*'];
+        yield ['7', '7.*.*'];
+        yield ['7.2.0', '~7.2.0'];
+        yield ['7.2.0', '^7.2.0'];
+        yield ['7.2.0', '>=7.2.0'];
     }
 
     private function getComposerJsonPhpVersion(string $version): string

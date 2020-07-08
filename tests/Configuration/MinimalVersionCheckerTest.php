@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\Configuration;
 
+use Iterator;
 use Rector\Core\Configuration\MinimalVersionChecker;
 use Rector\Core\Exception\Application\PhpVersionException;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
@@ -32,8 +33,11 @@ final class MinimalVersionCheckerTest extends AbstractKernelTestCase
         $minimalVersionChecker->check();
     }
 
-    public function dataProvider()
+    public function dataProvider(): Iterator
     {
-        return [['7.5.0', false], ['7.5.0-13ubuntu3.2', false], ['7.1.0', true], ['7.1.0-13ubuntu3.2', true]];
+        yield ['7.5.0', false];
+        yield ['7.5.0-13ubuntu3.2', false];
+        yield ['7.1.0', true];
+        yield ['7.1.0-13ubuntu3.2', true];
     }
 }

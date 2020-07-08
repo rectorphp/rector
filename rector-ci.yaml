@@ -1,3 +1,12 @@
+services:
+    Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector:
+        $methodsByType:
+            PHPUnit\Framework\TestCase:
+                - 'provideData'
+                - 'provideData*'
+                - 'dataProvider'
+                - 'dataProvider*'
+
 parameters:
     sets:
         - 'coding-style'
