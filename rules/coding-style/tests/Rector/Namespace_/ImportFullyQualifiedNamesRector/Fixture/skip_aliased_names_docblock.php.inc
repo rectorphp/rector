@@ -3,11 +3,11 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class SkipAliasedNames
+class SkipAliasedNamesDocblock
 {
-    public function __construct()
-    {
-        $constraint = Assert\Blank::class;
-    }
+    /**
+     * @var Assert\Choice
+     */
+    public $someProperty;
 }
 ?>
