@@ -18,11 +18,11 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Exception\InvalidConfigurationException;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionRector\ChangeFileLoaderInExtensionRectorTest
+ * @see \Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector\ChangeFileLoaderInExtensionAndKernelRectorTest
  *
  * Works best with https://github.com/migrify/config-transformer
  */
-final class ChangeFileLoaderInExtensionRector extends AbstractRector
+final class ChangeFileLoaderInExtensionAndKernelRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -106,12 +106,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'Symfony\Component\HttpKernel\DependencyInjection\Extension')) {
-            return null;
-        }
-
-        $loadClassMethod = $node->getMethod('load');
-        if ($loadClassMethod === null) {
+        if (! $this->isKernelOrExtensionClass($node)) {
             return null;
         }
 
@@ -120,7 +115,7 @@ PHP
         $oldFileLoaderClass = self::FILE_LOADERS_BY_TYPE[$this->from];
         $newFileLoaderClass = self::FILE_LOADERS_BY_TYPE[$this->to];
 
-        $this->traverseNodesWithCallable((array) $loadClassMethod->stmts, function (Node $node) use (
+        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (
             $oldFileLoaderClass,
             $newFileLoaderClass
         ) {
@@ -149,7 +144,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node->var, 'Symfony\Component\DependencyInjection\Loader\XmlFileLoader')) {
+        if (! $this->isObjectType($node->var, 'Symfony\Component\Config\Loader\LoaderInterface')) {
             return null;
         }
 
@@ -157,21 +152,21 @@ PHP
             return null;
         }
 
-        $this->replaceXmlWithYamlSuffix($node);
+        $this->replaceSuffix($node, $this->from, $this->to);
         return $node;
     }
 
-    private function replaceXmlWithYamlSuffix(MethodCall $methodCall): void
+    private function replaceSuffix(MethodCall $methodCall, string $from, string $to): void
     {
         // replace XML to YAML suffix in string parts
         $fileArgument = $methodCall->args[0]->value;
 
-        $this->traverseNodesWithCallable([$fileArgument], function (Node $node): ?Node {
+        $this->traverseNodesWithCallable([$fileArgument], function (Node $node) use ($from, $to): ?Node {
             if (! $node instanceof String_) {
                 return null;
             }
 
-            $node->value = Strings::replace($node->value, '#\.xml$#', '.yaml');
+            $node->value = Strings::replace($node->value, '#\.' . $from . '$#', '.' . $to);
 
             return $node;
         });
@@ -188,5 +183,14 @@ PHP
             $message = sprintf('File loader "%s" format is not supported', $to);
             throw new InvalidConfigurationException($message);
         }
+    }
+
+    private function isKernelOrExtensionClass(Class_ $class): bool
+    {
+        if ($this->isObjectType($class, 'Symfony\Component\HttpKernel\DependencyInjection\Extension')) {
+            return true;
+        }
+
+        return $this->isObjectType($class, 'Symfony\Component\HttpKernel\Kernel');
     }
 }
