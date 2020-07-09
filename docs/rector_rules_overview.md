@@ -1,4 +1,4 @@
-# All 518 Rectors Overview
+# All 519 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -25,7 +25,7 @@
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (2)
 - [MagicDisclosure](#magicdisclosure) (5)
-- [MockeryToProphecy](#mockerytoprophecy) (1)
+- [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (2)
@@ -2280,7 +2280,7 @@ Use `class` keyword for class name resolution in string instead of hardcoded str
 - class: [`Rector\CodingStyle\Rector\Assign\UseIncrementAssignRector`](/../master/rules/coding-style/src/Rector/Assign/UseIncrementAssignRector.php)
 - [test fixtures](/../master/rules/coding-style/tests/Rector/Assign/UseIncrementAssignRector/Fixture)
 
-Use ++ increment instead of `$var` += 1.
+Use ++ increment instead of `$var += 1`
 
 ```diff
  class SomeClass
@@ -4717,6 +4717,21 @@ services:
 <br><br>
 
 ## MockeryToProphecy
+
+### `MockeryCloseRemoveRector`
+
+- class: [`Rector\MockeryToProphecy\Rector\StaticCall\MockeryCloseRemoveRector`](/../master/rules/mockery-to-prophecy/src/Rector/StaticCall/MockeryCloseRemoveRector.php)
+
+Removes mockery close from test classes
+
+```diff
+ public function tearDown() : void
+ {
+-    \Mockery::close();
+ }
+```
+
+<br><br>
 
 ### `MockeryCreateMockToProphizeRector`
 
@@ -10585,12 +10600,21 @@ Change "cascade_validation" option to specific node attribute
 
 <br><br>
 
-### `ChangeXmlToYamlFileLoaderInExtensionRector`
+### `ChangeFileLoaderInExtensionRector`
 
-- class: [`Rector\Symfony\Rector\Class_\ChangeXmlToYamlFileLoaderInExtensionRector`](/../master/rules/symfony/src/Rector/Class_/ChangeXmlToYamlFileLoaderInExtensionRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Class_/ChangeXmlToYamlFileLoaderInExtensionRector/Fixture)
+- class: [`Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionRector`](/../master/rules/symfony/src/Rector/Class_/ChangeFileLoaderInExtensionRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/Class_/ChangeFileLoaderInExtensionRectorTest/Fixture)
 
 Change XML loader to YAML in Bundle Extension
+
+```yaml
+services:
+    Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionRector:
+        $from: xml
+        $to: yaml
+```
+
+↓
 
 ```diff
  use Symfony\Component\Config\FileLocator;
