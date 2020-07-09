@@ -154,6 +154,7 @@ final class BetterStandardPrinter extends Standard
      */
     protected function setIndentLevel(int $level): void
     {
+        $level = max($level, 0);
         $this->indentLevel = $level;
         $this->nl = "\n" . str_repeat($this->tabOrSpaceIndentCharacter, $level);
     }
