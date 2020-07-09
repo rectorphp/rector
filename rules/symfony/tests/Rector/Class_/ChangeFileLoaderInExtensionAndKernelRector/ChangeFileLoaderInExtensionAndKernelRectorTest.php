@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionRector;
+namespace Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionRector;
+use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ChangeFileLoaderInExtensionRectorTest extends AbstractRectorTestCase
+final class ChangeFileLoaderInExtensionAndKernelRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -27,7 +27,7 @@ final class ChangeFileLoaderInExtensionRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            ChangeFileLoaderInExtensionRector::class => [
+            ChangeFileLoaderInExtensionAndKernelRector::class => [
                 '$from' => 'xml',
                 '$to' => 'yaml',
             ],
