@@ -5,7 +5,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class SkipAliasedNames
 {
-    public function __construct()
+    /**
+     * @param Assert\Choice $choice
+     */
+    public function __construct(Assert\Choice $choice)
     {
         $constraint = Assert\Blank::class;
     }
