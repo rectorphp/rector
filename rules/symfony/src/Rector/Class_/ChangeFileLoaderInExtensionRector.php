@@ -13,18 +13,46 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Symfony\Exception\InvalidConfigurationException;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\Class_\ChangeXmlToYamlFileLoaderInExtensionRector\ChangeXmlToYamlFileLoaderInExtensionRectorTest
+ * @see \Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionRector\ChangeFileLoaderInExtensionRectorTest
+ *
+ * Works best with https://github.com/migrify/config-transformer
  */
-final class ChangeXmlToYamlFileLoaderInExtensionRector extends AbstractRector
+final class ChangeFileLoaderInExtensionRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const FILE_LOADERS_BY_TYPE = [
+        'xml' => 'Symfony\Component\DependencyInjection\Loader\XmlFileLoader',
+        'yaml' => 'Symfony\Component\DependencyInjection\Loader\YamlFileLoader',
+        'php' => 'Symfony\Component\DependencyInjection\Loader\PhpFileLoader',
+    ];
+
+    /**
+     * @var string
+     */
+    private $from;
+
+    /**
+     * @var string
+     */
+    private $to;
+
+    public function __construct(string $from = '', string $to = '')
+    {
+        $this->from = $from;
+        $this->to = $to;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change XML loader to YAML in Bundle Extension', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -58,8 +86,10 @@ final class SomeExtension extends Extension
     }
 }
 PHP
-
-            ),
+    , [
+        '$from' => 'xml',
+        '$to' => 'yaml',
+    ]),
         ]);
     }
 
@@ -85,13 +115,21 @@ PHP
             return null;
         }
 
-        $this->traverseNodesWithCallable((array) $loadClassMethod->stmts, function (Node $node) {
+        $this->validateConfiguration($this->from, $this->to);
+
+        $oldFileLoaderClass = self::FILE_LOADERS_BY_TYPE[$this->from];
+        $newFileLoaderClass = self::FILE_LOADERS_BY_TYPE[$this->to];
+
+        $this->traverseNodesWithCallable((array) $loadClassMethod->stmts, function (Node $node) use (
+            $oldFileLoaderClass,
+            $newFileLoaderClass
+        ) {
             if ($node instanceof New_) {
-                if (! $this->isName($node->class, 'Symfony\Component\DependencyInjection\Loader\XmlFileLoader')) {
+                if (! $this->isName($node->class, $oldFileLoaderClass)) {
                     return null;
                 }
 
-                $node->class = new FullyQualified('Symfony\Component\DependencyInjection\Loader\YamlFileLoader');
+                $node->class = new FullyQualified($newFileLoaderClass);
                 return $node;
             }
 
@@ -137,5 +175,18 @@ PHP
 
             return $node;
         });
+    }
+
+    private function validateConfiguration(string $from, string $to): void
+    {
+        if (! isset(self::FILE_LOADERS_BY_TYPE[$from])) {
+            $message = sprintf('File loader "%s" format is not supported', $from);
+            throw new InvalidConfigurationException($message);
+        }
+
+        if (! isset(self::FILE_LOADERS_BY_TYPE[$to])) {
+            $message = sprintf('File loader "%s" format is not supported', $to);
+            throw new InvalidConfigurationException($message);
+        }
     }
 }
