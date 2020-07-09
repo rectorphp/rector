@@ -12,9 +12,7 @@
         "rules",
         "packages"
     ],
-    "files": [
-        "composer.json"
-    ],
+    "exclude-composer-files": false,
     "force-autodiscovery": true,
     "output": "tmp/rector.phar",
     "php-scoper": "compiler/build/scoper.inc.php"
