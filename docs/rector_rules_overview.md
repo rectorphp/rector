@@ -10600,16 +10600,16 @@ Change "cascade_validation" option to specific node attribute
 
 <br><br>
 
-### `ChangeFileLoaderInExtensionRector`
+### `ChangeFileLoaderInExtensionAndKernelRector`
 
-- class: [`Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionRector`](/../master/rules/symfony/src/Rector/Class_/ChangeFileLoaderInExtensionRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Class_/ChangeFileLoaderInExtensionRectorTest/Fixture)
+- class: [`Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector`](/../master/rules/symfony/src/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector/Fixture)
 
 Change XML loader to YAML in Bundle Extension
 
 ```yaml
 services:
-    Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionRector:
+    Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector:
         $from: xml
         $to: yaml
 ```
