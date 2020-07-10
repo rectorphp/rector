@@ -2,20 +2,32 @@
 
 namespace Rector\Legacy\Tests\Rector\Include_\RemoveIncludeRector\Fixture;
 
-file_put_contents('somefile.php', '<?php // some comment');
-// comment before include
+class SomeClass
+{
+
+    private function someMethod() : void
+    {
+        // comment before include
 include 'somefile.php';
-// comment after include
-unlink('somefile.php');
+        // comment after include
+    }
+
+}
 ?>
 -----
 <?php
 
 namespace Rector\Legacy\Tests\Rector\Include_\RemoveIncludeRector\Fixture;
 
-file_put_contents('somefile.php', '<?php // some comment');
-// comment before include
+class SomeClass
+{
 
-// comment after include
-unlink('somefile.php');
+    private function someMethod() : void
+    {
+        // comment before include
+
+        // comment after include
+    }
+
+}
 ?>
