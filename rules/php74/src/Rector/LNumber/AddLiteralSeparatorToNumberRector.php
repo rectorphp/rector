@@ -88,6 +88,11 @@ PHP
         } else {
             $chunks = $this->strSplitNegative($numericValueAsString, self::GROUP_SIZE);
             $literalSeparatedNumber = implode('_', $chunks);
+
+            // PHP converts: (string) 1000.0 -> "1000"!
+            if (is_float($node->value)) {
+                $literalSeparatedNumber .= '.0';
+            }
         }
 
         $node->value = $literalSeparatedNumber;
