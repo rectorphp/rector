@@ -18,10 +18,6 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class RemoveIncludeRector extends AbstractRector
 {
-    /**
-     * From this method documentation is generated.
-     * @return string[]
-     */
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
