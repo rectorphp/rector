@@ -2,20 +2,20 @@
 
 namespace Rector\Legacy\Tests\Rector\Include_\RemoveIncludeRector\Fixture;
 
-$files = glob(__DIR__ . '/expect*.php');
+file_put_contents('somefile.php', '<?php // some comment');
 // comment before include
-include array_pop($files);
+include 'somefile.php';
 // comment after include
-
+unlink('somefile.php');
 ?>
 -----
 <?php
 
 namespace Rector\Legacy\Tests\Rector\Include_\RemoveIncludeRector\Fixture;
 
-$files = glob(__DIR__ . '/expect*.php');
+file_put_contents('somefile.php', '<?php // some comment');
 // comment before include
 
 // comment after include
-
+unlink('somefile.php');
 ?>
