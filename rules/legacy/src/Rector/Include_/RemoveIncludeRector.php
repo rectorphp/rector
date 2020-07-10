@@ -29,7 +29,7 @@ final class RemoveIncludeRector extends AbstractRector
                 new CodeSample(
                                         <<<'PHP'
 // Comment before require
-return 'somefile.php';
+include 'somefile.php';
 // Comment after require
 PHP
                                 ,
