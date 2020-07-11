@@ -58,6 +58,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->isName($node, 'mysql_create_db')) {
+            return $this->processMysqlCreateDb($node);
+        }
+
         if ($this->isName($node, 'mysql_drop_db')) {
             return $this->processMysqlDropDb($node);
         }
@@ -80,6 +84,14 @@ PHP
         }
 
         return $node;
+    }
+
+    private function processMysqlCreateDb(FuncCall $funcCall): FuncCall
+    {
+        $funcCall->name = new Name(self::MYSQLI_QUERY);
+        $funcCall->args[0]->value = $this->joinStringWithNode('CREATE DATABASE', $funcCall->args[0]->value);
+
+        return $funcCall;
     }
 
     private function processMysqlDropDb(FuncCall $funcCall): FuncCall
