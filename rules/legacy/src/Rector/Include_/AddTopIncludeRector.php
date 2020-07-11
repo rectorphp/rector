@@ -158,10 +158,9 @@ if (isset($_POST["csrf"])) {
     /**
      * Match file against matches, no patterns provided, then it matches
      */
-    private function matchFile(
-        string $path
-    ): bool {
-        if (empty($this->patterns)) {
+    private function matchFile(string $path): bool
+    {
+        if ([] === $this->patterns) {
             return true;
         }
 
@@ -182,14 +181,14 @@ if (isset($_POST["csrf"])) {
         $reflection = new ReflectionClass(Include_::class);
         $constants = $reflection->getConstants();
 
-        if (empty($constants[$this->configuration['type'] ?? ''])) {
+        if (! isset($constants[$this->configuration['type'] ?? ''])) {
             throw new InvalidRectorConfigurationException('Invalid type: must be one of ' . implode(
                 ', ',
                 array_keys($constants)
             ));
         }
 
-        if (empty($this->configuration['file'] ?? '')) {
+        if ('' === ($this->configuration['file'] ?? '')) {
             throw new InvalidRectorConfigurationException('Invalid parameter: file must be provided');
         }
         $this->type = $constants[$this->configuration['type']];
