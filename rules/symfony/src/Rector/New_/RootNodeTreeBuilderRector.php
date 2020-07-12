@@ -13,7 +13,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27476
@@ -57,7 +56,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->class, TreeBuilder::class)) {
+        if (! $this->isObjectType($node->class, 'Symfony\Component\Config\Definition\Builder\TreeBuilder')) {
             return null;
         }
 
@@ -101,7 +100,7 @@ PHP
                 return false;
             }
 
-            if (! $this->isObjectType($node->var, TreeBuilder::class)) {
+            if (! $this->isObjectType($node->var, 'Symfony\Component\Config\Definition\Builder\TreeBuilder')) {
                 return false;
             }
 

@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @see \Rector\Decomplex\Tests\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector\UseMessageVariableForSprintfInSymfonyStyleRectorTest
@@ -67,7 +66,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, SymfonyStyle::class)) {
+        if (! $this->isObjectType($node, 'Symfony\Component\Console\Style\SymfonyStyle')) {
             return null;
         }
 

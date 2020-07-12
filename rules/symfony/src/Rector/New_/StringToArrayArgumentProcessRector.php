@@ -18,9 +18,7 @@ use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 /**
@@ -71,11 +69,11 @@ PHP
     {
         $expr = $node instanceof New_ ? $node->class : $node->var;
 
-        if ($this->isObjectType($expr, Process::class)) {
+        if ($this->isObjectType($expr, 'Symfony\Component\Process\Process')) {
             return $this->processArgumentPosition($node, 0);
         }
 
-        if ($this->isObjectType($expr, ProcessHelper::class)) {
+        if ($this->isObjectType($expr, 'Symfony\Component\Console\Helper\ProcessHelper')) {
             return $this->processArgumentPosition($node, 1);
         }
 

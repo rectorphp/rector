@@ -14,7 +14,6 @@ use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\Console\Command\Command;
 
 /**
  * @see https://symfony.com/doc/current/console/commands_as_services.html
@@ -68,7 +67,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, Command::class)) {
+        if (! $this->isObjectType($node, 'Symfony\Component\Console\Command\Command')) {
             return null;
         }
 
@@ -107,7 +106,7 @@ PHP
             if (! $node instanceof StaticCall) {
                 return null;
             }
-            if (! $this->isObjectType($node->class, Command::class)) {
+            if (! $this->isObjectType($node->class, 'Symfony\Component\Console\Command\Command')) {
                 return null;
             }
 
@@ -130,7 +129,7 @@ PHP
             if (! $node instanceof MethodCall) {
                 return null;
             }
-            if (! $this->isObjectType($node->var, Command::class)) {
+            if (! $this->isObjectType($node->var, 'Symfony\Component\Console\Command\Command')) {
                 return null;
             }
 

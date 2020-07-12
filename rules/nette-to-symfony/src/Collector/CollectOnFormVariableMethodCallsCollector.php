@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Collector;
 
-use Nette\Application\UI\Form;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -70,7 +69,7 @@ final class CollectOnFormVariableMethodCallsCollector
                 return null;
             }
 
-            if (! $this->nodeTypeResolver->isObjectType($node->expr, Form::class)) {
+            if (! $this->nodeTypeResolver->isObjectType($node->expr, 'Nette\Application\UI\Form')) {
                 return null;
             }
 

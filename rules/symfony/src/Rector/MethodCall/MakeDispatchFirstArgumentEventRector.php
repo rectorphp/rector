@@ -13,7 +13,6 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
@@ -84,7 +83,7 @@ PHP
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall->var, EventDispatcherInterface::class)) {
+        if (! $this->isObjectType($methodCall->var, 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface')) {
             return true;
         }
 

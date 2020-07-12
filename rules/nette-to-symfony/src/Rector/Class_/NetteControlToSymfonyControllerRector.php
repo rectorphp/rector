@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Rector\Class_;
 
-use Nette\Application\UI\Control;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -108,7 +107,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node, Control::class)) {
+        if (! $this->isObjectType($node, 'Nette\Application\UI\Control')) {
             return null;
         }
 

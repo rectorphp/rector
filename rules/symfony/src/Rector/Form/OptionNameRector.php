@@ -11,7 +11,6 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Form\OptionNameRector\OptionNameRectorTest
@@ -60,7 +59,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node->var, FormBuilderInterface::class)) {
+        if (! $this->isObjectType($node->var, 'Symfony\Component\Form\FormBuilderInterface')) {
             return null;
         }
 

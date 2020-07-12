@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Rector\ClassMethod;
 
-use Nette\Application\IRouter;
 use Nette\Application\Routers\RouteList;
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -189,7 +188,7 @@ PHP
                 return false;
             }
 
-            if ($this->isObjectType($node->expr, IRouter::class)) {
+            if ($this->isObjectType($node->expr, 'Nette\Application\IRouter')) {
                 return true;
             }
 
@@ -286,7 +285,7 @@ PHP
         }
 
         $staticCallReturnType = (string) $reflectionMethod->getReturnType();
-        return is_a($staticCallReturnType, IRouter::class, true);
+        return is_a($staticCallReturnType, 'Nette\Application\IRouter', true);
     }
 
     private function shouldSkipClassStmt(Node $node): bool

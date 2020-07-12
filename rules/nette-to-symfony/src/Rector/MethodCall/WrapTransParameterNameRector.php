@@ -12,7 +12,6 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * @see https://symfony.com/doc/current/components/translation/usage.html#message-placeholders
@@ -74,7 +73,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, TranslatorInterface::class)) {
+        if (! $this->isObjectType($node->var, 'Symfony\Component\Translation\TranslatorInterface')) {
             return null;
         }
 

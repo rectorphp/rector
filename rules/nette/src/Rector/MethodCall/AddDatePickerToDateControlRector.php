@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\MethodCall;
 
-use Nette\Application\UI\Form;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -71,7 +70,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node->var, Form::class)) {
+        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
             return null;
         }
 

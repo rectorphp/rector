@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Architecture\Rector\MethodCall;
 
-use Doctrine\ORM\EntityRepository;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -88,7 +87,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node->var, EntityRepository::class)) {
+        if (! $this->isObjectType($node->var, 'Doctrine\ORM\EntityRepository')) {
             return null;
         }
 
