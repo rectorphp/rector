@@ -8,6 +8,7 @@ services:
     Rector\Symfony\Rector\Form\OptionNameRector: null
     Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector: null
     Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector: null
+    Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector: null
 
     # general
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:
@@ -153,5 +154,3 @@ services:
 
             # swift mailer
             'Symfony\Bridge\Swiftmailer\DataCollector\MessageDataCollector': 'Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector'
-
-    Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector: null
