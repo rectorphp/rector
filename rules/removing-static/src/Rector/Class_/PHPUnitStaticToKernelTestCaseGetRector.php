@@ -30,7 +30,6 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\RemovingStatic\ValueObject\PHPUnitClass;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\PHPUnitStaticToKernelTestCaseGetRectorTest
@@ -226,8 +225,8 @@ PHP
         }
 
         // update parent clsas if not already
-        if (! $this->isObjectType($class, KernelTestCase::class)) {
-            $class->extends = new FullyQualified(KernelTestCase::class);
+        if (! $this->isObjectType($class, 'Symfony\Bundle\FrameworkBundle\Test\KernelTestCase')) {
+            $class->extends = new FullyQualified('Symfony\Bundle\FrameworkBundle\Test\KernelTestCase');
         }
 
         return $class;

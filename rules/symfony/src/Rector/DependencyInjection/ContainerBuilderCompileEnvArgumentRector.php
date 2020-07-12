@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector\ContainerBuilderCompileEnvArgumentRectorTest
@@ -53,7 +52,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, ContainerBuilder::class)) {
+        if (! $this->isObjectType($node, 'Symfony\Component\DependencyInjection\ContainerBuilder')) {
             return null;
         }
 

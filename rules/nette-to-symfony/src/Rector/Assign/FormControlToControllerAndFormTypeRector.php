@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Rector\Assign;
 
-use Nette\Application\UI\Control;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -127,7 +126,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, Control::class)) {
+        if (! $this->isObjectType($node, 'Nette\Application\UI\Control')) {
             return null;
         }
 

@@ -9,7 +9,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPUnit\Framework\TestListener;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -131,12 +130,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, TestListener::class)) {
+        if (! $this->isObjectType($node, 'PHPUnit\Framework\TestListener')) {
             return null;
         }
 
         foreach ($node->implements as $implement) {
-            if ($this->isName($implement, TestListener::class)) {
+            if ($this->isName($implement, 'PHPUnit\Framework\TestListener')) {
                 $this->removeNode($implement);
             }
         }

@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPUnit\Framework\TestCase;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -120,7 +119,7 @@ PHP
             return true;
         }
 
-        if ($this->isObjectType($class, TestCase::class)) {
+        if ($this->isObjectType($class, 'PHPUnit\Framework\TestCase')) {
             return true;
         }
 

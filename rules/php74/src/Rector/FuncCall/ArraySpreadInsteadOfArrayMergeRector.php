@@ -21,7 +21,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Symfony\Component\Finder\Finder;
 
 /**
  * @see https://wiki.php.net/rfc/spread_operator_for_array
@@ -194,7 +193,7 @@ PHP
             return false;
         }
 
-        if (! $this->isObjectType($expr->var, Finder::class)) {
+        if (! $this->isObjectType($expr->var, 'Symfony\Component\Finder\Finder')) {
             return false;
         }
 

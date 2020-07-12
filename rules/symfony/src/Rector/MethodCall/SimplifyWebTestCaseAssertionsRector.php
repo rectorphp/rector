@@ -15,7 +15,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
@@ -138,7 +137,7 @@ PHP
             return false;
         }
 
-        return $this->isObjectType($class, WebTestCase::class);
+        return $this->isObjectType($class, 'Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
     }
 
     private function processAssertResponseStatusCodeSame(Node $node): ?MethodCall

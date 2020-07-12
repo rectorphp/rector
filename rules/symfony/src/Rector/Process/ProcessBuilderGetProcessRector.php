@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\ProcessBuilderGetProcessRectorTest
@@ -51,7 +50,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, ProcessBuilder::class)) {
+        if (! $this->isObjectType($node->var, 'Symfony\Component\Process\ProcessBuilder')) {
             return null;
         }
 

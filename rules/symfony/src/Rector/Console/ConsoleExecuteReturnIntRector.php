@@ -20,7 +20,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symfony\Component\Console\Command\Command;
 
 /**
  * @see https://github.com/symfony/symfony/pull/33775/files
@@ -77,7 +76,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($class, Command::class)) {
+        if (! $this->isObjectType($class, 'Symfony\Component\Console\Command\Command')) {
             return null;
         }
 

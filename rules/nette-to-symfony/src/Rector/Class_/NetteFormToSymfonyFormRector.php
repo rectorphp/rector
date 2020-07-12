@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Rector\Class_;
 
-use Nette\Application\IPresenter;
-use Nette\Application\UI\Form;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -119,7 +117,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($classNode, IPresenter::class)) {
+        if (! $this->isObjectType($classNode, 'Nette\Application\IPresenter')) {
             return null;
         }
 
@@ -128,7 +126,7 @@ PHP
         }
 
         /** @var MethodCall $node */
-        if (! $this->isObjectType($node->var, Form::class)) {
+        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
             return null;
         }
 
@@ -145,7 +143,7 @@ PHP
 
     private function processNew(New_ $new): ?MethodCall
     {
-        if (! $this->isName($new->class, Form::class)) {
+        if (! $this->isName($new->class, 'Nette\Application\UI\Form')) {
             return null;
         }
 

@@ -15,7 +15,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionMethod;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class ClassMethodExternalCallNodeAnalyzer
 {
@@ -123,7 +122,10 @@ final class ClassMethodExternalCallNodeAnalyzer
             return false;
         }
 
-        if (! $this->nodeTypeResolver->isObjectType($classNode, EventSubscriberInterface::class)) {
+        if (! $this->nodeTypeResolver->isObjectType(
+            $classNode,
+            'Symfony\Component\EventDispatcher\EventSubscriberInterface')
+        ) {
             return false;
         }
 

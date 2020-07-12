@@ -18,7 +18,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Twig_Extension;
 use Twig_Filter_Method;
 use Twig_Function_Method;
 use Twig_SimpleFilter;
@@ -117,7 +116,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($classNode, Twig_Extension::class)) {
+        if (! $this->isObjectType($classNode, 'Twig_Extension')) {
             return null;
         }
 

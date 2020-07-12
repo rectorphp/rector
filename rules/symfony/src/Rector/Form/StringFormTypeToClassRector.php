@@ -12,7 +12,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Covers https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#frameworkbundle
@@ -68,7 +67,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, FormBuilderInterface::class)) {
+        if (! $this->isObjectType($node->var, 'Symfony\Component\Form\FormBuilderInterface')) {
             return null;
         }
 

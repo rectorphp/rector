@@ -13,7 +13,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Tester\TestCase;
 
 /**
  * @see \Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\NetteTesterPHPUnitRectorTest
@@ -83,7 +82,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node, TestCase::class)) {
+        if (! $this->isObjectType($node, 'Tester\TestCase')) {
             return null;
         }
 

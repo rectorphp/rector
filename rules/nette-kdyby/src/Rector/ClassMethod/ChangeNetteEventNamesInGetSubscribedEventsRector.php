@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Rector\ClassMethod;
 
-use Kdyby\Events\Subscriber;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -152,7 +151,7 @@ PHP
             return true;
         }
 
-        if (! $this->isObjectType($class, Subscriber::class)) {
+        if (! $this->isObjectType($class, 'Kdyby\Events\Subscriber')) {
             return true;
         }
 
