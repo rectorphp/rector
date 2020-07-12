@@ -2,17 +2,14 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class SomeController extends Controller
+class PassingOptionsDependencyController extends Controller
 {
     public function action()
     {
-        $form = $this->createForm(new AnotherFormType(), $entity, [
-            'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
-            'method' => 'PUT',
-        ]);
-
+        $entity = new stdClass();
         $form = $this->createForm(new AnotherFormType([1]), $entity);
     }
 }
@@ -36,17 +33,14 @@ final class AnotherFormType
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class SomeController extends Controller
+class PassingOptionsDependencyController extends Controller
 {
     public function action()
     {
-        $form = $this->createForm(AnotherFormType::class, $entity, [
-            'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
-            'method' => 'PUT',
-        ]);
-
+        $entity = new stdClass();
         $form = $this->createForm(AnotherFormType::class, $entity, ['items' => [1]]);
     }
 }
