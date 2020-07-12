@@ -1,4 +1,4 @@
-# All 519 Rectors Overview
+# All 520 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -18,6 +18,7 @@
 - [Doctrine](#doctrine) (16)
 - [DoctrineCodeQuality](#doctrinecodequality) (2)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
+- [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
 - [Guzzle](#guzzle) (1)
@@ -4208,6 +4209,27 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 -        return $this->parent;
 -    }
 +    use TreeNodeTrait;
+ }
+```
+
+<br><br>
+
+## Downgrade
+
+### `TypedPropertyRector`
+
+- class: [`Rector\Downgrade\Rector\Property\TypedPropertyRector`](/../master/rules/downgrade/src/Rector/Property/TypedPropertyRector.php)
+- [test fixtures](/../master/rules/php74/tests/Rector/Property/TypedPropertyRector/Fixture)
+
+Changes property type definition from type definitions to `@var` annotations.
+
+```diff
+ class SomeClass {
+-    private string $property;
++    /**
++    * @var string
++    */
++    private $property;
  }
 ```
 
