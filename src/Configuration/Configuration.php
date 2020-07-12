@@ -8,8 +8,10 @@ use Jean85\PrettyVersions;
 use OndraM\CiDetector\CiDetector;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
+use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Configuration
@@ -95,6 +97,11 @@ final class Configuration
     private $onlyRuleResolver;
 
     /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      */
@@ -103,13 +110,15 @@ final class Configuration
         bool $isCacheEnabled,
         array $fileExtensions,
         array $paths,
-        OnlyRuleResolver $onlyRuleResolver
+        OnlyRuleResolver $onlyRuleResolver,
+        ParameterProvider $parameterProvider
     ) {
         $this->ciDetector = $ciDetector;
         $this->isCacheEnabled = $isCacheEnabled;
         $this->fileExtensions = $fileExtensions;
         $this->paths = $paths;
         $this->onlyRuleResolver = $onlyRuleResolver;
+        $this->parameterProvider = $parameterProvider;
     }
 
     /**
@@ -266,6 +275,27 @@ final class Configuration
     public function getOutputFormat(): string
     {
         return $this->outputFormat;
+    }
+
+    public function validateConfigParameters(): void
+    {
+        $symfonyContainerXmlPath = (string) $this->parameterProvider->provideParameter(
+            Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER
+        );
+        if ($symfonyContainerXmlPath === '') {
+            return;
+        }
+
+        if (file_exists($symfonyContainerXmlPath)) {
+            return;
+        }
+
+        $message = sprintf(
+            'Path "%s" for "parameters > %s" in your config was not found. Correct it',
+            $symfonyContainerXmlPath,
+            Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER
+        );
+        throw new InvalidConfigurationException($message);
     }
 
     private function canShowProgressBar(InputInterface $input): bool
