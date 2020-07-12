@@ -7,6 +7,7 @@ namespace Rector\Symfony\Rector\Form;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -31,8 +32,13 @@ final class StringFormTypeToClassRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
+        $description = sprintf(
+            'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "parameters > %s"',
+            Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER
+        );
+
         return new RectorDefinition(
-            'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony',
+            $description,
             [
                 new CodeSample(
 <<<'PHP'
