@@ -39,6 +39,19 @@ use ReflectionClass;
  */
 final class FormTypeInstanceToClassConstRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const CONTROLLER_TYPES = [
+        'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+        'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
+    ];
+
+    /**
+     * @var string[]
+     */
+    private const FORM_TYPES = ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface'];
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -88,20 +101,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isObjectTypes(
-            $node->var,
-            [
-                'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-                'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
-            ]
-        ) && $this->isName($node->name, 'createForm')) {
+        if ($this->isObjectTypes($node->var, self::CONTROLLER_TYPES) && $this->isName($node->name, 'createForm')) {
             return $this->processNewInstance($node, 0, 2);
         }
 
-        if (! $this->isObjectTypes(
-            $node->var,
-            ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface']
-        )) {
+        if (! $this->isObjectTypes($node->var, self::FORM_TYPES)) {
             return null;
         }
 
