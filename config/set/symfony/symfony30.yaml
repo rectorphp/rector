@@ -7,8 +7,11 @@ services:
     Rector\Symfony\Rector\Form\FormTypeGetParentRector: null
     Rector\Symfony\Rector\Form\OptionNameRector: null
     Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector: null
-    Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector: null
+
+    # forms
     Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector: null
+    Rector\Symfony\Rector\Form\StringFormTypeToClassRector: null
+    Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector: null
 
     # general
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:

@@ -14,7 +14,8 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
 
 /**
- * Covers https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#frameworkbundle
+ * Covers https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
+ *
  * @see \Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\StringFormTypeToClassRectorTest
  */
 final class StringFormTypeToClassRector extends AbstractRector

@@ -1,7 +1,6 @@
 services:
     Rector\Symfony\Rector\Validator\ConstraintUrlOptionRector: null
     Rector\Symfony\Rector\Form\FormIsValidRector: null
-    Rector\Symfony\Rector\Form\StringFormTypeToClassRector: null
     Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector: null
     Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector: null
 

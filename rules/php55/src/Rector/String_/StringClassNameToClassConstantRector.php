@@ -19,6 +19,7 @@ use ReflectionClass;
 
 /**
  * @see https://wiki.php.net/rfc/class_name_scalars
+ * @see https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
  *
  * @see \Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\StringClassNameToClassConstantRectorTest
  */
