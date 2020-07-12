@@ -44,6 +44,7 @@ final class FormTypeStringToTypeProvider
         'submit' => 'Symfony\Component\Form\Extension\Core\Type\SubmitType',
         'reset' => 'Symfony\Component\Form\Extension\Core\Type\ResetType',
         'entity' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
+        'choice' => 'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
     ];
 
     /**

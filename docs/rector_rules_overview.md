@@ -1,4 +1,4 @@
-# All 520 Rectors Overview
+# All 522 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -24,7 +24,7 @@
 - [Guzzle](#guzzle) (1)
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
-- [Legacy](#legacy) (2)
+- [Legacy](#legacy) (3)
 - [MagicDisclosure](#magicdisclosure) (5)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
@@ -65,7 +65,7 @@
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
-- [Symfony](#symfony) (30)
+- [Symfony](#symfony) (31)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [Twig](#twig) (1)
@@ -4578,6 +4578,22 @@ Change functions to static calls, so composer can autoload them
 
 -some_function('lol');
 +SomeUtilsClass::someFunction('lol');
+```
+
+<br><br>
+
+### `RemoveIncludeRector`
+
+- class: [`Rector\Legacy\Rector\Include_\RemoveIncludeRector`](/../master/rules/legacy/src/Rector/Include_/RemoveIncludeRector.php)
+- [test fixtures](/../master/rules/legacy/tests/Rector/Include_/RemoveIncludeRector/Fixture)
+
+Remove includes (include, include_once, require, require_once) from source
+
+```diff
+ // Comment before require
+-include 'somefile.php';
++
+ // Comment after require
 ```
 
 <br><br>
@@ -10622,6 +10638,37 @@ Change "cascade_validation" option to specific node attribute
 
 <br><br>
 
+### `ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector`
+
+- class: [`Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector`](/../master/rules/symfony/src/Rector/MethodCall/ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector/Fixture)
+
+Change type in CollectionType from alias string to class reference
+
+```diff
+ use Symfony\Component\Form\AbstractType;
+ use Symfony\Component\Form\FormBuilderInterface;
+ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+
+ class TaskType extends AbstractType
+ {
+     public function buildForm(FormBuilderInterface $builder, array $options)
+     {
+         $builder->add('tags', CollectionType::class, [
+-            'type' => 'choice',
++            'type' => \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class,
+         ]);
+
+         $builder->add('tags', 'collection', [
+-            'type' => 'choice',
++            'type' => \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class,
+         ]);
+     }
+ }
+```
+
+<br><br>
+
 ### `ChangeFileLoaderInExtensionAndKernelRector`
 
 - class: [`Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector`](/../master/rules/symfony/src/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector.php)
@@ -11142,7 +11189,7 @@ Simplify use of assertions in WebTestCase
 - class: [`Rector\Symfony\Rector\Form\StringFormTypeToClassRector`](/../master/rules/symfony/src/Rector/Form/StringFormTypeToClassRector.php)
 - [test fixtures](/../master/rules/symfony/tests/Rector/Form/StringFormTypeToClassRector/Fixture)
 
-Turns string Form Type references to their `CONSTANT` alternatives in FormTypes in Form in Symfony
+Turns string Form Type references to their `CONSTANT` alternatives in FormTypes in Form in Symfony. To enable custom types, add `link` to your container XML `dump` in "parameters > symfony_container_xml_path"
 
 ```diff
  $formBuilder = new Symfony\Component\Form\FormBuilder;
