@@ -9,6 +9,16 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -125,7 +135,9 @@ final class ShortNameResolver
             $shortNames[$originalName->toString()] = $node->toString();
         });
 
-        return $shortNames;
+        $docBlockShortNames = $this->resolveFromDocBlocks($stmts);
+
+        return array_merge($shortNames, $docBlockShortNames);
     }
 
     private function getNodeRealPath(Node $node): ?string
@@ -142,5 +154,71 @@ final class ShortNameResolver
         }
 
         return null;
+    }
+
+    /**
+     * @param Node[] $stmts
+     * @return string[]
+     */
+    private function resolveFromDocBlocks(array $stmts): array
+    {
+        $shortNames = [];
+
+        $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (&$shortNames) {
+            /** @var PhpDocInfo|null $phpDocInfo */
+            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo === null) {
+                return null;
+            }
+
+            foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
+                $shortTagName = $this->resolveShortTagNameFromPhpDocChildNode($phpDocChildNode);
+                if ($shortTagName === null) {
+                    continue;
+                }
+
+                $shortNames[$shortTagName] = $shortTagName;
+            }
+        });
+
+        return $shortNames;
+    }
+
+    private function resolveShortTagNameFromPhpDocChildNode(PhpDocChildNode $phpDocChildNode): ?string
+    {
+        if (! $phpDocChildNode instanceof PhpDocTagNode) {
+            return null;
+        }
+
+        $tagName = ltrim($phpDocChildNode->name, '@');
+
+        // is annotation class - big letter?
+        if (Strings::match($tagName, '#^[A-Z]#')) {
+            return $tagName;
+        }
+
+        if (! $this->isValueNodeWithType($phpDocChildNode->value)) {
+            return null;
+        }
+
+        $typeNode = $phpDocChildNode->value->type;
+        if (! $typeNode instanceof IdentifierTypeNode) {
+            return null;
+        }
+
+        if (Strings::contains($typeNode->name, '\\')) {
+            return null;
+        }
+
+        return $typeNode->name;
+    }
+
+    private function isValueNodeWithType(PhpDocTagValueNode $phpDocTagValueNode): bool
+    {
+        return $phpDocTagValueNode instanceof PropertyTagValueNode ||
+            $phpDocTagValueNode instanceof ReturnTagValueNode ||
+            $phpDocTagValueNode instanceof ParamTagValueNode ||
+            $phpDocTagValueNode instanceof VarTagValueNode ||
+            $phpDocTagValueNode instanceof ThrowsTagValueNode;
     }
 }
