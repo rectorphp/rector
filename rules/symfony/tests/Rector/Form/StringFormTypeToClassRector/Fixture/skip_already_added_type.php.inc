@@ -5,11 +5,8 @@ namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Fixture;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilder;
 
-final class ContactType
+final class SkipAlreadyAddedType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilder $builder, array $options): void
     {
         $builder

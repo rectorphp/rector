@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\FixtureWithContainer;
 
 use Symfony\Component\Form\FormBuilder;
 
@@ -9,7 +9,7 @@ final class SomePresenter
     public function action()
     {
         $formBuilder = new FormBuilder();
-        $formBuilder->add('task', 'form.type.text');
+        $formBuilder->add('task', 'vich_image');
     }
 }
 
@@ -17,7 +17,7 @@ final class SomePresenter
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\FixtureWithContainer;
 
 use Symfony\Component\Form\FormBuilder;
 
@@ -26,7 +26,7 @@ final class SomePresenter
     public function action()
     {
         $formBuilder = new FormBuilder();
-        $formBuilder->add('task', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
+        $formBuilder->add('task', \Vich\UploaderBundle\Form\Type\VichImageType::class);
     }
 }
 

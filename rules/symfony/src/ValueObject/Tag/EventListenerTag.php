@@ -49,4 +49,16 @@ final class EventListenerTag implements TagInterface
     {
         return $this->priority;
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getData(): array
+    {
+        return [
+            'method' => $this->method,
+            'priority' => $this->priority,
+            'event' => $this->event,
+        ];
+    }
 }
