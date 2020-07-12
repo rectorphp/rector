@@ -132,6 +132,7 @@ final class DocBlockNameImporter
             return $identifierTypeNode;
         }
 
+        // should skip because its already used
         if ($this->useNodesToAddCollector->isShortImported($node, $fullyQualifiedObjectType)) {
             if ($this->useNodesToAddCollector->isImportShortable($node, $fullyQualifiedObjectType)) {
                 $identifierTypeNode->name = $fullyQualifiedObjectType->getShortName();

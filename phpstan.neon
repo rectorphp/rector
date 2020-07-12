@@ -342,3 +342,4 @@ parameters:
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirstNonAnonymousClass\(\) should return PhpParser\\Node\\Stmt\\Class_\|null but returns PhpParser\\Node\|null#'
         # known value
         - '#Property PhpParser\\Node\\Stmt\\Foreach_\:\:\$valueVar \(PhpParser\\Node\\Expr\) does not accept PhpParser\\Node\\Expr\|null#'
+        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$type#'
