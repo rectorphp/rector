@@ -4,64 +4,39 @@ declare(strict_types=1);
 
 namespace Rector\Legacy\Rector\Include_;
 
-use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Include_;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\DeclareDeclare;
-use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\InlineHTML;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
-use Rector\Core\Exception\Rector\InvalidRectorConfigurationException;
-use Rector\Core\Rector\AbstractRector;
+use PhpParser\ParserFactory;
+use PhpParser\PrettyPrinter\Standard;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use ReflectionClass;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see https://github.com/rectorphp/rector/issues/3679
  *
  * @see \Rector\Legacy\Tests\Rector\Include_\AddTopIncludeRector\AddTopIncludeRectorTest
  */
-final class AddTopIncludeRector extends AbstractRector
+final class AddTopIncludeRector extends AbstractFileSystemRector
 {
-    /**
-     * @var bool
-     */
-    private $completed = false;
-
     /**
      * @var string
      */
     private $file = '';
 
     /**
-     * @var string
+     * @var PhpParser\Node\Expr
      */
-    private $lastFileProcessed = '';
+    private $fileExpression;
 
     /**
      * @var int
      */
     private $type = 0;
-
-    /**
-     * @var string[]
-     */
-    private $classNodes = [
-        Declare_::class => true,
-        DeclareDeclare::class => true,
-        GroupUse::class => true,
-        InlineHTML::class => true,
-        Namespace_::class => true,
-        Use_::class => true,
-        UseUse::class => true,
-    ];
 
     /**
      * @var string[] to match
@@ -71,33 +46,50 @@ final class AddTopIncludeRector extends AbstractRector
     /**
      * @var array
      */
-    private $configuration = [];
+    private $settings = [];
 
-    public function __construct(array $configuration = [])
+    /**
+     * @var PhpParser\ParserFactory
+     */
+    private $parser;
+
+    /**
+     * @var PhpParser\PrettyPrinter\Standard
+     */
+    private $prettyPrinter;
+
+    public function __construct(array $settings = [])
     {
-        $this->configuration = $configuration;
+        $this->settings = $settings;
+        $parserFactory = new ParserFactory();
+        $this->parser = $parserFactory->create(ParserFactory::PREFER_PHP7);
+        $this->prettyPrinter = new Standard();
     }
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Adds an include file at the top of matching files but not class definitions', [
             new CodeSample(
-                '<?php
+                <<<'PHP'
+<?php
 
 if (isset($_POST["csrf"])) {
     processPost($_POST);
-}',
-                '<?php
+}
+PHP,
+                <<<'PHP'
+<?php
 
 include "autoloader.php";
 
 if (isset($_POST["csrf"])) {
     processPost($_POST);
-}',
+}
+PHP,
                 [
-                    '$configuration' => [
+                    '$settings' => [
                         'type' => 'TYPE_INCLUDE_FILE',
-                        'file' => 'autoload.php',
+                        'file' => '__DIR__ . "/../autoload.php"',
                         'match' => ['filePathWildCards'],
                     ],
                 ]
@@ -105,54 +97,35 @@ if (isset($_POST["csrf"])) {
         ]);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getNodeTypes(): array
+    public function refactor(SmartFileInfo $smartFileInfo): void
     {
         $this->initialize();
 
-        return [Node::class];
-    }
-
-    public function refactor(Node $node): ?Node
-    {
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        $path = $fileInfo ? $fileInfo->getRelativeFilePath() : '';
-
-        if ($path !== $this->lastFileProcessed) {
-            $this->lastFileProcessed = $path;
-            $this->completed = false;
+        if (! $this->matchFile($smartFileInfo->getRealPath())) {
+            return;
         }
 
-        if (! $this->matchFile($path)) {
-            $this->completed = true;
+        $nodes = $this->parseFileInfoToNodes($smartFileInfo);
 
-            return null;
+        // we are done if there is a class definition in this file
+        $classNode = $this->betterNodeFinder->findFirstInstanceOf($nodes, Class_::class);
+        if ($classNode !== null) {
+            return;
         }
 
-        $name = get_class($node);
-        // things that are OK at the top of a file
-        if ($this->completed || isset($this->classNodes[$name])) {
-            return null;
+        // find all includes and see if any match what we want to insert
+        $includeNodes = $this->betterNodeFinder->findInstanceOf($nodes, Include_::class);
+        foreach ($includeNodes as $includeNode) {
+            if ($this->isTopFileInclude($includeNode)) {
+                return;
+            }
         }
 
-        // if we find a class or include, then no include needed
-        if ($name === Class_::class) {
-            $this->completed = true;
+        // add the include to the statements and print it
+        array_unshift($nodes, new Nop());
+        array_unshift($nodes, new Include_($this->fileExpression, $this->type));
 
-            return null;
-        }
-
-        $this->completed = true;
-
-        $expr = new String_($this->file);
-        $includeNode = new Include_($expr, $this->type);
-
-        $this->addNodeBeforeNode($includeNode, $node);
-        $this->addNodeBeforeNode(new Nop(), $node);
-
-        return $node;
+        $this->print($nodes);
     }
 
     /**
@@ -160,7 +133,7 @@ if (isset($_POST["csrf"])) {
      */
     private function matchFile(string $path): bool
     {
-        if ([] === $this->patterns) {
+        if ($this->patterns === []) {
             return true;
         }
 
@@ -181,20 +154,48 @@ if (isset($_POST["csrf"])) {
         $reflection = new ReflectionClass(Include_::class);
         $constants = $reflection->getConstants();
 
-        if (! isset($constants[$this->configuration['type'] ?? ''])) {
-            throw new InvalidRectorConfigurationException('Invalid type: must be one of ' . implode(
+        if (! isset($constants[$this->settings['type'] ?? ''])) {
+            throw new InvalidRectorsettingsException('Invalid type: must be one of ' . implode(
                 ', ',
                 array_keys($constants)
             ));
         }
 
-        if ('' === ($this->configuration['file'] ?? '')) {
-            throw new InvalidRectorConfigurationException('Invalid parameter: file must be provided');
+        if ('' === ($this->settings['file'] ?? '')) {
+            throw new InvalidRectorsettingsException('Invalid parameter: file must be provided');
         }
-        $this->type = $constants[$this->configuration['type']];
-        $this->file = $this->configuration['file'];
-        if (isset($this->configuration['match']) && is_array($this->configuration['match'])) {
-            $this->patterns = $this->configuration['match'];
+        $this->type = $constants[$this->settings['type']];
+        $this->file = $this->settings['file'];
+        $this->fileExpression = $this->getExpressionFromString($this->file);
+        // normalize the file we are including
+        $this->file = $this->getStringFromExpression($this->fileExpression);
+        if (isset($this->settings['match']) && is_array($this->settings['match'])) {
+            $this->patterns = $this->settings['match'];
         }
+    }
+
+    private function getExpressionFromString(string $source): ?Expr
+    {
+        $ast = $this->parser->parse("<?php {$source};\n");
+
+        if (is_array($ast)) {
+            return $ast[0]->expr;
+        }
+
+        return null;
+    }
+
+    private function getStringFromExpression(?Expr $expr): string
+    {
+        if ($expr === null) {
+            return '';
+        }
+
+        return $this->prettyPrinter->prettyPrintExpr($expr);
+    }
+
+    private function isTopFileInclude(Include_ $includeNode): bool
+    {
+        return $this->file === $this->getSourceFromExpression($includeNode->expr);
     }
 }

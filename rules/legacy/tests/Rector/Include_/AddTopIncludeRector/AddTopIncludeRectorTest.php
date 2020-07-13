@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Legacy\Tests\Rector\Include_\AddTopIncludeRector;
 
 use Iterator;
-use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Rector\Legacy\Rector\Include_\AddTopIncludeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AddTopIncludeRectorTest extends AbstractRectorTestCase
+final class AddTopIncludeRectorTest extends AbstractFileSystemRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -28,9 +28,9 @@ final class AddTopIncludeRectorTest extends AbstractRectorTestCase
     {
         return [
             AddTopIncludeRector::class => [
-                '$configuration' => [
+                '$settings' => [
                     'type' => 'TYPE_INCLUDE',
-                    'file' => 'autoloader.php',
+                    'file' => '__DIR__ . "/../autoloader.php"',
                 ],
             ],
         ];
