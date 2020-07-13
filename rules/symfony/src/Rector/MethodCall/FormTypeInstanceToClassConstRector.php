@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -16,7 +15,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\NodeFactory\BuilderFormNodeFactory;
@@ -33,7 +31,7 @@ use ReflectionClass;
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\FormTypeInstanceToClassConstRectorTest
  */
-final class FormTypeInstanceToClassConstRector extends AbstractRector
+final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
 {
     /**
      * @var string[]
@@ -42,11 +40,6 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
         'Symfony\Bundle\FrameworkBundle\Controller\Controller',
         'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
     ];
-
-    /**
-     * @var string[]
-     */
-    private const FORM_TYPES = ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface'];
 
     /**
      * @var BuilderFormNodeFactory
@@ -77,10 +70,7 @@ class SomeController
 {
     public function action()
     {
-        $form = $this->createForm(new TeamType, $entity, [
-            'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
-            'method' => 'PUT',
-        ]);
+        $form = $this->createForm(new TeamType, $entity);
     }
 }
 PHP
@@ -90,10 +80,7 @@ class SomeController
 {
     public function action()
     {
-        $form = $this->createForm(TeamType::class, $entity, [
-            'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
-            'method' => 'PUT',
-        ]);
+        $form = $this->createForm(TeamType::class, $entity);
     }
 }
 PHP
@@ -119,12 +106,13 @@ PHP
             return $this->processNewInstance($node, 0, 2);
         }
 
-        if (! $this->isObjectTypes($node->var, self::FORM_TYPES)) {
+        if (! $this->isFormAddMethodCall($node)) {
             return null;
         }
 
-        if (! $this->isName($node->name, 'add')) {
-            return null;
+        // special case for collections
+        if ($this->isCollectionType($node)) {
+            $this->refactorCollectionOptions($node);
         }
 
         return $this->processNewInstance($node, 1, 2);
@@ -136,25 +124,23 @@ PHP
             return null;
         }
 
-        if (! $methodCall->args[$position]->value instanceof New_) {
+        $argValue = $methodCall->args[$position]->value;
+        if (! $argValue instanceof New_) {
             return null;
         }
-
-        /** @var New_ $newNode */
-        $newNode = $methodCall->args[$position]->value;
 
         // we can only process direct name
-        if (! $newNode->class instanceof Name) {
+        if (! $argValue->class instanceof Name) {
             return null;
         }
 
-        if (count($newNode->args) > 0) {
+        if (count($argValue->args) > 0) {
             $methodCall = $this->moveArgumentsToOptions(
                 $methodCall,
                 $position,
                 $optionsPosition,
-                $newNode->class->toString(),
-                $newNode->args
+                $argValue->class->toString(),
+                $argValue->args
             );
 
             if ($methodCall === null) {
@@ -162,7 +148,7 @@ PHP
             }
         }
 
-        $methodCall->args[$position]->value = new ClassConstFetch($newNode->class, 'class');
+        $methodCall->args[$position]->value = $this->createClassConstantReference($argValue->class->toString());
 
         return $methodCall;
     }
@@ -184,6 +170,7 @@ PHP
             $methodCall->args[$position + 1] = new Arg($this->createNull());
         }
 
+        // @todo decopule and name, so I know what it is
         if (! isset($methodCall->args[$optionsPosition])) {
             $array = new Array_();
             foreach ($namesToArgs as $name => $arg) {
@@ -198,18 +185,18 @@ PHP
             return null;
         }
 
-        $formTypeConstructorMethod = $formTypeClass->getMethod('__construct');
+        $constructorMethod = $formTypeClass->getMethod('__construct');
 
         // nothing we can do, out of scope
-        if ($formTypeConstructorMethod === null) {
+        if ($constructorMethod === null) {
             return null;
         }
 
-        $this->addBuildFormMethod($formTypeClass, $formTypeConstructorMethod);
+        $this->addBuildFormMethod($formTypeClass, $constructorMethod);
         $this->addConfigureOptionsMethod($formTypeClass, $namesToArgs);
 
         // remove ctor
-        $this->removeNode($formTypeConstructorMethod);
+        $this->removeNode($constructorMethod);
 
         return $methodCall;
     }
@@ -254,5 +241,35 @@ PHP
         }
 
         $class->stmts[] = $this->configureOptionsNodeFactory->create($namesToArgs);
+    }
+
+    private function refactorCollectionOptions(MethodCall $methodCall): void
+    {
+        $optionsArray = $this->matchOptionsArray($methodCall);
+        if ($optionsArray === null) {
+            return;
+        }
+
+        foreach ($optionsArray->items as $arrayItem) {
+            if ($arrayItem->key === null) {
+                continue;
+            }
+
+            if (! $this->isValues($arrayItem->key, ['entry', 'entry_type'])) {
+                continue;
+            }
+
+            if (! $arrayItem->value instanceof New_) {
+                continue;
+            }
+
+            $newClass = $arrayItem->value->class;
+
+            if (! $newClass instanceof Name) {
+                continue;
+            }
+
+            $arrayItem->value = $this->createClassConstantReference($newClass->toString());
+        }
     }
 }

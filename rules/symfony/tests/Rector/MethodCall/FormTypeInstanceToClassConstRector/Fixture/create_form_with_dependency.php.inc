@@ -31,7 +31,7 @@ class TaskType extends AbstractType
     public function buildForm(FormBuilderInterface $formBuilder, array $options)
     {
         $formBuilder->add('tags', 'collection', [
-            'entry_type' => TagType::class
+            'entry_type' => \Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\TagType::class
         ]);
     }
 }

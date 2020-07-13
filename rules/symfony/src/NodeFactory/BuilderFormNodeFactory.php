@@ -31,32 +31,27 @@ final class BuilderFormNodeFactory
 
     public function create(ClassMethod $constructorClassMethod): ClassMethod
     {
-        $formBuilderParamBuilder = new ParamBuilder('builder');
-        $formBuilderParamBuilder->setType(new FullyQualified('Symfony\Component\Form\FormBuilderInterface'));
+        $formBuilderParam = $this->createBuilderParam();
 
-        $formBuilderParam = $formBuilderParamBuilder->getNode();
+        $optionsParam = $this->createOptionsParam();
 
-        $optionsParamBuilder = new ParamBuilder('options');
-        $optionsParamBuilder->setType('array');
-
-        $optionsParam = $optionsParamBuilder->getNode();
-
-        $buildFormClassMethodBuilder = new MethodBuilder('buildForm');
-        $buildFormClassMethodBuilder->makePublic();
-        $buildFormClassMethodBuilder->addParam($formBuilderParam);
-        $buildFormClassMethodBuilder->addParam($optionsParam);
+        $classMethodBuilder = new MethodBuilder('buildForm');
+        $classMethodBuilder->makePublic();
+        $classMethodBuilder->addParam($formBuilderParam);
+        $classMethodBuilder->addParam($optionsParam);
 
         // raw copy stmts from ctor
-        $buildFormClassMethodBuilder->addStmts(
-            $this->replaceParameterAssignWithOptionAssign((array) $constructorClassMethod->stmts, $optionsParam)
-        );
+        $options = $this->replaceParameterAssignWithOptionAssign((array) $constructorClassMethod->stmts, $optionsParam);
+        $classMethodBuilder->addStmts($options);
 
-        return $buildFormClassMethodBuilder->getNode();
+        return $classMethodBuilder->getNode();
     }
 
     /**
      * @param Node[] $nodes
-     * @return Node[] $this->value = $value
+     * @return Node[]
+     *
+     * $this->value = $value
      * ↓
      * $this->value = $options['value']
      */
@@ -83,5 +78,21 @@ final class BuilderFormNodeFactory
         }
 
         return $nodes;
+    }
+
+    private function createBuilderParam(): Param
+    {
+        $builderParamBuilder = new ParamBuilder('builder');
+        $builderParamBuilder->setType(new FullyQualified('Symfony\Component\Form\FormBuilderInterface'));
+
+        return $builderParamBuilder->getNode();
+    }
+
+    private function createOptionsParam(): Param
+    {
+        $optionsParamBuilder = new ParamBuilder('options');
+        $optionsParamBuilder->setType('array');
+
+        return $optionsParamBuilder->getNode();
     }
 }

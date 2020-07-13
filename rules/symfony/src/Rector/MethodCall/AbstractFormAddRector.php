@@ -13,6 +13,11 @@ use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
 abstract class AbstractFormAddRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private const FORM_TYPES = ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface'];
+
+    /**
      * @var FormTypeStringToTypeProvider
      */
     protected $formTypeStringToTypeProvider;
@@ -25,17 +30,9 @@ abstract class AbstractFormAddRector extends AbstractRector
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getNodeTypes(): array
-    {
-        return [MethodCall::class];
-    }
-
     protected function isFormAddMethodCall(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall->var, 'Symfony\Component\Form\FormBuilderInterface')) {
+        if (! $this->isObjectTypes($methodCall->var, self::FORM_TYPES)) {
             return false;
         }
 
