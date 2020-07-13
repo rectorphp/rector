@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -17,6 +18,14 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends AbstractFormAddRector
 {
+    /**
+     * @var string[]
+     */
+    private const OLD_TO_NEW_OPTION_NAME = [
+        'type' => 'entry_type',
+        'options' => 'entry_options',
+    ];
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Rename `type` option to `entry_type` in CollectionType', [
@@ -87,20 +96,25 @@ PHP
             return null;
         }
 
+        $this->refactorOptionsArray($optionsArray);
+
+        return $node;
+    }
+
+    private function refactorOptionsArray(Array_ $optionsArray): void
+    {
         foreach ($optionsArray->items as $arrayItem) {
             if ($arrayItem->key === null) {
                 continue;
             }
 
-            if ($this->isValue($arrayItem->key, 'type')) {
-                $arrayItem->key = new String_('entry_type');
-            }
+            foreach (self::OLD_TO_NEW_OPTION_NAME as $oldName => $newName) {
+                if (! $this->isValue($arrayItem->key, $oldName)) {
+                    continue;
+                }
 
-            if ($this->isValue($arrayItem->key, 'options')) {
-                $arrayItem->key = new String_('entry_options');
+                $arrayItem->key = new String_($newName);
             }
         }
-
-        return $node;
     }
 }
