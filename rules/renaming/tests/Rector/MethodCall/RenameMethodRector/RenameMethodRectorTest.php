@@ -51,10 +51,6 @@ final class RenameMethodRectorTest extends AbstractRectorTestCase
                     '*Presenter' => [
                         'run' => '__invoke',
                     ],
-                    'PHPUnit\Framework\TestClass' => [
-                        'setExpectedException' => 'expectedException',
-                        'setExpectedExceptionRegExp' => 'expectedException',
-                    ],
                 ],
             ],
         ];
