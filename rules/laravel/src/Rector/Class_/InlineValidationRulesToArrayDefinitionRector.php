@@ -25,11 +25,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class InlineValidationRulesToArrayDefinitionRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const FORM_REQUEST_CLASS = 'Illuminate\Foundation\Http\FormRequest';
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Transforms inline validation rules to array definition', [
@@ -92,7 +87,7 @@ PHP
             return true;
         }
 
-        if (! $this->isObjectType($classNode, self::FORM_REQUEST_CLASS)) {
+        if (! $this->isObjectType($classNode, 'Illuminate\Foundation\Http\FormRequest')) {
             return true;
         }
 
