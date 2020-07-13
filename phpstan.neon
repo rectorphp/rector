@@ -356,7 +356,7 @@ parameters:
 
         # local type
         -
-            message: '#Method call argument on position 1 must use string type#'
+            message: '#Method call "isObjectType\(\)" argument on position 1 cannot use "\:\:class" reference#'
             path: 'packages/dynamic-type-analysis/src/Rector/StaticCall/RemoveArgumentTypeProbeRector.php'
 
         - '#Call to an undefined method PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier\:\:toString\(\)#'

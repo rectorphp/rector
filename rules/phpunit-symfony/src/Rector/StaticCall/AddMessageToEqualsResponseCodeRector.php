@@ -20,11 +20,6 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class AddMessageToEqualsResponseCodeRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const RESPONSE_CLASS = 'Symfony\Component\HttpFoundation\Response';
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Add response content to response code assert, so it is easier to debug', [
@@ -112,7 +107,7 @@ PHP
             return false;
         }
 
-        return $this->isObjectType($node->class, self::RESPONSE_CLASS);
+        return $this->isObjectType($node->class, 'Symfony\Component\HttpFoundation\Response');
     }
 
     /**
