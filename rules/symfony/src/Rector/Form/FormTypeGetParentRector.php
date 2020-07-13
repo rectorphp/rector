@@ -11,8 +11,6 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\AbstractTypeExtension;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\FormTypeGetParentRectorTest
@@ -35,12 +33,54 @@ final class FormTypeGetParentRector extends AbstractRector
             'Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony',
             [
                 new CodeSample(
-                    'function getParent() { return "collection"; }',
-                    'function getParent() { return CollectionType::class; }'
+                    <<<'CODE_SAMPLE'
+use Symfony\Component\Form\AbstractType;
+
+class SomeType extends AbstractType
+{
+    public function getParent()
+    {
+        return 'collection';
+    }
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+use Symfony\Component\Form\AbstractType;
+
+class SomeType extends AbstractType
+{
+    public function getParent()
+    {
+        return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
+    }
+}
+CODE_SAMPLE
                 ),
                 new CodeSample(
-                    'function getExtendedType() { return "collection"; }',
-                    'function getExtendedType() { return CollectionType::class; }'
+                    <<<'CODE_SAMPLE'
+use Symfony\Component\Form\AbstractTypeExtension;
+
+class SomeExtension extends AbstractTypeExtension
+{
+    public function getExtendedType()
+    {
+        return 'collection';
+    }
+}
+CODE_SAMPLE
+                    ,
+                    <<<'CODE_SAMPLE'
+use Symfony\Component\Form\AbstractTypeExtension;
+
+class SomeExtension extends AbstractTypeExtension
+{
+    public function getExtendedType()
+    {
+        return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
+    }
+}
+CODE_SAMPLE
                 ),
             ]
         );
@@ -64,8 +104,8 @@ final class FormTypeGetParentRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isParentTypeAndMethod($node, AbstractType::class, 'getParent') &&
-            ! $this->isParentTypeAndMethod($node, AbstractTypeExtension::class, 'getExtendedType')
+        if (! $this->isParentTypeAndMethod($node, 'Symfony\Component\Form\AbstractType', 'getParent') &&
+            ! $this->isParentTypeAndMethod($node, 'Symfony\Component\Form\AbstractTypeExtension', 'getExtendedType')
         ) {
             return null;
         }

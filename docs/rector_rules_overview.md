@@ -1,4 +1,4 @@
-# All 522 Rectors Overview
+# All 523 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -65,7 +65,7 @@
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
-- [Symfony](#symfony) (31)
+- [Symfony](#symfony) (32)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [Twig](#twig) (1)
@@ -10638,6 +10638,35 @@ Change "cascade_validation" option to specific node attribute
 
 <br><br>
 
+### `ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector`
+
+- class: [`Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector`](/../master/rules/symfony/src/Rector/MethodCall/ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector/Fixture)
+
+Rename `type` option to `entry_type` in CollectionType
+
+```diff
+ use Symfony\Component\Form\AbstractType;
+ use Symfony\Component\Form\FormBuilderInterface;
+ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
+ class TaskType extends AbstractType
+ {
+     public function buildForm(FormBuilderInterface $builder, array $options)
+     {
+         $builder->add('tags', CollectionType::class, [
+-            'type' => ChoiceType::class,
+-            'options' => [1, 2, 3],
++            'entry_type' => ChoiceType::class,
++            'entry_options' => [1, 2, 3],
+         ]);
+     }
+ }
+```
+
+<br><br>
+
 ### `ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector`
 
 - class: [`Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector`](/../master/rules/symfony/src/Rector/MethodCall/ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector.php)
@@ -10831,13 +10860,29 @@ Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form i
 Turns string Form Type references to their `CONSTANT` alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
 
 ```diff
--function getParent() { return "collection"; }
-+function getParent() { return CollectionType::class; }
+ use Symfony\Component\Form\AbstractType;
+
+ class SomeType extends AbstractType
+ {
+     public function getParent()
+     {
+-        return 'collection';
++        return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
+     }
+ }
 ```
 
 ```diff
--function getExtendedType() { return "collection"; }
-+function getExtendedType() { return CollectionType::class; }
+ use Symfony\Component\Form\AbstractTypeExtension;
+
+ class SomeExtension extends AbstractTypeExtension
+ {
+     public function getExtendedType()
+     {
+-        return 'collection';
++        return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
+     }
+ }
 ```
 
 <br><br>
