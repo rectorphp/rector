@@ -2,28 +2,17 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use stdClass;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\TagType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 
-class PassingOptionsDependencyController extends Controller
+class TaskType extends AbstractType
 {
-    public function action()
+    public function buildForm(FormBuilderInterface $formBuilder, array $options)
     {
-        $entity = new stdClass();
-        $form = $this->createForm(new AnotherFormType([1]), $entity);
-    }
-}
-
-final class AnotherFormType
-{
-    /**
-     * @var array
-     */
-    private $items;
-
-    public function __construct(array $items = [])
-    {
-        $this->items = $items;
+        $formBuilder->add('tags', 'collection', [
+            'entry_type' => new TagType()
+        ]);
     }
 }
 
@@ -33,31 +22,17 @@ final class AnotherFormType
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use stdClass;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\TagType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 
-class PassingOptionsDependencyController extends Controller
+class TaskType extends AbstractType
 {
-    public function action()
+    public function buildForm(FormBuilderInterface $formBuilder, array $options)
     {
-        $entity = new stdClass();
-        $form = $this->createForm(AnotherFormType::class, $entity, ['items' => [1]]);
-    }
-}
-
-final class AnotherFormType
-{
-    /**
-     * @var array
-     */
-    private $items;
-    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
-    {
-        $this->items = $options['items'];
-    }
-    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(['items' => null]);
+        $formBuilder->add('tags', 'collection', [
+            'entry_type' => TagType::class
+        ]);
     }
 }
 
