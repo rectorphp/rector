@@ -18,7 +18,7 @@ services:
     Rector\PHPOffice\Rector\MethodCall\GetDefaultStyleToGetParentRector: null
     Rector\PHPOffice\Rector\MethodCall\IncreaseColumnIndexRector: null
 
-    Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
             'PHPExcel_Worksheet':
                 # https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#worksheetsetsharedstyle

@@ -360,3 +360,4 @@ parameters:
             path: 'packages/dynamic-type-analysis/src/Rector/StaticCall/RemoveArgumentTypeProbeRector.php'
 
         - '#Call to an undefined method PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier\:\:toString\(\)#'
+        - '#Class Rector\\Renaming\\Tests\\Rector\\MethodCall\\RenameMethodRector\\Fixture\\SkipSelfMethodRename not found#'

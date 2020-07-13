@@ -4,7 +4,7 @@ imports:
     - { resource: '../elasticsearch-dsl/elasticsearch-dsl50.yaml' }
 
 services:
-    Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
             'Enlight_Controller_Response_Response':
                 getHttpResponseCode: getStatusCode

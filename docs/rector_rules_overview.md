@@ -9839,7 +9839,7 @@ Turns method call names to new ones.
 
 ```yaml
 services:
-    Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         SomeExampleClass:
             oldMethod: newMethod
 ```

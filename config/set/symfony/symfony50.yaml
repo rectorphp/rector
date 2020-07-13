@@ -7,7 +7,7 @@ services:
         $oldToNewClasses:
             'Symfony\Component\Debug\Debug': 'Symfony\Component\ErrorHandler\Debug'
 
-    Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
             'Symfony\Component\Console\Application':
                 renderException: 'renderThrowable'

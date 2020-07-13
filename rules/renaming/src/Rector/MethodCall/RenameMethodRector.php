@@ -10,10 +10,12 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\RenameMethodRectorTest
@@ -85,7 +87,11 @@ PHP
                     continue;
                 }
 
-                $newNode = $this->process($node, $newMethod);
+                if ($this->skipClassMethod($node, $newMethod, $type)) {
+                    continue;
+                }
+
+                $newNode = $this->renameToMethod($node, $newMethod);
                 if ($newNode !== null) {
                     return $newNode;
                 }
@@ -99,7 +105,7 @@ PHP
      * @param MethodCall|StaticCall|ClassMethod $node
      * @param string|mixed[] $newMethod
      */
-    private function process(Node $node, $newMethod): ?Node
+    private function renameToMethod(Node $node, $newMethod): ?Node
     {
         if (is_string($newMethod)) {
             $node->name = new Identifier($newMethod);
@@ -115,5 +121,48 @@ PHP
         }
 
         return null;
+    }
+
+    /**
+     * @param string|mixed[] $newMethod
+     */
+    private function shouldSkipForAlreadyExistingClassMethod(ClassMethod $classMethod, $newMethod): bool
+    {
+        if (! is_string($newMethod)) {
+            return false;
+        }
+
+        if (! $classMethod instanceof ClassMethod) {
+            return false;
+        }
+
+        /** @var ClassLike|null $classLike */
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
+            return false;
+        }
+
+        return (bool) $classLike->getMethod($newMethod);
+    }
+
+    /**
+     * @param MethodCall|StaticCall|ClassMethod $node
+     */
+    private function skipClassMethod($node, $newMethod, string $type): bool
+    {
+        if (! $node instanceof ClassMethod) {
+            return false;
+        }
+
+        if ($this->shouldSkipForAlreadyExistingClassMethod($node, $newMethod)) {
+            return true;
+        }
+
+        return $this->shouldSkipForExactClassMethodForClassMethod($node, $type);
+    }
+
+    private function shouldSkipForExactClassMethodForClassMethod(ClassMethod $classMethod, string $type): bool
+    {
+        return $classMethod->getAttribute(AttributeKey::CLASS_NAME) === $type;
     }
 }

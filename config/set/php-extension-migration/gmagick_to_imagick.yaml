@@ -5,7 +5,7 @@ services:
             'GmagickPixel': 'ImagickPixel'
 
     # https://www.php.net/manual/en/book.gmagick.php → https://www.php.net/manual/en/book.imagick.php
-    Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
             'Gmagick':
                 addimage: addImage
