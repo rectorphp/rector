@@ -1,4 +1,4 @@
-# All 523 Rectors Overview
+# All 524 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -65,7 +65,7 @@
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
 - [StrictCodeQuality](#strictcodequality) (1)
-- [Symfony](#symfony) (32)
+- [Symfony](#symfony) (33)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [Twig](#twig) (1)
@@ -11144,6 +11144,27 @@ Turns redirect to route to short helper method in Controller in Symfony
 ```diff
 -$this->redirect($this->generateUrl("homepage"));
 +$this->redirectToRoute("homepage");
+```
+
+<br><br>
+
+### `RemoveDefaultGetBlockPrefixRector`
+
+- class: [`Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector`](/../master/rules/symfony/src/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector/Fixture)
+
+Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form
+
+```diff
+ use Symfony\Component\Form\AbstractType;
+
+ class TaskType extends AbstractType
+ {
+-    public function getBlockPrefix()
+-    {
+-        return 'task';
+-    }
+ }
 ```
 
 <br><br>
