@@ -1,4 +1,4 @@
-# All 524 Rectors Overview
+# All 523 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -60,7 +60,7 @@
 - [Polyfill](#polyfill) (2)
 - [Privatization](#privatization) (7)
 - [RemovingStatic](#removingstatic) (4)
-- [Renaming](#renaming) (10)
+- [Renaming](#renaming) (9)
 - [Restoration](#restoration) (7)
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
@@ -9826,30 +9826,6 @@ services:
 ```diff
 -view("...", []);
 +Laravel\Templating\render("...", []);
-```
-
-<br><br>
-
-### `RenameMethodCallRector`
-
-- class: [`Rector\Renaming\Rector\MethodCall\RenameMethodCallRector`](/../master/rules/renaming/src/Rector/MethodCall/RenameMethodCallRector.php)
-- [test fixtures](/../master/rules/renaming/tests/Rector/MethodCall/RenameMethodCallRector/Fixture)
-
-Turns method call names to new ones.
-
-```yaml
-services:
-    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        SomeExampleClass:
-            oldMethod: newMethod
-```
-
-↓
-
-```diff
- $someObject = new SomeExampleClass;
--$someObject->oldMethod();
-+$someObject->newMethod();
 ```
 
 <br><br>
