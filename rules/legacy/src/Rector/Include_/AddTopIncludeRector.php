@@ -8,10 +8,12 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use ReflectionClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -29,7 +31,7 @@ final class AddTopIncludeRector extends AbstractFileSystemRector
     private $file = '';
 
     /**
-     * @var PhpParser\Node\Expr
+     * @var ?Expr
      */
     private $fileExpression;
 
@@ -49,20 +51,19 @@ final class AddTopIncludeRector extends AbstractFileSystemRector
     private $settings = [];
 
     /**
-     * @var PhpParser\ParserFactory
+     * @var Parser
      */
     private $parser;
 
     /**
-     * @var PhpParser\PrettyPrinter\Standard
+     * @var Standard
      */
     private $prettyPrinter;
 
     public function __construct(array $settings = [])
     {
         $this->settings = $settings;
-        $parserFactory = new ParserFactory();
-        $this->parser = $parserFactory->create(ParserFactory::PREFER_PHP7);
+        $this->parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $this->prettyPrinter = new Standard();
     }
 
@@ -86,13 +87,6 @@ if (isset($_POST["csrf"])) {
     processPost($_POST);
 }
 PHP,
-                [
-                    '$settings' => [
-                        'type' => 'TYPE_INCLUDE_FILE',
-                        'file' => '__DIR__ . "/../autoload.php"',
-                        'match' => ['filePathWildCards'],
-                    ],
-                ]
             ),
         ]);
     }
@@ -101,7 +95,7 @@ PHP,
     {
         $this->initialize();
 
-        if (! $this->matchFile($smartFileInfo->getRealPath())) {
+        if (! $this->matchFile($smartFileInfo->getRelativeFilePath()) || $this->fileExpression === null) {
             return;
         }
 
@@ -125,7 +119,7 @@ PHP,
         array_unshift($nodes, new Nop());
         array_unshift($nodes, new Include_($this->fileExpression, $this->type));
 
-        $this->print($nodes);
+        $this->printNodesToFilePath($nodes, $smartFileInfo->getRelativeFilePath());
     }
 
     /**
@@ -155,14 +149,14 @@ PHP,
         $constants = $reflection->getConstants();
 
         if (! isset($constants[$this->settings['type'] ?? ''])) {
-            throw new InvalidRectorsettingsException('Invalid type: must be one of ' . implode(
+            throw new InvalidRectorConfigurationException('Invalid type: must be one of ' . implode(
                 ', ',
                 array_keys($constants)
             ));
         }
 
         if ('' === ($this->settings['file'] ?? '')) {
-            throw new InvalidRectorsettingsException('Invalid parameter: file must be provided');
+            throw new InvalidRectorConfigurationException('Invalid parameter: file must be provided');
         }
         $this->type = $constants[$this->settings['type']];
         $this->file = $this->settings['file'];
@@ -196,6 +190,6 @@ PHP,
 
     private function isTopFileInclude(Include_ $includeNode): bool
     {
-        return $this->file === $this->getSourceFromExpression($includeNode->expr);
+        return $this->file === $this->getStringFromExpression($includeNode->expr);
     }
 }
