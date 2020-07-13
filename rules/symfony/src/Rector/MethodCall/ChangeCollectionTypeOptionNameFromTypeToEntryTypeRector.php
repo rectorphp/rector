@@ -33,6 +33,7 @@ class TaskType extends AbstractType
     {
         $builder->add('tags', CollectionType::class, [
             'type' => ChoiceType::class,
+            'options' => [1, 2, 3],
         ]);
     }
 }
@@ -50,6 +51,7 @@ class TaskType extends AbstractType
     {
         $builder->add('tags', CollectionType::class, [
             'entry_type' => ChoiceType::class,
+            'entry_options' => [1, 2, 3],
         ]);
     }
 }
@@ -90,11 +92,13 @@ PHP
                 continue;
             }
 
-            if (! $this->isValue($arrayItem->key, 'type')) {
-                continue;
+            if ($this->isValue($arrayItem->key, 'type')) {
+                $arrayItem->key = new String_('entry_type');
             }
 
-            $arrayItem->key = new String_('entry_type');
+            if ($this->isValue($arrayItem->key, 'options')) {
+                $arrayItem->key = new String_('entry_options');
+            }
         }
 
         return $node;
