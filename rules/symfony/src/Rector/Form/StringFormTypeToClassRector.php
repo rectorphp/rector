@@ -8,28 +8,17 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
+use Rector\Symfony\Rector\MethodCall\AbstractFormAddRector;
 
 /**
  * Covers https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
  *
  * @see \Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\StringFormTypeToClassRectorTest
  */
-final class StringFormTypeToClassRector extends AbstractRector
+final class StringFormTypeToClassRector extends AbstractFormAddRector
 {
-    /**
-     * @var FormTypeStringToTypeProvider
-     */
-    private $formTypeStringToTypeProvider;
-
-    public function __construct(FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
-    {
-        $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         $description = sprintf(
@@ -68,16 +57,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, 'Symfony\Component\Form\FormBuilderInterface')) {
-            return null;
-        }
-
-        if (! $this->isName($node->name, 'add')) {
-            return null;
-        }
-
-        // just one argument
-        if (! isset($node->args[1])) {
+        if (! $this->isFormAddMethodCall($node)) {
             return null;
         }
 

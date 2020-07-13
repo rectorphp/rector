@@ -17,7 +17,10 @@ abstract class AbstractFormAddRector extends AbstractRector
      */
     protected $formTypeStringToTypeProvider;
 
-    public function __construct(FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
+    /**
+     * @required
+     */
+    public function autowireAbstractFormAddRector(FormTypeStringToTypeProvider $formTypeStringToTypeProvider): void
     {
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
