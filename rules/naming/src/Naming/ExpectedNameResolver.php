@@ -5,13 +5,19 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -34,14 +40,21 @@ final class ExpectedNameResolver
      */
     private $staticTypeMapper;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         PropertyNaming $propertyNaming,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        BetterNodeFinder $betterNodeFinder
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function resolveForPropertyIfNotYet(Property $property): ?string
@@ -146,6 +159,32 @@ final class ExpectedNameResolver
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($className);
 
         return $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
+    }
+
+    public function resolveForGetCallExpr(Expr $expr): ?string
+    {
+        /** @var MethodCall|StaticCall|FuncCall|null $callNode */
+        $callNode = $this->betterNodeFinder->findFirst($expr, function (Node $node) {
+            return $node instanceof MethodCall || $node instanceof StaticCall || $node instanceof FuncCall;
+        });
+
+        if ($callNode === null) {
+            return null;
+        }
+
+        $name = $this->nodeNameResolver->getName($callNode->name);
+        if ($name === null) {
+            return null;
+        }
+
+        // @see https://regex101.com/r/hnU5pm/2/
+        $matches = Strings::match($name, '#^get(([A-Z]).+)#');
+
+        if ($matches === null) {
+            return null;
+        }
+
+        return lcfirst($matches[1]);
     }
 
     /**

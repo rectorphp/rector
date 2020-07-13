@@ -1,4 +1,4 @@
-# All 525 Rectors Overview
+# All 526 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -29,7 +29,7 @@
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
-- [Naming](#naming) (2)
+- [Naming](#naming) (3)
 - [Nette](#nette) (12)
 - [NetteCodeQuality](#nettecodequality) (1)
 - [NetteKdyby](#nettekdyby) (4)
@@ -2226,11 +2226,11 @@ Prefer quote that are not inside the string
 Assign outcome of ternary condition to variable, where applicable
 
 ```diff
-function ternary($value)
-{
+ function ternary($value)
+ {
 -    $value ? $a = 1 : $a = 0;
 +    $a = $value ? 1 : 0;
-}
+ }
 ```
 
 <br><br>
@@ -4973,6 +4973,25 @@ Rename property and method param to match its type
      {
 -        $this->eventManager = $eventManager;
 +        $this->entityManager = $entityManager;
+     }
+ }
+```
+
+<br><br>
+
+### `RenameVariableToMatchGetMethodNameRector`
+
+- class: [`Rector\Naming\Rector\Assign\RenameVariableToMatchGetMethodNameRector`](/../master/rules/naming/src/Rector/Assign/RenameVariableToMatchGetMethodNameRector.php)
+- [test fixtures](/../master/rules/naming/tests/Rector/Assign/RenameVariableToMatchGetMethodNameRector/Fixture)
+
+Rename variable to match get method name
+
+```diff
+ class SomeClass {
+     public function run()
+     {
+-        $a = $this->getRunner();
++        $runner = $this->getRunner();
      }
  }
 ```

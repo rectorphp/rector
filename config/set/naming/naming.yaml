@@ -1,0 +1,2 @@
+services:
+    Rector\Naming\Rector\Assign\RenameVariableToMatchGetMethodNameRector: null
