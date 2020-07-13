@@ -87,7 +87,7 @@ PHP
                     continue;
                 }
 
-                if ($this->shouldSkipForAlreadyExistingClassMethod($node, $newMethod)) {
+                if ($this->skipClassMethod($node, $newMethod, $type)) {
                     continue;
                 }
 
@@ -124,25 +124,45 @@ PHP
     }
 
     /**
-     * @param MethodCall|StaticCall|ClassMethod $node
      * @param string|mixed[] $newMethod
      */
-    private function shouldSkipForAlreadyExistingClassMethod(Node $node, $newMethod): bool
+    private function shouldSkipForAlreadyExistingClassMethod(ClassMethod $classMethod, $newMethod): bool
     {
         if (! is_string($newMethod)) {
             return false;
         }
 
-        if (! $node instanceof ClassMethod) {
+        if (! $classMethod instanceof ClassMethod) {
             return false;
         }
 
         /** @var ClassLike|null $classLike */
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         if ($classLike === null) {
             return false;
         }
 
         return (bool) $classLike->getMethod($newMethod);
+    }
+
+    /**
+     * @param MethodCall|StaticCall|ClassMethod $node
+     */
+    private function skipClassMethod($node, $newMethod, string $type): bool
+    {
+        if (! $node instanceof ClassMethod) {
+            return false;
+        }
+
+        if ($this->shouldSkipForAlreadyExistingClassMethod($node, $newMethod)) {
+            return true;
+        }
+
+        return $this->shouldSkipForExactClassMethodForClassMethod($node, $type);
+    }
+
+    private function shouldSkipForExactClassMethodForClassMethod(ClassMethod $classMethod, string $type): bool
+    {
+        return $classMethod->getAttribute(AttributeKey::CLASS_NAME) === $type;
     }
 }
