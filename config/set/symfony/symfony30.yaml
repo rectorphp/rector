@@ -12,7 +12,10 @@ services:
     Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector: null
     Rector\Symfony\Rector\Form\StringFormTypeToClassRector: null
     Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector: null
+
+    # forms - collection
     Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector: null
+    Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector: null
 
     # general
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:
