@@ -33,10 +33,10 @@ class SomeAnotherController extends Controller
 {
     public function action(FormBuilder $builder)
     {
-        $builder->add('someText', SomeClass::class);
+        $builder->add('someText', \Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture\SomeClass::class);
 
         $form = new TextType();
-        $form->add('text', AnotherFormTypeClass::class);
+        $form->add('text', \Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AnotherFormTypeClass::class);
     }
 }
 

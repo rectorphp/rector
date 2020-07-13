@@ -7,26 +7,18 @@ namespace Rector\Symfony\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use Rector\Core\PhpParser\Builder\MethodBuilder;
-use Rector\Core\PhpParser\Builder\ParamBuilder;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Symfony\NodeFactory\BuilderFormNodeFactory;
+use Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory;
 use ReflectionClass;
 
 /**
@@ -39,7 +31,7 @@ use ReflectionClass;
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\FormTypeInstanceToClassConstRectorTest
  */
-final class FormTypeInstanceToClassConstRector extends AbstractRector
+final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
 {
     /**
      * @var string[]
@@ -50,9 +42,22 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
     ];
 
     /**
-     * @var string[]
+     * @var BuilderFormNodeFactory
      */
-    private const FORM_TYPES = ['Symfony\Component\Form\FormBuilderInterface', 'Symfony\Component\Form\FormInterface'];
+    private $builderFormNodeFactory;
+
+    /**
+     * @var ConfigureOptionsNodeFactory
+     */
+    private $configureOptionsNodeFactory;
+
+    public function __construct(
+        BuilderFormNodeFactory $builderFormNodeFactory,
+        ConfigureOptionsNodeFactory $configureOptionsNodeFactory
+    ) {
+        $this->builderFormNodeFactory = $builderFormNodeFactory;
+        $this->configureOptionsNodeFactory = $configureOptionsNodeFactory;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -65,10 +70,7 @@ class SomeController
 {
     public function action()
     {
-        $form = $this->createForm(new TeamType, $entity, [
-            'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
-            'method' => 'PUT',
-        ]);
+        $form = $this->createForm(new TeamType, $entity);
     }
 }
 PHP
@@ -78,10 +80,7 @@ class SomeController
 {
     public function action()
     {
-        $form = $this->createForm(TeamType::class, $entity, [
-            'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
-            'method' => 'PUT',
-        ]);
+        $form = $this->createForm(TeamType::class, $entity);
     }
 }
 PHP
@@ -107,12 +106,13 @@ PHP
             return $this->processNewInstance($node, 0, 2);
         }
 
-        if (! $this->isObjectTypes($node->var, self::FORM_TYPES)) {
+        if (! $this->isFormAddMethodCall($node)) {
             return null;
         }
 
-        if (! $this->isName($node->name, 'add')) {
-            return null;
+        // special case for collections
+        if ($this->isCollectionType($node)) {
+            $this->refactorCollectionOptions($node);
         }
 
         return $this->processNewInstance($node, 1, 2);
@@ -124,25 +124,23 @@ PHP
             return null;
         }
 
-        if (! $methodCall->args[$position]->value instanceof New_) {
+        $argValue = $methodCall->args[$position]->value;
+        if (! $argValue instanceof New_) {
             return null;
         }
-
-        /** @var New_ $newNode */
-        $newNode = $methodCall->args[$position]->value;
 
         // we can only process direct name
-        if (! $newNode->class instanceof Name) {
+        if (! $argValue->class instanceof Name) {
             return null;
         }
 
-        if (count($newNode->args) > 0) {
+        if (count($argValue->args) > 0) {
             $methodCall = $this->moveArgumentsToOptions(
                 $methodCall,
                 $position,
                 $optionsPosition,
-                $newNode->class->toString(),
-                $newNode->args
+                $argValue->class->toString(),
+                $argValue->args
             );
 
             if ($methodCall === null) {
@@ -150,7 +148,7 @@ PHP
             }
         }
 
-        $methodCall->args[$position]->value = new ClassConstFetch($newNode->class, 'class');
+        $methodCall->args[$position]->value = $this->createClassConstantReference($argValue->class->toString());
 
         return $methodCall;
     }
@@ -172,6 +170,7 @@ PHP
             $methodCall->args[$position + 1] = new Arg($this->createNull());
         }
 
+        // @todo decopule and name, so I know what it is
         if (! isset($methodCall->args[$optionsPosition])) {
             $array = new Array_();
             foreach ($namesToArgs as $name => $arg) {
@@ -181,24 +180,23 @@ PHP
             $methodCall->args[$optionsPosition] = new Arg($array);
         }
 
-        $formTypeClassNode = $this->classLikeParsedNodesFinder->findClass($className);
-        if ($formTypeClassNode === null) {
+        $formTypeClass = $this->classLikeParsedNodesFinder->findClass($className);
+        if ($formTypeClass === null) {
             return null;
         }
 
-        $formTypeConstructorMethodNode = $formTypeClassNode->getMethod('__construct');
+        $constructorMethod = $formTypeClass->getMethod('__construct');
 
         // nothing we can do, out of scope
-        if ($formTypeConstructorMethodNode === null) {
+        if ($constructorMethod === null) {
             return null;
         }
 
-        // add "buildForm" method + "configureOptions" method with defaults
-        $this->addBuildFormMethod($formTypeClassNode, $formTypeConstructorMethodNode);
-        $this->addConfigureOptionsMethod($formTypeClassNode, $namesToArgs);
+        $this->addBuildFormMethod($formTypeClass, $constructorMethod);
+        $this->addConfigureOptionsMethod($formTypeClass, $namesToArgs);
 
         // remove ctor
-        $this->removeNode($formTypeConstructorMethodNode);
+        $this->removeNode($constructorMethod);
 
         return $methodCall;
     }
@@ -230,29 +228,7 @@ PHP
             return;
         }
 
-        $formBuilderParamBuilder = new ParamBuilder('builder');
-        $formBuilderParamBuilder->setType(new FullyQualified('Symfony\Component\Form\FormBuilderInterface'));
-
-        $formBuilderParam = $formBuilderParamBuilder->getNode();
-
-        $optionsParamBuilder = new ParamBuilder('options');
-        $optionsParamBuilder->setType('array');
-
-        $optionsParam = $optionsParamBuilder->getNode();
-
-        $buildFormClassMethodBuilder = new MethodBuilder('buildForm');
-        $buildFormClassMethodBuilder->makePublic();
-        $buildFormClassMethodBuilder->addParam($formBuilderParam);
-        $buildFormClassMethodBuilder->addParam($optionsParam);
-
-        // raw copy stmts from ctor
-        $buildFormClassMethodBuilder->addStmts(
-            $this->replaceParameterAssignWithOptionAssign((array) $classMethod->stmts, $optionsParam)
-        );
-
-        $buildFormClassMethodNode = $buildFormClassMethodBuilder->getNode();
-
-        $class->stmts[] = $buildFormClassMethodNode;
+        $class->stmts[] = $this->builderFormNodeFactory->create($classMethod);
     }
 
     /**
@@ -264,61 +240,36 @@ PHP
             return;
         }
 
-        $resolverParamBuilder = new ParamBuilder('resolver');
-        $resolverParamBuilder->setType(new FullyQualified('Symfony\Component\OptionsResolver\OptionsResolver'));
-
-        $resolverParam = $resolverParamBuilder->getNode();
-
-        $array = new Array_();
-
-        foreach (array_keys($namesToArgs) as $optionName) {
-            $array->items[] = new ArrayItem($this->createNull(), new String_($optionName));
-        }
-
-        $setDefaultsMethodCall = new MethodCall($resolverParam->var, new Identifier('setDefaults'), [
-            new Arg($array),
-        ]);
-
-        $configureOptionsClassMethodBuilder = new MethodBuilder('configureOptions');
-        $configureOptionsClassMethodBuilder->makePublic();
-        $configureOptionsClassMethodBuilder->addParam($resolverParam);
-        $configureOptionsClassMethodBuilder->addStmt($setDefaultsMethodCall);
-
-        $configureOptionsClassMethod = $configureOptionsClassMethodBuilder->getNode();
-
-        $class->stmts[] = $configureOptionsClassMethod;
+        $class->stmts[] = $this->configureOptionsNodeFactory->create($namesToArgs);
     }
 
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     *
-     * $this->value = $value
-     * ↓
-     * $this->value = $options['value']
-     */
-    private function replaceParameterAssignWithOptionAssign(array $nodes, Param $param): array
+    private function refactorCollectionOptions(MethodCall $methodCall): void
     {
-        foreach ($nodes as $expression) {
-            if (! $expression instanceof Expression) {
-                continue;
-            }
-
-            $node = $expression->expr;
-            if (! $node instanceof Assign) {
-                continue;
-            }
-
-            $variableName = $this->getName($node->var);
-            if ($variableName === null) {
-                continue;
-            }
-
-            if ($node->expr instanceof Variable) {
-                $node->expr = new ArrayDimFetch($param->var, new String_($variableName));
-            }
+        $optionsArray = $this->matchOptionsArray($methodCall);
+        if ($optionsArray === null) {
+            return;
         }
 
-        return $nodes;
+        foreach ($optionsArray->items as $arrayItem) {
+            if ($arrayItem->key === null) {
+                continue;
+            }
+
+            if (! $this->isValues($arrayItem->key, ['entry', 'entry_type'])) {
+                continue;
+            }
+
+            if (! $arrayItem->value instanceof New_) {
+                continue;
+            }
+
+            $newClass = $arrayItem->value->class;
+
+            if (! $newClass instanceof Name) {
+                continue;
+            }
+
+            $arrayItem->value = $this->createClassConstantReference($newClass->toString());
+        }
     }
 }

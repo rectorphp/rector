@@ -39,7 +39,7 @@ class SomeAnotherControllerWithArgs extends Controller
 {
     public function action(FormBuilder $builder)
     {
-        $builder->add('someText', SomeTypeWithCtor::class, ['number' => 1]);
+        $builder->add('someText', \Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture\SomeTypeWithCtor::class, ['number' => 1]);
     }
 }
 

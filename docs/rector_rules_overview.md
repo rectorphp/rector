@@ -10899,11 +10899,8 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
  {
      public function action()
      {
--        $form = $this->createForm(new TeamType, $entity, [
-+        $form = $this->createForm(TeamType::class, $entity, [
-             'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
-             'method' => 'PUT',
-         ]);
+-        $form = $this->createForm(new TeamType, $entity);
++        $form = $this->createForm(TeamType::class, $entity);
      }
  }
 ```
