@@ -71,14 +71,14 @@ final class AddTopIncludeRector extends AbstractFileSystemRector
     {
         return new RectorDefinition('Adds an include file at the top of matching files but not class definitions', [
             new CodeSample(
-                <<<'PHP'
+                <<<PHP
 <?php
 
 if (isset($_POST["csrf"])) {
     processPost($_POST);
 }
 PHP,
-                <<<'PHP'
+                <<<PHP
 <?php
 
 include "autoloader.php";
