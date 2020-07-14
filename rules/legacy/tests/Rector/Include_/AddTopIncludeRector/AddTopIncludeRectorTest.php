@@ -20,13 +20,12 @@ final class AddTopIncludeRectorTest extends AbstractFileSystemRectorTestCase
 
     public function testSkip(): void
     {
-        $fileInfo = new SmartFileInfo(__DIR__ . '/Fixture/skip_has_include.php.inc');
-        $temporaryFileInfo = $this->doTestFileInfo($fileInfo);
-        $this->assertSame($fileInfo->getContents(), $temporaryFileInfo->getContents());
+        $this->doTestFileInfoRemainsUntouched(__DIR__ . '/Fixture/skip_has_include.php.inc');
+    }
 
-        $fileInfo = new SmartFileInfo(__DIR__ . '/Fixture/skip_has_class.php.inc');
-        $temporaryFileInfo = $this->doTestFileInfo($fileInfo);
-        $this->assertSame($fileInfo->getContents(), $temporaryFileInfo->getContents());
+    public function testSkipClass(): void
+    {
+        $this->doTestFileInfoRemainsUntouched(__DIR__ . '/Fixture/skip_has_class.php.inc');
     }
 
     /**
@@ -36,9 +35,16 @@ final class AddTopIncludeRectorTest extends AbstractFileSystemRectorTestCase
     {
         return [
             AddTopIncludeRector::class => [
-                '$type' => 'TYPE_INCLUDE',
-                '$file' => "__DIR__ . '/../autoloader.php'",
+                '$autoloadFilePath' => '/../autoloader.php',
             ],
         ];
+    }
+
+    private function doTestFileInfoRemainsUntouched(string $filePath): void
+    {
+        $fileInfo = new SmartFileInfo($filePath);
+        $temporaryFileInfo = $this->doTestFileInfo($fileInfo);
+
+        $this->assertSame($fileInfo->getContents(), $temporaryFileInfo->getContents());
     }
 }
