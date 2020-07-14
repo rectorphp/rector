@@ -58,26 +58,26 @@ final class AddTopIncludeRector extends AbstractFileSystemRector
 
     public function __construct(string $type = 'TYPE_INCLUDE', string $file = '"autoload.php"', array $match = [])
     {
-		$this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-		$this->prettyPrinter = new Standard();
-		$reflection = new ReflectionClass(Include_::class);
-		$constants = $reflection->getConstants();
+        $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $this->prettyPrinter = new Standard();
+        $reflection = new ReflectionClass(Include_::class);
+        $constants = $reflection->getConstants();
 
-		if (! isset($constants[$type])) {
-			throw new InvalidRectorConfigurationException('Invalid type: must be one of ' . implode(
-				', ',
-				array_keys($constants)
-			));
-			$this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-			$this->prettyPrinter = new Standard();
-		}
+        if (! isset($constants[$type])) {
+              throw new InvalidRectorConfigurationException('Invalid type: must be one of ' . implode(
+                  ', ',
+                array_keys($constants)
+            ));
+            $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+            $this->prettyPrinter = new Standard();
+        }
 
-		$this->type = $constants[$type];
-		$this->file = $file;
-		$this->fileExpression = $this->getExpressionFromString($this->file);
-		// normalize the file we are including
-		$this->file = $this->getStringFromExpression($this->fileExpression);
-  		$this->patterns = $match;
+        $this->type = $constants[$type];
+        $this->file = $file;
+        $this->fileExpression = $this->getExpressionFromString($this->file);
+        // normalize the file we are including
+        $this->file = $this->getStringFromExpression($this->fileExpression);
+        $this->patterns = $match;
     }
 
     public function getDefinition(): RectorDefinition
