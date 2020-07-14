@@ -28,10 +28,8 @@ final class AddTopIncludeRectorTest extends AbstractFileSystemRectorTestCase
     {
         return [
             AddTopIncludeRector::class => [
-                '$settings' => [
-                    'type' => 'TYPE_INCLUDE',
-                    'file' => '__DIR__ . "/../autoloader.php"',
-                ],
+                '$type' => 'TYPE_INCLUDE',
+                '$file' => '__DIR__ . "/../autoloader.php"',
             ],
         ];
     }

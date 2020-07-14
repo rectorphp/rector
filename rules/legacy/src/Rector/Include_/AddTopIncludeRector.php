@@ -7,6 +7,7 @@ namespace Rector\Legacy\Rector\Include_;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
@@ -46,11 +47,6 @@ final class AddTopIncludeRector extends AbstractFileSystemRector
     private $patterns = [];
 
     /**
-     * @var array
-     */
-    private $settings = [];
-
-    /**
      * @var Parser
      */
     private $parser;
@@ -60,25 +56,42 @@ final class AddTopIncludeRector extends AbstractFileSystemRector
      */
     private $prettyPrinter;
 
-    public function __construct(array $settings = [])
+    public function __construct(string $type = 'TYPE_INCLUDE', string $file = '"autoload.php"', array $match = [])
     {
-        $this->settings = $settings;
-        $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $this->prettyPrinter = new Standard();
+		$this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+		$this->prettyPrinter = new Standard();
+		$reflection = new ReflectionClass(Include_::class);
+		$constants = $reflection->getConstants();
+
+		if (! isset($constants[$type])) {
+			throw new InvalidRectorConfigurationException('Invalid type: must be one of ' . implode(
+				', ',
+				array_keys($constants)
+			));
+			$this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+			$this->prettyPrinter = new Standard();
+		}
+
+		$this->type = $constants[$type];
+		$this->file = $file;
+		$this->fileExpression = $this->getExpressionFromString($this->file);
+		// normalize the file we are including
+		$this->file = $this->getStringFromExpression($this->fileExpression);
+  		$this->patterns = $match;
     }
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Adds an include file at the top of matching files but not class definitions', [
             new CodeSample(
-                <<<PHP
+                <<<'PHP'
 <?php
 
 if (isset($_POST["csrf"])) {
     processPost($_POST);
 }
 PHP,
-                <<<PHP
+                <<<'PHP'
 <?php
 
 include "autoloader.php";
@@ -86,15 +99,13 @@ include "autoloader.php";
 if (isset($_POST["csrf"])) {
     processPost($_POST);
 }
-PHP,
+PHP
             ),
         ]);
     }
 
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
-        $this->initialize();
-
         if (! $this->matchFile($smartFileInfo->getRelativeFilePath()) || $this->fileExpression === null) {
             return;
         }
@@ -117,7 +128,7 @@ PHP,
 
         // add the include to the statements and print it
         array_unshift($nodes, new Nop());
-        array_unshift($nodes, new Include_($this->fileExpression, $this->type));
+        array_unshift($nodes, new Expression(new Include_($this->fileExpression, $this->type)));
 
         $this->printNodesToFilePath($nodes, $smartFileInfo->getRelativeFilePath());
     }
@@ -138,34 +149,6 @@ PHP,
         }
 
         return false;
-    }
-
-    private function initialize(): void
-    {
-        if ($this->type) {
-            return;
-        }
-        $reflection = new ReflectionClass(Include_::class);
-        $constants = $reflection->getConstants();
-
-        if (! isset($constants[$this->settings['type'] ?? ''])) {
-            throw new InvalidRectorConfigurationException('Invalid type: must be one of ' . implode(
-                ', ',
-                array_keys($constants)
-            ));
-        }
-
-        if ('' === ($this->settings['file'] ?? '')) {
-            throw new InvalidRectorConfigurationException('Invalid parameter: file must be provided');
-        }
-        $this->type = $constants[$this->settings['type']];
-        $this->file = $this->settings['file'];
-        $this->fileExpression = $this->getExpressionFromString($this->file);
-        // normalize the file we are including
-        $this->file = $this->getStringFromExpression($this->fileExpression);
-        if (isset($this->settings['match']) && is_array($this->settings['match'])) {
-            $this->patterns = $this->settings['match'];
-        }
     }
 
     private function getExpressionFromString(string $source): ?Expr
