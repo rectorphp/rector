@@ -4,6 +4,7 @@ services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
             'Cake\Routing\Exception\RedirectException': 'Cake\Http\Exception\RedirectException'
+            'Cake\Database\Expression\Comparison': 'Cake\Database\Expression\ComparisonExpression'
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
