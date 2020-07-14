@@ -54,12 +54,12 @@ final class AddTopIncludeRector extends AbstractFileSystemRector
     /**
      * @var Standard
      */
-    private $prettyPrinter;
+    private $standard;
 
     public function __construct(string $type = 'TYPE_INCLUDE', string $file = '"autoload.php"', array $match = [])
     {
         $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $this->prettyPrinter = new Standard();
+        $this->standard = new Standard();
         $reflection = new ReflectionClass(Include_::class);
         $constants = $reflection->getConstants();
 
@@ -68,8 +68,6 @@ final class AddTopIncludeRector extends AbstractFileSystemRector
                 ', ',
                 array_keys($constants)
             ));
-            $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-            $this->prettyPrinter = new Standard();
         }
 
         $this->type = $constants[$type];
@@ -168,11 +166,11 @@ PHP
             return '';
         }
 
-        return $this->prettyPrinter->prettyPrintExpr($expr);
+        return $this->standard->prettyPrintExpr($expr);
     }
 
-    private function isTopFileInclude(Include_ $includeNode): bool
+    private function isTopFileInclude(Include_ $include): bool
     {
-        return $this->file === $this->getStringFromExpression($includeNode->expr);
+        return $this->file === $this->getStringFromExpression($include->expr);
     }
 }
