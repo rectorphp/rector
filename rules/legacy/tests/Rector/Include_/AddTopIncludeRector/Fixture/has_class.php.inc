@@ -1,5 +1,7 @@
 <?php
 
-class SomeClass
+namespace Rector\Legacy\Tests\Rector\Include_\AddTopIncludeRector\Fixture;
+
+class SomeOtherClass
 {
 }

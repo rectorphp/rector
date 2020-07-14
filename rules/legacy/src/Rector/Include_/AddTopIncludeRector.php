@@ -17,6 +17,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use ReflectionClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
+
 /**
  * @see https://github.com/rectorphp/rector/issues/3679
  *
