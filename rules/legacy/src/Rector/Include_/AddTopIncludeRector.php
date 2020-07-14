@@ -11,13 +11,12 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
+use Rector\Core\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use ReflectionClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
-
 /**
  * @see https://github.com/rectorphp/rector/issues/3679
  *
@@ -63,7 +62,7 @@ final class AddTopIncludeRector extends AbstractFileSystemRector
     public function __construct(array $settings = [])
     {
         $this->settings = $settings;
-        $this->parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         $this->prettyPrinter = new Standard();
     }
 
