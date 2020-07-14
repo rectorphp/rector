@@ -64,8 +64,8 @@ final class AddTopIncludeRector extends AbstractFileSystemRector
         $constants = $reflection->getConstants();
 
         if (! isset($constants[$type])) {
-              throw new InvalidRectorConfigurationException('Invalid type: must be one of ' . implode(
-                  ', ',
+            throw new InvalidRectorConfigurationException('Invalid type: must be one of ' . implode(
+                ', ',
                 array_keys($constants)
             ));
             $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
