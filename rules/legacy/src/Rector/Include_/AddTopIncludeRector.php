@@ -170,10 +170,10 @@ PHP,
 
     private function getExpressionFromString(string $source): ?Expr
     {
-        $ast = $this->parser->parse("<?php {$source};\n");
+        $nodes = $this->parser->parse('<?php ' . $source . ';');
 
-        if (is_array($ast)) {
-            return $ast[0]->expr;
+        if (is_array($nodes)) {
+            return $nodes[0]->expr;
         }
 
         return null;
