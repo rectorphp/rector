@@ -36,3 +36,4 @@ services:
             - '@markdownDiffOutputBuilder'
 
     Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter: null
+    Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer: null
