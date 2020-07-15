@@ -34,3 +34,5 @@ services:
         class: SebastianBergmann\Diff\Differ
         arguments:
             - '@markdownDiffOutputBuilder'
+
+    Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter: null
