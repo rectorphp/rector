@@ -8608,7 +8608,7 @@ Change string calls on ReflectionType
 - class: [`Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector`](/../master/rules/php74/src/Rector/MagicConstClass/ClassConstantToSelfClassRector.php)
 - [test fixtures](/../master/rules/php74/tests/Rector/MagicConstClass/ClassConstantToSelfClassRector/Fixture)
 
-Change __CLASS__ to self::class
+Change `__CLASS__` to self::class
 
 ```diff
  class SomeClass
@@ -8681,7 +8681,7 @@ Change `filter_var()` with slash escaping to `addslashes()`
 - class: [`Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector`](/../master/rules/php74/src/Rector/FuncCall/GetCalledClassToStaticClassRector.php)
 - [test fixtures](/../master/rules/php74/tests/Rector/FuncCall/GetCalledClassToStaticClassRector/Fixture)
 
-Change __CLASS__ to self::class
+Change `get_called_class()` to static::class
 
 ```diff
  class SomeClass
