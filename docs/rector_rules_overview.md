@@ -1,4 +1,4 @@
-# All 523 Rectors Overview
+# All 524 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -24,7 +24,7 @@
 - [Guzzle](#guzzle) (1)
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
-- [Legacy](#legacy) (3)
+- [Legacy](#legacy) (4)
 - [MagicDisclosure](#magicdisclosure) (5)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
@@ -4530,6 +4530,23 @@ Change static `validate()` method to `$request->validate()`
 <br><br>
 
 ## Legacy
+
+### `AddTopIncludeRector`
+
+- class: [`Rector\Legacy\Rector\Include_\AddTopIncludeRector`](/../master/rules/legacy/src/Rector/Include_/AddTopIncludeRector.php)
+- [test fixtures](/../master/rules/legacy/tests/Rector/Include_/AddTopIncludeRector/Fixture)
+
+Adds an include file at the top of matching files, except class definitions
+
+```diff
++require_once __DIR__ . '/../autoloader.php';
++
+ if (isset($_POST['csrf'])) {
+     processPost($_POST);
+ }
+```
+
+<br><br>
 
 ### `ChangeSingletonToServiceRector`
 

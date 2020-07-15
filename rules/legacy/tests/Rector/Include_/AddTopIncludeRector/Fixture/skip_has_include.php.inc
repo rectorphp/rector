@@ -2,6 +2,7 @@
 
 namespace Rector\Legacy\Tests\Rector\Include_\AddTopIncludeRector\Fixture;
 
-class SomeOtherClass
+function someFunction() : void
 {
+    include __DIR__ . '/../autoloader.php';
 }
