@@ -3,11 +3,10 @@ services:
     SlevomatCodingStandard\Sniffs\Whitespaces\DuplicateSpacesSniff: null
 
     PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer:
-        annotations:
-            - 'throws'
-            - 'author'
-            - 'package'
-            - 'group'
+        calls:
+            - ['configure', [{'annotations': ['throws', 'author', 'package', 'group']}]]
+
+    Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer: null
 
 parameters:
     paths:
@@ -18,6 +17,7 @@ parameters:
         - "tests"
         - "utils"
         - "compiler"
+        - "config"
 
     sets:
       - "psr12"
@@ -27,7 +27,7 @@ parameters:
       - "common"
       - "clean-code"
 
-    exclude_files:
+    exclude_paths:
         # tests files
         - '*/Source/*'
         - '*/Fixture/*'

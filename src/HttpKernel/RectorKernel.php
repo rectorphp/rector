@@ -60,7 +60,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__ . '/../../config/config.yaml');
+        $loader->load(__DIR__ . '/../../config/config.php');
 
         foreach ($this->configs as $config) {
             $loader->load($config);
