@@ -4,6 +4,7 @@ services:
     Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector: null
     Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector: null
     Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector: null
+    Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector: null
     Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector: null
 
     # requires configuration
