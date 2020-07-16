@@ -32,13 +32,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set('paths', ['bin', 'src', 'packages', 'rules', 'tests', 'utils', 'compiler', 'config']);
+    $parameters->set(Option::PATHS, [
+        __DIR__ . '/bin',
+        __DIR__ . '/src',
+        __DIR__ . '/packages',
+        __DIR__ . '/rules',
+        __DIR__ . '/tests',
+        __DIR__ . '/utils',
+        __DIR__ . '/compiler',
+        __DIR__ . '/config',
+        __DIR__ . '/ecs.php',
+        __DIR__ . '/rector-ci.php',
+    ]);
 
-    $parameters->set('sets', ['psr12', 'php70', 'php71', 'symplify', 'common', 'clean-code']);
+    $parameters->set(Option::SETS, ['psr12', 'php70', 'php71', 'symplify', 'common', 'clean-code']);
 
-    $parameters->set('exclude_paths', [
+    $parameters->set(Option::EXCLUDE_PATHS, [
         '*/Source/*',
         '*/Fixture/*', '*/Expected/*',
+        # generated from /vendor
         __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php',
         __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php'
     ]);
