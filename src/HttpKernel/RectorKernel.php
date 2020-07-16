@@ -103,16 +103,16 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
 
     /**
      * This allows to use "%vendor%" variables in imports
-     * @param ContainerInterface|ContainerBuilder $containerBuilder
+     * @param ContainerInterface|ContainerBuilder $container
      */
-    protected function getContainerLoader(ContainerInterface $containerBuilder): DelegatingLoader
+    protected function getContainerLoader(ContainerInterface $container): DelegatingLoader
     {
         $fileLocator = new FileLocator($this);
 
         $loaderResolver = new LoaderResolver([
             new GlobFileLoader($fileLocator),
-            new PhpFileLoader($containerBuilder, $fileLocator),
-            new TolerantRectorYamlFileLoader($containerBuilder, $fileLocator, $this->rectorServiceArgumentCollector),
+            new PhpFileLoader($container, $fileLocator),
+            new TolerantRectorYamlFileLoader($container, $fileLocator, $this->rectorServiceArgumentCollector),
         ]);
 
         return new DelegatingLoader($loaderResolver);

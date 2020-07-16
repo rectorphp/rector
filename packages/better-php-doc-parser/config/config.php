@@ -20,7 +20,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public();
 
     $services->load('Rector\BetterPhpDocParser\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/ValueObject/*', __DIR__ . '/../src/*/*Info.php', __DIR__ . '/../src/*Info.php', __DIR__ . '/../src/Attributes/Ast/PhpDoc/*', __DIR__ . '/../src/PhpDocNode/*']);
+        ->exclude([
+            __DIR__ . '/../src/ValueObject/*',
+            __DIR__ . '/../src/*/*Info.php',
+            __DIR__ . '/../src/*Info.php',
+            __DIR__ . '/../src/Attributes/Ast/PhpDoc/*',
+            __DIR__ . '/../src/PhpDocNode/*',
+        ]);
 
     $services->set(Lexer::class);
 
