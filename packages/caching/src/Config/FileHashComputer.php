@@ -7,7 +7,11 @@ namespace Rector\Caching\Config;
 use Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
@@ -17,25 +21,25 @@ final class FileHashComputer
 {
     public function compute(string $filePath): string
     {
-        $this->ensureIsYaml($filePath);
+        $this->ensureIsYamlOrPhp($filePath);
 
         $containerBuilder = new ContainerBuilder();
+        $fileLoader = $this->createFileLoader($filePath, $containerBuilder);
 
-        $yamlFileLoader = new YamlFileLoader($containerBuilder, new FileLocator(dirname($filePath)));
-        $yamlFileLoader->load($filePath);
+        $fileLoader->load($filePath);
 
         return $this->arrayToHash($containerBuilder->getDefinitions()) .
             $this->arrayToHash($containerBuilder->getParameterBag()->all());
     }
 
-    private function ensureIsYaml(string $filePath): void
+    private function ensureIsYamlOrPhp(string $filePath): void
     {
-        if (Strings::match($filePath, '#\.(yml|yaml)$#')) {
+        if (Strings::match($filePath, '#\.(yml|yaml|php)$#')) {
             return;
         }
 
         throw new ShouldNotHappenException(sprintf(
-            'Provide only yml/yaml file, ready for Symfony DI. "%s" given', $filePath
+            'Provide only YAML/PHP file, ready for Symfony Dependency Injection. "%s" given', $filePath
         ));
     }
 
@@ -45,5 +49,22 @@ final class FileHashComputer
     private function arrayToHash(array $array): string
     {
         return md5(serialize($array));
+    }
+
+    private function createFileLoader(string $filePath, ContainerBuilder $containerBuilder): LoaderInterface
+    {
+        $fileLocator = new FileLocator([dirname($filePath)]);
+        $loaderResolver = new LoaderResolver([
+            new GlobFileLoader($containerBuilder, $fileLocator),
+            new PhpFileLoader($containerBuilder, $fileLocator),
+            new YamlFileLoader($containerBuilder, $fileLocator),
+        ]);
+
+        $loader = $loaderResolver->resolve($filePath);
+        if (! $loader) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $loader;
     }
 }

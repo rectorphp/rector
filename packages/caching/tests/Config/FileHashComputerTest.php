@@ -43,6 +43,6 @@ final class FileHashComputerTest extends AbstractKernelTestCase
     public function testInvalidType(): void
     {
         $this->expectException(ShouldNotHappenException::class);
-        $this->fileHashComputer->compute(__DIR__ . '/Source/file.php');
+        $this->fileHashComputer->compute(__DIR__ . '/Source/file.xml');
     }
 }

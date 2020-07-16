@@ -59,7 +59,7 @@ final class Option
     /**
      * @var string
      */
-    public const EXCLUDE_RECTORS_PARAMETER = 'exclude_rectors';
+    public const EXCLUDE_RECTORS = 'exclude_rectors';
 
     /**
      * @var string
@@ -100,4 +100,29 @@ final class Option
      * @var string
      */
     public const CACHE_DEBUG = 'cache-debug';
+
+    /**
+     * @var string
+     */
+    public const PATHS = 'paths';
+
+    /**
+     * @var string
+     */
+    public const AUTOLOAD_PATHS = 'autoload_paths';
+
+    /**
+     * @var string
+     */
+    public const EXCLUDE_PATHS = 'exclude_paths';
+
+    /**
+     * @var string
+     */
+    public const SETS = 'sets';
+
+    /**
+     * @var string
+     */
+    public const FILE_EXTENSIONS = 'file_extensions';
 }
