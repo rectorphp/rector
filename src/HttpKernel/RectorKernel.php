@@ -16,6 +16,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
@@ -102,15 +103,16 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
 
     /**
      * This allows to use "%vendor%" variables in imports
-     * @param ContainerInterface|ContainerBuilder $container
+     * @param ContainerInterface|ContainerBuilder $containerBuilder
      */
-    protected function getContainerLoader(ContainerInterface $container): DelegatingLoader
+    protected function getContainerLoader(ContainerInterface $containerBuilder): DelegatingLoader
     {
         $fileLocator = new FileLocator($this);
 
         $loaderResolver = new LoaderResolver([
             new GlobFileLoader($fileLocator),
-            new TolerantRectorYamlFileLoader($container, $fileLocator, $this->rectorServiceArgumentCollector),
+            new PhpFileLoader($containerBuilder, $fileLocator),
+            new TolerantRectorYamlFileLoader($containerBuilder, $fileLocator, $this->rectorServiceArgumentCollector),
         ]);
 
         return new DelegatingLoader($loaderResolver);

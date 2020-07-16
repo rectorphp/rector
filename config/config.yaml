@@ -1,5 +1,5 @@
 imports:
-    - { resource: '../packages/**/config/config.yaml' }
+    - { resource: '../packages/**/config/config.php' }
     - { resource: '../rules/**/config/config.yaml' }
     - { resource: 'services.yaml' }
     - { resource: 'parameters/parameter_name_guard.yaml' }
