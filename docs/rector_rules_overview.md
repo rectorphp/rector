@@ -1,4 +1,4 @@
-# All 524 Rectors Overview
+# All 525 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -11,7 +11,7 @@
 - [CakePHP](#cakephp) (6)
 - [Celebrity](#celebrity) (3)
 - [CodeQuality](#codequality) (54)
-- [CodingStyle](#codingstyle) (34)
+- [CodingStyle](#codingstyle) (35)
 - [DeadCode](#deadcode) (40)
 - [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
@@ -2214,6 +2214,23 @@ Prefer quote that are not inside the string
 +         $name = "' Sara";
      }
  }
+```
+
+<br><br>
+
+### `TernaryConditionVariableAssignmentRector`
+
+- class: [`Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector`](/../master/rules/coding-style/src/Rector/Ternary/TernaryConditionVariableAssignmentRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/Ternary/TernaryConditionVariableAssignmentRector/Fixture)
+
+Assign outcome of ternary condition to variable, where applicable
+
+```diff
+function ternary($value)
+{
+-    $value ? $a = 1 : $a = 0;
++    $a = $value ? 1 : 0;
+}
 ```
 
 <br><br>

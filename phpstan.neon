@@ -73,6 +73,13 @@ parameters:
 
     ignoreErrors:
         # false positive
+        -
+            message: '#Class with base \"[a-zA-Z0-9\\_]+\" name is already used in#'
+            paths:
+                - src/Console/Application.php
+                - src/PhpParser/Parser/Parser.php
+
+        # false positive
 #        - '#Call to function method_exists\(\) with string and (.*?) will always evaluate to false#'
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
 
