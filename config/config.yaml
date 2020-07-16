@@ -1,6 +1,6 @@
 imports:
-    - { resource: '../packages/**/config/config.yaml' }
-    - { resource: '../rules/**/config/config.yaml' }
+    - { resource: '../packages/**/config/config.*' }
+    - { resource: '../rules/**/config/config.*' }
     - { resource: 'services.yaml' }
     - { resource: 'parameters/parameter_name_guard.yaml' }
     # only in local repository
