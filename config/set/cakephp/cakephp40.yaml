@@ -58,6 +58,9 @@ services:
             'Cake\Controller\Controller':
                 initialize: 'void'
                 render: 'Cake\Http\Response'
+            'Cake\Form\Form':
+                validate: 'bool'
+                _buildSchema: 'Cake\Form\Schema'
             'Cake\ORM\Behavior':
                 initialize: 'void'
             'Cake\ORM\Table':
@@ -71,6 +74,9 @@ services:
 
     Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
         $typehintForParameterByMethodByClass:
+            'Cake\Form\Form':
+                getData:
+                    0: '?string'
             'Cake\ORM\Behavior':
                 beforeFind:
                     0: 'Cake\Event\EventInterface'
