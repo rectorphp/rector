@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Rector\Core\Configuration\Option;
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/../packages/**/config/config.*');
 
@@ -17,15 +19,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set('paths', []);
+    $parameters->set(Option::PATHS, []);
 
-    $parameters->set('file_extensions', ['php']);
+    $parameters->set(Option::FILE_EXTENSIONS, ['php']);
 
-    $parameters->set('exclude_paths', []);
+    $parameters->set(Option::EXCLUDE_PATHS, []);
 
-    $parameters->set('exclude_rectors', []);
+    $parameters->set(Option::EXCLUDE_RECTORS, []);
 
-    $parameters->set('autoload_paths', []);
+    $parameters->set(Option::AUTOLOAD_PATHS, []);
 
     $parameters->set('rector_recipe', []);
 
@@ -33,7 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set('nested_chain_method_call_limit', 30);
 
-    $parameters->set('auto_import_names', false);
+    $parameters->set(Option::AUTO_IMPORT_NAMES, false);
 
     $parameters->set('import_short_classes', true);
 
