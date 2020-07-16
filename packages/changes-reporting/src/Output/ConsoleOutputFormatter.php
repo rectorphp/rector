@@ -76,7 +76,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
                 ' %d file%s %s.',
                 $changeCount,
                 $changeCount > 1 ? 's' : '',
-                $this->configuration->isDryRun() ? 'would have changed (dry-run)' : 'have been changed'
+                $this->configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed'
             );
         }
 
