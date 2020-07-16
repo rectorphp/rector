@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Rector\Core\Configuration\Option;
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set('correct_to_typos', [
-        'exclude_paths' => [
+        Option::EXCLUDE_PATHS => [
             'exclude',
             'excluded',
             'exclude_path',
@@ -40,15 +42,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'skip_file',
             'skip_files',
         ],
-        'exclude_rectors' => [
+        Option::EXCLUDE_RECTORS => [
             'exclude_rector',
             'excluded_rector',
             'excluded_rectors',
             'skip_rector',
             'skip_rectors',
         ],
-        'autoload_paths' => ['#(autolaod|autoload|include|bootstrap)((ed)?_(path(s)?|dir(s)?|file(s)?))?#'],
-        'auto_import_names' => [
+        Option::AUTOLOAD_PATHS => ['#(autolaod|autoload|include|bootstrap)((ed)?_(path(s)?|dir(s)?|file(s)?))?#'],
+        Option::AUTO_IMPORT_NAMES => [
             'auto_imort_names',
             'auto_import_name',
             'auto_imports_names',
@@ -56,7 +58,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'auto_names',
             'import_name(space)?(s)?',
         ],
-        'paths' => ['path', 'source'],
-    ]
-    );
+        Option::PATHS => ['path', 'source'],
+    ]);
 };
