@@ -31,7 +31,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args(['$markdownDiffer' => ref('markdownDiffer')]);
 
     $services->set('diffOutputBuilder', StrictUnifiedDiffOutputBuilder::class)
-        ->args(['$options' => ['fromFile' => 'Original', 'toFile' => 'New']]);
+        ->args([
+            '$options' => [
+                'fromFile' => 'Original',
+                'toFile' => 'New',
+            ],
+        ]);
 
     $services->set('differ', Differ::class)
         ->args([ref('diffOutputBuilder')]);

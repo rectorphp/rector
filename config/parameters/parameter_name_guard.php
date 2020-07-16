@@ -56,6 +56,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'auto_names',
             'import_name(space)?(s)?',
         ],
-        'paths' => ['path', 'source'], ]
+        'paths' => ['path', 'source'],
+    ]
     );
 };

@@ -6,6 +6,8 @@ declare(strict_types=1);
 use Rector\Caching\ChangedFilesDetector;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\MinimalVersionChecker;
+use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
+use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonReader;
 use Rector\Core\Console\Application;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
@@ -31,10 +33,10 @@ $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 $autoloadIncluder->autoloadFromCommandLine();
 
 try {
-    $composerJsonReader = new MinimalVersionChecker\ComposerJsonReader(__DIR__ . '/../composer.json');
+    $composerJsonReader = new ComposerJsonReader(__DIR__ . '/../composer.json');
     $versionChecker = new MinimalVersionChecker(
         PHP_VERSION,
-        new MinimalVersionChecker\ComposerJsonParser($composerJsonReader->read())
+        new ComposerJsonParser($composerJsonReader->read())
     );
     $versionChecker->check();
 
