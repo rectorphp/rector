@@ -8,14 +8,12 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
+    # scalar type hints, see https://github.com/nette/component-model/commit/f69df2ca224cad7b07f1c8835679393263ea6771
+    # scalar param types https://github.com/nette/security/commit/84024f612fb3f55f5d6e3e3e28eef1ad0388fa56
     $services->set(AddParamTypeDeclarationRector::class)
         ->arg('$typehintForParameterByMethodByClass', [
             'Nette\ComponentModel\Component' => [
-                'lookup' => [
-                    # scalar type hints, see https://github.com/nette/component-model/commit/f69df2ca224cad7b07f1c8835679393263ea6771
-                    '?string',
-                    'bool',
-                ],
+                'lookup' => ['?string', 'bool'],
                 'lookupPath' => ['string', 'bool'],
                 'monitor' => ['string'],
                 'unmonitor' => ['string'],
@@ -35,10 +33,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'getComponents' => ['bool'],
             ],
             'Nette\Bridges\SecurityDI\SecurityExtension' => [
-                '__construct' => [
-                    # scalar param types https://github.com/nette/security/commit/84024f612fb3f55f5d6e3e3e28eef1ad0388fa56
-                    'bool',
-                ],
+                '__construct' => ['bool'],
             ],
             'Nette\Security\IUserStorage' => [
                 'setAuthenticated' => ['bool'],

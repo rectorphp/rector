@@ -11,10 +11,10 @@ use Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecMocksToPHPUnitMocksRector;
 use Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecPromisesToPHPUnitAssertRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# see: https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    # see: https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
     # 1. first convert mocks
     $services->set(PhpSpecMocksToPHPUnitMocksRector::class);
 

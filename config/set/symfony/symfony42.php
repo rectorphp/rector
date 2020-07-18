@@ -16,16 +16,14 @@ use Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# https://github.com/symfony/symfony/pull/28447
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(NewToStaticCallRector::class)
         ->arg('$typeToStaticCalls', [
-            'Symfony\Component\HttpFoundation\Cookie' => [
-                # https://github.com/symfony/symfony/pull/28447
-                'Symfony\Component\HttpFoundation\Cookie',
-                'create',
-            ],
+            'Symfony\Component\HttpFoundation\Cookie' => ['Symfony\Component\HttpFoundation\Cookie', 'create'],
         ]);
 
     $services->set(RenameClassRector::class)

@@ -11,20 +11,18 @@ use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# see https://laravel.com/docs/6.x/upgrade
+# https://github.com/laravel/docs/pull/5531/files
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(MethodCallToReturnRector::class)
         ->arg('$methodNamesByType', [
-            'Illuminate\Auth\Access\HandlesAuthorization' => [
-                # see https://laravel.com/docs/6.x/upgrade
-                # https://github.com/laravel/docs/pull/5531/files
-                'deny',
-            ],
+            'Illuminate\Auth\Access\HandlesAuthorization' => ['deny'],
         ]);
 
     # https://github.com/laravel/framework/commit/67a38ba0fa2acfbd1f4af4bf7d462bb4419cc091
-    # covered by
     $services->set(ParamTypeDeclarationRector::class);
 
     $services->set(RenameMethodRector::class)

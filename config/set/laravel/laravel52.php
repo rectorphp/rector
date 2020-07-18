@@ -6,12 +6,12 @@ use Rector\Core\Rector\String_\StringToClassConstantRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# see: https://laravel.com/docs/5.2/upgrade
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassRector::class)
         ->arg('$oldToNewClasses', [
-            # see: https://laravel.com/docs/5.2/upgrade
             'Illuminate\Auth\Access\UnauthorizedException' => 'Illuminate\Auth\Access\AuthorizationException',
             'Illuminate\Http\Exception\HttpResponseException' => 'Illuminate\Foundation\Validation\ValidationException',
             'Illuminate\Foundation\Composer' => 'Illuminate\Support\Composer',

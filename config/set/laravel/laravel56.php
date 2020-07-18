@@ -6,13 +6,14 @@ use Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# see: https://laravel.com/docs/5.6/upgrade
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [
             'Illuminate\Validation\ValidatesWhenResolvedTrait' => [
-                # see: https://laravel.com/docs/5.6/upgrade
                 'validate' => 'validateResolved',
             ],
             'Illuminate\Contracts\Validation\ValidatesWhenResolved' => [

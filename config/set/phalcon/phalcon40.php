@@ -11,24 +11,20 @@ use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# https://docs.phalcon.io/4.0/en/upgrade#general-notes
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
+    # !!! be careful not to run this twice, since it swaps arguments back and forth
+    # see https://github.com/rectorphp/rector/issues/2408#issue-534441142
     $services->set(SwapClassMethodArgumentsRector::class)
         ->arg('$newArgumentPositionsByMethodAndClass', [
             'Phalcon\Model' => [
-                'assign' => [
-                    # https://docs.phalcon.io/4.0/en/upgrade#general-notes
-                    # !!! be careful not to run this twice, since it swaps arguments back and forth
-                    #issue-534441142
-                    # see https://github.com/rectorphp/rector/issues/2408
-                    0,
-                    2,
-                    1,
-                ],
+                'assign' => [0, 2, 1],
             ],
         ]);
 
+    # for class renames is better - https://docs.phalcon.io/4.0/en/upgrade#cheat-sheet
     $services->set(RenameClassRector::class)
         ->arg('$oldToNewClasses', [
             'Phalcon\Acl\Adapter' => 'Phalcon\Acl\Adapter\AbstractAdapter',
@@ -38,8 +34,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Phalcon\Assets\ResourceInterface' => 'Phalcon\Assets\AssetInterface',
             'Phalcon\Validation\MessageInterface' => 'Phalcon\Messages\MessageInterface',
             'Phalcon\Mvc\Model\MessageInterface' => 'Phalcon\Messages\MessageInterface',
-            #cheat-sheet
-            # for class renames is better - https://docs.phalcon.io/4.0/en/upgrade
             'Phalcon\Annotations\Adapter' => 'Phalcon\Annotations\Adapter\AbstractAdapter',
             'Phalcon\Annotations\Factory' => 'Phalcon\Annotations\AnnotationsFactory',
             'Phalcon\Application' => 'Phalcon\Application\AbstractApplication',

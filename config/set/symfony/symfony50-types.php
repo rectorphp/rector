@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# see https://symfony.com/blog/symfony-type-declarations-return-types-and-phpunit-compatibility
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
@@ -12,7 +14,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$typehintForParameterByMethodByClass', [
             'Symfony\Component\EventDispatcher\EventDispatcherInterface' => [
                 'addListener' => [
-                    # see https://symfony.com/blog/symfony-type-declarations-return-types-and-phpunit-compatibility
                     # see https://github.com/symfony/symfony/issues/32179:
                     'string',
                     2 => 'int',

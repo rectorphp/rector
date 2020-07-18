@@ -23,13 +23,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MysqlPConnectToMysqliConnectRector::class);
 
+    # first swap arguments, then rename
     $services->set(SwapFuncCallArgumentsRector::class)
         ->arg('$newArgumentPositionsByFunctionName', [
-            'mysql_real_escape_string' => [
-                # first swap arguments, then rename
-                1,
-                0,
-            ],
+            'mysql_real_escape_string' => [1, 0],
             'mysql_select_db' => [1, 0],
             'mysql_set_charset' => [1, 0],
             'mysql_query' => [1, 0],
@@ -71,10 +68,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'mysql_connect' => 'mysqli_connect',
         ]);
 
+    # http://php.net/manual/en/mysql.constants.php → http://php.net/manual/en/mysqli.constants.php
     $services->set(RenameConstantRector::class)
         ->arg('$oldToNewConstants', [
-            # http://php.net/manual/en/mysql.constants.php ↓
-            # http://php.net/manual/en/mysqli.constants.php
             'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
             'MYSQL_NUM' => 'MYSQLI_NUM',
             'MYSQL_BOTH' => 'MYSQLI_BOTH',

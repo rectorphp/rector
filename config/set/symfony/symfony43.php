@@ -10,10 +10,10 @@ use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
     # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
     $services->set(SimplifyWebTestCaseAssertionsRector::class);
 
@@ -75,14 +75,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder' => 'Symfony\Component\Security\Core\Encoder\NativePasswordEncoder',
         ]);
 
+    # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#workflow
     $services->set(ArgumentAdderRector::class)
         ->arg('$positionWithDefaultValueByMethodNamesByClassTypes', [
             'Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface' => [
                 'setMarking' => [
                     # type: array
                     2 => [
-                        #workflow
-                        # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
                         'name' => 'context',
                         'default_value' => [],
                     ],

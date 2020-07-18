@@ -17,8 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->arg('$oldToNewClasses', [
-            #L37
-            # see https://github.com/cakephp/upgrade/blob/756410c8b7d5aff9daec3fa1fe750a3858d422ac/src/Shell/Task/RenameClassesTask.php
+            # see https://github.com/cakephp/upgrade/blob/756410c8b7d5aff9daec3fa1fe750a3858d422ac/src/Shell/Task/RenameClassesTask.php#L37
             'Cake\Network\Http\HttpSocket' => 'Cake\Network\Http\Client',
             'Cake\Model\ConnectionManager' => 'Cake\Database\ConnectionManager',
             'Cake\TestSuite\CakeTestCase' => 'Cake\TestSuite\TestCase',
@@ -26,13 +25,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Cake\Utility\String' => 'Cake\Utility\Text',
             'CakePlugin' => 'Plugin',
             'CakeException' => 'Exception',
-            #configure
-            # see https://book.cakephp.org/3/en/appendices/3-0-migration-guide.html
+            # see https://book.cakephp.org/3/en/appendices/3-0-migration-guide.html#configure
             'Cake\Configure\PhpReader' => 'Cake\Core\Configure\EnginePhpConfig',
             'Cake\Configure\IniReader' => 'Cake\Core\Configure\EngineIniConfig',
             'Cake\Configure\ConfigReaderInterface' => 'Cake\Core\Configure\ConfigEngineInterface',
-            #request
-            # https://book.cakephp.org/3/en/appendices/3-0-migration-guide.html
+            # https://book.cakephp.org/3/en/appendices/3-0-migration-guide.html#request
             'CakeRequest' => 'Cake\Network\Request',
         ]);
 };

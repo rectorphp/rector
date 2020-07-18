@@ -13,7 +13,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Symfony\Component\DependencyInjection\ContainerBuilder' => [
                 'addCompilerPass' => [
                     2 => [
-                        # dependency-injection
                         'name' => 'priority',
                         'default_value' => 0,
                     ],

@@ -171,8 +171,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
             'Cake\ORM\EagerLoader' => [
                 # note: will have to be called after setMatching() to keep the old behavior
-                #L330
-                # ref: https://github.com/cakephp/cakephp/blob/4feee5463641e05c068b4d1d31dc5ee882b4240f/src/ORM/EagerLoader.php
+                # ref: https://github.com/cakephp/cakephp/blob/4feee5463641e05c068b4d1d31dc5ee882b4240f/src/ORM/EagerLoader.php#L330
                 'matching' => [
                     'set' => 'setMatching',
                     'get' => 'getMatching',

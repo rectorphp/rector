@@ -14,8 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
-    #diff-fdc8251950f85c5467c63c249df05786
-    # Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files
+    # Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
     $services->set(RemoveParentCallWithoutParentRector::class);
 
     $services->set(RenameClassRector::class)

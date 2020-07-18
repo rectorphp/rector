@@ -5,12 +5,12 @@ declare(strict_types=1);
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# https://github.com/ongr-io/ElasticsearchDSL/blob/5.x/CHANGELOG.md
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassRector::class)
         ->arg('$oldToNewClasses', [
-            # https://github.com/ongr-io/ElasticsearchDSL/blob/5.x/CHANGELOG.md
             'ONGR\ElasticsearchDSL\Query\BoolQuery' => 'ONGR\ElasticsearchDSL\Query\Compound\BoolQuery',
             'ONGR\ElasticsearchDSL\Query\BoostingQuery' => 'ONGR\ElasticsearchDSL\Query\Compound\BoostingQuery',
             'ONGR\ElasticsearchDSL\Query\ConstantScoreQuery' => 'ONGR\ElasticsearchDSL\Query\Compound\ConstantScoreQuery',

@@ -6,14 +6,13 @@ use Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# https://github.com/doctrine/dbal/blob/master/UPGRADE.md#bc-break-changes-in-handling-string-and-binary-columns
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [
             'DBAL\Platforms\AbstractPlatform' => [
-                #bc-break-changes-in-handling-string-and-binary-columns
-                # https://github.com/doctrine/dbal/blob/master/UPGRADE.md
                 'getVarcharTypeDeclarationSQL' => 'getStringTypeDeclarationSQL',
             ],
             'Doctrine\DBAL\Driver\DriverException' => [

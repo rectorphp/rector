@@ -21,11 +21,11 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md
+# inspired https://github.com/PHPOffice/PhpSpreadsheet/blob/87f71e1930b497b36e3b9b1522117dfa87096d2b/src/PhpSpreadsheet/Helper/Migrator.php
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    # see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md
-    # inspired https://github.com/PHPOffice/PhpSpreadsheet/blob/87f71e1930b497b36e3b9b1522117dfa87096d2b/src/PhpSpreadsheet/Helper/Migrator.php
     $services->set(ChangeIOFactoryArgumentRector::class);
 
     $services->set(ChangeSearchLocationToRegisterReaderRector::class);
@@ -54,18 +54,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(IncreaseColumnIndexRector::class);
 
+    # beware! this can be run only once, since its circular change
     $services->set(RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [
             'PHPExcel_Worksheet' => [
-                #worksheetsetsharedstyle
-                # https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md
+                # https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#worksheetsetsharedstyle
                 'setSharedStyle' => 'duplicateStyle',
-                #worksheetgetselectedcell
-                # https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md
+                # https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#worksheetgetselectedcell
                 'getSelectedCell' => 'getSelectedCells',
-                #cell-caching
-                # https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md
-                # beware! this can be run only once, since its circular change
+                # https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#cell-caching
                 'getCellCacheController' => 'getCellCollection',
                 'getCellCollection' => 'getCoordinates',
             ],

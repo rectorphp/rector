@@ -16,8 +16,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Symfony\Component\DependencyInjection\ContainerBuilder' => [
                 'compile' => [
                     2 => [
-                        # dependency-injection
-                        # added default value
                         'name' => '__unknown__',
                         'default_value' => 0,
                     ],

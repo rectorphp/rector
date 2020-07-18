@@ -6,14 +6,14 @@ use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# see: https://laravel.com/docs/5.0/upgrade
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
+    # https://stackoverflow.com/a/24949656/1348344
     $services->set(RenameClassRector::class)
         ->arg('$oldToNewClasses', [
-            # see: https://laravel.com/docs/5.0/upgrade
             'Illuminate\Cache\CacheManager' => 'Illuminate\Contracts\Cache\Repository',
-            # https://stackoverflow.com/a/24949656/1348344
             'Illuminate\Database\Eloquent\SoftDeletingTrait' => 'Illuminate\Database\Eloquent\SoftDeletes',
         ]);
 

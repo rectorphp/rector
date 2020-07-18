@@ -7,12 +7,12 @@ use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# source: https://book.cakephp.org/3.0/en/appendices/3-5-migration-guide.html
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassRector::class)
         ->arg('$oldToNewClasses', [
-            # source: https://book.cakephp.org/3.0/en/appendices/3-5-migration-guide.html
             'Cake\Http\Client\CookieCollection' => 'Cake\Http\Cookie\CookieCollection',
             'Cake\Console\ShellDispatcher' => 'Cake\Console\CommandRunner',
         ]);

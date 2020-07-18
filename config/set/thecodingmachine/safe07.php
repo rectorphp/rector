@@ -5,12 +5,12 @@ declare(strict_types=1);
 use Rector\Renaming\Rector\Function_\RenameFunctionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# This file configures rector/rector:~0.7.0 to replace all PHP functions with their equivalent "safe" functions
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameFunctionRector::class)
         ->arg('$oldFunctionToNewFunction', [
-            # This file configures rector/rector:~0.7.0 to replace all PHP functions with their equivalent "safe" functions
             'apache_getenv' => 'Safe\apache_getenv',
             'apache_get_version' => 'Safe\apache_get_version',
             'apache_request_headers' => 'Safe\apache_request_headers',

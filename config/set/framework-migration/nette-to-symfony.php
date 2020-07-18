@@ -30,34 +30,28 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->arg('$typehintForMethodByClass', [
             'Nette\Application\IPresenter' => [
-                # run(Request $appRequest): IResponse -> run(Request $appRequest): \Symfony\Component\HttpFoundation\Response
                 'run' => 'Symfony\Component\HttpFoundation\Response',
             ],
         ]);
 
     $services->set(RenameClassRector::class)
         ->arg('$oldToNewClasses', [
-            # run(Request $appRequest) -> run(\Symfony\Component\HttpFoundation\Request $appRequest)
             'Nette\Application\Request' => 'Symfony\Component\HttpFoundation\Request',
             'Nette\Http\Request' => 'Symfony\Component\HttpFoundation\Request',
             'Nette\Http\IRequest' => 'Symfony\Component\HttpFoundation\Request',
-            # extends Nette\Application\UI\Presenter -> extends Symfony\Bundle\FrameworkBundle\Controller\AbstractController
             'Nette\Application\UI\Presenter' => 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
-            # Nette\Application\IResponse-> Symfony\Component\HttpFoundation\Response
             'Nette\Application\IResponse' => 'Symfony\Component\HttpFoundation\Response',
         ]);
 
     $services->set(RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [
             'Nette\Application\IPresenter' => [
-                # IPresenter::run() -> IPresenter->__invoke
                 'run' => '__invoke',
             ],
             'Nette\DI\Container' => [
                 'getByType' => 'get',
             ],
             'Nette\Configurator' => [
-                # load configs
                 'addConfig' => 'load',
             ],
             'Symfony\Component\Config\Loader\LoaderInterface' => [

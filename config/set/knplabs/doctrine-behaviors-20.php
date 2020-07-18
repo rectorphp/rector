@@ -12,7 +12,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddInterfaceByTraitRector::class)
         ->arg('$interfaceByTrait', [
-            # inspiration https://github.com/cpliakas/git-wrapper/tree/master/upgrade/rector
             'Knp\DoctrineBehaviors\Model\Timestampable\Timestampable' => 'Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface',
             'Knp\DoctrineBehaviors\Model\Timestampable\TimestampableMethods' => 'Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface',
             'Knp\DoctrineBehaviors\Model\Blameable\Blameable' => 'Knp\DoctrineBehaviors\Contract\Entity\BlameableInterface',

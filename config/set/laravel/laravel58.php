@@ -7,14 +7,14 @@ use Rector\Core\Rector\Property\RenamePropertyRector;
 use Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# https://laravel-news.com/laravel-5-8-deprecates-string-and-array-helpers
+# https://github.com/laravel/framework/pull/26898
+# see: https://laravel.com/docs/5.8/upgrade
 return static function (ContainerConfigurator $containerConfigurator): void {
-    # https://laravel-news.com/laravel-5-8-deprecates-string-and-array-helpers
-    # https://github.com/laravel/framework/pull/26898
     $containerConfigurator->import(__DIR__ . '/static/array-str-functions-to-static-call.php');
 
     $services = $containerConfigurator->services();
 
-    # see: https://laravel.com/docs/5.8/upgrade
     $services->set(MinutesToSecondsInCacheRector::class);
 
     $services->set(AddReturnTypeDeclarationRector::class)

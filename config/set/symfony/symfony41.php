@@ -6,14 +6,14 @@ use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# https://github.com/symfony/symfony/blob/master/UPGRADE-4.1.md
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [
+            # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
             'Symfony\Component\Console\Helper\TableStyle' => [
-                # https://github.com/symfony/symfony/blob/master/UPGRADE-4.1.md
-                # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
                 'setHorizontalBorderChar' => 'setHorizontalBorderChars',
                 'setVerticalBorderChar' => 'setVerticalBorderChars',
                 'getVerticalBorderChar' => [

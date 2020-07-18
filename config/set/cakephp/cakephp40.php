@@ -13,12 +13,13 @@ use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# source: https://book.cakephp.org/4/en/appendices/4-0-migration-guide.html
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassRector::class)
         ->arg('$oldToNewClasses', [
-            # source: https://book.cakephp.org/4/en/appendices/4-0-migration-guide.html
             'Cake\Database\Type' => 'Cake\Database\TypeFactory',
             'Cake\Console\ConsoleErrorHandler' => 'Cake\Error\ConsoleErrorHandler',
         ]);

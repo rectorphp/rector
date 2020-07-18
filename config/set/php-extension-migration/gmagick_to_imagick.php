@@ -6,6 +6,7 @@ use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# https://www.php.net/manual/en/book.gmagick.php → https://www.php.net/manual/en/book.imagick.php
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
@@ -18,7 +19,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [
             'Gmagick' => [
-                # https://www.php.net/manual/en/book.gmagick.php → https://www.php.net/manual/en/book.imagick.php
                 'addimage' => 'addImage',
                 'addnoiseimage' => 'addNoiseImage',
                 'annotateimage' => 'annotateImage',

@@ -12,8 +12,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    # from: https://github.com/Kdyby/Events/
-    # to: https://github.com/contributte/event-dispatcher/
     $services->set(ChangeNetteEventNamesInGetSubscribedEventsRector::class);
 
     $services->set(ReplaceMagicPropertyEventWithEventClassRector::class);

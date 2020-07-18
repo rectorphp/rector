@@ -8,10 +8,10 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
+    # scalar type hints, see https://github.com/nette/security/commit/84024f612fb3f55f5d6e3e3e28eef1ad0388fa56
     $services->set(AddReturnTypeDeclarationRector::class)
         ->arg('$typehintForMethodByClass', [
             'Nette\Security\IAuthenticator' => [
-                # scalar type hints, see https://github.com/nette/security/commit/84024f612fb3f55f5d6e3e3e28eef1ad0388fa56
                 'authenticate' => 'Nette\Security\IIdentity',
             ],
             'Nette\Security\IAuthorizator' => [
@@ -41,8 +41,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'getIdentity' => '?Nette\Security\IIdentity',
                 'getLogoutReason' => '?int',
             ],
+            # scalar type hints, see https://github.com/nette/component-model/commit/f69df2ca224cad7b07f1c8835679393263ea6771
             'Nette\ComponentModel\Component' => [
-                # scalar type hints, see https://github.com/nette/component-model/commit/f69df2ca224cad7b07f1c8835679393263ea6771
                 'lookup' => 'Nette\ComponentModel\IComponent',
                 'lookupPath' => '?string',
                 'monitor' => 'void',
@@ -68,8 +68,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'getComponent' => '?Nette\ComponentModel\IContainer',
                 'getComponents' => 'Iterator',
             ],
+            # scalar type hints, see https://github.com/nette/application/commit/b71d69c507f90b48fbc1e40447d451b4b5c6f063
             'Nette\Application\Application' => [
-                # scalar type hints, see https://github.com/nette/application/commit/b71d69c507f90b48fbc1e40447d451b4b5c6f063
                 'run' => 'void',
                 'createInitialRequest' => 'Nette\Application\Request',
                 'processRequest' => 'void',

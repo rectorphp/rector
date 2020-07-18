@@ -10,10 +10,10 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
+    # source: https://book.cakephp.org/3.0/en/appendices/3-6-migration-guide.html
     $services->set(RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [
             'Cake\ORM\Table' => [
-                # source: https://book.cakephp.org/3.0/en/appendices/3-6-migration-guide.html
                 'association' => 'getAssociation',
             ],
             'Cake\Validation\ValidationSet' => [

@@ -7,13 +7,14 @@ use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# see: https://laravel.com/docs/5.5/upgrade
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [
             'Illuminate\Console\Command' => [
-                # see: https://laravel.com/docs/5.5/upgrade
                 'fire' => 'handle',
             ],
         ]);

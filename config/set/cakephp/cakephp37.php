@@ -9,13 +9,13 @@ use Rector\Core\Rector\Property\PropertyToMethodRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# source: https://book.cakephp.org/3.0/en/appendices/3-7-migration-guide.html
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [
             'Cake\Form\Form' => [
-                # source: https://book.cakephp.org/3.0/en/appendices/3-7-migration-guide.html
                 'errors' => 'getErrors',
             ],
             'Cake\Validation\Validation' => [

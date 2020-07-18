@@ -7,16 +7,14 @@ use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+# see: https://laravel.com/docs/5.4/upgrade
+
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(StringToClassConstantRector::class)
         ->arg('$stringsToClassConstants', [
-            'kernel.handled' => [
-                # see: https://laravel.com/docs/5.4/upgrade
-                'Illuminate\Foundation\Http\Events\RequestHandled',
-                'class',
-            ],
+            'kernel.handled' => ['Illuminate\Foundation\Http\Events\RequestHandled', 'class'],
             'locale.changed' => ['Illuminate\Foundation\Events\LocaleUpdated', 'class'],
             'illuminate.log' => ['Illuminate\Log\Events\MessageLogged', 'class'],
         ]);
