@@ -6,7 +6,6 @@ namespace Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertContainsWithoutId
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

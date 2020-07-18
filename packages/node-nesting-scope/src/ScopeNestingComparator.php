@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NodeNestingScope;
 
 use PhpParser\Node;
-
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
 

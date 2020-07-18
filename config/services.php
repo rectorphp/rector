@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Symfony\Component\DependencyInjection\Loader\Configurator;
-
 use OndraM\CiDetector\CiDetector;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
@@ -18,6 +16,8 @@ use Rector\Core\PhpParser\Parser\LexerFactory;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Descriptor\TextDescriptor;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
