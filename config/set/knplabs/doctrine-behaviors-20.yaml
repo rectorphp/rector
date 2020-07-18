@@ -61,8 +61,6 @@ services:
             # tree
             'Knp\DoctrineBehaviors\Model\Tree\Node': 'Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait'
 
-    # @todo de-fluent method calls
-    # add scalar types to trait methods
     Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector:
         $detectedTraits:
             - 'Knp\DoctrineBehaviors\Model\Translatable\Translation'

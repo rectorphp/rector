@@ -255,7 +255,6 @@ services:
                 # renames are done by RenameMethodRector above
                 - 'withLocation'
                 - 'withHeader'
-                - 'withLocation'
                 - 'withDisabledCache'
                 - 'withType'
                 - 'withCharset'
@@ -273,6 +272,3 @@ services:
                 - 'withCookie'
                 - 'withFile'
                 - 'withDownload'
-
-    # @todo
-    # The fieldList option for Cake\ORM\Table::newEntity() and patchEntity() has been renamed to fields to be more consistent with other parts of the ORM.
