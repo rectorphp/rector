@@ -14,8 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $containerConfigurator->import(__DIR__ . '/parameters/parameter_name_guard.php');
 
-    # @todo convert
-    $containerConfigurator->import(__DIR__ . '/../utils/**/config/config.yaml', null, true);
+    $containerConfigurator->import(__DIR__ . '/../utils/**/config/config.php', null, true);
 
     $parameters = $containerConfigurator->parameters();
 
