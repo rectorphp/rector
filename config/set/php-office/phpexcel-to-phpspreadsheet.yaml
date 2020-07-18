@@ -27,7 +27,7 @@ services:
                 getSelectedCell: 'getSelectedCells'
 
                 # https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#cell-caching
-                # beware! this can be run only once, since it's circular change
+                # beware! this can be run only once, since its circular change
                 getCellCacheController: 'getCellCollection'
                 getCellCollection: 'getCoordinates'
 

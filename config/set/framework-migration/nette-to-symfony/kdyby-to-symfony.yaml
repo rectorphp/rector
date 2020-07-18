@@ -6,7 +6,6 @@ services:
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
-            # Kdyby → Symfony
             'Kdyby\Translation\Translator':
                 translate: 'trans'
             'Kdyby\RabbitMq\IConsumer':
@@ -14,7 +13,6 @@ services:
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            # Kdyby → Symfony
             'Kdyby\RabbitMq\IConsumer': 'OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface'
             'Kdyby\RabbitMq\IProducer': 'OldSound\RabbitMqBundle\RabbitMq\ProducerInterface'
             'Kdyby\Monolog\Logger': 'Psr\Log\LoggerInterface'

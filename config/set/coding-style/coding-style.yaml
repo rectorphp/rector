@@ -7,14 +7,10 @@ services:
     Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector: null
     Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector: null
 
-    # requires configuration
-#     Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector: null
-#     Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector: null
     Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector: null
     Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector: null
     Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector: null
 
-    # 'ClassName' → ClassName::class
     Rector\Php55\Rector\String_\StringClassNameToClassConstantRector: null
     Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector: null
     Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector: null

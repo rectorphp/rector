@@ -23,7 +23,6 @@ services:
             # https://github.com/symfony/symfony/pull/29236
             'Symfony\Component\Cache\Traits\ApcuTrait\ApcuCache': 'Symfony\Component\Cache\Traits\ApcuTrait\ApcuAdapter'
             'Symfony\Component\Cache\Adapter\SimpleCacheAdapter': 'Symfony\Component\Cache\Adapter\Psr16Adapter'
-            # simple → adapters
             'Symfony\Component\Cache\Simple\ArrayCache': 'Symfony\Component\Cache\Adapter\ArrayAdapter'
             'Symfony\Component\Cache\Simple\ChainCache': 'Symfony\Component\Cache\Adapter\ChainAdapter'
             'Symfony\Component\Cache\Simple\DoctrineCache': 'Symfony\Component\Cache\Adapter\DoctrineAdapter'
@@ -58,7 +57,7 @@ services:
             'Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser': 'Symfony\Component\Mime\FileinfoMimeTypeGuesser'
 
             # HttpKernel
-            'Symfony\Component\HttpKernel\Client': 'Symfony\Component\HttpKernel\HttpKernelBrowser'
+            # @todo unpack after YAML to PHP migration, Symfony\Component\HttpKernel\Client: Symfony\Component\HttpKernel\HttpKernelBrowser
             'Symfony\Component\HttpKernel\EventListener\TranslatorListener': 'Symfony\Component\HttpKernel\EventListener\LocaleAwareListener'
 
             # Security

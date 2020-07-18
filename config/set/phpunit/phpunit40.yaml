@@ -1,6 +1,6 @@
 services:
+    # see https://github.com/sebastianbergmann/phpunit-mock-objects/issues/137
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        # see https://github.com/sebastianbergmann/phpunit-mock-objects/issues/137
         $oldToNewMethodsByClass:
             'PHPUnit_Framework_MockObject_MockObject':
                 staticExpects: 'expects'

@@ -2,7 +2,6 @@ services:
     # handles 2nd and 3rd argument of setExpectedException
     Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector: null
 
-    # @expectedException → $this->expectException()
     Rector\PHPUnit\Rector\ExceptionAnnotationRector: null
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
