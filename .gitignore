@@ -9,7 +9,7 @@ composer.lock
 .phpunit.result.cache
 
 # often customized locally - example on Github is just fine
-create-rector.yaml
+create-rector.php
 
 # tests - travis
 /laravel-dir

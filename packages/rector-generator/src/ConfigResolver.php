@@ -40,7 +40,7 @@ final class ConfigResolver
      */
     private function getSetFileInfos(string $set): array
     {
-        $fileSet = sprintf('#^%s(\.yaml)?$#', $set);
+        $fileSet = sprintf('#^%s\.php)?$#', $set);
         $finder = Finder::create()->files()
             ->in(Set::SET_DIRECTORY)
             ->name($fileSet);

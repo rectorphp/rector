@@ -6,6 +6,8 @@ namespace Rector\Core\Tests\Configuration;
 
 use Iterator;
 use Rector\Core\Configuration\MinimalVersionChecker;
+use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
+use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonReader;
 use Rector\Core\Exception\Application\PhpVersionException;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
@@ -16,12 +18,10 @@ final class MinimalVersionCheckerTest extends AbstractKernelTestCase
      */
     public function test(string $version, bool $shouldThrowException): void
     {
-        $composerJsonReader = new MinimalVersionChecker\ComposerJsonReader(
-            __DIR__ . '/MinimalVersionChecker/composer-7.2.0.json'
-        );
+        $composerJsonReader = new ComposerJsonReader(__DIR__ . '/MinimalVersionChecker/composer-7.2.0.json');
         $minimalVersionChecker = new MinimalVersionChecker(
             $version,
-            new MinimalVersionChecker\ComposerJsonParser($composerJsonReader->read())
+            new ComposerJsonParser($composerJsonReader->read())
         );
 
         if ($shouldThrowException) {

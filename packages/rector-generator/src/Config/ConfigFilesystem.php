@@ -6,6 +6,7 @@ namespace Rector\RectorGenerator\Config;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\ValueObject\Configuration;
 
@@ -47,18 +48,8 @@ final class ConfigFilesystem
             return;
         }
 
-        $newSetConfigContent = trim($setConfigContent) . sprintf(
-            '%s%s: null%s',
-            PHP_EOL,
-            $this->indentFourSpaces($rectorFqnName),
-            PHP_EOL
-        );
+        throw new NotImplementedYetException('Add *.php config rule append support');
 
-        FileSystem::write($configuration->getSetConfig(), $newSetConfigContent);
-    }
-
-    private function indentFourSpaces(string $string): string
-    {
-        return Strings::indent($string, 4, ' ');
+        // FileSystem::write($configuration->getSetConfig(), $newSetConfigContent);
     }
 }
