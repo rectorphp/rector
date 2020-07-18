@@ -1,4 +1,0 @@
-services:
-    Rector\Renaming\Rector\Class_\RenameClassRector:
-        $oldToNewClasses:
-            'Doctrine\Common\DataFixtures\AbstractFixture': 'Doctrine\Bundle\FixturesBundle\Fixture'

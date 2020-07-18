@@ -25,6 +25,6 @@ final class SetTest extends AbstractRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/../../../config/set/database-migration/mysql-to-mysqli.yaml';
+        return __DIR__ . '/../../../config/set/database-migration/mysql-to-mysqli.php';
     }
 }

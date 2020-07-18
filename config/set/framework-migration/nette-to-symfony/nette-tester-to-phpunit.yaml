@@ -1,6 +1,0 @@
-services:
-    Rector\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector: null
-
-    Rector\NetteTesterToPHPUnit\Rector\StaticCall\NetteAssertToPHPUnitAssertRector: null
-
-    Rector\NetteTesterToPHPUnit\Rector\RenameTesterTestToPHPUnitToTestFileRector: null

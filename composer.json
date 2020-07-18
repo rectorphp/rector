@@ -264,10 +264,7 @@
             "bin/rector check-static-type-mappers"
         ],
         "check-cs": "vendor/bin/ecs check --ansi",
-        "fix-cs": [
-            "vendor/bin/ecs check --fix --ansi",
-            "ci/clean_trailing_spaces.sh"
-        ],
+        "fix-cs": "vendor/bin/ecs check --fix --ansi",
         "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
         "changelog": [
             "vendor/bin/changelog-linker dump-merges --in-categories --ansi",

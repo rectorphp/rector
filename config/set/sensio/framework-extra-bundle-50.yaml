@@ -1,2 +1,0 @@
-services:
-    Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector: null

@@ -1,5 +1,0 @@
-services:
-    Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector: null
-    Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector: null
-    Rector\Order\Rector\Class_\OrderPropertyByComplexityRector: null
-    Rector\Order\Rector\Class_\OrderClassConstantsByIntegerValueRector: null

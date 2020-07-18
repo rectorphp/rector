@@ -1,8 +1,0 @@
-services:
-    Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector: null
-    Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector: null
-    Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector: null
-    Rector\SOLID\Rector\ClassMethod\ChangeReadOnlyVariableWithDefaultValueToConstantRector: null
-    Rector\SOLID\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector: null
-    Rector\SOLID\Rector\Property\AddFalseDefaultToBoolPropertyRector: null
-    Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector: null
