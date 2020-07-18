@@ -41,7 +41,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
         "johnkary/phpunit-speedtrap": "^3.2",
-        "migrify/config-transformer": "^0.3.11",
+        "migrify/config-transformer": "dev-master",
         "ocramius/package-versions": "^1.4|^1.5",
         "phpunit/phpunit": "^8.5|^9.0",
         "psr/event-dispatcher": "^1.0",
@@ -264,10 +264,7 @@
             "bin/rector check-static-type-mappers"
         ],
         "check-cs": "vendor/bin/ecs check --ansi",
-        "fix-cs": [
-            "vendor/bin/ecs check --fix --ansi",
-            "ci/clean_trailing_spaces.sh"
-        ],
+        "fix-cs": "vendor/bin/ecs check --fix --ansi",
         "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
         "changelog": [
             "vendor/bin/changelog-linker dump-merges --in-categories --ansi",

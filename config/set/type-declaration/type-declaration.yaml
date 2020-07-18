@@ -1,7 +1,0 @@
-services:
-    Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector: null
-    Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector: null
-    Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector: null
-    Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector: null
-    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector: null
-    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector: null

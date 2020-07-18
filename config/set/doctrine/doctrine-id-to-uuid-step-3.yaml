@@ -1,3 +1,0 @@
-services:
-    # add relations uuid properties
-    Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector: null

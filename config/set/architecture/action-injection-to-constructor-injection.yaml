@@ -1,3 +1,0 @@
-services:
-    Rector\Core\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector: null
-    Rector\Core\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector: null

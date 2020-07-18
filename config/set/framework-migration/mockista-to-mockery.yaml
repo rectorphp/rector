@@ -1,3 +1,0 @@
-services:
-    Rector\MockistaToMockery\Rector\Class_\MockeryTearDownRector: null
-    Rector\MockistaToMockery\Rector\ClassMethod\MockistaMockToMockeryMockRector: null

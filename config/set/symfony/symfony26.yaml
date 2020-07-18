@@ -1,3 +1,0 @@
-services:
-    Rector\Symfony\Rector\Controller\RedirectToRouteRector: null
-    Rector\Symfony\Rector\Controller\AddFlashRector: null

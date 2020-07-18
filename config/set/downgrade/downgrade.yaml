@@ -1,2 +1,0 @@
-services:
-    Rector\Downgrade\Rector\Property\TypedPropertyRector: null

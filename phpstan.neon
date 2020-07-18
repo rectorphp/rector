@@ -51,6 +51,7 @@ parameters:
         - tests
         - compiler/src
         - utils
+        - config
 
     excludes_analyse:
         # phsptan bug

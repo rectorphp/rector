@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+use Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector;
+use Rector\PHPUnit\Rector\ExceptionAnnotationRector;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    # handles 2nd and 3rd argument of setExpectedException
+    $services->set(DelegateExceptionArgumentsRector::class);
+
+    $services->set(ExceptionAnnotationRector::class);
+
+    $services->set(RenameMethodRector::class)
+        ->arg('$oldToNewMethodsByClass', [
+            'PHPUnit\Framework\TestClass' => [
+                'setExpectedException' => 'expectedException',
+                'setExpectedExceptionRegExp' => 'expectedException',
+            ],
+        ]);
+};

@@ -28,6 +28,6 @@ final class Symfony28Test extends AbstractRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/../../../../config/set/symfony/symfony28.yaml';
+        return __DIR__ . '/../../../../config/set/symfony/symfony28.php';
     }
 }

@@ -1,4 +1,0 @@
-services:
-    Rector\Core\Rector\Property\InjectAnnotationClassRector:
-        $annotationClasses:
-            - 'DI\Annotation\Inject'
