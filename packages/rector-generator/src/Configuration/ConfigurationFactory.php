@@ -5,20 +5,12 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\Configuration;
 
 use Nette\Utils\Strings;
-use PhpParser\Node;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\RectorGenerator\ConfigResolver;
 use Rector\RectorGenerator\Guard\RecipeGuard;
-use Rector\RectorGenerator\Node\NodeClassProvider;
 use Rector\RectorGenerator\ValueObject\Configuration;
 
 final class ConfigurationFactory
 {
-    /**
-     * @var NodeClassProvider
-     */
-    private $nodeClassProvider;
-
     /**
      * @var RecipeGuard
      */
@@ -29,12 +21,8 @@ final class ConfigurationFactory
      */
     private $configResolver;
 
-    public function __construct(
-        NodeClassProvider $nodeClassProvider,
-        RecipeGuard $recipeGuard,
-        ConfigResolver $configResolver
-    ) {
-        $this->nodeClassProvider = $nodeClassProvider;
+    public function __construct(RecipeGuard $recipeGuard, ConfigResolver $configResolver)
+    {
         $this->recipeGuard = $recipeGuard;
         $this->configResolver = $configResolver;
     }
@@ -46,14 +34,14 @@ final class ConfigurationFactory
     {
         $this->recipeGuard->ensureRecipeIsValid($rectorRecipe);
 
-        $fqnNodeTypes = $this->resolveFullyQualifiedNodeTypes($rectorRecipe['node_types']);
-        $category = $this->resolveCategoryFromFqnNodeTypes($fqnNodeTypes);
+        $nodeTypeClasses = $rectorRecipe['node_types'];
+        $category = $this->resolveCategoryFromFqnNodeTypes($nodeTypeClasses);
 
         return new Configuration(
             $rectorRecipe['package'],
             $rectorRecipe['name'],
             $category,
-            $this->resolveFullyQualifiedNodeTypes($rectorRecipe['node_types']),
+            $nodeTypeClasses,
             $rectorRecipe['description'],
             $this->normalizeCode($rectorRecipe['code_before']),
             $this->normalizeCode($rectorRecipe['code_after']),
@@ -65,34 +53,6 @@ final class ConfigurationFactory
             $this->configResolver->resolveSetConfig($rectorRecipe['set']),
             $this->detectPhpSnippet($rectorRecipe['code_before'])
         );
-    }
-
-    /**
-     * @param string[] $nodeTypes
-     * @return string[]
-     */
-    private function resolveFullyQualifiedNodeTypes(array $nodeTypes): array
-    {
-        $nodeClasses = $this->nodeClassProvider->getNodeClasses();
-
-        $fqnNodeTypes = [];
-        foreach ($nodeTypes as $nodeType) {
-            if ($nodeType === 'Node') {
-                $fqnNodeTypes[] = Node::class;
-                continue;
-            }
-
-            foreach ($nodeClasses as $nodeClass) {
-                if ($this->isNodeClassMatch($nodeClass, $nodeType)) {
-                    $fqnNodeTypes[] = $nodeClass;
-                    continue 2;
-                }
-            }
-
-            throw new ShouldNotHappenException(sprintf('Node endings with "%s" was not found', $nodeType));
-        }
-
-        return array_unique($fqnNodeTypes);
     }
 
     /**
@@ -115,20 +75,5 @@ final class ConfigurationFactory
     private function detectPhpSnippet(string $code): bool
     {
         return Strings::startsWith($code, '<?php');
-    }
-
-    private function isNodeClassMatch(string $nodeClass, string $nodeType): bool
-    {
-        // skip "magic", they're used less than rarely
-        if (Strings::contains($nodeClass, 'MagicConst')) {
-            return false;
-        }
-
-        if (Strings::endsWith($nodeClass, '\\' . $nodeType)) {
-            return true;
-        }
-
-        // in case of forgotten _
-        return Strings::endsWith($nodeClass, '\\' . $nodeType . '_');
     }
 }

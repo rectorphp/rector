@@ -81,8 +81,8 @@ final class Configuration
         string $description,
         string $codeBefore,
         string $codeAfter,
-        ?string $extraFileContent = null,
-        ?string $extraFileName = null,
+        ?string $extraFileContent,
+        ?string $extraFileName,
         array $source,
         ?string $setConfig,
         bool $isPhpSnippet

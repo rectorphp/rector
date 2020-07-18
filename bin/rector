@@ -196,7 +196,7 @@ final class RectorConfigsResolver
         // And from --config or default one
         $inputOrFallbackConfig = $this->configResolver->resolveFromInputWithFallback(
             $input,
-            ['rector.yml', 'rector.yaml']
+            ['rector.yml', 'rector.yaml', 'rector.php']
         );
         if ($inputOrFallbackConfig !== null) {
             $configs[] = $inputOrFallbackConfig;

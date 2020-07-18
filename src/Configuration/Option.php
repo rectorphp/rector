@@ -125,4 +125,9 @@ final class Option
      * @var string
      */
     public const FILE_EXTENSIONS = 'file_extensions';
+
+    /**
+     * @var string
+     */
+    public const RECTOR_RECIPE = 'rector_recipe';
 }

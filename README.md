@@ -119,6 +119,23 @@ parameters:
         - code-quality
 ```
 
+You can also use `rector.php` as new [Symfony best practice](https://twitter.com/symfony_en/status/1284538366147678208):
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::SETS, ['code-quality']);
+};
+```
+
 ### B. Standalone Rules
 
 In the end, it's best to combine few of basic sets and drop [particular rules](/docs/rector_rules_overview.md) that you want to try:
