@@ -11,7 +11,7 @@ use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonReader;
 use Rector\Core\Console\Application;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
-use Rector\Core\Set\Set;
+use Rector\Core\ValueObject\SetDirectory;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\SetConfigResolver\ConfigResolver;
@@ -188,7 +188,7 @@ final class RectorConfigsResolver
         // Detect configuration from --set
         $input = new ArgvInput();
 
-        $setConfig = $this->configResolver->resolveSetFromInputAndDirectory($input, Set::SET_DIRECTORY);
+        $setConfig = $this->configResolver->resolveSetFromInputAndDirectory($input, SetDirectory::SET_DIRECTORY);
         if ($setConfig !== null) {
             $configs[] = $setConfig;
         }
@@ -205,7 +205,7 @@ final class RectorConfigsResolver
         // resolve: parameters > sets
         $parameterSetsConfigs = $this->configResolver->resolveFromParameterSetsFromConfigFiles(
             $configs,
-            Set::SET_DIRECTORY
+            SetDirectory::SET_DIRECTORY
         );
         if ($parameterSetsConfigs !== []) {
             $configs = array_merge($configs, $parameterSetsConfigs);

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Set;
+namespace Rector\Core\ValueObject;
 
-final class Set
+final class SetDirectory
 {
     /**
      * @var string

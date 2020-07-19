@@ -316,18 +316,12 @@ final class NodeFactory
 
     public function createPrivateClassConst(string $name, $value): ClassConst
     {
-        $const = new Const_($name, $value);
-        $classConst = new ClassConst([$const]);
-        $classConst->flags |= Class_::MODIFIER_PRIVATE;
+        return $this->createClassConstant($name, $value, Class_::MODIFIER_PRIVATE);
+    }
 
-        // add @var type by default
-        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($value);
-        if (! $staticType instanceof MixedType) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
-            $phpDocInfo->changeVarType($staticType);
-        }
-
-        return $classConst;
+    public function createPublicClassConst(string $name, $value): ClassConst
+    {
+        return $this->createClassConstant($name, $value, Class_::MODIFIER_PUBLIC);
     }
 
     /**
@@ -456,5 +450,24 @@ final class NodeFactory
         }
 
         $phpDocInfo->changeVarType($type);
+    }
+
+    private function createClassConstant(string $name, $value, int $modifier): ClassConst
+    {
+        $value = BuilderHelpers::normalizeValue($value);
+
+        $const = new Const_($name, $value);
+        $classConst = new ClassConst([$const]);
+        $classConst->flags |= $modifier;
+
+        // add @var type by default
+        $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($value);
+
+        if (! $staticType instanceof MixedType) {
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
+            $phpDocInfo->changeVarType($staticType);
+        }
+
+        return $classConst;
     }
 }
