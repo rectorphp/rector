@@ -126,7 +126,7 @@ PHP
             return null;
         }
 
-        $expectedName = $this->expectedNameResolver->resolveForGetCallExpr($variableAndCallAssign->getCall());
+        $expectedName = $this->expectedNameResolver->resolveForCall($variableAndCallAssign->getCall());
         if ($expectedName === null || $this->isName($node, $expectedName)) {
             return null;
         }

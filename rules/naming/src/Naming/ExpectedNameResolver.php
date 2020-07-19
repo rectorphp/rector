@@ -164,8 +164,12 @@ final class ExpectedNameResolver
     /**
      * @param MethodCall|StaticCall|FuncCall $expr
      */
-    public function resolveForGetCallExpr(Expr $expr): ?string
+    public function resolveForCall(Expr $expr): ?string
     {
+        if ($this->isDynamicNameCall($expr)) {
+            return null;
+        }
+
         $name = $this->nodeNameResolver->getName($expr->name);
         if ($name === null) {
             return null;
@@ -203,5 +207,21 @@ final class ExpectedNameResolver
     {
         $suffixNamePattern = '#\w+' . ucfirst($expectedName) . '#';
         return (bool) Strings::match($currentName, $suffixNamePattern);
+    }
+
+    /**
+     * @param MethodCall|StaticCall|FuncCall $expr
+     */
+    private function isDynamicNameCall(Expr $expr): bool
+    {
+        if ($expr->name instanceof StaticCall) {
+            return true;
+        }
+
+        if ($expr->name instanceof MethodCall) {
+            return true;
+        }
+
+        return $expr->name instanceof FuncCall;
     }
 }

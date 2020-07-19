@@ -21,9 +21,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # is_cache_enabled: true
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
-    $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests', __DIR__ . '/rules', __DIR__ . '/utils', __DIR__ . '/packages']);
+    $parameters->set(
+        Option::PATHS,
+        [__DIR__ . '/src', __DIR__ . '/tests', __DIR__ . '/rules', __DIR__ . '/utils', __DIR__ . '/packages']
+    );
 
-    $parameters->set(Option::EXCLUDE_PATHS, ['/Source/', '/*Source/', '/Fixture/', '/Expected/', __DIR__ . '/packages/doctrine-annotation-generated/src/*', '*.php.inc']);
+    $parameters->set(
+        Option::EXCLUDE_PATHS,
+        [
+            '/Source/',
+            '/*Source/',
+            '/Fixture/',
+            '/Expected/',
+            __DIR__ . '/packages/doctrine-annotation-generated/src/*',
+            '*.php.inc',
+        ]
+    );
 
     # so Rector code is still PHP 7.2 compatible
     $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
