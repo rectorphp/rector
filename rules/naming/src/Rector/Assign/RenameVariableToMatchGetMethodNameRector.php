@@ -15,10 +15,13 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\RenameVariableToMatchGetMethodNameRectorTest
@@ -93,24 +96,29 @@ PHP
         return $node;
     }
 
-    private function renameVariable(Node $node, string $newName): void
+    private function renameVariable(Assign $assign, string $newName): void
     {
-        $parentNodeStmts = $this->getParentNodeStmts($node);
+        $parentNodeStmts = $this->getParentNodeStmts($assign);
 
         /** @var Variable $variableNode */
-        $variableNode = $node->var;
+        $variableNode = $assign->var;
 
         /** @var string $originalName */
         $originalName = $variableNode->name;
 
         $this->traverseNodesWithCallable($parentNodeStmts, function (Node $node) use ($originalName, $newName) {
-            /** @var Variable $node */
+            if (! $node instanceof Variable) {
+                return null;
+            }
+
             if (! $this->isVariableName($node, $originalName)) {
                 return null;
             }
 
             $this->renameInDocComment($node, $originalName, $newName);
             $node->name = $newName;
+
+            return $node;
         });
     }
 
@@ -120,8 +128,7 @@ PHP
     private function getParentNodeStmts(Node $node): array
     {
         /** @var FunctionLike|null $parentNode */
-        $parentNode = $this->findFirstFunctionLikeParent($node);
-
+        $parentNode = $this->findFunctionLikeParent($node);
         if ($parentNode === null) {
             return [];
         }
@@ -135,7 +142,7 @@ PHP
     private function getParentNodeParams(Node $node): array
     {
         /** @var FunctionLike|null $parentNode */
-        $parentNode = $this->findFirstFunctionLikeParent($node);
+        $parentNode = $this->findFunctionLikeParent($node);
 
         if ($parentNode === null) {
             return [];
@@ -150,7 +157,7 @@ PHP
     private function getParentNodeUses(Node $node): array
     {
         /** @var FunctionLike|null $parentNode */
-        $parentNode = $this->findFirstFunctionLikeParent($node);
+        $parentNode = $this->findFunctionLikeParent($node);
 
         if ($parentNode === null || ! $parentNode instanceof Closure) {
             return [];
@@ -172,9 +179,9 @@ PHP
         return $this->skipOnConflictOtherVariable($assign, $newName);
     }
 
-    private function findFirstFunctionLikeParent(Node $node): ?FunctionLike
+    private function findFunctionLikeParent(Node $node): ?FunctionLike
     {
-        return $this->betterNodeFinder->findFirstParentInstanceOf($node, FunctionLike::class);
+        return $node->getAttribute(AttributeKey::METHOD_NODE) ?? $node->getAttribute(AttributeKey::FUNCTION_NODE);
     }
 
     private function skipOnConflictParamName(Assign $assign, string $newName): bool
@@ -241,14 +248,24 @@ PHP
 
     private function renameInDocComment(Variable $variable, string $originalName, string $newName): void
     {
-        /** @var Doc|null $docComment */
-        $docComment = $variable->getDocComment();
-        if ($docComment === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $variable->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return;
         }
 
-        $newText = str_replace('$' . $originalName, '$' . $newName, $docComment->getText());
-        $newDocComment = new Doc($newText);
-        $variable->setDocComment($newDocComment);
+        $varTagValueNode = $phpDocInfo->getByType(VarTagValueNode::class);
+        if ($varTagValueNode === null) {
+            return;
+        }
+
+        if ($varTagValueNode->variableName !== '$' . $originalName) {
+            return;
+        }
+
+        $varTagValueNode->variableName = '$' . $newName;
+
+        // invoke doc print
+        $variable->setAttribute(AttributeKey::ORIGINAL_NODE, null);
     }
 }
