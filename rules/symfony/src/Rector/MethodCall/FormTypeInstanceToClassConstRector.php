@@ -185,18 +185,18 @@ PHP
             return null;
         }
 
-        $classMethod = $formTypeClass->getMethod('__construct');
+        $constructorClassMethod = $formTypeClass->getMethod('__construct');
 
         // nothing we can do, out of scope
-        if ($classMethod === null) {
+        if ($constructorClassMethod === null) {
             return null;
         }
 
-        $this->addBuildFormMethod($formTypeClass, $classMethod);
+        $this->addBuildFormMethod($formTypeClass, $constructorClassMethod);
         $this->addConfigureOptionsMethod($formTypeClass, $namesToArgs);
 
         // remove ctor
-        $this->removeNode($classMethod);
+        $this->removeNode($constructorClassMethod);
 
         return $methodCall;
     }

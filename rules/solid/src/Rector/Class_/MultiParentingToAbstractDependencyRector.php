@@ -200,13 +200,13 @@ PHP
      */
     private function resolveConstructorParamClassTypes(Class_ $class): array
     {
-        $classMethod = $class->getMethod(self::CONSTRUCTOR_METHOD_NAME);
-        if ($classMethod === null) {
+        $constructorClassMethod = $class->getMethod(self::CONSTRUCTOR_METHOD_NAME);
+        if ($constructorClassMethod === null) {
             return [];
         }
 
         $objectTypes = [];
-        foreach ($classMethod->getParams() as $param) {
+        foreach ($constructorClassMethod->getParams() as $param) {
             $paramType = $this->getObjectType($param);
             $paramType = $this->popFirstObjectTypeFromUnionType($paramType);
 

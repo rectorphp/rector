@@ -208,7 +208,7 @@ PHP
         // add all properties to class
         $class = $this->addNewPropertiesToClass($class, $newProperties);
 
-        $expression = $this->createParentSetUpStaticCall();
+        $parentSetUpStaticCallExpression = $this->createParentSetUpStaticCall();
         foreach ($newProperties as $type) {
             // container fetch assign
             $assign = $this->createContainerGetTypeToPropertyAssign($type);
@@ -217,9 +217,9 @@ PHP
 
             // get setup or create a setup add add it there
             if ($setupClassMethod !== null) {
-                $this->updateSetUpMethod($setupClassMethod, $expression, $assign);
+                $this->updateSetUpMethod($setupClassMethod, $parentSetUpStaticCallExpression, $assign);
             } else {
-                $setUpMethod = $this->createSetUpMethod($expression, $assign);
+                $setUpMethod = $this->createSetUpMethod($parentSetUpStaticCallExpression, $assign);
                 $this->classInsertManipulator->addAsFirstMethod($class, $setUpMethod);
             }
         }

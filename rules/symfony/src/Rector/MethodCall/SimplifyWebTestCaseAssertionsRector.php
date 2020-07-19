@@ -98,8 +98,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $methodCall = $this->createMethodCall('client', 'getResponse');
-        $this->getStatusCodeMethodCall = $this->createMethodCall($methodCall, 'getStatusCode');
+        $clientGetResponseMethodCall = $this->createMethodCall('client', 'getResponse');
+        $this->getStatusCodeMethodCall = $this->createMethodCall($clientGetResponseMethodCall, 'getStatusCode');
 
         if (! $this->isInWebTestCase($node)) {
             return null;

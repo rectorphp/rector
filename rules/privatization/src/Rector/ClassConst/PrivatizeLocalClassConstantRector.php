@@ -158,16 +158,16 @@ PHP
 
     private function findParentClassConstantAndRefactorIfPossible(string $class, string $constant): ?ConstantVisibility
     {
-        $classConst = $this->parentClassConstantNodeFinder->find($class, $constant);
+        $parentClassConst = $this->parentClassConstantNodeFinder->find($class, $constant);
 
-        if ($classConst !== null) {
+        if ($parentClassConst !== null) {
             // Make sure the parent's constant has been refactored
-            $this->refactor($classConst);
+            $this->refactor($parentClassConst);
 
             return new ConstantVisibility(
-                $classConst->isPublic(),
-                $classConst->isProtected(),
-                $classConst->isPrivate()
+                $parentClassConst->isPublic(),
+                $parentClassConst->isProtected(),
+                $parentClassConst->isPrivate()
             );
             // If the constant isn't declared in the parent, it might be declared in the parent's parent
         }

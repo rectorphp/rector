@@ -240,11 +240,11 @@ PHP
      */
     private function createGetSubscribedEventsClassMethod(array $eventsToMethods): ClassMethod
     {
-        $classMethod = $this->nodeFactory->createPublicMethod('getSubscribedEvents');
+        $getSubscribersClassMethod = $this->nodeFactory->createPublicMethod('getSubscribedEvents');
 
         $eventsToMethodsArray = new Array_();
 
-        $this->makeStatic($classMethod);
+        $this->makeStatic($getSubscribersClassMethod);
 
         foreach ($eventsToMethods as $eventName => $methodNamesWithPriorities) {
             $eventNameExpr = $this->createEventName($eventName);
@@ -261,10 +261,10 @@ PHP
             }
         }
 
-        $classMethod->stmts[] = new Return_($eventsToMethodsArray);
-        $this->decorateClassMethodWithReturnType($classMethod);
+        $getSubscribersClassMethod->stmts[] = new Return_($eventsToMethodsArray);
+        $this->decorateClassMethodWithReturnType($getSubscribersClassMethod);
 
-        return $classMethod;
+        return $getSubscribersClassMethod;
     }
 
     /**
