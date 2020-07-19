@@ -41,10 +41,10 @@ final class AddArgumentTypeWithProbeDataRectorTest extends AbstractRectorTestCas
 
     private function initializeProbeData(): void
     {
-        $probeStorage = new StaticInMemoryProbeStorage();
-        TypeStaticProbe::setProbeStorage($probeStorage);
+        $staticInMemoryProbeStorage = new StaticInMemoryProbeStorage();
+        TypeStaticProbe::setProbeStorage($staticInMemoryProbeStorage);
 
-        $probeStorage::clear();
+        $staticInMemoryProbeStorage::clear();
 
         TypeStaticProbe::recordArgumentType('hey', self::METHOD_REFERENCE, 0);
     }
