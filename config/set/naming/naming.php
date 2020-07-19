@@ -14,6 +14,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // @todo add in separate PR, many changes now
     // $services->set(RenameVariableToMatchNewTypeRector::class);
 
-    // @todo add in separate PR, many changes now
-    // $services->set(RenameVariableToMatchGetMethodNameRector::class);
+    $services->set(RenameVariableToMatchGetMethodNameRector::class);
 };
