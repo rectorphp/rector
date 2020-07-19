@@ -50,9 +50,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ColorConsoleDiffFormatter::class);
 
     $services->set(ConsoleDiffer::class);
-
-    $services->set(SymfonyStyleFactory::class);
-
-    $services->set(SymfonyStyle::class)
-        ->factory([ref(SymfonyStyleFactory::class), 'create']);
 };

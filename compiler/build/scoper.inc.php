@@ -88,13 +88,24 @@ return [
 
         // unprefix configuraion in sets, @see https://github.com/rectorphp/rector/issues/3227
         function (string $filePath, string $prefix, string $content): string {
-            // only *.yaml files
-            if (! Strings::endsWith($filePath, '.yaml')) {
+            // only sets
+            if (! Strings::startsWith($filePath, 'config/set/')) {
                 return $content;
             }
 
-            if (! Strings::startsWith($filePath, 'config/set/')) {
+            return StaticEasyPrefixer::unPrefixQuotedValues($prefix, $content);
+        },
+
+        // unprefix all excluded classes
+        function (string $filePath, string $prefix, string $content): string {
+            // only sets
+            if (! Strings::endsWith($filePath, '*.php')) {
                 return $content;
+            }
+
+            foreach (StaticEasyPrefixer::EXCLUDED_NAMESPACES_AND_CLASSES as $excludedNamespaceAndClass) {
+                dump($excludedNamespaceAndClass);
+                die;
             }
 
             return StaticEasyPrefixer::unPrefixQuotedValues($prefix, $content);

@@ -137,7 +137,7 @@ final class CompileCommand extends Command
             return;
         }
 
-        $process = new Process(['composer', 'install'], $this->buildDir, null, null, null);
+        $process = new Process(['composer', 'install', '--ansi'], $this->buildDir, null, null, null);
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
