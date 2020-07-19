@@ -181,8 +181,13 @@ final class ExpectedNameResolver
             return $expectedName;
         }
 
+        // call with args can return different value, so skip there if not sure about the type
+        if (count($call->args) > 0) {
+            return null;
+        }
+
         // @see https://regex101.com/r/hnU5pm/2/
-        $matches = Strings::match($name, '#^get(([A-Z]).+)#');
+        $matches = Strings::match($name, '#^get([A-Z].+)#');
         if ($matches === null) {
             return null;
         }

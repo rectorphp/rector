@@ -105,6 +105,7 @@ PHP
         }
 
         $newName = $this->expectedNameResolver->resolveForGetCallExpr($node->expr);
+
         if ($newName === null || $this->isName($node, $newName)) {
             return null;
         }

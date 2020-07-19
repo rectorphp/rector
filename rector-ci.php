@@ -21,7 +21,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::SETS, [
-        'coding-style', 'code-quality', 'dead-code', 'nette-utils-code-quality', 'solid', 'privatization', 'naming',
+        // @todo use constants here, so we don't have to google the strings that can be used here
+        'coding-style', 'code-quality', 'dead-code', 'nette-utils-code-quality', 'solid', 'privatization', 'naming', 'decomplex',
     ]);
 
     $parameters->set(Option::PATHS, [
