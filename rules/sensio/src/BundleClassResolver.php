@@ -51,9 +51,9 @@ final class BundleClassResolver
     public function resolveShortBundleClassFromControllerClass(string $class): ?string
     {
         // resolve bundle from existing ones
-        $classReflection = new ReflectionClass($class);
+        $reflectionClass = new ReflectionClass($class);
 
-        $fileName = $classReflection->getFileName();
+        $fileName = $reflectionClass->getFileName();
         if (! $fileName) {
             return null;
         }
@@ -105,8 +105,8 @@ final class BundleClassResolver
     private function addFullyQualifiedNamesToNodes(array $nodes): void
     {
         $nodeTraverser = new NodeTraverser();
-        $nameResolverNodeVisitor = new NameResolver();
-        $nodeTraverser->addVisitor($nameResolverNodeVisitor);
+        $nameResolver = new NameResolver();
+        $nodeTraverser->addVisitor($nameResolver);
 
         $nodeTraverser->traverse($nodes);
     }

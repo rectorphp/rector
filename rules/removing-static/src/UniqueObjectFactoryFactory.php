@@ -169,13 +169,13 @@ final class UniqueObjectFactoryFactory
 
         $return = new Return_($new);
 
-        $builderMethod = new MethodBuilder('create');
-        $builderMethod->setReturnType(new FullyQualified($className));
-        $builderMethod->makePublic();
-        $builderMethod->addStmt($return);
-        $builderMethod->addParams($params);
+        $methodBuilder = new MethodBuilder('create');
+        $methodBuilder->setReturnType(new FullyQualified($className));
+        $methodBuilder->makePublic();
+        $methodBuilder->addStmt($return);
+        $methodBuilder->addParams($params);
 
-        return $builderMethod->getNode();
+        return $methodBuilder->getNode();
     }
 
     /**

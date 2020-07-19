@@ -173,16 +173,16 @@ final class NodeFactory
 
     public function createParamFromNameAndType(string $name, ?Type $type): Param
     {
-        $paramBuild = new ParamBuilder($name);
+        $paramBuilder = new ParamBuilder($name);
 
         if ($type !== null) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
             if ($typeNode !== null) {
-                $paramBuild->setType($typeNode);
+                $paramBuilder->setType($typeNode);
             }
         }
 
-        return $paramBuild->getNode();
+        return $paramBuilder->getNode();
     }
 
     public function createPublicInjectPropertyFromNameAndType(string $name, ?Type $type): Property
