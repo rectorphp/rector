@@ -179,7 +179,6 @@ final class ExpectedNameResolver
 
         // @see https://regex101.com/r/hnU5pm/2/
         $matches = Strings::match($name, '#^get(([A-Z]).+)#');
-
         if ($matches === null) {
             return null;
         }

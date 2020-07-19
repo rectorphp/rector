@@ -119,10 +119,6 @@ PHP
             return null;
         }
 
-//        if ($this->shouldSkipForNameConflict($node, $newName)) {
-//            return null;
-//        }
-
         return $this->renameVariable($node, $newName);
     }
 
