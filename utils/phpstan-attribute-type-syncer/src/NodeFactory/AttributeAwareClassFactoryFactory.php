@@ -89,48 +89,48 @@ final class AttributeAwareClassFactoryFactory
 
     private function createGetOriginalNodeClass(string $nodeClass): ClassMethod
     {
-        $getOriginalNodeClassClassMethod = new MethodBuilder('getOriginalNodeClass');
-        $getOriginalNodeClassClassMethod->makePublic();
-        $getOriginalNodeClassClassMethod->setReturnType('string');
+        $methodBuilder = new MethodBuilder('getOriginalNodeClass');
+        $methodBuilder->makePublic();
+        $methodBuilder->setReturnType('string');
 
         $classConstFetch = $this->createClassReference($nodeClass);
-        $getOriginalNodeClassClassMethod->addStmt(new Return_($classConstFetch));
+        $methodBuilder->addStmt(new Return_($classConstFetch));
 
-        return $getOriginalNodeClassClassMethod->getNode();
+        return $methodBuilder->getNode();
     }
 
     private function createIsMatchClassMethod(string $nodeClass, ParamBuilder $paramBuilder): ClassMethod
     {
-        $isMatchClassMethod = new MethodBuilder('isMatch');
+        $methodBuilder = new MethodBuilder('isMatch');
 
-        $isMatchClassMethod->addParam($paramBuilder);
-        $isMatchClassMethod->makePublic();
-        $isMatchClassMethod->setReturnType('bool');
+        $methodBuilder->addParam($paramBuilder);
+        $methodBuilder->makePublic();
+        $methodBuilder->setReturnType('bool');
 
         $isAFuncCall = $this->createIsAFuncCall($nodeClass);
-        $isMatchClassMethod->addStmt(new Return_($isAFuncCall));
+        $methodBuilder->addStmt(new Return_($isAFuncCall));
 
-        return $isMatchClassMethod->getNode();
+        return $methodBuilder->getNode();
     }
 
     private function createCreateClassMethod(string $nodeClass): ClassMethod
     {
-        $createClassMethod = new MethodBuilder('create');
+        $methodBuilder = new MethodBuilder('create');
 
         $paramBuilder = new ParamBuilder('docContent');
         $paramBuilder->setType('string');
 
         $docContentParam = $paramBuilder->getNode();
 
-        $createClassMethod->addParam($paramBuilder);
-        $createClassMethod->addParam($docContentParam);
-        $createClassMethod->makePublic();
+        $methodBuilder->addParam($paramBuilder);
+        $methodBuilder->addParam($docContentParam);
+        $methodBuilder->makePublic();
 
-        $createClassMethod->setReturnType(new FullyQualified(AttributeAwareNodeInterface::class));
+        $methodBuilder->setReturnType(new FullyQualified(AttributeAwareNodeInterface::class));
 
         // add @paramBuilder doc with more precise type
         $paramDocBlock = sprintf('/**%s * @paramBuilder \\%s%s */', PHP_EOL, $nodeClass, PHP_EOL);
-        $createClassMethod->setDocComment($paramDocBlock);
+        $methodBuilder->setDocComment($paramDocBlock);
 
         $attributeAwareClassName = $this->attributeClassNaming->createAttributeAwareClassName($nodeClass);
 
@@ -139,9 +139,9 @@ final class AttributeAwareClassFactoryFactory
         // complete new args
         $this->completeNewArgs($new, $nodeClass);
 
-        $createClassMethod->addStmt(new Return_($new));
+        $methodBuilder->addStmt(new Return_($new));
 
-        return $createClassMethod->getNode();
+        return $methodBuilder->getNode();
     }
 
     private function createClassReference(string $nodeClass): ClassConstFetch

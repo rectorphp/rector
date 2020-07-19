@@ -36,7 +36,7 @@
         "symplify/parameter-name-guard": "^8.1.9",
         "symplify/set-config-resolver": "^8.1.9",
         "tracy/tracy": "^2.7",
-        "phpstan/phpstan": "^0.12.32"
+        "phpstan/phpstan": "0.12.32"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",

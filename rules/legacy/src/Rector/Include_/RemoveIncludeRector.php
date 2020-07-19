@@ -49,11 +49,11 @@ PHP
 
     public function refactor(Node $node): ?Node
     {
-        $nopWithAttributes = new Nop();
+        $nop = new Nop();
         $comments = $node->getAttribute('comments');
         if ($comments) {
-            $nopWithAttributes->setAttribute('comments', $comments);
-            $this->addNodeAfterNode($nopWithAttributes, $node);
+            $nop->setAttribute('comments', $comments);
+            $this->addNodeAfterNode($nop, $node);
         }
         $this->removeNode($node);
 

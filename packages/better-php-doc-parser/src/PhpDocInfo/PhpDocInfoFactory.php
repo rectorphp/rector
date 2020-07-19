@@ -104,9 +104,9 @@ final class PhpDocInfoFactory
         /** needed for @see PhpDocNodeFactoryInterface */
         $this->currentNodeProvider->setNode($node);
 
-        $phpDocNode = new AttributeAwarePhpDocNode([]);
+        $attributeAwarePhpDocNode = new AttributeAwarePhpDocNode([]);
 
-        return $this->createFromPhpDocNode($phpDocNode, '', [], $node);
+        return $this->createFromPhpDocNode($attributeAwarePhpDocNode, '', [], $node);
     }
 
     private function parseTokensToPhpDocNode(array $tokens): AttributeAwarePhpDocNode

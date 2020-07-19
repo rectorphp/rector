@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Set;
 
+use Rector\Core\ValueObject\SetDirectory;
 use Symfony\Component\Finder\Finder;
 
 final class SetProvider
@@ -14,7 +15,7 @@ final class SetProvider
     public function provide(): array
     {
         $finder = Finder::create()->files()
-            ->in(Set::SET_DIRECTORY);
+            ->in(SetDirectory::SET_DIRECTORY);
 
         $sets = [];
         foreach ($finder->getIterator() as $fileInfo) {

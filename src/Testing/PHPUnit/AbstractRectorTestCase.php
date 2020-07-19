@@ -17,12 +17,12 @@ use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
-use Rector\Core\Set\Set;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\Contract\RunnableInterface;
 use Rector\Core\Testing\Finder\RectorsFinder;
 use Rector\Core\Testing\ValueObject\SplitLine;
+use Rector\Core\ValueObject\SetDirectory;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -334,7 +334,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $configResolver = new ConfigResolver();
         $parameterSetsConfigs = $configResolver->resolveFromParameterSetsFromConfigFiles(
             $configs,
-            Set::SET_DIRECTORY
+            SetDirectory::SET_DIRECTORY
         );
 
         if ($parameterSetsConfigs === []) {

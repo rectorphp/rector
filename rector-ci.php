@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\Core\Configuration\Option;
+use Rector\Core\ValueObject\Set;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -21,8 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::SETS, [
-        // @todo use constants here, so we don't have to google the strings that can be used here
-        'coding-style', 'code-quality', 'dead-code', 'nette-utils-code-quality', 'solid', 'privatization', 'naming', 'decomplex',
+        Set::CODING_STYLE, Set::CODE_QUALITY, Set::DEAD_CODE, Set::NETTE_UTILS_CODE_QUALITY, Set::SOLID, Set::PRIVATIZATION, Set::NAMING, Set::DECOMPLEX,
     ]);
 
     $parameters->set(Option::PATHS, [

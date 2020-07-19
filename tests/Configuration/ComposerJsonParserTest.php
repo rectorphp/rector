@@ -34,12 +34,12 @@ final class ComposerJsonParserTest extends AbstractKernelTestCase
 
     private function getComposerJsonPhpVersion(string $version): string
     {
-        $parser = new ComposerJsonParser(Json::encode([
+        $composerJsonParser = new ComposerJsonParser(Json::encode([
             'require' =>
                 [
                     'php' => $version,
                 ],
         ]));
-        return $parser->getPhpVersion();
+        return $composerJsonParser->getPhpVersion();
     }
 }
