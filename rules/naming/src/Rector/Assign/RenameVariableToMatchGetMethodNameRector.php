@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -83,8 +84,7 @@ PHP
             return null;
         }
 
-        $skip = $this->skipOnConflict($node, $newName);
-        if ($skip) {
+        if ($this->shouldSkipForNameConflict($node, $newName)) {
             return null;
         }
 
@@ -108,8 +108,8 @@ PHP
             if (! $this->isVariableName($node, $originalName)) {
                 return null;
             }
-            $this->renameInDocComment($node, $originalName, $newName);
 
+            $this->renameInDocComment($node, $originalName, $newName);
             $node->name = $newName;
         });
     }
@@ -159,16 +159,17 @@ PHP
         return $parentNode->uses ?? [];
     }
 
-    private function skipOnConflict(Node $node, string $newName): bool
+    private function shouldSkipForNameConflict(Assign $assign, string $newName): bool
     {
-        if ($this->skipOnConflictParamName($node, $newName)) {
+        if ($this->skipOnConflictParamName($assign, $newName)) {
             return true;
         }
 
-        if ($this->skipOnConflictClosureUsesName($node, $newName)) {
+        if ($this->skipOnConflictClosureUsesName($assign, $newName)) {
             return true;
         }
-        return $this->skipOnConflictOtherVariable($node, $newName);
+
+        return $this->skipOnConflictOtherVariable($assign, $newName);
     }
 
     private function findFirstFunctionLikeParent(Node $node): ?FunctionLike
@@ -176,14 +177,14 @@ PHP
         return $this->betterNodeFinder->findFirstParentInstanceOf($node, FunctionLike::class);
     }
 
-    private function skipOnConflictParamName(Node $node, string $newName): bool
+    private function skipOnConflictParamName(Assign $assign, string $newName): bool
     {
-        $parentNodeParams = $this->getParentNodeParams($node);
+        $parentNodeParams = $this->getParentNodeParams($assign);
         if ($parentNodeParams === []) {
             return false;
         }
 
-        $originalName = $this->getName($node->var);
+        $originalName = $this->getName($assign->var);
 
         $skip = false;
         $this->traverseNodesWithCallable($parentNodeParams, function (Node $node) use (
@@ -201,39 +202,53 @@ PHP
         return $skip;
     }
 
-    private function skipOnConflictClosureUsesName(Node $node, string $newName): bool
+    private function skipOnConflictClosureUsesName(Assign $assign, string $newName): bool
     {
         $skip = false;
-        $parentNodeUses = $this->getParentNodeUses($node);
-        $this->traverseNodesWithCallable($parentNodeUses, function (Node $node) use ($newName, &$skip): void {
+
+        $parentNodeUses = $this->getParentNodeUses($assign);
+        $this->traverseNodesWithCallable($parentNodeUses, function (Node $node) use ($newName, &$skip) {
             if ($this->isVariableName($node, $newName)) {
                 $skip = true;
+                return NodeTraverser::STOP_TRAVERSAL;
             }
+
+            return null;
         });
+
         return $skip;
     }
 
-    private function skipOnConflictOtherVariable(Node $node, string $newName): bool
+    private function skipOnConflictOtherVariable(Assign $assign, string $newName): bool
     {
         $skip = false;
-        $parentNodeStmts = $this->getParentNodeStmts($node);
-        $this->traverseNodesWithCallable($parentNodeStmts, function (Node $node) use ($newName, &$skip): void {
-            /** @var Variable $node */
+        $parentNodeStmts = $this->getParentNodeStmts($assign);
+
+        $this->traverseNodesWithCallable($parentNodeStmts, function (Node $node) use ($newName, &$skip): ?Node {
+            if (! $node instanceof Variable) {
+                return null;
+            }
+
             if ($this->isVariableName($node, $newName)) {
                 $skip = true;
             }
+
+            return null;
         });
+
         return $skip;
     }
 
     private function renameInDocComment(Variable $variable, string $originalName, string $newName): void
     {
-        /** @var Doc $docComment */
+        /** @var Doc|null $docComment */
         $docComment = $variable->getDocComment();
-        if ($docComment !== null) {
-            $newText = str_replace('$' . $originalName, '$' . $newName, $docComment->getText());
-            $newDocComment = new Doc($newText);
-            $variable->setDocComment($newDocComment);
+        if ($docComment === null) {
+            return;
         }
+
+        $newText = str_replace('$' . $originalName, '$' . $newName, $docComment->getText());
+        $newDocComment = new Doc($newText);
+        $variable->setDocComment($newDocComment);
     }
 }
