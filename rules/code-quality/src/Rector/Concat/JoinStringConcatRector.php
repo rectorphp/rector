@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\String_;
-use Rector\CodeQuality\Exception\TooLongException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -21,11 +20,11 @@ final class JoinStringConcatRector extends AbstractRector
     /**
      * @var int
      */
-    private const LINE_BREAK_POINT = 80;
+    private const LINE_BREAK_POINT = 100;
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Joins concat of 2 strings', [
+        return new RectorDefinition('Joins concat of 2 strings, unless the lenght is too long', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
@@ -63,11 +62,20 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        try {
-            return $this->joinConcatIfStrings($node);
-        } catch (TooLongException $tooLongException) {
+        $originalNode = clone $node;
+
+        $joinedNode = $this->joinConcatIfStrings($node);
+        if (! $joinedNode instanceof String_) {
             return null;
         }
+
+        // the value is too long
+        if (Strings::length($joinedNode->value) >= self::LINE_BREAK_POINT) {
+            // this prevents keeping joins
+            return $originalNode;
+        }
+
+        return $joinedNode;
     }
 
     /**
@@ -89,11 +97,6 @@ PHP
 
         if (! $concat->right instanceof String_) {
             return $concat;
-        }
-
-        $value = $concat->left->value . $concat->right->value;
-        if (Strings::length($value) >= self::LINE_BREAK_POINT) {
-            throw new TooLongException();
         }
 
         return new String_($concat->left->value . $concat->right->value);

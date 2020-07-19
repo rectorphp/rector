@@ -2,16 +2,11 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Concat\JoinStringConcatRector\Fixture;
 
-class SomeClass
+class ThreeItems
 {
     public function run()
     {
-        $name = 'Hi' . ' Tom';
         $name = 'Hi' . ' ' . 'John';
-
-        $name = 'Hi'
-            . ' '
-            . 'John';
 
         $name = 'Hi' . $name . ' John';
     }
@@ -23,13 +18,10 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\Concat\JoinStringConcatRector\Fixture;
 
-class SomeClass
+class ThreeItems
 {
     public function run()
     {
-        $name = 'Hi Tom';
-        $name = 'Hi John';
-
         $name = 'Hi John';
 
         $name = 'Hi' . $name . ' John';
