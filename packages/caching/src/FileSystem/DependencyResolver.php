@@ -42,10 +42,10 @@ final class DependencyResolver
      */
     public function resolveDependencies(Node $node, Scope $scope): array
     {
-        $analysedFiles = $this->configuration->getFileInfos();
+        $fileInfos = $this->configuration->getFileInfos();
 
         $analysedFileAbsolutesPaths = [];
-        foreach ($analysedFiles as $analysedFile) {
+        foreach ($fileInfos as $analysedFile) {
             $analysedFileAbsolutesPaths[] = $analysedFile->getRealPath();
         }
 

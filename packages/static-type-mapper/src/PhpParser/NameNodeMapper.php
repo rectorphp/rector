@@ -51,8 +51,8 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         }
 
         // to be existing class names
-        $newClasses = $this->renamedClassesCollector->getOldToNewClasses();
+        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
 
-        return in_array($name, $newClasses, true);
+        return in_array($name, $oldToNewClasses, true);
     }
 }

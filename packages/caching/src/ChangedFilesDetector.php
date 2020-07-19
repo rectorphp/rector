@@ -53,9 +53,9 @@ final class ChangedFilesDetector
         $currentFileHash = $this->hashFile($smartFileInfo);
 
         $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
-        $item = $this->tagAwareAdapter->getItem($fileInfoCacheKey);
+        $cacheItem = $this->tagAwareAdapter->getItem($fileInfoCacheKey);
 
-        $oldFileHash = $item->get();
+        $oldFileHash = $cacheItem->get();
 
         return $currentFileHash !== $oldFileHash;
     }
@@ -79,14 +79,14 @@ final class ChangedFilesDetector
     {
         $fileInfoCacheKey = $this->getFileInfoCacheKey($fileInfo);
 
-        $item = $this->tagAwareAdapter->getItem($fileInfoCacheKey . '_files');
-        if ($item->get() === null) {
+        $cacheItem = $this->tagAwareAdapter->getItem($fileInfoCacheKey . '_files');
+        if ($cacheItem->get() === null) {
             return [];
         }
 
         $dependentFileInfos = [];
 
-        $dependentFiles = $item->get();
+        $dependentFiles = $cacheItem->get();
         foreach ($dependentFiles as $dependentFile) {
             if (! file_exists($dependentFile)) {
                 continue;
@@ -120,10 +120,10 @@ final class ChangedFilesDetector
 
     private function saveItemWithValue(string $key, $value): void
     {
-        $item = $this->tagAwareAdapter->getItem($key);
-        $item->set($value);
+        $cacheItem = $this->tagAwareAdapter->getItem($key);
+        $cacheItem->set($value);
 
-        $this->tagAwareAdapter->save($item);
+        $this->tagAwareAdapter->save($cacheItem);
     }
 
     private function storeConfigurationDataHash(string $configPath, string $configurationHash): void

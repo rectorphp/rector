@@ -104,8 +104,8 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         TokenIterator $tokenIterator,
         string $annotationClass
     ): ?PhpDocTagValueNode {
-        $tagValueNodeClassToAnnotationClass = $this->getClasses();
-        $tagValueNodeClass = array_search($annotationClass, $tagValueNodeClassToAnnotationClass, true);
+        $classes = $this->getClasses();
+        $tagValueNodeClass = array_search($annotationClass, $classes, true);
 
         $annotation = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
         if ($annotation === null) {

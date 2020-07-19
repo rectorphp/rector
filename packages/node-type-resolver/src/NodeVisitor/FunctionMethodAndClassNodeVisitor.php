@@ -104,8 +104,8 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof ClassLike) {
-            $currentClass = array_pop($this->classStack);
-            $this->setClassNodeAndName($currentClass);
+            $classLike = array_pop($this->classStack);
+            $this->setClassNodeAndName($classLike);
         }
 
         if ($node instanceof ClassMethod) {

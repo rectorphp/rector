@@ -90,13 +90,13 @@ final class DocBlockNameImporter
 
     public function importNames(PhpDocInfo $phpDocInfo, Node $phpParserNode): bool
     {
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
+        $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
 
         $this->hasPhpDocChanged = false;
 
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (PhpDocParserNode $docNode) use (
-            $phpParserNode
-        ): PhpDocParserNode {
+        $this->phpDocNodeTraverser->traverseWithCallable($attributeAwarePhpDocNode, '', function (
+            PhpDocParserNode $docNode
+        ) use ($phpParserNode): PhpDocParserNode {
             if (! $docNode instanceof IdentifierTypeNode) {
                 return $docNode;
             }
@@ -186,20 +186,20 @@ final class DocBlockNameImporter
         string $fullyQualifiedName,
         ShortenedObjectType $shortenedObjectType
     ): bool {
-        /** @var ClassLike|null $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        /** @var ClassLike|null $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             // cannot say, so rather yes
             return true;
         }
 
-        $className = $this->nodeNameResolver->getName($classNode);
+        $className = $this->nodeNameResolver->getName($classLike);
 
         if (isset($this->usedShortNameByClasses[$className][$shortenedObjectType->getShortName()])) {
             return $this->usedShortNameByClasses[$className][$shortenedObjectType->getShortName()];
         }
 
-        $printedClass = $this->betterStandardPrinter->print($classNode->stmts);
+        $printedClass = $this->betterStandardPrinter->print($classLike->stmts);
 
         // short with space " Type"| fqn
         $shortNameOrFullyQualifiedNamePattern = sprintf(

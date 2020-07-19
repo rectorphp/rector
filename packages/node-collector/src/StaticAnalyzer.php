@@ -23,9 +23,9 @@ final class StaticAnalyzer
 
     public function isStaticMethod(string $methodName, string $className): bool
     {
-        $methodNode = $this->parsedFunctionLikeNodeCollector->findMethod($methodName, $className);
-        if ($methodNode !== null) {
-            return $methodNode->isStatic();
+        $classMethod = $this->parsedFunctionLikeNodeCollector->findMethod($methodName, $className);
+        if ($classMethod !== null) {
+            return $classMethod->isStatic();
         }
 
         // could be static in doc type magic
