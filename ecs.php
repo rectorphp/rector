@@ -32,6 +32,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StandaloneLineInMultilineArrayFixer::class);
 
+    $services->set(LineLengthFixer::class);
+
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
         ->call('configure', [
             [

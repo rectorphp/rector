@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DocumentationGenerator\Command;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
@@ -113,6 +114,10 @@ final class DumpSetConstantsCommand extends AbstractCommand
     private function printFileStmtsToSetFile(array $fileStmts): void
     {
         $contents = $this->betterStandardPrinter->prettyPrintFile($fileStmts);
+
+        // remove pre-trailing spaces from Nop()
+        $contents = Strings::replace($contents, '#^\s+$#ms');
+
         $this->smartFileSystem->dumpFile(self::SET_FILE_PATH, $contents);
     }
 

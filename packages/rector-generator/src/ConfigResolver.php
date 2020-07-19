@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator;
 
 use Nette\Utils\Strings;
+use Rector\Core\ValueObject\SetDirectory;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -22,7 +23,7 @@ final class ConfigResolver
             // assume new one is created
             $match = Strings::match($set, '#\/(?<name>[a-zA-Z_-]+])#');
             if (isset($match['name'])) {
-                return \Rector\Core\ValueObject\SetDirectory::SET_DIRECTORY . '/' . $match['name'] . '/' . $set;
+                return SetDirectory::SET_DIRECTORY . '/' . $match['name'] . '/' . $set;
             }
 
             return null;
@@ -39,7 +40,7 @@ final class ConfigResolver
      */
     private function getSetFileInfos(string $set): array
     {
-        $fileSet = sprintf('#^%s\.php)?$#', $set);
+        $fileSet = sprintf('#^%s\.php$#', $set);
         $finder = Finder::create()->files()
             ->in(SetDirectory::SET_DIRECTORY)
             ->name($fileSet);
