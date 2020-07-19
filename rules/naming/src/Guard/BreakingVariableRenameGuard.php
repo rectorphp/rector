@@ -7,9 +7,12 @@ namespace Rector\Naming\Guard;
 use DateTimeInterface;
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
@@ -67,10 +70,13 @@ final class BreakingVariableRenameGuard
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     */
     public function shouldSkipVariable(
         string $currentName,
         string $expectedName,
-        ClassMethod $classMethod,
+        FunctionLike $functionLike,
         Variable $variable
     ): bool {
         // is the suffix? → also accepted
@@ -78,15 +84,23 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        if ($this->conflictingNameResolver->checkNameIsInClassMethod($expectedName, $classMethod)) {
+        if ($this->conflictingNameResolver->checkNameIsInFunctionLike($expectedName, $functionLike)) {
             return true;
         }
 
-        if ($this->overridenExistingNamesResolver->checkNameInClassMethodForNew($currentName, $classMethod)) {
+        if ($this->overridenExistingNamesResolver->checkNameInClassMethodForNew($currentName, $functionLike)) {
             return true;
         }
 
         if ($this->isVariableAlreadyDefined($variable, $currentName)) {
+            return true;
+        }
+
+        if ($this->skipOnConflictOtherVariable($functionLike, $expectedName)) {
+            return true;
+        }
+
+        if ($this->isUsedInClosureUsesName($expectedName, $functionLike)) {
             return true;
         }
 
@@ -115,7 +129,7 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        if ($this->conflictingNameResolver->checkNameIsInClassMethod($expectedName, $classMethod)) {
+        if ($this->conflictingNameResolver->checkNameIsInFunctionLike($expectedName, $classMethod)) {
             return true;
         }
 
@@ -220,5 +234,29 @@ final class BreakingVariableRenameGuard
         }
 
         return $type;
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     */
+    private function isUsedInClosureUsesName(string $expectedName, FunctionLike $functionLike): bool
+    {
+        if (! $functionLike instanceof Closure) {
+            return false;
+        }
+
+        return (bool) $this->betterNodeFinder->hasInstanceOfName(
+            (array) $functionLike->uses,
+            Variable::class,
+            $expectedName
+        );
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     */
+    private function skipOnConflictOtherVariable(FunctionLike $functionLike, string $newName): bool
+    {
+        return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, Variable::class, $newName);
     }
 }

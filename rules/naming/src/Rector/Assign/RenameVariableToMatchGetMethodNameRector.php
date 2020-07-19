@@ -4,20 +4,24 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Rector\Assign;
 
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\Naming\VariableRenamer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\RenameVariableToMatchGetMethodNameRectorTest
@@ -29,9 +33,24 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
      */
     private $expectedNameResolver;
 
-    public function __construct(ExpectedNameResolver $expectedNameResolver)
-    {
+    /**
+     * @var VariableRenamer
+     */
+    private $variableRenamer;
+
+    /**
+     * @var BreakingVariableRenameGuard
+     */
+    private $breakingVariableRenameGuard;
+
+    public function __construct(
+        ExpectedNameResolver $expectedNameResolver,
+        VariableRenamer $variableRenamer,
+        BreakingVariableRenameGuard $breakingVariableRenameGuard
+    ) {
         $this->expectedNameResolver = $expectedNameResolver;
+        $this->variableRenamer = $variableRenamer;
+        $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
     }
 
     public function getDefinition(): RectorDefinition
@@ -72,9 +91,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (
-            $node->expr instanceof ArrowFunction || ! $node->var instanceof Variable
-        ) {
+        if ($node->expr instanceof ArrowFunction || ! $node->var instanceof Variable) {
             return null;
         }
 
@@ -83,157 +100,79 @@ PHP
             return null;
         }
 
-        $skip = $this->skipOnConflict($node, $newName);
-        if ($skip) {
+        $currentName = $this->getName($node->var);
+        if ($currentName === null) {
             return null;
         }
 
-        $this->renameVariable($node, $newName);
+        $functionLike = $this->getCurrentFunctionLike($node);
+        if ($functionLike === null) {
+            return null;
+        }
 
-        return $node;
+        if ($this->breakingVariableRenameGuard->shouldSkipVariable(
+            $currentName,
+            $newName,
+            $functionLike,
+            $node->var
+        )) {
+            return null;
+        }
+
+//        if ($this->shouldSkipForNameConflict($node, $newName)) {
+//            return null;
+//        }
+
+        return $this->renameVariable($node, $newName);
     }
 
-    private function renameVariable(Node $node, string $newName): void
+    private function renameVariable(Assign $assign, string $newName): Assign
     {
-        $parentNodeStmts = $this->getParentNodeStmts($node);
-
         /** @var Variable $variableNode */
-        $variableNode = $node->var;
+        $variableNode = $assign->var;
 
         /** @var string $originalName */
         $originalName = $variableNode->name;
 
-        $this->traverseNodesWithCallable($parentNodeStmts, function (Node $node) use ($originalName, $newName) {
-            /** @var Variable $node */
-            if (! $this->isVariableName($node, $originalName)) {
-                return null;
-            }
-            $this->renameInDocComment($node, $originalName, $newName);
+        $this->renameInDocComment($assign, $originalName, $newName);
 
-            $node->name = $newName;
-        });
+        $functionLike = $this->getCurrentFunctionLike($assign);
+        if ($functionLike === null) {
+            return $assign;
+        }
+
+        $this->variableRenamer->renameVariableInFunctionLike($functionLike, $assign, $originalName, $newName);
+
+        return $assign;
     }
 
     /**
-     * @return Stmt[]
+     * @return ClassMethod|Function_|Closure|null
      */
-    private function getParentNodeStmts(Node $node): array
+    private function getCurrentFunctionLike(Node $node): ?FunctionLike
     {
-        /** @var FunctionLike|null $parentNode */
-        $parentNode = $this->findFirstFunctionLikeParent($node);
+        return $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
+             $node->getAttribute(AttributeKey::METHOD_NODE) ??
+             $node->getAttribute(AttributeKey::FUNCTION_NODE);
+    }
 
-        if ($parentNode === null) {
-            return [];
+    private function renameInDocComment(Node $node, string $originalName, string $newName): void
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return;
         }
 
-        return $parentNode->getStmts() ?? [];
-    }
-
-    /**
-     * @return Param[]
-     */
-    private function getParentNodeParams(Node $node): array
-    {
-        /** @var FunctionLike|null $parentNode */
-        $parentNode = $this->findFirstFunctionLikeParent($node);
-
-        if ($parentNode === null) {
-            return [];
+        $varTagValueNode = $phpDocInfo->getByType(VarTagValueNode::class);
+        if ($varTagValueNode === null) {
+            return;
         }
 
-        return $parentNode->getParams() ?? [];
-    }
-
-    /**
-     * @return ClosureUse[]
-     */
-    private function getParentNodeUses(Node $node): array
-    {
-        /** @var FunctionLike|null $parentNode */
-        $parentNode = $this->findFirstFunctionLikeParent($node);
-
-        if ($parentNode === null || ! $parentNode instanceof Closure) {
-            return [];
+        if ($varTagValueNode->variableName !== '$' . $originalName) {
+            return;
         }
 
-        return $parentNode->uses ?? [];
-    }
-
-    private function skipOnConflict(Node $node, string $newName): bool
-    {
-        if ($this->skipOnConflictParamName($node, $newName)) {
-            return true;
-        }
-
-        if ($this->skipOnConflictClosureUsesName($node, $newName)) {
-            return true;
-        }
-        return $this->skipOnConflictOtherVariable($node, $newName);
-    }
-
-    private function findFirstFunctionLikeParent(Node $node): ?FunctionLike
-    {
-        return $this->betterNodeFinder->findFirstParentInstanceOf($node, FunctionLike::class);
-    }
-
-    private function skipOnConflictParamName(Node $node, string $newName): bool
-    {
-        $parentNodeParams = $this->getParentNodeParams($node);
-        if ($parentNodeParams === []) {
-            return false;
-        }
-
-        $originalName = $this->getName($node->var);
-
-        $skip = false;
-        $this->traverseNodesWithCallable($parentNodeParams, function (Node $node) use (
-            $originalName,
-            $newName,
-            &$skip
-        ): void {
-            if (
-                $node instanceof Param &&
-                ($this->isVariableName($node->var, $newName) || $this->isVariableName($node->var, $originalName))
-            ) {
-                $skip = true;
-            }
-        });
-        return $skip;
-    }
-
-    private function skipOnConflictClosureUsesName(Node $node, string $newName): bool
-    {
-        $skip = false;
-        $parentNodeUses = $this->getParentNodeUses($node);
-        $this->traverseNodesWithCallable($parentNodeUses, function (Node $node) use ($newName, &$skip): void {
-            if ($this->isVariableName($node, $newName)) {
-                $skip = true;
-            }
-        });
-        return $skip;
-    }
-
-    private function skipOnConflictOtherVariable(Node $node, string $newName): bool
-    {
-        $skip = false;
-        $parentNodeStmts = $this->getParentNodeStmts($node);
-        $this->traverseNodesWithCallable($parentNodeStmts, function (Node $node) use ($newName, &$skip): void {
-            /** @var Variable $node */
-            if ($this->isVariableName($node, $newName)) {
-                $skip = true;
-            }
-        });
-        return $skip;
-    }
-
-    private function renameInDocComment(Variable $variable, string $originalName, string $newName): void
-    {
-        /** @var Doc $docComment */
-        $docComment = $variable->getDocComment();
-        if ($docComment !== null) {
-            $newText = str_replace('$' . $originalName, '$' . $newName, $docComment->getText());
-            $newDocComment = new Doc($newText);
-            $variable->setDocComment($newDocComment);
-        }
+        $varTagValueNode->variableName = '$' . $newName;
     }
 }

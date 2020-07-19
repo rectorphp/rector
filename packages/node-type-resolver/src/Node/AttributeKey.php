@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\Node;
 
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -174,4 +175,9 @@ final class AttributeKey
      * @var string
      */
     public const DO_NOT_CHANGE = 'do_not_change';
+
+    /**
+     * @var string
+     */
+    public const CLOSURE_NODE = Closure::class;
 }

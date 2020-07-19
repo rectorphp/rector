@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -22,9 +23,15 @@ final class BetterNodeFinder
      */
     private $nodeFinder;
 
-    public function __construct(NodeFinder $nodeFinder)
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeFinder = $nodeFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -104,6 +111,22 @@ final class BetterNodeFinder
     public function findFirstInstanceOf($nodes, string $type): ?Node
     {
         return $this->nodeFinder->findFirstInstanceOf($nodes, $type);
+    }
+
+    /**
+     * @param Node|Node[] $nodes
+     */
+    public function hasInstanceOfName($nodes, string $type, string $name): bool
+    {
+        $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
+
+        foreach ($foundInstances as $foundInstance) {
+            if ($this->nodeNameResolver->isName($foundInstance, $name)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
