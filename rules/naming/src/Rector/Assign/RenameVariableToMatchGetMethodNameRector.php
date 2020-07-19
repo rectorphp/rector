@@ -17,10 +17,12 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\VariableRenamer;
@@ -46,14 +48,21 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
      */
     private $breakingVariableRenameGuard;
 
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
     public function __construct(
         ExpectedNameResolver $expectedNameResolver,
         VariableRenamer $variableRenamer,
-        BreakingVariableRenameGuard $breakingVariableRenameGuard
+        BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -96,6 +105,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        // @todo possible matched decouple value object to prevent so many if/elses
         if (! $node->expr instanceof MethodCall && ! $node->expr instanceof StaticCall && ! $node->expr instanceof FuncCall) {
             return null;
         }
@@ -116,6 +126,13 @@ PHP
 
         if ($this->shouldSkipForNamingConvention($node->expr, $currentName, $newName)) {
             return null;
+        }
+
+        $callStaticType = $this->getStaticType($node->expr);
+        if ($callStaticType instanceof TypeWithClassName) {
+            if ($this->familyRelationsAnalyzer->isParentClass($callStaticType->getClassName())) {
+                return null;
+            }
         }
 
         $functionLike = $this->getCurrentFunctionLike($node);
