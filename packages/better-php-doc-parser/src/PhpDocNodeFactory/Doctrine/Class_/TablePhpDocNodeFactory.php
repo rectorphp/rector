@@ -10,11 +10,12 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
+use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\TableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
 
-final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
+final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
 {
     /**
      * @var IndexPhpDocNodeFactory

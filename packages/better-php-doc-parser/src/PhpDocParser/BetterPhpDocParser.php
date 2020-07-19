@@ -17,7 +17,9 @@ use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\ParamPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\PHPUnitDataProviderDocNodeFactory;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
@@ -116,11 +118,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
         $this->phpUnitDataProviderDocNodeFactory = $phpUnitDataProviderDocNodeFactory;
 
-        foreach ($phpDocNodeFactories as $phpDocNodeFactory) {
-            foreach ($phpDocNodeFactory->getClasses() as $class) {
-                $this->phpDocNodeFactories[$class] = $phpDocNodeFactory;
-            }
-        }
+        $this->setPhpDocNodeFactories($phpDocNodeFactories);
     }
 
     public function parseString(string $docBlock): PhpDocNode
@@ -147,8 +145,8 @@ final class BetterPhpDocParser extends PhpDocParser
             $children[] = $this->parseChildAndStoreItsPositions($tokenIterator);
 
             while ($tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL) && ! $tokenIterator->isCurrentTokenType(
-                Lexer::TOKEN_CLOSE_PHPDOC
-            )) {
+                    Lexer::TOKEN_CLOSE_PHPDOC
+                )) {
                 $children[] = $this->parseChildAndStoreItsPositions($tokenIterator);
             }
         }
@@ -360,5 +358,34 @@ final class BetterPhpDocParser extends PhpDocParser
         );
 
         return $this->phpDocNodeFactories[$fullyQualifiedAnnotationClass] ?? null;
+    }
+
+    /**
+     * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
+     */
+    private function setPhpDocNodeFactories(array $phpDocNodeFactories): void
+    {
+        foreach ($phpDocNodeFactories as $phpDocNodeFactory) {
+            $classes = $this->resolvePhpDocNodeFactoryClasses($phpDocNodeFactory);
+            foreach ($classes as $class) {
+                $this->phpDocNodeFactories[$class] = $phpDocNodeFactory;
+            }
+        }
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolvePhpDocNodeFactoryClasses(PhpDocNodeFactoryInterface $phpDocNodeFactory): array
+    {
+        if ($phpDocNodeFactory instanceof SpecificPhpDocNodeFactoryInterface) {
+            return $phpDocNodeFactory->getClasses();
+        }
+
+        if ($phpDocNodeFactory instanceof GenericPhpDocNodeFactoryInterface) {
+            return $phpDocNodeFactory->getTagValueNodeClassesToAnnotationClasses();
+        }
+
+        throw new ShouldNotHappenException();
     }
 }

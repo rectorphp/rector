@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
+use Rector\BetterPhpDocParser\Contract\GenericPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EmbeddableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
@@ -41,12 +42,12 @@ use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertEma
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertRangeTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertTypeTagValueNode;
 
-final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory
+final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements GenericPhpDocNodeFactoryInterface
 {
     /**
-     * @return string[]
+     * @return array<string, string>
      */
-    public function getClasses(): array
+    public function getTagValueNodeClassesToAnnotationClasses(): array
     {
         return [
             // tag value node class => annotation class
@@ -104,8 +105,8 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         TokenIterator $tokenIterator,
         string $annotationClass
     ): ?PhpDocTagValueNode {
-        $classes = $this->getClasses();
-        $tagValueNodeClass = array_search($annotationClass, $classes, true);
+        $tagValueNodeClassesToAnnotationClasses = $this->getTagValueNodeClassesToAnnotationClasses();
+        $tagValueNodeClass = array_search($annotationClass, $tagValueNodeClassesToAnnotationClasses, true);
 
         $annotation = $this->nodeAnnotationReader->readAnnotation($node, $annotationClass);
         if ($annotation === null) {

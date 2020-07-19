@@ -9,11 +9,12 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
+use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
+final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements SpecificPhpDocNodeFactoryInterface
 {
     /**
      * @var NodeNameResolver

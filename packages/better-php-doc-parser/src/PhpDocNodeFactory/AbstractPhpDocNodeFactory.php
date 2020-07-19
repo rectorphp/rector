@@ -9,11 +9,10 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
 use Rector\BetterPhpDocParser\AnnotationReader\NodeAnnotationReader;
-use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-abstract class AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
+abstract class AbstractPhpDocNodeFactory
 {
     /**
      * @var NodeAnnotationReader

@@ -84,7 +84,7 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
         VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
         NamingConventionAnalyzer $namingConventionAnalyzer,
         VarTagValueNodeRenamer $varTagValueNodeRenamer,
-        TypeUnwrapper $typeUtils
+        TypeUnwrapper $typeUnwrapper
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
@@ -93,7 +93,7 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
         $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
         $this->namingConventionAnalyzer = $namingConventionAnalyzer;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
-        $this->typeUnwrapper = $typeUtils;
+        $this->typeUnwrapper = $typeUnwrapper;
     }
 
     public function getDefinition(): RectorDefinition
