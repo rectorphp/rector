@@ -109,8 +109,8 @@ PHP
         $args = [];
         $args[] = new Arg(new LNumber(200));
         $args[] = new Arg($this->getStatusCodeMethodCall);
-        $match = $this->createLocalMethodCall(self::ASSERT_SAME, $args);
-        if ($this->areNodesEqual($node, $match)) {
+        $methodCall = $this->createLocalMethodCall(self::ASSERT_SAME, $args);
+        if ($this->areNodesEqual($node, $methodCall)) {
             return $this->createLocalMethodCall('assertResponseIsSuccessful');
         }
 
