@@ -34,12 +34,12 @@ final class FunctionLikeDocParamTypeInferer extends AbstractTypeInferer implemen
             return new MixedType();
         }
 
-        $paramWithTypes = $phpDocInfo->getParamTypesByName();
-        if ($paramWithTypes === []) {
+        $paramTypesByName = $phpDocInfo->getParamTypesByName();
+        if ($paramTypesByName === []) {
             return new MixedType();
         }
 
-        return $this->matchParamNodeFromDoc($paramWithTypes, $param);
+        return $this->matchParamNodeFromDoc($paramTypesByName, $param);
     }
 
     private function resolveScopeNode(Param $param): ?FunctionLike

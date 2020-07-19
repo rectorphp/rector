@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Rector\Assign;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\TypeWithClassName;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -26,14 +20,22 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Matcher\VariableAndCallAssignMatcher;
 use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\Naming\NamingConvention\NamingConventionAnalyzer;
+use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
+use Rector\Naming\ValueObject\VariableAndCallAssign;
 use Rector\Naming\VariableRenamer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\RenameVariableToMatchGetMethodNameRectorTest
  */
 final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_PARENT_TYPES = [ClassLike::class];
+
     /**
      * @var ExpectedNameResolver
      */
@@ -59,18 +61,39 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
      */
     private $variableAndCallAssignMatcher;
 
+    /**
+     * @var NamingConventionAnalyzer
+     */
+    private $namingConventionAnalyzer;
+
+    /**
+     * @var VarTagValueNodeRenamer
+     */
+    private $varTagValueNodeRenamer;
+
+    /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
     public function __construct(
         ExpectedNameResolver $expectedNameResolver,
         VariableRenamer $variableRenamer,
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
         FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        VariableAndCallAssignMatcher $variableAndCallAssignMatcher
+        VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
+        NamingConventionAnalyzer $namingConventionAnalyzer,
+        VarTagValueNodeRenamer $varTagValueNodeRenamer,
+        TypeUnwrapper $typeUnwrapper
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
+        $this->namingConventionAnalyzer = $namingConventionAnalyzer;
+        $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
+        $this->typeUnwrapper = $typeUnwrapper;
     }
 
     public function getDefinition(): RectorDefinition
@@ -118,97 +141,77 @@ PHP
             return null;
         }
 
-        $newName = $this->expectedNameResolver->resolveForGetCallExpr($variableAndCallAssign->getCall());
-        if ($newName === null || $this->isName($node, $newName)) {
+        $expectedName = $this->expectedNameResolver->resolveForCall($variableAndCallAssign->getCall());
+        if ($expectedName === null || $this->isName($node, $expectedName)) {
             return null;
         }
 
-        if ($this->shouldSkipForNamingConvention(
+        if ($this->shouldSkip($variableAndCallAssign, $expectedName)) {
+            return null;
+        }
+
+        $this->renameVariable($variableAndCallAssign, $expectedName);
+
+        return $node;
+    }
+
+    private function renameVariable(VariableAndCallAssign $variableAndCallAssign, string $expectedName): void
+    {
+        $this->varTagValueNodeRenamer->renameAssignVarTagVariableName(
+            $variableAndCallAssign->getAssign(),
+            $variableAndCallAssign->getVariableName(),
+            $expectedName
+        );
+
+        $this->variableRenamer->renameVariableInFunctionLike(
+            $variableAndCallAssign->getFunctionLike(),
+            $variableAndCallAssign->getAssign(),
+            $variableAndCallAssign->getVariableName(),
+            $expectedName
+        );
+    }
+
+    /**
+     * @param StaticCall|MethodCall|FuncCall $expr
+     */
+    private function isClassTypeWithChildren(Expr $expr): bool
+    {
+        $callStaticType = $this->getStaticType($expr);
+
+        if ($callStaticType instanceof UnionType) {
+            $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);
+        }
+
+        if (! $callStaticType instanceof TypeWithClassName) {
+            return false;
+        }
+
+        if (in_array($callStaticType->getClassName(), self::ALLOWED_PARENT_TYPES, true)) {
+            return false;
+        }
+
+        return $this->familyRelationsAnalyzer->isParentClass($callStaticType->getClassName());
+    }
+
+    private function shouldSkip(VariableAndCallAssign $variableAndCallAssign, string $expectedName): bool
+    {
+        if ($this->namingConventionAnalyzer->isCallMatchingVariableName(
             $variableAndCallAssign->getCall(),
             $variableAndCallAssign->getVariableName(),
-            $newName
+            $expectedName
         )) {
-            return null;
-        }
-
-        $callStaticType = $this->getStaticType($node->expr);
-        if ($callStaticType instanceof TypeWithClassName && $this->familyRelationsAnalyzer->isParentClass(
-            $callStaticType->getClassName()
-        )) {
-            return null;
-        }
-
-        if ($this->breakingVariableRenameGuard->shouldSkipVariable(
-            $variableAndCallAssign->getVariableName(),
-            $newName,
-            $variableAndCallAssign->getFunctionLike(),
-            $variableAndCallAssign->getVariable()
-        )) {
-            return null;
-        }
-
-        return $this->renameVariable($node, $newName, $variableAndCallAssign->getFunctionLike());
-    }
-
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
-    private function renameVariable(Assign $assign, string $newName, FunctionLike $functionLike): Assign
-    {
-        /** @var Variable $variableNode */
-        $variableNode = $assign->var;
-
-        /** @var string $originalName */
-        $originalName = $variableNode->name;
-
-        $this->renameInDocComment($assign, $originalName, $newName);
-
-        $this->variableRenamer->renameVariableInFunctionLike($functionLike, $assign, $originalName, $newName);
-
-        return $assign;
-    }
-
-    /**
-     * @note variable rename is correct, but node printer doesn't see it as a changed text for some reason
-     */
-    private function renameInDocComment(Node $node, string $originalName, string $newName): void
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
-
-        $varTagValueNode = $phpDocInfo->getByType(VarTagValueNode::class);
-        if ($varTagValueNode === null) {
-            return;
-        }
-
-        if ($varTagValueNode->variableName !== '$' . $originalName) {
-            return;
-        }
-
-        $varTagValueNode->variableName = '$' . $newName;
-    }
-
-    /**
-     * Keep cases like:
-     *
-     * $someNameSuffix = $this->getSomeName();
-     * $prefixSomeName = $this->getSomeName();
-     * $someName = $this->getSomeName();
-     *
-     * @param FuncCall|StaticCall|MethodCall $expr
-     */
-    private function shouldSkipForNamingConvention(Expr $expr, string $currentName, string $expectedName): bool
-    {
-        // skip "$call = $method->call();" based conventions
-        $callName = $this->getName($expr->name);
-        if ($currentName === $callName) {
             return true;
         }
 
-        // starts with or ends with
-        return (bool) Strings::match($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
+        if ($this->isClassTypeWithChildren($variableAndCallAssign->getCall())) {
+            return true;
+        }
+
+        return $this->breakingVariableRenameGuard->shouldSkipVariable(
+            $variableAndCallAssign->getVariableName(),
+            $expectedName,
+            $variableAndCallAssign->getFunctionLike(),
+            $variableAndCallAssign->getVariable()
+        );
     }
 }

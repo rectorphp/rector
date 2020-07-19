@@ -155,11 +155,11 @@ final class RenameNamespaceRector extends AbstractRector
             return null;
         }
 
-        $completeNewName = $renamedNamespaceValueObject->getNameInNewNamespace();
+        $nameInNewNamespace = $renamedNamespaceValueObject->getNameInNewNamespace();
 
         // first dummy implementation - improve
-        $cutOffFromTheLeft = Strings::length($completeNewName) - Strings::length($name->toString());
+        $cutOffFromTheLeft = Strings::length($nameInNewNamespace) - Strings::length($name->toString());
 
-        return Strings::substring($completeNewName, $cutOffFromTheLeft);
+        return Strings::substring($nameInNewNamespace, $cutOffFromTheLeft);
     }
 }

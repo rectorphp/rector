@@ -132,15 +132,15 @@ PHP
 
     private function processPreviousAssign(Node $node, Node $firstArgument): void
     {
-        /** @var Assign|null $createdNode */
-        $createdNode = $this->findPreviousNodeAssign($node, $firstArgument);
+        /** @var Assign|null $previousNodeAssign */
+        $previousNodeAssign = $this->findPreviousNodeAssign($node, $firstArgument);
 
-        if ($createdNode instanceof Assign && $this->isFuncCallName($createdNode->expr, 'sprintf')) {
+        if ($previousNodeAssign instanceof Assign && $this->isFuncCallName($previousNodeAssign->expr, 'sprintf')) {
             /** @var FuncCall $funcCall */
-            $funcCall = $createdNode->expr;
+            $funcCall = $previousNodeAssign->expr;
             $arrayNode = $this->nodeTransformer->transformSprintfToArray($funcCall);
             if ($arrayNode !== null) {
-                $createdNode->expr = $arrayNode;
+                $previousNodeAssign->expr = $arrayNode;
             }
         }
     }

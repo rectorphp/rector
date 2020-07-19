@@ -179,9 +179,9 @@ PHP
 
     private function processStaticCall(StaticCall $staticCall): ?MethodCall
     {
-        /** @var Class_|null $class */
-        $class = $staticCall->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $staticCall->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return null;
         }
 
@@ -208,7 +208,7 @@ PHP
         // add all properties to class
         $class = $this->addNewPropertiesToClass($class, $newProperties);
 
-        $parentSetupStaticCall = $this->createParentSetUpStaticCall();
+        $parentSetUpStaticCallExpression = $this->createParentSetUpStaticCall();
         foreach ($newProperties as $type) {
             // container fetch assign
             $assign = $this->createContainerGetTypeToPropertyAssign($type);
@@ -217,9 +217,9 @@ PHP
 
             // get setup or create a setup add add it there
             if ($setupClassMethod !== null) {
-                $this->updateSetUpMethod($setupClassMethod, $parentSetupStaticCall, $assign);
+                $this->updateSetUpMethod($setupClassMethod, $parentSetUpStaticCallExpression, $assign);
             } else {
-                $setUpMethod = $this->createSetUpMethod($parentSetupStaticCall, $assign);
+                $setUpMethod = $this->createSetUpMethod($parentSetUpStaticCallExpression, $assign);
                 $this->classInsertManipulator->addAsFirstMethod($class, $setUpMethod);
             }
         }

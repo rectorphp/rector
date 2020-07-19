@@ -56,12 +56,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
-        if (! $class->isFinal()) {
+        if (! $classLike->isFinal()) {
             return null;
         }
 
@@ -69,12 +69,12 @@ PHP
             return null;
         }
 
-        if ($class->extends === null) {
+        if ($classLike->extends === null) {
             $this->makePrivate($node);
             return $node;
         }
 
-        if ($this->isClassMethodVisibilityGuardedByParent($node, $class)) {
+        if ($this->isClassMethodVisibilityGuardedByParent($node, $classLike)) {
             return null;
         }
 

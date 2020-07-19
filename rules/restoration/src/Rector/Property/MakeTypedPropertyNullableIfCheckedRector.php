@@ -110,16 +110,16 @@ PHP
 
     private function isPropertyNullChecked(PropertyProperty $onlyPropertyProperty): bool
     {
-        $class = $onlyPropertyProperty->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $onlyPropertyProperty->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return false;
         }
 
-        if ($this->isIdenticalOrNotIdenticalToNull($class, $onlyPropertyProperty)) {
+        if ($this->isIdenticalOrNotIdenticalToNull($classLike, $onlyPropertyProperty)) {
             return true;
         }
 
-        return $this->isBooleanNot($class, $onlyPropertyProperty);
+        return $this->isBooleanNot($classLike, $onlyPropertyProperty);
     }
 
     /**

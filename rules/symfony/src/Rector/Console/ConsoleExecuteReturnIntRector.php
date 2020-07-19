@@ -71,12 +71,12 @@ PHP
             return null;
         }
 
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
-        if (! $this->isObjectType($class, 'Symfony\Component\Console\Command\Command')) {
+        if (! $this->isObjectType($classLike, 'Symfony\Component\Console\Command\Command')) {
             return null;
         }
 

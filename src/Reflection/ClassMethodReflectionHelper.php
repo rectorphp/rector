@@ -35,13 +35,13 @@ final class ClassMethodReflectionHelper
             return [];
         }
 
-        $methodDocblock = $reflectedMethod->getDocComment();
+        $docComment = $reflectedMethod->getDocComment();
 
-        if (! is_string($methodDocblock)) {
+        if (! is_string($docComment)) {
             return [];
         }
 
-        $extractedTags = $this->phpDocTagsFinder->extractTagsFromStringedDocblock($methodDocblock, $tag);
+        $extractedTags = $this->phpDocTagsFinder->extractTagsFromStringedDocblock($docComment, $tag);
 
         $classes = [];
         foreach ($extractedTags as $returnTag) {

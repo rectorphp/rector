@@ -84,9 +84,9 @@ final class Application extends SymfonyApplication
             $output->writeln($this->getLongVersion());
             $shouldFollowByNewline = true;
 
-            $configPath = $this->configuration->getConfigFilePath();
-            if ($configPath) {
-                $configFileInfo = new SmartFileInfo($configPath);
+            $configFilePath = $this->configuration->getConfigFilePath();
+            if ($configFilePath) {
+                $configFileInfo = new SmartFileInfo($configFilePath);
                 $relativeConfigPath = $configFileInfo->getRelativeFilePathFromDirectory(getcwd());
 
                 $output->writeln('Config file: ' . $relativeConfigPath);

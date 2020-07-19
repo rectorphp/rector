@@ -24,8 +24,8 @@ final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
                 return false;
             }
         }
-        $comment = $node->getDocComment();
-        if ($comment !== null && $this->checkCommentForIgnore($phpRector, $comment)) {
+        $doc = $node->getDocComment();
+        if ($doc !== null && $this->checkCommentForIgnore($phpRector, $doc)) {
             return true;
         }
 

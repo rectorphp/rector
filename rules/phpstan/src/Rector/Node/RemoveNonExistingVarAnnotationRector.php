@@ -98,12 +98,12 @@ PHP
             return null;
         }
 
-        $varTagValue = $phpDocInfo->getVarTagValue();
-        if ($varTagValue === null) {
+        $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValue();
+        if ($attributeAwareVarTagValueNode === null) {
             return null;
         }
 
-        $variableName = $varTagValue->variableName;
+        $variableName = $attributeAwareVarTagValueNode->variableName;
         if ($variableName === null) {
             return null;
         }

@@ -22,10 +22,10 @@ abstract class AbstractArgumentProbeRector extends AbstractRector
             return true;
         }
 
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
 
         // skip interfaces
-        if ($classNode instanceof Interface_) {
+        if ($classLike instanceof Interface_) {
             return true;
         }
 

@@ -41,9 +41,9 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
 
     public function inferParam(Param $param): Type
     {
-        /** @var Class_|null $classNode */
-        $classNode = $param->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return new MixedType();
         }
 
@@ -64,7 +64,7 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
         $returnType = new MixedType();
 
         // resolve property assigns
-        $this->callableNodeTraverser->traverseNodesWithCallable($classNode, function (Node $node) use (
+        $this->callableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) use (
             $propertyNames,
             &$returnType
         ): ?int {
@@ -78,14 +78,14 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
             }
 
             // what is return type?
-            /** @var ClassMethod|null $methodNode */
-            $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
-            if (! $methodNode instanceof ClassMethod) {
+            /** @var ClassMethod|null $classMethod */
+            $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+            if (! $classMethod instanceof ClassMethod) {
                 return null;
             }
 
             /** @var PhpDocInfo $phpDocInfo */
-            $phpDocInfo = $methodNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+            $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
 
             $methodReturnType = $phpDocInfo->getReturnType();
             if ($methodReturnType instanceof MixedType) {

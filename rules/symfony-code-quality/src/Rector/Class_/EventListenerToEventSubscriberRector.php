@@ -159,17 +159,17 @@ PHP
         }
 
         // there must be event dispatcher in the application
-        $listenerClassToEvents = $this->getListenerClassesToEventsToMethods();
-        if ($listenerClassToEvents === []) {
+        $listenerClassesToEventsToMethods = $this->getListenerClassesToEventsToMethods();
+        if ($listenerClassesToEventsToMethods === []) {
             return null;
         }
 
         $className = $this->getName($node);
-        if (! isset($listenerClassToEvents[$className])) {
+        if (! isset($listenerClassesToEventsToMethods[$className])) {
             return null;
         }
 
-        return $this->changeListenerToSubscriberWithMethods($node, $listenerClassToEvents[$className]);
+        return $this->changeListenerToSubscriberWithMethods($node, $listenerClassesToEventsToMethods[$className]);
     }
 
     private function isAlreadyEventSubscriber(Class_ $class): bool
@@ -240,11 +240,11 @@ PHP
      */
     private function createGetSubscribedEventsClassMethod(array $eventsToMethods): ClassMethod
     {
-        $getSubscribedEventsMethod = $this->nodeFactory->createPublicMethod('getSubscribedEvents');
+        $getSubscribersClassMethod = $this->nodeFactory->createPublicMethod('getSubscribedEvents');
 
         $eventsToMethodsArray = new Array_();
 
-        $this->makeStatic($getSubscribedEventsMethod);
+        $this->makeStatic($getSubscribersClassMethod);
 
         foreach ($eventsToMethods as $eventName => $methodNamesWithPriorities) {
             $eventNameExpr = $this->createEventName($eventName);
@@ -261,10 +261,10 @@ PHP
             }
         }
 
-        $getSubscribedEventsMethod->stmts[] = new Return_($eventsToMethodsArray);
-        $this->decorateClassMethodWithReturnType($getSubscribedEventsMethod);
+        $getSubscribersClassMethod->stmts[] = new Return_($eventsToMethodsArray);
+        $this->decorateClassMethodWithReturnType($getSubscribersClassMethod);
 
-        return $getSubscribedEventsMethod;
+        return $getSubscribersClassMethod;
     }
 
     /**

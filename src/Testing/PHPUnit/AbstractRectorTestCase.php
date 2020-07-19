@@ -96,8 +96,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
                 $this->createRectorRepositoryContainer();
             } else {
                 // 3rd party
-                $configFileTempPath = $this->getConfigFor3rdPartyTest();
-                $this->bootKernelWithConfigs(RectorKernel::class, [$configFileTempPath]);
+                $configFor3rdPartyTest = $this->getConfigFor3rdPartyTest();
+                $this->bootKernelWithConfigs(RectorKernel::class, [$configFor3rdPartyTest]);
             }
 
             $enabledRectorsProvider = self::$container->get(EnabledRectorsProvider::class);
@@ -167,10 +167,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         SmartFileInfo $originalFileInfo,
         SmartFileInfo $expectedFileInfo
     ): void {
-        $originalInstance = $this->runnableRectorFactory->createRunnableClass($originalFileInfo);
+        $runnable = $this->runnableRectorFactory->createRunnableClass($originalFileInfo);
         $expectedInstance = $this->runnableRectorFactory->createRunnableClass($expectedFileInfo);
 
-        $actualResult = $originalInstance->run();
+        $actualResult = $runnable->run();
         $expectedResult = $expectedInstance->run();
 
         $this->assertSame($expectedResult, $actualResult);
@@ -240,9 +240,9 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     private function getConfigFor3rdPartyTest(): string
     {
-        $rectorClassWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
+        $currentTestRectorClassesWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
         $yamlContent = Yaml::dump([
-            'services' => $rectorClassWithConfiguration,
+            'services' => $currentTestRectorClassesWithConfiguration,
         ], Yaml::DUMP_OBJECT_AS_MAP);
 
         $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/current_test.yaml');
@@ -293,12 +293,12 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             throw new ShouldNotHappenException($message);
         }
 
-        $causedByFixtureMessage = $fixtureFileInfo->getRelativeFilePathFromCwd();
+        $relativeFilePathFromCwd = $fixtureFileInfo->getRelativeFilePathFromCwd();
 
         try {
-            $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $causedByFixtureMessage);
+            $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $relativeFilePathFromCwd);
         } catch (ExpectationFailedException $expectationFailedException) {
-            $expectedFileContent = $expectedFileInfo->getContents();
+            $contents = $expectedFileInfo->getContents();
 
             if (getenv('UPDATE_TESTS')) {
                 $newOriginalContent = $originalFileInfo->getContents() . SplitLine::LINE . $changedContent . '?>' . PHP_EOL;
@@ -306,7 +306,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             }
 
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
-            $this->assertStringMatchesFormat($expectedFileContent, $changedContent, $causedByFixtureMessage);
+            $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);
         }
     }
 

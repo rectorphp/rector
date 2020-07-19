@@ -34,10 +34,10 @@ final class RunnableRectorFactory
     {
         $temporaryPath = $this->createTemporaryPathWithPrefix($classContentFileInfo);
 
-        $fileContent = $classContentFileInfo->getContents();
-        $classNameSuffix = $this->getTemporaryClassSuffix();
+        $contents = $classContentFileInfo->getContents();
+        $temporaryClassSuffix = $this->getTemporaryClassSuffix();
 
-        $suffixedFileContent = $this->classLikeNamesSuffixer->suffixContent($fileContent, $classNameSuffix);
+        $suffixedFileContent = $this->classLikeNamesSuffixer->suffixContent($contents, $temporaryClassSuffix);
 
         FileSystem::write($temporaryPath, $suffixedFileContent);
         include_once $temporaryPath;

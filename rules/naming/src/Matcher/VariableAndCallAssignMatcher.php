@@ -51,7 +51,7 @@ final class VariableAndCallAssignMatcher
             return null;
         }
 
-        return new VariableAndCallAssign($assign->var, $call, $variableName, $functionLike);
+        return new VariableAndCallAssign($assign->var, $call, $assign, $variableName, $functionLike);
     }
 
     /**

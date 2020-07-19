@@ -72,8 +72,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return null;
         }
 
@@ -87,23 +87,23 @@ PHP
             return null;
         }
 
-        /** @var SensioMethodTagValueNode|null $symfonyMethodPhpDocTagValueNode */
-        $symfonyMethodPhpDocTagValueNode = $phpDocInfo->getByType(SensioMethodTagValueNode::class);
-        if ($symfonyMethodPhpDocTagValueNode === null) {
+        /** @var SensioMethodTagValueNode|null $sensioMethodTagValueNode */
+        $sensioMethodTagValueNode = $phpDocInfo->getByType(SensioMethodTagValueNode::class);
+        if ($sensioMethodTagValueNode === null) {
             return null;
         }
 
-        $methods = $symfonyMethodPhpDocTagValueNode->getMethods();
+        $methods = $sensioMethodTagValueNode->getMethods();
 
-        /** @var SymfonyRouteTagValueNode|null $symfonyRoutePhpDocTagValueNode */
-        $symfonyRoutePhpDocTagValueNode = $phpDocInfo->getByType(SymfonyRouteTagValueNode::class);
-        if ($symfonyRoutePhpDocTagValueNode === null) {
+        /** @var SymfonyRouteTagValueNode|null $symfonyRouteTagValueNode */
+        $symfonyRouteTagValueNode = $phpDocInfo->getByType(SymfonyRouteTagValueNode::class);
+        if ($symfonyRouteTagValueNode === null) {
             return null;
         }
 
-        $symfonyRoutePhpDocTagValueNode->changeMethods($methods);
+        $symfonyRouteTagValueNode->changeMethods($methods);
 
-        $phpDocInfo->removeTagValueNodeFromNode($symfonyMethodPhpDocTagValueNode);
+        $phpDocInfo->removeTagValueNodeFromNode($sensioMethodTagValueNode);
 
         return $node;
     }

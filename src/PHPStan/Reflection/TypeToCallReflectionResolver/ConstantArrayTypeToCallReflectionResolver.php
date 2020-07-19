@@ -40,18 +40,18 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
      */
     public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer)
     {
-        $typeAndMethodName = $this->findTypeAndMethodName($type);
-        if ($typeAndMethodName === null) {
+        $constantArrayTypeAndMethod = $this->findTypeAndMethodName($type);
+        if ($constantArrayTypeAndMethod === null) {
             return null;
         }
 
-        if ($typeAndMethodName->isUnknown() || ! $typeAndMethodName->getCertainty()->yes()) {
+        if ($constantArrayTypeAndMethod->isUnknown() || ! $constantArrayTypeAndMethod->getCertainty()->yes()) {
             return null;
         }
 
-        $method = $typeAndMethodName
+        $method = $constantArrayTypeAndMethod
             ->getType()
-            ->getMethod($typeAndMethodName->getMethod(), $classMemberAccessAnswerer);
+            ->getMethod($constantArrayTypeAndMethod->getMethod(), $classMemberAccessAnswerer);
 
         if (! $classMemberAccessAnswerer->canCallMethod($method)) {
             return null;
@@ -87,9 +87,9 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
             return ConstantArrayTypeAndMethod::createUnknown();
         }
 
-        $has = $type->hasMethod($method->getValue());
-        if (! $has->no()) {
-            return ConstantArrayTypeAndMethod::createConcrete($type, $method->getValue(), $has);
+        $trinaryLogic = $type->hasMethod($method->getValue());
+        if (! $trinaryLogic->no()) {
+            return ConstantArrayTypeAndMethod::createConcrete($type, $method->getValue(), $trinaryLogic);
         }
 
         return null;

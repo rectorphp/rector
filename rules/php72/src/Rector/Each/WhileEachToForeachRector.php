@@ -102,9 +102,9 @@ PHP
             [$eachFuncCall->args[0]]
         ) : $eachFuncCall->args[0]->value;
 
-        /** @var ArrayItem $valueItem */
-        $valueItem = array_pop($listNode->items);
-        $foreach = new Foreach_($foreachedExpr, $valueItem, [
+        /** @var ArrayItem $arrayItem */
+        $arrayItem = array_pop($listNode->items);
+        $foreach = new Foreach_($foreachedExpr, $arrayItem, [
             'stmts' => $node->stmts,
         ]);
 

@@ -93,8 +93,8 @@ final class AttributeAwareClassFactoryFactory
         $getOriginalNodeClassClassMethod->makePublic();
         $getOriginalNodeClassClassMethod->setReturnType('string');
 
-        $classReference = $this->createClassReference($nodeClass);
-        $getOriginalNodeClassClassMethod->addStmt(new Return_($classReference));
+        $classConstFetch = $this->createClassReference($nodeClass);
+        $getOriginalNodeClassClassMethod->addStmt(new Return_($classConstFetch));
 
         return $getOriginalNodeClassClassMethod->getNode();
     }

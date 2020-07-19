@@ -58,8 +58,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $functionLike = $node->getAttribute(AttributeKey::METHOD_NODE);
-        if (! $functionLike instanceof FunctionLike) {
+        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+        if (! $classMethod instanceof FunctionLike) {
             return null;
         }
 
@@ -68,7 +68,7 @@ PHP
         }
 
         // variable is used
-        $variableUsages = $this->findVariableUsages($functionLike, $node);
+        $variableUsages = $this->findVariableUsages($classMethod, $node);
         if (count($variableUsages) > 0) {
             return null;
         }

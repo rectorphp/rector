@@ -147,12 +147,12 @@ PHP
             return false;
         }
 
-        $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
-        if ($methodNode === null) {
+        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod === null) {
             return false;
         }
 
-        return $this->controllerMethodAnalyzer->isAction($methodNode);
+        return $this->controllerMethodAnalyzer->isAction($classMethod);
     }
 
     private function isActionWithGetRequestInBody(Node $node): bool

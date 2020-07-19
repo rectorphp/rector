@@ -54,8 +54,8 @@ final class ParseFileRector extends AbstractRector
             return null;
         }
 
-        $fileGetContentsFunCallNode = $this->createFuncCall('file_get_contents', [$node->args[0]]);
-        $node->args[0] = new Arg($fileGetContentsFunCallNode);
+        $funcCall = $this->createFuncCall('file_get_contents', [$node->args[0]]);
+        $node->args[0] = new Arg($funcCall);
 
         return $node;
     }

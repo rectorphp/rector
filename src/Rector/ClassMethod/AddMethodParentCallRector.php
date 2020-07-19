@@ -78,8 +78,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return null;
         }
 
@@ -87,7 +87,7 @@ PHP
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         foreach ($this->methodsByParentTypes as $type => $methods) {
-            if (! $this->isObjectType($class, $type)) {
+            if (! $this->isObjectType($classLike, $type)) {
                 continue;
             }
 

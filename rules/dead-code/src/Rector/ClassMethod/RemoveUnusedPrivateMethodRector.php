@@ -91,18 +91,18 @@ PHP
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        /** @var Class_|Interface_|Trait_|null $classNode */
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        /** @var Class_|Interface_|Trait_|null $classLike */
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return true;
         }
 
         // unreliable to detect trait, interface doesn't make sense
-        if ($classNode instanceof Trait_ || $classNode instanceof Interface_) {
+        if ($classLike instanceof Trait_ || $classLike instanceof Interface_) {
             return true;
         }
 
-        if ($this->isAnonymousClass($classNode)) {
+        if ($this->isAnonymousClass($classLike)) {
             return true;
         }
 

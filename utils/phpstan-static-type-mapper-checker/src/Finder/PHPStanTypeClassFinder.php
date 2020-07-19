@@ -22,10 +22,10 @@ final class PHPStanTypeClassFinder
         $robotLoader->acceptFiles = ['*Type.php'];
         $robotLoader->rebuild();
 
-        $classLikesToFilePaths = $robotLoader->getIndexedClasses();
+        $indexedClasses = $robotLoader->getIndexedClasses();
 
         /** @var class-string[] $classLikes */
-        $classLikes = array_keys($classLikesToFilePaths);
+        $classLikes = array_keys($indexedClasses);
 
         return $this->filterClassesOnly($classLikes);
     }

@@ -135,17 +135,17 @@ PHP
             return true;
         }
 
-        /** @var Class_|Interface_|Trait_|null $classNode */
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        /** @var Class_|Interface_|Trait_|null $classLike */
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return true;
         }
 
-        if ($classNode instanceof Trait_) {
+        if ($classLike instanceof Trait_) {
             return true;
         }
 
-        if ($classNode instanceof Interface_) {
+        if ($classLike instanceof Interface_) {
             return true;
         }
 

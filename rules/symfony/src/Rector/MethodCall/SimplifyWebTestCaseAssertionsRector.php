@@ -98,8 +98,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $clientGetResponse = $this->createMethodCall('client', 'getResponse');
-        $this->getStatusCodeMethodCall = $this->createMethodCall($clientGetResponse, 'getStatusCode');
+        $clientGetResponseMethodCall = $this->createMethodCall('client', 'getResponse');
+        $this->getStatusCodeMethodCall = $this->createMethodCall($clientGetResponseMethodCall, 'getStatusCode');
 
         if (! $this->isInWebTestCase($node)) {
             return null;
@@ -109,8 +109,8 @@ PHP
         $args = [];
         $args[] = new Arg(new LNumber(200));
         $args[] = new Arg($this->getStatusCodeMethodCall);
-        $match = $this->createLocalMethodCall(self::ASSERT_SAME, $args);
-        if ($this->areNodesEqual($node, $match)) {
+        $methodCall = $this->createLocalMethodCall(self::ASSERT_SAME, $args);
+        if ($this->areNodesEqual($node, $methodCall)) {
             return $this->createLocalMethodCall('assertResponseIsSuccessful');
         }
 
@@ -132,12 +132,12 @@ PHP
 
     private function isInWebTestCase(Node $node): bool
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return false;
         }
 
-        return $this->isObjectType($class, 'Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
+        return $this->isObjectType($classLike, 'Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
     }
 
     private function processAssertResponseStatusCodeSame(Node $node): ?MethodCall

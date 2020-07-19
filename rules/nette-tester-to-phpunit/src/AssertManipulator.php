@@ -265,14 +265,14 @@ final class AssertManipulator
 
         $this->nodesToRemoveCollector->addNodeToRemove($staticCall);
 
-        /** @var ClassMethod|null $methodNode */
-        $methodNode = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
-        if ($methodNode === null) {
+        /** @var ClassMethod|null $classMethod */
+        $classMethod = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod === null) {
             return;
         }
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $methodNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         $phpDocInfo->addBareTag('@doesNotPerformAssertions');
     }
 

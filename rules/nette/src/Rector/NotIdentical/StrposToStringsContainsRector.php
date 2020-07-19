@@ -64,18 +64,18 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $strpos = $this->matchStrposInComparisonToFalse($node);
-        if ($strpos === null) {
+        $funcCall = $this->matchStrposInComparisonToFalse($node);
+        if ($funcCall === null) {
             return null;
         }
 
-        if (isset($strpos->args[2]) && ! $this->isValue($strpos->args[2]->value, 0)) {
+        if (isset($funcCall->args[2]) && ! $this->isValue($funcCall->args[2]->value, 0)) {
             return null;
         }
 
         $containsStaticCall = $this->createStaticCall('Nette\Utils\Strings', 'contains');
-        $containsStaticCall->args[0] = $strpos->args[0];
-        $containsStaticCall->args[1] = $strpos->args[1];
+        $containsStaticCall->args[0] = $funcCall->args[0];
+        $containsStaticCall->args[1] = $funcCall->args[1];
 
         if ($node instanceof Identical) {
             return new BooleanNot($containsStaticCall);

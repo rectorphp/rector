@@ -61,11 +61,11 @@ PHP
 
     public function isInPhpSpecBehavior(Node $node): bool
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return false;
         }
 
-        return $this->isObjectType($classNode, 'PhpSpec\ObjectBehavior');
+        return $this->isObjectType($classLike, 'PhpSpec\ObjectBehavior');
     }
 }

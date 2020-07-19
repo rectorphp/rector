@@ -55,8 +55,8 @@ final class PropertyUsageAnalyzer
             return false;
         }
 
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class instanceof Class_ && $class->isFinal()) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike instanceof Class_ && $classLike->isFinal()) {
             return false;
         }
 

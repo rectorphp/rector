@@ -187,12 +187,12 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
             return $fileInfo->getRealPath();
         }
 
-        $currentFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($currentFileInfo === null) {
+        $smartFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        if ($smartFileInfo === null) {
             return null;
         }
 
-        return $currentFileInfo->getRealPath();
+        return $smartFileInfo->getRealPath();
     }
 
     private function isShortClassImported(string $filePath, string $shortName): bool

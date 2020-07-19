@@ -127,8 +127,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
@@ -141,7 +141,7 @@ PHP
             $serviceObjectType = new FullyQualifiedObjectType($serviceClass);
 
             $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
-            $this->addPropertyToClass($classNode, $serviceObjectType, $propertyName);
+            $this->addPropertyToClass($classLike, $serviceObjectType, $propertyName);
 
             $propertyFetchNode = $this->createPropertyFetch('this', $propertyName);
             return new MethodCall($propertyFetchNode, $node->name, $node->args);

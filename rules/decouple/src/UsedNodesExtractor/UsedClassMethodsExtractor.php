@@ -41,14 +41,14 @@ final class UsedClassMethodsExtractor
      */
     public function extractFromClassMethod(ClassMethod $classMethod, ?string $parentClassName = null): array
     {
-        /** @var Class_ $class */
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
 
         $classMethods = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
             &$classMethods,
-            $class
+            $classLike
         ) {
             if (! $node instanceof MethodCall) {
                 return null;
@@ -61,7 +61,7 @@ final class UsedClassMethodsExtractor
             /** @var string $methodName */
             $methodName = $this->nodeNameResolver->getName($node->name);
 
-            $classMethod = $class->getMethod($methodName);
+            $classMethod = $classLike->getMethod($methodName);
             if ($classMethod === null) {
                 throw new ShouldNotHappenException();
             }

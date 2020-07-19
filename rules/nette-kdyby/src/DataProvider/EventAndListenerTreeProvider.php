@@ -111,10 +111,10 @@ final class EventAndListenerTreeProvider
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($methodCall->name);
 
-        /** @var Class_ $class */
-        $class = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
 
-        return $class->getProperty($methodName);
+        return $classLike->getProperty($methodName);
     }
 
     private function initializeEventAndListenerTrees(): void

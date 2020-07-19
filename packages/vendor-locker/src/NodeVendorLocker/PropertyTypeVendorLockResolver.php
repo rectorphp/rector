@@ -16,14 +16,14 @@ final class PropertyTypeVendorLockResolver extends AbstractNodeVendorLockResolve
 {
     public function isVendorLocked(Property $property): bool
     {
-        /** @var Class_|null $classNode */
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return false;
         }
 
-        /** @var Class_|Interface_ $classNode */
-        if (! $this->hasParentClassChildrenClassesOrImplementsInterface($classNode)) {
+        /** @var Class_|Interface_ $classLike */
+        if (! $this->hasParentClassChildrenClassesOrImplementsInterface($classLike)) {
             return false;
         }
 
@@ -33,11 +33,11 @@ final class PropertyTypeVendorLockResolver extends AbstractNodeVendorLockResolve
             throw new ShouldNotHappenException();
         }
 
-        if ($this->isParentClassLocked($classNode, $propertyName)) {
+        if ($this->isParentClassLocked($classLike, $propertyName)) {
             return true;
         }
 
-        return $this->isChildClassLocked($property, $classNode, $propertyName);
+        return $this->isChildClassLocked($property, $classLike, $propertyName);
     }
 
     /**

@@ -214,12 +214,12 @@ PHP
      */
     private function resolveNullable(bool $isNegated, Expr $expr): BinaryOp
     {
-        $valueNode = $this->createNull();
+        $constFetch = $this->createNull();
 
         if ($isNegated) {
-            return new Identical($expr, $valueNode);
+            return new Identical($expr, $constFetch);
         }
 
-        return new NotIdentical($expr, $valueNode);
+        return new NotIdentical($expr, $constFetch);
     }
 }

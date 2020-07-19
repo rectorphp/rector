@@ -76,15 +76,15 @@ PHP
 
     private function determineDelimiter(FuncCall $funcCall)
     {
-        $parent = $this->getUppermostConcat($funcCall);
-        if ($parent === null) {
+        $concat = $this->getUppermostConcat($funcCall);
+        if ($concat === null) {
             return null;
         }
-        $leftMostConcatNode = $parent->left;
+        $leftMostConcatNode = $concat->left;
         while ($leftMostConcatNode instanceof Concat) {
             $leftMostConcatNode = $leftMostConcatNode->left;
         }
-        $rightMostConcatNode = $parent->right;
+        $rightMostConcatNode = $concat->right;
         while ($rightMostConcatNode instanceof Concat) {
             $rightMostConcatNode = $rightMostConcatNode->right;
         }

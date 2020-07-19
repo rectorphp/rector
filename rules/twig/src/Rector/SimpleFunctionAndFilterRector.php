@@ -111,12 +111,12 @@ PHP
             return null;
         }
 
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return null;
         }
 
-        if (! $this->isObjectType($classNode, 'Twig_Extension')) {
+        if (! $this->isObjectType($classLike, 'Twig_Extension')) {
             return null;
         }
 

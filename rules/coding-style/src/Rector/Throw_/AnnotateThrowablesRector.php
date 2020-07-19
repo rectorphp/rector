@@ -235,16 +235,16 @@ PHP
 
     private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
     {
-        $methodClass = $this->classResolver->getClassFromMethodCall($methodCall);
+        $fullyQualified = $this->classResolver->getClassFromMethodCall($methodCall);
         $methodName = $methodCall->name;
 
-        if (! $methodClass instanceof FullyQualified || ! $methodName instanceof Identifier) {
+        if (! $fullyQualified instanceof FullyQualified || ! $methodName instanceof Identifier) {
             return [];
         }
 
         return $methodCall->getAttribute('parentNode') instanceof Throw_
-            ? $this->extractMethodReturns($methodClass, $methodName)
-            : $this->extractMethodThrows($methodClass, $methodName);
+            ? $this->extractMethodReturns($fullyQualified, $methodName)
+            : $this->extractMethodThrows($fullyQualified, $methodName);
     }
 
     /**

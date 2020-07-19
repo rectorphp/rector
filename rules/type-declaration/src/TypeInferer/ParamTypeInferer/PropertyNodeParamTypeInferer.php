@@ -31,9 +31,9 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
 
     public function inferParam(Param $param): Type
     {
-        /** @var Class_|null $classNode */
-        $classNode = $param->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return new MixedType();
         }
 

@@ -108,8 +108,8 @@ PHP
 
     private function shouldSkip(FuncCall $funcCall): bool
     {
-        $class = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class instanceof Trait_) {
+        $classLike = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike instanceof Trait_) {
             return true;
         }
 

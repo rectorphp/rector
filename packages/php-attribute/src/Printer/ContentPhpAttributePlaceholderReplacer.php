@@ -26,9 +26,9 @@ final class ContentPhpAttributePlaceholderReplacer
             return $content;
         }
 
-        $placeholderToValue = $this->placeholderToValueCollector->getMap();
+        $map = $this->placeholderToValueCollector->getMap();
 
-        foreach ($placeholderToValue as $placeholder => $value) {
+        foreach ($map as $placeholder => $value) {
             $quotedPlaceholder = preg_quote($placeholder, '#');
             if (! Strings::match($content, '#' . $quotedPlaceholder . '#')) {
                 continue;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Naming\ValueObject;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -37,15 +38,26 @@ final class VariableAndCallAssign
     private $functionLike;
 
     /**
+     * @var Assign
+     */
+    private $assign;
+
+    /**
      * @param FuncCall|StaticCall|MethodCall $expr
      * @param ClassMethod|Function_|Closure $functionLike
      */
-    public function __construct(Variable $variable, Expr $expr, string $variableName, FunctionLike $functionLike)
-    {
+    public function __construct(
+        Variable $variable,
+        Expr $expr,
+        Assign $assign,
+        string $variableName,
+        FunctionLike $functionLike
+    ) {
         $this->variable = $variable;
         $this->call = $expr;
         $this->variableName = $variableName;
         $this->functionLike = $functionLike;
+        $this->assign = $assign;
     }
 
     public function getVariable(): Variable
@@ -72,5 +84,10 @@ final class VariableAndCallAssign
     public function getFunctionLike(): FunctionLike
     {
         return $this->functionLike;
+    }
+
+    public function getAssign(): Assign
+    {
+        return $this->assign;
     }
 }

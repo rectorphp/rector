@@ -104,12 +104,12 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
      */
     public function testSkip(SmartFileInfo $originalFile): void
     {
-        $originalFileContent = $originalFile->getContents();
+        $originalContents = $originalFile->getContents();
 
         $this->doTestFileInfo($originalFile);
 
         $this->assertFileExists($originalFile->getRealPath());
-        $this->assertStringEqualsFile($originalFile->getRealPath(), $originalFileContent);
+        $this->assertStringEqualsFile($originalFile->getRealPath(), $originalContents);
     }
 
     public function provideDataForSkip(): Iterator

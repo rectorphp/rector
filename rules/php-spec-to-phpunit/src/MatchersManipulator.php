@@ -16,21 +16,21 @@ final class MatchersManipulator
      */
     public function resolveMatcherNamesFromClass(Class_ $class): array
     {
-        $getMatchersMethod = $class->getMethod('getMatchers');
-        if ($getMatchersMethod === null) {
+        $classMethod = $class->getMethod('getMatchers');
+        if ($classMethod === null) {
             return [];
         }
 
-        if (! isset($getMatchersMethod->stmts[0])) {
+        if (! isset($classMethod->stmts[0])) {
             return [];
         }
 
-        if (! $getMatchersMethod->stmts[0] instanceof Return_) {
+        if (! $classMethod->stmts[0] instanceof Return_) {
             return [];
         }
 
         /** @var Return_ $return */
-        $return = $getMatchersMethod->stmts[0];
+        $return = $classMethod->stmts[0];
         if (! $return->expr instanceof Array_) {
             return [];
         }

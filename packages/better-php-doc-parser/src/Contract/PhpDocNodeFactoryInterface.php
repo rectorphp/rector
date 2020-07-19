@@ -15,9 +15,4 @@ interface PhpDocNodeFactoryInterface
         TokenIterator $tokenIterator,
         string $annotationClass
     ): ?PhpDocTagValueNode;
-
-    /**
-     * @return string[]
-     */
-    public function getClasses(): array;
 }
