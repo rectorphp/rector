@@ -161,20 +161,17 @@ final class ExpectedNameResolver
         return $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
     }
 
-    public function resolveForGetCallExpr(Expr $expr): ?string
+    /**
+     * @param MethodCall|StaticCall|FuncCall $call
+     */
+    public function resolveForGetCallExpr(Expr $call): ?string
     {
-        if (! $expr instanceof MethodCall && ! $expr instanceof StaticCall && ! $expr instanceof FuncCall) {
-            return null;
-        }
-
-        $name = $this->nodeNameResolver->getName($expr->name);
+        $name = $this->nodeNameResolver->getName($call->name);
         if ($name === null) {
             return null;
         }
 
-//        dump($expr);
-
-        $returnedType = $this->nodeTypeResolver->getStaticType($expr);
+        $returnedType = $this->nodeTypeResolver->getStaticType($call);
         if ($returnedType instanceof MixedType) {
             return null;
         }

@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
@@ -93,7 +95,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->expr instanceof ArrowFunction || ! $node->var instanceof Variable) {
+        if (! $node->expr instanceof MethodCall && ! $node->expr instanceof StaticCall && ! $node->expr instanceof FuncCall) {
+            return null;
+        }
+
+        if (! $node->var instanceof Variable) {
             return null;
         }
 
@@ -104,6 +110,12 @@ PHP
 
         $currentName = $this->getName($node->var);
         if ($currentName === null) {
+            return null;
+        }
+
+        // skip "$call = $method->call();" based conventions
+        $callName = $this->getName($node->expr->name);
+        if ($currentName === $callName) {
             return null;
         }
 
