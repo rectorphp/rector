@@ -58,7 +58,8 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
         return new RectorDefinition('Rename variable to match get method name', [
             new CodeSample(
                 <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         $a = $this->getRunner();
@@ -67,7 +68,8 @@ class SomeClass {
 PHP
 ,
                 <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         $runner = $this->getRunner();
@@ -152,6 +154,9 @@ PHP
              $node->getAttribute(AttributeKey::FUNCTION_NODE);
     }
 
+    /**
+     * @note variable rename is correct, but node printer doesn't see it as a changed text for some reason
+     */
     private function renameInDocComment(Node $node, string $originalName, string $newName): void
     {
         /** @var PhpDocInfo|null $phpDocInfo */
