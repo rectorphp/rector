@@ -12,6 +12,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class VariableRenamer
@@ -26,10 +27,19 @@ final class VariableRenamer
      */
     private $nodeNameResolver;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var VarTagValueNodeRenamer
+     */
+    private $varTagValueNodeRenamer;
+
+    public function __construct(
+        CallableNodeTraverser $callableNodeTraverser,
+        NodeNameResolver $nodeNameResolver,
+        VarTagValueNodeRenamer $varTagValueNodeRenamer
+    ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
     }
 
     /**
@@ -64,6 +74,7 @@ final class VariableRenamer
                 }
 
                 $node->name = $expectedName;
+                $this->varTagValueNodeRenamer->renameAssignVarTagVariableName($node, $oldName, $expectedName);
 
                 return $node;
             }

@@ -38,9 +38,9 @@ final class VarTagValueNodeRenamer
     {
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Expression) {
-            $expressionPhpDocInfo = $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $expression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if ($expression instanceof Node) {
+            $expressionPhpDocInfo = $expression->getAttribute(AttributeKey::PHP_DOC_INFO);
         }
 
         return $expressionPhpDocInfo ?? $phpDocInfo;

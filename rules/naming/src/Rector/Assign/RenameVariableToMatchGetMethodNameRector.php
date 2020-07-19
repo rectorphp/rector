@@ -10,7 +10,9 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -22,12 +24,18 @@ use Rector\Naming\NamingConvention\NamingConventionAnalyzer;
 use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
 use Rector\Naming\ValueObject\VariableAndCallAssign;
 use Rector\Naming\VariableRenamer;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\RenameVariableToMatchGetMethodNameRectorTest
  */
 final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_PARENT_TYPES = [ClassLike::class];
+
     /**
      * @var ExpectedNameResolver
      */
@@ -63,6 +71,11 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
      */
     private $varTagValueNodeRenamer;
 
+    /**
+     * @var TypeUnwrapper
+     */
+    private $typeUtils;
+
     public function __construct(
         ExpectedNameResolver $expectedNameResolver,
         VariableRenamer $variableRenamer,
@@ -70,7 +83,8 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
         FamilyRelationsAnalyzer $familyRelationsAnalyzer,
         VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
         NamingConventionAnalyzer $namingConventionAnalyzer,
-        VarTagValueNodeRenamer $varTagValueNodeRenamer
+        VarTagValueNodeRenamer $varTagValueNodeRenamer,
+        TypeUnwrapper $typeUtils
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
@@ -79,6 +93,7 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
         $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
         $this->namingConventionAnalyzer = $namingConventionAnalyzer;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
+        $this->typeUtils = $typeUtils;
     }
 
     public function getDefinition(): RectorDefinition
@@ -135,25 +150,25 @@ PHP
             return null;
         }
 
-        return $this->renameVariable($variableAndCallAssign, $expectedName);
+        $this->renameVariable($variableAndCallAssign, $expectedName);
+
+        return $node;
     }
 
-    private function renameVariable(VariableAndCallAssign $variableAndCallAssign, string $newName): Assign
+    private function renameVariable(VariableAndCallAssign $variableAndCallAssign, string $expectedName): void
     {
         $this->varTagValueNodeRenamer->renameAssignVarTagVariableName(
             $variableAndCallAssign->getAssign(),
             $variableAndCallAssign->getVariableName(),
-            $newName
+            $expectedName
         );
 
         $this->variableRenamer->renameVariableInFunctionLike(
             $variableAndCallAssign->getFunctionLike(),
             $variableAndCallAssign->getAssign(),
             $variableAndCallAssign->getVariableName(),
-            $newName
+            $expectedName
         );
-
-        return $variableAndCallAssign->getAssign();
     }
 
     /**
@@ -162,7 +177,16 @@ PHP
     private function isClassTypeWithChildren(Expr $expr): bool
     {
         $callStaticType = $this->getStaticType($expr);
+
+        if ($callStaticType instanceof UnionType) {
+            $callStaticType = $this->typeUtils->unwrapNullableType($callStaticType);
+        }
+
         if (! $callStaticType instanceof TypeWithClassName) {
+            return false;
+        }
+
+        if (in_array($callStaticType->getClassName(), self::ALLOWED_PARENT_TYPES, true)) {
             return false;
         }
 
