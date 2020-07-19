@@ -166,18 +166,6 @@ PHP
         return $parentNode->getParams() ?? [];
     }
 
-//    /**
-//     * @todo decouple to standalone service
-//     */
-//    private function shouldSkipForNameConflict(Assign $assign, string $newName): bool
-//    {
-//        if ($this->skipOnConflictParamName($assign, $newName)) {
-//            return true;
-//        }
-//
-//        return $this->skipOnConflictOtherVariable($assign, $newName);
-//    }
-
     /**
      * @return ClassMethod|Function_|Closure|null
      */

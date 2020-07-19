@@ -14,7 +14,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
@@ -243,28 +242,10 @@ final class BreakingVariableRenameGuard
             return false;
         }
 
-        return (bool) $this->hasVariableOfName((array) $functionLike->uses, $expectedName);
-    }
-
-    /**
-     * @param Node[] $nodes
-     */
-    private function hasVariableOfName(array $nodes, string $name): bool
-    {
-        $contains = false;
-        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use (&$contains, $name) {
-            if (! $node instanceof Variable) {
-                return null;
-            }
-
-            if (! $this->nodeNameResolver->isName($node, $name)) {
-                return null;
-            }
-
-            $contains = true;
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
-
-        return $contains;
+        return (bool) $this->betterNodeFinder->hasInstanceOfName(
+            (array) $functionLike->uses,
+            Variable::class,
+            $expectedName
+        );
     }
 }
