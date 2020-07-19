@@ -116,7 +116,7 @@ PHP
             $assign->var = new Variable($expectedName);
 
             // 2. rename variable in the
-            $this->variableRenamer->renameVariableInClassMethod($node, $assign, $currentName, $expectedName);
+            $this->variableRenamer->renameVariableInClassMethodOrFunction($node, $assign, $currentName, $expectedName);
         }
 
         if (! $hasChanged) {

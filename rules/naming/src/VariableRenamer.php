@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -63,8 +62,7 @@ final class VariableRenamer
                     return null;
                 }
 
-                /** @var Variable $node */
-                $node->name = new Identifier($expectedName);
+                $node->name = $expectedName;
 
                 return $node;
             }
