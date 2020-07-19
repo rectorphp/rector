@@ -24,6 +24,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
+use Rector\Naming\Matcher\VariableAndCallAssignMatcher;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -53,16 +54,23 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
      */
     private $familyRelationsAnalyzer;
 
+    /**
+     * @var VariableAndCallAssignMatcher
+     */
+    private $variableAndCallAssignMatcher;
+
     public function __construct(
         ExpectedNameResolver $expectedNameResolver,
         VariableRenamer $variableRenamer,
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
-        FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        VariableAndCallAssignMatcher $variableAndCallAssignMatcher
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+        $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
     }
 
     public function getDefinition(): RectorDefinition
@@ -105,54 +113,47 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        // @todo possible matched decouple value object to prevent so many if/elses
-        if (! $node->expr instanceof MethodCall && ! $node->expr instanceof StaticCall && ! $node->expr instanceof FuncCall) {
+        $variableAndCallAssign = $this->variableAndCallAssignMatcher->match($node);
+        if ($variableAndCallAssign === null) {
             return null;
         }
 
-        if (! $node->var instanceof Variable) {
-            return null;
-        }
-
-        $newName = $this->expectedNameResolver->resolveForGetCallExpr($node->expr);
+        $newName = $this->expectedNameResolver->resolveForGetCallExpr($variableAndCallAssign->getCall());
         if ($newName === null || $this->isName($node, $newName)) {
             return null;
         }
 
-        $currentName = $this->getName($node->var);
-        if ($currentName === null) {
-            return null;
-        }
-
-        if ($this->shouldSkipForNamingConvention($node->expr, $currentName, $newName)) {
-            return null;
-        }
-
-        $callStaticType = $this->getStaticType($node->expr);
-        if ($callStaticType instanceof TypeWithClassName) {
-            if ($this->familyRelationsAnalyzer->isParentClass($callStaticType->getClassName())) {
-                return null;
-            }
-        }
-
-        $functionLike = $this->getCurrentFunctionLike($node);
-        if ($functionLike === null) {
-            return null;
-        }
-
-        if ($this->breakingVariableRenameGuard->shouldSkipVariable(
-            $currentName,
-            $newName,
-            $functionLike,
-            $node->var
+        if ($this->shouldSkipForNamingConvention(
+            $variableAndCallAssign->getCall(),
+            $variableAndCallAssign->getVariableName(),
+            $newName
         )) {
             return null;
         }
 
-        return $this->renameVariable($node, $newName);
+        $callStaticType = $this->getStaticType($node->expr);
+        if ($callStaticType instanceof TypeWithClassName && $this->familyRelationsAnalyzer->isParentClass(
+            $callStaticType->getClassName()
+        )) {
+            return null;
+        }
+
+        if ($this->breakingVariableRenameGuard->shouldSkipVariable(
+            $variableAndCallAssign->getVariableName(),
+            $newName,
+            $variableAndCallAssign->getFunctionLike(),
+            $variableAndCallAssign->getVariable()
+        )) {
+            return null;
+        }
+
+        return $this->renameVariable($node, $newName, $variableAndCallAssign->getFunctionLike());
     }
 
-    private function renameVariable(Assign $assign, string $newName): Assign
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     */
+    private function renameVariable(Assign $assign, string $newName, FunctionLike $functionLike): Assign
     {
         /** @var Variable $variableNode */
         $variableNode = $assign->var;
@@ -162,24 +163,9 @@ PHP
 
         $this->renameInDocComment($assign, $originalName, $newName);
 
-        $functionLike = $this->getCurrentFunctionLike($assign);
-        if ($functionLike === null) {
-            return $assign;
-        }
-
         $this->variableRenamer->renameVariableInFunctionLike($functionLike, $assign, $originalName, $newName);
 
         return $assign;
-    }
-
-    /**
-     * @return ClassMethod|Function_|Closure|null
-     */
-    private function getCurrentFunctionLike(Node $node): ?FunctionLike
-    {
-        return $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
-             $node->getAttribute(AttributeKey::METHOD_NODE) ??
-             $node->getAttribute(AttributeKey::FUNCTION_NODE);
     }
 
     /**

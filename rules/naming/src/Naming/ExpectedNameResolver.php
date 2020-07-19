@@ -162,16 +162,16 @@ final class ExpectedNameResolver
     }
 
     /**
-     * @param MethodCall|StaticCall|FuncCall $call
+     * @param MethodCall|StaticCall|FuncCall $expr
      */
-    public function resolveForGetCallExpr(Expr $call): ?string
+    public function resolveForGetCallExpr(Expr $expr): ?string
     {
-        $name = $this->nodeNameResolver->getName($call->name);
+        $name = $this->nodeNameResolver->getName($expr->name);
         if ($name === null) {
             return null;
         }
 
-        $returnedType = $this->nodeTypeResolver->getStaticType($call);
+        $returnedType = $this->nodeTypeResolver->getStaticType($expr);
         if ($returnedType instanceof MixedType) {
             return null;
         }
@@ -182,7 +182,7 @@ final class ExpectedNameResolver
         }
 
         // call with args can return different value, so skip there if not sure about the type
-        if (count($call->args) > 0) {
+        if (count($expr->args) > 0) {
             return null;
         }
 
