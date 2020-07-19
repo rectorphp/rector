@@ -150,9 +150,9 @@ final class NodeFactory
 
     public function createPropertyAssignmentWithExpr(string $propertyName, Expr $expr): Assign
     {
-        $leftExprNode = $this->createPropertyFetch('this', $propertyName);
+        $propertyFetch = $this->createPropertyFetch('this', $propertyName);
 
-        return new Assign($leftExprNode, $expr);
+        return new Assign($propertyFetch, $expr);
     }
 
     /**

@@ -143,15 +143,15 @@ PHP
         }
 
         // ClassMethod
-        /** @var Class_|null $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_|null $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         // anonymous class
-        if ($class === null) {
+        if ($classLike === null) {
             return false;
         }
 
-        return $this->isObjectType($class, $type);
+        return $this->isObjectType($classLike, $type);
     }
 
     /**

@@ -41,28 +41,25 @@ final class FunctionAnnotationResolver
 
     public function extractFunctionAnnotatedThrows(ReflectionFunction $reflectionFunction): array
     {
-        $functionDocblock = $reflectionFunction->getDocComment();
+        $docComment = $reflectionFunction->getDocComment();
 
-        if (! is_string($functionDocblock)) {
+        if (! is_string($docComment)) {
             return [];
         }
 
-        $annotatedThrownClasses = $this->phpDocTagsFinder->extractTagsFromStringedDocblock(
-            $functionDocblock,
-            '@throws'
-        );
+        $annotatedThrownClasses = $this->phpDocTagsFinder->extractTagsFromStringedDocblock($docComment, '@throws');
 
         return $this->expandAnnotatedClasses($reflectionFunction, $annotatedThrownClasses);
     }
 
     private function expandAnnotatedClasses(ReflectionFunction $reflectionFunction, array $classNames): array
     {
-        $functionNode = $this->functionParser->parseFunction($reflectionFunction);
-        if (! $functionNode instanceof Namespace_) {
+        $namespace = $this->functionParser->parseFunction($reflectionFunction);
+        if (! $namespace instanceof Namespace_) {
             return [];
         }
 
-        $uses = $this->getUses($functionNode);
+        $uses = $this->getUses($namespace);
 
         $expandedClasses = [];
         foreach ($classNames as $className) {

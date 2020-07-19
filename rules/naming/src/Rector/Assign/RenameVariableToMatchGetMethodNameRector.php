@@ -74,7 +74,7 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
     /**
      * @var TypeUnwrapper
      */
-    private $typeUtils;
+    private $typeUnwrapper;
 
     public function __construct(
         ExpectedNameResolver $expectedNameResolver,
@@ -93,7 +93,7 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
         $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
         $this->namingConventionAnalyzer = $namingConventionAnalyzer;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
-        $this->typeUtils = $typeUtils;
+        $this->typeUnwrapper = $typeUtils;
     }
 
     public function getDefinition(): RectorDefinition
@@ -179,7 +179,7 @@ PHP
         $callStaticType = $this->getStaticType($expr);
 
         if ($callStaticType instanceof UnionType) {
-            $callStaticType = $this->typeUtils->unwrapNullableType($callStaticType);
+            $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);
         }
 
         if (! $callStaticType instanceof TypeWithClassName) {

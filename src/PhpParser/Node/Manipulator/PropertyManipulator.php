@@ -76,14 +76,14 @@ final class PropertyManipulator
      */
     public function getAllPropertyFetch(Property $property): array
     {
-        /** @var Class_|null $classNode */
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return [];
         }
 
-        $nodesToSearch = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($classNode);
-        $nodesToSearch[] = $classNode;
+        $nodesToSearch = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($classLike);
+        $nodesToSearch[] = $classLike;
 
         $singleProperty = $property->props[0];
 
@@ -139,10 +139,11 @@ final class PropertyManipulator
             }
         }
 
-        // has class $this->$variable call?
-        /** @var ClassLike $class */
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        return (bool) $this->betterNodeFinder->findFirst($class->stmts, function (Node $node): bool {
+        // has classLike $this->$variable call?
+        /** @var ClassLike $classLike */
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+
+        return (bool) $this->betterNodeFinder->findFirst($classLike->stmts, function (Node $node): bool {
             if (! $node instanceof PropertyFetch) {
                 return false;
             }

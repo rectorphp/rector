@@ -72,8 +72,8 @@ final class ClassDependencyManipulator
 
         $this->classInsertManipulator->addPropertyToClass($class, $name, $type);
 
-        $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($name);
-        $this->addConstructorDependencyWithCustomAssign($class, $name, $type, $propertyAssignNode);
+        $assign = $this->nodeFactory->createPropertyAssignment($name);
+        $this->addConstructorDependencyWithCustomAssign($class, $name, $type, $assign);
     }
 
     public function addConstructorDependencyWithCustomAssign(

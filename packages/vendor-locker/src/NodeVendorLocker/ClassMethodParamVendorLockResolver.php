@@ -47,11 +47,11 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
     {
         $class = $this->parsedNodeCollector->findClass($parentClassName);
         if ($class !== null) {
-            $parentMethodNode = $class->getMethod($methodName);
+            $parentClassMethod = $class->getMethod($methodName);
             // parent class method in local scope → it's ok
-            if ($parentMethodNode !== null) {
+            if ($parentClassMethod !== null) {
                 // parent method has no type → we cannot change it here
-                return isset($parentMethodNode->params[$paramPosition]) && $parentMethodNode->params[$paramPosition]->type === null;
+                return isset($parentClassMethod->params[$paramPosition]) && $parentClassMethod->params[$paramPosition]->type === null;
             }
         }
 

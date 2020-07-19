@@ -58,17 +58,17 @@ final class NonPhpFileProcessor
 
     public function processFileInfo(SmartFileInfo $neonYamlFileInfo): string
     {
-        $oldContent = $neonYamlFileInfo->getContents();
-        $newContent = $this->renameClasses($oldContent);
+        $oldContents = $neonYamlFileInfo->getContents();
+        $newContents = $this->renameClasses($oldContents);
 
         // nothing has changed
-        if ($oldContent === $newContent) {
-            return $oldContent;
+        if ($oldContents === $newContents) {
+            return $oldContents;
         }
 
-        $this->reportFileContentChange($neonYamlFileInfo, $newContent);
+        $this->reportFileContentChange($neonYamlFileInfo, $newContents);
 
-        return $newContent;
+        return $newContents;
     }
 
     private function renameClasses(string $newContent): string
@@ -107,13 +107,13 @@ final class NonPhpFileProcessor
 
     private function reportFileContentChange(SmartFileInfo $neonYamlFileInfo, string $newContent): void
     {
-        $relativeFilePath = $neonYamlFileInfo->getRelativeFilePathFromCwd();
+        $relativeFilePathFromCwd = $neonYamlFileInfo->getRelativeFilePathFromCwd();
 
         if ($this->configuration->isDryRun()) {
-            $message = sprintf('File "%s" would be changed ("dry-run" is on now)', $relativeFilePath);
+            $message = sprintf('File "%s" would be changed ("dry-run" is on now)', $relativeFilePathFromCwd);
             $this->symfonyStyle->note($message);
         } else {
-            $message = sprintf('File "%s" was changed', $relativeFilePath);
+            $message = sprintf('File "%s" was changed', $relativeFilePathFromCwd);
             $this->symfonyStyle->note($message);
             FileSystem::write($neonYamlFileInfo->getRealPath(), $newContent, $neonYamlFileInfo->getPerms());
         }

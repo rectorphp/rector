@@ -125,13 +125,13 @@ PHP
             return false;
         }
 
-        /** @var ClassMethod|null $methodNode */
-        $methodNode = $variable->getAttribute(AttributeKey::METHOD_NODE);
-        if ($methodNode === null) {
+        /** @var ClassMethod|null $classMethod */
+        $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod === null) {
             return false;
         }
 
         // is probably in controller action
-        return $methodNode->isPublic();
+        return $classMethod->isPublic();
     }
 }

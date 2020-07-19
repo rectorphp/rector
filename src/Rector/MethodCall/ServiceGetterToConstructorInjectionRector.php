@@ -137,8 +137,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $this->isNonAnonymousClass($classNode)) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $this->isNonAnonymousClass($classLike)) {
             return null;
         }
 
@@ -156,8 +156,8 @@ PHP
 
                 $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
 
-                /** @var Class_ $classNode */
-                $this->addPropertyToClass($classNode, $serviceObjectType, $propertyName);
+                /** @var Class_ $classLike */
+                $this->addPropertyToClass($classLike, $serviceObjectType, $propertyName);
 
                 return new PropertyFetch(new Variable('this'), new Identifier($propertyName));
             }

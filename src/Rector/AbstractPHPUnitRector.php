@@ -56,12 +56,12 @@ abstract class AbstractPHPUnitRector extends AbstractRector
 
     protected function isInTestClass(Node $node): bool
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return false;
         }
 
-        return $this->isObjectTypes($classNode, ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']);
+        return $this->isObjectTypes($classLike, ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']);
     }
 
     /**

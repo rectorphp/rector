@@ -175,9 +175,9 @@ final class ProcessCommand extends AbstractCommand
             'Run only one single Rector from the loaded Rectors (in services, sets, etc).'
         );
 
-        $availableOutputFormatters = $this->outputFormatterCollector->getNames();
+        $names = $this->outputFormatterCollector->getNames();
 
-        $description = sprintf('Select output format: "%s".', implode('", "', $availableOutputFormatters));
+        $description = sprintf('Select output format: "%s".', implode('", "', $names));
         $this->addOption(
             Option::OPTION_OUTPUT_FORMAT,
             'o',
@@ -215,15 +215,15 @@ final class ProcessCommand extends AbstractCommand
 
         $this->stubLoader->loadStubs();
 
-        $source = $this->configuration->getPaths();
+        $paths = $this->configuration->getPaths();
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
-            $source,
+            $paths,
             $this->configuration->getFileExtensions(),
             $this->configuration->mustMatchGitDiff()
         );
 
-        $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
+        $this->additionalAutoloader->autoloadWithInputAndSource($input, $paths);
 
         $phpFileInfos = $this->processWithCache($phpFileInfos);
 
@@ -237,7 +237,7 @@ final class ProcessCommand extends AbstractCommand
         $this->rectorApplication->runOnFileInfos($phpFileInfos);
 
         // must run after PHP rectors, because they might change class names, and these class names must be changed in configs
-        $neonYamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['neon', 'yaml', 'xml']);
+        $neonYamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, ['neon', 'yaml', 'xml']);
         $this->nonPhpFileProcessor->runOnFileInfos($neonYamlFileInfos);
 
         $this->reportZeroCacheRectorsCondition();

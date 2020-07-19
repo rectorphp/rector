@@ -143,8 +143,8 @@ final class ScreenFileCommand extends AbstractCommand
                 $node->setDocComment(new Doc($docBlock));
             } else {
                 // join with previous doc
-                $previousDoc = $node->getDocComment()->getText();
-                $newDocBlock = $previousDoc . $docBlock;
+                $previousText = $node->getDocComment()->getText();
+                $newDocBlock = $previousText . $docBlock;
                 $node->setDocComment(new Doc($newDocBlock));
             }
 

@@ -124,11 +124,11 @@ final class ParallelTaskRunner
         if ($this->canStartAnotherProcess($maxProcesses)) {
             /** @var string $setName */
             $setName = array_key_first($this->remainingTasks);
-            /** @var SetTask $task */
-            $task = array_shift($this->remainingTasks);
+            /** @var SetTask $setTask */
+            $setTask = array_shift($this->remainingTasks);
 
             try {
-                $process = $this->createProcessFromSetTask($task);
+                $process = $this->createProcessFromSetTask($setTask);
                 $process->start();
                 $this->runningProcesses[$setName] = $process;
             } catch (Throwable $throwable) {

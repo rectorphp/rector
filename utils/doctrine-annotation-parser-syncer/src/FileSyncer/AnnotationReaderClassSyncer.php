@@ -20,11 +20,11 @@ final class AnnotationReaderClassSyncer extends AbstractClassSyncer
 
     public function sync(bool $isDryRun): bool
     {
-        $nodes = $this->getFileNodes();
-        $changedNodes = $this->classSyncerNodeTraverser->traverse($nodes);
+        $fileNodes = $this->getFileNodes();
+        $changedNodes = $this->classSyncerNodeTraverser->traverse($fileNodes);
 
         if ($isDryRun) {
-            return ! $this->hasContentChanged($nodes);
+            return ! $this->hasContentChanged($fileNodes);
         }
 
         $this->printNodesToPath($changedNodes);

@@ -90,13 +90,13 @@ final class ValidateFixturesCommand extends Command
 
     private function hasFileIdenticalCodeBeforeAndAfter(SmartFileInfo $smartFileInfo): bool
     {
-        $fileContent = $smartFileInfo->getContents();
-        if (! Strings::match($fileContent, SplitLine::REGEX)) {
+        $contents = $smartFileInfo->getContents();
+        if (! Strings::match($contents, SplitLine::REGEX)) {
             return false;
         }
 
         // original → expected
-        [$originalContent, $expectedContent] = Strings::split($fileContent, SplitLine::REGEX);
+        [$originalContent, $expectedContent] = Strings::split($contents, SplitLine::REGEX);
 
         return $originalContent === $expectedContent;
     }

@@ -79,11 +79,11 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
     private function getMissingNodeClasses(): array
     {
         $phpStanTypeClasses = $this->phpStanTypeClassFinder->find();
-        $supportedPHPStanTypeClasses = $this->getSupportedTypeClasses();
+        $supportedTypeClasses = $this->getSupportedTypeClasses();
 
         $unsupportedTypeClasses = [];
         foreach ($phpStanTypeClasses as $phpStanTypeClass) {
-            foreach ($supportedPHPStanTypeClasses as $supportedPHPStanTypeClass) {
+            foreach ($supportedTypeClasses as $supportedPHPStanTypeClass) {
                 if (is_a($phpStanTypeClass, $supportedPHPStanTypeClass, true)) {
                     continue 2;
                 }
