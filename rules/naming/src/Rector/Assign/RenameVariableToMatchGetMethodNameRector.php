@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Rector\Assign;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -26,6 +25,7 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Matcher\VariableAndCallAssignMatcher;
 use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\Naming\NamingConvention\NamingConventionAnalyzer;
 use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -59,18 +59,25 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
      */
     private $variableAndCallAssignMatcher;
 
+    /**
+     * @var NamingConventionAnalyzer
+     */
+    private $namingConventionAnalyzer;
+
     public function __construct(
         ExpectedNameResolver $expectedNameResolver,
         VariableRenamer $variableRenamer,
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
         FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        VariableAndCallAssignMatcher $variableAndCallAssignMatcher
+        VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
+        NamingConventionAnalyzer $namingConventionAnalyzer
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
+        $this->namingConventionAnalyzer = $namingConventionAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -118,36 +125,33 @@ PHP
             return null;
         }
 
-        $newName = $this->expectedNameResolver->resolveForGetCallExpr($variableAndCallAssign->getCall());
-        if ($newName === null || $this->isName($node, $newName)) {
+        $expectedName = $this->expectedNameResolver->resolveForGetCallExpr($variableAndCallAssign->getCall());
+        if ($expectedName === null || $this->isName($node, $expectedName)) {
             return null;
         }
 
-        if ($this->shouldSkipForNamingConvention(
+        if ($this->namingConventionAnalyzer->isCallMatchingVariableName(
             $variableAndCallAssign->getCall(),
             $variableAndCallAssign->getVariableName(),
-            $newName
+            $expectedName
         )) {
             return null;
         }
 
-        $callStaticType = $this->getStaticType($node->expr);
-        if ($callStaticType instanceof TypeWithClassName && $this->familyRelationsAnalyzer->isParentClass(
-            $callStaticType->getClassName()
-        )) {
+        if ($this->isClassTypeWithChildren($variableAndCallAssign->getCall())) {
             return null;
         }
 
         if ($this->breakingVariableRenameGuard->shouldSkipVariable(
             $variableAndCallAssign->getVariableName(),
-            $newName,
+            $expectedName,
             $variableAndCallAssign->getFunctionLike(),
             $variableAndCallAssign->getVariable()
         )) {
             return null;
         }
 
-        return $this->renameVariable($node, $newName, $variableAndCallAssign->getFunctionLike());
+        return $this->renameVariable($node, $expectedName, $variableAndCallAssign->getFunctionLike());
     }
 
     /**
@@ -192,23 +196,15 @@ PHP
     }
 
     /**
-     * Keep cases like:
-     *
-     * $someNameSuffix = $this->getSomeName();
-     * $prefixSomeName = $this->getSomeName();
-     * $someName = $this->getSomeName();
-     *
-     * @param FuncCall|StaticCall|MethodCall $expr
+     * @param StaticCall|MethodCall|FuncCall $expr
      */
-    private function shouldSkipForNamingConvention(Expr $expr, string $currentName, string $expectedName): bool
+    private function isClassTypeWithChildren(Expr $expr): bool
     {
-        // skip "$call = $method->call();" based conventions
-        $callName = $this->getName($expr->name);
-        if ($currentName === $callName) {
-            return true;
+        $callStaticType = $this->getStaticType($expr);
+        if (! $callStaticType instanceof TypeWithClassName) {
+            return false;
         }
 
-        // starts with or ends with
-        return (bool) Strings::match($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
+        return $this->familyRelationsAnalyzer->isParentClass($callStaticType->getClassName());
     }
 }
