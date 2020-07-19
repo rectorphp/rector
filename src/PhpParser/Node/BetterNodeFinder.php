@@ -125,25 +125,17 @@ final class BetterNodeFinder
     /**
      * @param Node|Node[] $nodes
      */
-    public function findVariableOfName($nodes, string $name): ?Node
+    public function hasVariableOfName($nodes, string $name): bool
     {
-        return $this->findInstanceOfName($nodes, Variable::class, $name);
+        return (bool) $this->findVariableOfName($nodes, $name);
     }
 
     /**
      * @param Node|Node[] $nodes
      */
-    public function findInstanceOfName($nodes, string $type, string $name): ?Node
+    public function findVariableOfName($nodes, string $name): ?Node
     {
-        $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
-
-        foreach ($foundInstances as $foundInstance) {
-            if ($this->nodeNameResolver->isName($foundInstance, $name)) {
-                return $foundInstance;
-            }
-        }
-
-        return null;
+        return $this->findInstanceOfName($nodes, Variable::class, $name);
     }
 
     /**
@@ -263,6 +255,22 @@ final class BetterNodeFinder
 
             return false;
         });
+    }
+
+    /**
+     * @param Node|Node[] $nodes
+     */
+    private function findInstanceOfName($nodes, string $type, string $name): ?Node
+    {
+        $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
+
+        foreach ($foundInstances as $foundInstance) {
+            if ($this->nodeNameResolver->isName($foundInstance, $name)) {
+                return $foundInstance;
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -214,11 +214,7 @@ final class BreakingVariableRenameGuard
             return false;
         }
 
-        return (bool) $this->betterNodeFinder->hasInstanceOfName(
-            (array) $functionLike->uses,
-            Variable::class,
-            $expectedName
-        );
+        return $this->betterNodeFinder->hasVariableOfName((array) $functionLike->uses, $expectedName);
     }
 
     /**
