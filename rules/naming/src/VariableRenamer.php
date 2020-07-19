@@ -61,23 +61,28 @@ final class VariableRenamer
                     return null;
                 }
 
-                if (! $isRenamingActive) {
-                    return null;
-                }
-
                 if (! $node instanceof Variable) {
                     return null;
                 }
 
-                if (! $this->nodeNameResolver->isName($node, $oldName)) {
+                if (! $isRenamingActive) {
                     return null;
                 }
 
-                $node->name = $expectedName;
-                $this->varTagValueNodeRenamer->renameAssignVarTagVariableName($node, $oldName, $expectedName);
-
-                return $node;
+                return $this->renameVariableIfMatchesName($node, $oldName, $expectedName);
             }
         );
+    }
+
+    private function renameVariableIfMatchesName(Variable $variable, string $oldName, string $expectedName)
+    {
+        if (! $this->nodeNameResolver->isName($variable, $oldName)) {
+            return null;
+        }
+
+        $variable->name = $expectedName;
+        $this->varTagValueNodeRenamer->renameAssignVarTagVariableName($variable, $oldName, $expectedName);
+
+        return $variable;
     }
 }
