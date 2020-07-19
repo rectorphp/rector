@@ -70,7 +70,7 @@ final class BreakingVariableRenameGuard
     public function shouldSkipVariable(
         string $currentName,
         string $expectedName,
-        ClassMethod $classMethod,
+        Node\FunctionLike $functionLike,
         Variable $variable
     ): bool {
         // is the suffix? → also accepted
@@ -78,11 +78,11 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        if ($this->conflictingNameResolver->checkNameIsInClassMethod($expectedName, $classMethod)) {
+        if ($this->conflictingNameResolver->checkNameIsInFunctionLike($expectedName, $functionLike)) {
             return true;
         }
 
-        if ($this->overridenExistingNamesResolver->checkNameInClassMethodForNew($currentName, $classMethod)) {
+        if ($this->overridenExistingNamesResolver->checkNameInClassMethodForNew($currentName, $functionLike)) {
             return true;
         }
 
@@ -115,7 +115,7 @@ final class BreakingVariableRenameGuard
             return true;
         }
 
-        if ($this->conflictingNameResolver->checkNameIsInClassMethod($expectedName, $classMethod)) {
+        if ($this->conflictingNameResolver->checkNameIsInFunctionLike($expectedName, $classMethod)) {
             return true;
         }
 

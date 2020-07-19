@@ -6,6 +6,7 @@ namespace Rector\Naming\Naming;
 
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\PhpArray\ArrayFilter;
@@ -43,9 +44,9 @@ final class OverridenExistingNamesResolver
         $this->arrayFilter = $arrayFilter;
     }
 
-    public function checkNameInClassMethodForNew(string $variableName, ClassMethod $classMethod): bool
+    public function checkNameInClassMethodForNew(string $variableName, FunctionLike $functionLie): bool
     {
-        $overridenVariableNames = $this->resolveOveriddenNamesForNew($classMethod);
+        $overridenVariableNames = $this->resolveOveriddenNamesForNew($functionLie);
         return in_array($variableName, $overridenVariableNames, true);
     }
 
@@ -73,9 +74,9 @@ final class OverridenExistingNamesResolver
     /**
      * @return string[]
      */
-    private function resolveOveriddenNamesForNew(ClassMethod $classMethod): array
+    private function resolveOveriddenNamesForNew(FunctionLike $functionLike): array
     {
-        $classMethodHash = spl_object_hash($classMethod);
+        $classMethodHash = spl_object_hash($functionLike);
 
         if (isset($this->overridenExistingVariableNamesByClassMethod[$classMethodHash])) {
             return $this->overridenExistingVariableNamesByClassMethod[$classMethodHash];
@@ -84,7 +85,7 @@ final class OverridenExistingNamesResolver
         $currentlyUsedNames = [];
 
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Assign::class);
 
         foreach ($assigns as $assign) {
             /** @var Variable $assignVariable */

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -87,27 +88,27 @@ final class ConflictingNameResolver
         return $this->arrayFilter->filterWithAtLeastTwoOccurences($expectedNames);
     }
 
-    public function checkNameIsInClassMethod(string $variableName, ClassMethod $classMethod): bool
+    public function checkNameIsInFunctionLike(string $variableName, FunctionLike $functionLike): bool
     {
-        $conflictingVariableNames = $this->resolveConflictingVariableNamesForNew($classMethod);
+        $conflictingVariableNames = $this->resolveConflictingVariableNamesForNew($functionLike);
         return in_array($variableName, $conflictingVariableNames, true);
     }
 
     /**
      * @return string[]
      */
-    private function resolveConflictingVariableNamesForNew(ClassMethod $classMethod): array
+    private function resolveConflictingVariableNamesForNew(FunctionLike $functionLike): array
     {
         // cache it!
-        $classMethodHash = spl_object_hash($classMethod);
+        $classMethodHash = spl_object_hash($functionLike);
 
         if (isset($this->conflictingVariableNamesByClassMethod[$classMethodHash])) {
             return $this->conflictingVariableNamesByClassMethod[$classMethodHash];
         }
 
-        $paramNames = $this->collectParamNames($classMethod);
-        $newAssignNames = $this->resolveForNewAssigns($classMethod);
-        $nonNewAssignNames = $this->resolveForNonNewAssigns($classMethod);
+        $paramNames = $this->collectParamNames($functionLike);
+        $newAssignNames = $this->resolveForNewAssigns($functionLike);
+        $nonNewAssignNames = $this->resolveForNonNewAssigns($functionLike);
 
         $protectedNames = array_merge($paramNames, $newAssignNames, $nonNewAssignNames);
 
@@ -120,12 +121,12 @@ final class ConflictingNameResolver
     /**
      * @return string[]
      */
-    private function collectParamNames(ClassMethod $classMethod): array
+    private function collectParamNames(FunctionLike $functionLike): array
     {
         $paramNames = [];
 
         // params
-        foreach ($classMethod->params as $param) {
+        foreach ($functionLike->params as $param) {
             /** @var string $paramName */
             $paramName = $this->nodeNameResolver->getName($param);
             $paramNames[] = $paramName;
@@ -137,12 +138,12 @@ final class ConflictingNameResolver
     /**
      * @return string[]
      */
-    private function resolveForNewAssigns(ClassMethod $classMethod): array
+    private function resolveForNewAssigns(FunctionLike $functionLike): array
     {
         $names = [];
 
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Assign::class);
         foreach ($assigns as $assign) {
             $name = $this->expectedNameResolver->resolveForAssignNew($assign);
             if ($name === null) {
@@ -155,12 +156,15 @@ final class ConflictingNameResolver
         return $names;
     }
 
-    private function resolveForNonNewAssigns(ClassMethod $classMethod)
+    /**
+     * @return string[]
+     */
+    private function resolveForNonNewAssigns(FunctionLike $functionLike): array
     {
         $names = [];
 
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Assign::class);
         foreach ($assigns as $assign) {
             $name = $this->expectedNameResolver->resolveForAssignNonNew($assign);
             if ($name === null) {

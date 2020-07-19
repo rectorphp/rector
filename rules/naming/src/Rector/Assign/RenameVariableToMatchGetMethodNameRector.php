@@ -20,6 +20,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,10 +40,19 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
      */
     private $variableRenamer;
 
-    public function __construct(ExpectedNameResolver $expectedNameResolver, VariableRenamer $variableRenamer)
-    {
+    /**
+     * @var BreakingVariableRenameGuard
+     */
+    private $breakingVariableRenameGuard;
+
+    public function __construct(
+        ExpectedNameResolver $expectedNameResolver,
+        VariableRenamer $variableRenamer,
+        BreakingVariableRenameGuard $breakingVariableRenameGuard
+    ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
+        $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
     }
 
     public function getDefinition(): RectorDefinition
@@ -83,9 +93,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (
-            $node->expr instanceof ArrowFunction || ! $node->var instanceof Variable
-        ) {
+        if ($node->expr instanceof ArrowFunction || ! $node->var instanceof Variable) {
             return null;
         }
 
@@ -94,16 +102,33 @@ PHP
             return null;
         }
 
+        $currentName = $this->getName($node->var);
+        if ($currentName === null) {
+            return null;
+        }
+
+        $classMethodOrFunction = $this->getCurrentFunctionLike($node);
+        if ($classMethodOrFunction === null) {
+            return null;
+        }
+
+        if ($this->breakingVariableRenameGuard->shouldSkipVariable(
+            $currentName,
+            $newName,
+            $classMethodOrFunction,
+            $node->var
+        )) {
+            return null;
+        }
+
         if ($this->shouldSkipForNameConflict($node, $newName)) {
             return null;
         }
 
-        $this->renameVariable($node, $newName);
-
-        return $node;
+        return $this->renameVariable($node, $newName);
     }
 
-    private function renameVariable(Assign $assign, string $newName): void
+    private function renameVariable(Assign $assign, string $newName): Assign
     {
         /** @var Variable $variableNode */
         $variableNode = $assign->var;
@@ -115,7 +140,7 @@ PHP
 
         $functionLike = $this->getCurrentFunctionLike($assign);
         if ($functionLike === null) {
-            return;
+            return $assign;
         }
 
         $this->variableRenamer->renameVariableInClassMethodOrFunction(
@@ -124,6 +149,8 @@ PHP
             $originalName,
             $newName
         );
+
+        return $assign;
     }
 
     /**
