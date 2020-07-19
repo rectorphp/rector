@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -44,9 +46,12 @@ final class OverridenExistingNamesResolver
         $this->arrayFilter = $arrayFilter;
     }
 
-    public function checkNameInClassMethodForNew(string $variableName, FunctionLike $functionLie): bool
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     */
+    public function checkNameInClassMethodForNew(string $variableName, FunctionLike $functionLike): bool
     {
-        $overridenVariableNames = $this->resolveOveriddenNamesForNew($functionLie);
+        $overridenVariableNames = $this->resolveOveriddenNamesForNew($functionLike);
         return in_array($variableName, $overridenVariableNames, true);
     }
 
@@ -72,6 +77,7 @@ final class OverridenExistingNamesResolver
     }
 
     /**
+     * @param ClassMethod|Function_|Closure $functionLike
      * @return string[]
      */
     private function resolveOveriddenNamesForNew(FunctionLike $functionLike): array

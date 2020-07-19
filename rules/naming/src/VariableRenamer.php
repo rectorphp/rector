@@ -6,6 +6,7 @@ namespace Rector\Naming;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -32,9 +33,9 @@ final class VariableRenamer
     }
 
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param ClassMethod|Function_|Closure $functionLike
      */
-    public function renameVariableInClassMethodOrFunction(
+    public function renameVariableInFunctionLike(
         FunctionLike $functionLike,
         Assign $assign,
         string $oldName,

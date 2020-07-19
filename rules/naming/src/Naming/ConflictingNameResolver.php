@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -88,6 +90,9 @@ final class ConflictingNameResolver
         return $this->arrayFilter->filterWithAtLeastTwoOccurences($expectedNames);
     }
 
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     */
     public function checkNameIsInFunctionLike(string $variableName, FunctionLike $functionLike): bool
     {
         $conflictingVariableNames = $this->resolveConflictingVariableNamesForNew($functionLike);
@@ -95,6 +100,7 @@ final class ConflictingNameResolver
     }
 
     /**
+     * @param ClassMethod|Function_|Closure $functionLike
      * @return string[]
      */
     private function resolveConflictingVariableNamesForNew(FunctionLike $functionLike): array
@@ -119,6 +125,7 @@ final class ConflictingNameResolver
     }
 
     /**
+     * @param ClassMethod|Function_|Closure $functionLike
      * @return string[]
      */
     private function collectParamNames(FunctionLike $functionLike): array
@@ -136,6 +143,7 @@ final class ConflictingNameResolver
     }
 
     /**
+     * @param ClassMethod|Function_|Closure $functionLike
      * @return string[]
      */
     private function resolveForNewAssigns(FunctionLike $functionLike): array
@@ -157,6 +165,7 @@ final class ConflictingNameResolver
     }
 
     /**
+     * @param ClassMethod|Function_|Closure $functionLike
      * @return string[]
      */
     private function resolveForNonNewAssigns(FunctionLike $functionLike): array

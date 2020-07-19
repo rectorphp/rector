@@ -13,7 +13,6 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\NodeTraverser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
@@ -142,28 +141,9 @@ PHP
             return $assign;
         }
 
-        $this->variableRenamer->renameVariableInClassMethodOrFunction(
-            $functionLike,
-            $assign,
-            $originalName,
-            $newName
-        );
+        $this->variableRenamer->renameVariableInFunctionLike($functionLike, $assign, $originalName, $newName);
 
         return $assign;
-    }
-
-    /**
-     * @return Param[]
-     */
-    private function getParentNodeParams(Node $node): array
-    {
-        /** @var FunctionLike|null $parentNode */
-        $parentNode = $this->getCurrentFunctionLike($node);
-        if ($parentNode === null) {
-            return [];
-        }
-
-        return $parentNode->getParams() ?? [];
     }
 
     /**
@@ -174,55 +154,6 @@ PHP
         return $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
              $node->getAttribute(AttributeKey::METHOD_NODE) ??
              $node->getAttribute(AttributeKey::FUNCTION_NODE);
-    }
-
-    private function skipOnConflictParamName(Assign $assign, string $newName): bool
-    {
-        $parentNodeParams = $this->getParentNodeParams($assign);
-        if ($parentNodeParams === []) {
-            return false;
-        }
-
-        $originalName = $this->getName($assign->var);
-
-        $skip = false;
-        $this->traverseNodesWithCallable($parentNodeParams, function (Node $node) use (
-            $originalName,
-            $newName,
-            &$skip
-        ): void {
-            if (
-                $node instanceof Param &&
-                ($this->isVariableName($node->var, $newName) || $this->isVariableName($node->var, $originalName))
-            ) {
-                $skip = true;
-            }
-        });
-        return $skip;
-    }
-
-    private function skipOnConflictOtherVariable(Assign $assign, string $newName): bool
-    {
-        $skip = false;
-        $functionLike = $this->getCurrentFunctionLike($assign);
-        if ($functionLike === null) {
-            return false;
-        }
-
-        $this->traverseNodesWithCallable((array) $functionLike->stmts, function (Node $node) use ($newName, &$skip) {
-            if (! $node instanceof Variable) {
-                return null;
-            }
-
-            if ($this->isVariableName($node, $newName)) {
-                $skip = true;
-                return NodeTraverser::STOP_TRAVERSAL;
-            }
-
-            return null;
-        });
-
-        return $skip;
     }
 
     private function renameInDocComment(Node $node, string $originalName, string $newName): void
