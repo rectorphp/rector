@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symfony\Component\DependencyInjection\Variable;
 
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
@@ -118,15 +119,23 @@ final class BetterNodeFinder
      */
     public function hasInstanceOfName($nodes, string $type, string $name): bool
     {
-        $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
+        return (bool) $this->findInstanceOfName($nodes, $type, $name);
+    }
 
-        foreach ($foundInstances as $foundInstance) {
-            if ($this->nodeNameResolver->isName($foundInstance, $name)) {
-                return true;
-            }
-        }
+    /**
+     * @param Node|Node[] $nodes
+     */
+    public function hasVariableOfName($nodes, string $name): bool
+    {
+        return (bool) $this->findVariableOfName($nodes, $name);
+    }
 
-        return false;
+    /**
+     * @param Node|Node[] $nodes
+     */
+    public function findVariableOfName($nodes, string $name): ?Node
+    {
+        return $this->findInstanceOfName($nodes, Variable::class, $name);
     }
 
     /**
@@ -246,6 +255,22 @@ final class BetterNodeFinder
 
             return false;
         });
+    }
+
+    /**
+     * @param Node|Node[] $nodes
+     */
+    private function findInstanceOfName($nodes, string $type, string $name): ?Node
+    {
+        $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
+
+        foreach ($foundInstances as $foundInstance) {
+            if ($this->nodeNameResolver->isName($foundInstance, $name)) {
+                return $foundInstance;
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -6,7 +6,6 @@ namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
@@ -22,7 +21,6 @@ use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -47,11 +45,6 @@ final class BreakingVariableRenameGuard
     private $overridenExistingNamesResolver;
 
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -60,13 +53,11 @@ final class BreakingVariableRenameGuard
         BetterNodeFinder $betterNodeFinder,
         ConflictingNameResolver $conflictingNameResolver,
         OverridenExistingNamesResolver $overridenExistingNamesResolver,
-        NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->conflictingNameResolver = $conflictingNameResolver;
         $this->overridenExistingNamesResolver = $overridenExistingNamesResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
@@ -168,24 +159,11 @@ final class BreakingVariableRenameGuard
         if ($previousIf instanceof If_) {
             $variableUses = [];
 
-            $variableUses[] = $this->betterNodeFinder->findFirst($previousIf->stmts, function (Node $node) use (
-                $currentVariableName
-            ) {
-                return $this->isVariableName($node, $currentVariableName);
-            });
+            $variableUses[] = $this->betterNodeFinder->findVariableOfName($previousIf->stmts, $currentVariableName);
 
-            $variableUses[] = $this->betterNodeFinder->findFirst(
-                $previousIf->else !== null ? $previousIf->else->stmts : [],
-                function (Node $node) use ($currentVariableName) {
-                    return $this->isVariableName($node, $currentVariableName);
-                }
-            );
-
-            $variableUses[] = $this->betterNodeFinder->findFirst($previousIf->elseifs, function (Node $node) use (
-                $currentVariableName
-            ) {
-                return $this->isVariableName($node, $currentVariableName);
-            });
+            $previousStmts = $previousIf->else !== null ? $previousIf->else->stmts : [];
+            $variableUses[] = $this->betterNodeFinder->findVariableOfName($previousStmts, $currentVariableName);
+            $variableUses[] = $this->betterNodeFinder->findVariableOfName($previousIf->elseifs, $currentVariableName);
 
             $variableUses = array_filter($variableUses);
             if (count($variableUses) > 1) {
@@ -194,15 +172,6 @@ final class BreakingVariableRenameGuard
         }
 
         return false;
-    }
-
-    private function isVariableName(Node $node, string $name): bool
-    {
-        if (! $node instanceof Variable) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($node, $name);
     }
 
     private function isDateTimeAtNamingConvention(Type $type, string $currentName): bool
@@ -245,11 +214,7 @@ final class BreakingVariableRenameGuard
             return false;
         }
 
-        return (bool) $this->betterNodeFinder->hasInstanceOfName(
-            (array) $functionLike->uses,
-            Variable::class,
-            $expectedName
-        );
+        return $this->betterNodeFinder->hasVariableOfName((array) $functionLike->uses, $expectedName);
     }
 
     /**

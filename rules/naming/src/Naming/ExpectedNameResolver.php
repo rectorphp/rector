@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
@@ -16,10 +15,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -41,20 +41,20 @@ final class ExpectedNameResolver
     private $staticTypeMapper;
 
     /**
-     * @var BetterNodeFinder
+     * @var NodeTypeResolver
      */
-    private $betterNodeFinder;
+    private $nodeTypeResolver;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         PropertyNaming $propertyNaming,
         StaticTypeMapper $staticTypeMapper,
-        BetterNodeFinder $betterNodeFinder
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function resolveForPropertyIfNotYet(Property $property): ?string
@@ -161,25 +161,33 @@ final class ExpectedNameResolver
         return $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
     }
 
+    /**
+     * @param MethodCall|StaticCall|FuncCall $expr
+     */
     public function resolveForGetCallExpr(Expr $expr): ?string
     {
-        /** @var MethodCall|StaticCall|FuncCall|null $callNode */
-        $callNode = $this->betterNodeFinder->findFirst($expr, function (Node $node) {
-            return $node instanceof MethodCall || $node instanceof StaticCall || $node instanceof FuncCall;
-        });
-
-        if ($callNode === null) {
-            return null;
-        }
-
-        $name = $this->nodeNameResolver->getName($callNode->name);
+        $name = $this->nodeNameResolver->getName($expr->name);
         if ($name === null) {
             return null;
         }
 
-        // @see https://regex101.com/r/hnU5pm/2/
-        $matches = Strings::match($name, '#^get(([A-Z]).+)#');
+        $returnedType = $this->nodeTypeResolver->getStaticType($expr);
+        if ($returnedType instanceof MixedType) {
+            return null;
+        }
 
+        $expectedName = $this->propertyNaming->getExpectedNameFromType($returnedType);
+        if ($expectedName !== null) {
+            return $expectedName;
+        }
+
+        // call with args can return different value, so skip there if not sure about the type
+        if (count($expr->args) > 0) {
+            return null;
+        }
+
+        // @see https://regex101.com/r/hnU5pm/2/
+        $matches = Strings::match($name, '#^get([A-Z].+)#');
         if ($matches === null) {
             return null;
         }

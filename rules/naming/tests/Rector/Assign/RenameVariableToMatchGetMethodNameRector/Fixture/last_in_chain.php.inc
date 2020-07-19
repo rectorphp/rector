@@ -2,12 +2,19 @@
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
 
+use Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Source\Runners;
+
 class LastInChainClass
 {
     public function run()
     {
         $a = $this->getRunners()->getFast();
         $a->exit();
+    }
+
+    public function getRunners(): Runners
+    {
+        return new Runners();
     }
 }
 
@@ -17,12 +24,19 @@ class LastInChainClass
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
 
+use Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Source\Runners;
+
 class LastInChainClass
 {
     public function run()
     {
-        $fast = $this->getRunners()->getFast();
-        $fast->exit();
+        $fastRunner = $this->getRunners()->getFast();
+        $fastRunner->exit();
+    }
+
+    public function getRunners(): Runners
+    {
+        return new Runners();
     }
 }
 

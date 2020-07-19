@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Decomplex\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
+use Rector\Naming\Rector\Assign\RenameVariableToMatchGetMethodNameRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
-    $services->set(UseMessageVariableForSprintfInSymfonyStyleRector::class);
+    $services->set(RenameVariableToMatchGetMethodNameRector::class);
 
     $parameters = $containerConfigurator->parameters();
 

@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Reflection\StaticRelationsHelper;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -31,14 +31,21 @@ final class PropertyUsageAnalyzer
      */
     private $betterNodeFinder;
 
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
-        BetterNodeFinder $betterNodeFinder
+        BetterNodeFinder $betterNodeFinder,
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
 
     public function isPropertyFetchedInChildClass(Property $property): bool
@@ -58,7 +65,7 @@ final class PropertyUsageAnalyzer
             return false;
         }
 
-        $childrenClassNames = StaticRelationsHelper::getChildrenOfClass($className);
+        $childrenClassNames = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
         foreach ($childrenClassNames as $childClassName) {
             $childClass = $this->classLikeParsedNodesFinder->findClass($childClassName);
             if ($childClass === null) {

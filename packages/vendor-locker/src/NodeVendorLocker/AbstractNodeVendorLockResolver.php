@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Core\Reflection\StaticRelationsHelper;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -31,16 +31,23 @@ abstract class AbstractNodeVendorLockResolver
     protected $nodeNameResolver;
 
     /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
+    /**
      * @required
      */
     public function autowireAbstractNodeVendorLockResolver(
         ParsedNodeCollector $parsedNodeCollector,
         ClassManipulator $classManipulator,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ): void {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->classManipulator = $classManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
 
     protected function hasParentClassChildrenClassesOrImplementsInterface(ClassLike $classLike): bool
@@ -89,7 +96,7 @@ abstract class AbstractNodeVendorLockResolver
             return [];
         }
 
-        return StaticRelationsHelper::getChildrenOfClass($desiredClassName);
+        return $this->familyRelationsAnalyzer->getChildrenOfClass($desiredClassName);
     }
 
     private function hasInterfaceMethod(string $methodName, string $interfaceName): bool

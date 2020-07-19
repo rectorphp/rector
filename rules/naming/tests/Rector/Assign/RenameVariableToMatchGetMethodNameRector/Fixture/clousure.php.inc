@@ -2,13 +2,15 @@
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
 
+use DateTime;
+
 class ClosureClass
 {
     public function run()
     {
         $datetime = new DateTime();
         array_map(function ($element) use ($datetime) {
-            $a = $datetime->getTimestamp() + $element;
+            $a = $datetime->getTimestamp();
             return $a;
         }, [1, 2, 3]);
     }
@@ -20,13 +22,15 @@ class ClosureClass
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
 
+use DateTime;
+
 class ClosureClass
 {
     public function run()
     {
         $datetime = new DateTime();
         array_map(function ($element) use ($datetime) {
-            $timestamp = $datetime->getTimestamp() + $element;
+            $timestamp = $datetime->getTimestamp();
             return $timestamp;
         }, [1, 2, 3]);
     }

@@ -4,21 +4,27 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Rector\Assign;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
+use Rector\Naming\Matcher\VariableAndCallAssignMatcher;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -43,14 +49,28 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
      */
     private $breakingVariableRenameGuard;
 
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
+    /**
+     * @var VariableAndCallAssignMatcher
+     */
+    private $variableAndCallAssignMatcher;
+
     public function __construct(
         ExpectedNameResolver $expectedNameResolver,
         VariableRenamer $variableRenamer,
-        BreakingVariableRenameGuard $breakingVariableRenameGuard
+        BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        VariableAndCallAssignMatcher $variableAndCallAssignMatcher
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+        $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
     }
 
     public function getDefinition(): RectorDefinition
@@ -58,7 +78,8 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
         return new RectorDefinition('Rename variable to match get method name', [
             new CodeSample(
                 <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         $a = $this->getRunner();
@@ -67,7 +88,8 @@ class SomeClass {
 PHP
 ,
                 <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         $runner = $this->getRunner();
@@ -91,42 +113,47 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->expr instanceof ArrowFunction || ! $node->var instanceof Variable) {
+        $variableAndCallAssign = $this->variableAndCallAssignMatcher->match($node);
+        if ($variableAndCallAssign === null) {
             return null;
         }
 
-        $newName = $this->expectedNameResolver->resolveForGetCallExpr($node->expr);
+        $newName = $this->expectedNameResolver->resolveForGetCallExpr($variableAndCallAssign->getCall());
         if ($newName === null || $this->isName($node, $newName)) {
             return null;
         }
 
-        $currentName = $this->getName($node->var);
-        if ($currentName === null) {
-            return null;
-        }
-
-        $functionLike = $this->getCurrentFunctionLike($node);
-        if ($functionLike === null) {
-            return null;
-        }
-
-        if ($this->breakingVariableRenameGuard->shouldSkipVariable(
-            $currentName,
-            $newName,
-            $functionLike,
-            $node->var
+        if ($this->shouldSkipForNamingConvention(
+            $variableAndCallAssign->getCall(),
+            $variableAndCallAssign->getVariableName(),
+            $newName
         )) {
             return null;
         }
 
-//        if ($this->shouldSkipForNameConflict($node, $newName)) {
-//            return null;
-//        }
+        $callStaticType = $this->getStaticType($node->expr);
+        if ($callStaticType instanceof TypeWithClassName && $this->familyRelationsAnalyzer->isParentClass(
+            $callStaticType->getClassName()
+        )) {
+            return null;
+        }
 
-        return $this->renameVariable($node, $newName);
+        if ($this->breakingVariableRenameGuard->shouldSkipVariable(
+            $variableAndCallAssign->getVariableName(),
+            $newName,
+            $variableAndCallAssign->getFunctionLike(),
+            $variableAndCallAssign->getVariable()
+        )) {
+            return null;
+        }
+
+        return $this->renameVariable($node, $newName, $variableAndCallAssign->getFunctionLike());
     }
 
-    private function renameVariable(Assign $assign, string $newName): Assign
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     */
+    private function renameVariable(Assign $assign, string $newName, FunctionLike $functionLike): Assign
     {
         /** @var Variable $variableNode */
         $variableNode = $assign->var;
@@ -136,26 +163,14 @@ PHP
 
         $this->renameInDocComment($assign, $originalName, $newName);
 
-        $functionLike = $this->getCurrentFunctionLike($assign);
-        if ($functionLike === null) {
-            return $assign;
-        }
-
         $this->variableRenamer->renameVariableInFunctionLike($functionLike, $assign, $originalName, $newName);
 
         return $assign;
     }
 
     /**
-     * @return ClassMethod|Function_|Closure|null
+     * @note variable rename is correct, but node printer doesn't see it as a changed text for some reason
      */
-    private function getCurrentFunctionLike(Node $node): ?FunctionLike
-    {
-        return $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
-             $node->getAttribute(AttributeKey::METHOD_NODE) ??
-             $node->getAttribute(AttributeKey::FUNCTION_NODE);
-    }
-
     private function renameInDocComment(Node $node, string $originalName, string $newName): void
     {
         /** @var PhpDocInfo|null $phpDocInfo */
@@ -174,5 +189,26 @@ PHP
         }
 
         $varTagValueNode->variableName = '$' . $newName;
+    }
+
+    /**
+     * Keep cases like:
+     *
+     * $someNameSuffix = $this->getSomeName();
+     * $prefixSomeName = $this->getSomeName();
+     * $someName = $this->getSomeName();
+     *
+     * @param FuncCall|StaticCall|MethodCall $expr
+     */
+    private function shouldSkipForNamingConvention(Expr $expr, string $currentName, string $expectedName): bool
+    {
+        // skip "$call = $method->call();" based conventions
+        $callName = $this->getName($expr->name);
+        if ($currentName === $callName) {
+            return true;
+        }
+
+        // starts with or ends with
+        return (bool) Strings::match($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
     }
 }
