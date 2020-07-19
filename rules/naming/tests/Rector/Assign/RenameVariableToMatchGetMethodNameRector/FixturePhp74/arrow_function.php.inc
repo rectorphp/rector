@@ -2,10 +2,16 @@
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
 
-function testArrowFunction() {
-    $datetime = new DateTime();
+use DateTime;
 
-    $fn1 = fn($x) => $x + $stamp = $datetime->getTimestamp();
+class ArrowFunction
+{
+    public function run()
+    {
+        $datetime = new DateTime();
+
+        $fn1 = fn($x) => $x + $stamp = $datetime->getTimezone();
+    }
 }
 
 ?>
@@ -14,10 +20,16 @@ function testArrowFunction() {
 
 namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
 
-function testArrowFunction() {
-    $datetime = new DateTime();
+use DateTime;
 
-    $fn1 = fn($x) => $x + $timestamp = $datetime->getTimestamp();
+class ArrowFunction
+{
+    public function run()
+    {
+        $datetime = new DateTime();
+
+        $fn1 = fn($x) => $x + $dateTimeZone = $datetime->getTimezone();
+    }
 }
 
 ?>
