@@ -98,8 +98,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $clientGetResponse = $this->createMethodCall('client', 'getResponse');
-        $this->getStatusCodeMethodCall = $this->createMethodCall($clientGetResponse, 'getStatusCode');
+        $methodCall = $this->createMethodCall('client', 'getResponse');
+        $this->getStatusCodeMethodCall = $this->createMethodCall($methodCall, 'getStatusCode');
 
         if (! $this->isInWebTestCase($node)) {
             return null;
@@ -132,12 +132,12 @@ PHP
 
     private function isInWebTestCase(Node $node): bool
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return false;
         }
 
-        return $this->isObjectType($class, 'Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
+        return $this->isObjectType($classLike, 'Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
     }
 
     private function processAssertResponseStatusCodeSame(Node $node): ?MethodCall

@@ -83,12 +83,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return null;
         }
 
-        if (! $this->isObjectType($class, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
+        if (! $this->isObjectType($classLike, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
             return null;
         }
 

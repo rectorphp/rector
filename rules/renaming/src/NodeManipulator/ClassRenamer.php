@@ -153,21 +153,21 @@ final class ClassRenamer
             return null;
         }
 
-        $classNode = $this->getClassOfNamespaceToRefactor($namespace, $oldToNewClasses);
-        if ($classNode === null) {
+        $classLike = $this->getClassOfNamespaceToRefactor($namespace, $oldToNewClasses);
+        if ($classLike === null) {
             return null;
         }
 
-        $currentName = $this->nodeNameResolver->getName($classNode);
+        $currentName = $this->nodeNameResolver->getName($classLike);
 
         $newClassFqn = $oldToNewClasses[$currentName];
         $newNamespace = $this->classNaming->getNamespace($newClassFqn);
 
         // Renaming to class without namespace (example MyNamespace\DateTime -> DateTimeImmutable)
         if (! $newNamespace) {
-            $classNode->name = new Identifier($newClassFqn);
+            $classLike->name = new Identifier($newClassFqn);
 
-            return $classNode;
+            return $classLike;
         }
 
         $namespace->name = new Name($newNamespace);

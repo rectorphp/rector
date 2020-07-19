@@ -140,13 +140,13 @@ PHP
             return false;
         }
 
-        /** @var Class_|null $class */
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return false;
         }
 
-        foreach ($class->getMethods() as $iteratedClassMethod) {
+        foreach ($classLike->getMethods() as $iteratedClassMethod) {
             if (! $iteratedClassMethod->isPublic()) {
                 continue;
             }

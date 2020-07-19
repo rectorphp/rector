@@ -94,12 +94,12 @@ PHP
 
     private function isPropertyInitiatedInConstuctor(Property $property, string $propertyName): bool
     {
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return false;
         }
 
-        $constructClassMethod = $class->getMethod('__construct');
+        $constructClassMethod = $classLike->getMethod('__construct');
         if (! $constructClassMethod instanceof ClassMethod) {
             return false;
         }

@@ -64,8 +64,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($this->shouldSkipClass($classNode)) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($this->shouldSkipClass($classLike)) {
             return null;
         }
 

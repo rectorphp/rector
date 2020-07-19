@@ -164,15 +164,15 @@ PHP
 
     private function resolvePropertyFetchType(PropertyFetch $propertyFetch): Type
     {
-        /** @var Class_ $class */
-        $class = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
 
         $propertyName = $this->getName($propertyFetch);
         if ($propertyName === null) {
             return new MixedType();
         }
 
-        $property = $class->getProperty($propertyName);
+        $property = $classLike->getProperty($propertyName);
         if ($property === null) {
             return new MixedType();
         }
@@ -183,7 +183,7 @@ PHP
         }
 
         // set in constructor + changed in class
-        $propertyTypeFromConstructor = $this->resolvePropertyTypeAfterConstructor($class, $propertyName);
+        $propertyTypeFromConstructor = $this->resolvePropertyTypeAfterConstructor($classLike, $propertyName);
 
         $resolvedTypes = [];
         $resolvedTypes[] = $propertyTypeFromConstructor;
@@ -193,7 +193,7 @@ PHP
             $resolvedTypes[] = $this->getStaticType($defaultValue);
         }
 
-        $resolveAssignedType = $this->resolveAssignedTypeInStmtsByPropertyName($class->stmts, $propertyName);
+        $resolveAssignedType = $this->resolveAssignedTypeInStmtsByPropertyName($classLike->stmts, $propertyName);
         if ($resolveAssignedType !== null) {
             $resolvedTypes[] = $resolveAssignedType;
         }

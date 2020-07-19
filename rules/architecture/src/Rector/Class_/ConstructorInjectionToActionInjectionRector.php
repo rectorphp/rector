@@ -148,9 +148,9 @@ PHP
             }
 
             // only scan non-action methods
-            /** @var ClassMethod $methodNode */
-            $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
-            if ($methodNode->isPublic()) {
+            /** @var ClassMethod $classMethod */
+            $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+            if ($classMethod->isPublic()) {
                 return null;
             }
 

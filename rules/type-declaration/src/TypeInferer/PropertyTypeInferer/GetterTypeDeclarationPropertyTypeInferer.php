@@ -31,9 +31,9 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
 
     public function inferProperty(Property $property): Type
     {
-        /** @var Class_|null $class */
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             // anonymous class
             return new MixedType();
         }
@@ -41,7 +41,7 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
 
-        foreach ($class->getMethods() as $classMethod) {
+        foreach ($classLike->getMethods() as $classMethod) {
             if (! $this->hasClassMethodOnlyStatementReturnOfPropertyFetch($classMethod, $propertyName)) {
                 continue;
             }

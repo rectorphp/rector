@@ -60,9 +60,9 @@ final class ClassNaming
 
     public function getNameFromFileInfo(SmartFileInfo $smartFileInfo): string
     {
-        $basename = $smartFileInfo->getBasenameWithoutSuffix();
+        $basenameWithoutSuffix = $smartFileInfo->getBasenameWithoutSuffix();
 
-        return StaticRectorStrings::underscoreToCamelCase($basename);
+        return StaticRectorStrings::underscoreToCamelCase($basenameWithoutSuffix);
     }
 
     /**

@@ -64,12 +64,12 @@ final class UsedClassPropertyExtractor
     {
         $properties = [];
 
-        /** @var Class_ $class */
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
 
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
             &$properties,
-            $class
+            $classLike
         ) {
             if (! $node instanceof PropertyFetch) {
                 return null;
@@ -85,7 +85,7 @@ final class UsedClassPropertyExtractor
             }
 
             /** @var Property|null $property */
-            $property = $class->getProperty($propertyName);
+            $property = $classLike->getProperty($propertyName);
             if ($property === null) {
                 throw new ShouldNotHappenException();
             }

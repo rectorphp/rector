@@ -75,9 +75,9 @@ PHP
 
             $allConstants = $node->consts;
 
-            /** @var Const_ $firstConstant */
-            $firstConstant = array_shift($allConstants);
-            $node->consts = [$firstConstant];
+            /** @var Const_ $const */
+            $const = array_shift($allConstants);
+            $node->consts = [$const];
 
             foreach ($allConstants as $anotherConstant) {
                 $nextClassConst = new ClassConst([$anotherConstant], $node->flags, $node->getAttributes());
@@ -92,9 +92,9 @@ PHP
         }
 
         $allProperties = $node->props;
-        /** @var PropertyProperty $firstProperty */
-        $firstProperty = array_shift($allProperties);
-        $node->props = [$firstProperty];
+        /** @var PropertyProperty $propertyProperty */
+        $propertyProperty = array_shift($allProperties);
+        $node->props = [$propertyProperty];
 
         foreach ($allProperties as $anotherProperty) {
             $nextProperty = new Property($node->flags, [$anotherProperty], $node->getAttributes());

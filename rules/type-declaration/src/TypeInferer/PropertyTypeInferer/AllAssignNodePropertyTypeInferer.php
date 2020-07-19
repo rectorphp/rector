@@ -28,9 +28,9 @@ final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer impleme
 
     public function inferProperty(Property $property): Type
     {
-        /** @var ClassLike|null $class */
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        /** @var ClassLike|null $classLike */
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             // anonymous class
             return new MixedType();
         }
@@ -40,7 +40,7 @@ final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer impleme
             throw new ShouldNotHappenException();
         }
 
-        return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $class);
+        return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $classLike);
     }
 
     public function getPriority(): int

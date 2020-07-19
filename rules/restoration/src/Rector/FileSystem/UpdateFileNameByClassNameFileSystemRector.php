@@ -54,12 +54,12 @@ CODE_SAMPLE
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
         $nodes = $this->parseFileInfoToNodes($smartFileInfo);
-        $class = $this->betterNodeFinder->findFirstInstanceOf($nodes, ClassLike::class);
-        if ($class === null) {
+        $classLike = $this->betterNodeFinder->findFirstInstanceOf($nodes, ClassLike::class);
+        if ($classLike === null) {
             return;
         }
 
-        $className = $this->getName($class);
+        $className = $this->getName($classLike);
         if ($className === null) {
             return;
         }

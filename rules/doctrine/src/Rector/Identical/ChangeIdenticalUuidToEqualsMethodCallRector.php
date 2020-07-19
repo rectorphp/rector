@@ -81,9 +81,9 @@ PHP
 
         [$entityMethodCall, $comparedVariable] = $match;
 
-        $fromStringValue = $this->createStaticCall(Uuid::class, 'fromString', [$comparedVariable]);
+        $staticCall = $this->createStaticCall(Uuid::class, 'fromString', [$comparedVariable]);
 
-        return $this->createMethodCall($entityMethodCall, 'equals', [$fromStringValue]);
+        return $this->createMethodCall($entityMethodCall, 'equals', [$staticCall]);
     }
 
     /**

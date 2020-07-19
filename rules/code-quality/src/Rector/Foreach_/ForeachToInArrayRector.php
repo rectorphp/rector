@@ -104,7 +104,7 @@ PHP
             return null;
         }
 
-        $inArrayFunctionCall = $this->createInArrayFunction($comparedNode, $ifCondition, $node);
+        $funcCall = $this->createInArrayFunction($comparedNode, $ifCondition, $node);
 
         /** @var Return_ $returnToRemove */
         $returnToRemove = $node->getAttribute(AttributeKey::NEXT_NODE);
@@ -130,9 +130,7 @@ PHP
 
         $this->removeNode($returnToRemove);
 
-        $return = new Return_($this->isFalse($return->expr) ? new BooleanNot(
-            $inArrayFunctionCall
-        ) : $inArrayFunctionCall);
+        $return = new Return_($this->isFalse($return->expr) ? new BooleanNot($funcCall) : $funcCall);
 
         $this->commentCombiner->combineCommentsToNode($node, $return);
 

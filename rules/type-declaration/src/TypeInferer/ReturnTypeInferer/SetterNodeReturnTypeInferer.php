@@ -35,8 +35,8 @@ final class SetterNodeReturnTypeInferer extends AbstractTypeInferer implements R
 
     public function inferFunctionLike(FunctionLike $functionLike): Type
     {
-        $classNode = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return new MixedType();
         }
 
@@ -44,7 +44,7 @@ final class SetterNodeReturnTypeInferer extends AbstractTypeInferer implements R
 
         $types = [];
         foreach ($returnedPropertyNames as $returnedPropertyName) {
-            $types[] = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($returnedPropertyName, $classNode);
+            $types[] = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($returnedPropertyName, $classLike);
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($types);

@@ -185,10 +185,10 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             return null;
         }
 
-        /** @var Class_ $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         // it's a method call, skip
-        if ($class->getMethod($methodName) !== null) {
+        if ($classLike->getMethod($methodName) !== null) {
             return null;
         }
 
@@ -239,12 +239,12 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             return;
         }
 
-        /** @var Class_ $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-        $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($classNode);
+        $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($classLike);
         $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($node);
-        $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($classNode);
+        $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($classLike);
 
         $this->isPrepared = true;
     }

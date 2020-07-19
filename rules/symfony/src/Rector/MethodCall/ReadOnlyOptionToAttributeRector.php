@@ -77,15 +77,15 @@ PHP
             return null;
         }
 
-        $readonlyItem = $this->arrayManipulator->findItemInInArrayByKeyAndUnset($optionsArray, 'read_only');
-        if ($readonlyItem === null) {
+        $arrayItem = $this->arrayManipulator->findItemInInArrayByKeyAndUnset($optionsArray, 'read_only');
+        if ($arrayItem === null) {
             return null;
         }
 
         // rename string
-        $readonlyItem->key = new String_('readonly');
+        $arrayItem->key = new String_('readonly');
 
-        $this->arrayManipulator->addItemToArrayUnderKey($optionsArray, $readonlyItem, 'attr');
+        $this->arrayManipulator->addItemToArrayUnderKey($optionsArray, $arrayItem, 'attr');
 
         return $node;
     }

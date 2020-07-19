@@ -137,15 +137,15 @@ PHP
         }
 
         $repositoryFqn = $this->resolveRepositoryFqnFromGetRepositoryMethodCall($node);
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
         $repositoryObjectType = new ObjectType($repositoryFqn);
 
         $this->addPropertyToClass(
-            $classNode,
+            $classLike,
             $repositoryObjectType,
             $this->propertyNaming->fqnToVariableName($repositoryObjectType)
         );

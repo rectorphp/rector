@@ -89,13 +89,13 @@ PHP
 
         if ($firstArgumentValue instanceof Variable) {
             // check if for() value, rather update that
-            $forDefinedVariableAssignedValue = $this->findPreviousForWithVariable($firstArgumentValue);
-            if ($forDefinedVariableAssignedValue === null) {
+            $lNumber = $this->findPreviousForWithVariable($firstArgumentValue);
+            if ($lNumber === null) {
                 $node->args[0]->value = new Plus($firstArgumentValue, new LNumber(1));
                 return null;
             }
 
-            ++$forDefinedVariableAssignedValue->value;
+            ++$lNumber->value;
         }
 
         return $node;

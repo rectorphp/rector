@@ -84,9 +84,9 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     ): Type {
         $types = [];
 
-        $targetEntity = $toOneTagNode->getFullyQualifiedTargetEntity();
-        if ($targetEntity) {
-            $types[] = new FullyQualifiedObjectType($targetEntity);
+        $fullyQualifiedTargetEntity = $toOneTagNode->getFullyQualifiedTargetEntity();
+        if ($fullyQualifiedTargetEntity) {
+            $types[] = new FullyQualifiedObjectType($fullyQualifiedTargetEntity);
         }
 
         // nullable by default

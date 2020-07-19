@@ -156,14 +156,14 @@ PHP
             ));
         }
 
-        $entityClassConstantReferenceNode = $this->createClassConstantReference($entityClassName);
+        $classConstFetch = $this->createClassConstantReference($entityClassName);
 
-        $getRepositoryMethodCallNode = $this->builderFactory->methodCall(
+        $methodCall = $this->builderFactory->methodCall(
             new Variable('entityManager'),
             'getRepository',
-            [$entityClassConstantReferenceNode]
+            [$classConstFetch]
         );
 
-        return $this->createPropertyAssignmentWithExpr('repository', $getRepositoryMethodCallNode);
+        return $this->createPropertyAssignmentWithExpr('repository', $methodCall);
     }
 }

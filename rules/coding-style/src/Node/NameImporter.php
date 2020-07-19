@@ -199,8 +199,8 @@ final class NameImporter
         // can be also in to be renamed classes
         $classOrFunctionName = $name->toString();
 
-        $newClasses = $this->renamedClassesCollector->getOldToNewClasses();
-        if (in_array($classOrFunctionName, $newClasses, true)) {
+        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
+        if (in_array($classOrFunctionName, $oldToNewClasses, true)) {
             return false;
         }
 

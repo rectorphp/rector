@@ -28,21 +28,21 @@ final class ActionRenderFactory
 
     public function createThisRenderMethodCall(MagicTemplatePropertyCalls $magicTemplatePropertyCalls): MethodCall
     {
-        $thisRenderMethod = $this->nodeFactory->createMethodCall('this', 'render');
-        $this->addArguments($magicTemplatePropertyCalls, $thisRenderMethod);
+        $methodCall = $this->nodeFactory->createMethodCall('this', 'render');
+        $this->addArguments($magicTemplatePropertyCalls, $methodCall);
 
-        return $thisRenderMethod;
+        return $methodCall;
     }
 
     public function createThisTemplateRenderMethodCall(
         MagicTemplatePropertyCalls $magicTemplatePropertyCalls
     ): MethodCall {
         $thisTemplatePropertyFetch = new PropertyFetch(new Variable('this'), 'template');
-        $thisRenderMethod = $this->nodeFactory->createMethodCall($thisTemplatePropertyFetch, 'render');
+        $methodCall = $this->nodeFactory->createMethodCall($thisTemplatePropertyFetch, 'render');
 
-        $this->addArguments($magicTemplatePropertyCalls, $thisRenderMethod);
+        $this->addArguments($magicTemplatePropertyCalls, $methodCall);
 
-        return $thisRenderMethod;
+        return $methodCall;
     }
 
     private function addArguments(

@@ -117,8 +117,8 @@ PHP
         }
 
         // skip node in trait, as impossible to analyse
-        $classNode = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
 
-        return $classNode instanceof Trait_;
+        return $classLike instanceof Trait_;
     }
 }

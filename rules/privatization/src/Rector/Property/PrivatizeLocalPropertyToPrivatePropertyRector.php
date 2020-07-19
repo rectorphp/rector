@@ -122,8 +122,8 @@ PHP
 
     private function shouldSkip(Property $property): bool
     {
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($this->shouldSkipClass($classNode)) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($this->shouldSkipClass($classLike)) {
             return true;
         }
 

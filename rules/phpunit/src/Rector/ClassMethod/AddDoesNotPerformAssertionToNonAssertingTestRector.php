@@ -134,8 +134,8 @@ PHP
         }
 
         if ($classMethod->getDocComment() !== null) {
-            $text = $classMethod->getDocComment();
-            if (Strings::match($text->getText(), '#@(doesNotPerformAssertion|expectedException\b)#')) {
+            $doc = $classMethod->getDocComment();
+            if (Strings::match($doc->getText(), '#@(doesNotPerformAssertion|expectedException\b)#')) {
                 return true;
             }
         }

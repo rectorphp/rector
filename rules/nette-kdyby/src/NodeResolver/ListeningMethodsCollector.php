@@ -67,14 +67,14 @@ final class ListeningMethodsCollector
         string $type,
         ?string $eventClassName = null
     ): array {
-        /** @var Class_ $class */
-        $class = $getSubscribedEventsClassMethod->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $getSubscribedEventsClassMethod->getAttribute(AttributeKey::CLASS_NODE);
 
         $this->classMethodsByEventClass = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable(
             (array) $getSubscribedEventsClassMethod->stmts,
-            function (Node $node) use ($class, $type) {
+            function (Node $node) use ($classLike, $type) {
                 if (! $node instanceof ArrayItem) {
                     return null;
                 }
@@ -83,7 +83,7 @@ final class ListeningMethodsCollector
                     return null;
                 }
 
-                $classMethod = $this->matchClassMethodByNodeValue($class, $node->value);
+                $classMethod = $this->matchClassMethodByNodeValue($classLike, $node->value);
                 if ($classMethod === null) {
                     return null;
                 }
@@ -97,7 +97,7 @@ final class ListeningMethodsCollector
                 }
 
                 [$classMethod,
-            $eventClass] = $this->resolveCustomClassMethodAndEventClass($node, $class, $eventClass);
+            $eventClass] = $this->resolveCustomClassMethodAndEventClass($node, $classLike, $eventClass);
                 if ($classMethod === null) {
                     return null;
                 }

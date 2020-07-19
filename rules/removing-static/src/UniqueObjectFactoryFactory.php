@@ -80,8 +80,8 @@ final class UniqueObjectFactoryFactory
         $factoryClassBuilder->addStmts($properties);
 
         // constructor
-        $constructMethod = $this->createConstructMethod($objectType);
-        $factoryClassBuilder->addStmt($constructMethod);
+        $classMethod = $this->createConstructMethod($objectType);
+        $factoryClassBuilder->addStmt($classMethod);
 
         // create
         $createMethod = $this->createCreateMethod($class, $className, $properties);

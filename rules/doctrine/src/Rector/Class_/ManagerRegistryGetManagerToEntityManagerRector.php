@@ -102,8 +102,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $constructMethodNode = $node->getMethod('__construct');
-        if ($constructMethodNode === null) {
+        $classMethod = $node->getMethod('__construct');
+        if ($classMethod === null) {
             return null;
         }
 
@@ -113,7 +113,7 @@ PHP
             return null;
         }
 
-        $managerRegistryParam = $this->resolveManagerRegistryParam($constructMethodNode);
+        $managerRegistryParam = $this->resolveManagerRegistryParam($classMethod);
 
         // no registry manager in the constructor
         if ($managerRegistryParam === null) {
@@ -122,7 +122,7 @@ PHP
 
         if ($registryCalledMethods === [self::GET_MANAGER]) {
             // the manager registry is needed only get entity manager → we don't need it now
-            $this->removeManagerRegistryDependency($node, $constructMethodNode, $managerRegistryParam);
+            $this->removeManagerRegistryDependency($node, $classMethod, $managerRegistryParam);
         }
 
         $this->replaceEntityRegistryVariableWithEntityManagerProperty($node);
@@ -131,7 +131,7 @@ PHP
         // add entity manager via constructor
         $this->addConstructorDependencyWithProperty(
             $node,
-            $constructMethodNode,
+            $classMethod,
             self::ENTITY_MANAGER,
             new FullyQualifiedObjectType('Doctrine\ORM\EntityManagerInterface')
         );

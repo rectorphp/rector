@@ -72,8 +72,8 @@ final class EntityUuidNodeFactory
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         // add @var
-        $varTagValueNode = $this->phpDocTagNodeFactory->createUuidInterfaceVarTagValueNode();
-        $phpDocInfo->addTagValueNode($varTagValueNode);
+        $attributeAwareVarTagValueNode = $this->phpDocTagNodeFactory->createUuidInterfaceVarTagValueNode();
+        $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
 
         if ($isId) {
             // add @ORM\Id

@@ -116,10 +116,10 @@ PHP
         // add event dispatcher dependency if needed
         $assign = $this->createEventInstanceAssign($eventClassName, $node);
 
-        /** @var Class_ $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         $this->addPropertyToClass(
-            $class,
+            $classLike,
             new FullyQualifiedObjectType(EventDispatcherInterface::class),
             'eventDispatcher'
         );

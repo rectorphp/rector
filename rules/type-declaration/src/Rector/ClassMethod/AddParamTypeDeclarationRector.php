@@ -84,11 +84,11 @@ PHP
             return null;
         }
 
-        /** @var ClassLike $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var ClassLike $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         foreach ($this->typehintForParameterByMethodByClass as $objectType => $typehintForParameterByMethod) {
-            if (! $this->isObjectType($class, $objectType)) {
+            if (! $this->isObjectType($classLike, $objectType)) {
                 continue;
             }
 
@@ -111,24 +111,24 @@ PHP
             return true;
         }
 
-        /** @var ClassLike|null $class */
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        /** @var ClassLike|null $classLike */
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return true;
         }
 
         // skip traits
-        if ($class instanceof Trait_) {
+        if ($classLike instanceof Trait_) {
             return true;
         }
 
         // skip class without parents/interfaces
-        if ($class instanceof Class_) {
-            if ($class->implements !== []) {
+        if ($classLike instanceof Class_) {
+            if ($classLike->implements !== []) {
                 return false;
             }
 
-            if ($class->extends !== null) {
+            if ($classLike->extends !== null) {
                 return false;
             }
 
@@ -136,8 +136,8 @@ PHP
         }
 
         // skip interface without parents
-        /** @var Interface_ $class */
-        return ! (bool) $class->extends;
+        /** @var Interface_ $classLike */
+        return ! (bool) $classLike->extends;
     }
 
     private function refactorClassMethodWithTypehintByParameterPosition(
