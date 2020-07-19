@@ -7,16 +7,20 @@ namespace Rector\Naming\Guard;
 use DateTimeInterface;
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -53,11 +57,17 @@ final class BreakingVariableRenameGuard
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         ConflictingNameResolver $conflictingNameResolver,
         OverridenExistingNamesResolver $overridenExistingNamesResolver,
         NodeNameResolver $nodeNameResolver,
+        CallableNodeTraverser $callableNodeTraverser,
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
@@ -65,12 +75,13 @@ final class BreakingVariableRenameGuard
         $this->overridenExistingNamesResolver = $overridenExistingNamesResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
     public function shouldSkipVariable(
         string $currentName,
         string $expectedName,
-        Node\FunctionLike $functionLike,
+        FunctionLike $functionLike,
         Variable $variable
     ): bool {
         // is the suffix? → also accepted
@@ -87,6 +98,10 @@ final class BreakingVariableRenameGuard
         }
 
         if ($this->isVariableAlreadyDefined($variable, $currentName)) {
+            return true;
+        }
+
+        if ($this->isUsedInClosureUsesName($expectedName, $functionLike)) {
             return true;
         }
 
@@ -220,5 +235,36 @@ final class BreakingVariableRenameGuard
         }
 
         return $type;
+    }
+
+    private function isUsedInClosureUsesName(string $expectedName, FunctionLike $functionLike): bool
+    {
+        if (! $functionLike instanceof Closure) {
+            return false;
+        }
+
+        return (bool) $this->hasVariableOfName((array) $functionLike->uses, $expectedName);
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function hasVariableOfName(array $nodes, string $name): bool
+    {
+        $contains = false;
+        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use (&$contains, $name) {
+            if (! $node instanceof Variable) {
+                return null;
+            }
+
+            if (! $this->nodeNameResolver->isName($node, $name)) {
+                return null;
+            }
+
+            $contains = true;
+            return NodeTraverser::STOP_TRAVERSAL;
+        });
+
+        return $contains;
     }
 }

@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
@@ -107,23 +106,23 @@ PHP
             return null;
         }
 
-        $classMethodOrFunction = $this->getCurrentFunctionLike($node);
-        if ($classMethodOrFunction === null) {
+        $functionLike = $this->getCurrentFunctionLike($node);
+        if ($functionLike === null) {
             return null;
         }
 
         if ($this->breakingVariableRenameGuard->shouldSkipVariable(
             $currentName,
             $newName,
-            $classMethodOrFunction,
+            $functionLike,
             $node->var
         )) {
             return null;
         }
 
-        if ($this->shouldSkipForNameConflict($node, $newName)) {
-            return null;
-        }
+//        if ($this->shouldSkipForNameConflict($node, $newName)) {
+//            return null;
+//        }
 
         return $this->renameVariable($node, $newName);
     }
@@ -167,43 +166,26 @@ PHP
         return $parentNode->getParams() ?? [];
     }
 
-    /**
-     * @return ClosureUse[]
-     */
-    private function getParentNodeUses(Node $node): array
-    {
-        /** @var FunctionLike|null $parentNode */
-        $parentNode = $this->getCurrentFunctionLike($node);
-
-        if ($parentNode === null || ! $parentNode instanceof Closure) {
-            return [];
-        }
-
-        return $parentNode->uses ?? [];
-    }
+//    /**
+//     * @todo decouple to standalone service
+//     */
+//    private function shouldSkipForNameConflict(Assign $assign, string $newName): bool
+//    {
+//        if ($this->skipOnConflictParamName($assign, $newName)) {
+//            return true;
+//        }
+//
+//        return $this->skipOnConflictOtherVariable($assign, $newName);
+//    }
 
     /**
-     * @todo decouple to standalone service
-     */
-    private function shouldSkipForNameConflict(Assign $assign, string $newName): bool
-    {
-        if ($this->skipOnConflictParamName($assign, $newName)) {
-            return true;
-        }
-
-        if ($this->skipOnConflictClosureUsesName($assign, $newName)) {
-            return true;
-        }
-
-        return $this->skipOnConflictOtherVariable($assign, $newName);
-    }
-
-    /**
-     * @return ClassMethod|Function_|null
+     * @return ClassMethod|Function_|Closure|null
      */
     private function getCurrentFunctionLike(Node $node): ?FunctionLike
     {
-        return $node->getAttribute(AttributeKey::METHOD_NODE) ?? $node->getAttribute(AttributeKey::FUNCTION_NODE);
+        return $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
+             $node->getAttribute(AttributeKey::METHOD_NODE) ??
+             $node->getAttribute(AttributeKey::FUNCTION_NODE);
     }
 
     private function skipOnConflictParamName(Assign $assign, string $newName): bool
@@ -228,23 +210,6 @@ PHP
                 $skip = true;
             }
         });
-        return $skip;
-    }
-
-    private function skipOnConflictClosureUsesName(Assign $assign, string $newName): bool
-    {
-        $skip = false;
-
-        $parentNodeUses = $this->getParentNodeUses($assign);
-        $this->traverseNodesWithCallable($parentNodeUses, function (Node $node) use ($newName, &$skip) {
-            if ($this->isVariableName($node, $newName)) {
-                $skip = true;
-                return NodeTraverser::STOP_TRAVERSAL;
-            }
-
-            return null;
-        });
-
         return $skip;
     }
 

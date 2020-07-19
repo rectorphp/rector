@@ -45,6 +45,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME,
     \Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS,
     \Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE,
+    \Rector\NodeTypeResolver\Node\AttributeKey::CLOSURE_NODE,
 );
 
 expectedArguments(
@@ -75,6 +76,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME,
     \Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS,
     \Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE,
+    \Rector\NodeTypeResolver\Node\AttributeKey::CLOSURE_NODE,
 );
 
 expectedArguments(
