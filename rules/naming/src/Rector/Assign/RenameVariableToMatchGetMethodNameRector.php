@@ -105,7 +105,6 @@ PHP
         }
 
         $newName = $this->expectedNameResolver->resolveForGetCallExpr($node->expr);
-
         if ($newName === null || $this->isName($node, $newName)) {
             return null;
         }
@@ -115,9 +114,7 @@ PHP
             return null;
         }
 
-        // skip "$call = $method->call();" based conventions
-        $callName = $this->getName($node->expr->name);
-        if ($currentName === $callName) {
+        if ($this->shouldSkipForNamingConvention($node->expr, $currentName, $newName)) {
             return null;
         }
 
