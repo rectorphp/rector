@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Rector\Assign;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
@@ -12,7 +14,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -187,5 +188,26 @@ PHP
         }
 
         $varTagValueNode->variableName = '$' . $newName;
+    }
+
+    /**
+     * Keep cases like:
+     *
+     * $someNameSuffix = $this->getSomeName();
+     * $prefixSomeName = $this->getSomeName();
+     * $someName = $this->getSomeName();
+     *
+     * @param FuncCall|StaticCall|MethodCall $expr
+     */
+    private function shouldSkipForNamingConvention(Expr $expr, string $currentName, string $expectedName): bool
+    {
+        // skip "$call = $method->call();" based conventions
+        $callName = $this->getName($expr->name);
+        if ($currentName === $callName) {
+            return true;
+        }
+
+        // starts with or ends with
+        return (bool) Strings::match($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
     }
 }
