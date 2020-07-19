@@ -57,6 +57,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->left instanceof String_ && ! $node->right instanceof String_) {
+            return null;
+        }
+
         $node->left = $this->removeStringCast($node->left);
         $node->right = $this->removeStringCast($node->right);
 
