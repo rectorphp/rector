@@ -20,7 +20,7 @@ return [
     'files-whitelist' => $whitelistedStubsProvider->provide(),
     'patchers' => [
         function (string $filePath, string $prefix, string $content): string {
-            if ($filePath !== 'bin/rector' /* && ! Strings::contains($filePath, 'config/')*/) {
+            if ($filePath !== 'bin/rector' && ! $filePath !== 'packages/set/src/SetProvider.php') {
                 return $content;
             }
 
