@@ -11,7 +11,7 @@
 - [CakePHP](#cakephp) (6)
 - [Celebrity](#celebrity) (3)
 - [CodeQuality](#codequality) (54)
-- [CodingStyle](#codingstyle) (35)
+- [CodingStyle](#codingstyle) (36)
 - [DeadCode](#deadcode) (40)
 - [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
@@ -2328,6 +2328,25 @@ Use ++ increment instead of `$var += 1`
 +     */
      const HI = 'hi';
  }
+```
+
+<br><br>
+
+### `WrapVariableVariableNameInCurlyBracesRector`
+
+- class: [`Rector\CodingStyle\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector`](/../master/rules/coding-style/src/Rector/Variable/WrapVariableVariableNameInCurlyBracesRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/Variable/WrapVariableVariableNameInCurlyBracesRector/Fixture)
+
+Ensure variable variables are wrapped in curly braces
+
+```diff
+function run($foo)
+{
+-    // Valid in PHP 5 only
+-    global $$foo->bar;
++    // Valid in PHP 5 and 7
++    global ${$foo->bar};
+}
 ```
 
 <br><br>
