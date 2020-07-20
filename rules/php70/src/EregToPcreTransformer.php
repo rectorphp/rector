@@ -234,7 +234,9 @@ final class EregToPcreTransformer
     {
         if ($content === "\0") {
             throw new InvalidEregException('a literal null byte in the regex');
-        } elseif (Strings::contains('\^$.[]|()?*+{}-/', $content)) {
+        }
+
+        if (Strings::contains('\^$.[]|()?*+{}-/', $content)) {
             return '\\' . $content;
         }
 

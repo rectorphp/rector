@@ -13,6 +13,7 @@ use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\RectorConfigsResolver;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
@@ -22,7 +23,6 @@ use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\Contract\RunnableInterface;
 use Rector\Core\Testing\Finder\RectorsFinder;
 use Rector\Core\Testing\ValueObject\SplitLine;
-use Rector\Core\ValueObject\SetDirectory;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -30,7 +30,6 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\SetConfigResolver\ConfigResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
@@ -81,11 +80,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
         $this->runnableRectorFactory = new RunnableRectorFactory();
 
-        if ($this->provideConfig() !== '') {
-            $this->ensureConfigFileExists();
+        if ($this->provideConfigFileInfo() !== null) {
+            $configFileInfos = $this->resolveConfigs($this->provideConfigFileInfo());
 
-            $configs = $this->resolveConfigs();
-            $this->bootKernelWithConfigs(RectorKernel::class, $configs);
+            $this->bootKernelWithConfigInfos(RectorKernel::class, $configFileInfos);
 
             $enabledRectorsProvider = static::$container->get(EnabledRectorsProvider::class);
             $enabledRectorsProvider->reset();
@@ -201,19 +199,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->assertFileEquals($expectedExtraContentFilePath, $expectedFilePath);
     }
 
-    private function ensureConfigFileExists(): void
-    {
-        if (file_exists($this->provideConfig())) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Config "%s" for test "%s" was not found',
-            $this->provideConfig(),
-            static::class
-        ));
-    }
-
     private function createContainerWithAllRectors(): void
     {
         $rectorsFinder = new RectorsFinder();
@@ -324,23 +309,15 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     }
 
     /**
-     * Behavior duplicated from bin/rector
-     * @return string[]
+     * @return SmartFileInfo[]
      */
-    private function resolveConfigs(): array
+    private function resolveConfigs(SmartFileInfo $configFileInfo): array
     {
-        $configs = [$this->provideConfig()];
+        $configFileInfos = [$configFileInfo];
 
-        $configResolver = new ConfigResolver();
-        $parameterSetsConfigs = $configResolver->resolveFromParameterSetsFromConfigFiles(
-            $configs,
-            SetDirectory::SET_DIRECTORY
-        );
+        $rectorConfigsResolver = new RectorConfigsResolver();
+        $setFileInfos = $rectorConfigsResolver->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
 
-        if ($parameterSetsConfigs === []) {
-            return $configs;
-        }
-
-        return array_merge($configs, $parameterSetsConfigs);
+        return array_merge($configFileInfos, $setFileInfos);
     }
 }

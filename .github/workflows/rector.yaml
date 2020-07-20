@@ -14,13 +14,12 @@ jobs:
                 actions:
                     -
                         name: Rector CI
-                        run: |
-                            composer install --no-progress --ansi
-                            composer rector-ci
+                        install: composer install --no-progress --ansi
+                        run: composer rector-ci
                     -
                         name: Rector without Dev Dependencies
+                        install: composer install --no-progress --ansi --no-dev
                         run: |
-                            composer install --no-progress --ansi --no-dev
                             # needs to remove, add dev dependencies are missing and phpstan.neon includes them
                             rm phpstan.neon
                             bin/rector list
@@ -36,4 +35,5 @@ jobs:
                     php-version: 7.4
                     coverage: none
 
+            -   run: ${{ matrix.actions.install }}
             -   run: ${{ matrix.actions.run }}

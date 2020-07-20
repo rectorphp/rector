@@ -15,6 +15,9 @@ final class SomeController
 
         /** @noRector \Rector\DeadCode\Rector\Plus\AnotherRector */
         round(2 + 0);
+
+        /** @noRector */
+        round(2 + 0);
     }
 }
 
@@ -37,6 +40,9 @@ final class SomeController
 
         /** @noRector \Rector\DeadCode\Rector\Plus\AnotherRector */
         round(2);
+
+        /** @noRector */
+        round(2 + 0);
     }
 }
 

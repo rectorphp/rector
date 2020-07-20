@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Utils\ProjectValidator\Command;
 
-use Rector\Core\Set\SetProvider;
+use Rector\Set\SetProvider;
 use Rector\Utils\ProjectValidator\CpuCoreCountResolver;
 use Rector\Utils\ProjectValidator\Process\ParallelTaskRunner;
 use Rector\Utils\ProjectValidator\ValueObject\SetTask;
@@ -51,16 +51,16 @@ final class ValidateSetsCommand extends Command
     /**
      * @var SetProvider
      */
-    private $setProvider;
+    private $staticSetProvider;
 
     public function __construct(
         CpuCoreCountResolver $cpuCoreCountResolver,
         ParallelTaskRunner $parallelTaskRunner,
-        SetProvider $setProvider
+        SetProvider $staticSetProvider
     ) {
         $this->cpuCoreCountResolver = $cpuCoreCountResolver;
         $this->parallelTaskRunner = $parallelTaskRunner;
-        $this->setProvider = $setProvider;
+        $this->staticSetProvider = $staticSetProvider;
 
         parent::__construct();
     }
@@ -90,7 +90,7 @@ final class ValidateSetsCommand extends Command
     private function createSetTasks(): array
     {
         $setTasks = [];
-        foreach ($this->setProvider->provide() as $setName) {
+        foreach ($this->staticSetProvider->provideSetNames() as $setName) {
             if (in_array($setName, self::EXCLUDED_SETS, true)) {
                 continue;
             }

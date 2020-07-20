@@ -71,11 +71,9 @@ PHP
         }
 
         if ($node instanceof Plus) {
-            $newNode = new PreInc($node->var);
-        } else {
-            $newNode = new PreDec($node->var);
+            return new PreInc($node->var);
         }
 
-        return $newNode;
+        return new PreDec($node->var);
     }
 }

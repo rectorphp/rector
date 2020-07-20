@@ -24,8 +24,9 @@ final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
                 return false;
             }
         }
+
         $doc = $node->getDocComment();
-        if ($doc !== null && $this->checkCommentForIgnore($phpRector, $doc)) {
+        if ($doc !== null && $this->hasNoRectorComment($phpRector, $doc)) {
             return true;
         }
 
@@ -38,8 +39,13 @@ final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
         return false;
     }
 
-    private function checkCommentForIgnore(PhpRectorInterface $phpRector, Doc $doc): bool
+    private function hasNoRectorComment(PhpRectorInterface $phpRector, Doc $doc): bool
     {
+        // bare @noRector ignored all rules
+        if (Strings::match($doc->getText(), '#\@noRector(\s)+[^\w\\\\]#')) {
+            return true;
+        }
+
         $regex = '#@noRector\s*\\\\?' . preg_quote(get_class($phpRector), '/') . '#i';
         return (bool) Strings::match($doc->getText(), $regex);
     }

@@ -7,26 +7,43 @@ namespace Rector\Core\DependencyInjection;
 use Psr\Container\ContainerInterface;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Console\Input\InputDetector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorContainerFactory
 {
     /**
+     * @param SmartFileInfo[] $configFileInfos
      * @api
-     * @param string[] $configFiles
      */
-    public function createFromConfigs(array $configFiles): ContainerInterface
+    public function createFromConfigs(array $configFileInfos): ContainerInterface
     {
+
         // to override the configs without clearing cache
         $environment = 'prod' . random_int(1, 10000000);
         $isDebug = InputDetector::isDebug();
 
         $rectorKernel = new RectorKernel($environment, $isDebug);
-        if ($configFiles !== []) {
-            $rectorKernel->setConfigs($configFiles);
+        if ($configFileInfos !== []) {
+            $configFilePaths = $this->unpackRealPathsFromFileInfos($configFileInfos);
+            $rectorKernel->setConfigs($configFilePaths);
         }
 
         $rectorKernel->boot();
 
         return $rectorKernel->getContainer();
+    }
+
+    /**
+     * @param SmartFileInfo[] $configFileInfos
+     * @return string[]
+     */
+    private function unpackRealPathsFromFileInfos(array $configFileInfos): array
+    {
+        $configFilePaths = [];
+        foreach ($configFileInfos as $configFileInfo) {
+            $configFilePaths[] = $configFileInfo->getRealPath();
+        }
+
+        return $configFilePaths;
     }
 }
