@@ -23,6 +23,11 @@ final class CompileCommand extends Command
     /**
      * @var string
      */
+    private const ANSI = '--ansi';
+
+    /**
+     * @var string
+     */
     private $buildDir;
 
     /**
@@ -80,6 +85,7 @@ final class CompileCommand extends Command
         $composerJsonFile = $this->buildDir . '/composer.json';
 
         $this->symfonyStyle->title('1. Adding "phpstan/phpstan-src" to ' . $composerJsonFile);
+
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
         $this->symfonyStyle->newLine(2);
@@ -93,39 +99,43 @@ final class CompileCommand extends Command
             '--prefer-dist',
             '--no-interaction',
             '--classmap-authoritative',
-            '--ansi',
+            self::ANSI,
         ], $this->buildDir, null, null, null);
-
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
 
         $this->symfonyStyle->newLine(2);
 
+        $this->symfonyStyle->title('3. Downgrading PHPStan code to PHP 7.1');
+
         $this->downgradePHPStanCodeToPHP71($output);
 
-        $this->symfonyStyle->title('3. Renaming PHPStorm stubs from "*.php" to ".stub"');
+        $this->symfonyStyle->title('4. Renaming PHPStorm stubs from "*.php" to ".stub"');
 
         $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
-
         $this->symfonyStyle->newLine(2);
 
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
         // and "Nette\Neon\Neon" class can be used there
-        $this->symfonyStyle->title('4. Packing and prefixing rector.phar with Box and PHP Scoper');
+        $this->symfonyStyle->title('5. Packing and prefixing rector.phar with Box and PHP Scoper');
 
-        $process = new Process(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir, null, null, null);
-
+        $process = new Process([
+            'php',
+            'box.phar',
+            'compile',
+            '--no-parallel',
+            self::ANSI,
+        ], $this->dataDir, null, null, null);
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
 
         $this->symfonyStyle->newLine(2);
 
-        $this->symfonyStyle->title('5. Restoring root composer.json with "require-dev"');
+        $this->symfonyStyle->title('6. Restoring root composer.json with "require-dev"');
 
         $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);
-
         $this->restoreDependenciesLocallyIfNotCi($output);
 
         return ShellCode::SUCCESS;
@@ -137,7 +147,7 @@ final class CompileCommand extends Command
             return;
         }
 
-        $process = new Process(['composer', 'install', '--ansi'], $this->buildDir, null, null, null);
+        $process = new Process(['composer', 'install', self::ANSI], $this->buildDir, null, null, null);
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });

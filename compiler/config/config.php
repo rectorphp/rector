@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use OndraM\CiDetector\CiDetector;
-use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
 

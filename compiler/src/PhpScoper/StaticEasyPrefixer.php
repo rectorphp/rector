@@ -11,22 +11,30 @@ final class StaticEasyPrefixer
     /**
      * @var string[]
      */
-    public const EXCLUDED_NAMESPACES_AND_CLASSES = [
+    public const EXCLUDED_CLASSES = [
+        'Symfony\Component\EventDispatcher\EventSubscriberInterface',
+        'Symfony\Component\Console\Style\SymfonyStyle',
+        // doctrine annotations to autocomplete
+        'JMS\DiExtraBundle\Annotation\Inject',
+    ];
+
+    /**
+     * @var string[]
+     */
+    private const EXCLUDED_NAMESPACES = [
         'Hoa\*',
         'PhpParser\*',
         'PHPStan\*',
         'Rector\*',
         'Symplify\SmartFileSystem\*',
-        'Symfony\Component\EventDispatcher\EventSubscriberInterface',
-        'Symfony\Component\Console\Style\SymfonyStyle',
+        'Symplify\ConsoleColorDiff\*',
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',
-        'JMS\DiExtraBundle\Annotation\Inject',
     ];
 
     public static function prefixClass(string $class, string $prefix): string
     {
-        foreach (self::EXCLUDED_NAMESPACES_AND_CLASSES as $excludedNamespace) {
+        foreach (self::EXCLUDED_NAMESPACES as $excludedNamespace) {
             $excludedNamespace = Strings::substring($excludedNamespace, 0, -2) . '\\';
             if (Strings::startsWith($class, $excludedNamespace)) {
                 return $class;
@@ -53,5 +61,13 @@ final class StaticEasyPrefixer
     public static function unPreSlashQuotedValues(string $content): string
     {
         return Strings::replace($content, '#\'\\\\(\w|@)#', "'$1");
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getExcludedNamespacesAndClasses(): array
+    {
+        return array_merge(self::EXCLUDED_NAMESPACES, self::EXCLUDED_CLASSES);
     }
 }

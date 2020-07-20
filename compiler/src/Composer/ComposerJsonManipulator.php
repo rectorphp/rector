@@ -65,7 +65,9 @@ final class ComposerJsonManipulator
         $encodedJson = Json::encode($json, Json::PRETTY);
 
         // show diff
-        $this->consoleDiffer->diff($this->originalComposerJsonFileContent, $encodedJson);
+        if ($encodedJson !== $this->originalComposerJsonFileContent) {
+            $this->consoleDiffer->diff($this->originalComposerJsonFileContent, $encodedJson);
+        }
 
         $this->filesystem->dumpFile($composerJsonFile, $encodedJson);
     }
