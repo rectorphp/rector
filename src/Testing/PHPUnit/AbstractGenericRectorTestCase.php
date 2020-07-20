@@ -7,9 +7,12 @@ namespace Rector\Core\Testing\PHPUnit;
 use Iterator;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Set\SetProvider;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
 {
@@ -34,7 +37,24 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         return '';
     }
 
-    protected function provideConfig(): string
+    protected function provideConfigFileInfo(): ?SmartFileInfo
+    {
+        if ($this->provideSet() !== '') {
+            $setProvider = new SetProvider();
+            $set = $setProvider->provideFilePathByName($this->provideSet());
+            if ($set === null) {
+                $message = sprintf('Invalid set name provided "%s"', $this->provideSet());
+                throw new ShouldNotHappenException($message);
+            }
+
+            return $set->getFileInfo();
+        }
+
+        // can be implemented
+        return null;
+    }
+
+    protected function provideSet(): string
     {
         // can be implemented
         return '';
@@ -88,6 +108,19 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         }
 
         $parameterProvider->changeParameter($name, $value);
+    }
+
+    /**
+     * @param SmartFileInfo[] $configFileInfos
+     */
+    protected function bootKernelWithConfigInfos(string $class, array $configFileInfos): KernelInterface
+    {
+        $configFiles = [];
+        foreach ($configFileInfos as $configFileInfo) {
+            $configFiles[] = $configFileInfo->getRealPath();
+        }
+
+        return $this->bootKernelWithConfigs($class, $configFiles);
     }
 
     private function restoreOldParameterValues(): void

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\Configuration;
 
 use Nette\Utils\Strings;
-use Rector\RectorGenerator\ConfigResolver;
+use Rector\Core\Set\SetResolver;
 use Rector\RectorGenerator\Guard\RecipeGuard;
 use Rector\RectorGenerator\ValueObject\Configuration;
 
@@ -17,14 +17,14 @@ final class ConfigurationFactory
     private $recipeGuard;
 
     /**
-     * @var ConfigResolver
+     * @var SetResolver
      */
-    private $configResolver;
+    private $setResolver;
 
-    public function __construct(RecipeGuard $recipeGuard, ConfigResolver $configResolver)
+    public function __construct(RecipeGuard $recipeGuard, SetResolver $setResolver)
     {
         $this->recipeGuard = $recipeGuard;
-        $this->configResolver = $configResolver;
+        $this->setResolver = $setResolver;
     }
 
     /**
@@ -36,6 +36,10 @@ final class ConfigurationFactory
 
         $nodeTypeClasses = $rectorRecipe['node_types'];
         $category = $this->resolveCategoryFromFqnNodeTypes($nodeTypeClasses);
+        $extraFileContent = isset($rectorRecipe['extra_file_content']) ? $this->normalizeCode(
+            $rectorRecipe['extra_file_content']
+        ) : null;
+        $set = $this->setResolver->resolveSetByName($rectorRecipe['set']);
 
         return new Configuration(
             $rectorRecipe['package'],
@@ -45,12 +49,10 @@ final class ConfigurationFactory
             $rectorRecipe['description'],
             $this->normalizeCode($rectorRecipe['code_before']),
             $this->normalizeCode($rectorRecipe['code_after']),
-            isset($rectorRecipe['extra_file_content']) ? $this->normalizeCode(
-                $rectorRecipe['extra_file_content']
-            ) : null,
+            $extraFileContent,
             $rectorRecipe['extra_file_name'] ?? null,
             array_filter((array) $rectorRecipe['source']),
-            $this->configResolver->resolveSetConfig($rectorRecipe['set']),
+            $set,
             $this->detectPhpSnippet($rectorRecipe['code_before'])
         );
     }

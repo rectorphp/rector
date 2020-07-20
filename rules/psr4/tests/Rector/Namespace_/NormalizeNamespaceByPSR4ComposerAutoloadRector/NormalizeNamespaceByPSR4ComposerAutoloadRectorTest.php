@@ -18,8 +18,8 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRectorTest extends AbstractR
         $this->doTestFileInfo($fixtureFileInfo);
     }
 
-    protected function provideConfig(): string
+    protected function provideConfigFileInfo(): SmartFileInfo
     {
-        return __DIR__ . '/config/normalize_namespace_config.yaml';
+        return new SmartFileInfo(__DIR__ . '/config/normalize_namespace_config.php');
     }
 }

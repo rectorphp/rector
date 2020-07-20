@@ -6,6 +6,7 @@ namespace Rector\RectorGenerator\ValueObject;
 
 use Nette\Utils\Strings;
 use Rector\Core\Util\StaticRectorStrings;
+use Rector\Set\ValueObject\Set;
 
 final class Configuration
 {
@@ -40,9 +41,9 @@ final class Configuration
     private $description;
 
     /**
-     * @var string|null
+     * @var Set|null
      */
-    private $setConfig;
+    private $set;
 
     /**
      * @var bool
@@ -84,7 +85,7 @@ final class Configuration
         ?string $extraFileContent,
         ?string $extraFileName,
         array $source,
-        ?string $setConfig,
+        ?Set $set,
         bool $isPhpSnippet
     ) {
         $this->package = $package;
@@ -95,7 +96,7 @@ final class Configuration
         $this->codeAfter = $codeAfter;
         $this->description = $description;
         $this->source = $source;
-        $this->setConfig = $setConfig;
+        $this->set = $set;
         $this->isPhpSnippet = $isPhpSnippet;
         $this->extraFileContent = $extraFileContent;
         $this->extraFileName = $extraFileName;
@@ -159,7 +160,11 @@ final class Configuration
 
     public function getSetConfig(): ?string
     {
-        return $this->setConfig;
+        if ($this->set === null) {
+            return null;
+        }
+
+        return $this->set->getFileRealPath();
     }
 
     public function isPhpSnippet(): bool

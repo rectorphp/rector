@@ -101,6 +101,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        $hasChanged = false;
         foreach ($this->methodsByType as $type => $methods) {
             if (! $this->isObjectType($node, $type)) {
                 continue;
@@ -119,7 +120,12 @@ PHP
                 $this->transformArrayToYieldsOnMethodNode($node, $arrayNode);
 
                 $this->completeComments($node);
+                $hasChanged = true;
             }
+        }
+
+        if (! $hasChanged) {
+            return null;
         }
 
         return $node;

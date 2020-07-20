@@ -23,9 +23,9 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadFileSystemRectorTest extends
         );
     }
 
-    protected function provideConfig(): string
+    protected function provideConfigFileInfo(): SmartFileInfo
     {
-        return __DIR__ . '/config/normalize_namespace_without_namespace_config.yaml';
+        return new SmartFileInfo(__DIR__ . '/config/normalize_namespace_without_namespace_config.php');
     }
 
     protected function getRectorClass(): string

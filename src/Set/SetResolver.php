@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Core\Set;
 
-use Symfony\Component\Console\Input\ArgvInput;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Set\SetProvider;
+use Rector\Set\ValueObject\Set;
+use Symfony\Component\Console\Input\InputInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SetResolver
 {
@@ -18,19 +22,28 @@ final class SetResolver
         $this->setProvider = new SetProvider();
     }
 
-    public function resolveSetFromInput(ArgvInput $input)
+    public function resolveSetFromInput(InputInterface $input): ?Set
     {
-        $set = $input->getParameterOption(['-s', '--set']);
-        if ($set === false) {
-            return [];
+        $setOption = $input->getParameterOption(['-s', '--setOption']);
+        if ($setOption === false) {
+            return null;
         }
 
-        $setFilePath = $this->setProvider->provideFilePathByName($set);
-        if ($setFilePath === null) {
-            return [];
+        return $this->setProvider->provideFilePathByName($setOption);
+    }
+
+    public function resolveSetByName(string $name): ?Set
+    {
+        return $this->setProvider->provideFilePathByName($name);
+    }
+
+    public function resolveSetFileInfoByName(string $name): SmartFileInfo
+    {
+        $set = $this->setProvider->provideFilePathByName($name);
+        if ($set === null) {
+            throw new ShouldNotHappenException();
         }
 
-        dump($setFilePath);
-        die;
+        return $set->getFileInfo();
     }
 }

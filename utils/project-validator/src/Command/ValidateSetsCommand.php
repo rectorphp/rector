@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Utils\ProjectValidator\Command;
 
-use Rector\Core\Set\SetProvider;
+use Rector\Set\SetProvider;
 use Rector\Utils\ProjectValidator\CpuCoreCountResolver;
 use Rector\Utils\ProjectValidator\Process\ParallelTaskRunner;
 use Rector\Utils\ProjectValidator\ValueObject\SetTask;

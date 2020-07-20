@@ -6,6 +6,7 @@ namespace Rector\MysqlToMysqli\Tests;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Set\ValueObject\SetList;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SetTest extends AbstractRectorTestCase
@@ -23,8 +24,8 @@ final class SetTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfig(): string
+    protected function provideSet(): string
     {
-        return __DIR__ . '/../../../config/set/database-migration/mysql-to-mysqli.php';
+        return SetList::MYSQL_TO_MYSQLI;
     }
 }

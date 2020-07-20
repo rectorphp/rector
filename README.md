@@ -90,51 +90,41 @@ composer require rector/rector --dev
 
 ### A. Prepared Sets
 
-Featured open-source projects have **prepared sets**. You can find them in [`/config/set`](/config/set) or by running:
+Featured open-source projects have **prepared sets**. You can find them in [`/config/set`](/config/set) or by autocomplete of [`Rector\Set\ValueObject\SetList`](/packages/set/src/ValueObject/SetList.php) constants in `rector.php` config.
+
+Let's say you pick the [`symfony40`](/config/set/symfony40.php) set and you want to upgrade your `/src` directory:
 
 ```bash
-vendor/bin/rector sets
-```
-
-Let's say you pick the [`symfony40`](/config/set/symfony) set and you want to upgrade your `/src` directory:
-
-```bash
-# show a list of known changes in Symfony 4.0
 vendor/bin/rector process src --set symfony40 --dry-run
 ```
 
-Rector will show you diff of files that it *would* change. To *make* the changes, run same command without `--dry-run`:
+Rector will show you diff of files that it *would* change. To *make* the changes, drop `--dry-run`:
 
 ```bash
 # apply upgrades to your code
 vendor/bin/rector process src --set symfony40
 ```
 
-Some sets, such as [`code-quality`](/config/set/code-quality) can be used on a regular basis. **The best practise is to use config over CLI**, here in `sets` parameter:
-
-```yaml
-# rector.yaml
-parameters:
-    sets:
-        - code-quality
-```
-
-You can also use `rector.php` as new [Symfony best practice](https://twitter.com/symfony_en/status/1284538366147678208):
+Some sets, such as [`code-quality`](/config/set/code-quality.php) can be used on a regular basis. **The best practise is to  use config over command line**:
 
 ```php
 <?php
+// rector.php
 
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
+use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set(Option::SETS, ['code-quality']);
+    $parameters->set(Option::SETS, [SetList::CODE_QUALITY]);
 };
 ```
+
+PHP config format is a new [Symfony best practice](https://twitter.com/symfony_en/status/1284538366147678208).
 
 ### B. Standalone Rules
 

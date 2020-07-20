@@ -8,12 +8,10 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\MinimalVersionChecker;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonReader;
-use Rector\Core\Set\SetResolver;
+use Rector\Core\Configuration\RectorConfigsResolver;
 use Rector\Core\Console\Application;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
-use Rector\Core\ValueObject\SetDirectory;
-use Symfony\Component\Console\Input\ArgvInput;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 @ini_set('memory_limit', '-1'); // @ intentionally: continue anyway
@@ -41,11 +39,11 @@ try {
     $versionChecker->check();
 
     $rectorConfigsResolver = new RectorConfigsResolver();
-    $configs = $rectorConfigsResolver->provide();
+    $configFileInfos = $rectorConfigsResolver->provide();
 
     // Build DI container
     $rectorContainerFactory = new RectorContainerFactory();
-    $container = $rectorContainerFactory->createFromConfigs($configs);
+    $container = $rectorContainerFactory->createFromConfigs($configFileInfos);
 
     /** @var Configuration $configuration */
     $configuration = $container->get(Configuration::class);
@@ -108,19 +106,38 @@ final class AutoloadIncluder
             if (is_file($path)) {
                 $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
             }
+            return;
+        }
+
+        $pharPath = Phar::running(false);
+        if ($pharPath === '') {
+            if (is_file($path)) {
+                $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
+            }
         } else {
-            $pharPath = Phar::running(false);
-            if ($pharPath === '') {
-                if (is_file($path)) {
-                    $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
-                }
-            } else {
-                $path = dirname($pharPath) . $file;
-                if (is_file($path)) {
-                    $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
-                }
+            $path = dirname($pharPath) . $file;
+            if (is_file($path)) {
+                $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
             }
         }
+    }
+
+    public function autoloadFromCommandLine(): void
+    {
+        $cliArgs = $_SERVER['argv'];
+
+        $autoloadOptionPosition = array_search('-a', $cliArgs) ?: array_search('--autoload-file', $cliArgs);
+        if (! $autoloadOptionPosition) {
+            return;
+        }
+
+        $autoloadFileValuePosition = $autoloadOptionPosition + 1;
+        $fileToAutoload = $cliArgs[$autoloadFileValuePosition] ?? null;
+        if ($fileToAutoload=== null) {
+            return;
+        }
+
+        $this->loadIfNotLoadedYet($fileToAutoload, __METHOD__);
     }
 
     private function loadIfNotLoadedYet(string $file, string $location): void
@@ -145,77 +162,5 @@ final class AutoloadIncluder
     private function isDebugOption(): bool
     {
         return in_array('--debug', $_SERVER['argv'], true);
-    }
-
-    public function autoloadFromCommandLine(): void
-    {
-        $cliArgs = $_SERVER['argv'];
-
-        $autoloadOptionPosition = array_search('-a', $cliArgs) ?: array_search('--autoload-file', $cliArgs);
-        if (! $autoloadOptionPosition) {
-            return;
-        }
-
-        $autoloadFileValuePosition = $autoloadOptionPosition + 1;
-        $fileToAutoload = $cliArgs[$autoloadFileValuePosition] ?? null;
-        if ($fileToAutoload=== null) {
-            return;
-        }
-
-        $this->loadIfNotLoadedYet($fileToAutoload, __METHOD__);
-    }
-}
-
-final class RectorConfigsResolver
-{
-    /**
-     * @var SetResolver
-     */
-    private $setResolver;
-
-    public function __construct()
-    {
-        $this->setResolver = new SetResolver();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function provide(): array
-    {
-        $configs = [];
-
-        // Detect configuration from --set
-        $input = new ArgvInput();
-
-        $setConfig = $this->setResolver->resolveSetFromInput($input);
-        if ($setConfig !== null) {
-            $configs[] = $setConfig;
-        }
-
-        // And from --config or default one
-        $inputOrFallbackConfig = $this->setResolver->resolveFromInputWithFallback(
-            $input,
-            ['rector.yml', 'rector.yaml', 'rector.php']
-        );
-        if ($inputOrFallbackConfig !== null) {
-            $configs[] = $inputOrFallbackConfig;
-        }
-
-        // resolve: parameters > sets
-        $parameterSetsConfigs = $this->setResolver->resolveFromParameterSetsFromConfigFiles(
-            $configs,
-            SetDirectory::SET_DIRECTORY
-        );
-        if ($parameterSetsConfigs !== []) {
-            $configs = array_merge($configs, $parameterSetsConfigs);
-        }
-
-        return $configs;
-    }
-
-    public function getFirstResolvedConfig(): ?string
-    {
-        return $this->setResolver->getFirstResolvedConfig();
     }
 }
