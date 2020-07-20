@@ -8,12 +8,10 @@ use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
 use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter;
 use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
-use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -50,9 +48,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ColorConsoleDiffFormatter::class);
 
     $services->set(ConsoleDiffer::class);
-
-    $services->set(SymfonyStyleFactory::class);
-
-    $services->set(SymfonyStyle::class)
-        ->factory([ref(SymfonyStyleFactory::class), 'create']);
 };

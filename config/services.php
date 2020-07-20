@@ -16,10 +16,12 @@ use Rector\Core\PhpParser\Parser\LexerFactory;
 use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Descriptor\TextDescriptor;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
@@ -89,4 +91,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->alias(EventDispatcherInterface::class, AutowiredEventDispatcher::class);
 
     $services->set(SmartFileSystem::class);
+
+    $services->set(SymfonyStyleFactory::class);
+
+    $services->set(SymfonyStyle::class)
+        ->factory([ref(SymfonyStyleFactory::class), 'create']);
 };
