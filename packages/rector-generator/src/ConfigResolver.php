@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator;
 
 use Nette\Utils\Strings;
+use Rector\Core\Configuration\Set\SetResolver;
 use Rector\Core\ValueObject\SetDirectory;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 final class ConfigResolver
 {
+    /**
+     * @deprecated Use
+     * @see SetResolver instead
+     */
     public function resolveSetConfig(string $set): ?string
     {
         if ($set === '') {

@@ -23,12 +23,12 @@ final class SetsCommand extends AbstractCommand
     /**
      * @var SetProvider
      */
-    private $setProvider;
+    private $staticSetProvider;
 
-    public function __construct(SymfonyStyle $symfonyStyle, SetProvider $setProvider)
+    public function __construct(SymfonyStyle $symfonyStyle, SetProvider $staticSetProvider)
     {
         $this->symfonyStyle = $symfonyStyle;
-        $this->setProvider = $setProvider;
+        $this->staticSetProvider = $staticSetProvider;
 
         parent::__construct();
     }
@@ -42,7 +42,7 @@ final class SetsCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $sets = $this->setProvider->provide();
+        $sets = $this->staticSetProvider->provide();
 
         $name = (string) $input->getArgument('name');
         if ($name) {

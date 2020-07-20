@@ -8,13 +8,13 @@ use Rector\Core\Configuration\Configuration;
 use Rector\Core\Configuration\MinimalVersionChecker;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonReader;
+use Rector\Core\Set\SetResolver;
 use Rector\Core\Console\Application;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\ValueObject\SetDirectory;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use Symplify\SetConfigResolver\ConfigResolver;
 
 @ini_set('memory_limit', '-1'); // @ intentionally: continue anyway
 
@@ -169,13 +169,13 @@ final class AutoloadIncluder
 final class RectorConfigsResolver
 {
     /**
-     * @var ConfigResolver
+     * @var SetResolver
      */
-    private $configResolver;
+    private $setResolver;
 
     public function __construct()
     {
-        $this->configResolver = new ConfigResolver();
+        $this->setResolver = new SetResolver();
     }
 
     /**
@@ -188,13 +188,13 @@ final class RectorConfigsResolver
         // Detect configuration from --set
         $input = new ArgvInput();
 
-        $setConfig = $this->configResolver->resolveSetFromInputAndDirectory($input, SetDirectory::SET_DIRECTORY);
+        $setConfig = $this->setResolver->resolveSetFromInput($input);
         if ($setConfig !== null) {
             $configs[] = $setConfig;
         }
 
         // And from --config or default one
-        $inputOrFallbackConfig = $this->configResolver->resolveFromInputWithFallback(
+        $inputOrFallbackConfig = $this->setResolver->resolveFromInputWithFallback(
             $input,
             ['rector.yml', 'rector.yaml', 'rector.php']
         );
@@ -203,7 +203,7 @@ final class RectorConfigsResolver
         }
 
         // resolve: parameters > sets
-        $parameterSetsConfigs = $this->configResolver->resolveFromParameterSetsFromConfigFiles(
+        $parameterSetsConfigs = $this->setResolver->resolveFromParameterSetsFromConfigFiles(
             $configs,
             SetDirectory::SET_DIRECTORY
         );
@@ -216,6 +216,6 @@ final class RectorConfigsResolver
 
     public function getFirstResolvedConfig(): ?string
     {
-        return $this->configResolver->getFirstResolvedConfig();
+        return $this->setResolver->getFirstResolvedConfig();
     }
 }

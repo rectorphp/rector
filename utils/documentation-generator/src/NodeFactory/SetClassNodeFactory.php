@@ -7,9 +7,7 @@ namespace Rector\Utils\DocumentationGenerator\NodeFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Nop;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class SetClassNodeFactory
 {
@@ -36,11 +34,6 @@ final class SetClassNodeFactory
         $lastKey = array_key_last($constantNamesToSetNames);
         foreach ($constantNamesToSetNames as $constantName => $setName) {
             $classConst = $this->nodeFactory->createPublicClassConst($constantName, $setName);
-
-            /** @var PhpDocInfo $phpDocInfo */
-            $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
-            $phpDocInfo->addBareTag('api');
-
             $class->stmts[] = $classConst;
 
             // space between constants
