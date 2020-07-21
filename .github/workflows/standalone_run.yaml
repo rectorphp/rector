@@ -27,8 +27,8 @@ jobs:
                     cd test-paths
 
                     mkdir rector-dir
-                    composer require rector/rector:dev-${GITHUB_REF}#${GITHUB_SHA} -d rector-dir --no-progress --ansi
-
+                    # get branch name see https://stackoverflow.com/a/61699863/1348344
+                    composer require rector/rector:dev-${GITHUB_REF#refs/heads/}#${GITHUB_SHA} -d rector-dir --no-progress --ansi
                     mkdir symfony-demo-dir
                     composer create-project symfony/symfony-demo symfony-demo-dir --dev --no-progress --ansi
 
