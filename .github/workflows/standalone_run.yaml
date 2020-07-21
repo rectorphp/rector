@@ -24,14 +24,14 @@ jobs:
                     cd test-paths
 
                     mkdir rector-dir
-                    composer require rector/rector:@dev -d rector-dir --no-progress
+                    composer require rector/rector:@dev -d rector-dir --no-progress --ansi
 
                     mkdir symfony-demo-dir
-                    composer create-project symfony/symfony-demo symfony-demo-dir --dev --no-progress
+                    composer create-project symfony/symfony-demo symfony-demo-dir --dev --no-progress --ansi
 
                     # missing for some reason
-                    composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir --no-progress
-                    composer dump-autoload --no-dev -d symfony-demo-dir
+                    composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir --no-progress --ansi
+                    composer dump-autoload --no-dev -d symfony-demo-dir --ansi
 
                     # 2. run an another project
                     rector-dir/vendor/bin/rector
