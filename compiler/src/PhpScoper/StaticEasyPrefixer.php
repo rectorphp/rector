@@ -16,6 +16,8 @@ final class StaticEasyPrefixer
         'Symfony\Component\Console\Style\SymfonyStyle',
         // doctrine annotations to autocomplete
         'JMS\DiExtraBundle\Annotation\Inject',
+        // part of public interface of configs.php
+        'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator'
     ];
 
     /**
