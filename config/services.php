@@ -49,6 +49,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/HttpKernel/*',
             __DIR__ . '/../src/ValueObject/*',
             __DIR__ . '/../src/Configuration/MinimalVersionChecker/*',
+            __DIR__ . '/../src/Bootstrap/*',
         ]);
 
     $services->set(MinimalVersionChecker::class)

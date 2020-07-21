@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Configuration;
+namespace Rector\Core\Bootstrap;
 
+use Rector\Core\Configuration\Option;
 use Rector\Core\Set\SetResolver;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -93,7 +94,7 @@ final class RectorConfigsResolver
     private function resolveSetsParameterFromConfigFile(SmartFileInfo $configFileInfo): array
     {
         $containerBuilder = new ContainerBuilder();
-        $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator());
+        $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator([getcwd()]));
 
         // getRealPath() cannot be used, as it breaks in phar
         $phpFileLoader->load($configFileInfo->getPathname());

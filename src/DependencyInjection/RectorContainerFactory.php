@@ -17,7 +17,6 @@ final class RectorContainerFactory
      */
     public function createFromConfigs(array $configFileInfos): ContainerInterface
     {
-
         // to override the configs without clearing cache
         $environment = 'prod' . random_int(1, 10000000);
         $isDebug = InputDetector::isDebug();
@@ -42,7 +41,7 @@ final class RectorContainerFactory
         $configFilePaths = [];
         foreach ($configFileInfos as $configFileInfo) {
             // getRealPath() cannot be used, as it breaks in phar
-            $configFilePaths[] = $configFileInfo->getPathname();
+            $configFilePaths[] = $configFileInfo->getRealPath() ?: $configFileInfo->getPathname();
         }
 
         return $configFilePaths;
