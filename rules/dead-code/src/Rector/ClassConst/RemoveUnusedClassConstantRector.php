@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -103,11 +104,25 @@ PHP
         return null;
     }
 
+    /**
+     * @param ClassConst $node
+     */
     private function shouldSkip(Node $node): bool
     {
         if ($this->isOpenSourceProjectType()) {
             return true;
         }
-        return count($node->consts) !== 1;
+
+        if (count($node->consts) !== 1) {
+            return true;
+        }
+
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return false;
+        }
+
+        return $phpDocInfo->hasByName('api');
     }
 }
