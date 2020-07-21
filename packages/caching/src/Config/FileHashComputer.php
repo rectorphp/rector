@@ -39,7 +39,8 @@ final class FileHashComputer
         }
 
         throw new ShouldNotHappenException(sprintf(
-            'Provide only YAML/PHP file, ready for Symfony Dependency Injection. "%s" given', $fileInfo
+            // getRealPath() cannot be used, as it breaks in phar
+            'Provide only YAML/PHP file, ready for Symfony Dependency Injection. "%s" given', $fileInfo->getRelativeFilePath()
         ));
     }
 
