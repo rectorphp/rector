@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\Catch_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Catch_;
 use Rector\Core\Rector\AbstractRector;
@@ -15,6 +16,12 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class CatchExceptionNameMatchingTypeRector extends AbstractRector
 {
+    /**
+     * @var string
+     * @link https://regex101.com/r/xmfMAX/1
+     */
+    private const STARTS_WITH_ABBREVIATION_REGEX = '#^([A-Za-z]+?)([A-Z]{1}[a-z]{1})([A-Za-z]*)#';
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Type and name of catch exception should match', [
@@ -67,9 +74,6 @@ PHP
             return null;
         }
 
-        $type = $node->types[0];
-        $typeShortName = $this->getShortName($type);
-
         if ($node->var === null) {
             return null;
         }
@@ -79,7 +83,23 @@ PHP
             return null;
         }
 
-        $newVariableName = lcfirst($typeShortName);
+        $type = $node->types[0];
+        $typeShortName = $this->getShortName($type);
+
+        $newVariableName = Strings::replace(
+            lcfirst($typeShortName),
+            self::STARTS_WITH_ABBREVIATION_REGEX,
+            function (array $matches): string {
+                $output = '';
+
+                $output .= isset($matches[1]) ? strtolower($matches[1]) : '';
+                $output .= $matches[2] ?? '';
+                $output .= $matches[3] ?? '';
+
+                return $output;
+            }
+        );
+
         if ($oldVariableName === $newVariableName) {
             return null;
         }
