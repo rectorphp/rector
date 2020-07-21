@@ -34,10 +34,10 @@ jobs:
                     composer dump-autoload --no-dev -d symfony-demo-dir --ansi
 
                     # 2. run an another project
-                    rector-dir/vendor/bin/rector
+                    rector-dir/vendor/bin/rector --ansi
 
                     cd symfony-demo-dir
-                    ../rector-dir/vendor/bin/rector
+                    ../rector-dir/vendor/bin/rector --ansi
 
                     # autoload errors due to remove --dev and mixed dependencies in /src and /tests
-                    ../rector-dir/vendor/bin/rector process src --set code-quality
+                    ../rector-dir/vendor/bin/rector process src --set code-quality --ansi

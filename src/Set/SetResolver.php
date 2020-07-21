@@ -24,7 +24,7 @@ final class SetResolver
 
     public function resolveSetFromInput(InputInterface $input): ?Set
     {
-        $setOption = $input->getParameterOption(['-s', '--setOption']);
+        $setOption = $input->getParameterOption(['-s', '--set']);
         if ($setOption === false) {
             return null;
         }
