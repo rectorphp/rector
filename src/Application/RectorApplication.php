@@ -206,7 +206,7 @@ final class RectorApplication
     {
         $filePaths = [];
         foreach ($fileInfos as $fileInfo) {
-            $filePaths[] = $fileInfo->getRealPath();
+            $filePaths[] = $fileInfo->getPathname();
         }
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);

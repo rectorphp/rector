@@ -42,7 +42,7 @@ final class RectorContainerFactory
         $configFilePaths = [];
         foreach ($configFileInfos as $configFileInfo) {
             // getRealPath() cannot be used, as it breaks in phar
-            $configFilePaths[] = $configFileInfo->getRelativeFilePath();
+            $configFilePaths[] = $configFileInfo->getPathname();
         }
 
         return $configFilePaths;

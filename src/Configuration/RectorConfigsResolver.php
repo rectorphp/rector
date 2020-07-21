@@ -94,8 +94,9 @@ final class RectorConfigsResolver
     {
         $containerBuilder = new ContainerBuilder();
         $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator());
+
         // getRealPath() cannot be used, as it breaks in phar
-        $phpFileLoader->load($configFileInfo->getRelativeFilePath());
+        $phpFileLoader->load($configFileInfo->getPathname());
 
         if (! $containerBuilder->hasParameter(Option::SETS)) {
             return [];
