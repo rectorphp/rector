@@ -20,7 +20,7 @@ return [
     'files-whitelist' => $whitelistedStubsProvider->provide(),
     'patchers' => [
         function (string $filePath, string $prefix, string $content): string {
-            if ($filePath !== 'bin/rector' && ! $filePath !== 'packages/set/src/SetProvider.php') {
+            if ($filePath !== 'bin/rector' && $filePath === 'packages/set/src/SetProvider.php') {
                 return $content;
             }
 
@@ -182,9 +182,6 @@ return [
                 $content
             );
         },
-
-
-
     ],
     'whitelist' => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
 ];
