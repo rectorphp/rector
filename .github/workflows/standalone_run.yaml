@@ -19,12 +19,15 @@ jobs:
 
             # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
             -   run: |
+                    # wait till packagist gets information about new branches
+                    sleep 30
+
                     # 1. install locally
                     mkdir test-paths
                     cd test-paths
 
                     mkdir rector-dir
-                    composer require rector/rector:@dev -d rector-dir --no-progress --ansi
+                    composer require rector/rector:dev-${GITHUB_REF}#${GITHUB_SHA} -d rector-dir --no-progress --ansi
 
                     mkdir symfony-demo-dir
                     composer create-project symfony/symfony-demo symfony-demo-dir --dev --no-progress --ansi
