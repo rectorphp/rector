@@ -29,8 +29,7 @@ jobs:
                     coverage: none
                     tools: cs2pr
 
-            -   run: composer install --no-progress
+            -   run: composer install --no-progress --ansi
 
-            -   run: |
-                    vendor/bin/rector process --ansi --dry-run --output-format=checkstyle | cs2pr
+            -   run: vendor/bin/rector process --ansi --dry-run --output-format=checkstyle | cs2pr
 ```

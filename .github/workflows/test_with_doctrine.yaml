@@ -19,7 +19,7 @@ jobs:
             -   name: Clone doctrine/orm and install safe dependencies
                 run: |
                     # cannot install dev deps (--no-dev), because doctrine/orm might inherit from them in different version
-                    composer install --no-progress --no-dev
+                    composer install --no-progress --no-dev --ansi
                     # loads autoload-dev packages as well, there are utils that might be used later
                     git clone https://github.com/doctrine/orm.git --depth 1
 

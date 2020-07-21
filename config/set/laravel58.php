@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 # https://github.com/laravel/framework/pull/26898
 # see: https://laravel.com/docs/5.8/upgrade
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(__DIR__ . '/static/array-str-functions-to-static-call.php');
+    $containerConfigurator->import(__DIR__ . '/laravel-array-str-functions-to-static-call.php');
 
     $services = $containerConfigurator->services();
 
