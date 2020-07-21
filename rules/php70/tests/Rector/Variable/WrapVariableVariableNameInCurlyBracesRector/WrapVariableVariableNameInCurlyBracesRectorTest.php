@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
+namespace Rector\Php70\Tests\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class WrapVariableVariableNameInCurlyBracesRectorTest extends AbstractRectorTestCase

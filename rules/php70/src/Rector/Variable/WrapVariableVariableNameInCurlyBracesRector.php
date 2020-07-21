@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Rector\Variable;
+namespace Rector\Php70\Rector\Variable;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -12,7 +12,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector\WrapVariableVariableNameInCurlyBracesRectorTest
+ * @see \Rector\Php70\Tests\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector\WrapVariableVariableNameInCurlyBracesRectorTest
  * @see https://www.php.net/manual/en/language.variables.variable.php
  */
 final class WrapVariableVariableNameInCurlyBracesRector extends AbstractRector
