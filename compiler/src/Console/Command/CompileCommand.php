@@ -89,13 +89,16 @@ final class CompileCommand extends Command
     {
         $composerJsonFile = $this->buildDir . '/composer.json';
 
-        $this->symfonyStyle->title('1. Adding "phpstan/phpstan-src" to ' . $composerJsonFile);
+        $title = sprintf('1. Adding "phpstan/phpstan-src" to "%s"', $composerJsonFile);
+        $this->symfonyStyle->title($title);
 
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
+        $this->symfonyStyle->newLine(1);
+
         $this->symfonyStyle->success(self::DONE);
 
-        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->newLine(1);
 
         $this->symfonyStyle->title('2. Running "composer update" without dev');
 
@@ -114,21 +117,21 @@ final class CompileCommand extends Command
 
         $this->symfonyStyle->success(self::DONE);
 
-        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->newLine(1);
 
         $this->symfonyStyle->title('3. Downgrading PHPStan code to PHP 7.1');
 
         $this->downgradePHPStanCodeToPHP71($output);
 
         $this->symfonyStyle->success(self::DONE);
-        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->newLine(1);
 
         $this->symfonyStyle->title('4. Renaming PHPStorm stubs from "*.php" to ".stub"');
 
         $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
 
         $this->symfonyStyle->success(self::DONE);
-        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->newLine(1);
 
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
         // and "Nette\Neon\Neon" class can be used there
@@ -147,7 +150,7 @@ final class CompileCommand extends Command
 
         $this->symfonyStyle->success(self::DONE);
 
-        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->newLine(1);
 
         $this->symfonyStyle->title('6. Restoring root composer.json with "require-dev"');
 
