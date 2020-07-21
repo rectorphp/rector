@@ -10,7 +10,8 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(__DIR__ . '/nette-30/*');
+    $containerConfigurator->import(__DIR__ . '/nette-30-return-types.php');
+    $containerConfigurator->import(__DIR__ . '/nette-30-param-types.php');
 
     $services = $containerConfigurator->services();
 
