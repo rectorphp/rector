@@ -28,6 +28,11 @@ final class CompileCommand extends Command
     /**
      * @var string
      */
+    private const DONE = 'Done';
+
+    /**
+     * @var string
+     */
     private $buildDir;
 
     /**
@@ -88,7 +93,7 @@ final class CompileCommand extends Command
 
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
-        $this->symfonyStyle->success('Done');
+        $this->symfonyStyle->success(self::DONE);
 
         $this->symfonyStyle->newLine(2);
 
@@ -107,7 +112,7 @@ final class CompileCommand extends Command
             $output->write($buffer);
         });
 
-        $this->symfonyStyle->success('Done');
+        $this->symfonyStyle->success(self::DONE);
 
         $this->symfonyStyle->newLine(2);
 
@@ -115,14 +120,14 @@ final class CompileCommand extends Command
 
         $this->downgradePHPStanCodeToPHP71($output);
 
-        $this->symfonyStyle->success('Done');
+        $this->symfonyStyle->success(self::DONE);
         $this->symfonyStyle->newLine(2);
 
         $this->symfonyStyle->title('4. Renaming PHPStorm stubs from "*.php" to ".stub"');
 
         $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
 
-        $this->symfonyStyle->success('Done');
+        $this->symfonyStyle->success(self::DONE);
         $this->symfonyStyle->newLine(2);
 
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
@@ -140,7 +145,7 @@ final class CompileCommand extends Command
             $output->write($buffer);
         });
 
-        $this->symfonyStyle->success('Done');
+        $this->symfonyStyle->success(self::DONE);
 
         $this->symfonyStyle->newLine(2);
 
@@ -149,7 +154,7 @@ final class CompileCommand extends Command
         $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);
         $this->restoreDependenciesLocallyIfNotCi($output);
 
-        $this->symfonyStyle->success('Done');
+        $this->symfonyStyle->success(self::DONE);
 
         return ShellCode::SUCCESS;
     }
