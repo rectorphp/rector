@@ -33,9 +33,9 @@ final class RectorConfigsResolver
     /**
      * @noRector
      */
-    public function getFirstResolvedConfig(): ?string
+    public function getFirstResolvedConfig(): ?SmartFileInfo
     {
-        return $this->configResolver->getFirstResolvedConfig();
+        return $this->configResolver->getFirstResolvedConfigFileInfo();
     }
 
     /**
@@ -69,17 +69,17 @@ final class RectorConfigsResolver
 
         $set = $this->setResolver->resolveSetFromInput($argvInput);
         if ($set !== null) {
-            $configFileInfos[] = $set->getFileInfo();
+            $configFileInfos[] = $set->getSetFileInfo();
         }
 
         // And from --config or default one
-        $inputOrFallbackConfig = $this->configResolver->resolveFromInputWithFallback(
+        $inputOrFallbackConfigFileInfo = $this->configResolver->resolveFromInputWithFallback(
             $argvInput,
             ['rector.php', 'rector.yml', 'rector.yaml']
         );
 
-        if ($inputOrFallbackConfig !== null) {
-            $configFileInfos[] = new SmartFileInfo($inputOrFallbackConfig);
+        if ($inputOrFallbackConfigFileInfo !== null) {
+            $configFileInfos[] = $inputOrFallbackConfigFileInfo;
         }
 
         $setFileInfos = $this->resolveSetFileInfosFromConfigFileInfos($configFileInfos);

@@ -6,8 +6,8 @@ namespace Rector\Core\Set;
 
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Set\SetProvider;
-use Rector\Set\ValueObject\Set;
 use Symfony\Component\Console\Input\InputInterface;
+use Symplify\SetConfigResolver\ValueObject\Set;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SetResolver
@@ -29,21 +29,21 @@ final class SetResolver
             return null;
         }
 
-        return $this->setProvider->provideFilePathByName($setOption);
+        return $this->setProvider->provideByName($setOption);
     }
 
     public function resolveSetByName(string $name): ?Set
     {
-        return $this->setProvider->provideFilePathByName($name);
+        return $this->setProvider->provideByName($name);
     }
 
     public function resolveSetFileInfoByName(string $name): SmartFileInfo
     {
-        $set = $this->setProvider->provideFilePathByName($name);
+        $set = $this->setProvider->provideByName($name);
         if ($set === null) {
             throw new ShouldNotHappenException();
         }
 
-        return $set->getFileInfo();
+        return $set->getSetFileInfo();
     }
 }

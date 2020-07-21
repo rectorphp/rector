@@ -6,7 +6,7 @@ namespace Rector\RectorGenerator\ValueObject;
 
 use Nette\Utils\Strings;
 use Rector\Core\Util\StaticRectorStrings;
-use Rector\Set\ValueObject\Set;
+use Symplify\SetConfigResolver\ValueObject\Set;
 
 final class Configuration
 {
@@ -164,7 +164,7 @@ final class Configuration
             return null;
         }
 
-        return $this->set->getFileRealPath();
+        return $this->set->getSetFileInfo()->getRealPath();
     }
 
     public function isPhpSnippet(): bool
