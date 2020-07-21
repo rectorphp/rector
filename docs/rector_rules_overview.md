@@ -1,4 +1,4 @@
-# All 527 Rectors Overview
+# All 528 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -11,7 +11,7 @@
 - [CakePHP](#cakephp) (6)
 - [Celebrity](#celebrity) (3)
 - [CodeQuality](#codequality) (54)
-- [CodingStyle](#codingstyle) (35)
+- [CodingStyle](#codingstyle) (36)
 - [DeadCode](#deadcode) (40)
 - [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
@@ -2347,6 +2347,23 @@ Changes use of call to version compare function to use of PHP version constant
 -        version_compare(PHP_VERSION, '5.3.0', '<');
 +        PHP_VERSION_ID < 50300;
      }
+ }
+```
+
+<br><br>
+
+### `WrapEncapsedVariableInCurlyBracesRector`
+
+- class: [`Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector`](/../master/rules/coding-style/src/Rector/Encapsed/WrapEncapsedVariableInCurlyBracesRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/Encapsed/WrapEncapsedVariableInCurlyBracesRector/Fixture)
+
+Wrap encapsed variables in curly braces
+
+```diff
+ function run($world)
+ {
+-    echo "Hello $world!"
++    echo "Hello {$world}!"
  }
 ```
 
