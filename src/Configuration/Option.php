@@ -64,6 +64,11 @@ final class Option
     /**
      * @var string
      */
+    public const IMPORT_DOC_BLOCKS = 'import_doc_blocks';
+
+    /**
+     * @var string
+     */
     public const MATCH_GIT_DIFF = 'match-git-diff';
 
     /**
