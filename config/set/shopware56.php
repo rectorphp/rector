@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     # See https://github.com/shopware/shopware/blob/5.6/UPGRADE-5.6.md
-    $containerConfigurator->import(__DIR__ . '/../elasticsearch-dsl/elasticsearch-dsl50.php');
+    $containerConfigurator->import(__DIR__ . '/elasticsearch-dsl50.php');
 
     $services = $containerConfigurator->services();
 
