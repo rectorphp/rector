@@ -35,7 +35,6 @@
         "symplify/package-builder": "^8.1.15",
         "symplify/parameter-name-guard": "^8.1.15",
         "symplify/set-config-resolver": "^8.1.15",
-        "symplify/composer-json-manipulator": "^8.1.15",
         "symplify/smart-file-system": "^8.1.15",
         "tracy/tracy": "^2.7",
         "phpstan/phpstan": "0.12.32"
