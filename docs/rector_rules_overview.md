@@ -1,4 +1,4 @@
-# All 526 Rectors Overview
+# All 527 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -11,7 +11,7 @@
 - [CakePHP](#cakephp) (6)
 - [Celebrity](#celebrity) (3)
 - [CodeQuality](#codequality) (54)
-- [CodingStyle](#codingstyle) (36)
+- [CodingStyle](#codingstyle) (35)
 - [DeadCode](#deadcode) (40)
 - [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
@@ -49,7 +49,7 @@
 - [Php54](#php54) (2)
 - [Php55](#php55) (2)
 - [Php56](#php56) (2)
-- [Php70](#php70) (18)
+- [Php70](#php70) (19)
 - [Php71](#php71) (9)
 - [Php72](#php72) (11)
 - [Php73](#php73) (10)
@@ -2328,25 +2328,6 @@ Use ++ increment instead of `$var += 1`
 +     */
      const HI = 'hi';
  }
-```
-
-<br><br>
-
-### `WrapVariableVariableNameInCurlyBracesRector`
-
-- class: [`Rector\CodingStyle\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector`](/../master/rules/coding-style/src/Rector/Variable/WrapVariableVariableNameInCurlyBracesRector.php)
-- [test fixtures](/../master/rules/coding-style/tests/Rector/Variable/WrapVariableVariableNameInCurlyBracesRector/Fixture)
-
-Ensure variable variables are wrapped in curly braces
-
-```diff
-function run($foo)
-{
--    // Valid in PHP 5 only
--    global $$foo->bar;
-+    // Valid in PHP 5 and 7
-+    global ${$foo->bar};
-}
 ```
 
 <br><br>
@@ -8022,6 +8003,25 @@ Changes `$this->call()` to static method to static call
      {
      }
  }
+```
+
+<br><br>
+
+### `WrapVariableVariableNameInCurlyBracesRector`
+
+- class: [`Rector\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector`](/../master/rules/php70/src/Rector/Variable/WrapVariableVariableNameInCurlyBracesRector.php)
+- [test fixtures](/../master/rules/php70/tests/Rector/Variable/WrapVariableVariableNameInCurlyBracesRector/Fixture)
+
+Ensure variable variables are wrapped in curly braces
+
+```diff
+function run($foo)
+{
+-    // Valid in PHP 5 only
+-    global $$foo->bar;
++    // Valid in PHP 5 and 7
++    global ${$foo->bar};
+}
 ```
 
 <br><br>

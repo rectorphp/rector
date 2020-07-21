@@ -31,7 +31,6 @@ use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
 use Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector;
 use Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector;
 use Rector\CodingStyle\Rector\Variable\UnderscoreToPascalCaseVariableNameRector;
-use Rector\CodingStyle\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -99,8 +98,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(UnderscoreToPascalCasePropertyNameRector::class);
 
     $services->set(UnderscoreToPascalCaseVariableNameRector::class);
-
-    $services->set(WrapVariableVariableNameInCurlyBracesRector::class);
 
     $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
 };
