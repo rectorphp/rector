@@ -94,7 +94,7 @@ final class RectorConfigsResolver
     {
         $containerBuilder = new ContainerBuilder();
         $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator());
-        $phpFileLoader->load($configFileInfo->getRealPath());
+        $phpFileLoader->load($configFileInfo->getPathname());
 
         if (! $containerBuilder->hasParameter(Option::SETS)) {
             return [];
