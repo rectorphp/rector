@@ -41,13 +41,13 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     {
         if ($this->provideSet() !== '') {
             $setProvider = new SetProvider();
-            $set = $setProvider->provideFilePathByName($this->provideSet());
+            $set = $setProvider->provideByName($this->provideSet());
             if ($set === null) {
                 $message = sprintf('Invalid set name provided "%s"', $this->provideSet());
                 throw new ShouldNotHappenException($message);
             }
 
-            return $set->getFileInfo();
+            return $set->getSetFileInfo();
         }
 
         // can be implemented

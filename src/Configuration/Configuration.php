@@ -22,9 +22,9 @@ final class Configuration
     private $isDryRun = false;
 
     /**
-     * @var string|null
+     * @var SmartFileInfo|null
      */
-    private $configFilePath;
+    private $configFileInfo;
 
     /**
      * @var bool
@@ -153,14 +153,18 @@ final class Configuration
     /**
      * @api
      */
-    public function setFirstResolverConfig(?string $firstResolvedConfig): void
+    public function setFirstResolverConfigFileInfo(?SmartFileInfo $firstResolvedConfigFileInfo): void
     {
-        $this->configFilePath = $firstResolvedConfig;
+        $this->configFileInfo = $firstResolvedConfigFileInfo;
     }
 
     public function getConfigFilePath(): ?string
     {
-        return $this->configFilePath;
+        if ($this->configFileInfo === null) {
+            return null;
+        }
+
+        return $this->configFileInfo->getRealPath();
     }
 
     public function getPrettyVersion(): string

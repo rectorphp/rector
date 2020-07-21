@@ -15,7 +15,13 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(__DIR__ . '/nette-to-symfony/*.php');
+    $containerConfigurator->import(__DIR__ . '/nette-to-symfony-doctrine.php');
+
+    $containerConfigurator->import(__DIR__ . '/nette-control-to-symfony-controller.php');
+
+    $containerConfigurator->import(__DIR__ . '/nette-tester-to-phpunit.php');
+
+    $containerConfigurator->import(__DIR__ . '/kdyby-to-symfony.php');
 
     $services = $containerConfigurator->services();
 
