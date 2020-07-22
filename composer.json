@@ -265,9 +265,9 @@
             "bin/rector sync-types",
             "bin/rector check-static-type-mappers"
         ],
-        "check-cs": "vendor/bin/ecs check --ansi",
-        "fix-cs": "vendor/bin/ecs check --fix --ansi",
-        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
+        "check-cs": "\"vendor/bin/ecs\" check --ansi",
+        "fix-cs": "\"vendor/bin/ecs\" check --fix --ansi",
+        "phpstan": "\"vendor/bin/phpstan\" analyse --ansi --error-format symplify",
         "changelog": [
             "vendor/bin/changelog-linker dump-merges --in-categories --ansi",
             "vendor/bin/changelog-linker link --ansi",
