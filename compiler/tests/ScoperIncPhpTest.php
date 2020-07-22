@@ -49,6 +49,6 @@ final class ScoperIncPhpTest extends TestCase
 
     public function provideData(): Iterator
     {
-        return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.yaml');
+        return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '#(\.php|\.yaml|rector)$#');
     }
 }
