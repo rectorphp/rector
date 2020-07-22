@@ -144,7 +144,8 @@
             "Rector\\NetteUtilsCodeQuality\\": "rules/nette-utils-code-quality/src",
             "Rector\\NetteCodeQuality\\": "rules/nette-code-quality/src",
             "Rector\\Decomplex\\": "rules/decomplex/src",
-            "Rector\\Downgrade\\": "rules/downgrade/src"
+            "Rector\\Downgrade\\": "rules/downgrade/src",
+            "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src"
         }
     },
     "autoload-dev": {
@@ -223,7 +224,8 @@
             "Rector\\NetteUtilsCodeQuality\\Tests\\": "rules/nette-utils-code-quality/tests",
             "Rector\\NetteCodeQuality\\Tests\\": "rules/nette-code-quality/tests",
             "Rector\\Decomplex\\Tests\\": "rules/decomplex/tests",
-            "Rector\\Downgrade\\Tests\\": "rules/downgrade/tests"
+            "Rector\\Downgrade\\Tests\\": "rules/downgrade/tests",
+            "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests"
         },
         "classmap": [
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",

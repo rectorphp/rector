@@ -29,6 +29,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::SOLID,
         SetList::PRIVATIZATION,
         SetList::NAMING,
+        SetList::SYMFONY_PHP_CONFIG,
     ]);
 
     $parameters->set(Option::PATHS, [
