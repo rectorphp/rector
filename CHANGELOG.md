@@ -10,7 +10,75 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-<!-- dumped content start -->
+## Unreleased
+
+### Added
+
+- [#3760] [Nette] Add form dim access to standalone Form Control
+
+## [v0.7.52] - 2020-07-22
+
+### Changed
+
+- [#3749] Support exception names that begin with an abbreviation, Thanks to [@u01jmg3]
+
+## [v0.7.51] - 2020-07-21
+
+- [#3750] [CodingStyle] Create WrapEncapsedVariableInCurlyBracesRector, Thanks to [@u01jmg3]
+
+## [v0.7.49] - 2020-07-21
+
+### Added
+
+- [#3712] [Legacy] Add AddTopIncludeRector squash, Thanks to [@phpfui]
+- [#3705] [Symfony] Add RemoveDefaultGetBlockPrefixRector
+- [#3700] [Symfony] add support for options to entry_options rename in collection
+- [#3731] add TemplateAnnotationToThisRenderRector for nested closure
+- [#3697] [Symfony 3.0] Add ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector
+- [#3709] Add Comparison to ComparisonExpression rename, Thanks to [@othercorey]
+- [#3720] Add more refactorings for CakePHP 4.0, Thanks to [@markstory]
+- [#3695] [Symfony 3.0] Add ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector
+- [#3735] add rector.php support
+- [#3701] add support for options to entry_options rename in collection
+- [#3699] [Utils] Add RequireStringArgumentInMethodCallRule
+- [#3745] [ci] add colors
+
+### Changed
+
+- [#3717] [CodingStyle] Create new TernaryConditionVariableAssignmentRector, Thanks to [@u01jmg3]
+- [#3732] [CodingStyle] Create new WrapVariableVariableNameInCurlyBracesRector, Thanks to [@u01jmg3]
+- [#3744] [DeadCode] Skip [@api] in unused public constants
+- [#3713] [Legacy] Correct test for AddTopIncludeRector
+- [#3737] [Naming] Decoupling of RenameVariableToMatchGetMethodNameRector
+- [#3706] [Naming] Name variable after get method, Thanks to [@dobryy]
+- [#3738] [Naming] Skip non-object type returns, classes with children and typical naming patterns
+- [#3740] [Naming] apply "new" naming rule
+- [#3707] [Renaming] Prevent RenameMethodRector from renaming to duplicated class method and in class itself
+- [#3741] [Set] move to new package
+- [#3704] [Symfony] Update instance to class reference to collection types
+- [#3703] [Symfony 3.0] cleanup get name
+- [#3698] make use of AbstractFormAddRector
+- [#3724] Switch ecs.yaml to ecs.php
+- [#3719] config YAML to PHP
+- [#3722] Improve grammar, Thanks to [@u01jmg3]
+- [#3723] Convert config.php to config.yaml
+- [#3725] change ecs-after-rector.yaml to ecs-after-rector.php
+- [#3727] Switch rector-ci configuration from YAML to PHP
+- [#3730] use of constants
+- [#3733] correct namespace in configs
+- [#3746] Move existing Rector from the `coding-style` set to the `php70` set, Thanks to [@u01jmg3]
+- [#3747] make use of new set from symplify
+- [#3694] tyding
+- [#3734] [sets] YAML to PHP
+
+### Fixed
+
+- [#3739] [Naming] Apply RenameVariableToMatchGetMethodNameRector on code + fix docblock rename
+- [#3736] Fixing Compiler
+
+### Removed
+
+- [#3708] [Renaming] Remove RenameMethodCallRector, ported to RenameMethodRector
 
 ## [vO.7.43]
 
@@ -179,8 +247,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 - [#3583] remove [@return] tag if not needed in ReturnTypeDeclarationRector
 - [#3581] remove [@return] tag if not needed in ReturnTypeDeclarationRector
-
-<!-- dumped content end -->
 
 ## Unreleased
 
@@ -530,8 +596,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#3302] [CakePHPtoSymfony] Remove unfinished set
 - [#3287] [DX] drop confusing --only option to promote config
 - [#3296] remove scan-fatal-errors, move to migrify
-
-<!-- dumped content end -->
 
 ## Unreleased
 
@@ -1932,8 +1996,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#1777] make constant array types unique
 - [#1771] skip non-annotation prefix
 
-<!-- dumped content end -->
-
 ## [v0.5.8] - 2019-07-21
 
 ### Added
@@ -2016,10 +2078,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 - [#1659] remove deprecated singly implemented autowire compiler pass
 
-<!-- dumped content end -->
-
-<!-- dumped content start -->
-
 ## [v0.5.6] - 2019-06-28
 
 ### Added
@@ -2070,8 +2128,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 ## [v0.5.5] - 2019-06-08
 
 - [#1577] skip analysis of new anonymous classes in method call [closes [#1574]]
-
-<!-- dumped content end -->
 
 ## [v0.5.4] - 2019-06-06
 
@@ -2142,8 +2198,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 ### Fixed
 
 - [#1493] Fix documentation minor mistake, Thanks to [@alterphp]
-
-<!-- dumped content end -->
 
 ## [v0.5.0] - 2019-05-28
 
@@ -3931,3 +3985,52 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@andyexeter]: https://github.com/andyexeter
 [@Philosoft]: https://github.com/Philosoft
 [@Gymnasiast]: https://github.com/Gymnasiast
+[#3760]: https://github.com/rectorphp/rector/pull/3760
+[#3750]: https://github.com/rectorphp/rector/pull/3750
+[#3749]: https://github.com/rectorphp/rector/pull/3749
+[#3747]: https://github.com/rectorphp/rector/pull/3747
+[#3746]: https://github.com/rectorphp/rector/pull/3746
+[#3745]: https://github.com/rectorphp/rector/pull/3745
+[#3744]: https://github.com/rectorphp/rector/pull/3744
+[#3741]: https://github.com/rectorphp/rector/pull/3741
+[#3740]: https://github.com/rectorphp/rector/pull/3740
+[#3739]: https://github.com/rectorphp/rector/pull/3739
+[#3738]: https://github.com/rectorphp/rector/pull/3738
+[#3737]: https://github.com/rectorphp/rector/pull/3737
+[#3736]: https://github.com/rectorphp/rector/pull/3736
+[#3735]: https://github.com/rectorphp/rector/pull/3735
+[#3734]: https://github.com/rectorphp/rector/pull/3734
+[#3733]: https://github.com/rectorphp/rector/pull/3733
+[#3732]: https://github.com/rectorphp/rector/pull/3732
+[#3731]: https://github.com/rectorphp/rector/pull/3731
+[#3730]: https://github.com/rectorphp/rector/pull/3730
+[#3727]: https://github.com/rectorphp/rector/pull/3727
+[#3725]: https://github.com/rectorphp/rector/pull/3725
+[#3724]: https://github.com/rectorphp/rector/pull/3724
+[#3723]: https://github.com/rectorphp/rector/pull/3723
+[#3722]: https://github.com/rectorphp/rector/pull/3722
+[#3720]: https://github.com/rectorphp/rector/pull/3720
+[#3719]: https://github.com/rectorphp/rector/pull/3719
+[#3717]: https://github.com/rectorphp/rector/pull/3717
+[#3713]: https://github.com/rectorphp/rector/pull/3713
+[#3712]: https://github.com/rectorphp/rector/pull/3712
+[#3709]: https://github.com/rectorphp/rector/pull/3709
+[#3708]: https://github.com/rectorphp/rector/pull/3708
+[#3707]: https://github.com/rectorphp/rector/pull/3707
+[#3706]: https://github.com/rectorphp/rector/pull/3706
+[#3705]: https://github.com/rectorphp/rector/pull/3705
+[#3704]: https://github.com/rectorphp/rector/pull/3704
+[#3703]: https://github.com/rectorphp/rector/pull/3703
+[#3701]: https://github.com/rectorphp/rector/pull/3701
+[#3700]: https://github.com/rectorphp/rector/pull/3700
+[#3699]: https://github.com/rectorphp/rector/pull/3699
+[#3698]: https://github.com/rectorphp/rector/pull/3698
+[#3697]: https://github.com/rectorphp/rector/pull/3697
+[#3695]: https://github.com/rectorphp/rector/pull/3695
+[#3694]: https://github.com/rectorphp/rector/pull/3694
+[v0.7.52]: https://github.com/rectorphp/rector/compare/v0.7.51...v0.7.52
+[v0.7.51]: https://github.com/rectorphp/rector/compare/v0.7.49...v0.7.51
+[v0.7.49]: https://github.com/rectorphp/rector/compare/vO.7.43...v0.7.49
+[@u01jmg3]: https://github.com/u01jmg3
+[@othercorey]: https://github.com/othercorey
+[@api]: https://github.com/api
