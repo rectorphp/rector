@@ -574,7 +574,7 @@ final class SetList
     /**
      * @var string
      */
-    public const SYMFONY50_TYPES = 'symfony50-types';
+    public const SYMFONY_50_TYPES = 'symfony50-types';
 
     /**
      * @var string
@@ -700,4 +700,9 @@ final class SetList
      * @var string
      */
     public const UNWRAP_COMPAT = 'unwrap-compat';
+
+    /**
+     * @var string
+     */
+    public const SYMFONY_PHP_CONFIG = 'symfony-php-config';
 }
