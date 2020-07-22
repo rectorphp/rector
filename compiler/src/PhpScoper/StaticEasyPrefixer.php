@@ -19,10 +19,6 @@ final class StaticEasyPrefixer
         'Symfony\Component\Console\Style\SymfonyStyle',
         // doctrine annotations to autocomplete
         'JMS\DiExtraBundle\Annotation\Inject',
-        // part of public interface of configs.php
-        'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
-        // well, this is a function
-        // 'Symfony\Component\DependencyInjection\Loader\Configurator\ref',
     ];
 
     /**
@@ -37,6 +33,8 @@ final class StaticEasyPrefixer
         'Symplify\ConsoleColorDiff\*',
         // doctrine annotations to autocomplete
         'Doctrine\ORM\Mapping\*',
+        // part of public interface of configs.php
+        'Symfony\Component\DependencyInjection\Loader\Configurator\*',
     ];
 
     public static function prefixClass(string $class, string $prefix): string
