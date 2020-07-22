@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'unmonitor' => ['string'],
                 'attached' => ['Nette\ComponentModel\IComponent'],
                 'detached' => ['Nette\ComponentModel\IComponent'],
-                'link' => ['string']
+                'link' => ['string'],
             ],
             'Nette\ComponentModel\Container' => [
                 'getComponent' => [
