@@ -273,10 +273,6 @@
             "vendor/bin/changelog-linker link --ansi",
             "vendor/bin/changelog-linker cleanup --ansi"
         ],
-        "check-docs": [
-            "bin/rector dump-rectors | diff --ignore-space-change docs/rector_rules_overview.md - ",
-            "bin/rector dump-nodes | diff --ignore-space-change docs/nodes_overview.md - "
-        ],
         "docs": [
             "bin/rector dump-rectors > docs/rector_rules_overview.md",
             "bin/rector dump-nodes > docs/nodes_overview.md"
