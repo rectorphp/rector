@@ -76,19 +76,16 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->var instanceof Variable) {
+        $dimString = $this->matchNetteFormArrayDimString($node);
+        if ($dimString === null) {
             return null;
         }
 
-        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
+        if ($this->isBeingAssigned($node)) {
             return null;
         }
 
-        if (! $node->dim instanceof String_) {
-            return null;
-        }
-
-        $inputName = $this->getValue($node->dim);
+        $inputName = $this->getValue($dimString);
         $controlName = $inputName . 'Control';
 
         $controlVariableToFormDimFetchAssign = new Assign(new Variable($controlName), clone $node);
@@ -113,5 +110,32 @@ PHP
         $assign->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
 
         return $phpDocInfo;
+    }
+
+    private function matchNetteFormArrayDimString($node): ?String_
+    {
+        if (! $node->var instanceof Variable) {
+            return null;
+        }
+
+        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
+            return null;
+        }
+
+        if (! $node->dim instanceof String_) {
+            return null;
+        }
+
+        return $node->dim;
+    }
+
+    private function isBeingAssigned(ArrayDimFetch $arrayDimFetch): bool
+    {
+        $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Assign) {
+            return false;
+        }
+
+        return $parent->expr === $arrayDimFetch;
     }
 }
