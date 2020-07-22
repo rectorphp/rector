@@ -37,6 +37,10 @@ parameters:
             - Rector\Core\Rector\AbstractRector
             - Rector\FileSystemRector\Rector\AbstractFileSystemRector
 
+        old_to_preffered_classes:
+            # prevent PHPStorm autocomplete mess
+            'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
+
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
 
