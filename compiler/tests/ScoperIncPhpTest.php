@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\Compiler\Tests;
 
 use Iterator;
-use Nette\Utils\Strings;
 use PHPUnit\Framework\TestCase;
-use Symplify\PackageBuilder\Tests\StaticFixtureLoader;
+use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
+use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ScopingTest extends TestCase
+final class ScoperIncPhpTest extends TestCase
 {
     /**
      * @var string
@@ -33,21 +33,22 @@ final class ScopingTest extends TestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        [$content, $expectedContent] = Strings::split($fileInfo->getContents(), "#-----\n#");
+        [$inputContent, $expectedContent] = StaticFixtureSplitter::splitFileInfoToInputAndExpected($fileInfo);
 
         foreach ($this->patcherCallbacks as $patcherCallback) {
             $relativeFilePath = $fileInfo->getRelativeFilePathFromDirectory(__DIR__ . '/Fixture');
-            $content = $patcherCallback($relativeFilePath, self::PREFIX, $content);
+            $inputContent = $patcherCallback($relativeFilePath, self::PREFIX, $inputContent);
         }
 
         // normalize end-line spaces
         $expectedContent = rtrim($expectedContent);
-        $content = rtrim($content);
-        $this->assertSame($expectedContent, $content, $fileInfo->getRelativeFilePath());
+        $inputContent = rtrim($inputContent);
+
+        $this->assertSame($expectedContent, $inputContent, $fileInfo->getRelativeFilePath());
     }
 
     public function provideData(): Iterator
     {
-        return StaticFixtureLoader::loadFromDirectory(__DIR__ . '/Fixture');
+        return StaticFixtureFinder::yieldDirectory(__DIR__ . '/Fixture', '*.yaml');
     }
 }

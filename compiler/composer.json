@@ -16,6 +16,7 @@
         "symplify/console-color-diff": "^8.1.15",
         "symplify/auto-bind-parameter": "^8.1.15",
         "symplify/smart-file-system": "^8.1.15",
+        "symplify/easy-testing": "^8.1.15",
         "symplify/package-builder": "^8.1.15"
     },
     "require-dev": {

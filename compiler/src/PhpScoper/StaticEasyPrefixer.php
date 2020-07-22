@@ -6,6 +6,9 @@ namespace Rector\Compiler\PhpScoper;
 
 use Nette\Utils\Strings;
 
+/**
+ * @see \Rector\Compiler\Tests\PhpScoper\StaticEasyPrefixerTest
+ */
 final class StaticEasyPrefixer
 {
     /**
