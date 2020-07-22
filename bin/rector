@@ -31,6 +31,9 @@ $autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 $autoloadIncluder->autoloadFromCommandLine();
 
+$symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
+$symfonyStyle = $symfonyStyleFactory->create();
+
 try {
     $composerJsonReader = new ComposerJsonReader(__DIR__ . '/../composer.json');
     $versionChecker = new MinimalVersionChecker(
@@ -41,6 +44,24 @@ try {
 
     $rectorConfigsResolver = new RectorConfigsResolver();
     $configFileInfos = $rectorConfigsResolver->provide();
+
+    // report YAML deprecated configs
+    foreach ($configFileInfos as $configFileInfo) {
+        if (! in_array($configFileInfo->getSuffix(), ['yml', 'yaml'], true)) {
+            continue;
+        }
+
+        $warning = sprintf(
+            'You are using YAML format in "%s" config.%sIt will be removed in Rector 0.8. Switch to PHP format as soon as possible with "%s"',
+            $configFileInfo->getRelativeFilePathFromCwd(),
+            PHP_EOL,
+            'https://github.com/migrify/config-transformer'
+        );
+
+        $symfonyStyle->warning($warning);
+
+        sleep(3);
+    }
 
     // Build DI container
     $rectorContainerFactory = new RectorContainerFactory();
@@ -57,7 +78,6 @@ try {
     }
 
 } catch (Throwable $throwable) {
-    $symfonyStyle = (new SymfonyStyleFactory(new PrivatesCaller()))->create();
     $symfonyStyle->error($throwable->getMessage());
     exit(ShellCode::ERROR);
 }

@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Core\Bootstrap;
 
-use Rector\Core\Configuration\Option;
 use Rector\Core\Set\SetResolver;
-use Symfony\Component\Config\FileLocator;
+use Rector\Set\SetProvider;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symplify\SetConfigResolver\ConfigResolver;
+use Symplify\SetConfigResolver\SetAwareConfigResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RectorConfigsResolver
@@ -25,10 +23,16 @@ final class RectorConfigsResolver
      */
     private $configResolver;
 
+    /**
+     * @var SetAwareConfigResolver
+     */
+    private $setAwareConfigResolver;
+
     public function __construct()
     {
         $this->setResolver = new SetResolver();
         $this->configResolver = new ConfigResolver();
+        $this->setAwareConfigResolver = new SetAwareConfigResolver(new SetProvider());
     }
 
     /**
@@ -45,16 +49,7 @@ final class RectorConfigsResolver
      */
     public function resolveSetFileInfosFromConfigFileInfos(array $configFileInfos): array
     {
-        $setConfigFileInfos = [];
-
-        foreach ($configFileInfos as $configFileInfo) {
-            $setNames = $this->resolveSetsParameterFromConfigFile($configFileInfo);
-            foreach ($setNames as $setName) {
-                $setConfigFileInfos[] = $this->setResolver->resolveSetFileInfoByName($setName);
-            }
-        }
-
-        return $setConfigFileInfos;
+        return $this->setAwareConfigResolver->resolveFromParameterSetsFromConfigFiles($configFileInfos);
     }
 
     /**
@@ -86,23 +81,5 @@ final class RectorConfigsResolver
         $setFileInfos = $this->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
 
         return array_merge($configFileInfos, $setFileInfos);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveSetsParameterFromConfigFile(SmartFileInfo $configFileInfo): array
-    {
-        $containerBuilder = new ContainerBuilder();
-        $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator([getcwd()]));
-
-        // getRealPath() cannot be used, as it breaks in phar
-        $phpFileLoader->load($configFileInfo->getPathname());
-
-        if (! $containerBuilder->hasParameter(Option::SETS)) {
-            return [];
-        }
-
-        return $containerBuilder->getParameter(Option::SETS);
     }
 }
