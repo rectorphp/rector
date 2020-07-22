@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Configuration\Option;
-use Rector\Set\ValueObject\Set;
+use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::RECTOR_RECIPE, [
-        # run "bin/rector create" to create a new Rector + tests from this config
+        // run "bin/rector create" to create a new Rector + tests from this config
         'package' => 'Symfony',
         'name' => 'RemoveDefaultGetBlockPrefixRector',
         'node_types' => [
@@ -40,11 +40,11 @@ class TaskType extends AbstractType
 {
 }
 CODE_SAMPLE,
+        // e.g. link to RFC or headline in upgrade guide, 1 or more in the list
         'source' => [
-            # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
             'https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md',
         ],
-        # e.g. symfony30, target config to append this rector to
-        'set' => Set::SYMFONY_30,
+        // e.g. symfony30, target config to append this rector to
+        'set' => SetList::SYMFONY_30,
     ]);
 };

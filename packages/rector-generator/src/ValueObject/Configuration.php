@@ -7,6 +7,7 @@ namespace Rector\RectorGenerator\ValueObject;
 use Nette\Utils\Strings;
 use Rector\Core\Util\StaticRectorStrings;
 use Symplify\SetConfigResolver\ValueObject\Set;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Configuration
 {
@@ -158,13 +159,13 @@ final class Configuration
         return $this->source;
     }
 
-    public function getSetConfig(): ?string
+    public function getSetConfig(): ?SmartFileInfo
     {
         if ($this->set === null) {
             return null;
         }
 
-        return $this->set->getSetFileInfo()->getRealPath();
+        return $this->set->getSetFileInfo();
     }
 
     public function isPhpSnippet(): bool

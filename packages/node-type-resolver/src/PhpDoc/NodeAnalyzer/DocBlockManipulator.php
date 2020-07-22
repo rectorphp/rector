@@ -139,7 +139,12 @@ final class DocBlockManipulator
     {
         // new node, needs to be reparsed
         if ($phpDocInfo->isNewNode()) {
-            return (string) $phpDocInfo->getPhpDocNode();
+            $docContent = (string) $phpDocInfo->getPhpDocNode();
+            if (! $phpDocInfo->isSingleLine()) {
+                return $docContent;
+            }
+
+            return $this->inlineDocContent($docContent);
         }
 
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
@@ -190,5 +195,12 @@ final class DocBlockManipulator
     private function removeSpacesAndAsterisks(string $content): string
     {
         return Strings::replace($content, '#(\s|\*)+#');
+    }
+
+    private function inlineDocContent(string $docContent): string
+    {
+        $docContent = Strings::replace($docContent, "#\n \* #", ' ');
+
+        return Strings::replace($docContent, "#\n \*\/$#", ' */');
     }
 }

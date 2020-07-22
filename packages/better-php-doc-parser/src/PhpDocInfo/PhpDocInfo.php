@@ -84,6 +84,11 @@ final class PhpDocInfo
     private $paramPhpDocNodeFactory;
 
     /**
+     * @var bool
+     */
+    private $isSingleLine = false;
+
+    /**
      * @param mixed[] $tokens
      */
     public function __construct(
@@ -432,6 +437,16 @@ final class PhpDocInfo
         }
 
         return $throwsClasses;
+    }
+
+    public function makeSingleLined(): void
+    {
+        $this->isSingleLine = true;
+    }
+
+    public function isSingleLine(): bool
+    {
+        return $this->isSingleLine;
     }
 
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode

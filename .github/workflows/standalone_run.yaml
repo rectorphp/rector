@@ -17,18 +17,23 @@ jobs:
                     coverage: none # disable xdebug, pcov
                     extensions: "intl"
 
-            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
-            -   run: |
-                    # wait till packagist gets information about new branches
-                    sleep 30
+            # see https://github.com/rlespinasse/github-slug-action
+            -   name: Inject slug/short variables
+                uses: rlespinasse/github-slug-action@v2.x
 
+            # wait till packagist gets information about new branches
+            -   run: sleep 30
+
+            -   run:
                     # 1. install locally
                     mkdir test-paths
                     cd test-paths
 
+                    # 2. install rector to "rector-dir"
                     mkdir rector-dir
-                    # get branch name see https://stackoverflow.com/a/61699863/1348344
-                    composer require rector/rector:dev-${GITHUB_REF#refs/heads/}#${GITHUB_SHA} -d rector-dir --no-progress --ansi
+                    composer require rector/rector:dev-${{ env.GITHUB_REF_SLUG_URL }}#${GITHUB_SHA} -d rector-dir --no-progress --ansi
+
+                    # 3. download symfony demo to "symfony-demo-dir"
                     mkdir symfony-demo-dir
                     composer create-project symfony/symfony-demo symfony-demo-dir --dev --no-progress --ansi
 
@@ -36,7 +41,7 @@ jobs:
                     composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir --no-progress --ansi
                     composer dump-autoload --no-dev -d symfony-demo-dir --ansi
 
-                    # 2. run an another project
+                    # 4. run an another project
                     rector-dir/vendor/bin/rector --ansi
 
                     cd symfony-demo-dir

@@ -1,4 +1,4 @@
-# All 528 Rectors Overview
+# All 530 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -30,7 +30,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
-- [Nette](#nette) (12)
+- [Nette](#nette) (13)
 - [NetteCodeQuality](#nettecodequality) (1)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -59,6 +59,7 @@
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
 - [Privatization](#privatization) (7)
+- [RectorGenerator](#rectorgenerator) (1)
 - [RemovingStatic](#removingstatic) (4)
 - [Renaming](#renaming) (9)
 - [Restoration](#restoration) (7)
@@ -1039,7 +1040,7 @@ Complete missing 3rd argument in case `is_a()` function in case of strings
 - class: [`Rector\CodeQuality\Rector\Concat\JoinStringConcatRector`](/../master/rules/code-quality/src/Rector/Concat/JoinStringConcatRector.php)
 - [test fixtures](/../master/rules/code-quality/tests/Rector/Concat/JoinStringConcatRector/Fixture)
 
-Joins concat of 2 strings
+Joins concat of 2 strings, unless the lenght is too long
 
 ```diff
  class SomeClass
@@ -5004,7 +5005,8 @@ Rename property and method param to match its type
 Rename variable to match get method name
 
 ```diff
- class SomeClass {
+ class SomeClass
+ {
      public function run()
      {
 -        $a = $this->getRunner();
@@ -5056,6 +5058,33 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
          $form = new Form();
 -        $form->addDatePicker('key', 'Label');
 +        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+     }
+ }
+```
+
+<br><br>
+
+### `ChangeFormArrayAccessToAnnotatedControlVariableRector`
+
+- class: [`Rector\Nette\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector`](/../master/rules/nette/src/Rector/ArrayDimFetch/ChangeFormArrayAccessToAnnotatedControlVariableRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/ArrayDimFetch/ChangeFormArrayAccessToAnnotatedControlVariableRector/Fixture)
+
+Change array access magic on `$form` to explicit standalone typed variable
+
+```diff
+ use Nette\Application\UI\Form;
+
+ class SomePresenter
+ {
+     public function run()
+     {
+         $form = new Form();
+         $this->addText('email', 'Email');
+
+-        $form['email']->value = 'hey@hi.hello';
++        /** @var \Nette\Forms\Controls\BaseControl $emailControl */
++        $emailControl = $form['email'];
++        $emailControl->value = 'hey@hi.hello';
      }
  }
 ```
@@ -8032,13 +8061,11 @@ Changes `$this->call()` to static method to static call
 Ensure variable variables are wrapped in curly braces
 
 ```diff
-function run($foo)
-{
--    // Valid in PHP 5 only
+ function run($foo)
+ {
 -    global $$foo->bar;
-+    // Valid in PHP 5 and 7
 +    global ${$foo->bar};
-}
+ }
 ```
 
 <br><br>
@@ -9556,6 +9583,25 @@ Privatize local-only property to private property
          return $this->value;
      }
  }
+```
+
+<br><br>
+
+## RectorGenerator
+
+### `AddNewServiceToSymfonyPhpConfigRector`
+
+- class: [`Rector\RectorGenerator\Rector\Closure\AddNewServiceToSymfonyPhpConfigRector`](/../master/packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php)
+
+Adds a new `$services->set(...)` call to PHP Config
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
++    $services->set(AddNewServiceToSymfonyPhpConfigRector::class);
+ };
 ```
 
 <br><br>

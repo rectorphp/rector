@@ -28,8 +28,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::AUTOLOAD_PATHS, []);
 
-    $parameters->set('rector_recipe', []);
-
     $parameters->set('project_type', 'proprietary');
 
     $parameters->set('nested_chain_method_call_limit', 30);
