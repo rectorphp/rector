@@ -11,6 +11,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # scalar type hints, see https://github.com/nette/security/commit/84024f612fb3f55f5d6e3e3e28eef1ad0388fa56
     $services->set(AddReturnTypeDeclarationRector::class)
         ->arg('$typehintForMethodByClass', [
+            'Nette\Mail\Mailer' => [
+                'send' => 'void',
+            ],
+            'Nette\Forms\Rendering\DefaultFormRenderer' => [
+                'renderControl' => 'Nette\Utils\Html',
+            ],
+            'Nette\Caching\Cache' => [
+                'generateKey' => 'string',
+            ],
+            'Nette\Security\IResource' => [
+                'getResourceId' => 'string',
+            ],
             'Nette\Security\IAuthenticator' => [
                 'authenticate' => 'Nette\Security\IIdentity',
             ],
