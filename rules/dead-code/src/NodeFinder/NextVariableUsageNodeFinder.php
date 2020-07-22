@@ -6,9 +6,12 @@ namespace Rector\DeadCode\NodeFinder;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\NodeTraverser;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -29,14 +32,28 @@ final class NextVariableUsageNodeFinder
      */
     private $parentScopeFinder;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
     public function __construct(
         ParentScopeFinder $parentScopeFinder,
         CallableNodeTraverser $callableNodeTraverser,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        BetterNodeFinder $betterNodeFinder,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parentScopeFinder = $parentScopeFinder;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function find(Assign $assign): ?Node
@@ -46,8 +63,8 @@ final class NextVariableUsageNodeFinder
             return null;
         }
 
+        /** @var Variable $expr */
         $expr = $assign->var;
-
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $scopeNode->stmts, function (Node $currentNode) use (
             $expr,
             &$nextUsageOfVariable
@@ -68,8 +85,7 @@ final class NextVariableUsageNodeFinder
 
             $currentNodeParent = $currentNode->getAttribute(AttributeKey::PARENT_NODE);
 
-            // stop at next assign
-            if ($currentNodeParent instanceof Assign) {
+            if ($currentNodeParent instanceof Assign && ! $this->hasInParentExpression($currentNodeParent, $expr)) {
                 return NodeTraverser::STOP_TRAVERSAL;
             }
 
@@ -79,5 +95,15 @@ final class NextVariableUsageNodeFinder
         });
 
         return $nextUsageOfVariable;
+    }
+
+    private function hasInParentExpression(Assign $assign, Variable $variable): bool
+    {
+        $name = $this->nodeNameResolver->getName($variable);
+        if ($name === null) {
+            return false;
+        }
+
+        return $this->betterNodeFinder->hasVariableOfName($assign->expr, $name);
     }
 }
