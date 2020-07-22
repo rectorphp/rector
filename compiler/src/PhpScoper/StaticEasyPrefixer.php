@@ -22,7 +22,7 @@ final class StaticEasyPrefixer
         // part of public interface of configs.php
         'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
         // well, this is a function
-        'Symfony\Component\DependencyInjection\Loader\Configurator\ref',
+        // 'Symfony\Component\DependencyInjection\Loader\Configurator\ref',
     ];
 
     /**
