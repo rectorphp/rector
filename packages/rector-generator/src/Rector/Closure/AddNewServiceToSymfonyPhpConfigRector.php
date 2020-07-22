@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\SymfonyPhpConfig\NodeAnalyzer\SymfonyPhpConfigClosureAnalyzer;
 
 final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector
 {
@@ -23,6 +24,16 @@ final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector
      * @var string|null
      */
     private $rectorClass;
+
+    /**
+     * @var SymfonyPhpConfigClosureAnalyzer
+     */
+    private $symfonyPhpConfigClosureAnalyzer;
+
+    public function __construct(SymfonyPhpConfigClosureAnalyzer $symfonyPhpConfigClosureAnalyzer)
+    {
+        $this->symfonyPhpConfigClosureAnalyzer = $symfonyPhpConfigClosureAnalyzer;
+    }
 
     public function setRectorClass(string $rectorClass): void
     {
@@ -46,7 +57,7 @@ final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isPhpConfigClosure($node)) {
+        if (! $this->symfonyPhpConfigClosureAnalyzer->isPhpConfigClosure($node)) {
             return null;
         }
 
@@ -78,23 +89,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 CODE_SAMPLE
             ),
         ]);
-    }
-
-    private function isPhpConfigClosure(Closure $closure): bool
-    {
-        if (count($closure->params) !== 1) {
-            return false;
-        }
-
-        $onlyParam = $closure->params[0];
-        if ($onlyParam->type === null) {
-            return false;
-        }
-
-        return $this->isName(
-            $onlyParam->type,
-            'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator'
-        );
     }
 
     private function createServicesSetMethodCall(string $className): MethodCall

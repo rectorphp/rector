@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
-use Rector\SymfonyPhpConfig\Rector\Closure\AddEmptyLineBetweenCallsInPhpConfigRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(AddEmptyLineBetweenCallsInPhpConfigRector::class);
+    $services->defaults()
+        ->public()
+        ->autowire();
+
+    $services->load('Rector\SymfonyPhpConfig\\', __DIR__ . '/../src')
+        ->exclude([__DIR__ . '/../src/Rector/**/*Rector.php']);
 };
