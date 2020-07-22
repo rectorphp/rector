@@ -2,50 +2,62 @@
 
 ## 1. Configure a Rector Recipe in `rector.yaml`
 
-```yaml
-# rector.yaml
-parameters:
-    rector_recipe:
-        # run "bin/rector create" to create a new Rector + tests from this config
-        package: "Celebrity"
-        name: "SplitToExplodeRector"
-        node_types:
-            # put the main node first, it is used to create the namespace
-            - "Assign"
-        description: "Removes unneeded $a = $a assignments"
-        code_before: >
-            <?php
+```php
+<?php
 
-            class SomeClass
-            {
-                public function run()
-                {
-                    $a = $a;
-                }
-            }
+declare(strict_types=1);
 
-        code_after: >
-            <?php
+use PhpParser\Node\Expr\Assign;
+use Rector\Core\Configuration\Option;
+use Rector\Set\ValueObject\SetList;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-            class SomeClass
-            {
-                public function run()
-                {
-                }
-            }
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
 
-        source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
-            - ""
-        set: "celebrity" # e.g. symfony30, target config to append this rector to
+    $parameters->set(Option::RECTOR_RECIPE, [
+        'package' => 'Celebrity',
+        'name' => 'SplitToExplodeRector',
+        'node_types' => [
+            Assign::class,
+        ],
+        'description' => 'Removes unneeded $a = $a assignments',
+        'code_before' => <<<'CODE_SAMPLE'
+<?php
+
+class SomeClass
+{
+    public function run()
+    {
+        $a = $a;
+    }
+}
+CODE_SAMPLE,
+        'code_after' => <<<'CODE_SAMPLE'
+<?php
+
+class SomeClass
+{
+    public function run()
+    {
+    }
+}
+CODE_SAMPLE,
+        // e.g. link to RFC or headline in upgrade guide, 1 or more in the list
+        'source' => [
+        ],
+        // e.g. symfony30, target config to append this rector to
+        'set' => SetList::CELEBRITY,
+    ]);
+};
 ```
 
 ## 2. Generate it
 
 ```bash
 vendor/bin/rector create-rector
-```
-There is also a shortcut command:
-```bash
+
+# or for short
 vendor/bin/rector c
 ```
 

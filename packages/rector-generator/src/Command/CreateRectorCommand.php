@@ -144,9 +144,9 @@ final class CreateRectorCommand extends Command
             return ShellCode::SUCCESS;
         }
 
-        $this->generateFiles($templateFileInfos, $templateVariables, $configuration);
-
         $this->configFilesystem->appendRectorServiceToSet($configuration, $templateVariables);
+
+        $this->generateFiles($templateFileInfos, $templateVariables, $configuration);
 
         $this->printSuccess($configuration->getName());
 

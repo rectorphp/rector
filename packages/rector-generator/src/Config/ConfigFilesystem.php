@@ -6,7 +6,12 @@ namespace Rector\RectorGenerator\Config;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
-use Rector\Core\Exception\NotImplementedYetException;
+use PhpParser\Node;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
+use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\RectorGenerator\Rector\Closure\AddNewServiceToSymfonyPhpConfigRector;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\ValueObject\Configuration;
 
@@ -22,9 +27,31 @@ final class ConfigFilesystem
      */
     private $templateFactory;
 
-    public function __construct(TemplateFactory $templateFactory)
-    {
+    /**
+     * @var Parser
+     */
+    private $parser;
+
+    /**
+     * @var AddNewServiceToSymfonyPhpConfigRector
+     */
+    private $addNewServiceToSymfonyPhpConfigRector;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(
+        TemplateFactory $templateFactory,
+        Parser $parser,
+        AddNewServiceToSymfonyPhpConfigRector $addNewServiceToSymfonyPhpConfigRector,
+        BetterStandardPrinter $betterStandardPrinter
+    ) {
         $this->templateFactory = $templateFactory;
+        $this->parser = $parser;
+        $this->addNewServiceToSymfonyPhpConfigRector = $addNewServiceToSymfonyPhpConfigRector;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -36,20 +63,40 @@ final class ConfigFilesystem
             return;
         }
 
-        if (! file_exists($configuration->getSetConfig())) {
-            return;
-        }
+        $setConfigFileInfo = $configuration->getSetConfig();
+        $setFileContents = $setConfigFileInfo->getContents();
 
-        $setConfigContent = FileSystem::read($configuration->getSetConfig());
-
-        // already added
+        // already added?
         $rectorFqnName = $this->templateFactory->create(self::RECTOR_FQN_NAME_PATTERN, $templateVariables);
-        if (Strings::contains($setConfigContent, $rectorFqnName)) {
+        if (Strings::contains($setFileContents, $rectorFqnName)) {
             return;
         }
 
-        throw new NotImplementedYetException('Add *.php config rule append support');
+        // 1. parse the file
+        $setConfigNodes = $this->parser->parseFileInfo($setConfigFileInfo);
 
-        // FileSystem::write($configuration->getSetConfig(), $newSetConfigContent);
+        // 2. add the set() call
+        $this->decorateNamesToFullyQualified($setConfigNodes);
+
+        $nodeTraverser = new NodeTraverser();
+
+        $this->addNewServiceToSymfonyPhpConfigRector->setRectorClass($rectorFqnName);
+        $nodeTraverser->addVisitor($this->addNewServiceToSymfonyPhpConfigRector);
+        $setConfigNodes = $nodeTraverser->traverse($setConfigNodes);
+
+        // 3. print the content back to file
+        $changedSetConfigContent = $this->betterStandardPrinter->prettyPrintFile($setConfigNodes);
+        FileSystem::write($setConfigFileInfo->getRealPath(), $changedSetConfigContent);
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function decorateNamesToFullyQualified(array $nodes): void
+    {
+        // decorate nodes with names first
+        $nameResolverNodeTraverser = new NodeTraverser();
+        $nameResolverNodeTraverser->addVisitor(new NameResolver());
+        $nameResolverNodeTraverser->traverse($nodes);
     }
 }
