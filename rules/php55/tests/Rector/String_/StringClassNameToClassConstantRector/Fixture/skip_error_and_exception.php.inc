@@ -2,12 +2,12 @@
 
 namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\Fixture;
 
-class SkipError
+class SkipErrorAndException
 {
     public function run()
     {
-        return 'Error';
+        return 'Error' && 'Exception';
 
-        return 'ERROR';
+        return 'ERROR' && 'EXCEPTION';
     }
 }
