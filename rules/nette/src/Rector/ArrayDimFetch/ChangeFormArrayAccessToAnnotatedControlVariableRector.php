@@ -90,7 +90,7 @@ class SomePresenter
         $form = new Form();
         $this->addText('email', 'Email');
 
-        /** @var \Nette\Forms\Controls\BaseControl $emailControl */
+        /** @var \Nette\Forms\Controls\TextInput $emailControl */
         $emailControl = $form['email'];
         $emailControl->value = 'hey@hi.hello';
     }

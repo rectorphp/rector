@@ -5202,7 +5202,7 @@ Change array access magic on `$form` to explicit standalone typed variable
          $this->addText('email', 'Email');
 
 -        $form['email']->value = 'hey@hi.hello';
-+        /** @var \Nette\Forms\Controls\BaseControl $emailControl */
++        /** @var \Nette\Forms\Controls\TextInput $emailControl */
 +        $emailControl = $form['email'];
 +        $emailControl->value = 'hey@hi.hello';
      }
