@@ -154,14 +154,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         // show current Rector class on --debug
-        if ($this->symfonyStyle->isDebug()) {
-            if ($this->previousAppliedClass !== static::class) {
-                // prevent spamming with the same class over and over
-                // indented on purpose to improve log nesting under [refactoring]
-                $this->symfonyStyle->writeln('    [applying] ' . static::class);
-                $this->previousAppliedClass = static::class;
-            }
-        }
+        $this->printDebugApplying();
 
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
         $originalNodeWithAttributes = clone $node;
@@ -377,5 +370,21 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // names are the same
         return $this->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
+    }
+
+    private function printDebugApplying(): void
+    {
+        if (! $this->symfonyStyle->isDebug()) {
+            return;
+        }
+
+        if ($this->previousAppliedClass === static::class) {
+            return;
+        }
+
+        // prevent spamming with the same class over and over
+        // indented on purpose to improve log nesting under [refactoring]
+        $this->symfonyStyle->writeln('    [applying] ' . static::class);
+        $this->previousAppliedClass = static::class;
     }
 }
