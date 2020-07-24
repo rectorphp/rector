@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
@@ -183,11 +183,15 @@ final class MethodCallManipulator
         return $parentNode;
     }
 
-    private function resolveRootVariable(MethodCall $methodCall): Expr
+    private function resolveRootVariable(MethodCall $methodCall): Node
     {
         $callerNode = $methodCall->var;
-        while ($callerNode instanceof MethodCall) {
-            $callerNode = $callerNode->var;
+        while ($callerNode instanceof MethodCall || $callerNode instanceof StaticCall) {
+            if ($callerNode instanceof StaticCall) {
+                $callerNode = $callerNode->class;
+            } else {
+                $callerNode = $callerNode->var;
+            }
         }
 
         return $callerNode;
