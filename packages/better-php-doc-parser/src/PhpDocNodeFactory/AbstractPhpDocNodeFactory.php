@@ -49,6 +49,7 @@ abstract class AbstractPhpDocNodeFactory
 
     protected function resolveFqnTargetEntity(string $targetEntity, Node $node): string
     {
+        $targetEntity = $this->getCleanedUpTargetEntity($targetEntity);
         if (class_exists($targetEntity)) {
             return $targetEntity;
         }
@@ -75,5 +76,10 @@ abstract class AbstractPhpDocNodeFactory
         $closingSpace = $match['closing_space'] ?? '';
 
         return [$openingSpace, $closingSpace];
+    }
+
+    private function getCleanedUpTargetEntity(string $targetEntity): string
+    {
+        return Strings::replace($targetEntity, '#::class#', '');
     }
 }
