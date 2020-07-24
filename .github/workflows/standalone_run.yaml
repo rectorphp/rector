@@ -22,7 +22,7 @@ jobs:
                 uses: rlespinasse/github-slug-action@v2.x
 
             # wait till packagist gets information about new branches
-            -   run: sleep 30
+            -   run: sleep 15
 
             -   run:
                     # 1. install locally
