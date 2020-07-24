@@ -164,11 +164,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const METHOD_CALL_NODE_CALLER_NAME = 'methodCallVariableName';
-
-    /**
-     * @var string
-     */
     public const IS_REGULAR_PATTERN = 'is_regular_pattern';
 
     /**

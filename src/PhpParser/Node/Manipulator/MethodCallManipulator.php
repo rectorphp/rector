@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -113,15 +114,17 @@ final class MethodCallManipulator
             return [];
         }
 
-        return $this->betterNodeFinder->find($scopeNode, function (Node $node) use ($variable) {
+        $variableName = $this->nodeNameResolver->getName($variable);
+
+        return $this->betterNodeFinder->find($scopeNode, function (Node $node) use ($variableName) {
             if (! $node instanceof MethodCall) {
                 return false;
             }
 
-            /** @var string $methodCallVariableName */
-            $methodCallVariableName = $node->getAttribute(AttributeKey::METHOD_CALL_NODE_CALLER_NAME);
+            // cover fluent interfaces too
+            $callerNode = $this->resolveRootVariable($node);
 
-            return $this->nodeNameResolver->isName($variable, $methodCallVariableName);
+            return $this->nodeNameResolver->isName($callerNode, $variableName);
         });
     }
 
@@ -178,5 +181,15 @@ final class MethodCallManipulator
         }
 
         return $parentNode;
+    }
+
+    private function resolveRootVariable(MethodCall $methodCall): Expr
+    {
+        $callerNode = $methodCall->var;
+        while ($callerNode instanceof MethodCall) {
+            $callerNode = $callerNode->var;
+        }
+
+        return $callerNode;
     }
 }
