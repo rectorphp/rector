@@ -187,11 +187,7 @@ final class MethodCallManipulator
     {
         $callerNode = $methodCall->var;
         while ($callerNode instanceof MethodCall || $callerNode instanceof StaticCall) {
-            if ($callerNode instanceof StaticCall) {
-                $callerNode = $callerNode->class;
-            } else {
-                $callerNode = $callerNode->var;
-            }
+            $callerNode = $callerNode instanceof StaticCall ? $callerNode->class : $callerNode->var;
         }
 
         return $callerNode;

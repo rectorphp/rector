@@ -166,27 +166,18 @@ final class FormVariableInputNameTypeResolver
      */
     private function resolveExternalMethodNamesByInputNames(Variable $formVariable): array
     {
-        /** @var Assign|null $formVariableAssignNode */
-        $formVariableAssignNode = $this->betterNodeFinder->findFirstPrevious($formVariable, function (Node $node) use (
-            $formVariable
-        ) {
-            if (! $node instanceof Assign) {
-                return false;
-            }
-
-            return $this->betterStandardPrinter->areNodesEqual($node->var, $formVariable);
-        });
-
-        if ($formVariableAssignNode === null) {
+        /** @var Assign|null $formVariableAssign */
+        $formVariableAssign = $this->findPreviousAssignToVariable($formVariable);
+        if ($formVariableAssign === null) {
             return [];
         }
 
-        if ($formVariableAssignNode->expr instanceof New_) {
-            return $this->resolveFromNew($formVariableAssignNode->expr);
+        if ($formVariableAssign->expr instanceof New_) {
+            return $this->resolveFromNew($formVariableAssign->expr);
         }
 
-        if ($formVariableAssignNode->expr instanceof MethodCall) {
-            return $this->resolveFromMethodCall($formVariableAssignNode->expr);
+        if ($formVariableAssign->expr instanceof MethodCall) {
+            return $this->resolveFromMethodCall($formVariableAssign->expr);
         }
 
         return [];
@@ -255,7 +246,10 @@ final class FormVariableInputNameTypeResolver
             return [];
         }
 
-        return $this->resolveMethodNamesByInputNames($lastReturn->expr);
+        $initialAssignMethodNamesByInputNames = $this->resolveInitialVariableAssignMethodNamesByInputNames($lastReturn);
+        $previousMethodCallMethodNamesByInputNames = $this->resolveMethodNamesByInputNames($lastReturn->expr);
+
+        return array_merge($initialAssignMethodNamesByInputNames, $previousMethodCallMethodNamesByInputNames);
     }
 
     /**
@@ -270,5 +264,41 @@ final class FormVariableInputNameTypeResolver
         }
 
         return $this->resolveMethodNamesByInputNames($thisVariable);
+    }
+
+    private function findPreviousAssignToVariable(Variable $variable): ?Assign
+    {
+        return $this->betterNodeFinder->findFirstPrevious($variable, function (Node $node) use ($variable) {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            return $this->betterStandardPrinter->areNodesEqual($node->var, $variable);
+        });
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function resolveInitialVariableAssignMethodNamesByInputNames(Return_ $return): array
+    {
+        if (! $return->expr instanceof Variable) {
+            return [];
+        }
+
+        $initialAssign = $this->findPreviousAssignToVariable($return->expr);
+        if (! $initialAssign instanceof Assign) {
+            return [];
+        }
+
+        if ($initialAssign->expr instanceof MethodCall) {
+            return $this->resolveFromMethodCall($initialAssign->expr);
+        }
+
+        if ($initialAssign->expr instanceof New_) {
+            return $this->resolveFromNew($initialAssign->expr);
+        }
+
+        return [];
     }
 }
