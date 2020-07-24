@@ -1,4 +1,4 @@
-# All 531 Rectors Overview
+# All 532 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -22,6 +22,7 @@
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
 - [Guzzle](#guzzle) (1)
+- [Injection](#injection) (1)
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (4)
@@ -240,11 +241,17 @@ Move interface to "Contract" namespace
 
 Move classes by their suffix to their own group/directory
 
-```yaml
-services:
-    Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector:
-        $groupNamesBySuffix:
-            - Repository
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(MoveServicesBySuffixToDirectoryRector::class)
+        ->arg('$groupNamesBySuffix', ['Repository']);
+};
 ```
 
 ↓
@@ -402,16 +409,17 @@ Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.
 
 Changes method calls based on matching the first parameter value.
 
-```yaml
-services:
-    Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector:
-        $methodNamesByTypes:
-            getParam:
-                match_parameter: paging
-                replace_with: getAttribute
-            withParam:
-                match_parameter: paging
-                replace_with: withAttribute
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameMethodCallBasedOnParameterRector::class)
+        ->arg('$methodNamesByTypes', ['getParam' => ['match_parameter' => 'paging', 'replace_with' => 'getAttribute'], 'withParam' => ['match_parameter' => 'paging', 'replace_with' => 'withAttribute']]);
+};
 ```
 
 ↓
@@ -1981,10 +1989,17 @@ Changes negate of empty comparison of nullable value to explicit === or !== comp
 
 Changes `$this->...` to self:: or vise versa for specific types
 
-```yaml
-services:
-    Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector:
-        PHPUnit\TestCase: self
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(PreferThisOrSelfMethodCallRector::class)
+        ->arg('PHPUnit\TestCase', 'self');
+};
 ```
 
 ↓
@@ -2049,11 +2064,17 @@ Removes unused use aliases. Keep annotation aliases like "Doctrine\ORM\Mapping a
 
 Turns array return to yield return in specific type and method
 
-```yaml
-services:
-    Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector:
-        EventSubscriberInterface:
-            - getSubscribedEvents
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ReturnArrayClassMethodToYieldRector::class)
+        ->arg('EventSubscriberInterface', ['getSubscribedEvents']);
+};
 ```
 
 ↓
@@ -2378,11 +2399,17 @@ Wrap encapsed variables in curly braces
 
 Turns yield return to array return in specific type and method
 
-```yaml
-services:
-    Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector:
-        EventSubscriberInterface:
-            - getSubscribedEvents
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(YieldClassMethodToArrayClassMethodRector::class)
+        ->arg('EventSubscriberInterface', ['getSubscribedEvents']);
+};
 ```
 
 ↓
@@ -3313,15 +3340,17 @@ Decouple `$message` property from `sprintf()` calls in `$this->smyfonyStyle->met
 
 Move class method with its all dependencies to own class by method name
 
-```yaml
-services:
-    Rector\Decouple\Rector\DecoupleClassMethodToOwnClassRector:
-        $methodNamesByClass:
-            SomeClass:
-                someMethod:
-                    class: NewDecoupledClass
-                    method: someRenamedMethod
-                    parent_class: AddedParentClass
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Decouple\Rector\DecoupleClassMethodToOwnClassRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(DecoupleClassMethodToOwnClassRector::class)
+        ->arg('$methodNamesByClass', ['SomeClass' => ['someMethod' => ['class' => 'NewDecoupledClass', 'method' => 'someRenamedMethod', 'parent_class' => 'AddedParentClass']]]);
+};
 ```
 
 ↓
@@ -3369,9 +3398,16 @@ class NewDecoupledClass extends AddedParentClass
 
 Add entity id with annotations when meets condition
 
-```yaml
-services:
-    Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector: {  }
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(AddEntityIdByConditionRector::class);
+};
 ```
 
 ↓
@@ -4363,6 +4399,53 @@ Changes getMessage(..., true) to `getMessageAsArray()`
 
 <br><br>
 
+## Injection
+
+### `StaticCallToAnotherServiceConstructorInjectionRector`
+
+- class: [`Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector`](/../master/rules/injection/src/Rector/StaticCall/StaticCallToAnotherServiceConstructorInjectionRector.php)
+- [test fixtures](/../master/rules/injection/tests/Rector/StaticCall/StaticCallToAnotherServiceConstructorInjectionRector/Fixture)
+
+Change static call to service method via constructor injection
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(StaticCallToAnotherServiceConstructorInjectionRector::class);
+};
+```
+
+↓
+
+```diff
+-use Nette\Utils\FileSystem;
++use Symplify\SmartFileSystem\SmartFileSystem;
+
+ class SomeClass
+ {
++    /**
++     * @var SmartFileSystem
++     */
++    private $smartFileSystem;
++    public function __construct(SmartFileSystem $smartFileSystem)
++    {
++        $this->smartFileSystem = $smartFileSystem;
++    }
+     public function run()
+     {
+-        return FileSystem::write('file', 'content');
++        return $this->smartFileSystem->dumpFile('file', 'content');
+     }
+ }
+```
+
+<br><br>
+
 ## JMS
 
 ### `RemoveJmsInjectParamsAnnotationRector`
@@ -4677,11 +4760,17 @@ Turns fluent interface calls to classic ones.
 
 Turns defined `__get`/`__set` to specific method calls.
 
-```yaml
-services:
-    Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector:
-        SomeContainer:
-            set: addService
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(GetAndSetToMethodCallRector::class)
+        ->arg('SomeContainer', ['set' => 'addService']);
+};
 ```
 
 ↓
@@ -4692,12 +4781,17 @@ services:
 +$container->setService("someService", $someService);
 ```
 
-```yaml
-services:
-    Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector:
-        $typeToMethodCalls:
-            SomeContainer:
-                get: getService
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(GetAndSetToMethodCallRector::class)
+        ->arg('$typeToMethodCalls', ['SomeContainer' => ['get' => 'getService']]);
+};
 ```
 
 ↓
@@ -4717,11 +4811,17 @@ services:
 
 Removes "return `$this;"` from *fluent interfaces* for specified classes.
 
-```yaml
-services:
-    Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector:
-        -
-            - SomeExampleClass
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ReturnThisRemoveRector::class)
+        ->arg(0, ['SomeExampleClass']);
+};
 ```
 
 ↓
@@ -4750,10 +4850,17 @@ services:
 
 Turns defined code uses of "__toString()" method  to specific method calls.
 
-```yaml
-services:
-    Rector\MagicDisclosure\Rector\String_\ToStringToMethodCallRector:
-        SomeObject: getPath
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\MagicDisclosure\Rector\String_\ToStringToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ToStringToMethodCallRector::class)
+        ->arg('SomeObject', 'getPath');
+};
 ```
 
 ↓
@@ -4775,11 +4882,17 @@ services:
 
 Turns defined `__isset`/`__unset` calls to specific method calls.
 
-```yaml
-services:
-    Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector:
-        SomeContainer:
-            isset: hasService
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(UnsetAndIssetToMethodCallRector::class)
+        ->arg('SomeContainer', ['isset' => 'hasService']);
+};
 ```
 
 ↓
@@ -4790,11 +4903,17 @@ services:
 +$container->hasService("someKey");
 ```
 
-```yaml
-services:
-    Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector:
-        SomeContainer:
-            unset: removeService
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(UnsetAndIssetToMethodCallRector::class)
+        ->arg('SomeContainer', ['unset' => 'removeService']);
+};
 ```
 
 ↓
@@ -5976,13 +6095,17 @@ Order properties by complexity, from the simplest like scalars to the most compl
 
 Order public methods required by interface in custom orderer
 
-```yaml
-services:
-    Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector:
-        $methodOrderByInterfaces:
-            FoodRecipeInterface:
-                - getDescription
-                - process
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(OrderPublicInterfaceMethodRector::class)
+        ->arg('$methodOrderByInterfaces', ['FoodRecipeInterface' => ['getDescription', 'process']]);
+};
 ```
 
 ↓
@@ -6431,15 +6554,17 @@ Add @see annotation test of the class for faster jump to test. Make it FQN, so i
 
 Move array argument from tests into data provider [configurable]
 
-```yaml
-services:
-    Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector:
-        $configuration:
-            -
-                class: PHPUnit\Framework\TestCase
-                old_method: doTestMultiple
-                new_method: doTestSingle
-                variable_name: number
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ArrayArgumentInTestToDataProviderRector::class)
+        ->arg('$configuration', [['class' => 'PHPUnit\Framework\TestCase', 'old_method' => 'doTestMultiple', 'new_method' => 'doTestSingle', 'variable_name' => 'number']]);
+};
 ```
 
 ↓
@@ -9650,11 +9775,17 @@ Convert new X to new factories
 
 Convert static calls in PHPUnit test cases, to `get()` from the container of KernelTestCase
 
-```yaml
-services:
-    Rector\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector:
-        staticClassTypes:
-            - EntityFactory
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(PHPUnitStaticToKernelTestCaseGetRector::class)
+        ->arg('staticClassTypes', ['EntityFactory']);
+};
 ```
 
 ↓
@@ -9695,11 +9826,17 @@ services:
 
 Convert new `X/Static::call()` to factories in entities, pass them via constructor to `each` other
 
-```yaml
-services:
-    Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector:
-        $typesToServices:
-            - StaticClass
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(PassFactoryToUniqueObjectRector::class)
+        ->arg('$typesToServices', ['StaticClass']);
+};
 ```
 
 ↓
@@ -9763,11 +9900,17 @@ services:
 
 Changes types to setter injection
 
-```yaml
-services:
-    Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector:
-        $staticTypes:
-            - SomeStaticClass
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(StaticTypeToSetterInjectionRector::class)
+        ->arg('$staticTypes', ['SomeStaticClass']);
+};
 ```
 
 ↓
@@ -9806,12 +9949,17 @@ services:
 
 Turns defined annotations above properties and methods to their new values.
 
-```yaml
-services:
-    Rector\Renaming\Rector\Annotation\RenameAnnotationRector:
-        $classToAnnotationMap:
-            PHPUnit\Framework\TestCase:
-                test: scenario
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\Rector\Annotation\RenameAnnotationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameAnnotationRector::class)
+        ->arg('$classToAnnotationMap', ['PHPUnit\Framework\TestCase' => ['test' => 'scenario']]);
+};
 ```
 
 ↓
@@ -9838,12 +9986,17 @@ services:
 
 Replaces defined class constants in their calls.
 
-```yaml
-services:
-    Rector\Renaming\Rector\Constant\RenameClassConstantRector:
-        SomeClass:
-            OLD_CONSTANT: NEW_CONSTANT
-            OTHER_OLD_CONSTANT: 'DifferentClass::NEW_CONSTANT'
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameClassConstantRector::class)
+        ->arg('SomeClass', ['OLD_CONSTANT' => 'NEW_CONSTANT', 'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT']);
+};
 ```
 
 ↓
@@ -9864,11 +10017,17 @@ services:
 
 Replaces defined classes by new ones.
 
-```yaml
-services:
-    Rector\Renaming\Rector\Class_\RenameClassRector:
-        $oldToNewClasses:
-            App\SomeOldClass: App\SomeNewClass
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\Rector\Class_\RenameClassRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameClassRector::class)
+        ->arg('$oldToNewClasses', ['App\SomeOldClass' => 'App\SomeNewClass']);
+};
 ```
 
 ↓
@@ -9919,13 +10078,17 @@ Replace constant by new ones
 
 Rename func call to static call
 
-```yaml
-services:
-    Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector:
-        $functionsToStaticCalls:
-            strPee:
-                - Strings
-                - strPaa
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameFuncCallToStaticCallRector::class)
+        ->arg('$functionsToStaticCalls', ['strPee' => ['Strings', 'strPaa']]);
+};
 ```
 
 ↓
@@ -9950,11 +10113,17 @@ services:
 
 Turns defined function call new one.
 
-```yaml
-services:
-    Rector\Renaming\Rector\Function_\RenameFunctionRector:
-        $oldFunctionToNewFunction:
-            view: Laravel\Templating\render
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\Rector\Function_\RenameFunctionRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameFunctionRector::class)
+        ->arg('$oldFunctionToNewFunction', ['view' => 'Laravel\Templating\render']);
+};
 ```
 
 ↓
@@ -9973,12 +10142,17 @@ services:
 
 Turns method names to new ones.
 
-```yaml
-services:
-    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        SomeExampleClass:
-            $oldToNewMethodsByClass:
-                oldMethod: newMethod
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameMethodRector::class)
+        ->arg('SomeExampleClass', ['$oldToNewMethodsByClass' => ['oldMethod' => 'newMethod']]);
+};
 ```
 
 ↓
@@ -9998,11 +10172,17 @@ services:
 
 Replaces old namespace by new one.
 
-```yaml
-services:
-    Rector\Renaming\Rector\Namespace_\RenameNamespaceRector:
-        $oldToNewNamespaces:
-            SomeOldNamespace: SomeNewNamespace
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\Rector\Namespace_\RenameNamespaceRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameNamespaceRector::class)
+        ->arg('$oldToNewNamespaces', ['SomeOldNamespace' => 'SomeNewNamespace']);
+};
 ```
 
 ↓
@@ -10021,13 +10201,17 @@ services:
 
 Turns method names to new ones.
 
-```yaml
-services:
-    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
-        SomeClass:
-            oldMethod:
-                - AnotherExampleClass
-                - newStaticMethod
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameStaticMethodRector::class)
+        ->arg('SomeClass', ['oldMethod' => ['AnotherExampleClass', 'newStaticMethod']]);
+};
 ```
 
 ↓
@@ -10037,12 +10221,17 @@ services:
 +AnotherExampleClass::newStaticMethod();
 ```
 
-```yaml
-services:
-    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
-        $oldToNewMethodByClasses:
-            SomeClass:
-                oldMethod: newStaticMethod
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameStaticMethodRector::class)
+        ->arg('$oldToNewMethodByClasses', ['SomeClass' => ['oldMethod' => 'newStaticMethod']]);
+};
 ```
 
 ↓
@@ -10063,13 +10252,17 @@ services:
 
 In case you have accidentally removed use imports but code still contains partial use statements, this will save you
 
-```yaml
-services:
-    Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector:
-        $useImportsToRestore:
-            -
-                - Doctrine\ORM\Mapping
-                - ORM
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(CompleteImportForPartialAnnotationRector::class)
+        ->arg('$useImportsToRestore', [['Doctrine\ORM\Mapping', 'ORM']]);
+};
 ```
 
 ↓
@@ -10095,11 +10288,17 @@ services:
 
 Complete missing constructor dependency instance by type
 
-```yaml
-services:
-    Rector\Restoration\Rector\New_\CompleteMissingDependencyInNewRector:
-        $classToInstantiateByType:
-            RandomDependency: RandomDependency
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Restoration\Rector\New_\CompleteMissingDependencyInNewRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(CompleteMissingDependencyInNewRector::class)
+        ->arg('$classToInstantiateByType', ['RandomDependency' => 'RandomDependency']);
+};
 ```
 
 ↓
@@ -10465,10 +10664,17 @@ Classes that have no children nor are used, should have abstract
 
 Move dependency passed to all children to parent as @inject/@required dependency
 
-```yaml
-services:
-    Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector:
-        $framework: nette
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(MultiParentingToAbstractDependencyRector::class)
+        ->arg('$framework', 'nette');
+};
 ```
 
 ↓
@@ -10817,11 +11023,18 @@ Change type in CollectionType from alias string to class reference
 
 Change XML loader to YAML in Bundle Extension
 
-```yaml
-services:
-    Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector:
-        $from: xml
-        $to: yaml
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ChangeFileLoaderInExtensionAndKernelRector::class)
+        ->arg('$from', 'xml')
+        ->arg('$to', 'yaml');
+};
 ```
 
 ↓
@@ -11659,13 +11872,17 @@ Change param type of passed `getId()` to UuidInterface type declaration
 
 Add param types where needed
 
-```yaml
-services:
-    Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
-        $typehintForParameterByMethodByClass:
-            SomeClass:
-                process:
-                    - string
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(AddParamTypeDeclarationRector::class)
+        ->arg('$typehintForParameterByMethodByClass', ['SomeClass' => ['process' => ['string']]]);
+};
 ```
 
 ↓
@@ -11840,11 +12057,17 @@ Turns action injection in Controllers to constructor injection
 
 Add interface by used trait
 
-```yaml
-services:
-    Rector\Core\Rector\Class_\AddInterfaceByTraitRector:
-        $interfaceByTrait:
-            SomeTrait: SomeInterface
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Class_\AddInterfaceByTraitRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(AddInterfaceByTraitRector::class)
+        ->arg('$interfaceByTrait', ['SomeTrait' => 'SomeInterface']);
+};
 ```
 
 ↓
@@ -11887,12 +12110,17 @@ Add method parent call, in case new parent method is added
 
 Changes defined return typehint of method and class.
 
-```yaml
-services:
-    Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
-        $typehintForMethodByClass:
-            SomeClass:
-                getData: array
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(AddReturnTypeDeclarationRector::class)
+        ->arg('$typehintForMethodByClass', ['SomeClass' => ['getData' => 'array']]);
+};
 ```
 
 ↓
@@ -11939,16 +12167,17 @@ Turns non-private properties with `@annotation` to private properties and constr
 
 This Rector adds new default arguments in calls of defined methods and class types.
 
-```yaml
-services:
-    Rector\Core\Rector\Argument\ArgumentAdderRector:
-        $positionWithDefaultValueByMethodNamesByClassTypes:
-            SomeExampleClass:
-                someMethod:
-                    -
-                        name: someArgument
-                        default_value: 'true'
-                        type: SomeType
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Argument\ArgumentAdderRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ArgumentAdderRector::class)
+        ->arg('$positionWithDefaultValueByMethodNamesByClassTypes', ['SomeExampleClass' => ['someMethod' => [['name' => 'someArgument', 'default_value' => 'true', 'type' => 'SomeType']]]]);
+};
 ```
 
 ↓
@@ -11959,16 +12188,17 @@ services:
 +$someObject->someMethod(true);
 ```
 
-```yaml
-services:
-    Rector\Core\Rector\Argument\ArgumentAdderRector:
-        $positionWithDefaultValueByMethodNamesByClassTypes:
-            SomeExampleClass:
-                someMethod:
-                    -
-                        name: someArgument
-                        default_value: 'true'
-                        type: SomeType
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Argument\ArgumentAdderRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ArgumentAdderRector::class)
+        ->arg('$positionWithDefaultValueByMethodNamesByClassTypes', ['SomeExampleClass' => ['someMethod' => [['name' => 'someArgument', 'default_value' => 'true', 'type' => 'SomeType']]]]);
+};
 ```
 
 ↓
@@ -11992,15 +12222,17 @@ services:
 
 Replaces defined map of arguments in defined methods and their calls.
 
-```yaml
-services:
-    Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector:
-        SomeExampleClass:
-            someMethod:
-                -
-                    -
-                        before: 'SomeClass::OLD_CONSTANT'
-                        after: 'false'
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ArgumentDefaultValueReplacerRector::class)
+        ->arg('SomeExampleClass', ['someMethod' => [[['before' => 'SomeClass::OLD_CONSTANT', 'after' => 'false']]]]);
+};
 ```
 
 ↓
@@ -12020,13 +12252,17 @@ services:
 
 Removes defined arguments in defined methods and their calls.
 
-```yaml
-services:
-    Rector\Core\Rector\Argument\ArgumentRemoverRector:
-        ExampleClass:
-            someMethod:
-                -
-                    value: 'true'
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Argument\ArgumentRemoverRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ArgumentRemoverRector::class)
+        ->arg('ExampleClass', ['someMethod' => [['value' => 'true']]]);
+};
 ```
 
 ↓
@@ -12046,11 +12282,17 @@ services:
 
 Change visibility of constant from parent class.
 
-```yaml
-services:
-    Rector\Core\Rector\Visibility\ChangeConstantVisibilityRector:
-        ParentObject:
-            SOME_CONSTANT: protected
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Visibility\ChangeConstantVisibilityRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ChangeConstantVisibilityRector::class)
+        ->arg('ParentObject', ['SOME_CONSTANT' => 'protected']);
+};
 ```
 
 ↓
@@ -12077,12 +12319,17 @@ services:
 
 Change method that returns single value to multiple values
 
-```yaml
-services:
-    Rector\Core\Rector\ClassMethod\ChangeContractMethodSingleToManyRector:
-        $oldToNewMethodByType:
-            SomeClass:
-                getNode: getNodes
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\ClassMethod\ChangeContractMethodSingleToManyRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ChangeContractMethodSingleToManyRector::class)
+        ->arg('$oldToNewMethodByType', ['SomeClass' => ['getNode' => 'getNodes']]);
+};
 ```
 
 ↓
@@ -12111,12 +12358,17 @@ services:
 
 Change visibility of method from parent class.
 
-```yaml
-services:
-    Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
-        $methodToVisibilityByClass:
-            FrameworkClass:
-                someMethod: protected
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ChangeMethodVisibilityRector::class)
+        ->arg('$methodToVisibilityByClass', ['FrameworkClass' => ['someMethod' => 'protected']]);
+};
 ```
 
 ↓
@@ -12147,11 +12399,17 @@ services:
 
 Change visibility of property from parent class.
 
-```yaml
-services:
-    Rector\Core\Rector\Visibility\ChangePropertyVisibilityRector:
-        FrameworkClass:
-            someProperty: protected
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Visibility\ChangePropertyVisibilityRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ChangePropertyVisibilityRector::class)
+        ->arg('FrameworkClass', ['someProperty' => 'protected']);
+};
 ```
 
 ↓
@@ -12178,12 +12436,17 @@ services:
 
 Turns defined function calls to local method calls.
 
-```yaml
-services:
-    Rector\Core\Rector\Function_\FunctionToMethodCallRector:
-        view:
-            - this
-            - render
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Function_\FunctionToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(FunctionToMethodCallRector::class)
+        ->arg('view', ['this', 'render']);
+};
 ```
 
 ↓
@@ -12222,12 +12485,17 @@ Change configured function calls to new Instance
 
 Turns defined function call to static method call.
 
-```yaml
-services:
-    Rector\Core\Rector\Function_\FunctionToStaticCallRector:
-        view:
-            - SomeStaticClass
-            - render
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Function_\FunctionToStaticCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(FunctionToStaticCallRector::class)
+        ->arg('view', ['SomeStaticClass', 'render']);
+};
 ```
 
 ↓
@@ -12246,12 +12514,17 @@ services:
 
 Changes properties with specified annotations class to constructor injection
 
-```yaml
-services:
-    Rector\Core\Rector\Property\InjectAnnotationClassRector:
-        $annotationClasses:
-            - DI\Annotation\Inject
-            - JMS\DiExtraBundle\Annotation\Inject
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Property\InjectAnnotationClassRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(InjectAnnotationClassRector::class)
+        ->arg('$annotationClasses', ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject']);
+};
 ```
 
 ↓
@@ -12283,10 +12556,17 @@ services:
 
 Merges old interface to a new one, that already has its methods
 
-```yaml
-services:
-    Rector\Core\Rector\Interface_\MergeInterfacesRector:
-        SomeOldInterface: SomeInterface
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Interface_\MergeInterfacesRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(MergeInterfacesRector::class)
+        ->arg('SomeOldInterface', 'SomeInterface');
+};
 ```
 
 ↓
@@ -12307,15 +12587,17 @@ services:
 
 Turns old method call with specific types to new one with arguments
 
-```yaml
-services:
-    Rector\Core\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector:
-        Nette\DI\ServiceDefinition:
-            setInject:
-                -
-                    - addTag
-                    -
-                        - inject
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
+        ->arg('Nette\DI\ServiceDefinition', ['setInject' => [['addTag', ['inject']]]]);
+};
 ```
 
 ↓
@@ -12335,12 +12617,17 @@ services:
 
 Wrap method call to return
 
-```yaml
-services:
-    Rector\Core\Rector\MethodCall\MethodCallToReturnRector:
-        $methodNamesByType:
-            SomeClass:
-                - deny
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\MethodCall\MethodCallToReturnRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(MethodCallToReturnRector::class)
+        ->arg('$methodNamesByType', ['SomeClass' => ['deny']]);
+};
 ```
 
 ↓
@@ -12370,12 +12657,17 @@ services:
 
 Replaces creating object instances with "new" keyword with factory method.
 
-```yaml
-services:
-    Rector\Core\Rector\Architecture\Factory\NewObjectToFactoryCreateRector:
-        MyClass:
-            class: MyClassFactory
-            method: create
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Architecture\Factory\NewObjectToFactoryCreateRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(NewObjectToFactoryCreateRector::class)
+        ->arg('MyClass', ['class' => 'MyClassFactory', 'method' => 'create']);
+};
 ```
 
 ↓
@@ -12404,13 +12696,17 @@ services:
 
 Change new Object to static call
 
-```yaml
-services:
-    Rector\Core\Rector\New_\NewToStaticCallRector:
-        $typeToStaticCalls:
-            Cookie:
-                - Cookie
-                - create
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\New_\NewToStaticCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(NewToStaticCallRector::class)
+        ->arg('$typeToStaticCalls', ['Cookie' => ['Cookie', 'create']]);
+};
 ```
 
 ↓
@@ -12435,12 +12731,17 @@ services:
 
 Turns fluent interface calls to classic ones.
 
-```yaml
-services:
-    Rector\Core\Rector\MethodBody\NormalToFluentRector:
-        SomeClass:
-            - someFunction
-            - otherFunction
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\MethodBody\NormalToFluentRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(NormalToFluentRector::class)
+        ->arg('SomeClass', ['someFunction', 'otherFunction']);
+};
 ```
 
 ↓
@@ -12462,11 +12763,17 @@ services:
 
 Replaces parent class to specific traits
 
-```yaml
-services:
-    Rector\Core\Rector\Class_\ParentClassToTraitsRector:
-        Nette\Object:
-            - Nette\SmartObject
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Class_\ParentClassToTraitsRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ParentClassToTraitsRector::class)
+        ->arg('Nette\Object', ['Nette\SmartObject']);
+};
 ```
 
 ↓
@@ -12488,13 +12795,17 @@ services:
 
 Turns property assign of specific type and property name to method call
 
-```yaml
-services:
-    Rector\Core\Rector\Assign\PropertyAssignToMethodCallRector:
-        $oldPropertiesToNewMethodCallsByType:
-            SomeClass:
-                oldPropertyName: oldProperty
-                newMethodName: newMethodCall
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Assign\PropertyAssignToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(PropertyAssignToMethodCallRector::class)
+        ->arg('$oldPropertiesToNewMethodCallsByType', ['SomeClass' => ['oldPropertyName' => 'oldProperty', 'newMethodName' => 'newMethodCall']]);
+};
 ```
 
 ↓
@@ -12514,14 +12825,17 @@ services:
 
 Replaces properties assign calls be defined methods.
 
-```yaml
-services:
-    Rector\Core\Rector\Property\PropertyToMethodRector:
-        $perClassPropertyToMethods:
-            SomeObject:
-                property:
-                    get: getProperty
-                    set: setProperty
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Property\PropertyToMethodRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(PropertyToMethodRector::class)
+        ->arg('$perClassPropertyToMethods', ['SomeObject' => ['property' => ['get' => 'getProperty', 'set' => 'setProperty']]]);
+};
 ```
 
 ↓
@@ -12533,16 +12847,17 @@ services:
 +$object->setProperty($value);
 ```
 
-```yaml
-services:
-    Rector\Core\Rector\Property\PropertyToMethodRector:
-        $perClassPropertyToMethods:
-            SomeObject:
-                property:
-                    get:
-                        method: getConfig
-                        arguments:
-                            - someArg
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Property\PropertyToMethodRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(PropertyToMethodRector::class)
+        ->arg('$perClassPropertyToMethods', ['SomeObject' => ['property' => ['get' => ['method' => 'getConfig', 'arguments' => ['someArg']]]]]);
+};
 ```
 
 ↓
@@ -12561,12 +12876,17 @@ services:
 
 Replaces defined Pseudo_Namespaces by Namespace\Ones.
 
-```yaml
-services:
-    Rector\Core\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
-        $namespacePrefixesWithExcludedClasses:
-            Some_:
-                - Some_Class_To_Keep
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(PseudoNamespaceToNamespaceRector::class)
+        ->arg('$namespacePrefixesWithExcludedClasses', ['Some_' => ['Some_Class_To_Keep']]);
+};
 ```
 
 ↓
@@ -12588,12 +12908,17 @@ services:
 
 Remove argument by position by function name
 
-```yaml
-services:
-    Rector\Core\Rector\FuncCall\RemoveFuncCallArgRector:
-        $argumentPositionByFunctionName:
-            remove_last_arg:
-                - 1
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\FuncCall\RemoveFuncCallArgRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RemoveFuncCallArgRector::class)
+        ->arg('$argumentPositionByFunctionName', ['remove_last_arg' => [1]]);
+};
 ```
 
 ↓
@@ -12612,11 +12937,17 @@ services:
 
 Remove `ini_get` by configuration
 
-```yaml
-services:
-    Rector\Core\Rector\FuncCall\RemoveIniGetSetFuncCallRector:
-        $keysToRemove:
-            - y2k_compliance
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\FuncCall\RemoveIniGetSetFuncCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RemoveIniGetSetFuncCallRector::class)
+        ->arg('$keysToRemove', ['y2k_compliance']);
+};
 ```
 
 ↓
@@ -12635,10 +12966,17 @@ services:
 
 Removes interfaces usage from class.
 
-```yaml
-services:
-    Rector\Core\Rector\Interface_\RemoveInterfacesRector:
-        - SomeInterface
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Interface_\RemoveInterfacesRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RemoveInterfacesRector::class)
+        ->arg(0, 'SomeInterface');
+};
 ```
 
 ↓
@@ -12675,12 +13013,17 @@ Remove specific traits from code
 
 Replaces constant by value
 
-```yaml
-services:
-    Rector\Core\Rector\Constant\RenameClassConstantsUseToStringsRector:
-        Nette\Configurator:
-            DEVELOPMENT: development
-            PRODUCTION: production
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Constant\RenameClassConstantsUseToStringsRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenameClassConstantsUseToStringsRector::class)
+        ->arg('Nette\Configurator', ['DEVELOPMENT' => 'development', 'PRODUCTION' => 'production']);
+};
 ```
 
 ↓
@@ -12699,12 +13042,17 @@ services:
 
 Replaces defined old properties by new ones.
 
-```yaml
-services:
-    Rector\Core\Rector\Property\RenamePropertyRector:
-        $oldToNewPropertyByTypes:
-            SomeClass:
-                someOldProperty: someNewProperty
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\Property\RenamePropertyRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(RenamePropertyRector::class)
+        ->arg('$oldToNewPropertyByTypes', ['SomeClass' => ['someOldProperty' => 'someNewProperty']]);
+};
 ```
 
 ↓
@@ -12752,12 +13100,17 @@ Turns variable in controller action to property fetch, as follow up to action in
 
 Get service call to constructor injection
 
-```yaml
-services:
-    Rector\Core\Rector\MethodCall\ServiceGetterToConstructorInjectionRector:
-        $methodNamesByTypesToServiceTypes:
-            FirstService:
-                getAnotherService: AnotherService
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(ServiceGetterToConstructorInjectionRector::class)
+        ->arg('$methodNamesByTypesToServiceTypes', ['FirstService' => ['getAnotherService' => 'AnotherService']]);
+};
 ```
 
 ↓
@@ -12815,12 +13168,17 @@ services:
 
 Turns static call to function call.
 
-```yaml
-services:
-    Rector\Core\Rector\StaticCall\StaticCallToFunctionRector:
-        $staticCallToFunction:
-            OldClass:
-                oldMethod: new_function
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\StaticCall\StaticCallToFunctionRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(StaticCallToFunctionRector::class)
+        ->arg('$staticCallToFunction', ['OldClass' => ['oldMethod' => 'new_function']]);
+};
 ```
 
 ↓
@@ -12839,12 +13197,17 @@ services:
 
 Changes strings to specific constants
 
-```yaml
-services:
-    Rector\Core\Rector\String_\StringToClassConstantRector:
-        compiler.post_dump:
-            - Yet\AnotherClass
-            - CONSTANT
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\String_\StringToClassConstantRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(StringToClassConstantRector::class)
+        ->arg('compiler.post_dump', ['Yet\AnotherClass', 'CONSTANT']);
+};
 ```
 
 ↓
@@ -12869,14 +13232,17 @@ services:
 
 Reorder class method arguments, including their calls
 
-```yaml
-services:
-    Rector\Core\Rector\StaticCall\SwapClassMethodArgumentsRector:
-        $newArgumentPositionsByMethodAndClass:
-            SomeClass:
-                run:
-                    - 1
-                    - 0
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\StaticCall\SwapClassMethodArgumentsRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(SwapClassMethodArgumentsRector::class)
+        ->arg('$newArgumentPositionsByMethodAndClass', ['SomeClass' => ['run' => [1, 0]]]);
+};
 ```
 
 ↓
@@ -12922,11 +13288,17 @@ Swap arguments in function calls
 
 Wrap return value of specific method
 
-```yaml
-services:
-    Rector\Core\Rector\ClassMethod\WrapReturnRector:
-        SomeClass:
-            getItem: array
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\ClassMethod\WrapReturnRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(WrapReturnRector::class)
+        ->arg('SomeClass', ['getItem' => 'array']);
+};
 ```
 
 ↓
