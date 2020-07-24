@@ -39,7 +39,7 @@ final class ConfigurationFactory
         $extraFileContent = isset($rectorRecipe['extra_file_content']) ? $this->normalizeCode(
             $rectorRecipe['extra_file_content']
         ) : null;
-        $set = $this->setResolver->resolveSetByName($rectorRecipe['set']);
+        $set = $rectorRecipe['set'] ? $this->setResolver->resolveSetByName($rectorRecipe['set']) : null;
 
         return new Configuration(
             $rectorRecipe['package'],

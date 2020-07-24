@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Doctrine\EventSubscriber;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Rector\Core\EventDispatcher\Event\AfterProcessEvent;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSubscriberInterface
 {
@@ -23,12 +23,19 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
      */
     private $symfonyStyle;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
         UuidMigrationDataCollector $uuidMigrationDataCollector,
-        SymfonyStyle $symfonyStyle
+        SymfonyStyle $symfonyStyle,
+        SmartFileSystem $smartFileSystem
     ) {
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
         $this->symfonyStyle = $symfonyStyle;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function reportEntities(): void
@@ -61,7 +68,7 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
         $jsonContent = Json::encode(['new_columns_by_class' => $data], Json::PRETTY);
 
         $filePath = getcwd() . '/' . $fileName;
-        FileSystem::write($filePath, $jsonContent);
+        $this->smartFileSystem->dumpFile($filePath, $jsonContent);
         $message = sprintf('See freshly created "%s" file for changes on entities', $fileName);
 
         $this->symfonyStyle->warning($message);

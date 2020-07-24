@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Core\NonPhpFile;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\Core\Configuration\ChangeConfiguration;
 use Rector\Core\Configuration\Configuration;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class NonPhpFileProcessor
 {
@@ -34,16 +34,23 @@ final class NonPhpFileProcessor
      */
     private $renamedClassesCollector;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
         Configuration $configuration,
         ChangeConfiguration $changeConfiguration,
         SymfonyStyle $symfonyStyle,
-        RenamedClassesCollector $renamedClassesCollector
+        RenamedClassesCollector $renamedClassesCollector,
+        SmartFileSystem $smartFileSystem
     ) {
         $this->configuration = $configuration;
         $this->changeConfiguration = $changeConfiguration;
         $this->symfonyStyle = $symfonyStyle;
         $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**
@@ -115,7 +122,9 @@ final class NonPhpFileProcessor
         } else {
             $message = sprintf('File "%s" was changed', $relativeFilePathFromCwd);
             $this->symfonyStyle->note($message);
-            FileSystem::write($neonYamlFileInfo->getRealPath(), $newContent, $neonYamlFileInfo->getPerms());
+
+            $this->smartFileSystem->dumpFile($neonYamlFileInfo->getRealPath(), $newContent);
+            $this->smartFileSystem->chmod($neonYamlFileInfo->getRealPath(), $neonYamlFileInfo->getPerms());
         }
     }
 }

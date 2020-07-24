@@ -105,7 +105,7 @@ final class MethodCallManipulator
     /**
      * @return MethodCall[]
      */
-    private function findMethodCallsOnVariable(Variable $variable): array
+    public function findMethodCallsOnVariable(Variable $variable): array
     {
         // get scope node, e.g. parent function call, method call or anonymous function
         $scopeNode = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [FunctionLike::class]);

@@ -9,7 +9,7 @@ class SkipOnRightAssign
     public function run()
     {
         $form = new Form();
-        $this->addText('email', 'Email');
+        $form->addText('email', 'Email');
 
         /** @var \Nette\Forms\Controls\BaseControl $emailControl */
         $emailControl = $form['email'];

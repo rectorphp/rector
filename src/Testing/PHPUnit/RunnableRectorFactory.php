@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Core\Testing\PHPUnit;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Random;
 use Nette\Utils\Strings;
 use Rector\Core\Testing\Contract\RunnableInterface;
 use Rector\Core\Testing\PHPUnit\Runnable\ClassLikeNamesSuffixer;
 use Rector\Core\Testing\PHPUnit\Runnable\RunnableClassFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class RunnableRectorFactory
 {
@@ -24,10 +24,16 @@ final class RunnableRectorFactory
      */
     private $classLikeNamesSuffixer;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct()
     {
         $this->runnableClassFinder = new RunnableClassFinder();
         $this->classLikeNamesSuffixer = new ClassLikeNamesSuffixer();
+        $this->smartFileSystem = new SmartFileSystem();
     }
 
     public function createRunnableClass(SmartFileInfo $classContentFileInfo): RunnableInterface
@@ -39,7 +45,7 @@ final class RunnableRectorFactory
 
         $suffixedFileContent = $this->classLikeNamesSuffixer->suffixContent($contents, $temporaryClassSuffix);
 
-        FileSystem::write($temporaryPath, $suffixedFileContent);
+        $this->smartFileSystem->dumpFile($temporaryPath, $suffixedFileContent);
         include_once $temporaryPath;
 
         $runnableFullyQualifiedClassName = $this->runnableClassFinder->find($suffixedFileContent);

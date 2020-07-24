@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\PhpSpecToPHPUnit\Rector\FileSystem;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * @see https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
@@ -18,6 +18,16 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class RenameSpecFileToTestFileRector extends AbstractFileSystemRector
 {
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(SmartFileSystem $smartFileSystem)
+    {
+        $this->smartFileSystem = $smartFileSystem;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Rename "*Spec.php" file to "*Test.php" file',
@@ -46,7 +56,7 @@ CODE_SAMPLE
         $newRealPath = $this->createNewRealPath($oldRealPath);
 
         // rename
-        FileSystem::rename($oldRealPath, $newRealPath);
+        $this->smartFileSystem->rename($oldRealPath, $newRealPath);
 
         // remove old file
         $this->removeFile($smartFileInfo);

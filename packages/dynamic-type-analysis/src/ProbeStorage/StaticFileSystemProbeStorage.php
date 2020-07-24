@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\DynamicTypeAnalysis\ProbeStorage;
 
-use Nette\Utils\FileSystem;
 use Rector\DynamicTypeAnalysis\Contract\ProbeStorageInterface;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class StaticFileSystemProbeStorage implements ProbeStorageInterface
 {
@@ -17,13 +17,15 @@ final class StaticFileSystemProbeStorage implements ProbeStorageInterface
             file_put_contents($storageFile, $probeItem, FILE_APPEND);
         } else {
             // 1st write
-            FileSystem::write($storageFile, $probeItem);
+            $smartFileSystem = new SmartFileSystem();
+            $smartFileSystem->dumpFile($storageFile, $probeItem);
         }
     }
 
     public static function clear(): void
     {
-        FileSystem::delete(self::getFile());
+        $smartFileSystem = new SmartFileSystem();
+        $smartFileSystem->remove(self::getFile());
     }
 
     /**
@@ -31,7 +33,8 @@ final class StaticFileSystemProbeStorage implements ProbeStorageInterface
      */
     public static function getProbeItems(): array
     {
-        $probeFileContent = FileSystem::read(self::getFile());
+        $smartFileSystem = new SmartFileSystem();
+        $probeFileContent = $smartFileSystem->readFile(self::getFile());
 
         $probeItems = explode(PHP_EOL, $probeFileContent);
 

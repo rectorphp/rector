@@ -10,5 +10,7 @@ if (class_exists('Nette\Forms\Form')) {
 
 class Form
 {
-
+    public function addText(string $name, $label = null, int $cols = null, int $maxLength = null): Controls\TextInput
+    {
+    }
 }

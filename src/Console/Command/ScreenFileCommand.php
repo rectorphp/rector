@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
@@ -32,6 +31,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ScreenFileCommand extends AbstractCommand
 {
@@ -80,6 +80,11 @@ final class ScreenFileCommand extends AbstractCommand
      */
     private $staticTypeMapper;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileInfoParser $fileInfoParser,
@@ -87,7 +92,8 @@ final class ScreenFileCommand extends AbstractCommand
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         BetterStandardPrinter $betterStandardPrinter,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        SmartFileSystem $smartFileSystem
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileInfoParser = $fileInfoParser;
@@ -98,6 +104,8 @@ final class ScreenFileCommand extends AbstractCommand
         $this->staticTypeMapper = $staticTypeMapper;
 
         parent::__construct();
+
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     protected function configure(): void
@@ -160,7 +168,7 @@ final class ScreenFileCommand extends AbstractCommand
         $outputFileName = 'rector_vision_' . $fileInfo->getFilename();
         $decoratedFileContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
 
-        FileSystem::write($outputFileName, $decoratedFileContent);
+        $this->smartFileSystem->dumpFile($outputFileName, $decoratedFileContent);
         $message = sprintf('See: %s', $outputFileName);
 
         $this->symfonyStyle->writeln($message);

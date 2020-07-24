@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\PHPUnit\Composer;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ComposerAutoloadedDirectoryProvider
 {
@@ -20,9 +20,15 @@ final class ComposerAutoloadedDirectoryProvider
      */
     private $composerFilePath;
 
-    public function __construct()
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(SmartFileSystem $smartFileSystem)
     {
         $this->composerFilePath = getcwd() . '/composer.json';
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**
@@ -58,7 +64,7 @@ final class ComposerAutoloadedDirectoryProvider
             return [];
         }
 
-        $composerFileContent = FileSystem::read($this->composerFilePath);
+        $composerFileContent = $this->smartFileSystem->readFile($this->composerFilePath);
 
         return Json::decode($composerFileContent, Json::FORCE_ARRAY);
     }

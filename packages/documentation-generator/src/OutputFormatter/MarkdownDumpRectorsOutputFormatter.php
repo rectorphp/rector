@@ -15,9 +15,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DocumentationGenerator\PhpKeywordHighlighter;
 use Rector\DocumentationGenerator\RectorMetadataResolver;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
+use Rector\SymfonyPhpConfig\Printer\ReturnClosurePrinter;
 use ReflectionClass;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Yaml\Yaml;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MarkdownDumpRectorsOutputFormatter
@@ -47,18 +47,25 @@ final class MarkdownDumpRectorsOutputFormatter
      */
     private $phpKeywordHighlighter;
 
+    /**
+     * @var ReturnClosurePrinter
+     */
+    private $returnClosurePrinter;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         MarkdownDifferAndFormatter $markdownDifferAndFormatter,
         RectorMetadataResolver $rectorMetadataResolver,
         TestClassResolver $testClassResolver,
-        PhpKeywordHighlighter $phpKeywordHighlighter
+        PhpKeywordHighlighter $phpKeywordHighlighter,
+        ReturnClosurePrinter $returnClosurePrinter
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
         $this->rectorMetadataResolver = $rectorMetadataResolver;
         $this->testClassResolver = $testClassResolver;
         $this->phpKeywordHighlighter = $phpKeywordHighlighter;
+        $this->returnClosurePrinter = $returnClosurePrinter;
     }
 
     /**
@@ -206,13 +213,11 @@ final class MarkdownDumpRectorsOutputFormatter
         }
 
         $configuration = [
-            'services' => [
-                get_class($rector) => $codeSample->getConfiguration(),
-            ],
+            get_class($rector) => $codeSample->getConfiguration(),
         ];
-        $configuration = Yaml::dump($configuration, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
 
-        $this->printCodeWrapped($configuration, 'yaml');
+        $phpConfigContent = $this->returnClosurePrinter->printServices($configuration);
+        $this->printCodeWrapped($phpConfigContent, 'php');
 
         $this->symfonyStyle->newLine();
         $this->symfonyStyle->writeln('↓');
