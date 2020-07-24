@@ -3,11 +3,28 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
+use Rector\Injection\ValueObject\StaticCallToMethodCall;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/create-rector.php', null, 'not_found');
+
+    $services = $containerConfigurator->services();
+
+    // @todo improve this
+    $services->set('value_object', StaticCallToMethodCall::class)
+        ->args([
+            'Nette\Utils\FileSystem',
+            'write',
+            'Symplify\SmartFileSystem\SmartFileSystem',
+            'dumpFile'
+        ])
+        ->autowire(false);
+
+    $services->set(\Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector::class)
+        ->arg('$staticCallsToMethodCalls', [ref('value_object')]);
 
     $parameters = $containerConfigurator->parameters();
 
