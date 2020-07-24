@@ -83,6 +83,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $staticTypeMapper;
 
     /**
+     * @var string|null
+     */
+    private $previousAppliedClass;
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -120,6 +125,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->currentRectorProvider = $currentRectorProvider;
     }
 
+    public function beforeTraverse(array $nodes)
+    {
+        $this->previousAppliedClass = null;
+
+        return parent::beforeTraverse($nodes);
+    }
+
     /**
      * @return int|Node|null
      */
@@ -143,8 +155,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // show current Rector class on --debug
         if ($this->symfonyStyle->isDebug()) {
-            // indented on purpose to improve log nesting under [refactoring]
-            $this->symfonyStyle->writeln('    [applying] ' . static::class);
+            if ($this->previousAppliedClass !== static::class) {
+                // prevent spamming with the same class over and over
+                // indented on purpose to improve log nesting under [refactoring]
+                $this->symfonyStyle->writeln('    [applying] ' . static::class);
+                $this->previousAppliedClass = static::class;
+            }
         }
 
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
