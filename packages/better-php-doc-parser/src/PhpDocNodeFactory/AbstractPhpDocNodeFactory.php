@@ -7,10 +7,13 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Annotation\AnnotationItemsResolver;
 use Rector\BetterPhpDocParser\AnnotationReader\NodeAnnotationReader;
 use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 abstract class AbstractPhpDocNodeFactory
 {
@@ -30,16 +33,23 @@ abstract class AbstractPhpDocNodeFactory
     protected $annotationItemsResolver;
 
     /**
+     * @var ObjectTypeSpecifier
+     */
+    private $objectTypeSpecifier;
+
+    /**
      * @required
      */
     public function autowireAbstractPhpDocNodeFactory(
         NodeAnnotationReader $nodeAnnotationReader,
         AnnotationContentResolver $annotationContentResolver,
-        AnnotationItemsResolver $annotationItemsResolver
+        AnnotationItemsResolver $annotationItemsResolver,
+        ObjectTypeSpecifier $objectTypeSpecifier
     ): void {
         $this->nodeAnnotationReader = $nodeAnnotationReader;
         $this->annotationContentResolver = $annotationContentResolver;
         $this->annotationItemsResolver = $annotationItemsResolver;
+        $this->objectTypeSpecifier = $objectTypeSpecifier;
     }
 
     protected function resolveContentFromTokenIterator(TokenIterator $tokenIterator): string
@@ -57,6 +67,14 @@ abstract class AbstractPhpDocNodeFactory
         $namespacedTargetEntity = $node->getAttribute(AttributeKey::NAMESPACE_NAME) . '\\' . $targetEntity;
         if (class_exists($namespacedTargetEntity)) {
             return $namespacedTargetEntity;
+        }
+
+        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType(
+            $node,
+            new ObjectType($targetEntity)
+        );
+        if ($resolvedType instanceof ShortenedObjectType) {
+            return $resolvedType->getFullyQualifiedName();
         }
 
         // probably tested class
