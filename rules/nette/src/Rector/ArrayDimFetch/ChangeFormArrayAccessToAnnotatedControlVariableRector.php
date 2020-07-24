@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -21,6 +21,8 @@ use Rector\Nette\NodeResolver\FormVariableInputNameTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
+ * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
+ *
  * @see \Rector\Nette\Tests\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector\ChangeFormArrayAccessToAnnotatedControlVariableRectorTest
  */
 final class ChangeFormArrayAccessToAnnotatedControlVariableRector extends AbstractRector
@@ -93,7 +95,7 @@ PHP
             return null;
         }
 
-        if ($this->isBeingAssigned($node)) {
+        if ($this->isBeingAssignedOrInitialized($node)) {
             return null;
         }
 
@@ -125,9 +127,13 @@ PHP
         string $controlType
     ): PhpDocInfo {
         $phpDocInfo = $this->phpDocInfoFactory->createEmpty($assignExpression);
-        $identifierTypeNode = new IdentifierTypeNode('\\' . $controlType);
 
-        $varTagValueNode = new VarTagValueNode($identifierTypeNode, '$' . $controlName, '');
+        $varTagValueNode = new VarTagValueNode(
+            new AttributeAwareFullyQualifiedIdentifierTypeNode($controlType),
+            '$' . $controlName,
+            ''
+        );
+
         $phpDocInfo->addTagValueNode($varTagValueNode);
         $phpDocInfo->makeSingleLined();
 
@@ -136,28 +142,32 @@ PHP
         return $phpDocInfo;
     }
 
-    private function matchNetteFormArrayDimString($node): ?String_
+    private function matchNetteFormArrayDimString(ArrayDimFetch $arrayDimFetch): ?String_
     {
-        if (! $node->var instanceof Variable) {
+        if (! $arrayDimFetch->var instanceof Variable) {
             return null;
         }
 
-        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
+        if (! $this->isObjectType($arrayDimFetch->var, 'Nette\Application\UI\Form')) {
             return null;
         }
 
-        if (! $node->dim instanceof String_) {
+        if (! $arrayDimFetch->dim instanceof String_) {
             return null;
         }
 
-        return $node->dim;
+        return $arrayDimFetch->dim;
     }
 
-    private function isBeingAssigned(ArrayDimFetch $arrayDimFetch): bool
+    private function isBeingAssignedOrInitialized(ArrayDimFetch $arrayDimFetch): bool
     {
         $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parent instanceof Assign) {
             return false;
+        }
+
+        if ($parent->var === $arrayDimFetch) {
+            return true;
         }
 
         return $parent->expr === $arrayDimFetch;
