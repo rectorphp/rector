@@ -122,9 +122,6 @@ parameters:
         # known values
         - '#Strict comparison using === between PhpParser\\Node\\Expr and null will always evaluate to false#'
 
-        # console argument/option
-        - '#Cannot cast array<string\>\|string\|null to string#'
-
         - '#Access to an undefined property PhpParser\\Node\\Stmt\:\:\$expr#'
         - '#Cannot access property \$stmts on PhpParser\\Node\\Stmt\\Else_\|null#'
 
@@ -282,7 +279,6 @@ parameters:
         - '#Method Rector\\Caching\\ChangedFilesDetector\:\:hashFile\(\) should return string but returns string\|false#'
 
         - '#If condition is always false#'
-        - '#Method Rector\\Php80\\Rector\\Identical\\StrStartsWithRector\:\:refactor\(\) should return PhpParser\\Node\|null but return statement is missing#'
 
         - '#Parameter \#1 \$funcCall of method Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\AbstractMatchAndRefactor\:\:createStrStartsWithValueObjectFromFuncCall\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node\\Expr given#'
 
@@ -346,22 +342,18 @@ parameters:
         - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
 
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is 10, keep it under 9#'
-        - '#Parameter \#1 \$objectType of method Rector\\Core\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
         - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NetteKdyby\\NodeResolver\\ListeningMethodsCollector\:\:collectFromClassAndGetSubscribedEventClassMethod\(\)" is 11, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NetteKdyby\\ContributeEventClassResolver\:\:resolveGetterMethodByEventClassAndParam\(\)" is \d+, keep it under 9#'
         - '#Parameter \#1 \$type of class PhpParser\\Node\\NullableType constructor expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
-        - '#Parameter \#1 \$oldMethod of class Rector\\PHPOffice\\ValueObject\\ConditionalSetValue constructor expects string, bool\|int\|string given#'
         - '#Parameter \#1 \$object of function get_class expects object, PhpParser\\Node\|null given#'
         - '#Cognitive complexity for "Rector\\Core\\Application\\RectorApplication\:\:runOnFileInfos\(\)" is 10, keep it under 9#'
         - '#Class "Rector\\FileSystemRector\\Rector\\Removing\\RemoveProjectFileRector" is missing @see annotation with test case class reference#'
         - '#Class "Rector\\Php73\\Rector\\FuncCall\\SetCookieRector" is missing @see annotation with test case class reference#'
         - '#Parameter \#1 \$type of method PhpParser\\Builder\\Param\:\:setType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Parameter \#1 \$node of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirstAncestorInstanceOf\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\\Variable\|null given#'
-        - '#Parameter \#1 \$assignAndRootExpr of method Rector\\MagicDisclosure\\Rector\\MethodCall\\DefluentMethodCallRector\:\:createNodesToAdd\(\) expects Rector\\Core\\ValueObject\\AssignAndRootExpr\|Rector\\Core\\ValueObject\\SilentVariableAndRootExpr, Rector\\Core\\ValueObject\\AssignAndRootExpr\|Rector\\Core\\ValueObject\\SilentVariableAndRootExpr\|null given#'
         - '#Parameter \#1 \$assignAndRootExpr of method Rector\\MagicDisclosure\\NodeFactory\\NonFluentMethodCallFactory\:\:createFromAssignObjectAndMethodCalls\(\) expects Rector\\Core\\ValueObject\\AssignAndRootExpr, Rector\\Core\\ValueObject\\AssignAndRootExpr\|null given#'
-        - '#Method Rector\\Core\\ValueObject\\AssignAndRootExpr\:\:getReturnSilentVariable\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\\Stmt\\Return_#'
         - '#Parameter \#1 \$expr of method Rector\\MagicDisclosure\\Matcher\\ClassNameTypeMatcher\:\:doesExprMatchNames\(\) expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Parameter \#1 \$objectType of method Rector\\Naming\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
         - '#Method Rector\\Core\\PhpParser\\Node\\NodeFactory\:\:createConcat\(\) should return PhpParser\\Node\\Expr\\BinaryOp\\Concat\|null but returns PhpParser\\Node\\Expr#'
@@ -388,5 +380,3 @@ parameters:
         -
             message: '#Separate function "Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ref\(\)" in method call to standalone row to improve readability#'
             path: 'packages/rector-generator/config/config.php'
-
-        - '#Method Rector\\Nette\\Rector\\ArrayDimFetch\\ChangeFormArrayAccessToAnnotatedControlVariableRector\:\:resolveMethodNamesByInputNames\(\) should return array<string, string\> but returns array<int\|string, string\>#'
