@@ -9,10 +9,11 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\TypeUtils;
+use PHPStan\Type\TypeWithClassName;
 use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 final class FunctionLikeParsedNodesFinder
 {
@@ -31,20 +32,26 @@ final class FunctionLikeParsedNodesFinder
      */
     private $parsedFunctionLikeNodeCollector;
 
+    /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector
+        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector,
+        TypeUnwrapper $typeUnwrapper
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->typeUnwrapper = $typeUnwrapper;
     }
 
     public function findClassMethodByMethodCall(MethodCall $methodCall): ?ClassMethod
     {
-        /** @var string|null $className */
-        $className = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $this->resolveCallerClassName($methodCall);
         if ($className === null) {
             return null;
         }
@@ -54,7 +61,7 @@ final class FunctionLikeParsedNodesFinder
             return null;
         }
 
-        return $this->findMethod($methodName, $className);
+        return $this->findClassMethod($methodName, $className);
     }
 
     public function findClassMethodByStaticCall(StaticCall $staticCall): ?ClassMethod
@@ -68,7 +75,7 @@ final class FunctionLikeParsedNodesFinder
 
         $classNames = TypeUtils::getDirectClassNames($objectType);
         foreach ($classNames as $className) {
-            $foundMethod = $this->findMethod($methodName, $className);
+            $foundMethod = $this->findClassMethod($methodName, $className);
             if ($foundMethod !== null) {
                 return $foundMethod;
             }
@@ -82,7 +89,7 @@ final class FunctionLikeParsedNodesFinder
         return $this->parsedFunctionLikeNodeCollector->findFunction($name);
     }
 
-    public function findMethod(string $methodName, string $className): ?ClassMethod
+    public function findClassMethod(string $methodName, string $className): ?ClassMethod
     {
         return $this->parsedFunctionLikeNodeCollector->findMethod($className, $methodName);
     }
@@ -93,5 +100,16 @@ final class FunctionLikeParsedNodesFinder
     public function findMethodCallsOnClass(string $className): array
     {
         return $this->parsedFunctionLikeNodeCollector->findMethodCallsOnClass($className);
+    }
+
+    private function resolveCallerClassName(MethodCall $methodCall): ?string
+    {
+        $callerType = $this->nodeTypeResolver->getStaticType($methodCall->var);
+        $callerObjectType = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($callerType);
+        if (! $callerObjectType instanceof TypeWithClassName) {
+            return null;
+        }
+
+        return $callerObjectType->getClassName();
     }
 }

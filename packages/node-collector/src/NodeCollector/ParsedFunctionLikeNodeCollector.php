@@ -30,22 +30,22 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ParsedFunctionLikeNodeCollector
 {
     /**
-     * @var ClassMethod[][]
+     * @var array<string, ClassMethod[]>
      */
-    private $methodsByType = [];
+    private $classMethodsByType = [];
 
     /**
-     * @var Function_[]
+     * @var array<string, Function_>
      */
     private $functionsByName = [];
 
     /**
-     * @var FuncCall[][]
+     * @var array<string, FuncCall[]>
      */
     private $funcCallsByName = [];
 
     /**
-     * @var MethodCall[][][]|StaticCall[][][]
+     * @var array<string, array<array<MethodCall|StaticCall>>>
      */
     private $methodsCallsByTypeAndMethod = [];
 
@@ -155,7 +155,7 @@ final class ParsedFunctionLikeNodeCollector
     {
         $classMethods = [];
 
-        foreach ($this->methodsByType as $className => $classMethodByMethodName) {
+        foreach ($this->classMethodsByType as $className => $classMethodByMethodName) {
             if (! is_a($className, $desiredType, true)) {
                 continue;
             }
@@ -172,14 +172,14 @@ final class ParsedFunctionLikeNodeCollector
 
     public function findMethod(string $className, string $methodName): ?ClassMethod
     {
-        if (isset($this->methodsByType[$className][$methodName])) {
-            return $this->methodsByType[$className][$methodName];
+        if (isset($this->classMethodsByType[$className][$methodName])) {
+            return $this->classMethodsByType[$className][$methodName];
         }
 
         $parentClass = $className;
         while ($parentClass = get_parent_class($parentClass)) {
-            if (isset($this->methodsByType[$parentClass][$methodName])) {
-                return $this->methodsByType[$parentClass][$methodName];
+            if (isset($this->classMethodsByType[$parentClass][$methodName])) {
+                return $this->classMethodsByType[$parentClass][$methodName];
             }
         }
 
@@ -212,7 +212,7 @@ final class ParsedFunctionLikeNodeCollector
         }
 
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        $this->methodsByType[$className][$methodName] = $classMethod;
+        $this->classMethodsByType[$className][$methodName] = $classMethod;
     }
 
     /**
