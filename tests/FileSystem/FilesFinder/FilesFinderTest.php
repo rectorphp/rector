@@ -10,6 +10,7 @@ use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class FilesFinderTest extends AbstractKernelTestCase
 {
@@ -18,10 +19,16 @@ final class FilesFinderTest extends AbstractKernelTestCase
      */
     private $filesFinder;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
         $this->filesFinder = self::$container->get(FilesFinder::class);
+        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
     }
 
     /**
@@ -75,8 +82,8 @@ final class FilesFinderTest extends AbstractKernelTestCase
 
         shell_exec('git add --all && git commit -m "first commit"');
 
-        FileSystem::write($filename, '<?php echo ' . mt_rand() . ';');
-        FileSystem::write($dir . '/tmp.yml', '');
+        $this->smartFileSystem->dumpFile($filename, '<?php echo ' . mt_rand() . ';');
+        $this->smartFileSystem->dumpFile($dir . '/tmp.yml', '');
 
         $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([$dir], ['php'], true);
         $this->assertCount(1, $foundFiles);

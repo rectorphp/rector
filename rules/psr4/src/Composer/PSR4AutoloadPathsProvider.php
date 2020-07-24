@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\PSR4\Composer;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class PSR4AutoloadPathsProvider
 {
@@ -13,6 +13,16 @@ final class PSR4AutoloadPathsProvider
      * @var string[]
      */
     private $cachedComposerJsonPSR4AutoloadPaths = [];
+
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(SmartFileSystem $smartFileSystem)
+    {
+        $this->smartFileSystem = $smartFileSystem;
+    }
 
     /**
      * @return string[]|string[][]
@@ -39,7 +49,7 @@ final class PSR4AutoloadPathsProvider
      */
     private function readFileToJsonArray(string $composerJson): array
     {
-        $composerJsonContent = FileSystem::read($composerJson);
+        $composerJsonContent = $this->smartFileSystem->readFile($composerJson);
 
         return Json::decode($composerJsonContent, Json::FORCE_ARRAY);
     }

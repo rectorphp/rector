@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\RectorGenerator\FileSystem;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class JsonFileSystem
 {
@@ -14,9 +14,15 @@ final class JsonFileSystem
      */
     private $jsonStringFormatter;
 
-    public function __construct(JsonStringFormatter $jsonStringFormatter)
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(JsonStringFormatter $jsonStringFormatter, SmartFileSystem $smartFileSystem)
     {
         $this->jsonStringFormatter = $jsonStringFormatter;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**
@@ -24,7 +30,7 @@ final class JsonFileSystem
      */
     public function loadFileToJson(string $filePath): array
     {
-        $fileContent = FileSystem::read($filePath);
+        $fileContent = $this->smartFileSystem->readFile($filePath);
         return Json::decode($fileContent, Json::FORCE_ARRAY);
     }
 
@@ -40,6 +46,6 @@ final class JsonFileSystem
         // make sure there is newline in the end
         $content = trim($content) . PHP_EOL;
 
-        FileSystem::write($filePath, $content);
+        $this->smartFileSystem->dumpFile($filePath, $content);
     }
 }

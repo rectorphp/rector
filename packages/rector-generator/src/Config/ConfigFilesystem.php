@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\RectorGenerator\Config;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
@@ -14,6 +13,7 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\RectorGenerator\Rector\Closure\AddNewServiceToSymfonyPhpConfigRector;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\ValueObject\Configuration;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ConfigFilesystem
 {
@@ -42,16 +42,23 @@ final class ConfigFilesystem
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
         TemplateFactory $templateFactory,
         Parser $parser,
         AddNewServiceToSymfonyPhpConfigRector $addNewServiceToSymfonyPhpConfigRector,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        SmartFileSystem $smartFileSystem
     ) {
         $this->templateFactory = $templateFactory;
         $this->parser = $parser;
         $this->addNewServiceToSymfonyPhpConfigRector = $addNewServiceToSymfonyPhpConfigRector;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**
@@ -86,7 +93,7 @@ final class ConfigFilesystem
 
         // 3. print the content back to file
         $changedSetConfigContent = $this->betterStandardPrinter->prettyPrintFile($setConfigNodes);
-        FileSystem::write($setConfigFileInfo->getRealPath(), $changedSetConfigContent);
+        $this->smartFileSystem->dumpFile($setConfigFileInfo->getRealPath(), $changedSetConfigContent);
     }
 
     /**

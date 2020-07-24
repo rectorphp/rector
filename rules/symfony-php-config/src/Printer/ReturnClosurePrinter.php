@@ -127,14 +127,8 @@ final class ReturnClosurePrinter
         $methodCall = new MethodCall($servicesVariable, 'set', $args);
 
         foreach ($serviceParameters as $argument => $value) {
-            if (is_array($value)) {
-                foreach ($value as $singleValue) {
-                    // new PHP configuraiton style
-                    if (is_object($singleValue)) {
-                        // @todo
-                        continue 2;
-                    }
-                }
+            if ($this->shouldSkipObjectConfiguration($value)) {
+                continue;
             }
 
             $args = $this->nodeFactory->createArgs([$argument, $value]);
@@ -148,5 +142,20 @@ final class ReturnClosurePrinter
     {
         $nextCallIndentReplacement = ')' . PHP_EOL . Strings::indent('->', 8, ' ');
         return Strings::replace($content, '#\)->#', $nextCallIndentReplacement);
+    }
+
+    private function shouldSkipObjectConfiguration($value): bool
+    {
+        if (! is_array($value)) {
+            return false;
+        }
+        foreach ($value as $singleValue) {
+            // new PHP configuraiton style
+            if (is_object($singleValue)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

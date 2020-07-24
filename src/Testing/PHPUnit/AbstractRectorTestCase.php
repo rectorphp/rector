@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Testing\PHPUnit;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -31,6 +30,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 {
@@ -74,6 +74,11 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      */
     private $nonPhpFileProcessor;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -110,6 +115,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->fileProcessor = static::$container->get(FileProcessor::class);
         $this->nonPhpFileProcessor = static::$container->get(NonPhpFileProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
+        $this->smartFileSystem = static::$container->get(SmartFileSystem::class);
 
         // needed for PHPStan, because the analyzed file is just create in /temp
         $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
@@ -218,7 +224,9 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         ], Yaml::DUMP_OBJECT_AS_MAP);
 
         $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.yaml');
-        FileSystem::write($configFileTempPath, $yamlContent);
+
+        $smartFileSystem = new SmartFileSystem();
+        $smartFileSystem->dumpFile($configFileTempPath, $yamlContent);
 
         $this->bootKernelWithConfigs(RectorKernel::class, [$configFileTempPath]);
     }
@@ -231,7 +239,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         ], Yaml::DUMP_OBJECT_AS_MAP);
 
         $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/current_test.yaml');
-        FileSystem::write($configFileTempPath, $yamlContent);
+        $this->smartFileSystem->dumpFile($configFileTempPath, $yamlContent);
 
         return $configFileTempPath;
     }
@@ -287,7 +295,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
             if (getenv('UPDATE_TESTS')) {
                 $newOriginalContent = $originalFileInfo->getContents() . SplitLine::LINE . $changedContent . '?>' . PHP_EOL;
-                FileSystem::write($fixtureFileInfo->getRealPath(), $newOriginalContent);
+                $this->smartFileSystem->dumpFile($fixtureFileInfo->getRealPath(), $newOriginalContent);
             }
 
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)

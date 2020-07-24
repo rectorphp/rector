@@ -4820,7 +4820,7 @@ use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfiguration->services();
     $services->set(ReturnThisRemoveRector::class)
-        ->arg(0, ['SomeExampleClass']);
+        ->arg('$classesToDefluent', ['SomeExampleClass']);
 };
 ```
 
@@ -4859,7 +4859,7 @@ use Rector\MagicDisclosure\Rector\String_\ToStringToMethodCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfiguration->services();
     $services->set(ToStringToMethodCallRector::class)
-        ->arg('SomeObject', 'getPath');
+        ->arg('$methodNamesByType', ['SomeObject' => 'getPath']);
 };
 ```
 

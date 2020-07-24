@@ -17,6 +17,7 @@ use Rector\FileSystemRector\FileSystemFileProcessor;
 use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTestCase
 {
@@ -123,7 +124,8 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
             'services' => $listForConfig,
         ], Yaml::DUMP_OBJECT_AS_MAP);
 
-        FileSystem::write($configFileTempPath, $yamlContent);
+        $smartFileSystem = new SmartFileSystem();
+        $smartFileSystem->dumpFile($configFileTempPath, $yamlContent);
 
         // for 3rd party testing with services defined in configs
         $configFileInfos = [new SmartFileInfo($configFileTempPath)];

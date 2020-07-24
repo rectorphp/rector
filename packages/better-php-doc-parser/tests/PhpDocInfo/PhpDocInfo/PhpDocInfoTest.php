@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo;
 
-use Nette\Utils\FileSystem;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Nop;
@@ -15,6 +14,7 @@ use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class PhpDocInfoTest extends AbstractKernelTestCase
 {
@@ -38,14 +38,20 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
      */
     private $docBlockManipulator;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/Source/doc.txt');
-
         $this->phpDocInfoPrinter = self::$container->get(PhpDocInfoPrinter::class);
         $this->docBlockManipulator = self::$container->get(DocBlockManipulator::class);
+        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
+
+        $this->phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/Source/doc.txt');
     }
 
     public function testGetTagsByName(): void
@@ -81,7 +87,7 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
     private function createPhpDocInfoFromFile(string $path): PhpDocInfo
     {
         $phpDocInfoFactory = self::$container->get(PhpDocInfoFactory::class);
-        $phpDocContent = FileSystem::read($path);
+        $phpDocContent = $this->smartFileSystem->readFile($path);
 
         $this->node = new Nop();
         $this->node->setDocComment(new Doc($phpDocContent));

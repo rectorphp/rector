@@ -49,7 +49,9 @@ $result = $someValue->getPath();
 PHP
                 ,
                 [
-                    'SomeObject' => 'getPath',
+                    '$methodNamesByType' => [
+                        'SomeObject' => 'getPath',
+                    ],
                 ]
             ),
         ]);
