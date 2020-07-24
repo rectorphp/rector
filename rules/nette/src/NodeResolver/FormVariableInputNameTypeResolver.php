@@ -11,7 +11,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -20,6 +22,8 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class FormVariableInputNameTypeResolver
 {
@@ -76,13 +80,19 @@ final class FormVariableInputNameTypeResolver
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
         MethodCallManipulator $methodCallManipulator,
         ValueResolver $valueResolver,
         FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -90,6 +100,7 @@ final class FormVariableInputNameTypeResolver
         $this->valueResolver = $valueResolver;
         $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function resolveControlTypeByInputName(Variable $formVariable, string $inputName): string
@@ -187,6 +198,26 @@ final class FormVariableInputNameTypeResolver
         if ($classMethod === null) {
             return [];
         }
+
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        // magic Nette factory, continue to return type contructor
+        if ($classLike instanceof Interface_) {
+            $returnedType = $this->nodeTypeResolver->getStaticType($methodCall);
+            if ($returnedType instanceof TypeWithClassName) {
+                $constructorClassMethod = $this->functionLikeParsedNodesFinder->findClassMethod(
+                    self::CONSTRUCT,
+                    $returnedType->getClassName()
+                );
+                if ($constructorClassMethod === null) {
+                    return [];
+                }
+
+                return $this->resolveFromConstructorClassMethod($constructorClassMethod);
+            }
+
+            return [];
+        }
+
         return $this->resolveFromClassMethod($classMethod);
     }
 
