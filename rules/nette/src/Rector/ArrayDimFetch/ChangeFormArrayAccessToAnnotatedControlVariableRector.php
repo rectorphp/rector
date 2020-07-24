@@ -194,10 +194,10 @@ PHP
         $externalMethodNamesByInputsNames = $this->resolveExternalMethodNamesByInputNames($formVariable);
 
         $methodNamesByInputNames = array_merge($localMethodNamesByInputNames, $externalMethodNamesByInputsNames);
-
         $formAddMethodName = $methodNamesByInputNames[$inputName] ?? null;
         if ($formAddMethodName === null) {
-            throw new NotImplementedYetException();
+            $message = sprintf('Not found for "%s" input name', $inputName);
+            throw new ShouldNotHappenException($message);
         }
 
         foreach (self::METHOD_NAMES_BY_CONTROL_TYPE as $controlType => $methodNames) {

@@ -214,7 +214,7 @@ PHP
         /** @var string $methodName */
         $methodName = $this->getName($staticCall->name);
 
-        $parentClassMethod = $this->functionLikeParsedNodesFinder->findMethod($methodName, $parentClassName);
+        $parentClassMethod = $this->functionLikeParsedNodesFinder->findClassMethod($methodName, $parentClassName);
         if ($parentClassMethod !== null && $parentClassMethod->isProtected() && $classMethod->isPublic()) {
             return true;
         }

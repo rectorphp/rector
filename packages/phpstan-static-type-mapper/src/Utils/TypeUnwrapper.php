@@ -6,6 +6,7 @@ namespace Rector\PHPStanStaticTypeMapper\Utils;
 
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 
 final class TypeUnwrapper
@@ -32,5 +33,22 @@ final class TypeUnwrapper
         }
 
         return null;
+    }
+
+    public function unwrapFirstObjectTypeFromUnionType(Type $type): Type
+    {
+        if (! $type instanceof UnionType) {
+            return $type;
+        }
+
+        foreach ($type->getTypes() as $unionedType) {
+            if (! $unionedType instanceof TypeWithClassName) {
+                continue;
+            }
+
+            return $unionedType;
+        }
+
+        return $type;
     }
 }

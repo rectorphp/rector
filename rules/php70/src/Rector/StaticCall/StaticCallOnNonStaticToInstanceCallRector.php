@@ -129,7 +129,7 @@ PHP
         }
 
         // can we add static to method?
-        $classMethodNode = $this->functionLikeParsedNodesFinder->findMethod($methodName, $className);
+        $classMethodNode = $this->functionLikeParsedNodesFinder->findClassMethod($methodName, $className);
         if ($classMethodNode === null) {
             return null;
         }

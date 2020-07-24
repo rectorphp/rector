@@ -17,12 +17,12 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
  * This class check if a variable name change breaks existing code in class method
@@ -49,16 +49,23 @@ final class BreakingVariableRenameGuard
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         ConflictingNameResolver $conflictingNameResolver,
         OverridenExistingNamesResolver $overridenExistingNamesResolver,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        TypeUnwrapper $typeUnwrapper
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->conflictingNameResolver = $conflictingNameResolver;
         $this->overridenExistingNamesResolver = $overridenExistingNamesResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->typeUnwrapper = $typeUnwrapper;
     }
 
     /**
@@ -176,7 +183,7 @@ final class BreakingVariableRenameGuard
 
     private function isDateTimeAtNamingConvention(Type $type, string $currentName): bool
     {
-        $type = $this->unwrapUnionObjectType($type);
+        $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
         if (! $type instanceof TypeWithClassName) {
             return false;
         }
@@ -186,23 +193,6 @@ final class BreakingVariableRenameGuard
         }
 
         return (bool) Strings::match($currentName, '#[\w+]At$#');
-    }
-
-    private function unwrapUnionObjectType(Type $type): Type
-    {
-        if (! $type instanceof UnionType) {
-            return $type;
-        }
-
-        foreach ($type->getTypes() as $unionedType) {
-            if (! $unionedType instanceof TypeWithClassName) {
-                continue;
-            }
-
-            return $unionedType;
-        }
-
-        return $type;
     }
 
     /**

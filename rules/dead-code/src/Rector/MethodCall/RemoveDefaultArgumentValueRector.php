@@ -157,7 +157,7 @@ PHP
             return [];
         }
 
-        $classMethodNode = $this->functionLikeParsedNodesFinder->findMethod($nodeName, $className);
+        $classMethodNode = $this->functionLikeParsedNodesFinder->findClassMethod($nodeName, $className);
         if ($classMethodNode !== null) {
             return $this->resolveDefaultParamValuesFromFunctionLike($classMethodNode);
         }
