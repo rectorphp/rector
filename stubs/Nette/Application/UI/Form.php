@@ -10,5 +10,4 @@ if (class_exists('Nette\Application\UI')) {
 
 class Form extends \Nette\Forms\Form
 {
-
 }

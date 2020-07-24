@@ -9,8 +9,8 @@ class SelectBoxPresenter
     public function run()
     {
         $form = new Form();
-        $this->addText('email', 'Email');
-        $form['email']->value = 'hey@hi.hello';
+        $form->addSelect('items', 'Email');
+        $form['items']->value = 'hey@hi.hello';
     }
 }
 
@@ -27,10 +27,10 @@ class SelectBoxPresenter
     public function run()
     {
         $form = new Form();
-        $this->addText('email', 'Email');
-        /** @var \Nette\Forms\Controls\BaseControl $emailControl */
-        $emailControl = $form['email'];
-        $emailControl->value = 'hey@hi.hello';
+        $form->addSelect('items', 'Email');
+        /** @var \Nette\Forms\Controls\SelectBox $itemsControl */
+        $itemsControl = $form['items'];
+        $itemsControl->value = 'hey@hi.hello';
     }
 }
 
