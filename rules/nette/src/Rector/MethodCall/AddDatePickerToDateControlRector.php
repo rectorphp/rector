@@ -9,12 +9,18 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
+ * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
+ *
  * @see \Rector\Nette\Tests\Rector\MethodCall\AddDatePickerToDateControlRector\AddDatePickerToDateControlRectorTest
  */
 final class AddDatePickerToDateControlRector extends AbstractRector
@@ -44,7 +50,7 @@ class SomeClass
     public function run()
     {
         $form = new Form();
-        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+        $keyDateControl = $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
     }
 }
 PHP
@@ -66,24 +72,75 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node->name, 'addDatePicker')) {
+        // 1. chain call
+        if ($node->var instanceof MethodCall) {
+            if (! $this->isOnClassMethodCall($node->var, 'Nette\Application\UI\Form', 'addDatePicker')) {
+                return null;
+            }
+
+            $assign = $this->createAssign($node->var);
+            if ($assign === null) {
+                return null;
+            }
+
+            $controlName = $this->resolveControlName($node->var);
+
+            $node->var = new Variable($controlName);
+
+            // this fixes printing indent
+            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $this->addNodeBeforeNode($assign, $node);
+
+            return $node;
+        }
+
+        // 2. assign call
+        if (! $this->isOnClassMethodCall($node, 'Nette\Application\UI\Form', 'addDatePicker')) {
             return null;
         }
 
-        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
-            return null;
+        return $this->createAssign($node);
+    }
+
+    private function resolveControlName(MethodCall $methodCall): string
+    {
+        $controlName = $methodCall->args[0]->value;
+        if (! $controlName instanceof String_) {
+            throw new ShouldNotHappenException();
         }
 
-        $key = $node->args[0]->value;
-        $arrayDimFetch = new ArrayDimFetch($node->var, $key);
+        return $controlName->value . 'DateControl';
+    }
 
+    private function createDateTimeControlNew($node): New_
+    {
         $fullyQualified = new FullyQualified('Nextras\FormComponents\Controls\DateControl');
         $new = new New_($fullyQualified);
 
         if (isset($node->args[1])) {
             $new->args[] = $node->args[1];
         }
+        return $new;
+    }
 
-        return new Assign($arrayDimFetch, $new);
+    private function createAssign(MethodCall $methodCall): ?Assign
+    {
+        $key = $methodCall->args[0]->value;
+        if (! $key instanceof String_) {
+            return null;
+        }
+
+        $arrayDimFetch = new ArrayDimFetch($methodCall->var, $key);
+        $new = $this->createDateTimeControlNew($methodCall);
+        $formAssign = new Assign($arrayDimFetch, $new);
+
+        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Assign) {
+            return $formAssign;
+        }
+
+        $controlName = $this->resolveControlName($methodCall);
+
+        return new Assign(new Variable($controlName), $formAssign);
     }
 }

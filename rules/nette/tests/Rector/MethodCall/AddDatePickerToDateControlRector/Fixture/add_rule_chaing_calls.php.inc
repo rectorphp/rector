@@ -4,12 +4,14 @@ namespace Rector\Nette\Tests\Rector\MethodCall\AddDatePickerToDateControlRector\
 
 use Nette\Application\UI\Form;
 
-class SomeClass
+class AddRuleChainCalls
 {
     public function run()
     {
         $form = new Form();
-        $form->addDatePicker('key', 'Label');
+        $form->addDatePicker('key', 'Label')
+            ->addRule('...')
+            ->addContitionOn('...');
     }
 }
 
@@ -21,12 +23,14 @@ namespace Rector\Nette\Tests\Rector\MethodCall\AddDatePickerToDateControlRector\
 
 use Nette\Application\UI\Form;
 
-class SomeClass
+class AddRuleChainCalls
 {
     public function run()
     {
         $form = new Form();
         $keyDateControl = $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+        $keyDateControl->addRule('...')
+            ->addContitionOn('...');
     }
 }
 
