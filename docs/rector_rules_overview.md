@@ -1,4 +1,4 @@
-# All 532 Rectors Overview
+# All 533 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -31,7 +31,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
-- [Nette](#nette) (13)
+- [Nette](#nette) (14)
 - [NetteCodeQuality](#nettecodequality) (1)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -5319,6 +5319,41 @@ Changes `json_encode()/json_decode()` to safer and more verbose `Nette\Utils\Jso
 -        $prettyJsonString = json_encode($data, JSON_PRETTY_PRINT);
 +        $prettyJsonString = \Nette\Utils\Json::encode($data, \Nette\Utils\Json::PRETTY);
      }
+ }
+```
+
+<br><br>
+
+### `MakeGetComponentAssignAnnotatedRector`
+
+- class: [`Rector\Nette\Rector\Assign\MakeGetComponentAssignAnnotatedRector`](/../master/rules/nette/src/Rector/Assign/MakeGetComponentAssignAnnotatedRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/Assign/MakeGetComponentAssignAnnotatedRector/Fixture)
+
+Add doc type for magic `$control->getComponent(...)` assign
+
+```diff
+ use Nette\Application\UI\Control;
+
+ final class SomeClass
+ {
+     public function run()
+     {
+         $externalControl = new ExternalControl();
++        /** @var AnotherControl $anotherControl */
+         $anotherControl = $externalControl->getComponent('another');
+     }
+ }
+
+ final class ExternalControl extends Control
+ {
+     public function createComponentAnother(): AnotherControl
+     {
+         return new AnotherControl();
+     }
+ }
+
+ final class AnotherControl extends Control
+ {
  }
 ```
 
