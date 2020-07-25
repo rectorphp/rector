@@ -151,10 +151,12 @@ final class RectorApplication
         }
 
         // 3. process file system rectors
-        foreach ($phpFileInfos as $phpFileInfo) {
-            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->processFileSystemRectors($smartFileInfo);
-            }, 'refactoring with file system');
+        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
+            foreach ($phpFileInfos as $phpFileInfo) {
+                $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
+                    $this->processFileSystemRectors($smartFileInfo);
+                }, 'refactoring with file system');
+            }
         }
 
         // 4. apply post rectors
