@@ -37,7 +37,7 @@
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [NetteUtilsCodeQuality](#netteutilscodequality) (1)
-- [Order](#order) (4)
+- [Order](#order) (5)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
 - [PHPUnit](#phpunit) (37)
@@ -6054,6 +6054,30 @@ Order class constant order by their integer value
      const MODE_OFF = 2;
 -
 -    const MODE_MAYBE = 1;
+ }
+```
+
+<br><br>
+
+### `OrderConstructorDependenciesByTypeAlphabeticallyRector`
+
+- class: [`Rector\Order\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector`](/../master/rules/order/src/Rector/ClassMethod/OrderConstructorDependenciesByTypeAlphabeticallyRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/ClassMethod/OrderConstructorDependenciesByTypeAlphabeticallyRector/Fixture)
+
+Order __constructor dependencies by type A-Z
+
+```diff
+ class SomeClass
+ {
+     public function __construct(
++        LatteAndTwigFinder $latteAndTwigFinder,
+         LatteToTwigConverter $latteToTwigConverter,
++        SmartFileSystem $smartFileSystem,
+         SymfonyStyle $symfonyStyle,
+-        LatteAndTwigFinder $latteAndTwigFinder,
+-        SmartFileSystem $smartFileSystem,
+     ) {
+     }
  }
 ```
 
