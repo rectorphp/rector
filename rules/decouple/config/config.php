@@ -12,5 +12,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public();
 
     $services->load('Rector\Decouple\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Rector/**/*Rector.php', __DIR__ . '/../src/ValueObject/*']);
+        ->exclude([__DIR__ . '/../src/Rector/*', __DIR__ . '/../src/ValueObject/*']);
 };
