@@ -12,5 +12,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public();
 
     $services->load('Rector\CakePHP\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Rector/**/*Rector.php']);
+        ->exclude([__DIR__ . '/../src/Rector/*']);
 };

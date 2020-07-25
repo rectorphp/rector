@@ -137,18 +137,10 @@ final class RectorApplication
         }
 
         // 1. parse files to nodes
-        foreach ($phpFileInfos as $phpFileInfo) {
-            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
-            }, 'parsing');
-        }
+        $this->parseFileInfosToNodes($phpFileInfos);
 
         // 2. change nodes with Rectors
-        foreach ($phpFileInfos as $phpFileInfo) {
-            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->fileProcessor->refactor($smartFileInfo);
-            }, 'refactoring');
-        }
+        $this->refactoryNodesWithRectors($phpFileInfos);
 
         // 3. process file system rectors
         if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
@@ -272,5 +264,29 @@ final class RectorApplication
         }
 
         $this->fileSystemFileProcessor->processFileInfo($smartFileInfo);
+    }
+
+    /**
+     * @param SmartFileInfo[] $phpFileInfos
+     */
+    private function parseFileInfosToNodes(array $phpFileInfos): void
+    {
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
+            }, 'parsing');
+        }
+    }
+
+    /**
+     * @param SmartFileInfo[] $phpFileInfos
+     */
+    private function refactoryNodesWithRectors(array $phpFileInfos): void
+    {
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->fileProcessor->refactor($smartFileInfo);
+            }, 'refactoring');
+        }
     }
 }

@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -29,10 +32,19 @@ final class BetterNodeFinder
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(
+        NodeFinder $nodeFinder,
+        NodeNameResolver $nodeNameResolver,
+        BetterStandardPrinter $betterStandardPrinter
+    ) {
         $this->nodeFinder = $nodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -215,6 +227,17 @@ final class BetterNodeFinder
     public function findFirst($nodes, callable $filter): ?Node
     {
         return $this->nodeFinder->findFirst($nodes, $filter);
+    }
+
+    public function findPreviousAssignToExpr(Expr $expr): ?Assign
+    {
+        return $this->findFirstPrevious($expr, function (Node $node) use ($expr) {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            return $this->betterStandardPrinter->areNodesEqual($node->var, $expr);
+        });
     }
 
     public function findFirstPrevious(Node $node, callable $filter): ?Node

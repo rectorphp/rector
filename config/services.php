@@ -39,7 +39,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->load('Rector\Core\\', __DIR__ . '/../src')
         ->exclude([
-            __DIR__ . '/../src/Rector/**/*Rector.php',
+            __DIR__ . '/../src/Rector/*',
             __DIR__ . '/../src/Testing/PHPUnit/*',
             __DIR__ . '/../src/RectorDefinition/*',
             __DIR__ . '/../src/Exception/*',
@@ -50,6 +50,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/ValueObject/*',
             __DIR__ . '/../src/Configuration/MinimalVersionChecker/*',
             __DIR__ . '/../src/Bootstrap/*',
+            // loaded for PHPStan factory
+            __DIR__ . '/../src/PHPStan/Type/*',
         ]);
 
     $services->set(MinimalVersionChecker::class)

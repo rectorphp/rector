@@ -42,6 +42,7 @@ parameters:
             'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
             'Closure': 'PhpParser\Node\Expr\Closure'
             'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
+            'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
 
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
@@ -382,3 +383,6 @@ parameters:
             path: 'packages/rector-generator/config/config.php'
 
         - '#Method Rector\\Nette\\NodeResolver\\FormVariableInputNameTypeResolver\:\:findPreviousAssignToVariable\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\Nette\\NodeResolver\\FormVariableInputNameTypeResolver\:\:resolveFromGetComponentMethodCall\(\) should return array<string, string\> but returns array<int\|string, string\>#'
+        - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findPreviousAssignToExpr\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\Nette\\FormControlTypeResolver\\GetComponentMethodCallFormControlTypeResolver\:\:resolve\(\) should return array<string, string\> but returns array<int\|string, string\>#'
