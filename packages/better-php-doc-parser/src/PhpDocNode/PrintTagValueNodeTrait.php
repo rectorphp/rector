@@ -51,7 +51,7 @@ trait PrintTagValueNodeTrait
 
             // no original quoting
             $keysByQuotedStatus = $this->tagValueNodeConfiguration->getKeysByQuotedStatus();
-            if ((isset($keysByQuotedStatus[$key]) && ! $keysByQuotedStatus[$key])) {
+            if (isset($keysByQuotedStatus[$key]) && ! $keysByQuotedStatus[$key]) {
                 continue;
             }
 
