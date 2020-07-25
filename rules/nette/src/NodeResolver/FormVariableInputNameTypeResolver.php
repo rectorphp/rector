@@ -24,6 +24,7 @@ use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 final class FormVariableInputNameTypeResolver
 {
@@ -112,6 +113,7 @@ final class FormVariableInputNameTypeResolver
 
         $methodNamesByInputNames = array_merge($localMethodNamesByInputNames, $externalMethodNamesByInputsNames);
         $formAddMethodName = $methodNamesByInputNames[$inputName] ?? null;
+
         if ($formAddMethodName === null) {
             $message = sprintf('Not found for "%s" input name', $inputName);
             throw new ShouldNotHappenException($message);
@@ -185,7 +187,12 @@ final class FormVariableInputNameTypeResolver
 
     private function resolveFromMethodCall(MethodCall $methodCall): array
     {
+        if ($this->nodeNameResolver->isName($methodCall->name, 'getComponent')) {
+            return $this->resolveFromGetComponentMethodCall($methodCall);
+        }
+
         $classMethod = $this->functionLikeParsedNodesFinder->findClassMethodByMethodCall($methodCall);
+
         if ($classMethod === null) {
             return [];
         }
@@ -300,5 +307,46 @@ final class FormVariableInputNameTypeResolver
         }
 
         return [];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function resolveFromGetComponentMethodCall(MethodCall $methodCall): array
+    {
+        $createComponentClassMethodName = 'createComponent' . ucfirst(
+            $this->valueResolver->getValue($methodCall->args[0]->value)
+        );
+
+        $externalMethodNamesByInputsNames = [];
+
+        $staticType = $this->nodeTypeResolver->getStaticType($methodCall);
+        if ($staticType instanceof FullyQualifiedObjectType) {
+            // combine constructor + method body name
+            $constructorClassMethod = $this->functionLikeParsedNodesFinder->findClassMethod(
+                self::CONSTRUCT,
+                $staticType->getClassName()
+            );
+
+            if ($constructorClassMethod !== null) {
+                $collectedList = $this->resolveFromConstructorClassMethod($constructorClassMethod);
+                $externalMethodNamesByInputsNames = array_merge($externalMethodNamesByInputsNames, $collectedList);
+            }
+        }
+
+        $callerType = $this->nodeTypeResolver->getStaticType($methodCall->var);
+
+        if ($callerType instanceof TypeWithClassName) {
+            $createComponentClassMethod = $this->functionLikeParsedNodesFinder->findClassMethod(
+                $createComponentClassMethodName,
+                $callerType->getClassName()
+            );
+            if ($createComponentClassMethod !== null) {
+                $collectedList = $this->resolveFromClassMethod($createComponentClassMethod);
+                $externalMethodNamesByInputsNames = array_merge($externalMethodNamesByInputsNames, $collectedList);
+            }
+        }
+
+        return $externalMethodNamesByInputsNames;
     }
 }

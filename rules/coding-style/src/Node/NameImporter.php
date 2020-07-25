@@ -125,7 +125,7 @@ final class NameImporter
         }
 
         // Importing root namespace classes (like \DateTime) is optional
-        $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER);
+        $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES);
         if (! $importShortClasses) {
             $name = $this->nodeNameResolver->getName($name);
             if ($name !== null && substr_count($name, '\\') === 0) {

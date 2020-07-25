@@ -50,6 +50,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/ValueObject/*',
             __DIR__ . '/../src/Configuration/MinimalVersionChecker/*',
             __DIR__ . '/../src/Bootstrap/*',
+            // loaded for PHPStan factory
+            __DIR__ . '/../src/PHPStan/Type/*',
         ]);
 
     $services->set(MinimalVersionChecker::class)

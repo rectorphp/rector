@@ -28,17 +28,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::AUTOLOAD_PATHS, []);
 
-    $parameters->set('project_type', 'proprietary');
+    $parameters->set(Option::PROJECT_TYPE, 'proprietary');
 
-    $parameters->set('nested_chain_method_call_limit', 30);
+    $parameters->set(Option::NESTED_CHAIN_METHOD_CALL_LIMIT, 30);
 
     $parameters->set(Option::AUTO_IMPORT_NAMES, false);
 
-    $parameters->set('import_short_classes', true);
+    $parameters->set(Option::IMPORT_SHORT_CLASSES, true);
 
-    $parameters->set('import_doc_blocks', true);
+    $parameters->set(Option::IMPORT_DOC_BLOCKS, true);
 
-    $parameters->set('php_version_features', null);
+    $parameters->set(Option::PHP_VERSION_FEATURES, null);
 
     $parameters->set('safe_types', false);
 };

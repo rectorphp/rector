@@ -10,4 +10,5 @@ if (class_exists('Nette\Forms\Controls\TextInput')) {
 
 final class TextInput
 {
+    public $value;
 }

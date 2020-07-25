@@ -100,7 +100,7 @@ PHP
         }
 
         $inputName = $this->getValue($dimString);
-        $controlVariableName = StaticRectorStrings::underscoreToPascalCase($inputName) . 'Control';
+        $controlVariableName = $this->createControlVariableName($inputName);
 
         $controlVariableToFormDimFetchAssign = new Assign(new Variable($controlVariableName), clone $node);
         $assignExpression = new Expression($controlVariableToFormDimFetchAssign);
@@ -113,6 +113,7 @@ PHP
             $formVariable,
             $inputName
         );
+
         $this->addVarTag($controlVariableToFormDimFetchAssign, $assignExpression, $controlVariableName, $controlType);
 
         $this->addNodeBeforeNode($assignExpression, $node);
@@ -148,7 +149,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($arrayDimFetch->var, 'Nette\Application\UI\Form')) {
+        if (! $this->isObjectTypeOrNullableObjectType($arrayDimFetch->var, 'Nette\ComponentModel\IComponent')) {
             return null;
         }
 
@@ -171,5 +172,10 @@ PHP
         }
 
         return $parent->expr === $arrayDimFetch;
+    }
+
+    private function createControlVariableName(string $inputName): string
+    {
+        return StaticRectorStrings::underscoreToPascalCase($inputName) . 'Control';
     }
 }

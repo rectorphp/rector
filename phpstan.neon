@@ -382,3 +382,4 @@ parameters:
             path: 'packages/rector-generator/config/config.php'
 
         - '#Method Rector\\Nette\\NodeResolver\\FormVariableInputNameTypeResolver\:\:findPreviousAssignToVariable\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\Nette\\NodeResolver\\FormVariableInputNameTypeResolver\:\:resolveFromGetComponentMethodCall\(\) should return array<string, string\> but returns array<int\|string, string\>#'

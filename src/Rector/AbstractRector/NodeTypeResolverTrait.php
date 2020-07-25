@@ -14,11 +14,13 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -47,18 +49,25 @@ trait NodeTypeResolverTrait
     private $stringTypeAnalyzer;
 
     /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
+    /**
      * @required
      */
     public function autowireTypeAnalyzerDependencies(
         NodeTypeResolver $nodeTypeResolver,
         ArrayTypeAnalyzer $arrayTypeAnalyzer,
         CountableTypeAnalyzer $countableTypeAnalyzer,
-        StringTypeAnalyzer $stringTypeAnalyzer
+        StringTypeAnalyzer $stringTypeAnalyzer,
+        TypeUnwrapper $typeUnwrapper
     ): void {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
         $this->countableTypeAnalyzer = $countableTypeAnalyzer;
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
+        $this->typeUnwrapper = $typeUnwrapper;
     }
 
     public function isInObjectType(Node $node, string $type): bool
@@ -79,6 +88,25 @@ trait NodeTypeResolverTrait
     protected function isObjectType(Node $node, $type): bool
     {
         return $this->nodeTypeResolver->isObjectType($node, $type);
+    }
+
+    /**
+     * @param ObjectType|string $desiredType
+     */
+    protected function isObjectTypeOrNullableObjectType(Node $node, $desiredType): bool
+    {
+        if ($this->isNullableObjectType($node)) {
+            /** @var UnionType $nodeType */
+            $nodeType = $this->nodeTypeResolver->resolve($node);
+
+            $nodeType = $this->typeUnwrapper->unwrapNullableType($nodeType);
+            if ($nodeType instanceof TypeWithClassName) {
+                $desiredTypeString = $desiredType instanceof ObjectType ? $desiredType->getClassName() : $desiredType;
+                return is_a($nodeType->getClassName(), $desiredTypeString, true);
+            }
+        }
+
+        return $this->nodeTypeResolver->isObjectType($node, $desiredType);
     }
 
     /**
