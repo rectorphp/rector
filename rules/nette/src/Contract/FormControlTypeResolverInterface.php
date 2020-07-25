@@ -8,8 +8,6 @@ use PhpParser\Node;
 
 interface FormControlTypeResolverInterface
 {
-    public function match(Node $node);
-
     /**
      * @return array<string, string>
      */

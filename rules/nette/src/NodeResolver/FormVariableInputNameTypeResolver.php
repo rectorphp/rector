@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Nette\NodeResolver;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -17,9 +16,10 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Nette\Contract\FormControlTypeResolverInterface;
+use Rector\Nette\FormControlTypeResolver\OnVariableMethodCallsFormControlTypeResolver;
 use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -62,11 +62,6 @@ final class FormVariableInputNameTypeResolver
     private $betterNodeFinder;
 
     /**
-     * @var MethodCallManipulator
-     */
-    private $methodCallManipulator;
-
-    /**
      * @var ValueResolver
      */
     private $valueResolver;
@@ -86,32 +81,51 @@ final class FormVariableInputNameTypeResolver
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var FormControlTypeResolverInterface[]
+     */
+    private $formControlTypeResolvers = [];
+
+    /**
+     * @var OnVariableMethodCallsFormControlTypeResolver
+     */
+    private $onVariableMethodCallsFormControlTypeResolver;
+
+    /**
+     * @param FormControlTypeResolverInterface[] $formControlTypeResolvers
+     */
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
-        MethodCallManipulator $methodCallManipulator,
         ValueResolver $valueResolver,
         FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        array $formControlTypeResolvers,
+        OnVariableMethodCallsFormControlTypeResolver $onVariableMethodCallsFormControlTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->methodCallManipulator = $methodCallManipulator;
         $this->valueResolver = $valueResolver;
         $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->formControlTypeResolvers = $formControlTypeResolvers;
+        $this->onVariableMethodCallsFormControlTypeResolver = $onVariableMethodCallsFormControlTypeResolver;
     }
 
     public function resolveControlTypeByInputName(Variable $formVariable, string $inputName): string
     {
-        $localMethodNamesByInputNames = $this->resolveMethodNamesByInputNames($formVariable);
+        $methodNamesByInputNames = [];
+        foreach ($this->formControlTypeResolvers as $formControlTypeResolver) {
+            $currentMethodNamesByInputNames = $formControlTypeResolver->resolve($formVariable);
+            $methodNamesByInputNames = array_merge($methodNamesByInputNames, $currentMethodNamesByInputNames);
+        }
 
         // 1. find first node assign → if is method call, enter it
         $externalMethodNamesByInputsNames = $this->resolveExternalMethodNamesByInputNames($formVariable);
 
-        $methodNamesByInputNames = array_merge($localMethodNamesByInputNames, $externalMethodNamesByInputsNames);
+        $methodNamesByInputNames = array_merge($methodNamesByInputNames, $externalMethodNamesByInputsNames);
         $formAddMethodName = $methodNamesByInputNames[$inputName] ?? null;
 
         if ($formAddMethodName === null) {
@@ -128,39 +142,6 @@ final class FormVariableInputNameTypeResolver
         }
 
         throw new NotImplementedYetException();
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private function resolveMethodNamesByInputNames(Variable $formVariable): array
-    {
-        $onFormMethodCalls = $this->methodCallManipulator->findMethodCallsOnVariable($formVariable);
-
-        $methodNamesByInputNames = [];
-        foreach ($onFormMethodCalls as $onFormMethodCall) {
-            $methodName = $this->nodeNameResolver->getName($onFormMethodCall->name);
-            if ($methodName === null) {
-                continue;
-            }
-
-            if (! Strings::startsWith($methodName, 'add')) {
-                continue;
-            }
-
-            if (! isset($onFormMethodCall->args[0])) {
-                continue;
-            }
-
-            $addedInputName = $this->valueResolver->getValue($onFormMethodCall->args[0]->value);
-            if (! is_string($addedInputName)) {
-                throw new ShouldNotHappenException();
-            }
-
-            $methodNamesByInputNames[$addedInputName] = $methodName;
-        }
-
-        return $methodNamesByInputNames;
     }
 
     /**
@@ -254,7 +235,9 @@ final class FormVariableInputNameTypeResolver
         }
 
         $initialAssignMethodNamesByInputNames = $this->resolveInitialVariableAssignMethodNamesByInputNames($lastReturn);
-        $previousMethodCallMethodNamesByInputNames = $this->resolveMethodNamesByInputNames($lastReturn->expr);
+        $previousMethodCallMethodNamesByInputNames = $this->onVariableMethodCallsFormControlTypeResolver->resolve(
+            $lastReturn->expr
+        );
 
         return array_merge($initialAssignMethodNamesByInputNames, $previousMethodCallMethodNamesByInputNames);
     }
@@ -270,7 +253,7 @@ final class FormVariableInputNameTypeResolver
             return [];
         }
 
-        return $this->resolveMethodNamesByInputNames($thisVariable);
+        return $this->onVariableMethodCallsFormControlTypeResolver->resolve($thisVariable);
     }
 
     private function findPreviousAssignToVariable(Variable $variable): ?Assign
