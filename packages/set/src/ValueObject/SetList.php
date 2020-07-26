@@ -304,7 +304,7 @@ final class SetList
     /**
      * @var string
      */
-    public const NETTE_APPLICATION_CODE_QUALITY = 'nette-application-code-quality';
+    public const NETTE_CODE_QUALITY = 'nette-code-quality';
 
     /**
      * @var string

@@ -78,7 +78,7 @@ final class SetProvider extends AbstractSetProvider
             SetList::MYSQL_TO_MYSQLI => __DIR__ . '/../../../config/set/mysql-to-mysqli.php',
             SetList::NAMING => __DIR__ . '/../../../config/set/naming.php',
             SetList::NETTE_30 => __DIR__ . '/../../../config/set/nette-30.php',
-            SetList::NETTE_APPLICATION_CODE_QUALITY => __DIR__ . '/../../../config/set/nette-application-code-quality.php',
+            SetList::NETTE_CODE_QUALITY => __DIR__ . '/../../../config/set/nette-code-quality.php',
             SetList::NETTE_CONTROL_TO_SYMFONY_CONTROLLER => __DIR__ . '/../../../config/set/nette-control-to-symfony-controller.php',
             SetList::NETTE_FORMS_TO_SYMFONY => __DIR__ . '/../../../config/set/nette-forms-to-symfony.php',
             SetList::NETTE_PARAM_TYPES => __DIR__ . '/../../../config/set/nette-30-param-types.php',
