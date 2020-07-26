@@ -63,7 +63,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
         });
 
         // add default type, as not initialized in the constructor
-        if (count($assignedExprStaticTypes) && !$this->isAssignedInConstructor) {
+        if (count($assignedExprStaticTypes) && ! $this->isAssignedInConstructor) {
             $assignedExprStaticTypes[] = new NullType();
         }
 

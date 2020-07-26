@@ -293,15 +293,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         } catch (ExpectationFailedException $expectationFailedException) {
             $contents = $expectedFileInfo->getContents();
 
-            if (getenv('UPDATE_TESTS') || getenv('UT')) {
-                if ($originalFileInfo->getContents() === $changedContent) {
-                    $newOriginalContent = $originalFileInfo->getContents();
-                } else {
-                    $newOriginalContent = $originalFileInfo->getContents() . SplitLine::LINE . $changedContent;
-                }
-
-                $this->smartFileSystem->dumpFile($fixtureFileInfo->getRealPath(), $newOriginalContent);
-            }
+            $this->updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
 
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);
@@ -332,5 +324,27 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $setFileInfos = $rectorConfigsResolver->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
 
         return array_merge($configFileInfos, $setFileInfos);
+    }
+
+    private function updateFixtureContent(
+        SmartFileInfo $originalFileInfo,
+        string $changedContent,
+        SmartFileInfo $fixtureFileInfo
+    ): void {
+        if (! getenv('UPDATE_TESTS') && ! getenv('UT')) {
+            return;
+        }
+
+        $newOriginalContent = $this->resolveNewFixtureContent($originalFileInfo, $changedContent);
+        $this->smartFileSystem->dumpFile($fixtureFileInfo->getRealPath(), $newOriginalContent);
+    }
+
+    private function resolveNewFixtureContent(SmartFileInfo $originalFileInfo, string $changedContent): string
+    {
+        if ($originalFileInfo->getContents() === $changedContent) {
+            return $originalFileInfo->getContents();
+        }
+
+        return $originalFileInfo->getContents() . SplitLine::LINE . $changedContent;
     }
 }
