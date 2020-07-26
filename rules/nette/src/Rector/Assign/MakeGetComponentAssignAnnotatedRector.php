@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -19,6 +21,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -103,7 +106,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isOnClassMethodCall($node->expr, 'Nette\Application\UI\Control', 'getComponent')) {
+        if (! $this->isGetComponentMethodCallOrArrayDimFetchOnControl($node->expr)) {
             return null;
         }
 
@@ -121,10 +124,8 @@ PHP
             return null;
         }
 
-        /** @var MethodCall $methodCall */
-        $methodCall = $node->expr;
-        $createComponentClassMethodReturnType = $this->resolveGetComponentReturnType($methodCall);
-        if (! $createComponentClassMethodReturnType instanceof TypeWithClassName) {
+        $controlType = $this->resolveControlType($node);
+        if ($controlType instanceof MixedType) {
             return null;
         }
 
@@ -134,7 +135,7 @@ PHP
         }
 
         $attributeAwareFullyQualifiedIdentifierTypeNode = new AttributeAwareFullyQualifiedIdentifierTypeNode(
-            $createComponentClassMethodReturnType->getClassName()
+            $controlType->getClassName()
         );
         $varTagValueNode = new VarTagValueNode(
             $attributeAwareFullyQualifiedIdentifierTypeNode,
@@ -166,15 +167,13 @@ PHP
         return $phpDocInfo;
     }
 
-    private function resolveGetComponentReturnType(MethodCall $methodCall): Type
+    private function resolveCreateComponentMethodCallReturnType(MethodCall $methodCall): Type
     {
         /** @var Scope|null $scope */
         $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
         if ($scope === null) {
             return new MixedType();
         }
-
-        $calledOnType = $scope->getType($methodCall->var);
 
         if (count($methodCall->args) !== 1) {
             return new MixedType();
@@ -185,9 +184,53 @@ PHP
             return new MixedType();
         }
 
-        $componentName = $this->getValue($firstArgumentValue);
+        return $this->resolveTypeFromShortControlNameAndVariable($firstArgumentValue, $scope, $methodCall->var);
+    }
+
+    private function isGetComponentMethodCallOrArrayDimFetchOnControl(Expr $expr): bool
+    {
+        if ($this->isOnClassMethodCall($expr, 'Nette\Application\UI\Control', 'getComponent')) {
+            return true;
+        }
+
+        return $this->isArrayDimFetchStringOnControlVariable($expr);
+    }
+
+    private function resolveArrayDimFetchControlType(ArrayDimFetch $arrayDimFetch): Type
+    {
+        /** @var Scope|null $scope */
+        $scope = $arrayDimFetch->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $this->resolveTypeFromShortControlNameAndVariable($arrayDimFetch->dim, $scope, $arrayDimFetch->var);
+    }
+
+    private function isArrayDimFetchStringOnControlVariable(Expr $expr): bool
+    {
+        if (! $expr instanceof ArrayDimFetch) {
+            return false;
+        }
+
+        if (! $expr->dim instanceof String_) {
+            return false;
+        }
+
+        $varStaticType = $this->getStaticType($expr->var);
+        if (! $varStaticType instanceof TypeWithClassName) {
+            return false;
+        }
+
+        return is_a($varStaticType->getClassName(), 'Nette\Application\UI\Control', true);
+    }
+
+    private function resolveTypeFromShortControlNameAndVariable(String_ $shortControlString, Scope $scope, Expr $expr)
+    {
+        $componentName = $this->getValue($shortControlString);
         $methodName = sprintf('createComponent%s', ucfirst($componentName));
 
+        $calledOnType = $scope->getType($expr);
         if (! $calledOnType instanceof ObjectType) {
             return new MixedType();
         }
@@ -200,5 +243,22 @@ PHP
         $method = $calledOnType->getMethod($methodName, $scope);
 
         return ParametersAcceptorSelector::selectSingle($method->getVariants())->getReturnType();
+    }
+
+    private function resolveControlType(Assign $assign): Type
+    {
+        if ($assign->expr instanceof MethodCall) {
+            /** @var MethodCall $methodCall */
+            $methodCall = $assign->expr;
+            return $this->resolveCreateComponentMethodCallReturnType($methodCall);
+        }
+
+        if ($assign->expr instanceof ArrayDimFetch) {
+            /** @var ArrayDimFetch $arrayDimFetch */
+            $arrayDimFetch = $assign->expr;
+            return $this->resolveArrayDimFetchControlType($arrayDimFetch);
+        }
+
+        return new MixedType();
     }
 }
