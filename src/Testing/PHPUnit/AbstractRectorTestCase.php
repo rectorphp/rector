@@ -293,8 +293,13 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         } catch (ExpectationFailedException $expectationFailedException) {
             $contents = $expectedFileInfo->getContents();
 
-            if (getenv('UPDATE_TESTS')) {
-                $newOriginalContent = $originalFileInfo->getContents() . SplitLine::LINE . $changedContent . '?>' . PHP_EOL;
+            if (getenv('UPDATE_TESTS') || getenv('UT')) {
+                if ($originalFileInfo->getContents() === $changedContent) {
+                    $newOriginalContent = $originalFileInfo->getContents();
+                } else {
+                    $newOriginalContent = $originalFileInfo->getContents() . SplitLine::LINE . $changedContent;
+                }
+
                 $this->smartFileSystem->dumpFile($fixtureFileInfo->getRealPath(), $newOriginalContent);
             }
 

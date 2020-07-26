@@ -2,8 +2,11 @@
 
 namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class ClassNameNullableTypeClass {
-    private ?\Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass $property;
+use Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass;
+
+class ClassNameNullableTypeClass
+{
+    private ?AnotherClass $property;
 }
 
 ?>
@@ -12,7 +15,10 @@ class ClassNameNullableTypeClass {
 
 namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class ClassNameNullableTypeClass {
+use Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass;
+
+class ClassNameNullableTypeClass
+{
     /**
      * @var \Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass|null
      */

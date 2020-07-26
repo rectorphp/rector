@@ -15,12 +15,19 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class AssignToPropertyTypeInferer extends AbstractTypeInferer
 {
+    /**
+     * @var bool
+     */
+    private $isAssignedInConstructor = false;
+
     public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): Type
     {
         $assignedExprStaticTypes = [];
+        $this->isAssignedInConstructor = false;
 
         $this->callableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
             $propertyName,
@@ -44,13 +51,19 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
                 $exprStaticType = new ArrayType(new MixedType(), $exprStaticType);
             }
 
+            // is in constructor?
+            $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
+            if ($methodName === '__construct') {
+                $this->isAssignedInConstructor = true;
+            }
+
             $assignedExprStaticTypes[] = $exprStaticType;
 
             return null;
         });
 
         // add default type, as not initialized in the constructor
-        if (count($assignedExprStaticTypes)) {
+        if (count($assignedExprStaticTypes) && $this->isAssignedInConstructor === false) {
             $assignedExprStaticTypes[] = new NullType();
         }
 

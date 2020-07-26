@@ -27,7 +27,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropert
 class KeepComment
 {
     /**
-     * @var string[]|string e.g. 123
+     * @var string[]|string|null e.g. 123
      */
     private $ids;
 
