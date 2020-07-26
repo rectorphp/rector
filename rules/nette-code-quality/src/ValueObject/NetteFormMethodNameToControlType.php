@@ -10,17 +10,21 @@ final class NetteFormMethodNameToControlType
      * @var string[]
      */
     public const METHOD_NAME_TO_CONTROL_TYPE = [
-        'Nette\Forms\Controls\TextInput' => ['addText', 'addPassword', 'addEmail', 'addInteger'],
-        'Nette\Forms\Controls\TextArea' => ['addTextArea'],
-        'Nette\Forms\Controls\UploadControl' => ['addUpload', 'addMultiUpload'],
-        'Nette\Forms\Controls\HiddenField' => ['addHidden'],
-        'Nette\Forms\Controls\Checkbox' => ['addCheckbox'],
-        'Nette\Forms\Controls\RadioList' => ['addRadioList'],
-        'Nette\Forms\Controls\CheckboxList' => ['addCheckboxList'],
-        'Nette\Forms\Controls\SelectBox' => ['addSelect'],
-        'Nette\Forms\Controls\MultiSelectBox' => ['addMultiSelect'],
-        'Nette\Forms\Controls\SubmitButton' => ['addSubmit'],
-        'Nette\Forms\Controls\Button' => ['addButton'],
-        'Nette\Forms\Controls\ImageButton' => ['addImage'],
+        'addText' => 'Nette\Forms\Controls\TextInput',
+        'addPassword' => 'Nette\Forms\Controls\TextInput',
+        'addEmail' => 'Nette\Forms\Controls\TextInput',
+        'addInteger' => 'Nette\Forms\Controls\TextInput',
+        'addUpload' => 'Nette\Forms\Controls\UploadControl',
+        'addMultiUpload' => 'Nette\Forms\Controls\UploadControl',
+        'addTextArea' => 'Nette\Forms\Controls\TextArea',
+        'addHidden' => 'Nette\Forms\Controls\HiddenField',
+        'addCheckbox' => 'Nette\Forms\Controls\Checkbox',
+        'addRadioList' => 'Nette\Forms\Controls\RadioList',
+        'addCheckboxList' => 'Nette\Forms\Controls\CheckboxList',
+        'addSelect' => 'Nette\Forms\Controls\SelectBox',
+        'addMultiSelect' => 'Nette\Forms\Controls\MultiSelectBox',
+        'addSubmit' => 'Nette\Forms\Controls\SubmitButton',
+        'addButton' => 'Nette\Forms\Controls\Button',
+        'addImage' => 'Nette\Forms\Controls\ImageButton',
     ];
 }

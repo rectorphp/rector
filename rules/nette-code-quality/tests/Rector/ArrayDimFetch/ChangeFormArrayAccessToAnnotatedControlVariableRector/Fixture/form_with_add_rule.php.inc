@@ -35,15 +35,16 @@ class FormWithAddRule
     public function run()
     {
         $form = $this->makeForm();
-        /** @var \Nette\Forms\Controls\TextInput $emailElseControl */
-        $emailElseControl = $form['email_else'];
-        $emailElseControl->value = 'hey@hi.hello';
+        /** @var \Nette\Forms\Controls\TextArea $textControl */
+        $textControl = $form['text'];
+        $textControl->value = 'hey@hi.hello';
     }
 
     public function makeForm(): Form
     {
         $form = new Form();
-        $form->addText('email_else', 'Email');
+        $form->addTextArea('text', 'Text')
+            ->addRule([$this, 'check']);
 
         return $form;
     }
