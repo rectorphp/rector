@@ -143,8 +143,8 @@ PHP
     private function createAssignExpression(string $variableName, ArrayDimFetch $arrayDimFetch): Expression
     {
         $variable = new Variable($variableName);
-        $assignedDimFetch = clone $arrayDimFetch;
-        $assign = new Assign($variable, $assignedDimFetch);
+        $assignedArrayDimFetch = clone $arrayDimFetch;
+        $assign = new Assign($variable, $assignedArrayDimFetch);
 
         return new Expression($assign);
     }
@@ -157,7 +157,7 @@ PHP
         /** @var ClassMethod|null $classMethod */
         $classMethod = $arrayDimFetch->getAttribute(AttributeKey::METHOD_NODE);
         if ($classMethod !== null) {
-            $classMethodObjectHash = spl_object_hash($classMethod);
+            $classMethodObjectHash = spl_object_hash($classMethod) . $variableName;
             if (in_array($classMethodObjectHash, $this->alreadyInitializedAssignsClassMethodObjectHashes, true)) {
                 return;
             }
