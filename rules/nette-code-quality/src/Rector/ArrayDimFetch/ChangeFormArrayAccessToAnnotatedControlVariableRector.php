@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -46,6 +47,11 @@ final class ChangeFormArrayAccessToAnnotatedControlVariableRector extends Abstra
      * @var VarAnnotationManipulator
      */
     private $varAnnotationManipulator;
+
+    /**
+     * @var string[]
+     */
+    private $alreadyInitializedAssignsClassMethodObjectHashes = [];
 
     public function __construct(
         FormVariableInputNameTypeResolver $formVariableInputNameTypeResolver,
@@ -123,9 +129,6 @@ PHP
 
         $controlVariableName = $this->netteControlNaming->createVariableName($inputName);
 
-        $controlVariableToFormDimFetchAssign = new Assign(new Variable($controlVariableName), clone $node);
-        $assignExpression = new Expression($controlVariableToFormDimFetchAssign);
-
         // 1. find previous calls on variable
         /** @var Variable $formVariable */
         $formVariable = $node->var;
@@ -141,13 +144,8 @@ PHP
         }
 
         $controlObjectType = new ObjectType($controlType);
-        $this->varAnnotationManipulator->decorateNodeWithInlineVarType(
-            $assignExpression,
-            $controlObjectType,
-            $controlVariableName
-        );
 
-        $this->addNodeBeforeNode($assignExpression, $node);
+        $this->addAssignExpressionForFirstCase($controlVariableName, $node, $controlObjectType);
 
         return new Variable($controlVariableName);
     }
@@ -164,5 +162,44 @@ PHP
         }
 
         return $parent->expr === $arrayDimFetch;
+    }
+
+    private function addAssignExpressionForFirstCase(
+        string $variableName,
+        ArrayDimFetch $arrayDimFetch,
+        ObjectType $controlObjectType
+    ): void {
+        /** @var ClassMethod|null $classMethod */
+        $classMethod = $arrayDimFetch->getAttribute(AttributeKey::METHOD_NODE);
+
+        if ($classMethod !== null) {
+            $classMethodObjectHash = spl_object_hash($classMethod) . $variableName;
+            if (in_array($classMethodObjectHash, $this->alreadyInitializedAssignsClassMethodObjectHashes, true)) {
+                return;
+            }
+
+            $this->alreadyInitializedAssignsClassMethodObjectHashes[] = $classMethodObjectHash;
+        }
+
+        $assignExpression = $this->createAssignExpression($variableName, $arrayDimFetch);
+
+        $this->varAnnotationManipulator->decorateNodeWithInlineVarType(
+            $assignExpression,
+            $controlObjectType,
+            $variableName
+        );
+
+        $this->addNodeBeforeNode($assignExpression, $arrayDimFetch);
+    }
+
+    private function createAssignExpression(string $controlVariableName, ArrayDimFetch $arrayDimFetch): Expression
+    {
+        $variable = new Variable($controlVariableName);
+
+        $assignedArrayDimFetch = clone $arrayDimFetch;
+
+        $controlVariableToFormDimFetchAssign = new Assign($variable, $assignedArrayDimFetch);
+
+        return new Expression($controlVariableToFormDimFetchAssign);
     }
 }

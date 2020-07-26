@@ -161,6 +161,7 @@ PHP
     ): void {
         /** @var ClassMethod|null $classMethod */
         $classMethod = $arrayDimFetch->getAttribute(AttributeKey::METHOD_NODE);
+
         if ($classMethod !== null) {
             $classMethodObjectHash = spl_object_hash($classMethod) . $variableName;
             if (in_array($classMethodObjectHash, $this->alreadyInitializedAssignsClassMethodObjectHashes, true)) {
