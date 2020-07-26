@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NetteCodeQuality\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -127,6 +128,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->isBeingAssigned($node)) {
+            return null;
+        }
+
         $controlName = $this->controlDimFetchAnalyzer->matchName($node);
         if ($controlName === null) {
             return null;
@@ -191,5 +196,15 @@ PHP
         $controlType = $controlTypes[$controlName];
 
         return new ObjectType($controlType);
+    }
+
+    private function isBeingAssigned(Expr $expr): bool
+    {
+        $parent = $expr->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Assign) {
+            return false;
+        }
+
+        return $parent->expr === $expr;
     }
 }

@@ -66,7 +66,9 @@ class SomeEventSubscriber implements EventSubscriberInterface
 PHP
                 ,
                 [
-                    'EventSubscriberInterface' => ['getSubscribedEvents'],
+                    '$methodsByType' => [
+                        'EventSubscriberInterface' => ['getSubscribedEvents'],
+                    ],
                 ]
             ),
         ]);
