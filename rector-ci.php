@@ -7,6 +7,8 @@ use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\Core\Configuration\Option;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
+use Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector;
+use Rector\Order\Rector\Class_\OrderPropertyByComplexityRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\SetList;
 use Rector\SymfonyPhpConfig\Rector\Closure\AddEmptyLineBetweenCallsInPhpConfigRector;
@@ -33,6 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::PRIVATIZATION,
         SetList::NAMING,
         SetList::SYMFONY_PHP_CONFIG,
+        SetList::ORDER,
     ]);
 
     $parameters->set(Option::PATHS, [
@@ -58,5 +61,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SplitStringClassConstantToClassConstFetchRector::class,
         // false positives on constants used in rector-ci.php
         RemoveUnusedClassConstantRector::class,
+
+        OrderPrivateMethodsByUseRector::class,
+        OrderPropertyByComplexityRector::class,
     ]);
 };
