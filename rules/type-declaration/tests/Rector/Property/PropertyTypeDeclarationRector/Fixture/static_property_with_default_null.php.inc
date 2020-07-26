@@ -34,11 +34,11 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRe
 class StaticPropertyWithDefaultNull
 {
     /**
-     * @var string|null
+     * @var null|string
      */
     protected static $cacheFile = null;
     /**
-     * @var string[]|null
+     * @var null|string[]
      */
     protected static $cacheFiles = null;
 

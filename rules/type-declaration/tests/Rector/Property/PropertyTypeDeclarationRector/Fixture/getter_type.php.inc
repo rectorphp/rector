@@ -85,7 +85,7 @@ final class GetterType
 
     /**
      * @Serializer\Type("string")
-     * @var string
+     * @var string|null
      */
     private $language;
 

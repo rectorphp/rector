@@ -591,7 +591,7 @@ class Command
      */
     private $name;
     /**
-     * @var string
+     * @var string|null
      */
     private $processTitle;
     /**
@@ -623,7 +623,7 @@ class Command
      */
     private $applicationDefinitionMergedWithArgs = false;
     /**
-     * @var callable
+     * @var callable|null
      */
     private $code;
     /**

@@ -13,9 +13,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Downgrade\Tests\Rector\Property\TypedPropertyRector\TypedPropertyRectorTest
+ * @see \Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  */
-final class TypedPropertyRector extends AbstractRector
+final class DowngradeTypedPropertyRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {

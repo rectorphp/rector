@@ -120,12 +120,7 @@ final class RectorApplication
             return;
         }
 
-        if (! $this->symfonyStyle->isVerbose() && $this->configuration->showProgressBar()) {
-            // why 5? one for each cycle, so user sees some activity all the time
-            $this->symfonyStyle->progressStart($fileCount * 5);
-
-            $this->configureStepCount($this->symfonyStyle);
-        }
+        $this->prepareProgressBar($fileCount);
 
         // PHPStan has to know about all files!
         $this->configurePHPStanNodeScopeResolver($phpFileInfos);
@@ -288,5 +283,26 @@ final class RectorApplication
                 $this->fileProcessor->refactor($smartFileInfo);
             }, 'refactoring');
         }
+    }
+
+    private function prepareProgressBar(int $fileCount): void
+    {
+        if ($this->symfonyStyle->isVerbose()) {
+            return;
+        }
+
+        if (! $this->configuration->showProgressBar()) {
+            return;
+        }
+
+        // why 5? one for each cycle, so user sees some activity all the time
+        $stepMultiplier = 4;
+        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
+            ++$stepMultiplier;
+        }
+
+        $this->symfonyStyle->progressStart($fileCount * $stepMultiplier);
+
+        $this->configureStepCount($this->symfonyStyle);
     }
 }
