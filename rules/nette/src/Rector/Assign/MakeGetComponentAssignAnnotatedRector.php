@@ -11,20 +11,17 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Nette\DocBlock\VarAnnotationManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -34,6 +31,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class MakeGetComponentAssignAnnotatedRector extends AbstractRector
 {
+    /**
+     * @var VarAnnotationManipulator
+     */
+    private $varAnnotationManipulator;
+
+    public function __construct(VarAnnotationManipulator $varAnnotationManipulator)
+    {
+        $this->varAnnotationManipulator = $varAnnotationManipulator;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Add doc type for magic $control->getComponent(...) assign', [
@@ -125,46 +132,13 @@ PHP
         }
 
         $controlType = $this->resolveControlType($node);
-        if ($controlType instanceof MixedType) {
+        if (! $controlType instanceof TypeWithClassName) {
             return null;
         }
 
-        $phpDocInfo = $this->resolvePhpDocInfo($node);
-        if ($phpDocInfo->getVarTagValue() !== null) {
-            return null;
-        }
-
-        $attributeAwareFullyQualifiedIdentifierTypeNode = new AttributeAwareFullyQualifiedIdentifierTypeNode(
-            $controlType->getClassName()
-        );
-        $varTagValueNode = new VarTagValueNode(
-            $attributeAwareFullyQualifiedIdentifierTypeNode,
-            '$' . $variableName,
-            ''
-        );
-        $phpDocInfo->addTagValueNode($varTagValueNode);
+        $this->varAnnotationManipulator->decorateNodeWithInlineVarType($node, $controlType, $variableName);
 
         return $node;
-    }
-
-    private function resolvePhpDocInfo(Assign $assign): PhpDocInfo
-    {
-        $currentStmt = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if ($currentStmt instanceof Expression) {
-            /** @var PhpDocInfo|null $phpDocInfo */
-            $phpDocInfo = $currentStmt->getAttribute(AttributeKey::PHP_DOC_INFO);
-        } else {
-            /** @var PhpDocInfo|null $phpDocInfo */
-            $phpDocInfo = $assign->getAttribute(AttributeKey::PHP_DOC_INFO);
-        }
-
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($assign);
-        }
-
-        $phpDocInfo->makeSingleLined();
-
-        return $phpDocInfo;
     }
 
     private function resolveCreateComponentMethodCallReturnType(MethodCall $methodCall): Type

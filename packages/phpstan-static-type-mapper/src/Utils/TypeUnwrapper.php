@@ -8,6 +8,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\PHPStan\TypeFactoryStaticHelper;
 
 final class TypeUnwrapper
 {
@@ -50,5 +51,23 @@ final class TypeUnwrapper
         }
 
         return $type;
+    }
+
+    /**
+     * @return Type|UnionType
+     */
+    public function removeNullTypeFromUnionType(UnionType $unionType): Type
+    {
+        $unionedTypesWithoutNullType = [];
+
+        foreach ($unionType->getTypes() as $type) {
+            if ($type instanceof UnionType) {
+                continue;
+            }
+
+            $unionedTypesWithoutNullType[] = $type;
+        }
+
+        return TypeFactoryStaticHelper::createUnionObjectType($unionedTypesWithoutNullType);
     }
 }

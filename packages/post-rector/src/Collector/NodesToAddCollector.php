@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 
@@ -41,6 +42,11 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
     public function addNodeBeforeNode(Node $addedNode, Node $positionNode): void
     {
+        if ($positionNode->getAttributes() === []) {
+            $message = sprintf('Switch arguments in "%s()" method', __METHOD__);
+            throw new ShouldNotHappenException($message);
+        }
+
         $position = $this->resolveNearestExpressionPosition($positionNode);
         $this->nodesToAddBefore[$position][] = $this->wrapToExpression($addedNode);
     }

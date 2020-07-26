@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
@@ -88,25 +87,6 @@ trait NodeTypeResolverTrait
     protected function isObjectType(Node $node, $type): bool
     {
         return $this->nodeTypeResolver->isObjectType($node, $type);
-    }
-
-    /**
-     * @param ObjectType|string $desiredType
-     */
-    protected function isObjectTypeOrNullableObjectType(Node $node, $desiredType): bool
-    {
-        if ($this->isNullableObjectType($node)) {
-            /** @var UnionType $nodeType */
-            $nodeType = $this->nodeTypeResolver->resolve($node);
-
-            $nodeType = $this->typeUnwrapper->unwrapNullableType($nodeType);
-            if ($nodeType instanceof TypeWithClassName) {
-                $desiredTypeString = $desiredType instanceof ObjectType ? $desiredType->getClassName() : $desiredType;
-                return is_a($nodeType->getClassName(), $desiredTypeString, true);
-            }
-        }
-
-        return $this->nodeTypeResolver->isObjectType($node, $desiredType);
     }
 
     /**

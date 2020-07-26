@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\FloatType;
@@ -25,12 +24,13 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\AnonymousClass\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassesInterfacesAndUsedTraitsCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 final class NodeTypeResolver
@@ -39,11 +39,6 @@ final class NodeTypeResolver
      * @var NodeTypeResolverInterface[]
      */
     private $nodeTypeResolvers = [];
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
 
     /**
      * @var ObjectTypeSpecifier
@@ -61,22 +56,33 @@ final class NodeTypeResolver
     private $parentClassesInterfacesAndUsedTraitsCorrector;
 
     /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
+    /**
+     * @var ClassNodeAnalyzer
+     */
+    private $classNodeAnalyzer;
+
+    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
         ObjectTypeSpecifier $objectTypeSpecifier,
         ParentClassesInterfacesAndUsedTraitsCorrector $parentClassesInterfacesAndUsedTraitsCorrector,
+        TypeUnwrapper $typeUnwrapper,
+        ClassNodeAnalyzer $classNodeAnalyzer,
         array $nodeTypeResolvers
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
             $this->addNodeTypeResolver($nodeTypeResolver);
         }
 
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->parentClassesInterfacesAndUsedTraitsCorrector = $parentClassesInterfacesAndUsedTraitsCorrector;
+        $this->typeUnwrapper = $typeUnwrapper;
+        $this->classNodeAnalyzer = $classNodeAnalyzer;
     }
 
     /**
@@ -166,7 +172,7 @@ final class NodeTypeResolver
             return new MixedType();
         }
 
-        if ($node instanceof New_ && $this->isAnonymousClass($node->class)) {
+        if ($node instanceof New_ && $this->classNodeAnalyzer->isAnonymousClass($node->class)) {
             return new ObjectWithoutClassType();
         }
 
@@ -176,6 +182,48 @@ final class NodeTypeResolver
         }
 
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $staticType);
+    }
+
+    public function isNumberType(Node $node): bool
+    {
+        return $this->isStaticType($node, IntegerType::class) || $this->isStaticType($node, FloatType::class);
+    }
+
+    public function isStaticType(Node $node, string $staticTypeClass): bool
+    {
+        if (! is_a($staticTypeClass, Type::class, true)) {
+            throw new ShouldNotHappenException(sprintf(
+                '"%s" in "%s()" must be type of "%s"',
+                $staticTypeClass,
+                __METHOD__,
+                Type::class
+            ));
+        }
+
+        return is_a($this->resolve($node), $staticTypeClass);
+    }
+
+    /**
+     * @param ObjectType|string $desiredType
+     */
+    public function isObjectTypeOrNullableObjectType(Node $node, $desiredType): bool
+    {
+        if ($this->isObjectType($node, $desiredType)) {
+            return true;
+        }
+
+        $nodeType = $this->getStaticType($node);
+        if (! $nodeType instanceof UnionType) {
+            return false;
+        }
+
+        $unwrappedNodeType = $this->typeUnwrapper->unwrapNullableType($nodeType);
+        if (! $unwrappedNodeType instanceof TypeWithClassName) {
+            return false;
+        }
+
+        $desiredTypeString = $desiredType instanceof ObjectType ? $desiredType->getClassName() : $desiredType;
+        return is_a($unwrappedNodeType->getClassName(), $desiredTypeString, true);
     }
 
     public function isNullableObjectType(Node $node): bool
@@ -201,25 +249,6 @@ final class NodeTypeResolver
         }
 
         return false;
-    }
-
-    public function isNumberType(Node $node): bool
-    {
-        return $this->isStaticType($node, IntegerType::class) || $this->isStaticType($node, FloatType::class);
-    }
-
-    public function isStaticType(Node $node, string $staticTypeClass): bool
-    {
-        if (! is_a($staticTypeClass, Type::class, true)) {
-            throw new ShouldNotHappenException(sprintf(
-                '"%s" in "%s()" must be type of "%s"',
-                $staticTypeClass,
-                __METHOD__,
-                Type::class
-            ));
-        }
-
-        return is_a($this->resolve($node), $staticTypeClass);
     }
 
     private function addNodeTypeResolver(NodeTypeResolverInterface $nodeTypeResolver): void
@@ -296,7 +325,7 @@ final class NodeTypeResolver
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof New_ && $this->isAnonymousClass($node->class)) {
+        if ($node instanceof New_ && $this->classNodeAnalyzer->isAnonymousClass($node->class)) {
             return new ObjectWithoutClassType();
         }
 
@@ -329,17 +358,6 @@ final class NodeTypeResolver
         }
 
         return new ArrayType(new MixedType(), new MixedType());
-    }
-
-    private function isAnonymousClass(Node $node): bool
-    {
-        if (! $node instanceof Class_) {
-            return false;
-        }
-
-        $className = $this->nodeNameResolver->getName($node);
-
-        return $className === null || Strings::contains($className, 'AnonymousClass');
     }
 
     private function resolveByNodeTypeResolvers(Node $node): ?Type

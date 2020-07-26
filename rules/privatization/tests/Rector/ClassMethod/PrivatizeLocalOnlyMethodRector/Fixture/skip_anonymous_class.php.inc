@@ -6,6 +6,9 @@ use PhpParser\NodeTraverser;
 
 class SkipAnonymousClass
 {
+    /**
+     * @api
+     */
     public function run()
     {
         $anonymousClass = new class() extends NodeTraverser

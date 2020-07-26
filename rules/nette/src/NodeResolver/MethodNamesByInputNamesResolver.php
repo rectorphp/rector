@@ -38,7 +38,6 @@ final class MethodNamesByInputNamesResolver
 
         foreach ($this->formControlTypeResolvers as $formControlTypeResolver) {
             $currentMethodNamesByInputNames = $formControlTypeResolver->resolve($node);
-
             $methodNamesByInputNames = array_merge($methodNamesByInputNames, $currentMethodNamesByInputNames);
         }
 
