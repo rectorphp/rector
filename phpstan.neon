@@ -386,3 +386,4 @@ parameters:
         - '#Method Rector\\Nette\\NodeResolver\\FormVariableInputNameTypeResolver\:\:resolveFromGetComponentMethodCall\(\) should return array<string, string\> but returns array<int\|string, string\>#'
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findPreviousAssignToExpr\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
         - '#Method Rector\\Nette\\FormControlTypeResolver\\GetComponentMethodCallFormControlTypeResolver\:\:resolve\(\) should return array<string, string\> but returns array<int\|string, string\>#'
+        - '#Class with base "LexerFactory" name is already used in "PHPStan\\Parser\\LexerFactory", "Rector\\Core\\PhpParser\\Parser\\LexerFactory"\. Use unique name to make classes easy to recognize#'
