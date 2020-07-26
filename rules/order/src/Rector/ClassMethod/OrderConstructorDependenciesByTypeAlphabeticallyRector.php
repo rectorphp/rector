@@ -5,21 +5,33 @@ declare(strict_types=1);
 namespace Rector\Order\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\OrderConstructorDependenciesByTypeAlphabeticallyRectorTest
  */
 final class OrderConstructorDependenciesByTypeAlphabeticallyRector extends AbstractRector
 {
+    /**
+     * @var array
+     */
+    private $skipPatterns = [];
+
+    public function __construct(array $skipPatterns = ['*/ValueObject/*'])
+    {
+        $this->skipPatterns = $skipPatterns;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Order __constructor dependencies by type A-Z', [
@@ -31,7 +43,7 @@ class SomeClass
         LatteToTwigConverter $latteToTwigConverter,
         SymfonyStyle $symfonyStyle,
         LatteAndTwigFinder $latteAndTwigFinder,
-        SmartFileSystem $smartFileSystem,
+        SmartFileSystem $smartFileSystem
     ) {
     }
 }
@@ -44,7 +56,7 @@ class SomeClass
         LatteAndTwigFinder $latteAndTwigFinder,
         LatteToTwigConverter $latteToTwigConverter,
         SmartFileSystem $smartFileSystem,
-        SymfonyStyle $symfonyStyle,
+        SymfonyStyle $symfonyStyle
     ) {
     }
 }
@@ -83,24 +95,26 @@ PHP
     {
         $params = $classMethod->getParams();
         usort($params, function (Param $firstParam, Param $secondParam) {
-            /** @var Name $typeA */
-            $typeA = $firstParam->type;
-            /** @var Name $typeB */
-            $typeB = $secondParam->type;
-            return strcmp($this->getShortName($typeA), $this->getShortName($typeB));
+            /** @var Name $firstParamType */
+            $firstParamType = $this->getParamType($firstParam);
+            /** @var Name $secondParamType */
+            $secondParamType = $this->getParamType($secondParam);
+
+            return $this->getShortName($firstParamType) <=> $this->getShortName($secondParamType);
         });
 
         return $params;
     }
 
-    private function isPrimitiveDataTypeParam(Param $param): bool
+    private function hasPrimitiveDataTypeParam(ClassMethod $classMethod): bool
     {
-        return $param->type instanceof Identifier;
-    }
+        foreach ($classMethod->params as $param) {
+            if ($param->type instanceof Identifier) {
+                return true;
+            }
+        }
 
-    private function isDefaultValueParam(Param $param): bool
-    {
-        return $param->default instanceof Expr || $param->type instanceof NullableType;
+        return false;
     }
 
     private function shouldSkip(ClassMethod $classMethod): bool
@@ -109,16 +123,53 @@ PHP
             return true;
         }
 
+        /** @var SmartFileInfo $smartFileInfo */
+        $smartFileInfo = $classMethod->getAttribute(AttributeKey::FILE_INFO);
+        if ($this->isFileInfoMatch($smartFileInfo)) {
+            return true;
+        }
+
         if ($classMethod->params === []) {
             return true;
         }
 
+        if ($this->hasPrimitiveDataTypeParam($classMethod)) {
+            return true;
+        }
+
+        return $this->hasParamWithNoType($classMethod);
+    }
+
+    /**
+     * @return Identifier|Name|UnionType|null
+     */
+    private function getParamType(Param $param)
+    {
+        return $param->type instanceof NullableType ? $param->type->type : $param->type;
+    }
+
+    private function hasParamWithNoType(ClassMethod $classMethod): bool
+    {
         foreach ($classMethod->params as $param) {
-            if ($this->isDefaultValueParam($param)) {
+            if ($param->type === null) {
                 return true;
             }
+        }
 
-            if ($this->isPrimitiveDataTypeParam($param)) {
+        return false;
+    }
+
+    /**
+     * Match file against matches, no patterns provided, then it matches
+     */
+    private function isFileInfoMatch(SmartFileInfo $smartFileInfo): bool
+    {
+        if ($this->skipPatterns === []) {
+            return true;
+        }
+
+        foreach ($this->skipPatterns as $pattern) {
+            if (fnmatch($pattern, $smartFileInfo->getRelativeFilePath(), FNM_NOESCAPE)) {
                 return true;
             }
         }

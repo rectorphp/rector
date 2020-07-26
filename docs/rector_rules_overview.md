@@ -6100,10 +6100,11 @@ Order __constructor dependencies by type A-Z
      public function __construct(
 +        LatteAndTwigFinder $latteAndTwigFinder,
          LatteToTwigConverter $latteToTwigConverter,
-+        SmartFileSystem $smartFileSystem,
-         SymfonyStyle $symfonyStyle,
+-        SymfonyStyle $symfonyStyle,
 -        LatteAndTwigFinder $latteAndTwigFinder,
--        SmartFileSystem $smartFileSystem,
+-        SmartFileSystem $smartFileSystem
++        SmartFileSystem $smartFileSystem,
++        SymfonyStyle $symfonyStyle
      ) {
      }
  }

@@ -24,8 +24,15 @@ final class OrderConstructorDependenciesByTypeAlphabeticallyRectorTest extends A
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorsWithConfiguration(): array
     {
-        return OrderConstructorDependenciesByTypeAlphabeticallyRector::class;
+        return [
+            OrderConstructorDependenciesByTypeAlphabeticallyRector::class => [
+                '$skipPatterns' => ['*skip_pattern_setting*'],
+            ],
+        ];
     }
 }
