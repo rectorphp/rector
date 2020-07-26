@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Downgrade\Tests\Rector\Property\TypedPropertyRector;
+namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Downgrade\Rector\Property\TypedPropertyRector;
+use Rector\Downgrade\Rector\Property\DowngradeTypedPropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class TypedPropertyRectorTest extends AbstractRectorTestCase
+final class DowngradeTypedPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP >= 7.4
@@ -27,6 +27,6 @@ final class TypedPropertyRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return TypedPropertyRector::class;
+        return DowngradeTypedPropertyRector::class;
     }
 }
