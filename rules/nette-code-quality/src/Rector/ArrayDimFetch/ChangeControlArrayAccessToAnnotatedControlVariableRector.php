@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NetteCodeQuality\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -127,6 +128,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->isBeingAssigned($node)) {
+            return null;
+        }
+
         $controlName = $this->controlDimFetchAnalyzer->matchName($node);
         if ($controlName === null) {
             return null;
@@ -143,8 +148,8 @@ PHP
     private function createAssignExpression(string $variableName, ArrayDimFetch $arrayDimFetch): Expression
     {
         $variable = new Variable($variableName);
-        $assignedDimFetch = clone $arrayDimFetch;
-        $assign = new Assign($variable, $assignedDimFetch);
+        $assignedArrayDimFetch = clone $arrayDimFetch;
+        $assign = new Assign($variable, $assignedArrayDimFetch);
 
         return new Expression($assign);
     }
@@ -157,7 +162,7 @@ PHP
         /** @var ClassMethod|null $classMethod */
         $classMethod = $arrayDimFetch->getAttribute(AttributeKey::METHOD_NODE);
         if ($classMethod !== null) {
-            $classMethodObjectHash = spl_object_hash($classMethod);
+            $classMethodObjectHash = spl_object_hash($classMethod) . $variableName;
             if (in_array($classMethodObjectHash, $this->alreadyInitializedAssignsClassMethodObjectHashes, true)) {
                 return;
             }
@@ -191,5 +196,15 @@ PHP
         $controlType = $controlTypes[$controlName];
 
         return new ObjectType($controlType);
+    }
+
+    private function isBeingAssigned(Expr $expr): bool
+    {
+        $parent = $expr->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Assign) {
+            return false;
+        }
+
+        return $parent->expr === $expr;
     }
 }
