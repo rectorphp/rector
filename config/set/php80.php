@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
 use Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector;
@@ -36,4 +37,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(TokenGetAllToObjectRector::class);
 
     $services->set(RemoveUnusedVariableInCatchRector::class);
+
+    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
 };

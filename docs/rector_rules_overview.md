@@ -1,4 +1,4 @@
-# All 533 Rectors Overview
+# All 534 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -55,7 +55,7 @@
 - [Php72](#php72) (11)
 - [Php73](#php73) (10)
 - [Php74](#php74) (15)
-- [Php80](#php80) (10)
+- [Php80](#php80) (11)
 - [PhpDeglobalize](#phpdeglobalize) (1)
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
@@ -9108,6 +9108,38 @@ Change get_class($object) to faster `$object::class`
 -        return get_class($object);
 +        return $object::class;
      }
+ }
+```
+
+<br><br>
+
+### `ClassPropertyAssignToConstructorPromotionRector`
+
+- class: [`Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector`](/../master/rules/php80/src/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector/Fixture)
+
+Change simple property init and assign to constructor promotion
+
+```diff
+ class SomeClass
+ {
+-    public float $x;
+-    public float $y;
+-    public float $z;
+-
+     public function __construct(
+-        float $x = 0.0,
+-        float $y = 0.0,
+-        float $z = 0.0
+-    ) {
+-        $this->x = $x;
+-        $this->y = $y;
+-        $this->z = $z;
+-    }
++        public float $x = 0.0,
++        public float $y = 0.0,
++        public float $z = 0.0,
++    ) {}
  }
 ```
 

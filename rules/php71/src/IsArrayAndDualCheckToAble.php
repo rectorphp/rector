@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php71;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
@@ -47,12 +48,12 @@ final class IsArrayAndDualCheckToAble
         /** @var FuncCall $funcCallNode */
         [$instanceOfNode, $funcCallNode] = $matchedNodes;
 
-        $instanceOfNodeClass = $instanceOfNode->class;
-        if (! $instanceOfNodeClass instanceof Name) {
+        $instanceOfClass = $instanceOfNode->class;
+        if ($instanceOfClass instanceof Expr) {
             return null;
         }
 
-        if ((string) $instanceOfNodeClass !== $type) {
+        if ((string) $instanceOfClass !== $type) {
             return null;
         }
 

@@ -31,10 +31,6 @@ jobs:
                         run: bin/rector sync-annotation-parser --dry-run --ansi
 
                     -
-                        name: 'Validate Services in Sets'
-                        run: bin/rector validate-services-in-sets --ansi
-
-                    -
                         name: 'Validate Sets Loading'
                         # this is very slow, so it has to be in own workflow
                         run: bin/rector validate-sets --ansi
