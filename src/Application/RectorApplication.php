@@ -122,7 +122,12 @@ final class RectorApplication
 
         if (! $this->symfonyStyle->isVerbose() && $this->configuration->showProgressBar()) {
             // why 5? one for each cycle, so user sees some activity all the time
-            $this->symfonyStyle->progressStart($fileCount * 5);
+            $stepMultiplier = 4;
+            if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
+                ++$stepMultiplier;
+            }
+
+            $this->symfonyStyle->progressStart($fileCount * $stepMultiplier);
 
             $this->configureStepCount($this->symfonyStyle);
         }
