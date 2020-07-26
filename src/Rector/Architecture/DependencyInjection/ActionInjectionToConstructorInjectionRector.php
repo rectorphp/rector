@@ -32,8 +32,8 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
     private $applicationServiceMapProvider;
 
     public function __construct(
-        VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
-        ServiceMapProvider $applicationServiceMapProvider
+        ServiceMapProvider $applicationServiceMapProvider,
+        VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection
     ) {
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
         $this->applicationServiceMapProvider = $applicationServiceMapProvider;

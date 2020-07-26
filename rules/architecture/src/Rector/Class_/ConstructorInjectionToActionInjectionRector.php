@@ -57,8 +57,8 @@ final class ConstructorInjectionToActionInjectionRector extends AbstractRector
 
     public function __construct(
         ClassManipulator $classManipulator,
-        TypeAnalyzer $typeAnalyzer,
-        ClassMethodManipulator $classMethodManipulator
+        ClassMethodManipulator $classMethodManipulator,
+        TypeAnalyzer $typeAnalyzer
     ) {
         $this->classManipulator = $classManipulator;
         $this->typeAnalyzer = $typeAnalyzer;

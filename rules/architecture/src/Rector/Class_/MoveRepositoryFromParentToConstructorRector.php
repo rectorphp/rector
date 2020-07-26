@@ -42,9 +42,9 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     private $classInsertManipulator;
 
     public function __construct(
-        DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
+        ClassDependencyManipulator $classDependencyManipulator,
         ClassInsertManipulator $classInsertManipulator,
-        ClassDependencyManipulator $classDependencyManipulator
+        DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper
     ) {
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->classDependencyManipulator = $classDependencyManipulator;

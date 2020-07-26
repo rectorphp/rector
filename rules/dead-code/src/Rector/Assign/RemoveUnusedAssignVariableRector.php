@@ -43,10 +43,10 @@ final class RemoveUnusedAssignVariableRector extends AbstractRector
     private $nextVariableUsageNodeFinder;
 
     public function __construct(
-        SideEffectNodeDetector $sideEffectNodeDetector,
+        NextVariableUsageNodeFinder $nextVariableUsageNodeFinder,
         PreviousVariableAssignNodeFinder $previousVariableAssignNodeFinder,
         ScopeNestingComparator $scopeNestingComparator,
-        NextVariableUsageNodeFinder $nextVariableUsageNodeFinder
+        SideEffectNodeDetector $sideEffectNodeDetector
     ) {
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
         $this->previousVariableAssignNodeFinder = $previousVariableAssignNodeFinder;

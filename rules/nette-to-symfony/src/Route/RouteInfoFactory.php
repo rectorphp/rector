@@ -34,8 +34,8 @@ final class RouteInfoFactory
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ValueResolver $valueResolver,
-        ParsedNodeCollector $parsedNodeCollector
+        ParsedNodeCollector $parsedNodeCollector,
+        ValueResolver $valueResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;

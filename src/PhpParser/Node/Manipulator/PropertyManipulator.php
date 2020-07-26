@@ -58,11 +58,11 @@ final class PropertyManipulator
     private $classLikeParsedNodesFinder;
 
     public function __construct(
+        AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        NodeNameResolver $nodeNameResolver,
-        AssignManipulator $assignManipulator,
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
+        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;

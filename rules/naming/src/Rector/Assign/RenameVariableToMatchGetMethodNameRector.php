@@ -77,14 +77,14 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
     private $typeUnwrapper;
 
     public function __construct(
-        ExpectedNameResolver $expectedNameResolver,
-        VariableRenamer $variableRenamer,
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        ExpectedNameResolver $expectedNameResolver,
         FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
         NamingConventionAnalyzer $namingConventionAnalyzer,
+        TypeUnwrapper $typeUnwrapper,
         VarTagValueNodeRenamer $varTagValueNodeRenamer,
-        TypeUnwrapper $typeUnwrapper
+        VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
+        VariableRenamer $variableRenamer
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;

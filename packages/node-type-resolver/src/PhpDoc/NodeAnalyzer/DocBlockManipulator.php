@@ -29,7 +29,7 @@ final class DocBlockManipulator
      */
     private $docBlockClassRenamer;
 
-    public function __construct(PhpDocInfoPrinter $phpDocInfoPrinter, DocBlockClassRenamer $docBlockClassRenamer)
+    public function __construct(DocBlockClassRenamer $docBlockClassRenamer, PhpDocInfoPrinter $phpDocInfoPrinter)
     {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockClassRenamer = $docBlockClassRenamer;

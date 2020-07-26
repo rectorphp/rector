@@ -42,11 +42,11 @@ final class RemovedAndAddedFilesProcessor
     private $nodesWithFileDestinationPrinter;
 
     public function __construct(
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         Configuration $configuration,
-        SymfonyStyle $symfonyStyle,
         Filesystem $filesystem,
-        NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter
+        NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter,
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        SymfonyStyle $symfonyStyle
     ) {
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->configuration = $configuration;

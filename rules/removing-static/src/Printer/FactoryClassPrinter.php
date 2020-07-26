@@ -32,9 +32,9 @@ final class FactoryClassPrinter
     private $filesystem;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
         BetterStandardPrinter $betterStandardPrinter,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;

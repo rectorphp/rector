@@ -35,7 +35,7 @@ final class PhpSpecRenaming
      */
     private $nodeNameResolver;
 
-    public function __construct(StringFormatConverter $stringFormatConverter, NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, StringFormatConverter $stringFormatConverter)
     {
         $this->stringFormatConverter = $stringFormatConverter;
         $this->nodeNameResolver = $nodeNameResolver;

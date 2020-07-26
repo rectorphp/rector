@@ -42,10 +42,10 @@ final class ConflictingNameResolver
     private $arrayFilter;
 
     public function __construct(
-        ExpectedNameResolver $expectedNameResolver,
-        NodeNameResolver $nodeNameResolver,
+        ArrayFilter $arrayFilter,
         BetterNodeFinder $betterNodeFinder,
-        ArrayFilter $arrayFilter
+        ExpectedNameResolver $expectedNameResolver,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->nodeNameResolver = $nodeNameResolver;

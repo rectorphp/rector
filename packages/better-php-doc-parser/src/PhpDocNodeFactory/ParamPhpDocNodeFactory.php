@@ -48,10 +48,10 @@ final class ParamPhpDocNodeFactory
     private $annotationContentResolver;
 
     public function __construct(
-        PrivatesAccessor $privatesAccessor,
-        PrivatesCaller $privatesCaller,
+        AnnotationContentResolver $annotationContentResolver,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
-        AnnotationContentResolver $annotationContentResolver
+        PrivatesAccessor $privatesAccessor,
+        PrivatesCaller $privatesCaller
     ) {
         $this->privatesAccessor = $privatesAccessor;
         $this->privatesCaller = $privatesCaller;

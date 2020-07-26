@@ -35,10 +35,10 @@ final class VendorLockResolver
     private $classMethodVendorLockResolver;
 
     public function __construct(
-        ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver,
         ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
-        PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver,
-        ClassMethodVendorLockResolver $classMethodVendorLockResolver
+        ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver,
+        ClassMethodVendorLockResolver $classMethodVendorLockResolver,
+        PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver
     ) {
         $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;

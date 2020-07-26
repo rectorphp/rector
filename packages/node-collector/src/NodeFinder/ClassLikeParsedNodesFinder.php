@@ -25,7 +25,7 @@ final class ClassLikeParsedNodesFinder
      */
     private $nodeNameResolver;
 
-    public function __construct(ParsedNodeCollector $parsedNodeCollector, NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, ParsedNodeCollector $parsedNodeCollector)
     {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeNameResolver = $nodeNameResolver;

@@ -86,14 +86,14 @@ final class ScreenFileCommand extends AbstractCommand
     private $smartFileSystem;
 
     public function __construct(
-        SymfonyStyle $symfonyStyle,
-        FileInfoParser $fileInfoParser,
+        BetterStandardPrinter $betterStandardPrinter,
         CallableNodeTraverser $callableNodeTraverser,
+        FileInfoParser $fileInfoParser,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        BetterStandardPrinter $betterStandardPrinter,
+        SmartFileSystem $smartFileSystem,
         StaticTypeMapper $staticTypeMapper,
-        SmartFileSystem $smartFileSystem
+        SymfonyStyle $symfonyStyle
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileInfoParser = $fileInfoParser;

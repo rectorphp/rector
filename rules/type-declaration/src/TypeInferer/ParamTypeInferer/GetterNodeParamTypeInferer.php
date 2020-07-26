@@ -32,8 +32,8 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
     private $propertyFetchAssignManipulator;
 
     public function __construct(
-        PropertyFetchManipulator $propertyFetchManipulator,
-        PropertyFetchAssignManipulator $propertyFetchAssignManipulator
+        PropertyFetchAssignManipulator $propertyFetchAssignManipulator,
+        PropertyFetchManipulator $propertyFetchManipulator
     ) {
         $this->propertyFetchManipulator = $propertyFetchManipulator;
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;

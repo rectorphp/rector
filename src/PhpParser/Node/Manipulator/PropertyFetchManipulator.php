@@ -41,9 +41,9 @@ final class PropertyFetchManipulator
     private $nodeNameResolver;
 
     public function __construct(
+        NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ReflectionProvider $reflectionProvider,
-        NodeNameResolver $nodeNameResolver
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionProvider = $reflectionProvider;

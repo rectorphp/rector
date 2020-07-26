@@ -40,11 +40,11 @@ final class NonPhpFileProcessor
     private $smartFileSystem;
 
     public function __construct(
-        Configuration $configuration,
         ChangeConfiguration $changeConfiguration,
-        SymfonyStyle $symfonyStyle,
+        Configuration $configuration,
         RenamedClassesCollector $renamedClassesCollector,
-        SmartFileSystem $smartFileSystem
+        SmartFileSystem $smartFileSystem,
+        SymfonyStyle $symfonyStyle
     ) {
         $this->configuration = $configuration;
         $this->changeConfiguration = $changeConfiguration;

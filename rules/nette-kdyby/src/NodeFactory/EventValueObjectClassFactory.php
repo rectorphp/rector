@@ -43,8 +43,8 @@ final class EventValueObjectClassFactory
 
     public function __construct(
         ClassNaming $classNaming,
-        VariableWithTypesFactory $variableWithTypesFactory,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        VariableWithTypesFactory $variableWithTypesFactory
     ) {
         $this->classNaming = $classNaming;
         $this->variableWithTypesFactory = $variableWithTypesFactory;

@@ -38,9 +38,9 @@ final class BetterNodeFinder
     private $betterStandardPrinter;
 
     public function __construct(
+        BetterStandardPrinter $betterStandardPrinter,
         NodeFinder $nodeFinder,
-        NodeNameResolver $nodeNameResolver,
-        BetterStandardPrinter $betterStandardPrinter
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeFinder = $nodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;

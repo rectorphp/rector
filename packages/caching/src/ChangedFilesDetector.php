@@ -29,7 +29,7 @@ final class ChangedFilesDetector
      */
     private $fileHashComputer;
 
-    public function __construct(TagAwareAdapterInterface $tagAwareAdapter, FileHashComputer $fileHashComputer)
+    public function __construct(FileHashComputer $fileHashComputer, TagAwareAdapterInterface $tagAwareAdapter)
     {
         $this->tagAwareAdapter = $tagAwareAdapter;
         $this->fileHashComputer = $fileHashComputer;

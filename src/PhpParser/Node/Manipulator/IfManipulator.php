@@ -47,11 +47,11 @@ final class IfManipulator
     private $betterNodeFinder;
 
     public function __construct(
+        BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         ConstFetchManipulator $constFetchManipulator,
-        StmtsManipulator $stmtsManipulator,
         NodeNameResolver $nodeNameResolver,
-        BetterNodeFinder $betterNodeFinder
+        StmtsManipulator $stmtsManipulator
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->constFetchManipulator = $constFetchManipulator;

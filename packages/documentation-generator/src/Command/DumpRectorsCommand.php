@@ -27,8 +27,8 @@ final class DumpRectorsCommand extends AbstractCommand
     private $markdownDumpRectorsOutputFormatter;
 
     public function __construct(
-        RectorsFinder $rectorsFinder,
-        MarkdownDumpRectorsOutputFormatter $markdownDumpRectorsOutputFormatter
+        MarkdownDumpRectorsOutputFormatter $markdownDumpRectorsOutputFormatter,
+        RectorsFinder $rectorsFinder
     ) {
         parent::__construct();
 

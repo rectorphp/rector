@@ -42,9 +42,9 @@ final class NodeAnnotationReader
     private $constantReferenceIdentifierRestorer;
 
     public function __construct(
-        Reader $reader,
+        ConstantReferenceIdentifierRestorer $constantReferenceIdentifierRestorer,
         NodeNameResolver $nodeNameResolver,
-        ConstantReferenceIdentifierRestorer $constantReferenceIdentifierRestorer
+        Reader $reader
     ) {
         $this->reader = $reader;
         $this->nodeNameResolver = $nodeNameResolver;

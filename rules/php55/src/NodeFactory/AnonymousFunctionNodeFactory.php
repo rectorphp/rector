@@ -31,7 +31,7 @@ final class AnonymousFunctionNodeFactory
      */
     private $callableNodeTraverser;
 
-    public function __construct(Parser $parser, CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(CallableNodeTraverser $callableNodeTraverser, Parser $parser)
     {
         $this->parser = $parser;
         $this->callableNodeTraverser = $callableNodeTraverser;

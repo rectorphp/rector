@@ -26,7 +26,7 @@ final class TemplateGuesser
      */
     private $bundleClassResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, BundleClassResolver $bundleClassResolver)
+    public function __construct(BundleClassResolver $bundleClassResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->bundleClassResolver = $bundleClassResolver;

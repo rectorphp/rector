@@ -32,8 +32,8 @@ final class CountableTypeAnalyzer
 
     public function __construct(
         ArrayTypeAnalyzer $arrayTypeAnalyzer,
-        PregMatchTypeCorrector $pregMatchTypeCorrector,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        PregMatchTypeCorrector $pregMatchTypeCorrector
     ) {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
         $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;

@@ -21,7 +21,7 @@ final class ClassRenamingPostRector extends AbstractPostRector
      */
     private $classRenamer;
 
-    public function __construct(RenamedClassesCollector $renamedClassesCollector, ClassRenamer $classRenamer)
+    public function __construct(ClassRenamer $classRenamer, RenamedClassesCollector $renamedClassesCollector)
     {
         $this->renamedClassesCollector = $renamedClassesCollector;
         $this->classRenamer = $classRenamer;

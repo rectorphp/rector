@@ -29,8 +29,8 @@ final class PrintReportCollectorEventSubscriber implements EventSubscriberInterf
     private $symfonyStyle;
 
     public function __construct(
-        ReportCollector $reportCollector,
         Configuration $configuration,
+        ReportCollector $reportCollector,
         SymfonyStyle $symfonyStyle
     ) {
         $this->reportCollector = $reportCollector;

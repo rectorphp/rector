@@ -38,9 +38,9 @@ final class EntityWithMissingUuidProvider
     private $nodeNameResolver;
 
     public function __construct(
-        ParsedNodeCollector $parsedNodeCollector,
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        ParsedNodeCollector $parsedNodeCollector
     ) {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;

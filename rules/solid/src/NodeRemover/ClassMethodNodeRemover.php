@@ -33,9 +33,9 @@ final class ClassMethodNodeRemover
     private $callableNodeTraverser;
 
     public function __construct(
-        NodesToRemoveCollector $nodesToRemoveCollector,
+        CallableNodeTraverser $callableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
-        CallableNodeTraverser $callableNodeTraverser
+        NodesToRemoveCollector $nodesToRemoveCollector
     ) {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeNameResolver = $nodeNameResolver;

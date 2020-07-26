@@ -47,9 +47,9 @@ final class ExpectedNameResolver
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver,
         PropertyNaming $propertyNaming,
-        StaticTypeMapper $staticTypeMapper,
-        NodeTypeResolver $nodeTypeResolver
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;

@@ -60,9 +60,9 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     private $traitNodeScopeCollector;
 
     public function __construct(
-        ParsedNodeCollector $parsedNodeCollector,
-        NodeNameResolver $nodeNameResolver,
         BetterPhpDocParser $betterPhpDocParser,
+        NodeNameResolver $nodeNameResolver,
+        ParsedNodeCollector $parsedNodeCollector,
         StaticTypeMapper $staticTypeMapper,
         TraitNodeScopeCollector $traitNodeScopeCollector
     ) {

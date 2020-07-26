@@ -49,9 +49,9 @@ final class ChildParamPopulator
 
     public function __construct(
         ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
-        StaticTypeMapper $staticTypeMapper,
         NodeNameResolver $nodeNameResolver,
-        RectorChangeCollector $rectorChangeCollector
+        RectorChangeCollector $rectorChangeCollector,
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->staticTypeMapper = $staticTypeMapper;

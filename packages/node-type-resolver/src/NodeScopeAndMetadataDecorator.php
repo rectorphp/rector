@@ -72,16 +72,16 @@ final class NodeScopeAndMetadataDecorator
     private $phpDocInfoNodeVisitor;
 
     public function __construct(
-        PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
-        ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         CloningVisitor $cloningVisitor,
+        Configuration $configuration,
+        FileInfoNodeVisitor $fileInfoNodeVisitor,
         FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
         NamespaceNodeVisitor $namespaceNodeVisitor,
-        StatementNodeVisitor $statementNodeVisitor,
-        FileInfoNodeVisitor $fileInfoNodeVisitor,
         NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
+        PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
+        ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         PhpDocInfoNodeVisitor $phpDocInfoNodeVisitor,
-        Configuration $configuration
+        StatementNodeVisitor $statementNodeVisitor
     ) {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;

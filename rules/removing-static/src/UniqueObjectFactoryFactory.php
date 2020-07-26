@@ -51,10 +51,10 @@ final class UniqueObjectFactoryFactory
     private $nodeFactory;
 
     public function __construct(
+        NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         PropertyNaming $propertyNaming,
-        StaticTypeMapper $staticTypeMapper,
-        NodeFactory $nodeFactory
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;

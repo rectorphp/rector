@@ -41,10 +41,8 @@ final class TranslationBehaviorRector extends AbstractRector
      */
     private $classInsertManipulator;
 
-    public function __construct(
-        ClassManipulator $classManipulator,
-        ClassInsertManipulator $classInsertManipulator
-    ) {
+    public function __construct(ClassInsertManipulator $classInsertManipulator, ClassManipulator $classManipulator)
+    {
         $this->classManipulator = $classManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
     }

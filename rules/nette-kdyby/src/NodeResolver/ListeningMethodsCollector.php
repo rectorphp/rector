@@ -51,8 +51,8 @@ final class ListeningMethodsCollector
 
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
-        ValueResolver $valueResolver,
-        EventClassNaming $eventClassNaming
+        EventClassNaming $eventClassNaming,
+        ValueResolver $valueResolver
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->valueResolver = $valueResolver;

@@ -39,9 +39,9 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private $configuration;
 
     public function __construct(
-        SymfonyStyle $symfonyStyle,
         BetterStandardPrinter $betterStandardPrinter,
-        Configuration $configuration
+        Configuration $configuration,
+        SymfonyStyle $symfonyStyle
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->betterStandardPrinter = $betterStandardPrinter;

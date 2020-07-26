@@ -39,9 +39,9 @@ final class ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector ex
     private $eventAndListenerTreeProvider;
 
     public function __construct(
+        EventAndListenerTreeProvider $eventAndListenerTreeProvider,
         EventClassNaming $eventClassNaming,
-        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
-        EventAndListenerTreeProvider $eventAndListenerTreeProvider
+        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator
     ) {
         $this->eventClassNaming = $eventClassNaming;
         $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;

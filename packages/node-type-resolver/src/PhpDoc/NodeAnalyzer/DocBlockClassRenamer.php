@@ -31,7 +31,7 @@ final class DocBlockClassRenamer
      */
     private $phpDocNodeTraverser;
 
-    public function __construct(StaticTypeMapper $staticTypeMapper, PhpDocNodeTraverser $phpDocNodeTraverser)
+    public function __construct(PhpDocNodeTraverser $phpDocNodeTraverser, StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;

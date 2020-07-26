@@ -22,7 +22,7 @@ final class AnnotationContentResolver
      */
     private $privatesAccessor;
 
-    public function __construct(TokenIteratorFactory $tokenIteratorFactory, PrivatesAccessor $privatesAccessor)
+    public function __construct(PrivatesAccessor $privatesAccessor, TokenIteratorFactory $tokenIteratorFactory)
     {
         $this->tokenIteratorFactory = $tokenIteratorFactory;
         $this->privatesAccessor = $privatesAccessor;

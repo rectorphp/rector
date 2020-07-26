@@ -35,8 +35,8 @@ final class FileMover
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        FileRelocationResolver $fileRelocationResolver,
-        CategoryNamespaceProvider $categoryNamespaceProvider
+        CategoryNamespaceProvider $categoryNamespaceProvider,
+        FileRelocationResolver $fileRelocationResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->fileRelocationResolver = $fileRelocationResolver;

@@ -37,7 +37,7 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $childParamPopulator;
 
-    public function __construct(ParamTypeInferer $paramTypeInferer, ChildParamPopulator $childParamPopulator)
+    public function __construct(ChildParamPopulator $childParamPopulator, ParamTypeInferer $paramTypeInferer)
     {
         $this->paramTypeInferer = $paramTypeInferer;
         $this->childParamPopulator = $childParamPopulator;

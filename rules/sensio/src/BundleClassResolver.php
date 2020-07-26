@@ -37,10 +37,10 @@ final class BundleClassResolver
     private $nodeNameResolver;
 
     public function __construct(
-        Parser $parser,
         BetterNodeFinder $betterNodeFinder,
         ClassNaming $classNaming,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        Parser $parser
     ) {
         $this->parser = $parser;
         $this->betterNodeFinder = $betterNodeFinder;

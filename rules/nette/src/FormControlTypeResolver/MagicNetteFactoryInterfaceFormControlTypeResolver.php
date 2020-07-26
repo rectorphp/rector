@@ -41,8 +41,8 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
 
     public function __construct(
         FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
-        NodeTypeResolver $nodeTypeResolver,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
         $this->nodeTypeResolver = $nodeTypeResolver;

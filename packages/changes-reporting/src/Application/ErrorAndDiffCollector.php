@@ -56,10 +56,10 @@ final class ErrorAndDiffCollector
 
     public function __construct(
         DifferAndFormatter $differAndFormatter,
-        RectorChangeCollector $rectorChangeCollector,
         ExceptionCorrector $exceptionCorrector,
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        NodesToRemoveCollector $nodesToRemoveCollector
+        NodesToRemoveCollector $nodesToRemoveCollector,
+        RectorChangeCollector $rectorChangeCollector,
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
     ) {
         $this->differAndFormatter = $differAndFormatter;
         $this->rectorChangeCollector = $rectorChangeCollector;

@@ -45,10 +45,10 @@ final class UseAddingPostRector extends AbstractPostRector
     private $useNodesToAddCollector;
 
     public function __construct(
-        UseImportsAdder $useImportsAdder,
-        UseImportsRemover $useImportsRemover,
         BetterNodeFinder $betterNodeFinder,
         TypeFactory $typeFactory,
+        UseImportsAdder $useImportsAdder,
+        UseImportsRemover $useImportsRemover,
         UseNodesToAddCollector $useNodesToAddCollector
     ) {
         $this->useImportsAdder = $useImportsAdder;

@@ -37,10 +37,10 @@ final class PropertyUsageAnalyzer
     private $familyRelationsAnalyzer;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
         BetterNodeFinder $betterNodeFinder,
-        FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;

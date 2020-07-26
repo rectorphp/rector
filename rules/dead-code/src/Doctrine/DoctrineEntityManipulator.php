@@ -39,8 +39,8 @@ final class DoctrineEntityManipulator
     private $nodeTypeResolver;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
+        NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;

@@ -87,16 +87,16 @@ final class RectorApplication
     private $eventDispatcher;
 
     public function __construct(
-        SymfonyStyle $symfonyStyle,
-        FileSystemFileProcessor $fileSystemFileProcessor,
-        ErrorAndDiffCollector $errorAndDiffCollector,
         Configuration $configuration,
-        FileProcessor $fileProcessor,
         EnabledRectorsProvider $enabledRectorsProvider,
+        ErrorAndDiffCollector $errorAndDiffCollector,
+        EventDispatcherInterface $eventDispatcher,
+        FileProcessor $fileProcessor,
+        FileSystemFileProcessor $fileSystemFileProcessor,
+        NodeScopeResolver $nodeScopeResolver,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
-        NodeScopeResolver $nodeScopeResolver,
-        EventDispatcherInterface $eventDispatcher
+        SymfonyStyle $symfonyStyle
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;

@@ -42,11 +42,11 @@ final class ClassConstManipulator
     private $classManipulator;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        ParsedNodeCollector $parsedNodeCollector,
-        ClassManipulator $classManipulator
+        ClassManipulator $classManipulator,
+        NodeNameResolver $nodeNameResolver,
+        ParsedNodeCollector $parsedNodeCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;

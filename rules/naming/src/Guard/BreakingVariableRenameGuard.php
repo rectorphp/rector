@@ -57,8 +57,8 @@ final class BreakingVariableRenameGuard
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         ConflictingNameResolver $conflictingNameResolver,
-        OverridenExistingNamesResolver $overridenExistingNamesResolver,
         NodeTypeResolver $nodeTypeResolver,
+        OverridenExistingNamesResolver $overridenExistingNamesResolver,
         TypeUnwrapper $typeUnwrapper
     ) {
         $this->betterNodeFinder = $betterNodeFinder;

@@ -32,9 +32,9 @@ final class CollectOnFormVariableMethodCallsCollector
     private $betterStandardPrinter;
 
     public function __construct(
+        BetterStandardPrinter $betterStandardPrinter,
         CallableNodeTraverser $callableNodeTraverser,
-        NodeTypeResolver $nodeTypeResolver,
-        BetterStandardPrinter $betterStandardPrinter
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeTypeResolver = $nodeTypeResolver;

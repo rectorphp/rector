@@ -31,10 +31,8 @@ final class PregReplaceEModifierRector extends AbstractRector
      */
     private $anonymousFunctionNodeFactory;
 
-    public function __construct(
-        RegexMatcher $regexMatcher,
-        AnonymousFunctionNodeFactory $anonymousFunctionNodeFactory
-    ) {
+    public function __construct(AnonymousFunctionNodeFactory $anonymousFunctionNodeFactory, RegexMatcher $regexMatcher)
+    {
         $this->regexMatcher = $regexMatcher;
         $this->anonymousFunctionNodeFactory = $anonymousFunctionNodeFactory;
     }

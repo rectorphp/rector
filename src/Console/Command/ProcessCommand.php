@@ -102,20 +102,20 @@ final class ProcessCommand extends AbstractCommand
     private $eventDispatcher;
 
     public function __construct(
-        FilesFinder $phpFilesFinder,
         AdditionalAutoloader $additionalAutoloader,
-        RectorGuard $rectorGuard,
-        ErrorAndDiffCollector $errorAndDiffCollector,
+        ChangedFilesDetector $changedFilesDetector,
         Configuration $configuration,
-        RectorApplication $rectorApplication,
+        ErrorAndDiffCollector $errorAndDiffCollector,
+        EventDispatcherInterface $eventDispatcher,
+        FilesFinder $phpFilesFinder,
+        NonPhpFileProcessor $nonPhpFileProcessor,
         OutputFormatterCollector $outputFormatterCollector,
+        RectorApplication $rectorApplication,
+        RectorGuard $rectorGuard,
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
-        NonPhpFileProcessor $nonPhpFileProcessor,
-        ChangedFilesDetector $changedFilesDetector,
-        UnchangedFilesFilter $unchangedFilesFilter,
         SymfonyStyle $symfonyStyle,
-        EventDispatcherInterface $eventDispatcher
+        UnchangedFilesFilter $unchangedFilesFilter
     ) {
         $this->filesFinder = $phpFilesFinder;
         $this->additionalAutoloader = $additionalAutoloader;

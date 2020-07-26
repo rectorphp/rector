@@ -49,11 +49,11 @@ final class ThisRenderFactory
     private $nodeTypeResolver;
 
     public function __construct(
-        NodeFactory $nodeFactory,
-        TemplateGuesser $templateGuesser,
-        NodeNameResolver $nodeNameResolver,
         ArrayFromCompactFactory $arrayFromCompactFactory,
-        NodeTypeResolver $nodeTypeResolver
+        NodeFactory $nodeFactory,
+        NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver,
+        TemplateGuesser $templateGuesser
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->templateGuesser = $templateGuesser;

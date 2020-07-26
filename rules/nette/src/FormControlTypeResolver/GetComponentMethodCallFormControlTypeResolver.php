@@ -45,10 +45,10 @@ final class GetComponentMethodCallFormControlTypeResolver implements FormControl
     private $methodNamesByInputNamesResolver;
 
     public function __construct(
-        ValueResolver $valueResolver,
+        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder
+        ValueResolver $valueResolver
     ) {
         $this->valueResolver = $valueResolver;
         $this->nodeNameResolver = $nodeNameResolver;

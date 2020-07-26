@@ -51,11 +51,11 @@ final class OnContainerGetCallManipulator
     private $nodesToRemoveCollector;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
-        ServiceNaming $serviceNaming,
-        NodesToRemoveCollector $nodesToRemoveCollector,
         KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
+        NodeNameResolver $nodeNameResolver,
+        NodesToRemoveCollector $nodesToRemoveCollector,
+        ServiceNaming $serviceNaming,
         ValueResolver $valueResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;

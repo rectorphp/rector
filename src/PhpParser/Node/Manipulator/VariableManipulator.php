@@ -51,11 +51,11 @@ final class VariableManipulator
     private $nodeNameResolver;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
-        AssignManipulator $assignManipulator,
-        BetterStandardPrinter $betterStandardPrinter,
-        BetterNodeFinder $betterNodeFinder,
         ArrayManipulator $arrayManipulator,
+        AssignManipulator $assignManipulator,
+        BetterNodeFinder $betterNodeFinder,
+        BetterStandardPrinter $betterStandardPrinter,
+        CallableNodeTraverser $callableNodeTraverser,
         NodeNameResolver $nodeNameResolver
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;

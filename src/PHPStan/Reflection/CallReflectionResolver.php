@@ -44,9 +44,9 @@ final class CallReflectionResolver
     private $typeToCallReflectionResolverRegistry;
 
     public function __construct(
-        ReflectionProvider $reflectionProvider,
-        NodeTypeResolver $nodeTypeResolver,
         NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver,
+        ReflectionProvider $reflectionProvider,
         TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry
     ) {
         $this->reflectionProvider = $reflectionProvider;
