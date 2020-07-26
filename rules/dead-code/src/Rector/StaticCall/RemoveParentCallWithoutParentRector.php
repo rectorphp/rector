@@ -93,7 +93,7 @@ PHP
         }
 
         if ($this->isAnonymousClass($classLike)) {
-            //currently the classMethodManipulator isn't able to find usages of anonymous classes
+            // currently the classMethodManipulator isn't able to find usages of anonymous classes
             return null;
         }
 

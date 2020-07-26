@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -177,14 +178,20 @@ final class PHPStanNodeScopeResolver
     }
 
     /**
-     * @param Class_|Interface_ $classOrInterfaceNode
+     * @param Class_|Interface_ $classLike
      */
     private function resolveClassOrInterfaceScope(
-        Node $classOrInterfaceNode,
+        ClassLike $classLike,
         MutatingScope $mutatingScope
     ): MutatingScope {
-        $className = $this->resolveClassName($classOrInterfaceNode);
-        $classReflection = $this->reflectionProvider->getClass($className);
+        $className = $this->resolveClassName($classLike);
+
+        // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
+        if ($classLike instanceof Class_ && Strings::match($className, '#^AnonymousClass(\w+)#')) {
+            $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $mutatingScope);
+        } else {
+            $classReflection = $this->reflectionProvider->getClass($className);
+        }
 
         return $mutatingScope->enterClass($classReflection);
     }
