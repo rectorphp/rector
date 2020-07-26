@@ -42,9 +42,9 @@ final class ArrayTypeAnalyzer
     private $nodeNameResolver;
 
     public function __construct(
+        NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        PregMatchTypeCorrector $pregMatchTypeCorrector,
-        NodeNameResolver $nodeNameResolver
+        PregMatchTypeCorrector $pregMatchTypeCorrector
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;

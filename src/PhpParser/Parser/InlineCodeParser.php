@@ -35,9 +35,9 @@ final class InlineCodeParser
     private $nodeScopeAndMetadataDecorator;
 
     public function __construct(
-        Parser $parser,
         BetterStandardPrinter $betterStandardPrinter,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
+        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        Parser $parser
     ) {
         $this->parser = $parser;
         $this->betterStandardPrinter = $betterStandardPrinter;

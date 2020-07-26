@@ -25,7 +25,7 @@ final class NodeRemovingRector extends AbstractPostRector
      */
     private $nodeFactory;
 
-    public function __construct(NodesToRemoveCollector $nodesToRemoveCollector, NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory, NodesToRemoveCollector $nodesToRemoveCollector)
     {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeFactory = $nodeFactory;

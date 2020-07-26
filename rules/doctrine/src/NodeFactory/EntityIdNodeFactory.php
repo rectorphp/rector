@@ -24,7 +24,7 @@ final class EntityIdNodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(PhpDocTagNodeFactory $phpDocTagNodeFactory, NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory, PhpDocTagNodeFactory $phpDocTagNodeFactory)
     {
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->nodeFactory = $nodeFactory;

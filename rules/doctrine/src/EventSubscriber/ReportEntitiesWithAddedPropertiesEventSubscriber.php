@@ -29,9 +29,9 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
     private $smartFileSystem;
 
     public function __construct(
-        UuidMigrationDataCollector $uuidMigrationDataCollector,
+        SmartFileSystem $smartFileSystem,
         SymfonyStyle $symfonyStyle,
-        SmartFileSystem $smartFileSystem
+        UuidMigrationDataCollector $uuidMigrationDataCollector
     ) {
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
         $this->symfonyStyle = $symfonyStyle;

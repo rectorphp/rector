@@ -60,9 +60,9 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
     private $classMethodNestingLevel = 0;
 
     public function __construct(
+        ClassMethodReflectionFactory $classMethodReflectionFactory,
         DocBlockManipulator $docBlockManipulator,
-        FileInfoParser $fileInfoParser,
-        ClassMethodReflectionFactory $classMethodReflectionFactory
+        FileInfoParser $fileInfoParser
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->fileInfoParser = $fileInfoParser;

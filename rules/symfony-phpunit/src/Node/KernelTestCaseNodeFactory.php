@@ -45,8 +45,8 @@ final class KernelTestCaseNodeFactory
     private $serviceNaming;
 
     public function __construct(
-        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
         NodeFactory $nodeFactory,
+        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
         ServiceNaming $serviceNaming
     ) {
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;

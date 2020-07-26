@@ -41,10 +41,10 @@ final class ChildAndParentClassManipulator
     private $parsedNodeCollector;
 
     public function __construct(
-        ParsedNodeCollector $parsedNodeCollector,
+        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
+        ParsedNodeCollector $parsedNodeCollector
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;

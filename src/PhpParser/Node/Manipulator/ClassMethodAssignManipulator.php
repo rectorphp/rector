@@ -58,12 +58,12 @@ final class ClassMethodAssignManipulator
     private $betterStandardPrinter;
 
     public function __construct(
-        VariableManipulator $variableManipulator,
-        CallableNodeTraverser $callableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        NodeFactory $nodeFactory,
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        CallableNodeTraverser $callableNodeTraverser,
+        NodeFactory $nodeFactory,
+        NodeNameResolver $nodeNameResolver,
+        VariableManipulator $variableManipulator
     ) {
         $this->variableManipulator = $variableManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;

@@ -60,9 +60,9 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
     private $arrayUnionResponseTypeAnalyzer;
 
     public function __construct(
+        ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer,
         ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater,
-        ThisRenderFactory $thisRenderFactory,
-        ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer
+        ThisRenderFactory $thisRenderFactory
     ) {
         $this->returnTypeDeclarationUpdater = $returnTypeDeclarationUpdater;
         $this->thisRenderFactory = $thisRenderFactory;

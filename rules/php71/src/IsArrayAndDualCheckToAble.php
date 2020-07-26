@@ -26,7 +26,7 @@ final class IsArrayAndDualCheckToAble
      */
     private $binaryOpManipulator;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, BinaryOpManipulator $binaryOpManipulator)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->binaryOpManipulator = $binaryOpManipulator;

@@ -58,13 +58,13 @@ final class PhpDocInfoFactory
     private $paramPhpDocNodeFactory;
 
     public function __construct(
-        PhpDocParser $phpDocParser,
-        Lexer $lexer,
-        CurrentNodeProvider $currentNodeProvider,
-        StaticTypeMapper $staticTypeMapper,
-        TypeComparator $typeComparator,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
-        ParamPhpDocNodeFactory $paramPhpDocNodeFactory
+        CurrentNodeProvider $currentNodeProvider,
+        Lexer $lexer,
+        ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
+        PhpDocParser $phpDocParser,
+        StaticTypeMapper $staticTypeMapper,
+        TypeComparator $typeComparator
     ) {
         $this->phpDocParser = $phpDocParser;
         $this->lexer = $lexer;

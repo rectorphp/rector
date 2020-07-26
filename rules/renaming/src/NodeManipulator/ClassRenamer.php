@@ -63,12 +63,12 @@ final class ClassRenamer
     private $betterNodeFinder;
 
     public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        CallableNodeTraverser $callableNodeTraverser,
+        ClassNaming $classNaming,
         DocBlockManipulator $docBlockManipulator,
         NodeNameResolver $nodeNameResolver,
-        CallableNodeTraverser $callableNodeTraverser,
-        PhpDocClassRenamer $phpDocClassRenamer,
-        ClassNaming $classNaming,
-        BetterNodeFinder $betterNodeFinder
+        PhpDocClassRenamer $phpDocClassRenamer
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->nodeNameResolver = $nodeNameResolver;

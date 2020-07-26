@@ -48,9 +48,9 @@ final class ClassMethodManipulator
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        NodeTypeResolver $nodeTypeResolver,
+        FuncCallManipulator $funcCallManipulator,
         NodeNameResolver $nodeNameResolver,
-        FuncCallManipulator $funcCallManipulator
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;

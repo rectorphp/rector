@@ -39,8 +39,8 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
 
     public function __construct(
         EntityUuidNodeFactory $entityUuidNodeFactory,
-        UuidMigrationDataCollector $uuidMigrationDataCollector,
-        EntityWithMissingUuidProvider $entityWithMissingUuidProvider
+        EntityWithMissingUuidProvider $entityWithMissingUuidProvider,
+        UuidMigrationDataCollector $uuidMigrationDataCollector
     ) {
         $this->entityUuidNodeFactory = $entityUuidNodeFactory;
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;

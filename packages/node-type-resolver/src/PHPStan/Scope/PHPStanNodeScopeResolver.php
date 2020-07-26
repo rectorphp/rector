@@ -92,15 +92,15 @@ final class PHPStanNodeScopeResolver
 
     public function __construct(
         ChangedFilesDetector $changedFilesDetector,
-        ScopeFactory $scopeFactory,
+        Configuration $configuration,
+        DependencyResolver $dependencyResolver,
         NodeScopeResolver $nodeScopeResolver,
+        ParameterProvider $parameterProvider,
         ReflectionProvider $reflectionProvider,
         RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
-        TraitNodeScopeCollector $traitNodeScopeCollector,
-        DependencyResolver $dependencyResolver,
-        Configuration $configuration,
+        ScopeFactory $scopeFactory,
         SymfonyStyle $symfonyStyle,
-        ParameterProvider $parameterProvider
+        TraitNodeScopeCollector $traitNodeScopeCollector
     ) {
         $this->scopeFactory = $scopeFactory;
         $this->nodeScopeResolver = $nodeScopeResolver;

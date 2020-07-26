@@ -71,12 +71,12 @@ final class DocBlockNameImporter
     private $useNodesToAddCollector;
 
     public function __construct(
-        PhpDocNodeTraverser $phpDocNodeTraverser,
-        StaticTypeMapper $staticTypeMapper,
-        NodeNameResolver $nodeNameResolver,
         BetterStandardPrinter $betterStandardPrinter,
         ImportSkipper $importSkipper,
+        NodeNameResolver $nodeNameResolver,
         ParameterProvider $parameterProvider,
+        PhpDocNodeTraverser $phpDocNodeTraverser,
+        StaticTypeMapper $staticTypeMapper,
         UseNodesToAddCollector $useNodesToAddCollector
     ) {
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;

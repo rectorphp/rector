@@ -70,15 +70,15 @@ final class FileProcessor
     private $tokensByFilePathStorage;
 
     public function __construct(
-        FormatPerservingPrinter $formatPerservingPrinter,
-        Parser $parser,
-        Lexer $lexer,
-        RectorNodeTraverser $rectorNodeTraverser,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        CurrentFileInfoProvider $currentFileInfoProvider,
-        StubLoader $stubLoader,
         AffectedFilesCollector $affectedFilesCollector,
+        CurrentFileInfoProvider $currentFileInfoProvider,
+        FormatPerservingPrinter $formatPerservingPrinter,
+        Lexer $lexer,
+        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        Parser $parser,
         PostFileProcessor $postFileProcessor,
+        RectorNodeTraverser $rectorNodeTraverser,
+        StubLoader $stubLoader,
         TokensByFilePathStorage $tokensByFilePathStorage
     ) {
         $this->formatPerservingPrinter = $formatPerservingPrinter;

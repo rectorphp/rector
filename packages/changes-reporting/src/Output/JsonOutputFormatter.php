@@ -34,9 +34,9 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     private $smartFileSystem;
 
     public function __construct(
-        SymfonyStyle $symfonyStyle,
         Configuration $configuration,
-        SmartFileSystem $smartFileSystem
+        SmartFileSystem $smartFileSystem,
+        SymfonyStyle $symfonyStyle
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->configuration = $configuration;

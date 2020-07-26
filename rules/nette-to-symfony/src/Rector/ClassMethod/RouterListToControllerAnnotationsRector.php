@@ -49,9 +49,9 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $implicitToExplicitRoutingAnnotationDecorator;
 
     public function __construct(
-        RouteInfoFactory $routeInfoFactory,
+        ImplicitToExplicitRoutingAnnotationDecorator $implicitToExplicitRoutingAnnotationDecorator,
         ReturnTypeInferer $returnTypeInferer,
-        ImplicitToExplicitRoutingAnnotationDecorator $implicitToExplicitRoutingAnnotationDecorator
+        RouteInfoFactory $routeInfoFactory
     ) {
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;

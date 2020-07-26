@@ -23,8 +23,8 @@ final class RectorGuard
     private $fileSystemFileProcessor;
 
     public function __construct(
-        RectorNodeTraverser $rectorNodeTraverser,
-        FileSystemFileProcessor $fileSystemFileProcessor
+        FileSystemFileProcessor $fileSystemFileProcessor,
+        RectorNodeTraverser $rectorNodeTraverser
     ) {
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;

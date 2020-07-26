@@ -64,13 +64,13 @@ final class EventAndListenerTreeProvider
     private $getSubscribedEventsClassMethodProvider;
 
     public function __construct(
-        OnPropertyMagicCallProvider $onPropertyMagicCallProvider,
-        ListeningMethodsCollector $listeningMethodsCollector,
-        NodeNameResolver $nodeNameResolver,
+        DispatchMethodCallFactory $dispatchMethodCallFactory,
         EventClassNaming $eventClassNaming,
         EventValueObjectClassFactory $eventValueObjectClassFactory,
-        DispatchMethodCallFactory $dispatchMethodCallFactory,
-        GetSubscribedEventsClassMethodProvider $getSubscribedEventsClassMethodProvider
+        GetSubscribedEventsClassMethodProvider $getSubscribedEventsClassMethodProvider,
+        ListeningMethodsCollector $listeningMethodsCollector,
+        NodeNameResolver $nodeNameResolver,
+        OnPropertyMagicCallProvider $onPropertyMagicCallProvider
     ) {
         $this->onPropertyMagicCallProvider = $onPropertyMagicCallProvider;
         $this->listeningMethodsCollector = $listeningMethodsCollector;

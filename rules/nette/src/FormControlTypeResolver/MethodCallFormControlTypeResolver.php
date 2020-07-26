@@ -30,8 +30,8 @@ final class MethodCallFormControlTypeResolver implements FormControlTypeResolver
     private $methodNamesByInputNamesResolver;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder
+        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;

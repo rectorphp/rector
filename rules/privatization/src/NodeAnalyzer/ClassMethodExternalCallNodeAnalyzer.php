@@ -39,10 +39,10 @@ final class ClassMethodExternalCallNodeAnalyzer
     private $eventSubscriberMethodNamesResolver;
 
     public function __construct(
+        EventSubscriberMethodNamesResolver $eventSubscriberMethodNamesResolver,
         MethodCallParsedNodesFinder $methodCallParsedNodesFinder,
         NodeNameResolver $nodeNameResolver,
-        NodeTypeResolver $nodeTypeResolver,
-        EventSubscriberMethodNamesResolver $eventSubscriberMethodNamesResolver
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
         $this->nodeNameResolver = $nodeNameResolver;

@@ -39,10 +39,10 @@ final class ReturnTypeDeclarationUpdater
     private $phpDocInfoManipulator;
 
     public function __construct(
-        StaticTypeMapper $staticTypeMapper,
-        PhpVersionProvider $phpVersionProvider,
         NodeNameResolver $nodeNameResolver,
-        PhpDocInfoManipulator $phpDocInfoManipulator
+        PhpDocInfoManipulator $phpDocInfoManipulator,
+        PhpVersionProvider $phpVersionProvider,
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpVersionProvider = $phpVersionProvider;

@@ -30,8 +30,8 @@ final class SelfContainerMethodCallCollector
     private $valueResolver;
 
     public function __construct(
-        KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
         CallableNodeTraverser $callableNodeTraverser,
+        KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
         ValueResolver $valueResolver
     ) {
         $this->kernelTestCaseNodeAnalyzer = $kernelTestCaseNodeAnalyzer;

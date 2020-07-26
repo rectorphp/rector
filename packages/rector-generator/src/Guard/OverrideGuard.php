@@ -21,7 +21,7 @@ final class OverrideGuard
      */
     private $symfonyStyle;
 
-    public function __construct(TemplateFileSystem $templateFileSystem, SymfonyStyle $symfonyStyle)
+    public function __construct(SymfonyStyle $symfonyStyle, TemplateFileSystem $templateFileSystem)
     {
         $this->templateFileSystem = $templateFileSystem;
         $this->symfonyStyle = $symfonyStyle;

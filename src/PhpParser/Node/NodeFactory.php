@@ -74,9 +74,9 @@ final class NodeFactory
 
     public function __construct(
         BuilderFactory $builderFactory,
-        StaticTypeMapper $staticTypeMapper,
         PhpDocInfoFactory $phpDocInfoFactory,
-        PhpVersionProvider $phpVersionProvider
+        PhpVersionProvider $phpVersionProvider,
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->builderFactory = $builderFactory;
         $this->staticTypeMapper = $staticTypeMapper;

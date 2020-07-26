@@ -40,8 +40,8 @@ final class PropertyAddingPostRector extends AbstractPostRector
     public function __construct(
         ClassDependencyManipulator $classDependencyManipulator,
         ClassInsertManipulator $classInsertManipulator,
-        PropertyToAddCollector $propertyToAddCollector,
-        NetteInjectDetector $netteInjectDetector
+        NetteInjectDetector $netteInjectDetector,
+        PropertyToAddCollector $propertyToAddCollector
     ) {
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->classInsertManipulator = $classInsertManipulator;

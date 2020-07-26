@@ -27,9 +27,9 @@ final class NodesWithFileDestinationPrinter
     private $betterStandardPrinter;
 
     public function __construct(
-        PostFileProcessor $postFileProcessor,
+        BetterStandardPrinter $betterStandardPrinter,
         Lexer $lexer,
-        BetterStandardPrinter $betterStandardPrinter
+        PostFileProcessor $postFileProcessor
     ) {
         $this->postFileProcessor = $postFileProcessor;
         $this->lexer = $lexer;

@@ -27,7 +27,7 @@ final class ClassInsertManipulator
      */
     private $nodeFactory;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;

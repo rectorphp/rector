@@ -34,10 +34,10 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
     private $parsedClassConstFetchNodeCollector;
 
     public function __construct(
-        ParsedNodeCollector $parsedNodeCollector,
+        ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector,
         ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector,
-        ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
-        ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector
+        ParsedNodeCollector $parsedNodeCollector,
+        ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector
     ) {
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
         $this->parsedNodeCollector = $parsedNodeCollector;

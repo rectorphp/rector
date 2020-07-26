@@ -28,9 +28,9 @@ final class DependencyResolver
     private $phpStanDependencyResolver;
 
     public function __construct(
-        FileHelper $fileHelper,
         Configuration $configuration,
-        PHPStanDependencyResolver $phpStanDependencyResolver
+        PHPStanDependencyResolver $phpStanDependencyResolver,
+        FileHelper $fileHelper
     ) {
         $this->fileHelper = $fileHelper;
         $this->configuration = $configuration;

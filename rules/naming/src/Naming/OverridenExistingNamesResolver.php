@@ -37,9 +37,9 @@ final class OverridenExistingNamesResolver
     private $arrayFilter;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
+        ArrayFilter $arrayFilter,
         BetterNodeFinder $betterNodeFinder,
-        ArrayFilter $arrayFilter
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;

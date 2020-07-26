@@ -48,11 +48,11 @@ final class ConfigFilesystem
     private $smartFileSystem;
 
     public function __construct(
-        TemplateFactory $templateFactory,
-        Parser $parser,
         AddNewServiceToSymfonyPhpConfigRector $addNewServiceToSymfonyPhpConfigRector,
         BetterStandardPrinter $betterStandardPrinter,
-        SmartFileSystem $smartFileSystem
+        Parser $parser,
+        SmartFileSystem $smartFileSystem,
+        TemplateFactory $templateFactory
     ) {
         $this->templateFactory = $templateFactory;
         $this->parser = $parser;

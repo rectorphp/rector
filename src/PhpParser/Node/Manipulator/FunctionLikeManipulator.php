@@ -29,8 +29,8 @@ final class FunctionLikeManipulator
     private $propertyFetchManipulator;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
+        NodeNameResolver $nodeNameResolver,
         PropertyFetchManipulator $propertyFetchManipulator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;

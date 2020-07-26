@@ -53,12 +53,12 @@ final class MarkdownDumpRectorsOutputFormatter
     private $returnClosurePrinter;
 
     public function __construct(
-        SymfonyStyle $symfonyStyle,
         MarkdownDifferAndFormatter $markdownDifferAndFormatter,
-        RectorMetadataResolver $rectorMetadataResolver,
-        TestClassResolver $testClassResolver,
         PhpKeywordHighlighter $phpKeywordHighlighter,
-        ReturnClosurePrinter $returnClosurePrinter
+        RectorMetadataResolver $rectorMetadataResolver,
+        ReturnClosurePrinter $returnClosurePrinter,
+        SymfonyStyle $symfonyStyle,
+        TestClassResolver $testClassResolver
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;

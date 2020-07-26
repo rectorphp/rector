@@ -41,7 +41,7 @@ final class PhpSpecMockCollector
      */
     private $callableNodeTraverser;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;

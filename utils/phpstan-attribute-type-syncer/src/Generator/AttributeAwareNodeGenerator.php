@@ -27,9 +27,9 @@ final class AttributeAwareNodeGenerator extends AbstractAttributeAwareNodeGenera
     private $attributeAwareClassFactory;
 
     public function __construct(
+        AttributeAwareClassFactory $attributeAwareClassFactory,
         AttributeClassNaming $attributeClassNaming,
-        SymfonyStyle $symfonyStyle,
-        AttributeAwareClassFactory $attributeAwareClassFactory
+        SymfonyStyle $symfonyStyle
     ) {
         $this->attributeClassNaming = $attributeClassNaming;
         $this->symfonyStyle = $symfonyStyle;

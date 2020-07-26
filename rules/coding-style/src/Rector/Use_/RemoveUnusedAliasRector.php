@@ -61,8 +61,8 @@ final class RemoveUnusedAliasRector extends AbstractRector
 
     public function __construct(
         DocAliasResolver $docAliasResolver,
-        UseNameAliasToNameResolver $useNameAliasToNameResolver,
-        UseManipulator $useManipulator
+        UseManipulator $useManipulator,
+        UseNameAliasToNameResolver $useNameAliasToNameResolver
     ) {
         $this->docAliasResolver = $docAliasResolver;
         $this->useNameAliasToNameResolver = $useNameAliasToNameResolver;

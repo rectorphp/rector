@@ -65,13 +65,13 @@ final class NameImporter
     private $renamedClassesCollector;
 
     public function __construct(
-        StaticTypeMapper $staticTypeMapper,
         AliasUsesResolver $aliasUsesResolver,
         ImportSkipper $importSkipper,
         NodeNameResolver $nodeNameResolver,
         ParameterProvider $parameterProvider,
-        UseNodesToAddCollector $useNodesToAddCollector,
-        RenamedClassesCollector $renamedClassesCollector
+        RenamedClassesCollector $renamedClassesCollector,
+        StaticTypeMapper $staticTypeMapper,
+        UseNodesToAddCollector $useNodesToAddCollector
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;

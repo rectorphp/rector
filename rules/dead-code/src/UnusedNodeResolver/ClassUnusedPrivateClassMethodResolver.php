@@ -29,9 +29,9 @@ final class ClassUnusedPrivateClassMethodResolver
     private $functionLikeParsedNodesFinder;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
         ClassManipulator $classManipulator,
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder
+        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classManipulator = $classManipulator;

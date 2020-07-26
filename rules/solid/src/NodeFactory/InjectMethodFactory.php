@@ -44,11 +44,11 @@ final class InjectMethodFactory
     private $nodeFactory;
 
     public function __construct(
+        ClassNaming $classNaming,
+        NodeFactory $nodeFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
         PropertyNaming $propertyNaming,
-        ClassNaming $classNaming,
-        TypeFactory $typeFactory,
-        NodeFactory $nodeFactory
+        TypeFactory $typeFactory
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->propertyNaming = $propertyNaming;

@@ -74,8 +74,8 @@ final class PhpDocInfoPrinter
     private $spacePatternFactory;
 
     public function __construct(
-        OriginalSpacingRestorer $originalSpacingRestorer,
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
+        OriginalSpacingRestorer $originalSpacingRestorer,
         SpacePatternFactory $spacePatternFactory
     ) {
         $this->originalSpacingRestorer = $originalSpacingRestorer;

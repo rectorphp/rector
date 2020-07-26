@@ -41,8 +41,8 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
     private $mergedNodeCommentPreserver;
 
     public function __construct(
-        StaticTypeAnalyzer $staticTypeAnalyzer,
-        MergedNodeCommentPreserver $mergedNodeCommentPreserver
+        MergedNodeCommentPreserver $mergedNodeCommentPreserver,
+        StaticTypeAnalyzer $staticTypeAnalyzer
     ) {
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
         $this->mergedNodeCommentPreserver = $mergedNodeCommentPreserver;

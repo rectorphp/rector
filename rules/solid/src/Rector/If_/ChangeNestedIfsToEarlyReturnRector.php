@@ -31,7 +31,7 @@ final class ChangeNestedIfsToEarlyReturnRector extends AbstractRector
      */
     private $conditionInverter;
 
-    public function __construct(IfManipulator $ifManipulator, ConditionInverter $conditionInverter)
+    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
         $this->conditionInverter = $conditionInverter;

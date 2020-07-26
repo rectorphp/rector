@@ -71,8 +71,8 @@ final class ParsedFunctionLikeNodeCollector
     private $arrayCallableClassMethodReferenceAnalyzer;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ArrayCallableClassMethodReferenceAnalyzer $arrayCallableClassMethodReferenceAnalyzer
+        ArrayCallableClassMethodReferenceAnalyzer $arrayCallableClassMethodReferenceAnalyzer,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableClassMethodReferenceAnalyzer = $arrayCallableClassMethodReferenceAnalyzer;

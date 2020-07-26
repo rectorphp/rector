@@ -29,8 +29,8 @@ final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
     private $classInsertManipulator;
 
     public function __construct(
-        PhpSpecMockCollector $phpSpecMockCollector,
-        ClassInsertManipulator $classInsertManipulator
+        ClassInsertManipulator $classInsertManipulator,
+        PhpSpecMockCollector $phpSpecMockCollector
     ) {
         $this->phpSpecMockCollector = $phpSpecMockCollector;
         $this->classInsertManipulator = $classInsertManipulator;

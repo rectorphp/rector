@@ -92,10 +92,10 @@ final class ContributeEventClassResolver
     private $betterStandardPrinter;
 
     public function __construct(
+        BetterStandardPrinter $betterStandardPrinter,
         NodeNameResolver $nodeNameResolver,
-        VariableNaming $variableNaming,
         StaticTypeMapper $staticTypeMapper,
-        BetterStandardPrinter $betterStandardPrinter
+        VariableNaming $variableNaming
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableNaming = $variableNaming;

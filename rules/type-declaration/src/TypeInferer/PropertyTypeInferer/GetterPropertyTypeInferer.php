@@ -36,8 +36,8 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
     private $typeDeclarationToStringConverter;
 
     public function __construct(
-        ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
         ReturnTagReturnTypeInferer $returnTagReturnTypeInferer,
+        ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
         TypeDeclarationToStringConverter $typeDeclarationToStringConverter
     ) {
         $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;

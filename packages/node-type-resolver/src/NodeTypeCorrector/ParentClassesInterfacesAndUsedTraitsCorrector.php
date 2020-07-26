@@ -30,9 +30,9 @@ final class ParentClassesInterfacesAndUsedTraitsCorrector
     private $classReflectionTypesResolver;
 
     public function __construct(
-        TypeFactory $typeFactory,
+        ClassReflectionTypesResolver $classReflectionTypesResolver,
         ReflectionProvider $reflectionProvider,
-        ClassReflectionTypesResolver $classReflectionTypesResolver
+        TypeFactory $typeFactory
     ) {
         $this->typeFactory = $typeFactory;
         $this->reflectionProvider = $reflectionProvider;

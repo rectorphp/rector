@@ -41,10 +41,10 @@ final class ClassManipulator
     private $nodesToRemoveCollector;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
-        NodesToRemoveCollector $nodesToRemoveCollector,
-        NodeTypeResolver $nodeTypeResolver
+        NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver,
+        NodesToRemoveCollector $nodesToRemoveCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;

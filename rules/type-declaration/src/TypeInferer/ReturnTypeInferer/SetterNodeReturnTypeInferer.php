@@ -26,8 +26,8 @@ final class SetterNodeReturnTypeInferer extends AbstractTypeInferer implements R
     private $assignToPropertyTypeInferer;
 
     public function __construct(
-        FunctionLikeManipulator $functionLikeManipulator,
-        AssignToPropertyTypeInferer $assignToPropertyTypeInferer
+        AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
+        FunctionLikeManipulator $functionLikeManipulator
     ) {
         $this->functionLikeManipulator = $functionLikeManipulator;
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;

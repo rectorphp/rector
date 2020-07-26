@@ -33,7 +33,7 @@ final class SideEffectNodeDetector
      */
     private $nodeTypeResolver;
 
-    public function __construct(PureFunctionDetector $pureFunctionDetector, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, PureFunctionDetector $pureFunctionDetector)
     {
         $this->pureFunctionDetector = $pureFunctionDetector;
         $this->nodeTypeResolver = $nodeTypeResolver;

@@ -65,12 +65,12 @@ final class TokenManipulator
     private $nodesToRemoveCollector;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
-        ValueResolver $valueResolver,
         BetterStandardPrinter $betterStandardPrinter,
+        CallableNodeTraverser $callableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        NodesToRemoveCollector $nodesToRemoveCollector
+        NodesToRemoveCollector $nodesToRemoveCollector,
+        ValueResolver $valueResolver
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->valueResolver = $valueResolver;

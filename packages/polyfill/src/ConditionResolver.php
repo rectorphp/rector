@@ -37,8 +37,8 @@ final class ConditionResolver
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ValueResolver $valueResolver,
-        PhpVersionProvider $phpVersionProvider
+        PhpVersionProvider $phpVersionProvider,
+        ValueResolver $valueResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;

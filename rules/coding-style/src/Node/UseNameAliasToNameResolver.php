@@ -20,7 +20,7 @@ final class UseNameAliasToNameResolver
      */
     private $classNaming;
 
-    public function __construct(ShortNameResolver $shortNameResolver, ClassNaming $classNaming)
+    public function __construct(ClassNaming $classNaming, ShortNameResolver $shortNameResolver)
     {
         $this->shortNameResolver = $shortNameResolver;
         $this->classNaming = $classNaming;

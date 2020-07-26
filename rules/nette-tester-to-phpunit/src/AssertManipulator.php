@@ -113,10 +113,10 @@ final class AssertManipulator
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ValueResolver $valueResolver,
         NodesToAddCollector $nodesToAddCollector,
         NodesToRemoveCollector $nodesToRemoveCollector,
-        StringTypeAnalyzer $stringTypeAnalyzer
+        StringTypeAnalyzer $stringTypeAnalyzer,
+        ValueResolver $valueResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;

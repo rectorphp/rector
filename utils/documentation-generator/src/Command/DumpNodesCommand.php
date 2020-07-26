@@ -159,9 +159,9 @@ final class DumpNodesCommand extends AbstractCommand
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
+        MarkdownDumpNodesOutputFormatter $markdownDumpNodesOutputFormatter,
         NodeClassProvider $nodeClassProvider,
-        NodeInfoResult $nodeInfoResult,
-        MarkdownDumpNodesOutputFormatter $markdownDumpNodesOutputFormatter
+        NodeInfoResult $nodeInfoResult
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeClassProvider = $nodeClassProvider;

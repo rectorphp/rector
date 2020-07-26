@@ -43,11 +43,11 @@ final class NextVariableUsageNodeFinder
     private $nodeNameResolver;
 
     public function __construct(
-        ParentScopeFinder $parentScopeFinder,
-        CallableNodeTraverser $callableNodeTraverser,
-        BetterStandardPrinter $betterStandardPrinter,
         BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver
+        BetterStandardPrinter $betterStandardPrinter,
+        CallableNodeTraverser $callableNodeTraverser,
+        NodeNameResolver $nodeNameResolver,
+        ParentScopeFinder $parentScopeFinder
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;

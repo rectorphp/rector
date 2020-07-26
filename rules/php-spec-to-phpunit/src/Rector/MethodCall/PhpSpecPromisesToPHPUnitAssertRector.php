@@ -115,7 +115,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
      */
     private $matchersManipulator;
 
-    public function __construct(PhpSpecRenaming $phpSpecRenaming, MatchersManipulator $matchersManipulator)
+    public function __construct(MatchersManipulator $matchersManipulator, PhpSpecRenaming $phpSpecRenaming)
     {
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->matchersManipulator = $matchersManipulator;

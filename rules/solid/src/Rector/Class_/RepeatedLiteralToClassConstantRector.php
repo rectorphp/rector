@@ -51,8 +51,8 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
 
     public function __construct(
         ClassInsertManipulator $classInsertManipulator,
-        ScopeAwareNodeFinder $scopeAwareNodeFinder,
-        ReservedKeywordAnalyzer $reservedKeywordAnalyzer
+        ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        ScopeAwareNodeFinder $scopeAwareNodeFinder
     ) {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->scopeAwareNodeFinder = $scopeAwareNodeFinder;
