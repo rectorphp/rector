@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\NetteCodeQuality\FormControlTypeResolver;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
+use Rector\NetteCodeQuality\ValueObject\NetteFormMethodNameToControlType;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class OnVariableMethodCallsFormControlTypeResolver implements FormControlTypeResolverInterface
@@ -58,7 +58,7 @@ final class OnVariableMethodCallsFormControlTypeResolver implements FormControlT
                 continue;
             }
 
-            if (! Strings::startsWith($methodName, 'add')) {
+            if (! isset(NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE[$methodName])) {
                 continue;
             }
 
