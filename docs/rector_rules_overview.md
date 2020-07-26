@@ -31,8 +31,8 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
-- [Nette](#nette) (15)
-- [NetteCodeQuality](#nettecodequality) (1)
+- [Nette](#nette) (12)
+- [NetteCodeQuality](#nettecodequality) (4)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
@@ -4288,10 +4288,10 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 
 ## Downgrade
 
-### `TypedPropertyRector`
+### `DowngradeTypedPropertyRector`
 
-- class: [`Rector\Downgrade\Rector\Property\TypedPropertyRector`](/../master/rules/downgrade/src/Rector/Property/TypedPropertyRector.php)
-- [test fixtures](/../master/rules/php74/tests/Rector/Property/TypedPropertyRector/Fixture)
+- class: [`Rector\Downgrade\Rector\Property\DowngradeTypedPropertyRector`](/../master/rules/downgrade/src/Rector/Property/DowngradeTypedPropertyRector.php)
+- [test fixtures](/../master/rules/downgrade/tests/Rector/Property/DowngradeTypedPropertyRector/Fixture)
 
 Changes property type definition from type definitions to `@var` annotations.
 
@@ -5184,64 +5184,6 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
 
 <br><br>
 
-### `ChangeControlArrayAccessToAnnotatedControlVariableRector`
-
-- class: [`Rector\Nette\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector`](/../master/rules/nette/src/Rector/ArrayDimFetch/ChangeControlArrayAccessToAnnotatedControlVariableRector.php)
-- [test fixtures](/../master/rules/nette/tests/Rector/ArrayDimFetch/ChangeControlArrayAccessToAnnotatedControlVariableRector/Fixture)
-
-Change magic `$this["some_component"]` to variable assign with @var annotation
-
-```diff
- use Nette\Application\UI\Presenter;
- use Nette\Application\UI\Form;
-
- final class SomePresenter extends Presenter
- {
-     public function run()
-     {
--        if ($this['some_form']->isSubmitted()) {
-+        /** @var \Nette\Application\UI\Form $someForm */
-+        $someForm = $this['some_form'];
-+        if ($someForm->isSubmitted()) {
-         }
-     }
-
-     protected function createComponentSomeForm()
-     {
-         return new Form();
-     }
- }
-```
-
-<br><br>
-
-### `ChangeFormArrayAccessToAnnotatedControlVariableRector`
-
-- class: [`Rector\Nette\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector`](/../master/rules/nette/src/Rector/ArrayDimFetch/ChangeFormArrayAccessToAnnotatedControlVariableRector.php)
-- [test fixtures](/../master/rules/nette/tests/Rector/ArrayDimFetch/ChangeFormArrayAccessToAnnotatedControlVariableRector/Fixture)
-
-Change array access magic on `$form` to explicit standalone typed variable
-
-```diff
- use Nette\Application\UI\Form;
-
- class SomePresenter
- {
-     public function run()
-     {
-         $form = new Form();
-         $this->addText('email', 'Email');
-
--        $form['email']->value = 'hey@hi.hello';
-+        /** @var \Nette\Forms\Controls\TextInput $emailControl */
-+        $emailControl = $form['email'];
-+        $emailControl->value = 'hey@hi.hello';
-     }
- }
-```
-
-<br><br>
-
 ### `ContextGetByTypeToConstructorInjectionRector`
 
 - class: [`Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector`](/../master/rules/nette/src/Rector/MethodCall/ContextGetByTypeToConstructorInjectionRector.php)
@@ -5350,41 +5292,6 @@ Changes `json_encode()/json_decode()` to safer and more verbose `Nette\Utils\Jso
 -        $prettyJsonString = json_encode($data, JSON_PRETTY_PRINT);
 +        $prettyJsonString = \Nette\Utils\Json::encode($data, \Nette\Utils\Json::PRETTY);
      }
- }
-```
-
-<br><br>
-
-### `MakeGetComponentAssignAnnotatedRector`
-
-- class: [`Rector\Nette\Rector\Assign\MakeGetComponentAssignAnnotatedRector`](/../master/rules/nette/src/Rector/Assign/MakeGetComponentAssignAnnotatedRector.php)
-- [test fixtures](/../master/rules/nette/tests/Rector/Assign/MakeGetComponentAssignAnnotatedRector/Fixture)
-
-Add doc type for magic `$control->getComponent(...)` assign
-
-```diff
- use Nette\Application\UI\Control;
-
- final class SomeClass
- {
-     public function run()
-     {
-         $externalControl = new ExternalControl();
-+        /** @var AnotherControl $anotherControl */
-         $anotherControl = $externalControl->getComponent('another');
-     }
- }
-
- final class ExternalControl extends Control
- {
-     public function createComponentAnother(): AnotherControl
-     {
-         return new AnotherControl();
-     }
- }
-
- final class AnotherControl extends Control
- {
  }
 ```
 
@@ -5546,6 +5453,99 @@ Change `$this->templates->{magic}` to `$this->template->render(..., $values)`
 <br><br>
 
 ## NetteCodeQuality
+
+### `ChangeControlArrayAccessToAnnotatedControlVariableRector`
+
+- class: [`Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector`](/../master/rules/nette-code-quality/src/Rector/ArrayDimFetch/ChangeControlArrayAccessToAnnotatedControlVariableRector.php)
+- [test fixtures](/../master/rules/nette-code-quality/tests/Rector/ArrayDimFetch/ChangeControlArrayAccessToAnnotatedControlVariableRector/Fixture)
+
+Change magic `$this["some_component"]` to variable assign with @var annotation
+
+```diff
+ use Nette\Application\UI\Presenter;
+ use Nette\Application\UI\Form;
+
+ final class SomePresenter extends Presenter
+ {
+     public function run()
+     {
+-        if ($this['some_form']->isSubmitted()) {
++        /** @var \Nette\Application\UI\Form $someForm */
++        $someForm = $this['some_form'];
++        if ($someForm->isSubmitted()) {
+         }
+     }
+
+     protected function createComponentSomeForm()
+     {
+         return new Form();
+     }
+ }
+```
+
+<br><br>
+
+### `ChangeFormArrayAccessToAnnotatedControlVariableRector`
+
+- class: [`Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector`](/../master/rules/nette-code-quality/src/Rector/ArrayDimFetch/ChangeFormArrayAccessToAnnotatedControlVariableRector.php)
+- [test fixtures](/../master/rules/nette-code-quality/tests/Rector/ArrayDimFetch/ChangeFormArrayAccessToAnnotatedControlVariableRector/Fixture)
+
+Change array access magic on `$form` to explicit standalone typed variable
+
+```diff
+ use Nette\Application\UI\Form;
+
+ class SomePresenter
+ {
+     public function run()
+     {
+         $form = new Form();
+         $this->addText('email', 'Email');
+
+-        $form['email']->value = 'hey@hi.hello';
++        /** @var \Nette\Forms\Controls\TextInput $emailControl */
++        $emailControl = $form['email'];
++        $emailControl->value = 'hey@hi.hello';
+     }
+ }
+```
+
+<br><br>
+
+### `MakeGetComponentAssignAnnotatedRector`
+
+- class: [`Rector\NetteCodeQuality\Rector\Assign\MakeGetComponentAssignAnnotatedRector`](/../master/rules/nette-code-quality/src/Rector/Assign/MakeGetComponentAssignAnnotatedRector.php)
+- [test fixtures](/../master/rules/nette-code-quality/tests/Rector/Assign/MakeGetComponentAssignAnnotatedRector/Fixture)
+
+Add doc type for magic `$control->getComponent(...)` assign
+
+```diff
+ use Nette\Application\UI\Control;
+
+ final class SomeClass
+ {
+     public function run()
+     {
+         $externalControl = new ExternalControl();
++        /** @var AnotherControl $anotherControl */
+         $anotherControl = $externalControl->getComponent('another');
+     }
+ }
+
+ final class ExternalControl extends Control
+ {
+     public function createComponentAnother(): AnotherControl
+     {
+         return new AnotherControl();
+     }
+ }
+
+ final class AnotherControl extends Control
+ {
+ }
+```
+
+<br><br>
 
 ### `MoveInjectToExistingConstructorRector`
 
