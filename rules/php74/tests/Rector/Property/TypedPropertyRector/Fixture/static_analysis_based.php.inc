@@ -20,7 +20,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 final class StaticAnalysisBased
 {
-    private int $count;
+    private ?int $count = null;
 
     public function setCount(int $count)
     {

@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 
 final class AssignToPropertyTypeInferer extends AbstractTypeInferer
@@ -47,6 +48,11 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
 
             return null;
         });
+
+        // add default type, as not initialized in the constructor
+        if (count($assignedExprStaticTypes)) {
+            $assignedExprStaticTypes[] = new NullType();
+        }
 
         return $this->typeFactory->createMixedPassedOrUnionType($assignedExprStaticTypes);
     }
