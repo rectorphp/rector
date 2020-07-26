@@ -8,15 +8,15 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\Util\StaticRectorStrings;
+use Rector\Nette\DocBlock\VarAnnotationManipulator;
+use Rector\Nette\Naming\NetteControlNaming;
+use Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer;
 use Rector\Nette\NodeResolver\FormVariableInputNameTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -32,9 +32,31 @@ final class ChangeFormArrayAccessToAnnotatedControlVariableRector extends Abstra
      */
     private $formVariableInputNameTypeResolver;
 
-    public function __construct(FormVariableInputNameTypeResolver $formVariableInputNameTypeResolver)
-    {
+    /**
+     * @var ControlDimFetchAnalyzer
+     */
+    private $controlDimFetchAnalyzer;
+
+    /**
+     * @var NetteControlNaming
+     */
+    private $netteControlNaming;
+
+    /**
+     * @var VarAnnotationManipulator
+     */
+    private $varAnnotationManipulator;
+
+    public function __construct(
+        FormVariableInputNameTypeResolver $formVariableInputNameTypeResolver,
+        ControlDimFetchAnalyzer $controlDimFetchAnalyzer,
+        NetteControlNaming $netteControlNaming,
+        VarAnnotationManipulator $varAnnotationManipulator
+    ) {
         $this->formVariableInputNameTypeResolver = $formVariableInputNameTypeResolver;
+        $this->controlDimFetchAnalyzer = $controlDimFetchAnalyzer;
+        $this->netteControlNaming = $netteControlNaming;
+        $this->varAnnotationManipulator = $varAnnotationManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,8 +112,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $dimString = $this->matchNetteFormArrayDimString($node);
-        if ($dimString === null) {
+        $inputName = $this->controlDimFetchAnalyzer->matchName($node);
+        if ($inputName === null) {
             return null;
         }
 
@@ -99,8 +121,7 @@ PHP
             return null;
         }
 
-        $inputName = $this->getValue($dimString);
-        $controlVariableName = $this->createControlVariableName($inputName);
+        $controlVariableName = $this->netteControlNaming->createVariableName($inputName);
 
         $controlVariableToFormDimFetchAssign = new Assign(new Variable($controlVariableName), clone $node);
         $assignExpression = new Expression($controlVariableToFormDimFetchAssign);
@@ -114,50 +135,21 @@ PHP
             $inputName
         );
 
-        $this->addVarTag($controlVariableToFormDimFetchAssign, $assignExpression, $controlVariableName, $controlType);
+        $formVariableName = $this->getName($formVariable);
+        if ($formVariableName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $controlObjectType = new ObjectType($controlType);
+        $this->varAnnotationManipulator->decorateNodeWithInlineVarType(
+            $assignExpression,
+            $controlObjectType,
+            $controlVariableName
+        );
 
         $this->addNodeBeforeNode($assignExpression, $node);
 
         return new Variable($controlVariableName);
-    }
-
-    private function addVarTag(
-        Assign $assign,
-        Expression $assignExpression,
-        string $controlName,
-        string $controlType
-    ): PhpDocInfo {
-        $phpDocInfo = $this->phpDocInfoFactory->createEmpty($assignExpression);
-
-        $varTagValueNode = new VarTagValueNode(
-            new AttributeAwareFullyQualifiedIdentifierTypeNode($controlType),
-            '$' . $controlName,
-            ''
-        );
-
-        $phpDocInfo->addTagValueNode($varTagValueNode);
-        $phpDocInfo->makeSingleLined();
-
-        $assign->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
-
-        return $phpDocInfo;
-    }
-
-    private function matchNetteFormArrayDimString(ArrayDimFetch $arrayDimFetch): ?String_
-    {
-        if (! $arrayDimFetch->var instanceof Variable) {
-            return null;
-        }
-
-        if (! $this->isObjectTypeOrNullableObjectType($arrayDimFetch->var, 'Nette\ComponentModel\IComponent')) {
-            return null;
-        }
-
-        if (! $arrayDimFetch->dim instanceof String_) {
-            return null;
-        }
-
-        return $arrayDimFetch->dim;
     }
 
     private function isBeingAssignedOrInitialized(ArrayDimFetch $arrayDimFetch): bool
@@ -172,10 +164,5 @@ PHP
         }
 
         return $parent->expr === $arrayDimFetch;
-    }
-
-    private function createControlVariableName(string $inputName): string
-    {
-        return StaticRectorStrings::underscoreToPascalCase($inputName) . 'Control';
     }
 }

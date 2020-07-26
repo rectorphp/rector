@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Naming;
+namespace Rector\Naming;
 
 use Nette\Utils\Strings;
 use Rector\Core\ValueObject\RenamedNamespaceValueObject;

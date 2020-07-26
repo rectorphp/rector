@@ -1,4 +1,4 @@
-# All 534 Rectors Overview
+# All 536 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -31,7 +31,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
-- [Nette](#nette) (14)
+- [Nette](#nette) (15)
 - [NetteCodeQuality](#nettecodequality) (1)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -5178,6 +5178,37 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
          $form = new Form();
 -        $form->addDatePicker('key', 'Label');
 +        $keyDateControl = $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+     }
+ }
+```
+
+<br><br>
+
+### `ChangeControlArrayAccessToAnnotatedControlVariableRector`
+
+- class: [`Rector\Nette\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector`](/../master/rules/nette/src/Rector/ArrayDimFetch/ChangeControlArrayAccessToAnnotatedControlVariableRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/ArrayDimFetch/ChangeControlArrayAccessToAnnotatedControlVariableRector/Fixture)
+
+Change magic `$this["some_component"]` to variable assign with @var annotation
+
+```diff
+ use Nette\Application\UI\Presenter;
+ use Nette\Application\UI\Form;
+
+ final class SomePresenter extends Presenter
+ {
+     public function run()
+     {
+-        if ($this['some_form']->isSubmitted()) {
++        /** @var \Nette\Application\UI\Form $someForm */
++        $someForm = $this['some_form'];
++        if ($someForm->isSubmitted()) {
+         }
+     }
+
+     protected function createComponentSomeForm()
+     {
+         return new Form();
      }
  }
 ```

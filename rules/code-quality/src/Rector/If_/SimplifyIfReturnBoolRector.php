@@ -23,7 +23,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
-use Rector\PHPStan\TypeFactoryStaticHelper;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\SimplifyIfReturnBoolRectorTest
@@ -40,12 +40,19 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
      */
     private $mergedNodeCommentPreserver;
 
+    /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
     public function __construct(
         MergedNodeCommentPreserver $mergedNodeCommentPreserver,
+        TypeUnwrapper $typeUnwrapper,
         StaticTypeAnalyzer $staticTypeAnalyzer
     ) {
-        $this->staticTypeAnalyzer = $staticTypeAnalyzer;
         $this->mergedNodeCommentPreserver = $mergedNodeCommentPreserver;
+        $this->typeUnwrapper = $typeUnwrapper;
+        $this->staticTypeAnalyzer = $staticTypeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -205,7 +212,7 @@ PHP
             $exprStaticType = $this->getStaticType($expr);
             // if we remove null type, still has to be trueable
             if ($exprStaticType instanceof UnionType) {
-                $unionTypeWithoutNullType = $this->removeNullTypeFromUnionType($exprStaticType);
+                $unionTypeWithoutNullType = $this->typeUnwrapper->removeNullTypeFromUnionType($exprStaticType);
                 if ($this->staticTypeAnalyzer->isAlwaysTruableType($unionTypeWithoutNullType)) {
                     return new NotIdentical($expr, $this->createNull());
                 }
@@ -219,23 +226,6 @@ PHP
         }
 
         return new Bool_($expr);
-    }
-
-    /**
-     * @return Type|UnionType
-     */
-    private function removeNullTypeFromUnionType(UnionType $unionType): Type
-    {
-        $unionedTypesWithoutNullType = [];
-        foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof UnionType) {
-                continue;
-            }
-
-            $unionedTypesWithoutNullType[] = $type;
-        }
-
-        return TypeFactoryStaticHelper::createUnionObjectType($unionedTypesWithoutNullType);
     }
 
     private function isBoolCastNeeded(Expr $expr): bool

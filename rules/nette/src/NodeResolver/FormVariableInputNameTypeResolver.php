@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Nette\NodeResolver;
 
-use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 
@@ -38,14 +38,13 @@ final class FormVariableInputNameTypeResolver
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }
 
-    public function resolveControlTypeByInputName(Variable $formVariable, string $inputName): string
+    public function resolveControlTypeByInputName(Expr $formOrControlExpr, string $inputName): string
     {
-        $methodNamesByInputNames = $this->methodNamesByInputNamesResolver->resolveExpr($formVariable);
+        $methodNamesByInputNames = $this->methodNamesByInputNamesResolver->resolveExpr($formOrControlExpr);
 
         $formAddMethodName = $methodNamesByInputNames[$inputName] ?? null;
-
         if ($formAddMethodName === null) {
-            $message = sprintf('Not found for "%s" input name', $inputName);
+            $message = sprintf('Type was not found for "%s" input name', $inputName);
             throw new ShouldNotHappenException($message);
         }
 
