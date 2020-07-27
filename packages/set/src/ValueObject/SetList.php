@@ -59,11 +59,6 @@ final class SetList
     /**
      * @var string
      */
-    public const CELEBRITY = 'celebrity';
-
-    /**
-     * @var string
-     */
     public const CODEIGNITER_40 = 'codeigniter-40';
 
     /**

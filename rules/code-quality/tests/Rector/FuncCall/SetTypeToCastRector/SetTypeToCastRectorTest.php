@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Celebrity\Tests\Rector\FuncCall\SetTypeToCastRector;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\SetTypeToCastRector;
 
 use Iterator;
-use Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector;
+use Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
