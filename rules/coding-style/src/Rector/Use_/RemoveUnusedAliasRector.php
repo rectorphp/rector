@@ -270,12 +270,12 @@ PHP
     }
 
     /**
-     * @param Name|Identifier $usedName
+     * @param Name|Identifier $usedNameNode
      */
-    private function renameInterface(string $lastName, Interface_ $interface, Node $usedName): void
+    private function renameInterface(string $lastName, Interface_ $interface, Node $usedNameNode): void
     {
         foreach ($interface->extends as $key => $extendInterfaceName) {
-            if ($this->areNamesEqual($extendInterfaceName, $usedName)) {
+            if ($this->areNamesEqual($extendInterfaceName, $usedNameNode)) {
                 $interface->extends[$key] = new Name($lastName);
             }
         }

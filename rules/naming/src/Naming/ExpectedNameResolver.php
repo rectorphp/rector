@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -176,6 +177,11 @@ final class ExpectedNameResolver
         }
 
         $returnedType = $this->nodeTypeResolver->getStaticType($expr);
+
+        if ($returnedType instanceof ArrayType) {
+            return null;
+        }
+
         if ($returnedType instanceof MixedType) {
             return null;
         }

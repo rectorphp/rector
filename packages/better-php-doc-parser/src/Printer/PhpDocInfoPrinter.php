@@ -7,7 +7,6 @@ namespace Rector\BetterPhpDocParser\Printer;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -77,14 +76,21 @@ final class PhpDocInfoPrinter
      */
     private $spacePatternFactory;
 
+    /**
+     * @var EmptyPhpDocDetector
+     */
+    private $emptyPhpDocDetector;
+
     public function __construct(
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
         OriginalSpacingRestorer $originalSpacingRestorer,
-        SpacePatternFactory $spacePatternFactory
+        SpacePatternFactory $spacePatternFactory,
+        EmptyPhpDocDetector $emptyPhpDocDetector
     ) {
         $this->originalSpacingRestorer = $originalSpacingRestorer;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
         $this->spacePatternFactory = $spacePatternFactory;
+        $this->emptyPhpDocDetector = $emptyPhpDocDetector;
     }
 
     /**
@@ -127,7 +133,7 @@ final class PhpDocInfoPrinter
     private function printPhpDocNode(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): string
     {
         // no nodes were, so empty doc
-        if ($this->isPhpDocNodeEmpty($attributeAwarePhpDocNode)) {
+        if ($this->emptyPhpDocDetector->isPhpDocNodeEmpty($attributeAwarePhpDocNode)) {
             return '';
         }
 
@@ -160,25 +166,6 @@ final class PhpDocInfoPrinter
     private function removeExtraSpacesAfterAsterisk(string $phpDocString): string
     {
         return Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
-    }
-
-    private function isPhpDocNodeEmpty(PhpDocNode $phpDocNode): bool
-    {
-        if (count($phpDocNode->children) === 0) {
-            return true;
-        }
-
-        foreach ($phpDocNode->children as $phpDocChildNode) {
-            if ($phpDocChildNode instanceof PhpDocTextNode) {
-                if ($phpDocChildNode->text !== '') {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private function printNode(
@@ -371,16 +358,19 @@ final class PhpDocInfoPrinter
      */
     private function resolveTagSpaceSeparator(PhpDocTagNode $phpDocTagNode): string
     {
-        if ($this->isCommonTag($phpDocTagNode)) {
-            return ' ';
-        }
-
         $originalContent = $this->phpDocInfo->getOriginalContent();
         $spacePattern = $this->spacePatternFactory->createSpacePattern($phpDocTagNode);
 
         $matches = Strings::match($originalContent, $spacePattern);
+        if (isset($matches['space'])) {
+            return $matches['space'];
+        }
 
-        return $matches['space'] ?? '';
+        if ($this->isCommonTag($phpDocTagNode)) {
+            return ' ';
+        }
+
+        return '';
     }
 
     private function hasDescription(AttributeAwarePhpDocTagNode $attributeAwarePhpDocTagNode): bool

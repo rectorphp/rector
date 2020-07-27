@@ -15,9 +15,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
@@ -29,14 +27,13 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
@@ -74,19 +71,14 @@ final class PhpDocInfo
     private $node;
 
     /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-
-    /**
-     * @var ParamPhpDocNodeFactory
-     */
-    private $paramPhpDocNodeFactory;
-
-    /**
      * @var bool
      */
     private $isSingleLine = false;
+
+    /**
+     * @var PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
 
     /**
      * @param mixed[] $tokens
@@ -97,8 +89,7 @@ final class PhpDocInfo
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
         Node $node,
-        TypeComparator $typeComparator,
-        ParamPhpDocNodeFactory $paramPhpDocNodeFactory
+        PhpDocTypeChanger $phpDocTypeChanger
     ) {
         $this->phpDocNode = $attributeAwarePhpDocNode;
         $this->tokens = $tokens;
@@ -106,8 +97,7 @@ final class PhpDocInfo
         $this->originalContent = $originalContent;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
-        $this->typeComparator = $typeComparator;
-        $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function getOriginalContent(): string
@@ -347,49 +337,12 @@ final class PhpDocInfo
 
     public function changeVarType(Type $newType): void
     {
-        // make sure the tags are not identical, e.g imported class vs FQN class
-        if ($this->typeComparator->areTypesEquals($this->getVarType(), $newType)) {
-            return;
-        }
-
-        // prevent existing type override by mixed
-        if (! $this->getVarType() instanceof MixedType && $newType instanceof ConstantArrayType && $newType->getItemType() instanceof NeverType) {
-            return;
-        }
-
-        // override existing type
-        $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-
-        $currentVarTagValueNode = $this->getVarTagValue();
-        if ($currentVarTagValueNode !== null) {
-            // only change type
-            $currentVarTagValueNode->type = $newPHPStanPhpDocType;
-        } else {
-            // add completely new one
-            $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode($newPHPStanPhpDocType, '', '');
-            $this->addTagValueNode($attributeAwareVarTagValueNode);
-        }
+        $this->phpDocTypeChanger->changeVarType($this, $newType);
     }
 
     public function changeReturnType(Type $newType): void
     {
-        // make sure the tags are not identical, e.g imported class vs FQN class
-        if ($this->typeComparator->areTypesEquals($this->getReturnType(), $newType)) {
-            return;
-        }
-
-        // override existing type
-        $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-
-        $currentReturnTagValueNode = $this->getReturnTagValue();
-        if ($currentReturnTagValueNode !== null) {
-            // only change type
-            $currentReturnTagValueNode->type = $newPHPStanPhpDocType;
-        } else {
-            // add completely new one
-            $attributeAwareReturnTagValueNode = new AttributeAwareReturnTagValueNode($newPHPStanPhpDocType, '');
-            $this->addTagValueNode($attributeAwareReturnTagValueNode);
-        }
+        $this->phpDocTypeChanger->changeReturnType($this, $newType);
     }
 
     public function addBareTag(string $tag): void
@@ -419,33 +372,26 @@ final class PhpDocInfo
 
     public function changeParamType(Type $type, Param $param, string $paramName): void
     {
-        $paramTagValueNode = $this->getParamTagValueByName($paramName);
-
-        $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($type);
-
-        // override existing type
-        if ($paramTagValueNode !== null) {
-            $paramTagValueNode->type = $phpDocType;
-            return;
-        }
-
-        $paramTagValueNode = $this->paramPhpDocNodeFactory->create($type, $param);
-        $this->addTagValueNode($paramTagValueNode);
+        $this->phpDocTypeChanger->changeParamType($this, $type, $param, $paramName);
     }
 
     /**
-     * @return string[]
+     * @return class-string[]
      */
     public function getThrowsClassNames(): array
     {
         $throwsClasses = [];
         foreach ($this->getThrowsTypes() as $throwsType) {
             if ($throwsType instanceof ShortenedObjectType) {
-                $throwsClasses[] = $throwsType->getFullyQualifiedName();
+                /** @var class-string $className */
+                $className = $throwsType->getFullyQualifiedName();
+                $throwsClasses[] = $className;
             }
 
             if ($throwsType instanceof FullyQualifiedObjectType) {
-                $throwsClasses[] = $throwsType->getClassName();
+                /** @var class-string $className */
+                $className = $throwsType->getClassName();
+                $throwsClasses[] = $className;
             }
         }
 
@@ -462,7 +408,14 @@ final class PhpDocInfo
         return $this->isSingleLine;
     }
 
-    private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
+    public function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
+    {
+        /** @var AttributeAwareReturnTagValueNode[] $returnTagValueNodes */
+        $returnTagValueNodes = $this->phpDocNode->getReturnTagValues();
+        return $returnTagValueNodes[0] ?? null;
+    }
+
+    public function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
         /** @var AttributeAwareParamTagValueNode $paramTagValue */
         foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
@@ -481,13 +434,6 @@ final class PhpDocInfo
         }
 
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($phpDocTagValueNode, $this->node);
-    }
-
-    private function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
-    {
-        /** @var AttributeAwareReturnTagValueNode[] $returnTagValueNodes */
-        $returnTagValueNodes = $this->phpDocNode->getReturnTagValues();
-        return $returnTagValueNodes[0] ?? null;
     }
 
     private function ensureTypeIsTagValueNode(string $type, string $location): void
