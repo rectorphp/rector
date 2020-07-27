@@ -34,9 +34,9 @@ final class PhpDocTypeChanger
     private $paramPhpDocNodeFactory;
 
     public function __construct(
-        TypeComparator $typeComparator,
+        ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
         StaticTypeMapper $staticTypeMapper,
-        ParamPhpDocNodeFactory $paramPhpDocNodeFactory
+        TypeComparator $typeComparator
     ) {
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;

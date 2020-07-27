@@ -56,8 +56,8 @@ final class PhpDocInfoFactory
         CurrentNodeProvider $currentNodeProvider,
         Lexer $lexer,
         PhpDocParser $phpDocParser,
-        StaticTypeMapper $staticTypeMapper,
-        PhpDocTypeChanger $phpDocTypeChanger
+        PhpDocTypeChanger $phpDocTypeChanger,
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->phpDocParser = $phpDocParser;
         $this->lexer = $lexer;

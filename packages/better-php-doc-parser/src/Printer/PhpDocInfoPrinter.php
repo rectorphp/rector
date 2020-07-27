@@ -82,10 +82,10 @@ final class PhpDocInfoPrinter
     private $emptyPhpDocDetector;
 
     public function __construct(
+        EmptyPhpDocDetector $emptyPhpDocDetector,
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
         OriginalSpacingRestorer $originalSpacingRestorer,
-        SpacePatternFactory $spacePatternFactory,
-        EmptyPhpDocDetector $emptyPhpDocDetector
+        SpacePatternFactory $spacePatternFactory
     ) {
         $this->originalSpacingRestorer = $originalSpacingRestorer;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
