@@ -23,7 +23,7 @@ jobs:
                     -
                         name: Validate Fixtures
                         run: |
-                            bin/rector validate-fixtures --ansi
+                            bin/rector validate-fixture-content --ansi
                             bin/rector validate-fixture-suffix --ansi
 
                     -
