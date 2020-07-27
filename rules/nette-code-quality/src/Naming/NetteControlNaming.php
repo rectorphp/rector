@@ -21,6 +21,6 @@ final class NetteControlNaming
 
     public function createCreateComponentClassMethodName(string $shortName): string
     {
-        return 'createComponent' . ucfirst($this->createVariableName($shortName));
+        return 'createComponent' . StaticRectorStrings::underscoreToCamelCase($shortName);
     }
 }

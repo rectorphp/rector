@@ -87,7 +87,7 @@ PHP
             return null;
         }
 
-        $inputName = $this->controlDimFetchAnalyzer->matchName($node);
+        $inputName = $this->controlDimFetchAnalyzer->matchNameOnFormOrControlVariable($node);
         if ($inputName === null) {
             return null;
         }
