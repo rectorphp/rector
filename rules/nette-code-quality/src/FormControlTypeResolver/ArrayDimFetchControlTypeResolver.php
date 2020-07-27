@@ -43,10 +43,10 @@ final class ArrayDimFetchControlTypeResolver implements FormControlTypeResolverI
     private $returnTypeInferer;
 
     public function __construct(
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
         ControlDimFetchAnalyzer $controlDimFetchAnalyzer,
-        NodeTypeResolver $nodeTypeResolver,
+        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
         NetteControlNaming $netteControlNaming,
+        NodeTypeResolver $nodeTypeResolver,
         ReturnTypeInferer $returnTypeInferer
     ) {
         $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;

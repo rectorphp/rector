@@ -47,8 +47,8 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
 
     public function __construct(
         MergedNodeCommentPreserver $mergedNodeCommentPreserver,
-        TypeUnwrapper $typeUnwrapper,
-        StaticTypeAnalyzer $staticTypeAnalyzer
+        StaticTypeAnalyzer $staticTypeAnalyzer,
+        TypeUnwrapper $typeUnwrapper
     ) {
         $this->mergedNodeCommentPreserver = $mergedNodeCommentPreserver;
         $this->typeUnwrapper = $typeUnwrapper;
