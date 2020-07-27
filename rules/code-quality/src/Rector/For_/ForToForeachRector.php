@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\For_;
 
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\Inflector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -50,9 +50,15 @@ final class ForToForeachRector extends AbstractRector
      */
     private $assignManipulator;
 
-    public function __construct(AssignManipulator $assignManipulator)
+    /**
+     * @var Inflector
+     */
+    private $inflector;
+
+    public function __construct(AssignManipulator $assignManipulator, Inflector $inflector)
     {
         $this->assignManipulator = $assignManipulator;
+        $this->inflector = $inflector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -132,7 +138,7 @@ PHP
             return null;
         }
 
-        $iteratedVariableSingle = Inflector::singularize($iteratedVariable);
+        $iteratedVariableSingle = $this->inflector->singularize($iteratedVariable);
         $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
         $this->useForeachVariableInStmts($foreach->expr, $foreach->valueVar, $foreach->stmts);
