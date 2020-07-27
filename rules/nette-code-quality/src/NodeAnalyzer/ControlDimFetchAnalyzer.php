@@ -22,13 +22,31 @@ final class ControlDimFetchAnalyzer
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    public function matchName(Node $node): ?string
+    public function matchNameOnFormOrControlVariable(Node $node): ?string
+    {
+        return $this->matchNameOnVariableTypes($node, ['Nette\Application\UI\Form']);
+    }
+
+    public function matchNameOnControlVariable(Node $node): ?string
+    {
+        $variableName = $this->matchNameOnVariableTypes($node, ['Nette\Application\UI\Control']);
+        if ($variableName === null) {
+            return null;
+        }
+
+        return $variableName;
+    }
+
+    /**
+     * @param string[] $types
+     */
+    public function matchNameOnVariableTypes(Node $node, array $types): ?string
     {
         if (! $node instanceof ArrayDimFetch) {
             return null;
         }
 
-        if (! $this->isContainerVariable($node->var)) {
+        if (! $this->isVariableTypes($node->var, $types)) {
             return null;
         }
 
@@ -39,12 +57,21 @@ final class ControlDimFetchAnalyzer
         return $node->dim->value;
     }
 
-    private function isContainerVariable(Node $node): bool
+    /**
+     * @param string[] $types
+     */
+    private function isVariableTypes(Node $node, array $types): bool
     {
         if (! $node instanceof Variable) {
             return false;
         }
 
-        return $this->nodeTypeResolver->isObjectTypeOrNullableObjectType($node, 'Nette\ComponentModel\IContainer');
+        foreach ($types as $type) {
+            if ($this->nodeTypeResolver->isObjectTypeOrNullableObjectType($node, $type)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

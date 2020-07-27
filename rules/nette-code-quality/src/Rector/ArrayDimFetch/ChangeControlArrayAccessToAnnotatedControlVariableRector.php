@@ -96,7 +96,7 @@ PHP
             return null;
         }
 
-        $controlName = $this->controlDimFetchAnalyzer->matchName($node);
+        $controlName = $this->controlDimFetchAnalyzer->matchNameOnControlVariable($node);
         if ($controlName === null) {
             return null;
         }
