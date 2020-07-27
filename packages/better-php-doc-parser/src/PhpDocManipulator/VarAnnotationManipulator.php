@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteCodeQuality\DocBlock;
+namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
