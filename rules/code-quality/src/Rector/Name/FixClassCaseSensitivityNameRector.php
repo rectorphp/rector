@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Name;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -121,7 +122,7 @@ PHP
     {
         $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
         // for some reason, Param gets already corrected name
-        if (! $parent instanceof Param) {
+        if (! $parent instanceof Param && ! $parent instanceof ClassConstFetch) {
             return $this->getName($name);
         }
 

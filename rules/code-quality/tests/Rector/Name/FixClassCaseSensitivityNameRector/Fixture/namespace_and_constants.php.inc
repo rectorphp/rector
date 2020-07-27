@@ -8,7 +8,7 @@ final class NamespaceAndConstant
 {
     public function run()
     {
-        $fatherSon = MissCaseTypedClass::SOME_CONST;
+        $fatherSon = misscasetypedclass::SOME_CONST;
     }
 }
 
@@ -24,7 +24,7 @@ final class NamespaceAndConstant
 {
     public function run()
     {
-        $fatherSon = MissCaseTypedClass::SOME_CONST;
+        $fatherSon = \Rector\CodeQuality\Tests\Rector\Name\FixClassCaseSensitivityNameRector\Source\MissCaseTypedClass::SOME_CONST;
     }
 }
 
