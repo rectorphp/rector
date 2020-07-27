@@ -1,4 +1,4 @@
-# All 536 Rectors Overview
+# All 537 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -9,7 +9,7 @@
 - [Architecture](#architecture) (4)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
-- [CodeQuality](#codequality) (57)
+- [CodeQuality](#codequality) (58)
 - [CodingStyle](#codingstyle) (36)
 - [DeadCode](#deadcode) (40)
 - [Decomplex](#decomplex) (1)
@@ -809,6 +809,30 @@ Make if conditions more explicit
              return 'no items';
          }
      }
+ }
+```
+
+<br><br>
+
+### `FixClassCaseSensitivityNameRector`
+
+- class: [`Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector`](/../master/rules/code-quality/src/Rector/Name/FixClassCaseSensitivityNameRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/Name/FixClassCaseSensitivityNameRector/Fixture)
+
+Change miss-typed case sensitivity name to correct one
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        $anotherClass = new anotherclass;
++        $anotherClass = new AnotherClass;
+     }
+ }
+
+ final class AnotherClass
+ {
  }
 ```
 
