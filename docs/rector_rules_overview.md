@@ -5174,7 +5174,7 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
      {
          $form = new Form();
 -        $form->addDatePicker('key', 'Label');
-+        $keyDateControl = $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
++        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
      }
  }
 ```

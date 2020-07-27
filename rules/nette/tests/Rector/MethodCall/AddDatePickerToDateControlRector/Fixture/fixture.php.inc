@@ -26,7 +26,7 @@ class SomeClass
     public function run()
     {
         $form = new Form();
-        $keyDateControl = $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
     }
 }
 

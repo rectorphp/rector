@@ -45,7 +45,7 @@ parameters:
             'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
 
     # to allow installing with various phsptan versions without reporting old errors here
-    reportUnmatchedIgnoredErrors: false
+#    reportUnmatchedIgnoredErrors: false
 
     checkGenericClassInNonGenericObjectType: false
 
@@ -228,7 +228,7 @@ parameters:
         - '#Method (.*?) returns bool type, so the name should start with is/has/was#'
 
         # known value
-        - "#^Parameter \\#1 \\$variable of class Rector\\\\Php70\\\\ValueObject\\\\VariableAssignPair constructor expects PhpParser\\\\Node\\\\Expr\\\\ArrayDimFetch\\|PhpParser\\\\Node\\\\Expr\\\\PropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\StaticPropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\Variable, PhpParser\\\\Node\\\\Expr given\\.$#"
+#        - "#^Parameter \\#1 \\$variable of class Rector\\\\Php70\\\\ValueObject\\\\VariableAssignPair constructor expects PhpParser\\\\Node\\\\Expr\\\\ArrayDimFetch\\|PhpParser\\\\Node\\\\Expr\\\\PropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\StaticPropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\Variable, PhpParser\\\\Node\\\\Expr given\\.$#"
         - '#Cannot cast \(array<string\>\)\|string\|true to string#'
 
         - '#In method "Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createPropertyReflectionFromPropertyNode", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
@@ -388,3 +388,4 @@ parameters:
         - '#Method Rector\\Nette\\FormControlTypeResolver\\GetComponentMethodCallFormControlTypeResolver\:\:resolve\(\) should return array<string, string\> but returns array<int\|string, string\>#'
         - '#Class with base "LexerFactory" name is already used in "PHPStan\\Parser\\LexerFactory", "Rector\\Core\\PhpParser\\Parser\\LexerFactory"\. Use unique name to make classes easy to recognize#'
         - '#Parameter \#1 \$shortControlString of method Rector\\NetteCodeQuality\\Rector\\Assign\\MakeGetComponentAssignAnnotatedRector\:\:resolveTypeFromShortControlNameAndVariable\(\) expects PhpParser\\Node\\Scalar\\String_, PhpParser\\Node\\Expr\|null given#'
+        - '#Parameter \#1 \$variable of class Rector\\Php70\\ValueObject\\VariableAssignPair constructor expects PhpParser\\Node\\Expr\\ArrayDimFetch\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticPropertyFetch\|PhpParser\\Node\\Expr\\Variable, PhpParser\\Node\\Expr given#'
