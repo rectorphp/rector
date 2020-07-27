@@ -65,11 +65,7 @@ final class ArrayDimFetchControlTypeResolver implements FormControlTypeResolverI
             return [];
         }
 
-        $controlShortName = $this->controlDimFetchAnalyzer->matchNameOnVariableTypes($node, [
-            'Nette\Application\UI\Form',
-            'Nette\Application\UI\Control',
-        ]);
-
+        $controlShortName = $this->controlDimFetchAnalyzer->matchName($node);
         if ($controlShortName === null) {
             return [];
         }

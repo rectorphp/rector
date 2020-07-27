@@ -6,6 +6,7 @@ namespace Rector\NetteCodeQuality\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -29,24 +30,16 @@ final class ControlDimFetchAnalyzer
 
     public function matchNameOnControlVariable(Node $node): ?string
     {
-        $variableName = $this->matchNameOnVariableTypes($node, ['Nette\Application\UI\Control']);
-        if ($variableName === null) {
-            return null;
-        }
-
-        return $variableName;
+        return $this->matchNameOnVariableTypes($node, ['Nette\Application\UI\Control']);
     }
 
-    /**
-     * @param string[] $types
-     */
-    public function matchNameOnVariableTypes(Node $node, array $types): ?string
+    public function matchName(Node $node): ?string
     {
         if (! $node instanceof ArrayDimFetch) {
             return null;
         }
 
-        if (! $this->isVariableTypes($node->var, $types)) {
+        if (! $this->isVariableTypes($node->var, ['Nette\ComponentModel\IContainer'])) {
             return null;
         }
 
@@ -55,6 +48,24 @@ final class ControlDimFetchAnalyzer
         }
 
         return $node->dim->value;
+    }
+
+    /**
+     * @param string[] $types
+     */
+    private function matchNameOnVariableTypes(Node $node, array $types): ?string
+    {
+        $matchedName = $this->matchName($node);
+        if ($matchedName === null) {
+            return null;
+        }
+
+        /** @var Assign $node */
+        if (! $this->isVariableTypes($node->var, $types)) {
+            return null;
+        }
+
+        return $matchedName;
     }
 
     /**
