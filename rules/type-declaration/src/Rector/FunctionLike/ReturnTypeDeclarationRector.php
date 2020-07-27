@@ -281,7 +281,7 @@ PHP
         $this->notifyNodeFileInfo($currentClassMethod);
     }
 
-    private function isVoidDueToThrow(Node $node, $inferredReturnNode): bool
+    private function isVoidDueToThrow(Node $node, Node $inferredReturnNode): bool
     {
         if (! $inferredReturnNode instanceof Identifier) {
             return false;

@@ -14,7 +14,7 @@ final class ComposerJsonParserTest extends AbstractKernelTestCase
     /**
      * @dataProvider dataProvider
      */
-    public function test($expectedVersion, string $version): void
+    public function test(string $expectedVersion, string $version): void
     {
         $actualPhpVersion = $this->getComposerJsonPhpVersion($version);
 

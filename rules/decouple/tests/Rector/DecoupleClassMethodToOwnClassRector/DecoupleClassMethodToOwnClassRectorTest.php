@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector;
 
+use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Decouple\Rector\DecoupleClassMethodToOwnClassRector;
 use Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Source\AbstractFather;
@@ -22,7 +23,7 @@ final class DecoupleClassMethodToOwnClassRectorTest extends AbstractRectorTestCa
         $this->assertFileEquals($expectedContentFilePath, $expectedFilePath);
     }
 
-    public function provideData()
+    public function provideData(): Iterator
     {
         yield [
             new SmartFileInfo(__DIR__ . '/Fixture/basic.php.inc'),

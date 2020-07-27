@@ -461,7 +461,7 @@ final class PhpDocInfo
         return null;
     }
 
-    private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode)
+    private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): Type
     {
         if ($phpDocTagValueNode === null) {
             return new MixedType();

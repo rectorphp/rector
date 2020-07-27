@@ -9,7 +9,7 @@ use Rector\Core\Configuration\ChangeConfiguration;
 final class RenamedClassesCollector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $oldToNewClass = [];
 
@@ -29,7 +29,7 @@ final class RenamedClassesCollector
     }
 
     /**
-     * @return string[]
+     * @return array<string, string>
      */
     public function getOldToNewClasses(): array
     {

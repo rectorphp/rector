@@ -147,8 +147,9 @@ PHP
 
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
+     * @param string|string[] $newMethod
      */
-    private function skipClassMethod($node, $newMethod, string $type): bool
+    private function skipClassMethod(Node $node, $newMethod, string $type): bool
     {
         if (! $node instanceof ClassMethod) {
             return false;

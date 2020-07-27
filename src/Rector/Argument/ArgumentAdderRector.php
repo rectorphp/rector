@@ -200,6 +200,9 @@ PHP
         return ! $this->isInCorrectScope($node, $parameterConfiguration);
     }
 
+    /**
+     * @param mixed $defaultValue
+     */
     private function addClassMethodParam(
         ClassMethod $classMethod,
         string $name,
@@ -215,7 +218,7 @@ PHP
         $classMethod->params[$position] = $param;
     }
 
-    private function processStaticCall(StaticCall $staticCall, int $position, $name): void
+    private function processStaticCall(StaticCall $staticCall, int $position, string $name): void
     {
         if (! $staticCall->class instanceof Name) {
             return;

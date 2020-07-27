@@ -61,11 +61,7 @@ final class ConditionResolver
         if ($this->isVersionCompareFuncCall($expr->left)) {
             /** @var FuncCall $funcCall */
             $funcCall = $expr->left;
-
-            $versionCompareCondition = $this->resolveVersionCompareConditionForFuncCall($funcCall);
-            $expectedValue = $this->valueResolver->getValue($expr->right);
-
-            return new BinaryToVersionCompareCondition($versionCompareCondition, $binaryClass, $expectedValue);
+            return $this->resolveFuncCall($funcCall, $expr->right, $binaryClass);
         }
 
         if ($this->isVersionCompareFuncCall($expr->right)) {
@@ -73,6 +69,10 @@ final class ConditionResolver
             $funcCall = $expr->right;
 
             $versionCompareCondition = $this->resolveVersionCompareConditionForFuncCall($funcCall);
+            if ($versionCompareCondition === null) {
+                return null;
+            }
+
             $expectedValue = $this->valueResolver->getValue($expr->left);
 
             return new BinaryToVersionCompareCondition($versionCompareCondition, $binaryClass, $expectedValue);
@@ -90,7 +90,7 @@ final class ConditionResolver
         return $this->nodeNameResolver->isName($node, 'version_compare');
     }
 
-    private function resolveVersionCompareConditionForFuncCall(FuncCall $funcCall)
+    private function resolveVersionCompareConditionForFuncCall(FuncCall $funcCall): ?VersionCompareCondition
     {
         $firstVersion = $this->resolveArgumentValue($funcCall, 0);
         if ($firstVersion === null) {
@@ -120,5 +120,20 @@ final class ConditionResolver
         }
 
         return $version;
+    }
+
+    private function resolveFuncCall(
+        FuncCall $funcCall,
+        Expr $expr,
+        string $binaryClass
+    ): ?BinaryToVersionCompareCondition {
+        $versionCompareCondition = $this->resolveVersionCompareConditionForFuncCall($funcCall);
+        if ($versionCompareCondition === null) {
+            return null;
+        }
+
+        $expectedValue = $this->valueResolver->getValue($expr);
+
+        return new BinaryToVersionCompareCondition($versionCompareCondition, $binaryClass, $expectedValue);
     }
 }

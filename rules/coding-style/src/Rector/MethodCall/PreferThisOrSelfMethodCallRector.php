@@ -102,7 +102,7 @@ PHP
         return $node;
     }
 
-    private function ensurePreferenceIsValid($preference): void
+    private function ensurePreferenceIsValid(string $preference): void
     {
         $allowedPreferences = [self::PREFER_THIS, self::PREFER_SELF];
         if (in_array($preference, $allowedPreferences, true)) {

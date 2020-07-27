@@ -22,6 +22,9 @@ final class TypeStaticProbe
      */
     private static $probeStorage;
 
+    /**
+     * @param mixed $value
+     */
     public static function recordArgumentType($value, string $method, int $argumentPosition): void
     {
         $probeItem = self::createProbeItem($value, $method, $argumentPosition);
@@ -29,6 +32,9 @@ final class TypeStaticProbe
         self::recordProbeItem($probeItem);
     }
 
+    /**
+     * @param mixed $value
+     */
     public static function createProbeItem($value, string $method, int $argumentPosition): string
     {
         $type = self::resolveValueTypeToString($value);
@@ -37,6 +43,9 @@ final class TypeStaticProbe
         return implode(';', $data) . PHP_EOL;
     }
 
+    /**
+     * @param object|mixed[]|mixed $value
+     */
     public static function resolveValueTypeToString($value): string
     {
         if (is_object($value)) {

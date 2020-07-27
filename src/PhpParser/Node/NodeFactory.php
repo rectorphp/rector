@@ -156,7 +156,7 @@ final class NodeFactory
     }
 
     /**
-     * Creates "($arg)"
+     * @param mixed $argument
      */
     public function createArg($argument): Arg
     {
@@ -314,11 +314,17 @@ final class NodeFactory
         return $property;
     }
 
+    /**
+     * @param mixed $value
+     */
     public function createPrivateClassConst(string $name, $value): ClassConst
     {
         return $this->createClassConstant($name, $value, Class_::MODIFIER_PRIVATE);
     }
 
+    /**
+     * @param mixed $value
+     */
     public function createPublicClassConst(string $name, $value): ClassConst
     {
         return $this->createClassConstant($name, $value, Class_::MODIFIER_PUBLIC);
@@ -366,6 +372,7 @@ final class NodeFactory
     }
 
     /**
+     * @param mixed $item
      * @param string|int|null $key
      */
     private function createArrayItem($item, $key = null): ArrayItem
@@ -452,6 +459,9 @@ final class NodeFactory
         $phpDocInfo->changeVarType($type);
     }
 
+    /**
+     * @param mixed $value
+     */
     private function createClassConstant(string $name, $value, int $modifier): ClassConst
     {
         $value = BuilderHelpers::normalizeValue($value);

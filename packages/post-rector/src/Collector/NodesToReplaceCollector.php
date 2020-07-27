@@ -24,7 +24,10 @@ final class NodesToReplaceCollector implements NodeCollectorInterface
         return count($this->nodesToReplace) > 0;
     }
 
-    public function getNodes()
+    /**
+     * @return Node[][]
+     */
+    public function getNodes(): array
     {
         return $this->nodesToReplace;
     }

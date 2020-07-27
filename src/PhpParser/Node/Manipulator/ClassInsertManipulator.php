@@ -126,7 +126,7 @@ final class ClassInsertManipulator
         return false;
     }
 
-    private function hasClassConstant(Class_ $class, string $constantName)
+    private function hasClassConstant(Class_ $class, string $constantName): bool
     {
         foreach ($class->getConstants() as $classConst) {
             if ($this->nodeNameResolver->isName($classConst, $constantName)) {

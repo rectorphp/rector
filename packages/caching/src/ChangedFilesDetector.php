@@ -118,6 +118,9 @@ final class ChangedFilesDetector
         return hash_file('sha1', $smartFileInfo->getRealPath());
     }
 
+    /**
+     * @param mixed $value
+     */
     private function saveItemWithValue(string $key, $value): void
     {
         $cacheItem = $this->tagAwareAdapter->getItem($key);

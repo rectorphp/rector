@@ -181,7 +181,7 @@ final class EregToPcreTransformer
         return [implode('|', $r), $i];
     }
 
-    private function processBracket(string $content, int $i, int $l, array &$r, int $rr)
+    private function processBracket(string $content, int $i, int $l, array &$r, int $rr): int
     {
         // special case
         if ($i + 1 < $l && $content[$i + 1] === ')') {

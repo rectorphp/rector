@@ -95,17 +95,17 @@ PHP
         return $node;
     }
 
-    private function shouldSkipProperty($node): bool
+    private function shouldSkipProperty(Property $property): bool
     {
-        if (count($node->props) !== 1) {
+        if (count($property->props) !== 1) {
             return true;
         }
 
-        if ($node->type === null) {
+        if ($property->type === null) {
             return true;
         }
 
-        return $node->type instanceof NullableType;
+        return $property->type instanceof NullableType;
     }
 
     private function isPropertyNullChecked(PropertyProperty $onlyPropertyProperty): bool
@@ -171,7 +171,7 @@ PHP
         return $isIdenticalOrNotIdenticalToNull;
     }
 
-    private function isBooleanNot(Class_ $class, PropertyProperty $onlyPropertyProperty)
+    private function isBooleanNot(Class_ $class, PropertyProperty $onlyPropertyProperty): bool
     {
         $isBooleanNot = false;
 

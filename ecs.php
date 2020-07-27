@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
+use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
@@ -42,6 +43,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->set(LineLengthFixer::class);
+
+    $services->set(NoSuperfluousPhpdocTagsFixer::class)
+        ->call('configure', [[
+            'allow_mixed' => true,
+        ]]);
 
     $parameters = $containerConfigurator->parameters();
 

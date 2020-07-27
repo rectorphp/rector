@@ -61,7 +61,10 @@ trait PrintTagValueNodeTrait
         return $items;
     }
 
-    private function shouldSkipFromExplicitKey($contentItem, $key): bool
+    /**
+     * @param mixed $contentItem
+     */
+    private function shouldSkipFromExplicitKey($contentItem, string $key): bool
     {
         if (is_array($contentItem)) {
             return true;

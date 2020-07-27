@@ -33,7 +33,7 @@ final class RenameClassRector extends AbstractRector
     private $classRenamer;
 
     /**
-     * @param string[] $oldToNewClasses
+     * @param array<string, string> $oldToNewClasses
      */
     public function __construct(
         ChangeConfiguration $changeConfiguration,

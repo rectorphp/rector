@@ -81,22 +81,22 @@ PHP
         return $node;
     }
 
-    private function shouldSkip($node): bool
+    private function shouldSkip(Assign $assign): bool
     {
-        if (! $node->var instanceof Array_ && ! $node->var instanceof List_) {
+        if (! $assign->var instanceof Array_ && ! $assign->var instanceof List_) {
             return true;
         }
 
-        if (! $node->expr instanceof Array_) {
+        if (! $assign->expr instanceof Array_) {
             return true;
         }
 
-        if (count($node->var->items) !== count($node->expr->items)) {
+        if (count($assign->var->items) !== count($assign->expr->items)) {
             return true;
         }
 
         // is value swap
-        return $this->isValueSwap($node->var, $node->expr);
+        return $this->isValueSwap($assign->var, $assign->expr);
     }
 
     /**

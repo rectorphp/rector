@@ -11,6 +11,9 @@ final class ResolvedConstantStaticCollector
      */
     private static $valuesByIdentifier = [];
 
+    /**
+     * @param mixed $value
+     */
     public static function collect(string $identifier, $value): void
     {
         // skip PHP values
