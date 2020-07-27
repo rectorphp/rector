@@ -56,6 +56,9 @@ final class ValueResolver
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
+    /**
+     * @param mixed $value
+     */
     public function isValue(Expr $expr, $value): bool
     {
         return $this->getValue($expr) === $value;
@@ -188,7 +191,7 @@ final class ValueResolver
         return $fileInfo->getPathname();
     }
 
-    private function resolveClassConstFetch(ClassConstFetch $classConstFetch)
+    private function resolveClassConstFetch(ClassConstFetch $classConstFetch): string
     {
         $class = $this->nodeNameResolver->getName($classConstFetch->class);
         $constant = $this->nodeNameResolver->getName($classConstFetch->name);
@@ -219,10 +222,10 @@ final class ValueResolver
         return $this->constExprEvaluator->evaluateDirectly($classConstNode->consts[0]->value);
     }
 
-    private function processConcat($expr, bool $resolvedClassReference): string
+    private function processConcat(Concat $concat, bool $resolvedClassReference): string
     {
-        return $this->getValue($expr->left, $resolvedClassReference) . $this->getValue(
-                $expr->right,
+        return $this->getValue($concat->left, $resolvedClassReference) . $this->getValue(
+                $concat->right,
                 $resolvedClassReference
             );
     }

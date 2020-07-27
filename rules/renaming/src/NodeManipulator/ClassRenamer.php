@@ -63,12 +63,12 @@ final class ClassRenamer
     private $betterNodeFinder;
 
     public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        CallableNodeTraverser $callableNodeTraverser,
+        ClassNaming $classNaming,
         DocBlockManipulator $docBlockManipulator,
         NodeNameResolver $nodeNameResolver,
-        CallableNodeTraverser $callableNodeTraverser,
-        PhpDocClassRenamer $phpDocClassRenamer,
-        ClassNaming $classNaming,
-        BetterNodeFinder $betterNodeFinder
+        PhpDocClassRenamer $phpDocClassRenamer
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -78,6 +78,9 @@ final class ClassRenamer
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
+    /**
+     * @param array<string, string> $oldToNewClasses
+     */
     public function renameNode(Node $node, array $oldToNewClasses): ?Node
     {
         $this->refactorPhpDoc($node, $oldToNewClasses);
@@ -101,7 +104,7 @@ final class ClassRenamer
      * Replace types in @var/@param/@return/@throws,
      * Doctrine @ORM entity targetClass, Serialize, Assert etc.
      */
-    private function refactorPhpDoc(Node $node, $oldToNewClasses): void
+    private function refactorPhpDoc(Node $node, array $oldToNewClasses): void
     {
         if (! $this->docBlockManipulator->hasNodeTypeTags($node)) {
             return;
@@ -153,21 +156,21 @@ final class ClassRenamer
             return null;
         }
 
-        $classNode = $this->getClassOfNamespaceToRefactor($namespace, $oldToNewClasses);
-        if ($classNode === null) {
+        $classLike = $this->getClassOfNamespaceToRefactor($namespace, $oldToNewClasses);
+        if ($classLike === null) {
             return null;
         }
 
-        $currentName = $this->nodeNameResolver->getName($classNode);
+        $currentName = $this->nodeNameResolver->getName($classLike);
 
         $newClassFqn = $oldToNewClasses[$currentName];
         $newNamespace = $this->classNaming->getNamespace($newClassFqn);
 
         // Renaming to class without namespace (example MyNamespace\DateTime -> DateTimeImmutable)
         if (! $newNamespace) {
-            $classNode->name = new Identifier($newClassFqn);
+            $classLike->name = new Identifier($newClassFqn);
 
-            return $classNode;
+            return $classLike;
         }
 
         $namespace->name = new Name($newNamespace);

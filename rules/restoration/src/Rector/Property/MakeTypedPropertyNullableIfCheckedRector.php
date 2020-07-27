@@ -95,31 +95,31 @@ PHP
         return $node;
     }
 
-    private function shouldSkipProperty($node): bool
+    private function shouldSkipProperty(Property $property): bool
     {
-        if (count($node->props) !== 1) {
+        if (count($property->props) !== 1) {
             return true;
         }
 
-        if ($node->type === null) {
+        if ($property->type === null) {
             return true;
         }
 
-        return $node->type instanceof NullableType;
+        return $property->type instanceof NullableType;
     }
 
     private function isPropertyNullChecked(PropertyProperty $onlyPropertyProperty): bool
     {
-        $class = $onlyPropertyProperty->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $onlyPropertyProperty->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return false;
         }
 
-        if ($this->isIdenticalOrNotIdenticalToNull($class, $onlyPropertyProperty)) {
+        if ($this->isIdenticalOrNotIdenticalToNull($classLike, $onlyPropertyProperty)) {
             return true;
         }
 
-        return $this->isBooleanNot($class, $onlyPropertyProperty);
+        return $this->isBooleanNot($classLike, $onlyPropertyProperty);
     }
 
     /**
@@ -171,7 +171,7 @@ PHP
         return $isIdenticalOrNotIdenticalToNull;
     }
 
-    private function isBooleanNot(Class_ $class, PropertyProperty $onlyPropertyProperty)
+    private function isBooleanNot(Class_ $class, PropertyProperty $onlyPropertyProperty): bool
     {
         $isBooleanNot = false;
 

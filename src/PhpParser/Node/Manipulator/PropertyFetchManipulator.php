@@ -41,9 +41,9 @@ final class PropertyFetchManipulator
     private $nodeNameResolver;
 
     public function __construct(
+        NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ReflectionProvider $reflectionProvider,
-        NodeNameResolver $nodeNameResolver
+        ReflectionProvider $reflectionProvider
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -56,13 +56,13 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        /** @var Class_|null $class */
-        $class = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return false;
         }
 
-        foreach ($class->getProperties() as $property) {
+        foreach ($classLike->getProperties() as $property) {
             if (! $this->nodeNameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
                 continue;
             }

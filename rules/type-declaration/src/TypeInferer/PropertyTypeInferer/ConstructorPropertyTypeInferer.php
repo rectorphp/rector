@@ -41,14 +41,14 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
 
     public function inferProperty(Property $property): Type
     {
-        /** @var Class_|null $class */
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             // anonymous class
             return new MixedType();
         }
 
-        $classMethod = $class->getMethod('__construct');
+        $classMethod = $classLike->getMethod('__construct');
         if ($classMethod === null) {
             return new MixedType();
         }

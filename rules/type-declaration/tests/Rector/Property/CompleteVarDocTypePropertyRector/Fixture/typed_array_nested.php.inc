@@ -24,7 +24,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropert
 class TypedArrayNested
 {
     /**
-     * @var int[][]|bool[]
+     * @var int[][]|bool[]|null
      */
     private $itemsNested;
 

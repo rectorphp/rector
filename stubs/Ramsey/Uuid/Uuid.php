@@ -18,6 +18,6 @@ class Uuid implements UuidInterface
     public function toString()
     {
         // dummy value
-        return '4398dda9-3bc0-45ec-ae81-3d81a86ad84a';
+        return '%s-%s-%s-%s-%s';
     }
 }

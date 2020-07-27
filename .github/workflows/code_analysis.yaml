@@ -1,0 +1,59 @@
+name: Code Analysis
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    matrix:
+        strategy:
+            fail-fast: false
+            matrix:
+                actions:
+                    -
+                        name: 'Coding Standard'
+                        run: composer check-cs
+
+                    -
+                        name: 'PHPStan'
+                        run: composer phpstan
+
+                    -
+                        name: Validate Fixtures
+                        run: |
+                            bin/rector validate-fixture-content --ansi
+                            bin/rector validate-fixture-suffix --ansi
+
+                    -
+                        name: 'Sync Annotation Parser'
+                        run: bin/rector sync-annotation-parser --dry-run --ansi
+
+                    -
+                        name: 'Validate Sets Loading'
+                        # this is very slow, so it has to be in own workflow
+                        run: bin/rector validate-sets --ansi
+
+                    -
+                        name: 'Validate PHPStan AttributeAware Doc Types'
+                        run: bin/rector sync-types
+
+                    -
+                        name: 'Validate PHPStan Static Type Mappers'
+                        run: bin/rector check-static-type-mappers
+
+        name: ${{ matrix.actions.name }}
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v2
+            # see https://github.com/shivammathur/setup-php
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.4
+                    coverage: none
+
+            -   run: composer install --no-progress --ansi
+
+            -   run: ${{ matrix.actions.run }}

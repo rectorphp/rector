@@ -44,10 +44,10 @@ final class SyncTypesCommand extends AbstractCommand
 
     public function __construct(
         AttributeAwareNodeFactoryCollector $attributeAwareNodeFactoryCollector,
-        SymfonyStyle $symfonyStyle,
-        NodeClassFinder $nodeClassFinder,
+        AttributeAwareNodeFactoryGenerator $attributeAwareNodeFactoryGenerator,
         AttributeAwareNodeGenerator $attributeAwareNodeGenerator,
-        AttributeAwareNodeFactoryGenerator $attributeAwareNodeFactoryGenerator
+        NodeClassFinder $nodeClassFinder,
+        SymfonyStyle $symfonyStyle
     ) {
         $this->attributeAwareNodeFactoryCollector = $attributeAwareNodeFactoryCollector;
         $this->symfonyStyle = $symfonyStyle;

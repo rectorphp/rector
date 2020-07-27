@@ -87,8 +87,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Class_ $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -98,7 +98,7 @@ PHP
 
         foreach ($this->classToAnnotationMap as $type => $annotationMap) {
             /** @var string $type */
-            if (! $this->isObjectType($class, $type)) {
+            if (! $this->isObjectType($classLike, $type)) {
                 continue;
             }
 

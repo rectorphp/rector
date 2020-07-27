@@ -47,11 +47,11 @@ final class IfManipulator
     private $betterNodeFinder;
 
     public function __construct(
+        BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         ConstFetchManipulator $constFetchManipulator,
-        StmtsManipulator $stmtsManipulator,
         NodeNameResolver $nodeNameResolver,
-        BetterNodeFinder $betterNodeFinder
+        StmtsManipulator $stmtsManipulator
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->constFetchManipulator = $constFetchManipulator;
@@ -222,6 +222,11 @@ final class IfManipulator
             $currentIf = $currentIf->stmts[0];
         }
 
+        // IfManipulator is not build to handle elseif and else
+        if (! $this->isIfWithoutElseAndElseIfs($currentIf)) {
+            return [];
+        }
+
         if ($this->betterNodeFinder->findInstanceOf($currentIf->stmts, Return_::class) !== []) {
             return [];
         }
@@ -231,6 +236,7 @@ final class IfManipulator
         }
 
         // last node is with the expression
+
         $ifs[] = $currentIf;
 
         return $ifs;

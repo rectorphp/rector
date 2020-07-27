@@ -42,9 +42,9 @@ final class NodeClassFinder
         $robotLoader->acceptFiles = [$namePattern];
         $robotLoader->rebuild();
 
-        $classLikesToPaths = $robotLoader->getIndexedClasses();
+        $indexedClasses = $robotLoader->getIndexedClasses();
 
-        $classLikes = array_keys($classLikesToPaths);
+        $classLikes = array_keys($indexedClasses);
 
         // keep only classes, skip interfaces
         $classes = [];

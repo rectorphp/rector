@@ -41,10 +41,10 @@ final class ChildAndParentClassManipulator
     private $parsedNodeCollector;
 
     public function __construct(
-        ParsedNodeCollector $parsedNodeCollector,
+        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
+        ParsedNodeCollector $parsedNodeCollector
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -72,8 +72,8 @@ final class ChildAndParentClassManipulator
 
         // complete parent call for __construct()
         if ($parentClassName !== '' && method_exists($parentClassName, self::CONSTRUCT)) {
-            $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams([]);
-            $classMethod->stmts[] = new Expression($parentConstructCallNode);
+            $staticCall = $this->nodeFactory->createParentConstructWithParams([]);
+            $classMethod->stmts[] = new Expression($staticCall);
         }
     }
 
@@ -119,11 +119,9 @@ final class ChildAndParentClassManipulator
         // replicate parent parameters
         $classMethod->params = array_merge($firstParentConstructMethodNode->params, $classMethod->params);
 
-        $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams(
-            $firstParentConstructMethodNode->params
-        );
+        $staticCall = $this->nodeFactory->createParentConstructWithParams($firstParentConstructMethodNode->params);
 
-        $classMethod->stmts[] = new Expression($parentConstructCallNode);
+        $classMethod->stmts[] = new Expression($staticCall);
     }
 
     private function findFirstParentConstructor(Class_ $class): ?ClassMethod

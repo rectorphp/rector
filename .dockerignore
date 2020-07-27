@@ -6,10 +6,10 @@
 .phpstorm.meta.php
 
 phpstan.neon
-rector.yaml
+rector.php
 phpunit.xml
-ecs.yaml
-ecs-after-rector.yaml
+ecs.php
+ecs-after-rector.php
 changelog-linker.yaml
 
 LICENSE

@@ -39,9 +39,9 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private $configuration;
 
     public function __construct(
-        SymfonyStyle $symfonyStyle,
         BetterStandardPrinter $betterStandardPrinter,
-        Configuration $configuration
+        Configuration $configuration,
+        SymfonyStyle $symfonyStyle
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -51,12 +51,13 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
         if ($this->configuration->getOutputFile()) {
-            $this->symfonyStyle->error(sprintf(
+            $message = sprintf(
                 'Option "--%s" can be used only with "--%s %s"',
                 Option::OPTION_OUTPUT_FILE,
                 Option::OPTION_OUTPUT_FORMAT,
                 'json'
-            ));
+            );
+            $this->symfonyStyle->error($message);
         }
 
         $this->reportFileDiffs($errorAndDiffCollector->getFileDiffs());
@@ -75,7 +76,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
                 ' %d file%s %s.',
                 $changeCount,
                 $changeCount > 1 ? 's' : '',
-                $this->configuration->isDryRun() ? 'would have changed (dry-run)' : 'have been changed'
+                $this->configuration->isDryRun() ? 'would have changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed'
             );
         }
 
@@ -98,16 +99,16 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
         // normalize
         ksort($fileDiffs);
+        $message = sprintf('%d file%s with changes', count($fileDiffs), count($fileDiffs) === 1 ? '' : 's');
 
-        $this->symfonyStyle->title(
-            sprintf('%d file%s with changes', count($fileDiffs), count($fileDiffs) === 1 ? '' : 's')
-        );
+        $this->symfonyStyle->title($message);
 
         $i = 0;
         foreach ($fileDiffs as $fileDiff) {
             $relativeFilePath = $fileDiff->getRelativeFilePath();
+            $message = sprintf('<options=bold>%d) %s</>', ++$i, $relativeFilePath);
 
-            $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', ++$i, $relativeFilePath));
+            $this->symfonyStyle->writeln($message);
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln($fileDiff->getDiffConsoleFormatted());
             $this->symfonyStyle->newLine();
@@ -146,9 +147,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private function reportRemovedFilesAndNodes(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
         if ($errorAndDiffCollector->getRemovedAndAddedFilesCount() !== 0) {
-            $this->symfonyStyle->note(
-                sprintf('%d files were added/removed', $errorAndDiffCollector->getRemovedAndAddedFilesCount())
-            );
+            $message = sprintf('%d files were added/removed', $errorAndDiffCollector->getRemovedAndAddedFilesCount());
+            $this->symfonyStyle->note($message);
         }
 
         $this->reportRemovedNodes($errorAndDiffCollector);
@@ -159,21 +159,23 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         if ($errorAndDiffCollector->getRemovedNodeCount() === 0) {
             return;
         }
+        $message = sprintf('%d nodes were removed', $errorAndDiffCollector->getRemovedNodeCount());
 
-        $this->symfonyStyle->warning(sprintf('%d nodes were removed', $errorAndDiffCollector->getRemovedNodeCount()));
+        $this->symfonyStyle->warning($message);
 
         if ($this->symfonyStyle->isVeryVerbose()) {
             $i = 0;
             foreach ($errorAndDiffCollector->getRemovedNodes() as $removedNode) {
                 /** @var SmartFileInfo $fileInfo */
                 $fileInfo = $removedNode->getAttribute(AttributeKey::FILE_INFO);
-
-                $this->symfonyStyle->writeln(sprintf(
+                $message = sprintf(
                     '<options=bold>%d) %s:%d</>',
                     ++$i,
                     $fileInfo->getRelativeFilePath(),
                     $removedNode->getStartLine()
-                ));
+                );
+
+                $this->symfonyStyle->writeln($message);
 
                 $printedNode = $this->betterStandardPrinter->print($removedNode);
 

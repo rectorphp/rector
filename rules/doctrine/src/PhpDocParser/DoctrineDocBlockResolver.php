@@ -103,13 +103,13 @@ final class DoctrineDocBlockResolver
 
     public function isInDoctrineEntityClass(Node $node): bool
     {
-        /** @var ClassLike|null $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        /** @var ClassLike|null $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return false;
         }
 
-        return $this->isDoctrineEntityClass($classNode);
+        return $this->isDoctrineEntityClass($classLike);
     }
 
     private function isDoctrineEntityClassNode(Class_ $class): bool

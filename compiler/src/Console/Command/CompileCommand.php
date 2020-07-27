@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\Console\Command;
 
+use Nette\Utils\FileSystem;
 use OndraM\CiDetector\CiDetector;
 use Rector\Compiler\Composer\ComposerJsonManipulator;
 use Rector\Compiler\Renaming\JetbrainsStubsRenamer;
@@ -19,6 +20,16 @@ use Symplify\PackageBuilder\Console\ShellCode;
  */
 final class CompileCommand extends Command
 {
+    /**
+     * @var string
+     */
+    private const ANSI = '--ansi';
+
+    /**
+     * @var string
+     */
+    private const DONE = 'Done';
+
     /**
      * @var string
      */
@@ -78,10 +89,16 @@ final class CompileCommand extends Command
     {
         $composerJsonFile = $this->buildDir . '/composer.json';
 
-        $this->symfonyStyle->title('1. Adding "phpstan/phpstan-src" to ' . $composerJsonFile);
+        $title = sprintf('1. Adding "phpstan/phpstan-src" to "%s"', $composerJsonFile);
+        $this->symfonyStyle->title($title);
+
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
-        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->newLine(1);
+
+        $this->symfonyStyle->success(self::DONE);
+
+        $this->symfonyStyle->newLine(1);
 
         $this->symfonyStyle->title('2. Running "composer update" without dev');
 
@@ -92,38 +109,55 @@ final class CompileCommand extends Command
             '--prefer-dist',
             '--no-interaction',
             '--classmap-authoritative',
-            '--ansi',
+            self::ANSI,
         ], $this->buildDir, null, null, null);
-
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
 
-        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->success(self::DONE);
 
-        $this->symfonyStyle->title('3. Renaming PHPStorm stubs from "*.php" to ".stub"');
+        $this->symfonyStyle->newLine(1);
+
+        $this->symfonyStyle->title('3. Downgrading PHPStan code to PHP 7.1');
+
+        $this->downgradePHPStanCodeToPHP71($output);
+
+        $this->symfonyStyle->success(self::DONE);
+        $this->symfonyStyle->newLine(1);
+
+        $this->symfonyStyle->title('4. Renaming PHPStorm stubs from "*.php" to ".stub"');
 
         $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
 
-        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->success(self::DONE);
+        $this->symfonyStyle->newLine(1);
 
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
         // and "Nette\Neon\Neon" class can be used there
-        $this->symfonyStyle->title('4. Packing and prefixing rector.phar with Box and PHP Scoper');
+        $this->symfonyStyle->title('5. Packing and prefixing rector.phar with Box and PHP Scoper');
 
-        $process = new Process(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir, null, null, null);
-
+        $process = new Process([
+            'php',
+            'box.phar',
+            'compile',
+            '--no-parallel',
+            self::ANSI,
+        ], $this->dataDir, null, null, null);
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
 
-        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->success(self::DONE);
 
-        $this->symfonyStyle->title('5. Restoring root composer.json with "require-dev"');
+        $this->symfonyStyle->newLine(1);
+
+        $this->symfonyStyle->title('6. Restoring root composer.json with "require-dev"');
 
         $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);
-
         $this->restoreDependenciesLocallyIfNotCi($output);
+
+        $this->symfonyStyle->success(self::DONE);
 
         return ShellCode::SUCCESS;
     }
@@ -134,9 +168,35 @@ final class CompileCommand extends Command
             return;
         }
 
-        $process = new Process(['composer', 'install'], $this->buildDir, null, null, null);
+        $process = new Process(['composer', 'install', self::ANSI], $this->buildDir, null, null, null);
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
+    }
+
+    private function downgradePHPStanCodeToPHP71(OutputInterface $output): void
+    {
+        // downgrade phpstan-src code from PHP 7.4 to PHP 7.1, see https://github.com/phpstan/phpstan-src/pull/202/files
+        $this->fixRequirePath();
+
+        $process = new Process(['php', 'vendor/phpstan/phpstan-src/bin/transform-source.php'], $this->buildDir);
+        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
+            $output->write($buffer);
+        });
+    }
+
+    private function fixRequirePath(): void
+    {
+        // fix require path first
+        $filePath = __DIR__ . '/../../../../vendor/phpstan/phpstan-src/bin/transform-source.php';
+        $fileContent = FileSystem::read($filePath);
+
+        $fileContent = str_replace(
+            "__DIR__ . '/../vendor/autoload.php'",
+            "__DIR__ . '/../../../../vendor/autoload.php'",
+            $fileContent
+        );
+
+        FileSystem::write($filePath, $fileContent);
     }
 }

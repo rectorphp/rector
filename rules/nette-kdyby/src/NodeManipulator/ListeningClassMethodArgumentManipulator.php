@@ -48,9 +48,9 @@ final class ListeningClassMethodArgumentManipulator
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
+        BetterStandardPrinter $betterStandardPrinter,
         ClassNaming $classNaming,
-        ContributeEventClassResolver $contributeEventClassResolver,
-        BetterStandardPrinter $betterStandardPrinter
+        ContributeEventClassResolver $contributeEventClassResolver
     ) {
         $this->classNaming = $classNaming;
         $this->contributeEventClassResolver = $contributeEventClassResolver;

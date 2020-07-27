@@ -72,8 +72,8 @@ PHP
             return null;
         }
 
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
@@ -81,12 +81,12 @@ PHP
         $this->processClassMethodStatementsForParentConstructorCalls($node);
 
         // not PSR-4 constructor
-        if (! $this->isName($classNode, $this->getName($node))) {
+        if (! $this->isName($classLike, $this->getName($node))) {
             return null;
         }
 
         // does it already have a __construct method?
-        if ($classNode->getMethod(self::__CONSTRUCT) === null) {
+        if ($classLike->getMethod(self::__CONSTRUCT) === null) {
             $node->name = new Identifier(self::__CONSTRUCT);
         }
 
@@ -120,8 +120,8 @@ PHP
             return true;
         }
 
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        return $classNode instanceof Class_ && $classNode->name === null;
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        return $classLike instanceof Class_ && $classLike->name === null;
     }
 
     private function processClassMethodStatementsForParentConstructorCalls(ClassMethod $classMethod): void

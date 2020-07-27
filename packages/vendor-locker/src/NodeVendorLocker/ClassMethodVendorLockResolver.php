@@ -25,17 +25,17 @@ final class ClassMethodVendorLockResolver extends AbstractNodeVendorLockResolver
         /** @var string $classMethodName */
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
 
-        /** @var Class_|Interface_|null $class */
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        /** @var Class_|Interface_|null $classLike */
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return false;
         }
 
-        if ($this->isMethodVendorLockedByInterface($class, $classMethodName)) {
+        if ($this->isMethodVendorLockedByInterface($classLike, $classMethodName)) {
             return true;
         }
 
-        if ($class->extends === null) {
+        if ($classLike->extends === null) {
             return false;
         }
 

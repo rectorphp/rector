@@ -19,6 +19,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -47,18 +48,37 @@ trait NodeTypeResolverTrait
     private $stringTypeAnalyzer;
 
     /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
+    /**
      * @required
      */
     public function autowireTypeAnalyzerDependencies(
         NodeTypeResolver $nodeTypeResolver,
         ArrayTypeAnalyzer $arrayTypeAnalyzer,
         CountableTypeAnalyzer $countableTypeAnalyzer,
-        StringTypeAnalyzer $stringTypeAnalyzer
+        StringTypeAnalyzer $stringTypeAnalyzer,
+        TypeUnwrapper $typeUnwrapper
     ): void {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
         $this->countableTypeAnalyzer = $countableTypeAnalyzer;
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
+        $this->typeUnwrapper = $typeUnwrapper;
+    }
+
+    public function isInObjectType(Node $node, string $type): bool
+    {
+        $objectType = $this->nodeTypeResolver->resolve($node);
+
+        $desiredObjectType = new ObjectType($type);
+        if ($objectType->isSuperTypeOf($desiredObjectType)->yes()) {
+            return true;
+        }
+
+        return $objectType->equals($desiredObjectType);
     }
 
     /**

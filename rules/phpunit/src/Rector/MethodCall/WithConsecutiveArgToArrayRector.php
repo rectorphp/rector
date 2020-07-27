@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ArrayType;
-use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -109,7 +108,7 @@ PHP
         }
 
         // is a mock?
-        if (! $this->isObjectType($node, InvocationMocker::class)) {
+        if (! $this->isObjectType($node, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
             return null;
         }
 

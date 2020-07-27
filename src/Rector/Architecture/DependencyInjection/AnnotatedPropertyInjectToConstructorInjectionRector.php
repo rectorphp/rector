@@ -41,7 +41,7 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     private $classChildAnalyzer;
 
-    public function __construct(PropertyUsageAnalyzer $propertyUsageAnalyzer, ClassChildAnalyzer $classChildAnalyzer)
+    public function __construct(ClassChildAnalyzer $classChildAnalyzer, PropertyUsageAnalyzer $propertyUsageAnalyzer)
     {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->classChildAnalyzer = $classChildAnalyzer;
@@ -121,24 +121,24 @@ PHP
             return true;
         }
 
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return true;
         }
 
-        if (! $class instanceof Class_) {
+        if (! $classLike instanceof Class_) {
             return true;
         }
 
-        if ($class->isAbstract()) {
+        if ($classLike->isAbstract()) {
             return true;
         }
 
-        if ($this->classChildAnalyzer->hasChildClassConstructor($class)) {
+        if ($this->classChildAnalyzer->hasChildClassConstructor($classLike)) {
             return true;
         }
 
-        if ($this->classChildAnalyzer->hasParentClassConstructor($class)) {
+        if ($this->classChildAnalyzer->hasParentClassConstructor($classLike)) {
             return true;
         }
 

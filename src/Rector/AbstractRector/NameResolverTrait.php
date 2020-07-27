@@ -176,6 +176,14 @@ trait NameResolverTrait
             return false;
         }
 
+        if ($node->var instanceof MethodCall) {
+            return false;
+        }
+
+        if ($node->var instanceof StaticCall) {
+            return false;
+        }
+
         if (! $this->isName($node->var, $variableName)) {
             return false;
         }

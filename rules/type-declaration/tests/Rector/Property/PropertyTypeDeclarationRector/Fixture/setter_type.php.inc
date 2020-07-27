@@ -34,11 +34,11 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRe
 final class SetterType
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $email;
     /**
-     * @var string
+     * @var string|null
      */
     private $name;
 

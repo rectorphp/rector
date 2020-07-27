@@ -73,11 +73,11 @@ final class RegexPatternArgumentManipulator
     private $parsedNodeCollector;
 
     public function __construct(
-        NodeTypeResolver $nodeTypeResolver,
-        NodeNameResolver $nodeNameResolver,
-        ParsedNodeCollector $parsedNodeCollector,
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver,
+        ParsedNodeCollector $parsedNodeCollector
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -181,12 +181,12 @@ final class RegexPatternArgumentManipulator
      */
     private function findAssignerForVariable(Variable $variable): array
     {
-        $methodNode = $variable->getAttribute(AttributeKey::METHOD_NODE);
-        if ($methodNode === null) {
+        $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod === null) {
             return [];
         }
 
-        return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variable): ?Assign {
+        return $this->betterNodeFinder->find([$classMethod], function (Node $node) use ($variable): ?Assign {
             if (! $node instanceof Assign) {
                 return null;
             }

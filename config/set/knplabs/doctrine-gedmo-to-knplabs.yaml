@@ -1,9 +1,0 @@
-# version gedmo/doctrine-extensions 2.x to knplabs/doctrine-behaviors 2.0
-services:
-    Rector\DoctrineGedmoToKnplabs\Rector\Class_\TimestampableBehaviorRector: null
-    Rector\DoctrineGedmoToKnplabs\Rector\Class_\SluggableBehaviorRector: null
-    Rector\DoctrineGedmoToKnplabs\Rector\Class_\TreeBehaviorRector: null
-    Rector\DoctrineGedmoToKnplabs\Rector\Class_\TranslationBehaviorRector: null
-    Rector\DoctrineGedmoToKnplabs\Rector\Class_\SoftDeletableBehaviorRector: null
-    Rector\DoctrineGedmoToKnplabs\Rector\Class_\BlameableBehaviorRector: null
-    Rector\DoctrineGedmoToKnplabs\Rector\Class_\LoggableBehaviorRector: null

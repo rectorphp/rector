@@ -13,7 +13,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symfony\Component\Form\Form;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Form\FormIsValidRector\FormIsValidRectorTest
@@ -89,7 +88,7 @@ PHP
             return true;
         }
 
-        if (! $this->isObjectType($methodCall->var, Form::class)) {
+        if (! $this->isObjectType($methodCall->var, 'Symfony\Component\Form\Form')) {
             return true;
         }
 

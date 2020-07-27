@@ -21,11 +21,11 @@ jobs:
 
             - run: |
                   cd compiler
-                  composer install
+                  composer install --ansi
 
             - run: |
                   cd compiler
-                  bin/compile
+                  bin/compile --ansi
 
             - run: |
                 # remove local vendor, to prevent duplicated content

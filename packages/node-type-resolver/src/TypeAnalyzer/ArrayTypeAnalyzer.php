@@ -42,9 +42,9 @@ final class ArrayTypeAnalyzer
     private $nodeNameResolver;
 
     public function __construct(
+        NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        PregMatchTypeCorrector $pregMatchTypeCorrector,
-        NodeNameResolver $nodeNameResolver
+        PregMatchTypeCorrector $pregMatchTypeCorrector
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
@@ -106,9 +106,9 @@ final class ArrayTypeAnalyzer
             return false;
         }
 
-        /** @var Class_|Trait_|Interface_|null $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode instanceof Interface_ || $classNode === null) {
+        /** @var Class_|Trait_|Interface_|null $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike instanceof Interface_ || $classLike === null) {
             return false;
         }
 
@@ -117,7 +117,7 @@ final class ArrayTypeAnalyzer
             return false;
         }
 
-        $property = $classNode->getProperty($propertyName);
+        $property = $classLike->getProperty($propertyName);
         if ($property !== null) {
             $propertyProperty = $property->props[0];
             return $propertyProperty->default instanceof Array_;

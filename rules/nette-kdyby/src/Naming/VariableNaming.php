@@ -39,9 +39,9 @@ final class VariableNaming
     private $classNaming;
 
     public function __construct(
+        ClassNaming $classNaming,
         NodeNameResolver $nodeNameResolver,
-        ValueResolver $valueResolver,
-        ClassNaming $classNaming
+        ValueResolver $valueResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;

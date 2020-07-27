@@ -6,6 +6,8 @@ namespace Rector\RectorGenerator\ValueObject;
 
 use Nette\Utils\Strings;
 use Rector\Core\Util\StaticRectorStrings;
+use Symplify\SetConfigResolver\ValueObject\Set;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Configuration
 {
@@ -40,9 +42,9 @@ final class Configuration
     private $description;
 
     /**
-     * @var string|null
+     * @var Set|null
      */
-    private $setConfig;
+    private $set;
 
     /**
      * @var bool
@@ -81,10 +83,10 @@ final class Configuration
         string $description,
         string $codeBefore,
         string $codeAfter,
-        ?string $extraFileContent = null,
-        ?string $extraFileName = null,
+        ?string $extraFileContent,
+        ?string $extraFileName,
         array $source,
-        ?string $setConfig,
+        ?Set $set,
         bool $isPhpSnippet
     ) {
         $this->package = $package;
@@ -95,7 +97,7 @@ final class Configuration
         $this->codeAfter = $codeAfter;
         $this->description = $description;
         $this->source = $source;
-        $this->setConfig = $setConfig;
+        $this->set = $set;
         $this->isPhpSnippet = $isPhpSnippet;
         $this->extraFileContent = $extraFileContent;
         $this->extraFileName = $extraFileName;
@@ -157,9 +159,13 @@ final class Configuration
         return $this->source;
     }
 
-    public function getSetConfig(): ?string
+    public function getSetConfig(): ?SmartFileInfo
     {
-        return $this->setConfig;
+        if ($this->set === null) {
+            return null;
+        }
+
+        return $this->set->getSetFileInfo();
     }
 
     public function isPhpSnippet(): bool

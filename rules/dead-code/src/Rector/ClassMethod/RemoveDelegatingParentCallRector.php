@@ -64,8 +64,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($this->shouldSkipClass($classNode)) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($this->shouldSkipClass($classLike)) {
             return null;
         }
 
@@ -214,7 +214,7 @@ PHP
         /** @var string $methodName */
         $methodName = $this->getName($staticCall->name);
 
-        $parentClassMethod = $this->functionLikeParsedNodesFinder->findMethod($methodName, $parentClassName);
+        $parentClassMethod = $this->functionLikeParsedNodesFinder->findClassMethod($methodName, $parentClassName);
         if ($parentClassMethod !== null && $parentClassMethod->isProtected() && $classMethod->isPublic()) {
             return true;
         }

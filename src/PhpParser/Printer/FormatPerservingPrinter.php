@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Printer;
 
-use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Rector\Core\ValueObject\Application\ParsedStmtsAndTokens;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * @see \Rector\Core\Tests\PhpParser\Printer\FormatPerservingPrinterTest
@@ -19,9 +19,15 @@ final class FormatPerservingPrinter
      */
     private $betterStandardPrinter;
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, SmartFileSystem $smartFileSystem)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**
@@ -33,7 +39,8 @@ final class FormatPerservingPrinter
     {
         $newContent = $this->printToString($newStmts, $oldStmts, $oldTokens);
 
-        FileSystem::write($fileInfo->getRealPath(), $newContent, $fileInfo->getPerms());
+        $this->smartFileSystem->dumpFile($fileInfo->getRealPath(), $newContent);
+        $this->smartFileSystem->chmod($fileInfo->getRealPath(), $fileInfo->getPerms());
 
         return $newContent;
     }

@@ -19,7 +19,7 @@ final class DifferAndFormatter
      */
     private $colorConsoleDiffFormatter;
 
-    public function __construct(Differ $differ, ColorConsoleDiffFormatter $colorConsoleDiffFormatter)
+    public function __construct(ColorConsoleDiffFormatter $colorConsoleDiffFormatter, Differ $differ)
     {
         $this->differ = $differ;
         $this->colorConsoleDiffFormatter = $colorConsoleDiffFormatter;

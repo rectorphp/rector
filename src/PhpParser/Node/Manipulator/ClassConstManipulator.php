@@ -42,11 +42,11 @@ final class ClassConstManipulator
     private $classManipulator;
 
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        ParsedNodeCollector $parsedNodeCollector,
-        ClassManipulator $classManipulator
+        ClassManipulator $classManipulator,
+        NodeNameResolver $nodeNameResolver,
+        ParsedNodeCollector $parsedNodeCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -60,14 +60,14 @@ final class ClassConstManipulator
      */
     public function getAllClassConstFetch(ClassConst $classConst): array
     {
-        /** @var Class_|null $classNode */
-        $classNode = $classConst->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return [];
         }
 
-        $searchInNodes = [$classNode];
-        foreach ($this->classManipulator->getUsedTraits($classNode) as $trait) {
+        $searchInNodes = [$classLike];
+        foreach ($this->classManipulator->getUsedTraits($classLike) as $trait) {
             $trait = $this->parsedNodeCollector->findTrait((string) $trait);
             if ($trait === null) {
                 continue;

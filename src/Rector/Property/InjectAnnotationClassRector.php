@@ -213,12 +213,12 @@ PHP
         $phpDocInfo->changeVarType($type);
         $phpDocInfo->removeByType($tagClass);
 
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             throw new ShouldNotHappenException();
         }
 
-        $this->addPropertyToClass($classNode, $type, $name);
+        $this->addPropertyToClass($classLike, $type, $name);
 
         return $property;
     }
@@ -267,9 +267,11 @@ PHP
         /** @var SmartFileInfo $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
 
+        $errorMessage = sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName);
+
         $this->errorAndDiffCollector->addErrorWithRectorClassMessageAndFileInfo(
             self::class,
-            sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName),
+            $errorMessage,
             $fileInfo
         );
     }

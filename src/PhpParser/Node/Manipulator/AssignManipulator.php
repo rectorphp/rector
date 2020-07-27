@@ -42,7 +42,7 @@ final class AssignManipulator
      */
     private $betterStandardPrinter;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;

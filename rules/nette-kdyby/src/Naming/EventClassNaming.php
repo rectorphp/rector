@@ -28,7 +28,7 @@ final class EventClassNaming
      */
     private $classNaming;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, ClassNaming $classNaming)
+    public function __construct(ClassNaming $classNaming, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classNaming = $classNaming;

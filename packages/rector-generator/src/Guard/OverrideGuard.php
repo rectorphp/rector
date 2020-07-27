@@ -21,7 +21,7 @@ final class OverrideGuard
      */
     private $symfonyStyle;
 
-    public function __construct(TemplateFileSystem $templateFileSystem, SymfonyStyle $symfonyStyle)
+    public function __construct(SymfonyStyle $symfonyStyle, TemplateFileSystem $templateFileSystem)
     {
         $this->templateFileSystem = $templateFileSystem;
         $this->symfonyStyle = $symfonyStyle;
@@ -34,7 +34,7 @@ final class OverrideGuard
         array $templateFileInfos,
         array $templateVariables,
         Configuration $configuration
-    ) {
+    ): bool {
         foreach ($templateFileInfos as $templateFileInfo) {
             if (! $this->doesFileInfoAlreadyExist($templateVariables, $configuration, $templateFileInfo)) {
                 continue;

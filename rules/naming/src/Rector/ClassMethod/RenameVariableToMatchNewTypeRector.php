@@ -8,13 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\Naming\VariableRenamer;
 
 /**
  * @see \Rector\Naming\Tests\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\RenameVariableToMatchNewTypeRectorTest
@@ -31,12 +31,19 @@ final class RenameVariableToMatchNewTypeRector extends AbstractRector
      */
     private $breakingVariableRenameGuard;
 
+    /**
+     * @var VariableRenamer
+     */
+    private $variableRenamer;
+
     public function __construct(
+        BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ExpectedNameResolver $expectedNameResolver,
-        BreakingVariableRenameGuard $breakingVariableRenameGuard
+        VariableRenamer $variableRenamer
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
+        $this->variableRenamer = $variableRenamer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,7 +97,6 @@ PHP
 
             /** @var Variable $variable */
             $variable = $assign->var;
-
             if ($expectedName === null || $this->isName($variable, $expectedName)) {
                 continue;
             }
@@ -110,7 +116,7 @@ PHP
             $assign->var = new Variable($expectedName);
 
             // 2. rename variable in the
-            $this->renameVariableInClassMethod($node, $assign, $currentName, $expectedName);
+            $this->variableRenamer->renameVariableInFunctionLike($node, $assign, $currentName, $expectedName);
         }
 
         if (! $hasChanged) {
@@ -130,40 +136,6 @@ PHP
 
         return array_filter($assigns, function (Assign $assign) {
             return $assign->expr instanceof New_;
-        });
-    }
-
-    private function renameVariableInClassMethod(
-        ClassMethod $classMethod,
-        Assign $assign,
-        string $oldName,
-        string $expectedName
-    ): void {
-        $isRenamingActive = false;
-
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $oldName,
-            $expectedName,
-            $assign,
-            &$isRenamingActive
-        ) {
-            if ($node === $assign) {
-                $isRenamingActive = true;
-                return null;
-            }
-
-            if (! $isRenamingActive) {
-                return null;
-            }
-
-            if (! $this->isVariableName($node, $oldName)) {
-                return null;
-            }
-
-            /** @var Variable $node */
-            $node->name = new Identifier($expectedName);
-
-            return $node;
         });
     }
 }

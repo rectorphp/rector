@@ -41,13 +41,13 @@ final class ClassMethodReturnVendorLockResolver extends AbstractNodeVendorLockRe
 
     private function isVendorLockedByParentClass(string $parentClassName, string $methodName): bool
     {
-        $parentClassNode = $this->parsedNodeCollector->findClass($parentClassName);
-        if ($parentClassNode !== null) {
-            $parentMethodNode = $parentClassNode->getMethod($methodName);
+        $parentClass = $this->parsedNodeCollector->findClass($parentClassName);
+        if ($parentClass !== null) {
+            $parentClassMethod = $parentClass->getMethod($methodName);
             // validate type is conflicting
             // parent class method in local scope → it's ok
-            if ($parentMethodNode !== null) {
-                return $parentMethodNode->returnType !== null;
+            if ($parentClassMethod !== null) {
+                return $parentClassMethod->returnType !== null;
             }
 
             // if not, look for it's parent parent

@@ -68,8 +68,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
@@ -87,18 +87,18 @@ PHP
             return null;
         }
 
-        $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
-        if ($methodNode === null) {
+        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod === null) {
             return null;
         }
 
-        if ($this->isAnonymousClass($class)) {
-            //currently the classMethodManipulator isn't able to find usages of anonymous classes
+        if ($this->isAnonymousClass($classLike)) {
+            // currently the classMethodManipulator isn't able to find usages of anonymous classes
             return null;
         }
 
         $calledMethodName = $this->getName($node->name);
-        if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($methodNode, $calledMethodName)) {
+        if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($classMethod, $calledMethodName)) {
             return null;
         }
 

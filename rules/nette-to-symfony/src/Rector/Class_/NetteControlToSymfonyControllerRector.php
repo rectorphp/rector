@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Rector\Class_;
 
-use Nette\Application\UI\Control;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -46,8 +45,8 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
     private $actionRenderFactory;
 
     public function __construct(
-        TemplatePropertyAssignCollector $templatePropertyAssignCollector,
-        ActionRenderFactory $actionRenderFactory
+        ActionRenderFactory $actionRenderFactory,
+        TemplatePropertyAssignCollector $templatePropertyAssignCollector
     ) {
         $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
         $this->actionRenderFactory = $actionRenderFactory;
@@ -108,7 +107,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node, Control::class)) {
+        if (! $this->isObjectType($node, 'Nette\Application\UI\Control')) {
             return null;
         }
 
@@ -120,9 +119,9 @@ PHP
         $node->name = new Identifier($className);
         $node->extends = new FullyQualified(AbstractController::class);
 
-        $renderMethod = $node->getMethod('render');
-        if ($renderMethod !== null) {
-            $this->processRenderMethod($renderMethod);
+        $classMethod = $node->getMethod('render');
+        if ($classMethod !== null) {
+            $this->processRenderMethod($classMethod);
         }
 
         return $node;
@@ -147,10 +146,10 @@ PHP
             $classMethod
         );
 
-        $thisRenderMethod = $this->actionRenderFactory->createThisRenderMethodCall($magicTemplatePropertyCalls);
+        $methodCall = $this->actionRenderFactory->createThisRenderMethodCall($magicTemplatePropertyCalls);
 
         // add return in the end
-        $return = new Return_($thisRenderMethod);
+        $return = new Return_($methodCall);
         $classMethod->stmts[] = $return;
 
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
@@ -181,12 +180,12 @@ PHP
 
             $node->var = new PropertyFetch(new Variable('this'), 'session');
 
-            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-            if (! $class instanceof Class_) {
+            $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+            if (! $classLike instanceof Class_) {
                 throw new ShouldNotHappenException();
             }
 
-            $this->addPropertyToClass($class, new FullyQualifiedObjectType('Nette\Http\Session'), 'session');
+            $this->addPropertyToClass($classLike, new FullyQualifiedObjectType('Nette\Http\Session'), 'session');
 
             return $node;
         });

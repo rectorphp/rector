@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -55,6 +56,14 @@ trait NodeFactoryTrait
         return new StaticCall($class, $method, $args);
     }
 
+    /**
+     * @param Expr[] $exprsToConcat
+     */
+    protected function createConcat(array $exprsToConcat): ?Concat
+    {
+        return $this->nodeFactory->createConcat($exprsToConcat);
+    }
+
     protected function createClassConstFetch(string $class, string $constant): ClassConstFetch
     {
         return $this->nodeFactory->createClassConstFetch($class, $constant);
@@ -75,6 +84,9 @@ trait NodeFactoryTrait
         return new ConstFetch(new Name('true'));
     }
 
+    /**
+     * @param mixed $argument
+     */
     protected function createArg($argument): Arg
     {
         return $this->nodeFactory->createArg($argument);

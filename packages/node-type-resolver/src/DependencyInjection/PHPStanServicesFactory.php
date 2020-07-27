@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
@@ -17,6 +16,7 @@ use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProv
 use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * Factory so Symfony app can use services from PHPStan container
@@ -38,6 +38,7 @@ final class PHPStanServicesFactory
     public function __construct()
     {
         $currentWorkingDirectory = getcwd();
+        $smartFileSystem = new SmartFileSystem();
 
         $containerFactory = new ContainerFactory($currentWorkingDirectory);
         $additionalConfigFiles = [];
@@ -53,7 +54,7 @@ final class PHPStanServicesFactory
         $currentProjectConfigFile = $currentWorkingDirectory . '/phpstan.neon';
 
         if (file_exists($currentProjectConfigFile)) {
-            $phpstanNeonContent = FileSystem::read($currentProjectConfigFile);
+            $phpstanNeonContent = $smartFileSystem->readFile($currentProjectConfigFile);
 
             // bleeding edge clean out, see https://github.com/rectorphp/rector/issues/2431
             if (Strings::match($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN)) {
@@ -61,7 +62,7 @@ final class PHPStanServicesFactory
                 $pid = getmypid();
                 $temporaryPHPStanNeon = $currentWorkingDirectory . '/rector-temp-phpstan' . $pid . '.neon';
                 $clearedPhpstanNeonContent = Strings::replace($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN);
-                FileSystem::write($temporaryPHPStanNeon, $clearedPhpstanNeonContent);
+                $smartFileSystem->dumpFile($temporaryPHPStanNeon, $clearedPhpstanNeonContent);
 
                 $additionalConfigFiles[] = $temporaryPHPStanNeon;
             } else {
@@ -78,7 +79,7 @@ final class PHPStanServicesFactory
 
         // clear bleeding edge fallback
         if ($temporaryPHPStanNeon !== null) {
-            FileSystem::delete($temporaryPHPStanNeon);
+            $smartFileSystem->remove($temporaryPHPStanNeon);
         }
     }
 

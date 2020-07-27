@@ -14,8 +14,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionFunctionAbstract;
-use ReflectionParameter;
 
 /**
  * @see https://www.php.net/manual/en/reflectiontype.tostring.php
@@ -178,7 +176,7 @@ PHP
 
     private function isReflectionParameterGetTypeMethodCall(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall->var, ReflectionParameter::class)) {
+        if (! $this->isObjectType($methodCall->var, 'ReflectionParameter')) {
             return false;
         }
 
@@ -198,7 +196,7 @@ PHP
 
     private function isReflectionFunctionAbstractGetReturnTypeMethodCall(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall->var, ReflectionFunctionAbstract::class)) {
+        if (! $this->isObjectType($methodCall->var, 'ReflectionFunctionAbstract')) {
             return false;
         }
 

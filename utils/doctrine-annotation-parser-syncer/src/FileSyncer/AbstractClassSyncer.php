@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DoctrineAnnotationParserSyncer\FileSyncer;
 
-use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\ClassSyncerInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 abstract class AbstractClassSyncer implements ClassSyncerInterface
 {
+    /**
+     * @var SmartFileSystem
+     */
+    protected $smartFileSystem;
+
     /**
      * @var BetterStandardPrinter
      */
@@ -28,10 +33,12 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
      */
     public function autowireAbstractClassSyncer(
         BetterStandardPrinter $betterStandardPrinter,
-        FileInfoParser $fileInfoParser
+        FileInfoParser $fileInfoParser,
+        SmartFileSystem $smartFileSystem
     ): void {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->fileInfoParser = $fileInfoParser;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**
@@ -51,7 +58,7 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
     {
         $printedContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
 
-        FileSystem::write($this->getTargetFilePath(), $printedContent);
+        $this->smartFileSystem->dumpFile($this->getTargetFilePath(), $printedContent);
     }
 
     /**
@@ -66,7 +73,7 @@ abstract class AbstractClassSyncer implements ClassSyncerInterface
             return false;
         }
 
-        $currentContent = FileSystem::read($this->getTargetFilePath());
+        $currentContent = $this->smartFileSystem->readFile($this->getTargetFilePath());
 
         // has content changed
         return $finalContent !== $currentContent;

@@ -61,7 +61,7 @@ return [
             );
         },
         function (string $filePath, string $prefix, string $content): string {
-            if ($filePath !== 'src/Testing/TestCase.php') {
+            if ($filePath !== 'vendor/phpstan/phpstan-src/src/Testing/TestCase.php') {
                 return $content;
             }
 
@@ -72,7 +72,7 @@ return [
             );
         },
         function (string $filePath, string $prefix, string $content): string {
-            if ($filePath !== 'src/Testing/LevelsTestCase.php') {
+            if ($filePath !== 'vendor/phpstan/phpstan-src/src/Testing/LevelsTestCase.php') {
                 return $content;
             }
 
@@ -86,18 +86,15 @@ return [
             );
         },
 
-        // unprefix configuraion in sets, @see https://github.com/rectorphp/rector/issues/3227
+        // unprefix excluded classes
+        // fixes https://github.com/humbug/box/issues/470
         function (string $filePath, string $prefix, string $content): string {
-            // only *.yaml files
-            if (! Strings::endsWith($filePath, '.yaml')) {
-                return $content;
+            foreach (StaticEasyPrefixer::EXCLUDED_CLASSES as $excludedClass) {
+                $prefixedClassPattern = '#' . $prefix . '\\\\' . preg_quote($excludedClass, '#') . '#';
+                $content = Strings::replace($content, $prefixedClassPattern, $excludedClass);
             }
 
-            if (! Strings::startsWith($filePath, 'config/set/')) {
-                return $content;
-            }
-
-            return StaticEasyPrefixer::unPrefixQuotedValues($prefix, $content);
+            return $content;
         },
 
         // mimics https://github.com/phpstan/phpstan-src/commit/5a6a22e5c4d38402c8cc888d8732360941c33d43#diff-463a36e4a5687fb2366b5ee56cdad92d
@@ -142,7 +139,7 @@ return [
 
         // mimics https://github.com/phpstan/phpstan-src/commit/fd8f0a852207a1724ae4a262f47d9a449de70da4#diff-463a36e4a5687fb2366b5ee56cdad92d
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::match($filePath, '#^(src|rules|packages)\/#')) {
+            if (! Strings::match($filePath, '#^(config|src|rules|packages)\/#')) {
                 return $content;
             }
 
@@ -150,6 +147,41 @@ return [
 
             return StaticEasyPrefixer::unPreSlashQuotedValues($content);
         },
+
+        // mimics
+        // https://github.com/phpstan/phpstan-src/commit/9c2eb91b630bdfee2c1bb642a4c81ebfa0f1ca9a#diff-87f75ce3f908a819a9a2c77ffeffcc38
+        // https://github.com/phpstan/phpstan-src/commit/7048109ab17aa16102dc0fd21190782e6d6d5e7e#diff-87f75ce3f908a819a9a2c77ffeffcc38
+        function (string $filePath, string $prefix, string $content): string {
+            if (! in_array($filePath, [
+                'vendor/phpstan/phpstan-src/src/Type/TypehintHelper.php',
+                'vendor/ondrejmirtes/better-reflection/src/Reflection/Adapter/ReflectionUnionType.php',
+            ], true)) {
+                return $content;
+            }
+
+            return str_replace(sprintf('%s\\ReflectionUnionType', $prefix), 'ReflectionUnionType', $content);
+        },
+
+        // mimics: https://github.com/phpstan/phpstan-src/commit/6bb92ed7b92b186bb1eb5111bc49ec7679ed780f#diff-87f75ce3f908a819a9a2c77ffeffcc38
+        function (string $filePath, string $prefix, string $content): string {
+            return str_replace('private static final', 'private static', $content);
+        },
+
+        // mimics: https://github.com/phpstan/phpstan-src/commit/1c63a785e5fce8d031b04f52c61904bd57b51e27#diff-87f75ce3f908a819a9a2c77ffeffcc38
+        function (string $filePath, string $prefix, string $content): string {
+            if (! in_array($filePath, [
+                'vendor/phpstan/phpstan-src/src/Testing/TestCaseSourceLocatorFactory.php',
+                'vendor/phpstan/phpstan-src/src/Testing/TestCase.php',
+            ], true)) {
+                return $content;
+            }
+
+            return str_replace(
+                sprintf('%s\\Composer\\Autoload\\ClassLoader', $prefix),
+                'Composer\\Autoload\\ClassLoader',
+                $content
+            );
+        },
     ],
-    'whitelist' => StaticEasyPrefixer::EXCLUDED_NAMESPACES_AND_CLASSES,
+    'whitelist' => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
 ];

@@ -54,11 +54,11 @@ final class StaticTypeMapper
     private $nameScopeFactory;
 
     public function __construct(
+        NameScopeFactory $nameScopeFactory,
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
-        PhpParserNodeMapper $phpParserNodeMapper,
         PhpDocTypeMapper $phpDocTypeMapper,
-        StringTypeToPhpParserNodeMapper $stringTypeToPhpParserNodeMapper,
-        NameScopeFactory $nameScopeFactory
+        PhpParserNodeMapper $phpParserNodeMapper,
+        StringTypeToPhpParserNodeMapper $stringTypeToPhpParserNodeMapper
     ) {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->phpParserNodeMapper = $phpParserNodeMapper;

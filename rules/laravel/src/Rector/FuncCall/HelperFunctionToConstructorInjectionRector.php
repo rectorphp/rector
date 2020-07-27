@@ -94,8 +94,8 @@ PHP
             return null;
         }
 
-        /** @var Class_ $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         $functionName = $this->getName($node);
         if ($functionName === null) {
@@ -108,7 +108,7 @@ PHP
         }
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($functionChange->getClass());
-        $this->addPropertyToClass($classNode, $fullyQualifiedObjectType, $functionChange->getProperty());
+        $this->addPropertyToClass($classLike, $fullyQualifiedObjectType, $functionChange->getProperty());
 
         $propertyFetchNode = $this->createPropertyFetch('this', $functionChange->getProperty());
 
@@ -135,8 +135,8 @@ PHP
     private function shouldSkipFuncCall(FuncCall $funcCall): bool
     {
         // we can inject only in class context
-        $classNode = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $classLike = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return true;
         }
 
@@ -169,7 +169,7 @@ PHP
         FuncCall $funcCall,
         ArrayFunctionToMethodCall $arrayFunctionToMethodCall,
         PropertyFetch $propertyFetch
-    ) {
+    ): ?MethodCall {
         if ($arrayFunctionToMethodCall->getArrayMethod() && $this->isArrayType($funcCall->args[0]->value)) {
             return new MethodCall($propertyFetch, $arrayFunctionToMethodCall->getArrayMethod(), $funcCall->args);
         }

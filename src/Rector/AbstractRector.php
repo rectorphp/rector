@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Rector;
 
-use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -13,11 +12,11 @@ use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
+use Rector\AnonymousClass\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
@@ -83,6 +82,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $staticTypeMapper;
 
     /**
+     * @var string|null
+     */
+    private $previousAppliedClass;
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -98,6 +102,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $currentRectorProvider;
 
     /**
+     * @var ClassNodeAnalyzer
+     */
+    private $classNodeAnalyzer;
+
+    /**
      * @required
      */
     public function autowireAbstractRectorDependencies(
@@ -108,7 +117,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         DocBlockManipulator $docBlockManipulator,
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
-        CurrentRectorProvider $currentRectorProvider
+        CurrentRectorProvider $currentRectorProvider,
+        ClassNodeAnalyzer $classNodeAnalyzer
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -118,6 +128,14 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
+        $this->classNodeAnalyzer = $classNodeAnalyzer;
+    }
+
+    public function beforeTraverse(array $nodes)
+    {
+        $this->previousAppliedClass = null;
+
+        return parent::beforeTraverse($nodes);
     }
 
     /**
@@ -125,7 +143,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     final public function enterNode(Node $node)
     {
-        if (! $this->isMatchingNodeType(get_class($node))) {
+        $nodeClass = get_class($node);
+        if (! $this->isMatchingNodeType($nodeClass)) {
             return null;
         }
 
@@ -141,10 +160,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         // show current Rector class on --debug
-        if ($this->symfonyStyle->isDebug()) {
-            // indented on purpose to improve log nesting under [refactoring]
-            $this->symfonyStyle->writeln('    [applying] ' . static::class);
-        }
+        $this->printDebugApplying();
 
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
         $originalNodeWithAttributes = clone $node;
@@ -205,13 +221,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     protected function isAnonymousClass(Node $node): bool
     {
-        if (! $node instanceof Class_) {
-            return false;
-        }
-
-        $className = $this->nodeNameResolver->getName($node);
-
-        return $className === null || Strings::contains($className, 'AnonymousClass');
+        return $this->classNodeAnalyzer->isAnonymousClass($node);
     }
 
     protected function createCountedValueName(string $countedValueName, ?Scope $scope): string
@@ -360,5 +370,21 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // names are the same
         return $this->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
+    }
+
+    private function printDebugApplying(): void
+    {
+        if (! $this->symfonyStyle->isDebug()) {
+            return;
+        }
+
+        if ($this->previousAppliedClass === static::class) {
+            return;
+        }
+
+        // prevent spamming with the same class over and over
+        // indented on purpose to improve log nesting under [refactoring]
+        $this->symfonyStyle->writeln('    [applying] ' . static::class);
+        $this->previousAppliedClass = static::class;
     }
 }

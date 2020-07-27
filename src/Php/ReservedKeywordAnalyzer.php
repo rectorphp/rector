@@ -81,6 +81,16 @@ final class ReservedKeywordAnalyzer
         'yield',
     ];
 
+    /**
+     * @var string[]
+     */
+    private const NATIVE_VARIABLE_NAMES = ['_ENV', '_POST', '_GET', '_COOKIE', '_SERVER', '_FILES', '_REQUEST'];
+
+    public function isNativeVariable(string $name): bool
+    {
+        return in_array($name, self::NATIVE_VARIABLE_NAMES, true);
+    }
+
     public function isReserved(string $keyword): bool
     {
         $keyword = strtolower($keyword);

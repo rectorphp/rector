@@ -9,9 +9,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Sensio\BundleClassResolver;
 
 /**
- * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationRectorTest
+ * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
  */
 final class TemplateGuesser
 {
@@ -20,9 +21,15 @@ final class TemplateGuesser
      */
     private $nodeNameResolver;
 
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    /**
+     * @var BundleClassResolver
+     */
+    private $bundleClassResolver;
+
+    public function __construct(BundleClassResolver $bundleClassResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->bundleClassResolver = $bundleClassResolver;
     }
 
     public function resolveFromClassMethodNode(ClassMethod $classMethod): string
@@ -50,17 +57,24 @@ final class TemplateGuesser
      */
     private function resolve(string $namespace, string $class, string $method): string
     {
-        $bundle = Strings::match($namespace, '#(?<bundle>[\w]*Bundle)#')['bundle'] ?? '';
-        $bundle = Strings::replace($bundle, '#Bundle$#');
-        $bundle = $bundle !== '' ? '@' . $bundle . '/' : '';
+        $bundle = $this->resolveBundle($class, $namespace);
+        $controller = $this->resolveController($class);
 
-        $controller = $this->resolveControllerVersion5($class);
         $action = Strings::replace($method, '#Action$#');
 
-        return sprintf('%s%s%s.html.twig', $bundle, $controller, $action);
+        $fullPath = '';
+        if ($bundle !== '') {
+            $fullPath .= $bundle . '/';
+        }
+
+        if ($controller !== '') {
+            $fullPath .= $controller . '/';
+        }
+
+        return $fullPath . $action . '.html.twig';
     }
 
-    private function resolveControllerVersion5(string $class): string
+    private function resolveController(string $class): string
     {
         $match = Strings::match($class, '#Controller\\\(.+)Controller$#');
         if (! $match) {
@@ -68,9 +82,18 @@ final class TemplateGuesser
         }
 
         $controller = Strings::replace($match[1], '#([a-z\d])([A-Z])#', '\\1_\\2');
-        $controller = strtolower($controller);
-        $controller = str_replace('\\', '/', $controller);
+        return str_replace('\\', '/', $controller);
+    }
 
-        return $controller !== '' ? $controller . '/' : '';
+    private function resolveBundle(string $class, string $namespace): string
+    {
+        $shortBundleClass = $this->bundleClassResolver->resolveShortBundleClassFromControllerClass($class);
+        if ($shortBundleClass !== null) {
+            return '@' . $shortBundleClass;
+        }
+
+        $bundle = Strings::match($namespace, '#(?<bundle>[\w]*Bundle)#')['bundle'] ?? '';
+        $bundle = Strings::replace($bundle, '#Bundle$#');
+        return $bundle !== '' ? '@' . $bundle : '';
     }
 }

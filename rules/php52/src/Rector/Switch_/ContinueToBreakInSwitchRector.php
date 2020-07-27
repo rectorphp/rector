@@ -85,7 +85,9 @@ PHP
     {
         if ($continue->num === null) {
             return new Break_();
-        } elseif ($continue->num instanceof LNumber) {
+        }
+
+        if ($continue->num instanceof LNumber) {
             if ($this->getValue($continue->num) <= 1) {
                 return new Break_();
             }

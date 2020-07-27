@@ -2543,6 +2543,7 @@ $someVariable
  * `$variadic` - `/** @var bool Whether this is a variadic argument */`
  * `$var` - `/** @var Expr\Variable|Expr\Error Parameter variable */`
  * `$default` - `/** @var null|Expr Default value */`
+ * `$flags` - `/** @var int */`
 <br>
 
 ### `PhpParser\Node\UnionType`

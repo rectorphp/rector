@@ -30,13 +30,13 @@ final class DecoupledClassMethodMatcher
 
     public function matchDecoupled(ClassMethod $classMethod, array $methodNamesByClass): ?DecoupleClassMethodMatch
     {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return null;
         }
 
         foreach ($methodNamesByClass as $className => $configuration) {
-            if (! $this->nodeTypeResolver->isObjectType($class, $className)) {
+            if (! $this->nodeTypeResolver->isObjectType($classLike, $className)) {
                 continue;
             }
 

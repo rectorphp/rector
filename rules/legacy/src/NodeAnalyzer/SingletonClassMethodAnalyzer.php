@@ -36,8 +36,8 @@ final class SingletonClassMethodAnalyzer
     private $nodeTypeResolver;
 
     public function __construct(
-        ConstFetchManipulator $constFetchManipulator,
         BetterStandardPrinter $betterStandardPrinter,
+        ConstFetchManipulator $constFetchManipulator,
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->constFetchManipulator = $constFetchManipulator;

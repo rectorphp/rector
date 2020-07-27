@@ -75,7 +75,7 @@ It supports all versions of PHP from 5.2 and many open-source projects:
 
 Rector uses [nikic/php-parser](https://github.com/nikic/PHP-Parser/), that build on technology called *abstract syntax tree*) technology* (AST). AST doesn't care about spaces and produces mall-formatted code. That's why your project needs to have coding standard tool and set of rules, so it can make refactored nice and shiny again.
 
-Don't have any coding standard tool? Add [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) and use prepared [`ecs-after-rector.yaml`](/ecs-after-rector.yaml) set.
+Don't have any coding standard tool? Add [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) and use prepared [`ecs-after-rector.php`](/ecs-after-rector.php) set.
 
 ## Install
 
@@ -90,34 +90,41 @@ composer require rector/rector --dev
 
 ### A. Prepared Sets
 
-Featured open-source projects have **prepared sets**. You can find them in [`/config/set`](/config/set) or by running:
+Featured open-source projects have **prepared sets**. You can find them in [`/config/set`](/config/set) or by autocomplete of [`Rector\Set\ValueObject\SetList`](/packages/set/src/ValueObject/SetList.php) constants in `rector.php` config.
+
+Let's say you pick the [`symfony40`](/config/set/symfony40.php) set and you want to upgrade your `/src` directory:
 
 ```bash
-vendor/bin/rector sets
-```
-
-Let's say you pick the [`symfony40`](/config/set/symfony) set and you want to upgrade your `/src` directory:
-
-```bash
-# show a list of known changes in Symfony 4.0
 vendor/bin/rector process src --set symfony40 --dry-run
 ```
 
-Rector will show you diff of files that it *would* change. To *make* the changes, run same command without `--dry-run`:
+Rector will show you diff of files that it *would* change. To *make* the changes, drop `--dry-run`:
 
 ```bash
 # apply upgrades to your code
 vendor/bin/rector process src --set symfony40
 ```
 
-Some sets, such as [`code-quality`](/config/set/code-quality) can be used on a regular basis. **The best practise is to use config over CLI**, here in `sets` parameter:
+Some sets, such as [`code-quality`](/config/set/code-quality.php) can be used on a regular basis. **The best practise is to  use config over command line**:
 
-```yaml
-# rector.yaml
-parameters:
-    sets:
-        - code-quality
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Rector\Set\ValueObject\SetList;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::SETS, [SetList::CODE_QUALITY]);
+};
 ```
+
+PHP config format is a new [Symfony best practice](https://twitter.com/symfony_en/status/1284538366147678208).
 
 ### B. Standalone Rules
 
@@ -381,6 +388,15 @@ docker run --rm -v $(pwd):/project rector/rector:latest process /project/app \
 --autoload-file /project/vendor/autoload.php \
 --dry-run
 ```
+
+<br>
+
+### Debugging
+
+1. Make sure XDebug is installed and configured
+2. Add `--xdebug` option when running Rector
+
+Without XDebug, you can use `--debug` option, that will print nested exceptions output.
 
 <br>
 

@@ -15,9 +15,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DocumentationGenerator\PhpKeywordHighlighter;
 use Rector\DocumentationGenerator\RectorMetadataResolver;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
+use Rector\SymfonyPhpConfig\Printer\ReturnClosurePrinter;
 use ReflectionClass;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Yaml\Yaml;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MarkdownDumpRectorsOutputFormatter
@@ -47,18 +47,25 @@ final class MarkdownDumpRectorsOutputFormatter
      */
     private $phpKeywordHighlighter;
 
+    /**
+     * @var ReturnClosurePrinter
+     */
+    private $returnClosurePrinter;
+
     public function __construct(
-        SymfonyStyle $symfonyStyle,
         MarkdownDifferAndFormatter $markdownDifferAndFormatter,
+        PhpKeywordHighlighter $phpKeywordHighlighter,
         RectorMetadataResolver $rectorMetadataResolver,
-        TestClassResolver $testClassResolver,
-        PhpKeywordHighlighter $phpKeywordHighlighter
+        ReturnClosurePrinter $returnClosurePrinter,
+        SymfonyStyle $symfonyStyle,
+        TestClassResolver $testClassResolver
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
         $this->rectorMetadataResolver = $rectorMetadataResolver;
         $this->testClassResolver = $testClassResolver;
         $this->phpKeywordHighlighter = $phpKeywordHighlighter;
+        $this->returnClosurePrinter = $returnClosurePrinter;
     }
 
     /**
@@ -68,8 +75,9 @@ final class MarkdownDumpRectorsOutputFormatter
     public function format(array $packageRectors, array $generalRectors, bool $isRectorProject): void
     {
         $totalRectorCount = count($packageRectors) + count($generalRectors);
+        $message = sprintf('# All %d Rectors Overview', $totalRectorCount);
 
-        $this->symfonyStyle->writeln(sprintf('# All %d Rectors Overview', $totalRectorCount));
+        $this->symfonyStyle->writeln($message);
         $this->symfonyStyle->newLine();
 
         if ($isRectorProject) {
@@ -91,7 +99,8 @@ final class MarkdownDumpRectorsOutputFormatter
     {
         $rectorsByPackage = [];
         foreach ($rectors as $rector) {
-            $package = $this->rectorMetadataResolver->resolvePackageFromRectorClass(get_class($rector));
+            $rectorClass = get_class($rector);
+            $package = $this->rectorMetadataResolver->resolvePackageFromRectorClass($rectorClass);
             $rectorsByPackage[$package][] = $rector;
         }
 
@@ -109,8 +118,9 @@ final class MarkdownDumpRectorsOutputFormatter
         foreach ($rectorsByGroup as $group => $rectors) {
             $escapedGroup = str_replace('\\', '', $group);
             $escapedGroup = Strings::webalize($escapedGroup, '_');
+            $message = sprintf('- [%s](#%s) (%d)', $group, $escapedGroup, count($rectors));
 
-            $this->symfonyStyle->writeln(sprintf('- [%s](#%s) (%d)', $group, $escapedGroup, count($rectors)));
+            $this->symfonyStyle->writeln($message);
         }
 
         $this->symfonyStyle->newLine();
@@ -121,25 +131,29 @@ final class MarkdownDumpRectorsOutputFormatter
         $headline = $this->getRectorClassWithoutNamespace($rector);
 
         if ($isRectorProject) {
-            $this->symfonyStyle->writeln(sprintf('### `%s`', $headline));
+            $message = sprintf('### `%s`', $headline);
+            $this->symfonyStyle->writeln($message);
         } else {
-            $this->symfonyStyle->writeln(sprintf('## `%s`', $headline));
+            $message = sprintf('## `%s`', $headline);
+            $this->symfonyStyle->writeln($message);
         }
 
         $rectorClass = get_class($rector);
 
         $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln(sprintf(
+        $message = sprintf(
             '- class: [`%s`](%s)',
             get_class($rector),
             $this->resolveClassFilePathOnGitHub($rectorClass)
-        ));
+        );
+        $this->symfonyStyle->writeln($message);
 
         $rectorTestClass = $this->testClassResolver->resolveFromClassName($rectorClass);
         if ($rectorTestClass !== null) {
             $fixtureDirectoryPath = $this->resolveFixtureDirectoryPathOnGitHub($rectorTestClass);
             if ($fixtureDirectoryPath !== null) {
-                $this->symfonyStyle->writeln(sprintf('- [test fixtures](%s)', $fixtureDirectoryPath));
+                $message = sprintf('- [test fixtures](%s)', $fixtureDirectoryPath);
+                $this->symfonyStyle->writeln($message);
             }
         }
 
@@ -199,13 +213,11 @@ final class MarkdownDumpRectorsOutputFormatter
         }
 
         $configuration = [
-            'services' => [
-                get_class($rector) => $codeSample->getConfiguration(),
-            ],
+            get_class($rector) => $codeSample->getConfiguration(),
         ];
-        $configuration = Yaml::dump($configuration, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
 
-        $this->printCodeWrapped($configuration, 'yaml');
+        $phpConfigContent = $this->returnClosurePrinter->printServices($configuration);
+        $this->printCodeWrapped($phpConfigContent, 'php');
 
         $this->symfonyStyle->newLine();
         $this->symfonyStyle->writeln('↓');
@@ -241,7 +253,8 @@ final class MarkdownDumpRectorsOutputFormatter
 
     private function printCodeWrapped(string $content, string $format): void
     {
-        $this->symfonyStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL));
+        $message = sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL);
+        $this->symfonyStyle->writeln($message);
     }
 
     private function getClassRelativePath(string $className): string

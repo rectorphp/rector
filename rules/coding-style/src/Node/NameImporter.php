@@ -16,7 +16,6 @@ use Rector\Core\Configuration\Option;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
@@ -66,13 +65,13 @@ final class NameImporter
     private $renamedClassesCollector;
 
     public function __construct(
-        StaticTypeMapper $staticTypeMapper,
         AliasUsesResolver $aliasUsesResolver,
         ImportSkipper $importSkipper,
         NodeNameResolver $nodeNameResolver,
         ParameterProvider $parameterProvider,
-        UseNodesToAddCollector $useNodesToAddCollector,
-        RenamedClassesCollector $renamedClassesCollector
+        RenamedClassesCollector $renamedClassesCollector,
+        StaticTypeMapper $staticTypeMapper,
+        UseNodesToAddCollector $useNodesToAddCollector
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
@@ -90,11 +89,6 @@ final class NameImporter
         }
 
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
-
-        // propagate to fqn, that's what we need here
-        if ($staticType instanceof AliasedObjectType) {
-            $staticType = new FullyQualifiedObjectType($staticType->getFullyQualifiedClass());
-        }
 
         if (! $staticType instanceof FullyQualifiedObjectType) {
             return null;
@@ -131,7 +125,7 @@ final class NameImporter
         }
 
         // Importing root namespace classes (like \DateTime) is optional
-        $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER);
+        $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES);
         if (! $importShortClasses) {
             $name = $this->nodeNameResolver->getName($name);
             if ($name !== null && substr_count($name, '\\') === 0) {
@@ -205,8 +199,8 @@ final class NameImporter
         // can be also in to be renamed classes
         $classOrFunctionName = $name->toString();
 
-        $newClasses = $this->renamedClassesCollector->getOldToNewClasses();
-        if (in_array($classOrFunctionName, $newClasses, true)) {
+        $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClasses();
+        if (in_array($classOrFunctionName, $oldToNewClasses, true)) {
             return false;
         }
 

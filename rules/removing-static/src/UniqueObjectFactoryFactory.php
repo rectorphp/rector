@@ -51,10 +51,10 @@ final class UniqueObjectFactoryFactory
     private $nodeFactory;
 
     public function __construct(
+        NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
         PropertyNaming $propertyNaming,
-        StaticTypeMapper $staticTypeMapper,
-        NodeFactory $nodeFactory
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;
@@ -80,12 +80,12 @@ final class UniqueObjectFactoryFactory
         $factoryClassBuilder->addStmts($properties);
 
         // constructor
-        $constructMethod = $this->createConstructMethod($objectType);
-        $factoryClassBuilder->addStmt($constructMethod);
+        $constructorClassMethod = $this->createConstructMethod($objectType);
+        $factoryClassBuilder->addStmt($constructorClassMethod);
 
         // create
-        $createMethod = $this->createCreateMethod($class, $className, $properties);
-        $factoryClassBuilder->addStmt($createMethod);
+        $classMethod = $this->createCreateMethod($class, $className, $properties);
+        $factoryClassBuilder->addStmt($classMethod);
 
         return $factoryClassBuilder->getNode();
     }
@@ -169,13 +169,13 @@ final class UniqueObjectFactoryFactory
 
         $return = new Return_($new);
 
-        $builderMethod = new MethodBuilder('create');
-        $builderMethod->setReturnType(new FullyQualified($className));
-        $builderMethod->makePublic();
-        $builderMethod->addStmt($return);
-        $builderMethod->addParams($params);
+        $methodBuilder = new MethodBuilder('create');
+        $methodBuilder->setReturnType(new FullyQualified($className));
+        $methodBuilder->makePublic();
+        $methodBuilder->addStmt($return);
+        $methodBuilder->addParams($params);
 
-        return $builderMethod->getNode();
+        return $methodBuilder->getNode();
     }
 
     /**

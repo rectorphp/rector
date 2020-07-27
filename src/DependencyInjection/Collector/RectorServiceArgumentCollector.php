@@ -46,6 +46,9 @@ final class RectorServiceArgumentCollector
         }
     }
 
+    /**
+     * @param mixed $argumentValue
+     */
     private function addArgumentValue(string $serviceClassName, string $argumentName, $argumentValue): void
     {
         if (! isset($this->cachedRectorServiceKeyArguments[$serviceClassName][$argumentName])) {

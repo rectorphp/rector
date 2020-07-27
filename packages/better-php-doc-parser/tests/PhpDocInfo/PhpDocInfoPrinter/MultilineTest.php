@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter;
 
 use Iterator;
-use Nette\Utils\FileSystem;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -31,13 +30,17 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
      */
     public function test(string $docFilePath, Node $node): void
     {
-        $docComment = FileSystem::read($docFilePath);
+        $docComment = $this->smartFileSystem->readFile($docFilePath);
         $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, $node);
 
         $fileInfo = new SmartFileInfo($docFilePath);
-        $message = $fileInfo->getRelativeFilePathFromCwd();
+        $relativeFilePathFromCwd = $fileInfo->getRelativeFilePathFromCwd();
 
-        $this->assertSame($docComment, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo), $message);
+        $this->assertSame(
+            $docComment,
+            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo),
+            $relativeFilePathFromCwd
+        );
     }
 
     public function provideData(): Iterator
@@ -94,9 +97,9 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         $methodBuilder = $builderFactory->method($name);
         $methodBuilder->makePublic();
 
-        $method = $methodBuilder->getNode();
-        $method->setAttribute(AttributeKey::CLASS_NAME, $class);
+        $classMethod = $methodBuilder->getNode();
+        $classMethod->setAttribute(AttributeKey::CLASS_NAME, $class);
 
-        return $method;
+        return $classMethod;
     }
 }

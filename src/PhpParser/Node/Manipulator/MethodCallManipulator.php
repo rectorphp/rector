@@ -7,8 +7,10 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -26,7 +28,7 @@ final class MethodCallManipulator
      */
     private $betterNodeFinder;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -105,23 +107,29 @@ final class MethodCallManipulator
     /**
      * @return MethodCall[]
      */
-    private function findMethodCallsOnVariable(Variable $variable): array
+    public function findMethodCallsOnVariable(Variable $variable): array
     {
         // get scope node, e.g. parent function call, method call or anonymous function
-        $scopeNode = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [FunctionLike::class]);
-        if ($scopeNode === null) {
+        /** @var ClassMethod|null $classMethod */
+        $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod === null) {
             return [];
         }
 
-        return $this->betterNodeFinder->find($scopeNode, function (Node $node) use ($variable) {
+        $variableName = $this->nodeNameResolver->getName($variable);
+
+        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use ($variableName) {
             if (! $node instanceof MethodCall) {
                 return false;
             }
 
-            /** @var string $methodCallVariableName */
-            $methodCallVariableName = $node->getAttribute(AttributeKey::METHOD_CALL_NODE_CALLER_NAME);
+            // cover fluent interfaces too
+            $callerNode = $this->resolveRootVariable($node);
+            if (! $callerNode instanceof Variable) {
+                return false;
+            }
 
-            return $this->nodeNameResolver->isName($variable, $methodCallVariableName);
+            return $this->nodeNameResolver->isName($callerNode, $variableName);
         });
     }
 
@@ -178,5 +186,16 @@ final class MethodCallManipulator
         }
 
         return $parentNode;
+    }
+
+    private function resolveRootVariable(MethodCall $methodCall): Node
+    {
+        $callerNode = $methodCall->var;
+
+        while ($callerNode instanceof MethodCall || $callerNode instanceof StaticCall) {
+            $callerNode = $callerNode instanceof StaticCall ? $callerNode->class : $callerNode->var;
+        }
+
+        return $callerNode;
     }
 }

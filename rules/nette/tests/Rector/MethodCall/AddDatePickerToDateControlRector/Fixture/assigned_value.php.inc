@@ -26,7 +26,7 @@ class AssignedValue
     public function run()
     {
         $form = new Form();
-        $datePicker = $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+        $datePicker = new \Nextras\FormComponents\Controls\DateControl('Label');
     }
 }
 

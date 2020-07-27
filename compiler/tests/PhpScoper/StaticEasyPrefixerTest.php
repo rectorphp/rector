@@ -22,6 +22,7 @@ final class StaticEasyPrefixerTest extends TestCase
     public function provideData(): Iterator
     {
         yield ["'Prefix\\SomeNamespace\\", '\'SomeNamespace\\'];
+        yield ["'Prefix\\?SomeNamespace\\", '\'?SomeNamespace\\'];
     }
 
     /**

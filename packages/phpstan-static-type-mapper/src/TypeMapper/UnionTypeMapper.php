@@ -48,9 +48,9 @@ final class UnionTypeMapper implements TypeMapperInterface
     private $doctrineTypeAnalyzer;
 
     public function __construct(
+        DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         PhpVersionProvider $phpVersionProvider,
-        UnionTypeAnalyzer $unionTypeAnalyzer,
-        DoctrineTypeAnalyzer $doctrineTypeAnalyzer
+        UnionTypeAnalyzer $unionTypeAnalyzer
     ) {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;

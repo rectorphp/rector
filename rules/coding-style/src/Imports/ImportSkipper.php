@@ -28,8 +28,8 @@ final class ImportSkipper
 
     public function __construct(
         AliasUsesResolver $aliasUsesResolver,
-        ShortNameResolver $shortNameResolver,
-        CanImportBeAddedValidator $canImportBeAddedValidator
+        CanImportBeAddedValidator $canImportBeAddedValidator,
+        ShortNameResolver $shortNameResolver
     ) {
         $this->aliasUsesResolver = $aliasUsesResolver;
         $this->shortNameResolver = $shortNameResolver;

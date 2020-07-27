@@ -64,6 +64,7 @@ PHP
         }
 
         $methodData = TypeStaticProbe::getDataForMethodByPosition($classMethodReference);
+
         // no data for this method → skip
         if ($methodData === []) {
             return null;

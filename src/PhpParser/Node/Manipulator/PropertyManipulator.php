@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\PostDec;
+use PhpParser\Node\Expr\PostInc;
+use PhpParser\Node\Expr\PreDec;
+use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
@@ -53,11 +58,11 @@ final class PropertyManipulator
     private $classLikeParsedNodesFinder;
 
     public function __construct(
+        AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        NodeNameResolver $nodeNameResolver,
-        AssignManipulator $assignManipulator,
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
+        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -71,14 +76,14 @@ final class PropertyManipulator
      */
     public function getAllPropertyFetch(Property $property): array
     {
-        /** @var Class_|null $classNode */
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return [];
         }
 
-        $nodesToSearch = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($classNode);
-        $nodesToSearch[] = $classNode;
+        $nodesToSearch = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($classLike);
+        $nodesToSearch[] = $classLike;
 
         $singleProperty = $property->props[0];
 
@@ -134,10 +139,11 @@ final class PropertyManipulator
             }
         }
 
-        // has class $this->$variable call?
-        /** @var ClassLike $class */
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        return (bool) $this->betterNodeFinder->findFirst($class->stmts, function (Node $node): bool {
+        // has classLike $this->$variable call?
+        /** @var ClassLike $classLike */
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+
+        return (bool) $this->betterNodeFinder->findFirst($classLike->stmts, function (Node $node): bool {
             if (! $node instanceof PropertyFetch) {
                 return false;
             }
@@ -154,6 +160,15 @@ final class PropertyManipulator
      */
     private function isReadContext(Node $node): bool
     {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof PreInc || $parentNode instanceof PreDec || $parentNode instanceof PostInc || $parentNode instanceof PostDec) {
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        if ($parentNode instanceof Arg) {
+            return true;
+        }
+
         return ! $this->assignManipulator->isNodeLeftPartOfAssign($node);
     }
 }

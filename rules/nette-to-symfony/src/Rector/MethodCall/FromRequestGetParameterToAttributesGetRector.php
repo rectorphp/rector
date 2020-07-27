@@ -64,7 +64,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, Request::class)) {
+        if (! $this->isObjectType($node, 'Nette\Application\Request')) {
             return null;
         }
 

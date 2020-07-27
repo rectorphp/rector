@@ -9,6 +9,7 @@ use Rector\Caching\Config\FileHashComputer;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileHashComputerTest extends AbstractKernelTestCase
 {
@@ -28,8 +29,8 @@ final class FileHashComputerTest extends AbstractKernelTestCase
      */
     public function testHashIsIdentical(string $firstConfig, string $secondConfig): void
     {
-        $configAHash = $this->fileHashComputer->compute($firstConfig);
-        $configBHash = $this->fileHashComputer->compute($secondConfig);
+        $configAHash = $this->fileHashComputer->compute(new SmartFileInfo($firstConfig));
+        $configBHash = $this->fileHashComputer->compute(new SmartFileInfo($secondConfig));
 
         $this->assertSame($configAHash, $configBHash);
     }
@@ -43,6 +44,6 @@ final class FileHashComputerTest extends AbstractKernelTestCase
     public function testInvalidType(): void
     {
         $this->expectException(ShouldNotHappenException::class);
-        $this->fileHashComputer->compute(__DIR__ . '/Source/file.php');
+        $this->fileHashComputer->compute(new SmartFileInfo(__DIR__ . '/Source/file.xml'));
     }
 }

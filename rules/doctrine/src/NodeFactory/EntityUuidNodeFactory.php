@@ -34,7 +34,7 @@ final class EntityUuidNodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(PhpDocTagNodeFactory $phpDocTagNodeFactory, NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory, PhpDocTagNodeFactory $phpDocTagNodeFactory)
     {
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->nodeFactory = $nodeFactory;
@@ -72,8 +72,8 @@ final class EntityUuidNodeFactory
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         // add @var
-        $varTagValueNode = $this->phpDocTagNodeFactory->createUuidInterfaceVarTagValueNode();
-        $phpDocInfo->addTagValueNode($varTagValueNode);
+        $attributeAwareVarTagValueNode = $this->phpDocTagNodeFactory->createUuidInterfaceVarTagValueNode();
+        $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
 
         if ($isId) {
             // add @ORM\Id

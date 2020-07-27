@@ -24,7 +24,7 @@ final class EntityIdNodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(PhpDocTagNodeFactory $phpDocTagNodeFactory, NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory, PhpDocTagNodeFactory $phpDocTagNodeFactory)
     {
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->nodeFactory = $nodeFactory;
@@ -45,8 +45,8 @@ final class EntityIdNodeFactory
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         // add @var int
-        $varTagValueNode = $this->phpDocTagNodeFactory->createVarTagIntValueNode();
-        $phpDocInfo->addTagValueNode($varTagValueNode);
+        $attributeAwareVarTagValueNode = $this->phpDocTagNodeFactory->createVarTagIntValueNode();
+        $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
 
         // add @ORM\Id
         $phpDocInfo->addTagValueNodeWithShortName(new IdTagValueNode([]));

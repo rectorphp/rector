@@ -41,12 +41,12 @@ final class UsedClassConstsExtractor
     {
         $classConsts = [];
 
-        /** @var Class_ $class */
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
 
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
             &$classConsts,
-            $class
+            $classLike
         ) {
             if (! $node instanceof ClassConstFetch) {
                 return null;
@@ -61,7 +61,7 @@ final class UsedClassConstsExtractor
                 return null;
             }
 
-            $classConsts[$classConstName] = $this->getClassConstByName($class, $classConstName);
+            $classConsts[$classConstName] = $this->getClassConstByName($classLike, $classConstName);
         });
 
         return $classConsts;

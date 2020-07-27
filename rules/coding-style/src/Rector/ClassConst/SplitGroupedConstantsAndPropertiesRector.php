@@ -73,13 +73,13 @@ PHP
                 return null;
             }
 
-            $allConstants = $node->consts;
+            $allConsts = $node->consts;
 
-            /** @var Const_ $firstConstant */
-            $firstConstant = array_shift($allConstants);
-            $node->consts = [$firstConstant];
+            /** @var Const_ $firstConst */
+            $firstConst = array_shift($allConsts);
+            $node->consts = [$firstConst];
 
-            foreach ($allConstants as $anotherConstant) {
+            foreach ($allConsts as $anotherConstant) {
                 $nextClassConst = new ClassConst([$anotherConstant], $node->flags, $node->getAttributes());
                 $this->addNodeAfterNode($nextClassConst, $node);
             }
@@ -92,9 +92,9 @@ PHP
         }
 
         $allProperties = $node->props;
-        /** @var PropertyProperty $firstProperty */
-        $firstProperty = array_shift($allProperties);
-        $node->props = [$firstProperty];
+        /** @var PropertyProperty $firstPropertyProperty */
+        $firstPropertyProperty = array_shift($allProperties);
+        $node->props = [$firstPropertyProperty];
 
         foreach ($allProperties as $anotherProperty) {
             $nextProperty = new Property($node->flags, [$anotherProperty], $node->getAttributes());

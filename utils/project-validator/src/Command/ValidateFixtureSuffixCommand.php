@@ -50,10 +50,9 @@ final class ValidateFixtureSuffixCommand extends Command
 
         if (count($invalidFilePaths) > 0) {
             $this->symfonyStyle->listing($invalidFilePaths);
+            $message = sprintf('Found %d files with invalid suffix. Must be *.php.inc', count($invalidFilePaths));
 
-            $this->symfonyStyle->error(
-                sprintf('Found %d files with invalid suffix. Must be *.php.inc', count($invalidFilePaths))
-            );
+            $this->symfonyStyle->error($message);
 
             return ShellCode::ERROR;
         }

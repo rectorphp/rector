@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\ClassMethod;
 
-use Nette\Application\UI\Control;
-use Nette\Application\UI\Presenter;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -33,8 +31,8 @@ final class TemplateMagicAssignToExplicitVariableArrayRector extends AbstractRec
     private $actionRenderFactory;
 
     public function __construct(
-        TemplatePropertyAssignCollector $templatePropertyAssignCollector,
-        ActionRenderFactory $actionRenderFactory
+        ActionRenderFactory $actionRenderFactory,
+        TemplatePropertyAssignCollector $templatePropertyAssignCollector
     ) {
         $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
         $this->actionRenderFactory = $actionRenderFactory;
@@ -86,7 +84,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, Control::class)) {
+        if (! $this->isObjectType($node, 'Nette\Application\UI\Control')) {
             return null;
         }
 
@@ -110,7 +108,7 @@ PHP
         ClassMethod $classMethod,
         MagicTemplatePropertyCalls $magicTemplatePropertyCalls
     ): MethodCall {
-        if ($this->isObjectType($classMethod, Presenter::class)) {
+        if ($this->isObjectType($classMethod, 'Nette\Application\UI\Presenter')) {
             return $this->actionRenderFactory->createThisTemplateRenderMethodCall($magicTemplatePropertyCalls);
         }
 

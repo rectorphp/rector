@@ -40,7 +40,7 @@ class ClassTryCatchArrayResponseController extends AbstractController
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         try {
-            return $this->render('@App/class_try_catch_array_response/index.html.twig', [
+            return $this->render('@App/Class_Try_Catch_Array_Response/index.html.twig', [
                 'key' => 'value'
             ]);
         } catch (Throwable $throwable) {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Architecture\Rector\MethodCall;
 
-use Doctrine\ORM\EntityRepository;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -36,7 +35,7 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.',
+            'Handles method calls in child of Doctrine EntityRepository and moves them to $this->repository property.',
             [
                 new CodeSample(
                     <<<'PHP'
@@ -88,7 +87,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node->var, EntityRepository::class)) {
+        if (! $this->isObjectType($node->var, 'Doctrine\ORM\EntityRepository')) {
             return null;
         }
 

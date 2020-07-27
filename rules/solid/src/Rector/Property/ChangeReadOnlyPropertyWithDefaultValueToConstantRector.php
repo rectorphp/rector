@@ -131,25 +131,25 @@ PHP
             return true;
         }
 
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return false;
         }
 
-        return $this->isObjectType($class, 'PHP_CodeSniffer\Sniffs\Sniff');
+        return $this->isObjectType($classLike, 'PHP_CodeSniffer\Sniffs\Sniff');
     }
 
     private function replacePropertyFetchWithClassConstFetch(Node $node, PropertyProperty $propertyProperty): void
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             throw new ShouldNotHappenException();
         }
 
         $propertyName = $this->getName($propertyProperty);
         $constantName = $this->createConstantNameFromProperty($propertyProperty);
 
-        $this->traverseNodesWithCallable($classNode, function (Node $node) use ($propertyName, $constantName) {
+        $this->traverseNodesWithCallable($classLike, function (Node $node) use ($propertyName, $constantName) {
             if (! $this->isLocalPropertyFetch($node)) {
                 return null;
             }

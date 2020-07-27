@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Rector\String_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
@@ -15,7 +15,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\UseClassKeywordForClassNameResolutionTest
+ * @see \Rector\CodingStyle\Tests\Rector\String_\UseClassKeywordForClassNameResolutionRector\UseClassKeywordForClassNameResolutionRectorTest
  */
 final class UseClassKeywordForClassNameResolutionRector extends AbstractRector
 {
@@ -50,25 +50,61 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (substr_count($node->value, '::') !== 1) {
+        $classNames = $this->getExistingClasses($node);
+        if ($classNames === []) {
+            return $node;
+        }
+
+        $parts = $this->getParts($node, $classNames);
+        if ($parts === []) {
             return null;
         }
-        // a possible static call reference
+
+        $exprsToConcat = $this->createExpressionsToConcat($parts);
+        return $this->createConcat($exprsToConcat);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getExistingClasses(String_ $string): array
+    {
         // @see https://regex101.com/r/Vv41Qr/1/
-        [$before, $possibleClass, $after] = Strings::split($node->value, '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#');
+        $matches = Strings::matchAll($string->value, '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#', PREG_PATTERN_ORDER);
 
-        if (! $possibleClass || ! class_exists($possibleClass)) {
-            return null;
+        return array_filter($matches[1], function (string $className) {
+            return class_exists($className);
+        });
+    }
+
+    public function getParts(String_ $string, array $classNames): array
+    {
+        $classNames = array_map(function (string $className) {
+            return preg_quote($className);
+        }, $classNames);
+
+        // @see https://regex101.com/r/8nGS0F/1
+        $parts = Strings::split($string->value, '#(' . implode('|', $classNames) . ')#');
+
+        return array_filter($parts, function (string $className) {
+            return $className !== '';
+        });
+    }
+
+    /**
+     * @param string[] $parts
+     * @return Expr[]
+     */
+    private function createExpressionsToConcat(array $parts): array
+    {
+        $exprsToConcat = [];
+        foreach ($parts as $part) {
+            if (class_exists($part)) {
+                $exprsToConcat[] = new ClassConstFetch(new FullyQualified(ltrim($part, '\\')), 'class');
+            } else {
+                $exprsToConcat[] = new String_($part);
+            }
         }
-
-        $classConstFetch = new ClassConstFetch(new FullyQualified(ltrim($possibleClass, '\\')), 'class');
-
-        $concat = new Concat($classConstFetch, new String_('::' . $after));
-        if (! empty($before)) {
-            $concat = new Concat(new String_($before), $classConstFetch);
-            $concat = new Concat($concat, new String_('::' . $after));
-        }
-
-        return $concat;
+        return $exprsToConcat;
     }
 }

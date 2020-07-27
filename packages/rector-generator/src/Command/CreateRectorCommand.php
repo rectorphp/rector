@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\RectorGenerator\Command;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
 use Rector\RectorGenerator\Config\ConfigFilesystem;
@@ -22,6 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class CreateRectorCommand extends Command
 {
@@ -86,6 +86,11 @@ final class CreateRectorCommand extends Command
     private $overrideGuard;
 
     /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    /**
      * @param mixed[] $rectorRecipe
      */
     public function __construct(
@@ -98,7 +103,8 @@ final class CreateRectorCommand extends Command
         TemplateFactory $templateFactory,
         ConfigFilesystem $configFilesystem,
         OverrideGuard $overrideGuard,
-        array $rectorRecipe
+        array $rectorRecipe,
+        SmartFileSystem $smartFileSystem
     ) {
         parent::__construct();
 
@@ -112,6 +118,7 @@ final class CreateRectorCommand extends Command
         $this->templateFactory = $templateFactory;
         $this->configFilesystem = $configFilesystem;
         $this->overrideGuard = $overrideGuard;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     protected function configure(): void
@@ -144,9 +151,9 @@ final class CreateRectorCommand extends Command
             return ShellCode::SUCCESS;
         }
 
-        $this->generateFiles($templateFileInfos, $templateVariables, $configuration);
-
         $this->configFilesystem->appendRectorServiceToSet($configuration, $templateVariables);
+
+        $this->generateFiles($templateFileInfos, $templateVariables, $configuration);
 
         $this->printSuccess($configuration->getName());
 
@@ -173,7 +180,7 @@ final class CreateRectorCommand extends Command
                 $content = $this->addOneMoreRectorNesting($content);
             }
 
-            FileSystem::write($destination, $content);
+            $this->smartFileSystem->dumpFile($destination, $content);
 
             $this->generatedFiles[] = $destination;
 
@@ -186,15 +193,17 @@ final class CreateRectorCommand extends Command
 
     private function printSuccess(string $name): void
     {
-        $this->symfonyStyle->title(sprintf('New files generated for "%s"', $name));
+        $message = sprintf('New files generated for "%s"', $name);
+        $this->symfonyStyle->title($message);
         sort($this->generatedFiles);
         $this->symfonyStyle->listing($this->generatedFiles);
-
-        $this->symfonyStyle->success(sprintf(
+        $message = sprintf(
             'Make tests green again:%svendor/bin/phpunit %s',
             PHP_EOL . PHP_EOL,
             $this->testCasePath
-        ));
+        );
+
+        $this->symfonyStyle->success($message);
     }
 
     private function addOneMoreRectorNesting(string $content): string

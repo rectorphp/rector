@@ -109,14 +109,14 @@ PHP
 
     private function getVarDocVariableName(PhpDocInfo $phpDocInfo): ?string
     {
-        $varTagValueNode = $phpDocInfo->getVarTagValue();
-        if ($varTagValueNode === null) {
+        $attributeAwareVarTagValueNode = $phpDocInfo->getVarTagValue();
+        if ($attributeAwareVarTagValueNode === null) {
             return null;
         }
 
-        $variableName = $varTagValueNode->variableName;
+        $variableName = (string) $attributeAwareVarTagValueNode->variableName;
         // no variable
-        if (empty($variableName)) {
+        if ($variableName === '') {
             return null;
         }
 

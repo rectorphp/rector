@@ -21,7 +21,7 @@ final class FileInfoParser
      */
     private $nodeScopeAndMetadataDecorator;
 
-    public function __construct(Parser $parser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
+    public function __construct(NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, Parser $parser)
     {
         $this->parser = $parser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;

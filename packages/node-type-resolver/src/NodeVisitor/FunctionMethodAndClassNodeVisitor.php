@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -57,6 +58,11 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     private $function;
 
     /**
+     * @var Closure|null
+     */
+    private $closure;
+
+    /**
      * @var ClassNaming
      */
     private $classNaming;
@@ -77,6 +83,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         $this->methodName = null;
         $this->classMethod = null;
         $this->function = null;
+        $this->closure = null;
 
         return null;
     }
@@ -89,6 +96,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         $this->processClass($node);
         $this->processMethod($node);
         $this->processFunction($node);
+        $this->processClosure($node);
 
         return $node;
     }
@@ -96,12 +104,15 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof ClassLike) {
-            $this->setClassNodeAndName(array_pop($this->classStack));
+            $classLike = array_pop($this->classStack);
+            $this->setClassNodeAndName($classLike);
         }
+
         if ($node instanceof ClassMethod) {
             $this->classMethod = array_pop($this->methodStack);
             $this->methodName = (string) $this->methodName;
         }
+
         return null;
     }
 
@@ -143,12 +154,21 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         $node->setAttribute(AttributeKey::FUNCTION_NODE, $this->function);
     }
 
+    private function processClosure(Node $node): void
+    {
+        if ($node instanceof Closure) {
+            $this->closure = $node;
+        }
+
+        $node->setAttribute(AttributeKey::CLOSURE_NODE, $this->closure);
+    }
+
     private function setClassNodeAndName(?ClassLike $classLike): void
     {
         $this->classLike = $classLike;
         if ($classLike === null || $classLike->name === null) {
             $this->className = null;
-        } elseif (isset($classLike->namespacedName)) {
+        } elseif (property_exists($classLike, 'namespacedName')) {
             $this->className = $classLike->namespacedName->toString();
             $this->classShortName = $this->classNaming->getShortName($this->className);
         } else {

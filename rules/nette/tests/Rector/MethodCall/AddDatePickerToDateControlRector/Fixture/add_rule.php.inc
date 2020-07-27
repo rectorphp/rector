@@ -27,8 +27,8 @@ class AddRule
     public function run()
     {
         $form = new Form();
-        ($form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label'))
-            ->addRule('...');
+        $keyDateControl = $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+        $keyDateControl->addRule('...');
     }
 }
 

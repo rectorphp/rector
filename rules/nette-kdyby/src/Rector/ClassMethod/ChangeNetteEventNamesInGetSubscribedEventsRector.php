@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Rector\ClassMethod;
 
-use Kdyby\Events\Subscriber;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -147,12 +146,12 @@ PHP
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return true;
         }
 
-        if (! $this->isObjectType($class, Subscriber::class)) {
+        if (! $this->isObjectType($classLike, 'Kdyby\Events\Subscriber')) {
             return true;
         }
 

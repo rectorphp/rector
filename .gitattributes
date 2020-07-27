@@ -16,10 +16,10 @@
 CODE_OF_CONDUCT.md export-ignore
 easy-coding-standard.neon export-ignore
 LICENSE export-ignore
-ecs.yml export-ignore
+ecs.php export-ignore
 phpstan.neon export-ignore
 phpunit.xml export-ignore
-rector.yaml export-ignore
+rector.php export-ignore
 utils export-ignore
 stubs export-ignore
 compiler export-ignore

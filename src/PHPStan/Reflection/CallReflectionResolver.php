@@ -44,9 +44,9 @@ final class CallReflectionResolver
     private $typeToCallReflectionResolverRegistry;
 
     public function __construct(
-        ReflectionProvider $reflectionProvider,
-        NodeTypeResolver $nodeTypeResolver,
         NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver,
+        ReflectionProvider $reflectionProvider,
         TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry
     ) {
         $this->reflectionProvider = $reflectionProvider;
@@ -83,19 +83,19 @@ final class CallReflectionResolver
 
         if ($nbVariants === 0) {
             return null;
-        } elseif ($nbVariants === 1) {
-            $parametersAcceptor = ParametersAcceptorSelector::selectSingle($variants);
-        } else {
-            /** @var Scope|null $scope */
-            $scope = $node->getAttribute(AttributeKey::SCOPE);
-            if ($scope === null) {
-                return null;
-            }
-
-            $parametersAcceptor = ParametersAcceptorSelector::selectFromArgs($scope, $node->args, $variants);
         }
 
-        return $parametersAcceptor;
+        if ($nbVariants === 1) {
+            return ParametersAcceptorSelector::selectSingle($variants);
+        }
+
+        /** @var Scope|null $scope */
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($scope === null) {
+            return null;
+        }
+
+        return ParametersAcceptorSelector::selectFromArgs($scope, $node->args, $variants);
     }
 
     /**

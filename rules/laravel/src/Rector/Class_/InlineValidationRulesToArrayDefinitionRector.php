@@ -25,11 +25,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class InlineValidationRulesToArrayDefinitionRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const FORM_REQUEST_CLASS = 'Illuminate\Foundation\Http\FormRequest';
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Transforms inline validation rules to array definition', [
@@ -87,21 +82,21 @@ PHP
 
     private function shouldSkipArrayItem(ArrayItem $arrayItem): bool
     {
-        $classNode = $arrayItem->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $arrayItem->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return true;
         }
 
-        if (! $this->isObjectType($classNode, self::FORM_REQUEST_CLASS)) {
+        if (! $this->isObjectType($classLike, 'Illuminate\Foundation\Http\FormRequest')) {
             return true;
         }
 
-        $methodNode = $arrayItem->getAttribute(AttributeKey::METHOD_NODE);
-        if ($methodNode === null) {
+        $classMethod = $arrayItem->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod === null) {
             return true;
         }
 
-        if (! $this->isName($methodNode, 'rules')) {
+        if (! $this->isName($classMethod, 'rules')) {
             return true;
         }
         return ! $arrayItem->value instanceof String_ && ! $arrayItem->value instanceof Concat;

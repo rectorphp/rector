@@ -43,7 +43,7 @@ class GetterBased
     }
 
     /**
-     * @return \stdClass[]
+     * @return \stdClass[]|null
      */
     public function getValues(): array
     {

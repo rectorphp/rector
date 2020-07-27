@@ -148,13 +148,13 @@ PHP
             return true;
         }
 
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         // skip interfaces and traits
-        if (! $class instanceof Class_) {
+        if (! $classLike instanceof Class_) {
             return true;
         }
 
-        if ($this->shouldSkipOpenSourceAbstract($classMethod, $class)) {
+        if ($this->shouldSkipOpenSourceAbstract($classMethod, $classLike)) {
             return true;
         }
 
@@ -166,7 +166,7 @@ PHP
             return true;
         }
 
-        return $this->isAnonymousClass($class);
+        return $this->isAnonymousClass($classLike);
     }
 
     /**
@@ -259,7 +259,7 @@ PHP
             return false;
         }
 
-        return empty($classMethod->getStmts());
+        return $classMethod->stmts === [] || $classMethod->stmts === null;
     }
 
     private function shouldSkipOpenSourceProtectedMethod(ClassMethod $classMethod): bool

@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -22,9 +27,24 @@ final class BetterNodeFinder
      */
     private $nodeFinder;
 
-    public function __construct(NodeFinder $nodeFinder)
-    {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(
+        BetterStandardPrinter $betterStandardPrinter,
+        NodeFinder $nodeFinder,
+        NodeNameResolver $nodeNameResolver
+    ) {
         $this->nodeFinder = $nodeFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -108,6 +128,30 @@ final class BetterNodeFinder
 
     /**
      * @param Node|Node[] $nodes
+     */
+    public function hasInstanceOfName($nodes, string $type, string $name): bool
+    {
+        return (bool) $this->findInstanceOfName($nodes, $type, $name);
+    }
+
+    /**
+     * @param Node|Node[] $nodes
+     */
+    public function hasVariableOfName($nodes, string $name): bool
+    {
+        return (bool) $this->findVariableOfName($nodes, $name);
+    }
+
+    /**
+     * @param Node|Node[] $nodes
+     */
+    public function findVariableOfName($nodes, string $name): ?Node
+    {
+        return $this->findInstanceOfName($nodes, Variable::class, $name);
+    }
+
+    /**
+     * @param Node|Node[] $nodes
      * @param string[] $types
      */
     public function hasInstancesOf($nodes, array $types): bool
@@ -163,11 +207,37 @@ final class BetterNodeFinder
     }
 
     /**
+     * @param Node[] $nodes
+     */
+    public function findFirstNonAnonymousClass(array $nodes): ?Class_
+    {
+        return $this->findFirst($nodes, function (Node $node): bool {
+            if (! $node instanceof ClassLike) {
+                return false;
+            }
+
+            // skip anonymous classes
+            return ! ($node instanceof Class_ && $node->isAnonymous());
+        });
+    }
+
+    /**
      * @param Node|Node[] $nodes
      */
     public function findFirst($nodes, callable $filter): ?Node
     {
         return $this->nodeFinder->findFirst($nodes, $filter);
+    }
+
+    public function findPreviousAssignToExpr(Expr $expr): ?Assign
+    {
+        return $this->findFirstPrevious($expr, function (Node $node) use ($expr) {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            return $this->betterStandardPrinter->areNodesEqual($node->var, $expr);
+        });
     }
 
     public function findFirstPrevious(Node $node, callable $filter): ?Node
@@ -208,6 +278,22 @@ final class BetterNodeFinder
 
             return false;
         });
+    }
+
+    /**
+     * @param Node|Node[] $nodes
+     */
+    private function findInstanceOfName($nodes, string $type, string $name): ?Node
+    {
+        $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
+
+        foreach ($foundInstances as $foundInstance) {
+            if ($this->nodeNameResolver->isName($foundInstance, $name)) {
+                return $foundInstance;
+            }
+        }
+
+        return null;
     }
 
     /**

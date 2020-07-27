@@ -89,7 +89,7 @@ trait ArrayPartPhpDocTagPrinterTrait
 
     private function createKeyPart(?string $key, TagValueNodeConfiguration $tagValueNodeConfiguration): string
     {
-        if (empty($key)) {
+        if ($key === null) {
             return '';
         }
 

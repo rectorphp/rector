@@ -154,6 +154,7 @@ final class BetterStandardPrinter extends Standard
      */
     protected function setIndentLevel(int $level): void
     {
+        $level = max($level, 0);
         $this->indentLevel = $level;
         $this->nl = "\n" . str_repeat($this->tabOrSpaceIndentCharacter, $level);
     }
@@ -428,8 +429,6 @@ final class BetterStandardPrinter extends Standard
                 continue;
             }
 
-            $this->makeSureCommentWasNotAddedOnWrongPlace($node);
-
             $this->docBlockManipulator->updateNodeWithPhpDocInfo($node);
         }
     }
@@ -451,31 +450,5 @@ final class BetterStandardPrinter extends Standard
     private function wrapValueWith(String_ $string, string $wrap): string
     {
         return $wrap . $string->value . $wrap;
-    }
-
-    private function makeSureCommentWasNotAddedOnWrongPlace(Node $node): void
-    {
-        if (! $node instanceof Expression) {
-            return;
-        }
-
-        if ($node->getComments() === $node->expr->getComments()) {
-            return;
-        }
-
-        $commentsString = '';
-        foreach ($node->expr->getComments() as $comment) {
-            $commentsString .= $comment->getText() . PHP_EOL;
-        }
-
-        // docblocks are handled somewhere else
-        if (Strings::startsWith($commentsString, '/*')) {
-            return;
-        }
-
-        $mergedComments = array_merge($node->expr->getComments(), $node->getComments());
-        $mergedComments = array_unique($mergedComments);
-
-        $node->setAttribute(AttributeKey::COMMENTS, $mergedComments);
     }
 }

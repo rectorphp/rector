@@ -9,15 +9,13 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Node\Manipulator\ArrayManipulator;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector\ReadOnlyOptionToAttributeRectorTest
  */
-final class ReadOnlyOptionToAttributeRector extends AbstractRector
+final class ReadOnlyOptionToAttributeRector extends AbstractFormAddRector
 {
     /**
      * @var ArrayManipulator
@@ -67,32 +65,27 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node->name, 'add')) {
+        if (! $this->isFormAddMethodCall($node)) {
             return null;
         }
 
-        if (! $this->isObjectType($node->var, FormBuilderInterface::class)) {
+        $optionsArray = $this->matchOptionsArray($node);
+        if ($optionsArray === null) {
+            return null;
+        }
+        if (! $optionsArray instanceof Array_) {
             return null;
         }
 
-        if (! isset($node->args[2])) {
-            return null;
-        }
-
-        $optionsNode = $node->args[2]->value;
-        if (! $optionsNode instanceof Array_) {
-            return null;
-        }
-
-        $readonlyItem = $this->arrayManipulator->findItemInInArrayByKeyAndUnset($optionsNode, 'read_only');
-        if ($readonlyItem === null) {
+        $readOnlyArrayItem = $this->arrayManipulator->findItemInInArrayByKeyAndUnset($optionsArray, 'read_only');
+        if ($readOnlyArrayItem === null) {
             return null;
         }
 
         // rename string
-        $readonlyItem->key = new String_('readonly');
+        $readOnlyArrayItem->key = new String_('readonly');
 
-        $this->arrayManipulator->addItemToArrayUnderKey($optionsNode, $readonlyItem, 'attr');
+        $this->arrayManipulator->addItemToArrayUnderKey($optionsArray, $readOnlyArrayItem, 'attr');
 
         return $node;
     }

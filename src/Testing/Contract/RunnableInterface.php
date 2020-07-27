@@ -6,5 +6,8 @@ namespace Rector\Core\Testing\Contract;
 
 interface RunnableInterface
 {
+    /**
+     * @return mixed
+     */
     public function run();
 }

@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use Rector\Php70\Exception\InvalidEregException;
 
 /**
- * @author Kang Seonghoon <public+ere2pcre@mearie.org>
  * @source https://gist.github.com/lifthrasiir/704754/7e486f43e62fd1c9d3669330c251f8ca4a59a3f8
  *
  * @see \Rector\Php70\Tests\EregToPcreTransformerTest
@@ -65,7 +64,8 @@ final class EregToPcreTransformer
         }
 
         // fallback
-        return $this->ere2pcre(preg_quote($ereg, '#'), $isCaseInsensitive);
+        $quotedEreg = preg_quote($ereg, '#');
+        return $this->ere2pcre($quotedEreg, $isCaseInsensitive);
     }
 
     // converts the ERE $s into the PCRE $r. triggers error on any invalid input.
@@ -181,7 +181,7 @@ final class EregToPcreTransformer
         return [implode('|', $r), $i];
     }
 
-    private function processBracket(string $content, int $i, int $l, array &$r, int $rr)
+    private function processBracket(string $content, int $i, int $l, array &$r, int $rr): int
     {
         // special case
         if ($i + 1 < $l && $content[$i + 1] === ')') {
@@ -234,7 +234,9 @@ final class EregToPcreTransformer
     {
         if ($content === "\0") {
             throw new InvalidEregException('a literal null byte in the regex');
-        } elseif (Strings::contains('\^$.[]|()?*+{}-/', $content)) {
+        }
+
+        if (Strings::contains('\^$.[]|()?*+{}-/', $content)) {
             return '\\' . $content;
         }
 

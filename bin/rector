@@ -5,13 +5,15 @@ declare(strict_types=1);
 
 use Rector\Caching\ChangedFilesDetector;
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Configuration\MinimalVersionChecker;
+use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
+use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonReader;
+use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Console\Application;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
-use Rector\Core\Set\Set;
-use Symfony\Component\Console\Input\ArgvInput;
+use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use Symplify\SetConfigResolver\ConfigResolver;
 
 @ini_set('memory_limit', '-1'); // @ intentionally: continue anyway
 
@@ -29,32 +31,59 @@ $autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 $autoloadIncluder->autoloadFromCommandLine();
 
+$symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
+$symfonyStyle = $symfonyStyleFactory->create();
+
 try {
+    $composerJsonReader = new ComposerJsonReader(__DIR__ . '/../composer.json');
+    $versionChecker = new MinimalVersionChecker(
+        PHP_VERSION,
+        new ComposerJsonParser($composerJsonReader->read())
+    );
+    $versionChecker->check();
+
     $rectorConfigsResolver = new RectorConfigsResolver();
-    $configs = $rectorConfigsResolver->provide();
+    $configFileInfos = $rectorConfigsResolver->provide();
+
+    // report YAML deprecated configs
+    foreach ($configFileInfos as $configFileInfo) {
+        if (! in_array($configFileInfo->getSuffix(), ['yml', 'yaml'], true)) {
+            continue;
+        }
+
+        $warning = sprintf(
+            'You are using YAML format in "%s" config.%sIt will be removed in Rector 0.8. Switch to PHP format as soon as possible with "%s"',
+            $configFileInfo->getRelativeFilePathFromCwd(),
+            PHP_EOL,
+            'https://github.com/migrify/config-transformer'
+        );
+
+        $symfonyStyle->warning($warning);
+
+        sleep(3);
+    }
 
     // Build DI container
     $rectorContainerFactory = new RectorContainerFactory();
-    $container = $rectorContainerFactory->createFromConfigs($configs);
+    $container = $rectorContainerFactory->createFromConfigs($configFileInfos);
 
     /** @var Configuration $configuration */
     $configuration = $container->get(Configuration::class);
-    $configuration->setFirstResolverConfig($rectorConfigsResolver->getFirstResolvedConfig());
+    $configuration->setFirstResolverConfigFileInfo($rectorConfigsResolver->getFirstResolvedConfig());
 
     if ($rectorConfigsResolver->getFirstResolvedConfig()) {
         /** @var ChangedFilesDetector $changedFilesDetector */
         $changedFilesDetector = $container->get(ChangedFilesDetector::class);
-        $changedFilesDetector->setFirstUsedConfig(realpath($rectorConfigsResolver->getFirstResolvedConfig()));
+        $changedFilesDetector->setFirstResolvedConfigFileInfo($rectorConfigsResolver->getFirstResolvedConfig());
     }
+
 } catch (Throwable $throwable) {
-    $symfonyStyle = (new SymfonyStyleFactory(new PrivatesCaller()))->create();
     $symfonyStyle->error($throwable->getMessage());
-    exit(1);
+    exit(ShellCode::ERROR);
 }
 
 $application = $container->get(Application::class);
 exit($application->run());
-
 
 final class AutoloadIncluder
 {
@@ -98,19 +127,38 @@ final class AutoloadIncluder
             if (is_file($path)) {
                 $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
             }
+            return;
+        }
+
+        $pharPath = Phar::running(false);
+        if ($pharPath === '') {
+            if (is_file($path)) {
+                $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
+            }
         } else {
-            $pharPath = Phar::running(false);
-            if ($pharPath === '') {
-                if (is_file($path)) {
-                    $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
-                }
-            } else {
-                $path = dirname($pharPath) . $file;
-                if (is_file($path)) {
-                    $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
-                }
+            $path = dirname($pharPath) . $file;
+            if (is_file($path)) {
+                $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
             }
         }
+    }
+
+    public function autoloadFromCommandLine(): void
+    {
+        $cliArgs = $_SERVER['argv'];
+
+        $autoloadOptionPosition = array_search('-a', $cliArgs) ?: array_search('--autoload-file', $cliArgs);
+        if (! $autoloadOptionPosition) {
+            return;
+        }
+
+        $autoloadFileValuePosition = $autoloadOptionPosition + 1;
+        $fileToAutoload = $cliArgs[$autoloadFileValuePosition] ?? null;
+        if ($fileToAutoload=== null) {
+            return;
+        }
+
+        $this->loadIfNotLoadedYet($fileToAutoload, __METHOD__);
     }
 
     private function loadIfNotLoadedYet(string $file, string $location): void
@@ -135,77 +183,5 @@ final class AutoloadIncluder
     private function isDebugOption(): bool
     {
         return in_array('--debug', $_SERVER['argv'], true);
-    }
-
-    public function autoloadFromCommandLine(): void
-    {
-        $cliArgs = $_SERVER['argv'];
-
-        $autoloadOptionPosition = array_search('-a', $cliArgs) ?: array_search('--autoload-file', $cliArgs);
-        if (! $autoloadOptionPosition) {
-            return;
-        }
-
-        $autoloadFileValuePosition = $autoloadOptionPosition + 1;
-        $fileToAutoload = $cliArgs[$autoloadFileValuePosition] ?? null;
-        if ($fileToAutoload=== null) {
-            return;
-        }
-
-        $this->loadIfNotLoadedYet($fileToAutoload, __METHOD__);
-    }
-}
-
-final class RectorConfigsResolver
-{
-    /**
-     * @var ConfigResolver
-     */
-    private $configResolver;
-
-    public function __construct()
-    {
-        $this->configResolver = new ConfigResolver();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function provide(): array
-    {
-        $configs = [];
-
-        // Detect configuration from --set
-        $input = new ArgvInput();
-
-        $setConfig = $this->configResolver->resolveSetFromInputAndDirectory($input, Set::SET_DIRECTORY);
-        if ($setConfig !== null) {
-            $configs[] = $setConfig;
-        }
-
-        // And from --config or default one
-        $inputOrFallbackConfig = $this->configResolver->resolveFromInputWithFallback(
-            $input,
-            ['rector.yml', 'rector.yaml']
-        );
-        if ($inputOrFallbackConfig !== null) {
-            $configs[] = $inputOrFallbackConfig;
-        }
-
-        // resolve: parameters > sets
-        $parameterSetsConfigs = $this->configResolver->resolveFromParameterSetsFromConfigFiles(
-            $configs,
-            Set::SET_DIRECTORY
-        );
-        if ($parameterSetsConfigs !== []) {
-            $configs = array_merge($configs, $parameterSetsConfigs);
-        }
-
-        return $configs;
-    }
-
-    public function getFirstResolvedConfig(): ?string
-    {
-        return $this->configResolver->getFirstResolvedConfig();
     }
 }

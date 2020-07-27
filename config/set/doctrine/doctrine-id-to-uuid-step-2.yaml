@@ -1,2 +1,0 @@
-services:
-    Rector\Doctrine\Rector\Class_\AlwaysInitializeUuidInEntityRector: null

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
@@ -13,6 +12,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 final class PropertyNaming
 {
@@ -26,10 +26,20 @@ final class PropertyNaming
      */
     private const INTERFACE = 'Interface';
 
+    /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
+    public function __construct(TypeUnwrapper $typeUnwrapper)
+    {
+        $this->typeUnwrapper = $typeUnwrapper;
+    }
+
     public function getExpectedNameFromType(Type $type): ?string
     {
         if ($type instanceof UnionType) {
-            $type = $this->unwrapNullableType($type);
+            $type = $this->typeUnwrapper->unwrapNullableType($type);
         }
 
         if (! $type instanceof TypeWithClassName) {
@@ -153,30 +163,6 @@ final class PropertyNaming
         }
 
         return $shortClassName;
-    }
-
-    /**
-     * E.g. null|ClassType → ClassType
-     */
-    private function unwrapNullableType(UnionType $unionType): ?Type
-    {
-        if (count($unionType->getTypes()) !== 2) {
-            return null;
-        }
-
-        if (! $unionType->isSuperTypeOf(new NullType())->yes()) {
-            return null;
-        }
-
-        foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof NullType) {
-                continue;
-            }
-
-            return $unionedType;
-        }
-
-        return null;
     }
 
     private function isNumberOrUpper(string $char): bool

@@ -34,7 +34,7 @@ final class ClassNameResolver implements NodeNameResolverInterface
      */
     public function resolve(Node $node): ?string
     {
-        if (isset($node->namespacedName)) {
+        if (property_exists($node, 'namespacedName')) {
             return $node->namespacedName->toString();
         }
 

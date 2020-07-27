@@ -7,6 +7,9 @@ namespace Rector\SOLID\Rector\Foreach_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\BinaryOp\Equal;
+use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Foreach_;
@@ -33,7 +36,7 @@ final class ChangeNestedForeachIfsToEarlyContinueRector extends AbstractRector
      */
     private $conditionInverter;
 
-    public function __construct(IfManipulator $ifManipulator, ConditionInverter $conditionInverter)
+    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
         $this->conditionInverter = $conditionInverter;
@@ -125,6 +128,11 @@ PHP
 
                 $this->addInvertedIfStmtWithContinue($nestedIfWithOnlyReturn, $foreach);
 
+                // should skip for weak inversion
+                if ($this->isBooleanOrWithWeakComparison($nestedIfWithOnlyReturn->cond)) {
+                    continue;
+                }
+
                 $foreach->stmts = array_merge($foreach->stmts, $finalReturn->stmts);
             } else {
                 $this->addInvertedIfStmtWithContinue($nestedIfWithOnlyReturn, $foreach);
@@ -153,6 +161,13 @@ PHP
             return;
         }
 
+        // should skip for weak inversion
+        if ($this->isBooleanOrWithWeakComparison($nestedIfWithOnlyReturn->cond)) {
+            $foreach->stmts[] = $nestedIfWithOnlyReturn;
+
+            return;
+        }
+
         $nestedIfWithOnlyReturn->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         $nestedIfWithOnlyReturn->cond = $invertedCondition;
@@ -168,5 +183,33 @@ PHP
         }
 
         return new BooleanNot($expr);
+    }
+
+    /**
+     * Matches:
+     * $a == 1 || $b == 1
+     *
+     * Skips:
+     * $a === 1 || $b === 2
+     */
+    private function isBooleanOrWithWeakComparison(Expr $expr): bool
+    {
+        if (! $expr instanceof BooleanOr) {
+            return false;
+        }
+
+        if ($expr->left instanceof Equal) {
+            return true;
+        }
+
+        if ($expr->left instanceof NotEqual) {
+            return true;
+        }
+
+        if ($expr->right instanceof Equal) {
+            return true;
+        }
+
+        return $expr->right instanceof NotEqual;
     }
 }

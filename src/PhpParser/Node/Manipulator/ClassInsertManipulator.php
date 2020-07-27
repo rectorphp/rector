@@ -27,7 +27,7 @@ final class ClassInsertManipulator
      */
     private $nodeFactory;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeFactory $nodeFactory)
+    public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;
@@ -126,7 +126,7 @@ final class ClassInsertManipulator
         return false;
     }
 
-    private function hasClassConstant(Class_ $class, string $constantName)
+    private function hasClassConstant(Class_ $class, string $constantName): bool
     {
         foreach ($class->getConstants() as $classConst) {
             if ($this->nodeNameResolver->isName($classConst, $constantName)) {

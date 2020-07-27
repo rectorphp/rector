@@ -11,11 +11,17 @@ trait AttributeTrait
      */
     private $attributes = [];
 
+    /**
+     * @return mixed|null
+     */
     public function getAttribute(string $name)
     {
         return $this->attributes[$name] ?? null;
     }
 
+    /**
+     * @param mixed $value
+     */
     public function setAttribute(string $name, $value): void
     {
         $this->attributes[$name] = $value;

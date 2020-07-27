@@ -5,13 +5,19 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
+use PhpParser\NodeTraverser;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -44,14 +50,21 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
      */
     private $breakingVariableRenameGuard;
 
+    /**
+     * @var PropertyDocBlockManipulator
+     */
+    private $propertyDocBlockManipulator;
+
     public function __construct(
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ConflictingNameResolver $conflictingNameResolver,
-        ExpectedNameResolver $expectedNameResolver
+        ExpectedNameResolver $expectedNameResolver,
+        PropertyDocBlockManipulator $propertyDocBlockManipulator
     ) {
         $this->conflictingNameResolver = $conflictingNameResolver;
         $this->expectedNameResolver = $expectedNameResolver;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
+        $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -118,33 +131,7 @@ PHP
     private function refactorClassMethods(ClassLike $classLike): void
     {
         foreach ($classLike->getMethods() as $classMethod) {
-            foreach ($classMethod->params as $param) {
-                $expectedName = $this->expectedNameResolver->resolveForParamIfNotYet($param);
-                if ($expectedName === null) {
-                    continue;
-                }
-
-                /** @var string $paramName */
-                $paramName = $this->getName($param);
-                if ($this->breakingVariableRenameGuard->shouldSkipParam(
-                    $paramName,
-                    $expectedName,
-                    $classMethod,
-                    $param
-                )) {
-                    continue;
-                }
-
-                // 1. rename param
-                /** @var string $oldName */
-                $oldName = $this->getName($param->var);
-                $param->var->name = new Identifier($expectedName);
-
-                // 2. rename param in the rest of the method
-                $this->renameVariableInClassMethod($classMethod, $oldName, $expectedName);
-
-                $this->hasChange = true;
-            }
+            $this->refactorClassMethod($classMethod);
         }
     }
 
@@ -164,8 +151,7 @@ PHP
                 continue;
             }
 
-            // skip conflicting
-            if (in_array($expectedName, $conflictingPropertyNames, true)) {
+            if ($this->shouldSkipPropertyRename($property, $oldName, $expectedName, $conflictingPropertyNames)) {
                 continue;
             }
 
@@ -183,6 +169,10 @@ PHP
             $oldName,
             $expectedName
         ) {
+            if ($node instanceof Closure || $node instanceof Function_ || $node instanceof ArrowFunction) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+
             if (! $this->isVariableName($node, $oldName)) {
                 return null;
             }
@@ -205,5 +195,56 @@ PHP
             $node->name = new Identifier($expectedName);
             return $node;
         });
+    }
+
+    /**
+     * @param string[] $conflictingPropertyNames
+     */
+    private function shouldSkipPropertyRename(
+        Property $property,
+        string $currentName,
+        string $expectedName,
+        array $conflictingPropertyNames
+    ): bool {
+        if (in_array($expectedName, $conflictingPropertyNames, true)) {
+            return true;
+        }
+
+        return $this->breakingVariableRenameGuard->shouldSkipProperty($property, $currentName);
+    }
+
+    private function refactorClassMethod(ClassMethod $classMethod): void
+    {
+        foreach ($classMethod->params as $param) {
+            $expectedName = $this->expectedNameResolver->resolveForParamIfNotYet($param);
+            if ($expectedName === null) {
+                continue;
+            }
+
+            /** @var string $paramName */
+            $paramName = $this->getName($param);
+
+            if ($this->breakingVariableRenameGuard->shouldSkipParam(
+                $paramName,
+                $expectedName,
+                $classMethod,
+                $param
+            )) {
+                continue;
+            }
+
+            // 1. rename param
+            /** @var string $oldName */
+            $oldName = $this->getName($param->var);
+            $param->var->name = new Identifier($expectedName);
+
+            // 2. rename param in the rest of the method
+            $this->renameVariableInClassMethod($classMethod, $oldName, $expectedName);
+
+            // 3. rename @param variable in docblock too
+            $this->propertyDocBlockManipulator->renameParameterNameInDocBlock($classMethod, $oldName, $expectedName);
+
+            $this->hasChange = true;
+        }
     }
 }

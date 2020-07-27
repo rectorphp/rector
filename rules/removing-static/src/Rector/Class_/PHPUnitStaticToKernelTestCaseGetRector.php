@@ -30,7 +30,6 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\RemovingStatic\ValueObject\PHPUnitClass;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\PHPUnitStaticToKernelTestCaseGetRectorTest
@@ -180,9 +179,9 @@ PHP
 
     private function processStaticCall(StaticCall $staticCall): ?MethodCall
     {
-        /** @var Class_|null $class */
-        $class = $staticCall->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        /** @var Class_|null $classLike */
+        $classLike = $staticCall->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return null;
         }
 
@@ -209,7 +208,7 @@ PHP
         // add all properties to class
         $class = $this->addNewPropertiesToClass($class, $newProperties);
 
-        $parentSetupStaticCall = $this->createParentSetUpStaticCall();
+        $parentSetUpStaticCallExpression = $this->createParentSetUpStaticCall();
         foreach ($newProperties as $type) {
             // container fetch assign
             $assign = $this->createContainerGetTypeToPropertyAssign($type);
@@ -218,16 +217,16 @@ PHP
 
             // get setup or create a setup add add it there
             if ($setupClassMethod !== null) {
-                $this->updateSetUpMethod($setupClassMethod, $parentSetupStaticCall, $assign);
+                $this->updateSetUpMethod($setupClassMethod, $parentSetUpStaticCallExpression, $assign);
             } else {
-                $setUpMethod = $this->createSetUpMethod($parentSetupStaticCall, $assign);
+                $setUpMethod = $this->createSetUpMethod($parentSetUpStaticCallExpression, $assign);
                 $this->classInsertManipulator->addAsFirstMethod($class, $setUpMethod);
             }
         }
 
         // update parent clsas if not already
-        if (! $this->isObjectType($class, KernelTestCase::class)) {
-            $class->extends = new FullyQualified(KernelTestCase::class);
+        if (! $this->isObjectType($class, 'Symfony\Bundle\FrameworkBundle\Test\KernelTestCase')) {
+            $class->extends = new FullyQualified('Symfony\Bundle\FrameworkBundle\Test\KernelTestCase');
         }
 
         return $class;

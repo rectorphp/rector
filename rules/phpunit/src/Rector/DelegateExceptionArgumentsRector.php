@@ -55,7 +55,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, array_keys(self::OLD_TO_NEW_METHOD))) {
+        $oldMethodNames = array_keys(self::OLD_TO_NEW_METHOD);
+        if (! $this->isPHPUnitMethodNames($node, $oldMethodNames)) {
             return null;
         }
 

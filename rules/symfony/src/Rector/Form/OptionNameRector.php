@@ -5,18 +5,16 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\Form;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\Form\FormBuilderInterface;
+use Rector\Symfony\Rector\MethodCall\AbstractFormAddRector;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Form\OptionNameRector\OptionNameRectorTest
  */
-final class OptionNameRector extends AbstractRector
+final class OptionNameRector extends AbstractFormAddRector
 {
     /**
      * @var string[]
@@ -56,24 +54,16 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node->name, 'add')) {
+        if (! $this->isFormAddMethodCall($node)) {
             return null;
         }
 
-        if (! $this->isObjectType($node->var, FormBuilderInterface::class)) {
+        $optionsArray = $this->matchOptionsArray($node);
+        if ($optionsArray === null) {
             return null;
         }
 
-        if (! isset($node->args[2])) {
-            return null;
-        }
-
-        $optionsNode = $node->args[2]->value;
-        if (! $optionsNode instanceof Array_) {
-            return null;
-        }
-
-        foreach ($optionsNode->items as $arrayItemNode) {
+        foreach ($optionsArray->items as $arrayItemNode) {
             if (! $arrayItemNode->key instanceof String_) {
                 continue;
             }

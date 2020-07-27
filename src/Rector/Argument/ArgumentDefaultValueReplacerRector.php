@@ -150,14 +150,17 @@ PHP
         }
     }
 
+    /**
+     * @param mixed $value
+     */
     private function normalizeValueToArgument($value): Arg
     {
         // class constants → turn string to composite
         if (is_string($value) && Strings::contains($value, '::')) {
             [$class, $constant] = explode('::', $value);
-            $classConstantFetchNode = $this->createClassConstFetch($class, $constant);
+            $classConstFetch = $this->createClassConstFetch($class, $constant);
 
-            return new Arg($classConstantFetchNode);
+            return new Arg($classConstFetch);
         }
 
         return new Arg(BuilderHelpers::normalizeValue($value));
@@ -193,7 +196,7 @@ PHP
      * @param Arg[] $argumentNodes
      * @param mixed[] $before
      */
-    private function resolveArgumentValuesToBeforeRecipe(array $argumentNodes, int $position, array $before)
+    private function resolveArgumentValuesToBeforeRecipe(array $argumentNodes, int $position, array $before): array
     {
         $argumentValues = [];
 

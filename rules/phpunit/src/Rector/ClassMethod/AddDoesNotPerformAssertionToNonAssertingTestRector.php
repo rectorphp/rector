@@ -60,9 +60,9 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
     private $classMethodNestingLevel = 0;
 
     public function __construct(
+        ClassMethodReflectionFactory $classMethodReflectionFactory,
         DocBlockManipulator $docBlockManipulator,
-        FileInfoParser $fileInfoParser,
-        ClassMethodReflectionFactory $classMethodReflectionFactory
+        FileInfoParser $fileInfoParser
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->fileInfoParser = $fileInfoParser;
@@ -134,8 +134,8 @@ PHP
         }
 
         if ($classMethod->getDocComment() !== null) {
-            $text = $classMethod->getDocComment();
-            if (Strings::match($text->getText(), '#@(doesNotPerformAssertion|expectedException\b)#')) {
+            $doc = $classMethod->getDocComment();
+            if (Strings::match($doc->getText(), '#@(doesNotPerformAssertion|expectedException\b)#')) {
                 return true;
             }
         }

@@ -1,7 +1,6 @@
 name: Standalone Run
 
 on:
-    pull_request: null
     push:
         branches:
             - master
@@ -17,27 +16,35 @@ jobs:
                     coverage: none # disable xdebug, pcov
                     extensions: "intl"
 
-            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
-            -   run: |
+            # see https://github.com/rlespinasse/github-slug-action
+            -   name: Inject slug/short variables
+                uses: rlespinasse/github-slug-action@v2.x
+
+            # wait till packagist gets information about new branches
+            -   run: sleep 15
+
+            -   run:
                     # 1. install locally
                     mkdir test-paths
                     cd test-paths
 
+                    # 2. install rector to "rector-dir"
                     mkdir rector-dir
-                    composer require rector/rector:@dev -d rector-dir --no-progress
+                    composer require rector/rector:dev-${{ env.GITHUB_REF_SLUG_URL }}#${GITHUB_SHA} -d rector-dir --no-progress --ansi
 
+                    # 3. download symfony demo to "symfony-demo-dir"
                     mkdir symfony-demo-dir
-                    composer create-project symfony/symfony-demo symfony-demo-dir --dev --no-progress
+                    composer create-project symfony/symfony-demo symfony-demo-dir --dev --no-progress --ansi
 
                     # missing for some reason
-                    composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir --no-progress
-                    composer dump-autoload --no-dev -d symfony-demo-dir
+                    composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir --no-progress --ansi
+                    composer dump-autoload --no-dev -d symfony-demo-dir --ansi
 
-                    # 2. run an another project
-                    rector-dir/vendor/bin/rector
+                    # 4. run an another project
+                    rector-dir/vendor/bin/rector --ansi
 
                     cd symfony-demo-dir
-                    ../rector-dir/vendor/bin/rector
+                    ../rector-dir/vendor/bin/rector --ansi
 
                     # autoload errors due to remove --dev and mixed dependencies in /src and /tests
-                    ../rector-dir/vendor/bin/rector process src --set code-quality
+                    ../rector-dir/vendor/bin/rector process src --set code-quality --ansi

@@ -34,7 +34,7 @@ final class AddMethodCallBasedParamTypeRector extends AbstractRector
      */
     private $methodCallParsedNodesFinder;
 
-    public function __construct(TypeFactory $typeFactory, MethodCallParsedNodesFinder $methodCallParsedNodesFinder)
+    public function __construct(MethodCallParsedNodesFinder $methodCallParsedNodesFinder, TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;
         $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;

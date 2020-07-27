@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 
 use Iterator;
+use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Source\EventSubscriberInterface;
 use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Source\ParentTestCase;
@@ -36,6 +37,7 @@ final class ReturnArrayClassMethodToYieldRectorTest extends AbstractRectorTestCa
                 '$methodsByType' => [
                     EventSubscriberInterface::class => ['getSubscribedEvents'],
                     ParentTestCase::class => ['provide*', 'dataProvider*'],
+                    TestCase::class => ['provideData'],
                 ],
             ],
         ];

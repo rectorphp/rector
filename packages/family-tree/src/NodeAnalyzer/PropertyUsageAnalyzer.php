@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Reflection\StaticRelationsHelper;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -31,14 +31,21 @@ final class PropertyUsageAnalyzer
      */
     private $betterNodeFinder;
 
+    /**
+     * @var FamilyRelationsAnalyzer
+     */
+    private $familyRelationsAnalyzer;
+
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
+        BetterNodeFinder $betterNodeFinder,
         ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
-        BetterNodeFinder $betterNodeFinder
+        FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
 
     public function isPropertyFetchedInChildClass(Property $property): bool
@@ -48,8 +55,8 @@ final class PropertyUsageAnalyzer
             return false;
         }
 
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class instanceof Class_ && $class->isFinal()) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike instanceof Class_ && $classLike->isFinal()) {
             return false;
         }
 
@@ -58,7 +65,7 @@ final class PropertyUsageAnalyzer
             return false;
         }
 
-        $childrenClassNames = StaticRelationsHelper::getChildrenOfClass($className);
+        $childrenClassNames = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
         foreach ($childrenClassNames as $childClassName) {
             $childClass = $this->classLikeParsedNodesFinder->findClass($childClassName);
             if ($childClass === null) {

@@ -50,9 +50,9 @@ final class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRec
 
         unset($node->args);
 
-        $arrayCollection = $this->getNewArrayCollectionFromSetParametersArgument($firstArgument);
+        $new = $this->getNewArrayCollectionFromSetParametersArgument($firstArgument);
 
-        $node->args = [new Arg($arrayCollection)];
+        $node->args = [new Arg($new)];
         return $node;
     }
 
@@ -110,13 +110,13 @@ PHP
 
     private function needToSkip(Node $node): bool
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return true;
         }
 
         //one of the cases when we are in the repo and it's extended from EntityRepository
-        if (! $this->isObjectType($classNode, 'Doctrine\ORM\EntityRepository')) {
+        if (! $this->isObjectType($classLike, 'Doctrine\ORM\EntityRepository')) {
             return true;
         }
         if (! $this->isObjectType($node->var, 'Doctrine\ORM\EntityRepository')) {

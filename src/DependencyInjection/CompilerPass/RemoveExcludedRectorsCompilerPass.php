@@ -61,7 +61,7 @@ final class RemoveExcludedRectorsCompilerPass implements CompilerPassInterface
         throw new ShouldNotHappenException(sprintf(
             'Class "%s" defined in "parameters > %s" was not found ',
             $excludedRector,
-            Option::EXCLUDE_RECTORS_PARAMETER
+            Option::EXCLUDE_RECTORS
         ));
     }
 
@@ -74,7 +74,7 @@ final class RemoveExcludedRectorsCompilerPass implements CompilerPassInterface
         throw new ShouldNotHappenException(sprintf(
             'Class "%s" defined in "parameters > %s" is not a Rector rule = does not implement "%s" ',
             $excludedRector,
-            Option::EXCLUDE_RECTORS_PARAMETER,
+            Option::EXCLUDE_RECTORS,
             RectorInterface::class
         ));
     }

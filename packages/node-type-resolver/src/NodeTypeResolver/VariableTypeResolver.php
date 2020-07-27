@@ -119,8 +119,8 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
         }
 
         // is node in trait
-        $classNode = $variable->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode instanceof Trait_) {
+        $classLike = $variable->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike instanceof Trait_) {
             /** @var string $traitName */
             $traitName = $variable->getAttribute(AttributeKey::CLASS_NAME);
             $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $variable);

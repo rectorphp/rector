@@ -79,8 +79,8 @@ PHP
             return null;
         }
 
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
@@ -90,7 +90,7 @@ PHP
         }
 
         /** @var ClassMethod|null $classMethod */
-        $classMethod = $class->getMethod($methodName);
+        $classMethod = $classLike->getMethod($methodName);
         if ($classMethod === null) {
             return null;
         }

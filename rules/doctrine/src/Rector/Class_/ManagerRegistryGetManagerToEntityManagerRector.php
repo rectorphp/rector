@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Doctrine\Rector\Class_;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -105,8 +102,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $constructMethodNode = $node->getMethod('__construct');
-        if ($constructMethodNode === null) {
+        $constructorClassMethod = $node->getMethod('__construct');
+        if ($constructorClassMethod === null) {
             return null;
         }
 
@@ -116,7 +113,7 @@ PHP
             return null;
         }
 
-        $managerRegistryParam = $this->resolveManagerRegistryParam($constructMethodNode);
+        $managerRegistryParam = $this->resolveManagerRegistryParam($constructorClassMethod);
 
         // no registry manager in the constructor
         if ($managerRegistryParam === null) {
@@ -125,7 +122,7 @@ PHP
 
         if ($registryCalledMethods === [self::GET_MANAGER]) {
             // the manager registry is needed only get entity manager → we don't need it now
-            $this->removeManagerRegistryDependency($node, $constructMethodNode, $managerRegistryParam);
+            $this->removeManagerRegistryDependency($node, $constructorClassMethod, $managerRegistryParam);
         }
 
         $this->replaceEntityRegistryVariableWithEntityManagerProperty($node);
@@ -134,9 +131,9 @@ PHP
         // add entity manager via constructor
         $this->addConstructorDependencyWithProperty(
             $node,
-            $constructMethodNode,
+            $constructorClassMethod,
             self::ENTITY_MANAGER,
-            new FullyQualifiedObjectType(EntityManagerInterface::class)
+            new FullyQualifiedObjectType('Doctrine\ORM\EntityManagerInterface')
         );
 
         return $node;
@@ -153,7 +150,7 @@ PHP
                 return null;
             }
 
-            if (! $this->isObjectType($node->var, ManagerRegistry::class)) {
+            if (! $this->isObjectType($node->var, 'Doctrine\Common\Persistence\ManagerRegistry')) {
                 return null;
             }
 
@@ -175,7 +172,7 @@ PHP
                 continue;
             }
 
-            if (! $this->isName($param->type, ManagerRegistry::class)) {
+            if (! $this->isName($param->type, 'Doctrine\Common\Persistence\ManagerRegistry')) {
                 continue;
             }
 
@@ -198,7 +195,7 @@ PHP
                 continue;
             }
 
-            if (! $this->isName($param->type, ManagerRegistry::class)) {
+            if (! $this->isName($param->type, 'Doctrine\Common\Persistence\ManagerRegistry')) {
                 continue;
             }
 
@@ -222,7 +219,7 @@ PHP
                 return null;
             }
 
-            if (! $this->isObjectType($class, ObjectManager::class)) {
+            if (! $this->isObjectType($class, 'Doctrine\Common\Persistence\ObjectManager')) {
                 return null;
             }
 
@@ -259,7 +256,9 @@ PHP
 
     private function createEntityManagerParam(): Param
     {
-        return new Param(new Variable(self::ENTITY_MANAGER), null, new FullyQualified(EntityManagerInterface::class));
+        return new Param(new Variable(self::ENTITY_MANAGER), null, new FullyQualified(
+            'Doctrine\ORM\EntityManagerInterface'
+        ));
     }
 
     private function removeRegistryDependencyAssign(Class_ $class, ClassMethod $classMethod, Param $registryParam): void
@@ -290,7 +289,7 @@ PHP
             return false;
         }
 
-        if (! $this->isObjectType($assign->expr->var, ManagerRegistry::class)) {
+        if (! $this->isObjectType($assign->expr->var, 'Doctrine\Common\Persistence\ManagerRegistry')) {
             return false;
         }
         return $this->isName($assign->expr->name, self::GET_MANAGER);

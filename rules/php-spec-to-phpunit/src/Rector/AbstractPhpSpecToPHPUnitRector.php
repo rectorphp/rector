@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PhpSpecToPHPUnit\Rector;
 
 use PhpParser\Node;
-use PhpSpec\ObjectBehavior;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -62,11 +61,11 @@ PHP
 
     public function isInPhpSpecBehavior(Node $node): bool
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return false;
         }
 
-        return $this->isObjectType($classNode, ObjectBehavior::class);
+        return $this->isObjectType($classLike, 'PhpSpec\ObjectBehavior');
     }
 }

@@ -57,8 +57,8 @@ final class ConstructorInjectionToActionInjectionRector extends AbstractRector
 
     public function __construct(
         ClassManipulator $classManipulator,
-        TypeAnalyzer $typeAnalyzer,
-        ClassMethodManipulator $classMethodManipulator
+        ClassMethodManipulator $classMethodManipulator,
+        TypeAnalyzer $typeAnalyzer
     ) {
         $this->classManipulator = $classManipulator;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -148,9 +148,9 @@ PHP
             }
 
             // only scan non-action methods
-            /** @var ClassMethod $methodNode */
-            $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
-            if ($methodNode->isPublic()) {
+            /** @var ClassMethod $classMethod */
+            $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+            if ($classMethod->isPublic()) {
                 return null;
             }
 

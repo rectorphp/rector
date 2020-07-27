@@ -23,9 +23,9 @@ jobs:
                 # see https://www.previousnext.com.au/blog/managing-composer-github-access-personal-access-tokens
                 - composer config -g github-oauth.github.com $GITHUB_TOKEN
 
-                - composer install
+                - composer install --ansi
                 - bin/compile --ansi
-                - ../tmp/rector.phar
+                - ../tmp/rector.phar --ansi
 
                 - cd ..
 

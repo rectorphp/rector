@@ -74,17 +74,19 @@ PHP
         return $node;
     }
 
-    private function determineDelimiter(FuncCall $funcCall)
+    private function determineDelimiter(FuncCall $funcCall): ?string
     {
-        $parent = $this->getUppermostConcat($funcCall);
-        if ($parent === null) {
+        $concat = $this->getUppermostConcat($funcCall);
+        if ($concat === null) {
             return null;
         }
-        $leftMostConcatNode = $parent->left;
+
+        $leftMostConcatNode = $concat->left;
         while ($leftMostConcatNode instanceof Concat) {
             $leftMostConcatNode = $leftMostConcatNode->left;
         }
-        $rightMostConcatNode = $parent->right;
+
+        $rightMostConcatNode = $concat->right;
         while ($rightMostConcatNode instanceof Concat) {
             $rightMostConcatNode = $rightMostConcatNode->right;
         }
@@ -92,10 +94,12 @@ PHP
         if (! $leftMostConcatNode instanceof String_) {
             return null;
         }
+
         $possibleLeftDelimiter = Strings::substring($leftMostConcatNode->value, 0, 1);
         if (! $rightMostConcatNode instanceof String_) {
             return null;
         }
+
         $possibleRightDelimiter = Strings::substring(rtrim($rightMostConcatNode->value, self::ALL_MODIFIERS), -1, 1);
         if ($possibleLeftDelimiter === $possibleRightDelimiter) {
             return $possibleLeftDelimiter;

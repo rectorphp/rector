@@ -28,7 +28,7 @@ final class OrderPropertyByComplexityRector extends AbstractRector
      */
     private $propertyRanker;
 
-    public function __construct(StmtOrder $stmtOrder, PropertyRanker $propertyRanker)
+    public function __construct(PropertyRanker $propertyRanker, StmtOrder $stmtOrder)
     {
         $this->stmtOrder = $stmtOrder;
         $this->propertyRanker = $propertyRanker;

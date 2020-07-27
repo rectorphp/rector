@@ -1,2 +1,0 @@
-services:
-    Rector\DeadCode\Rector\Class_\RemoveUnusedClassesRector: null

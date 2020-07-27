@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Guzzle\Rector\MethodCall;
 
-use GuzzleHttp\Message\MessageInterface;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -49,7 +48,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, MessageInterface::class)) {
+        if (! $this->isObjectType($node->var, 'GuzzleHttp\Message\MessageInterface')) {
             return null;
         }
 

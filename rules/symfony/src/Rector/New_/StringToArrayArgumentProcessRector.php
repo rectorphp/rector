@@ -18,9 +18,7 @@ use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 /**
@@ -71,11 +69,11 @@ PHP
     {
         $expr = $node instanceof New_ ? $node->class : $node->var;
 
-        if ($this->isObjectType($expr, Process::class)) {
+        if ($this->isObjectType($expr, 'Symfony\Component\Process\Process')) {
             return $this->processArgumentPosition($node, 0);
         }
 
-        if ($this->isObjectType($expr, ProcessHelper::class)) {
+        if ($this->isObjectType($expr, 'Symfony\Component\Console\Helper\ProcessHelper')) {
             return $this->processArgumentPosition($node, 1);
         }
 
@@ -134,15 +132,15 @@ PHP
 
     private function processPreviousAssign(Node $node, Node $firstArgument): void
     {
-        /** @var Assign|null $createdNode */
-        $createdNode = $this->findPreviousNodeAssign($node, $firstArgument);
+        /** @var Assign|null $previousNodeAssign */
+        $previousNodeAssign = $this->findPreviousNodeAssign($node, $firstArgument);
 
-        if ($createdNode instanceof Assign && $this->isFuncCallName($createdNode->expr, 'sprintf')) {
+        if ($previousNodeAssign instanceof Assign && $this->isFuncCallName($previousNodeAssign->expr, 'sprintf')) {
             /** @var FuncCall $funcCall */
-            $funcCall = $createdNode->expr;
+            $funcCall = $previousNodeAssign->expr;
             $arrayNode = $this->nodeTransformer->transformSprintfToArray($funcCall);
             if ($arrayNode !== null) {
-                $createdNode->expr = $arrayNode;
+                $previousNodeAssign->expr = $arrayNode;
             }
         }
     }

@@ -42,12 +42,12 @@ final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInter
      */
     public function resolve(Node $node): Type
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             // anonymous class
             return new ObjectWithoutClassType();
         }
 
-        return $this->nodeTypeResolver->resolve($classNode);
+        return $this->nodeTypeResolver->resolve($classLike);
     }
 }

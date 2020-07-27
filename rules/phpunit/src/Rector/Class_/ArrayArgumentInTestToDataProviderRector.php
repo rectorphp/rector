@@ -334,14 +334,7 @@ PHP
         foreach ($paramAndArgs as $paramAndArg) {
             $param = new Param($paramAndArg->getVariable());
 
-            $staticType = $paramAndArg->getType();
-
-            if ($staticType !== null && ! $staticType instanceof UnionType) {
-                $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType);
-                if ($phpNodeType !== null) {
-                    $param->type = $phpNodeType;
-                }
-            }
+            $this->setTypeIfNotNull($paramAndArg, $param);
 
             $params[] = $param;
         }
@@ -421,5 +414,24 @@ PHP
         return new AttributeAwarePhpDocTagNode('@dataProvider', new GenericTagValueNode(
             $dataProviderMethodName . '()'
         ));
+    }
+
+    private function setTypeIfNotNull(ParamAndArgValueObject $paramAndArgValueObject, Param $param): void
+    {
+        $staticType = $paramAndArgValueObject->getType();
+        if ($staticType === null) {
+            return;
+        }
+
+        if ($staticType instanceof UnionType) {
+            return;
+        }
+
+        $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType);
+        if ($phpNodeType === null) {
+            return;
+        }
+
+        $param->type = $phpNodeType;
     }
 }

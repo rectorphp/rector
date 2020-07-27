@@ -6,9 +6,9 @@ namespace Rector\DynamicTypeAnalysis\Tests\Rector\ClassMethod\AddArgumentTypeWit
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\DynamicTypeAnalysis\Probe\ProbeStaticStorage;
 use Rector\DynamicTypeAnalysis\Probe\TypeStaticProbe;
 use Rector\DynamicTypeAnalysis\Rector\ClassMethod\AddArgumentTypeWithProbeDataRector;
+use Rector\DynamicTypeAnalysis\Tests\ProbeStorage\StaticInMemoryProbeStorage;
 use Rector\DynamicTypeAnalysis\Tests\Rector\ClassMethod\AddArgumentTypeWithProbeDataRector\Fixture\SomeClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -41,8 +41,10 @@ final class AddArgumentTypeWithProbeDataRectorTest extends AbstractRectorTestCas
 
     private function initializeProbeData(): void
     {
-        // clear cache
-        ProbeStaticStorage::clear();
+        $staticInMemoryProbeStorage = new StaticInMemoryProbeStorage();
+        TypeStaticProbe::setProbeStorage($staticInMemoryProbeStorage);
+
+        $staticInMemoryProbeStorage::clear();
 
         TypeStaticProbe::recordArgumentType('hey', self::METHOD_REFERENCE, 0);
     }

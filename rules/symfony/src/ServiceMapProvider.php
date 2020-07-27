@@ -84,7 +84,7 @@ final class ServiceMapProvider
             $def = $this->convertXmlToArray($def);
             $tags = $this->createTagFromXmlElement($def);
 
-            $service = $this->createServiceFromXml($attrs, $tags);
+            $service = $this->createServiceFromXmlAndTagsData($attrs, $tags);
             if ($service->getAlias() !== null) {
                 $aliases[] = $service;
             } else {
@@ -117,7 +117,7 @@ final class ServiceMapProvider
         return $data;
     }
 
-    private function createTagFromXmlElement($def): array
+    private function createTagFromXmlElement(array $def): array
     {
         if (! isset($def[self::TAG])) {
             return [];
@@ -138,9 +138,9 @@ final class ServiceMapProvider
     /**
      * @param mixed[] $tags
      */
-    private function createServiceFromXml(SimpleXMLElement $attrs, array $tags): ServiceDefinition
+    private function createServiceFromXmlAndTagsData(SimpleXMLElement $attrs, array $tags): ServiceDefinition
     {
-        $tags = $this->createTagsFromXml($tags);
+        $tags = $this->createTagsFromData($tags);
 
         return new ServiceDefinition(
             strpos((string) $attrs->id, '.') === 0 ? Strings::substring((string) $attrs->id, 1) : (string) $attrs->id,
@@ -195,6 +195,9 @@ final class ServiceMapProvider
         return $data;
     }
 
+    /**
+     * @param string|int $key
+     */
     private function convertedNestedArrayOrXml(array $value, array $data, $key): array
     {
         foreach ($value as $subKey => $subValue) {
@@ -209,13 +212,13 @@ final class ServiceMapProvider
     }
 
     /**
-     * @param mixed[] $tags
+     * @param mixed[] $tagsData
      * @return TagInterface[]
      */
-    private function createTagsFromXml(array $tags): array
+    private function createTagsFromData(array $tagsData): array
     {
         $tagValueObjects = [];
-        foreach ($tags as $key => $tag) {
+        foreach ($tagsData as $key => $tag) {
             $data = $tag;
             $name = $data['name'] ?? '';
 
@@ -227,7 +230,7 @@ final class ServiceMapProvider
                 );
             } else {
                 unset($data['name']);
-                $tagValueObjects[$key] = new Tag($name);
+                $tagValueObjects[$key] = new Tag($name, $data ?? []);
             }
         }
 

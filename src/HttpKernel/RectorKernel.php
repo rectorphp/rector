@@ -16,6 +16,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
@@ -59,7 +60,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__ . '/../../config/config.yaml');
+        $loader->load(__DIR__ . '/../../config/config.php');
 
         foreach ($this->configs as $config) {
             $loader->load($config);
@@ -110,6 +111,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
 
         $loaderResolver = new LoaderResolver([
             new GlobFileLoader($fileLocator),
+            new PhpFileLoader($container, $fileLocator),
             new TolerantRectorYamlFileLoader($container, $fileLocator, $this->rectorServiceArgumentCollector),
         ]);
 

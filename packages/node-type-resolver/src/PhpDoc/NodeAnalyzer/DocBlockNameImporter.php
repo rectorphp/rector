@@ -71,12 +71,12 @@ final class DocBlockNameImporter
     private $useNodesToAddCollector;
 
     public function __construct(
-        PhpDocNodeTraverser $phpDocNodeTraverser,
-        StaticTypeMapper $staticTypeMapper,
-        NodeNameResolver $nodeNameResolver,
         BetterStandardPrinter $betterStandardPrinter,
         ImportSkipper $importSkipper,
+        NodeNameResolver $nodeNameResolver,
         ParameterProvider $parameterProvider,
+        PhpDocNodeTraverser $phpDocNodeTraverser,
+        StaticTypeMapper $staticTypeMapper,
         UseNodesToAddCollector $useNodesToAddCollector
     ) {
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
@@ -90,13 +90,13 @@ final class DocBlockNameImporter
 
     public function importNames(PhpDocInfo $phpDocInfo, Node $phpParserNode): bool
     {
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
+        $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
 
         $this->hasPhpDocChanged = false;
 
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (PhpDocParserNode $docNode) use (
-            $phpParserNode
-        ): PhpDocParserNode {
+        $this->phpDocNodeTraverser->traverseWithCallable($attributeAwarePhpDocNode, '', function (
+            PhpDocParserNode $docNode
+        ) use ($phpParserNode): PhpDocParserNode {
             if (! $docNode instanceof IdentifierTypeNode) {
                 return $docNode;
             }
@@ -106,7 +106,7 @@ final class DocBlockNameImporter
                 return $docNode;
             }
 
-            $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER);
+            $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES);
             // Importing root namespace classes (like \DateTime) is optional
             if (! $importShortClasses && substr_count($staticType->getClassName(), '\\') === 0) {
                 return $docNode;
@@ -132,6 +132,7 @@ final class DocBlockNameImporter
             return $identifierTypeNode;
         }
 
+        // should skip because its already used
         if ($this->useNodesToAddCollector->isShortImported($node, $fullyQualifiedObjectType)) {
             if ($this->useNodesToAddCollector->isImportShortable($node, $fullyQualifiedObjectType)) {
                 $identifierTypeNode->name = $fullyQualifiedObjectType->getShortName();
@@ -185,20 +186,20 @@ final class DocBlockNameImporter
         string $fullyQualifiedName,
         ShortenedObjectType $shortenedObjectType
     ): bool {
-        /** @var ClassLike|null $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
+        /** @var ClassLike|null $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             // cannot say, so rather yes
             return true;
         }
 
-        $className = $this->nodeNameResolver->getName($classNode);
+        $className = $this->nodeNameResolver->getName($classLike);
 
         if (isset($this->usedShortNameByClasses[$className][$shortenedObjectType->getShortName()])) {
             return $this->usedShortNameByClasses[$className][$shortenedObjectType->getShortName()];
         }
 
-        $printedClass = $this->betterStandardPrinter->print($classNode->stmts);
+        $printedClass = $this->betterStandardPrinter->print($classLike->stmts);
 
         // short with space " Type"| fqn
         $shortNameOrFullyQualifiedNamePattern = sprintf(

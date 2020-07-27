@@ -43,8 +43,8 @@ final class EventValueObjectClassFactory
 
     public function __construct(
         ClassNaming $classNaming,
-        VariableWithTypesFactory $variableWithTypesFactory,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        VariableWithTypesFactory $variableWithTypesFactory
     ) {
         $this->classNaming = $classNaming;
         $this->variableWithTypesFactory = $variableWithTypesFactory;
@@ -122,8 +122,8 @@ final class EventValueObjectClassFactory
 
         $this->ensureVariablesAreUnique($variablesWithTypes, $classBuilder);
 
-        $methodBuilder = $this->createConstructClassMethod($variablesWithTypes);
-        $classBuilder->addStmt($methodBuilder);
+        $classMethod = $this->createConstructClassMethod($variablesWithTypes);
+        $classBuilder->addStmt($classMethod);
 
         // add properties
         foreach ($variablesWithTypes as $variableWithType) {

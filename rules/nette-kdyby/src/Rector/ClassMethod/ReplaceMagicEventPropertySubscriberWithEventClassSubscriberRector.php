@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Rector\ClassMethod;
 
-use Kdyby\Events\Subscriber;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
@@ -40,9 +39,9 @@ final class ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector ex
     private $eventAndListenerTreeProvider;
 
     public function __construct(
+        EventAndListenerTreeProvider $eventAndListenerTreeProvider,
         EventClassNaming $eventClassNaming,
-        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator,
-        EventAndListenerTreeProvider $eventAndListenerTreeProvider
+        ListeningClassMethodArgumentManipulator $listeningClassMethodArgumentManipulator
     ) {
         $this->eventClassNaming = $eventClassNaming;
         $this->listeningClassMethodArgumentManipulator = $listeningClassMethodArgumentManipulator;
@@ -131,12 +130,12 @@ PHP
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return true;
         }
 
-        if (! $this->isObjectType($class, Subscriber::class)) {
+        if (! $this->isObjectType($classLike, 'Kdyby\Events\Subscriber')) {
             return true;
         }
 

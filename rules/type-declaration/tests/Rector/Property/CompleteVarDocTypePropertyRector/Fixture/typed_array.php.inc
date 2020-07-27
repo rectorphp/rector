@@ -24,7 +24,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropert
 class TypedArray
 {
     /**
-     * @var string[]
+     * @var string[]|null
      */
     private $items;
 

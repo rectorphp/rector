@@ -54,10 +54,10 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
     private $classInsertManipulator;
 
     public function __construct(
-        PhpSpecRenaming $phpSpecRenaming,
-        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
         ClassInsertManipulator $classInsertManipulator,
-        LetManipulator $letManipulator
+        LetManipulator $letManipulator,
+        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
+        PhpSpecRenaming $phpSpecRenaming
     ) {
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;

@@ -12,12 +12,16 @@ use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -43,16 +47,30 @@ final class ClassMethodAssignManipulator
      */
     private $nodeFactory;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
     public function __construct(
-        VariableManipulator $variableManipulator,
+        BetterNodeFinder $betterNodeFinder,
+        BetterStandardPrinter $betterStandardPrinter,
         CallableNodeTraverser $callableNodeTraverser,
+        NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
-        NodeFactory $nodeFactory
+        VariableManipulator $variableManipulator
     ) {
         $this->variableManipulator = $variableManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -72,6 +90,7 @@ final class ClassMethodAssignManipulator
 
         $readOnlyVariableAssigns = $this->filterOutReferencedVariables($readOnlyVariableAssigns, $classMethod);
         $readOnlyVariableAssigns = $this->filterOutMultiAssigns($readOnlyVariableAssigns);
+        $readOnlyVariableAssigns = $this->filterOutForeachVariables($readOnlyVariableAssigns);
 
         return $this->variableManipulator->filterOutReadOnlyVariables($readOnlyVariableAssigns, $classMethod);
     }
@@ -211,5 +230,41 @@ final class ClassMethodAssignManipulator
 
             return ! $parentNode instanceof Assign;
         });
+    }
+
+    /**
+     * @param Assign[] $variableAssigns
+     * @return Assign[]
+     */
+    private function filterOutForeachVariables(array $variableAssigns): array
+    {
+        foreach ($variableAssigns as $key => $variableAssign) {
+            $foreach = $this->findParentForeach($variableAssign);
+            if (! $foreach instanceof Foreach_) {
+                continue;
+            }
+
+            if ($this->betterStandardPrinter->areNodesEqual($foreach->valueVar, $variableAssign->var)) {
+                unset($variableAssigns[$key]);
+                continue;
+            }
+
+            if ($this->betterStandardPrinter->areNodesEqual($foreach->keyVar, $variableAssign->var)) {
+                unset($variableAssigns[$key]);
+            }
+        }
+
+        return $variableAssigns;
+    }
+
+    private function findParentForeach(Assign $assign): ?Foreach_
+    {
+        /** @var Foreach_|FunctionLike|null $foreach */
+        $foreach = $this->betterNodeFinder->findFirstPreviousOfTypes($assign, [Foreach_::class, FunctionLike::class]);
+        if (! $foreach instanceof Foreach_) {
+            return null;
+        }
+
+        return $foreach;
     }
 }

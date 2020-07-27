@@ -54,12 +54,17 @@ final class Option
     /**
      * @var string
      */
-    public const IMPORT_SHORT_CLASSES_PARAMETER = 'import_short_classes';
+    public const IMPORT_SHORT_CLASSES = 'import_short_classes';
 
     /**
      * @var string
      */
-    public const EXCLUDE_RECTORS_PARAMETER = 'exclude_rectors';
+    public const EXCLUDE_RECTORS = 'exclude_rectors';
+
+    /**
+     * @var string
+     */
+    public const IMPORT_DOC_BLOCKS = 'import_doc_blocks';
 
     /**
      * @var string
@@ -100,4 +105,39 @@ final class Option
      * @var string
      */
     public const CACHE_DEBUG = 'cache-debug';
+
+    /**
+     * @var string
+     */
+    public const PATHS = 'paths';
+
+    /**
+     * @var string
+     */
+    public const AUTOLOAD_PATHS = 'autoload_paths';
+
+    /**
+     * @var string
+     */
+    public const EXCLUDE_PATHS = 'exclude_paths';
+
+    /**
+     * @var string
+     */
+    public const SETS = 'sets';
+
+    /**
+     * @var string
+     */
+    public const FILE_EXTENSIONS = 'file_extensions';
+
+    /**
+     * @var string
+     */
+    public const RECTOR_RECIPE = 'rector_recipe';
+
+    /**
+     * @var string
+     */
+    public const NESTED_CHAIN_METHOD_CALL_LIMIT = 'nested_chain_method_call_limit';
 }

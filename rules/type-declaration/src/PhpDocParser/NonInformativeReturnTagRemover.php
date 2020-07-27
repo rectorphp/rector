@@ -189,8 +189,11 @@ final class NonInformativeReturnTagRemover
         return null;
     }
 
-    private function removeShortObjectType(Type $returnType, $returnTagValueNode, ?PhpDocInfo $phpDocInfo): void
-    {
+    private function removeShortObjectType(
+        Type $returnType,
+        ReturnTagValueNode $returnTagValueNode,
+        ?PhpDocInfo $phpDocInfo
+    ): void {
         if (! $returnType instanceof ShortenedObjectType) {
             return;
         }

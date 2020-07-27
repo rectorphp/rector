@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use PHPUnit\Framework\TestCase;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -123,8 +122,8 @@ PHP
 
     private function shouldSkip(Property $property): bool
     {
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if ($this->shouldSkipClass($classNode)) {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($this->shouldSkipClass($classLike)) {
             return true;
         }
 
@@ -166,7 +165,7 @@ PHP
             return true;
         }
 
-        if ($this->isObjectType($classLike, TestCase::class)) {
+        if ($this->isObjectType($classLike, 'PHPUnit\Framework\TestCase')) {
             return true;
         }
 

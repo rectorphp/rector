@@ -48,7 +48,7 @@ final class ServiceLocatorToDIRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.',
+            'Turns $this->getRepository() in Symfony Controller to constructor injection and private property access.',
             [
                 new CodeSample(
                     <<<'PHP'
@@ -137,15 +137,15 @@ PHP
         }
 
         $repositoryFqn = $this->resolveRepositoryFqnFromGetRepositoryMethodCall($node);
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
         $repositoryObjectType = new ObjectType($repositoryFqn);
 
         $this->addPropertyToClass(
-            $classNode,
+            $classLike,
             $repositoryObjectType,
             $this->propertyNaming->fqnToVariableName($repositoryObjectType)
         );

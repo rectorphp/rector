@@ -75,6 +75,7 @@ final class ConstantReferenceIdentifierRestorer
     }
 
     /**
+     * @param mixed $value
      * @return mixed|null
      */
     private function matchIdentifierBasedOnResolverValue(array $identifierToResolvedValues, $value)

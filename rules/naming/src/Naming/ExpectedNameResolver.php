@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -34,14 +41,21 @@ final class ExpectedNameResolver
      */
     private $staticTypeMapper;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver,
         PropertyNaming $propertyNaming,
         StaticTypeMapper $staticTypeMapper
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function resolveForPropertyIfNotYet(Property $property): ?string
@@ -149,6 +163,49 @@ final class ExpectedNameResolver
     }
 
     /**
+     * @param MethodCall|StaticCall|FuncCall $expr
+     */
+    public function resolveForCall(Expr $expr): ?string
+    {
+        if ($this->isDynamicNameCall($expr)) {
+            return null;
+        }
+
+        $name = $this->nodeNameResolver->getName($expr->name);
+        if ($name === null) {
+            return null;
+        }
+
+        $returnedType = $this->nodeTypeResolver->getStaticType($expr);
+
+        if ($returnedType instanceof ArrayType) {
+            return null;
+        }
+
+        if ($returnedType instanceof MixedType) {
+            return null;
+        }
+
+        $expectedName = $this->propertyNaming->getExpectedNameFromType($returnedType);
+        if ($expectedName !== null) {
+            return $expectedName;
+        }
+
+        // call with args can return different value, so skip there if not sure about the type
+        if (count($expr->args) > 0) {
+            return null;
+        }
+
+        // @see https://regex101.com/r/hnU5pm/2/
+        $matches = Strings::match($name, '#^get([A-Z].+)#');
+        if ($matches === null) {
+            return null;
+        }
+
+        return lcfirst($matches[1]);
+    }
+
+    /**
      * Ends with ucname
      * Starts with adjective, e.g. (Post $firstPost, Post $secondPost)
      */
@@ -156,5 +213,21 @@ final class ExpectedNameResolver
     {
         $suffixNamePattern = '#\w+' . ucfirst($expectedName) . '#';
         return (bool) Strings::match($currentName, $suffixNamePattern);
+    }
+
+    /**
+     * @param MethodCall|StaticCall|FuncCall $expr
+     */
+    private function isDynamicNameCall(Expr $expr): bool
+    {
+        if ($expr->name instanceof StaticCall) {
+            return true;
+        }
+
+        if ($expr->name instanceof MethodCall) {
+            return true;
+        }
+
+        return $expr->name instanceof FuncCall;
     }
 }

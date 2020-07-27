@@ -111,6 +111,9 @@ PHP
 
         $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
         $assignAndRootExpr = $this->chainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
+        if ($assignAndRootExpr === null) {
+            return null;
+        }
 
         if ($this->shouldSkip($assignAndRootExpr, $chainMethodCalls)) {
             return null;
@@ -151,7 +154,10 @@ PHP
         return $node;
     }
 
-    private function isHandledByReturn($node): bool
+    /**
+     * @param MethodCall|Return_ $node
+     */
+    private function isHandledByReturn(Node $node): bool
     {
         if ($node instanceof MethodCall) {
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -167,12 +173,8 @@ PHP
     /**
      * @param MethodCall[] $chainMethodCalls
      */
-    private function shouldSkip(?AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
+    private function shouldSkip(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
     {
-        if ($assignAndRootExpr === null) {
-            return true;
-        }
-
         if (! $this->chainMethodCallNodeAnalyzer->isCalleeSingleType($assignAndRootExpr, $chainMethodCalls)) {
             return true;
         }
@@ -183,7 +185,10 @@ PHP
         );
     }
 
-    private function removeCurrentNode($node): void
+    /**
+     * @param MethodCall|Return_ $node
+     */
+    private function removeCurrentNode(Node $node): void
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Assign) {

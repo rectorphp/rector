@@ -12,7 +12,6 @@ use Rector\Core\Configuration\Configuration;
 use Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\MethodCallNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\PhpDocInfoNodeVisitor;
@@ -72,23 +71,17 @@ final class NodeScopeAndMetadataDecorator
      */
     private $phpDocInfoNodeVisitor;
 
-    /**
-     * @var MethodCallNodeVisitor
-     */
-    private $methodCallNodeVisitor;
-
     public function __construct(
-        PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
-        ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         CloningVisitor $cloningVisitor,
+        Configuration $configuration,
+        FileInfoNodeVisitor $fileInfoNodeVisitor,
         FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
         NamespaceNodeVisitor $namespaceNodeVisitor,
-        StatementNodeVisitor $statementNodeVisitor,
-        FileInfoNodeVisitor $fileInfoNodeVisitor,
         NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
+        PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
+        ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         PhpDocInfoNodeVisitor $phpDocInfoNodeVisitor,
-        Configuration $configuration,
-        MethodCallNodeVisitor $methodCallNodeVisitor
+        StatementNodeVisitor $statementNodeVisitor
     ) {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
@@ -100,7 +93,6 @@ final class NodeScopeAndMetadataDecorator
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
         $this->configuration = $configuration;
         $this->phpDocInfoNodeVisitor = $phpDocInfoNodeVisitor;
-        $this->methodCallNodeVisitor = $methodCallNodeVisitor;
     }
 
     /**
@@ -139,7 +131,6 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
-        $nodeTraverser->addVisitor($this->methodCallNodeVisitor);
         $nodeTraverser->addVisitor($this->phpDocInfoNodeVisitor);
 
         $nodes = $nodeTraverser->traverse($nodes);

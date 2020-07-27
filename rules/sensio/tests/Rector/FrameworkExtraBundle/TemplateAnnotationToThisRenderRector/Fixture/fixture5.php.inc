@@ -29,7 +29,7 @@ class ClassWithNamedService55Controller extends AbstractController
 {
     public function index(): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('class_with_named_service55/index.html.twig');
+        return $this->render('Class_With_Named_Service55/index.html.twig');
     }
 }
 

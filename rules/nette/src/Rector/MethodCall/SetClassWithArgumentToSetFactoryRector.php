@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\MethodCall;
 
-use Nette\DI\Definitions\ServiceDefinition;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -74,7 +73,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node->var, ServiceDefinition::class)) {
+        if (! $this->isObjectType($node->var, 'Nette\DI\Definitions\ServiceDefinition')) {
             return null;
         }
 

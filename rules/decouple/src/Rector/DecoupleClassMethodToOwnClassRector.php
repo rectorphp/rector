@@ -97,13 +97,16 @@ final class DecoupleClassMethodToOwnClassRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $matchedConfiguration = $this->decoupledClassMethodMatcher->matchDecoupled($node, $this->methodNamesByClass);
-        if ($matchedConfiguration === null) {
+        $decoupleClassMethodMatch = $this->decoupledClassMethodMatcher->matchDecoupled(
+            $node,
+            $this->methodNamesByClass
+        );
+        if ($decoupleClassMethodMatch === null) {
             return null;
         }
 
         $mainClassMethod = clone $node;
-        $mainClassMethod->name = new Identifier($matchedConfiguration->getMethodName());
+        $mainClassMethod->name = new Identifier($decoupleClassMethodMatch->getMethodName());
         $this->makePublic($mainClassMethod);
 
         // 2. get related class constants in the same class
@@ -112,18 +115,19 @@ final class DecoupleClassMethodToOwnClassRector extends AbstractRector
         // 3. get class method related methods call in the same class
         $usedClassMethods = $this->usedClassMethodsExtractor->extractFromClassMethod(
             $node,
-            $matchedConfiguration->getParentClassName()
+            $decoupleClassMethodMatch->getParentClassName()
         );
 
         // 4. get class method related property fetches in the same class - add to constructor
+        $classMethods = array_merge($usedClassMethods, [$node]);
         $usedProperties = $this->usedClassPropertyExtractor->extractFromClassMethods(
-            array_merge($usedClassMethods, [$node]),
-            $matchedConfiguration->getParentClassName()
+            $classMethods,
+            $decoupleClassMethodMatch->getParentClassName()
         );
 
         // 5. add constructor dependencies $requiredLocalPropertyFetches
-        /** @var Class_ $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
         $constructClassMethod = $this->constructorClassMethodFactory->create($usedProperties);
 
         // 6. build a class
@@ -136,12 +140,12 @@ final class DecoupleClassMethodToOwnClassRector extends AbstractRector
         );
 
         $namespace = $this->namespaceFactory->createNamespacedClassByNameAndStmts(
-            $class,
-            $matchedConfiguration,
+            $classLike,
+            $decoupleClassMethodMatch,
             $usedClassStmts
         );
 
-        $newClassLocation = $this->createNewClassLocation($node, $matchedConfiguration->getClassName());
+        $newClassLocation = $this->createNewClassLocation($node, $decoupleClassMethodMatch->getClassName());
         $this->printNodesToFilePath($namespace, $newClassLocation);
 
         // 7. cleanup this class method

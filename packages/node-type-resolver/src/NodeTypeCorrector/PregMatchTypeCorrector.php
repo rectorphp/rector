@@ -41,8 +41,8 @@ final class PregMatchTypeCorrector
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver,
         BetterStandardPrinter $betterStandardPrinter,
+        NodeNameResolver $nodeNameResolver,
         ParentScopeFinder $parentScopeFinder
     ) {
         $this->betterNodeFinder = $betterNodeFinder;

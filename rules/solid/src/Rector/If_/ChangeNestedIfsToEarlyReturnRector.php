@@ -31,7 +31,7 @@ final class ChangeNestedIfsToEarlyReturnRector extends AbstractRector
      */
     private $conditionInverter;
 
-    public function __construct(IfManipulator $ifManipulator, ConditionInverter $conditionInverter)
+    public function __construct(ConditionInverter $conditionInverter, IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
         $this->conditionInverter = $conditionInverter;
@@ -139,6 +139,7 @@ PHP
             $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->left));
             $booleanNotPartIf->stmts = [clone $return];
             $this->addNodeAfterNode($booleanNotPartIf, $if);
+
             $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
             $booleanNotPartIf->stmts = [clone $return];
             $this->addNodeAfterNode($booleanNotPartIf, $if);

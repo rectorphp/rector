@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -32,10 +33,13 @@ final class BetterStandardPrinterTest extends AbstractKernelTestCase
     public function testAddingCommentOnSomeNodesFail(): void
     {
         $methodCall = new MethodCall(new Variable('this'), 'run');
-        $methodCall->setAttribute(AttributeKey::COMMENTS, [new Comment('// todo: fix')]);
+
+        // cannot be on MethodCall, must be Expression
+        $methodCallExpression = new Expression($methodCall);
+        $methodCallExpression->setAttribute(AttributeKey::COMMENTS, [new Comment('// todo: fix')]);
 
         $methodBuilder = new MethodBuilder('run');
-        $methodBuilder->addStmt($methodCall);
+        $methodBuilder->addStmt($methodCallExpression);
 
         $classMethod = $methodBuilder->getNode();
 

@@ -86,8 +86,8 @@ PHP
             return true;
         }
 
-        /** @var Class_|Interface_|Trait_|null $classNode */
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        return $classNode === null || $classNode instanceof Trait_ || $classNode instanceof Interface_;
+        /** @var Class_|Interface_|Trait_|null $classLike */
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        return $classLike === null || $classLike instanceof Trait_ || $classLike instanceof Interface_;
     }
 }

@@ -61,10 +61,16 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
             return ShellCode::SUCCESS;
         }
 
-        $this->symfonyStyle->error('Some classes are missing nodes');
+        $errorMessage = sprintf(
+            'Add new class to "%s" that implements "%s" for this type',
+            'packages/phpstan-static-type-mapper/src/TypeMapper',
+            TypeMapperInterface::class
+        );
+        $this->symfonyStyle->error($errorMessage);
+
         $this->symfonyStyle->listing($missingNodeClasses);
 
-        return ShellCode::SUCCESS;
+        return ShellCode::ERROR;
     }
 
     /**
@@ -73,11 +79,11 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
     private function getMissingNodeClasses(): array
     {
         $phpStanTypeClasses = $this->phpStanTypeClassFinder->find();
-        $supportedPHPStanTypeClasses = $this->getSupportedTypeClasses();
+        $supportedTypeClasses = $this->getSupportedTypeClasses();
 
         $unsupportedTypeClasses = [];
         foreach ($phpStanTypeClasses as $phpStanTypeClass) {
-            foreach ($supportedPHPStanTypeClasses as $supportedPHPStanTypeClass) {
+            foreach ($supportedTypeClasses as $supportedPHPStanTypeClass) {
                 if (is_a($phpStanTypeClass, $supportedPHPStanTypeClass, true)) {
                     continue 2;
                 }

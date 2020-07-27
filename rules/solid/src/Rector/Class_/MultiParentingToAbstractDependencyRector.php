@@ -165,8 +165,8 @@ PHP
             return null;
         }
 
-        $constructMethod = $node->getMethod(self::CONSTRUCTOR_METHOD_NAME);
-        if ($constructMethod === null) {
+        $classMethod = $node->getMethod(self::CONSTRUCTOR_METHOD_NAME);
+        if ($classMethod === null) {
             return null;
         }
 
@@ -187,7 +187,7 @@ PHP
         }
 
         // 2. remove from abstract class
-        $this->clearAbstractClassConstructor($constructMethod);
+        $this->clearAbstractClassConstructor($classMethod);
 
         // 3. add inject*/@required to abstract property
         $this->addInjectOrRequiredClassMethod($node);
@@ -200,13 +200,13 @@ PHP
      */
     private function resolveConstructorParamClassTypes(Class_ $class): array
     {
-        $constructMethod = $class->getMethod(self::CONSTRUCTOR_METHOD_NAME);
-        if ($constructMethod === null) {
+        $constructorClassMethod = $class->getMethod(self::CONSTRUCTOR_METHOD_NAME);
+        if ($constructorClassMethod === null) {
             return [];
         }
 
         $objectTypes = [];
-        foreach ($constructMethod->getParams() as $param) {
+        foreach ($constructorClassMethod->getParams() as $param) {
             $paramType = $this->getObjectType($param);
             $paramType = $this->popFirstObjectTypeFromUnionType($paramType);
 

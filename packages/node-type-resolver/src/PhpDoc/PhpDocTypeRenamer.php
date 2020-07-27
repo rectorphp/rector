@@ -43,14 +43,12 @@ final class PhpDocTypeRenamer
             return;
         }
 
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
+        $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
         $phpParserNode = $node;
 
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (PhpDocParserNode $node) use (
-            $namespacePrefix,
-            $excludedClasses,
-            $phpParserNode
-        ): PhpDocParserNode {
+        $this->phpDocNodeTraverser->traverseWithCallable($attributeAwarePhpDocNode, '', function (
+            PhpDocParserNode $node
+        ) use ($namespacePrefix, $excludedClasses, $phpParserNode): PhpDocParserNode {
             if ($this->shouldSkip($node, $phpParserNode, $namespacePrefix, $excludedClasses)) {
                 return $node;
             }
@@ -67,11 +65,14 @@ final class PhpDocTypeRenamer
         });
     }
 
+    /**
+     * @param string[] $excludedClasses
+     */
     private function shouldSkip(
         PhpDocParserNode $phpDocParserNode,
         Node $phpParserNode,
         string $namespacePrefix,
-        $excludedClasses
+        array $excludedClasses
     ): bool {
         if (! $phpDocParserNode instanceof IdentifierTypeNode) {
             return true;

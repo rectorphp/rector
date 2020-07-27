@@ -15,7 +15,6 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector\GetParameterToConstructorInjectionRectorTest
@@ -82,7 +81,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, Controller::class)) {
+        if (! $this->isObjectType($node->var, 'Symfony\Bundle\FrameworkBundle\Controller\Controller')) {
             return null;
         }
 
@@ -98,12 +97,12 @@ PHP
 
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
-        $this->addPropertyToClass($classNode, new StringType(), $propertyName);
+        $this->addPropertyToClass($classLike, new StringType(), $propertyName);
 
         return $this->createPropertyFetch('this', $propertyName);
     }

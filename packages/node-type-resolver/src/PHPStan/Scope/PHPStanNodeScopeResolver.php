@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -91,15 +92,15 @@ final class PHPStanNodeScopeResolver
 
     public function __construct(
         ChangedFilesDetector $changedFilesDetector,
-        ScopeFactory $scopeFactory,
+        Configuration $configuration,
+        DependencyResolver $dependencyResolver,
         NodeScopeResolver $nodeScopeResolver,
+        ParameterProvider $parameterProvider,
         ReflectionProvider $reflectionProvider,
         RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
-        TraitNodeScopeCollector $traitNodeScopeCollector,
-        DependencyResolver $dependencyResolver,
-        Configuration $configuration,
+        ScopeFactory $scopeFactory,
         SymfonyStyle $symfonyStyle,
-        ParameterProvider $parameterProvider
+        TraitNodeScopeCollector $traitNodeScopeCollector
     ) {
         $this->scopeFactory = $scopeFactory;
         $this->nodeScopeResolver = $nodeScopeResolver;
@@ -177,14 +178,20 @@ final class PHPStanNodeScopeResolver
     }
 
     /**
-     * @param Class_|Interface_ $classOrInterfaceNode
+     * @param Class_|Interface_ $classLike
      */
     private function resolveClassOrInterfaceScope(
-        Node $classOrInterfaceNode,
+        ClassLike $classLike,
         MutatingScope $mutatingScope
     ): MutatingScope {
-        $className = $this->resolveClassName($classOrInterfaceNode);
-        $classReflection = $this->reflectionProvider->getClass($className);
+        $className = $this->resolveClassName($classLike);
+
+        // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
+        if ($classLike instanceof Class_ && Strings::match($className, '#^AnonymousClass(\w+)#')) {
+            $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $mutatingScope);
+        } else {
+            $classReflection = $this->reflectionProvider->getClass($className);
+        }
 
         return $mutatingScope->enterClass($classReflection);
     }
@@ -224,7 +231,7 @@ final class PHPStanNodeScopeResolver
      */
     private function resolveClassName(ClassLike $classLike): string
     {
-        if (isset($classLike->namespacedName)) {
+        if (property_exists($classLike, 'namespacedName')) {
             return (string) $classLike->namespacedName;
         }
 
@@ -240,10 +247,13 @@ final class PHPStanNodeScopeResolver
         if (! $this->configuration->isCacheDebug()) {
             return;
         }
-
-        $this->symfonyStyle->note(
-            sprintf('[debug] %d dependencies for %s file', count($dependentFiles), $smartFileInfo->getRealPath())
+        $message = sprintf(
+            '[debug] %d dependencies for %s file',
+            count($dependentFiles),
+            $smartFileInfo->getRealPath()
         );
+
+        $this->symfonyStyle->note($message);
 
         if ($dependentFiles !== []) {
             $this->symfonyStyle->listing($dependentFiles);

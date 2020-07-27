@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\DynamicTypeAnalysis\Probe;
 
-use Nette\Utils\FileSystem;
+use Rector\DynamicTypeAnalysis\Contract\ProbeStorageInterface;
+use Rector\DynamicTypeAnalysis\ProbeStorage\StaticFileSystemProbeStorage;
 
 /**
  * @see https://stackoverflow.com/a/39525458/1348344
@@ -16,6 +17,14 @@ final class TypeStaticProbe
      */
     private static $itemDataByMethodReferenceAndPosition = [];
 
+    /**
+     * @var ProbeStorageInterface|null
+     */
+    private static $probeStorage;
+
+    /**
+     * @param mixed $value
+     */
     public static function recordArgumentType($value, string $method, int $argumentPosition): void
     {
         $probeItem = self::createProbeItem($value, $method, $argumentPosition);
@@ -23,6 +32,9 @@ final class TypeStaticProbe
         self::recordProbeItem($probeItem);
     }
 
+    /**
+     * @param mixed $value
+     */
     public static function createProbeItem($value, string $method, int $argumentPosition): string
     {
         $type = self::resolveValueTypeToString($value);
@@ -31,6 +43,9 @@ final class TypeStaticProbe
         return implode(';', $data) . PHP_EOL;
     }
 
+    /**
+     * @param object|mixed[]|mixed $value
+     */
     public static function resolveValueTypeToString($value): string
     {
         if (is_object($value)) {
@@ -63,17 +78,14 @@ final class TypeStaticProbe
         return $probeItemData[$methodReference] ?? [];
     }
 
+    public static function setProbeStorage(ProbeStorageInterface $probeStorage): void
+    {
+        self::$probeStorage = $probeStorage;
+    }
+
     private static function recordProbeItem(string $probeItem): void
     {
-        $storageFile = ProbeStaticStorage::getFile();
-
-        if (file_exists($storageFile)) {
-            // append
-            file_put_contents($storageFile, $probeItem, FILE_APPEND);
-        } else {
-            // 1st write
-            FileSystem::write($storageFile, $probeItem);
-        }
+        self::getProbeStorage()::recordProbeItem($probeItem);
     }
 
     /**
@@ -85,14 +97,11 @@ final class TypeStaticProbe
             return self::$itemDataByMethodReferenceAndPosition;
         }
 
-        $probeFileContent = FileSystem::read(ProbeStaticStorage::getFile());
-
-        $probeItems = explode(PHP_EOL, $probeFileContent);
-        // remove empty values
-        $probeItems = array_filter($probeItems);
+        $probeItems = self::getProbeStorage()::getProbeItems();
 
         $itemData = [];
         foreach ($probeItems as $probeItem) {
+            $probeItem = trim($probeItem);
             [$type, $methodReference, $position] = explode(';', $probeItem);
 
             $itemData[$methodReference][$position][] = $type;
@@ -101,5 +110,15 @@ final class TypeStaticProbe
         self::$itemDataByMethodReferenceAndPosition = $itemData;
 
         return $itemData;
+    }
+
+    private static function getProbeStorage(): ProbeStorageInterface
+    {
+        if (self::$probeStorage === null) {
+            // set default filesystem storage
+            self::$probeStorage = new StaticFileSystemProbeStorage();
+        }
+
+        return self::$probeStorage;
     }
 }

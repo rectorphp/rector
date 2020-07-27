@@ -14,6 +14,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
 {
@@ -21,6 +22,11 @@ abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
      * @var PhpDocInfoPrinter
      */
     protected $phpDocInfoPrinter;
+
+    /**
+     * @var SmartFileSystem
+     */
+    protected $smartFileSystem;
 
     /**
      * @var PhpDocInfoFactory
@@ -33,6 +39,7 @@ abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase
 
         $this->phpDocInfoFactory = self::$container->get(PhpDocInfoFactory::class);
         $this->phpDocInfoPrinter = self::$container->get(PhpDocInfoPrinter::class);
+        $this->smartFileSystem = self::$container->get(SmartFileSystem::class);
     }
 
     protected function createPhpDocInfoFromDocCommentAndNode(string $docComment, Node $node): PhpDocInfo

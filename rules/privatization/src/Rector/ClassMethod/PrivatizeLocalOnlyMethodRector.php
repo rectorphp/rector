@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPUnit\Framework\TestCase;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -34,8 +33,8 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements Zer
     private $classMethodExternalCallNodeAnalyzer;
 
     public function __construct(
-        ClassMethodVisibilityVendorLockResolver $classMethodVisibilityVendorLockResolver,
-        ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer
+        ClassMethodExternalCallNodeAnalyzer $classMethodExternalCallNodeAnalyzer,
+        ClassMethodVisibilityVendorLockResolver $classMethodVisibilityVendorLockResolver
     ) {
         $this->classMethodVisibilityVendorLockResolver = $classMethodVisibilityVendorLockResolver;
         $this->classMethodExternalCallNodeAnalyzer = $classMethodExternalCallNodeAnalyzer;
@@ -111,24 +110,24 @@ PHP
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return true;
         }
 
-        if ($this->isAnonymousClass($class)) {
+        if ($this->isAnonymousClass($classLike)) {
             return true;
         }
 
-        if ($this->isObjectType($class, TestCase::class)) {
+        if ($this->isObjectType($classLike, 'PHPUnit\Framework\TestCase')) {
             return true;
         }
 
-        if ($this->isDoctrineEntityClass($class)) {
+        if ($this->isDoctrineEntityClass($classLike)) {
             return true;
         }
 
-        if ($this->isControllerAction($class, $classMethod)) {
+        if ($this->isControllerAction($classLike, $classMethod)) {
             return true;
         }
 

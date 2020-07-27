@@ -102,20 +102,20 @@ final class ProcessCommand extends AbstractCommand
     private $eventDispatcher;
 
     public function __construct(
-        FilesFinder $phpFilesFinder,
         AdditionalAutoloader $additionalAutoloader,
-        RectorGuard $rectorGuard,
-        ErrorAndDiffCollector $errorAndDiffCollector,
+        ChangedFilesDetector $changedFilesDetector,
         Configuration $configuration,
-        RectorApplication $rectorApplication,
+        ErrorAndDiffCollector $errorAndDiffCollector,
+        EventDispatcherInterface $eventDispatcher,
+        FilesFinder $phpFilesFinder,
+        NonPhpFileProcessor $nonPhpFileProcessor,
         OutputFormatterCollector $outputFormatterCollector,
+        RectorApplication $rectorApplication,
+        RectorGuard $rectorGuard,
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
-        NonPhpFileProcessor $nonPhpFileProcessor,
-        ChangedFilesDetector $changedFilesDetector,
-        UnchangedFilesFilter $unchangedFilesFilter,
         SymfonyStyle $symfonyStyle,
-        EventDispatcherInterface $eventDispatcher
+        UnchangedFilesFilter $unchangedFilesFilter
     ) {
         $this->filesFinder = $phpFilesFinder;
         $this->additionalAutoloader = $additionalAutoloader;
@@ -175,12 +175,14 @@ final class ProcessCommand extends AbstractCommand
             'Run only one single Rector from the loaded Rectors (in services, sets, etc).'
         );
 
-        $availableOutputFormatters = $this->outputFormatterCollector->getNames();
+        $names = $this->outputFormatterCollector->getNames();
+
+        $description = sprintf('Select output format: "%s".', implode('", "', $names));
         $this->addOption(
             Option::OPTION_OUTPUT_FORMAT,
             'o',
             InputOption::VALUE_OPTIONAL,
-            sprintf('Select output format: "%s".', implode('", "', $availableOutputFormatters)),
+            $description,
             ConsoleOutputFormatter::NAME
         );
 
@@ -205,6 +207,7 @@ final class ProcessCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->configuration->resolveFromInput($input);
+        $this->configuration->validateConfigParameters();
         $this->configuration->setAreAnyPhpRectorsLoaded((bool) $this->rectorNodeTraverser->getPhpRectorCount());
 
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
@@ -212,20 +215,21 @@ final class ProcessCommand extends AbstractCommand
 
         $this->stubLoader->loadStubs();
 
-        $source = $this->configuration->getPaths();
+        $paths = $this->configuration->getPaths();
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
-            $source,
+            $paths,
             $this->configuration->getFileExtensions(),
             $this->configuration->mustMatchGitDiff()
         );
 
-        $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
+        $this->additionalAutoloader->autoloadWithInputAndSource($input, $paths);
 
         $phpFileInfos = $this->processWithCache($phpFileInfos);
 
         if ($this->configuration->isCacheDebug()) {
-            $this->symfonyStyle->note(sprintf('[cache] %d files after cache filter', count($phpFileInfos)));
+            $message = sprintf('[cache] %d files after cache filter', count($phpFileInfos));
+            $this->symfonyStyle->note($message);
             $this->symfonyStyle->listing($phpFileInfos);
         }
 
@@ -233,7 +237,7 @@ final class ProcessCommand extends AbstractCommand
         $this->rectorApplication->runOnFileInfos($phpFileInfos);
 
         // must run after PHP rectors, because they might change class names, and these class names must be changed in configs
-        $neonYamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['neon', 'yaml', 'xml']);
+        $neonYamlFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, ['neon', 'yaml', 'xml']);
         $this->nonPhpFileProcessor->runOnFileInfos($neonYamlFileInfos);
 
         $this->reportZeroCacheRectorsCondition();
@@ -278,7 +282,8 @@ final class ProcessCommand extends AbstractCommand
         }
 
         if ($this->configuration->isCacheDebug()) {
-            $this->symfonyStyle->note(sprintf('[cache] %d files before cache filter', count($phpFileInfos)));
+            $message = sprintf('[cache] %d files before cache filter', count($phpFileInfos));
+            $this->symfonyStyle->note($message);
         }
 
         return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($phpFileInfos);
@@ -293,11 +298,12 @@ final class ProcessCommand extends AbstractCommand
         if (! $this->rectorNodeTraverser->hasZeroCacheRectors()) {
             return;
         }
-
-        $this->symfonyStyle->note(sprintf(
+        $message = sprintf(
             'Ruleset contains %d rules that need "--clear-cache" option to analyse full project',
             $this->rectorNodeTraverser->getZeroCacheRectorCount()
-        ));
+        );
+
+        $this->symfonyStyle->note($message);
     }
 
     private function invalidateAffectedCacheFiles(): void

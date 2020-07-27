@@ -87,12 +87,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Class_ $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        /** @var Class_ $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         /** @var string $type */
         foreach ($this->oldToNewMethodByType as $type => $oldToNewMethod) {
-            if (! $this->isObjectType($class, $type)) {
+            if (! $this->isObjectType($classLike, $type)) {
                 continue;
             }
 

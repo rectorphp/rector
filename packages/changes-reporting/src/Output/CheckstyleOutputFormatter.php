@@ -50,7 +50,8 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
 
     private function writeFileErrors(FileDiff $fileDiff): void
     {
-        $this->symfonyStyle->writeln(sprintf('<file name="%s">', $this->escape($fileDiff->getRelativeFilePath())));
+        $message = sprintf('<file name="%s">', $this->escape($fileDiff->getRelativeFilePath()));
+        $this->symfonyStyle->writeln($message);
 
         foreach ($fileDiff->getRectorChanges() as $rectorChange) {
             $message = $rectorChange->getRectorDefinitionsDescription() . ' (Reported by: ' . $rectorChange->getRectorClass() . ')';
@@ -74,10 +75,9 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
 
             foreach ($errorAndDiffCollector->getErrors() as $error) {
                 $escapedMessage = $this->escape($error->getMessage());
+                $message = sprintf('    <error severity="error" message="%s" />', $escapedMessage);
 
-                $this->symfonyStyle->writeln(
-                    sprintf('    <error severity="error" message="%s" />', $escapedMessage)
-                );
+                $this->symfonyStyle->writeln($message);
             }
 
             $this->symfonyStyle->writeln('</file>');

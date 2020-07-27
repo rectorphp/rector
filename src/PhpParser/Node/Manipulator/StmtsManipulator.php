@@ -24,8 +24,8 @@ final class StmtsManipulator
     private $betterStandardPrinter;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        CallableNodeTraverser $callableNodeTraverser
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;

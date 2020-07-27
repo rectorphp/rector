@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Rector\MethodCall;
 
-use Nette\Http\Request;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -14,7 +13,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @see https://doc.nette.org/en/2.4/http-request-response
@@ -77,7 +76,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, Request::class)) {
+        if (! $this->isObjectType($node->var, 'Nette\Http\Request')) {
             return null;
         }
 
@@ -87,7 +86,7 @@ PHP
 
         $requestName = $this->classMethodManipulator->addMethodParameterIfMissing(
             $node,
-            SymfonyRequest::class,
+            Request::class,
             ['request', 'symfonyRequest']
         );
 

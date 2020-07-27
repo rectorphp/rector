@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class KernelTestCaseNodeAnalyzer
 {
@@ -58,6 +57,9 @@ final class KernelTestCaseNodeAnalyzer
             return false;
         }
 
-        return $this->nodeTypeResolver->isObjectType($node->var, ContainerInterface::class);
+        return $this->nodeTypeResolver->isObjectType(
+            $node->var,
+            'Symfony\Component\DependencyInjection\ContainerInterface'
+        );
     }
 }

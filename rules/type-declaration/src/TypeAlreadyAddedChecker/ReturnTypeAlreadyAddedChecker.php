@@ -49,9 +49,9 @@ final class ReturnTypeAlreadyAddedChecker
     private $nodeNameResolver;
 
     public function __construct(
-        StaticTypeMapper $staticTypeMapper,
         BetterStandardPrinter $betterStandardPrinter,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->betterStandardPrinter = $betterStandardPrinter;

@@ -75,7 +75,9 @@ class SomeExampleClass
 }
 PHP
                     ,
-                    [['SomeExampleClass']]
+                    [
+                        '$classesToDefluent' => ['SomeExampleClass'],
+                    ]
                 ),
             ]
         );

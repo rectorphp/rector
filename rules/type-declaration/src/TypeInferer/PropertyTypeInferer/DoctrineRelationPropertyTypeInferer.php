@@ -51,7 +51,9 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
 
         if ($relationTagValueNode instanceof ToManyTagNodeInterface) {
             return $this->processToManyRelation($relationTagValueNode);
-        } elseif ($relationTagValueNode instanceof ToOneTagNodeInterface) {
+        }
+
+        if ($relationTagValueNode instanceof ToOneTagNodeInterface) {
             $joinColumnTagValueNode = $phpDocInfo->getByType(JoinColumnTagValueNode::class);
             return $this->processToOneRelation($relationTagValueNode, $joinColumnTagValueNode);
         }
@@ -84,9 +86,9 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     ): Type {
         $types = [];
 
-        $targetEntity = $toOneTagNode->getFullyQualifiedTargetEntity();
-        if ($targetEntity) {
-            $types[] = new FullyQualifiedObjectType($targetEntity);
+        $fullyQualifiedTargetEntity = $toOneTagNode->getFullyQualifiedTargetEntity();
+        if ($fullyQualifiedTargetEntity) {
+            $types[] = new FullyQualifiedObjectType($fullyQualifiedTargetEntity);
         }
 
         // nullable by default

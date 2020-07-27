@@ -40,9 +40,9 @@ final class RemoveDeadRecursiveClassMethodRector extends AbstractRector implemen
     private $classMethodVendorLockResolver;
 
     public function __construct(
-        MethodCallParsedNodesFinder $methodCallParsedNodesFinder,
         ClassMethodAndCallMatcher $classMethodAndCallMatcher,
-        ClassMethodVendorLockResolver $classMethodVendorLockResolver
+        ClassMethodVendorLockResolver $classMethodVendorLockResolver,
+        MethodCallParsedNodesFinder $methodCallParsedNodesFinder
     ) {
         $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
         $this->classMethodAndCallMatcher = $classMethodAndCallMatcher;
@@ -86,8 +86,8 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 

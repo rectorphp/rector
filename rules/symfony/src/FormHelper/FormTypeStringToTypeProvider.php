@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Rector\Symfony\FormHelper;
 
 use Nette\Utils\Strings;
+use Rector\Symfony\ServiceMapProvider;
 
 final class FormTypeStringToTypeProvider
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
-    private const NAME_TO_TYPE_MAP = [
+    private const SYMFONY_CORE_NAME_TO_TYPE_MAP = [
         'form' => 'Symfony\Component\Form\Extension\Core\Type\FormType',
         'birthday' => 'Symfony\Component\Form\Extension\Core\Type\BirthdayType',
         'checkbox' => 'Symfony\Component\Form\Extension\Core\Type\CheckboxType',
@@ -43,18 +44,74 @@ final class FormTypeStringToTypeProvider
         'submit' => 'Symfony\Component\Form\Extension\Core\Type\SubmitType',
         'reset' => 'Symfony\Component\Form\Extension\Core\Type\ResetType',
         'entity' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
+        'choice' => 'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
     ];
+
+    /**
+     * @var ServiceMapProvider
+     */
+    private $serviceMapProvider;
+
+    /**
+     * @var array<string, string>
+     */
+    private $customServiceFormTypeByAlias = [];
+
+    public function __construct(ServiceMapProvider $serviceMapProvider)
+    {
+        $this->serviceMapProvider = $serviceMapProvider;
+    }
 
     public function matchClassForNameWithPrefix(string $name): ?string
     {
+        $nameToTypeMap = $this->getNameToTypeMap();
+
         if (Strings::startsWith($name, 'form.type.')) {
             $name = Strings::substring($name, strlen('form.type.'));
         }
 
-        if (! isset(self::NAME_TO_TYPE_MAP[$name])) {
-            return null;
+        return $nameToTypeMap[$name] ?? null;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getNameToTypeMap(): array
+    {
+        $customServiceFormTypeByAlias = $this->provideCustomServiceFormTypeByAliasFromContainerXml();
+
+        return array_merge(self::SYMFONY_CORE_NAME_TO_TYPE_MAP, $customServiceFormTypeByAlias);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function provideCustomServiceFormTypeByAliasFromContainerXml(): array
+    {
+        if ($this->customServiceFormTypeByAlias !== []) {
+            return $this->customServiceFormTypeByAlias;
         }
 
-        return self::NAME_TO_TYPE_MAP[$name];
+        $serviceMap = $this->serviceMapProvider->provide();
+        foreach ($serviceMap->getServicesByTag('form.type') as $formTypeServiceDefinition) {
+            $formTypeTag = $formTypeServiceDefinition->getTag('form.type');
+            if ($formTypeTag === null) {
+                continue;
+            }
+
+            $alias = $formTypeTag->getData()['alias'] ?? null;
+            if (! is_string($alias)) {
+                continue;
+            }
+
+            $class = $formTypeServiceDefinition->getClass();
+            if ($class === null) {
+                continue;
+            }
+
+            $this->customServiceFormTypeByAlias[$alias] = $class;
+        }
+
+        return $this->customServiceFormTypeByAlias;
     }
 }

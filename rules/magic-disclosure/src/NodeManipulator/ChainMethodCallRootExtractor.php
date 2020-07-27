@@ -34,9 +34,9 @@ final class ChainMethodCallRootExtractor
     private $nodeNameResolver;
 
     public function __construct(
-        PropertyNaming $propertyNaming,
         BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        PropertyNaming $propertyNaming
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->betterNodeFinder = $betterNodeFinder;

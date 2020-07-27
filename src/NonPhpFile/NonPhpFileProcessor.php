@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Core\NonPhpFile;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\Core\Configuration\ChangeConfiguration;
 use Rector\Core\Configuration\Configuration;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class NonPhpFileProcessor
 {
@@ -34,16 +34,23 @@ final class NonPhpFileProcessor
      */
     private $renamedClassesCollector;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
-        Configuration $configuration,
         ChangeConfiguration $changeConfiguration,
-        SymfonyStyle $symfonyStyle,
-        RenamedClassesCollector $renamedClassesCollector
+        Configuration $configuration,
+        RenamedClassesCollector $renamedClassesCollector,
+        SmartFileSystem $smartFileSystem,
+        SymfonyStyle $symfonyStyle
     ) {
         $this->configuration = $configuration;
         $this->changeConfiguration = $changeConfiguration;
         $this->symfonyStyle = $symfonyStyle;
         $this->renamedClassesCollector = $renamedClassesCollector;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     /**
@@ -58,17 +65,17 @@ final class NonPhpFileProcessor
 
     public function processFileInfo(SmartFileInfo $neonYamlFileInfo): string
     {
-        $oldContent = $neonYamlFileInfo->getContents();
-        $newContent = $this->renameClasses($oldContent);
+        $oldContents = $neonYamlFileInfo->getContents();
+        $newContents = $this->renameClasses($oldContents);
 
         // nothing has changed
-        if ($oldContent === $newContent) {
-            return $oldContent;
+        if ($oldContents === $newContents) {
+            return $oldContents;
         }
 
-        $this->reportFileContentChange($neonYamlFileInfo, $newContent);
+        $this->reportFileContentChange($neonYamlFileInfo, $newContents);
 
-        return $newContent;
+        return $newContents;
     }
 
     private function renameClasses(string $newContent): string
@@ -107,15 +114,17 @@ final class NonPhpFileProcessor
 
     private function reportFileContentChange(SmartFileInfo $neonYamlFileInfo, string $newContent): void
     {
-        $relativeFilePath = $neonYamlFileInfo->getRelativeFilePathFromCwd();
+        $relativeFilePathFromCwd = $neonYamlFileInfo->getRelativeFilePathFromCwd();
 
         if ($this->configuration->isDryRun()) {
-            $this->symfonyStyle->note(
-                sprintf('File "%s" would be changed ("dry-run" is on now)', $relativeFilePath)
-            );
+            $message = sprintf('File "%s" would be changed ("dry-run" is on now)', $relativeFilePathFromCwd);
+            $this->symfonyStyle->note($message);
         } else {
-            $this->symfonyStyle->note(sprintf('File "%s" was changed', $relativeFilePath));
-            FileSystem::write($neonYamlFileInfo->getRealPath(), $newContent, $neonYamlFileInfo->getPerms());
+            $message = sprintf('File "%s" was changed', $relativeFilePathFromCwd);
+            $this->symfonyStyle->note($message);
+
+            $this->smartFileSystem->dumpFile($neonYamlFileInfo->getRealPath(), $newContent);
+            $this->smartFileSystem->chmod($neonYamlFileInfo->getRealPath(), $neonYamlFileInfo->getPerms());
         }
     }
 }

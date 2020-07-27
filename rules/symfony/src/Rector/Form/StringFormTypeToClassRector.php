@@ -7,32 +7,27 @@ namespace Rector\Symfony\Rector\Form;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Configuration\Option;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
-use Symfony\Component\Form\FormBuilderInterface;
+use Rector\Symfony\Rector\MethodCall\AbstractFormAddRector;
 
 /**
- * Covers https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#frameworkbundle
+ * Covers https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
+ *
  * @see \Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\StringFormTypeToClassRectorTest
  */
-final class StringFormTypeToClassRector extends AbstractRector
+final class StringFormTypeToClassRector extends AbstractFormAddRector
 {
-    /**
-     * @var FormTypeStringToTypeProvider
-     */
-    private $formTypeStringToTypeProvider;
-
-    public function __construct(FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
-    {
-        $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
-    }
-
     public function getDefinition(): RectorDefinition
     {
+        $description = sprintf(
+            'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "parameters > %s"',
+            Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER
+        );
+
         return new RectorDefinition(
-            'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony',
+            $description,
             [
                 new CodeSample(
 <<<'PHP'
@@ -62,16 +57,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, FormBuilderInterface::class)) {
-            return null;
-        }
-
-        if (! $this->isName($node->name, 'add')) {
-            return null;
-        }
-
-        // just one argument
-        if (! isset($node->args[1])) {
+        if (! $this->isFormAddMethodCall($node)) {
             return null;
         }
 

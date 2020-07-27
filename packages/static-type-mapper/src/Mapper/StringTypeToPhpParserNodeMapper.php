@@ -17,7 +17,7 @@ final class StringTypeToPhpParserNodeMapper
     /**
      * @var string[]
      */
-    private const SAME_NAMED_IDENTIFIERS = ['string', 'int', 'float', 'array', 'void'];
+    private const SAME_NAMED_IDENTIFIERS = ['string', 'int', 'float', 'array', 'void', 'bool'];
 
     /**
      * @return Identifier|Name|NullableType

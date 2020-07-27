@@ -34,17 +34,17 @@ final class PhpDocClassRenamer
      */
     private function processAssertChoiceTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo): void
     {
-        $choiceTagValueNode = $phpDocInfo->getByType(AssertChoiceTagValueNode::class);
-        if (! $choiceTagValueNode instanceof AssertChoiceTagValueNode) {
+        $assertChoiceTagValueNode = $phpDocInfo->getByType(AssertChoiceTagValueNode::class);
+        if (! $assertChoiceTagValueNode instanceof AssertChoiceTagValueNode) {
             return;
         }
 
         foreach ($oldToNewClasses as $oldClass => $newClass) {
-            if (! $choiceTagValueNode->isCallbackClass($oldClass)) {
+            if (! $assertChoiceTagValueNode->isCallbackClass($oldClass)) {
                 continue;
             }
 
-            $choiceTagValueNode->changeCallbackClass($newClass);
+            $assertChoiceTagValueNode->changeCallbackClass($newClass);
             break;
         }
     }

@@ -23,6 +23,18 @@ final class PhpKeywordHighlighter
         'constant',
     ];
 
+    /**
+     * @var string
+     * @see https://regex101.com/r/uxtJDA/3
+     */
+    private const VARIABLE_CALL_OR_VARIABLE_REGEX = '#^\$([A-Za-z\-\>]+)[^\]](\(\))?#';
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/uxtJDA/1
+     */
+    private const STATIC_CALL_REGEX = '#([A-Za-z::\-\>]+)(\(\))$#';
+
     public function highlight(string $content): string
     {
         $words = Strings::split($content, '# #');
@@ -39,6 +51,11 @@ final class PhpKeywordHighlighter
 
     private function isKeywordToHighlight(string $word): bool
     {
+        // already in code quotes
+        if (Strings::startsWith($word, '`') || Strings::endsWith($word, '`')) {
+            return false;
+        }
+
         // part of normal text
         if (in_array($word, self::TEXT_WORDS, true)) {
             return false;
@@ -61,6 +78,10 @@ final class PhpKeywordHighlighter
             return true;
         }
 
-        return (bool) Strings::match($word, '#($)?(.*?)\(\)$#');
+        if ((bool) Strings::match($word, self::VARIABLE_CALL_OR_VARIABLE_REGEX)) {
+            return true;
+        }
+
+        return (bool) Strings::match($word, self::STATIC_CALL_REGEX);
     }
 }

@@ -22,7 +22,8 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
         string $expectedFileContent,
         array $extraFiles = []
     ): void {
-        $this->doTestFileInfo($originalFileInfo, array_keys($extraFiles));
+        $extraFilePaths = array_keys($extraFiles);
+        $this->doTestFileInfo($originalFileInfo, $extraFilePaths);
 
         $this->assertFileExists($expectedFileLocation);
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);

@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Php74\Tests\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector\RestoreDefaultNullToNullableTypePropertyRectorTest
@@ -77,7 +82,46 @@ PHP
         }
 
         $onlyProperty = $property->props[0];
+        if ($onlyProperty->default !== null) {
+            return true;
+        }
 
-        return $onlyProperty->default !== null;
+        // is variable assigned in constructor
+        $propertyName = $this->getName($property);
+
+        return $this->isPropertyInitiatedInConstuctor($property, $propertyName);
+    }
+
+    private function isPropertyInitiatedInConstuctor(Property $property, string $propertyName): bool
+    {
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return false;
+        }
+
+        $constructClassMethod = $classLike->getMethod('__construct');
+        if (! $constructClassMethod instanceof ClassMethod) {
+            return false;
+        }
+
+        $isPropertyInitiated = false;
+        $this->traverseNodesWithCallable((array) $constructClassMethod->stmts, function (Node $node) use (
+            $propertyName,
+            &$isPropertyInitiated
+        ) {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
+            if (! $this->isLocalPropertyFetchNamed($node->var, $propertyName)) {
+                return null;
+            }
+
+            $isPropertyInitiated = true;
+
+            return NodeTraverser::STOP_TRAVERSAL;
+        });
+
+        return $isPropertyInitiated;
     }
 }

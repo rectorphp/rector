@@ -30,11 +30,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RenameEventNamesInEventSubscriberRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const EVENT_SUBSCRIBER_INTERFACE = 'Symfony\Component\EventDispatcher\EventSubscriberInterface';
-
-    /**
      * @var EventInfo[]
      */
     private $symfonyClassConstWithAliases = [];
@@ -88,12 +83,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
             return null;
         }
 
-        if (! $this->isObjectType($class, self::EVENT_SUBSCRIBER_INTERFACE)) {
+        if (! $this->isObjectType($classLike, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
             return null;
         }
 
@@ -177,7 +172,7 @@ PHP
 
     private function processMethodArgument(string $class, string $method, EventInfo $eventInfo): void
     {
-        $classMethodNode = $this->functionLikeParsedNodesFinder->findMethod($method, $class);
+        $classMethodNode = $this->functionLikeParsedNodesFinder->findClassMethod($method, $class);
         if ($classMethodNode === null) {
             return;
         }

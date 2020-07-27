@@ -21,7 +21,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRe
 class PhpUnitTestCase
 {
     /**
-     * @var int
+     * @var int|null
      */
     private $value;
 

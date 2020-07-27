@@ -22,7 +22,7 @@ final class ClassConstantToSelfClassRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change __CLASS__ to self::class', [
+        return new RectorDefinition('Change `__CLASS__` to self::class', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass

@@ -38,8 +38,8 @@ final class ClassAnalyzer
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ParsedNodeCollector $parsedNodeCollector,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        ParsedNodeCollector $parsedNodeCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;
@@ -104,7 +104,7 @@ final class ClassAnalyzer
         return false;
     }
 
-    private function hasAllPropertiesWithSerialize(Class_ $class)
+    private function hasAllPropertiesWithSerialize(Class_ $class): bool
     {
         foreach ($class->stmts as $stmt) {
             if (! $stmt instanceof Property) {

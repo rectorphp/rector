@@ -27,6 +27,9 @@ final class ClassMethodReflectionHelper
         $this->phpDocTagsFinder = $phpDocTagsFinder;
     }
 
+    /**
+     * @return array<class-string>
+     */
     public function extractTagsFromMethodDockblock(string $class, string $method, string $tag): array
     {
         $reflectedMethod = $this->classMethodReflectionFactory->createReflectionMethodIfExists($class, $method);
@@ -35,17 +38,19 @@ final class ClassMethodReflectionHelper
             return [];
         }
 
-        $methodDocblock = $reflectedMethod->getDocComment();
+        $docComment = $reflectedMethod->getDocComment();
 
-        if (! is_string($methodDocblock)) {
+        if (! is_string($docComment)) {
             return [];
         }
 
-        $extractedTags = $this->phpDocTagsFinder->extractTagsFromStringedDocblock($methodDocblock, $tag);
+        $extractedTags = $this->phpDocTagsFinder->extractTagsFromStringedDocblock($docComment, $tag);
 
         $classes = [];
         foreach ($extractedTags as $returnTag) {
-            $classes[] = Reflection::expandClassName($returnTag, $reflectedMethod->getDeclaringClass());
+            /** @var class-string $className */
+            $className = Reflection::expandClassName($returnTag, $reflectedMethod->getDeclaringClass());
+            $classes[] = $className;
         }
 
         return $classes;

@@ -20,7 +20,7 @@ final class GetCalledClassToStaticClassRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change __CLASS__ to self::class', [
+        return new RectorDefinition('Change get_called_class() to static::class', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass

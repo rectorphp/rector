@@ -40,7 +40,7 @@ final class JetbrainsStubsRenamer
         $message = sprintf(
             'Renaming "%d" stub files from "%s"',
             count($stubFileInfos),
-            'vendor/jetbrains/phpstorm-stubs̈́'
+            'vendor/jetbrains/phpstorm-stubs'
         );
         $this->symfonyStyle->note($message);
 

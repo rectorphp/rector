@@ -1,7 +1,0 @@
-services:
-    -
-        arguments: ['Prefix__\SomeClass\WithNesting']
------
-services:
-    -
-        arguments: ['SomeClass\WithNesting']

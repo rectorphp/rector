@@ -25,7 +25,7 @@ final class PhpDocTagsFinder
         $tagName = '@' . ltrim($tagName, '@');
         $regEx = sprintf(self::TAG_REGEX, $tagName);
         $result = Strings::matchAll($dockblock, $regEx);
-        if (empty($result)) {
+        if ($result === []) {
             return [];
         }
 

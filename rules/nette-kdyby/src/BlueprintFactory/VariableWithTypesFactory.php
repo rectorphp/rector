@@ -30,9 +30,9 @@ final class VariableWithTypesFactory
     private $staticTypeMapper;
 
     public function __construct(
-        VariableNaming $variableNaming,
         NodeTypeResolver $nodeTypeResolver,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        VariableNaming $variableNaming
     ) {
         $this->variableNaming = $variableNaming;
         $this->nodeTypeResolver = $nodeTypeResolver;

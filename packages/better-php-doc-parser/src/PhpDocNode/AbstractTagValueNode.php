@@ -180,7 +180,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         return implode(', ', $itemsAsStrings);
     }
 
-    private function correctArraySingleItemPrint($value, string $arrayItemAsString): string
+    private function correctArraySingleItemPrint(array $value, string $arrayItemAsString): string
     {
         if (count($value) !== 1) {
             return $arrayItemAsString;

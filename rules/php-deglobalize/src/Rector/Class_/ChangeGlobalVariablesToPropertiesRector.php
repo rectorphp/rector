@@ -82,15 +82,15 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
         $this->collectGlobalVariableNamesAndRefactorToPropertyFetch($node);
 
         foreach ($this->globalVariableNames as $globalVariableName) {
-            $this->addPropertyWithoutConstructorToClass($classNode, null, $globalVariableName);
+            $this->addPropertyWithoutConstructorToClass($classLike, null, $globalVariableName);
         }
 
         return $node;
