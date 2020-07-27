@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -109,20 +110,24 @@ final class MethodCallManipulator
     public function findMethodCallsOnVariable(Variable $variable): array
     {
         // get scope node, e.g. parent function call, method call or anonymous function
-        $scopeNode = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [FunctionLike::class]);
-        if ($scopeNode === null) {
+        /** @var ClassMethod|null $classMethod */
+        $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod === null) {
             return [];
         }
 
         $variableName = $this->nodeNameResolver->getName($variable);
 
-        return $this->betterNodeFinder->find($scopeNode, function (Node $node) use ($variableName) {
+        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use ($variableName) {
             if (! $node instanceof MethodCall) {
                 return false;
             }
 
             // cover fluent interfaces too
             $callerNode = $this->resolveRootVariable($node);
+            if (! $callerNode instanceof Variable) {
+                return false;
+            }
 
             return $this->nodeNameResolver->isName($callerNode, $variableName);
         });
@@ -186,6 +191,7 @@ final class MethodCallManipulator
     private function resolveRootVariable(MethodCall $methodCall): Node
     {
         $callerNode = $methodCall->var;
+
         while ($callerNode instanceof MethodCall || $callerNode instanceof StaticCall) {
             $callerNode = $callerNode instanceof StaticCall ? $callerNode->class : $callerNode->var;
         }
