@@ -2,6 +2,7 @@
 
 namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
+use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 
@@ -10,7 +11,7 @@ interface UpdateDocName
     /**
      * @param Identifier|Name $value
      */
-    public function method(\PhpParser\Node $value);
+    public function method(Node $value);
 }
 
 ?>
@@ -19,6 +20,7 @@ interface UpdateDocName
 
 namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
+use PhpParser\Node;
 use ReflectionProperty;
 
 interface UpdateDocName
@@ -26,7 +28,7 @@ interface UpdateDocName
     /**
      * @param Identifier|Name $node
      */
-    public function method(\PhpParser\Node $node);
+    public function method(Node $node);
 }
 
 ?>
