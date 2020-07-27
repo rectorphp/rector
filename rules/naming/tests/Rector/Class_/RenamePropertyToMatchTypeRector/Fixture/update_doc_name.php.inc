@@ -21,7 +21,8 @@ interface UpdateDocName
 namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
 use PhpParser\Node;
-use ReflectionProperty;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 
 interface UpdateDocName
 {

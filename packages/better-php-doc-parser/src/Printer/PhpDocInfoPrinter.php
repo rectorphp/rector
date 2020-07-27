@@ -6,9 +6,13 @@ namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
@@ -277,7 +281,6 @@ final class PhpDocInfoPrinter
         }
 
         $nodeOutput = $this->printNode($phpDocTagNodeValue, $startEndValueObject);
-
         $tagSpaceSeparator = $this->resolveTagSpaceSeparator($phpDocTagNode);
 
         // space is handled by $tagSpaceSeparator
@@ -368,6 +371,10 @@ final class PhpDocInfoPrinter
      */
     private function resolveTagSpaceSeparator(PhpDocTagNode $phpDocTagNode): string
     {
+        if ($this->isCommonTag($phpDocTagNode)) {
+            return ' ';
+        }
+
         $originalContent = $this->phpDocInfo->getOriginalContent();
         $spacePattern = $this->spacePatternFactory->createSpacePattern($phpDocTagNode);
 
@@ -398,5 +405,22 @@ final class PhpDocInfoPrinter
         }
 
         return implode($implodeChar, $content);
+    }
+
+    private function isCommonTag(PhpDocTagNode $phpDocTagNode): bool
+    {
+        if ($phpDocTagNode->value instanceof ParamTagValueNode) {
+            return true;
+        }
+
+        if ($phpDocTagNode->value instanceof VarTagValueNode) {
+            return true;
+        }
+
+        if ($phpDocTagNode->value instanceof ReturnTagValueNode) {
+            return true;
+        }
+
+        return $phpDocTagNode->value instanceof ThrowsTagValueNode;
     }
 }

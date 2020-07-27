@@ -190,6 +190,19 @@ final class PhpDocInfo
         return $paramTypes;
     }
 
+    public function getParamTagValueNodeByName(string $parameterName): ?ParamTagValueNode
+    {
+        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValue) {
+            if ($paramTagValue->parameterName !== '$' . $parameterName) {
+                continue;
+            }
+
+            return $paramTagValue;
+        }
+
+        return null;
+    }
+
     public function getVarType(): Type
     {
         return $this->getTypeOrMixed($this->getVarTagValue());
@@ -472,7 +485,9 @@ final class PhpDocInfo
 
     private function getReturnTagValue(): ?AttributeAwareReturnTagValueNode
     {
-        return $this->phpDocNode->getReturnTagValues()[0] ?? null;
+        /** @var AttributeAwareReturnTagValueNode[] $returnTagValueNodes */
+        $returnTagValueNodes = $this->phpDocNode->getReturnTagValues();
+        return $returnTagValueNodes[0] ?? null;
     }
 
     private function ensureTypeIsTagValueNode(string $type, string $location): void
