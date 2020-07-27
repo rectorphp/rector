@@ -169,7 +169,7 @@ PHP
         FuncCall $funcCall,
         ArrayFunctionToMethodCall $arrayFunctionToMethodCall,
         PropertyFetch $propertyFetch
-    ) {
+    ): ?MethodCall {
         if ($arrayFunctionToMethodCall->getArrayMethod() && $this->isArrayType($funcCall->args[0]->value)) {
             return new MethodCall($propertyFetch, $arrayFunctionToMethodCall->getArrayMethod(), $funcCall->args);
         }

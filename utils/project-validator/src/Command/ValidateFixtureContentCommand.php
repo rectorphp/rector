@@ -16,7 +16,7 @@ use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ValidateFixturesCommand extends Command
+final class ValidateFixtureContentCommand extends Command
 {
     /**
      * @var FinderSanitizer

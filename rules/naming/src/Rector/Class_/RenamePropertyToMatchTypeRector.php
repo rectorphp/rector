@@ -17,12 +17,14 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
 use PhpParser\NodeTraverser;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\RenamePropertyToMatchTypeRectorTest
@@ -233,7 +235,29 @@ PHP
             // 2. rename param in the rest of the method
             $this->renameVariableInClassMethod($classMethod, $oldName, $expectedName);
 
+            // 3. rename @param variable in docblock too
+            $this->renameParameterNameInDocBlock($classMethod, $oldName, $expectedName);
+
             $this->hasChange = true;
         }
+    }
+
+    private function renameParameterNameInDocBlock(
+        ClassMethod $classMethod,
+        string $oldName,
+        string $expectedName
+    ): void {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return;
+        }
+
+        $paramTagValueNode = $phpDocInfo->getParamTagValueNodeByName($oldName);
+        if ($paramTagValueNode === null) {
+            return;
+        }
+
+        $paramTagValueNode->parameterName = '$' . $expectedName;
     }
 }

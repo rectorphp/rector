@@ -199,8 +199,11 @@ PHP
         return is_a($varStaticType->getClassName(), 'Nette\Application\UI\Control', true);
     }
 
-    private function resolveTypeFromShortControlNameAndVariable(String_ $shortControlString, Scope $scope, Expr $expr)
-    {
+    private function resolveTypeFromShortControlNameAndVariable(
+        String_ $shortControlString,
+        Scope $scope,
+        Expr $expr
+    ): Type {
         $componentName = $this->getValue($shortControlString);
         $methodName = sprintf('createComponent%s', ucfirst($componentName));
 

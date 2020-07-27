@@ -8,5 +8,5 @@ use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
 
 interface MethodNamesByInputNamesResolverAwareInterface
 {
-    public function setResolver(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver);
+    public function setResolver(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver): void;
 }

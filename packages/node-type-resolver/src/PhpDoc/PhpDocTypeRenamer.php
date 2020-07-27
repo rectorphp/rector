@@ -65,11 +65,14 @@ final class PhpDocTypeRenamer
         });
     }
 
+    /**
+     * @param string[] $excludedClasses
+     */
     private function shouldSkip(
         PhpDocParserNode $phpDocParserNode,
         Node $phpParserNode,
         string $namespacePrefix,
-        $excludedClasses
+        array $excludedClasses
     ): bool {
         if (! $phpDocParserNode instanceof IdentifierTypeNode) {
             return true;

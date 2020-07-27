@@ -78,7 +78,7 @@ final class RequireStringArgumentInMethodCallRule implements Rule
     }
 
     /**
-     * @param array<string, int> $positionsByMethods
+     * @param array<string, array<int>> $positionsByMethods
      */
     private function matchPositions(
         MethodCall $methodCall,
@@ -86,7 +86,7 @@ final class RequireStringArgumentInMethodCallRule implements Rule
         string $desiredType,
         array $positionsByMethods,
         string $methodName
-    ) {
+    ): ?array {
         if (! $this->isNodeVarType($methodCall, $scope, $desiredType)) {
             return null;
         }

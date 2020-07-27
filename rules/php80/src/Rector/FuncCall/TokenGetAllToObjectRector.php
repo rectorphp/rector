@@ -156,9 +156,10 @@ PHP
     }
 
     /**
+     * @param ClassMethod|Function_ $functionLike
      * @return Foreach_[]
      */
-    private function findForeachesOverTokenVariable($functionLike, Expr $assignedExpr): array
+    private function findForeachesOverTokenVariable(FunctionLike $functionLike, Expr $assignedExpr): array
     {
         return $this->betterNodeFinder->find((array) $functionLike->stmts, function (Node $node) use (
             $assignedExpr

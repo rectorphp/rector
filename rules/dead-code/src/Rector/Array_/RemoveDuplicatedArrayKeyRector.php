@@ -64,7 +64,10 @@ PHP
         return $node;
     }
 
-    private function getArrayItemsWithDuplicatedKey(Array_ $array)
+    /**
+     * @return ArrayItem[][]
+     */
+    private function getArrayItemsWithDuplicatedKey(Array_ $array): array
     {
         $arrayItemsByKeys = [];
 

@@ -7,12 +7,12 @@ namespace Rector\Core\Configuration;
 final class ChangeConfiguration
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $oldToNewClasses = [];
 
     /**
-     * @param string[] $oldToNewClasses
+     * @param array<string, string> $oldToNewClasses
      */
     public function setOldToNewClasses(array $oldToNewClasses): void
     {
@@ -20,7 +20,7 @@ final class ChangeConfiguration
     }
 
     /**
-     * @return string[]
+     * @return array<string, string>
      */
     public function getOldToNewClasses(): array
     {

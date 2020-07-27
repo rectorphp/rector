@@ -104,7 +104,7 @@ final class ClassAnalyzer
         return false;
     }
 
-    private function hasAllPropertiesWithSerialize(Class_ $class)
+    private function hasAllPropertiesWithSerialize(Class_ $class): bool
     {
         foreach ($class->stmts as $stmt) {
             if (! $stmt instanceof Property) {

@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -176,10 +177,15 @@ CODE_SAMPLE
         $this->renamedClassesCollector->addClassRename($implementedInterfaceName, $className);
     }
 
-    private function resolveClassFileLocation(string $implementedInterfaceName)
+    private function resolveClassFileLocation(string $implementedInterfaceName): string
     {
         $reflectionClass = new ReflectionClass($implementedInterfaceName);
-        return $reflectionClass->getFileName();
+        $fileName = $reflectionClass->getFileName();
+        if (! $fileName) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $fileName;
     }
 
     private function removeOrReplaceImlementedInterface(string $implementedInterfaceName, Class_ $class, int $key): void

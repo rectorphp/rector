@@ -13,12 +13,11 @@ use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 
 final class PhpDocInfoFactory
 {
@@ -43,36 +42,29 @@ final class PhpDocInfoFactory
     private $staticTypeMapper;
 
     /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-
-    /**
      * @var AttributeAwareNodeFactory
      */
     private $attributeAwareNodeFactory;
 
     /**
-     * @var ParamPhpDocNodeFactory
+     * @var PhpDocTypeChanger
      */
-    private $paramPhpDocNodeFactory;
+    private $phpDocTypeChanger;
 
     public function __construct(
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         CurrentNodeProvider $currentNodeProvider,
         Lexer $lexer,
-        ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
         PhpDocParser $phpDocParser,
         StaticTypeMapper $staticTypeMapper,
-        TypeComparator $typeComparator
+        PhpDocTypeChanger $phpDocTypeChanger
     ) {
         $this->phpDocParser = $phpDocParser;
         $this->lexer = $lexer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->typeComparator = $typeComparator;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
-        $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
 
     public function createFromNode(Node $node): ?PhpDocInfo
@@ -155,8 +147,7 @@ final class PhpDocInfoFactory
             $content,
             $this->staticTypeMapper,
             $node,
-            $this->typeComparator,
-            $this->paramPhpDocNodeFactory
+            $this->phpDocTypeChanger
         );
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
 

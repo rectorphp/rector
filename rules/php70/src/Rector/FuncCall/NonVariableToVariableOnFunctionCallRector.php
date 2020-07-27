@@ -79,7 +79,6 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         }
 
         $arguments = $this->getNonVariableArguments($node);
-
         if ($arguments === []) {
             return null;
         }

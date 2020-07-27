@@ -34,7 +34,7 @@ final class OverrideGuard
         array $templateFileInfos,
         array $templateVariables,
         Configuration $configuration
-    ) {
+    ): bool {
         foreach ($templateFileInfos as $templateFileInfo) {
             if (! $this->doesFileInfoAlreadyExist($templateVariables, $configuration, $templateFileInfo)) {
                 continue;

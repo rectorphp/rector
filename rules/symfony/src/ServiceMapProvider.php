@@ -195,6 +195,9 @@ final class ServiceMapProvider
         return $data;
     }
 
+    /**
+     * @param string|int $key
+     */
     private function convertedNestedArrayOrXml(array $value, array $data, $key): array
     {
         foreach ($value as $subKey => $subValue) {

@@ -50,7 +50,7 @@ class SomeClass
     public function run()
     {
         $form = new Form();
-        $keyDateControl = $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
     }
 }
 PHP
@@ -84,7 +84,6 @@ PHP
             }
 
             $controlName = $this->resolveControlName($node->var);
-
             $node->var = new Variable($controlName);
 
             // this fixes printing indent
@@ -112,35 +111,46 @@ PHP
         return $controlName->value . 'DateControl';
     }
 
-    private function createDateTimeControlNew($node): New_
+    private function createDateTimeControlNew(MethodCall $methodCall): New_
     {
         $fullyQualified = new FullyQualified('Nextras\FormComponents\Controls\DateControl');
         $new = new New_($fullyQualified);
 
-        if (isset($node->args[1])) {
-            $new->args[] = $node->args[1];
+        if (isset($methodCall->args[1])) {
+            $new->args[] = $methodCall->args[1];
         }
+
         return $new;
     }
 
-    private function createAssign(MethodCall $methodCall): ?Assign
+    private function createAssign(MethodCall $methodCall): ?Node
     {
         $key = $methodCall->args[0]->value;
         if (! $key instanceof String_) {
             return null;
         }
 
-        $arrayDimFetch = new ArrayDimFetch($methodCall->var, $key);
         $new = $this->createDateTimeControlNew($methodCall);
-        $formAssign = new Assign($arrayDimFetch, $new);
 
         $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Assign) {
-            return $formAssign;
+            return $new;
         }
 
-        $controlName = $this->resolveControlName($methodCall);
+        $arrayDimFetch = new ArrayDimFetch($methodCall->var, $key);
+        $new = $this->createDateTimeControlNew($methodCall);
 
-        return new Assign(new Variable($controlName), $formAssign);
+        $formAssign = new Assign($arrayDimFetch, $new);
+
+        if ($parent !== null) {
+            $methodCalls = $this->betterNodeFinder->findInstanceOf($parent, MethodCall::class);
+
+            if (count($methodCalls) > 1) {
+                $controlName = $this->resolveControlName($methodCall);
+                return new Assign(new Variable($controlName), $formAssign);
+            }
+        }
+
+        return $formAssign;
     }
 }

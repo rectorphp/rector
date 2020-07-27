@@ -96,6 +96,9 @@ final class BinaryOpManipulator
         return new $inversedNodeClass($binaryOp->left, $binaryOp->right);
     }
 
+    /**
+     * @param string|callable $firstCondition
+     */
     private function validateCondition($firstCondition): void
     {
         if (is_callable($firstCondition)) {

@@ -31,6 +31,9 @@ final class ConditionEvaluator
         return null;
     }
 
+    /**
+     * @return bool|int
+     */
     private function evaluateVersionCompareCondition(VersionCompareCondition $versionCompareCondition)
     {
         $compareSign = $versionCompareCondition->getCompareSign();

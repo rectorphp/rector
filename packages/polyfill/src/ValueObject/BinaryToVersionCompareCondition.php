@@ -8,6 +8,9 @@ use Rector\Polyfill\Contract\ConditionInterface;
 
 final class BinaryToVersionCompareCondition implements ConditionInterface
 {
+    /**
+     * @var mixed
+     */
     private $expectedValue;
 
     /**
@@ -20,6 +23,9 @@ final class BinaryToVersionCompareCondition implements ConditionInterface
      */
     private $versionCompareCondition;
 
+    /**
+     * @param mixed $expectedValue
+     */
     public function __construct(
         VersionCompareCondition $versionCompareCondition,
         string $binaryClass,
@@ -40,6 +46,9 @@ final class BinaryToVersionCompareCondition implements ConditionInterface
         return $this->binaryClass;
     }
 
+    /**
+     * @return mixed
+     */
     public function getExpectedValue()
     {
         return $this->expectedValue;

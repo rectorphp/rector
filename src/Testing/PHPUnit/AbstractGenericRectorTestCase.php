@@ -98,6 +98,9 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         return StaticFixtureFinder::yieldDirectory($directory, $suffix);
     }
 
+    /**
+     * @param mixed $value
+     */
     protected function setParameter(string $name, $value): void
     {
         $parameterProvider = self::$container->get(ParameterProvider::class);

@@ -221,6 +221,9 @@ PHP
         return new AttributeAwarePhpDocTagNode('@throws', $throwsTagValueNode);
     }
 
+    /**
+     * @return array<class-string>
+     */
     private function identifyThrownThrowablesInStaticCall(StaticCall $staticCall): array
     {
         $thrownClass = $staticCall->class;
@@ -242,13 +245,14 @@ PHP
             return [];
         }
 
-        return $methodCall->getAttribute('parentNode') instanceof Throw_
-            ? $this->extractMethodReturns($fullyQualified, $methodName)
+        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+
+        return $parent instanceof Throw_ ? $this->extractMethodReturns($fullyQualified, $methodName)
             : $this->extractMethodThrows($fullyQualified, $methodName);
     }
 
     /**
-     * @return string[]
+     * @return class-string[]
      */
     private function extractAlreadyAnnotatedThrowables(Node $node): array
     {
@@ -288,6 +292,9 @@ PHP
         return count($this->throwablesToAnnotate);
     }
 
+    /**
+     * @return array<class-string>
+     */
     private function extractMethodReturns(FullyQualified $fullyQualified, Identifier $identifier): array
     {
         $method = $identifier->name;
@@ -300,6 +307,9 @@ PHP
         return $this->classMethodReflectionHelper->extractTagsFromMethodDockblock($class, $method, '@return');
     }
 
+    /**
+     * @return array<class-string>
+     */
     private function extractMethodThrows(FullyQualified $fullyQualified, Identifier $identifier): array
     {
         $method = $identifier->name;

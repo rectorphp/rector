@@ -67,7 +67,7 @@ final class CountManipulator
         return $this->isCountWithExpression($greater->left, $expr);
     }
 
-    private function processGreaterOrEqual(GreaterOrEqual $greaterOrEqual, Expr $expr)
+    private function processGreaterOrEqual(GreaterOrEqual $greaterOrEqual, Expr $expr): bool
     {
         if (! $this->isNumber($greaterOrEqual->right, 1)) {
             return false;

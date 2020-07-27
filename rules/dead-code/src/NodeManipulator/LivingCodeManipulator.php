@@ -28,8 +28,6 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar;
 
 final class LivingCodeManipulator
@@ -40,13 +38,11 @@ final class LivingCodeManipulator
      */
     public function keepLivingCodeFromExpr($expr): array
     {
-        if (! $expr instanceof Node ||
-            $expr instanceof Closure ||
-            $expr instanceof Name ||
-            $expr instanceof Identifier ||
-            $expr instanceof Scalar ||
-            $expr instanceof ConstFetch
-        ) {
+        if (! $expr instanceof Expr) {
+            return [];
+        }
+
+        if ($expr instanceof Closure || $expr instanceof Scalar || $expr instanceof ConstFetch) {
             return [];
         }
 
@@ -72,8 +68,7 @@ final class LivingCodeManipulator
             );
         }
 
-        if ($expr instanceof ClassConstFetch ||
-            $expr instanceof StaticPropertyFetch) {
+        if ($expr instanceof ClassConstFetch || $expr instanceof StaticPropertyFetch) {
             return array_merge(
                 $this->keepLivingCodeFromExpr($expr->class),
                 $this->keepLivingCodeFromExpr($expr->name)
@@ -81,10 +76,9 @@ final class LivingCodeManipulator
         }
 
         if ($this->isBinaryOpWithoutChange($expr)) {
-            return array_merge(
-                $this->keepLivingCodeFromExpr($expr->left),
-                $this->keepLivingCodeFromExpr($expr->right)
-            );
+            /** @var BinaryOp $binaryOp */
+            $binaryOp = $expr;
+            return $this->processBinary($binaryOp);
         }
 
         if ($expr instanceof Instanceof_) {
@@ -95,15 +89,13 @@ final class LivingCodeManipulator
         }
 
         if ($expr instanceof Isset_) {
-            return array_merge(...array_map(function (Expr $expr): array {
-                return $this->keepLivingCodeFromExpr($expr);
-            }, $expr->vars));
+            return $this->processIsset($expr);
         }
 
         return [$expr];
     }
 
-    private function isNestedExpr($expr): bool
+    private function isNestedExpr(Expr $expr): bool
     {
         return $expr instanceof Cast ||
             $expr instanceof Empty_ ||
@@ -114,15 +106,33 @@ final class LivingCodeManipulator
             $expr instanceof Clone_;
     }
 
-    private function isBinaryOpWithoutChange($expr): bool
+    private function isBinaryOpWithoutChange(Expr $expr): bool
     {
-        return $expr instanceof BinaryOp
-            && ! (
-                $expr instanceof LogicalAnd ||
-                $expr instanceof BooleanAnd ||
-                $expr instanceof LogicalOr ||
-                $expr instanceof BooleanOr ||
-                $expr instanceof Coalesce
-            );
+        if (! $expr instanceof BinaryOp) {
+            return false;
+        }
+
+        return ! (
+            $expr instanceof LogicalAnd ||
+            $expr instanceof BooleanAnd ||
+            $expr instanceof LogicalOr ||
+            $expr instanceof BooleanOr ||
+            $expr instanceof Coalesce
+        );
+    }
+
+    private function processIsset(Isset_ $isset): array
+    {
+        return array_merge(...array_map(function (Expr $expr): array {
+            return $this->keepLivingCodeFromExpr($expr);
+        }, $isset->vars));
+    }
+
+    private function processBinary(BinaryOp $binaryOp): array
+    {
+        return array_merge(
+            $this->keepLivingCodeFromExpr($binaryOp->left),
+            $this->keepLivingCodeFromExpr($binaryOp->right)
+        );
     }
 }

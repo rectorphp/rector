@@ -144,6 +144,9 @@ final class ReturnClosurePrinter
         return Strings::replace($content, '#\)->#', $nextCallIndentReplacement);
     }
 
+    /**
+     * @param mixed[]|mixed $value
+     */
     private function shouldSkipObjectConfiguration($value): bool
     {
         if (! is_array($value)) {

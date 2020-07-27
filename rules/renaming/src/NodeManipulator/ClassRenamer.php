@@ -78,6 +78,9 @@ final class ClassRenamer
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
+    /**
+     * @param array<string, string> $oldToNewClasses
+     */
     public function renameNode(Node $node, array $oldToNewClasses): ?Node
     {
         $this->refactorPhpDoc($node, $oldToNewClasses);
@@ -101,7 +104,7 @@ final class ClassRenamer
      * Replace types in @var/@param/@return/@throws,
      * Doctrine @ORM entity targetClass, Serialize, Assert etc.
      */
-    private function refactorPhpDoc(Node $node, $oldToNewClasses): void
+    private function refactorPhpDoc(Node $node, array $oldToNewClasses): void
     {
         if (! $this->docBlockManipulator->hasNodeTypeTags($node)) {
             return;

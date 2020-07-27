@@ -142,7 +142,7 @@ PHP
 
     private function refactorClassMethodWithTypehintByParameterPosition(
         ClassMethod $classMethod,
-        $typehintByParameterPosition
+        array $typehintByParameterPosition
     ): void {
         foreach ($typehintByParameterPosition as $parameterPosition => $type) {
             if (! isset($classMethod->params[$parameterPosition])) {
