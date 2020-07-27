@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Doctrine\Inflector\Inflector;
+use Doctrine\Inflector\Rules\English\InflectorFactory;
 use OndraM\CiDetector\CiDetector;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
@@ -99,4 +101,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(SymfonyStyle::class)
         ->factory([ref(SymfonyStyleFactory::class), 'create']);
+
+    $services->set(InflectorFactory::class);
+
+    $services->set(Inflector::class)
+        ->factory([ref(InflectorFactory::class), 'build']);
 };
