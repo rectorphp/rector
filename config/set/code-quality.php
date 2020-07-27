@@ -53,6 +53,7 @@ use Rector\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
 use Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector;
+use Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;
 use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
@@ -214,4 +215,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(LogicalToBooleanRector::class);
 
     $services->set(VarToPublicPropertyRector::class);
+
+    $services->set(FixClassCaseSensitivityNameRector::class);
 };

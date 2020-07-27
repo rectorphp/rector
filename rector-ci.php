@@ -9,6 +9,7 @@ use Rector\Core\Configuration\Option;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\SetList;
+use Rector\SymfonyPhpConfig\Rector\Closure\AddEmptyLineBetweenCallsInPhpConfigRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -18,6 +19,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$methodsByType', [
             TestCase::class => ['provideData', 'provideData*', 'dataProvider', 'dataProvider*'],
         ]);
+
+    $services->set(AddEmptyLineBetweenCallsInPhpConfigRector::class);
 
     $parameters = $containerConfigurator->parameters();
 
