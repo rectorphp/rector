@@ -47,7 +47,7 @@ final class ComposerJsonManipulator
      */
     private $consoleDiffer;
 
-    public function __construct(Filesystem $filesystem, ConsoleDiffer $consoleDiffer)
+    public function __construct(ConsoleDiffer $consoleDiffer, Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
         $this->consoleDiffer = $consoleDiffer;
