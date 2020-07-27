@@ -9,6 +9,7 @@ use Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector;
 use Rector\CodeQuality\Rector\BinaryOp\InlineIfToExplicitIfRector;
 use Rector\CodeQuality\Rector\BinaryOp\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
+use Rector\CodeQuality\Rector\BooleanOp\LogicalToBooleanRector;
 use Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
@@ -29,6 +30,7 @@ use Rector\CodeQuality\Rector\FuncCall\InArrayAndArrayKeysToArrayKeyExistsRector
 use Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector;
 use Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector;
 use Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector;
+use Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyFuncGetArgsCountRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
@@ -51,12 +53,15 @@ use Rector\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
 use Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector;
+use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
+use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
+use Rector\Renaming\Rector\Function_\RenameFunctionRector;
 use Rector\SOLID\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -174,4 +179,39 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(UnusedForeachValueToArrayKeysRector::class);
 
     $services->set(ArrayThisCallToThisMethodCallRector::class);
+
+    $services->set(CommonNotEqualRector::class);
+
+    $services->set(RenameFunctionRector::class)
+        ->arg('$oldFunctionToNewFunction', [
+            'split' => 'explode',
+            'join' => 'implode',
+            'sizeof' => 'count',
+            # https://www.php.net/manual/en/aliases.php
+            'chop' => 'rtrim',
+            'doubleval' => 'floatval',
+            'gzputs' => 'gzwrites',
+            'fputs' => 'fwrite',
+            'ini_alter' => 'ini_set',
+            'is_double' => 'is_float',
+            'is_integer' => 'is_int',
+            'is_long' => 'is_int',
+            'is_real' => 'is_float',
+            'is_writeable' => 'is_writable',
+            'key_exists' => 'array_key_exists',
+            'pos' => 'current',
+            'strchr' => 'strstr',
+            # mb
+            'mbstrcut' => 'mb_strcut',
+            'mbstrlen' => 'mb_strlen',
+            'mbstrpos' => 'mb_strpos',
+            'mbstrrpos' => 'mb_strrpos',
+            'mbsubstr' => 'mb_substr',
+        ]);
+
+    $services->set(SetTypeToCastRector::class);
+
+    $services->set(LogicalToBooleanRector::class);
+
+    $services->set(VarToPublicPropertyRector::class);
 };

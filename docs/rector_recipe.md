@@ -47,7 +47,7 @@ CODE_SAMPLE,
         'source' => [
         ],
         // e.g. symfony30, target config to append this rector to
-        'set' => SetList::CELEBRITY,
+        'set' => SetList::CODE_QUALITY,
     ]);
 };
 ```

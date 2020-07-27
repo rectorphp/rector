@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Celebrity\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\FuncCall\SetTypeToCastRector\Fixture;
 
 class Assin
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Celebrity\Rector\FuncCall;
+namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -24,7 +24,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see https://stackoverflow.com/questions/5577003/using-settype-in-php-instead-of-typecasting-using-brackets-what-is-the-differen/5577068#5577068
  * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/pull/3709
- * @see \Rector\Celebrity\Tests\Rector\FuncCall\SetTypeToCastRector\SetTypeToCastRectorTest
+ * @see \Rector\CodeQuality\Tests\Rector\FuncCall\SetTypeToCastRector\SetTypeToCastRectorTest
  */
 final class SetTypeToCastRector extends AbstractRector
 {

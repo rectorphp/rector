@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Celebrity\Tests\Rector\BooleanOp\LogicalToBooleanRector;
+namespace Rector\CodeQuality\Tests\Rector\NotEqual\CommonNotEqualRector;
 
 use Iterator;
-use Rector\Celebrity\Rector\BooleanOp\LogicalToBooleanRector;
+use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class LogicalToBooleanRectorTest extends AbstractRectorTestCase
+final class CommonNotEqualRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class LogicalToBooleanRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return LogicalToBooleanRector::class;
+        return CommonNotEqualRector::class;
     }
 }

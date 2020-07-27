@@ -29,7 +29,6 @@ final class SetProvider extends AbstractSetProvider
             SetList::CAKEPHP_38 => __DIR__ . '/../../../config/set/cakephp38.php',
             SetList::CAKEPHP_40 => __DIR__ . '/../../../config/set/cakephp40.php',
             SetList::CAKEPHP_FLUENT_OPTIONS => __DIR__ . '/../../../config/set/cakephp-fluent-options.php',
-            SetList::CELEBRITY => __DIR__ . '/../../../config/set/celebrity.php',
             SetList::CODEIGNITER_40 => __DIR__ . '/../../../config/set/codeigniter-40.php',
             SetList::CODE_QUALITY => __DIR__ . '/../../../config/set/code-quality.php',
             SetList::CODING_STYLE => __DIR__ . '/../../../config/set/coding-style.php',

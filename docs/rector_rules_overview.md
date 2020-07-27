@@ -9,8 +9,7 @@
 - [Architecture](#architecture) (4)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
-- [Celebrity](#celebrity) (3)
-- [CodeQuality](#codequality) (54)
+- [CodeQuality](#codequality) (57)
 - [CodingStyle](#codingstyle) (36)
 - [DeadCode](#deadcode) (40)
 - [Decomplex](#decomplex) (1)
@@ -435,68 +434,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
-## Celebrity
-
-### `CommonNotEqualRector`
-
-- class: [`Rector\Celebrity\Rector\NotEqual\CommonNotEqualRector`](/../master/rules/celebrity/src/Rector/NotEqual/CommonNotEqualRector.php)
-- [test fixtures](/../master/rules/celebrity/tests/Rector/NotEqual/CommonNotEqualRector/Fixture)
-
-Use common != instead of less known <> with same meaning
-
-```diff
- final class SomeClass
- {
-     public function run($one, $two)
-     {
--        return $one <> $two;
-+        return $one != $two;
-     }
- }
-```
-
-<br><br>
-
-### `LogicalToBooleanRector`
-
-- class: [`Rector\Celebrity\Rector\BooleanOp\LogicalToBooleanRector`](/../master/rules/celebrity/src/Rector/BooleanOp/LogicalToBooleanRector.php)
-- [test fixtures](/../master/rules/celebrity/tests/Rector/BooleanOp/LogicalToBooleanRector/Fixture)
-
-Change OR, AND to ||, && with more common understanding
-
-```diff
--if ($f = false or true) {
-+if (($f = false) || true) {
-     return $f;
- }
-```
-
-<br><br>
-
-### `SetTypeToCastRector`
-
-- class: [`Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector`](/../master/rules/celebrity/src/Rector/FuncCall/SetTypeToCastRector.php)
-- [test fixtures](/../master/rules/celebrity/tests/Rector/FuncCall/SetTypeToCastRector/Fixture)
-
-Changes `settype()` to (type) where possible
-
-```diff
- class SomeClass
- {
--    public function run($foo)
-+    public function run(array $items)
-     {
--        settype($foo, 'string');
-+        $foo = (string) $foo;
-
--        return settype($foo, 'integer');
-+        return (int) $foo;
-     }
- }
-```
-
-<br><br>
-
 ## CodeQuality
 
 ### `AbsolutizeRequireAndIncludePathRector`
@@ -757,6 +694,26 @@ Simplify `$value` = `$value` + 5; assignments to shorter ones
 ```diff
 -$value = $value + 5;
 +$value += 5;
+```
+
+<br><br>
+
+### `CommonNotEqualRector`
+
+- class: [`Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector`](/../master/rules/code-quality/src/Rector/NotEqual/CommonNotEqualRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/NotEqual/CommonNotEqualRector/Fixture)
+
+Use common != instead of less known <> with same meaning
+
+```diff
+ final class SomeClass
+ {
+     public function run($one, $two)
+     {
+-        return $one <> $two;
++        return $one != $two;
+     }
+ }
 ```
 
 <br><br>
@@ -1064,6 +1021,22 @@ Joins concat of 2 strings, unless the lenght is too long
 
 <br><br>
 
+### `LogicalToBooleanRector`
+
+- class: [`Rector\CodeQuality\Rector\BooleanOp\LogicalToBooleanRector`](/../master/rules/code-quality/src/Rector/BooleanOp/LogicalToBooleanRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/BooleanOp/LogicalToBooleanRector/Fixture)
+
+Change OR, AND to ||, && with more common understanding
+
+```diff
+-if ($f = false or true) {
++if (($f = false) || true) {
+     return $f;
+ }
+```
+
+<br><br>
+
 ### `RemoveAlwaysTrueConditionSetInConstructorRector`
 
 - class: [`Rector\CodeQuality\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector`](/../master/rules/code-quality/src/Rector/If_/RemoveAlwaysTrueConditionSetInConstructorRector.php)
@@ -1111,6 +1084,30 @@ Remove `sprintf()` wrapper if not needed
          $welcome = 'hello';
 -        $value = sprintf('%s', $welcome);
 +        $value = $welcome;
+     }
+ }
+```
+
+<br><br>
+
+### `SetTypeToCastRector`
+
+- class: [`Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector`](/../master/rules/code-quality/src/Rector/FuncCall/SetTypeToCastRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/FuncCall/SetTypeToCastRector/Fixture)
+
+Changes `settype()` to (type) where possible
+
+```diff
+ class SomeClass
+ {
+-    public function run($foo)
++    public function run(array $items)
+     {
+-        settype($foo, 'string');
++        $foo = (string) $foo;
+
+-        return settype($foo, 'integer');
++        return (int) $foo;
      }
  }
 ```
@@ -2408,7 +2405,7 @@ use Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRect
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfiguration->services();
     $services->set(YieldClassMethodToArrayClassMethodRector::class)
-        ->arg('EventSubscriberInterface', ['getSubscribedEvents']);
+        ->arg('$methodsByType', ['EventSubscriberInterface' => ['getSubscribedEvents']]);
 };
 ```
 
