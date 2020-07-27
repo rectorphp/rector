@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Nette\ValueObject;
+namespace Rector\NetteCodeQuality\ValueObject;
 
 final class MethodName
 {

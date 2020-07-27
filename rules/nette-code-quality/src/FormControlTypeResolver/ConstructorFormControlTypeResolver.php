@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Nette\ValueObject\MethodName;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\Contract\MethodNamesByInputNamesResolverAwareInterface;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
+use Rector\NetteCodeQuality\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ConstructorFormControlTypeResolver implements FormControlTypeResolverInterface, MethodNamesByInputNamesResolverAwareInterface

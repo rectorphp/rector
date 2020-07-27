@@ -83,33 +83,28 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->isBeingAssignedOrInitialized($node)) {
+            return null;
+        }
+
         $inputName = $this->controlDimFetchAnalyzer->matchName($node);
         if ($inputName === null) {
             return null;
         }
 
-        if ($this->isBeingAssignedOrInitialized($node)) {
-            return null;
-        }
-
-        $controlVariableName = $this->netteControlNaming->createVariableName($inputName);
-
-        // 1. find previous calls on variable
-        /** @var Variable $formVariable */
-        $formVariable = $node->var;
-
-        $controlType = $this->formVariableInputNameTypeResolver->resolveControlTypeByInputName(
-            $formVariable,
-            $inputName
-        );
-
-        $formVariableName = $this->getName($formVariable);
+        $formVariableName = $this->getName($node->var);
         if ($formVariableName === null) {
             throw new ShouldNotHappenException();
         }
 
-        $controlObjectType = new ObjectType($controlType);
+        // 1. find previous calls on variable
+        $controlType = $this->formVariableInputNameTypeResolver->resolveControlTypeByInputName(
+            $node->var,
+            $inputName
+        );
 
+        $controlVariableName = $this->netteControlNaming->createVariableName($inputName);
+        $controlObjectType = new ObjectType($controlType);
         $this->addAssignExpressionForFirstCase($controlVariableName, $node, $controlObjectType);
 
         return new Variable($controlVariableName);
