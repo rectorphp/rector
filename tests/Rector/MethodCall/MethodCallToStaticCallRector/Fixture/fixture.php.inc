@@ -2,6 +2,8 @@
 
 namespace Rector\Core\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Fixture;
 
+use Rector\Core\Tests\Rector\MethodCall\MethodCallToStaticCallRector\AnotherDependency;
+
 final class SomeClass
 {
     private $anotherDependency;
@@ -23,6 +25,8 @@ final class SomeClass
 
 namespace Rector\Core\Tests\Rector\MethodCall\MethodCallToStaticCallRector\Fixture;
 
+use Rector\Core\Tests\Rector\MethodCall\MethodCallToStaticCallRector\AnotherDependency;
+
 final class SomeClass
 {
     private $anotherDependency;
@@ -34,7 +38,7 @@ final class SomeClass
 
     public function loadConfiguration()
     {
-        return StaticCaller::anotherMethod('value');
+        return \StaticCaller::anotherMethod('value');
     }
 }
 

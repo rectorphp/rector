@@ -81,7 +81,7 @@ final class ConfigurationFactory
         return Strings::startsWith($code, '<?php');
     }
 
-    private function resolveExtraFileContent(array $rectorRecipe)
+    private function resolveExtraFileContent(array $rectorRecipe): ?string
     {
         return isset($rectorRecipe[RecipeOption::EXTRA_FILE_CONTENT]) ? $this->normalizeCode(
             $rectorRecipe[RecipeOption::EXTRA_FILE_CONTENT]

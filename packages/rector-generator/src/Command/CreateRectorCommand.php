@@ -94,17 +94,17 @@ final class CreateRectorCommand extends Command
     private $parameterProvider;
 
     public function __construct(
-        SymfonyStyle $symfonyStyle,
-        ConfigurationFactory $configurationFactory,
-        TemplateVariablesFactory $templateVariablesFactory,
         ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
-        TemplateFinder $templateFinder,
-        TemplateFileSystem $templateFileSystem,
-        TemplateFactory $templateFactory,
         ConfigFilesystem $configFilesystem,
+        ConfigurationFactory $configurationFactory,
         OverrideGuard $overrideGuard,
+        ParameterProvider $parameterProvider,
         SmartFileSystem $smartFileSystem,
-        ParameterProvider $parameterProvider
+        SymfonyStyle $symfonyStyle,
+        TemplateFactory $templateFactory,
+        TemplateFileSystem $templateFileSystem,
+        TemplateFinder $templateFinder,
+        TemplateVariablesFactory $templateVariablesFactory
     ) {
         parent::__construct();
 

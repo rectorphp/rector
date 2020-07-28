@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator;
 
 use Nette\Utils\Strings;
-use PhpParser\Node\Stmt\Expression;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\StringType;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\RectorGenerator\NodeFactory\ConfigurationNodeFactory;
 use Rector\RectorGenerator\ValueObject\Configuration;
 
 final class TemplateVariablesFactory
@@ -26,10 +22,19 @@ final class TemplateVariablesFactory
      */
     private $nodeFactory;
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, NodeFactory $nodeFactory)
-    {
+    /**
+     * @var ConfigurationNodeFactory
+     */
+    private $configurationNodeFactory;
+
+    public function __construct(
+        BetterStandardPrinter $betterStandardPrinter,
+        ConfigurationNodeFactory $configurationNodeFactory,
+        NodeFactory $nodeFactory
+    ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeFactory = $nodeFactory;
+        $this->configurationNodeFactory = $configurationNodeFactory;
     }
 
     /**
@@ -55,6 +60,7 @@ final class TemplateVariablesFactory
             $data['__ConfigurationProperty__'] = $this->createConfigurationProperty(
                 $configuration->getRuleConfiguration()
             );
+
             $data['__ConfigurationConstructor__'] = $this->createConfigurationConstructor(
                 $configuration->getRuleConfiguration()
             );
@@ -124,44 +130,21 @@ final class TemplateVariablesFactory
         return $this->betterStandardPrinter->print($array);
     }
 
+    /**
+     * @param array<string, mixed> $ruleConfiguration
+     */
     private function createConfigurationProperty(array $ruleConfiguration): string
     {
-        $properties = [];
-        foreach (array_keys($ruleConfiguration) as $variable) {
-            $variable = ltrim($variable, '$');
-            $type = new ArrayType(new MixedType(), new MixedType());
-            $properties[] = $this->nodeFactory->createPrivatePropertyFromNameAndType($variable, $type);
-        }
-
+        $properties = $this->configurationNodeFactory->createProperties($ruleConfiguration);
         return $this->betterStandardPrinter->print($properties);
     }
 
+    /**
+     * @param array<string, mixed> $ruleConfiguration
+     */
     private function createConfigurationConstructor(array $ruleConfiguration): string
     {
-        $classMethod = $this->nodeFactory->createPublicMethod('__construct');
-
-        $assigns = [];
-        $params = [];
-
-        foreach ($ruleConfiguration as $variable => $values) {
-            $variable = ltrim($variable, '$');
-            $assign = $this->nodeFactory->createPropertyAssignment($variable);
-            $assigns[] = new Expression($assign);
-
-            if (is_array($values)) {
-                $type = new ArrayType(new MixedType(), new MixedType());
-            } elseif (is_string($values)) {
-                $type = new StringType();
-            } else {
-                throw new NotImplementedYetException();
-            }
-
-            $params[] = $this->nodeFactory->createParamFromNameAndType($variable, $type);
-        }
-
-        $classMethod->params = $params;
-        $classMethod->stmts = $assigns;
-
+        $classMethod = $this->configurationNodeFactory->createConstructorClassMethod($ruleConfiguration);
         return $this->betterStandardPrinter->print($classMethod);
     }
 }

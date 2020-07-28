@@ -38,6 +38,7 @@ final class TemplateFinder
 
         $filePaths = $this->addRuleAndTestCase($configuration, $filePaths);
 
+        /** @var string[] $filePaths */
         $filePaths[] = $this->resolveFixtureFilePath($configuration->isPhpSnippet());
 
         return $this->finderSanitizer->sanitize($filePaths);
@@ -59,7 +60,7 @@ final class TemplateFinder
      */
     private function addRuleAndTestCase(Configuration $configuration, array $filePaths): array
     {
-        if ($configuration->getRuleConfiguration()) {
+        if ($configuration->getRuleConfiguration() !== []) {
             $filePaths[] = __DIR__ . '/../../templates/rules/__package__/src/Rector/__Category__/__Configured__Name__.php';
 
             if ($configuration->getExtraFileContent()) {

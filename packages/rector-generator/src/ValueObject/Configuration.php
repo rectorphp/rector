@@ -72,9 +72,9 @@ final class Configuration
     private $source = [];
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
-    private $ruleConfiguration;
+    private $ruleConfiguration = [];
 
     /**
      * @param string[] $nodeTypes
@@ -191,7 +191,7 @@ final class Configuration
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function getRuleConfiguration(): array
     {

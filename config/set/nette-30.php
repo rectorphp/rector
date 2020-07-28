@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Core\Rector\MethodCall\MethodCallToStaticCallRector;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
@@ -42,6 +43,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
         'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
     ]);
+
+    $services->set(MethodCallToStaticCallRector::class)
+        ->arg('$methodCallsToStaticCalls', [
+            'Nette\DI\ContainerBuilder' => [
+                'expand' => ['Nette\DI\Helpers', 'expand'],
+            ],
+        ]);
 
     $services->set(RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [

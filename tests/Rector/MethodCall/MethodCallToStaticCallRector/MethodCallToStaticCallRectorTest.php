@@ -29,7 +29,9 @@ final class MethodCallToStaticCallRectorTest extends AbstractRectorTestCase
         return [
             MethodCallToStaticCallRector::class => [
                 '$methodCallsToStaticCalls' => [
-                    'AnotherDependency' => [['StaticCaller', 'anotherMethod']],
+                    AnotherDependency::class => [
+                        'process' => ['StaticCaller', 'anotherMethod'],
+                    ],
                 ],
             ],
         ];

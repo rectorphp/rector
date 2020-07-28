@@ -16,14 +16,15 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class MethodCallToStaticCallRector extends AbstractRector
 {
     /**
-     * @var mixed[]
+     * @var array<string, array<string, string>>
      */
-    private $methodCallsToStaticCalls;
+    private $methodCallsToStaticCalls = [];
 
+    /**
+     * @param array<string, array<string, string>> $methodCallsToStaticCalls
+     */
     public function __construct(array $methodCallsToStaticCalls = [])
     {
-        dump($methodCallsToStaticCalls);
-        die;
         $this->methodCallsToStaticCalls = $methodCallsToStaticCalls;
     }
 
@@ -67,7 +68,9 @@ PHP
 ,
                 [
                     '$methodCallsToStaticCalls' => [
-                        'AnotherDependency' => [['StaticCaller', 'anotherMethod']],
+                        'AnotherDependency' => [
+                            'process' => ['StaticCaller', 'anotherMethod'],
+                        ],
                     ],
                 ]
             ),
@@ -91,11 +94,20 @@ PHP
             return null;
         }
 
-//        foreach ($this->methodCallsToStaticCalls as ) {
-//    }
+        foreach ($this->methodCallsToStaticCalls as $class => $staticCallsByMethod) {
+            if (! $this->isObjectType($node->var, $class)) {
+                continue;
+            }
 
-        // change the node
+            foreach ($staticCallsByMethod as $method => $staticCall) {
+                if (! $this->isName($node->name, $method)) {
+                    continue;
+                }
 
-        return $node;
+                return $this->createStaticCall($staticCall[0], $staticCall[1], $node->args);
+            }
+        }
+
+        return null;
     }
 }
