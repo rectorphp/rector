@@ -70,6 +70,10 @@ final class Configuration
      * @var string[]
      */
     private $source = [];
+    /**
+     * @var array
+     */
+    private $configuration;
 
     /**
      * @param string[] $nodeTypes
@@ -85,6 +89,7 @@ final class Configuration
         string $codeAfter,
         ?string $extraFileContent,
         ?string $extraFileName,
+        array $configuration,
         array $source,
         ?Set $set,
         bool $isPhpSnippet
@@ -101,6 +106,7 @@ final class Configuration
         $this->isPhpSnippet = $isPhpSnippet;
         $this->extraFileContent = $extraFileContent;
         $this->extraFileName = $extraFileName;
+        $this->configuration = $configuration;
     }
 
     public function getDescription(): string
@@ -190,5 +196,13 @@ final class Configuration
         }
 
         $this->name = $name;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getConfiguration(): array
+    {
+        return $this->configuration;
     }
 }

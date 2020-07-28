@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\Command;
 
 use Nette\Utils\Strings;
+use Rector\Core\Configuration\Option;
 use Rector\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
 use Rector\RectorGenerator\Config\ConfigFilesystem;
 use Rector\RectorGenerator\Configuration\ConfigurationFactory;
@@ -20,6 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -34,11 +36,6 @@ final class CreateRectorCommand extends Command
      * @var string[]
      */
     private $generatedFiles = [];
-
-    /**
-     * @var mixed[]
-     */
-    private $rectorRecipe = [];
 
     /**
      * @var SymfonyStyle
@@ -91,8 +88,10 @@ final class CreateRectorCommand extends Command
     private $smartFileSystem;
 
     /**
-     * @param mixed[] $rectorRecipe
+     * @var ParameterProvider
      */
+    private $parameterProvider;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         ConfigurationFactory $configurationFactory,
@@ -103,15 +102,14 @@ final class CreateRectorCommand extends Command
         TemplateFactory $templateFactory,
         ConfigFilesystem $configFilesystem,
         OverrideGuard $overrideGuard,
-        array $rectorRecipe,
-        SmartFileSystem $smartFileSystem
+        SmartFileSystem $smartFileSystem,
+        ParameterProvider $parameterProvider
     ) {
         parent::__construct();
 
         $this->symfonyStyle = $symfonyStyle;
         $this->configurationFactory = $configurationFactory;
         $this->templateVariablesFactory = $templateVariablesFactory;
-        $this->rectorRecipe = $rectorRecipe;
         $this->composerPackageAutoloadUpdater = $composerPackageAutoloadUpdater;
         $this->templateFinder = $templateFinder;
         $this->templateFileSystem = $templateFileSystem;
@@ -119,6 +117,7 @@ final class CreateRectorCommand extends Command
         $this->configFilesystem = $configFilesystem;
         $this->overrideGuard = $overrideGuard;
         $this->smartFileSystem = $smartFileSystem;
+        $this->parameterProvider = $parameterProvider;
     }
 
     protected function configure(): void
@@ -130,7 +129,12 @@ final class CreateRectorCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $configuration = $this->configurationFactory->createFromRectorRecipe($this->rectorRecipe);
+        $rectorRecipe = $this->parameterProvider->provideParameter(Option::RECTOR_RECIPE);
+
+        $configuration = $this->configurationFactory->createFromRectorRecipe($rectorRecipe);
+        dump($configuration);
+        die;
+
         $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
 
         // setup psr-4 autoload, if not already in
