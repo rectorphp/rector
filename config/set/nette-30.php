@@ -7,6 +7,7 @@ use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
 use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -19,6 +20,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     # Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
     $services->set(RemoveParentCallWithoutParentRector::class);
+
+    // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
+    $services->set(RenameClassConstantRector::class)
+        ->arg('$oldToNewConstantsByClass', [
+            'Contributte\Events\Extra\Event\Security\LoggedInEvent' => [
+                'NAME' => 'class',
+            ],
+            'Contributte\Events\Extra\Event\Security\LoggedOutEvent' => [
+                'NAME' => 'class',
+            ],
+        ]);
 
     $services->set(RenameClassRector::class)
         ->arg('$oldToNewClasses', [
