@@ -24,8 +24,14 @@ final class MethodCallToStaticCallRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    protected function getRectorsWithConfiguration(): array
     {
-        return MethodCallToStaticCallRector::class;
+        return [
+            MethodCallToStaticCallRector::class => [
+                '$methodCallsToStaticCalls' => [
+                    'AnotherDependency' => [['StaticCaller', 'anotherMethod']],
+                ],
+            ],
+        ];
     }
 }

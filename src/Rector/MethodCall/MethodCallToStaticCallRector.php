@@ -7,7 +7,7 @@ namespace Rector\Core\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -15,10 +15,22 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class MethodCallToStaticCallRector extends AbstractRector
 {
+    /**
+     * @var mixed[]
+     */
+    private $methodCallsToStaticCalls;
+
+    public function __construct(array $methodCallsToStaticCalls = [])
+    {
+        dump($methodCallsToStaticCalls);
+        die;
+        $this->methodCallsToStaticCalls = $methodCallsToStaticCalls;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change method call to desired static call', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 final class SomeClass
 {
@@ -52,7 +64,12 @@ final class SomeClass
     }
 }
 PHP
-
+,
+                [
+                    '$methodCallsToStaticCalls' => [
+                        'AnotherDependency' => [['StaticCaller', 'anotherMethod']],
+                    ],
+                ]
             ),
         ]);
     }
@@ -70,6 +87,13 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->methodCallsToStaticCalls === []) {
+            return null;
+        }
+
+//        foreach ($this->methodCallsToStaticCalls as ) {
+//    }
+
         // change the node
 
         return $node;

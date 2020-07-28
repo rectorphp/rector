@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\_Package_\Rector\_Category_;
+namespace Rector\__Package__\Rector\__Category__;
 
 use PhpParser\Node;
 use Rector\Core\Rector\AbstractRector;
@@ -11,16 +11,16 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
 _Source_
- * @see \Rector\_Package_\Tests\Rector\_Category_\_Name_\_Name_Test
+ * @see \Rector\__Package__\Tests\Rector\__Category__\__Name__\__Name__Test
  */
-final class _Name_ extends AbstractRector
+final class __Name__ extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('_Description_', [
+        return new RectorDefinition('__Description__', [
             new CodeSample(
-                _CodeBeforeExample_,
-                _CodeAfterExample_
+                __CodeBeforeExample__,
+                __CodeAfterExample__
             )
         ]);
     }
@@ -30,11 +30,11 @@ final class _Name_ extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return _NodeTypes_Php_;
+        return __NodeTypes_Php__;
     }
 
     /**
-     * @param _NodeTypes_Doc_ $node
+     * @param __NodeTypes_Doc__ $node
      */
     public function refactor(Node $node): ?Node
     {

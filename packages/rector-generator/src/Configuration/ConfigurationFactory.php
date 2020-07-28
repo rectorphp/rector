@@ -9,6 +9,7 @@ use Rector\Core\Set\SetResolver;
 use Rector\RectorGenerator\Guard\RecipeGuard;
 use Rector\RectorGenerator\ValueObject\Configuration;
 use Rector\RectorGenerator\ValueObject\RecipeOption;
+use Symplify\SetConfigResolver\ValueObject\Set;
 
 final class ConfigurationFactory
 {
@@ -38,12 +39,8 @@ final class ConfigurationFactory
         $nodeTypeClasses = $rectorRecipe[RecipeOption::NODE_TYPES];
 
         $category = $this->resolveCategoryFromFqnNodeTypes($nodeTypeClasses);
-
-        $extraFileContent = isset($rectorRecipe[RecipeOption::EXTRA_FILE_CONTENT]) ? $this->normalizeCode(
-            $rectorRecipe[RecipeOption::EXTRA_FILE_CONTENT]
-        ) : null;
-
-        $set = $rectorRecipe['set'] ? $this->setResolver->resolveSetByName($rectorRecipe['set']) : null;
+        $extraFileContent = $this->resolveExtraFileContent($rectorRecipe);
+        $set = $this->resolveeSet($rectorRecipe);
 
         return new Configuration(
             $rectorRecipe[RecipeOption::PACKAGE],
@@ -82,5 +79,21 @@ final class ConfigurationFactory
     private function isPhpSnippet(string $code): bool
     {
         return Strings::startsWith($code, '<?php');
+    }
+
+    private function resolveExtraFileContent(array $rectorRecipe)
+    {
+        return isset($rectorRecipe[RecipeOption::EXTRA_FILE_CONTENT]) ? $this->normalizeCode(
+            $rectorRecipe[RecipeOption::EXTRA_FILE_CONTENT]
+        ) : null;
+    }
+
+    private function resolveeSet(array $rectorRecipe): ?Set
+    {
+        if ($rectorRecipe[RecipeOption::SET]) {
+            return $this->setResolver->resolveSetByName($rectorRecipe[RecipeOption::SET]);
+        }
+
+        return null;
     }
 }

@@ -70,6 +70,7 @@ final class Configuration
      * @var string[]
      */
     private $source = [];
+
     /**
      * @var array
      */
@@ -189,6 +190,14 @@ final class Configuration
         return $this->extraFileName;
     }
 
+    /**
+     * @return mixed[]
+     */
+    public function getRuleConfiguration(): array
+    {
+        return $this->ruleConfiguration;
+    }
+
     private function setName(string $name): void
     {
         if (! Strings::endsWith($name, 'Rector')) {
@@ -196,13 +205,5 @@ final class Configuration
         }
 
         $this->name = $name;
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function getRuleConfiguration(): array
-    {
-        return $this->ruleConfiguration;
     }
 }

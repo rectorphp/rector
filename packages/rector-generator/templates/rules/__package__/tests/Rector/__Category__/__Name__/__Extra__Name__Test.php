@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\_Package_\Tests\Rector\_Category_\_Name_;
+namespace Rector\__Package__\Tests\Rector\__Category__\__Name__;
 
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class _Name_ExtraTest extends AbstractRectorTestCase
+final class __Name__Test extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -19,11 +19,11 @@ final class _Name_ExtraTest extends AbstractRectorTestCase
 
     public function provideData(): \Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc', '_ExtraFileName_', __DIR__ . '/Source/extra_file.php'];
+        yield [__DIR__ . '/Fixture/fixture.php.inc', '__ExtraFileName__', __DIR__ . '/Source/extra_file.php'];
     }
 
     protected function getRectorClass(): string
     {
-        return \Rector\_Package_\Rector\_Category_\_Name_::class;
+        return \Rector\__Package__\Rector\__Category__\__Name__::class;
     }
 }

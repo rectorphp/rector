@@ -140,9 +140,6 @@ final class CreateRectorCommand extends Command
 
         $templateFileInfos = $this->templateFinder->find($configuration);
 
-        dump($templateFileInfos);
-        die;
-
         $isUnwantedOverride = $this->overrideGuard->isUnwantedOverride(
             $templateFileInfos,
             $templateVariables,
@@ -155,9 +152,9 @@ final class CreateRectorCommand extends Command
             return ShellCode::SUCCESS;
         }
 
-//        $this->configFilesystem->appendRectorServiceToSet($configuration, $templateVariables);
-
         $this->generateFiles($templateFileInfos, $templateVariables, $configuration);
+
+        $this->configFilesystem->appendRectorServiceToSet($configuration, $templateVariables);
 
         $this->printSuccess($configuration->getName());
 

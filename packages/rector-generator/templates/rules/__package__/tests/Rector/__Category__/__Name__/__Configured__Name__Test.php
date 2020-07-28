@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\_Package_\Tests\Rector\_Category_\_Name_;
+namespace Rector\__Package__\Tests\Rector\__Category__\__Name__;
 
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class Configured_Name_Test extends AbstractRectorTestCase
+final class __Name__Test extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -24,8 +24,8 @@ final class Configured_Name_Test extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            \Rector\_Package_\Rector\_Category_\_Name_::class =>
-                _RuleConfiguration_
+            \Rector\__Package__\Rector\__Category__\__Name__::class =>
+                __RuleConfiguration__
         ];
     }
 }

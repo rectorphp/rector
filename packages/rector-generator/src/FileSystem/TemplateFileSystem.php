@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\ValueObject\Configuration;
 use Rector\RectorGenerator\ValueObject\Package;
+use Rector\RectorGenerator\ValueObject\RecipeOption;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TemplateFileSystem
@@ -23,19 +24,17 @@ final class TemplateFileSystem
         $destination = $smartFileInfo->getRelativeFilePathFromDirectory(TemplateFinder::TEMPLATES_DIRECTORY);
 
         // normalize core package
-        if ($configuration->getPackage() === 'Rector') {
-            $destination = Strings::replace($destination, '#rules\/_package_/tests/Rector#', 'tests/Rector');
-            $destination = Strings::replace($destination, '#rules\/_package_/src/Rector#', 'src/Rector');
+        if ($configuration->getPackage() === RecipeOption::PACKAGE_CORE) {
+            $destination = Strings::replace($destination, '#rules\/__package__/tests/Rector#', 'tests/Rector');
+            $destination = Strings::replace($destination, '#rules\/__package__/src/Rector#', 'src/Rector');
         } elseif ($configuration->getPackage() === Package::UTILS) {
             // special keyword for 3rd party Rectors, not for core Github contribution
-            $destination = Strings::replace($destination, '#packages\/_Package_#', 'utils/rector');
+            $destination = Strings::replace($destination, '#packages\/__Package__#', 'utils/rector');
         }
 
-        if (! Strings::match($destination, '#fixture[\d+]*\.php\.inc#')) {
-            $destination = rtrim($destination, '.inc');
-        }
-
-        return $this->applyVariables($destination, $templateVariables);
+        // remove _Configured|_Extra prefix
+        $destination = $this->applyVariables($destination, $templateVariables);
+        return Strings::replace($destination, '#(__Configured|__Extra)#', '');
     }
 
     /**
