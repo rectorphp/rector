@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\Argument\ArgumentRemoverRector;
+use Rector\Generic\Rector\Argument\ArgumentRemoverRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

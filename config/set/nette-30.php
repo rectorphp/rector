@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\MethodCall\MethodCallToStaticCallRector;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
+use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
 use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;

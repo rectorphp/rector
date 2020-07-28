@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\Function_\FunctionToStaticCallRector;
+use Rector\Generic\Rector\Function_\FunctionToStaticCallRector;
 use Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector;
 use Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector;
 use Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;

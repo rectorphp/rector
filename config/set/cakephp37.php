@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector;
-use Rector\Core\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
-use Rector\Core\Rector\Property\PropertyToMethodRector;
+use Rector\Generic\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
+use Rector\Generic\Rector\Property\PropertyToMethodRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

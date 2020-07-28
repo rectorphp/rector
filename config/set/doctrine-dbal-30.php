@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\FuncCall\RemoveFuncCallArgRector;
+use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

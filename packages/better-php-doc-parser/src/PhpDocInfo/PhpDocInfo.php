@@ -27,6 +27,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -81,6 +82,11 @@ final class PhpDocInfo
     private $phpDocTypeChanger;
 
     /**
+     * @var PhpDocRemover
+     */
+    private $phpDocRemover;
+
+    /**
      * @param mixed[] $tokens
      */
     public function __construct(
@@ -89,7 +95,8 @@ final class PhpDocInfo
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
         Node $node,
-        PhpDocTypeChanger $phpDocTypeChanger
+        PhpDocTypeChanger $phpDocTypeChanger,
+        PhpDocRemover $phpDocRemover
     ) {
         $this->phpDocNode = $attributeAwarePhpDocNode;
         $this->tokens = $tokens;
@@ -98,6 +105,7 @@ final class PhpDocInfo
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->phpDocRemover = $phpDocRemover;
     }
 
     public function getOriginalContent(): string
@@ -205,17 +213,7 @@ final class PhpDocInfo
 
     public function removeTagValueNodeFromNode(PhpDocTagValueNode $phpDocTagValueNode): void
     {
-        foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if ($phpDocChildNode->value !== $phpDocTagValueNode) {
-                continue;
-            }
-
-            unset($this->phpDocNode->children[$key]);
-        }
+        $this->phpDocRemover->removeTagValueFromNode($this, $phpDocTagValueNode);
     }
 
     public function hasByType(string $type): bool
@@ -302,17 +300,7 @@ final class PhpDocInfo
 
     public function removeByName(string $name): void
     {
-        foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if (! $this->areAnnotationNamesEqual($name, $phpDocChildNode->name)) {
-                continue;
-            }
-
-            unset($this->phpDocNode->children[$key]);
-        }
+        $this->phpDocRemover->removeByName($this, $name);
     }
 
     /**
@@ -456,14 +444,6 @@ final class PhpDocInfo
             $location,
             PhpDocTagValueNode::class
         ));
-    }
-
-    private function areAnnotationNamesEqual(string $firstAnnotationName, string $secondAnnotationName): bool
-    {
-        $firstAnnotationName = trim($firstAnnotationName, '@');
-        $secondAnnotationName = trim($secondAnnotationName, '@');
-
-        return $firstAnnotationName === $secondAnnotationName;
     }
 
     private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): string

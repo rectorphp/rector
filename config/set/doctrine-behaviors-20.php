@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\Class_\AddInterfaceByTraitRector;
 use Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
+use Rector\Generic\Rector\Class_\AddInterfaceByTraitRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
