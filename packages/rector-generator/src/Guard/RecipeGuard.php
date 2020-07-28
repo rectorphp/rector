@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\RectorGenerator\Guard;
 
+use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\Configuration\Option;
 use Rector\RectorGenerator\Exception\ConfigurationException;
+use Rector\RectorGenerator\ValueObject\RecipeOption;
 
 final class RecipeGuard
 {
@@ -30,19 +33,22 @@ final class RecipeGuard
         $requiredKeysCount = count(self::REQUIRED_KEYS);
 
         if (count(array_intersect(array_keys($rectorRecipe), self::REQUIRED_KEYS)) === $requiredKeysCount) {
-            if (count($rectorRecipe['node_types']) < 1) {
+            if (count($rectorRecipe[RecipeOption::NODE_TYPES]) < 1) {
                 throw new ConfigurationException(sprintf(
-                    '"%s" option requires at least one node, e.g. "FuncCall"',
-                    'node_types'
+                    '"%s" option requires at least one node, e.g. "%s"',
+                    FuncCall::class,
+                    RecipeOption::NODE_TYPES
                 ));
             }
 
             return;
         }
 
-        throw new ConfigurationException(sprintf(
-            'Make sure "%s" keys are present in "parameters > rector_recipe"',
+        $message = sprintf(
+            'Make sure "%s" keys are present in "parameters > %s"',
+            Option::RECTOR_RECIPE,
             implode('", "', self::REQUIRED_KEYS)
-        ));
+        );
+        throw new ConfigurationException($message);
     }
 }

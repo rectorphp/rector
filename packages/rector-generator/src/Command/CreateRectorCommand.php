@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\Command;
 
 use Nette\Utils\Strings;
+use Rector\Core\Configuration\Option;
 use Rector\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
 use Rector\RectorGenerator\Config\ConfigFilesystem;
 use Rector\RectorGenerator\Configuration\ConfigurationFactory;
@@ -14,12 +15,14 @@ use Rector\RectorGenerator\Guard\OverrideGuard;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\RecipeOption;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -34,11 +37,6 @@ final class CreateRectorCommand extends Command
      * @var string[]
      */
     private $generatedFiles = [];
-
-    /**
-     * @var mixed[]
-     */
-    private $rectorRecipe = [];
 
     /**
      * @var SymfonyStyle
@@ -91,27 +89,28 @@ final class CreateRectorCommand extends Command
     private $smartFileSystem;
 
     /**
-     * @param mixed[] $rectorRecipe
+     * @var ParameterProvider
      */
+    private $parameterProvider;
+
     public function __construct(
-        SymfonyStyle $symfonyStyle,
-        ConfigurationFactory $configurationFactory,
-        TemplateVariablesFactory $templateVariablesFactory,
         ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
-        TemplateFinder $templateFinder,
-        TemplateFileSystem $templateFileSystem,
-        TemplateFactory $templateFactory,
         ConfigFilesystem $configFilesystem,
+        ConfigurationFactory $configurationFactory,
         OverrideGuard $overrideGuard,
-        array $rectorRecipe,
-        SmartFileSystem $smartFileSystem
+        ParameterProvider $parameterProvider,
+        SmartFileSystem $smartFileSystem,
+        SymfonyStyle $symfonyStyle,
+        TemplateFactory $templateFactory,
+        TemplateFileSystem $templateFileSystem,
+        TemplateFinder $templateFinder,
+        TemplateVariablesFactory $templateVariablesFactory
     ) {
         parent::__construct();
 
         $this->symfonyStyle = $symfonyStyle;
         $this->configurationFactory = $configurationFactory;
         $this->templateVariablesFactory = $templateVariablesFactory;
-        $this->rectorRecipe = $rectorRecipe;
         $this->composerPackageAutoloadUpdater = $composerPackageAutoloadUpdater;
         $this->templateFinder = $templateFinder;
         $this->templateFileSystem = $templateFileSystem;
@@ -119,6 +118,7 @@ final class CreateRectorCommand extends Command
         $this->configFilesystem = $configFilesystem;
         $this->overrideGuard = $overrideGuard;
         $this->smartFileSystem = $smartFileSystem;
+        $this->parameterProvider = $parameterProvider;
     }
 
     protected function configure(): void
@@ -130,7 +130,9 @@ final class CreateRectorCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $configuration = $this->configurationFactory->createFromRectorRecipe($this->rectorRecipe);
+        $rectorRecipe = $this->parameterProvider->provideParameter(Option::RECTOR_RECIPE);
+
+        $configuration = $this->configurationFactory->createFromRectorRecipe($rectorRecipe);
         $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
 
         // setup psr-4 autoload, if not already in
@@ -145,15 +147,14 @@ final class CreateRectorCommand extends Command
         );
 
         if ($isUnwantedOverride) {
-            $this->symfonyStyle->warning(
-                'The rule already exists and you decided to keep the original. No files were changed'
-            );
+            $this->symfonyStyle->warning('No files were changed');
+
             return ShellCode::SUCCESS;
         }
 
-        $this->configFilesystem->appendRectorServiceToSet($configuration, $templateVariables);
-
         $this->generateFiles($templateFileInfos, $templateVariables, $configuration);
+
+        $this->configFilesystem->appendRectorServiceToSet($configuration, $templateVariables);
 
         $this->printSuccess($configuration->getName());
 
@@ -176,7 +177,7 @@ final class CreateRectorCommand extends Command
             );
 
             $content = $this->templateFactory->create($smartFileInfo->getContents(), $templateVariables);
-            if ($configuration->getPackage() === 'Rector') {
+            if ($configuration->getPackage() === RecipeOption::PACKAGE_CORE) {
                 $content = $this->addOneMoreRectorNesting($content);
             }
 

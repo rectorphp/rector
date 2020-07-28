@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator;
 
 use Nette\Utils\Strings;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\RectorGenerator\NodeFactory\ConfigurationNodeFactory;
 use Rector\RectorGenerator\ValueObject\Configuration;
 
 final class TemplateVariablesFactory
@@ -19,9 +17,24 @@ final class TemplateVariablesFactory
      */
     private $betterStandardPrinter;
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
-    {
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    /**
+     * @var ConfigurationNodeFactory
+     */
+    private $configurationNodeFactory;
+
+    public function __construct(
+        BetterStandardPrinter $betterStandardPrinter,
+        ConfigurationNodeFactory $configurationNodeFactory,
+        NodeFactory $nodeFactory
+    ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeFactory = $nodeFactory;
+        $this->configurationNodeFactory = $configurationNodeFactory;
     }
 
     /**
@@ -30,26 +43,39 @@ final class TemplateVariablesFactory
     public function createFromConfiguration(Configuration $configuration): array
     {
         $data = [
-            '_Package_' => $configuration->getPackage(),
-            '_package_' => $configuration->getPackageDirectory(),
-            '_Category_' => $configuration->getCategory(),
-            '_Description_' => $configuration->getDescription(),
-            '_Name_' => $configuration->getName(),
-            '_CodeBefore_' => trim($configuration->getCodeBefore()) . PHP_EOL,
-            '_CodeBeforeExample_' => $this->createCodeForDefinition($configuration->getCodeBefore()),
-            '_CodeAfter_' => trim($configuration->getCodeAfter()) . PHP_EOL,
-            '_CodeAfterExample_' => $this->createCodeForDefinition($configuration->getCodeAfter()),
-            '_Source_' => $this->createSourceDocBlock($configuration->getSource()),
+            '__Package__' => $configuration->getPackage(),
+            '__package__' => $configuration->getPackageDirectory(),
+            '__Category__' => $configuration->getCategory(),
+            '__Description__' => $configuration->getDescription(),
+            '__Name__' => $configuration->getName(),
+            '__CodeBefore__' => trim($configuration->getCodeBefore()) . PHP_EOL,
+            '__CodeBeforeExample__' => $this->createCodeForDefinition($configuration->getCodeBefore()),
+            '__CodeAfter__' => trim($configuration->getCodeAfter()) . PHP_EOL,
+            '__CodeAfterExample__' => $this->createCodeForDefinition($configuration->getCodeAfter()),
+            '__Source__' => $this->createSourceDocBlock($configuration->getSource()),
         ];
 
-        if ($configuration->getExtraFileContent() !== null && $configuration->getExtraFileName() !== null) {
-            $data['_ExtraFileName_'] = $configuration->getExtraFileName();
-            $data['_ExtraFileContent_'] = trim($configuration->getExtraFileContent()) . PHP_EOL;
-            $data['_ExtraFileContentExample_'] = $this->createCodeForDefinition($configuration->getExtraFileContent());
+        if ($configuration->getRuleConfiguration() !== []) {
+            $data['__RuleConfiguration__'] = $this->createRuleConfiguration($configuration->getRuleConfiguration());
+            $data['__ConfigurationProperty__'] = $this->createConfigurationProperty(
+                $configuration->getRuleConfiguration()
+            );
+
+            $data['__ConfigurationConstructor__'] = $this->createConfigurationConstructor(
+                $configuration->getRuleConfiguration()
+            );
         }
 
-        $data['_NodeTypes_Php_'] = $this->createNodeTypePhp($configuration);
-        $data['_NodeTypes_Doc_'] = '\\' . implode('|\\', $configuration->getNodeTypes());
+        if ($configuration->getExtraFileContent() !== null && $configuration->getExtraFileName() !== null) {
+            $data['__ExtraFileName__'] = $configuration->getExtraFileName();
+            $data['__ExtraFileContent__'] = trim($configuration->getExtraFileContent()) . PHP_EOL;
+            $data['__ExtraFileContentExample__'] = $this->createCodeForDefinition(
+                $configuration->getExtraFileContent()
+            );
+        }
+
+        $data['__NodeTypes_Php__'] = $this->createNodeTypePhp($configuration);
+        $data['__NodeTypes_Doc__'] = '\\' . implode('|\\', $configuration->getNodeTypes());
 
         return $data;
     }
@@ -86,12 +112,39 @@ final class TemplateVariablesFactory
 
     private function createNodeTypePhp(Configuration $configuration): string
     {
-        $arrayNodes = [];
+        $referencingClassConsts = [];
         foreach ($configuration->getNodeTypes() as $nodeType) {
-            $classConstFetchNode = new ClassConstFetch(new FullyQualified($nodeType), 'class');
-            $arrayNodes[] = new ArrayItem($classConstFetchNode);
+            $referencingClassConsts[] = $this->nodeFactory->createClassConstReference($nodeType);
         }
 
-        return $this->betterStandardPrinter->print(new Array_($arrayNodes));
+        $array = $this->nodeFactory->createArray($referencingClassConsts);
+        return $this->betterStandardPrinter->print($array);
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
+    private function createRuleConfiguration(array $configuration): string
+    {
+        $array = $this->nodeFactory->createArray($configuration);
+        return $this->betterStandardPrinter->print($array);
+    }
+
+    /**
+     * @param array<string, mixed> $ruleConfiguration
+     */
+    private function createConfigurationProperty(array $ruleConfiguration): string
+    {
+        $properties = $this->configurationNodeFactory->createProperties($ruleConfiguration);
+        return $this->betterStandardPrinter->print($properties);
+    }
+
+    /**
+     * @param array<string, mixed> $ruleConfiguration
+     */
+    private function createConfigurationConstructor(array $ruleConfiguration): string
+    {
+        $classMethod = $this->configurationNodeFactory->createConstructorClassMethod($ruleConfiguration);
+        return $this->betterStandardPrinter->print($classMethod);
     }
 }

@@ -8,6 +8,8 @@ use Nette\Utils\Strings;
 use Rector\Core\Set\SetResolver;
 use Rector\RectorGenerator\Guard\RecipeGuard;
 use Rector\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\RecipeOption;
+use Symplify\SetConfigResolver\ValueObject\Set;
 
 final class ConfigurationFactory
 {
@@ -34,35 +36,35 @@ final class ConfigurationFactory
     {
         $this->recipeGuard->ensureRecipeIsValid($rectorRecipe);
 
-        $nodeTypeClasses = $rectorRecipe['node_types'];
+        $nodeTypeClasses = $rectorRecipe[RecipeOption::NODE_TYPES];
+
         $category = $this->resolveCategoryFromFqnNodeTypes($nodeTypeClasses);
-        $extraFileContent = isset($rectorRecipe['extra_file_content']) ? $this->normalizeCode(
-            $rectorRecipe['extra_file_content']
-        ) : null;
-        $set = $rectorRecipe['set'] ? $this->setResolver->resolveSetByName($rectorRecipe['set']) : null;
+        $extraFileContent = $this->resolveExtraFileContent($rectorRecipe);
+        $set = $this->resolveeSet($rectorRecipe);
 
         return new Configuration(
-            $rectorRecipe['package'],
-            $rectorRecipe['name'],
+            $rectorRecipe[RecipeOption::PACKAGE],
+            $rectorRecipe[RecipeOption::NAME],
             $category,
             $nodeTypeClasses,
-            $rectorRecipe['description'],
-            $this->normalizeCode($rectorRecipe['code_before']),
-            $this->normalizeCode($rectorRecipe['code_after']),
+            $rectorRecipe[RecipeOption::DESCRIPTION],
+            $this->normalizeCode($rectorRecipe[RecipeOption::CODE_BEFORE]),
+            $this->normalizeCode($rectorRecipe[RecipeOption::CODE_AFTER]),
             $extraFileContent,
-            $rectorRecipe['extra_file_name'] ?? null,
-            array_filter((array) $rectorRecipe['source']),
+            $rectorRecipe[RecipeOption::EXTRA_FILE_NAME] ?? null,
+            (array) $rectorRecipe[RecipeOption::RULE_CONFIGURATION],
+            array_filter((array) $rectorRecipe[RecipeOption::SOURCE]),
             $set,
-            $this->detectPhpSnippet($rectorRecipe['code_before'])
+            $this->isPhpSnippet($rectorRecipe[RecipeOption::CODE_BEFORE])
         );
     }
 
     /**
-     * @param string[] $fqnNodeTypes
+     * @param class-string[] $nodeTypes
      */
-    private function resolveCategoryFromFqnNodeTypes(array $fqnNodeTypes): string
+    private function resolveCategoryFromFqnNodeTypes(array $nodeTypes): string
     {
-        return (string) Strings::after($fqnNodeTypes[0], '\\', -1);
+        return (string) Strings::after($nodeTypes[0], '\\', -1);
     }
 
     private function normalizeCode(string $code): string
@@ -74,8 +76,24 @@ final class ConfigurationFactory
         return trim($code);
     }
 
-    private function detectPhpSnippet(string $code): bool
+    private function isPhpSnippet(string $code): bool
     {
         return Strings::startsWith($code, '<?php');
+    }
+
+    private function resolveExtraFileContent(array $rectorRecipe): ?string
+    {
+        return isset($rectorRecipe[RecipeOption::EXTRA_FILE_CONTENT]) ? $this->normalizeCode(
+            $rectorRecipe[RecipeOption::EXTRA_FILE_CONTENT]
+        ) : null;
+    }
+
+    private function resolveeSet(array $rectorRecipe): ?Set
+    {
+        if ($rectorRecipe[RecipeOption::SET]) {
+            return $this->setResolver->resolveSetByName($rectorRecipe[RecipeOption::SET]);
+        }
+
+        return null;
     }
 }

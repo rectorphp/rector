@@ -1,4 +1,4 @@
-# All 537 Rectors Overview
+# All 539 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -30,7 +30,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
-- [Nette](#nette) (12)
+- [Nette](#nette) (13)
 - [NetteCodeQuality](#nettecodequality) (4)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -5278,6 +5278,32 @@ Change `file_put_contents()` to `FileSystem::write()`
 +        \Nette\Utils\FileSystem::write('file.txt', 'content');
 
          file_put_contents('file.txt', 'content_to_append', FILE_APPEND);
+     }
+ }
+```
+
+<br><br>
+
+### `GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector`
+
+- class: [`Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector`](/../master/rules/nette/src/Rector/MethodCall/GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/MethodCall/GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector/Fixture)
+
+Change `$this->getConfig($defaults)` to `array_merge`
+
+```diff
+ use Nette\DI\CompilerExtension;
+
+ final class SomeExtension extends CompilerExtension
+ {
+     private $defaults = [
+         'key' => 'value'
+     ];
+
+     public function loadConfiguration()
+     {
+-        $config = $this->getConfig($this->defaults);
++        $config = array_merge($this->defaults, $this->getConfig());
      }
  }
 ```
@@ -12160,7 +12186,7 @@ Change @return types and type from static analysis to type declarations if not a
 
 ## General
 
-- [Core](#core) (39)
+- [Core](#core) (40)
 
 ## Core
 
@@ -12788,6 +12814,48 @@ return function (ContainerConfigurator $containerConfigurator) : void {
      public function deny()
      {
          return 1;
+     }
+ }
+```
+
+<br><br>
+
+### `MethodCallToStaticCallRector`
+
+- class: [`Rector\Core\Rector\MethodCall\MethodCallToStaticCallRector`](/../master/src/Rector/MethodCall/MethodCallToStaticCallRector.php)
+- [test fixtures](/../master/tests/Rector/MethodCall/MethodCallToStaticCallRector/Fixture)
+
+Change method call to desired static call
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Core\Rector\MethodCall\MethodCallToStaticCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfiguration->services();
+    $services->set(MethodCallToStaticCallRector::class)
+        ->arg('$methodCallsToStaticCalls', ['AnotherDependency' => [['StaticCaller', 'anotherMethod']]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     private $anotherDependency;
+
+     public function __construct(AnotherDependency $anotherDependency)
+     {
+         $this->anotherDependency = $anotherDependency;
+     }
+
+     public function loadConfiguration()
+     {
+-        return $this->anotherDependency->process('value');
++        return StaticCaller::anotherMethod('value');
      }
  }
 ```

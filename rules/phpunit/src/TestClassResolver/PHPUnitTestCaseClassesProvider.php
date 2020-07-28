@@ -54,6 +54,7 @@ final class PHPUnitTestCaseClassesProvider
         $robotLoader->acceptFiles = ['*Test.php'];
         $robotLoader->ignoreDirs[] = '*Expected*';
         $robotLoader->ignoreDirs[] = '*Fixture*';
+        $robotLoader->ignoreDirs[] = 'templates';
 
         return $robotLoader;
     }

@@ -72,6 +72,11 @@ final class Configuration
     private $source = [];
 
     /**
+     * @var array<string, mixed>
+     */
+    private $ruleConfiguration = [];
+
+    /**
      * @param string[] $nodeTypes
      * @param string[] $source
      */
@@ -85,6 +90,7 @@ final class Configuration
         string $codeAfter,
         ?string $extraFileContent,
         ?string $extraFileName,
+        array $ruleConfiguration,
         array $source,
         ?Set $set,
         bool $isPhpSnippet
@@ -101,6 +107,7 @@ final class Configuration
         $this->isPhpSnippet = $isPhpSnippet;
         $this->extraFileContent = $extraFileContent;
         $this->extraFileName = $extraFileName;
+        $this->ruleConfiguration = $ruleConfiguration;
     }
 
     public function getDescription(): string
@@ -181,6 +188,14 @@ final class Configuration
     public function getExtraFileName(): ?string
     {
         return $this->extraFileName;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getRuleConfiguration(): array
+    {
+        return $this->ruleConfiguration;
     }
 
     private function setName(string $name): void

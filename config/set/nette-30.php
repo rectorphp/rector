@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
+use Rector\Core\Rector\MethodCall\MethodCallToStaticCallRector;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
+use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
 use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
 use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -17,16 +20,35 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
-    # Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
+    // Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
     $services->set(RemoveParentCallWithoutParentRector::class);
 
-    $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            # nextras/forms was split into 2 packages
-            'Nextras\FormComponents\Controls\DatePicker' => 'Nextras\FormComponents\Controls\DateControl',
-            # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
-            'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
-            'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
+    // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
+    $services->set(RenameClassConstantRector::class)->arg(
+        '$oldToNewConstantsByClass',
+        [
+            'Contributte\Events\Extra\Event\Security\LoggedInEvent' => [
+                'NAME' => 'class',
+            ],
+            'Contributte\Events\Extra\Event\Security\LoggedOutEvent' => [
+                'NAME' => 'class',
+            ],
+        ]
+    );
+
+    $services->set(RenameClassRector::class)->arg('$oldToNewClasses', [
+        # nextras/forms was split into 2 packages
+        'Nextras\FormComponents\Controls\DatePicker' => 'Nextras\FormComponents\Controls\DateControl',
+        # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
+        'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
+        'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
+    ]);
+
+    $services->set(MethodCallToStaticCallRector::class)
+        ->arg('$methodCallsToStaticCalls', [
+            'Nette\DI\ContainerBuilder' => [
+                'expand' => ['Nette\DI\Helpers', 'expand'],
+            ],
         ]);
 
     $services->set(RenameMethodRector::class)
@@ -51,4 +73,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SetClassWithArgumentToSetFactoryRector::class);
 
     $services->set(ChangeFormArrayAccessToAnnotatedControlVariableRector::class);
+
+    $services->set(GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector::class);
 };

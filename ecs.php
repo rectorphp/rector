@@ -74,6 +74,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         # generated from /vendor
         __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php',
         __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php',
+        // template files
+        __DIR__ . '/packages/rector-generator/templates/*',
     ]);
 
     $parameters->set(Option::SKIP, [

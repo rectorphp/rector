@@ -82,6 +82,6 @@ PHP
             }
         }
 
-        return $node;
+        return null;
     }
 }
