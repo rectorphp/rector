@@ -31,43 +31,35 @@ final class TemplateFinder
      */
     public function find(Configuration $configuration): array
     {
-        $finder = Finder::create()
-            ->files()
-            ->exclude('Fixture/')
-            ->exclude('Source/')
-            ->notName('*Test.php.inc')
-            ->in(self::TEMPLATES_DIRECTORY);
+        $filePaths = [];
 
-        $smartFileInfos = $this->finderSanitizer->sanitize($finder);
-        $smartFileInfos[] = $this->createFixtureSmartFileInfo($configuration->isPhpSnippet());
-
-        if ($configuration->getExtraFileContent()) {
-            $smartFileInfos[] = new SmartFileInfo(
-                __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/Source/extra_file.php.inc'
-            );
-            $smartFileInfos[] = new SmartFileInfo(
-                __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/_Name_ExtraTest.php.inc'
-            );
+        if ($configuration->getRuleConfiguration()) {
+            $filePaths[] = __DIR__ . '/../../templates/rules/_package_/src/Rector/_Category_/_Name_WithConfiguration_.php.inc';
+            $filePaths[] = __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/Configured_Name_Test.php.inc';
         } else {
-            $smartFileInfos[] = new SmartFileInfo(
-                __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/_Name_Test.php.inc'
-            );
+            $filePaths[] = __DIR__ . '/../../templates/rules/_package_/src/Rector/_Category_/_Name_.php.inc';
+            $filePaths[] = __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/_Name_Test.php.inc';
         }
 
-        return $smartFileInfos;
+        $filePaths[] = $this->resolveFixtureFilePath($configuration->isPhpSnippet());
+
+        if ($configuration->getExtraFileContent()) {
+            $filePaths[] = __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/Source/extra_file.php.inc';
+            $filePaths[] = __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/_Name_ExtraTest.php.inc';
+        } else {
+            $filePaths[] = __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/_Name_Test.php.inc';
+        }
+
+        return $this->finderSanitizer->sanitize($filePaths);
     }
 
-    private function createFixtureSmartFileInfo(bool $isPhpSnippet): SmartFileInfo
+    private function resolveFixtureFilePath(bool $isPhpSnippet): string
     {
         if ($isPhpSnippet) {
-            return new SmartFileInfo(
-                __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/Fixture/fixture.php.inc'
-            );
+            return __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/Fixture/fixture.php.inc';
         }
 
         // is html snippet
-        return new SmartFileInfo(
-            __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/Fixture/html_fixture.php.inc'
-        );
+        return __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/Fixture/html_fixture.php.inc';
     }
 }

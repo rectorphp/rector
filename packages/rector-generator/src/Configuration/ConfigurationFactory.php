@@ -55,7 +55,7 @@ final class ConfigurationFactory
             $this->normalizeCode($rectorRecipe[RecipeOption::CODE_AFTER]),
             $extraFileContent,
             $rectorRecipe[RecipeOption::EXTRA_FILE_NAME] ?? null,
-            (array) $rectorRecipe[RecipeOption::CONFIGURATION],
+            (array) $rectorRecipe[RecipeOption::RULE_CONFIGURATION],
             array_filter((array) $rectorRecipe[RecipeOption::SOURCE]),
             $set,
             $this->isPhpSnippet($rectorRecipe[RecipeOption::CODE_BEFORE])

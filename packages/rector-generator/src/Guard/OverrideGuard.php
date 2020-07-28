@@ -40,7 +40,7 @@ final class OverrideGuard
                 continue;
             }
 
-            return ! $this->symfonyStyle->confirm('Files for this rules already exist. Should we override them?');
+            return ! $this->symfonyStyle->confirm('Files for this rule already exist. Should we override them?');
         }
 
         return false;

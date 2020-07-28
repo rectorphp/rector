@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\RectorGenerator\ValueObject\Configuration;
 
@@ -18,10 +19,15 @@ final class TemplateVariablesFactory
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, NodeFactory $nodeFactory)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeFactory = $nodeFactory;
     }
 
     /**
@@ -40,6 +46,7 @@ final class TemplateVariablesFactory
             '_CodeAfter_' => trim($configuration->getCodeAfter()) . PHP_EOL,
             '_CodeAfterExample_' => $this->createCodeForDefinition($configuration->getCodeAfter()),
             '_Source_' => $this->createSourceDocBlock($configuration->getSource()),
+            '_Configuration_' => $this->createConfiguration($configuration->getRuleConfiguration()),
         ];
 
         if ($configuration->getExtraFileContent() !== null && $configuration->getExtraFileName() !== null) {
@@ -93,5 +100,19 @@ final class TemplateVariablesFactory
         }
 
         return $this->betterStandardPrinter->print(new Array_($arrayNodes));
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
+    private function createConfiguration(array $configuration): string
+    {
+        if ($configuration === []) {
+            return '';
+        }
+
+        $array = $this->nodeFactory->createArray($configuration);
+
+        return $this->betterStandardPrinter->prettyPrint([$array]);
     }
 }

@@ -15,6 +15,7 @@ use Rector\RectorGenerator\Guard\OverrideGuard;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\RecipeOption;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -132,15 +133,15 @@ final class CreateRectorCommand extends Command
         $rectorRecipe = $this->parameterProvider->provideParameter(Option::RECTOR_RECIPE);
 
         $configuration = $this->configurationFactory->createFromRectorRecipe($rectorRecipe);
-        dump($configuration);
-        die;
-
         $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
 
         // setup psr-4 autoload, if not already in
         $this->composerPackageAutoloadUpdater->processComposerAutoload($configuration);
 
         $templateFileInfos = $this->templateFinder->find($configuration);
+
+        dump($templateFileInfos);
+        die;
 
         $isUnwantedOverride = $this->overrideGuard->isUnwantedOverride(
             $templateFileInfos,
@@ -149,13 +150,12 @@ final class CreateRectorCommand extends Command
         );
 
         if ($isUnwantedOverride) {
-            $this->symfonyStyle->warning(
-                'The rule already exists and you decided to keep the original. No files were changed'
-            );
+            $this->symfonyStyle->warning('No files were changed');
+
             return ShellCode::SUCCESS;
         }
 
-        $this->configFilesystem->appendRectorServiceToSet($configuration, $templateVariables);
+//        $this->configFilesystem->appendRectorServiceToSet($configuration, $templateVariables);
 
         $this->generateFiles($templateFileInfos, $templateVariables, $configuration);
 
@@ -180,7 +180,7 @@ final class CreateRectorCommand extends Command
             );
 
             $content = $this->templateFactory->create($smartFileInfo->getContents(), $templateVariables);
-            if ($configuration->getPackage() === 'Rector') {
+            if ($configuration->getPackage() === RecipeOption::PACKAGE_CORE) {
                 $content = $this->addOneMoreRectorNesting($content);
             }
 

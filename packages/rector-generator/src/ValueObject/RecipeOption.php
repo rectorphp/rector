@@ -39,7 +39,7 @@ final class RecipeOption
     /**
      * @var string
      */
-    public const CONFIGURATION = 'configuration';
+    public const RULE_CONFIGURATION = 'rule_configuration';
 
     /**
      * @var string
@@ -60,4 +60,9 @@ final class RecipeOption
      * @var string
      */
     public const EXTRA_FILE_NAME = 'extra_file_name';
+
+    /**
+     * @var string
+     */
+    public const PACKAGE_CORE = 'Rector';
 }
