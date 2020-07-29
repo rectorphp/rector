@@ -3,17 +3,27 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Set\ValueObject\SetList;
+use Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/create-rector.php', null, 'not_found');
 
+    $services = $containerConfigurator->services();
+
+    $services->set(ChangeServiceArgumentsToMethodCallRector::class)
+        ->call('configure', [
+            [
+                ChangeServiceArgumentsToMethodCallRector::CLASS_TYPE_TO_METHOD_NAME => [
+                    RectorInterface::class => 'configure',
+                ],
+            ],
+        ]);
+
     $parameters = $containerConfigurator->parameters();
 
-    #    Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector: null
-    # bleeding edge feature
-    # is_cache_enabled: true
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
     $parameters->set(Option::SETS, [SetList::NAMING]);

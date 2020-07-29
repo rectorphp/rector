@@ -12,9 +12,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddProphecyTraitRector::class);
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'PHPUnit\Framework\TestCase' => [
-                'assertFileNotExists' => 'assertFileDoesNotExist',
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                'PHPUnit\Framework\TestCase' => [
+                    'assertFileNotExists' => 'assertFileDoesNotExist',
+                ],
             ],
-        ]);
+        ]]);
 };

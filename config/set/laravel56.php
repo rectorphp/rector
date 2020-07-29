@@ -12,25 +12,29 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'Illuminate\Validation\ValidatesWhenResolvedTrait' => [
-                'validate' => 'validateResolved',
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                'Illuminate\Validation\ValidatesWhenResolvedTrait' => [
+                    'validate' => 'validateResolved',
+                ],
+                'Illuminate\Contracts\Validation\ValidatesWhenResolved' => [
+                    'validate' => 'validateResolved',
+                ],
             ],
-            'Illuminate\Contracts\Validation\ValidatesWhenResolved' => [
-                'validate' => 'validateResolved',
-            ],
-        ]);
+        ]]);
 
     $services->set(ChangeMethodVisibilityRector::class)
-        ->arg('$methodToVisibilityByClass', [
-            'Illuminate\Routing\Router' => [
-                'addRoute' => 'public',
+        ->call('configure', [[
+            '$methodToVisibilityByClass' => [
+                'Illuminate\Routing\Router' => [
+                    'addRoute' => 'public',
+                ],
+                'Illuminate\Contracts\Auth\Access\Gate' => [
+                    'raw' => 'public',
+                ],
+                'Illuminate\Database\Grammar' => [
+                    'getDateFormat' => 'public',
+                ],
             ],
-            'Illuminate\Contracts\Auth\Access\Gate' => [
-                'raw' => 'public',
-            ],
-            'Illuminate\Database\Grammar' => [
-                'getDateFormat' => 'public',
-            ],
-        ]);
+        ]]);
 };

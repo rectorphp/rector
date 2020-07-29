@@ -10,7 +10,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            'Illuminate\Validation\Validator' => 'Illuminate\Contracts\Validation\Validator',
-        ]);
+        ->call('configure', [[
+            '$oldToNewClasses' => [
+                'Illuminate\Validation\Validator' => 'Illuminate\Contracts\Validation\Validator',
+            ],
+        ]]);
 };

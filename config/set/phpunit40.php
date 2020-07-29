@@ -9,10 +9,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'PHPUnit_Framework_MockObject_MockObject' => [
-                # see https://github.com/sebastianbergmann/phpunit-mock-objects/issues/137
-                'staticExpects' => 'expects',
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                'PHPUnit_Framework_MockObject_MockObject' => [
+                    # see https://github.com/sebastianbergmann/phpunit-mock-objects/issues/137
+                    'staticExpects' => 'expects',
+                ],
             ],
-        ]);
+        ]]);
 };

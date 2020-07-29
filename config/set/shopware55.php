@@ -10,31 +10,35 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(GetAndSetToMethodCallRector::class)
-        ->arg('$typeToMethodCalls', [
-            'Enlight_View_Default' => [
-                # See https://github.com/shopware/shopware/blob/5.5/UPGRADE-5.5.md
-                'get' => 'getAssign',
-                'set' => 'assign',
+        ->call('configure', [[
+            '$typeToMethodCalls' => [
+                'Enlight_View_Default' => [
+                    # See https://github.com/shopware/shopware/blob/5.5/UPGRADE-5.5.md
+                    'get' => 'getAssign',
+                    'set' => 'assign',
+                ],
+                'Enlight_Components_Session_Namespace' => [
+                    'get' => 'get',
+                    'set' => 'offsetSet',
+                ],
+                'Shopware_Components_Config' => [
+                    'get' => 'offsetGet',
+                    'set' => 'offsetSet',
+                ],
             ],
-            'Enlight_Components_Session_Namespace' => [
-                'get' => 'get',
-                'set' => 'offsetSet',
-            ],
-            'Shopware_Components_Config' => [
-                'get' => 'offsetGet',
-                'set' => 'offsetSet',
-            ],
-        ]);
+        ]]);
 
     $services->set(UnsetAndIssetToMethodCallRector::class)
-        ->arg('$typeToMethodCalls', [
-            'Enlight_Components_Session_Namespace' => [
-                'isset' => 'offsetExists',
-                'unset' => 'offsetUnset',
+        ->call('configure', [[
+            '$typeToMethodCalls' => [
+                'Enlight_Components_Session_Namespace' => [
+                    'isset' => 'offsetExists',
+                    'unset' => 'offsetUnset',
+                ],
+                'Shopware_Components_Config' => [
+                    'isset' => 'offsetExists',
+                    'unset' => 'offsetUnset',
+                ],
             ],
-            'Shopware_Components_Config' => [
-                'isset' => 'offsetExists',
-                'unset' => 'offsetUnset',
-            ],
-        ]);
+        ]]);
 };

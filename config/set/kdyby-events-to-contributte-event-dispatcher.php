@@ -21,8 +21,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceEventManagerWithEventSubscriberRector::class);
 
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            'Kdyby\Events\Subscriber' => 'Symfony\Component\EventDispatcher\EventSubscriberInterface',
-            'Kdyby\Events\EventManager' => 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface',
-        ]);
+        ->call('configure', [[
+            '$oldToNewClasses' => [
+                'Kdyby\Events\Subscriber' => 'Symfony\Component\EventDispatcher\EventSubscriberInterface',
+                'Kdyby\Events\EventManager' => 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface',
+            ],
+        ]]);
 };

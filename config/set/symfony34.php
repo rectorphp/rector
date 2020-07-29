@@ -10,13 +10,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ArgumentRemoverRector::class)
-        ->arg('$positionsByMethodNameByClassType', [
-            'Symfony\Component\Yaml\Yaml' => [
-                'parse' => [
-                    2 => ['Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'],
+        ->call('configure', [[
+            '$positionsByMethodNameByClassType' => [
+                'Symfony\Component\Yaml\Yaml' => [
+                    'parse' => [
+                        2 => ['Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'],
+                    ],
                 ],
             ],
-        ]);
+        ]]);
 
     $services->set(MergeMethodAnnotationToRouteAnnotationRector::class);
 };

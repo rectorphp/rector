@@ -19,11 +19,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(FunctionToStaticCallRector::class)
-        ->arg('$functionToStaticCall', [
-            'file_get_contents' => ['Nette\Utils\FileSystem', 'read'],
-            'unlink' => ['Nette\Utils\FileSystem', 'delete'],
-            'rmdir' => ['Nette\Utils\FileSystem', 'delete'],
-        ]);
+        ->call('configure', [[
+            '$functionToStaticCall' => [
+                'file_get_contents' => ['Nette\Utils\FileSystem', 'read'],
+                'unlink' => ['Nette\Utils\FileSystem', 'delete'],
+                'rmdir' => ['Nette\Utils\FileSystem', 'delete'],
+            ],
+        ]]);
 
     $services->set(StrposToStringsContainsRector::class);
 

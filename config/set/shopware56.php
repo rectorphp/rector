@@ -12,12 +12,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'Enlight_Controller_Response_Response' => [
-                'getHttpResponseCode' => 'getStatusCode',
-                'setHttpResponseCode' => 'setStatusCode',
-                'sendCookies' => 'sendHeaders',
-                'setBody' => 'setContent',
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                'Enlight_Controller_Response_Response' => [
+                    'getHttpResponseCode' => 'getStatusCode',
+                    'setHttpResponseCode' => 'setStatusCode',
+                    'sendCookies' => 'sendHeaders',
+                    'setBody' => 'setContent',
+                ],
             ],
-        ]);
+        ]]);
 };

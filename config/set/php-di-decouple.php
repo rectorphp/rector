@@ -9,5 +9,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(InjectAnnotationClassRector::class)
-        ->arg('$annotationClasses', ['DI\Annotation\Inject']);
+        ->call('configure', [[
+            '$annotationClasses' => ['DI\Annotation\Inject'],
+        ]]);
 };

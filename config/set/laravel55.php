@@ -13,25 +13,33 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'Illuminate\Console\Command' => [
-                'fire' => 'handle',
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                'Illuminate\Console\Command' => [
+                    'fire' => 'handle',
+                ],
             ],
-        ]);
+        ]]);
 
     $services->set(RenamePropertyRector::class)
-        ->arg('$oldToNewPropertyByTypes', [
-            'Illuminate\Database\Eloquent\Concerns\HasEvents' => [
-                'events' => 'dispatchesEvents',
+        ->call('configure', [[
+            '$oldToNewPropertyByTypes' => [
+                'Illuminate\Database\Eloquent\Concerns\HasEvents' => [
+                    'events' => 'dispatchesEvents',
+                ],
+                'Illuminate\Database\Eloquent\Relations\Pivot' => [
+                    'parent' => 'pivotParent',
+                ],
             ],
-            'Illuminate\Database\Eloquent\Relations\Pivot' => [
-                'parent' => 'pivotParent',
-            ],
-        ]);
+        ]]);
 
     $services->set(RenameClassRector::class)
-        ->arg(
-            '$oldToNewClasses',
-            ['Illuminate\Translation\LoaderInterface' => 'Illuminate\Contracts\Translation\Loader']
+        ->call(
+            'configure',
+            [[
+                '$oldToNewClasses' => [
+                    'Illuminate\Translation\LoaderInterface' => 'Illuminate\Contracts\Translation\Loader',
+                ],
+            ]]
         );
 };

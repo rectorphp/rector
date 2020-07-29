@@ -16,10 +16,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ExceptionAnnotationRector::class);
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'PHPUnit\Framework\TestClass' => [
-                'setExpectedException' => 'expectedException',
-                'setExpectedExceptionRegExp' => 'expectedException',
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                'PHPUnit\Framework\TestClass' => [
+                    'setExpectedException' => 'expectedException',
+                    'setExpectedExceptionRegExp' => 'expectedException',
+                ],
             ],
-        ]);
+        ]]);
 };

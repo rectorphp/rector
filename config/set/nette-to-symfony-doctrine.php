@@ -9,8 +9,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassRector::class)
-        ->arg(
-            '$oldToNewClasses',
-            ['Doctrine\Common\DataFixtures\AbstractFixture' => 'Doctrine\Bundle\FixturesBundle\Fixture']
+        ->call(
+            'configure',
+            [[
+                '$oldToNewClasses' => [
+                    'Doctrine\Common\DataFixtures\AbstractFixture' => 'Doctrine\Bundle\FixturesBundle\Fixture',
+                ],
+            ]]
         );
 };

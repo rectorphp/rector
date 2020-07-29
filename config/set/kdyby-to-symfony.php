@@ -12,30 +12,36 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ChangeMethodVisibilityRector::class)
-        ->arg('$methodToVisibilityByClass', [
-            'Kdyby\Events\Subscriber' => [
-                'getSubscribedEvents' => 'static',
+        ->call('configure', [[
+            '$methodToVisibilityByClass' => [
+                'Kdyby\Events\Subscriber' => [
+                    'getSubscribedEvents' => 'static',
+                ],
             ],
-        ]);
+        ]]);
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'Kdyby\Translation\Translator' => [
-                'translate' => 'trans',
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                'Kdyby\Translation\Translator' => [
+                    'translate' => 'trans',
+                ],
+                'Kdyby\RabbitMq\IConsumer' => [
+                    'process' => 'execute',
+                ],
             ],
-            'Kdyby\RabbitMq\IConsumer' => [
-                'process' => 'execute',
-            ],
-        ]);
+        ]]);
 
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            'Kdyby\RabbitMq\IConsumer' => 'OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface',
-            'Kdyby\RabbitMq\IProducer' => 'OldSound\RabbitMqBundle\RabbitMq\ProducerInterface',
-            'Kdyby\Monolog\Logger' => 'Psr\Log\LoggerInterface',
-            'Kdyby\Events\Subscriber' => 'Symfony\Component\EventDispatcher\EventSubscriberInterface',
-            'Kdyby\Translation\Translator' => 'Symfony\Contracts\Translation\TranslatorInterface',
-        ]);
+        ->call('configure', [[
+            '$oldToNewClasses' => [
+                'Kdyby\RabbitMq\IConsumer' => 'OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface',
+                'Kdyby\RabbitMq\IProducer' => 'OldSound\RabbitMqBundle\RabbitMq\ProducerInterface',
+                'Kdyby\Monolog\Logger' => 'Psr\Log\LoggerInterface',
+                'Kdyby\Events\Subscriber' => 'Symfony\Component\EventDispatcher\EventSubscriberInterface',
+                'Kdyby\Translation\Translator' => 'Symfony\Contracts\Translation\TranslatorInterface',
+            ],
+        ]]);
 
     $services->set(WrapTransParameterNameRector::class);
 };

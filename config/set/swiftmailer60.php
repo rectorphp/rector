@@ -9,8 +9,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            # swiftmailer 60
-            'Swift_Mime_Message' => 'Swift_Mime_SimpleMessage',
-        ]);
+        ->call('configure', [[
+            '$oldToNewClasses' => [
+                # swiftmailer 60
+                'Swift_Mime_Message' => 'Swift_Mime_SimpleMessage',
+            ],
+        ]]);
 };

@@ -11,36 +11,40 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
-            'Symfony\Component\Console\Helper\TableStyle' => [
-                'setHorizontalBorderChar' => 'setHorizontalBorderChars',
-                'setVerticalBorderChar' => 'setVerticalBorderChars',
-                'getVerticalBorderChar' => [
-                    # special case to "getVerticalBorderChar" → "getBorderChars()[3]"
-                    'name' => 'getBorderChars',
-                    'array_key' => 3,
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
+                'Symfony\Component\Console\Helper\TableStyle' => [
+                    'setHorizontalBorderChar' => 'setHorizontalBorderChars',
+                    'setVerticalBorderChar' => 'setVerticalBorderChars',
+                    'getVerticalBorderChar' => [
+                        # special case to "getVerticalBorderChar" → "getBorderChars()[3]"
+                        'name' => 'getBorderChars',
+                        'array_key' => 3,
+                    ],
+                    'getHorizontalBorderChar' => [
+                        'name' => 'getBorderChars',
+                        'array_key' => 2,
+                    ],
+                    'setCrossingChar' => 'setDefaultCrossingChar',
                 ],
-                'getHorizontalBorderChar' => [
-                    'name' => 'getBorderChars',
-                    'array_key' => 2,
+                'Symfony\Component\HttpFoundation\File\UploadedFile' => [
+                    'getClientSize' => 'getSize',
                 ],
-                'setCrossingChar' => 'setDefaultCrossingChar',
+                'Symfony\Component\Workflow\DefinitionBuilder' => [
+                    'reset' => 'clear',
+                    'add' => 'addWorkflow',
+                ],
             ],
-            'Symfony\Component\HttpFoundation\File\UploadedFile' => [
-                'getClientSize' => 'getSize',
-            ],
-            'Symfony\Component\Workflow\DefinitionBuilder' => [
-                'reset' => 'clear',
-                'add' => 'addWorkflow',
-            ],
-        ]);
+        ]]);
 
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            # https://github.com/symfony/symfony/commit/07dd09db59e2f2a86a291d00d978169d9059e307
-            'Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector' => 'Symfony\Component\HttpKernel\DataCollector\RequestDataCollector',
-            'Symfony\Component\Workflow\SupportStrategy\SupportStrategyInterface' => 'Symfony\Component\Workflow\SupportStrategy\WorkflowSupportStrategyInterface',
-            'Symfony\Component\Workflow\SupportStrategy\ClassInstanceSupportStrategy' => 'Symfony\Component\Workflow\SupportStrategy\InstanceOfSupportStrategy',
-        ]);
+        ->call('configure', [[
+            '$oldToNewClasses' => [
+                # https://github.com/symfony/symfony/commit/07dd09db59e2f2a86a291d00d978169d9059e307
+                'Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector' => 'Symfony\Component\HttpKernel\DataCollector\RequestDataCollector',
+                'Symfony\Component\Workflow\SupportStrategy\SupportStrategyInterface' => 'Symfony\Component\Workflow\SupportStrategy\WorkflowSupportStrategyInterface',
+                'Symfony\Component\Workflow\SupportStrategy\ClassInstanceSupportStrategy' => 'Symfony\Component\Workflow\SupportStrategy\InstanceOfSupportStrategy',
+            ],
+        ]]);
 };

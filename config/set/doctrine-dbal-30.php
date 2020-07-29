@@ -11,19 +11,23 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'DBAL\Platforms\AbstractPlatform' => [
-                'getVarcharTypeDeclarationSQL' => 'getStringTypeDeclarationSQL',
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                'DBAL\Platforms\AbstractPlatform' => [
+                    'getVarcharTypeDeclarationSQL' => 'getStringTypeDeclarationSQL',
+                ],
+                'Doctrine\DBAL\Driver\DriverException' => [
+                    'getErrorCode' => 'getCode',
+                ],
             ],
-            'Doctrine\DBAL\Driver\DriverException' => [
-                'getErrorCode' => 'getCode',
-            ],
-        ]);
+        ]]);
 
     $services->set(AddReturnTypeDeclarationRector::class)
-        ->arg('$typehintForMethodByClass', [
-            'Doctrine\DBAL\Connection' => [
-                'ping' => 'void',
+        ->call('configure', [[
+            '$typehintForMethodByClass' => [
+                'Doctrine\DBAL\Connection' => [
+                    'ping' => 'void',
+                ],
             ],
-        ]);
+        ]]);
 };

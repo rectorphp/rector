@@ -15,10 +15,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ContinueToBreakInSwitchRector::class);
 
     $services->set(RemoveFuncCallArgRector::class)
-        ->arg('$argumentPositionByFunctionName', [
-            'ldap_first_attribute' => [
-                # see https://www.php.net/manual/en/function.ldap-first-attribute.php
-                2,
+        ->call('configure', [[
+            '$argumentPositionByFunctionName' => [
+                'ldap_first_attribute' => [
+                    # see https://www.php.net/manual/en/function.ldap-first-attribute.php
+                    2,
+                ],
             ],
-        ]);
+        ]]);
 };

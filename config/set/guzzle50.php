@@ -25,33 +25,39 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     #diff-810cdcfdd8a6b9e1fc0d1e96d7786874
     # covers https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7
     $services->set(ReturnThisRemoveRector::class)
-        ->arg('$classesToDefluent', '%classes_to_defluent%');
+        ->call('configure', [['$classesToDefluent' => '%classes_to_defluent%']]);
 
     $services->set(DefluentMethodCallRector::class)
-        ->arg('$namesToDefluent', '%classes_to_defluent%');
+        ->call('configure', [['$namesToDefluent' => '%classes_to_defluent%']]);
 
     $services->set(FunctionToMethodCallRector::class)
-        ->arg('$functionToMethodCall', [
-            'GuzzleHttp\json_decode' => ['GuzzleHttp\Utils', 'jsonDecode'],
-            'GuzzleHttp\get_path' => ['GuzzleHttp\Utils', 'getPath'],
-        ]);
+        ->call('configure', [[
+            '$functionToMethodCall' => [
+                'GuzzleHttp\json_decode' => ['GuzzleHttp\Utils', 'jsonDecode'],
+                'GuzzleHttp\get_path' => ['GuzzleHttp\Utils', 'getPath'],
+            ],
+        ]]);
 
     $services->set(StaticCallToFunctionRector::class)
-        ->arg('$staticCallToFunctionByType', [
-            'GuzzleHttp\Utils' => [
-                'setPath' => 'GuzzleHttp\set_path',
+        ->call('configure', [[
+            '$staticCallToFunctionByType' => [
+                'GuzzleHttp\Utils' => [
+                    'setPath' => 'GuzzleHttp\set_path',
+                ],
+                'GuzzleHttp\Pool' => [
+                    'batch' => 'GuzzleHttp\Pool\batch',
+                ],
             ],
-            'GuzzleHttp\Pool' => [
-                'batch' => 'GuzzleHttp\Pool\batch',
-            ],
-        ]);
+        ]]);
 
     $services->set(MessageAsArrayRector::class);
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'GuzzleHttp\Message\MessageInterface' => [
-                'getHeaderLines' => 'getHeaderAsArray',
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                'GuzzleHttp\Message\MessageInterface' => [
+                    'getHeaderLines' => 'getHeaderAsArray',
+                ],
             ],
-        ]);
+        ]]);
 };

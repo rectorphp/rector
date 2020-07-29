@@ -9,9 +9,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            'Kdyby\Translation\Translator' => 'Nette\Localization\ITranslator',
-            'Kdyby\Translation\DI\ITranslationProvider' => 'Contributte\Translation\DI\TranslationProviderInterface',
-            'Kdyby\Translation\Phrase' => 'Contributte\Translation\Wrappers\Message',
-        ]);
+        ->call('configure', [[
+            '$oldToNewClasses' => [
+                'Kdyby\Translation\Translator' => 'Nette\Localization\ITranslator',
+                'Kdyby\Translation\DI\ITranslationProvider' => 'Contributte\Translation\DI\TranslationProviderInterface',
+                'Kdyby\Translation\Phrase' => 'Contributte\Translation\Wrappers\Message',
+            ],
+        ]]);
 };

@@ -9,7 +9,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ReturnArrayClassMethodToYieldRector::class)
-        ->arg('$methodsByType', [
-            'PHPUnit\Framework\TestCase' => ['provide*', 'dataProvider*'],
-        ]);
+        ->call('configure', [[
+            '$methodsByType' => [
+                'PHPUnit\Framework\TestCase' => ['provide*', 'dataProvider*'],
+            ],
+        ]]);
 };

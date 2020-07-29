@@ -89,10 +89,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(VersionCompareFuncCallToConstantRector::class);
 
     $services->set(FunctionCallToConstantRector::class)
-        ->arg('$functionsToConstants', [
-            'php_sapi_name' => 'PHP_SAPI',
-            'pi' => 'M_PI',
-        ]);
+        ->call('configure', [[
+            '$functionsToConstants' => [
+                'php_sapi_name' => 'PHP_SAPI',
+                'pi' => 'M_PI',
+            ],
+        ]]);
 
     $services->set(CamelCaseFunctionNamingToUnderscoreRector::class);
 

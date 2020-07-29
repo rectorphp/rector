@@ -9,10 +9,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(AddReturnTypeDeclarationRector::class)
-        ->arg('$typehintForMethodByClass', [
-            'PhpSpec\ObjectBehavior' => [
-                # @see http://www.phpspec.net/en/stable/manual/upgrading-to-phpspec-4.html
-                'getMatchers' => 'array',
+        ->call('configure', [[
+            '$typehintForMethodByClass' => [
+                'PhpSpec\ObjectBehavior' => [
+                    # @see http://www.phpspec.net/en/stable/manual/upgrading-to-phpspec-4.html
+                    'getMatchers' => 'array',
+                ],
             ],
-        ]);
+        ]]);
 };

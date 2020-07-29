@@ -9,17 +9,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'Twig_Node' => [
-                'getLine' => 'getTemplateLine',
-                'getFilename' => 'getTemplateName',
+        ->call('configure', [[
+            '$oldToNewMethodsByClass' => [
+                'Twig_Node' => [
+                    'getLine' => 'getTemplateLine',
+                    'getFilename' => 'getTemplateName',
+                ],
+                'Twig_Template' => [
+                    'getSource' => 'getSourceContext',
+                ],
+                'Twig_Error' => [
+                    'getTemplateFile' => 'getTemplateName',
+                    'getTemplateName' => 'setTemplateName',
+                ],
             ],
-            'Twig_Template' => [
-                'getSource' => 'getSourceContext',
-            ],
-            'Twig_Error' => [
-                'getTemplateFile' => 'getTemplateName',
-                'getTemplateName' => 'setTemplateName',
-            ],
-        ]);
+        ]]);
 };
