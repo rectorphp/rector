@@ -1,6 +1,6 @@
 # Generating your own Rector from a Recipe
 
-## 1. Configure a Rector Recipe in `rector.yaml`
+## 1. Configure a Rector Recipe in `rector.php`
 
 ```php
 <?php

@@ -4,7 +4,7 @@
 
 ## 1. Finds all files and Load Configured Rectors
 
-- The application finds files in the source code you provide and registered Rectors - from `--set`, `--config` or local `rector.yaml`
+- The application finds files in the source code you provide and registered Rectors - from `--set`, `--config` or local `rector.php`
 - Then it iterates all found files and applies relevant Rectors to them.
 - A *Rector* in this context is 1 single class that modifies 1 thing, e.g. changes the class name
 
@@ -61,16 +61,25 @@ in the configuration will be run first.
 E.g. in this case, first the `@expectedException` annotation will be changed to a method,
  then the `setExpectedException` method will be changed to `expectedException`.
 
-```yaml
-# rector.yaml
-services:
-    Rector\PHPUnit\Rector\ExceptionAnnotationRector: ~
+```php
+<?php
+// rector.php
 
-    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        $oldToNewMethodsByClass:
-            PHPUnit\Framework\TestClass:
-                setExpectedException: 'expectedException'
-                setExpectedExceptionRegExp: 'expectedException'
+declare(strict_types=1);
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+    $services->set(Rector\PHPUnit\Rector\ExceptionAnnotationRector::class);
+    $services->set(Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)
+        ->arg('$oldToNewMethodsByClass', [
+             PHPUnit\Framework\TestClass::class => [
+                'setExpectedException' => 'expectedException',
+                'setExpectedExceptionRegExp' => 'expectedException',
+            ],
+        ]);
+};
 ```
 
 ### 2.3 Save File/Diff Phase
