@@ -26,7 +26,7 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class CreateRectorCommand extends Command
+final class CreateCommand extends Command
 {
     /**
      * @var string

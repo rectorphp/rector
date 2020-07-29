@@ -55,7 +55,7 @@ CODE_SAMPLE,
 ## 2. Generate it
 
 ```bash
-vendor/bin/rector create-rector
+vendor/bin/rector create
 
 # or for short
 vendor/bin/rector c
