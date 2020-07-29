@@ -26,5 +26,7 @@ final class NetteFormMethodNameToControlType
         'addSubmit' => 'Nette\Forms\Controls\SubmitButton',
         'addButton' => 'Nette\Forms\Controls\Button',
         'addImage' => 'Nette\Forms\Controls\ImageButton',
+        // custom
+        'addJSelect' => 'DependentSelectBox\JsonDependentSelectBox',
     ];
 }
