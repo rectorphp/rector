@@ -184,8 +184,8 @@ parameters:
         - '#Class Rector\\DynamicTypeAnalysis\\Tests\\Rector\\ClassMethod\\AddArgumentTypeWithProbeDataRector\\Fixture\\SomeClass not found#'
 
         -
-            message: '#Class Rector\\Core\\Tests\\Rector\\StaticCall\\SwapClassMethodArgumentsRector\\Fixture\\SomeClass not found#'
-            path: tests/Rector/StaticCall/SwapClassMethodArgumentsRector/SwapClassMethodArgumentsRectorTest.php
+            message: '#Class Rector\\Generic\\Tests\\Rector\\StaticCall\\SwapClassMethodArgumentsRector\\Fixture\\SomeClass not found#'
+            path: rules/generic/tests/Rector/StaticCall/SwapClassMethodArgumentsRector/SwapClassMethodArgumentsRectorTest.php
 
         # internal rule
         - '#Class "Rector\\Utils\\(.*?)" is missing @see annotation with test case class reference#'
@@ -233,7 +233,7 @@ parameters:
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         - '#PHPDoc tag @return with type iterable<object\> is not subtype of native type array#'
         - '#Method Rector\\SOLID\\Reflection\\ParentConstantReflectionResolver\:\:(.*?)\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
-        - '#Parameter \#1 \$firstStmt of method Rector\\Core\\Rector\\MethodBody\\NormalToFluentRector\:\:isBothMethodCallMatch\(\) expects PhpParser\\Node\\Stmt\\Expression, PhpParser\\Node\\Stmt given#'
+        - '#Parameter \#1 \$firstStmt of method Rector\\Generic\\Rector\\MethodBody\\NormalToFluentRector\:\:isBothMethodCallMatch\(\) expects PhpParser\\Node\\Stmt\\Expression, PhpParser\\Node\\Stmt given#'
         - '#Method Rector\\Core\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
 
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'

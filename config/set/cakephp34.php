@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
-use Rector\Core\Rector\MethodBody\NormalToFluentRector;
-use Rector\Core\Rector\Property\PropertyToMethodRector;
-use Rector\Core\Rector\Property\RenamePropertyRector;
-use Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector;
+use Rector\Generic\Rector\MethodBody\NormalToFluentRector;
+use Rector\Generic\Rector\Property\PropertyToMethodRector;
+use Rector\Generic\Rector\Property\RenamePropertyRector;
+use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -51,11 +52,17 @@ final class PhpDocInfoFactory
      */
     private $phpDocTypeChanger;
 
+    /**
+     * @var PhpDocRemover
+     */
+    private $phpDocRemover;
+
     public function __construct(
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         CurrentNodeProvider $currentNodeProvider,
         Lexer $lexer,
         PhpDocParser $phpDocParser,
+        PhpDocRemover $phpDocRemover,
         PhpDocTypeChanger $phpDocTypeChanger,
         StaticTypeMapper $staticTypeMapper
     ) {
@@ -65,6 +72,7 @@ final class PhpDocInfoFactory
         $this->staticTypeMapper = $staticTypeMapper;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->phpDocRemover = $phpDocRemover;
     }
 
     public function createFromNode(Node $node): ?PhpDocInfo
@@ -147,7 +155,8 @@ final class PhpDocInfoFactory
             $content,
             $this->staticTypeMapper,
             $node,
-            $this->phpDocTypeChanger
+            $this->phpDocTypeChanger,
+            $this->phpDocRemover
         );
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
 

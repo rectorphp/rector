@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Core\Rector\Property\RenamePropertyRector;
+use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Generic\Rector\Property\RenamePropertyRector;
 use Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

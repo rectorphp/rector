@@ -70,11 +70,10 @@ final class MarkdownDumpRectorsOutputFormatter
 
     /**
      * @param RectorInterface[] $packageRectors
-     * @param RectorInterface[] $generalRectors
      */
-    public function format(array $packageRectors, array $generalRectors, bool $isRectorProject): void
+    public function format(array $packageRectors, bool $isRectorProject): void
     {
-        $totalRectorCount = count($packageRectors) + count($generalRectors);
+        $totalRectorCount = count($packageRectors);
         $message = sprintf('# All %d Rectors Overview', $totalRectorCount);
 
         $this->symfonyStyle->writeln($message);
@@ -82,10 +81,7 @@ final class MarkdownDumpRectorsOutputFormatter
 
         if ($isRectorProject) {
             $this->symfonyStyle->writeln('- [Projects](#projects)');
-            $this->symfonyStyle->writeln('- [General](#general)');
-
             $this->printRectorsWithHeadline($packageRectors, 'Projects');
-            $this->printRectorsWithHeadline($generalRectors, 'General');
         } else {
             $this->printRectors($packageRectors, $isRectorProject);
         }

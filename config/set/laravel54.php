@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\String_\StringToClassConstantRector;
+use Rector\Generic\Rector\String_\StringToClassConstantRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

@@ -60,15 +60,12 @@ final class DumpRectorsCommand extends AbstractCommand
                 __DIR__ . '/../../../../rules',
                 __DIR__ . '/../../../../packages',
             ]);
-
-            $generalRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../src');
         } else {
             // custom directory
             $rulesRectors = $this->rectorsFinder->findInDirectories($source);
-            $generalRectors = [];
         }
 
-        $this->markdownDumpRectorsOutputFormatter->format($rulesRectors, $generalRectors, $isRectorProject);
+        $this->markdownDumpRectorsOutputFormatter->format($rulesRectors, $isRectorProject);
 
         return ShellCode::SUCCESS;
     }

@@ -67,6 +67,7 @@
             "Rector\\ChangesReporting\\": "packages/changes-reporting/src",
             "Rector\\CodeQuality\\": "rules/code-quality/src",
             "Rector\\NodeRemoval\\": "packages/node-removal/src",
+            "Rector\\Generic\\": "rules/generic/src",
             "Rector\\Reporting\\": "packages/reporting/src",
             "Rector\\CodingStyle\\": "rules/coding-style/src",
             "Rector\\ConsoleDiffer\\": "packages/console-differ/src",
@@ -166,6 +167,7 @@
             "Rector\\Doctrine\\Tests\\": "rules/doctrine/tests",
             "Rector\\DynamicTypeAnalysis\\Tests\\": "packages/dynamic-type-analysis/tests",
             "Rector\\Guzzle\\Tests\\": "rules/guzzle/tests",
+            "Rector\\Generic\\Tests\\": "rules/generic/tests",
             "Rector\\JMS\\Tests\\": "rules/jms/tests",
             "Rector\\Laravel\\Tests\\": "rules/laravel/tests",
             "Rector\\Legacy\\Tests\\": "rules/legacy/tests",
@@ -236,7 +238,7 @@
             "rules/cakephp/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source",
             "tests/Source",
             "rules/psr4/tests/Rector/MultipleClassFileToPsr4ClassesRector/Source",
-            "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source"
+            "rules/generic/tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source"
         ],
         "files": [
             "rules/coding-style/tests/Rector/Throw_/AnnotateThrowablesRector/Source/i_throw_an_exception.func.php",
@@ -248,7 +250,7 @@
             "rules/renaming/tests/Rector/Class_/RenameClassRector/Source/Twig_Extension_Sandbox.php",
             "rules/renaming/tests/Rector/Class_/RenameClassRector/Source/TwigFilter.php",
             "rules/renaming/tests/Rector/Class_/RenameClassRector/Source/Manual_Twig_Filter.php",
-            "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
+            "rules/generic/tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Foo.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Function_/count.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",

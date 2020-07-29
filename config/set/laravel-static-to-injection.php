@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\FuncCall\FunctionToNewRector;
+use Rector\Generic\Rector\FuncCall\FunctionToNewRector;
 use Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
 use Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector;
 use Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;

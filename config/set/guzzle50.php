@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Cookie\SetCookie;
-use Rector\Core\Rector\Function_\FunctionToMethodCallRector;
-use Rector\Core\Rector\StaticCall\StaticCallToFunctionRector;
+use Rector\Generic\Rector\Function_\FunctionToMethodCallRector;
+use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
 use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
 use Rector\MagicDisclosure\Rector\MethodCall\DefluentMethodCallRector;

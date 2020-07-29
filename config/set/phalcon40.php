@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\StaticCall\SwapClassMethodArgumentsRector;
+use Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector;
 use Rector\Phalcon\Rector\Assign\FlashWithCssClassesToExtraCallRector;
 use Rector\Phalcon\Rector\Assign\NewApplicationToToFactoryWithDefaultContainerRector;
 use Rector\Phalcon\Rector\MethodCall\AddRequestToHandleMethodCallRector;

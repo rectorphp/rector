@@ -36,14 +36,6 @@ final class RectorsFinder
     }
 
     /**
-     * @return RectorInterface[]
-     */
-    public function findInDirectory(string $directory): array
-    {
-        return $this->findInDirectories([$directory]);
-    }
-
-    /**
      * @param string[] $directories
      * @return RectorInterface[]
      */

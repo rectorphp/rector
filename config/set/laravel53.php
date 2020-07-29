@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\ClassLike\RemoveTraitRector;
+use Rector\Generic\Rector\ClassLike\RemoveTraitRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

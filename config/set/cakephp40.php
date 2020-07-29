@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
-use Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Core\Rector\Property\RenamePropertyRector;
+use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Generic\Rector\Property\RenamePropertyRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\Argument\ArgumentAdderRector;
-use Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector;
-use Rector\Core\Rector\Argument\ArgumentRemoverRector;
-use Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Core\Rector\ClassMethod\WrapReturnRector;
-use Rector\Core\Rector\New_\NewToStaticCallRector;
-use Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector;
+use Rector\Generic\Rector\Argument\ArgumentAdderRector;
+use Rector\Generic\Rector\Argument\ArgumentDefaultValueReplacerRector;
+use Rector\Generic\Rector\Argument\ArgumentRemoverRector;
+use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
+use Rector\Generic\Rector\New_\NewToStaticCallRector;
+use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector;

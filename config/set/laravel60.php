@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Rector\Argument\ArgumentAdderRector;
-use Rector\Core\Rector\MethodCall\MethodCallToReturnRector;
-use Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector;
+use Rector\Generic\Rector\Argument\ArgumentAdderRector;
+use Rector\Generic\Rector\MethodCall\MethodCallToReturnRector;
+use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
