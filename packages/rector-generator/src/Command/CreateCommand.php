@@ -144,7 +144,6 @@ final class CreateCommand extends Command
             $templateVariables,
             $configuration
         );
-
         if ($isUnwantedOverride) {
             $this->symfonyStyle->warning('No files were changed');
 

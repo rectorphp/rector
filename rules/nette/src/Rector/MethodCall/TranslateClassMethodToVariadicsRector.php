@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -44,7 +45,7 @@ final class SomeClass implements ITranslator
 }
 PHP
 
-            )
+            ),
         ]);
     }
 
@@ -53,11 +54,11 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
 
     /**
-     * @param \PhpParser\Node\Expr\MethodCall $node
+     * @param MethodCall $node
      */
     public function refactor(Node $node): ?Node
     {
