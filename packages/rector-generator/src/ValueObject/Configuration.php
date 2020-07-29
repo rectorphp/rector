@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\ValueObject;
 
 use Nette\Utils\Strings;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticRectorStrings;
 use Symplify\SetConfigResolver\ValueObject\Set;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -201,7 +202,8 @@ final class Configuration
     private function setName(string $name): void
     {
         if (! Strings::endsWith($name, 'Rector')) {
-            $name .= 'Rector';
+            $message = sprintf('Rector name "%s" must end with "Rector"', $name);
+            throw new ShouldNotHappenException($message);
         }
 
         $this->name = $name;

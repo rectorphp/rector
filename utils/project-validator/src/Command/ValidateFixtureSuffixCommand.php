@@ -77,6 +77,7 @@ final class ValidateFixtureSuffixCommand extends Command
             ->notPath('#TagValueNodeReprint#')
             ->notPath('#PhpSpecToPHPUnitRector#')
             ->notPath('#Source#')
+            ->notPath('#expected#')
             ->notPath('DoctrineRepositoryAsService/Fixture/PostController.php')
             ->notPath('Namespace_/ImportFullyQualifiedNamesRector/Fixture/SharedShortName.php')
             ->notPath('Class_/RenameClassRector/Fixture/DuplicatedClass.php')

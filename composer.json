@@ -171,6 +171,7 @@
             "Rector\\JMS\\Tests\\": "rules/jms/tests",
             "Rector\\Laravel\\Tests\\": "rules/laravel/tests",
             "Rector\\Legacy\\Tests\\": "rules/legacy/tests",
+            "Rector\\RectorGenerator\\Tests\\": "packages/rector-generator/tests",
             "Rector\\MagicDisclosure\\Tests\\": "rules/magic-disclosure/tests",
             "Rector\\MysqlToMysqli\\Tests\\": "rules/mysql-to-mysqli/tests",
             "Rector\\NetteTesterToPHPUnit\\Tests\\": "rules/nette-tester-to-phpunit/tests",
@@ -262,7 +263,6 @@
     "scripts": {
         "complete-check": [
             "@check-cs",
-            "bin/rector validate-fixtures --ansi",
             "bin/rector validate-services-in-sets --ansi",
             "bin/rector validate-sets --ansi",
             "phpunit",
