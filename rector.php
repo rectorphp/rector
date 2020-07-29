@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Generic\Rector\Class_\AddConfigureClassMethodWithConstantRector;
 use Rector\Set\ValueObject\SetList;
-use Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeCallByNameToConstantByClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -13,14 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
-    $services->set(ChangeCallByNameToConstantByClassRector::class)
-        ->call('configure', [
-            [
-                ChangeCallByNameToConstantByClassRector::CLASS_TYPES_TO_METHOD_NAME => [
-                    RectorInterface::class => 'configure',
-                ],
-            ],
-        ]);
+    $services->set(AddConfigureClassMethodWithConstantRector::class);
 
     $parameters = $containerConfigurator->parameters();
 
@@ -43,6 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '/Fixture/',
         '/Expected/',
         __DIR__ . '/packages/doctrine-annotation-generated/src/*',
+        __DIR__ . '/packages/rector-generator/templates/*',
         '*.php.inc',
     ]);
 

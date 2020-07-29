@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # scalar param types https://github.com/nette/security/commit/84024f612fb3f55f5d6e3e3e28eef1ad0388fa56
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForParameterByMethodByClass' => [
+            AddParamTypeDeclarationRector::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
                 'Nette\ComponentModel\Component' => [
                     'lookup' => ['?string', 'bool'],
                     'lookupPath' => ['string', 'bool'],

@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # scalar type hints, see https://github.com/nette/security/commit/84024f612fb3f55f5d6e3e3e28eef1ad0388fa56
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForMethodByClass' => [
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
                 'Nette\Mail\Mailer' => [
                     'send' => 'void',
                 ],

@@ -25,14 +25,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     #diff-810cdcfdd8a6b9e1fc0d1e96d7786874
     # covers https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7
     $services->set(ReturnThisRemoveRector::class)
-        ->call('configure', [['$classesToDefluent' => '%classes_to_defluent%']]);
+        ->call('configure', [[ReturnThisRemoveRector::CLASSES_TO_DEFLUENT => '%classes_to_defluent%']]);
 
     $services->set(DefluentMethodCallRector::class)
-        ->call('configure', [['$namesToDefluent' => '%classes_to_defluent%']]);
+        ->call('configure', [[DefluentMethodCallRector::NAMES_TO_DEFLUENT => '%classes_to_defluent%']]);
 
     $services->set(FunctionToMethodCallRector::class)
         ->call('configure', [[
-            '$functionToMethodCall' => [
+            FunctionToMethodCallRector::FUNCTION_TO_METHOD_CALL => [
                 'GuzzleHttp\json_decode' => ['GuzzleHttp\Utils', 'jsonDecode'],
                 'GuzzleHttp\get_path' => ['GuzzleHttp\Utils', 'getPath'],
             ],
@@ -40,7 +40,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StaticCallToFunctionRector::class)
         ->call('configure', [[
-            '$staticCallToFunctionByType' => [
+            StaticCallToFunctionRector::STATIC_CALL_TO_FUNCTION_BY_TYPE => [
                 'GuzzleHttp\Utils' => [
                     'setPath' => 'GuzzleHttp\set_path',
                 ],
@@ -54,7 +54,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'GuzzleHttp\Message\MessageInterface' => [
                     'getHeaderLines' => 'getHeaderAsArray',
                 ],

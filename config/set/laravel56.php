@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Illuminate\Validation\ValidatesWhenResolvedTrait' => [
                     'validate' => 'validateResolved',
                 ],
@@ -25,7 +25,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            '$methodToVisibilityByClass' => [
+            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
                 'Illuminate\Routing\Router' => [
                     'addRoute' => 'public',
                 ],

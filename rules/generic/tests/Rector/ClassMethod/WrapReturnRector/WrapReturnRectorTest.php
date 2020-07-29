@@ -32,7 +32,7 @@ final class WrapReturnRectorTest extends AbstractRectorTestCase
     {
         return [
             WrapReturnRector::class => [
-                '$typeToMethodToWrap' => [
+                WrapReturnRector::TYPE_TO_METHOD_TO_WRAP => [
                     SomeReturnClass::class => [
                         'getItem' => 'array',
                     ],

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -17,8 +18,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  * @see https://github.com/cakephp/cakephp/commit/77017145961bb697b4256040b947029259f66a9b
  * @see \Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\RenameMethodCallBasedOnParameterRectorTest
  */
-final class RenameMethodCallBasedOnParameterRector extends AbstractRector
+final class RenameMethodCallBasedOnParameterRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const METHOD_NAMES_BY_TYPES = '$methodNamesByTypes';
+
     /**
      * @var string
      */
@@ -33,14 +39,6 @@ final class RenameMethodCallBasedOnParameterRector extends AbstractRector
      * @var mixed[]
      */
     private $methodNamesByTypes = [];
-
-    /**
-     * @param mixed[] $methodNamesByTypes
-     */
-    public function __construct(array $methodNamesByTypes = [])
-    {
-        $this->methodNamesByTypes = $methodNamesByTypes;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -100,6 +98,11 @@ PHP
         $node->name = new Identifier($config[self::REPLACE_WITH]);
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodNamesByTypes = $configuration[self::METHOD_NAMES_BY_TYPES] ?? [];
     }
 
     /**

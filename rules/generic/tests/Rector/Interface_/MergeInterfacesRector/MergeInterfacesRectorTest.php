@@ -33,7 +33,7 @@ final class MergeInterfacesRectorTest extends AbstractRectorTestCase
     {
         return [
             MergeInterfacesRector::class => [
-                '$oldToNewInterfaces' => [
+                MergeInterfacesRector::OLD_TO_NEW_INTERFACES => [
                     SomeOldInterface::class => SomeInterface::class,
                 ],
             ],

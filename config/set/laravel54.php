@@ -14,7 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StringToClassConstantRector::class)
         ->call('configure', [[
-            '$stringsToClassConstants' => [
+            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => [
                 'kernel.handled' => ['Illuminate\Foundation\Http\Events\RequestHandled', 'class'],
                 'locale.changed' => ['Illuminate\Foundation\Events\LocaleUpdated', 'class'],
                 'illuminate.log' => ['Illuminate\Log\Events\MessageLogged', 'class'],
@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Illuminate\Console\AppNamespaceDetectorTrait' => 'Illuminate\Console\DetectsApplicationNamespace',
                 'Illuminate\Http\Exception\HttpResponseException' => 'Illuminate\Http\Exceptions\HttpResponseException',
                 'Illuminate\Http\Exception\PostTooLargeException' => 'Illuminate\Http\Exceptions\PostTooLargeException',
@@ -34,7 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Illuminate\Support\Collection' => [
                     'every' => 'nth',
                 ],

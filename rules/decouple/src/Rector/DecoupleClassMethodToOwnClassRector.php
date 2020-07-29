@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -26,8 +27,13 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\DecoupleClassMethodToOwnClassRectorTest
  */
-final class DecoupleClassMethodToOwnClassRector extends AbstractRector
+final class DecoupleClassMethodToOwnClassRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const METHOD_NAMES_BY_CLASS = '$methodNamesByClass';
+
     /**
      * @var mixed[][]
      */
@@ -63,19 +69,14 @@ final class DecoupleClassMethodToOwnClassRector extends AbstractRector
      */
     private $constructorClassMethodFactory;
 
-    /**
-     * @param mixed[][] $methodNamesByClass
-     */
     public function __construct(
         NamespaceFactory $namespaceFactory,
         UsedClassMethodsExtractor $usedClassMethodsExtractor,
         UsedClassConstsExtractor $usedClassConstsExtractor,
         UsedClassPropertyExtractor $usedClassPropertyExtractor,
         DecoupledClassMethodMatcher $decoupledClassMethodMatcher,
-        ConstructorClassMethodFactory $constructorClassMethodFactory,
-        array $methodNamesByClass = []
+        ConstructorClassMethodFactory $constructorClassMethodFactory
     ) {
-        $this->methodNamesByClass = $methodNamesByClass;
         $this->namespaceFactory = $namespaceFactory;
         $this->usedClassMethodsExtractor = $usedClassMethodsExtractor;
         $this->usedClassConstsExtractor = $usedClassConstsExtractor;
@@ -206,6 +207,11 @@ class NewDecoupledClass extends AddedParentClass
 CODE_SAMPLE
             ),
         ]);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodNamesByClass = $configuration[self::METHOD_NAMES_BY_CLASS] ?? [];
     }
 
     private function createNewClassLocation(ClassMethod $classMethod, string $newClassName): string

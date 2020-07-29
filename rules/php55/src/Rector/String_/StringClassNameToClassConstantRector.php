@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -23,12 +24,22 @@ use ReflectionClass;
  *
  * @see \Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\StringClassNameToClassConstantRectorTest
  */
-final class StringClassNameToClassConstantRector extends AbstractRector
+final class StringClassNameToClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const CLASSES_TO_SKIP = '$classesToSkip';
+
     /**
      * @var string[]
      */
-    private $classesToSkip = [];
+    private $classesToSkip = [
+        // can be string
+        'Error',
+        'Exception',
+    ];
 
     /**
      * @var string[]
@@ -39,18 +50,6 @@ final class StringClassNameToClassConstantRector extends AbstractRector
      * @var string[]
      */
     private $sensitiveNonExistingClasses = [];
-
-    /**
-     * @param string[] $classesToSkip
-     */
-    public function __construct(array $classesToSkip = [
-        // can be string
-        'Error',
-        'Exception',
-    ])
-    {
-        $this->classesToSkip = $classesToSkip;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -125,6 +124,13 @@ PHP
         $fullyQualified->setAttribute(AttributeKey::FILE_INFO, $node->getAttribute(AttributeKey::FILE_INFO));
 
         return new ClassConstFetch($fullyQualified, 'class');
+    }
+
+    public function configure(array $configuration): void
+    {
+        if (isset($configuration[self::CLASSES_TO_SKIP])) {
+            $this->classesToSkip = $configuration[self::CLASSES_TO_SKIP];
+        }
     }
 
     private function classLikeSensitiveExists(string $classLikeName): bool

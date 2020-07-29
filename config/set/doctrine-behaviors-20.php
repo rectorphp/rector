@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddInterfaceByTraitRector::class)
         ->call('configure', [[
-            '$interfaceByTrait' => [
+            AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
                 'Knp\DoctrineBehaviors\Model\Timestampable\Timestampable' => 'Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface',
                 'Knp\DoctrineBehaviors\Model\Timestampable\TimestampableMethods' => 'Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface',
                 'Knp\DoctrineBehaviors\Model\Blameable\Blameable' => 'Knp\DoctrineBehaviors\Contract\Entity\BlameableInterface',
@@ -31,7 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 # move interface to "Contract"
                 'Knp\DoctrineBehaviors\Model\Tree\NodeInterface' => 'Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface',
                 # suffix "Trait" for traits
@@ -66,7 +66,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call(
             'configure',
             [[
-                '$detectedTraits' => [
+                AddEntityIdByConditionRector::DETECTED_TRAITS => [
                     'Knp\DoctrineBehaviors\Model\Translatable\Translation',
                     'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait',
                 ],

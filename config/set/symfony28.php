@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
-            '$replacesByMethodAndTypes' => [
+            ArgumentDefaultValueReplacerRector::REPLACES_BY_METHOD_AND_TYPES => [
                 'Symfony\Component\Routing\Generator\UrlGeneratorInterface' => [
                     'generate' => [
                         2 => [

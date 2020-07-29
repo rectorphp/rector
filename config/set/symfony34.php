@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            '$positionsByMethodNameByClassType' => [
+            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
                 'Symfony\Component\Yaml\Yaml' => [
                     'parse' => [
                         2 => ['Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'],

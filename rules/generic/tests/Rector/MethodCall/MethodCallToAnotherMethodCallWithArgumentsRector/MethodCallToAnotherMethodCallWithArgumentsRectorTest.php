@@ -32,7 +32,7 @@ final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends Abstrac
     {
         return [
             MethodCallToAnotherMethodCallWithArgumentsRector::class => [
-                '$oldMethodsToNewMethodsWithArgsByType' => [
+                MethodCallToAnotherMethodCallWithArgumentsRector::OLD_METHODS_TO_NEW_METHODS_WITH_ARGS_BY_TYPE => [
                     NetteServiceDefinition::class => [
                         'setInject' => ['addTag', ['inject']],
                     ],

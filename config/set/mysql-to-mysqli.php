@@ -26,7 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # first swap arguments, then rename
     $services->set(SwapFuncCallArgumentsRector::class)
         ->call('configure', [[
-            '$newArgumentPositionsByFunctionName' => [
+            SwapFuncCallArgumentsRector::NEW_ARGUMENT_POSITIONS_BY_FUNCTION_NAME => [
                 'mysql_real_escape_string' => [1, 0],
                 'mysql_select_db' => [1, 0],
                 'mysql_set_charset' => [1, 0],
@@ -37,7 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameFunctionRector::class)
         ->call('configure', [[
-            '$oldFunctionToNewFunction' => [
+            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
                 'mysql_affected_rows' => 'mysqli_affected_rows',
                 'mysql_close' => 'mysqli_close',
                 'mysql_data_seek' => 'mysqli_data_seek',
@@ -75,7 +75,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # http://php.net/manual/en/mysql.constants.php → http://php.net/manual/en/mysqli.constants.php
     $services->set(RenameConstantRector::class)
         ->call('configure', [[
-            '$oldToNewConstants' => [
+            RenameConstantRector::OLD_TO_NEW_CONSTANTS => [
                 'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
                 'MYSQL_NUM' => 'MYSQLI_NUM',
                 'MYSQL_BOTH' => 'MYSQLI_BOTH',

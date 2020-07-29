@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -16,20 +17,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\SwapClassMethodArgumentsRectorTest
  */
-final class SwapClassMethodArgumentsRector extends AbstractRector
+final class SwapClassMethodArgumentsRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS = 'new_argument_positions_by_method_and_class';
+
     /**
      * @var int[][][]
      */
     private $newArgumentPositionsByMethodAndClass = [];
-
-    /**
-     * @param int[][][] $newArgumentPositionsByMethodAndClass
-     */
-    public function __construct(array $newArgumentPositionsByMethodAndClass = [])
-    {
-        $this->newArgumentPositionsByMethodAndClass = $newArgumentPositionsByMethodAndClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -88,6 +86,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->newArgumentPositionsByMethodAndClass = $configuration[self::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS] ?? [];
     }
 
     /**

@@ -6,6 +6,7 @@ namespace Rector\Generic\Rector\Interface_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -13,20 +14,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\Interface_\RemoveInterfacesRector\RemoveInterfacesRectorTest
  */
-final class RemoveInterfacesRector extends AbstractRector
+final class RemoveInterfacesRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const INTERFACES_TO_REMOVE = '$interfacesToRemove';
+
     /**
      * @var string[]
      */
     private $interfacesToRemove = [];
-
-    /**
-     * @param string[] $interfacesToRemove
-     */
-    public function __construct(array $interfacesToRemove = [])
-    {
-        $this->interfacesToRemove = $interfacesToRemove;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -73,5 +71,10 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->interfacesToRemove = $configuration[self::INTERFACES_TO_REMOVE] ?? [];
     }
 }

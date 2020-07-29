@@ -24,6 +24,7 @@ use Rector\SymfonyPhpConfig\NodeAnalyzer\SymfonyPhpConfigClosureAnalyzer;
 final class ChangeServiceArgumentsToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @api
      * @var string
      */
     public const CLASS_TYPE_TO_METHOD_NAME = 'class_type_to_method_name';
@@ -152,10 +153,6 @@ PHP
             return true;
         }
 
-        if (! $this->isName($methodCall->name, 'set')) {
-            return true;
-        }
-
-        return false;
+        return ! $this->isName($methodCall->name, 'set');
     }
 }

@@ -28,7 +28,7 @@ final class MultiParentingToAbstractDependencyRectorTest extends AbstractRectorT
     {
         return [
             MultiParentingToAbstractDependencyRector::class => [
-                '$framework' => 'nette',
+                MultiParentingToAbstractDependencyRector::FRAMEWORK => 'nette',
             ],
         ];
     }

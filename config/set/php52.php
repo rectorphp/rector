@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RemoveFuncCallArgRector::class)
         ->call('configure', [[
-            '$argumentPositionByFunctionName' => [
+            RemoveFuncCallArgRector::ARGUMENT_POSITION_BY_FUNCTION_NAME => [
                 'ldap_first_attribute' => [
                     # see https://www.php.net/manual/en/function.ldap-first-attribute.php
                     2,

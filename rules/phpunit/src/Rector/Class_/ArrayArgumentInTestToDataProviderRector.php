@@ -21,6 +21,7 @@ use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -36,8 +37,14 @@ use Rector\PHPUnit\ValueObject\ParamAndArgValueObject;
  *
  * @see why → https://blog.martinhujer.cz/how-to-use-data-providers-in-phpunit/
  */
-final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRector
+final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const CONFIGURATION = '$configuration';
+
     /**
      * @var mixed[]
      */
@@ -58,17 +65,12 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
      */
     private $typeFactory;
 
-    /**
-     * @param mixed[] $configuration
-     */
     public function __construct(
         DataProviderClassMethodFactory $dataProviderClassMethodFactory,
-        TypeFactory $typeFactory,
-        array $configuration = []
+        TypeFactory $typeFactory
     ) {
         $this->dataProviderClassMethodFactory = $dataProviderClassMethodFactory;
         $this->typeFactory = $typeFactory;
-        $this->configuration = $configuration;
     }
 
     public function getDefinition(): RectorDefinition
@@ -166,6 +168,11 @@ PHP
         $node->stmts = array_merge($node->stmts, $dataProviderClassMethods);
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->configuration = $configuration[self::CONFIGURATION] ?? [];
     }
 
     /**

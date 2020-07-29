@@ -32,7 +32,7 @@ final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTes
     {
         return [
             RenameClassConstantsUseToStringsRector::class => [
-                '$oldConstantsToNewValuesByType' => [
+                RenameClassConstantsUseToStringsRector::OLD_CONSTANTS_TO_NEW_VALUES_BY_TYPE => [
                     OldClassWithConstants::class => [
                         'DEVELOPMENT' => 'development',
                         'PRODUCTION' => 'production',

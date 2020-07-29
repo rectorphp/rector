@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -22,8 +23,18 @@ use Rector\Symfony\Exception\InvalidConfigurationException;
  *
  * Works best with https://github.com/migrify/config-transformer
  */
-final class ChangeFileLoaderInExtensionAndKernelRector extends AbstractRector
+final class ChangeFileLoaderInExtensionAndKernelRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const FROM = 'from';
+
+    /**
+     * @var string
+     */
+    public const TO = 'to';
+
     /**
      * @var string[]
      */
@@ -42,12 +53,6 @@ final class ChangeFileLoaderInExtensionAndKernelRector extends AbstractRector
      * @var string
      */
     private $to;
-
-    public function __construct(string $from = '', string $to = '')
-    {
-        $this->from = $from;
-        $this->to = $to;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -87,8 +92,8 @@ final class SomeExtension extends Extension
 }
 PHP
     , [
-        '$from' => 'xml',
-        '$to' => 'yaml',
+        self::FROM => 'xml',
+        self::TO => 'yaml',
     ]),
         ]);
     }
@@ -132,6 +137,12 @@ PHP
         });
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->from = $configuration[self::FROM];
+        $this->to = $configuration[self::TO];
     }
 
     private function refactorLoadMethodCall(Node $node): ?Node

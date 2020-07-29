@@ -32,7 +32,7 @@ final class MethodCallToReturnRectorTest extends AbstractRectorTestCase
     {
         return [
             MethodCallToReturnRector::class => [
-                '$methodNamesByType' => [
+                MethodCallToReturnRector::METHOD_NAMES_BY_TYPE => [
                     ReturnDeny::class => ['deny'],
                 ],
             ],

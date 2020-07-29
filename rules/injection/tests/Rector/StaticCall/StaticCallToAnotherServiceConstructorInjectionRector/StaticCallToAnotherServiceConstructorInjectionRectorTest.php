@@ -38,7 +38,7 @@ final class StaticCallToAnotherServiceConstructorInjectionRectorTest extends Abs
 
         return [
             StaticCallToAnotherServiceConstructorInjectionRector::class => [
-                '$staticCallsToMethodCalls' => $configuration,
+                StaticCallToAnotherServiceConstructorInjectionRector::STATIC_CALLS_TO_METHOD_CALLS => $configuration,
             ],
         ];
     }

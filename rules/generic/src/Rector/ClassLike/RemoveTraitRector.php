@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -17,8 +18,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Generic\Tests\Rector\ClassLike\RemoveTraitRector\RemoveTraitRectorTest
  */
-final class RemoveTraitRector extends AbstractRector
+final class RemoveTraitRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const TRAITS_TO_REMOVE = '$traitsToRemove';
+
     /**
      * @var bool
      */
@@ -34,13 +40,9 @@ final class RemoveTraitRector extends AbstractRector
      */
     private $classManipulator;
 
-    /**
-     * @param string[] $traitsToRemove
-     */
-    public function __construct(ClassManipulator $classManipulator, array $traitsToRemove = [])
+    public function __construct(ClassManipulator $classManipulator)
     {
         $this->classManipulator = $classManipulator;
-        $this->traitsToRemove = $traitsToRemove;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,6 +92,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->traitsToRemove = $configuration[self::TRAITS_TO_REMOVE] ?? [];
     }
 
     /**

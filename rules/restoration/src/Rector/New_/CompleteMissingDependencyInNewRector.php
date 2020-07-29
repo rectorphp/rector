@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -20,20 +21,18 @@ use ReflectionParameter;
  *
  * @see \Rector\Restoration\Tests\Rector\New_\CompleteMissingDependencyInNewRector\CompleteMissingDependencyInNewRectorTest
  */
-final class CompleteMissingDependencyInNewRector extends AbstractRector
+final class CompleteMissingDependencyInNewRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const CLASS_TO_INSTANTIATE_BY_TYPE = '$classToInstantiateByType';
+
     /**
      * @var string[]
      */
     private $classToInstantiateByType = [];
-
-    /**
-     * @param string[] $classToInstantiateByType
-     */
-    public function __construct(array $classToInstantiateByType = [])
-    {
-        $this->classToInstantiateByType = $classToInstantiateByType;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -117,6 +116,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->classToInstantiateByType = $configuration[self::CLASS_TO_INSTANTIATE_BY_TYPE] ?? [];
     }
 
     private function shouldSkipNew(New_ $new): bool

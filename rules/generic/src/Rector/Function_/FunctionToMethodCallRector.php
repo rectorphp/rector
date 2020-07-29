@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -15,20 +16,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\Function_\FunctionToMethodCallRector\FunctionToMethodCallRectorTest
  */
-final class FunctionToMethodCallRector extends AbstractRector
+final class FunctionToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const FUNCTION_TO_METHOD_CALL = '$functionToMethodCall';
+
     /**
      * @var string[]
      */
     private $functionToMethodCall = [];
-
-    /**
-     * @param string[] $functionToMethodCall e.g. ["view" => ["this", "render"]]
-     */
-    public function __construct(array $functionToMethodCall = [])
-    {
-        $this->functionToMethodCall = $functionToMethodCall;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -73,5 +71,10 @@ final class FunctionToMethodCallRector extends AbstractRector
         [$variableName, $methodName] = $this->functionToMethodCall[$functionName];
 
         return $this->createMethodCall($variableName, $methodName, $node->args);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->functionToMethodCall = $configuration[self::FUNCTION_TO_METHOD_CALL] ?? [];
     }
 }

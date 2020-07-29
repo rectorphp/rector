@@ -7,6 +7,7 @@ namespace Rector\Generic\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -14,20 +15,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\MethodCallToAnotherMethodCallWithArgumentsRectorTest
  */
-final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRector
+final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OLD_METHODS_TO_NEW_METHODS_WITH_ARGS_BY_TYPE = 'old_methods_to_new_methods_with_args_by_type';
+
     /**
      * @var mixed[][][]
      */
     private $oldMethodsToNewMethodsWithArgsByType = [];
-
-    /**
-     * @param mixed[][][] $oldMethodsToNewMethodsWithArgsByType
-     */
-    public function __construct(array $oldMethodsToNewMethodsWithArgsByType = [])
-    {
-        $this->oldMethodsToNewMethodsWithArgsByType = $oldMethodsToNewMethodsWithArgsByType;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -83,5 +81,10 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->oldMethodsToNewMethodsWithArgsByType = $configuration[self::OLD_METHODS_TO_NEW_METHODS_WITH_ARGS_BY_TYPE] ?? [];
     }
 }

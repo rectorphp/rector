@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
@@ -26,8 +27,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  * @see \Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\ReturnArrayClassMethodToYieldRectorTest
  */
-final class ReturnArrayClassMethodToYieldRector extends AbstractRector
+final class ReturnArrayClassMethodToYieldRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const METHODS_BY_TYPE = 'methods_by_type';
+
     /**
      * @var string[][]
      */
@@ -48,13 +54,9 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
      */
     private $returnPhpDocInfo;
 
-    /**
-     * @param string[][] $methodsByType
-     */
-    public function __construct(NodeTransformer $nodeTransformer, array $methodsByType = [])
+    public function __construct(NodeTransformer $nodeTransformer)
     {
         $this->nodeTransformer = $nodeTransformer;
-        $this->methodsByType = $methodsByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -129,6 +131,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodsByType = $configuration[self::METHODS_BY_TYPE] ?? [];
     }
 
     private function collectReturnArrayNodesFromClassMethod(ClassMethod $classMethod): ?Array_

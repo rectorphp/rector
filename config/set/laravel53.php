@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RemoveTraitRector::class)
         ->call('configure', [[
-            '$traitsToRemove' => [
+            RemoveTraitRector::TRAITS_TO_REMOVE => [
                 # see https://laravel.com/docs/5.3/upgrade
                 'Illuminate\Foundation\Auth\Access\AuthorizesResources',
             ],

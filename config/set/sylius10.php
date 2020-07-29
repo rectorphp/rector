@@ -14,7 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Sylius\Component\Core\Repository\OrderRepositoryInterface' => [
                     # source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-100-beta3-to-100
                     'count' => 'countPlacedOrders',
@@ -34,7 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForParameterByMethodByClass' => [
+            AddParamTypeDeclarationRector::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
                 'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext' => [
                     '__construct' => ['Sylius\Component\Core\Storage\CartStorageInterface'],
                 ],
@@ -43,7 +43,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
                 'Sylius\Component\Mailer\Sender\SenderInterface' => [
                     'send' => [[
                         'name' => 'code',
@@ -63,7 +63,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForMethodByClass' => [
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
                 'Sylius\Component\Order\Model\OrderInterface' => [
                     'getAdjustmentsRecursively' => [
                         'array' => 'Doctrine\Common\Collections\Collection',
@@ -84,7 +84,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext' => 'Sylius\Component\Core\Storage\CartStorageInterface',
                 'Sylius\Bundle\CoreBundle\EmailManager\ShipmentEmailManager' => 'Sylius\Bundle\AdminBundle\EmailManager\ShipmentEmailManager',
                 'Sylius\Bundle\CoreBundle\EmailManager\ShipmentEmailManagerInterface' => 'Sylius\Bundle\AdminBundle\EmailManager\ShipmentEmailManagerInterface',

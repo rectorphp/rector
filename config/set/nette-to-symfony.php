@@ -35,7 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForMethodByClass' => [
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
                 'Nette\Application\IPresenter' => [
                     'run' => 'Symfony\Component\HttpFoundation\Response',
                 ],
@@ -44,7 +44,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Nette\Application\Request' => 'Symfony\Component\HttpFoundation\Request',
                 'Nette\Http\Request' => 'Symfony\Component\HttpFoundation\Request',
                 'Nette\Http\IRequest' => 'Symfony\Component\HttpFoundation\Request',
@@ -55,7 +55,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Nette\Application\IPresenter' => [
                     'run' => '__invoke',
                 ],
@@ -73,12 +73,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RemoveInterfacesRector::class)
         ->call('configure', [[
-            '$interfacesToRemove' => ['Nette\Application\IPresenter'],
+            RemoveInterfacesRector::INTERFACES_TO_REMOVE => ['Nette\Application\IPresenter'],
         ]]);
 
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            '$oldToNewConstantsByClass' => [
+            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
                 'Nette\Http\*Response' => [
                     'S100_CONTINUE' => 'Symfony\Component\HttpFoundation\Response::HTTP_CONTINUE',
                     'S101_SWITCHING_PROTOCOLS' => 'Symfony\Component\HttpFoundation\Response::HTTP_SWITCHING_PROTOCOLS',

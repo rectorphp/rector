@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -18,20 +19,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  * @see https://github.com/cebe/yii2/commit/9548a212ecf6e50fcdb0e5ba6daad88019cfc544
  * @see \Rector\Php71\Tests\Rector\Name\ReservedObjectRector\ReservedObjectRectorTest
  */
-final class ReservedObjectRector extends AbstractRector
+final class ReservedObjectRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const RESERVED_KEYWORDS_TO_REPLACEMENTS = '$reservedKeywordsToReplacements';
+
     /**
      * @var string[]
      */
     private $reservedKeywordsToReplacements = [];
-
-    /**
-     * @param string[] $reservedKeywordsToReplacements
-     */
-    public function __construct(array $reservedKeywordsToReplacements = [])
-    {
-        $this->reservedKeywordsToReplacements = $reservedKeywordsToReplacements;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -69,6 +67,11 @@ PHP
         }
 
         return $this->processName($node);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? [];
     }
 
     private function processIdentifier(Identifier $identifier): Identifier

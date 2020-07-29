@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
                 'Symfony\Component\DependencyInjection\ContainerBuilder' => [
                     'addCompilerPass' => [
                         2 => [

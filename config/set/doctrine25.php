@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForParameterByMethodByClass' => [
+            AddParamTypeDeclarationRector::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
                 'Doctrine\ORM\Mapping\ClassMetadataFactory' => [
                     'setEntityManager' => ['Doctrine\ORM\EntityManagerInterface'],
                 ],
@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            '$positionsByMethodNameByClassType' => [
+            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
                 'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister' => [
                     'getSelectJoinColumnSQL' => [
                         4 => null,

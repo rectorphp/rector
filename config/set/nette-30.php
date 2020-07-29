@@ -27,7 +27,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameClassConstantRector::class)->call(
         'configure',
         [[
-            '$oldToNewConstantsByClass' => [
+            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
                 'Contributte\Events\Extra\Event\Security\LoggedInEvent' => [
                     'NAME' => 'class',
                 ],
@@ -39,7 +39,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     );
 
     $services->set(RenameClassRector::class)->call('configure', [[
-        '$oldToNewClasses' => [
+        RenameClassRector::OLD_TO_NEW_CLASSES => [
             # nextras/forms was split into 2 packages
             'Nextras\FormComponents\Controls\DatePicker' => 'Nextras\FormComponents\Controls\DateControl',
             # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
@@ -50,7 +50,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MethodCallToStaticCallRector::class)
         ->call('configure', [[
-            '$methodCallsToStaticCalls' => [
+            MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => [
                 'Nette\DI\ContainerBuilder' => [
                     'expand' => ['Nette\DI\Helpers', 'expand'],
                 ],
@@ -59,7 +59,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Nette\Forms\Controls\BaseControl' => [
                     # see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
                     'setType' => 'setHtmlType',

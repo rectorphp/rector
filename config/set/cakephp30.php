@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 # see https://github.com/cakephp/upgrade/blob/756410c8b7d5aff9daec3fa1fe750a3858d422ac/src/Shell/Task/RenameClassesTask.php#L37
                 'Cake\Network\Http\HttpSocket' => 'Cake\Network\Http\Client',
                 'Cake\Model\ConnectionManager' => 'Cake\Database\ConnectionManager',

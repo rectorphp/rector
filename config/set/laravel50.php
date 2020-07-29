@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # https://stackoverflow.com/a/24949656/1348344
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Illuminate\Cache\CacheManager' => 'Illuminate\Contracts\Cache\Repository',
                 'Illuminate\Database\Eloquent\SoftDeletingTrait' => 'Illuminate\Database\Eloquent\SoftDeletes',
             ],
@@ -21,7 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Illuminate\Contracts\Pagination\Paginator' => [
                     'links' => 'render',
                     'getFrom' => 'firstItem',

@@ -14,7 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Illuminate\Console\Command' => [
                     'fire' => 'handle',
                 ],
@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            '$oldToNewPropertyByTypes' => [
+            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
                 'Illuminate\Database\Eloquent\Concerns\HasEvents' => [
                     'events' => 'dispatchesEvents',
                 ],
@@ -37,7 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call(
             'configure',
             [[
-                '$oldToNewClasses' => [
+                RenameClassRector::OLD_TO_NEW_CLASSES => [
                     'Illuminate\Translation\LoaderInterface' => 'Illuminate\Contracts\Translation\Loader',
                 ],
             ]]

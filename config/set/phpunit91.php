@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'PHPUnit\Framework\TestCase' => [
                     'assertFileNotExists' => 'assertFileDoesNotExist',
                 ],

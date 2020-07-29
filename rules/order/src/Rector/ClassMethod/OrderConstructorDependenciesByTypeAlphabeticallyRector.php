@@ -11,6 +11,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\UnionType;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -20,17 +21,18 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Order\Tests\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector\OrderConstructorDependenciesByTypeAlphabeticallyRectorTest
  */
-final class OrderConstructorDependenciesByTypeAlphabeticallyRector extends AbstractRector
+final class OrderConstructorDependenciesByTypeAlphabeticallyRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const SKIP_PATTERNS = '$skipPatterns';
+
     /**
      * @var array
      */
     private $skipPatterns = [];
-
-    public function __construct(array $skipPatterns = ['*/ValueObject/*'])
-    {
-        $this->skipPatterns = $skipPatterns;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -86,6 +88,11 @@ PHP
         $node->params = $this->getSortedParams($node);
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->skipPatterns = $configuration[self::SKIP_PATTERNS] ?? [];
     }
 
     /**

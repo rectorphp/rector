@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Stmt\Unset_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -15,8 +16,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\MagicDisclosure\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\UnsetAndIssetToMethodCallRectorTest
  */
-final class UnsetAndIssetToMethodCallRector extends AbstractRector
+final class UnsetAndIssetToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const TYPE_TO_METHOD_CALLS = 'type_to_method_calls';
+
     /**
      * @var string
      */
@@ -31,16 +37,6 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
      * @var string[][]
      */
     private $typeToMethodCalls = [];
-
-    /**
-     * Type to method call()
-     *
-     * @param string[][] $typeToMethodCalls
-     */
-    public function __construct(array $typeToMethodCalls = [])
-    {
-        $this->typeToMethodCalls = $typeToMethodCalls;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -74,8 +70,10 @@ $container->removeService("someKey");
 PHP
                 ,
                 [
-                    'SomeContainer' => [
-                        self::UNSET => 'removeService',
+                    self::TYPE_TO_METHOD_CALLS => [
+                        'SomeContainer' => [
+                            self::UNSET => 'removeService',
+                        ],
                     ],
                 ]
             ),
@@ -113,6 +111,11 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->typeToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? [];
     }
 
     /**

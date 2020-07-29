@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'PhpSpec\ServiceContainer' => [
                     # @see http://www.phpspec.net/en/stable/manual/upgrading-to-phpspec-3.html
                     'set' => 'define',
@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'PhpSpec\Console\IO' => 'PhpSpec\Console\ConsoleIO',
                 'PhpSpec\IO\IOInterface' => 'PhpSpec\IO\IO',
                 'PhpSpec\Locator\ResourceInterface' => 'PhpSpec\Locator\Resource',

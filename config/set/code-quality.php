@@ -185,7 +185,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameFunctionRector::class)
         ->call('configure', [[
-            '$oldFunctionToNewFunction' => [
+            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
                 'split' => 'explode',
                 'join' => 'implode',
                 'sizeof' => 'count',

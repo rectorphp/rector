@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ReservedObjectRector::class)
         ->call('configure', [[
-            '$reservedKeywordsToReplacements' => [
+            ReservedObjectRector::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
                 'Object' => 'BaseObject',
             ],
         ]]);

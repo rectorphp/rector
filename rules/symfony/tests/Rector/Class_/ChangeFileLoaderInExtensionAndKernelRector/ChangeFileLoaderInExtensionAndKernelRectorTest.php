@@ -28,8 +28,8 @@ final class ChangeFileLoaderInExtensionAndKernelRectorTest extends AbstractRecto
     {
         return [
             ChangeFileLoaderInExtensionAndKernelRector::class => [
-                '$from' => 'xml',
-                '$to' => 'yaml',
+                ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml',
+                ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml',
             ],
         ];
     }

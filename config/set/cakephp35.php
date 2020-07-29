@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Cake\Http\Client\CookieCollection' => 'Cake\Http\Cookie\CookieCollection',
                 'Cake\Console\ShellDispatcher' => 'Cake\Console\CommandRunner',
             ],
@@ -21,7 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Cake\Database\Schema\TableSchema' => [
                     'column' => 'getColumn',
                     'constraint' => 'getConstraint',
@@ -32,7 +32,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            '$methodNamesByTypes' => [
+            ModalToGetSetRector::METHOD_NAMES_BY_TYPES => [
                 'Cake\Cache\Cache' => [
                     'config' => null,
                     'registry' => null,

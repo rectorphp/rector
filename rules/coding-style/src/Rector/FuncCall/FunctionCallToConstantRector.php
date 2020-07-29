@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -15,20 +16,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\CodingStyle\Tests\Rector\FuncCall\FunctionCallToConstantRector\FunctionCallToConstantRectorTest
  */
-final class FunctionCallToConstantRector extends AbstractRector
+final class FunctionCallToConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const FUNCTIONS_TO_CONSTANTS = '$functionsToConstants';
+
     /**
      * @var string[]
      */
     private $functionsToConstants = [];
-
-    /**
-     * @param string[] $functionsToConstants
-     */
-    public function __construct(array $functionsToConstants = [])
-    {
-        $this->functionsToConstants = $functionsToConstants;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -97,5 +95,10 @@ EOS
         }
 
         return new ConstFetch(new Name($this->functionsToConstants[$functionName]));
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->functionsToConstants = $configuration[self::FUNCTIONS_TO_CONSTANTS] ?? [];
     }
 }

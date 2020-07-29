@@ -10,6 +10,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -18,20 +19,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Generic\Tests\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
  */
-final class AddMethodParentCallRector extends AbstractRector
+final class AddMethodParentCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const METHODS_BY_PARENT_TYPES = '$methodsByParentTypes';
+
     /**
      * @var mixed[]
      */
     private $methodsByParentTypes = [];
-
-    /**
-     * @param mixed[] $methodsByParentTypes
-     */
-    public function __construct(array $methodsByParentTypes = [])
-    {
-        $this->methodsByParentTypes = $methodsByParentTypes;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -108,6 +106,11 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodsByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? [];
     }
 
     private function shouldSkipMethod(ClassMethod $classMethod, string $method): bool

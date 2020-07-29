@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
                 'Symfony\Component\DependencyInjection\ContainerBuilder' => [
                     'compile' => [
                         2 => [
@@ -43,7 +43,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 # console
                 'Symfony\Component\Console\Event\ConsoleExceptionEvent' => 'Symfony\Component\Console\Event\ConsoleErrorEvent',
                 # debug
@@ -63,7 +63,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Symfony\Component\DependencyInjection\Container' => [
                     # dependency-injection
                     'isFrozen' => 'isCompiled',

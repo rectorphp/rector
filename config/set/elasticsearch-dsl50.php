@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'ONGR\ElasticsearchDSL\Query\BoolQuery' => 'ONGR\ElasticsearchDSL\Query\Compound\BoolQuery',
                 'ONGR\ElasticsearchDSL\Query\BoostingQuery' => 'ONGR\ElasticsearchDSL\Query\Compound\BoostingQuery',
                 'ONGR\ElasticsearchDSL\Query\ConstantScoreQuery' => 'ONGR\ElasticsearchDSL\Query\Compound\ConstantScoreQuery',

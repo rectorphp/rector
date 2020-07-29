@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Illuminate\Auth\Access\UnauthorizedException' => 'Illuminate\Auth\Access\AuthorizationException',
                 'Illuminate\Http\Exception\HttpResponseException' => 'Illuminate\Foundation\Validation\ValidationException',
                 'Illuminate\Foundation\Composer' => 'Illuminate\Support\Composer',
@@ -21,7 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StringToClassConstantRector::class)
         ->call('configure', [[
-            '$stringsToClassConstants' => [
+            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => [
                 'artisan.start' => ['Illuminate\Console\Events\ArtisanStarting', 'class'],
                 'auth.attempting' => ['Illuminate\Auth\Events\Attempting', 'class'],
                 'auth.login' => ['Illuminate\Auth\Events\Login', 'class'],

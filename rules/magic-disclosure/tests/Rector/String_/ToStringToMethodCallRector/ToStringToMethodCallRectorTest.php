@@ -32,7 +32,7 @@ final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
     {
         return [
             ToStringToMethodCallRector::class => [
-                '$methodNamesByType' => [
+                ToStringToMethodCallRector::METHOD_NAMES_BY_TYPE => [
                     ConfigCache::class => 'getPath',
                 ],
             ],

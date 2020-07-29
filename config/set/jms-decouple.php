@@ -10,6 +10,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(InjectAnnotationClassRector::class)
         ->call('configure', [[
-            '$annotationClasses' => ['JMS\DiExtraBundle\Annotation\Inject'],
+            InjectAnnotationClassRector::ANNOTATION_CLASSES => ['JMS\DiExtraBundle\Annotation\Inject'],
         ]]);
 };

@@ -16,6 +16,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -36,8 +37,13 @@ use Rector\VendorLocker\VendorLockResolver;
  * @see \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\ImportedTest
  * @see \Rector\Php74\Tests\Rector\Property\TypedPropertyRector\UnionTypedPropertyRectorTest
  */
-final class TypedPropertyRector extends AbstractRector
+final class TypedPropertyRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const CLASS_LIKE_TYPE_ONLY = '$classLikeTypeOnly';
+
     /**
      * @var PropertyTypeInferer
      */
@@ -62,13 +68,11 @@ final class TypedPropertyRector extends AbstractRector
     public function __construct(
         PropertyTypeInferer $propertyTypeInferer,
         VendorLockResolver $vendorLockResolver,
-        DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        bool $classLikeTypeOnly = false
+        DoctrineTypeAnalyzer $doctrineTypeAnalyzer
     ) {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
-        $this->classLikeTypeOnly = $classLikeTypeOnly;
     }
 
     public function getDefinition(): RectorDefinition
@@ -155,6 +159,11 @@ PHP
         $node->type = $propertyTypeNode;
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->classLikeTypeOnly = $configuration[self::CLASS_LIKE_TYPE_ONLY] ?? false;
     }
 
     private function removeVarPhpTagValueNodeIfNotComment(Property $property, Type $type): void

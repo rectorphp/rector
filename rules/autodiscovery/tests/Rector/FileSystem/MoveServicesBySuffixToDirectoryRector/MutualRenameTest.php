@@ -76,7 +76,7 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
     {
         return [
             MoveServicesBySuffixToDirectoryRector::class => [
-                '$groupNamesBySuffix' => ['Mapper'],
+                MoveServicesBySuffixToDirectoryRector::GROUP_NAMES_BY_SUFFIX => ['Mapper'],
             ],
         ];
     }

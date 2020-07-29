@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -20,8 +21,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\MagicDisclosure\Tests\Rector\Assign\GetAndSetToMethodCallRector\GetAndSetToMethodCallRectorTest
  */
-final class GetAndSetToMethodCallRector extends AbstractRector
+final class GetAndSetToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const TYPE_TO_METHOD_CALLS = 'type_to_method_calls';
+
     /**
      * @var string[][]
      */
@@ -32,15 +38,9 @@ final class GetAndSetToMethodCallRector extends AbstractRector
      */
     private $propertyFetchManipulator;
 
-    /**
-     * Type to method call()
-     *
-     * @param string[][] $typeToMethodCalls
-     */
-    public function __construct(PropertyFetchManipulator $propertyFetchManipulator, array $typeToMethodCalls = [])
+    public function __construct(PropertyFetchManipulator $propertyFetchManipulator)
     {
         $this->propertyFetchManipulator = $propertyFetchManipulator;
-        $this->typeToMethodCalls = $typeToMethodCalls;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,7 +75,7 @@ $someService = $container->getService("someService");
 PHP
                 ,
                 [
-                    '$typeToMethodCalls' => [
+                    self::TYPE_TO_METHOD_CALLS => [
                         'SomeContainer' => [
                             'get' => 'getService',
                         ],
@@ -107,6 +107,11 @@ PHP
         }
 
         return $this->processPropertyFetch($node);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->typeToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? [];
     }
 
     private function processMagicSet(Assign $assign): ?Node

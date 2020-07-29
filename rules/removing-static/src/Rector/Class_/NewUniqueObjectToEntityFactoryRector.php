@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -24,8 +25,14 @@ use Rector\RemovingStatic\StaticTypesInClassResolver;
  *
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\PassFactoryToEntityRectorTest
  */
-final class NewUniqueObjectToEntityFactoryRector extends AbstractRector
+final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const TYPES_TO_SERVICES = '$typesToServices';
+
     /**
      * @var string
      */
@@ -56,15 +63,8 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector
      */
     private $staticTypesInClassResolver;
 
-    /**
-     * @param string[] $typesToServices
-     */
-    public function __construct(
-        PropertyNaming $propertyNaming,
-        StaticTypesInClassResolver $staticTypesInClassResolver,
-        array $typesToServices = []
-    ) {
-        $this->typesToServices = $typesToServices;
+    public function __construct(PropertyNaming $propertyNaming, StaticTypesInClassResolver $staticTypesInClassResolver)
+    {
         $this->propertyNaming = $propertyNaming;
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
     }
@@ -165,6 +165,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->typesToServices = $configuration[self::TYPES_TO_SERVICES] ?? [];
     }
 
     /**

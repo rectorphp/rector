@@ -43,6 +43,7 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\PhpParser\Builder\PropertyBuilder;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -269,7 +270,7 @@ final class NodeFactory
     {
         return new StaticCall(
             new Name('parent'),
-            new Identifier('__construct'),
+            new Identifier(MethodName::CONSTRUCT),
             $this->convertParamNodesToArgNodes($params)
         );
     }

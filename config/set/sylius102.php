@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForMethodByClass' => [
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
                 'Sylius\Bundle\AdminApiBundle\Model\ClientManager' => [
                     # source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-101-to-102
                     'findClientByPublicId' => '?Sylius\Bundle\AdminApiBundle\Model\ClientInterface',

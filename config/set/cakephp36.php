@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # source: https://book.cakephp.org/3.0/en/appendices/3-6-migration-guide.html
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Cake\ORM\Table' => [
                     'association' => 'getAssociation',
                 ],
@@ -26,7 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            '$perClassPropertyToMethods' => [
+            PropertyToMethodRector::PER_CLASS_PROPERTY_TO_METHODS => [
                 'Cake\Controller\Controller' => [
                     'name' => [
                         'get' => 'getName',
@@ -48,7 +48,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Cake\Cache\Engine\ApcEngine' => 'Cake\Cache\Engine\ApcuEngine',
                 'Cake\Network\Exception\BadRequestException' => 'Cake\Http\Exception\BadRequestException',
                 'Cake\Network\Exception\ConflictException' => 'Cake\Http\Exception\ConflictException',

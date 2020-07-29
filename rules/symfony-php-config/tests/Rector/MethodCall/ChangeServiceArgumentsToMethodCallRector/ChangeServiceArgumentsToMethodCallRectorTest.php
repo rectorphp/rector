@@ -28,12 +28,11 @@ final class ChangeServiceArgumentsToMethodCallRectorTest extends AbstractRectorT
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            ChangeServiceArgumentsToMethodCallRector::class =>
-                [
-                    ChangeServiceArgumentsToMethodCallRector::CLASS_TYPE_TO_METHOD_NAME => [
-                        ClassPassedAsId::class => 'configure',
-                    ],
+            ChangeServiceArgumentsToMethodCallRector::class => [
+                ChangeServiceArgumentsToMethodCallRector::CLASS_TYPE_TO_METHOD_NAME => [
+                    ClassPassedAsId::class => 'configure',
                 ],
+            ],
         ];
     }
 }

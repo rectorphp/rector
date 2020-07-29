@@ -31,7 +31,7 @@ final class SwapFuncCallArgumentsRectorTest extends AbstractRectorTestCase
     {
         return [
             SwapFuncCallArgumentsRector::class => [
-                '$newArgumentPositionsByFunctionName' => [
+                SwapFuncCallArgumentsRector::NEW_ARGUMENT_POSITIONS_BY_FUNCTION_NAME => [
                     'some_function' => [1, 0],
                 ],
             ],

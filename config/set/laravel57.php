@@ -15,7 +15,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            '$methodToVisibilityByClass' => [
+            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
                 'Illuminate\Routing\Router' => [
                     'addRoute' => 'public',
                 ],
@@ -27,7 +27,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
                 'Illuminate\Auth\Middleware\Authenticate' => [
                     'authenticate' => [
                         'name' => 'request',
@@ -52,7 +52,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            '$positionsByMethodNameByClassType' => [
+            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
                 'Illuminate\Foundation\Application' => [
                     'register' => [
                         1 => [

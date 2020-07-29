@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -20,8 +21,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
  */
-final class ReturnThisRemoveRector extends AbstractRector
+final class ReturnThisRemoveRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const CLASSES_TO_DEFLUENT = '$classesToDefluent';
+
     /**
      * @var string[]
      */
@@ -32,12 +38,8 @@ final class ReturnThisRemoveRector extends AbstractRector
      */
     private $classNameTypeMatcher;
 
-    /**
-     * @param string[] $classesToDefluent
-     */
-    public function __construct(ClassNameTypeMatcher $classNameTypeMatcher, array $classesToDefluent = [])
+    public function __construct(ClassNameTypeMatcher $classNameTypeMatcher)
     {
-        $this->classesToDefluent = $classesToDefluent;
         $this->classNameTypeMatcher = $classNameTypeMatcher;
     }
 
@@ -119,6 +121,11 @@ PHP
         $this->removePhpDocTagValueNode($classMethod, ReturnTagValueNode::class);
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->classesToDefluent = $configuration[self::CLASSES_TO_DEFLUENT] ?? [];
     }
 
     /**

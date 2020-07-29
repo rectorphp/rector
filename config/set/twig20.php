@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 #filters
                 # see https://twig.symfony.com/doc/1.x/deprecated.html
                 'Twig_SimpleFilter' => 'Twig_Filter',

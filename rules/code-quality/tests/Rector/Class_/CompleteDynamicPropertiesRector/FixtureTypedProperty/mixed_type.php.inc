@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\FixtureTypedProperty;
 
-class MixedType
+class MixedAnotherType
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class MixedType
 
 namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\FixtureTypedProperty;
 
-class MixedType
+class MixedAnotherType
 {
     /**
      * @var mixed

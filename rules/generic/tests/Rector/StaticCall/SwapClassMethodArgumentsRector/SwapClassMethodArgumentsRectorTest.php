@@ -29,7 +29,7 @@ final class SwapClassMethodArgumentsRectorTest extends AbstractRectorTestCase
     {
         return [
             SwapClassMethodArgumentsRector::class => [
-                'newArgumentPositionsByMethodAndClass' => [
+                SwapClassMethodArgumentsRector::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS => [
                     SomeClass::class => [
                         'run' => [1, 0],
                     ],

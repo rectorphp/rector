@@ -33,7 +33,7 @@ final class NewObjectToFactoryCreateRectorTest extends AbstractRectorTestCase
     {
         return [
             NewObjectToFactoryCreateRector::class => [
-                '$objectToFactoryMethod' => [
+                NewObjectToFactoryCreateRector::OBJECT_TO_FACTORY_METHOD => [
                     MyClass::class => [
                         'class' => MyClassFactory::class,
                         'method' => 'create',

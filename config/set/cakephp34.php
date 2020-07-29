@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            '$perClassPropertyToMethods' => [
+            PropertyToMethodRector::PER_CLASS_PROPERTY_TO_METHODS => [
                 'Cake\Network\Request' => [
                     'params' => [
                         'get' => [
@@ -58,7 +58,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            '$oldToNewPropertyByTypes' => [
+            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
                 'Cake\Network\Request' => [
                     '_session' => 'session',
                 ],
@@ -67,7 +67,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            '$methodNamesByTypes' => [
+            ModalToGetSetRector::METHOD_NAMES_BY_TYPES => [
                 'Cake\Core\InstanceConfigTrait' => [
                     'config' => [
                         'minimal_argument_count' => 2,
@@ -266,7 +266,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Cake\Network\Request' => [
                     'param' => 'getParam',
                     'data' => 'getData',
@@ -325,7 +325,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            '$methodToVisibilityByClass' => [
+            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
                 'Cake\Mailer\MailerAwareTrait' => [
                     'getMailer' => 'protected',
                 ],
@@ -339,7 +339,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call(
             'configure',
             [[
-                '$oldToNewClasses' => [
+                RenameClassRector::OLD_TO_NEW_CLASSES => [
                     'Cake\Database\Schema\Table' => 'Cake\Database\Schema\TableSchema',
                 ],
             ]]
@@ -347,7 +347,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
-            '$fluentMethodsByType' => [
+            NormalToFluentRector::FLUENT_METHODS_BY_TYPE => [
                 'Cake\Network\Response' => [
                     'withLocation',
                     'withHeader',

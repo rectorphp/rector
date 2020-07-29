@@ -14,7 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameFunctionRector::class)
         ->call('configure', [[
-            '$oldFunctionToNewFunction' => [
+            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
                 'mcrypt_generic_end' => 'mcrypt_generic_deinit',
                 'set_socket_blocking' => 'stream_set_blocking',
                 'ocibindbyname' => 'oci_bind_by_name',

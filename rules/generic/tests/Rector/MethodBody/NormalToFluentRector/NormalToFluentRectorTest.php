@@ -32,7 +32,7 @@ final class NormalToFluentRectorTest extends AbstractRectorTestCase
     {
         return [
             NormalToFluentRector::class => [
-                '$fluentMethodsByType' => [
+                NormalToFluentRector::FLUENT_METHODS_BY_TYPE => [
                     FluentInterfaceClass::class => ['someFunction', 'otherFunction', 'joinThisAsWell'],
                 ],
             ],

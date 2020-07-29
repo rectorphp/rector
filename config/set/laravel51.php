@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Illuminate\Validation\Validator' => 'Illuminate\Contracts\Validation\Validator',
             ],
         ]]);

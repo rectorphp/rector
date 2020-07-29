@@ -29,7 +29,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameFunctionRector::class)
         ->call('configure', [[
-            '$oldFunctionToNewFunction' => [
+            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
                 # https://wiki.php.net/rfc/deprecations_php_7_3
                 'image2wbmp' => 'imagewbmp',
                 'mbregex_encoding' => 'mb_regex_encoding',

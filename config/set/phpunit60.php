@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'PHPUnit\Framework\TestCase' => [
                     'createMockBuilder' => 'getMockBuilder',
                 ],
@@ -25,7 +25,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'PHPUnit_Framework_MockObject_Stub' => 'PHPUnit\Framework\MockObject\Stub',
                 'PHPUnit_Framework_MockObject_Stub_Return' => 'PHPUnit\Framework\MockObject\Stub\ReturnStub',
                 'PHPUnit_Framework_MockObject_Matcher_Parameters' => 'PHPUnit\Framework\MockObject\Matcher\Parameters',
@@ -37,7 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
-            '$namespacePrefixesWithExcludedClasses' => [
+            PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => [
                 'PHPUnit_' => [
                     # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
                     'PHPUnit_Framework_MockObject_MockObject',

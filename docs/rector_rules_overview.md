@@ -1,4 +1,4 @@
-# All 540 Rectors Overview
+# All 541 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -69,7 +69,7 @@
 - [Symfony](#symfony) (33)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
-- [SymfonyPhpConfig](#symfonyphpconfig) (1)
+- [SymfonyPhpConfig](#symfonyphpconfig) (2)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -4676,7 +4676,7 @@ use Rector\Generic\Rector\Visibility\ChangeConstantVisibilityRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ChangeConstantVisibilityRector::class)
-        ->arg('ParentObject', ['SOME_CONSTANT' => 'protected']);
+        ->arg('$constantToVisibilityByClass', ['ParentObject' => ['SOME_CONSTANT' => 'protected']]);
 };
 ```
 
@@ -4752,7 +4752,7 @@ use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ChangeMethodVisibilityRector::class)
-        ->arg('$methodToVisibilityByClass', ['FrameworkClass' => ['someMethod' => 'protected']]);
+        ->arg('method_to_visibility_by_class', ['FrameworkClass' => ['someMethod' => 'protected']]);
 };
 ```
 
@@ -5011,7 +5011,7 @@ use Rector\Generic\Rector\MethodCall\MethodCallToReturnRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(MethodCallToReturnRector::class)
-        ->arg('$methodNamesByType', ['SomeClass' => ['deny']]);
+        ->arg('method_names_by_type', ['SomeClass' => ['deny']]);
 };
 ```
 
@@ -5093,7 +5093,7 @@ use Rector\Generic\Rector\Architecture\Factory\NewObjectToFactoryCreateRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(NewObjectToFactoryCreateRector::class)
-        ->arg('MyClass', ['class' => 'MyClassFactory', 'method' => 'create']);
+        ->arg('$objectToFactoryMethod', ['MyClass' => ['class' => 'MyClassFactory', 'method' => 'create']]);
 };
 ```
 
@@ -5199,7 +5199,7 @@ use Rector\Generic\Rector\Class_\ParentClassToTraitsRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ParentClassToTraitsRector::class)
-        ->arg('Nette\Object', ['Nette\SmartObject']);
+        ->arg('$parentClassToTraits', ['Nette\Object' => ['Nette\SmartObject']]);
 };
 ```
 
@@ -5261,7 +5261,7 @@ use Rector\Generic\Rector\Property\PropertyToMethodRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(PropertyToMethodRector::class)
-        ->arg('$perClassPropertyToMethods', ['SomeObject' => ['property' => ['get' => 'getProperty', 'set' => 'setProperty']]]);
+        ->arg('per_class_property_to_methods', ['SomeObject' => ['property' => ['get' => 'getProperty', 'set' => 'setProperty']]]);
 };
 ```
 
@@ -6151,7 +6151,7 @@ use Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(GetAndSetToMethodCallRector::class)
-        ->arg('$typeToMethodCalls', ['SomeContainer' => ['get' => 'getService']]);
+        ->arg('type_to_method_calls', ['SomeContainer' => ['get' => 'getService']]);
 };
 ```
 
@@ -6273,7 +6273,7 @@ use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(UnsetAndIssetToMethodCallRector::class)
-        ->arg('SomeContainer', ['unset' => 'removeService']);
+        ->arg('type_to_method_calls', ['SomeContainer' => ['unset' => 'removeService']]);
 };
 ```
 
@@ -12565,8 +12565,8 @@ use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ChangeFileLoaderInExtensionAndKernelRector::class)
-        ->arg('$from', 'xml')
-        ->arg('$to', 'yaml');
+        ->arg('from', 'xml')
+        ->arg('to', 'yaml');
 };
 ```
 
@@ -13255,6 +13255,44 @@ Make calls in PHP Symfony config separated by newline
 +
      $parameters->set('key', 'value');
  };
+```
+
+<br><br>
+
+### `ChangeServiceArgumentsToMethodCallRector`
+
+- class: [`Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector`](/../master/rules/symfony-php-config/src/Rector/MethodCall/ChangeServiceArgumentsToMethodCallRector.php)
+- [test fixtures](/../master/rules/symfony-php-config/tests/Rector/MethodCall/ChangeServiceArgumentsToMethodCallRector/Fixture)
+
+Change `$service->arg(...)` to `$service->call(...)`
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ChangeServiceArgumentsToMethodCallRector::class)
+        ->arg('class_type_to_method_name', ['SomeClass' => 'configure']);
+};
+```
+
+↓
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
+
+     $services->set(SomeClass::class)
+-        ->arg('$key', 'value');
++        ->call('configure', [[
++            '$key' => 'value
++        ]]);
+ }
 ```
 
 <br><br>

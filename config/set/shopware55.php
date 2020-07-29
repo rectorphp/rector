@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(GetAndSetToMethodCallRector::class)
         ->call('configure', [[
-            '$typeToMethodCalls' => [
+            GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
                 'Enlight_View_Default' => [
                     # See https://github.com/shopware/shopware/blob/5.5/UPGRADE-5.5.md
                     'get' => 'getAssign',
@@ -30,7 +30,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
-            '$typeToMethodCalls' => [
+            UnsetAndIssetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
                 'Enlight_Components_Session_Namespace' => [
                     'isset' => 'offsetExists',
                     'unset' => 'offsetUnset',

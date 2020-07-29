@@ -18,6 +18,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\ChangesReporting\Application\ErrorAndDiffCollector;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -32,8 +33,13 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Generic\Tests\Rector\Property\InjectAnnotationClassRector\InjectAnnotationClassRectorTest
  */
-final class InjectAnnotationClassRector extends AbstractRector
+final class InjectAnnotationClassRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const ANNOTATION_CLASSES = '$annotationClasses';
+
     /**
      * @var string[]
      */
@@ -57,16 +63,11 @@ final class InjectAnnotationClassRector extends AbstractRector
      */
     private $serviceMapProvider;
 
-    /**
-     * @param string[] $annotationClasses
-     */
     public function __construct(
         ServiceMapProvider $serviceMapProvider,
-        ErrorAndDiffCollector $errorAndDiffCollector,
-        array $annotationClasses = []
+        ErrorAndDiffCollector $errorAndDiffCollector
     ) {
         $this->errorAndDiffCollector = $errorAndDiffCollector;
-        $this->annotationClasses = $annotationClasses;
         $this->serviceMapProvider = $serviceMapProvider;
     }
 
@@ -151,6 +152,11 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->annotationClasses = $configuration[self::ANNOTATION_CLASSES] ?? [];
     }
 
     private function ensureAnnotationClassIsSupported(string $annotationClass): void

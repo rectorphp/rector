@@ -29,7 +29,7 @@ final class OrderPublicInterfaceMethodRectorTest extends AbstractRectorTestCase
     {
         return [
             OrderPublicInterfaceMethodRector::class => [
-                '$methodOrderByInterfaces' => [
+                OrderPublicInterfaceMethodRector::METHOD_ORDER_BY_INTERFACES => [
                     FoodRecipeInterface::class => ['getDescription', 'process'],
                 ],
             ],

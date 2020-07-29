@@ -46,7 +46,7 @@ final class DecoupleClassMethodToOwnClassRectorTest extends AbstractRectorTestCa
     {
         return [
             DecoupleClassMethodToOwnClassRector::class => [
-                '$methodNamesByClass' => [
+                DecoupleClassMethodToOwnClassRector::METHOD_NAMES_BY_CLASS => [
                     'Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Fixture\Basic' => [
                         'someMethod' => [
                             'method' => 'newMethodName',

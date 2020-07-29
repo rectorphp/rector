@@ -23,14 +23,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NewToStaticCallRector::class)
         ->call('configure', [[
-            '$typeToStaticCalls' => [
+            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => [
                 'Symfony\Component\HttpFoundation\Cookie' => ['Symfony\Component\HttpFoundation\Cookie', 'create'],
             ],
         ]]);
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 # https://github.com/symfony/symfony/commit/a7e319d9e1316e2e18843f8ce15b67a8693e5bf9
                 'Symfony\Bundle\FrameworkBundle\Controller\Controller' => 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
                 # https://github.com/symfony/symfony/commit/744bf0e7ac3ecf240d0bf055cc58f881bb0b3ec0
@@ -49,7 +49,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
                 'Symfony\Component\BrowserKit\Client' => [
                     'submit' => [
                         2 => [
@@ -119,7 +119,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Symfony\Component\Cache\CacheItem' => [
                     'getPreviousTags' => 'getMetadata',
                 ],
@@ -131,7 +131,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForMethodByClass' => [
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
                 'Symfony\Component\Form\AbstractTypeExtension' => [
                     'getExtendedTypes' => 'iterable',
                 ],
@@ -140,7 +140,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            '$methodToVisibilityByClass' => [
+            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
                 'Symfony\Component\Form\AbstractTypeExtension' => [
                     'getExtendedTypes' => 'static',
                 ],
@@ -149,7 +149,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(WrapReturnRector::class)
         ->call('configure', [[
-            '$typeToMethodToWrap' => [
+            WrapReturnRector::TYPE_TO_METHOD_TO_WRAP => [
                 'Symfony\Component\Form\AbstractTypeExtension' => [
                     'getExtendedTypes' => 'array',
                 ],
@@ -158,7 +158,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
-            '$replacesByMethodAndTypes' => [
+            ArgumentDefaultValueReplacerRector::REPLACES_BY_METHOD_AND_TYPES => [
                 'Symfony\Component\HttpFoundation\Cookie' => [
                     '__construct' => [
                         5 => [
@@ -177,7 +177,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            '$positionsByMethodNameByClassType' => [
+            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
                 'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector' => [
                     '__construct' => [
                         # https://github.com/symfony/symfony/commit/f5c355e1ba399a1b3512367647d902148bdaf09f

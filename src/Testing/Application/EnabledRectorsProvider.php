@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Testing\Application;
 
 use Rector\Core\Configuration\ChangeConfiguration;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 
@@ -13,7 +14,7 @@ final class EnabledRectorsProvider
     /**
      * @var mixed[][]
      */
-    private $enabledRectors = [];
+    private $enabledRectorsWithConfiguration = [];
 
     /**
      * @var ChangeConfiguration
@@ -30,22 +31,22 @@ final class EnabledRectorsProvider
      */
     public function addEnabledRector(string $rector, array $configuration = []): void
     {
-        $this->enabledRectors[$rector] = $configuration;
+        $this->enabledRectorsWithConfiguration[$rector] = $configuration;
 
         if (StaticPHPUnitEnvironment::isPHPUnitRun() && is_a($rector, RenameClassRector::class, true)) {
             // only in unit tests
-            $this->changeConfiguration->setOldToNewClasses($configuration['$oldToNewClasses'] ?? []);
+            $this->changeConfiguration->setOldToNewClasses($configuration[RenameClassRector::OLD_TO_NEW_CLASSES] ?? []);
         }
     }
 
     public function reset(): void
     {
-        $this->enabledRectors = [];
+        $this->enabledRectorsWithConfiguration = [];
     }
 
-    public function isEnabled(): bool
+    public function isConfigured(): bool
     {
-        return (bool) $this->enabledRectors;
+        return (bool) $this->enabledRectorsWithConfiguration;
     }
 
     /**
@@ -53,6 +54,34 @@ final class EnabledRectorsProvider
      */
     public function getEnabledRectors(): array
     {
-        return $this->enabledRectors;
+        return $this->enabledRectorsWithConfiguration;
+    }
+
+    public function isRectorActive(RectorInterface $rector): bool
+    {
+        if (! $this->isConfigured()) {
+            return true;
+        }
+
+        foreach (array_keys($this->enabledRectorsWithConfiguration) as $rectorClass) {
+            if (is_a($rector, $rectorClass, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getRectorConfiguration(RectorInterface $rector): array
+    {
+        foreach ($this->enabledRectorsWithConfiguration as $rectorClass => $configuration) {
+            if (! is_a($rector, $rectorClass, true)) {
+                continue;
+            }
+
+            return $configuration;
+        }
+
+        return [];
     }
 }

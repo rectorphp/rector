@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\Rector\AbstractRector;
@@ -27,8 +28,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\StaticTypeToSetterInjectionRectorTest
  */
-final class StaticTypeToSetterInjectionRector extends AbstractRector
+final class StaticTypeToSetterInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const STATIC_TYPES = '$staticTypes';
+
     /**
      * @var string[]
      */
@@ -39,13 +46,9 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector
      */
     private $propertyNaming;
 
-    /**
-     * @param string[] $staticTypes
-     */
-    public function __construct(PropertyNaming $propertyNaming, array $staticTypes = [])
+    public function __construct(PropertyNaming $propertyNaming)
     {
         $this->propertyNaming = $propertyNaming;
-        $this->staticTypes = $staticTypes;
     }
 
     public function getDefinition(): RectorDefinition
@@ -124,6 +127,11 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->staticTypes = $configuration[self::STATIC_TYPES] ?? [];
     }
 
     private function processClass(Class_ $class): Class_

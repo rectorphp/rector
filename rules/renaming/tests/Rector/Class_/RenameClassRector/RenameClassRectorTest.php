@@ -48,7 +48,7 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
     {
         return [
             RenameClassRector::class => [
-                '$oldToNewClasses' => [
+                RenameClassRector::OLD_TO_NEW_CLASSES => [
                     'FqnizeNamespaced' => 'Abc\FqnizeNamespaced',
                     OldClass::class => NewClass::class,
                     OldClassWithTypo::class => NewClassWithoutTypo::class,

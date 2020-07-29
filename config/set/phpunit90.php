@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 # see https://github.com/sebastianbergmann/phpunit/issues/3957
                 'expectExceptionMessageRegExp' => 'expectExceptionMessageMatches',
                 'assertRegExp' => 'assertMatchesRegularExpression',

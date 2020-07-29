@@ -44,10 +44,10 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
 
         return [
             PassFactoryToUniqueObjectRector::class => [
-                '$typesToServices' => $typesToServices,
+                PassFactoryToUniqueObjectRector::TYPES_TO_SERVICES => $typesToServices,
             ],
             NewUniqueObjectToEntityFactoryRector::class => [
-                '$typesToServices' => $typesToServices,
+                NewUniqueObjectToEntityFactoryRector::TYPES_TO_SERVICES => $typesToServices,
             ],
         ];
     }

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -24,8 +25,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\DefluentMethodCallRectorTest
  */
-final class DefluentMethodCallRector extends AbstractRector
+final class DefluentMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const NAMES_TO_DEFLUENT = '$namesToDefluent';
+
     /**
      * @var string[]
      */
@@ -51,17 +57,12 @@ final class DefluentMethodCallRector extends AbstractRector
      */
     private $nonFluentMethodCallFactory;
 
-    /**
-     * @param string[] $namesToDefluent
-     */
     public function __construct(
         ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
         ChainMethodCallRootExtractor $chainMethodCallRootExtractor,
         ClassNameTypeMatcher $classNameTypeMatcher,
-        NonFluentMethodCallFactory $nonFluentMethodCallFactory,
-        array $namesToDefluent = []
+        NonFluentMethodCallFactory $nonFluentMethodCallFactory
     ) {
-        $this->namesToDefluent = $namesToDefluent;
         $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
         $this->chainMethodCallRootExtractor = $chainMethodCallRootExtractor;
         $this->classNameTypeMatcher = $classNameTypeMatcher;
@@ -133,6 +134,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->namesToDefluent = $configuration[self::NAMES_TO_DEFLUENT] ?? [];
     }
 
     /**

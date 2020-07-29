@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Twig_LoaderInterface' => 'Twig\Loader\LoaderInterface',
                 'Twig_Extension_StringLoader' => 'Twig\Extension\StringLoaderExtension',
                 'Twig_Extension_Optimizer' => 'Twig\Extension\OptimizerExtension',
@@ -169,7 +169,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
-            '$namespacePrefixesWithExcludedClasses' => [
+            PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => [
                 'Twig_' => null,
             ],
         ]]);

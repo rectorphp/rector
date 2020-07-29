@@ -15,14 +15,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Symfony\Component\Debug\Debug' => 'Symfony\Component\ErrorHandler\Debug',
             ],
         ]]);
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Symfony\Component\Console\Application' => [
                     'renderException' => 'renderThrowable',
                     'doRenderException' => 'doRenderThrowable',

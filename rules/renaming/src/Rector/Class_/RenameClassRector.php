@@ -80,7 +80,7 @@ function someFunction(SomeNewClass $someOldClass): SomeNewClass
 PHP
                 ,
                 [
-                    '$oldToNewClasses' => [
+                    self::OLD_TO_NEW_CLASSES => [
                         'App\SomeOldClass' => 'App\SomeNewClass',
                     ],
                 ]

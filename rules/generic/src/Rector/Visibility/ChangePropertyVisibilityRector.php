@@ -6,6 +6,7 @@ namespace Rector\Generic\Rector\Visibility;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -14,20 +15,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Generic\Tests\Rector\Visibility\ChangePropertyVisibilityRector\ChangePropertyVisibilityRectorTest
  */
-final class ChangePropertyVisibilityRector extends AbstractRector
+final class ChangePropertyVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const PROPERTY_TO_VISIBILITY_BY_CLASS = 'propertyToVisibilityByClass';
+
     /**
      * @var string[][] { class => [ property name => visibility ] }
      */
     private $propertyToVisibilityByClass = [];
-
-    /**
-     * @param string[][] $propertyToVisibilityByClass
-     */
-    public function __construct(array $propertyToVisibilityByClass = [])
-    {
-        $this->propertyToVisibilityByClass = $propertyToVisibilityByClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -102,5 +100,10 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->propertyToVisibilityByClass = $configuration[self::PROPERTY_TO_VISIBILITY_BY_CLASS] ?? [];
     }
 }

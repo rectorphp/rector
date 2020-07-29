@@ -18,7 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForParameterByMethodByClass' => [
+            AddParamTypeDeclarationRector::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
                 'PHPUnit\Framework\TestCase' => [
                     '__construct' => [
                         # https://github.com/rectorphp/rector/issues/1024
@@ -35,7 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 # https://github.com/sebastianbergmann/phpunit/issues/3123
                 'PHPUnit_Framework_MockObject_MockObject' => 'PHPUnit\Framework\MockObject\MockObject',
             ],
@@ -45,7 +45,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForMethodByClass' => [
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
                 'PHPUnit\Framework\TestCase' => [
                     'setUpBeforeClass' => 'void',
                     'setUp' => 'void',

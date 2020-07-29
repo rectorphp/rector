@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -16,20 +17,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\MethodCallToReturnRector\MethodCallToReturnRectorTest
  */
-final class MethodCallToReturnRector extends AbstractRector
+final class MethodCallToReturnRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const METHOD_NAMES_BY_TYPE = 'method_names_by_type';
+
     /**
      * @var string[][]
      */
     private $methodNamesByType = [];
-
-    /**
-     * @param string[][] $methodNamesByType
-     */
-    public function __construct(array $methodNamesByType = [])
-    {
-        $this->methodNamesByType = $methodNamesByType;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -66,7 +64,7 @@ class SomeClass
 PHP
 
             , [
-                '$methodNamesByType' => [
+                self::METHOD_NAMES_BY_TYPE => [
                     'SomeClass' => ['deny'],
                 ],
             ]),
@@ -93,6 +91,11 @@ PHP
         $methodCall = $node->expr;
 
         return $this->refactorMethodCall($methodCall);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? [];
     }
 
     private function refactorMethodCall(MethodCall $methodCall): ?Node

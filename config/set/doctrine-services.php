@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ServiceGetterToConstructorInjectionRector::class)
         ->call('configure', [[
-            '$methodNamesByTypesToServiceTypes' => [
+            ServiceGetterToConstructorInjectionRector::METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES => [
                 'Doctrine\Common\Persistence\ManagerRegistry' => [
                     'getConnection' => 'Doctrine\DBAL\Connection',
                 ],

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -15,22 +16,18 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\MagicDisclosure\Tests\Rector\String_\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
  */
-final class ToStringToMethodCallRector extends AbstractRector
+final class ToStringToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const METHOD_NAMES_BY_TYPE = '$methodNamesByType';
+
     /**
      * @var string[]
      */
     private $methodNamesByType = [];
-
-    /**
-     * Type to method call()
-     *
-     * @param string[] $methodNamesByType
-     */
-    public function __construct(array $methodNamesByType = [])
-    {
-        $this->methodNamesByType = $methodNamesByType;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -75,6 +72,11 @@ PHP
         }
 
         return $this->processMethodCall($node);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? [];
     }
 
     private function processStringNode(String_ $string): ?Node

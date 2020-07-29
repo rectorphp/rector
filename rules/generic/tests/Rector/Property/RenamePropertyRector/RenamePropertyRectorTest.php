@@ -32,7 +32,7 @@ final class RenamePropertyRectorTest extends AbstractRectorTestCase
     {
         return [
             RenamePropertyRector::class => [
-                '$oldToNewPropertyByTypes' => [
+                RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
                     ClassWithProperties::class => [
                         'oldProperty' => 'newProperty',
                         'anotherOldProperty' => 'anotherNewProperty',

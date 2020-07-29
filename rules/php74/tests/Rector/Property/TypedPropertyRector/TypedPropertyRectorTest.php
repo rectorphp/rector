@@ -28,7 +28,7 @@ final class TypedPropertyRectorTest extends AbstractRectorTestCase
     {
         return [
             TypedPropertyRector::class => [
-                '$classLikeTypeOnly' => false,
+                TypedPropertyRector::CLASS_LIKE_TYPE_ONLY => false,
             ],
         ];
     }

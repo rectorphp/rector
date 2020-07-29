@@ -6,6 +6,7 @@ namespace Rector\Doctrine\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -16,8 +17,13 @@ use Rector\Doctrine\NodeFactory\EntityIdNodeFactory;
 /**
  * @see \Rector\Doctrine\Tests\Rector\Class_\AddEntityIdByConditionRector\AddEntityIdByConditionRectorTest
  */
-final class AddEntityIdByConditionRector extends AbstractRector
+final class AddEntityIdByConditionRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const DETECTED_TRAITS = '$detectedTraits';
+
     /**
      * @var string[]
      */
@@ -38,16 +44,11 @@ final class AddEntityIdByConditionRector extends AbstractRector
      */
     private $classInsertManipulator;
 
-    /**
-     * @param string[] $detectedTraits
-     */
     public function __construct(
         ClassManipulator $classManipulator,
         EntityIdNodeFactory $entityIdNodeFactory,
-        ClassInsertManipulator $classInsertManipulator,
-        array $detectedTraits = []
+        ClassInsertManipulator $classInsertManipulator
     ) {
-        $this->detectedTraits = $detectedTraits;
         $this->classManipulator = $classManipulator;
         $this->entityIdNodeFactory = $entityIdNodeFactory;
         $this->classInsertManipulator = $classInsertManipulator;
@@ -107,6 +108,11 @@ PHP
         $this->classInsertManipulator->addAsFirstMethod($node, $idProperty);
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->detectedTraits = $configuration[self::DETECTED_TRAITS] ?? [];
     }
 
     private function shouldSkip(Class_ $class): bool

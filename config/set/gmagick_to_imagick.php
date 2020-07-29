@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Gmagick' => 'Imagick',
                 'GmagickPixel' => 'ImagickPixel',
             ],
@@ -20,7 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Gmagick' => [
                     'addimage' => 'addImage',
                     'addnoiseimage' => 'addNoiseImage',

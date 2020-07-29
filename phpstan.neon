@@ -40,6 +40,7 @@ parameters:
         old_to_preffered_classes:
             # prevent PHPStorm autocomplete mess
             'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
+            'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
             'Closure': 'PhpParser\Node\Expr\Closure'
             'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
             'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
@@ -375,3 +376,6 @@ parameters:
         - '#Class with base "LexerFactory" name is already used in "PHPStan\\Parser\\LexerFactory", "Rector\\Core\\PhpParser\\Parser\\LexerFactory"\. Use unique name to make classes easy to recognize#'
         - '#Parameter \#1 \$files of method Symplify\\SmartFileSystem\\Finder\\FinderSanitizer\:\:sanitize\(\) expects \(iterable<SplFileInfo\|string\>&Nette\\Utils\\Finder\)\|Symfony\\Component\\Finder\\Finder, array<string\> given#'
         - '#Method Rector\\Core\\PhpParser\\Node\\Manipulator\\ChainMethodCallManipulator\:\:resolveRootMethodCall\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\|null#'
+        - '#Static property Symplify\\PackageBuilder\\Tests\\AbstractKernelTestCase\:\:\$container \(Psr\\Container\\ContainerInterface\) does not accept Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container#'
+        - '#Static property Rector\\Core\\Testing\\PHPUnit\\AbstractGenericRectorTestCase\:\:\$allRectorContainer \(Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container\|null\) does not accept Psr\\Container\\ContainerInterface#'
+        - '#Separate function "Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ref\(\)" in method call to standalone row to improve readability#'

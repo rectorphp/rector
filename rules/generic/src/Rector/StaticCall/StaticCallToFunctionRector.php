@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -15,8 +16,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\StaticCall\StaticCallToFunctionRector\StaticCallToFunctionRectorTest
  */
-final class StaticCallToFunctionRector extends AbstractRector
+final class StaticCallToFunctionRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const STATIC_CALL_TO_FUNCTION_BY_TYPE = 'static_call_to_function_by_type';
+
     /**
      * @var string[][]
      */
@@ -75,5 +81,10 @@ final class StaticCallToFunctionRector extends AbstractRector
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->staticCallToFunctionByType = $configuration[self::STATIC_CALL_TO_FUNCTION_BY_TYPE] ?? [];
     }
 }

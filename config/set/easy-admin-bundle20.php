@@ -14,12 +14,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # first replace ->get("...") by constructor injection in every child of "EasyCorp\Bundle\EasyAdminBundle\AdminController"
     $services->set(GetToConstructorInjectionRector::class)
         ->call('configure', [[
-            '$getMethodAwareTypes' => ['EasyCorp\Bundle\EasyAdminBundle\AdminController'],
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
+                'EasyCorp\Bundle\EasyAdminBundle\AdminController',
+            ],
         ]]);
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 # then rename the "EasyCorp\Bundle\EasyAdminBundle\AdminController" class
                 'EasyCorp\Bundle\EasyAdminBundle\AdminController' => 'EasyCorp\Bundle\EasyAdminBundle\EasyAdminController',
             ],

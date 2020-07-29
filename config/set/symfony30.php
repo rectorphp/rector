@@ -47,7 +47,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            '$oldToNewConstantsByClass' => [
+            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
                 'Symfony\Component\Form\FormEvents' => [
                     # general
                     # form
@@ -65,7 +65,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader' => [
                     # class loader
                     'registerNamespaces' => 'addPrefixes',
@@ -147,7 +147,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 # class loader
                 # partial with method rename
                 'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader' => 'Symfony\Component\ClassLoader\ClassLoader',

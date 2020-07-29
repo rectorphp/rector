@@ -10,6 +10,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -18,10 +19,16 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see https://medium.com/tech-tajawal/use-memory-gently-with-yield-in-php-7e62e2480b8d
  * @see https://3v4l.org/5PJid
+ *
  * @see \Rector\CodingStyle\Tests\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector\YieldClassMethodToArrayClassMethodRectorTest
  */
-final class YieldClassMethodToArrayClassMethodRector extends AbstractRector
+final class YieldClassMethodToArrayClassMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const METHODS_BY_TYPE = '$methodsByType';
+
     /**
      * @var string[][]
      */
@@ -113,6 +120,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodsByType = $configuration[self::METHODS_BY_TYPE] ?? [];
     }
 
     /**

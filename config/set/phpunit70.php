@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameAnnotationRector::class)
         ->call('configure', [[
-            '$classToAnnotationMap' => [
+            RenameAnnotationRector::CLASS_TO_ANNOTATION_MAP => [
                 'PHPUnit\Framework\TestCase' => [
                     'scenario' => 'test',
                 ],

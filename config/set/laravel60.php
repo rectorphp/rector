@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MethodCallToReturnRector::class)
         ->call('configure', [[
-            '$methodNamesByType' => [
+            MethodCallToReturnRector::METHOD_NAMES_BY_TYPE => [
                 'Illuminate\Auth\Access\HandlesAuthorization' => ['deny'],
             ],
         ]]);
@@ -29,7 +29,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Illuminate\Auth\Access\Gate' => [
                     # https://github.com/laravel/framework/commit/69de466ddc25966a0f6551f48acab1afa7bb9424
                     'access' => 'inspect',
@@ -48,7 +48,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodByClasses' => [
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
                 'Illuminate\Support\Facades\Input' => [
                     'get' => [
                         # https://github.com/laravel/framework/commit/55785d3514a8149d4858acef40c56a31b6b2ccd1
@@ -63,7 +63,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call(
             'configure',
             [[
-                '$oldToNewClasses' => [
+                RenameClassRector::OLD_TO_NEW_CLASSES => [
                     'Illuminate\Support\Facades\Input' => 'Illuminate\Support\Facades\Request',
                 ],
             ]]
@@ -71,7 +71,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            '$methodToVisibilityByClass' => [
+            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
                 'Illuminate\Foundation\Http\FormRequest' => [
                     # https://github.com/laravel/framework/commit/e47e91417ab22e6af001db1dcbe75b87db218c1d
                     'validationData' => 'public',
@@ -81,7 +81,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
                 'Illuminate\Database\Capsule\Manager' => [
                     'table' => [
                         1 => [

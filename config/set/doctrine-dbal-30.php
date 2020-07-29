@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'DBAL\Platforms\AbstractPlatform' => [
                     'getVarcharTypeDeclarationSQL' => 'getStringTypeDeclarationSQL',
                 ],
@@ -24,7 +24,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForMethodByClass' => [
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
                 'Doctrine\DBAL\Connection' => [
                     'ping' => 'void',
                 ],

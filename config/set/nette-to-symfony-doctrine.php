@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call(
             'configure',
             [[
-                '$oldToNewClasses' => [
+                RenameClassRector::OLD_TO_NEW_CLASSES => [
                     'Doctrine\Common\DataFixtures\AbstractFixture' => 'Doctrine\Bundle\FixturesBundle\Fixture',
                 ],
             ]]

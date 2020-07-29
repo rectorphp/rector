@@ -6,6 +6,7 @@ namespace Rector\Generic\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -13,8 +14,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\AddReturnTypeDeclarationRectorTest
  */
-final class AddReturnTypeDeclarationRector extends AbstractRector
+final class AddReturnTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const TYPEHINT_FOR_METHOD_BY_CLASS = '$typehintForMethodByClass';
+
     /**
      * class => [
      *      method => typehting
@@ -23,14 +29,6 @@ final class AddReturnTypeDeclarationRector extends AbstractRector
      * @var string[][]
      */
     private $typehintForMethodByClass = [];
-
-    /**
-     * @param mixed[] $typehintForMethodByClass
-     */
-    public function __construct(array $typehintForMethodByClass = [])
-    {
-        $this->typehintForMethodByClass = $typehintForMethodByClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -95,6 +93,11 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->typehintForMethodByClass = $configuration[self::TYPEHINT_FOR_METHOD_BY_CLASS] ?? [];
     }
 
     private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, string $newType): void

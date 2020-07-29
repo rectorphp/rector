@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -15,20 +16,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\FuncCall\FunctionToNewRector\FunctionToNewRectorTest
  */
-final class FunctionToNewRector extends AbstractRector
+final class FunctionToNewRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const FUNCTION_TO_NEW = '$functionToNew';
+
     /**
      * @var string[]
      */
     private $functionToNew = [];
-
-    /**
-     * @param string[] $functionToNew
-     */
-    public function __construct(array $functionToNew = [])
-    {
-        $this->functionToNew = $functionToNew;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -79,5 +77,10 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->functionToNew = $configuration[self::FUNCTION_TO_NEW] ?? [];
     }
 }

@@ -90,7 +90,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FunctionCallToConstantRector::class)
         ->call('configure', [[
-            '$functionsToConstants' => [
+            FunctionCallToConstantRector::FUNCTIONS_TO_CONSTANTS => [
                 'php_sapi_name' => 'PHP_SAPI',
                 'pi' => 'M_PI',
             ],

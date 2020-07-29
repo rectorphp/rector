@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForMethodByClass' => [
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
                 'Illuminate\Contracts\Cache\Repository' => [
                     'put' => 'bool',
                     'forever' => 'bool',
@@ -34,7 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            '$oldToNewPropertyByTypes' => [
+            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
                 'Illuminate\Routing\UrlGenerator' => [
                     'cachedSchema' => 'cachedScheme',
                 ],

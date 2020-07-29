@@ -57,7 +57,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # beware! this can be run only once, since its circular change
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'PHPExcel_Worksheet' => [
                     # https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#worksheetsetsharedstyle
                     'setSharedStyle' => 'duplicateStyle',
@@ -72,7 +72,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodByClasses' => [
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
                 'PHPExcel_Shared_Date' => [
                     'ExcelToPHP' => 'excelToTimestamp',
                     'ExcelToPHPObject' => 'excelToDateTimeObject',
@@ -89,7 +89,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'PHPExcel' => 'PhpOffice\PhpSpreadsheet\Spreadsheet',
                 'PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE_Blip' => 'PhpOffice\PhpSpreadsheet\Shared\Escher\DggContainer\BstoreContainer\BSE\Blip',
                 'PHPExcel_Shared_Escher_DgContainer_SpgrContainer_SpContainer' => 'PhpOffice\PhpSpreadsheet\Shared\Escher\DgContainer\SpgrContainer\SpContainer',

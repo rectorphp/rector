@@ -32,7 +32,7 @@ final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
     {
         return [
             ChangeMethodVisibilityRector::class => [
-                '$methodToVisibilityByClass' => [
+                ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
                     ParentObject::class => [
                         'toBePublicMethod' => 'public',
                         'toBeProtectedMethod' => 'protected',

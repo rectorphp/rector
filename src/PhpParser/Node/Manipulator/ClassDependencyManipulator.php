@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
@@ -20,11 +21,6 @@ use ReflectionProperty;
 
 final class ClassDependencyManipulator
 {
-    /**
-     * @var string
-     */
-    private const CONSTRUCTOR = '__construct';
-
     /**
      * @var ClassMethodAssignManipulator
      */
@@ -82,7 +78,7 @@ final class ClassDependencyManipulator
         ?Type $type,
         Assign $assign
     ): void {
-        $constructorMethod = $class->getMethod(self::CONSTRUCTOR);
+        $constructorMethod = $class->getMethod(MethodName::CONSTRUCT);
 
         /** @var ClassMethod|null $constructorMethod */
         if ($constructorMethod !== null) {
@@ -95,7 +91,7 @@ final class ClassDependencyManipulator
             return;
         }
 
-        $constructorMethod = $this->nodeFactory->createPublicMethod(self::CONSTRUCTOR);
+        $constructorMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
 
         $this->classMethodAssignManipulator->addParameterAndAssignToMethod($constructorMethod, $name, $type, $assign);
 
@@ -111,14 +107,14 @@ final class ClassDependencyManipulator
      */
     public function addStmtsToConstructorIfNotThereYet(Class_ $class, array $stmts): void
     {
-        $classMethod = $class->getMethod(self::CONSTRUCTOR);
+        $classMethod = $class->getMethod(MethodName::CONSTRUCT);
 
         if ($classMethod === null) {
-            $classMethod = $this->nodeFactory->createPublicMethod(self::CONSTRUCTOR);
+            $classMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
 
             // keep parent constructor call
-            if ($this->hasClassParentClassMethod($class, self::CONSTRUCTOR)) {
-                $classMethod->stmts[] = $this->createParentClassMethodCall(self::CONSTRUCTOR);
+            if ($this->hasClassParentClassMethod($class, MethodName::CONSTRUCT)) {
+                $classMethod->stmts[] = $this->createParentClassMethodCall(MethodName::CONSTRUCT);
             }
 
             $classMethod->stmts = array_merge((array) $classMethod->stmts, $stmts);

@@ -5,19 +5,14 @@ declare(strict_types=1);
 namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
-use Nette\Utils\Strings;
-use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\HttpKernel\RectorKernel;
-use Rector\Core\NonPhpFile\NonPhpFileProcessor;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use ReflectionClass;
-use Symfony\Component\Yaml\Yaml;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTestCase
 {
@@ -31,28 +26,16 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
      */
     private $removedAndAddedFilesProcessor;
 
-    /**
-     * @var FileProcessor
-     */
-    private $fileProcessor;
-
-    /**
-     * @var NonPhpFileProcessor
-     */
-    private $nonPhpFileProcessor;
-
     protected function setUp(): void
     {
-        $this->createContainerWithProvidedRector();
+        parent::setUp();
+
+        $this->fileSystemFileProcessor = self::$container->get(FileSystemFileProcessor::class);
+        $this->removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
 
         // so the files are removed and added
         $configuration = self::$container->get(Configuration::class);
         $configuration->setIsDryRun(false);
-
-        $this->fileProcessor = self::$container->get(FileProcessor::class);
-        $this->fileSystemFileProcessor = self::$container->get(FileSystemFileProcessor::class);
-        $this->removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
-        $this->nonPhpFileProcessor = self::$container->get(NonPhpFileProcessor::class);
     }
 
     /**
@@ -67,6 +50,12 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
 
         if ($autolaod) {
             require_once $temporaryFileInfo->getRealPath();
+        }
+
+        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() === 0) {
+            throw new ShouldNotHappenException(
+                'No rector rules found in filesytem. Check the configuration of the test case.'
+            );
         }
 
         $this->fileSystemFileProcessor->processFileInfo($temporaryFileInfo);
@@ -111,31 +100,6 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         return sys_get_temp_dir() . '/rector_temp_tests';
     }
 
-    private function createContainerWithProvidedRector(): void
-    {
-        $configFileTempPath = $this->createConfigFileTempPath();
-
-        $listForConfig = [];
-        foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
-            $listForConfig[$rectorClass] = $configuration;
-        }
-
-        $yamlContent = Yaml::dump([
-            'services' => $listForConfig,
-        ], Yaml::DUMP_OBJECT_AS_MAP);
-
-        $smartFileSystem = new SmartFileSystem();
-        $smartFileSystem->dumpFile($configFileTempPath, $yamlContent);
-
-        // for 3rd party testing with services defined in configs
-        $configFileInfos = [new SmartFileInfo($configFileTempPath)];
-        if ($this->provideConfigFileInfo() !== null) {
-            $configFileInfos[] = $this->provideConfigFileInfo();
-        }
-
-        $this->bootKernelWithConfigInfos(RectorKernel::class, $configFileInfos);
-    }
-
     private function createTemporaryFilePathFromFilePath(SmartFileInfo $fileInfo): SmartFileInfo
     {
         // 1. get test case directory
@@ -150,12 +114,5 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         FileSystem::copy($fileInfo->getRealPath(), $temporaryFilePath, true);
 
         return new SmartFileInfo($temporaryFilePath);
-    }
-
-    private function createConfigFileTempPath(): string
-    {
-        $thisClass = Strings::after(Strings::webalize(static::class), '-', -1);
-
-        return sprintf($this->getFixtureTempDirectory() . '/' . $thisClass . 'file_system_rector.yaml');
     }
 }

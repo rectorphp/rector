@@ -15,7 +15,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Cake\Form\Form' => [
                     'errors' => 'getErrors',
                 ],
@@ -36,7 +36,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            '$perClassPropertyToMethods' => [
+            PropertyToMethodRector::PER_CLASS_PROPERTY_TO_METHODS => [
                 'Cake\Http\Client\Response' => [
                     'body' => [
                         'get' => 'getStringBody',
@@ -112,7 +112,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
         ->call('configure', [[
-            '$oldMethodsToNewMethodsWithArgsByType' => [
+            MethodCallToAnotherMethodCallWithArgumentsRector::OLD_METHODS_TO_NEW_METHODS_WITH_ARGS_BY_TYPE => [
                 'Cake\Database\Query' => [
                     'join' => ['clause', ['join']],
                     'from' => ['clause', ['from']],
@@ -122,7 +122,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            '$methodNamesByTypes' => [
+            ModalToGetSetRector::METHOD_NAMES_BY_TYPES => [
                 'Cake\Database\Connection' => [
                     'logQueries' => [
                         'set' => 'enableQueryLogging',

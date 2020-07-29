@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[
-            '$configurableClasses' => [
+            ArrayToFluentCallRector::CONFIGURABLE_CLASSES => [
                 'Cake\ORM\Association' => [
                     'bindingKey' => 'setBindingKey',
                     'cascadeCallbacks' => 'setCascadeCallbacks',
@@ -46,7 +46,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]])
         ->call('configure', [[
-            '$configurableClasses' => [
+            ArrayToFluentCallRector::CONFIGURABLE_CLASSES => [
                 'Cake\ORM\Association' => [
                     'bindingKey' => 'setBindingKey',
                     'cascadeCallbacks' => 'setCascadeCallbacks',
@@ -80,7 +80,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'page' => 'page',
                 ],
             ],
-            '$factoryMethods' => [
+            ArrayToFluentCallRector::FACTORY_METHODS => [
                 'Cake\ORM\Table' => [
                     'belongsTo' => [
                         'argumentPosition' => 2,

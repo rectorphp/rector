@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -26,8 +27,13 @@ use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
 /**
  * @see \Rector\Generic\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
  */
-final class PseudoNamespaceToNamespaceRector extends AbstractRector
+final class PseudoNamespaceToNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES = 'namespace_prefixed_with_excluded_classes';
+
     /**
      * @see https://regex101.com/r/chvLgs/1/
      * @var string
@@ -54,16 +60,11 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
      */
     private $classInsertManipulator;
 
-    /**
-     * @param string[][]|null[] $namespacePrefixesWithExcludedClasses
-     */
     public function __construct(
         ClassInsertManipulator $classInsertManipulator,
-        PhpDocTypeRenamer $phpDocTypeRenamer,
-        array $namespacePrefixesWithExcludedClasses = []
+        PhpDocTypeRenamer $phpDocTypeRenamer
     ) {
         $this->phpDocTypeRenamer = $phpDocTypeRenamer;
-        $this->namespacePrefixesWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
         $this->classInsertManipulator = $classInsertManipulator;
     }
 
@@ -140,6 +141,11 @@ PHP
         $this->newNamespace = null;
 
         return $nodes;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? [];
     }
 
     /**

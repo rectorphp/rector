@@ -21,7 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FunctionToNewRector::class)
         ->call('configure', [[
-            '$functionToNew' => [
+            FunctionToNewRector::FUNCTION_TO_NEW => [
                 'collect' => 'Illuminate\Support\Collection',
             ],
         ]]);

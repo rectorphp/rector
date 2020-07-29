@@ -31,7 +31,7 @@ final class StringToClassConstantRectorTest extends AbstractRectorTestCase
     {
         return [
             StringToClassConstantRector::class => [
-                '$stringsToClassConstants' => [
+                StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => [
                     'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
                     'compiler.to_class' => ['Yet\AnotherClass', 'class'],
                 ],

@@ -28,7 +28,7 @@ final class ReservedFnFunctionRectorTest extends AbstractRectorTestCase
     {
         return [
             ReservedFnFunctionRector::class => [
-                '$reservedNamesToNewOnes' => [
+                ReservedFnFunctionRector::RESERVED_NAMES_TO_NEW_ONES => [
                     // for testing purposes of "fn" even on PHP 7.3-
                     'reservedFn' => 'f',
                 ],

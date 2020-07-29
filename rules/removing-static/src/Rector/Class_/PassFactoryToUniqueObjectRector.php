@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -23,8 +24,14 @@ use Rector\RemovingStatic\UniqueObjectOrServiceDetector;
 /**
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\PassFactoryToEntityRectorTest
  */
-final class PassFactoryToUniqueObjectRector extends AbstractRector
+final class PassFactoryToUniqueObjectRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const TYPES_TO_SERVICES = '$typesToServices';
+
     /**
      * @var string[]
      */
@@ -55,23 +62,18 @@ final class PassFactoryToUniqueObjectRector extends AbstractRector
      */
     private $staticTypesInClassResolver;
 
-    /**
-     * @param string[] $typesToServices
-     */
     public function __construct(
         StaticTypesInClassResolver $staticTypesInClassResolver,
         PropertyNaming $propertyNaming,
         UniqueObjectOrServiceDetector $uniqueObjectOrServiceDetector,
         UniqueObjectFactoryFactory $uniqueObjectFactoryFactory,
-        FactoryClassPrinter $factoryClassPrinter,
-        array $typesToServices = []
+        FactoryClassPrinter $factoryClassPrinter
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->uniqueObjectOrServiceDetector = $uniqueObjectOrServiceDetector;
         $this->uniqueObjectFactoryFactory = $uniqueObjectFactoryFactory;
         $this->factoryClassPrinter = $factoryClassPrinter;
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
-        $this->typesToServices = $typesToServices;
     }
 
     public function getDefinition(): RectorDefinition
@@ -182,6 +184,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->typesToServices = $configuration[self::TYPES_TO_SERVICES] ?? [];
     }
 
     private function refactorClass(Class_ $class): Class_

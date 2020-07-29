@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -19,20 +20,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\AddParamTypeDeclarationRectorTest
  */
-final class AddParamTypeDeclarationRector extends AbstractRector
+final class AddParamTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS = '$typehintForParameterByMethodByClass';
+
     /**
      * @var mixed[]
      */
     private $typehintForParameterByMethodByClass = [];
-
-    /**
-     * @param mixed[] $typehintForParameterByMethodByClass
-     */
-    public function __construct(array $typehintForParameterByMethodByClass = [])
-    {
-        $this->typehintForParameterByMethodByClass = $typehintForParameterByMethodByClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -102,6 +100,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->typehintForParameterByMethodByClass = $configuration[self::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS] ?? [];
     }
 
     private function shouldSkip(ClassMethod $classMethod): bool

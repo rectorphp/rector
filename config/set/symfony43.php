@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Symfony\Component\BrowserKit\Response' => [
                     'getStatus' => 'getStatusCode',
                 ],
@@ -33,7 +33,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 # https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
                 # Browser Kit
                 'Symfony\Component\BrowserKit\Client' => 'Symfony\Component\BrowserKit\AbstractBrowser',
@@ -82,7 +82,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#workflow
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
                 'Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface' => [
                     'setMarking' => [
                         # type: array
@@ -97,7 +97,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddMethodParentCallRector::class)
         ->call('configure', [[
-            '$methodsByParentTypes' => [
+            AddMethodParentCallRector::METHODS_BY_PARENT_TYPES => [
                 'Symfony\Component\EventDispatcher\EventDispatcher' => ['__construct'],
             ],
         ]]);

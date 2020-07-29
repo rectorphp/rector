@@ -7,6 +7,7 @@ namespace Rector\Generic\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -14,8 +15,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\Property\RenamePropertyRector\RenamePropertyRectorTest
  */
-final class RenamePropertyRector extends AbstractRector
+final class RenamePropertyRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OLD_TO_NEW_PROPERTY_BY_TYPES = 'old_to_new_property_by_types';
+
     /**
      * class => [
      *     oldProperty => newProperty
@@ -24,14 +30,6 @@ final class RenamePropertyRector extends AbstractRector
      * @var string[][]
      */
     private $oldToNewPropertyByTypes = [];
-
-    /**
-     * @param string[][] $oldToNewPropertyByTypes
-     */
-    public function __construct(array $oldToNewPropertyByTypes = [])
-    {
-        $this->oldToNewPropertyByTypes = $oldToNewPropertyByTypes;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -78,5 +76,10 @@ final class RenamePropertyRector extends AbstractRector
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->oldToNewPropertyByTypes = $configuration[self::OLD_TO_NEW_PROPERTY_BY_TYPES] ?? [];
     }
 }

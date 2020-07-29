@@ -20,7 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Cake\Database\Type' => 'Cake\Database\TypeFactory',
                 'Cake\Console\ConsoleErrorHandler' => 'Cake\Error\ConsoleErrorHandler',
             ],
@@ -28,7 +28,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            '$oldToNewConstantsByClass' => [
+            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
                 'Cake\View\View' => [
                     'NAME_ELEMENT' => 'TYPE_ELEMENT',
                     'NAME_LAYOUT' => 'TYPE_LAYOUT',
@@ -44,7 +44,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Cake\Form\Form' => [
                     'errors' => 'getErrors',
                 ],
@@ -69,7 +69,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodByClasses' => [
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
                 'Router' => [
                     'pushRequest' => 'setRequest',
                     'setRequestInfo' => 'setRequest',
@@ -80,7 +80,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            '$oldToNewPropertyByTypes' => [
+            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
                 'Cake\ORM\Entity' => [
                     '_properties' => '_fields',
                 ],
@@ -89,7 +89,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForMethodByClass' => [
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
                 'Cake\Http\BaseApplication' => [
                     'bootstrap' => 'void',
                     'bootstrapCli' => 'void',
@@ -127,7 +127,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            '$typehintForParameterByMethodByClass' => [
+            AddParamTypeDeclarationRector::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
                 'Cake\Form\Form' => [
                     'getData' => ['?string'],
                 ],
@@ -171,7 +171,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->call('configure', [[
-            '$methodNamesByTypes' => [
+            RenameMethodCallBasedOnParameterRector::METHOD_NAMES_BY_TYPES => [
                 'getParam' => [
                     'match_parameter' => 'paging',
                     'replace_with' => 'getAttribute',
@@ -185,7 +185,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            '$methodNamesByTypes' => [
+            ModalToGetSetRector::METHOD_NAMES_BY_TYPES => [
                 'Cake\Console\ConsoleIo' => [
                     'styles' => [
                         'set' => 'setStyle',

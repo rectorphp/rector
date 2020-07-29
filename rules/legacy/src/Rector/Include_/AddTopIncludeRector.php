@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
@@ -21,23 +22,29 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Legacy\Tests\Rector\Include_\AddTopIncludeRector\AddTopIncludeRectorTest
  */
-final class AddTopIncludeRector extends AbstractFileSystemRector
+final class AddTopIncludeRector extends AbstractFileSystemRector implements ConfigurableRectorInterface
 {
     /**
-     * @var String_
+     * @api
+     * @var string
      */
-    private $autoloadFilePathString;
+    public const PATTERNS = '$patterns';
+
+    /**
+     * @api
+     * @var string
+     */
+    public const AUTOLOAD_FILE_PATH = '$autoloadFilePath';
+
+    /**
+     * @var string
+     */
+    private $autoloadFilePath = '/autoload.php';
 
     /**
      * @var string[]
      */
     private $patterns = [];
-
-    public function __construct(string $autoloadFilePath = '/autoload.php', array $match = [])
-    {
-        $this->autoloadFilePathString = new String_($autoloadFilePath);
-        $this->patterns = $match;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -83,6 +90,13 @@ PHP
         $this->printNodesToFilePath($nodes, $smartFileInfo->getRelativeFilePath());
     }
 
+    public function configure(array $configuration): void
+    {
+        $this->patterns = $configuration[self::PATTERNS] ?? [];
+
+        $this->autoloadFilePath = $configuration[self::AUTOLOAD_FILE_PATH] ?? '/autoload.php';
+    }
+
     /**
      * Match file against matches, no patterns provided, then it matches
      */
@@ -103,7 +117,7 @@ PHP
 
     private function createInclude(): Include_
     {
-        $filePathConcat = new Concat(new Dir(), $this->autoloadFilePathString);
+        $filePathConcat = new Concat(new Dir(), new String_($this->autoloadFilePath));
 
         return new Include_($filePathConcat, Include_::TYPE_REQUIRE_ONCE);
     }

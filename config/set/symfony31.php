@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
-            '$replacesByMethodAndTypes' => [
+            ArgumentDefaultValueReplacerRector::REPLACES_BY_METHOD_AND_TYPES => [
                 # replace args - covers https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.1.md#yaml
                 'Symfony\Component\Yaml\Yaml' => [
                     'parse' => [

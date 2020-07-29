@@ -33,7 +33,7 @@ final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
     {
         return [
             PropertyAssignToMethodCallRector::class => [
-                '$oldPropertiesToNewMethodCallsByType' => [
+                PropertyAssignToMethodCallRector::OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE => [
                     ChoiceControl::class => [
                         'checkAllowedValues' => 'checkDefaultValue',
                     ],

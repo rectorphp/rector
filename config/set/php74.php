@@ -27,7 +27,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameFunctionRector::class)
         ->call('configure', [[
-            '$oldFunctionToNewFunction' => [
+            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
                 #the_real_type
                 # https://wiki.php.net/rfc/deprecations_php_7_4
                 'is_real' => 'is_float',

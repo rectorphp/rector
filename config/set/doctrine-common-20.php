@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Doctrine\Common\Persistence\Event\LifecycleEventArgs' => 'Doctrine\Persistence\Event\LifecycleEventArgs',
                 'Doctrine\Common\Persistence\Event\LoadClassMetadataEventArgs' => 'Doctrine\Persistence\Event\LoadClassMetadataEventArgs',
                 'Doctrine\Common\Persistence\Event\ManagerEventArgs' => 'Doctrine\Persistence\Event\ManagerEventArgs',

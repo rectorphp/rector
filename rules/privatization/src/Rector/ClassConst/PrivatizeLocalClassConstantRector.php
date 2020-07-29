@@ -6,6 +6,7 @@ namespace Rector\Privatization\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -148,6 +149,12 @@ PHP
         }
 
         if (count($classConst->consts) !== 1) {
+            return true;
+        }
+
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo !== null && $phpDocInfo->hasByName('api')) {
             return true;
         }
 

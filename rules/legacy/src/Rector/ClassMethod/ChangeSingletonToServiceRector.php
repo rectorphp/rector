@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Legacy\NodeAnalyzer\SingletonClassMethodAnalyzer;
 
 /**
@@ -124,7 +125,7 @@ PHP
                 continue;
             }
 
-            if (! $this->isNames($property, ['__construct', '__clone', '__wakeup'])) {
+            if (! $this->isNames($property, [MethodName::CONSTRUCT, '__clone', '__wakeup'])) {
                 continue;
             }
 

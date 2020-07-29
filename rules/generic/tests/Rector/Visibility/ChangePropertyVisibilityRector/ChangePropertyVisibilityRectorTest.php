@@ -32,7 +32,7 @@ final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
     {
         return [
             ChangePropertyVisibilityRector::class => [
-                '$propertyToVisibilityByClass' => [
+                ChangePropertyVisibilityRector::PROPERTY_TO_VISIBILITY_BY_CLASS => [
                     ParentObject::class => [
                         'toBePublicProperty' => 'public',
                         'toBeProtectedProperty' => 'protected',

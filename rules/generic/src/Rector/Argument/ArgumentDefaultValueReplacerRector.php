@@ -11,6 +11,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -18,8 +19,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector\ArgumentDefaultValueReplacerRectorTest
  */
-final class ArgumentDefaultValueReplacerRector extends AbstractRector
+final class ArgumentDefaultValueReplacerRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const REPLACES_BY_METHOD_AND_TYPES = '$replacesByMethodAndTypes';
+
     /**
      * @var string
      */
@@ -34,14 +40,6 @@ final class ArgumentDefaultValueReplacerRector extends AbstractRector
      * @var mixed[]
      */
     private $replacesByMethodAndTypes = [];
-
-    /**
-     * @param mixed[] $replacesByMethodAndTypes
-     */
-    public function __construct(array $replacesByMethodAndTypes = [])
-    {
-        $this->replacesByMethodAndTypes = $replacesByMethodAndTypes;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -104,6 +102,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->replacesByMethodAndTypes = $configuration[self::REPLACES_BY_METHOD_AND_TYPES] ?? [];
     }
 
     /**

@@ -6,6 +6,7 @@ namespace Rector\Generic\Rector\New_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -13,20 +14,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\New_\NewToStaticCallRector\NewToStaticCallRectorTest
  */
-final class NewToStaticCallRector extends AbstractRector
+final class NewToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const TYPE_TO_STATIC_CALLS = '$typeToStaticCalls';
+
     /**
      * @var string[]
      */
     private $typeToStaticCalls = [];
-
-    /**
-     * @param string[] $typeToStaticCalls
-     */
-    public function __construct(array $typeToStaticCalls = [])
-    {
-        $this->typeToStaticCalls = $typeToStaticCalls;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -83,5 +81,10 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? [];
     }
 }

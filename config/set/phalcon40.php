@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # see https://github.com/rectorphp/rector/issues/2408#issue-534441142
     $services->set(SwapClassMethodArgumentsRector::class)
         ->call('configure', [[
-            '$newArgumentPositionsByMethodAndClass' => [
+            SwapClassMethodArgumentsRector::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS => [
                 'Phalcon\Model' => [
                     'assign' => [0, 2, 1],
                 ],
@@ -29,7 +29,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # for class renames is better - https://docs.phalcon.io/4.0/en/upgrade#cheat-sheet
     $services->set(RenameClassRector::class)
         ->call('configure', [[
-            '$oldToNewClasses' => [
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Phalcon\Acl\Adapter' => 'Phalcon\Acl\Adapter\AbstractAdapter',
                 'Phalcon\Acl\Resource' => 'Phalcon\Acl\Component',
                 'Phalcon\Acl\ResourceInterface' => 'Phalcon\Acl\ComponentInterface',
@@ -106,7 +106,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            '$oldToNewMethodsByClass' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Phalcon\Acl\AdapterInterface' => [
                     'isResource' => 'isComponent',
                     'addResource' => 'addComponent',
@@ -148,7 +148,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameConstantRector::class)
         ->call('configure', [[
-            '$oldToNewConstants' => [
+            RenameConstantRector::OLD_TO_NEW_CONSTANTS => [
                 'FILTER_SPECIAL_CHARS' => 'FILTER_SPECIAL',
                 'FILTER_ALPHANUM' => 'FILTER_ALNUM',
             ],

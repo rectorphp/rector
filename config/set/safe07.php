@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameFunctionRector::class)
         ->call('configure', [[
-            '$oldFunctionToNewFunction' => [
+            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
                 'apache_getenv' => 'Safe\apache_getenv',
                 'apache_get_version' => 'Safe\apache_get_version',
                 'apache_request_headers' => 'Safe\apache_request_headers',
