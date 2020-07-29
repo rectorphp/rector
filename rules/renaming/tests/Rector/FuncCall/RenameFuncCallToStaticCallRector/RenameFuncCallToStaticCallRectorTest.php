@@ -28,7 +28,7 @@ final class RenameFuncCallToStaticCallRectorTest extends AbstractRectorTestCase
     {
         return [
             RenameFuncCallToStaticCallRector::class => [
-                '$functionsToStaticCalls' => [
+                RenameFuncCallToStaticCallRector::FUNCTIONS_TO_STATIC_CALLS => [
                     'strPee' => ['Strings', 'strPaa'],
                 ],
             ],

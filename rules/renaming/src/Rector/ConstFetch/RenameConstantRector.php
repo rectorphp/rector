@@ -7,6 +7,7 @@ namespace Rector\Renaming\Rector\ConstFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -14,20 +15,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector\RenameConstantRectorTest
  */
-final class RenameConstantRector extends AbstractRector
+final class RenameConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OLD_TO_NEW_CONSTANTS = '$oldToNewConstants';
+
     /**
      * @var string[]
      */
     private $oldToNewConstants = [];
-
-    /**
-     * @param string[] $oldToNewConstants
-     */
-    public function __construct(array $oldToNewConstants = [])
-    {
-        $this->oldToNewConstants = $oldToNewConstants;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -79,5 +77,10 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->oldToNewConstants = $configuration[self::OLD_TO_NEW_CONSTANTS] ?? [];
     }
 }

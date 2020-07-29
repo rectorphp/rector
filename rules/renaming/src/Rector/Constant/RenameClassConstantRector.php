@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -16,24 +17,21 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector\RenameClassConstantRectorTest
  */
-final class RenameClassConstantRector extends AbstractRector
+final class RenameClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OLD_TO_NEW_CONSTANTS_BY_CLASS = '$oldToNewConstantsByClass';
+
     /**
      * class => [
      *      OLD_CONSTANT => NEW_CONSTANT
      * ]
      *
-     * @var string[][]
+     * @var array<string, array<string, string>>
      */
     private $oldToNewConstantsByClass = [];
-
-    /**
-     * @param string[][] $oldToNewConstantsByClass
-     */
-    public function __construct(array $oldToNewConstantsByClass = [])
-    {
-        $this->oldToNewConstantsByClass = $oldToNewConstantsByClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -93,6 +91,14 @@ PHP
         }
 
         return $node;
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        $this->oldToNewConstantsByClass = $configuration[self::OLD_TO_NEW_CONSTANTS_BY_CLASS] ?? [];
     }
 
     private function createClassConstantFetchNodeFromDoubleColonFormat(string $constant): ClassConstFetch

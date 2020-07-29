@@ -35,7 +35,7 @@ final class RenameMethodRectorTest extends AbstractRectorTestCase
     {
         return [
             RenameMethodRector::class => [
-                '$oldToNewMethodsByClass' => [
+                RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                     AbstractType::class => [
                         'setDefaultOptions' => 'configureOptions',
                     ],

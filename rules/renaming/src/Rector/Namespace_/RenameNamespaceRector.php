@@ -11,6 +11,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -21,8 +22,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
  */
-final class RenameNamespaceRector extends AbstractRector
+final class RenameNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OLD_TO_NEW_NAMESPACES = '$oldToNewNamespaces';
+
     /**
      * @var string[]
      */
@@ -33,12 +39,8 @@ final class RenameNamespaceRector extends AbstractRector
      */
     private $namespaceMatcher;
 
-    /**
-     * @param string[] $oldToNewNamespaces
-     */
-    public function __construct(NamespaceMatcher $namespaceMatcher, array $oldToNewNamespaces = [])
+    public function __construct(NamespaceMatcher $namespaceMatcher)
     {
-        $this->oldToNewNamespaces = $oldToNewNamespaces;
         $this->namespaceMatcher = $namespaceMatcher;
     }
 
@@ -49,7 +51,7 @@ final class RenameNamespaceRector extends AbstractRector
                 '$someObject = new SomeOldNamespace\SomeClass;',
                 '$someObject = new SomeNewNamespace\SomeClass;',
                 [
-                    '$oldToNewNamespaces' => [
+                    self::OLD_TO_NEW_NAMESPACES => [
                         'SomeOldNamespace' => 'SomeNewNamespace',
                     ],
                 ]
@@ -76,6 +78,7 @@ final class RenameNamespaceRector extends AbstractRector
         }
 
         $renamedNamespaceValueObject = $this->namespaceMatcher->matchRenamedNamespace($name, $this->oldToNewNamespaces);
+
         if ($renamedNamespaceValueObject === null) {
             return null;
         }
@@ -107,6 +110,14 @@ final class RenameNamespaceRector extends AbstractRector
         }
 
         return new FullyQualified($newName);
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        $this->oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? [];
     }
 
     /**

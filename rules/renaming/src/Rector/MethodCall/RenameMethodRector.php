@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -20,24 +21,21 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\RenameMethodRectorTest
  */
-final class RenameMethodRector extends AbstractRector
+final class RenameMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OLD_TO_NEW_METHODS_BY_CLASS = '$oldToNewMethodsByClass';
+
     /**
      * class => [
      *     oldMethod => newMethod
      * ]
      *
-     * @var string[][]|mixed[][][]
+     * @var array<string, array<string, string>>
      */
     private $oldToNewMethodsByClass = [];
-
-    /**
-     * @param string[][]|mixed[][][] $oldToNewMethodsByClass
-     */
-    public function __construct(array $oldToNewMethodsByClass = [])
-    {
-        $this->oldToNewMethodsByClass = $oldToNewMethodsByClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -99,6 +97,11 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->oldToNewMethodsByClass = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASS] ?? [];
     }
 
     /**

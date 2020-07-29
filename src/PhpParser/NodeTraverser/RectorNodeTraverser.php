@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -105,8 +106,13 @@ final class RectorNodeTraverser extends NodeTraverser
                     continue;
                 }
 
-                $this->addRectorConfiguration($configuration, $phpRector);
+                if ($phpRector instanceof ConfigurableRectorInterface) {
+                    $phpRector->configure($configuration);
+                    $this->addVisitor($phpRector);
+                    continue 2;
+                }
 
+                $this->addRectorConfiguration($configuration, $phpRector);
                 $this->addVisitor($phpRector);
                 continue 2;
             }

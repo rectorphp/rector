@@ -31,7 +31,7 @@ final class RenameAnnotationRectorTest extends AbstractRectorTestCase
     {
         return [
             RenameAnnotationRector::class => [
-                '$classToAnnotationMap' => [
+                RenameAnnotationRector::CLASS_TO_ANNOTATION_MAP => [
                     'PHPUnit\Framework\TestCase' => [
                         'scenario' => 'test',
                     ],

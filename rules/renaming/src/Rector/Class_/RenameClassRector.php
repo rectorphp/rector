@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Configuration\ChangeConfiguration;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -20,8 +21,13 @@ use Rector\Renaming\NodeManipulator\ClassRenamer;
 /**
  * @see \Rector\Renaming\Tests\Rector\Class_\RenameClassRector\RenameClassRectorTest
  */
-final class RenameClassRector extends AbstractRector
+final class RenameClassRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OLD_TO_NEW_CLASSES = '$oldToNewClasses';
+
     /**
      * @var string[]
      */
@@ -33,19 +39,14 @@ final class RenameClassRector extends AbstractRector
     private $classRenamer;
 
     /**
-     * @param array<string, string> $oldToNewClasses
+     * @var ChangeConfiguration
      */
-    public function __construct(
-        ChangeConfiguration $changeConfiguration,
-        ClassRenamer $classRenamer,
-        array $oldToNewClasses = []
-    ) {
-        $this->oldToNewClasses = $oldToNewClasses;
-        $this->classRenamer = $classRenamer;
+    private $changeConfiguration;
 
-        if ($oldToNewClasses !== []) {
-            $changeConfiguration->setOldToNewClasses($oldToNewClasses);
-        }
+    public function __construct(ChangeConfiguration $changeConfiguration, ClassRenamer $classRenamer)
+    {
+        $this->classRenamer = $classRenamer;
+        $this->changeConfiguration = $changeConfiguration;
     }
 
     public function getDefinition(): RectorDefinition
@@ -108,5 +109,13 @@ PHP
     public function refactor(Node $node): ?Node
     {
         return $this->classRenamer->renameNode($node, $this->oldToNewClasses);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? [];
+        if ($this->oldToNewClasses !== []) {
+            $this->changeConfiguration->setOldToNewClasses($this->oldToNewClasses);
+        }
     }
 }
