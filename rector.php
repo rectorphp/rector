@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Set\ValueObject\SetList;
-use Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector;
+use Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeCallByNameToConstantByClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -13,10 +13,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
-    $services->set(ChangeServiceArgumentsToMethodCallRector::class)
+    $services->set(ChangeCallByNameToConstantByClassRector::class)
         ->call('configure', [
             [
-                ChangeServiceArgumentsToMethodCallRector::CLASS_TYPE_TO_METHOD_NAME => [
+                ChangeCallByNameToConstantByClassRector::CLASS_TYPES_TO_METHOD_NAME => [
                     RectorInterface::class => 'configure',
                 ],
             ],

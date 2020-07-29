@@ -374,3 +374,4 @@ parameters:
         - '#Cognitive complexity for "Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator\:\:keepLivingCodeFromExpr\(\)" is \d+, keep it under 9#'
         - '#Class with base "LexerFactory" name is already used in "PHPStan\\Parser\\LexerFactory", "Rector\\Core\\PhpParser\\Parser\\LexerFactory"\. Use unique name to make classes easy to recognize#'
         - '#Parameter \#1 \$files of method Symplify\\SmartFileSystem\\Finder\\FinderSanitizer\:\:sanitize\(\) expects \(iterable<SplFileInfo\|string\>&Nette\\Utils\\Finder\)\|Symfony\\Component\\Finder\\Finder, array<string\> given#'
+        - '#Method Rector\\Core\\PhpParser\\Node\\Manipulator\\ChainMethodCallManipulator\:\:resolveRootMethodCall\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\|null#'
