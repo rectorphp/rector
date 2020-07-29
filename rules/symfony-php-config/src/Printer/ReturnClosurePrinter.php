@@ -27,6 +27,11 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 final class ReturnClosurePrinter
 {
     /**
+     * @var string
+     */
+    private const CONTAINER_CONFIGURATOR = 'containerConfigurator';
+
+    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -89,7 +94,7 @@ final class ReturnClosurePrinter
 
         $servicesVariable = new Variable('services');
 
-        $servicesMethodCall = new MethodCall(new Variable('containerConfiguration'), 'services');
+        $servicesMethodCall = new MethodCall(new Variable(self::CONTAINER_CONFIGURATOR), 'services');
         $assign = new Assign($servicesVariable, $servicesMethodCall);
         $stmts[] = new Expression($assign);
 
@@ -104,7 +109,7 @@ final class ReturnClosurePrinter
 
     private function createClosureParam(): Param
     {
-        $paramBuilder = new ParamBuilder('containerConfigurator');
+        $paramBuilder = new ParamBuilder(self::CONTAINER_CONFIGURATOR);
         $paramBuilder->setType('ContainerConfigurator');
         return $paramBuilder->getNode();
     }

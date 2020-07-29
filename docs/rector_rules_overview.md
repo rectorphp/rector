@@ -1,4 +1,4 @@
-# All 539 Rectors Overview
+# All 540 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -30,7 +30,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
-- [Nette](#nette) (13)
+- [Nette](#nette) (14)
 - [NetteCodeQuality](#nettecodequality) (4)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -247,7 +247,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(MoveServicesBySuffixToDirectoryRector::class)
         ->arg('$groupNamesBySuffix', ['Repository']);
 };
@@ -415,7 +415,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->arg('$methodNamesByTypes', ['getParam' => ['match_parameter' => 'paging', 'replace_with' => 'getAttribute'], 'withParam' => ['match_parameter' => 'paging', 'replace_with' => 'withAttribute']]);
 };
@@ -2017,7 +2017,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(PreferThisOrSelfMethodCallRector::class)
         ->arg('PHPUnit\TestCase', 'self');
 };
@@ -2092,7 +2092,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->arg('EventSubscriberInterface', ['getSubscribedEvents']);
 };
@@ -2427,7 +2427,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(YieldClassMethodToArrayClassMethodRector::class)
         ->arg('$methodsByType', ['EventSubscriberInterface' => ['getSubscribedEvents']]);
 };
@@ -3368,7 +3368,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Decouple\Rector\DecoupleClassMethodToOwnClassRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(DecoupleClassMethodToOwnClassRector::class)
         ->arg('$methodNamesByClass', ['SomeClass' => ['someMethod' => ['class' => 'NewDecoupledClass', 'method' => 'someRenamedMethod', 'parent_class' => 'AddedParentClass']]]);
 };
@@ -3426,7 +3426,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(AddEntityIdByConditionRector::class);
 };
 ```
@@ -4449,7 +4449,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Class_\AddInterfaceByTraitRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(AddInterfaceByTraitRector::class)
         ->arg('$interfaceByTrait', ['SomeTrait' => 'SomeInterface']);
 };
@@ -4502,7 +4502,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(AddReturnTypeDeclarationRector::class)
         ->arg('$typehintForMethodByClass', ['SomeClass' => ['getData' => 'array']]);
 };
@@ -4559,7 +4559,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Argument\ArgumentAdderRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ArgumentAdderRector::class)
         ->arg('$positionWithDefaultValueByMethodNamesByClassTypes', ['SomeExampleClass' => ['someMethod' => [['name' => 'someArgument', 'default_value' => 'true', 'type' => 'SomeType']]]]);
 };
@@ -4580,7 +4580,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Argument\ArgumentAdderRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ArgumentAdderRector::class)
         ->arg('$positionWithDefaultValueByMethodNamesByClassTypes', ['SomeExampleClass' => ['someMethod' => [['name' => 'someArgument', 'default_value' => 'true', 'type' => 'SomeType']]]]);
 };
@@ -4614,7 +4614,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Argument\ArgumentDefaultValueReplacerRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->arg('SomeExampleClass', ['someMethod' => [[['before' => 'SomeClass::OLD_CONSTANT', 'after' => 'false']]]]);
 };
@@ -4644,7 +4644,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Argument\ArgumentRemoverRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ArgumentRemoverRector::class)
         ->arg('ExampleClass', ['someMethod' => [['value' => 'true']]]);
 };
@@ -4674,7 +4674,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Visibility\ChangeConstantVisibilityRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ChangeConstantVisibilityRector::class)
         ->arg('ParentObject', ['SOME_CONSTANT' => 'protected']);
 };
@@ -4711,7 +4711,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\ClassMethod\ChangeContractMethodSingleToManyRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ChangeContractMethodSingleToManyRector::class)
         ->arg('$oldToNewMethodByType', ['SomeClass' => ['getNode' => 'getNodes']]);
 };
@@ -4750,7 +4750,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ChangeMethodVisibilityRector::class)
         ->arg('$methodToVisibilityByClass', ['FrameworkClass' => ['someMethod' => 'protected']]);
 };
@@ -4791,7 +4791,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Visibility\ChangePropertyVisibilityRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ChangePropertyVisibilityRector::class)
         ->arg('FrameworkClass', ['someProperty' => 'protected']);
 };
@@ -4828,7 +4828,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Function_\FunctionToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(FunctionToMethodCallRector::class)
         ->arg('view', ['this', 'render']);
 };
@@ -4877,7 +4877,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Function_\FunctionToStaticCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(FunctionToStaticCallRector::class)
         ->arg('view', ['SomeStaticClass', 'render']);
 };
@@ -4906,7 +4906,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Property\InjectAnnotationClassRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(InjectAnnotationClassRector::class)
         ->arg('$annotationClasses', ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject']);
 };
@@ -4948,7 +4948,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Interface_\MergeInterfacesRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(MergeInterfacesRector::class)
         ->arg('SomeOldInterface', 'SomeInterface');
 };
@@ -4979,7 +4979,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
         ->arg('Nette\DI\ServiceDefinition', ['setInject' => [['addTag', ['inject']]]]);
 };
@@ -5009,7 +5009,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\MethodCall\MethodCallToReturnRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(MethodCallToReturnRector::class)
         ->arg('$methodNamesByType', ['SomeClass' => ['deny']]);
 };
@@ -5049,7 +5049,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(MethodCallToStaticCallRector::class)
         ->arg('$methodCallsToStaticCalls', ['AnotherDependency' => ['process' => ['StaticCaller', 'anotherMethod']]]);
 };
@@ -5091,7 +5091,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Architecture\Factory\NewObjectToFactoryCreateRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(NewObjectToFactoryCreateRector::class)
         ->arg('MyClass', ['class' => 'MyClassFactory', 'method' => 'create']);
 };
@@ -5130,7 +5130,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\New_\NewToStaticCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(NewToStaticCallRector::class)
         ->arg('$typeToStaticCalls', ['Cookie' => ['Cookie', 'create']]);
 };
@@ -5165,7 +5165,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\MethodBody\NormalToFluentRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(NormalToFluentRector::class)
         ->arg('SomeClass', ['someFunction', 'otherFunction']);
 };
@@ -5197,7 +5197,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Class_\ParentClassToTraitsRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ParentClassToTraitsRector::class)
         ->arg('Nette\Object', ['Nette\SmartObject']);
 };
@@ -5229,7 +5229,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Assign\PropertyAssignToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(PropertyAssignToMethodCallRector::class)
         ->arg('$oldPropertiesToNewMethodCallsByType', ['SomeClass' => ['oldPropertyName' => 'oldProperty', 'newMethodName' => 'newMethodCall']]);
 };
@@ -5259,7 +5259,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Property\PropertyToMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(PropertyToMethodRector::class)
         ->arg('$perClassPropertyToMethods', ['SomeObject' => ['property' => ['get' => 'getProperty', 'set' => 'setProperty']]]);
 };
@@ -5281,7 +5281,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Property\PropertyToMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(PropertyToMethodRector::class)
         ->arg('$perClassPropertyToMethods', ['SomeObject' => ['property' => ['get' => ['method' => 'getConfig', 'arguments' => ['someArg']]]]]);
 };
@@ -5310,7 +5310,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->arg('$namespacePrefixesWithExcludedClasses', ['Some_' => ['Some_Class_To_Keep']]);
 };
@@ -5342,7 +5342,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RemoveFuncCallArgRector::class)
         ->arg('$argumentPositionByFunctionName', ['remove_last_arg' => [1]]);
 };
@@ -5371,7 +5371,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\FuncCall\RemoveIniGetSetFuncCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RemoveIniGetSetFuncCallRector::class)
         ->arg('$keysToRemove', ['y2k_compliance']);
 };
@@ -5400,7 +5400,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Interface_\RemoveInterfacesRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RemoveInterfacesRector::class)
         ->arg(0, 'SomeInterface');
 };
@@ -5447,7 +5447,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Constant\RenameClassConstantsUseToStringsRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameClassConstantsUseToStringsRector::class)
         ->arg('Nette\Configurator', ['DEVELOPMENT' => 'development', 'PRODUCTION' => 'production']);
 };
@@ -5476,7 +5476,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\Property\RenamePropertyRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenamePropertyRector::class)
         ->arg('$oldToNewPropertyByTypes', ['SomeClass' => ['someOldProperty' => 'someNewProperty']]);
 };
@@ -5534,7 +5534,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ServiceGetterToConstructorInjectionRector::class)
         ->arg('$methodNamesByTypesToServiceTypes', ['FirstService' => ['getAnotherService' => 'AnotherService']]);
 };
@@ -5602,7 +5602,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(StaticCallToFunctionRector::class)
         ->arg('$staticCallToFunction', ['OldClass' => ['oldMethod' => 'new_function']]);
 };
@@ -5631,7 +5631,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\String_\StringToClassConstantRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(StringToClassConstantRector::class)
         ->arg('compiler.post_dump', ['Yet\AnotherClass', 'CONSTANT']);
 };
@@ -5666,7 +5666,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(SwapClassMethodArgumentsRector::class)
         ->arg('$newArgumentPositionsByMethodAndClass', ['SomeClass' => ['run' => [1, 0]]]);
 };
@@ -5722,7 +5722,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(WrapReturnRector::class)
         ->arg('SomeClass', ['getItem' => 'array']);
 };
@@ -5776,7 +5776,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(StaticCallToAnotherServiceConstructorInjectionRector::class);
 };
 ```
@@ -6128,7 +6128,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(GetAndSetToMethodCallRector::class)
         ->arg('SomeContainer', ['set' => 'addService']);
 };
@@ -6149,7 +6149,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(GetAndSetToMethodCallRector::class)
         ->arg('$typeToMethodCalls', ['SomeContainer' => ['get' => 'getService']]);
 };
@@ -6179,7 +6179,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ReturnThisRemoveRector::class)
         ->arg('$classesToDefluent', ['SomeExampleClass']);
 };
@@ -6218,7 +6218,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\MagicDisclosure\Rector\String_\ToStringToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ToStringToMethodCallRector::class)
         ->arg('$methodNamesByType', ['SomeObject' => 'getPath']);
 };
@@ -6250,7 +6250,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->arg('SomeContainer', ['isset' => 'hasService']);
 };
@@ -6271,7 +6271,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->arg('SomeContainer', ['unset' => 'removeService']);
 };
@@ -6833,6 +6833,29 @@ Change `$this->templates->{magic}` to `$this->template->render(..., $values)`
 -        $this->template->param = 'some value';
 -        $this->template->render(__DIR__ . '/poll.latte');
 +        $this->template->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
+     }
+ }
+```
+
+<br><br>
+
+### `TranslateClassMethodToVariadicsRector`
+
+- class: [`Rector\Nette\Rector\ClassMethod\TranslateClassMethodToVariadicsRector`](/../master/rules/nette/src/Rector/ClassMethod/TranslateClassMethodToVariadicsRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/ClassMethod/TranslateClassMethodToVariadicsRector/Fixture)
+
+Change `translate()` method call 2nd arg to variadic
+
+```diff
+ use Nette\Localization\ITranslator;
+
+ final class SomeClass implements ITranslator
+ {
+-    public function translate($message, $count = null)
++    public function translate($message, ... $parameters)
+     {
++        $count = $parameters[0] ?? null;
+         return [$message, $count];
      }
  }
 ```
@@ -7580,7 +7603,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(OrderPublicInterfaceMethodRector::class)
         ->arg('$methodOrderByInterfaces', ['FoodRecipeInterface' => ['getDescription', 'process']]);
 };
@@ -8039,7 +8062,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ArrayArgumentInTestToDataProviderRector::class)
         ->arg('$configuration', [['class' => 'PHPUnit\Framework\TestCase', 'old_method' => 'doTestMultiple', 'new_method' => 'doTestSingle', 'variable_name' => 'number']]);
 };
@@ -11292,7 +11315,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(PHPUnitStaticToKernelTestCaseGetRector::class)
         ->arg('staticClassTypes', ['EntityFactory']);
 };
@@ -11343,7 +11366,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(PassFactoryToUniqueObjectRector::class)
         ->arg('$typesToServices', ['StaticClass']);
 };
@@ -11417,7 +11440,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(StaticTypeToSetterInjectionRector::class)
         ->arg('$staticTypes', ['SomeStaticClass']);
 };
@@ -11466,7 +11489,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Renaming\Rector\Annotation\RenameAnnotationRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameAnnotationRector::class)
         ->arg('$classToAnnotationMap', ['PHPUnit\Framework\TestCase' => ['test' => 'scenario']]);
 };
@@ -11503,7 +11526,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameClassConstantRector::class)
         ->arg('SomeClass', ['OLD_CONSTANT' => 'NEW_CONSTANT', 'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT']);
 };
@@ -11534,7 +11557,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameClassRector::class)
         ->arg('$oldToNewClasses', ['App\SomeOldClass' => 'App\SomeNewClass']);
 };
@@ -11595,7 +11618,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameFuncCallToStaticCallRector::class)
         ->arg('$functionsToStaticCalls', ['strPee' => ['Strings', 'strPaa']]);
 };
@@ -11630,7 +11653,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Renaming\Rector\Function_\RenameFunctionRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameFunctionRector::class)
         ->arg('$oldFunctionToNewFunction', ['view' => 'Laravel\Templating\render']);
 };
@@ -11659,7 +11682,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameMethodRector::class)
         ->arg('SomeExampleClass', ['$oldToNewMethodsByClass' => ['oldMethod' => 'newMethod']]);
 };
@@ -11689,7 +11712,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Renaming\Rector\Namespace_\RenameNamespaceRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameNamespaceRector::class)
         ->arg('$oldToNewNamespaces', ['SomeOldNamespace' => 'SomeNewNamespace']);
 };
@@ -11718,7 +11741,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameStaticMethodRector::class)
         ->arg('SomeClass', ['oldMethod' => ['AnotherExampleClass', 'newStaticMethod']]);
 };
@@ -11738,7 +11761,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(RenameStaticMethodRector::class)
         ->arg('$oldToNewMethodByClasses', ['SomeClass' => ['oldMethod' => 'newStaticMethod']]);
 };
@@ -11769,7 +11792,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(CompleteImportForPartialAnnotationRector::class)
         ->arg('$useImportsToRestore', [['Doctrine\ORM\Mapping', 'ORM']]);
 };
@@ -11805,7 +11828,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Restoration\Rector\New_\CompleteMissingDependencyInNewRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(CompleteMissingDependencyInNewRector::class)
         ->arg('$classToInstantiateByType', ['RandomDependency' => 'RandomDependency']);
 };
@@ -12181,7 +12204,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\SOLID\Rector\Class_\MultiParentingToAbstractDependencyRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(MultiParentingToAbstractDependencyRector::class)
         ->arg('$framework', 'nette');
 };
@@ -12540,7 +12563,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(ChangeFileLoaderInExtensionAndKernelRector::class)
         ->arg('$from', 'xml')
         ->arg('$to', 'yaml');
@@ -13389,7 +13412,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfiguration->services();
+    $services = $containerConfigurator->services();
     $services->set(AddParamTypeDeclarationRector::class)
         ->arg('$typehintForParameterByMethodByClass', ['SomeClass' => ['process' => ['string']]]);
 };
