@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -104,7 +103,7 @@ PHP
 
         $secondParam->default = null;
         $secondParam->variadic = true;
-        $secondParam->var = new Identifier('$' . self::PARAMETERS);
+        $secondParam->var->name = self::PARAMETERS;
 
         return $node;
     }
@@ -123,16 +122,17 @@ PHP
             }
 
             // instantiate
-            $assign = $this->createCoalesceAssign($paramName, $node);
+            $assign = $this->createCoalesceAssign($node);
 
             $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-            $this->addNodeBeforeNode($assign, $currentStmt);
+            $positionNode = $currentStmt ?? $node;
+            $this->addNodeBeforeNode($assign, $positionNode);
 
             return NodeTraverser::STOP_TRAVERSAL;
         });
     }
 
-    private function createCoalesceAssign(string $paramName, Variable $variable): Assign
+    private function createCoalesceAssign(Variable $variable): Assign
     {
         $arrayDimFetch = new ArrayDimFetch(new Variable(self::PARAMETERS), new LNumber(0));
         $coalesce = new Coalesce($arrayDimFetch, $this->createNull());
