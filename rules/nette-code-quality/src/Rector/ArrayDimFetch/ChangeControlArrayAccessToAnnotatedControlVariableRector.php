@@ -113,11 +113,11 @@ PHP
     {
         $controlTypes = $this->methodNamesByInputNamesResolver->resolveExpr($arrayDimFetch);
         if ($controlTypes === []) {
-            throw new NotImplementedYetException();
+            throw new NotImplementedYetException($controlName);
         }
 
         if (! isset($controlTypes[$controlName])) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException($controlName);
         }
 
         $controlType = $controlTypes[$controlName];

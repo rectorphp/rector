@@ -15,7 +15,6 @@ use Rector\RectorGenerator\Guard\OverrideGuard;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\Configuration;
-use Rector\RectorGenerator\ValueObject\RecipeOption;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,7 +25,7 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class CreateRectorCommand extends Command
+final class CreateCommand extends Command
 {
     /**
      * @var string
@@ -145,7 +144,6 @@ final class CreateRectorCommand extends Command
             $templateVariables,
             $configuration
         );
-
         if ($isUnwantedOverride) {
             $this->symfonyStyle->warning('No files were changed');
 
@@ -177,9 +175,6 @@ final class CreateRectorCommand extends Command
             );
 
             $content = $this->templateFactory->create($smartFileInfo->getContents(), $templateVariables);
-            if ($configuration->getPackage() === RecipeOption::PACKAGE_CORE) {
-                $content = $this->addOneMoreRectorNesting($content);
-            }
 
             $this->smartFileSystem->dumpFile($destination, $content);
 
@@ -205,16 +200,5 @@ final class CreateRectorCommand extends Command
         );
 
         $this->symfonyStyle->success($message);
-    }
-
-    private function addOneMoreRectorNesting(string $content): string
-    {
-        $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\Core\\');
-
-        return Strings::replace(
-            $content,
-            '#use Rector\\\\AbstractRector;#',
-            'use Rector\\Core\\Rector\\AbstractRector;'
-        );
     }
 }

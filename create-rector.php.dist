@@ -2,49 +2,61 @@
 
 declare(strict_types=1);
 
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Configuration\Option;
-use Rector\Set\ValueObject\SetList;
+use Rector\RectorGenerator\ValueObject\RecipeOption;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+// run "bin/rector create" to create a new Rector + tests from this config
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::RECTOR_RECIPE, [
-        // run "bin/rector create" to create a new Rector + tests from this config
-        'package' => 'Symfony',
-        'name' => 'RemoveDefaultGetBlockPrefixRector',
-        'node_types' => [
-            ClassMethod::class,
+        RecipeOption::PACKAGE => 'Nette',
+        RecipeOption::NAME => 'TranslateClassMethodToVariadicsRector',
+        RecipeOption::NODE_TYPES => [
+            MethodCall::class,
         ],
-        'description' => 'Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form',
-        'code_before' => <<<'CODE_SAMPLE'
+        RecipeOption::DESCRIPTION => 'Change translate() method call 2nd arg to variadic',
+        RecipeOption::CODE_BEFORE => <<<'CODE_SAMPLE'
 <?php
 
-use Symfony\Component\Form\AbstractType;
+use Nette\Localization\ITranslator;
 
-class TaskType extends AbstractType
+final class SomeClass implements ITranslator
 {
-    public function getBlockPrefix()
+    public function translate($message, $count = null)
     {
-        return 'task';
+        return [$message, $count];
     }
 }
 CODE_SAMPLE,
-        'code_after' => <<<'CODE_SAMPLE'
+        RecipeOption::CODE_AFTER => <<<'CODE_SAMPLE'
 <?php
 
-use Symfony\Component\Form\AbstractType;
+use Nette\Localization\ITranslator;
 
-class TaskType extends AbstractType
+final class SomeClass implements ITranslator
 {
+    public function translate($message, ... $parameters)
+    {
+        $count = $parameters[0] ?? null;
+        return [$message, $count];
+    }
 }
 CODE_SAMPLE,
         // e.g. link to RFC or headline in upgrade guide, 1 or more in the list
-        'source' => [
-            'https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md',
+        RecipeOption::SOURCE => [
+            'https://github.com/nette/utils/pull/178'
         ],
-        // e.g. symfony30, target config to append this rector to
-        'set' => SetList::SYMFONY_30,
+        // e.g. symfony30, target set to add this Rule to; keep null if part of core
+        RecipeOption::SET => null,
+
+        // OPTIONAL: only when configured
+        RecipeOption::RULE_CONFIGURATION => null,
+
+        // OPTIONAL: extra file
+        RecipeOption::EXTRA_FILE_NAME => null,
+        RecipeOption::EXTRA_FILE_CONTENT => null,
     ]);
 };
