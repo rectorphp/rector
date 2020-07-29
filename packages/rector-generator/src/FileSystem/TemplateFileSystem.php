@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\ValueObject\Configuration;
 use Rector\RectorGenerator\ValueObject\Package;
-use Rector\RectorGenerator\ValueObject\RecipeOption;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TemplateFileSystem
@@ -24,10 +23,7 @@ final class TemplateFileSystem
         $destination = $smartFileInfo->getRelativeFilePathFromDirectory(TemplateFinder::TEMPLATES_DIRECTORY);
 
         // normalize core package
-        if ($configuration->getPackage() === RecipeOption::PACKAGE_CORE) {
-            $destination = Strings::replace($destination, '#rules\/__package__/tests/Rector#', 'tests/Rector');
-            $destination = Strings::replace($destination, '#rules\/__package__/src/Rector#', 'src/Rector');
-        } elseif ($configuration->getPackage() === Package::UTILS) {
+        if ($configuration->getPackage() === Package::UTILS) {
             // special keyword for 3rd party Rectors, not for core Github contribution
             $destination = Strings::replace($destination, '#packages\/__Package__#', 'utils/rector');
         }
