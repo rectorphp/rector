@@ -390,7 +390,7 @@ final class NodeFactory
         } elseif ($item instanceof Identifier) {
             $string = new String_($item->toString());
             $arrayItem = new ArrayItem($string);
-        } elseif (is_scalar($item)) {
+        } elseif (is_scalar($item) || $item instanceof Array_) {
             $itemValue = BuilderHelpers::normalizeValue($item);
             $arrayItem = new ArrayItem($itemValue);
         } elseif (is_array($item)) {

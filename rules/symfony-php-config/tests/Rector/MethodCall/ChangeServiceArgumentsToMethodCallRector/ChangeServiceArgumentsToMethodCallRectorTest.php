@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace Rector\SymfonyPhpConfig\Tests\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector;
 
+use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector;
+use Rector\SymfonyPhpConfig\Tests\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector\Source\ClassPassedAsId;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeServiceArgumentsToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): void
+    public function test(SmartFileInfo $fileInfo): void
     {
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideData(): \Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
@@ -24,8 +28,12 @@ final class ChangeServiceArgumentsToMethodCallRectorTest extends AbstractRectorT
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            \Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector::class =>
-                [\Rector\SymfonyPhpConfig\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector::CLASS_TYPE_TO_METHOD_NAME => ['SomeClass' => 'configure']]
+            ChangeServiceArgumentsToMethodCallRector::class =>
+                [
+                    ChangeServiceArgumentsToMethodCallRector::CLASS_TYPE_TO_METHOD_NAME => [
+                        ClassPassedAsId::class => 'configure',
+                    ],
+                ],
         ];
     }
 }
