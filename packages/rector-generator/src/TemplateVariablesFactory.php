@@ -5,13 +5,34 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\RectorGenerator\Config\ConfigFilesystem;
 use Rector\RectorGenerator\NodeFactory\ConfigurationNodeFactory;
 use Rector\RectorGenerator\ValueObject\Configuration;
 
 final class TemplateVariablesFactory
 {
+    /**
+     * @var string
+     */
+    private const SELF = 'self';
+
+    /**
+     * @var string
+     */
+    private const VARIABLE_PACKAGE = '__Package__';
+
+    /**
+     * @var string
+     */
+    private const VARIABLE_PACKAGE_LOWERCASE = '__package__';
+
     /**
      * @var BetterStandardPrinter
      */
@@ -27,24 +48,31 @@ final class TemplateVariablesFactory
      */
     private $configurationNodeFactory;
 
+    /**
+     * @var TemplateFactory
+     */
+    private $templateFactory;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         ConfigurationNodeFactory $configurationNodeFactory,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        TemplateFactory $templateFactory
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeFactory = $nodeFactory;
         $this->configurationNodeFactory = $configurationNodeFactory;
+        $this->templateFactory = $templateFactory;
     }
 
     /**
-     * @return mixed[]
+     * @return string[]
      */
     public function createFromConfiguration(Configuration $configuration): array
     {
         $data = [
-            '__Package__' => $configuration->getPackage(),
-            '__package__' => $configuration->getPackageDirectory(),
+            self::VARIABLE_PACKAGE => $configuration->getPackage(),
+            self::VARIABLE_PACKAGE_LOWERCASE => $configuration->getPackageDirectory(),
             '__Category__' => $configuration->getCategory(),
             '__Description__' => $configuration->getDescription(),
             '__Name__' => $configuration->getName(),
@@ -55,13 +83,28 @@ final class TemplateVariablesFactory
             '__Source__' => $this->createSourceDocBlock($configuration->getSource()),
         ];
 
+        $rectorClass = $this->templateFactory->create(ConfigFilesystem::RECTOR_FQN_NAME_PATTERN, $data);
+        $data['__RectorClass_'] = $rectorClass;
+
         if ($configuration->getRuleConfiguration() !== []) {
-            $data['__RuleConfiguration__'] = $this->createRuleConfiguration($configuration->getRuleConfiguration());
-            $data['__ConfigurationProperty__'] = $this->createConfigurationProperty(
+            $data['__TestRuleConfiguration__'] = $this->createRuleConfiguration(
+                $data['__RectorClass_'],
+                $configuration->getRuleConfiguration()
+            );
+            $data['__RuleConfiguration__'] = $this->createRuleConfiguration(
+                self::SELF,
                 $configuration->getRuleConfiguration()
             );
 
-            $data['__ConfigurationConstructor__'] = $this->createConfigurationConstructor(
+            $data['__ConfigurationProperties__'] = $this->createConfigurationProperty(
+                $configuration->getRuleConfiguration()
+            );
+
+            $data['__ConfigurationConstants__'] = $this->createConfigurationConstants(
+                $configuration->getRuleConfiguration()
+            );
+
+            $data['__ConfigureClassMethod__'] = $this->createConfigureClassMethod(
                 $configuration->getRuleConfiguration()
             );
         }
@@ -74,8 +117,8 @@ final class TemplateVariablesFactory
             );
         }
 
-        $data['__NodeTypes_Php__'] = $this->createNodeTypePhp($configuration);
-        $data['__NodeTypes_Doc__'] = '\\' . implode('|\\', $configuration->getNodeTypes());
+        $data['__NodeTypesPhp__'] = $this->createNodeTypePhp($configuration);
+        $data['__NodeTypesDoc__'] = '\\' . implode('|\\', $configuration->getNodeTypes());
 
         return $data;
     }
@@ -124,9 +167,20 @@ final class TemplateVariablesFactory
     /**
      * @param mixed[] $configuration
      */
-    private function createRuleConfiguration(array $configuration): string
+    private function createRuleConfiguration(string $rectorClass, array $configuration): string
     {
-        $array = $this->nodeFactory->createArray($configuration);
+        $arrayItems = [];
+        foreach ($configuration as $constantName => $variableConfiguration) {
+            if ($rectorClass === self::SELF) {
+                $class = new Name(self::SELF);
+            } else {
+                $class = new FullyQualified($rectorClass);
+            }
+            $classConstFetch = new ClassConstFetch($class, $constantName);
+            $arrayItems[] = new ArrayItem($this->nodeFactory->createArray($variableConfiguration), $classConstFetch);
+        }
+
+        $array = new Array_($arrayItems);
         return $this->betterStandardPrinter->print($array);
     }
 
@@ -142,9 +196,18 @@ final class TemplateVariablesFactory
     /**
      * @param array<string, mixed> $ruleConfiguration
      */
-    private function createConfigurationConstructor(array $ruleConfiguration): string
+    private function createConfigureClassMethod(array $ruleConfiguration): string
     {
-        $classMethod = $this->configurationNodeFactory->createConstructorClassMethod($ruleConfiguration);
+        $classMethod = $this->configurationNodeFactory->createConfigureClassMethod($ruleConfiguration);
         return $this->betterStandardPrinter->print($classMethod);
+    }
+
+    /**
+     * @param array<string, mixed> $ruleConfiguration
+     */
+    private function createConfigurationConstants(array $ruleConfiguration): string
+    {
+        $configurationConstants = $this->configurationNodeFactory->createConfigurationConstants($ruleConfiguration);
+        return $this->betterStandardPrinter->print($configurationConstants);
     }
 }

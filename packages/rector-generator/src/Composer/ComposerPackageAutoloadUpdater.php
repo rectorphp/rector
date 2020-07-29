@@ -35,11 +35,6 @@ final class ComposerPackageAutoloadUpdater
 
     public function processComposerAutoload(Configuration $configuration): void
     {
-        // skip core, already autoloaded
-        if ($configuration->getPackage() === 'Rector') {
-            return;
-        }
-
         $composerJsonFilePath = getcwd() . '/composer.json';
         $composerJson = $this->jsonFileSystem->loadFileToJson($composerJsonFilePath);
 
@@ -51,10 +46,10 @@ final class ComposerPackageAutoloadUpdater
 
         // ask user
         $questionText = sprintf(
-            'Can we update "composer.json" autoload with "%s" namespace?%s Handle it manually o therwise',
+            'Should we update "composer.json" autoload with "%s" namespace?',
             $package->getSrcNamespace(),
-            PHP_EOL
         );
+
         $isConfirmed = $this->symfonyStyle->confirm($questionText);
         if (! $isConfirmed) {
             return;

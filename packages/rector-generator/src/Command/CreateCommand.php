@@ -6,15 +6,14 @@ namespace Rector\RectorGenerator\Command;
 
 use Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
 use Rector\RectorGenerator\Config\ConfigFilesystem;
 use Rector\RectorGenerator\Configuration\ConfigurationFactory;
-use Rector\RectorGenerator\FileSystem\TemplateFileSystem;
 use Rector\RectorGenerator\Finder\TemplateFinder;
+use Rector\RectorGenerator\Generator\FileGenerator;
 use Rector\RectorGenerator\Guard\OverrideGuard;
-use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\TemplateVariablesFactory;
-use Rector\RectorGenerator\ValueObject\Configuration;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,20 +22,9 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class CreateCommand extends Command
 {
-    /**
-     * @var string
-     */
-    private $testCasePath;
-
-    /**
-     * @var string[]
-     */
-    private $generatedFiles = [];
-
     /**
      * @var SymfonyStyle
      */
@@ -63,16 +51,6 @@ final class CreateCommand extends Command
     private $templateFinder;
 
     /**
-     * @var TemplateFileSystem
-     */
-    private $templateFileSystem;
-
-    /**
-     * @var TemplateFactory
-     */
-    private $templateFactory;
-
-    /**
      * @var ConfigFilesystem
      */
     private $configFilesystem;
@@ -83,25 +61,23 @@ final class CreateCommand extends Command
     private $overrideGuard;
 
     /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
      * @var ParameterProvider
      */
     private $parameterProvider;
+
+    /**
+     * @var FileGenerator
+     */
+    private $fileGenerator;
 
     public function __construct(
         ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
         ConfigFilesystem $configFilesystem,
         ConfigurationFactory $configurationFactory,
+        FileGenerator $fileGenerator,
         OverrideGuard $overrideGuard,
         ParameterProvider $parameterProvider,
-        SmartFileSystem $smartFileSystem,
         SymfonyStyle $symfonyStyle,
-        TemplateFactory $templateFactory,
-        TemplateFileSystem $templateFileSystem,
         TemplateFinder $templateFinder,
         TemplateVariablesFactory $templateVariablesFactory
     ) {
@@ -112,12 +88,10 @@ final class CreateCommand extends Command
         $this->templateVariablesFactory = $templateVariablesFactory;
         $this->composerPackageAutoloadUpdater = $composerPackageAutoloadUpdater;
         $this->templateFinder = $templateFinder;
-        $this->templateFileSystem = $templateFileSystem;
-        $this->templateFactory = $templateFactory;
         $this->configFilesystem = $configFilesystem;
         $this->overrideGuard = $overrideGuard;
-        $this->smartFileSystem = $smartFileSystem;
         $this->parameterProvider = $parameterProvider;
+        $this->fileGenerator = $fileGenerator;
     }
 
     protected function configure(): void
@@ -139,10 +113,13 @@ final class CreateCommand extends Command
 
         $templateFileInfos = $this->templateFinder->find($configuration);
 
+        $targetDirectory = getcwd();
+
         $isUnwantedOverride = $this->overrideGuard->isUnwantedOverride(
             $templateFileInfos,
             $templateVariables,
-            $configuration
+            $configuration->getPackage(),
+            $targetDirectory
         );
         if ($isUnwantedOverride) {
             $this->symfonyStyle->warning('No files were changed');
@@ -150,55 +127,52 @@ final class CreateCommand extends Command
             return ShellCode::SUCCESS;
         }
 
-        $this->generateFiles($templateFileInfos, $templateVariables, $configuration);
+        $generatedFilePaths = $this->fileGenerator->generateFiles(
+            $templateFileInfos,
+            $templateVariables,
+            $configuration,
+            $targetDirectory
+        );
+
+        $testCaseFilePath = $this->resolveTestCaseFilePath($generatedFilePaths);
 
         $this->configFilesystem->appendRectorServiceToSet($configuration, $templateVariables);
 
-        $this->printSuccess($configuration->getName());
+        $this->printSuccess($configuration->getName(), $generatedFilePaths, $testCaseFilePath);
 
         return ShellCode::SUCCESS;
     }
 
     /**
-     * @param SmartFileInfo[] $templateFileInfos
+     * @param string[] $generatedFilePaths
      */
-    private function generateFiles(
-        array $templateFileInfos,
-        array $templateVariables,
-        Configuration $configuration
-    ): void {
-        foreach ($templateFileInfos as $smartFileInfo) {
-            $destination = $this->templateFileSystem->resolveDestination(
-                $smartFileInfo,
-                $templateVariables,
-                $configuration
-            );
-
-            $content = $this->templateFactory->create($smartFileInfo->getContents(), $templateVariables);
-
-            $this->smartFileSystem->dumpFile($destination, $content);
-
-            $this->generatedFiles[] = $destination;
-
-            // is a test case?
-            if (Strings::endsWith($destination, 'Test.php')) {
-                $this->testCasePath = dirname($destination);
-            }
-        }
-    }
-
-    private function printSuccess(string $name): void
+    private function printSuccess(string $name, array $generatedFilePaths, string $testCaseFilePath): void
     {
-        $message = sprintf('New files generated for "%s"', $name);
+        $message = sprintf('New files generated for "%s":', $name);
         $this->symfonyStyle->title($message);
-        sort($this->generatedFiles);
-        $this->symfonyStyle->listing($this->generatedFiles);
-        $message = sprintf(
-            'Make tests green again:%svendor/bin/phpunit %s',
-            PHP_EOL . PHP_EOL,
-            $this->testCasePath
-        );
+
+        sort($generatedFilePaths);
+        $this->symfonyStyle->listing($generatedFilePaths);
+
+        $message = sprintf('Make tests green again:%svendor/bin/phpunit %s', PHP_EOL . PHP_EOL, $testCaseFilePath);
 
         $this->symfonyStyle->success($message);
+    }
+
+    /**
+     * @param string[] $generatedFilePaths
+     */
+    private function resolveTestCaseFilePath(array $generatedFilePaths): string
+    {
+        foreach ($generatedFilePaths as $generatedFilePath) {
+            if (! Strings::endsWith($generatedFilePath, 'Test.php')) {
+                continue;
+            }
+
+            $generatedFileInfo = new SmartFileInfo($generatedFilePath);
+            return $generatedFileInfo->getRelativeFilePathFromCwd();
+        }
+
+        throw new ShouldNotHappenException();
     }
 }

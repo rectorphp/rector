@@ -137,6 +137,11 @@ final class PhpVersionFeature
     public const BEFORE_UNION_TYPES = '7.4';
 
     /**
+     * @var string
+     */
+    public const BEFORE_TYPED_PROPERTIES = '7.3';
+
+    /**
      * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
      * @var string
      */

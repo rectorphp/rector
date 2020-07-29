@@ -30,11 +30,11 @@ final class __Name__ extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return __NodeTypes_Php__;
+        return __NodeTypesPhp__;
     }
 
     /**
-     * @param __NodeTypes_Doc__ $node
+     * @param __NodeTypesDoc__ $node
      */
     public function refactor(Node $node): ?Node
     {

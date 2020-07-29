@@ -5,17 +5,27 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\NodeFactory;
 
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
-use Rector\Core\Exception\NotImplementedYetException;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\Util\StaticRectorStrings;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ConfigurationNodeFactory
 {
@@ -24,9 +34,21 @@ final class ConfigurationNodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(NodeFactory $nodeFactory)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        NodeFactory $nodeFactory,
+        ParameterProvider $parameterProvider,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->nodeFactory = $nodeFactory;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+
+        // so types are PHP 7.2 compatible
+        $parameterProvider->changeParameter(Option::PHP_VERSION_FEATURES, PhpVersionFeature::BEFORE_TYPED_PROPERTIES);
     }
 
     /**
@@ -36,10 +58,13 @@ final class ConfigurationNodeFactory
     public function createProperties(array $ruleConfiguration): array
     {
         $properties = [];
-        foreach (array_keys($ruleConfiguration) as $variable) {
-            $variable = ltrim($variable, '$');
+        foreach (array_keys($ruleConfiguration) as $constantName) {
+            $propertyName = StaticRectorStrings::uppercaseUnderscoreToPascalCase($constantName);
             $type = new ArrayType(new MixedType(), new MixedType());
-            $properties[] = $this->nodeFactory->createPrivatePropertyFromNameAndType($variable, $type);
+
+            $property = $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $type);
+            $property->props[0]->default = new Array_([]);
+            $properties[] = $property;
         }
 
         return $properties;
@@ -47,57 +72,63 @@ final class ConfigurationNodeFactory
 
     /**
      * @param array<string, mixed> $ruleConfiguration
+     * @return ClassConst[]
      */
-    public function createConstructorClassMethod(array $ruleConfiguration): ClassMethod
+    public function createConfigurationConstants(array $ruleConfiguration): array
     {
-        $classMethod = $this->nodeFactory->createPublicMethod('__construct');
+        $classConsts = [];
 
-        $assigns = [];
-        $params = [];
-
-        foreach ($ruleConfiguration as $variable => $values) {
-            $variable = ltrim($variable, '$');
-
-            $assign = $this->nodeFactory->createPropertyAssignment($variable);
-            $assigns[] = new Expression($assign);
-
-            $type = $this->resolveParamType($values);
-            $param = $this->nodeFactory->createParamFromNameAndType($variable, $type);
-            if ($type instanceof ArrayType) {
-                // add default for fast testing property set mgaic purposes - @todo refactor for cleaner way later
-                $param->default = new Array_([]);
-            }
-
-            $params[] = $param;
+        foreach (array_keys($ruleConfiguration) as $constantName) {
+            $constantValue = strtolower($constantName);
+            $classConst = $this->nodeFactory->createPublicClassConst($constantName, $constantValue);
+            $classConsts[] = $classConst;
         }
 
-        $classMethod->params = $params;
+        return $classConsts;
+    }
+
+    /**
+     * @param array<string, mixed> $ruleConfiguration
+     */
+    public function createConfigureClassMethod(array $ruleConfiguration): ClassMethod
+    {
+        $classMethod = $this->nodeFactory->createPublicMethod('configure');
+        $classMethod->returnType = new Identifier('void');
+
+        $configurationVariable = new Variable('configuration');
+        $configurationParam = new Param($configurationVariable);
+        $configurationParam->type = new Identifier('array');
+        $classMethod->params[] = $configurationParam;
+
+        $assigns = [];
+        foreach (array_keys($ruleConfiguration) as $constantName) {
+            $coalesce = $this->createConstantInConfigurationCoalesce($constantName, $configurationVariable);
+
+            $propertyName = StaticRectorStrings::uppercaseUnderscoreToPascalCase($constantName);
+            $assign = $this->nodeFactory->createPropertyAssignmentWithExpr($propertyName, $coalesce);
+            $assigns[] = new Expression($assign);
+        }
+
         $classMethod->stmts = $assigns;
+
+        $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classMethod);
+
+        $identifierTypeNode = new IdentifierTypeNode('mixed[]');
+        $paramTagValueNode = new ParamTagValueNode($identifierTypeNode, false, '$configuration', '');
+        $phpDocInfo->addTagValueNode($paramTagValueNode);
 
         return $classMethod;
     }
 
-    /**
-     * @param mixed $value
-     */
-    private function resolveParamType($value): Type
-    {
-        if (is_array($value)) {
-            return new ArrayType(new MixedType(), new MixedType());
-        }
+    private function createConstantInConfigurationCoalesce(
+        string $constantName,
+        Variable $configurationVariable
+    ): Coalesce {
+        $classConstFetch = new ClassConstFetch(new Name('self'), $constantName);
+        $arrayDimFetch = new ArrayDimFetch($configurationVariable, $classConstFetch);
 
-        if (is_string($value)) {
-            return new StringType();
-        }
+        $emptyArray = new Array_([]);
 
-        if (is_int($value)) {
-            return new IntegerType();
-        }
-
-        if (is_float($value)) {
-            return new FloatType();
-        }
-
-        throw new NotImplementedYetException();
+        return new Coalesce($arrayDimFetch, $emptyArray);
     }
 }

@@ -20,7 +20,7 @@ final class ConfigFilesystem
     /**
      * @var string
      */
-    private const RECTOR_FQN_NAME_PATTERN = 'Rector\__Package__\Rector\__Category__\__Name__';
+    public const RECTOR_FQN_NAME_PATTERN = 'Rector\__Package__\Rector\__Category__\__Name__';
 
     /**
      * @var TemplateFactory

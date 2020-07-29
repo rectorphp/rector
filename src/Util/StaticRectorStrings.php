@@ -57,6 +57,12 @@ final class StaticRectorStrings
         return lcfirst($string);
     }
 
+    public static function uppercaseUnderscoreToPascalCase(string $input): string
+    {
+        $input = strtolower($input);
+        return self::underscoreToPascalCase($input);
+    }
+
     public static function underscoreToCamelCase(string $input): string
     {
         $nameParts = explode('_', $input);

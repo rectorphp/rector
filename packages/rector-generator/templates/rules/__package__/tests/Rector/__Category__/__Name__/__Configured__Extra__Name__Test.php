@@ -26,7 +26,7 @@ final class __Name__ExtraTest extends AbstractRectorTestCase
     {
         return [
             \Rector\__Package__\Rector\__Category__\__Name__::class =>
-                __RuleConfiguration__
+                __TestRuleConfiguration__
         ];
     }
 }
