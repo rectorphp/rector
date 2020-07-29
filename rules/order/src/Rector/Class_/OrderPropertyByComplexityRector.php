@@ -109,13 +109,13 @@ PHP
                 $propertyName = $this->getName($property);
 
                 $propertyPositionByName[$position] = $propertyName;
-                $propertyNameToRank[$propertyName] = $this->propertyRanker->rank($property);
+                $propertyNameToRank[$propertyName]['rank'] = $this->propertyRanker->rank($property);
+                $propertyNameToRank[$propertyName]['position'] = $position;
             }
 
-            asort($propertyNameToRank);
-            $sortedPropertyByRank = array_keys($propertyNameToRank);
+            $sortedPropertyByRank = $this->getSortedPropertiesByRankAndPosition($propertyNameToRank);
 
-            $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($propertyPositionByName, $sortedPropertyByRank);
+            $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($sortedPropertyByRank, $propertyPositionByName);
 
             $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
         }
@@ -152,5 +152,20 @@ PHP
         }
 
         return $propertyByVisibilityByPosition;
+    }
+
+    private function getSortedPropertiesByRankAndPosition(array $propertyNameToRank): array
+    {
+        uasort(
+            $propertyNameToRank,
+            function (array $firstArray, array $secondArray): int {
+                return [$firstArray['rank'], $firstArray['position']] <=> [
+                    $secondArray['rank'],
+                    $secondArray['position'],
+                ];
+            }
+        );
+
+        return array_keys($propertyNameToRank);
     }
 }

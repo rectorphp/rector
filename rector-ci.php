@@ -8,7 +8,6 @@ use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchR
 use Rector\Core\Configuration\Option;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector;
-use Rector\Order\Rector\Class_\OrderPropertyByComplexityRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\SetList;
 use Rector\SymfonyPhpConfig\Rector\Closure\AddEmptyLineBetweenCallsInPhpConfigRector;
@@ -69,6 +68,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         RemoveUnusedClassConstantRector::class,
 
         OrderPrivateMethodsByUseRector::class,
-        OrderPropertyByComplexityRector::class,
     ]);
 };

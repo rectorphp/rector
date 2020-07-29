@@ -7,10 +7,12 @@ namespace Rector\Order;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\CallableType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
@@ -47,6 +49,14 @@ final class PropertyRanker
 
         if ($varType instanceof UnionType) {
             return 25;
+        }
+
+        if ($varType instanceof MixedType) {
+            return 30;
+        }
+
+        if ($varType instanceof CallableType) {
+            return 35;
         }
 
         throw new NotImplementedException(get_class($varType));

@@ -35,6 +35,16 @@ class ComplexTypes
     private $someObject;
 
     /**
+     * @var callable
+     */
+    private $callableProperty;
+
+    /**
+     * @var mixed
+     */
+    private $mixedProperty;
+
+    /**
      * @var mixed[]
      *
      * Rich information about methods, e.g.:
@@ -97,6 +107,14 @@ class ComplexTypes
      * @var AnotherSimpleType
      */
     private $someObject;
+    /**
+     * @var mixed
+     */
+    private $mixedProperty;
+    /**
+     * @var callable
+     */
+    private $callableProperty;
 }
 
 ?>
