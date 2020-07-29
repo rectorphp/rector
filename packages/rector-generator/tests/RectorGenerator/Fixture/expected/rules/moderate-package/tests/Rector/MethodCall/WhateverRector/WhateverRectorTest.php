@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector;
+namespace Rector\ModeratePackage\Tests\Rector\MethodCall\WhateverRector;
 
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ChangeServiceArgumentsToMethodCallRectorTest extends AbstractRectorTestCase
+final class WhateverRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -24,8 +24,8 @@ final class ChangeServiceArgumentsToMethodCallRectorTest extends AbstractRectorT
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            \Rector\Symfony\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector::class =>
-                [\Rector\Symfony\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector::CLASS_TYPE_TO_METHOD_NAME => ['SomeClass' => 'configure']]
+            \Rector\ModeratePackage\Rector\MethodCall\WhateverRector::class =>
+                [\Rector\ModeratePackage\Rector\MethodCall\WhateverRector::CLASS_TYPE_TO_METHOD_NAME => ['SomeClass' => 'configure']]
         ];
     }
 }
