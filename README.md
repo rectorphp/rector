@@ -105,7 +105,7 @@ Rector will show you diff of files that it *would* change. To *make* the changes
 vendor/bin/rector process src --set symfony40
 ```
 
-Some sets, such as [`code-quality`](/config/set/code-quality.php) can be used on a regular basis. **The best practise is to  use config over command line**:
+Some sets, such as [`code-quality`](/config/set/code-quality.php) can be used on a regular basis. **The best practice is to  use config over command line**:
 
 ```php
 <?php
@@ -130,14 +130,25 @@ PHP config format is a new [Symfony best practice](https://twitter.com/symfony_e
 
 In the end, it's best to combine few of basic sets and drop [particular rules](/docs/rector_rules_overview.md) that you want to try:
 
-```yaml
-# rector.yaml
-parameters:
-    sets:
-        - code-quality
+```php
+<?php
+// rector.php
 
-services:
-    Rector\Php74\Rector\Property\TypedPropertyRector: null
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Rector\Set\ValueObject\SetList;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Php74\Rector\Property\TypedPropertyRector;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $services = $containerConfigurator->services();
+    $services->set(TypedPropertyRector::class);
+
+    $parameters->set(Option::SETS, [SetList::CODE_QUALITY]);
+};
 ```
 
 Then let Rector refactor your code:
@@ -150,7 +161,7 @@ vendor/bin/rector process src
 
 <br>
 
-*Note: `rector.yaml` is loaded by default. For different location, use `--config` option.*
+*Note: `rector.php` is loaded by default. For different location, use `--config` option.*
 
 ## Features
 
@@ -158,12 +169,23 @@ vendor/bin/rector process src
 
 If you're annoyed by repeating paths in arguments, you can move them to config instead:
 
-```yaml
-# rector.yaml
-parameters:
-    paths:
-        - 'src'
-        - 'tests'
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::PATHS, [
+        __DIR__ . '/src',
+        __DIR__ . '/tests',
+    ]);
+};
 ```
 
 ### Extra Autoloading
@@ -174,34 +196,73 @@ Rector relies on whatever autoload setup the project it is fixing is using by us
 vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
 ```
 
-Or use a `rector.yaml` configuration file:
+Or use a `rector.php` configuration file:
 
-```yaml
-# rector.yaml
-parameters:
-    autoload_paths:
-        - 'vendor/squizlabs/php_codesniffer/autoload.php'
-        - 'vendor/project-without-composer'
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::AUTOLOAD_PATHS, [
+        __DIR__ . '/vendor/squizlabs/php_codesniffer/autoload.php',
+        __DIR__ . '/vendor/project-without-composer',
+    ]);
+};
 ```
 
 ### Exclude Paths and Rectors
 
 You can also **exclude files or directories** (with regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php)):
 
-```yaml
-# rector.yaml
-parameters:
-    exclude_paths:
-        - '*/src/*/Tests/*'
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::EXCLUDE_PATHS, [
+        __DIR__ . '/src/*/Tests/*',
+    ]);
+};
 ```
 
 You can use a whole set, except 1 rule:
 
-```yaml
-# rector.yaml
-parameters:
-    exclude_rectors:
-        - 'Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector'
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
+use Rector\Core\Configuration\Option;
+use Rector\Set\ValueObject\SetList;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::SETS, [
+        SetList::CODE_QUALITY,
+    ]);
+
+    $parameters->set(Option::EXCLUDE_RECTORS, [
+        SimplifyIfReturnBoolRector::class,
+    ]);
+};
 ```
 
 For in-file exclusion, use `@noRector \FQN name` annotation:
@@ -240,20 +301,40 @@ Both will run only `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRec
 
 By default Rector uses the language features matching your system version of PHP. You can configure it for a different PHP version:
 
-```yaml
-# rector.yaml
-parameters:
-    php_version_features: '7.2' # your version is 7.3
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::PHP_VERSION_FEATURES, '7.2'); # your version is 7.3
+};
 ```
 
 ### Safe Types
 
 In default setting:
 
-```yaml
-# rector.yaml
-parameters:
-    safe_types: false
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::SAFE_TYPES, false);
+};
 ```
 
 All docblocks are taken seriously, e.g. with [typed properties](https://github.com/rectorphp/rector/blob/master/docs/rector_rules_overview.md#typedpropertyrector) rule:
@@ -278,10 +359,20 @@ All docblocks are taken seriously, e.g. with [typed properties](https://github.c
 
 Do you want to use only explicit PHP type declaration? Enable `safe_types`:
 
-```yaml
-# rector.yaml
-parameters:
-    safe_types: true
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::SAFE_TYPES, true);
+};
 ```
 
 Then, docblocks are skipped:
@@ -311,22 +402,41 @@ Then, docblocks are skipped:
 
 FQN classes are not imported by default. If you don't want to do it manually after every Rector run, enable it by:
 
-```yaml
-# rector.yaml
-parameters:
-    auto_import_names: true
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
+};
 ```
 
 You can also fine-tune how these imports are processed:
 
-```yaml
-# rector.yaml
-parameters:
-    # this will not import root namespace classes, like \DateTime or \Exception
-    import_short_classes: false
+```php
+<?php
+// rector.php
 
-    # this will not import classes used in PHP DocBlocks, like in /** @var \Some\Class */
-    import_doc_blocks: false
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    // this will not import root namespace classes, like \DateTime or \Exception
+    $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
+    // this will not import classes used in PHP DocBlocks, like in /** @var \Some\Class */
+    $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
+};
 ```
 
 ### Limit Execution to Changed Files
@@ -344,11 +454,20 @@ This option is useful in CI with pull-requests that only change few files.
 
 To work with some Symfony rules, you now need to link your container XML file
 
-```yaml
-# rector.yaml
-parameters:
-    # path to load services from
-    symfony_container_xml_path: 'var/cache/dev/AppKernelDevDebugContainer.xml'
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $parameters = $containerConfigurator->parameters();
+
+    $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ .  '/var/cache/dev/AppKernelDevDebugContainer.xml');
+};
 ```
 
 <br>
@@ -380,11 +499,11 @@ docker run --rm -v $(pwd):/project rector/rector:latest process /project/src --s
 # Note that a volume is mounted from `pwd` (the current directory) into `/project` which can be accessed later.
 ```
 
-Using `rector.yaml`:
+Using `rector.php`:
 
 ```bash
 docker run --rm -v $(pwd):/project rector/rector:latest process /project/app \
---config /project/rector.yaml \
+--config /project/rector.php \
 --autoload-file /project/vendor/autoload.php \
 --dry-run
 ```

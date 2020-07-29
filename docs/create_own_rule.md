@@ -86,7 +86,7 @@ This is how the file structure should look like:
 ```bash
 /src/YourCode.php
 /utils/Rector/MyFirstRector.php
-rector.yaml
+rector.php
 composer.json
 ```
 
@@ -115,15 +115,24 @@ composer dump-autoload
 
 ## 2. Register It
 
-```yaml
-# rector.yaml
-services:
-    Utils\Rector\MyFirstRector: ~
+```php
+<?php
+// rector.php
+
+declare(strict_types=1);
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Utils\Rector\MyFirstRector;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+    $services->set(MyFirstRector::class);
+};
 ```
 
 ## 3. Let Rector Refactor Your Code
 
-The `rector.yaml` configuration is loaded by default, so we can skip it.
+The `rector.php` configuration is loaded by default, so we can skip it.
 
 ```bash
 # see the diff first
