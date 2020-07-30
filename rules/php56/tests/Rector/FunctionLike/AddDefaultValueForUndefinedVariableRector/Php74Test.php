@@ -9,10 +9,11 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRectorTestCase
+final class Php74Test extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
+     * @requires PHP >= 7.4
      */
     public function test(SmartFileInfo $fileInfo): void
     {
@@ -21,7 +22,7 @@ final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRector
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp74');
     }
 
     protected function getRectorClass(): string
