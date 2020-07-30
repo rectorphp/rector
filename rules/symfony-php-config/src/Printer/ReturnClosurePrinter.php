@@ -136,8 +136,8 @@ final class ReturnClosurePrinter
                 continue;
             }
 
-            $args = $this->nodeFactory->createArgs([$argument, $value]);
-            $methodCall = new MethodCall($methodCall, 'arg', $args);
+            $args = $this->nodeFactory->createArgs(['configure', [[$argument, $value]]]);
+            $methodCall = new MethodCall($methodCall, 'call', $args);
         }
 
         return $methodCall;

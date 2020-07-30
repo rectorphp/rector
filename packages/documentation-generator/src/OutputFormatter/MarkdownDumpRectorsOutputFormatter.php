@@ -309,7 +309,7 @@ final class MarkdownDumpRectorsOutputFormatter
         }
 
         $message = sprintf(
-            'Rector "%s" must have description. Complete it in "%s()" method.',
+            'Rector "%s" is missing description. Complete it in "%s()" method.',
             get_class($rector),
             'getDefinition'
         );
