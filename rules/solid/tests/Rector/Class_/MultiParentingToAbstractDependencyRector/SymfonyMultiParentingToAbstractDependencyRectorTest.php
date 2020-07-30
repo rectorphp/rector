@@ -28,7 +28,7 @@ final class SymfonyMultiParentingToAbstractDependencyRectorTest extends Abstract
     {
         return [
             MultiParentingToAbstractDependencyRector::class => [
-                '$framework' => 'symfony',
+                MultiParentingToAbstractDependencyRector::FRAMEWORK => 'symfony',
             ],
         ];
     }

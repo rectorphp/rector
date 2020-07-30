@@ -8,12 +8,18 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
  * Read-only utils for chain of MethodCall Node:
  * "$this->methodCall()->chainedMethodCall()"
+ *
+ * @deprecated Merge with
+ * @see ChainMethodCallNodeAnalyzer
+ *
+ * Rename to FluentMethodCallManipulator
  */
 final class ChainMethodCallManipulator
 {

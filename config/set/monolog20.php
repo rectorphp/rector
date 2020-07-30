@@ -10,20 +10,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'Monolog\Logger' => [
-                'addDebug' => 'debug',
-                'addInfo' => 'info',
-                'addNotice' => 'notice',
-                'addWarning' => 'warning',
-                'addError' => 'error',
-                'addCritical' => 'critical',
-                'addAlert' => 'alert',
-                'addEmergency' => 'emergency',
-                'warn' => 'warning',
-                'err' => 'error',
-                'crit' => 'critical',
-                'emerg' => 'emergency',
+        ->call('configure', [[
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+                'Monolog\Logger' => [
+                    'addDebug' => 'debug',
+                    'addInfo' => 'info',
+                    'addNotice' => 'notice',
+                    'addWarning' => 'warning',
+                    'addError' => 'error',
+                    'addCritical' => 'critical',
+                    'addAlert' => 'alert',
+                    'addEmergency' => 'emergency',
+                    'warn' => 'warning',
+                    'err' => 'error',
+                    'crit' => 'critical',
+                    'emerg' => 'emergency',
+                ],
             ],
-        ]);
+        ]]);
 };

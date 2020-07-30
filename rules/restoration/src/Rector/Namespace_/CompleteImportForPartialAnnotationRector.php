@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Builder\UseBuilder;
 use Rector\Core\Rector\AbstractRector;
@@ -19,8 +20,14 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnnotationRector\CompleteImportForPartialAnnotationRectorTest
  */
-final class CompleteImportForPartialAnnotationRector extends AbstractRector
+final class CompleteImportForPartialAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const USE_IMPORTS_TO_RESTORE = '$useImportsToRestore';
+
     /**
      * @var string[][]
      */
@@ -34,14 +41,6 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector
      * @var mixed[]
      */
     private $useImportsToRestore = [];
-
-    /**
-     * @param mixed[] $useImportsToRestore
-     */
-    public function __construct(array $useImportsToRestore = [])
-    {
-        $this->useImportsToRestore = array_merge($useImportsToRestore, self::DEFAULT_IMPORTS_TO_RESTORE);
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -118,6 +117,14 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->useImportsToRestore = array_merge(
+            $configuration[self::USE_IMPORTS_TO_RESTORE] ?? [],
+            self::DEFAULT_IMPORTS_TO_RESTORE
+        );
     }
 
     private function addImportToNamespaceIfMissing(Namespace_ $namespace, string $import, string $alias): Namespace_

@@ -39,7 +39,7 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
     {
         return [
             ContainerGetToConstructorInjectionRector::class => [
-                '$containerAwareParentTypes' => [
+                ContainerGetToConstructorInjectionRector::CONTAINER_AWARE_PARENT_TYPES => [
                     ContainerAwareParentClass::class,
                     ContainerAwareParentCommand::class,
                     ThisClassCallsMethodInConstructor::class,

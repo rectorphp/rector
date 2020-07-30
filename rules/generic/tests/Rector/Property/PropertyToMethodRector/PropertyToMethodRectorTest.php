@@ -32,7 +32,7 @@ final class PropertyToMethodRectorTest extends AbstractRectorTestCase
     {
         return [
             PropertyToMethodRector::class => [
-                '$perClassPropertyToMethods' => [
+                PropertyToMethodRector::PER_CLASS_PROPERTY_TO_METHODS => [
                     Translator::class => [
                         'locale' => [
                             'get' => 'getLocale',

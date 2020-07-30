@@ -6,6 +6,7 @@ namespace Rector\Generic\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -15,20 +16,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  *
  * @see \Rector\Generic\Tests\Rector\FuncCall\RemoveFuncCallArgRector\RemoveFuncCallArgRectorTest
  */
-final class RemoveFuncCallArgRector extends AbstractRector
+final class RemoveFuncCallArgRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const ARGUMENT_POSITION_BY_FUNCTION_NAME = 'argument_position_by_function_Name';
+
     /**
      * @var int[][]
      */
     private $argumentPositionByFunctionName = [];
-
-    /**
-     * @param int[][] $argumentPositionByFunctionName
-     */
-    public function __construct(array $argumentPositionByFunctionName = [])
-    {
-        $this->argumentPositionByFunctionName = $argumentPositionByFunctionName;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -77,5 +75,10 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->argumentPositionByFunctionName = $configuration[self::ARGUMENT_POSITION_BY_FUNCTION_NAME] ?? [];
     }
 }

@@ -9,8 +9,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            'CI_Controller' => 'CodeIgniter\Controller',
-            'CI_Model' => 'CodeIgniter\Model',
-        ]);
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'CI_Controller' => 'CodeIgniter\Controller',
+                'CI_Model' => 'CodeIgniter\Model',
+            ],
+        ]]);
 };

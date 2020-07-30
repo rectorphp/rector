@@ -7,6 +7,7 @@ namespace Rector\Generic\Rector\Interface_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -15,22 +16,21 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  * Covers cases like
  * - https://github.com/FriendsOfPHP/PHP-CS-Fixer/commit/a1cdb4d2dd8f45d731244eed406e1d537218cc66
  * - https://github.com/FriendsOfPHP/PHP-CS-Fixer/commit/614d2e6f7af5a5b0be5363ff536aed2b7ee5a31d
+ *
  * @see \Rector\Generic\Tests\Rector\Interface_\MergeInterfacesRector\MergeInterfacesRectorTest
  */
-final class MergeInterfacesRector extends AbstractRector
+final class MergeInterfacesRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const OLD_TO_NEW_INTERFACES = '$oldToNewInterfaces';
+
     /**
      * @var string[]
      */
     private $oldToNewInterfaces = [];
-
-    /**
-     * @param string[] $oldToNewInterfaces
-     */
-    public function __construct(array $oldToNewInterfaces = [])
-    {
-        $this->oldToNewInterfaces = $oldToNewInterfaces;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -85,6 +85,11 @@ PHP
         $this->makeImplementsUnique($node);
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? [];
     }
 
     private function makeImplementsUnique(Class_ $class): void

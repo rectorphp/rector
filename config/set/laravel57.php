@@ -14,46 +14,52 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ChangeMethodVisibilityRector::class)
-        ->arg('$methodToVisibilityByClass', [
-            'Illuminate\Routing\Router' => [
-                'addRoute' => 'public',
+        ->call('configure', [[
+            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
+                'Illuminate\Routing\Router' => [
+                    'addRoute' => 'public',
+                ],
+                'Illuminate\Contracts\Auth\Access\Gate' => [
+                    'raw' => 'public',
+                ],
             ],
-            'Illuminate\Contracts\Auth\Access\Gate' => [
-                'raw' => 'public',
-            ],
-        ]);
+        ]]);
 
     $services->set(ArgumentAdderRector::class)
-        ->arg('$positionWithDefaultValueByMethodNamesByClassTypes', [
-            'Illuminate\Auth\Middleware\Authenticate' => [
-                'authenticate' => [
-                    'name' => 'request',
+        ->call('configure', [[
+            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
+                'Illuminate\Auth\Middleware\Authenticate' => [
+                    'authenticate' => [
+                        'name' => 'request',
+                    ],
+                ],
+                'Illuminate\Foundation\Auth\ResetsPasswords' => [
+                    'sendResetResponse' => [
+                        'name' => 'request',
+                        'type' => 'Illuminate\Http\Illuminate\Http',
+                    ],
+                ],
+                'Illuminate\Foundation\Auth\SendsPasswordResetEmails' => [
+                    'sendResetLinkResponse' => [
+                        'name' => 'request',
+                        'type' => 'Illuminate\Http\Illuminate\Http',
+                    ],
                 ],
             ],
-            'Illuminate\Foundation\Auth\ResetsPasswords' => [
-                'sendResetResponse' => [
-                    'name' => 'request',
-                    'type' => 'Illuminate\Http\Illuminate\Http',
-                ],
-            ],
-            'Illuminate\Foundation\Auth\SendsPasswordResetEmails' => [
-                'sendResetLinkResponse' => [
-                    'name' => 'request',
-                    'type' => 'Illuminate\Http\Illuminate\Http',
-                ],
-            ],
-        ]);
+        ]]);
 
     $services->set(Redirect301ToPermanentRedirectRector::class);
 
     $services->set(ArgumentRemoverRector::class)
-        ->arg('$positionsByMethodNameByClassType', [
-            'Illuminate\Foundation\Application' => [
-                'register' => [
-                    1 => [
-                        'name' => 'options',
+        ->call('configure', [[
+            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
+                'Illuminate\Foundation\Application' => [
+                    'register' => [
+                        1 => [
+                            'name' => 'options',
+                        ],
                     ],
                 ],
             ],
-        ]);
+        ]]);
 };

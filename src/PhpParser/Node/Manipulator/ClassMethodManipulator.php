@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -87,7 +88,7 @@ final class ClassMethodManipulator
 
     public function isNamedConstructor(ClassMethod $classMethod): bool
     {
-        if (! $this->nodeNameResolver->isName($classMethod, '__construct')) {
+        if (! $this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
             return false;
         }
 

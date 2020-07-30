@@ -17,40 +17,46 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(AddParamTypeDeclarationRector::class)
-        ->arg('$typehintForParameterByMethodByClass', [
-            'PHPUnit\Framework\TestCase' => [
-                '__construct' => [
-                    # https://github.com/rectorphp/rector/issues/1024
-                    # no type, $dataName
-                    2 => '',
+        ->call('configure', [[
+            AddParamTypeDeclarationRector::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
+                'PHPUnit\Framework\TestCase' => [
+                    '__construct' => [
+                        # https://github.com/rectorphp/rector/issues/1024
+                        # no type, $dataName
+                        2 => '',
+                    ],
                 ],
             ],
-        ]);
+        ]]);
 
     $services->set(SpecificAssertContainsRector::class);
 
     $services->set(SpecificAssertInternalTypeRector::class);
 
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            # https://github.com/sebastianbergmann/phpunit/issues/3123
-            'PHPUnit_Framework_MockObject_MockObject' => 'PHPUnit\Framework\MockObject\MockObject',
-        ]);
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                # https://github.com/sebastianbergmann/phpunit/issues/3123
+                'PHPUnit_Framework_MockObject_MockObject' => 'PHPUnit\Framework\MockObject\MockObject',
+            ],
+        ]]);
 
     $services->set(AssertEqualsParameterToSpecificMethodsTypeRector::class);
 
     $services->set(AddReturnTypeDeclarationRector::class)
-        ->arg('$typehintForMethodByClass', [
-            'PHPUnit\Framework\TestCase' => [
-                'setUpBeforeClass' => 'void',
-                'setUp' => 'void',
-                'assertPreConditions' => 'void',
-                'assertPostConditions' => 'void',
-                'tearDown' => 'void',
-                'tearDownAfterClass' => 'void',
-                'onNotSuccessfulTest' => 'void',
+        ->call('configure', [[
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
+                'PHPUnit\Framework\TestCase' => [
+                    'setUpBeforeClass' => 'void',
+                    'setUp' => 'void',
+                    'assertPreConditions' => 'void',
+                    'assertPostConditions' => 'void',
+                    'tearDown' => 'void',
+                    'tearDownAfterClass' => 'void',
+                    'onNotSuccessfulTest' => 'void',
+                ],
             ],
-        ]);
+        ]]);
 
     $services->set(ReplaceAssertArraySubsetRector::class);
 };

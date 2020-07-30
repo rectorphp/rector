@@ -20,5 +20,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(HelperFunctionToConstructorInjectionRector::class);
 
     $services->set(FunctionToNewRector::class)
-        ->arg('$functionToNew', ['collect' => 'Illuminate\Support\Collection']);
+        ->call('configure', [[
+            FunctionToNewRector::FUNCTION_TO_NEW => [
+                'collect' => 'Illuminate\Support\Collection',
+            ],
+        ]]);
 };

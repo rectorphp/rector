@@ -13,25 +13,33 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'Illuminate\Console\Command' => [
-                'fire' => 'handle',
+        ->call('configure', [[
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+                'Illuminate\Console\Command' => [
+                    'fire' => 'handle',
+                ],
             ],
-        ]);
+        ]]);
 
     $services->set(RenamePropertyRector::class)
-        ->arg('$oldToNewPropertyByTypes', [
-            'Illuminate\Database\Eloquent\Concerns\HasEvents' => [
-                'events' => 'dispatchesEvents',
+        ->call('configure', [[
+            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
+                'Illuminate\Database\Eloquent\Concerns\HasEvents' => [
+                    'events' => 'dispatchesEvents',
+                ],
+                'Illuminate\Database\Eloquent\Relations\Pivot' => [
+                    'parent' => 'pivotParent',
+                ],
             ],
-            'Illuminate\Database\Eloquent\Relations\Pivot' => [
-                'parent' => 'pivotParent',
-            ],
-        ]);
+        ]]);
 
     $services->set(RenameClassRector::class)
-        ->arg(
-            '$oldToNewClasses',
-            ['Illuminate\Translation\LoaderInterface' => 'Illuminate\Contracts\Translation\Loader']
+        ->call(
+            'configure',
+            [[
+                RenameClassRector::OLD_TO_NEW_CLASSES => [
+                    'Illuminate\Translation\LoaderInterface' => 'Illuminate\Contracts\Translation\Loader',
+                ],
+            ]]
         );
 };

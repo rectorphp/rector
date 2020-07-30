@@ -12,8 +12,8 @@ final class StaticRectorRecipeFactory
     public static function createWithConfiguration(): array
     {
         return [
-            RecipeOption::PACKAGE => 'Symfony',
-            RecipeOption::NAME => 'ChangeServiceArgumentsToMethodCallRector',
+            RecipeOption::PACKAGE => 'ModeratePackage',
+            RecipeOption::NAME => 'WhateverRector',
             RecipeOption::NODE_TYPES => [
                 MethodCall::class,
             ],

@@ -7,6 +7,7 @@ namespace Rector\Order\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -16,8 +17,13 @@ use Rector\Order\StmtOrder;
 /**
  * @see \Rector\Order\Tests\Rector\Class_\OrderPublicInterfaceMethodRector\OrderPublicInterfaceMethodRectorTest
  */
-final class OrderPublicInterfaceMethodRector extends AbstractRector
+final class OrderPublicInterfaceMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const METHOD_ORDER_BY_INTERFACES = '$methodOrderByInterfaces';
+
     /**
      * @var string[][]
      */
@@ -33,16 +39,9 @@ final class OrderPublicInterfaceMethodRector extends AbstractRector
      */
     private $stmtOrder;
 
-    /**
-     * @param string[][] $methodOrderByInterfaces
-     */
-    public function __construct(
-        ClassManipulator $classManipulator,
-        StmtOrder $stmtOrder,
-        array $methodOrderByInterfaces = []
-    ) {
+    public function __construct(ClassManipulator $classManipulator, StmtOrder $stmtOrder)
+    {
         $this->classManipulator = $classManipulator;
-        $this->methodOrderByInterfaces = $methodOrderByInterfaces;
         $this->stmtOrder = $stmtOrder;
     }
 
@@ -75,7 +74,7 @@ class SomeClass implements FoodRecipeInterface
 }
 PHP
            , [
-               '$methodOrderByInterfaces' => [
+               self::METHOD_ORDER_BY_INTERFACES => [
                    'FoodRecipeInterface' => ['getDescription', 'process'],
                ],
            ]
@@ -112,6 +111,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodOrderByInterfaces = $configuration[self::METHOD_ORDER_BY_INTERFACES] ?? [];
     }
 
     /**

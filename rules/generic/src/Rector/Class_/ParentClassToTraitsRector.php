@@ -6,6 +6,7 @@ namespace Rector\Generic\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -15,12 +16,18 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  * Can handle cases like:
  * - https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
  * - https://github.com/silverstripe/silverstripe-upgrader/issues/71#issue-320145944
+ *
  * @see \Rector\Generic\Tests\Rector\Class_\ParentClassToTraitsRector\ParentClassToTraitsRectorTest
  */
-final class ParentClassToTraitsRector extends AbstractRector
+final class ParentClassToTraitsRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var string[][]
+     * @var string
+     */
+    public const PARENT_CLASS_TO_TRAITS = '$parentClassToTraits';
+
+    /**
+     * @var string[][] { parent class => [ traits ] }
      */
     private $parentClassToTraits = [];
 
@@ -29,12 +36,8 @@ final class ParentClassToTraitsRector extends AbstractRector
      */
     private $classInsertManipulator;
 
-    /**
-     * @param string[][] $parentClassToTraits { parent class => [ traits ] }
-     */
-    public function __construct(ClassInsertManipulator $classInsertManipulator, array $parentClassToTraits = [])
+    public function __construct(ClassInsertManipulator $classInsertManipulator)
     {
-        $this->parentClassToTraits = $parentClassToTraits;
         $this->classInsertManipulator = $classInsertManipulator;
     }
 
@@ -56,7 +59,9 @@ class SomeClass
 PHP
                 ,
                 [
-                    'Nette\Object' => ['Nette\SmartObject'],
+                    self::PARENT_CLASS_TO_TRAITS => [
+                        'Nette\Object' => ['Nette\SmartObject'],
+                    ],
                 ]
             ),
         ]);
@@ -96,6 +101,11 @@ PHP
         $this->removeParentClass($node);
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? [];
     }
 
     private function removeParentClass(Class_ $class): void

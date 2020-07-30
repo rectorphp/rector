@@ -31,7 +31,9 @@ final class CompleteImportForPartialAnnotationRectorTest extends AbstractRectorT
     {
         return [
             CompleteImportForPartialAnnotationRector::class => [
-                '$useImportsToRestore' => [['Doctrine\ORM\Mapping', 'ORM']],
+                CompleteImportForPartialAnnotationRector::USE_IMPORTS_TO_RESTORE => [
+                    ['Doctrine\ORM\Mapping', 'ORM'],
+                ],
             ],
         ];
     }

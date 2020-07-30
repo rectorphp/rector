@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -17,20 +18,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Renaming\Tests\Rector\Annotation\RenameAnnotationRector\RenameAnnotationRectorTest
  */
-final class RenameAnnotationRector extends AbstractPHPUnitRector
+final class RenameAnnotationRector extends AbstractPHPUnitRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const CLASS_TO_ANNOTATION_MAP = '$classToAnnotationMap';
+
     /**
      * @var string[][]
      */
     private $classToAnnotationMap = [];
-
-    /**
-     * @param string[][] $classToAnnotationMap
-     */
-    public function __construct(array $classToAnnotationMap = [])
-    {
-        $this->classToAnnotationMap = $classToAnnotationMap;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -112,5 +110,10 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->classToAnnotationMap = $configuration[self::CLASS_TO_ANNOTATION_MAP] ?? [];
     }
 }

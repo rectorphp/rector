@@ -12,21 +12,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     # https://stackoverflow.com/a/24949656/1348344
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            'Illuminate\Cache\CacheManager' => 'Illuminate\Contracts\Cache\Repository',
-            'Illuminate\Database\Eloquent\SoftDeletingTrait' => 'Illuminate\Database\Eloquent\SoftDeletes',
-        ]);
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'Illuminate\Cache\CacheManager' => 'Illuminate\Contracts\Cache\Repository',
+                'Illuminate\Database\Eloquent\SoftDeletingTrait' => 'Illuminate\Database\Eloquent\SoftDeletes',
+            ],
+        ]]);
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'Illuminate\Contracts\Pagination\Paginator' => [
-                'links' => 'render',
-                'getFrom' => 'firstItem',
-                'getTo' => 'lastItem',
-                'getPerPage' => 'perPage',
-                'getCurrentPage' => 'currentPage',
-                'getLastPage' => 'lastPage',
-                'getTotal' => 'total',
+        ->call('configure', [[
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+                'Illuminate\Contracts\Pagination\Paginator' => [
+                    'links' => 'render',
+                    'getFrom' => 'firstItem',
+                    'getTo' => 'lastItem',
+                    'getPerPage' => 'perPage',
+                    'getCurrentPage' => 'currentPage',
+                    'getLastPage' => 'lastPage',
+                    'getTotal' => 'total',
+                ],
             ],
-        ]);
+        ]]);
 };

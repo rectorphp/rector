@@ -11,6 +11,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -25,12 +26,17 @@ use Rector\SOLID\NodeRemover\ClassMethodNodeRemover;
  *
  * @see \Rector\SOLID\Tests\Rector\Class_\MultiParentingToAbstractDependencyRector\MultiParentingToAbstractDependencyRectorTest
  */
-final class MultiParentingToAbstractDependencyRector extends AbstractRector
+final class MultiParentingToAbstractDependencyRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
      */
     public const FRAMEWORK_SYMFONY = 'symfony';
+
+    /**
+     * @var string
+     */
+    public const FRAMEWORK = 'framework';
 
     /**
      * @var string
@@ -67,10 +73,8 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector
         ClassMethodNodeRemover $classMethodNodeRemover,
         InjectMethodFactory $injectMethodFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        ClassInsertManipulator $classInsertManipulator,
-        string $framework = ''
+        ClassInsertManipulator $classInsertManipulator
     ) {
-        $this->framework = $framework;
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->injectMethodFactory = $injectMethodFactory;
         $this->classMethodNodeRemover = $classMethodNodeRemover;
@@ -193,6 +197,11 @@ PHP
         $this->addInjectOrRequiredClassMethod($node);
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->framework = $configuration[self::FRAMEWORK];
     }
 
     /**

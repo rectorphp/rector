@@ -33,7 +33,7 @@ final class StaticTypeToSetterInjectionRectorTest extends AbstractRectorTestCase
     {
         return [
             StaticTypeToSetterInjectionRector::class => [
-                '$staticTypes' => [
+                StaticTypeToSetterInjectionRector::STATIC_TYPES => [
                     GenericEntityFactory::class,
                     // with adding a parent interface to the class
                     'ParentSetterEnforcingInterface' => GenericEntityFactoryWithInterface::class,

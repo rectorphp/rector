@@ -6,29 +6,24 @@ namespace Rector\Symfony\Rector\FrameworkBundle;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\GetToConstructorInjectionRectorTest
  */
-final class GetToConstructorInjectionRector extends AbstractToConstructorInjectionRector
+final class GetToConstructorInjectionRector extends AbstractToConstructorInjectionRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const GET_METHOD_AWARE_TYPES = '$getMethodAwareTypes';
+
     /**
      * @var string[]
      */
     private $getMethodAwareTypes = [];
-
-    /**
-     * @param string[] $getMethodAwareTypes
-     */
-    public function __construct(array $getMethodAwareTypes = [
-        'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-        'Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait',
-    ])
-    {
-        $this->getMethodAwareTypes = $getMethodAwareTypes;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -88,5 +83,10 @@ PHP
         }
 
         return $this->processMethodCallNode($node);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->getMethodAwareTypes = $configuration[self::GET_METHOD_AWARE_TYPES] ?? [];
     }
 }

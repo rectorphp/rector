@@ -35,7 +35,7 @@ final class AddTopIncludeRectorTest extends AbstractFileSystemRectorTestCase
     {
         return [
             AddTopIncludeRector::class => [
-                '$autoloadFilePath' => '/../autoloader.php',
+                AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php',
             ],
         ];
     }

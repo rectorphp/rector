@@ -31,7 +31,7 @@ final class OrderConstructorDependenciesByTypeAlphabeticallyRectorTest extends A
     {
         return [
             OrderConstructorDependenciesByTypeAlphabeticallyRector::class => [
-                '$skipPatterns' => ['*skip_pattern_setting*'],
+                OrderConstructorDependenciesByTypeAlphabeticallyRector::SKIP_PATTERNS => ['*skip_pattern_setting*'],
             ],
         ];
     }

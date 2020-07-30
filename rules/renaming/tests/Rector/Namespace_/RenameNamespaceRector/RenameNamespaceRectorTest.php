@@ -31,7 +31,7 @@ final class RenameNamespaceRectorTest extends AbstractRectorTestCase
     {
         return [
             RenameNamespaceRector::class => [
-                '$oldToNewNamespaces' => [
+                RenameNamespaceRector::OLD_TO_NEW_NAMESPACES => [
                     'OldNamespace' => 'NewNamespace',
                     'OldNamespaceWith\OldSplitNamespace' => 'NewNamespaceWith\NewSplitNamespace',
                     'Old\Long\AnyNamespace' => 'Short\AnyNamespace',

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -16,8 +17,14 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\PreferThisOrSelfMethodCallRectorTest
  */
-final class PreferThisOrSelfMethodCallRector extends AbstractRector
+final class PreferThisOrSelfMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const TYPE_TO_PREFERENCE = '$typeToPreference';
+
     /**
      * @var string
      */
@@ -32,14 +39,6 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector
      * @var string[]
      */
     private $typeToPreference = [];
-
-    /**
-     * @param string[] $typeToPreference
-     */
-    public function __construct(array $typeToPreference = [])
-    {
-        $this->typeToPreference = $typeToPreference;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -100,6 +99,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? [];
     }
 
     private function ensurePreferenceIsValid(string $preference): void

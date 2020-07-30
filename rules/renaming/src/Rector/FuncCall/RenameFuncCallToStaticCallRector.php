@@ -6,6 +6,7 @@ namespace Rector\Renaming\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -14,18 +15,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Renaming\Tests\Rector\FuncCall\RenameFuncCallToStaticCallRector\RenameFuncCallToStaticCallRectorTest
  */
-final class RenameFuncCallToStaticCallRector extends AbstractRector
+final class RenameFuncCallToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const FUNCTIONS_TO_STATIC_CALLS = '$functionsToStaticCalls';
+
     /**
      * @var string[][]
      */
     private $functionsToStaticCalls = [];
-
-    public function __construct(array $functionsToStaticCalls = [])
-    {
-        $this->functionsToStaticCalls = $functionsToStaticCalls;
-        $this->ensureConfigurationIsValid($functionsToStaticCalls);
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -84,6 +84,15 @@ PHP
         }
 
         return null;
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        $this->functionsToStaticCalls = $configuration[self::FUNCTIONS_TO_STATIC_CALLS] ?? [];
+        $this->ensureConfigurationIsValid($this->functionsToStaticCalls);
     }
 
     private function ensureConfigurationIsValid(array $functionsToStaticCalls): void

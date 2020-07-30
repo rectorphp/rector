@@ -35,7 +35,7 @@ final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
     {
         return [
             ParentClassToTraitsRector::class => [
-                '$parentClassToTraits' => [
+                ParentClassToTraitsRector::PARENT_CLASS_TO_TRAITS => [
                     ParentObject::class => [SomeTrait::class],
                     AnotherParentObject::class => [SomeTrait::class, SecondTrait::class],
                 ],

@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -20,23 +21,18 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Generic\Tests\Rector\ClassMethod\ChangeContractMethodSingleToManyRector\ChangeContractMethodSingleToManyRectorTest
  */
-final class ChangeContractMethodSingleToManyRector extends AbstractRector
+final class ChangeContractMethodSingleToManyRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const OLD_TO_NEW_METHOD_BY_TYPE = '$oldToNewMethodByType';
+
     /**
      * @var mixed[]
      */
     private $oldToNewMethodByType = [];
-
-    /**
-     * E.g.:
-     * ClassType => [
-     *     oldMethod => newMethod
-     * ]
-     */
-    public function __construct(array $oldToNewMethodByType = [])
-    {
-        $this->oldToNewMethodByType = $oldToNewMethodByType;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -112,6 +108,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->oldToNewMethodByType = $configuration[self::OLD_TO_NEW_METHOD_BY_TYPE] ?? [];
     }
 
     private function wrapReturnValueToArray(ClassMethod $classMethod): void

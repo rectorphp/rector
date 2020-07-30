@@ -6,6 +6,7 @@ namespace Rector\Generic\Rector\Argument;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -13,20 +14,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\Argument\SwapFuncCallArgumentsRector\SwapFuncCallArgumentsRectorTest
  */
-final class SwapFuncCallArgumentsRector extends AbstractRector
+final class SwapFuncCallArgumentsRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const NEW_ARGUMENT_POSITIONS_BY_FUNCTION_NAME = 'new_argument_positions_by_function_name';
+
     /**
      * @var int[][]
      */
     private $newArgumentPositionsByFunctionName = [];
-
-    /**
-     * @param int[][] $newArgumentPositionsByFunctionName
-     */
-    public function __construct(array $newArgumentPositionsByFunctionName = [])
-    {
-        $this->newArgumentPositionsByFunctionName = $newArgumentPositionsByFunctionName;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -88,5 +86,10 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->newArgumentPositionsByFunctionName = $configuration[self::NEW_ARGUMENT_POSITIONS_BY_FUNCTION_NAME] ?? [];
     }
 }

@@ -29,7 +29,7 @@ final class ChangeContractMethodSingleToManyRectorTest extends AbstractRectorTes
     {
         return [
             ChangeContractMethodSingleToManyRector::class => [
-                '$oldToNewMethodByType' => [
+                ChangeContractMethodSingleToManyRector::OLD_TO_NEW_METHOD_BY_TYPE => [
                     OneToManyInterface::class => [
                         'getNode' => 'getNodes',
                     ],

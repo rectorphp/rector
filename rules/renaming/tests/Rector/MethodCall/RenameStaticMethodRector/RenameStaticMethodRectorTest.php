@@ -33,7 +33,7 @@ final class RenameStaticMethodRectorTest extends AbstractRectorTestCase
     {
         return [
             RenameStaticMethodRector::class => [
-                '$oldToNewMethodByClasses' => [
+                RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
                     Html::class => [
                         'add' => 'addHtml',
                     ],

@@ -29,7 +29,7 @@ final class CompleteMissingDependencyInNewRectorTest extends AbstractRectorTestC
     {
         return [
             CompleteMissingDependencyInNewRector::class => [
-                '$classToInstantiateByType' => [
+                CompleteMissingDependencyInNewRector::CLASS_TO_INSTANTIATE_BY_TYPE => [
                     RandomDependency::class => RandomDependency::class,
                 ],
             ],

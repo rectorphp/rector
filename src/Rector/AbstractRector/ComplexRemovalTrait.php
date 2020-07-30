@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
@@ -207,7 +208,7 @@ trait ComplexRemovalTrait
     private function removeConstructorDependency(Assign $assign): void
     {
         $methodName = $assign->getAttribute(AttributeKey::METHOD_NAME);
-        if ($methodName !== '__construct') {
+        if ($methodName !== MethodName::CONSTRUCT) {
             return;
         }
 
@@ -217,7 +218,7 @@ trait ComplexRemovalTrait
         }
 
         /** @var Class_|null $class */
-        $constructClassMethod = $class->getMethod('__construct');
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod === null) {
             return;
         }

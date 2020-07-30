@@ -10,6 +10,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -17,20 +18,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Renaming\Tests\Rector\Function_\RenameFunctionRector\RenameFunctionRectorTest
  */
-final class RenameFunctionRector extends AbstractRector
+final class RenameFunctionRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OLD_FUNCTION_TO_NEW_FUNCTION = '$oldFunctionToNewFunction';
+
     /**
      * @var string[]|string[][]
      */
     private $oldFunctionToNewFunction = [];
-
-    /**
-     * @param string[]|string[][] $oldFunctionToNewFunction
-     */
-    public function __construct(array $oldFunctionToNewFunction = [])
-    {
-        $this->oldFunctionToNewFunction = $oldFunctionToNewFunction;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -77,6 +75,14 @@ final class RenameFunctionRector extends AbstractRector
         }
 
         return $node;
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        $this->oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? [];
     }
 
     /**

@@ -31,7 +31,7 @@ final class ArrayArgumentInTestToDataProviderRectorTest extends AbstractRectorTe
     {
         return [
             ArrayArgumentInTestToDataProviderRector::class => [
-                '$configuration' => [
+                ArrayArgumentInTestToDataProviderRector::CONFIGURATION => [
                     [
                         'class' => 'PHPUnit\Framework\TestCase',
                         'old_method' => 'doTestMultiple',

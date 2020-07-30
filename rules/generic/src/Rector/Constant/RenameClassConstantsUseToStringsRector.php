@@ -7,6 +7,7 @@ namespace Rector\Generic\Rector\Constant;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -14,20 +15,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\RenameClassConstantsUseToStringsRectorTest
  */
-final class RenameClassConstantsUseToStringsRector extends AbstractRector
+final class RenameClassConstantsUseToStringsRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OLD_CONSTANTS_TO_NEW_VALUES_BY_TYPE = '$oldConstantsToNewValuesByType';
+
     /**
      * @var string[][]
      */
     private $oldConstantsToNewValuesByType = [];
-
-    /**
-     * @param string[][] $oldConstantsToNewValuesByType
-     */
-    public function __construct(array $oldConstantsToNewValuesByType = [])
-    {
-        $this->oldConstantsToNewValuesByType = $oldConstantsToNewValuesByType;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -73,5 +71,10 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->oldConstantsToNewValuesByType = $configuration[self::OLD_CONSTANTS_TO_NEW_VALUES_BY_TYPE] ?? [];
     }
 }

@@ -23,27 +23,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->load('Rector\ConsoleDiffer\\', __DIR__ . '/../src');
 
     $services->set(DifferAndFormatter::class)
-        ->args(['$differ' => ref('differ')]);
+        ->arg('$differ', ref('differ'));
 
     $services->set(MarkdownDifferAndFormatter::class)
-        ->args(['$markdownDiffer' => ref('markdownDiffer')]);
+        ->arg('$markdownDiffer', ref('markdownDiffer'));
 
     $services->set('diffOutputBuilder', StrictUnifiedDiffOutputBuilder::class)
-        ->args([
-            '$options' => [
-                'fromFile' => 'Original',
-                'toFile' => 'New',
-            ],
+        ->arg('$options', [
+            'fromFile' => 'Original',
+            'toFile' => 'New',
         ]);
 
     $services->set('differ', Differ::class)
-        ->args([ref('diffOutputBuilder')]);
+        ->arg('$outputBuilder', ref('diffOutputBuilder'));
 
     $services->set('markdownDiffOutputBuilder', UnifiedDiffOutputBuilder::class)
         ->factory([ref(CompleteUnifiedDiffOutputBuilderFactory::class), 'create']);
 
     $services->set('markdownDiffer', Differ::class)
-        ->args([ref('markdownDiffOutputBuilder')]);
+        ->arg('$outputBuilder', ref('markdownDiffOutputBuilder'));
 
     $services->set(ColorConsoleDiffFormatter::class);
 

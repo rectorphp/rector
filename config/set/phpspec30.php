@@ -10,29 +10,33 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'PhpSpec\ServiceContainer' => [
-                # @see http://www.phpspec.net/en/stable/manual/upgrading-to-phpspec-3.html
-                'set' => 'define',
-                'setShared' => 'define',
+        ->call('configure', [[
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+                'PhpSpec\ServiceContainer' => [
+                    # @see http://www.phpspec.net/en/stable/manual/upgrading-to-phpspec-3.html
+                    'set' => 'define',
+                    'setShared' => 'define',
+                ],
             ],
-        ]);
+        ]]);
 
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            'PhpSpec\Console\IO' => 'PhpSpec\Console\ConsoleIO',
-            'PhpSpec\IO\IOInterface' => 'PhpSpec\IO\IO',
-            'PhpSpec\Locator\ResourceInterface' => 'PhpSpec\Locator\Resource',
-            'PhpSpec\Locator\ResourceLocatorInterface' => 'PhpSpec\Locator\ResourceLocator',
-            'PhpSpec\Formatter\Presenter\PresenterInterface' => 'PhpSpec\Formatter\Presenter\Presenter',
-            'PhpSpec\CodeGenerator\Generator\GeneratorInterface' => 'PhpSpec\CodeGenerator\Generator\Generator',
-            'PhpSpec\Extension\ExtensionInterface' => 'PhpSpec\Extension',
-            'Phpspec\CodeAnalysis\AccessInspectorInterface' => 'Phpspec\CodeAnalysis\AccessInspector',
-            'Phpspec\Event\EventInterface' => 'Phpspec\Event\PhpSpecEvent',
-            'PhpSpec\Formatter\Presenter\Differ\EngineInterface' => 'PhpSpec\Formatter\Presenter\Differ\DifferEngine',
-            'PhpSpec\Matcher\MatcherInterface' => 'PhpSpec\Matcher\Matcher',
-            'PhpSpec\Matcher\MatchersProviderInterface' => 'PhpSpec\Matcher\MatchersProvider',
-            'PhpSpec\SpecificationInterface' => 'PhpSpec\Specification',
-            'PhpSpec\Runner\Maintainer\MaintainerInterface' => 'PhpSpec\Runner\Maintainer\Maintainer',
-        ]);
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'PhpSpec\Console\IO' => 'PhpSpec\Console\ConsoleIO',
+                'PhpSpec\IO\IOInterface' => 'PhpSpec\IO\IO',
+                'PhpSpec\Locator\ResourceInterface' => 'PhpSpec\Locator\Resource',
+                'PhpSpec\Locator\ResourceLocatorInterface' => 'PhpSpec\Locator\ResourceLocator',
+                'PhpSpec\Formatter\Presenter\PresenterInterface' => 'PhpSpec\Formatter\Presenter\Presenter',
+                'PhpSpec\CodeGenerator\Generator\GeneratorInterface' => 'PhpSpec\CodeGenerator\Generator\Generator',
+                'PhpSpec\Extension\ExtensionInterface' => 'PhpSpec\Extension',
+                'Phpspec\CodeAnalysis\AccessInspectorInterface' => 'Phpspec\CodeAnalysis\AccessInspector',
+                'Phpspec\Event\EventInterface' => 'Phpspec\Event\PhpSpecEvent',
+                'PhpSpec\Formatter\Presenter\Differ\EngineInterface' => 'PhpSpec\Formatter\Presenter\Differ\DifferEngine',
+                'PhpSpec\Matcher\MatcherInterface' => 'PhpSpec\Matcher\Matcher',
+                'PhpSpec\Matcher\MatchersProviderInterface' => 'PhpSpec\Matcher\MatchersProvider',
+                'PhpSpec\SpecificationInterface' => 'PhpSpec\Specification',
+                'PhpSpec\Runner\Maintainer\MaintainerInterface' => 'PhpSpec\Runner\Maintainer\Maintainer',
+            ],
+        ]]);
 };

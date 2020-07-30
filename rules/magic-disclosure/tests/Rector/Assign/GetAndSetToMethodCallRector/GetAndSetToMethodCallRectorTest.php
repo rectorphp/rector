@@ -33,7 +33,7 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
     {
         return [
             GetAndSetToMethodCallRector::class => [
-                '$typeToMethodCalls' => [
+                GetAndSetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
                     SomeContainer::class => [
                         'get' => 'getService',
                         'set' => 'addService',

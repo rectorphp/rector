@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -22,11 +23,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class Php4ConstructorRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const __CONSTRUCT = '__construct';
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -86,8 +82,8 @@ PHP
         }
 
         // does it already have a __construct method?
-        if ($classLike->getMethod(self::__CONSTRUCT) === null) {
-            $node->name = new Identifier(self::__CONSTRUCT);
+        if ($classLike->getMethod(MethodName::CONSTRUCT) === null) {
+            $node->name = new Identifier(MethodName::CONSTRUCT);
         }
 
         if ($node->stmts === null) {
@@ -98,7 +94,7 @@ PHP
             /** @var Expression $stmt */
             $stmt = $node->stmts[0];
 
-            if ($this->isLocalMethodCallNamed($stmt->expr, self::__CONSTRUCT)) {
+            if ($this->isLocalMethodCallNamed($stmt->expr, MethodName::CONSTRUCT)) {
                 $this->removeNode($node);
 
                 return null;
@@ -175,6 +171,6 @@ PHP
             return;
         }
 
-        $node->name = new Identifier(self::__CONSTRUCT);
+        $node->name = new Identifier(MethodName::CONSTRUCT);
     }
 }

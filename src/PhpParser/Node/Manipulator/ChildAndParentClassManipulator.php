@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -15,11 +16,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ChildAndParentClassManipulator
 {
-    /**
-     * @var string
-     */
-    private const CONSTRUCT = '__construct';
-
     /**
      * @var NodeFactory
      */
@@ -71,7 +67,7 @@ final class ChildAndParentClassManipulator
         }
 
         // complete parent call for __construct()
-        if ($parentClassName !== '' && method_exists($parentClassName, self::CONSTRUCT)) {
+        if ($parentClassName !== '' && method_exists($parentClassName, MethodName::CONSTRUCT)) {
             $staticCall = $this->nodeFactory->createParentConstructWithParams([]);
             $classMethod->stmts[] = new Expression($staticCall);
         }
@@ -87,7 +83,7 @@ final class ChildAndParentClassManipulator
         $childClassNodes = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
 
         foreach ($childClassNodes as $childClassNode) {
-            $childConstructorClassMethod = $childClassNode->getMethod(self::CONSTRUCT);
+            $childConstructorClassMethod = $childClassNode->getMethod(MethodName::CONSTRUCT);
             if ($childConstructorClassMethod === null) {
                 continue;
             }
@@ -127,7 +123,7 @@ final class ChildAndParentClassManipulator
     private function findFirstParentConstructor(Class_ $class): ?ClassMethod
     {
         while ($class !== null) {
-            $constructMethodNode = $class->getMethod(self::CONSTRUCT);
+            $constructMethodNode = $class->getMethod(MethodName::CONSTRUCT);
             if ($constructMethodNode !== null) {
                 return $constructMethodNode;
             }

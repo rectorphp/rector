@@ -7,6 +7,7 @@ namespace Rector\Autodiscovery\Rector\FileSystem;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Autodiscovery\Analyzer\ClassAnalyzer;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
@@ -21,8 +22,24 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * @see \Rector\Autodiscovery\Tests\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector\MoveValueObjectsToValueObjectDirectoryRectorTest
  */
-final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMovingFileSystemRector
+final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMovingFileSystemRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const TYPES = '$types';
+
+    /**
+     * @var string
+     */
+    public const SUFFIXES = '$suffixes';
+
+    /**
+     * @api
+     * @var string
+     */
+    public const ENABLE_VALUE_OBJECT_GUESSING = '$enableValueObjectGuessing';
+
     /**
      * @var string[]
      */
@@ -50,20 +67,9 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMov
      */
     private $enableValueObjectGuessing = true;
 
-    /**
-     * @param string[] $types
-     * @param string[] $suffixes
-     */
-    public function __construct(
-        ClassAnalyzer $classAnalyzer,
-        array $types = [],
-        array $suffixes = [],
-        bool $enableValueObjectGuessing = true
-    ) {
+    public function __construct(ClassAnalyzer $classAnalyzer)
+    {
         $this->classAnalyzer = $classAnalyzer;
-        $this->types = $types;
-        $this->suffixes = $suffixes;
-        $this->enableValueObjectGuessing = $enableValueObjectGuessing;
     }
 
     public function getDefinition(): RectorDefinition
@@ -130,6 +136,13 @@ CODE_SAMPLE
         );
 
         $this->processNodesWithFileDestination($nodesWithFileDestination);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->types = $configuration[self::TYPES] ?? [];
+        $this->suffixes = $configuration[self::SUFFIXES] ?? [];
+        $this->enableValueObjectGuessing = $configuration[self::ENABLE_VALUE_OBJECT_GUESSING] ?? false;
     }
 
     private function isValueObjectMatch(Class_ $class): bool

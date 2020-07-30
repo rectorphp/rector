@@ -6,6 +6,7 @@ namespace Rector\Generic\Rector\Visibility;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -13,20 +14,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\Visibility\ChangeConstantVisibilityRector\ChangeConstantVisibilityRectorTest
  */
-final class ChangeConstantVisibilityRector extends AbstractRector
+final class ChangeConstantVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const CONSTANT_TO_VISIBILITY_BY_CLASS = '$constantToVisibilityByClass';
+
     /**
      * @var string[][] { class => [ method name => visibility ] }
      */
     private $constantToVisibilityByClass = [];
-
-    /**
-     * @param string[][] $constantToVisibilityByClass
-     */
-    public function __construct(array $constantToVisibilityByClass = [])
-    {
-        $this->constantToVisibilityByClass = $constantToVisibilityByClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -58,8 +56,10 @@ class MyClass extends FrameworkClass
 PHP
                 ,
                 [
-                    'ParentObject' => [
-                        'SOME_CONSTANT' => 'protected',
+                    self::CONSTANT_TO_VISIBILITY_BY_CLASS => [
+                        'ParentObject' => [
+                            'SOME_CONSTANT' => 'protected',
+                        ],
                     ],
                 ]
             )]
@@ -96,5 +96,10 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->constantToVisibilityByClass = $configuration[self::CONSTANT_TO_VISIBILITY_BY_CLASS] ?? [];
     }
 }

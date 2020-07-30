@@ -11,9 +11,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            'Cake\ORM\Entity' => [
-                'visibleProperties' => 'getVisible',
+        ->call('configure', [[
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+                'Cake\ORM\Entity' => [
+                    'visibleProperties' => 'getVisible',
+                ],
             ],
-        ]);
+        ]]);
 };

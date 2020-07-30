@@ -42,7 +42,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->factory([ref(FilesystemAdapterFactory::class), 'create']);
 
     $services->set(TagAwareAdapter::class)
-        ->args(['$itemsPool' => ref(FilesystemAdapter::class)]);
+        ->arg('$itemsPool', ref(FilesystemAdapter::class));
 
     $services->alias(CacheItemPoolInterface::class, FilesystemAdapter::class);
 

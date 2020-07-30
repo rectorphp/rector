@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -16,8 +17,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\Property\PropertyToMethodRector\PropertyToMethodRectorTest
  */
-final class PropertyToMethodRector extends AbstractRector
+final class PropertyToMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const PER_CLASS_PROPERTY_TO_METHODS = 'per_class_property_to_methods';
+
     /**
      * @var string
      */
@@ -51,7 +57,7 @@ $object->setProperty($value);
 PHP
                 ,
                 [
-                    '$perClassPropertyToMethods' => [
+                    self::PER_CLASS_PROPERTY_TO_METHODS => [
                         'SomeObject' => [
                             'property' => [
                                 self::GET => 'getProperty',
@@ -108,6 +114,11 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->perClassPropertyToMethods = $configuration[self::PER_CLASS_PROPERTY_TO_METHODS] ?? [];
     }
 
     private function processSetter(Assign $assign): ?Node

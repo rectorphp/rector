@@ -32,7 +32,7 @@ final class RemoveFuncCallArgRectorTest extends AbstractRectorTestCase
     {
         return [
             RemoveFuncCallArgRector::class => [
-                '$argumentPositionByFunctionName' => [
+                RemoveFuncCallArgRector::ARGUMENT_POSITION_BY_FUNCTION_NAME => [
                     'ldap_first_attribute' => [2],
                 ],
             ],

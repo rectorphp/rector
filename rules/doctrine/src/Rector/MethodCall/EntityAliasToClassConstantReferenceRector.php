@@ -13,6 +13,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -20,8 +21,14 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\EntityAliasToClassConstantReferenceRectorTest
  */
-final class EntityAliasToClassConstantReferenceRector extends AbstractRector
+final class EntityAliasToClassConstantReferenceRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const ALIASES_TO_NAMESPACES = '$aliasesToNamespaces';
+
     /**
      * @var string[]
      */
@@ -37,14 +44,6 @@ final class EntityAliasToClassConstantReferenceRector extends AbstractRector
      * @var string[]
      */
     private $aliasesToNamespaces = [];
-
-    /**
-     * @param string[] $aliasesToNamespaces
-     */
-    public function __construct(array $aliasesToNamespaces = [])
-    {
-        $this->aliasesToNamespaces = $aliasesToNamespaces;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -103,6 +102,11 @@ PHP
         );
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->aliasesToNamespaces = $configuration[self::ALIASES_TO_NAMESPACES] ?? [];
     }
 
     private function isAliasWithConfiguredEntity(string $name): bool

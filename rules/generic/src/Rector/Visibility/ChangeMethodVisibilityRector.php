@@ -6,6 +6,7 @@ namespace Rector\Generic\Rector\Visibility;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -14,20 +15,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Generic\Tests\Rector\Visibility\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest
  */
-final class ChangeMethodVisibilityRector extends AbstractRector
+final class ChangeMethodVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const METHOD_TO_VISIBILITY_BY_CLASS = 'method_to_visibility_by_class';
+
     /**
      * @var string[][] { class => [ method name => visibility ] }
      */
     private $methodToVisibilityByClass = [];
-
-    /**
-     * @param string[][] $methodToVisibilityByClass
-     */
-    public function __construct(array $methodToVisibilityByClass = [])
-    {
-        $this->methodToVisibilityByClass = $methodToVisibilityByClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -67,7 +65,7 @@ class MyClass extends FrameworkClass
 PHP
                 ,
                 [
-                    '$methodToVisibilityByClass' => [
+                    self::METHOD_TO_VISIBILITY_BY_CLASS => [
                         'FrameworkClass' => [
                             'someMethod' => 'protected',
                         ],
@@ -114,5 +112,10 @@ PHP
         $this->changeNodeVisibility($node, $visibility);
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodToVisibilityByClass = $configuration[self::METHOD_TO_VISIBILITY_BY_CLASS] ?? [];
     }
 }

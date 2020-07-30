@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -15,20 +16,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\String_\StringToClassConstantRector\StringToClassConstantRectorTest
  */
-final class StringToClassConstantRector extends AbstractRector
+final class StringToClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const STRINGS_TO_CLASS_CONSTANTS = 'strings_to_class_constants';
+
     /**
      * @var string[][]
      */
     private $stringsToClassConstants = [];
-
-    /**
-     * @param string[][] $stringsToClassConstants
-     */
-    public function __construct(array $stringsToClassConstants = [])
-    {
-        $this->stringsToClassConstants = $stringsToClassConstants;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -83,5 +81,10 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->stringsToClassConstants = $configuration[self::STRINGS_TO_CLASS_CONSTANTS] ?? [];
     }
 }

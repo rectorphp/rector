@@ -103,6 +103,12 @@ final class StaticRectorStrings
         return $value;
     }
 
+    public static function camelToConstant(string $input): string
+    {
+        $underscore = self::camelCaseToGlue($input, '_');
+        return strtoupper($underscore);
+    }
+
     private static function camelCaseToGlue(string $input, string $glue): string
     {
         if ($input === strtolower($input)) {

@@ -9,14 +9,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ArgumentAdderRector::class)
-        ->arg('$positionWithDefaultValueByMethodNamesByClassTypes', [
-            'Symfony\Component\DependencyInjection\ContainerBuilder' => [
-                'addCompilerPass' => [
-                    2 => [
-                        'name' => 'priority',
-                        'default_value' => 0,
+        ->call('configure', [[
+            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
+                'Symfony\Component\DependencyInjection\ContainerBuilder' => [
+                    'addCompilerPass' => [
+                        2 => [
+                            'name' => 'priority',
+                            'default_value' => 0,
+                        ],
                     ],
                 ],
             ],
-        ]);
+        ]]);
 };

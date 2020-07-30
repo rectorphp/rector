@@ -8,9 +8,10 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Configuration\Configuration;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
@@ -25,11 +26,6 @@ final class RectorNodeTraverser extends NodeTraverser
     private $enabledRectorsProvider;
 
     /**
-     * @var PrivatesAccessor
-     */
-    private $privatesAccessor;
-
-    /**
      * @param PhpRectorInterface[] $phpRectors
      */
     public function __construct(
@@ -38,6 +34,7 @@ final class RectorNodeTraverser extends NodeTraverser
         array $phpRectors = []
     ) {
         $this->allPhpRectors = $phpRectors;
+        $this->enabledRectorsProvider = $enabledRectorsProvider;
 
         foreach ($phpRectors as $phpRector) {
             if ($configuration->isCacheEnabled() && ! $configuration->shouldClearCache() && $phpRector instanceof ZeroCacheRectorInterface) {
@@ -46,9 +43,6 @@ final class RectorNodeTraverser extends NodeTraverser
 
             $this->addVisitor($phpRector);
         }
-
-        $this->enabledRectorsProvider = $enabledRectorsProvider;
-        $this->privatesAccessor = new PrivatesAccessor();
     }
 
     /**
@@ -65,7 +59,7 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     public function traverse(array $nodes): array
     {
-        if ($this->enabledRectorsProvider->isEnabled()) {
+        if ($this->enabledRectorsProvider->isConfigured()) {
             $this->configureEnabledRectorsOnly();
         }
 
@@ -105,23 +99,20 @@ final class RectorNodeTraverser extends NodeTraverser
                     continue;
                 }
 
-                $this->addRectorConfiguration($configuration, $phpRector);
+                if ($phpRector instanceof ConfigurableRectorInterface) {
+                    $phpRector->configure($configuration);
+                } elseif ($configuration !== []) {
+                    $message = sprintf(
+                        'Rule "%s" with configuration must implement "%s"',
+                        get_class($phpRector),
+                        ConfigurableRectorInterface::class
+                    );
+                    throw new ShouldNotHappenException($message);
+                }
 
                 $this->addVisitor($phpRector);
                 continue 2;
             }
-        }
-    }
-
-    /**
-     * @param mixed[] $configuration
-     */
-    private function addRectorConfiguration(array $configuration, PhpRectorInterface $phpRector): void
-    {
-        foreach ($configuration as $property => $value) {
-            /** @var string $property */
-            $property = ltrim($property, '$');
-            $this->privatesAccessor->setPrivateProperty($phpRector, $property, $value);
         }
     }
 }

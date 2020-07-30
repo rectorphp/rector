@@ -65,7 +65,12 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystem
     {
         return [
             MoveServicesBySuffixToDirectoryRector::class => [
-                '$groupNamesBySuffix' => ['Repository', 'Command', 'Mapper', 'Controller'],
+                MoveServicesBySuffixToDirectoryRector::GROUP_NAMES_BY_SUFFIX => [
+                    'Repository',
+                    'Command',
+                    'Mapper',
+                    'Controller',
+                ],
             ],
         ];
     }

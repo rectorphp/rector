@@ -18,10 +18,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Twig_Filter_Method;
-use Twig_Function_Method;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
 
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function
@@ -33,18 +29,10 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $oldToNewClasses = [];
-
-    /**
-     * @param string[] $oldToNewClasses
-     */
-    public function __construct(array $oldToNewClasses = [
-        Twig_Function_Method::class => Twig_SimpleFunction::class,
-        Twig_Filter_Method::class => Twig_SimpleFilter::class,
-    ])
-    {
-        $this->oldToNewClasses = $oldToNewClasses;
-    }
+    private const OLD_TO_NEW_CLASSES = [
+        'Twig_Function_Method' => 'Twig_SimpleFunction',
+        'Twig_Filter_Method' => 'Twig_SimpleFilter',
+    ];
 
     public function getDefinition(): RectorDefinition
     {
@@ -121,7 +109,6 @@ PHP
         }
 
         $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
-
         if (! in_array($methodName, ['getFunctions', 'getFilters'], true)) {
             return null;
         }
@@ -143,7 +130,7 @@ PHP
 
     private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType): ArrayItem
     {
-        foreach ($this->oldToNewClasses as $oldClass => $newClass) {
+        foreach (self::OLD_TO_NEW_CLASSES as $oldClass => $newClass) {
             $oldClassObjectType = new ObjectType($oldClass);
             if (! $oldClassObjectType->equals($newNodeType)) {
                 continue;

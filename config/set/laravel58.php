@@ -18,22 +18,26 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MinutesToSecondsInCacheRector::class);
 
     $services->set(AddReturnTypeDeclarationRector::class)
-        ->arg('$typehintForMethodByClass', [
-            'Illuminate\Contracts\Cache\Repository' => [
-                'put' => 'bool',
-                'forever' => 'bool',
+        ->call('configure', [[
+            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
+                'Illuminate\Contracts\Cache\Repository' => [
+                    'put' => 'bool',
+                    'forever' => 'bool',
+                ],
+                'Illuminate\Contracts\Cache\Store' => [
+                    'put' => 'bool',
+                    'putMany' => 'bool',
+                    'forever' => 'bool',
+                ],
             ],
-            'Illuminate\Contracts\Cache\Store' => [
-                'put' => 'bool',
-                'putMany' => 'bool',
-                'forever' => 'bool',
-            ],
-        ]);
+        ]]);
 
     $services->set(RenamePropertyRector::class)
-        ->arg('$oldToNewPropertyByTypes', [
-            'Illuminate\Routing\UrlGenerator' => [
-                'cachedSchema' => 'cachedScheme',
+        ->call('configure', [[
+            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
+                'Illuminate\Routing\UrlGenerator' => [
+                    'cachedSchema' => 'cachedScheme',
+                ],
             ],
-        ]);
+        ]]);
 };

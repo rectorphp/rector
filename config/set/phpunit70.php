@@ -12,11 +12,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameAnnotationRector::class)
-        ->arg('$classToAnnotationMap', [
-            'PHPUnit\Framework\TestCase' => [
-                'scenario' => 'test',
+        ->call('configure', [[
+            RenameAnnotationRector::CLASS_TO_ANNOTATION_MAP => [
+                'PHPUnit\Framework\TestCase' => [
+                    'scenario' => 'test',
+                ],
             ],
-        ]);
+        ]]);
 
     $services->set(RemoveDataProviderTestPrefixRector::class);
 };

@@ -18,9 +18,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SpecificAssertContainsWithoutIdentityRector::class);
 
     $services->set(RenameMethodRector::class)
-        ->arg('$oldToNewMethodsByClass', [
-            # see https://github.com/sebastianbergmann/phpunit/issues/3957
-            'expectExceptionMessageRegExp' => 'expectExceptionMessageMatches',
-            'assertRegExp' => 'assertMatchesRegularExpression',
-        ]);
+        ->call('configure', [[
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+                # see https://github.com/sebastianbergmann/phpunit/issues/3957
+                'expectExceptionMessageRegExp' => 'expectExceptionMessageMatches',
+                'assertRegExp' => 'assertMatchesRegularExpression',
+            ],
+        ]]);
 };

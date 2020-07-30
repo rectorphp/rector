@@ -32,7 +32,7 @@ final class YieldClassMethodToArrayClassMethodRectorTest extends AbstractRectorT
     {
         return [
             YieldClassMethodToArrayClassMethodRector::class => [
-                '$methodsByType' => [
+                YieldClassMethodToArrayClassMethodRector::METHODS_BY_TYPE => [
                     EventSubscriberInterface::class => ['getSubscribedEvents'],
                 ],
             ],

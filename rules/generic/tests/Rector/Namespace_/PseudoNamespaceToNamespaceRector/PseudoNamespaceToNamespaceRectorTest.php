@@ -31,7 +31,7 @@ final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
     {
         return [
             PseudoNamespaceToNamespaceRector::class => [
-                '$namespacePrefixesWithExcludedClasses' => [
+                PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => [
                     // namespace prefix => excluded classes
                     'PHPUnit_' => ['PHPUnit_Framework_MockObject_MockObject'],
                     'ChangeMe_' => ['KeepMe_'],

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -19,8 +20,13 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
 /**
  * @see \Rector\Injection\Tests\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector\StaticCallToAnotherServiceConstructorInjectionRectorTest
  */
-final class StaticCallToAnotherServiceConstructorInjectionRector extends AbstractRector
+final class StaticCallToAnotherServiceConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const STATIC_CALLS_TO_METHOD_CALLS = '$staticCallsToMethodCalls';
+
     /**
      * @var StaticCallToMethodCall[]
      */
@@ -122,5 +128,10 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? [];
     }
 }

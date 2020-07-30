@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\MethodCall;
+namespace Rector\ModeratePackage\Rector\MethodCall;
 
 use PhpParser\Node;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -12,9 +12,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
 
- * @see \Rector\Symfony\Tests\Rector\MethodCall\ChangeServiceArgumentsToMethodCallRector\ChangeServiceArgumentsToMethodCallRectorTest
+ * @see \Rector\ModeratePackage\Tests\Rector\MethodCall\WhateverRector\WhateverRectorTest
  */
-final class ChangeServiceArgumentsToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class WhateverRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
  * @var string

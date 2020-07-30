@@ -27,8 +27,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ProcessBuilderGetProcessRector::class);
 
     $services->set(RenameClassRector::class)
-        ->arg('$oldToNewClasses', [
-            'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest' => 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase',
-            'Symfony\Component\Process\ProcessBuilder' => 'Symfony\Component\Process\Process',
-        ]);
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest' => 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase',
+                'Symfony\Component\Process\ProcessBuilder' => 'Symfony\Component\Process\Process',
+            ],
+        ]]);
 };

@@ -18,8 +18,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ReturnArrayClassMethodToYieldRector::class)
-        ->arg('$methodsByType', [
-            TestCase::class => ['provideData', 'provideData*', 'dataProvider', 'dataProvider*'],
+        ->call('configure', [[
+            ReturnArrayClassMethodToYieldRector::METHODS_BY_TYPE => [
+                TestCase::class => ['provideData', 'provideData*', 'dataProvider', 'dataProvider*'],
+            ],
+        ],
         ]);
 
     $services->set(AddEmptyLineBetweenCallsInPhpConfigRector::class);

@@ -18,7 +18,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(IsIterableRector::class);
 
     $services->set(ReservedObjectRector::class)
-        ->arg('$reservedKeywordsToReplacements', ['Object' => 'BaseObject']);
+        ->call('configure', [[
+            ReservedObjectRector::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
+                'Object' => 'BaseObject',
+            ],
+        ]]);
 
     $services->set(MultiExceptionCatchRector::class);
 

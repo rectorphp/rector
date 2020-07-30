@@ -6,6 +6,7 @@ namespace Rector\Generic\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -13,20 +14,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\MethodCallToStaticCallRector\MethodCallToStaticCallRectorTest
  */
-final class MethodCallToStaticCallRector extends AbstractRector
+final class MethodCallToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const METHOD_CALLS_TO_STATIC_CALLS = 'method_calls_to_static_calls';
+
     /**
      * @var array<string, array<string, string>>
      */
     private $methodCallsToStaticCalls = [];
-
-    /**
-     * @param array<string, array<string, string>> $methodCallsToStaticCalls
-     */
-    public function __construct(array $methodCallsToStaticCalls = [])
-    {
-        $this->methodCallsToStaticCalls = $methodCallsToStaticCalls;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -109,5 +107,10 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodCallsToStaticCalls = $configuration[self::METHOD_CALLS_TO_STATIC_CALLS] ?? [];
     }
 }

@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -16,20 +17,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\Argument\ArgumentRemoverRector\ArgumentRemoverRectorTest
  */
-final class ArgumentRemoverRector extends AbstractRector
+final class ArgumentRemoverRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE = '$positionsByMethodNameByClassType';
+
     /**
      * @var mixed[]
      */
     private $positionsByMethodNameByClassType = [];
-
-    /**
-     * @param mixed[] $positionsByMethodNameByClassType
-     */
-    public function __construct(array $positionsByMethodNameByClassType = [])
-    {
-        $this->positionsByMethodNameByClassType = $positionsByMethodNameByClassType;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -91,6 +89,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->positionsByMethodNameByClassType = $configuration[self::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE] ?? [];
     }
 
     /**

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -16,8 +17,13 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\MethodBody\NormalToFluentRector\NormalToFluentRectorTest
  */
-final class NormalToFluentRector extends AbstractRector
+final class NormalToFluentRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const FLUENT_METHODS_BY_TYPE = 'fluent_methods_by_type';
+
     /**
      * @var string[][]
      */
@@ -27,14 +33,6 @@ final class NormalToFluentRector extends AbstractRector
      * @var MethodCall[]
      */
     private $collectedMethodCalls = [];
-
-    /**
-     * @param string[][] $fluentMethodsByType
-     */
-    public function __construct(array $fluentMethodsByType = [])
-    {
-        $this->fluentMethodsByType = $fluentMethodsByType;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -111,6 +109,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->fluentMethodsByType = $configuration[self::FLUENT_METHODS_BY_TYPE] ?? [];
     }
 
     private function shouldSkipPreviousStmt(Node $node, int $i, Stmt $stmt): bool

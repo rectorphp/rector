@@ -32,7 +32,7 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
     {
         return [
             ChangeConstantVisibilityRector::class => [
-                '$constantToVisibilityByClass' => [
+                ChangeConstantVisibilityRector::CONSTANT_TO_VISIBILITY_BY_CLASS => [
                     ParentObject::class => [
                         'TO_BE_PUBLIC_CONSTANT' => 'public',
                         'TO_BE_PROTECTED_CONSTANT' => 'protected',

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -16,20 +17,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\ClassMethod\WrapReturnRector\WrapReturnRectorTest
  */
-final class WrapReturnRector extends AbstractRector
+final class WrapReturnRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const TYPE_TO_METHOD_TO_WRAP = 'type_to_method_to_wrap';
+
     /**
      * @var mixed[][]
      */
     private $typeToMethodToWrap = [];
-
-    /**
-     * @param mixed[][] $typeToMethodToWrap
-     */
-    public function __construct(array $typeToMethodToWrap = [])
-    {
-        $this->typeToMethodToWrap = $typeToMethodToWrap;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -96,6 +94,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->typeToMethodToWrap = $configuration[self::TYPE_TO_METHOD_TO_WRAP] ?? [];
     }
 
     private function wrap(ClassMethod $classMethod, string $type): void

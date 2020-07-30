@@ -263,13 +263,9 @@
     "scripts": {
         "complete-check": [
             "@check-cs",
-            "bin/rector validate-services-in-sets --ansi",
-            "bin/rector validate-sets --ansi",
-            "phpunit",
             "@phpstan",
             "@docs",
-            "bin/rector sync-types",
-            "bin/rector check-static-type-mappers"
+            "phpunit"
         ],
         "check-cs": "vendor/bin/ecs check --ansi",
         "fix-cs": "vendor/bin/ecs check --fix --ansi",

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -15,20 +16,17 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Generic\Tests\Rector\Assign\PropertyAssignToMethodCallRector\PropertyAssignToMethodCallRectorTest
  */
-final class PropertyAssignToMethodCallRector extends AbstractRector
+final class PropertyAssignToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE = '$oldPropertiesToNewMethodCallsByType';
+
     /**
      * @var string[][]
      */
     private $oldPropertiesToNewMethodCallsByType = [];
-
-    /**
-     * @param string[][] $oldPropertiesToNewMethodCallsByType
-     */
-    public function __construct(array $oldPropertiesToNewMethodCallsByType = [])
-    {
-        $this->oldPropertiesToNewMethodCallsByType = $oldPropertiesToNewMethodCallsByType;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -93,5 +91,10 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->oldPropertiesToNewMethodCallsByType = $configuration[self::OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE] ?? [];
     }
 }

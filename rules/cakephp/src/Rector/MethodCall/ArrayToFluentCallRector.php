@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -16,8 +17,18 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\ArrayToFluentCallRectorTest
  */
-final class ArrayToFluentCallRector extends AbstractRector
+final class ArrayToFluentCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const CONFIGURABLE_CLASSES = '$configurableClasses';
+
+    /**
+     * @var string
+     */
+    public const FACTORY_METHODS = '$factoryMethods';
+
     /**
      * @var string
      */
@@ -37,15 +48,6 @@ final class ArrayToFluentCallRector extends AbstractRector
      * @var mixed[]
      */
     private $factoryMethods = [];
-
-    /**
-     * @param mixed[] $factoryMethods
-     */
-    public function __construct(array $configurableClasses = [], array $factoryMethods = [])
-    {
-        $this->configurableClasses = $configurableClasses;
-        $this->factoryMethods = $factoryMethods;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -105,6 +107,12 @@ PHP
         }
 
         return $this->replaceArrayToFluentMethodCalls($node, $argumentPosition, $fluentMethods);
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->configurableClasses = $configuration[self::CONFIGURABLE_CLASSES] ?? [];
+        $this->factoryMethods = $configuration[self::FACTORY_METHODS] ?? [];
     }
 
     /**

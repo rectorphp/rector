@@ -18,6 +18,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -25,11 +26,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ConstructorInjectionToActionInjectionRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const __CONSTRUCT = '__construct';
-
     /**
      * @var Param[]
      */
@@ -123,12 +119,12 @@ PHP
 
         // traverse constructor dependencies and names of their properties
         /** @var ClassMethod $constructMethod */
-        $constructMethod = $node->getMethod(self::__CONSTRUCT);
+        $constructMethod = $node->getMethod(MethodName::CONSTRUCT);
         $this->collectPropertyFetchToParams($constructMethod);
 
         // replace them in property fetches with particular class methods and use variable instead
         foreach ($node->getMethods() as $classMethod) {
-            if ($this->isName($classMethod, self::__CONSTRUCT)) {
+            if ($this->isName($classMethod, MethodName::CONSTRUCT)) {
                 continue;
             }
 
@@ -182,7 +178,7 @@ PHP
             return true;
         }
 
-        $constructMethod = $class->getMethod(self::__CONSTRUCT);
+        $constructMethod = $class->getMethod(MethodName::CONSTRUCT);
         // no constructor, nothing to do
 
         return $constructMethod === null;

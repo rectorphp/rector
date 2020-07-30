@@ -32,7 +32,11 @@ final class RemoveIniGetSetFuncCallRectorTest extends AbstractRectorTestCase
     {
         return [
             RemoveIniGetSetFuncCallRector::class => [
-                '$keysToRemove' => ['y2k_compliance', 'safe_mode', 'magic_quotes_runtime'],
+                RemoveIniGetSetFuncCallRector::KEYS_TO_REMOVE => [
+                    'y2k_compliance',
+                    'safe_mode',
+                    'magic_quotes_runtime',
+                ],
             ],
         ];
     }

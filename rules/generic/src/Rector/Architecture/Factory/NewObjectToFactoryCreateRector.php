@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -21,20 +22,17 @@ use ReflectionClass;
 /**
  * @see \Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\NewObjectToFactoryCreateRectorTest
  */
-final class NewObjectToFactoryCreateRector extends AbstractRector
+final class NewObjectToFactoryCreateRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const OBJECT_TO_FACTORY_METHOD = '$objectToFactoryMethod';
+
     /**
      * @var string[][]
      */
     private $objectToFactoryMethod = [];
-
-    /**
-     * @param string[][] $objectToFactoryMethod
-     */
-    public function __construct(array $objectToFactoryMethod = [])
-    {
-        $this->objectToFactoryMethod = $objectToFactoryMethod;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -64,9 +62,11 @@ class SomeClass
 PHP
                 ,
                 [
-                    'MyClass' => [
-                        'class' => 'MyClassFactory',
-                        'method' => 'create',
+                    self::OBJECT_TO_FACTORY_METHOD => [
+                        'MyClass' => [
+                            'class' => 'MyClassFactory',
+                            'method' => 'create',
+                        ],
                     ],
                 ]
             ),
@@ -118,6 +118,11 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->objectToFactoryMethod = $configuration[self::OBJECT_TO_FACTORY_METHOD] ?? [];
     }
 
     private function getExistingFactoryPropertyName(Class_ $class, string $factoryClass): ?string

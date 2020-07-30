@@ -37,7 +37,7 @@ final class RenameNonPhpTest extends AbstractRectorTestCase
     {
         return [
             RenameClassRector::class => [
-                '$oldToNewClasses' => [
+                RenameClassRector::OLD_TO_NEW_CLASSES => [
                     OldClass::class => NewClass::class,
                 ],
             ],

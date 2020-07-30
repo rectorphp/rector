@@ -33,13 +33,13 @@ final class ArrayToFluentCallRectorTest extends AbstractRectorTestCase
     {
         return [
             ArrayToFluentCallRector::class => [
-                '$configurableClasses' => [
+                ArrayToFluentCallRector::CONFIGURABLE_CLASSES => [
                     ConfigurableClass::class => [
                         'name' => 'setName',
                         'size' => 'setSize',
                     ],
                 ],
-                '$factoryMethods' => [
+                ArrayToFluentCallRector::FACTORY_METHODS => [
                     FactoryClass::class => [
                         'buildClass' => [
                             'argumentPosition' => 2,

@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -21,8 +22,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  * @see \Rector\Generic\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
  * @see \Rector\Generic\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
  */
-final class ServiceGetterToConstructorInjectionRector extends AbstractRector
+final class ServiceGetterToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES = '$methodNamesByTypesToServiceTypes';
+
     /**
      * @var mixed[]
      */
@@ -33,12 +39,8 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector
      */
     private $propertyNaming;
 
-    /**
-     * @param mixed[] $methodNamesByTypesToServiceTypes
-     */
-    public function __construct(PropertyNaming $propertyNaming, array $methodNamesByTypesToServiceTypes = [])
+    public function __construct(PropertyNaming $propertyNaming)
     {
-        $this->methodNamesByTypesToServiceTypes = $methodNamesByTypesToServiceTypes;
         $this->propertyNaming = $propertyNaming;
     }
 
@@ -164,5 +166,10 @@ PHP
         }
 
         return $node;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->methodNamesByTypesToServiceTypes = $configuration[self::METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES] ?? [];
     }
 }

@@ -59,10 +59,20 @@ final class ChainMethodCallNodeAnalyzer
     {
         $chainMethodCalls = [$methodCall];
 
+        // traverse up
         $currentNode = $methodCall->var;
         while ($currentNode instanceof MethodCall) {
             $chainMethodCalls[] = $currentNode;
             $currentNode = $currentNode->var;
+        }
+
+        // traverse down
+        if (count($chainMethodCalls) === 1) {
+            $currentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+            while ($currentNode instanceof MethodCall) {
+                $chainMethodCalls[] = $currentNode;
+                $currentNode = $currentNode->getAttribute(AttributeKey::PARENT_NODE);
+            }
         }
 
         return $chainMethodCalls;
