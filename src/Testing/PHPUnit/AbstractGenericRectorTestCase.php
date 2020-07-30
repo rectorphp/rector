@@ -128,6 +128,11 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     protected function tearDown(): void
     {
         $this->restoreOldParameterValues();
+
+        // restore PHP version if changed
+        if ($this->getPhpVersion() !== '') {
+            $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
+        }
     }
 
     protected function getRectorClass(): string

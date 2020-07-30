@@ -34,10 +34,8 @@ final class TemplateFileSystem
         $destination = Strings::replace($destination, '#(__Configured|__Extra)#', '');
 
         // remove ".inc" protection from PHPUnit if not a test case
-        if (! Strings::match($destination, '#/Fixture/#')) {
-            if (Strings::endsWith($destination, '.inc')) {
-                $destination = Strings::before($destination, '.inc');
-            }
+        if ($this->isNonFixtureFileWithIncSuffix($destination)) {
+            $destination = Strings::before($destination, '.inc');
         }
 
         return $targetDirectory . DIRECTORY_SEPARATOR . $destination;
@@ -49,5 +47,14 @@ final class TemplateFileSystem
     private function applyVariables(string $content, array $variables): string
     {
         return str_replace(array_keys($variables), array_values($variables), $content);
+    }
+
+    private function isNonFixtureFileWithIncSuffix(string $filePath): bool
+    {
+        if (Strings::match($filePath, '#/Fixture/#')) {
+            return false;
+        }
+
+        return Strings::endsWith($filePath, '.inc');
     }
 }

@@ -53,11 +53,8 @@ final class ValidateFixtureContentCommand extends Command
 
             // files content is equal, but it should not
             $message = sprintf(
-                'The "%s" file has same content before "%s" and after it.%sRemove the content after "%s"',
-                $fixtureFileInfo->getRelativeFilePathFromCwd(),
-                SplitLine::REGEX,
-                PHP_EOL,
-                SplitLine::REGEX
+                'The "%s" file has same content before and after. Remove the 2nd half of the file.',
+                $fixtureFileInfo->getRelativeFilePathFromCwd()
             );
 
             $this->symfonyStyle->error($message);

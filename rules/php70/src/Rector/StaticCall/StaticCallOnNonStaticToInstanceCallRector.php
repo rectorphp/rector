@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php70\Rector\StaticCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -23,6 +24,7 @@ use ReflectionClass;
  * @see https://3v4l.org/tQ32f
  * @see https://3v4l.org/jB9jn
  * @see https://stackoverflow.com/a/19694064/1348344
+ *
  * @see \Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\StaticCallOnNonStaticToInstanceCallRectorTest
  */
 final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
@@ -97,6 +99,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->name instanceof Expr) {
+            return null;
+        }
+
         $methodName = $this->getName($node->name);
 
         $className = $this->resolveStaticCallClassName($node);
