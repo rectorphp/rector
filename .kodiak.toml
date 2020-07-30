@@ -1,8 +1,7 @@
 # .kodiak.toml
-version = 1
+version=1
 
 [merge]
-delete_branch_on_merge = true
-
-# this should merge !fixup commits from Rector, lets give it a try
-method = rebase
+delete_branch_on_merge=true
+# for some reason this is broken
+# method=rebase
