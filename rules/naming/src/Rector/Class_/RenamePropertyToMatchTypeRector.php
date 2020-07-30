@@ -5,18 +5,14 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
-use PhpParser\NodeTraverser;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -24,6 +20,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\ExpectedNameResolver;
+use Rector\Naming\VariableRenamer;
 
 /**
  * @see \Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\RenamePropertyToMatchTypeRectorTest
@@ -55,16 +52,23 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
      */
     private $propertyDocBlockManipulator;
 
+    /**
+     * @var VariableRenamer
+     */
+    private $variableRenamer;
+
     public function __construct(
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ConflictingNameResolver $conflictingNameResolver,
         ExpectedNameResolver $expectedNameResolver,
-        PropertyDocBlockManipulator $propertyDocBlockManipulator
+        PropertyDocBlockManipulator $propertyDocBlockManipulator,
+        VariableRenamer $variableRenamer
     ) {
         $this->conflictingNameResolver = $conflictingNameResolver;
         $this->expectedNameResolver = $expectedNameResolver;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->propertyDocBlockManipulator = $propertyDocBlockManipulator;
+        $this->variableRenamer = $variableRenamer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -163,31 +167,6 @@ PHP
         }
     }
 
-    /**
-     * @todo extra to own re-usable service; together with
-     * @see \Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector::renameDimFetchToVariable
-     */
-    private function renameVariableInClassMethod(ClassMethod $classMethod, string $oldName, string $expectedName): void
-    {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $oldName,
-            $expectedName
-        ) {
-            if ($node instanceof Closure || $node instanceof Function_ || $node instanceof ArrowFunction) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
-
-            if (! $this->isVariableName($node, $oldName)) {
-                return null;
-            }
-
-            /** @var Variable $node */
-            $node->name = new Identifier($expectedName);
-
-            return $node;
-        });
-    }
-
     private function renamePropertyFetchesInClass(ClassLike $classLike, string $oldName, string $expectedName): void
     {
         // 1. replace property fetch rename in whole class
@@ -243,7 +222,9 @@ PHP
             $param->var->name = new Identifier($expectedName);
 
             // 2. rename param in the rest of the method
-            $this->renameVariableInClassMethod($classMethod, $oldName, $expectedName);
+            $this->variableRenamer->renameVariableInFunctionLike($classMethod, null, $oldName, $expectedName);
+
+//            $this->renameVariableInClassMethod($classMethod, $oldName, $expectedName);
 
             // 3. rename @param variable in docblock too
             $this->propertyDocBlockManipulator->renameParameterNameInDocBlock($classMethod, $oldName, $expectedName);
