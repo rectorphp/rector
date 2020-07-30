@@ -13,8 +13,11 @@ use Symplify\SmartFileSystem\SmartFileSystem;
  */
 final class StaticFixtureUpdater
 {
-    public static function updateFixtureContent(SmartFileInfo $originalFileInfo, string $changedContent, SmartFileInfo $fixtureFileInfo): void
-    {
+    public static function updateFixtureContent(
+        SmartFileInfo $originalFileInfo,
+        string $changedContent,
+        SmartFileInfo $fixtureFileInfo
+    ): void {
         if (! getenv('UPDATE_TESTS') && ! getenv('UT')) {
             return;
         }
@@ -37,5 +40,4 @@ final class StaticFixtureUpdater
     {
         return new SmartFileSystem();
     }
-
 }

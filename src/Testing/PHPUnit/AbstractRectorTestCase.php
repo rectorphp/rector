@@ -12,7 +12,6 @@ use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Testing\Contract\RunnableInterface;
 use Rector\Core\Testing\PHPUnit\DataProvider\StaticFixtureUpdater;
-use Rector\Core\Testing\ValueObject\SplitLine;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symplify\EasyTesting\StaticFixtureSplitter;
 use Symplify\SmartFileSystem\SmartFileInfo;
