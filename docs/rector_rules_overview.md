@@ -1,4 +1,4 @@
-# All 542 Rectors Overview
+# All 543 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -31,7 +31,7 @@
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
 - [Nette](#nette) (14)
-- [NetteCodeQuality](#nettecodequality) (4)
+- [NetteCodeQuality](#nettecodequality) (5)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
@@ -6863,6 +6863,33 @@ Change `translate()` method call 2nd arg to variadic
 <br><br>
 
 ## NetteCodeQuality
+
+### `ArrayDimFetchControlToGetComponentMethodCallRector`
+
+- class: [`Rector\NetteCodeQuality\Rector\ArrayDimFetch\ArrayDimFetchControlToGetComponentMethodCallRector`](/../master/rules/nette-code-quality/src/Rector/ArrayDimFetch/ArrayDimFetchControlToGetComponentMethodCallRector.php)
+- [test fixtures](/../master/rules/nette-code-quality/tests/Rector/ArrayDimFetch/ArrayDimFetchControlToGetComponentMethodCallRector/Fixture)
+
+Change array dim `$this["someComponent"]` to more explicit `$this->getComponent("someComponent")`
+
+```diff
+ use Nette\Application\UI\Presenter;
+
+ class SomePresenter extends Presenter
+ {
+     public function someAction()
+     {
+-        $form = $this['someForm'];
++        $form = $this->getComponent('someForm');
+     }
+
+     protected function createComponentSomeForm()
+     {
+         return new Form();
+     }
+ }
+```
+
+<br><br>
 
 ### `ChangeControlArrayAccessToAnnotatedControlVariableRector`
 
