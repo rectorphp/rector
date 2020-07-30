@@ -109,7 +109,9 @@ final class ComposerJsonManipulator
             'url' => 'https://github.com/phpstan/phpstan-src.git',
         ];
 
-        return $this->addDevDependenciesFromPHPStan($json, $phpstanVersion);
+        $json = $this->addDevDependenciesFromPHPStan($json, $phpstanVersion);
+
+        return $this->allowDevDependnecies($json);
     }
 
     private function addDevDependenciesFromPHPStan(array $json, string $phpstanVersion): array
@@ -136,5 +138,13 @@ final class ComposerJsonManipulator
         $jsonFileContent = NetteFileSystem::read($jsonFilePath);
 
         return (array) Json::decode($jsonFileContent, Json::FORCE_ARRAY);
+    }
+
+    private function allowDevDependnecies(array $json): array
+    {
+        $json['minimum-stability'] = 'dev';
+        $json['prefer-stable'] = true;
+
+        return $json;
     }
 }
