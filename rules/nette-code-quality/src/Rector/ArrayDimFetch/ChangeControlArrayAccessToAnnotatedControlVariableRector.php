@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NetteCodeQuality\Rector\ArrayDimFetch;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Variable;
@@ -98,6 +99,11 @@ PHP
 
         $controlName = $this->controlDimFetchAnalyzer->matchNameOnControlVariable($node);
         if ($controlName === null) {
+            return null;
+        }
+
+        // probably multiplier factory, nothing we can do
+        if (Strings::contains($controlName, '-')) {
             return null;
         }
 
