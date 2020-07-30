@@ -163,6 +163,10 @@ PHP
         }
     }
 
+    /**
+     * @todo extra to own re-usable service; together with
+     * @see \Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector::renameDimFetchToVariable
+     */
     private function renameVariableInClassMethod(ClassMethod $classMethod, string $oldName, string $expectedName): void
     {
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
