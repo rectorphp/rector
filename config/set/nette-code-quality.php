@@ -16,5 +16,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MakeGetComponentAssignAnnotatedRector::class);
 
     $services->set(ChangeControlArrayAccessToAnnotatedControlVariableRector::class);
+
     $services->set(ArrayDimFetchControlToGetComponentMethodCallRector::class);
 };
