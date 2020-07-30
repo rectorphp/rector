@@ -11,6 +11,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Testing\Contract\RunnableInterface;
+use Rector\Core\Testing\PHPUnit\DataProvider\StaticFixtureUpdater;
 use Rector\Core\Testing\ValueObject\SplitLine;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symplify\EasyTesting\StaticFixtureSplitter;
@@ -119,35 +120,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         } catch (ExpectationFailedException $expectationFailedException) {
             $contents = $expectedFileInfo->getContents();
 
-            $this->updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
+            StaticFixtureUpdater::updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
 
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
             $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);
         }
-    }
-
-    /**
-     * @todo decouple to symplify/easy-testing
-     */
-    private function updateFixtureContent(
-        SmartFileInfo $originalFileInfo,
-        string $changedContent,
-        SmartFileInfo $fixtureFileInfo
-    ): void {
-        if (! getenv('UPDATE_TESTS') && ! getenv('UT')) {
-            return;
-        }
-
-        $newOriginalContent = $this->resolveNewFixtureContent($originalFileInfo, $changedContent);
-        $this->smartFileSystem->dumpFile($fixtureFileInfo->getRealPath(), $newOriginalContent);
-    }
-
-    private function resolveNewFixtureContent(SmartFileInfo $originalFileInfo, string $changedContent): string
-    {
-        if ($originalFileInfo->getContents() === $changedContent) {
-            return $originalFileInfo->getContents();
-        }
-
-        return $originalFileInfo->getContents() . SplitLine::LINE . $changedContent;
     }
 }
