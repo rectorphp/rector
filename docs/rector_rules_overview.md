@@ -1,4 +1,4 @@
-# All 541 Rectors Overview
+# All 542 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -54,7 +54,7 @@
 - [Php72](#php72) (11)
 - [Php73](#php73) (10)
 - [Php74](#php74) (15)
-- [Php80](#php80) (11)
+- [Php80](#php80) (12)
 - [PhpDeglobalize](#phpdeglobalize) (1)
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 - [Polyfill](#polyfill) (2)
@@ -10554,6 +10554,47 @@ Change annotation to attribute
 +<<ORM\Entity>>
  class SomeClass
  {
+ }
+```
+
+<br><br>
+
+### `ChangeSwitchToMatchRector`
+
+- class: [`Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector`](/../master/rules/php80/src/Rector/Switch_/ChangeSwitchToMatchRector.php)
+- [test fixtures](/../master/rules/php80/tests/Rector/Switch_/ChangeSwitchToMatchRector/Fixture)
+
+Change `switch()` to `match()`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $statement = switch ($this->lexer->lookahead['type']) {
+-            case Lexer::T_SELECT:
+-                $statement = $this->SelectStatement();
+-                break;
+-
+-            case Lexer::T_UPDATE:
+-                $statement = $this->UpdateStatement();
+-                break;
+-
+-            case Lexer::T_DELETE:
+-                $statement = $this->DeleteStatement();
+-                break;
+-
+-            default:
+-                $this->syntaxError('SELECT, UPDATE or DELETE');
+-                break;
+-        }
++        $statement = match ($this->lexer->lookahead['type']) {
++            Lexer::T_SELECT => $this->SelectStatement(),
++            Lexer::T_UPDATE => $this->UpdateStatement(),
++            Lexer::T_DELETE => $this->DeleteStatement(),
++            default => $this->syntaxError('SELECT, UPDATE or DELETE'),
++        };
+     }
  }
 ```
 
