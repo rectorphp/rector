@@ -41,14 +41,14 @@ final class InSwitchPresenter extends Presenter
 {
     public function run($value)
     {
+        /** @var \Nette\Application\UI\Form $someForm */
+        $someForm = $this['some_form'];
+        /** @var \Nette\Application\UI\Form $anotherForm */
+        $anotherForm = $this['another_form'];
         switch ($value) {
             case 'form':
-                /** @var \Nette\Application\UI\Form $someForm */
-                $someForm = $this['some_form'];
                 return $someForm->getValues();
             case 'another_form':
-                /** @var \Nette\Application\UI\Form $anotherForm */
-                $anotherForm = $this['another_form'];
                 return $anotherForm->getValues();
         }
     }

@@ -5,14 +5,16 @@ namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayA
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
 
-final class NestedIssetUnsedPresenter extends Presenter
+final class NestedInIf extends Presenter
 {
-    public function run($controls)
+    public function run($value)
     {
-        foreach (\array_keys($controls) as $key) {
-            if (isset($this['someForm'][$key])) {
-                unset($this['someForm'][$key]);
-            }
+        if ($value) {
+            $this['someForm']->call();
+        }
+
+        if ($this['someForm']) {
+            return null;
         }
     }
 
@@ -31,16 +33,18 @@ namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayA
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
 
-final class NestedIssetUnsedPresenter extends Presenter
+final class NestedInIf extends Presenter
 {
-    public function run($controls)
+    public function run($value)
     {
         /** @var \Nette\Application\UI\Form $someForm */
         $someForm = $this['someForm'];
-        foreach (\array_keys($controls) as $key) {
-            if (isset($someForm[$key])) {
-                unset($someForm[$key]);
-            }
+        if ($value) {
+            $someForm->call();
+        }
+
+        if ($someForm) {
+            return null;
         }
     }
 

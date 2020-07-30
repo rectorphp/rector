@@ -2,20 +2,19 @@
 
 namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector\Fixture;
 
-use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
+use Nette\Application\UI\Presenter;
 
-final class NestedIssetUnsedPresenter extends Presenter
+final class OnParentCreateComponent extends SomeParentPresenter
 {
-    public function run($controls)
+    public function run()
     {
-        foreach (\array_keys($controls) as $key) {
-            if (isset($this['someForm'][$key])) {
-                unset($this['someForm'][$key]);
-            }
-        }
+        $this['someForm']->onSuccces[] = 'yes';
     }
+}
 
+abstract class SomeParentPresenter extends Presenter
+{
     protected function createComponentSomeForm()
     {
         return new Form();
@@ -28,22 +27,21 @@ final class NestedIssetUnsedPresenter extends Presenter
 
 namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector\Fixture;
 
-use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
+use Nette\Application\UI\Presenter;
 
-final class NestedIssetUnsedPresenter extends Presenter
+final class OnParentCreateComponent extends SomeParentPresenter
 {
-    public function run($controls)
+    public function run()
     {
         /** @var \Nette\Application\UI\Form $someForm */
         $someForm = $this['someForm'];
-        foreach (\array_keys($controls) as $key) {
-            if (isset($someForm[$key])) {
-                unset($someForm[$key]);
-            }
-        }
+        $someForm->onSuccces[] = 'yes';
     }
+}
 
+abstract class SomeParentPresenter extends Presenter
+{
     protected function createComponentSomeForm()
     {
         return new Form();
