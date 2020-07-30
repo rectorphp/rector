@@ -28,16 +28,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      */
     private $autoloadTestFixture = true;
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        // restore PHP version if changed
-        if ($this->getPhpVersion() !== '') {
-            $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
-        }
-    }
-
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {
         $this->autoloadTestFixture = false;
@@ -136,6 +126,9 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         }
     }
 
+    /**
+     * @todo decouple to symplify/easy-testing
+     */
     private function updateFixtureContent(
         SmartFileInfo $originalFileInfo,
         string $changedContent,
