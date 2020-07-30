@@ -32,6 +32,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see https://github.com/vimeo/psalm/blob/29b70442b11e3e66113935a2ee22e165a70c74a4/docs/fixing_code.md#possiblyundefinedvariable
  * @see https://3v4l.org/MZFel
+ *
  * @see \Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\AddDefaultValueForUndefinedVariableRectorTest
  */
 final class AddDefaultValueForUndefinedVariableRector extends AbstractRector
@@ -116,13 +117,18 @@ PHP
     private function collectUndefinedVariableScope(Node $node): array
     {
         $undefinedVariables = [];
+
         $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (&$undefinedVariables): ?int {
             // entering new scope - break!
             if ($node instanceof FunctionLike && ! $node instanceof ArrowFunction) {
                 return NodeTraverser::STOP_TRAVERSAL;
             }
 
-            $this->collectDefinedVariablesFromForeach($node);
+            if ($node instanceof Foreach_) {
+                // handled above
+                $this->collectDefinedVariablesFromForeach($node);
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
 
             if (! $node instanceof Variable) {
                 return null;
@@ -150,13 +156,9 @@ PHP
         return array_unique($undefinedVariables);
     }
 
-    private function collectDefinedVariablesFromForeach(Node $node): void
+    private function collectDefinedVariablesFromForeach(Foreach_ $foreach): void
     {
-        if (! $node instanceof Foreach_) {
-            return;
-        }
-
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node): void {
+        $this->traverseNodesWithCallable((array) $foreach->stmts, function (Node $node): void {
             if ($node instanceof Assign || $node instanceof AssignRef) {
                 if (! $node->var instanceof Variable) {
                     return;
