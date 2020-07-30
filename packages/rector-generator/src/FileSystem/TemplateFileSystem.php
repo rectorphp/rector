@@ -32,6 +32,14 @@ final class TemplateFileSystem
         $destination = $this->applyVariables($destination, $templateVariables);
 
         $destination = Strings::replace($destination, '#(__Configured|__Extra)#', '');
+
+        // remove ".inc" protection from PHPUnit if not a test case
+        if (! Strings::match($destination, '#/Fixture/#')) {
+            if (Strings::endsWith($destination, '.inc')) {
+                $destination = Strings::before($destination, '.inc');
+            }
+        }
+
         return $targetDirectory . DIRECTORY_SEPARATOR . $destination;
     }
 

@@ -6,7 +6,7 @@ namespace Rector\__Package__\Tests\Rector\__Category__\__Name__;
 
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class __Name__ExtraTest extends AbstractRectorTestCase
+final class __Name__Test extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
