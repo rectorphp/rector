@@ -6,6 +6,7 @@ namespace Rector\NetteCodeQuality\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -70,13 +71,22 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Node\Expr\Assign && $parent->var === $node) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
         $controlName = $this->controlDimFetchAnalyzer->matchNameOnControlVariable($node);
 
         return new MethodCall($node->var, 'getComponent', $this->createArgs([$controlName]));
+    }
+
+    private function shouldSkip(ArrayDimFetch $arrayDimFetch): bool
+    {
+        $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Assign && $parent->var === $arrayDimFetch) {
+            return true;
+        }
+
+        return $parent instanceof MethodCall;
     }
 }
