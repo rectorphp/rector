@@ -7,13 +7,18 @@ namespace Rector\NetteCodeQuality\Rector\ArrayDimFetch;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Naming\ArrayDimFetchRenamer;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -27,9 +32,17 @@ final class ChangeControlArrayAccessToAnnotatedControlVariableRector extends Abs
      */
     private $methodNamesByInputNamesResolver;
 
-    public function __construct(MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver)
-    {
+    /**
+     * @var ArrayDimFetchRenamer
+     */
+    private $arrayDimFetchRenamer;
+
+    public function __construct(
+        MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver,
+        ArrayDimFetchRenamer $arrayDimFetchRenamer
+    ) {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
+        $this->arrayDimFetchRenamer = $arrayDimFetchRenamer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -93,7 +106,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isBeingAssignedOrInitialized($node)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -102,7 +115,7 @@ PHP
             return null;
         }
 
-        // probably multiplier factory, nothing we can do
+        // probably multiplier factory, nothing we can do... yet
         if (Strings::contains($controlName, '-')) {
             return null;
         }
@@ -111,6 +124,11 @@ PHP
 
         $controlObjectType = $this->resolveControlType($node, $controlName);
         $this->addAssignExpressionForFirstCase($variableName, $node, $controlObjectType);
+
+        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod instanceof ClassMethod) {
+            $this->arrayDimFetchRenamer->renameToVariable($classMethod, $node, $variableName);
+        }
 
         return new Variable($variableName);
     }
@@ -129,5 +147,19 @@ PHP
         $controlType = $controlTypes[$controlName];
 
         return new ObjectType($controlType);
+    }
+
+    private function shouldSkip(ArrayDimFetch $arrayDimFetch): bool
+    {
+        if ($this->isBeingAssignedOrInitialized($arrayDimFetch)) {
+            return true;
+        }
+
+        $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Isset_ || $parent instanceof Unset_) {
+            return ! $arrayDimFetch->dim instanceof Variable;
+        }
+
+        return false;
     }
 }
