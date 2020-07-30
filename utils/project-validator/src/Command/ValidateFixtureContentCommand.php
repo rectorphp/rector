@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Rector\Utils\ProjectValidator\Command;
 
 use Nette\Utils\Strings;
-use Rector\Core\Testing\ValueObject\SplitLine;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
+use Symplify\EasyTesting\StaticFixtureSplitter;
+use Symplify\EasyTesting\ValueObject\SplitLine;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
@@ -87,13 +88,12 @@ final class ValidateFixtureContentCommand extends Command
 
     private function hasFileIdenticalCodeBeforeAndAfter(SmartFileInfo $smartFileInfo): bool
     {
-        $contents = $smartFileInfo->getContents();
-        if (! Strings::match($contents, SplitLine::REGEX)) {
+        if (! Strings::match($smartFileInfo->getContents(), SplitLine::SPLIT_LINE)) {
             return false;
         }
 
         // original → expected
-        [$originalContent, $expectedContent] = Strings::split($contents, SplitLine::REGEX);
+        [$originalContent, $expectedContent] = StaticFixtureSplitter::splitFileInfoToInputAndExpected($smartFileInfo);
 
         return $originalContent === $expectedContent;
     }

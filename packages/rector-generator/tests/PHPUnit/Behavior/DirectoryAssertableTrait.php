@@ -14,6 +14,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  *
  * Answer here
  * @see https://stackoverflow.com/questions/54263109/how-to-assert-2-directories-are-identical-in-phpunit
+ *
+ * @deprecated
+ * Use symplify after merged https://github.com/symplify/symplify/pull/2035
  */
 trait DirectoryAssertableTrait
 {
