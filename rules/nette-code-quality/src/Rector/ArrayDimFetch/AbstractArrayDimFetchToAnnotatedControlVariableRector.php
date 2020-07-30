@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NetteCodeQuality\Rector\ArrayDimFetch;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -11,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NetteCodeQuality\Naming\NetteControlNaming;
 use Rector\NetteCodeQuality\NodeAnalyzer\ControlDimFetchAnalyzer;
@@ -71,15 +73,9 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
             return;
         }
 
-        $assignExpression = $this->createAssignExpression($variableName, $arrayDimFetch);
+        $assignExpression = $this->createAnnotatedAssignExpression($variableName, $arrayDimFetch, $controlObjectType);
 
-        $this->varAnnotationManipulator->decorateNodeWithInlineVarType(
-            $assignExpression,
-            $controlObjectType,
-            $variableName
-        );
-
-        $currentStatement = $arrayDimFetch->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $currentStatement = $this->getClassMethodFirstLevelStatement($arrayDimFetch);
         $this->addNodeBeforeNode($assignExpression, $currentStatement);
     }
 
@@ -125,5 +121,45 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
         $this->alreadyInitializedAssignsClassMethodObjectHashes[] = $classMethodObjectHash;
 
         return false;
+    }
+
+    private function createAnnotatedAssignExpression(
+        string $variableName,
+        ArrayDimFetch $arrayDimFetch,
+        ObjectType $controlObjectType
+    ): Expression {
+        $assignExpression = $this->createAssignExpression($variableName, $arrayDimFetch);
+
+        $this->varAnnotationManipulator->decorateNodeWithInlineVarType(
+            $assignExpression,
+            $controlObjectType,
+            $variableName
+        );
+
+        return $assignExpression;
+    }
+
+    private function getClassMethodFirstLevelStatement(ArrayDimFetch $arrayDimFetch): Node
+    {
+        $classMethod = $arrayDimFetch->getAttribute(AttributeKey::METHOD_NODE);
+        if (! $classMethod instanceof ClassMethod) {
+            throw new ShouldNotHappenException();
+        }
+
+        $currentStatement = $arrayDimFetch->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (! $currentStatement instanceof Node) {
+            throw new ShouldNotHappenException();
+        }
+
+        while (! in_array($currentStatement, (array) $classMethod->stmts, true)) {
+            $parent = $currentStatement->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parent instanceof Node) {
+                throw new ShouldNotHappenException();
+            }
+
+            $currentStatement = $parent->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        }
+
+        return $currentStatement;
     }
 }
