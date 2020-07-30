@@ -6,6 +6,7 @@ use Rector\Core\Configuration\Option;
 use Rector\RectorGenerator\Rector\Closure\AddNewServiceToSymfonyPhpConfigRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
+use Symplify\SmartFileSystem\FileSystemGuard;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -25,6 +26,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddNewServiceToSymfonyPhpConfigRector::class)
         ->autowire(false);
+
+    $services->set(FileSystemGuard::class);
 
     $parameters = $containerConfigurator->parameters();
 
