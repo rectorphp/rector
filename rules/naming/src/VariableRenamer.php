@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -47,18 +48,26 @@ final class VariableRenamer
      */
     public function renameVariableInFunctionLike(
         FunctionLike $functionLike,
-        Assign $assign,
+        ?Assign $assign = null,
         string $oldName,
         string $expectedName
     ): void {
         $isRenamingActive = false;
 
+        if ($assign === null) {
+            $isRenamingActive = true;
+        }
+
         $this->callableNodeTraverser->traverseNodesWithCallable(
             (array) $functionLike->stmts,
             function (Node $node) use ($oldName, $expectedName, $assign, &$isRenamingActive) {
-                if ($node === $assign) {
+                if ($assign !== null && $node === $assign) {
                     $isRenamingActive = true;
                     return null;
+                }
+
+                if ($this->isScopingNode($node)) {
+                    return NodeTraverser::DONT_TRAVERSE_CHILDREN;
                 }
 
                 if (! $node instanceof Variable) {
@@ -84,5 +93,10 @@ final class VariableRenamer
         $this->varTagValueNodeRenamer->renameAssignVarTagVariableName($variable, $oldName, $expectedName);
 
         return $variable;
+    }
+
+    private function isScopingNode(Node $node): bool
+    {
+        return $node instanceof Closure || $node instanceof Function_ || $node instanceof ClassMethod;
     }
 }
