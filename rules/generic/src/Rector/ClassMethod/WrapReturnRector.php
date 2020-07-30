@@ -54,8 +54,10 @@ final class SomeClass
 PHP
                 ,
                 [
-                    'SomeClass' => [
-                        'getItem' => 'array',
+                    self::TYPE_TO_METHOD_TO_WRAP => [
+                        'SomeClass' => [
+                            'getItem' => 'array',
+                        ],
                     ],
                 ]
             ),

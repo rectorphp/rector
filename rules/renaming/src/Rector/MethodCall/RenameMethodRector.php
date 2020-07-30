@@ -52,9 +52,11 @@ $someObject->newMethod();
 PHP
                 ,
                 [
-                    'SomeExampleClass' => [
-                        '$oldToNewMethodsByClass' => [
-                            'oldMethod' => 'newMethod',
+                    self::OLD_TO_NEW_METHODS_BY_CLASS => [
+                        'SomeExampleClass' => [
+                            '$oldToNewMethodsByClass' => [
+                                'oldMethod' => 'newMethod',
+                            ],
                         ],
                     ],
                 ]

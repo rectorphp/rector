@@ -35,8 +35,10 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
                 'SomeClass::oldStaticMethod();',
                 'AnotherExampleClass::newStaticMethod();',
                 [
-                    'SomeClass' => [
-                        'oldMethod' => ['AnotherExampleClass', 'newStaticMethod'],
+                    self::OLD_TO_NEW_METHODS_BY_CLASSES => [
+                        'SomeClass' => [
+                            'oldMethod' => ['AnotherExampleClass', 'newStaticMethod'],
+                        ],
                     ],
                 ]
             ),
@@ -44,7 +46,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
                 'SomeClass::oldStaticMethod();',
                 'SomeClass::newStaticMethod();',
                 [
-                    '$oldToNewMethodByClasses' => [
+                    self::OLD_TO_NEW_METHODS_BY_CLASSES => [
                         'SomeClass' => [
                             'oldMethod' => 'newStaticMethod',
                         ],

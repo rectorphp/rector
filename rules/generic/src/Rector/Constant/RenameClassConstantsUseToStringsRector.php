@@ -34,9 +34,11 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector implem
                 '$value === Nette\Configurator::DEVELOPMENT',
                 '$value === "development"',
                 [
-                    'Nette\Configurator' => [
-                        'DEVELOPMENT' => 'development',
-                        'PRODUCTION' => 'production',
+                    self::OLD_CONSTANTS_TO_NEW_VALUES_BY_TYPE => [
+                        'Nette\Configurator' => [
+                            'DEVELOPMENT' => 'development',
+                            'PRODUCTION' => 'production',
+                        ],
                     ],
                 ]
             ),

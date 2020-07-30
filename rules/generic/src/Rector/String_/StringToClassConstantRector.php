@@ -53,7 +53,9 @@ final class SomeSubscriber
 PHP
                 ,
                 [
-                    'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
+                    self::STRINGS_TO_CLASS_CONSTANTS => [
+                        'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
+                    ],
                 ]
             ),
         ]);

@@ -2019,7 +2019,7 @@ use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(PreferThisOrSelfMethodCallRector::class)
-        ->call('configure', [['PHPUnit\TestCase', 'self']]);
+        ->call('configure', [['$typeToPreference', ['PHPUnit\TestCase' => 'self']]]);
 };
 ```
 
@@ -5449,7 +5449,7 @@ use Rector\Generic\Rector\Constant\RenameClassConstantsUseToStringsRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameClassConstantsUseToStringsRector::class)
-        ->call('configure', [['Nette\Configurator', ['DEVELOPMENT' => 'development', 'PRODUCTION' => 'production']]]);
+        ->call('configure', [['$oldConstantsToNewValuesByType', ['Nette\Configurator' => ['DEVELOPMENT' => 'development', 'PRODUCTION' => 'production']]]]);
 };
 ```
 
@@ -5633,7 +5633,7 @@ use Rector\Generic\Rector\String_\StringToClassConstantRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(StringToClassConstantRector::class)
-        ->call('configure', [['compiler.post_dump', ['Yet\AnotherClass', 'CONSTANT']]]);
+        ->call('configure', [['strings_to_class_constants', ['compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT']]]]);
 };
 ```
 
@@ -5724,7 +5724,7 @@ use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(WrapReturnRector::class)
-        ->call('configure', [['SomeClass', ['getItem' => 'array']]]);
+        ->call('configure', [['type_to_method_to_wrap', ['SomeClass' => ['getItem' => 'array']]]]);
 };
 ```
 
@@ -6130,7 +6130,7 @@ use Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(GetAndSetToMethodCallRector::class)
-        ->call('configure', [['SomeContainer', ['set' => 'addService']]]);
+        ->call('configure', [['type_to_method_calls', ['SomeContainer' => ['set' => 'addService']]]]);
 };
 ```
 
@@ -6252,7 +6252,7 @@ use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(UnsetAndIssetToMethodCallRector::class)
-        ->call('configure', [['SomeContainer', ['isset' => 'hasService']]]);
+        ->call('configure', [['type_to_method_calls', ['SomeContainer' => ['isset' => 'hasService']]]]);
 };
 ```
 
@@ -11528,7 +11528,7 @@ use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameClassConstantRector::class)
-        ->call('configure', [['SomeClass', ['OLD_CONSTANT' => 'NEW_CONSTANT', 'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT']]]);
+        ->call('configure', [['$oldToNewConstantsByClass', ['SomeClass' => ['OLD_CONSTANT' => 'NEW_CONSTANT', 'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT']]]]);
 };
 ```
 
@@ -11684,7 +11684,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameMethodRector::class)
-        ->call('configure', [['SomeExampleClass', ['$oldToNewMethodsByClass' => ['oldMethod' => 'newMethod']]]]);
+        ->call('configure', [['$oldToNewMethodsByClass', ['SomeExampleClass' => ['$oldToNewMethodsByClass' => ['oldMethod' => 'newMethod']]]]]);
 };
 ```
 
@@ -11743,7 +11743,7 @@ use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameStaticMethodRector::class)
-        ->call('configure', [['SomeClass', ['oldMethod' => ['AnotherExampleClass', 'newStaticMethod']]]]);
+        ->call('configure', [['$oldToNewMethodByClasses', ['SomeClass' => ['oldMethod' => ['AnotherExampleClass', 'newStaticMethod']]]]]);
 };
 ```
 

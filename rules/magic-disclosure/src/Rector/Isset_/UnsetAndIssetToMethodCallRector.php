@@ -53,8 +53,10 @@ $container->hasService("someKey");
 PHP
                 ,
                 [
-                    'SomeContainer' => [
-                        self::ISSET => 'hasService',
+                    self::TYPE_TO_METHOD_CALLS => [
+                        'SomeContainer' => [
+                            self::ISSET => 'hasService',
+                        ],
                     ],
                 ]
             ),

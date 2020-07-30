@@ -64,7 +64,11 @@ class SomeClass extends PHPUnit\TestCase
 }
 PHP
                 ,
-                ['PHPUnit\TestCase' => self::PREFER_SELF]
+                [
+                    self::TYPE_TO_PREFERENCE => [
+                        'PHPUnit\TestCase' => self::PREFER_SELF,
+                    ],
+                ]
             ),
         ]);
     }

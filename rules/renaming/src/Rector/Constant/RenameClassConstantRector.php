@@ -48,9 +48,11 @@ $value = DifferentClass::NEW_CONSTANT;
 PHP
                 ,
                 [
-                    'SomeClass' => [
-                        'OLD_CONSTANT' => 'NEW_CONSTANT',
-                        'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT',
+                    self::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
+                        'SomeClass' => [
+                            'OLD_CONSTANT' => 'NEW_CONSTANT',
+                            'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT',
+                        ],
                     ],
                 ]
             ),

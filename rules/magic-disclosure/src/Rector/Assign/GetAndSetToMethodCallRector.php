@@ -58,8 +58,10 @@ $container->setService("someService", $someService);
 PHP
                 ,
                 [
-                    'SomeContainer' => [
-                        'set' => 'addService',
+                    self::TYPE_TO_METHOD_CALLS => [
+                        'SomeContainer' => [
+                            'set' => 'addService',
+                        ],
                     ],
                 ]
             ),
