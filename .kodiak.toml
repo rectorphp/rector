@@ -3,3 +3,6 @@ version = 1
 
 [merge]
 delete_branch_on_merge = true
+
+# this should merge !fixup commits from Rector, lets give it a try
+method = rebase
