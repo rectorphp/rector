@@ -191,7 +191,10 @@ final class ValueResolver
         return $fileInfo->getPathname();
     }
 
-    private function resolveClassConstFetch(ClassConstFetch $classConstFetch): string
+    /**
+     * @return mixed
+     */
+    private function resolveClassConstFetch(ClassConstFetch $classConstFetch)
     {
         $class = $this->nodeNameResolver->getName($classConstFetch->class);
         $constant = $this->nodeNameResolver->getName($classConstFetch->name);
