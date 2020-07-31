@@ -32,7 +32,7 @@ final class ModalToGetSetRectorTest extends AbstractRectorTestCase
     {
         return [
             ModalToGetSetRector::class => [
-                '$methodNamesByTypes' => [
+                ModalToGetSetRector::METHOD_NAMES_BY_TYPES => [
                     SomeModelType::class => [
                         'config' => [
                             'get' => 'getConfig',

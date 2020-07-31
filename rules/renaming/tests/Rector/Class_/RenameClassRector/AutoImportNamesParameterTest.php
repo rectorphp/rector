@@ -42,7 +42,7 @@ final class AutoImportNamesParameterTest extends AbstractRectorTestCase
             # this class causes to "partial_expression.php.inc" to fail
             SimplifyEmptyArrayCheckRector::class => [],
             RenameClassRector::class => [
-                '$oldToNewClasses' => [
+                RenameClassRector::OLD_TO_NEW_CLASSES => [
                     OldClass::class => NewClass::class,
                 ],
             ],

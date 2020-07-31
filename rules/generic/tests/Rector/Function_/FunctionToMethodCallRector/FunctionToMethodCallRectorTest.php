@@ -31,7 +31,7 @@ final class FunctionToMethodCallRectorTest extends AbstractRectorTestCase
     {
         return [
             FunctionToMethodCallRector::class => [
-                '$functionToMethodCall' => [
+                FunctionToMethodCallRector::FUNCTION_TO_METHOD_CALL => [
                     'view' => ['this', 'render'],
                 ],
             ],

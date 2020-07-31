@@ -34,7 +34,7 @@ final class RenameMethodCallBasedOnParameterRectorTest extends AbstractRectorTes
     {
         return [
             RenameMethodCallBasedOnParameterRector::class => [
-                '$methodNamesByTypes' => [
+                RenameMethodCallBasedOnParameterRector::METHOD_NAMES_BY_TYPES => [
                     SomeModelType::class => [
                         'invalidNoOptions' => [],
                         'getParam' => [

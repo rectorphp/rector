@@ -31,7 +31,7 @@ final class FunctionToNewRectorTest extends AbstractRectorTestCase
     {
         return [
             FunctionToNewRector::class => [
-                '$functionToNew' => [
+                FunctionToNewRector::FUNCTION_TO_NEW => [
                     'collection' => ['Collection'],
                 ],
             ],

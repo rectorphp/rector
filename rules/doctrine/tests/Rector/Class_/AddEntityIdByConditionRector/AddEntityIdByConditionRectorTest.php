@@ -29,7 +29,7 @@ final class AddEntityIdByConditionRectorTest extends AbstractRectorTestCase
     {
         return [
             AddEntityIdByConditionRector::class => [
-                '$detectedTraits' => [SomeTrait::class],
+                AddEntityIdByConditionRector::DETECTED_TRAITS => [SomeTrait::class],
             ],
         ];
     }

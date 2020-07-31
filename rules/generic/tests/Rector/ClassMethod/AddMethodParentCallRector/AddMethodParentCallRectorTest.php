@@ -32,7 +32,7 @@ final class AddMethodParentCallRectorTest extends AbstractRectorTestCase
     {
         return [
             AddMethodParentCallRector::class => [
-                '$methodsByParentTypes' => [
+                AddMethodParentCallRector::METHODS_BY_PARENT_TYPES => [
                     ParentClassWithNewConstructor::class => ['__construct'],
                 ],
             ],

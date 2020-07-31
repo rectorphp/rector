@@ -33,7 +33,7 @@ final class NewToStaticCallRectorTest extends AbstractRectorTestCase
     {
         return [
             NewToStaticCallRector::class => [
-                '$typeToStaticCalls' => [
+                NewToStaticCallRector::TYPE_TO_STATIC_CALLS => [
                     FromNewClass::class => [IntoStaticClass::class, 'run'],
                 ],
             ],

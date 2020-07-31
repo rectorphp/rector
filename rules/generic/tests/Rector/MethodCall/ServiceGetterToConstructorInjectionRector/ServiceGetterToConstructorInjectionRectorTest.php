@@ -38,7 +38,7 @@ final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRector
     {
         return [
             ServiceGetterToConstructorInjectionRector::class => [
-                '$methodNamesByTypesToServiceTypes' => [
+                ServiceGetterToConstructorInjectionRector::METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES => [
                     FirstService::class => [
                         'getAnotherService' => AnotherService::class,
                     ],

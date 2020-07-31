@@ -30,7 +30,7 @@ final class AddInterfaceByTraitRectorTest extends AbstractRectorTestCase
     {
         return [
             AddInterfaceByTraitRector::class => [
-                '$interfaceByTrait' => [
+                AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
                     SomeTrait::class => SomeInterface::class,
                 ],
             ],

@@ -32,7 +32,7 @@ final class RemoveTraitRectorTest extends AbstractRectorTestCase
     {
         return [
             RemoveTraitRector::class => [
-                '$traitsToRemove' => [TraitToBeRemoved::class],
+                RemoveTraitRector::TRAITS_TO_REMOVE => [TraitToBeRemoved::class],
             ],
         ];
     }

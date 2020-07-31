@@ -31,7 +31,7 @@ final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCas
     {
         return [
             ArgumentDefaultValueReplacerRector::class => [
-                '$replacesByMethodAndTypes' => [
+                ArgumentDefaultValueReplacerRector::REPLACES_BY_METHOD_AND_TYPES => [
                     'Symfony\Component\DependencyInjection\Definition' => [
                         'setScope' => [
                             [

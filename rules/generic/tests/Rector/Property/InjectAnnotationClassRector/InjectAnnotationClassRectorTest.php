@@ -39,7 +39,7 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
     {
         return [
             InjectAnnotationClassRector::class => [
-                '$annotationClasses' => [Inject::class, PHPDIInject::class],
+                InjectAnnotationClassRector::ANNOTATION_CLASSES => [Inject::class, PHPDIInject::class],
             ],
         ];
     }

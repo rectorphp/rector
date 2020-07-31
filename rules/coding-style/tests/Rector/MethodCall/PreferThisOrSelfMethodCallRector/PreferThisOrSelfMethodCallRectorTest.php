@@ -33,7 +33,7 @@ final class PreferThisOrSelfMethodCallRectorTest extends AbstractRectorTestCase
     {
         return [
             PreferThisOrSelfMethodCallRector::class => [
-                '$typeToPreference' => [
+                PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
                     AbstractTestCase::class => 'self',
                     BeLocalClass::class => 'this',
                 ],

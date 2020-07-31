@@ -32,7 +32,7 @@ final class RemoveInterfacesRectorTest extends AbstractRectorTestCase
     {
         return [
             RemoveInterfacesRector::class => [
-                '$interfacesToRemove' => [SomeInterface::class],
+                RemoveInterfacesRector::INTERFACES_TO_REMOVE => [SomeInterface::class],
             ],
         ];
     }

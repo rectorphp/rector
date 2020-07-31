@@ -32,7 +32,7 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
     {
         return [
             AddReturnTypeDeclarationRector::class => [
-                '$typehintForMethodByClass' => [
+                AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
                     'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass' => [
                         'parse' => 'array',
                         'resolve' => 'SomeType',

@@ -28,7 +28,7 @@ final class FunctionCallToConstantRectorTest extends AbstractRectorTestCase
     {
         return [
             FunctionCallToConstantRector::class => [
-                '$functionsToConstants' => [
+                FunctionCallToConstantRector::FUNCTIONS_TO_CONSTANTS => [
                     'php_sapi_name' => 'PHP_SAPI',
                     'pi' => 'M_PI',
                 ],

@@ -31,7 +31,7 @@ final class ReservedObjectRectorTest extends AbstractRectorTestCase
     {
         return [
             ReservedObjectRector::class => [
-                '$reservedKeywordsToReplacements' => [
+                ReservedObjectRector::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
                     'ReservedObject' => 'SmartObject',
                     'Object' => 'AnotherSmartObject',
                 ],
