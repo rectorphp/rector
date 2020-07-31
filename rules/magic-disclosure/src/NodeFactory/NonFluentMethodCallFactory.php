@@ -54,8 +54,6 @@ final class NonFluentMethodCallFactory
                     $assignAndRootExpr->getSilentVariable(),
                     $assignAndRootExpr->getRootExpr()
                 );
-            } elseif (! $assignAndRootExpr->getRootExpr() instanceof New_) {
-                $decoupledMethodCalls[] = $assignAndRootExpr->getRootExpr();
             }
         }
 
