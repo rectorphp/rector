@@ -54,7 +54,7 @@ jobs:
 
             -   name: Commit Rector changes
                 if: steps.rector-git-check.outputs.modified == 'true'
-                run: git commit -am "fixup! ${COMMIT_MESSAGE}"
+                run: git commit -am "[rector] ${COMMIT_MESSAGE}"
 
             ## Now, there might be coding standard issues after running Rector
             -
@@ -69,7 +69,7 @@ jobs:
 
             -   name: Commit CS changes
                 if: steps.cs-git-check.outputs.modified == 'true'
-                run: git commit -am "fixup! fixup! ${COMMIT_MESSAGE}"
+                run: git commit -am "[cs] ${COMMIT_MESSAGE}"
 
 
             -   name: Push changes
