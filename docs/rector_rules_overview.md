@@ -1,4 +1,4 @@
-# All 544 Rectors Overview
+# All 545 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -19,7 +19,7 @@
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (40)
+- [Generic](#generic) (41)
 - [Guzzle](#guzzle) (1)
 - [Injection](#injection) (1)
 - [JMS](#jms) (2)
@@ -4961,6 +4961,36 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 +class SomeClass implements SomeInterface
  {
  }
+```
+
+<br><br>
+
+### `MethodCallRemoverRector`
+
+- class: [`Rector\Generic\Rector\MethodCall\MethodCallRemoverRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallRemoverRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/MethodCallRemoverRector/Fixture)
+
+Turns "$this->something()->anything()" to "$this->anything()"
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\MethodCall\MethodCallRemoverRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(MethodCallRemoverRector::class)
+        ->call('configure', [['$methodCallRemoverArgument', ['$methodCallRemoverArgument' => ['Car' => 'anything']]]]);
+};
+```
+
+↓
+
+```diff
+ $someObject = new Car;
+-$someObject->something()->anything();
++$someObject->anything();
 ```
 
 <br><br>
