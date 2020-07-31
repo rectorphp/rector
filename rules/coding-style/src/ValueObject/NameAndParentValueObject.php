@@ -11,15 +11,13 @@ use PhpParser\Node\Name;
 final class NameAndParentValueObject
 {
     /**
-     * @var Name|Identifier
-     */
-    private $nameNode;
-
-    /**
      * @var Node
      */
     private $parentNode;
-
+    /**
+     * @var Name|Identifier
+     */
+    private $nameNode;
     /**
      * @param Name|Identifier $nameNode
      */
@@ -28,7 +26,6 @@ final class NameAndParentValueObject
         $this->nameNode = $nameNode;
         $this->parentNode = $parentNode;
     }
-
     /**
      * @return Name|Identifier
      */
@@ -36,7 +33,6 @@ final class NameAndParentValueObject
     {
         return $this->nameNode;
     }
-
     public function getParentNode(): Node
     {
         return $this->parentNode;

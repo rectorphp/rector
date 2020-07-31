@@ -28,6 +28,10 @@ use Rector\Naming\VariableRenamer;
 final class RenamePropertyToMatchTypeRector extends AbstractRector
 {
     /**
+     * @var bool
+     */
+    private $hasChange = false;
+    /**
      * @var ConflictingNameResolver
      */
     private $conflictingNameResolver;
@@ -36,11 +40,6 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
      * @var ExpectedNameResolver
      */
     private $expectedNameResolver;
-
-    /**
-     * @var bool
-     */
-    private $hasChange = false;
 
     /**
      * @var BreakingVariableRenameGuard

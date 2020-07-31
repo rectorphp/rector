@@ -18,6 +18,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 {
     /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+    /**
      * @var string|null
      */
     private $methodName;
@@ -61,11 +65,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
      * @var Closure|null
      */
     private $closure;
-
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
 
     public function __construct(ClassNaming $classNaming)
     {

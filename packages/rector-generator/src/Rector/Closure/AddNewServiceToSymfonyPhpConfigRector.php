@@ -21,25 +21,21 @@ use Rector\SymfonyPhpConfig\NodeAnalyzer\SymfonyPhpConfigClosureAnalyzer;
 final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector
 {
     /**
-     * @var string|null
-     */
-    private $rectorClass;
-
-    /**
      * @var SymfonyPhpConfigClosureAnalyzer
      */
     private $symfonyPhpConfigClosureAnalyzer;
-
+    /**
+     * @var string|null
+     */
+    private $rectorClass;
     public function __construct(SymfonyPhpConfigClosureAnalyzer $symfonyPhpConfigClosureAnalyzer)
     {
         $this->symfonyPhpConfigClosureAnalyzer = $symfonyPhpConfigClosureAnalyzer;
     }
-
     public function setRectorClass(string $rectorClass): void
     {
         $this->rectorClass = $rectorClass;
     }
-
     /**
      * @return string[]
      */
@@ -47,7 +43,6 @@ final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector
     {
         return [Closure::class];
     }
-
     /**
      * @param Closure $node
      */
@@ -66,7 +61,6 @@ final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector
 
         return $node;
     }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Adds a new $services->set(...) call to PHP Config', [
@@ -90,7 +84,6 @@ CODE_SAMPLE
             ),
         ]);
     }
-
     private function createServicesSetMethodCall(string $className): MethodCall
     {
         $servicesVariable = new Variable('services');

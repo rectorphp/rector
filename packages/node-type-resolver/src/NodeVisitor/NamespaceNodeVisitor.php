@@ -14,30 +14,25 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NamespaceNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var string|null
-     */
-    private $namespaceName;
-
-    /**
      * @var Use_[]
      */
     private $useNodes = [];
-
-    /**
-     * @var Namespace_|null
-     */
-    private $namespace;
-
     /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
+    /**
+     * @var string|null
+     */
+    private $namespaceName;
+    /**
+     * @var Namespace_|null
+     */
+    private $namespace;
     public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-
     /**
      * @param Node[] $nodes
      * @return Node[]|null
@@ -54,7 +49,6 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
 
         return null;
     }
-
     public function enterNode(Node $node): ?Node
     {
         if ($node instanceof Namespace_) {

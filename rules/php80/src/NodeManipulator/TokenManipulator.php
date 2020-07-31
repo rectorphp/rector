@@ -50,11 +50,6 @@ final class TokenManipulator
     private $nodeNameResolver;
 
     /**
-     * @var Expr|null
-     */
-    private $assignedNameExpr;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -63,6 +58,10 @@ final class TokenManipulator
      * @var NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;
+    /**
+     * @var Expr|null
+     */
+    private $assignedNameExpr;
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,

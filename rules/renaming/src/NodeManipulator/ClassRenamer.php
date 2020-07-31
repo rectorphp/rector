@@ -28,6 +28,10 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
 final class ClassRenamer
 {
     /**
+     * @var string[]
+     */
+    private $alreadyProcessedClasses = [];
+    /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
@@ -46,11 +50,6 @@ final class ClassRenamer
      * @var PhpDocClassRenamer
      */
     private $phpDocClassRenamer;
-
-    /**
-     * @var string[]
-     */
-    private $alreadyProcessedClasses = [];
 
     /**
      * @var ClassNaming

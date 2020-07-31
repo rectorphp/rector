@@ -28,20 +28,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class SimplifyForeachToCoalescingRector extends AbstractRector
 {
     /**
-     * @var Return_|null
-     */
-    private $return;
-
-    /**
      * @var ForeachManipulator
      */
     private $foreachManipulator;
-
+    /**
+     * @var Return_|null
+     */
+    private $return;
     public function __construct(ForeachManipulator $foreachManipulator)
     {
         $this->foreachManipulator = $foreachManipulator;
     }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes foreach that returns set value to ??', [
@@ -62,7 +59,6 @@ PHP
             ),
         ]);
     }
-
     /**
      * @return string[]
      */
@@ -70,7 +66,6 @@ PHP
     {
         return [Foreach_::class];
     }
-
     /**
      * @param Foreach_ $node
      */
@@ -104,7 +99,6 @@ PHP
 
         return $this->processForeachNodeWithAssignInside($node, $returnOrAssignNode);
     }
-
     /**
      * @return Assign|Return_|null
      */
@@ -132,7 +126,6 @@ PHP
             return null;
         });
     }
-
     private function processForeachNodeWithReturnInside(Foreach_ $foreach, Return_ $return): ?Node
     {
         if (! $this->areNodesEqual($foreach->valueVar, $return->expr)) {
@@ -170,7 +163,6 @@ PHP
 
         return null;
     }
-
     private function processForeachNodeWithAssignInside(Foreach_ $foreach, Assign $assign): ?Node
     {
         /** @var If_ $ifNode */

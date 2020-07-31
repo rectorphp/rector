@@ -27,6 +27,14 @@ final class OrderPropertyByComplexityRector extends AbstractRector
      * @var PropertyRanker
      */
     private $propertyRanker;
+    /**
+     * @var string
+     */
+    private const RANK = 'rank';
+    /**
+     * @var string
+     */
+    private const POSITION = 'position';
 
     public function __construct(PropertyRanker $propertyRanker, StmtOrder $stmtOrder)
     {
@@ -109,8 +117,8 @@ PHP
                 $propertyName = $this->getName($property);
 
                 $propertyPositionByName[$position] = $propertyName;
-                $propertyNameToRank[$propertyName]['rank'] = $this->propertyRanker->rank($property);
-                $propertyNameToRank[$propertyName]['position'] = $position;
+                $propertyNameToRank[$propertyName][self::RANK] = $this->propertyRanker->rank($property);
+                $propertyNameToRank[$propertyName][self::POSITION] = $position;
             }
 
             $sortedPropertyByRank = $this->getSortedPropertiesByRankAndPosition($propertyNameToRank);
@@ -159,9 +167,9 @@ PHP
         uasort(
             $propertyNameToRank,
             function (array $firstArray, array $secondArray): int {
-                return [$firstArray['rank'], $firstArray['position']] <=> [
-                    $secondArray['rank'],
-                    $secondArray['position'],
+                return [$firstArray[self::RANK], $firstArray[self::POSITION]] <=> [
+                    $secondArray[self::RANK],
+                    $secondArray[self::POSITION],
                 ];
             }
         );

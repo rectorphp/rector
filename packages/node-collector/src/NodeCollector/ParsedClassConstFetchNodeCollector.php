@@ -18,6 +18,10 @@ use ReflectionClass;
 final class ParsedClassConstFetchNodeCollector
 {
     /**
+     * @var string[][][]
+     */
+    private $classConstantFetchByClassAndName = [];
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -26,11 +30,6 @@ final class ParsedClassConstFetchNodeCollector
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
-
-    /**
-     * @var string[][][]
-     */
-    private $classConstantFetchByClassAndName = [];
 
     public function __construct(NodeNameResolver $nodeNameResolver)
     {

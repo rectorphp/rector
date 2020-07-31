@@ -31,16 +31,17 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
      * @var int
      */
     private const MAX_LOOKING_FOR_ASSERT_METHOD_CALL_NESTING_LEVEL = 3;
+    /**
+     * This should prevent segfaults while going too deep into to parsed code.
+     * Without it, it might end-up with segfault
+     * @var int
+     */
+    private $classMethodNestingLevel = 0;
 
     /**
      * @var bool[]
      */
     private $containsAssertCallByClassMethod = [];
-
-    /**
-     * @var ClassMethod[][]|null[][]
-     */
-    private $analyzedMethodsInFileName = [];
 
     /**
      * @var FileInfoParser
@@ -53,11 +54,9 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
     private $classMethodReflectionFactory;
 
     /**
-     * This should prevent segfaults while going too deep into to parsed code.
-     * Without it, it might end-up with segfault
-     * @var int
+     * @var ClassMethod[][]|null[][]
      */
-    private $classMethodNestingLevel = 0;
+    private $analyzedMethodsInFileName = [];
 
     public function __construct(
         ClassMethodReflectionFactory $classMethodReflectionFactory,

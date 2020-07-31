@@ -10,25 +10,21 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class CurrentFileInfoProvider
 {
     /**
-     * @var SmartFileInfo|null
-     */
-    private $smartFileInfo;
-
-    /**
      * @var Node[]
      */
     private $currentStmts = [];
-
+    /**
+     * @var SmartFileInfo|null
+     */
+    private $smartFileInfo;
     public function setCurrentFileInfo(SmartFileInfo $smartFileInfo): void
     {
         $this->smartFileInfo = $smartFileInfo;
     }
-
     public function getSmartFileInfo(): ?SmartFileInfo
     {
         return $this->smartFileInfo;
     }
-
     /**
      * @param Node[] $stmts
      */
@@ -36,7 +32,6 @@ final class CurrentFileInfoProvider
     {
         $this->currentStmts = $stmts;
     }
-
     /**
      * @return Node[]
      */

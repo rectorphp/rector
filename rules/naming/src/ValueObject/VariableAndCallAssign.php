@@ -18,9 +18,17 @@ use PhpParser\Node\Stmt\Function_;
 final class VariableAndCallAssign
 {
     /**
+     * @var string
+     */
+    private $variableName;
+    /**
      * @var Variable
      */
     private $variable;
+    /**
+     * @var Assign
+     */
+    private $assign;
 
     /**
      * @var FuncCall|MethodCall|StaticCall
@@ -28,19 +36,9 @@ final class VariableAndCallAssign
     private $call;
 
     /**
-     * @var string
-     */
-    private $variableName;
-
-    /**
      * @var ClassMethod|Function_|Closure
      */
     private $functionLike;
-
-    /**
-     * @var Assign
-     */
-    private $assign;
 
     /**
      * @param FuncCall|StaticCall|MethodCall $expr

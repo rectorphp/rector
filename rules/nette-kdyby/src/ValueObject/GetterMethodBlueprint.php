@@ -14,14 +14,13 @@ final class GetterMethodBlueprint
     private $methodName;
 
     /**
-     * @var Node|null
-     */
-    private $returnTypeNode;
-
-    /**
      * @var string
      */
     private $variableName;
+    /**
+     * @var Node|null
+     */
+    private $returnTypeNode;
 
     public function __construct(string $methodName, ?Node $returnTypeNode, string $variableName)
     {

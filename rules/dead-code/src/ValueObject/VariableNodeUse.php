@@ -37,14 +37,13 @@ final class VariableNodeUse
     private $type;
 
     /**
-     * @var string|null
-     */
-    private $nestingHash;
-
-    /**
      * @var Variable
      */
     private $variable;
+    /**
+     * @var string|null
+     */
+    private $nestingHash;
 
     public function __construct(
         int $startTokenPosition,

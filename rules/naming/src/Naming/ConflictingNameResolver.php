@@ -17,6 +17,10 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ConflictingNameResolver
 {
     /**
+     * @var string[][]
+     */
+    private $conflictingVariableNamesByClassMethod = [];
+    /**
      * @var ExpectedNameResolver
      */
     private $expectedNameResolver;
@@ -30,11 +34,6 @@ final class ConflictingNameResolver
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
-    /**
-     * @var string[][]
-     */
-    private $conflictingVariableNamesByClassMethod = [];
 
     /**
      * @var ArrayFilter

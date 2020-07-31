@@ -18,6 +18,14 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
      * @var bool
      */
     private $haveUniqueConstraintsFinalComma = false;
+    /**
+     * @var IndexTagValueNode[]
+     */
+    private $indexes = [];
+    /**
+     * @var UniqueConstraintTagValueNode[]
+     */
+    private $uniqueConstraints = [];
 
     /**
      * @var string|null
@@ -38,16 +46,6 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
      * @var string|null
      */
     private $uniqueConstraintsClosingSpace;
-
-    /**
-     * @var IndexTagValueNode[]
-     */
-    private $indexes = [];
-
-    /**
-     * @var UniqueConstraintTagValueNode[]
-     */
-    private $uniqueConstraints = [];
 
     /**
      * @param mixed[] $options

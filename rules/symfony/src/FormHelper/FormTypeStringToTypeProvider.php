@@ -48,14 +48,13 @@ final class FormTypeStringToTypeProvider
     ];
 
     /**
-     * @var ServiceMapProvider
-     */
-    private $serviceMapProvider;
-
-    /**
      * @var array<string, string>
      */
     private $customServiceFormTypeByAlias = [];
+    /**
+     * @var ServiceMapProvider
+     */
+    private $serviceMapProvider;
 
     public function __construct(ServiceMapProvider $serviceMapProvider)
     {

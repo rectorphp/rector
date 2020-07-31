@@ -45,6 +45,10 @@ final class PhpDocInfo
      * @var string
      */
     private $originalContent;
+    /**
+     * @var bool
+     */
+    private $isSingleLine = false;
 
     /**
      * @var mixed[]
@@ -70,11 +74,6 @@ final class PhpDocInfo
      * @var Node
      */
     private $node;
-
-    /**
-     * @var bool
-     */
-    private $isSingleLine = false;
 
     /**
      * @var PhpDocTypeChanger

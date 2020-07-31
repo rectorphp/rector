@@ -28,11 +28,6 @@ final class TemplatePropertyAssignCollector
     private $nodesToRemove = [];
 
     /**
-     * @var Expr|null
-     */
-    private $templateFileExpr;
-
-    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -41,6 +36,10 @@ final class TemplatePropertyAssignCollector
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var Expr|null
+     */
+    private $templateFileExpr;
 
     public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {

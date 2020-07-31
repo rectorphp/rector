@@ -48,9 +48,9 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMov
     ];
 
     /**
-     * @var ClassAnalyzer
+     * @var bool
      */
-    private $classAnalyzer;
+    private $enableValueObjectGuessing = true;
 
     /**
      * @var string[]
@@ -63,9 +63,9 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMov
     private $suffixes = [];
 
     /**
-     * @var bool
+     * @var ClassAnalyzer
      */
-    private $enableValueObjectGuessing = true;
+    private $classAnalyzer;
 
     public function __construct(ClassAnalyzer $classAnalyzer)
     {

@@ -12,14 +12,13 @@ final class DecoupleClassMethodMatch
     private $className;
 
     /**
-     * @var string|null
-     */
-    private $parentClassName;
-
-    /**
      * @var string
      */
     private $methodName;
+    /**
+     * @var string|null
+     */
+    private $parentClassName;
 
     public function __construct(string $className, string $methodName, ?string $parentClassName = null)
     {
