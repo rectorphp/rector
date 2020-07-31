@@ -32,7 +32,7 @@ final class DefluentMethodCallRectorTest extends AbstractRectorTestCase
     {
         return [
             DefluentMethodCallRector::class => [
-                '$namesToDefluent' => [FluentInterfaceClassInterface::class, '*Command'],
+                DefluentMethodCallRector::TYPES_TO_MATCH => [FluentInterfaceClassInterface::class, '*Command'],
             ],
         ];
     }

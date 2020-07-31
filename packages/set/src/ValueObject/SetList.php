@@ -9,6 +9,11 @@ final class SetList
     /**
      * @var string
      */
+    public const DEFLUENT = 'defluent';
+
+    /**
+     * @var string
+     */
     public const ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION = 'action-injection-to-constructor-injection';
 
     /**

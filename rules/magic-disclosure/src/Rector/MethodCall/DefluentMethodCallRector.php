@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
@@ -17,6 +18,7 @@ use Rector\MagicDisclosure\NodeManipulator\ChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/
@@ -107,6 +109,8 @@ PHP
             $chainMethodCalls
         );
 
+        $nodesToAdd = $this->addFluentAsArg($node, $assignAndRootExpr, $nodesToAdd);
+
         $this->removeCurrentNode($node);
 
         foreach ($nodesToAdd as $nodeToAdd) {
@@ -183,6 +187,39 @@ PHP
             return;
         }
 
+        // part of method call
+        if ($parentNode instanceof Arg) {
+            $parentParent = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentParent instanceof MethodCall) {
+                $this->removeNode($parentParent);
+            }
+            return;
+        }
+
         $this->removeNode($node);
+    }
+
+    /**
+     * @param Return_|MethodCall $node
+     * @param Node[] $nodesToAdd
+     * @return Node[]
+     */
+    private function addFluentAsArg(Node $node, AssignAndRootExpr $assignAndRootExpr, array $nodesToAdd): array
+    {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Arg) {
+            return $nodesToAdd;
+        }
+
+        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentParent instanceof MethodCall) {
+            return $nodesToAdd;
+        }
+
+        $lastMethodCall = new MethodCall($parentParent->var, $parentParent->name);
+        $lastMethodCall->args[] = new Arg($assignAndRootExpr->getRootExpr());
+        $nodesToAdd[] = $lastMethodCall;
+
+        return $nodesToAdd;
     }
 }

@@ -72,6 +72,10 @@ abstract class AbstractConfigurableMatchTypeRector extends AbstractRector
             if (fnmatch($typeToMatch, $currentType, FNM_NOESCAPE)) {
                 return true;
             }
+
+            if (is_a($currentType, $typeToMatch, true)) {
+                return true;
+            }
         }
 
         return false;

@@ -33,7 +33,7 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
     {
         return [
             ArgumentAdderRector::class => [
-                '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+                ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
                     SomeContainerBuilder::class => [
                         'compile' => [
                             0 => [

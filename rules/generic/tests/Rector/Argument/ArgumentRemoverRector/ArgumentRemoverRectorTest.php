@@ -33,9 +33,8 @@ final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            ArgumentRemoverRector::class =>
-            [
-                '$positionsByMethodNameByClassType' => [
+            ArgumentRemoverRector::class => [
+                ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
                     Persister::class => [
                         'getSelectJoinColumnSQL' => [
                             4 => null,

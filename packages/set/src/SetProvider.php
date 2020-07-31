@@ -19,6 +19,7 @@ final class SetProvider extends AbstractSetProvider
     public function __construct()
     {
         $setNamesToSetPaths = [
+            SetList::DEFLUENT => __DIR__ . '/../../../config/set/defluent.php',
             SetList::ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION => __DIR__ . '/../../../config/set/action-injection-to-constructor-injection.php',
             SetList::ARRAY_STR_FUNCTIONS_TO_STATIC_CALL => __DIR__ . '/../../../config/set/laravel-array-str-functions-to-static-call.php',
             SetList::CAKEPHP_30 => __DIR__ . '/../../../config/set/cakephp30.php',

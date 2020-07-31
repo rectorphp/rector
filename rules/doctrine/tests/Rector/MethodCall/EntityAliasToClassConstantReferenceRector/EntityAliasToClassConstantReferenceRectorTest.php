@@ -31,7 +31,7 @@ final class EntityAliasToClassConstantReferenceRectorTest extends AbstractRector
     {
         return [
             EntityAliasToClassConstantReferenceRector::class => [
-                '$aliasesToNamespaces' => [
+                EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => [
                     'App' => 'App\Entity',
                 ],
             ],
