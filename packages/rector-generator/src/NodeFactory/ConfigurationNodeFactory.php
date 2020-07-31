@@ -39,6 +39,11 @@ final class ConfigurationNodeFactory
      */
     private $phpDocInfoFactory;
 
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
     public function __construct(
         NodeFactory $nodeFactory,
         ParameterProvider $parameterProvider,
@@ -46,9 +51,7 @@ final class ConfigurationNodeFactory
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-
-        // so types are PHP 7.2 compatible
-        $parameterProvider->changeParameter(Option::PHP_VERSION_FEATURES, PhpVersionFeature::BEFORE_TYPED_PROPERTIES);
+        $this->parameterProvider = $parameterProvider;
     }
 
     /**
@@ -57,6 +60,8 @@ final class ConfigurationNodeFactory
      */
     public function createProperties(array $ruleConfiguration): array
     {
+        $this->lowerPhpVersion();
+
         $properties = [];
         foreach (array_keys($ruleConfiguration) as $constantName) {
             $propertyName = StaticRectorStrings::uppercaseUnderscoreToPascalCase($constantName);
@@ -92,6 +97,8 @@ final class ConfigurationNodeFactory
      */
     public function createConfigureClassMethod(array $ruleConfiguration): ClassMethod
     {
+        $this->lowerPhpVersion();
+
         $classMethod = $this->nodeFactory->createPublicMethod('configure');
         $classMethod->returnType = new Identifier('void');
 
@@ -130,5 +137,16 @@ final class ConfigurationNodeFactory
         $emptyArray = new Array_([]);
 
         return new Coalesce($arrayDimFetch, $emptyArray);
+    }
+
+    /**
+     * So types are PHP 7.2 compatible
+     */
+    private function lowerPhpVersion(): void
+    {
+        $this->parameterProvider->changeParameter(
+            Option::PHP_VERSION_FEATURES,
+            PhpVersionFeature::BEFORE_TYPED_PROPERTIES
+        );
     }
 }
