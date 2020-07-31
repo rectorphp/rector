@@ -94,7 +94,12 @@ PHP
             return null;
         }
 
+        if ($this->isGetterMethodCall($methodCall)) {
+            return null;
+        }
+
         $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
+
         $assignAndRootExpr = $this->chainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
         if ($assignAndRootExpr === null) {
             return null;
@@ -221,5 +226,17 @@ PHP
         $nodesToAdd[] = $lastMethodCall;
 
         return $nodesToAdd;
+    }
+
+    private function isGetterMethodCall(MethodCall $methodCall): bool
+    {
+        if ($methodCall->var instanceof MethodCall) {
+            return false;
+        }
+        $methodCallStaticType = $this->getStaticType($methodCall);
+        $methodCallVarStaticType = $this->getStaticType($methodCall->var);
+
+        // getter short call type
+        return ! $methodCallStaticType->equals($methodCallVarStaticType);
     }
 }
