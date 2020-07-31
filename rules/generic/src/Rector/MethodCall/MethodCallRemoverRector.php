@@ -41,7 +41,7 @@ PHP
                 [
                     self::METHOD_CALL_REMOVER_ARGUMENT => [
                         self::METHOD_CALL_REMOVER_ARGUMENT => [
-                            'Car' => 'anything',
+                            'Car' => 'something',
                         ],
                     ],
                 ]
