@@ -58,6 +58,7 @@ final class TokenManipulator
      * @var NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;
+
     /**
      * @var Expr|null
      */

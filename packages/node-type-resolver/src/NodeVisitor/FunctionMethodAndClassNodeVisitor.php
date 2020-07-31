@@ -21,6 +21,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
      * @var ClassNaming
      */
     private $classNaming;
+
     /**
      * @var string|null
      */

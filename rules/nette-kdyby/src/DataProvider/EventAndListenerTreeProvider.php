@@ -27,6 +27,7 @@ final class EventAndListenerTreeProvider
      * @var EventAndListenerTree[]
      */
     private $eventAndListenerTrees = [];
+
     /**
      * @var OnPropertyMagicCallProvider
      */

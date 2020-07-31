@@ -30,6 +30,7 @@ final class ReturnClosurePrinter
      * @var string
      */
     private const CONTAINER_CONFIGURATOR = 'containerConfigurator';
+
     /**
      * @var Node[]
      */

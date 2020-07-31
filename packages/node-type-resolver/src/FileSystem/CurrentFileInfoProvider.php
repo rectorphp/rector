@@ -13,18 +13,22 @@ final class CurrentFileInfoProvider
      * @var Node[]
      */
     private $currentStmts = [];
+
     /**
      * @var SmartFileInfo|null
      */
     private $smartFileInfo;
+
     public function setCurrentFileInfo(SmartFileInfo $smartFileInfo): void
     {
         $this->smartFileInfo = $smartFileInfo;
     }
+
     public function getSmartFileInfo(): ?SmartFileInfo
     {
         return $this->smartFileInfo;
     }
+
     /**
      * @param Node[] $stmts
      */
@@ -32,6 +36,7 @@ final class CurrentFileInfoProvider
     {
         $this->currentStmts = $stmts;
     }
+
     /**
      * @return Node[]
      */

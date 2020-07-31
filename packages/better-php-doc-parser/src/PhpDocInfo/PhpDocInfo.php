@@ -45,6 +45,7 @@ final class PhpDocInfo
      * @var string
      */
     private $originalContent;
+
     /**
      * @var bool
      */

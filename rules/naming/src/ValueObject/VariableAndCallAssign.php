@@ -21,10 +21,12 @@ final class VariableAndCallAssign
      * @var string
      */
     private $variableName;
+
     /**
      * @var Variable
      */
     private $variable;
+
     /**
      * @var Assign
      */

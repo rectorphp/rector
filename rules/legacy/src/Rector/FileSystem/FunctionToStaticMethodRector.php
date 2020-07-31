@@ -29,14 +29,17 @@ final class FunctionToStaticMethodRector extends AbstractFileSystemRector
      * @var StaticCallPointer[]
      */
     private $functionNameToClassStaticMethod = [];
+
     /**
      * @var ClassNaming
      */
     private $classNaming;
+
     public function __construct(ClassNaming $classNaming)
     {
         $this->classNaming = $classNaming;
     }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change functions to static calls, so composer can autoload them', [
@@ -63,6 +66,7 @@ PHP
             ),
         ]);
     }
+
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
         $nodes = $this->parseFileInfoToNodes($smartFileInfo);
@@ -120,6 +124,7 @@ PHP
         $nodesWithFileDestination = new NodesWithFileDestination($nodesToPrint, $classFilePath, $smartFileInfo);
         $this->printNodesWithFileDestination($nodesWithFileDestination);
     }
+
     /**
      * @param Node[] $nodes
      * @return Node[]
@@ -137,6 +142,7 @@ PHP
 
         return [$class];
     }
+
     /**
      * @param Node[] $nodes
      * @return Node[]
@@ -151,6 +157,7 @@ PHP
 
         return $namespace->stmts;
     }
+
     private function getFullyQualifiedName(array $nodes, string $shortClassName): string
     {
         /** @var Namespace_|null $namespace */
@@ -166,6 +173,7 @@ PHP
 
         return $namespaceName . '\\' . $shortClassName;
     }
+
     private function createClassMethodFromFunction(string $methodName, Function_ $function): ClassMethod
     {
         $methodBuilder = new MethodBuilder($methodName);

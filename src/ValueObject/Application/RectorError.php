@@ -12,18 +12,22 @@ final class RectorError
      * @var string
      */
     private $message;
+
     /**
      * @var SmartFileInfo
      */
     private $fileInfo;
+
     /**
      * @var int|null
      */
     private $line;
+
     /**
      * @var string|null
      */
     private $rectorClass;
+
     public function __construct(
         SmartFileInfo $smartFileInfo,
         string $message,
@@ -35,18 +39,22 @@ final class RectorError
         $this->line = $line;
         $this->rectorClass = $rectorClass;
     }
+
     public function getFileInfo(): SmartFileInfo
     {
         return $this->fileInfo;
     }
+
     public function getMessage(): string
     {
         return $this->message;
     }
+
     public function getLine(): ?int
     {
         return $this->line;
     }
+
     public function getRectorClass(): ?string
     {
         return $this->rectorClass;

@@ -31,6 +31,7 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
      * @var bool
      */
     private $hasChange = false;
+
     /**
      * @var ConflictingNameResolver
      */

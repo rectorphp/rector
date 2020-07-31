@@ -36,6 +36,7 @@ final class TemplatePropertyAssignCollector
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
+
     /**
      * @var Expr|null
      */

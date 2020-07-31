@@ -22,6 +22,7 @@ final class ConfiguredCodeSample implements CodeSampleInterface
      * @var mixed[]
      */
     private $configuration = [];
+
     /**
      * @var string|null
      */

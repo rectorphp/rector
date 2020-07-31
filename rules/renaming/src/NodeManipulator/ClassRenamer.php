@@ -31,6 +31,7 @@ final class ClassRenamer
      * @var string[]
      */
     private $alreadyProcessedClasses = [];
+
     /**
      * @var DocBlockManipulator
      */

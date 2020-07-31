@@ -18,10 +18,12 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
      * @var bool
      */
     private $haveUniqueConstraintsFinalComma = false;
+
     /**
      * @var IndexTagValueNode[]
      */
     private $indexes = [];
+
     /**
      * @var UniqueConstraintTagValueNode[]
      */

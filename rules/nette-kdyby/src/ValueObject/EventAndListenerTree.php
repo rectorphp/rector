@@ -21,10 +21,12 @@ final class EventAndListenerTree
      * @var string
      */
     private $eventFileLocation;
+
     /**
      * @var ClassMethod[][]
      */
     private $listenerClassMethodsByEventSubscriberClass = [];
+
     /**
      * @var GetterMethodBlueprint[]
      */

@@ -49,10 +49,12 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
      * @var ClassInsertManipulator
      */
     private $classInsertManipulator;
+
     /**
      * @var string|null
      */
     private $newNamespace;
+
     /**
      * @var string[][]|null[]
      */

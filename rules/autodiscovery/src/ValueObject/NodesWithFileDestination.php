@@ -19,6 +19,7 @@ final class NodesWithFileDestination
      * @var Node[]
      */
     private $nodes = [];
+
     /**
      * @var SmartFileInfo
      */

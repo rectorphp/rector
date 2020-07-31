@@ -34,10 +34,12 @@ final class ForToForeachRector extends AbstractRector
      * @var AssignManipulator
      */
     private $assignManipulator;
+
     /**
      * @var Inflector
      */
     private $inflector;
+
     /**
      * @var string|null
      */

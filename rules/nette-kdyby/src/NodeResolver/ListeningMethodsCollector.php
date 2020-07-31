@@ -28,6 +28,7 @@ final class ListeningMethodsCollector
      * @var string
      */
     public const EVENT_TYPE_CUSTOM = 'custom';
+
     /**
      * @var array<string, ClassMethod>
      */

@@ -75,6 +75,7 @@ final class Configuration
      * @var string[]
      */
     private $paths = [];
+
     /**
      * @var CiDetector
      */
@@ -89,10 +90,12 @@ final class Configuration
      * @var ParameterProvider
      */
     private $parameterProvider;
+
     /**
      * @var SmartFileInfo|null
      */
     private $configFileInfo;
+
     /**
      * @var string|null
      */

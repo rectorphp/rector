@@ -21,14 +21,17 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
      * @var AffectedFilesCollector
      */
     private $affectedFilesCollector;
+
     /**
      * @var BreakingRemovalGuard
      */
     private $breakingRemovalGuard;
+
     /**
      * @var Stmt[]|Node[]
      */
     private $nodesToRemove = [];
+
     public function __construct(
         AffectedFilesCollector $affectedFilesCollector,
         BreakingRemovalGuard $breakingRemovalGuard
@@ -36,6 +39,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
         $this->affectedFilesCollector = $affectedFilesCollector;
         $this->breakingRemovalGuard = $breakingRemovalGuard;
     }
+
     public function addNodeToRemove(Node $node): void
     {
         // chain call: "->method()->another()"
@@ -58,18 +62,22 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
         /** @var Stmt $node */
         $this->nodesToRemove[] = $node;
     }
+
     public function isNodeRemoved(Node $node): bool
     {
         return in_array($node, $this->nodesToRemove, true);
     }
+
     public function isActive(): bool
     {
         return $this->getCount() > 0;
     }
+
     public function getCount(): int
     {
         return count($this->nodesToRemove);
     }
+
     /**
      * @return Node[]|Stmt[]
      */
@@ -77,10 +85,12 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
     {
         return $this->nodesToRemove;
     }
+
     public function unset(int $key): void
     {
         unset($this->nodesToRemove[$key]);
     }
+
     private function ensureIsNotPartOfChainMethodCall(Node $node): void
     {
         if (! $node instanceof MethodCall) {

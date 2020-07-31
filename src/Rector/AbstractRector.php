@@ -100,6 +100,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var ClassNodeAnalyzer
      */
     private $classNodeAnalyzer;
+
     /**
      * @var string|null
      */

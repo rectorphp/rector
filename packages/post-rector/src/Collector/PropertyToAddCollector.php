@@ -16,22 +16,27 @@ final class PropertyToAddCollector implements NodeCollectorInterface
      * @var ClassConst[][]
      */
     private $constantsByClass = [];
+
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
+
     /**
      * @var Type[][]|null[][]
      */
     private $propertiesByClass = [];
+
     /**
      * @var Type[][]|null[][]
      */
     private $propertiesWithoutConstructorByClass = [];
+
     public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
+
     public function isActive(): bool
     {
         if (count($this->propertiesByClass) > 0) {
@@ -44,15 +49,18 @@ final class PropertyToAddCollector implements NodeCollectorInterface
 
         return count($this->constantsByClass) > 0;
     }
+
     public function addPropertyToClass(string $propertyName, ?Type $propertyType, Class_ $class): void
     {
         $this->propertiesByClass[spl_object_hash($class)][$propertyName] = $propertyType;
     }
+
     public function addConstantToClass(Class_ $class, ClassConst $classConst): void
     {
         $constantName = $this->nodeNameResolver->getName($classConst);
         $this->constantsByClass[spl_object_hash($class)][$constantName] = $classConst;
     }
+
     public function addPropertyWithoutConstructorToClass(
         string $propertyName,
         ?Type $propertyType,
@@ -60,6 +68,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     ): void {
         $this->propertiesWithoutConstructorByClass[spl_object_hash($class)][$propertyName] = $propertyType;
     }
+
     /**
      * @var ClassConst[]
      */
@@ -68,6 +77,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
         $classHash = spl_object_hash($class);
         return $this->constantsByClass[$classHash] ?? [];
     }
+
     /**
      * @var Type[]|null[]
      */
@@ -76,6 +86,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
         $classHash = spl_object_hash($class);
         return $this->propertiesByClass[$classHash] ?? [];
     }
+
     /**
      * @var Type[]|null[]
      */

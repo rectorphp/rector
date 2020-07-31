@@ -21,6 +21,7 @@ final class ParsedClassConstFetchNodeCollector
      * @var string[][][]
      */
     private $classConstantFetchByClassAndName = [];
+
     /**
      * @var NodeNameResolver
      */

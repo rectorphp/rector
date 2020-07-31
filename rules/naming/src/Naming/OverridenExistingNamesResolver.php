@@ -20,6 +20,7 @@ final class OverridenExistingNamesResolver
      * @var string[][]
      */
     private $overridenExistingVariableNamesByClassMethod = [];
+
     /**
      * @var NodeNameResolver
      */

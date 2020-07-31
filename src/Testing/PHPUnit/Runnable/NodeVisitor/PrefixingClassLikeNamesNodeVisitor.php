@@ -21,10 +21,12 @@ final class PrefixingClassLikeNamesNodeVisitor extends NodeVisitorAbstract
      * @var string
      */
     private $suffix;
+
     /**
      * @var string[]
      */
     private $classLikeNames = [];
+
     /**
      * @param string[] $classLikeNames
      */
@@ -33,6 +35,7 @@ final class PrefixingClassLikeNamesNodeVisitor extends NodeVisitorAbstract
         $this->classLikeNames = $classLikeNames;
         $this->suffix = $suffix;
     }
+
     public function enterNode(Node $node): ?Node
     {
         if ($node instanceof ClassLike) {
@@ -45,6 +48,7 @@ final class PrefixingClassLikeNamesNodeVisitor extends NodeVisitorAbstract
 
         return null;
     }
+
     private function refactorClassLike(ClassLike $classLike): ?ClassLike
     {
         if ($classLike->name === null) {
@@ -68,6 +72,7 @@ final class PrefixingClassLikeNamesNodeVisitor extends NodeVisitorAbstract
 
         return null;
     }
+
     private function refactorNew(New_ $new): ?New_
     {
         if (! $new->class instanceof Name) {
@@ -86,6 +91,7 @@ final class PrefixingClassLikeNamesNodeVisitor extends NodeVisitorAbstract
 
         return null;
     }
+
     private function refactorClass(Class_ $class): void
     {
         if ($class->extends === null) {

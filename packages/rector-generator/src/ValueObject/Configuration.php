@@ -61,14 +61,17 @@ final class Configuration
      * @var array<string, mixed>
      */
     private $ruleConfiguration = [];
+
     /**
      * @var Set|null
      */
     private $set;
+
     /**
      * @var string|null
      */
     private $extraFileContent;
+
     /**
      * @var string|null
      */

@@ -18,14 +18,17 @@ final class OnPropertyMagicCallProvider
      * @var MethodCall[]
      */
     private $onPropertyMagicCalls = [];
+
     /**
      * @var ParsedFunctionLikeNodeCollector
      */
     private $parsedFunctionLikeNodeCollector;
+
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector
@@ -33,6 +36,7 @@ final class OnPropertyMagicCallProvider
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
         $this->nodeNameResolver = $nodeNameResolver;
     }
+
     /**
      * @return MethodCall[]
      */
@@ -52,6 +56,7 @@ final class OnPropertyMagicCallProvider
 
         return $this->onPropertyMagicCalls;
     }
+
     /**
      * Detects method call on, e.g:
      * public $onSomeProperty;

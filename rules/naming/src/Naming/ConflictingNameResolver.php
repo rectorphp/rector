@@ -20,6 +20,7 @@ final class ConflictingNameResolver
      * @var string[][]
      */
     private $conflictingVariableNamesByClassMethod = [];
+
     /**
      * @var ExpectedNameResolver
      */

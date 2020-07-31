@@ -60,6 +60,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
      * @var NodeScopeResolver
      */
     protected $nodeScopeResolver;
+
     /**
      * @var Container|ContainerInterface|null
      */

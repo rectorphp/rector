@@ -15,6 +15,7 @@ final class DecoupleClassMethodMatch
      * @var string
      */
     private $methodName;
+
     /**
      * @var string|null
      */

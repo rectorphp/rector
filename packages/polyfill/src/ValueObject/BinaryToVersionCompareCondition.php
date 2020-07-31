@@ -12,14 +12,17 @@ final class BinaryToVersionCompareCondition implements ConditionInterface
      * @var string
      */
     private $binaryClass;
+
     /**
      * @var VersionCompareCondition
      */
     private $versionCompareCondition;
+
     /**
      * @var mixed
      */
     private $expectedValue;
+
     /**
      * @param mixed $expectedValue
      */
@@ -32,14 +35,17 @@ final class BinaryToVersionCompareCondition implements ConditionInterface
         $this->binaryClass = $binaryClass;
         $this->expectedValue = $expectedValue;
     }
+
     public function getVersionCompareCondition(): VersionCompareCondition
     {
         return $this->versionCompareCondition;
     }
+
     public function getBinaryClass(): string
     {
         return $this->binaryClass;
     }
+
     /**
      * @return mixed
      */

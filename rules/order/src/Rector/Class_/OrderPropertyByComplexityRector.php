@@ -19,6 +19,16 @@ use Rector\Order\StmtOrder;
 final class OrderPropertyByComplexityRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const RANK = 'rank';
+
+    /**
+     * @var string
+     */
+    private const POSITION = 'position';
+
+    /**
      * @var StmtOrder
      */
     private $stmtOrder;
@@ -27,14 +37,6 @@ final class OrderPropertyByComplexityRector extends AbstractRector
      * @var PropertyRanker
      */
     private $propertyRanker;
-    /**
-     * @var string
-     */
-    private const RANK = 'rank';
-    /**
-     * @var string
-     */
-    private const POSITION = 'position';
 
     public function __construct(PropertyRanker $propertyRanker, StmtOrder $stmtOrder)
     {

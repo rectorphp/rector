@@ -40,6 +40,7 @@ final class VariableNodeUse
      * @var Variable
      */
     private $variable;
+
     /**
      * @var string|null
      */

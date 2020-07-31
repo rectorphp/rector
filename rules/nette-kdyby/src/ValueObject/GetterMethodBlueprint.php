@@ -17,6 +17,7 @@ final class GetterMethodBlueprint
      * @var string
      */
     private $variableName;
+
     /**
      * @var Node|null
      */

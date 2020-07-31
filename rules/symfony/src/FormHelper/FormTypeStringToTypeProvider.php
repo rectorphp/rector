@@ -51,6 +51,7 @@ final class FormTypeStringToTypeProvider
      * @var array<string, string>
      */
     private $customServiceFormTypeByAlias = [];
+
     /**
      * @var ServiceMapProvider
      */

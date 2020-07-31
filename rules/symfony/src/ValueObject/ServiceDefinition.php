@@ -27,10 +27,12 @@ final class ServiceDefinition
      * @var TagInterface[]
      */
     private $tags = [];
+
     /**
      * @var string|null
      */
     private $class;
+
     /**
      * @var string|null
      */

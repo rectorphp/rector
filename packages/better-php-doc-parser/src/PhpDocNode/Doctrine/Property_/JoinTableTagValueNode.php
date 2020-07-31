@@ -26,10 +26,12 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
      * @var string
      */
     private $name;
+
     /**
      * @var JoinColumnTagValueNode[]
      */
     private $joinColumns = [];
+
     /**
      * @var JoinColumnTagValueNode[]
      */
