@@ -31,6 +31,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ForToForeachRector extends AbstractRector
 {
     /**
+     * @var AssignManipulator
+     */
+    private $assignManipulator;
+
+    /**
+     * @var Inflector
+     */
+    private $inflector;
+
+    /**
      * @var string|null
      */
     private $keyValueName;
@@ -44,16 +54,6 @@ final class ForToForeachRector extends AbstractRector
      * @var Expr|null
      */
     private $iteratedExpr;
-
-    /**
-     * @var AssignManipulator
-     */
-    private $assignManipulator;
-
-    /**
-     * @var Inflector
-     */
-    private $inflector;
 
     public function __construct(AssignManipulator $assignManipulator, Inflector $inflector)
     {

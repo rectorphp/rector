@@ -26,14 +26,14 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FunctionToStaticMethodRector extends AbstractFileSystemRector
 {
     /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
      * @var StaticCallPointer[]
      */
     private $functionNameToClassStaticMethod = [];
+
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
 
     public function __construct(ClassNaming $classNaming)
     {

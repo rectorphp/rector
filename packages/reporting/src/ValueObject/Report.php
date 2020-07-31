@@ -9,11 +9,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class Report
 {
     /**
-     * @var SmartFileInfo
-     */
-    private $smartFileInfo;
-
-    /**
      * @var int
      */
     private $line;
@@ -27,6 +22,11 @@ final class Report
      * @var string
      */
     private $rectorClass;
+
+    /**
+     * @var SmartFileInfo
+     */
+    private $smartFileInfo;
 
     public function __construct(string $report, string $rectorClass, SmartFileInfo $smartFileInfo, int $line)
     {

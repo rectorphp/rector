@@ -9,24 +9,24 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class RectorError
 {
     /**
-     * @var int|null
-     */
-    private $line;
-
-    /**
      * @var string
      */
     private $message;
 
     /**
-     * @var string|null
-     */
-    private $rectorClass;
-
-    /**
      * @var SmartFileInfo
      */
     private $fileInfo;
+
+    /**
+     * @var int|null
+     */
+    private $line;
+
+    /**
+     * @var string|null
+     */
+    private $rectorClass;
 
     public function __construct(
         SmartFileInfo $smartFileInfo,

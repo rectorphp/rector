@@ -28,14 +28,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class SimplifyForeachToCoalescingRector extends AbstractRector
 {
     /**
-     * @var Return_|null
-     */
-    private $return;
-
-    /**
      * @var ForeachManipulator
      */
     private $foreachManipulator;
+
+    /**
+     * @var Return_|null
+     */
+    private $return;
 
     public function __construct(ForeachManipulator $foreachManipulator)
     {

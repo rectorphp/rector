@@ -18,14 +18,14 @@ use PhpParser\NodeVisitorAbstract;
 final class PrefixingClassLikeNamesNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var string[]
-     */
-    private $classLikeNames = [];
-
-    /**
      * @var string
      */
     private $suffix;
+
+    /**
+     * @var string[]
+     */
+    private $classLikeNames = [];
 
     /**
      * @param string[] $classLikeNames

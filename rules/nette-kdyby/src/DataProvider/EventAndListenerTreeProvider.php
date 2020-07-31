@@ -24,6 +24,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class EventAndListenerTreeProvider
 {
     /**
+     * @var EventAndListenerTree[]
+     */
+    private $eventAndListenerTrees = [];
+
+    /**
      * @var OnPropertyMagicCallProvider
      */
     private $onPropertyMagicCallProvider;
@@ -42,11 +47,6 @@ final class EventAndListenerTreeProvider
      * @var EventClassNaming
      */
     private $eventClassNaming;
-
-    /**
-     * @var EventAndListenerTree[]
-     */
-    private $eventAndListenerTrees = [];
 
     /**
      * @var EventValueObjectClassFactory

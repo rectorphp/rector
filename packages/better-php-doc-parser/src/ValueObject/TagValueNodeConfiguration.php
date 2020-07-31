@@ -9,16 +9,6 @@ use Nette\Utils\Strings;
 final class TagValueNodeConfiguration
 {
     /**
-     * @var string|null
-     */
-    private $originalContent;
-
-    /**
-     * @var array|null
-     */
-    private $orderedVisibleItems;
-
-    /**
      * @var bool
      */
     private $hasNewlineAfterOpening = false;
@@ -39,16 +29,6 @@ final class TagValueNodeConfiguration
     private $hasClosingBracket = false;
 
     /**
-     * @var array
-     */
-    private $keysByQuotedStatus = [];
-
-    /**
-     * @var string|null
-     */
-    private $silentKey;
-
-    /**
      * @var bool
      */
     private $isSilentKeyExplicit = false;
@@ -57,6 +37,26 @@ final class TagValueNodeConfiguration
      * @var string
      */
     private $arrayEqualSign;
+
+    /**
+     * @var array
+     */
+    private $keysByQuotedStatus = [];
+
+    /**
+     * @var string|null
+     */
+    private $originalContent;
+
+    /**
+     * @var array|null
+     */
+    private $orderedVisibleItems;
+
+    /**
+     * @var string|null
+     */
+    private $silentKey;
 
     public function __construct(
         ?string $originalContent = null,

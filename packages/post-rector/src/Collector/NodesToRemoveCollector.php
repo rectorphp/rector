@@ -18,11 +18,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class NodesToRemoveCollector implements NodeCollectorInterface
 {
     /**
-     * @var Stmt[]|Node[]
-     */
-    private $nodesToRemove = [];
-
-    /**
      * @var AffectedFilesCollector
      */
     private $affectedFilesCollector;
@@ -31,6 +26,11 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
      * @var BreakingRemovalGuard
      */
     private $breakingRemovalGuard;
+
+    /**
+     * @var Stmt[]|Node[]
+     */
+    private $nodesToRemove = [];
 
     public function __construct(
         AffectedFilesCollector $affectedFilesCollector,

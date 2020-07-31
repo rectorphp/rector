@@ -52,11 +52,6 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     protected $parameterProvider;
 
     /**
-     * @var Container|ContainerInterface|null
-     */
-    protected static $allRectorContainer;
-
-    /**
      * @var RunnableRectorFactory
      */
     protected $runnableRectorFactory;
@@ -65,6 +60,11 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
      * @var NodeScopeResolver
      */
     protected $nodeScopeResolver;
+
+    /**
+     * @var Container|ContainerInterface|null
+     */
+    protected static $allRectorContainer;
 
     /**
      * @var mixed[]

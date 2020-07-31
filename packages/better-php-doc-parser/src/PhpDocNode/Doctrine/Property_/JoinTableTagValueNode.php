@@ -28,6 +28,16 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     private $name;
 
     /**
+     * @var JoinColumnTagValueNode[]
+     */
+    private $joinColumns = [];
+
+    /**
+     * @var JoinColumnTagValueNode[]
+     */
+    private $inverseJoinColumns = [];
+
+    /**
      * @var string|null
      */
     private $schema;
@@ -51,16 +61,6 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
      * @var string|null
      */
     private $inverseJoinColumnsClosingSpace;
-
-    /**
-     * @var JoinColumnTagValueNode[]
-     */
-    private $joinColumns = [];
-
-    /**
-     * @var JoinColumnTagValueNode[]
-     */
-    private $inverseJoinColumns = [];
 
     /**
      * @param JoinColumnTagValueNode[] $joinColumns

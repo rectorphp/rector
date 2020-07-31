@@ -44,7 +44,7 @@ final class StmtOrder
             // reorder here
             $newKey = $oldToNewKeys[$key];
 
-            $reorderedStmts[$newKey] = $stmt;
+            $reorderedStmts[$key] = $class->stmts[$newKey];
         }
 
         for ($i = 0; $i < $stmtCount; ++$i) {

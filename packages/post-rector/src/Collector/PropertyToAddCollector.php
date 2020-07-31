@@ -13,24 +13,24 @@ use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 final class PropertyToAddCollector implements NodeCollectorInterface
 {
     /**
-     * @var Type[][]|null[][]
-     */
-    private $propertiesByClass = [];
-
-    /**
      * @var ClassConst[][]
      */
     private $constantsByClass = [];
 
     /**
-     * @var Type[][]|null[][]
-     */
-    private $propertiesWithoutConstructorByClass = [];
-
-    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
+
+    /**
+     * @var Type[][]|null[][]
+     */
+    private $propertiesByClass = [];
+
+    /**
+     * @var Type[][]|null[][]
+     */
+    private $propertiesWithoutConstructorByClass = [];
 
     public function __construct(NodeNameResolver $nodeNameResolver)
     {

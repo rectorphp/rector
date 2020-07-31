@@ -18,19 +18,19 @@ final class EventAndListenerTree
     private $eventClassName;
 
     /**
+     * @var string
+     */
+    private $eventFileLocation;
+
+    /**
      * @var ClassMethod[][]
      */
     private $listenerClassMethodsByEventSubscriberClass = [];
 
     /**
-     * @var Property|null
+     * @var GetterMethodBlueprint[]
      */
-    private $onMagicProperty;
-
-    /**
-     * @var string
-     */
-    private $eventFileLocation;
+    private $getterMethodBlueprints = [];
 
     /**
      * @var MethodCall
@@ -48,9 +48,9 @@ final class EventAndListenerTree
     private $eventDispatcherDispatchMethodCall;
 
     /**
-     * @var GetterMethodBlueprint[]
+     * @var Property|null
      */
-    private $getterMethodBlueprints = [];
+    private $onMagicProperty;
 
     /**
      * @param ClassMethod[][] $listenerClassMethodsByEventSubscriberClass

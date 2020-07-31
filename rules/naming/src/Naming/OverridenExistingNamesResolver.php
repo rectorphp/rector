@@ -17,6 +17,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class OverridenExistingNamesResolver
 {
     /**
+     * @var string[][]
+     */
+    private $overridenExistingVariableNamesByClassMethod = [];
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -25,11 +30,6 @@ final class OverridenExistingNamesResolver
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
-    /**
-     * @var string[][]
-     */
-    private $overridenExistingVariableNamesByClassMethod = [];
 
     /**
      * @var ArrayFilter

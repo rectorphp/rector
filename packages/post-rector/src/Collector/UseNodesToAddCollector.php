@@ -16,11 +16,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class UseNodesToAddCollector implements NodeCollectorInterface
 {
     /**
-     * @var FullyQualifiedObjectType[][]|AliasedObjectType[][]
-     */
-    private $useImportTypesInFilePath = [];
-
-    /**
      * @var string[][]
      */
     private $removedShortUsesInFilePath = [];
@@ -34,6 +29,11 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
      * @var CurrentFileInfoProvider
      */
     private $currentFileInfoProvider;
+
+    /**
+     * @var FullyQualifiedObjectType[][]|AliasedObjectType[][]
+     */
+    private $useImportTypesInFilePath = [];
 
     public function __construct(CurrentFileInfoProvider $currentFileInfoProvider)
     {

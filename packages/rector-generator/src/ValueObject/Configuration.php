@@ -43,24 +43,9 @@ final class Configuration
     private $description;
 
     /**
-     * @var Set|null
-     */
-    private $set;
-
-    /**
      * @var bool
      */
     private $isPhpSnippet = false;
-
-    /**
-     * @var string|null
-     */
-    private $extraFileContent;
-
-    /**
-     * @var string|null
-     */
-    private $extraFileName;
 
     /**
      * @var string[]
@@ -76,6 +61,21 @@ final class Configuration
      * @var array<string, mixed>
      */
     private $ruleConfiguration = [];
+
+    /**
+     * @var Set|null
+     */
+    private $set;
+
+    /**
+     * @var string|null
+     */
+    private $extraFileContent;
+
+    /**
+     * @var string|null
+     */
+    private $extraFileName;
 
     /**
      * @param string[] $nodeTypes

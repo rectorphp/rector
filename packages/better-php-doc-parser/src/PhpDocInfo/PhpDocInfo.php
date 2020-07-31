@@ -47,6 +47,11 @@ final class PhpDocInfo
     private $originalContent;
 
     /**
+     * @var bool
+     */
+    private $isSingleLine = false;
+
+    /**
      * @var mixed[]
      */
     private $tokens = [];
@@ -70,11 +75,6 @@ final class PhpDocInfo
      * @var Node
      */
     private $node;
-
-    /**
-     * @var bool
-     */
-    private $isSingleLine = false;
 
     /**
      * @var PhpDocTypeChanger

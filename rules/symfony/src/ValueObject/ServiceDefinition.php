@@ -14,11 +14,6 @@ final class ServiceDefinition
     private $id;
 
     /**
-     * @var string|null
-     */
-    private $class;
-
-    /**
      * @var bool
      */
     private $public = false;
@@ -29,14 +24,19 @@ final class ServiceDefinition
     private $synthetic = false;
 
     /**
-     * @var string|null
-     */
-    private $alias;
-
-    /**
      * @var TagInterface[]
      */
     private $tags = [];
+
+    /**
+     * @var string|null
+     */
+    private $class;
+
+    /**
+     * @var string|null
+     */
+    private $alias;
 
     /**
      * @param TagInterface[] $tags

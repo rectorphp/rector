@@ -45,6 +45,12 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
     public const CLASS_LIKE_TYPE_ONLY = '$classLikeTypeOnly';
 
     /**
+     * Useful for refactoring of huge applications. Taking types first narrows scope
+     * @var bool
+     */
+    private $classLikeTypeOnly = false;
+
+    /**
      * @var PropertyTypeInferer
      */
     private $propertyTypeInferer;
@@ -58,12 +64,6 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
      * @var DoctrineTypeAnalyzer
      */
     private $doctrineTypeAnalyzer;
-
-    /**
-     * Useful for refactoring of huge applications. Taking types first narrows scope
-     * @var bool
-     */
-    private $classLikeTypeOnly = false;
 
     public function __construct(
         PropertyTypeInferer $propertyTypeInferer,

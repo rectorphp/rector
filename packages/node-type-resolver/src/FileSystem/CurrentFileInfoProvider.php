@@ -10,14 +10,14 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class CurrentFileInfoProvider
 {
     /**
-     * @var SmartFileInfo|null
-     */
-    private $smartFileInfo;
-
-    /**
      * @var Node[]
      */
     private $currentStmts = [];
+
+    /**
+     * @var SmartFileInfo|null
+     */
+    private $smartFileInfo;
 
     public function setCurrentFileInfo(SmartFileInfo $smartFileInfo): void
     {

@@ -19,6 +19,16 @@ use Rector\Order\StmtOrder;
 final class OrderPropertyByComplexityRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const RANK = 'rank';
+
+    /**
+     * @var string
+     */
+    private const POSITION = 'position';
+
+    /**
      * @var StmtOrder
      */
     private $stmtOrder;
@@ -109,13 +119,13 @@ PHP
                 $propertyName = $this->getName($property);
 
                 $propertyPositionByName[$position] = $propertyName;
-                $propertyNameToRank[$propertyName] = $this->propertyRanker->rank($property);
+                $propertyNameToRank[$propertyName][self::RANK] = $this->propertyRanker->rank($property);
+                $propertyNameToRank[$propertyName][self::POSITION] = $position;
             }
 
-            asort($propertyNameToRank);
-            $sortedPropertyByRank = array_keys($propertyNameToRank);
+            $sortedPropertyByRank = $this->getSortedPropertiesByRankAndPosition($propertyNameToRank);
 
-            $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($propertyPositionByName, $sortedPropertyByRank);
+            $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($sortedPropertyByRank, $propertyPositionByName);
 
             $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
         }
@@ -152,5 +162,20 @@ PHP
         }
 
         return $propertyByVisibilityByPosition;
+    }
+
+    private function getSortedPropertiesByRankAndPosition(array $propertyNameToRank): array
+    {
+        uasort(
+            $propertyNameToRank,
+            function (array $firstArray, array $secondArray): int {
+                return [$firstArray[self::RANK], $firstArray[self::POSITION]] <=> [
+                    $secondArray[self::RANK],
+                    $secondArray[self::POSITION],
+                ];
+            }
+        );
+
+        return array_keys($propertyNameToRank);
     }
 }

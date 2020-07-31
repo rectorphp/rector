@@ -15,14 +15,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class OnPropertyMagicCallProvider
 {
     /**
-     * @var ParsedFunctionLikeNodeCollector
-     */
-    private $parsedFunctionLikeNodeCollector;
-
-    /**
      * @var MethodCall[]
      */
     private $onPropertyMagicCalls = [];
+
+    /**
+     * @var ParsedFunctionLikeNodeCollector
+     */
+    private $parsedFunctionLikeNodeCollector;
 
     /**
      * @var NodeNameResolver

@@ -82,11 +82,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $staticTypeMapper;
 
     /**
-     * @var string|null
-     */
-    private $previousAppliedClass;
-
-    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -105,6 +100,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var ClassNodeAnalyzer
      */
     private $classNodeAnalyzer;
+
+    /**
+     * @var string|null
+     */
+    private $previousAppliedClass;
 
     /**
      * @required

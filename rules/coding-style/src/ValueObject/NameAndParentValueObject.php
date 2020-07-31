@@ -11,14 +11,14 @@ use PhpParser\Node\Name;
 final class NameAndParentValueObject
 {
     /**
-     * @var Name|Identifier
-     */
-    private $nameNode;
-
-    /**
      * @var Node
      */
     private $parentNode;
+
+    /**
+     * @var Name|Identifier
+     */
+    private $nameNode;
 
     /**
      * @param Name|Identifier $nameNode

@@ -21,14 +21,14 @@ use Rector\SymfonyPhpConfig\NodeAnalyzer\SymfonyPhpConfigClosureAnalyzer;
 final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector
 {
     /**
-     * @var string|null
-     */
-    private $rectorClass;
-
-    /**
      * @var SymfonyPhpConfigClosureAnalyzer
      */
     private $symfonyPhpConfigClosureAnalyzer;
+
+    /**
+     * @var string|null
+     */
+    private $rectorClass;
 
     public function __construct(SymfonyPhpConfigClosureAnalyzer $symfonyPhpConfigClosureAnalyzer)
     {

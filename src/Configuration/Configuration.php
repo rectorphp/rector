@@ -22,19 +22,9 @@ final class Configuration
     private $isDryRun = false;
 
     /**
-     * @var SmartFileInfo|null
-     */
-    private $configFileInfo;
-
-    /**
      * @var bool
      */
     private $showProgressBar = true;
-
-    /**
-     * @var string|null
-     */
-    private $onlyRector;
 
     /**
      * @var bool
@@ -82,14 +72,14 @@ final class Configuration
     private $fileExtensions = [];
 
     /**
-     * @var CiDetector
-     */
-    private $ciDetector;
-
-    /**
      * @var string[]
      */
     private $paths = [];
+
+    /**
+     * @var CiDetector
+     */
+    private $ciDetector;
 
     /**
      * @var OnlyRuleResolver
@@ -100,6 +90,16 @@ final class Configuration
      * @var ParameterProvider
      */
     private $parameterProvider;
+
+    /**
+     * @var SmartFileInfo|null
+     */
+    private $configFileInfo;
+
+    /**
+     * @var string|null
+     */
+    private $onlyRector;
 
     /**
      * @param string[] $fileExtensions

@@ -30,6 +30,11 @@ final class ListeningMethodsCollector
     public const EVENT_TYPE_CUSTOM = 'custom';
 
     /**
+     * @var array<string, ClassMethod>
+     */
+    private $classMethodsByEventClass = [];
+
+    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -43,11 +48,6 @@ final class ListeningMethodsCollector
      * @var EventClassNaming
      */
     private $eventClassNaming;
-
-    /**
-     * @var array<string, ClassMethod>
-     */
-    private $classMethodsByEventClass = [];
 
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,

@@ -32,6 +32,11 @@ final class ReturnClosurePrinter
     private const CONTAINER_CONFIGURATOR = 'containerConfigurator';
 
     /**
+     * @var Node[]
+     */
+    private $useStmts = [];
+
+    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -40,11 +45,6 @@ final class ReturnClosurePrinter
      * @var NodeFactory
      */
     private $nodeFactory;
-
-    /**
-     * @var Node[]
-     */
-    private $useStmts = [];
 
     /**
      * @var ClassNaming
