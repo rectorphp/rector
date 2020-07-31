@@ -48,13 +48,11 @@ final class NonFluentMethodCallFactory
             $decoupledMethodCalls[] = $chainMethodCall;
         }
 
-        if ($assignAndRootExpr->getRootExpr() instanceof New_) {
-            if ($assignAndRootExpr->getSilentVariable() !== null) {
-                $decoupledMethodCalls[] = new Assign(
-                    $assignAndRootExpr->getSilentVariable(),
-                    $assignAndRootExpr->getRootExpr()
-                );
-            }
+        if ($assignAndRootExpr->getRootExpr() instanceof New_ && $assignAndRootExpr->getSilentVariable() !== null) {
+            $decoupledMethodCalls[] = new Assign(
+                $assignAndRootExpr->getSilentVariable(),
+                $assignAndRootExpr->getRootExpr()
+            );
         }
 
         return array_reverse($decoupledMethodCalls);
