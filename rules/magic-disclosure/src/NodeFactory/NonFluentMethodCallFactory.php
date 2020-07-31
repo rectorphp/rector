@@ -8,7 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use Rector\Core\ValueObject\AssignAndRootExpr;
+use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 
 final class NonFluentMethodCallFactory
 {

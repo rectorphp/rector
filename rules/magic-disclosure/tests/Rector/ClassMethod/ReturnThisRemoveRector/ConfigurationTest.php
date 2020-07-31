@@ -7,9 +7,10 @@ namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
+use Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\FixtureConfiguration\SomeClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
+final class ConfigurationTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -21,11 +22,18 @@ final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureConfiguration');
     }
 
-    protected function getRectorClass(): string
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorsWithConfiguration(): array
     {
-        return ReturnThisRemoveRector::class;
+        return [
+            ReturnThisRemoveRector::class => [
+                ReturnThisRemoveRector::TYPES_TO_MATCH => [SomeClass::class],
+            ],
+        ];
     }
 }

@@ -9,14 +9,13 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\ValueObject\AssignAndRootExpr;
-use Rector\MagicDisclosure\Matcher\ClassNameTypeMatcher;
 use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\NodeFactory\NonFluentMethodCallFactory;
 use Rector\MagicDisclosure\NodeManipulator\ChainMethodCallRootExtractor;
+use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
+use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -25,18 +24,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\DefluentMethodCallRectorTest
  */
-final class DefluentMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class DefluentMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
 {
-    /**
-     * @var string
-     */
-    public const NAMES_TO_DEFLUENT = '$namesToDefluent';
-
-    /**
-     * @var string[]
-     */
-    private $namesToDefluent = [];
-
     /**
      * @var ChainMethodCallNodeAnalyzer
      */
@@ -48,11 +37,6 @@ final class DefluentMethodCallRector extends AbstractRector implements Configura
     private $chainMethodCallRootExtractor;
 
     /**
-     * @var ClassNameTypeMatcher
-     */
-    private $classNameTypeMatcher;
-
-    /**
      * @var NonFluentMethodCallFactory
      */
     private $nonFluentMethodCallFactory;
@@ -60,12 +44,10 @@ final class DefluentMethodCallRector extends AbstractRector implements Configura
     public function __construct(
         ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
         ChainMethodCallRootExtractor $chainMethodCallRootExtractor,
-        ClassNameTypeMatcher $classNameTypeMatcher,
         NonFluentMethodCallFactory $nonFluentMethodCallFactory
     ) {
         $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
         $this->chainMethodCallRootExtractor = $chainMethodCallRootExtractor;
-        $this->classNameTypeMatcher = $classNameTypeMatcher;
         $this->nonFluentMethodCallFactory = $nonFluentMethodCallFactory;
     }
 
@@ -129,16 +111,11 @@ PHP
 
         foreach ($nodesToAdd as $nodeToAdd) {
             // needed to remove weird spacing
-            $nodeToAdd->setAttribute('origNode', null);
+            $nodeToAdd->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             $this->addNodeAfterNode($nodeToAdd, $node);
         }
 
         return $node;
-    }
-
-    public function configure(array $configuration): void
-    {
-        $this->namesToDefluent = $configuration[self::NAMES_TO_DEFLUENT] ?? [];
     }
 
     /**
@@ -181,14 +158,18 @@ PHP
      */
     private function shouldSkip(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
     {
-        if (! $this->chainMethodCallNodeAnalyzer->isCalleeSingleType($assignAndRootExpr, $chainMethodCalls)) {
+        $calleeUniqueTypes = $this->chainMethodCallNodeAnalyzer->resolveCalleeUniqueTypes(
+            $assignAndRootExpr,
+            $chainMethodCalls
+        );
+
+        if (count($calleeUniqueTypes) !== 1) {
             return true;
         }
 
-        return ! $this->classNameTypeMatcher->doesExprMatchNames(
-            $assignAndRootExpr->getRootExpr(),
-            $this->namesToDefluent
-        );
+        $calleeUniqueType = $calleeUniqueTypes[0];
+
+        return ! $this->isMatchedType($calleeUniqueType);
     }
 
     /**

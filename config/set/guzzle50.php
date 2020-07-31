@@ -25,10 +25,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     #diff-810cdcfdd8a6b9e1fc0d1e96d7786874
     # covers https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7
     $services->set(ReturnThisRemoveRector::class)
-        ->call('configure', [[ReturnThisRemoveRector::CLASSES_TO_DEFLUENT => '%classes_to_defluent%']]);
+        ->call('configure', [[ReturnThisRemoveRector::TYPES_TO_MATCH => '%classes_to_defluent%']]);
 
     $services->set(DefluentMethodCallRector::class)
-        ->call('configure', [[DefluentMethodCallRector::NAMES_TO_DEFLUENT => '%classes_to_defluent%']]);
+        ->call('configure', [[DefluentMethodCallRector::TYPES_TO_MATCH => '%classes_to_defluent%']]);
 
     $services->set(FunctionToMethodCallRector::class)
         ->call('configure', [[

@@ -3,5 +3,5 @@ version=1
 
 [merge]
 delete_branch_on_merge=true
-# for some reason this is broken
-# method=rebase
+
+method="squash"
