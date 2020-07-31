@@ -21,6 +21,7 @@ use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover;
@@ -38,7 +39,7 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
     /**
      * @var string[]
      */
-    private const EXCLUDED_METHOD_NAMES = ['__construct', '__destruct', '__clone'];
+    private const EXCLUDED_METHOD_NAMES = [MethodName::CONSTRUCT, '__destruct', '__clone'];
 
     /**
      * @var bool
