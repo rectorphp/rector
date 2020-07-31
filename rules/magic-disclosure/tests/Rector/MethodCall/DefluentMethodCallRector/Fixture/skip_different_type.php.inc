@@ -9,9 +9,6 @@ class SkipDifferentType
     public function run()
     {
         $differentReturnValues = new DifferentReturnValues();
-        $differentReturnValues->someFunction()
-            ->otherFunction();
-
         $differentReturnValues->otherFunction()
             ->someFunction();
     }
