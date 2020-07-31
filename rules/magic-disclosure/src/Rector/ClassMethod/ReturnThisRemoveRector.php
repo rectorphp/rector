@@ -11,44 +11,32 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\MagicDisclosure\Matcher\ClassNameTypeMatcher;
+use Rector\MagicDisclosure\ConflictGuard\ParentClassMethodTypeOverrideGuard;
+use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
  */
-final class ReturnThisRemoveRector extends AbstractRector implements ConfigurableRectorInterface
+final class ReturnThisRemoveRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
 {
     /**
-     * @var string
+     * @var ParentClassMethodTypeOverrideGuard
      */
-    public const CLASSES_TO_DEFLUENT = '$classesToDefluent';
+    private $parentClassMethodTypeOverrideGuard;
 
-    /**
-     * @var string[]
-     */
-    private $classesToDefluent = [];
-
-    /**
-     * @var ClassNameTypeMatcher
-     */
-    private $classNameTypeMatcher;
-
-    public function __construct(ClassNameTypeMatcher $classNameTypeMatcher)
+    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
-        $this->classNameTypeMatcher = $classNameTypeMatcher;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition(
-            'Removes "return $this;" from *fluent interfaces* for specified classes.',
-            [
-                new ConfiguredCodeSample(
+        return new RectorDefinition('Removes "return $this;" from *fluent interfaces* for specified classes.', [
+            new ConfiguredCodeSample(
                     <<<'PHP'
 class SomeExampleClass
 {
@@ -63,8 +51,8 @@ class SomeExampleClass
     }
 }
 PHP
-                    ,
-                    <<<'PHP'
+                ,
+                <<<'PHP'
 class SomeExampleClass
 {
     public function someFunction()
@@ -76,13 +64,12 @@ class SomeExampleClass
     }
 }
 PHP
-                    ,
-                    [
-                        '$classesToDefluent' => ['SomeExampleClass'],
-                    ]
-                ),
-            ]
-        );
+                ,
+                [
+                    self::TYPES_TO_MATCH => ['SomeExampleClass'],
+                ]
+            ),
+        ]);
     }
 
     /**
@@ -103,7 +90,7 @@ PHP
             return null;
         }
 
-        if (! $this->classNameTypeMatcher->doesExprMatchNames($returnThis->expr, $this->classesToDefluent)) {
+        if ($this->shouldSkip($returnThis, $node)) {
             return null;
         }
 
@@ -121,11 +108,6 @@ PHP
         $this->removePhpDocTagValueNode($classMethod, ReturnTagValueNode::class);
 
         return null;
-    }
-
-    public function configure(array $configuration): void
-    {
-        $this->classesToDefluent = $configuration[self::CLASSES_TO_DEFLUENT] ?? [];
     }
 
     /**
@@ -156,5 +138,18 @@ PHP
         }
 
         return $return;
+    }
+
+    private function shouldSkip(Return_ $return, ClassMethod $classMethod): bool
+    {
+        if (! $this->parentClassMethodTypeOverrideGuard->isReturnTypeChangeAllowed($classMethod)) {
+            return true;
+        }
+
+        if ($return->expr === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return ! $this->isExprMatchingAllowedTypes($return->expr);
     }
 }

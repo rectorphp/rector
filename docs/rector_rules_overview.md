@@ -1,4 +1,4 @@
-# All 543 Rectors Overview
+# All 544 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -25,7 +25,7 @@
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (4)
-- [MagicDisclosure](#magicdisclosure) (5)
+- [MagicDisclosure](#magicdisclosure) (6)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
@@ -6114,6 +6114,22 @@ Turns fluent interface calls to classic ones.
 
 <br><br>
 
+### `DefluentReturnMethodCallRector`
+
+- class: [`Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/Return_/DefluentReturnMethodCallRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/Return_/DefluentReturnMethodCallRector/Fixture)
+
+Turns return of fluent, to standalone call line and return of value
+
+```diff
+ $someClass = new SomeClass();
+-return $someClass->someFunction();
++$someClass->someFunction();
++return $someClass;
+```
+
+<br><br>
+
 ### `GetAndSetToMethodCallRector`
 
 - class: [`Rector\MagicDisclosure\Rector\Assign\GetAndSetToMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/Assign/GetAndSetToMethodCallRector.php)
@@ -6181,7 +6197,7 @@ use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ReturnThisRemoveRector::class)
-        ->call('configure', [['$classesToDefluent', ['SomeExampleClass']]]);
+        ->call('configure', [['types_to_match', ['SomeExampleClass']]]);
 };
 ```
 

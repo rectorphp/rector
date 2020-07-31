@@ -2,23 +2,26 @@
 
 namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
 
-class AnyClass
+class ChildClassWithSameMethodName extends SomeParentClassWithSameMethod
 {
     /**
-     * @return AnyClass
+     * @return self
      */
     public function someFunction()
     {
         foo();
         return $this;
     }
+}
 
+class SomeParentClassWithSameMethod
+{
     /**
-     * @return AnyClass
+     * @return self
      */
-    public function otherFunction()
+    public function someFunction()
     {
-        bar();
+        foo();
         return $this;
     }
 }
@@ -29,16 +32,19 @@ class AnyClass
 
 namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
 
-class AnyClass
+class ChildClassWithSameMethodName extends SomeParentClassWithSameMethod
 {
     public function someFunction(): void
     {
         foo();
     }
+}
 
-    public function otherFunction(): void
+class SomeParentClassWithSameMethod
+{
+    public function someFunction(): void
     {
-        bar();
+        foo();
     }
 }
 

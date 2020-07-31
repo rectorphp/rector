@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\FixtureConfiguration;
 
-class SomeAnotherClass
+class SomeClassNotInTheList
 {
     public function someFunction()
     {

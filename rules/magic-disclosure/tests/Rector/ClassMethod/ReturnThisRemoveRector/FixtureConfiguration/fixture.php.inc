@@ -1,11 +1,11 @@
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\FixtureConfiguration;
 
-class AnyClass
+class SomeClass
 {
     /**
-     * @return AnyClass
+     * @return self
      */
     public function someFunction()
     {
@@ -14,7 +14,7 @@ class AnyClass
     }
 
     /**
-     * @return AnyClass
+     * @return self
      */
     public function otherFunction()
     {
@@ -27,9 +27,9 @@ class AnyClass
 -----
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\FixtureConfiguration;
 
-class AnyClass
+class SomeClass
 {
     public function someFunction(): void
     {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\ValueObject;
+namespace Rector\MagicDisclosure\ValueObject;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -23,7 +23,7 @@ final class AssignAndRootExpr
     private $rootExpr;
 
     /**
-     * @var Expr\Variable|null
+     * @var Variable|null
      */
     private $silentVariable;
 
@@ -37,11 +37,6 @@ final class AssignAndRootExpr
     public function getAssignExpr(): Expr
     {
         return $this->assignExpr;
-    }
-
-    public function getFirstAssign(): Assign
-    {
-        return new Assign($this->assignExpr, $this->rootExpr);
     }
 
     public function getRootExpr(): Expr
@@ -61,6 +56,11 @@ final class AssignAndRootExpr
         }
 
         return new Return_($this->silentVariable);
+    }
+
+    public function getFirstAssign(): Assign
+    {
+        return new Assign($this->assignExpr, $this->rootExpr);
     }
 
     public function getCallerExpr(): Expr

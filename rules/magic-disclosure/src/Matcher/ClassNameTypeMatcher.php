@@ -25,6 +25,10 @@ final class ClassNameTypeMatcher
      */
     public function doesExprMatchNames(Expr $expr, array $names): bool
     {
+        if ($names === []) {
+            return true;
+        }
+
         $exprType = $this->nodeTypeResolver->getStaticType($expr);
         if (! $exprType instanceof TypeWithClassName) {
             return false;
