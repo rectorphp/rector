@@ -6,6 +6,11 @@ namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRecto
 
 final class FluentInterfaceClass extends InterFluentInterfaceClass
 {
+    /**
+     * @var int
+     */
+    private $value = 0;
+
     public function someFunction(): self
     {
         return $this;
@@ -14,5 +19,10 @@ final class FluentInterfaceClass extends InterFluentInterfaceClass
     public function otherFunction(): self
     {
         return $this;
+    }
+
+    public function voidReturningMethod()
+    {
+        $this->value = 100;
     }
 }

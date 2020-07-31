@@ -90,9 +90,18 @@ final class ChainMethodCallNodeAnalyzer
         $callerClassTypes = [];
         $callerClassTypes[] = $rootClassType;
 
-        foreach ($chainMethodCalls as $chainMethodCall) {
+        // chain method calls are inversed
+        $lastChainMethodCallKey = array_key_first($chainMethodCalls);
+
+        foreach ($chainMethodCalls as $key => $chainMethodCall) {
             $chainMethodCallType = $this->resolveExprStringClassType($chainMethodCall);
+
             if ($chainMethodCallType === null) {
+                // last method call does not need a type
+                if ($lastChainMethodCallKey === $key) {
+                    continue;
+                }
+
                 return [];
             }
 
