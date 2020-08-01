@@ -159,10 +159,10 @@ PHP
         return $assignAndRootExpr->getCallerExpr();
     }
 
-    private function removeParentParent(MethodCall $node): void
+    private function removeParentParent(MethodCall $methodCall): void
     {
         /** @var Arg $parent */
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
 
         /** @var MethodCall $parentParent */
         $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
