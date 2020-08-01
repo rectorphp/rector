@@ -1,0 +1,43 @@
+<?php
+
+namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector\Fixture;
+
+use Nette\Application\UI\Presenter;
+use Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector\Source\SomeControl;
+
+final class AboveArrayDimFetchSet extends Presenter
+{
+    public function run()
+    {
+        $someControl = new SomeControl();
+        $this['super_name'] = $someControl;
+
+        if ($this['super_name']->callThis()) {
+        }
+    }
+}
+
+?>
+-----
+<?php
+
+namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector\Fixture;
+
+use Nette\Application\UI\Presenter;
+use Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector\Source\SomeControl;
+
+final class AboveArrayDimFetchSet extends Presenter
+{
+    public function run()
+    {
+        $someControl = new SomeControl();
+        $this['super_name'] = $someControl;
+        /** @var \Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessToAnnotatedControlVariableRector\Source\SomeControl $superNameControl */
+        $superNameControl = $this['super_name'];
+
+        if ($superNameControl->callThis()) {
+        }
+    }
+}
+
+?>

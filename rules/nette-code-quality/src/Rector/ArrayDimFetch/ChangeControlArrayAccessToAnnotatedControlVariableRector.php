@@ -120,7 +120,6 @@ PHP
         }
 
         $variableName = $this->netteControlNaming->createVariableName($controlName);
-
         $controlObjectType = $this->resolveControlType($node, $controlName);
         $this->addAssignExpressionForFirstCase($variableName, $node, $controlObjectType);
 
