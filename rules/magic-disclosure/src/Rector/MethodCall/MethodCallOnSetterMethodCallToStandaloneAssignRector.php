@@ -9,12 +9,9 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\NetteKdyby\Naming\VariableNaming;
 
 /**
@@ -22,22 +19,12 @@ use Rector\NetteKdyby\Naming\VariableNaming;
  *
  * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\MethodCallOnSetterMethodCallToStandaloneAssignRectorTest
  */
-final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends AbstractRector
+final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends AbstractFluentChainMethodCallRector
 {
     /**
      * @var VariableNaming
      */
     private $variableNaming;
-
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
-    /**
-     * @var NonFluentChainMethodCallFactory
-     */
-    private $nonFluentChainMethodCallFactory;
 
     /**
      * @var NewFluentChainMethodCallNodeAnalyzer
@@ -46,13 +33,9 @@ final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends Abstrac
 
     public function __construct(
         VariableNaming $variableNaming,
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
         NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer
     ) {
         $this->variableNaming = $variableNaming;
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
-        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
         $this->newFluentChainMethodCallNodeAnalyzer = $newFluentChainMethodCallNodeAnalyzer;
     }
 
@@ -131,9 +114,6 @@ PHP
         return $rootMethodCall;
     }
 
-    /**
-     * @duplicated
-     */
     private function shouldSkip(MethodCall $methodCall): bool
     {
         if (! $methodCall->var instanceof MethodCall) {

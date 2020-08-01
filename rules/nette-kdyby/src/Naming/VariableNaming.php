@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Naming;
 
-use PhpParser\Node\Name;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -13,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ThisType;

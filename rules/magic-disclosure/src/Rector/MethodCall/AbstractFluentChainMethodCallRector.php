@@ -6,137 +6,50 @@ namespace Rector\MagicDisclosure\Rector\MethodCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
 {
     /**
      * @var FluentChainMethodCallNodeAnalyzer
      */
-    private $chainMethodCallNodeAnalyzer;
+    protected $fluentChainMethodCallNodeAnalyzer;
 
     /**
      * @var FluentChainMethodCallRootExtractor
      */
-    private $chainMethodCallRootExtractor;
+    protected $fluentChainMethodCallRootExtractor;
 
     /**
      * @var NonFluentChainMethodCallFactory
      */
-    private $nonFluentMethodCallFactory;
-
-    public function __construct(
-        FluentChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
-        FluentChainMethodCallRootExtractor $chainMethodCallRootExtractor,
-        NonFluentChainMethodCallFactory $nonFluentMethodCallFactory
-    ) {
-        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
-        $this->chainMethodCallRootExtractor = $chainMethodCallRootExtractor;
-        $this->nonFluentMethodCallFactory = $nonFluentMethodCallFactory;
-    }
+    protected $nonFluentChainMethodCallFactory;
 
     /**
-     * @return string[]
+     * @required
      */
-    public function getNodeTypes(): array
-    {
-        return [MethodCall::class, Return_::class];
-    }
-
-    /**
-     * @param MethodCall|Return_ $node
-     */
-    public function refactor(Node $node): ?Node
-    {
-        // @todo decouple "Return_" completelly to \Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector
-        $methodCall = $this->matchMethodCall($node);
-        if ($methodCall === null) {
-            return null;
-        }
-
-        // is handled by @see \Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector
-        if ($this->hasParentType($node, Return_::class)) {
-            return null;
-        }
-
-        // is handled by @see InArgChainMethodCallToStandaloneMethodCallRector
-        if ($this->hasParentType($node, Arg::class)) {
-            return null;
-        }
-
-        if (! $this->chainMethodCallNodeAnalyzer->isLastChainMethodCall($methodCall)) {
-            return null;
-        }
-
-        if ($this->isGetterMethodCall($methodCall)) {
-            return null;
-        }
-
-        // DUPLICATED
-        $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
-
-        $assignAndRootExpr = $this->chainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
-        if ($assignAndRootExpr === null) {
-            return null;
-        }
-
-        if ($this->shouldSkip($assignAndRootExpr, $chainMethodCalls)) {
-            return null;
-        }
-
-        $nodesToAdd = $this->nonFluentMethodCallFactory->createFromAssignObjectAndMethodCalls(
-            $assignAndRootExpr,
-            $chainMethodCalls
-        );
-
-        $nodesToAdd = $this->addFluentAsArg($node, $assignAndRootExpr, $nodesToAdd);
-
-        $this->removeCurrentNode($node);
-
-        foreach ($nodesToAdd as $nodeToAdd) {
-            // needed to remove weird spacing
-            $nodeToAdd->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $this->addNodeAfterNode($nodeToAdd, $node);
-        }
-
-        return $node;
-    }
-
-    /**
-     * @param MethodCall|Return_ $node
-     */
-    private function matchMethodCall(Node $node): ?MethodCall
-    {
-        if ($node instanceof Return_) {
-            if ($node->expr === null) {
-                return null;
-            }
-
-            if ($node->expr instanceof MethodCall) {
-                return $node->expr;
-            }
-            return null;
-        }
-
-        return $node;
+    public function autowireAbstractFluentChainMethodCallRector(
+        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor,
+        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory
+    ): void {
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
+        $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
+        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
     }
 
     /**
      * @param MethodCall[] $chainMethodCalls
      */
-    private function shouldSkip(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
+    protected function shouldSkipChainMethodCalls(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
     {
-        $calleeUniqueTypes = $this->chainMethodCallNodeAnalyzer->resolveCalleeUniqueTypes(
+        $calleeUniqueTypes = $this->fluentChainMethodCallNodeAnalyzer->resolveCalleeUniqueTypes(
             $assignAndRootExpr,
             $chainMethodCalls
         );
@@ -156,62 +69,26 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
     }
 
     /**
-     * @duplicated
-     * @param MethodCall|Return_ $node
+     * @return Node[][]|AssignAndRootExpr[]
      */
-    private function removeCurrentNode(Node $node): void
+    protected function createStandaloneNodesToAddFromChainMethodCalls(MethodCall $methodCall): array
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign) {
-            $this->removeNode($parentNode);
-            return;
+        $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
+
+        $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
+        if ($assignAndRootExpr === null) {
+            return [];
         }
 
-        // part of method call
-        if ($parentNode instanceof Arg) {
-            $parentParent = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParent instanceof MethodCall) {
-                $this->removeNode($parentParent);
-            }
-            return;
+        if ($this->shouldSkipChainMethodCalls($assignAndRootExpr, $chainMethodCalls)) {
+            return [];
         }
 
-        $this->removeNode($node);
-    }
+        $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromAssignObjectAndMethodCalls(
+            $assignAndRootExpr,
+            $chainMethodCalls
+        );
 
-    /**
-     * @param Return_|MethodCall $node
-     * @param Node[] $nodesToAdd
-     * @return Node[]
-     */
-    private function addFluentAsArg(Node $node, AssignAndRootExpr $assignAndRootExpr, array $nodesToAdd): array
-    {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Arg) {
-            return $nodesToAdd;
-        }
-
-        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentParent instanceof MethodCall) {
-            return $nodesToAdd;
-        }
-
-        $lastMethodCall = new MethodCall($parentParent->var, $parentParent->name);
-        $lastMethodCall->args[] = new Arg($assignAndRootExpr->getRootExpr());
-        $nodesToAdd[] = $lastMethodCall;
-
-        return $nodesToAdd;
-    }
-
-    private function isGetterMethodCall(MethodCall $methodCall): bool
-    {
-        if ($methodCall->var instanceof MethodCall) {
-            return false;
-        }
-        $methodCallStaticType = $this->getStaticType($methodCall);
-        $methodCallVarStaticType = $this->getStaticType($methodCall->var);
-
-        // getter short call type
-        return ! $methodCallStaticType->equals($methodCallVarStaticType);
+        return [$nodesToAdd, $assignAndRootExpr];
     }
 }

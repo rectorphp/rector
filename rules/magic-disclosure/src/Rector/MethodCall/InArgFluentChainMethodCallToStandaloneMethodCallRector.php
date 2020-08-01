@@ -4,20 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
-use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
-use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -25,20 +19,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
- * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\InArgChainMethodCallToStandaloneMethodCallRector\InArgChainMethodCallToStandaloneMethodCallRectorTest
+ * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest
  */
-final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
+final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends AbstractFluentChainMethodCallRector
 {
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
-    /**
-     * @var NonFluentChainMethodCallFactory
-     */
-    private $nonFluentChainMethodCallFactory;
-
     /**
      * @var VariableNaming
      */
@@ -49,23 +33,12 @@ final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends Abstr
      */
     private $newFluentChainMethodCallNodeAnalyzer;
 
-    /**
-     * @var FluentChainMethodCallRootExtractor
-     */
-    private $fluentChainMethodCallRootExtractor;
-
     public function __construct(
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
         VariableNaming $variableNaming,
-        NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
-        FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor
+        NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer
     ) {
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
-        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
         $this->variableNaming = $variableNaming;
         $this->newFluentChainMethodCallNodeAnalyzer = $newFluentChainMethodCallNodeAnalyzer;
-        $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
     }
 
     public function getDefinition(): RectorDefinition
@@ -137,25 +110,17 @@ PHP
             return null;
         }
 
-        // DUPLCIATED
-        $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($node);
-
-        $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
-        if ($assignAndRootExpr === null) {
+        $result = $this->createStandaloneNodesToAddFromChainMethodCalls($node);
+        if ($result === []) {
             return null;
         }
 
-        if ($this->shouldSkip($assignAndRootExpr, $chainMethodCalls)) {
-            return null;
-        }
+        [$nodesToAdd, $assignAndRootExpr] = $result;
 
-        $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromAssignObjectAndMethodCalls(
-            $assignAndRootExpr,
-            $chainMethodCalls
-        );
-
+        /** @var Node[] $nodesToAdd */
         $this->addNodesBeforeNode($nodesToAdd, $node);
 
+        /** @var AssignAndRootExpr $assignAndRootExpr */
         return $assignAndRootExpr->getCallerExpr();
     }
 
@@ -170,6 +135,10 @@ PHP
         $this->removeNode($parentParent);
     }
 
+    /**
+     * @deprecated
+     * @todo extact to factory
+     */
     private function createFluentAsArg(MethodCall $methodCall, Variable $variable): MethodCall
     {
         /** @var Arg $parent */
@@ -202,30 +171,5 @@ PHP
 
         $this->addNodesBeforeNode($nodesToAdd, $methodCall);
         $this->removeParentParent($methodCall);
-    }
-
-    /**
-     * @duplicated
-     * @param MethodCall[] $chainMethodCalls
-     */
-    private function shouldSkip(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
-    {
-        $calleeUniqueTypes = $this->fluentChainMethodCallNodeAnalyzer->resolveCalleeUniqueTypes(
-            $assignAndRootExpr,
-            $chainMethodCalls
-        );
-
-        if (count($calleeUniqueTypes) !== 1) {
-            return true;
-        }
-
-        $calleeUniqueType = $calleeUniqueTypes[0];
-        // skip query and builder
-        // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?"
-        if ((bool) Strings::match($calleeUniqueType, '#(Query|Builder)$#')) {
-            return true;
-        }
-
-        return ! $this->isMatchedType($calleeUniqueType);
     }
 }

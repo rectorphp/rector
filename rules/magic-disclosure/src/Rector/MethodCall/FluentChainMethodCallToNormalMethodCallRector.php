@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
-use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
-use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
-use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -26,33 +19,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\FluentChainMethodCallToNormalMethodCallRectorTest
  */
-final class FluentChainMethodCallToNormalMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
+final class FluentChainMethodCallToNormalMethodCallRector extends AbstractFluentChainMethodCallRector
 {
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
-    /**
-     * @var FluentChainMethodCallRootExtractor
-     */
-    private $fluentChainMethodCallRootExtractor;
-
-    /**
-     * @var NonFluentChainMethodCallFactory
-     */
-    private $nonFluentChainMethodCallFactory;
-
-    public function __construct(
-        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor,
-        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory
-    ) {
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
-        $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
-        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns fluent interface calls to classic ones.', [new CodeSample(<<<'PHP'
@@ -105,34 +73,22 @@ PHP
             return null;
         }
 
-        // DUPLICATED
-        $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
-
-        $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
-        if ($assignAndRootExpr === null) {
+        $result = $this->createStandaloneNodesToAddFromChainMethodCalls($methodCall);
+        if ($result === []) {
             return null;
         }
 
-        if ($this->shouldSkip($assignAndRootExpr, $chainMethodCalls)) {
+        [$nodesToAdd, ] = $result;
+        if ($nodesToAdd === []) {
             return null;
         }
-
-        $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromAssignObjectAndMethodCalls(
-            $assignAndRootExpr,
-            $chainMethodCalls
-        );
-
-        $nodesToAdd = $this->addFluentAsArg($node, $assignAndRootExpr, $nodesToAdd);
 
         $this->removeCurrentNode($node);
 
-        foreach ($nodesToAdd as $nodeToAdd) {
-            // needed to remove weird spacing
-            $nodeToAdd->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $this->addNodeAfterNode($nodeToAdd, $node);
-        }
+        /** @var Node[] $nodesToAdd */
+        $this->addNodesAfterNode($nodesToAdd, $node);
 
-        return $node;
+        return null;
     }
 
     /**
@@ -152,30 +108,6 @@ PHP
         }
 
         return $node;
-    }
-
-    /**
-     * @param MethodCall[] $chainMethodCalls
-     */
-    private function shouldSkip(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
-    {
-        $calleeUniqueTypes = $this->fluentChainMethodCallNodeAnalyzer->resolveCalleeUniqueTypes(
-            $assignAndRootExpr,
-            $chainMethodCalls
-        );
-
-        if (count($calleeUniqueTypes) !== 1) {
-            return true;
-        }
-
-        $calleeUniqueType = $calleeUniqueTypes[0];
-        // skip query and builder
-        // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?"
-        if ((bool) Strings::match($calleeUniqueType, '#(Query|Builder)$#')) {
-            return true;
-        }
-
-        return ! $this->isMatchedType($calleeUniqueType);
     }
 
     /**
@@ -200,30 +132,6 @@ PHP
         }
 
         $this->removeNode($node);
-    }
-
-    /**
-     * @param Return_|MethodCall $node
-     * @param Node[] $nodesToAdd
-     * @return Node[]
-     */
-    private function addFluentAsArg(Node $node, AssignAndRootExpr $assignAndRootExpr, array $nodesToAdd): array
-    {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Arg) {
-            return $nodesToAdd;
-        }
-
-        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentParent instanceof MethodCall) {
-            return $nodesToAdd;
-        }
-
-        $lastMethodCall = new MethodCall($parentParent->var, $parentParent->name);
-        $lastMethodCall->args[] = new Arg($assignAndRootExpr->getRootExpr());
-        $nodesToAdd[] = $lastMethodCall;
-
-        return $nodesToAdd;
     }
 
     private function isGetterMethodCall(MethodCall $methodCall): bool

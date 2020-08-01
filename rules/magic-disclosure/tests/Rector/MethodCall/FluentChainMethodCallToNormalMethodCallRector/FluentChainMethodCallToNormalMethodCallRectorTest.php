@@ -9,7 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DefluentMethodCallRectorTest extends AbstractRectorTestCase
+final class FluentChainMethodCallToNormalMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

@@ -45,6 +45,7 @@ parameters:
             'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
             'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
             'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
+            'Hoa\Protocol\Node\Node': 'PhpParser\Node'
 
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
