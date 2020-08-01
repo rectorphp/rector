@@ -9,9 +9,9 @@ use Rector\RectorGenerator\Configuration\ConfigurationFactory;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\Generator\FileGenerator;
 use Rector\RectorGenerator\TemplateVariablesFactory;
-use Rector\RectorGenerator\Tests\PHPUnit\Behavior\DirectoryAssertableTrait;
 use Rector\RectorGenerator\Tests\RectorGenerator\Source\StaticRectorRecipeFactory;
 use Rector\RectorGenerator\ValueObject\Configuration;
+use Symplify\EasyTesting\PHPUnit\Behavior\DirectoryAssertableTrait;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -80,7 +80,6 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
             self::DESTINATION_DIRECTORY
         );
 
-        // @todo decouple to EasyTesting
         $this->assertDirectoryEquals(__DIR__ . '/Fixture/expected', self::DESTINATION_DIRECTORY);
     }
 

@@ -54,7 +54,6 @@ class SomeClass extends Presenter
     }
 }
 PHP
-
             ),
         ]);
     }
@@ -92,8 +91,8 @@ PHP
             return false;
         }
 
-        $exprStaticType = $this->getStaticType($assign->expr);
-        if (! $exprStaticType->equals(new ObjectType('Nette\Application\UI\Control'))) {
+        $exprStaticType = $this->getObjectType($assign->expr);
+        if (! $exprStaticType->isSuperTypeOf(new ObjectType('Nette\Application\UI\Control'))->yes()) {
             return false;
         }
 
@@ -102,7 +101,7 @@ PHP
             return false;
         }
 
-        $variableStaticType = $this->getStaticType($arrayDimFetch->var);
+        $variableStaticType = $this->getObjectType($arrayDimFetch->var);
         return $variableStaticType->isSuperTypeOf(new ObjectType('Nette\Application\UI\Presenter'))->yes();
     }
 }

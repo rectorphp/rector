@@ -2,14 +2,14 @@
 
 namespace Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Fixture;
 
-use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
+use Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Source\ChildControl;
 
 class SomeClass extends Presenter
 {
     public function some()
     {
-        $someControl = new Control();
+        $someControl = new ChildControl();
         $this['whatever'] = $someControl;
     }
 }
@@ -20,14 +20,14 @@ class SomeClass extends Presenter
 
 namespace Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Fixture;
 
-use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
+use Rector\NetteCodeQuality\Tests\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector\Source\ChildControl;
 
 class SomeClass extends Presenter
 {
     public function some()
     {
-        $someControl = new Control();
+        $someControl = new ChildControl();
         $this->addComponent($someControl, 'whatever');
     }
 }
