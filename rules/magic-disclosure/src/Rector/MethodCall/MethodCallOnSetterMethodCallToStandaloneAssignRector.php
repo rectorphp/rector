@@ -6,18 +6,16 @@ namespace Rector\MagicDisclosure\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Expression;
-use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeAnalyzer\NewChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeFactory\NonFluentMethodCallFactory;
 use Rector\NetteKdyby\Naming\VariableNaming;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -36,12 +34,26 @@ final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends Abstrac
      */
     private $chainMethodCallNodeAnalyzer;
 
+    /**
+     * @var NonFluentMethodCallFactory
+     */
+    private $nonFluentMethodCallFactory;
+
+    /**
+     * @var NewChainMethodCallNodeAnalyzer
+     */
+    private $newChainMethodCallNodeAnalyzer;
+
     public function __construct(
         VariableNaming $variableNaming,
-        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer
+        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
+        NonFluentMethodCallFactory $nonFluentMethodCallFactory,
+        NewChainMethodCallNodeAnalyzer $newChainMethodCallNodeAnalyzer
     ) {
         $this->variableNaming = $variableNaming;
         $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
+        $this->nonFluentMethodCallFactory = $nonFluentMethodCallFactory;
+        $this->newChainMethodCallNodeAnalyzer = $newChainMethodCallNodeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -104,67 +116,24 @@ PHP
             return null;
         }
 
-        $new = $this->matchNewInFluentSetterMethodCall($rootMethodCall);
+        $new = $this->newChainMethodCallNodeAnalyzer->matchNewInFluentSetterMethodCall($rootMethodCall);
         if ($new === null) {
             return null;
         }
 
-        $variableName = $this->variableNaming->resolveFromNode($new);
-        $newVariable = new Variable($variableName);
-
-        $assignExpression = $this->createAssignExpression($newVariable, $new);
-        $this->addNodeBeforeNode($assignExpression, $node);
-
-        // resolve chain calls
-        $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChainWithoutRootOne($node);
-        $chainMethodCalls = array_reverse($chainMethodCalls);
-        foreach ($chainMethodCalls as $chainMethodCall) {
-            $currentMethodCall = new MethodCall($newVariable, $chainMethodCall->name, $chainMethodCall->args);
-            $this->addNodeBeforeNode($currentMethodCall, $node);
-        }
+        $newStmts = $this->nonFluentMethodCallFactory->createFromNewAndRootMethodCall($new, $node);
+        $this->addNodesBeforeNode($newStmts, $node);
 
         // change new arg to root variable
+        $newVariable = $this->crateVariableFromNew($new);
         $rootMethodCall->args = [new Arg($newVariable)];
 
         return $rootMethodCall;
     }
 
     /**
-     * Method call with "new X", that returns "X"?
-     * e.g.
-     *
-     * $this->setItem(new Item) // → returns "Item"
+     * @duplicated
      */
-    private function matchNewInFluentSetterMethodCall(MethodCall $methodCall): ?New_
-    {
-        if (count($methodCall->args) !== 1) {
-            return null;
-        }
-
-        $onlyArgValue = $methodCall->args[0]->value;
-        if (! $onlyArgValue instanceof New_) {
-            return null;
-        }
-
-        $newType = $this->getObjectType($onlyArgValue);
-        if ($newType instanceof MixedType) {
-            return null;
-        }
-
-        $parentMethodCallReturnType = $this->getObjectType($methodCall);
-        if (! $newType->equals($parentMethodCallReturnType)) {
-            return null;
-        }
-
-        return $onlyArgValue;
-    }
-
-    private function createAssignExpression(Variable $newVariable, New_ $new): Expression
-    {
-        $assign = new Assign($newVariable, $new);
-        return new Expression($assign);
-    }
-
     private function shouldSkip(MethodCall $methodCall): bool
     {
         if (! $methodCall->var instanceof MethodCall) {
@@ -172,5 +141,11 @@ PHP
         }
 
         return ! $this->chainMethodCallNodeAnalyzer->isLastChainMethodCall($methodCall);
+    }
+
+    private function crateVariableFromNew(New_ $new): Variable
+    {
+        $variableName = $this->variableNaming->resolveFromNode($new);
+        return new Variable($variableName);
     }
 }

@@ -81,6 +81,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        // @todo decouple "Return_" completelly to \Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector
         $methodCall = $this->matchMethodCall($node);
         if ($methodCall === null) {
             return null;
@@ -104,6 +105,7 @@ PHP
             return null;
         }
 
+        // DUPLICATED
         $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
 
         $assignAndRootExpr = $this->chainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
@@ -177,6 +179,7 @@ PHP
     }
 
     /**
+     * @duplicated
      * @param MethodCall|Return_ $node
      */
     private function removeCurrentNode(Node $node): void

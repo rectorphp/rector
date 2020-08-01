@@ -8,10 +8,57 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
+use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
+use Rector\NetteKdyby\Naming\VariableNaming;
 
 final class NonFluentMethodCallFactory
 {
+    /**
+     * @var ChainMethodCallNodeAnalyzer
+     */
+    private $chainMethodCallNodeAnalyzer;
+
+    /**
+     * @var VariableNaming
+     */
+    private $variableNaming;
+
+    public function __construct(
+        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
+        VariableNaming $variableNaming
+    ) {
+        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
+        $this->variableNaming = $variableNaming;
+    }
+
+    /**
+     * @return Expression[]
+     */
+    public function createFromNewAndRootMethodCall(New_ $new, MethodCall $rootMethodCall): array
+    {
+        $variableName = $this->variableNaming->resolveFromNode($new);
+        $newVariable = new Variable($variableName);
+
+        $newStmts = [];
+        $newStmts[] = $this->createAssignExpression($newVariable, $new);
+
+        // resolve chain calls
+        $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChainWithoutRootOne(
+            $rootMethodCall
+        );
+
+        $chainMethodCalls = array_reverse($chainMethodCalls);
+        foreach ($chainMethodCalls as $chainMethodCall) {
+            $methodCall = new MethodCall($newVariable, $chainMethodCall->name, $chainMethodCall->args);
+            $newStmts[] = new Expression($methodCall);
+        }
+
+        return $newStmts;
+    }
+
     /**
      * @param MethodCall[] $chainMethodCalls
      */
@@ -65,5 +112,11 @@ final class NonFluentMethodCallFactory
         }
 
         return $assignAndRootExpr->getRootExpr() !== $assignAndRootExpr->getAssignExpr();
+    }
+
+    private function createAssignExpression(Variable $newVariable, New_ $new): Expression
+    {
+        $assign = new Assign($newVariable, $new);
+        return new Expression($assign);
     }
 }
