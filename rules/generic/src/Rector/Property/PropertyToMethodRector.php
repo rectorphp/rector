@@ -34,14 +34,6 @@ final class PropertyToMethodRector extends AbstractRector implements Configurabl
      */
     private $perClassPropertyToMethods = [];
 
-    /**
-     * @param string[][][] $perClassPropertyToMethods
-     */
-    public function __construct(array $perClassPropertyToMethods = [])
-    {
-        $this->perClassPropertyToMethods = $perClassPropertyToMethods;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces properties assign calls be defined methods.', [
@@ -77,7 +69,7 @@ $result = $object->getProperty('someArg');
 PHP
                 ,
                 [
-                    '$perClassPropertyToMethods' => [
+                    self::PER_CLASS_PROPERTY_TO_METHODS => [
                         'SomeObject' => [
                             'property' => [
                                 self::GET => [

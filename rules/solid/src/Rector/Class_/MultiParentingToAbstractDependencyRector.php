@@ -29,11 +29,19 @@ use Rector\SOLID\NodeRemover\ClassMethodNodeRemover;
 final class MultiParentingToAbstractDependencyRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @api
      * @var string
      */
     public const FRAMEWORK_SYMFONY = 'symfony';
 
     /**
+     * @api
+     * @var string
+     */
+    public const FRAMEWORK_NETTE = 'nette';
+
+    /**
+     * @api
      * @var string
      */
     public const FRAMEWORK = 'framework';
@@ -135,7 +143,8 @@ class SecondChild extends AbstractParentClass
 }
 PHP
 ,
-                    ['$framework' => 'nette']
+                    [
+                        self::FRAMEWORK => self::FRAMEWORK_NETTE, ]
                 ),
             ]
         );

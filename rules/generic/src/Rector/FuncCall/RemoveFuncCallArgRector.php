@@ -40,7 +40,7 @@ CODE_SAMPLE
 remove_last_arg(1);
 CODE_SAMPLE
                 , [
-                    '$argumentPositionByFunctionName' => [
+                    self::ARGUMENT_POSITION_BY_FUNCTION_NAME => [
                         'remove_last_arg' => [1],
                     ],
                 ]),

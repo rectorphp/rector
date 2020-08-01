@@ -42,8 +42,10 @@ $serviceDefinition->addTag('inject');
 PHP
                 ,
                 [
-                    'Nette\DI\ServiceDefinition' => [
-                        'setInject' => [['addTag', ['inject']]],
+                    self::OLD_METHODS_TO_NEW_METHODS_WITH_ARGS_BY_TYPE => [
+                        'Nette\DI\ServiceDefinition' => [
+                            'setInject' => [['addTag', ['inject']]],
+                        ],
                     ],
                 ]
             ),

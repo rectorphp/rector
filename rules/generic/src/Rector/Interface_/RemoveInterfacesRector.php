@@ -42,7 +42,9 @@ class SomeClass
 }
 PHP
                 ,
-                ['SomeInterface']
+                [
+                    self::INTERFACES_TO_REMOVE => ['SomeInterface'],
+                ]
             ),
         ]);
     }

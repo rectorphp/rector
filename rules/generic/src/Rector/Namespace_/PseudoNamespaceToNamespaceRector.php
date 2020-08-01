@@ -85,7 +85,7 @@ $someClassToKeep = new Some_Class_To_Keep;
 PHP
                 ,
                 [
-                    '$namespacePrefixesWithExcludedClasses' => [
+                    self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => [
                         'Some_' => ['Some_Class_To_Keep'],
                     ],
                 ]

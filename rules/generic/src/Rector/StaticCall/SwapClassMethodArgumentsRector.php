@@ -55,7 +55,7 @@ PHP
 
             ,
             [
-                '$newArgumentPositionsByMethodAndClass' => [
+                self::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS => [
                     'SomeClass' => [
                         'run' => [1, 0],
                     ],

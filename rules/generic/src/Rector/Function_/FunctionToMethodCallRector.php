@@ -35,7 +35,9 @@ final class FunctionToMethodCallRector extends AbstractRector implements Configu
                 'view("...", []);',
                 '$this->render("...", []);',
                 [
-                    'view' => ['this', 'render'],
+                    self::FUNCTION_TO_METHOD_CALL => [
+                        'view' => ['this', 'render'],
+                    ],
                 ]
             ),
         ]);

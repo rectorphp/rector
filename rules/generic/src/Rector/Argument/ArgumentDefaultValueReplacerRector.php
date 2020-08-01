@@ -58,12 +58,14 @@ $someObject->someMethod(false);'
 PHP
                     ,
                     [
-                        'SomeExampleClass' => [
-                            'someMethod' => [
-                                0 => [
-                                    [
-                                        self::BEFORE => 'SomeClass::OLD_CONSTANT',
-                                        self::AFTER => 'false',
+                        self::REPLACES_BY_METHOD_AND_TYPES => [
+                            'SomeExampleClass' => [
+                                'someMethod' => [
+                                    0 => [
+                                        [
+                                            self::BEFORE => 'SomeClass::OLD_CONSTANT',
+                                            self::AFTER => 'false',
+                                        ],
                                     ],
                                 ],
                             ],

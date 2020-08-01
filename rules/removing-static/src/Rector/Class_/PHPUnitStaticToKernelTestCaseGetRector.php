@@ -125,7 +125,7 @@ final class SomeTestCase extends KernelTestCase
 PHP
                 ,
                 [
-                    'staticClassTypes' => ['EntityFactory'],
+                    self::STATIC_CLASS_TYPES => ['EntityFactory'],
                 ]
             ),
         ]);
