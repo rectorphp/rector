@@ -53,8 +53,7 @@ class SomeClass extends TestCase
     }
 }
 PHP
-
-                ),
+            ),
             ]
         );
     }

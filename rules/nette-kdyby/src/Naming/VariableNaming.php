@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar;
@@ -17,9 +18,11 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class VariableNaming
 {
@@ -38,17 +41,31 @@ final class VariableNaming
      */
     private $classNaming;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         ClassNaming $classNaming,
         NodeNameResolver $nodeNameResolver,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
         $this->classNaming = $classNaming;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    public function resolveFromNode(Node $node, Type $type): string
+    public function resolveFromNode(Node $node): string
+    {
+        $nodeType = $this->nodeTypeResolver->getStaticType($node);
+
+        return $this->resolveFromNodeAndType($node, $nodeType);
+    }
+
+    public function resolveFromNodeAndType(Node $node, Type $type): string
     {
         $variableName = $this->resolveBareFromNode($node);
 
@@ -111,17 +128,7 @@ final class VariableNaming
 
     private function resolveBareFromNode(Node $node): string
     {
-        if ($node instanceof Arg) {
-            $node = $node->value;
-        }
-
-        if ($node instanceof Cast) {
-            $node = $node->expr;
-        }
-
-        if ($node instanceof Ternary) {
-            $node = $node->if;
-        }
+        $node = $this->unwrapNode($node);
 
         if ($node instanceof ArrayDimFetch) {
             return $this->resolveParamNameFromArrayDimFetch($node);
@@ -133,6 +140,10 @@ final class VariableNaming
 
         if ($node instanceof MethodCall) {
             return $this->resolveFromMethodCall($node);
+        }
+
+        if ($node instanceof New_) {
+            return $this->resolveFromNew($node);
         }
 
         if ($node === null) {
@@ -149,5 +160,32 @@ final class VariableNaming
         }
 
         throw new NotImplementedException();
+    }
+
+    private function resolveFromNew(New_ $new): string
+    {
+        if ($new->class instanceof Node\Name) {
+            $className = $this->nodeNameResolver->getName($new->class);
+            return $this->classNaming->getShortName($className);
+        }
+
+        throw new NotImplementedYetException();
+    }
+
+    private function unwrapNode(Node $node): ?Node
+    {
+        if ($node instanceof Arg) {
+            return $node->value;
+        }
+
+        if ($node instanceof Cast) {
+            return $node->expr;
+        }
+
+        if ($node instanceof Ternary) {
+            return $node->if;
+        }
+
+        return $node;
     }
 }

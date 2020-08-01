@@ -1,4 +1,4 @@
-# All 545 Rectors Overview
+# All 546 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -25,7 +25,7 @@
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (4)
-- [MagicDisclosure](#magicdisclosure) (6)
+- [MagicDisclosure](#magicdisclosure) (8)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
@@ -668,7 +668,8 @@ Change `array_push()` to direct variable assign
 Merges nested if statements
 
 ```diff
- class SomeClass {
+ class SomeClass
+ {
      public function run()
      {
 -        if ($cond1) {
@@ -4317,7 +4318,8 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 Changes property type definition from type definitions to `@var` annotations.
 
 ```diff
- class SomeClass {
+ class SomeClass
+ {
 -    private string $property;
 +    /**
 +    * @var string
@@ -6211,27 +6213,66 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
+### `InArgChainMethodCallToStandaloneMethodCallRector`
+
+- class: [`Rector\MagicDisclosure\Rector\MethodCall\InArgChainMethodCallToStandaloneMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/MethodCall/InArgChainMethodCallToStandaloneMethodCallRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodCall/InArgChainMethodCallToStandaloneMethodCallRector/Fixture)
+
+Turns fluent interface calls to classic ones.
+
+```diff
+ class UsedAsParameter
+ {
+     public function someFunction(FluentClass $someClass)
+     {
+-        $this->processFluentClass($someClass->someFunction()->otherFunction());
++        $someClass->someFunction();
++        $someClass->otherFunction();
++        $this->processFluentClass($someClass);
+     }
+
+     public function processFluentClass(FluentClass $someClass)
+     {
+     }
+-}
++}
+```
+
+<br><br>
+
+### `MethodCallOnSetterMethodCallToStandaloneAssignRector`
+
+- class: [`Rector\MagicDisclosure\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector`](/../master/rules/magic-disclosure/src/Rector/MethodCall/MethodCallOnSetterMethodCallToStandaloneAssignRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodCall/MethodCallOnSetterMethodCallToStandaloneAssignRector/Fixture)
+
+Change method call on setter to standalone assign before the setter
+
+```diff
+ class SomeClass
+ {
+     public function some()
+     {
+-        $this->anotherMethod(new AnotherClass())
+-            ->someFunction();
++        $anotherClass = new AnotherClass();
++        $anotherClass->someFunction();
++        $this->anotherMethod($anotherClass);
+     }
+
+     public function anotherMethod(AnotherClass $anotherClass)
+     {
+     }
+ }
+```
+
+<br><br>
+
 ### `ReturnThisRemoveRector`
 
 - class: [`Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector`](/../master/rules/magic-disclosure/src/Rector/ClassMethod/ReturnThisRemoveRector.php)
 - [test fixtures](/../master/rules/magic-disclosure/tests/Rector/ClassMethod/ReturnThisRemoveRector/Fixture)
 
 Removes "return `$this;"` from *fluent interfaces* for specified classes.
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(ReturnThisRemoveRector::class)
-        ->call('configure', [['types_to_match', ['SomeExampleClass']]]);
-};
-```
-
-↓
 
 ```diff
  class SomeExampleClass
@@ -9102,7 +9143,8 @@ Add pre-slash to short named functions to improve performance
 Add $_SERVER REQUEST_URI to method call
 
 ```diff
- class SomeClass {
+ class SomeClass
+ {
      public function run($di)
      {
          $application = new \Phalcon\Mvc\Application();
@@ -9143,7 +9185,8 @@ Decouple `Phalcon\Mvc\Model::save()` with argument to `assign()`
 Add `$cssClasses` in Flash to separated method call
 
 ```diff
- class SomeClass {
+ class SomeClass
+ {
      public function run()
      {
          $cssClasses = [];
@@ -10336,7 +10379,8 @@ Add "_" as thousands separator in numbers
 Change `array_key_exists()` on property to `property_exists()`
 
 ```diff
- class SomeClass {
+ class SomeClass
+ {
       public $value;
  }
  $someClass = new SomeClass;
@@ -10891,7 +10935,8 @@ Complete missing constructor dependency instance by type
 Change docs types to union types, where possible (properties are covered by TypedPropertiesRector)
 
 ```diff
- class SomeClass {
+ class SomeClass
+ {
      /**
       * @param array|int $number
       * @return bool|float

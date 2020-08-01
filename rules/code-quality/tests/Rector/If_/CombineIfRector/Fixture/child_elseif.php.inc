@@ -2,7 +2,8 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\ChildElseIf;
 
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         if ($cond1) {

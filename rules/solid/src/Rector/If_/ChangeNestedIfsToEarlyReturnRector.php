@@ -74,7 +74,6 @@ class SomeClass
     }
 }
 PHP
-
             ),
         ]);
     }

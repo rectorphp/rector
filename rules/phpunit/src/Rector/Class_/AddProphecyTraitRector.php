@@ -72,7 +72,6 @@ final class ExampleTest extends TestCase
     }
 }
 PHP
-
             ),
         ]);
     }

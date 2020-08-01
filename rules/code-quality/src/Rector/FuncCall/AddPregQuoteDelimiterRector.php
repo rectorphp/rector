@@ -37,7 +37,6 @@ PHP
                 <<<'PHP'
 '#' . preg_quote('name', '#') . '#';
 PHP
-
             ),
         ]);
     }

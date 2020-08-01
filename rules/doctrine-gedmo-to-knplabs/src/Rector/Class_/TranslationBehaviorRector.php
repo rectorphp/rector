@@ -136,7 +136,6 @@ class SomeClassTranslation implements TranslationInterface
     private $content;
 }
 PHP
-
             ),
         ]);
     }

@@ -40,7 +40,6 @@ class SomeClass
     }
 }
 PHP
-
             ),
         ]);
     }

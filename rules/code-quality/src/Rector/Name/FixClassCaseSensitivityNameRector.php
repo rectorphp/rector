@@ -65,7 +65,6 @@ final class AnotherClass
 {
 }
 PHP
-
             ),
         ]);
     }

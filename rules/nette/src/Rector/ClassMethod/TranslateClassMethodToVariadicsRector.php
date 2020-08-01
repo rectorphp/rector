@@ -60,7 +60,6 @@ final class SomeClass implements ITranslator
     }
 }
 PHP
-
             ),
         ]);
     }

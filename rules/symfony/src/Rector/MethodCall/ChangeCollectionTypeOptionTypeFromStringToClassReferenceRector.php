@@ -62,7 +62,6 @@ class TaskType extends AbstractType
     }
 }
 PHP
-
             ),
         ]);
     }

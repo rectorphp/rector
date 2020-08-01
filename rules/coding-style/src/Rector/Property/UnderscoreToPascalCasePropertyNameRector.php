@@ -48,7 +48,6 @@ final class SomeClass
     }
 }
 PHP
-
             ),
         ]);
     }

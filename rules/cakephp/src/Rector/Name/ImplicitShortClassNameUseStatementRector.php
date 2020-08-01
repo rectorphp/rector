@@ -52,7 +52,6 @@ class LocationsFixture extends TestFixture implements Plugin
 {
 }
 PHP
-
             ),
         ]);
     }

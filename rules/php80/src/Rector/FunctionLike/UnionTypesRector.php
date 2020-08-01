@@ -30,7 +30,8 @@ final class UnionTypesRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     /**
      * @param array|int $number
      * @return bool|float
@@ -42,7 +43,8 @@ class SomeClass {
 PHP
 ,
                     <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     /**
      * @param array|int $number
      * @return bool|float
@@ -52,8 +54,7 @@ class SomeClass {
     }
 }
 PHP
-
-                ),
+            ),
             ]
         );
     }

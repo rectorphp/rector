@@ -38,7 +38,6 @@ class SomeTest extends \PHPUnit\Framework\TestCase
 {
 }
 PHP
-
             ),
         ]);
     }

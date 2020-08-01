@@ -2,7 +2,8 @@
 
 namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class SomeClass {
+class SomeClass
+{
     private string $property;
 }
 
@@ -12,7 +13,8 @@ class SomeClass {
 
 namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
 
-class SomeClass {
+class SomeClass
+{
     /**
      * @var string
      */

@@ -49,7 +49,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set('key', 'value');
 };
 PHP
-
             ),
         ]);
     }

@@ -51,7 +51,6 @@ final class SomeExtension extends CompilerExtension
     }
 }
 PHP
-
             ),
         ]);
     }

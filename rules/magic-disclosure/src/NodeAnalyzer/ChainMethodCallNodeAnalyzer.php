@@ -4,18 +4,25 @@ declare(strict_types=1);
 
 namespace Rector\MagicDisclosure\NodeAnalyzer;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
+/**
+ * Utils for chain of MethodCall Node:
+ * "$this->methodCall()->chainedMethodCall()"
+ */
 final class ChainMethodCallNodeAnalyzer
 {
     /**
@@ -28,10 +35,19 @@ final class ChainMethodCallNodeAnalyzer
      */
     private $typeUnwrapper;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeUnwrapper $typeUnwrapper)
-    {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        NodeTypeResolver $nodeTypeResolver,
+        TypeUnwrapper $typeUnwrapper
+    ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeUnwrapper = $typeUnwrapper;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -137,6 +153,83 @@ final class ChainMethodCallNodeAnalyzer
         }
 
         return $chainMethodCalls;
+    }
+
+    /**
+     * @return MethodCall[]
+     */
+    public function collectAllMethodCallsInChainWithoutRootOne(MethodCall $methodCall): array
+    {
+        $chainMethodCalls = $this->collectAllMethodCallsInChain($methodCall);
+
+        foreach ($chainMethodCalls as $key => $chainMethodCall) {
+            if (! $chainMethodCall->var instanceof MethodCall) {
+                unset($chainMethodCalls[$key]);
+                break;
+            }
+        }
+
+        return array_values($chainMethodCalls);
+    }
+
+    /**
+     * Checks "$this->someMethod()->anotherMethod()"
+     *
+     * @param string[] $methods
+     */
+    public function isTypeAndChainCalls(Node $node, Type $type, array $methods): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        // node chaining is in reverse order than code
+        $methods = array_reverse($methods);
+
+        foreach ($methods as $method) {
+            $activeMethodName = $this->nodeNameResolver->getName($node->name);
+            if ($activeMethodName !== $method) {
+                return false;
+            }
+
+            $node = $node->var;
+            if ($node instanceof MethodCall) {
+                continue;
+            }
+        }
+
+        $variableType = $this->nodeTypeResolver->resolve($node);
+        if ($variableType instanceof MixedType) {
+            return false;
+        }
+
+        return $variableType->isSuperTypeOf($type)->yes();
+    }
+
+    public function resolveRootVariable(MethodCall $methodCall): Node
+    {
+        $callerNode = $methodCall->var;
+
+        while ($callerNode instanceof MethodCall || $callerNode instanceof StaticCall) {
+            $callerNode = $callerNode instanceof StaticCall ? $callerNode->class : $callerNode->var;
+        }
+
+        return $callerNode;
+    }
+
+    public function resolveRootMethodCall(MethodCall $methodCall): ?MethodCall
+    {
+        $callerNode = $methodCall->var;
+
+        while ($callerNode instanceof MethodCall && $callerNode->var instanceof MethodCall) {
+            $callerNode = $callerNode->var;
+        }
+
+        if ($callerNode instanceof MethodCall) {
+            return $callerNode;
+        }
+
+        return null;
     }
 
     private function resolveStringTypeFromExpr(Expr $expr): ?string

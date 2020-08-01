@@ -2,7 +2,8 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
 
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         if ($cond1) {
@@ -19,7 +20,8 @@ class SomeClass {
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\Fixture;
 
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         if ($cond1 && $cond2) {

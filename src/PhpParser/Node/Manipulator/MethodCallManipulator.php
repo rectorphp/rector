@@ -7,12 +7,12 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -28,10 +28,19 @@ final class MethodCallManipulator
      */
     private $betterNodeFinder;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
-    {
+    /**
+     * @var ChainMethodCallNodeAnalyzer
+     */
+    private $chainMethodCallNodeAnalyzer;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        NodeNameResolver $nodeNameResolver,
+        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
     }
 
     /**
@@ -124,24 +133,13 @@ final class MethodCallManipulator
             }
 
             // cover fluent interfaces too
-            $callerNode = $this->resolveRootVariable($node);
+            $callerNode = $this->chainMethodCallNodeAnalyzer->resolveRootVariable($node);
             if (! $callerNode instanceof Variable) {
                 return false;
             }
 
             return $this->nodeNameResolver->isName($callerNode, $variableName);
         });
-    }
-
-    public function resolveRootVariable(MethodCall $methodCall): Node
-    {
-        $callerNode = $methodCall->var;
-
-        while ($callerNode instanceof MethodCall || $callerNode instanceof StaticCall) {
-            $callerNode = $callerNode instanceof StaticCall ? $callerNode->class : $callerNode->var;
-        }
-
-        return $callerNode;
     }
 
     /**

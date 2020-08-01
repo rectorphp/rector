@@ -60,8 +60,7 @@ class SomePresenter extends Presenter
     }
 }
 PHP
-
-                ),
+            ),
             ]
         );
     }

@@ -50,7 +50,6 @@ class SomeClass extends PHPUnit\Framework\TestCase
     }
 }
 PHP
-
             ),
         ]);
     }

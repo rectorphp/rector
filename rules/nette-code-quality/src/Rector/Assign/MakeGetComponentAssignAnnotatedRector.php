@@ -95,7 +95,6 @@ final class AnotherControl extends Control
 {
 }
 PHP
-
             ),
         ]);
     }

@@ -187,6 +187,16 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return $node;
     }
 
+    public function hasParentType(Node $node, string $type): bool
+    {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent === null) {
+            return false;
+        }
+
+        return is_a($parent, $type, true);
+    }
+
     protected function getNextExpression(Node $node): ?Node
     {
         $currentExpression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);

@@ -89,8 +89,7 @@ class SomeClass implements FoodRecipeInterface
     private $service;
 }
 PHP
-
-                ),
+            ),
             ]
         );
     }

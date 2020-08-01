@@ -62,7 +62,6 @@ class SomeUtilsClass
 
 SomeUtilsClass::someFunction('lol');
 PHP
-
             ),
         ]);
     }
