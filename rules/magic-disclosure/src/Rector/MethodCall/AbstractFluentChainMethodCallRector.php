@@ -61,7 +61,7 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
         $calleeUniqueType = $calleeUniqueTypes[0];
         // skip query and builder
         // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?"
-        if ((bool) Strings::match($calleeUniqueType, '#(Query|Builder)$#')) {
+        if ((bool) Strings::match($calleeUniqueType, '#(Finder|Query|Builder|MutatingScope)$#')) {
             return true;
         }
 
