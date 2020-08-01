@@ -25,7 +25,7 @@
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (6)
 - [Legacy](#legacy) (4)
-- [MagicDisclosure](#magicdisclosure) (6)
+- [MagicDisclosure](#magicdisclosure) (7)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
@@ -6218,21 +6218,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 Removes "return `$this;"` from *fluent interfaces* for specified classes.
 
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(ReturnThisRemoveRector::class)
-        ->call('configure', [['types_to_match', ['SomeExampleClass']]]);
-};
-```
-
-↓
-
 ```diff
  class SomeExampleClass
  {
@@ -6244,6 +6229,33 @@ return function (ContainerConfigurator $containerConfigurator) : void {
      public function otherFunction()
      {
 -        return $this;
+     }
+ }
+```
+
+<br><br>
+
+### `SetterOnSetterMethodCallToStandaloneAssignRector`
+
+- class: [`Rector\MagicDisclosure\Rector\MethodCall\SetterOnSetterMethodCallToStandaloneAssignRector`](/../master/rules/magic-disclosure/src/Rector/MethodCall/SetterOnSetterMethodCallToStandaloneAssignRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodCall/SetterOnSetterMethodCallToStandaloneAssignRector/Fixture)
+
+Change method call on setter to standalone assign before the setter
+
+```diff
+ class SomeClass
+ {
+     public function some()
+     {
+-        $this->anotherMethod(new AnotherClass())
+-            ->someFunction();
++        $anotherClass = new AnotherClass();
++        $anotherClass->someFunction();
++        $this->anotherMethod($anotherClass);
+     }
+
+     public function anotherMethod(AnotherClass $anotherClass)
+     {
      }
  }
 ```

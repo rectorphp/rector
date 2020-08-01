@@ -49,7 +49,7 @@ final class VariableWithTypesFactory
 
         foreach ($args as $arg) {
             $staticType = $this->nodeTypeResolver->getStaticType($arg->value);
-            $variableName = $this->variableNaming->resolveFromNode($arg, $staticType);
+            $variableName = $this->variableNaming->resolveFromNodeAndType($arg, $staticType);
 
             // compensate for static
             if ($staticType instanceof StaticType) {

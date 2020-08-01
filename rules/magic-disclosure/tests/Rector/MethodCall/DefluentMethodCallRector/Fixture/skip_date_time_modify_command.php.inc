@@ -3,9 +3,8 @@
 namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
 
 use DateTime;
-use Symfony\Component\Console\Command\Command;
 
-class SkipDateTimeModifyCommand extends Command
+class SkipDateTimeModifyCommand
 {
     public function go()
     {

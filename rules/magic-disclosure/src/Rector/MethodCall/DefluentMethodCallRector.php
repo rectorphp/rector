@@ -19,7 +19,6 @@ use Rector\MagicDisclosure\NodeManipulator\ChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/

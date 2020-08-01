@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\FixtureInMethodCall;
 
 use Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClass;
 
@@ -20,7 +20,7 @@ class UsedAsParameter
 -----
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\FixtureInMethodCall;
 
 use Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClass;
 
