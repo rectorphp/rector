@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -85,7 +84,6 @@ PHP
             return false;
         }
 
-        $exprStaticType = $this->getObjectType($assign->expr);
-        return $exprStaticType->isSuperTypeOf(new ObjectType('Nette\Application\UI\Presenter'))->yes();
+        return $this->isObjectType($assign->expr, 'Nette\Application\UI\Presenter');
     }
 }
