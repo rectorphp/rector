@@ -82,7 +82,7 @@ final class ChainMethodCallNodeAnalyzer
      */
     public function resolveCalleeUniqueTypes(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): array
     {
-        $rootClassType = $this->resolveExprStringClassType($assignAndRootExpr->getRootExpr());
+        $rootClassType = $this->resolveStringTypeFromExpr($assignAndRootExpr->getRootExpr());
         if ($rootClassType === null) {
             return [];
         }
@@ -94,7 +94,7 @@ final class ChainMethodCallNodeAnalyzer
         $lastChainMethodCallKey = array_key_first($chainMethodCalls);
 
         foreach ($chainMethodCalls as $key => $chainMethodCall) {
-            $chainMethodCallType = $this->resolveExprStringClassType($chainMethodCall);
+            $chainMethodCallType = $this->resolveStringTypeFromExpr($chainMethodCall);
 
             if ($chainMethodCallType === null) {
                 // last method call does not need a type
@@ -108,7 +108,9 @@ final class ChainMethodCallNodeAnalyzer
             $callerClassTypes[] = $chainMethodCallType;
         }
 
-        return array_unique($callerClassTypes);
+        $uniqueCallerClassTypes = array_unique($callerClassTypes);
+
+        return $this->filterOutAlreadyPresentParentClasses($uniqueCallerClassTypes);
     }
 
     /**
@@ -137,7 +139,7 @@ final class ChainMethodCallNodeAnalyzer
         return $chainMethodCalls;
     }
 
-    private function resolveExprStringClassType(Expr $expr): ?string
+    private function resolveStringTypeFromExpr(Expr $expr): ?string
     {
         $rootStaticType = $this->nodeTypeResolver->getStaticType($expr);
         if ($rootStaticType instanceof UnionType) {
@@ -150,5 +152,31 @@ final class ChainMethodCallNodeAnalyzer
         }
 
         return $rootStaticType->getClassName();
+    }
+
+    /**
+     * If a child class is with the parent class in the list, count them as 1
+     *
+     * @param string[] $types
+     * @return string[]
+     */
+    private function filterOutAlreadyPresentParentClasses(array $types): array
+    {
+        $secondTypes = $types;
+
+        foreach ($types as $key => $type) {
+            foreach ($secondTypes as $secondType) {
+                if ($type === $secondType) {
+                    continue;
+                }
+
+                if (is_a($type, $secondType, true)) {
+                    unset($types[$key]);
+                    continue 2;
+                }
+            }
+        }
+
+        return array_values($types);
     }
 }
