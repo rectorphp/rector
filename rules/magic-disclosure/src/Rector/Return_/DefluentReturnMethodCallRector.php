@@ -8,18 +8,17 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
  * @see \Rector\MagicDisclosure\Tests\Rector\Return_\DefluentReturnMethodCallRector\DefluentReturnMethodCallRectorTest
  */
-final class DefluentReturnMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
+final class DefluentReturnMethodCallRector extends AbstractRector
 {
     /**
      * @var ChainMethodCallNodeAnalyzer

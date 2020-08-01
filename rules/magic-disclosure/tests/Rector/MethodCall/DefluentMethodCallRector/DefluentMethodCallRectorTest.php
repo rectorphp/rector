@@ -24,13 +24,8 @@ final class DefluentMethodCallRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            DefluentMethodCallRector::class => [],
-        ];
+        return DefluentMethodCallRector::class;
     }
 }
