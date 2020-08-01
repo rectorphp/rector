@@ -10,10 +10,16 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
+/**
+ * @deprecated
+ * @todo merge with very similar logic in
+ * @see VariableNaming
+ */
 final class PropertyNaming
 {
     /**

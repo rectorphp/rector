@@ -64,7 +64,8 @@ final class NonFluentChainMethodCallFactory
      */
     public function createFromAssignObjectAndMethodCalls(
         AssignAndRootExpr $assignAndRootExpr,
-        array $chainMethodCalls
+        array $chainMethodCalls,
+        string $kind = 'normal'
     ): array {
         $nodesToAdd = [];
 
@@ -75,7 +76,7 @@ final class NonFluentChainMethodCallFactory
         $decoupledMethodCalls = $this->createNonFluentMethodCalls($chainMethodCalls, $assignAndRootExpr);
         $nodesToAdd = array_merge($nodesToAdd, $decoupledMethodCalls);
 
-        if ($assignAndRootExpr->getSilentVariable() !== null) {
+        if ($assignAndRootExpr->getSilentVariable() !== null && $kind !== 'in_args') {
             $nodesToAdd[] = $assignAndRootExpr->getReturnSilentVariable();
         }
 

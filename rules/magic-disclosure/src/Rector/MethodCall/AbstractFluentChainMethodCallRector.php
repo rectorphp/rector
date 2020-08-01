@@ -71,11 +71,14 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
     /**
      * @return Node[][]|AssignAndRootExpr[]
      */
-    protected function createStandaloneNodesToAddFromChainMethodCalls(MethodCall $methodCall): array
+    protected function createStandaloneNodesToAddFromChainMethodCalls(MethodCall $methodCall, string $kind): array
     {
         $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
+        $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls(
+            $chainMethodCalls,
+            $kind
+        );
 
-        $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
         if ($assignAndRootExpr === null) {
             return [];
         }
@@ -86,7 +89,8 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
 
         $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromAssignObjectAndMethodCalls(
             $assignAndRootExpr,
-            $chainMethodCalls
+            $chainMethodCalls,
+            $kind
         );
 
         return [$nodesToAdd, $assignAndRootExpr];

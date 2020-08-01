@@ -37,11 +37,15 @@ class SomeClass
     public function run(DummyUserProvider $dummyUserProvider, $oldDescription)
     {
         $user = $dummyUserProvider->getDummyUser();
-
         $dummyUserProfile = new DummyUserProfile();
-        $dummyUserProfile->setOldDescription($oldDescription);
-        $dummyUserProfile->setUserId($user->id);
-        $this->someMethod($dummyUserProfile);
+        ($dummyUserProfile)
+            ->setOldDescription($oldDescription);
+        $dummyUserProfile
+            ->setUserId($user->id);
+
+        $this->someMethod(
+            $dummyUserProfile
+        );
     }
 
     public function someMethod(DummyUserProfile $dummyUserProfile)
