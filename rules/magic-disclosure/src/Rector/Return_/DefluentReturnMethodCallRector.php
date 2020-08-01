@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
@@ -21,13 +21,13 @@ use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
 final class DefluentReturnMethodCallRector extends AbstractRector
 {
     /**
-     * @var ChainMethodCallNodeAnalyzer
+     * @var FluentChainMethodCallNodeAnalyzer
      */
-    private $chainMethodCallNodeAnalyzer;
+    private $fluentChainMethodCallNodeAnalyzer;
 
-    public function __construct(ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer)
+    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
     {
-        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -68,7 +68,7 @@ PHP
             return null;
         }
 
-        if (! $this->chainMethodCallNodeAnalyzer->isFluentClassMethodOfMethodCall($methodCall)) {
+        if (! $this->fluentChainMethodCallNodeAnalyzer->isFluentClassMethodOfMethodCall($methodCall)) {
             return null;
         }
 

@@ -6,9 +6,6 @@ namespace Rector\MagicDisclosure\Rector\AbstractRector;
 
 use Rector\Core\Rector\AbstractRector;
 
-/**
- * @todo upgrade Rector core rule
- */
 abstract class AbstractConfigurableMatchTypeRector extends AbstractRector
 {
     /**

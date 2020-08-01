@@ -10,7 +10,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,13 +21,13 @@ use Symfony\Component\HttpFoundation\Request;
 final class AddFlashRector extends AbstractRector
 {
     /**
-     * @var ChainMethodCallNodeAnalyzer
+     * @var FluentChainMethodCallNodeAnalyzer
      */
-    private $chainMethodCallNodeAnalyzer;
+    private $fluentChainMethodCallNodeAnalyzer;
 
-    public function __construct(ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer)
+    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
     {
-        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,7 +75,7 @@ PHP
             return null;
         }
 
-        if (! $this->chainMethodCallNodeAnalyzer->isTypeAndChainCalls(
+        if (! $this->fluentChainMethodCallNodeAnalyzer->isTypeAndChainCalls(
             $node,
             new ObjectType(Request::class),
             ['getSession', 'getFlashBag', 'add']

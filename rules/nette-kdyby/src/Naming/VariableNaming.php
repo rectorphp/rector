@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ThisType;
@@ -164,7 +165,7 @@ final class VariableNaming
 
     private function resolveFromNew(New_ $new): string
     {
-        if ($new->class instanceof Node\Name) {
+        if ($new->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($new->class);
             return $this->classNaming->getShortName($className);
         }

@@ -2,7 +2,7 @@
 
 namespace Rector\MagicDisclosure\Tests\Rector\Return_\DefluentReturnMethodCallRector\Fixture;
 
-use Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClass;
+use Rector\MagicDisclosure\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
 
 class SomeClass
 {
@@ -19,7 +19,7 @@ class SomeClass
 
 namespace Rector\MagicDisclosure\Tests\Rector\Return_\DefluentReturnMethodCallRector\Fixture;
 
-use Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector\Source\FluentInterfaceClass;
+use Rector\MagicDisclosure\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector\Source\FluentInterfaceClass;
 
 class SomeClass
 {

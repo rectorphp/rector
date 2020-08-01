@@ -6,7 +6,7 @@ use GuzzleHttp\Cookie\SetCookie;
 use Rector\Generic\Rector\Function_\FunctionToMethodCallRector;
 use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
-use Rector\MagicDisclosure\Rector\MethodCall\DefluentMethodCallRector;
+use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -23,8 +23,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # both uses "%classes_to_defluent%
     #diff-810cdcfdd8a6b9e1fc0d1e96d7786874
     # covers https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7
-    $services->set(DefluentMethodCallRector::class)
-        ->call('configure', [[DefluentMethodCallRector::TYPES_TO_MATCH => '%classes_to_defluent%']]);
+    $services->set(FluentChainMethodCallToNormalMethodCallRector::class)
+        ->call(
+            'configure',
+            [[FluentChainMethodCallToNormalMethodCallRector::TYPES_TO_MATCH => '%classes_to_defluent%']]
+        );
 
     $services->set(FunctionToMethodCallRector::class)
         ->call('configure', [[

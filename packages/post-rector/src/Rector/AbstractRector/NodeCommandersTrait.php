@@ -94,6 +94,8 @@ trait NodeCommandersTrait
     protected function addNodesAfterNode(array $newNodes, Node $positionNode): void
     {
         foreach ($newNodes as $newNode) {
+            // prevent fluent method weird indent
+            $newNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             $this->addNodeAfterNode($newNode, $positionNode);
         }
     }
