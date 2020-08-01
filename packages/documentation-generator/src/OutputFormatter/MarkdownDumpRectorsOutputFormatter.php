@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace Rector\DocumentationGenerator\OutputFormatter;
 
 use Nette\Utils\Strings;
-use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\RectorDefinition\ComposerJsonAwareCodeSample;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DocumentationGenerator\PhpKeywordHighlighter;
 use Rector\DocumentationGenerator\RectorMetadataResolver;
 use Rector\PHPUnit\TestClassResolver\TestClassResolver;
-use Rector\SymfonyPhpConfig\Printer\ReturnClosurePrinter;
 use ReflectionClass;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -26,11 +21,6 @@ final class MarkdownDumpRectorsOutputFormatter
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-
-    /**
-     * @var MarkdownDifferAndFormatter
-     */
-    private $markdownDifferAndFormatter;
 
     /**
      * @var RectorMetadataResolver
@@ -48,24 +38,22 @@ final class MarkdownDumpRectorsOutputFormatter
     private $phpKeywordHighlighter;
 
     /**
-     * @var ReturnClosurePrinter
+     * @var RectorCodeSamplePrinter
      */
-    private $returnClosurePrinter;
+    private $rectorCodeSamplePrinter;
 
     public function __construct(
-        MarkdownDifferAndFormatter $markdownDifferAndFormatter,
         PhpKeywordHighlighter $phpKeywordHighlighter,
         RectorMetadataResolver $rectorMetadataResolver,
-        ReturnClosurePrinter $returnClosurePrinter,
         SymfonyStyle $symfonyStyle,
-        TestClassResolver $testClassResolver
+        TestClassResolver $testClassResolver,
+        RectorCodeSamplePrinter $rectorCodeSamplePrinter
     ) {
         $this->symfonyStyle = $symfonyStyle;
-        $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
         $this->rectorMetadataResolver = $rectorMetadataResolver;
         $this->testClassResolver = $testClassResolver;
         $this->phpKeywordHighlighter = $phpKeywordHighlighter;
-        $this->returnClosurePrinter = $returnClosurePrinter;
+        $this->rectorCodeSamplePrinter = $rectorCodeSamplePrinter;
     }
 
     /**
@@ -164,12 +152,7 @@ final class MarkdownDumpRectorsOutputFormatter
 
         $this->ensureCodeSampleExists($rectorDefinition, $rector);
 
-        foreach ($rectorDefinition->getCodeSamples() as $codeSample) {
-            $this->symfonyStyle->newLine();
-
-            $this->printConfiguration($rector, $codeSample);
-            $this->printCodeSample($codeSample);
-        }
+        $this->rectorCodeSamplePrinter->printCodeSamples($rectorDefinition, $rector);
 
         $this->symfonyStyle->newLine();
         $this->symfonyStyle->writeln('<br><br>');
@@ -200,57 +183,6 @@ final class MarkdownDumpRectorsOutputFormatter
         }
 
         return null;
-    }
-
-    private function printConfiguration(RectorInterface $rector, CodeSampleInterface $codeSample): void
-    {
-        if (! $codeSample instanceof ConfiguredCodeSample) {
-            return;
-        }
-
-        $configuration = [
-            get_class($rector) => $codeSample->getConfiguration(),
-        ];
-
-        $phpConfigContent = $this->returnClosurePrinter->printServices($configuration);
-        $this->printCodeWrapped($phpConfigContent, 'php');
-
-        $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln('↓');
-        $this->symfonyStyle->newLine();
-    }
-
-    private function printCodeSample(CodeSampleInterface $codeSample): void
-    {
-        $diff = $this->markdownDifferAndFormatter->bareDiffAndFormatWithoutColors(
-            $codeSample->getCodeBefore(),
-            $codeSample->getCodeAfter()
-        );
-
-        $this->printCodeWrapped($diff, 'diff');
-
-        $extraFileContent = $codeSample->getExtraFileContent();
-        if ($extraFileContent !== null) {
-            $this->symfonyStyle->newLine();
-            $this->symfonyStyle->writeln('**New file**');
-            $this->symfonyStyle->newLine();
-            $this->printCodeWrapped($extraFileContent, 'php');
-        }
-
-        if ($codeSample instanceof ComposerJsonAwareCodeSample) {
-            $composerJsonContent = $codeSample->getComposerJsonContent();
-            $this->symfonyStyle->newLine(1);
-            $this->symfonyStyle->writeln('`composer.json`');
-            $this->symfonyStyle->newLine(1);
-            $this->printCodeWrapped($composerJsonContent, 'json');
-            $this->symfonyStyle->newLine();
-        }
-    }
-
-    private function printCodeWrapped(string $content, string $format): void
-    {
-        $message = sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL);
-        $this->symfonyStyle->writeln($message);
     }
 
     private function getClassRelativePath(string $className): string
