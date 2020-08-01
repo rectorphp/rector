@@ -47,7 +47,7 @@ final class ComposerPackageAutoloadUpdater
         // ask user
         $questionText = sprintf(
             'Should we update "composer.json" autoload with "%s" namespace?',
-            $package->getSrcNamespace(),
+            $package->getSrcNamespace()
         );
 
         $isConfirmed = $this->symfonyStyle->confirm($questionText);
