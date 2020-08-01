@@ -1,4 +1,4 @@
-# All 547 Rectors Overview
+# All 548 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -31,7 +31,7 @@
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
 - [Nette](#nette) (14)
-- [NetteCodeQuality](#nettecodequality) (5)
+- [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
@@ -6949,6 +6949,30 @@ Change `translate()` method call 2nd arg to variadic
 <br><br>
 
 ## NetteCodeQuality
+
+### `ArrayAccessSetControlToSetComponentMethodCallRector`
+
+- class: [`Rector\NetteCodeQuality\Rector\Assign\ArrayAccessSetControlToSetComponentMethodCallRector`](/../master/rules/nette-code-quality/src/Rector/Assign/ArrayAccessSetControlToSetComponentMethodCallRector.php)
+- [test fixtures](/../master/rules/nette-code-quality/tests/Rector/Assign/ArrayAccessSetControlToSetComponentMethodCallRector/Fixture)
+
+Change magic arrays access set, to explicit `$this->setComponent(...)` method
+
+```diff
+ use Nette\Application\UI\Control;
+ use Nette\Application\UI\Presenter;
+
+ class SomeClass extends Presenter
+ {
+     public function some()
+     {
+         $someControl = new Control();
+-        $this['whatever'] = $someControl;
++        $this->addComponent($someControl, 'whatever');
+     }
+ }
+```
+
+<br><br>
 
 ### `ArrayDimFetchControlToGetComponentMethodCallRector`
 
