@@ -26,7 +26,7 @@ final class MethodCallRemoverRector extends AbstractRector implements Configurab
     /**
      * @var string[]
      */
-    private $methodCallRemoverArgument;
+    private $methodCallRemoverArgument = [];
 
     /**
      * @var MethodCallManipulator
@@ -102,9 +102,9 @@ PHP
         $this->methodCallRemoverArgument = $configuration[self::METHOD_CALL_REMOVER_ARGUMENT] ?? [];
     }
 
-    private function getRootNodeVariableName(MethodCall $node): ?string
+    private function getRootNodeVariableName(MethodCall $methodCall): ?string
     {
-        $rootNode = $this->methodCallManipulator->resolveRootVariable($node);
+        $rootNode = $this->methodCallManipulator->resolveRootVariable($methodCall);
         return $this->getName($rootNode);
     }
 }
