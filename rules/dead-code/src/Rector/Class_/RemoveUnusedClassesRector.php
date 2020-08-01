@@ -62,7 +62,6 @@ class SomeClass implements SomeInterface
     }
 }
 PHP
-
             ),
         ]);
     }

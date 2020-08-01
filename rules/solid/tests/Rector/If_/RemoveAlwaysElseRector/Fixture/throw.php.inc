@@ -2,7 +2,8 @@
 
 namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Throw_;
 
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         if ($cond1) {
@@ -20,7 +21,8 @@ class SomeClass {
 
 namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Throw_;
 
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         if ($cond1) {

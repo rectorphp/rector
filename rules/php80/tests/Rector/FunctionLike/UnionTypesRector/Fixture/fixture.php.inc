@@ -2,7 +2,8 @@
 
 namespace Rector\Php80\Tests\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-class SomeClass {
+class SomeClass
+{
     /**
      * @param array|int $number
      * @return bool|float
@@ -18,7 +19,8 @@ class SomeClass {
 
 namespace Rector\Php80\Tests\Rector\FunctionLike\UnionTypesRector\Fixture;
 
-class SomeClass {
+class SomeClass
+{
     /**
      * @param array|int $number
      * @return bool|float

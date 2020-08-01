@@ -72,8 +72,7 @@ class SomeClass implements SoftDeletableInterface
     use SoftDeletableTrait;
 }
 PHP
-
-                ),
+            ),
             ]
         );
     }

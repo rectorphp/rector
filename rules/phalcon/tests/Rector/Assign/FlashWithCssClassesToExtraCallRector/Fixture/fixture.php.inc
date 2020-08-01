@@ -2,7 +2,8 @@
 
 namespace Rector\Phalcon\Tests\Rector\Assign\FlashWithCssClassesToExtraCallRector\Fixture;
 
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         $cssClasses = [];
@@ -16,7 +17,8 @@ class SomeClass {
 
 namespace Rector\Phalcon\Tests\Rector\Assign\FlashWithCssClassesToExtraCallRector\Fixture;
 
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         $cssClasses = [];

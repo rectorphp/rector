@@ -51,7 +51,6 @@ use Event\NotificationListener;
 
 CakeEventManager::instance()->attach(new NotificationListener());
 PHP
-
             ),
         ]);
     }

@@ -90,7 +90,6 @@ class SomeClass
     }
 }
 PHP
-
             ),
         ]);
     }

@@ -54,8 +54,7 @@ class SomeClass implements TimestampableInterface
     use TimestampableTrait;
 }
 PHP
-
-                ),
+            ),
             ]
         );
     }

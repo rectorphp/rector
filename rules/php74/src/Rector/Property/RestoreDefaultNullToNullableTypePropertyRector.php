@@ -39,7 +39,6 @@ class SomeClass
     public ?string $name = null;
 }
 PHP
-
             ),
         ]);
     }

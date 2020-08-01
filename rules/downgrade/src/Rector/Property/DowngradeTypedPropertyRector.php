@@ -22,20 +22,21 @@ final class DowngradeTypedPropertyRector extends AbstractRector
         return new RectorDefinition('Changes property type definition from type definitions to `@var` annotations.', [
             new CodeSample(
                 <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     private string $property;
 }
 PHP
 ,
                 <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     /**
     * @var string
     */
     private $property;
 }
 PHP
-
             ),
         ]);
     }

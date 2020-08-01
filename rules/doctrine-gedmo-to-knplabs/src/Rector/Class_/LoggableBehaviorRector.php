@@ -73,7 +73,6 @@ class SomeClass implements LoggableInterface
     private $title;
 }
 PHP
-
             ),
         ]);
     }

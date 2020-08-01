@@ -50,7 +50,6 @@ function useMe()
 
 useMe();
 PHP
-
             ),
         ]);
     }

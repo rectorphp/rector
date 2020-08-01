@@ -93,8 +93,7 @@ class SomeClassTest extends TestCase {
 }
 class SomeService { }
 PHP
-
-                ),
+            ),
             ]
         );
     }

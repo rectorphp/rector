@@ -24,7 +24,8 @@ final class FlashWithCssClassesToExtraCallRector extends AbstractRector
         return new RectorDefinition('Add $cssClasses in Flash to separated method call', [
             new CodeSample(
                 <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         $cssClasses = [];
@@ -34,7 +35,8 @@ class SomeClass {
 PHP
 ,
                 <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         $cssClasses = [];
@@ -43,7 +45,6 @@ class SomeClass {
     }
 }
 PHP
-
             ),
         ]);
     }

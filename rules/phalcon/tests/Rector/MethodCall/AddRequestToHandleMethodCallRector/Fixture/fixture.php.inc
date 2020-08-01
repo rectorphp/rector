@@ -2,7 +2,8 @@
 
 namespace Rector\Phalcon\Tests\Rector\MethodCall\AddRequestToHandleMethodCallRector\Fixture;
 
-class SomeClass {
+class SomeClass
+{
     public function run($di)
     {
         $application = new \Phalcon\Mvc\Application();
@@ -16,7 +17,8 @@ class SomeClass {
 
 namespace Rector\Phalcon\Tests\Rector\MethodCall\AddRequestToHandleMethodCallRector\Fixture;
 
-class SomeClass {
+class SomeClass
+{
     public function run($di)
     {
         $application = new \Phalcon\Mvc\Application();

@@ -86,7 +86,13 @@ PHP
             return null;
         }
 
-        if ($this->isHandledByReturn($node)) {
+        // is handled by @see \Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector
+        if ($this->hasParentType($node, Return_::class)) {
+            return null;
+        }
+
+        // is handled by @see InArgChainMethodCallToStandaloneMethodCallRector
+        if ($this->hasParentType($node, Arg::class)) {
             return null;
         }
 
@@ -144,22 +150,6 @@ PHP
         }
 
         return $node;
-    }
-
-    /**
-     * @param MethodCall|Return_ $node
-     */
-    private function isHandledByReturn(Node $node): bool
-    {
-        if ($node instanceof MethodCall) {
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            // handled ty Return_ node
-            if ($parentNode instanceof Return_) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

@@ -41,7 +41,6 @@ class SomeClass
     private $isDisabled = false;
 }
 PHP
-
             ),
         ]);
     }

@@ -2,7 +2,8 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\DocBlock;
 
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         // condition 1
@@ -29,7 +30,8 @@ class SomeClass {
 
 namespace Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\DocBlock;
 
-class SomeClass {
+class SomeClass
+{
     public function run()
     {
         // condition 1

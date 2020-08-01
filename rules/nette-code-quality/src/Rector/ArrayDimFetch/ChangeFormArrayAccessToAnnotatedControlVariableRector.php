@@ -65,7 +65,6 @@ class SomePresenter
     }
 }
 PHP
-
             ),
         ]);
     }

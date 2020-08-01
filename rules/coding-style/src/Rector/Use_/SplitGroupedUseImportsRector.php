@@ -41,7 +41,6 @@ class SomeClass
     use AnotherTrait;
 }
 PHP
-
             ),
         ]);
     }

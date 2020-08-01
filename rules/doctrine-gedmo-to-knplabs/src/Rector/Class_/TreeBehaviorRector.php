@@ -120,7 +120,6 @@ class SomeClass implements TreeNodeInterface
     use TreeNodeTrait;
 }
 PHP
-
             ),
         ]);
     }

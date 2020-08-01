@@ -55,7 +55,6 @@ class SomeClass
     const MODE_OFF = 2;
 }
 PHP
-
             ),
         ]);
     }

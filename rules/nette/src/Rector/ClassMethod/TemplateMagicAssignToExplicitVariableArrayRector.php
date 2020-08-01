@@ -66,7 +66,6 @@ class SomeControl extends Control
     }
 }
 PHP
-
             ),
         ]);
     }

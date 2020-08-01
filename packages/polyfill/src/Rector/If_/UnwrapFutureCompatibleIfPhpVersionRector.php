@@ -52,7 +52,6 @@ PHP
 // current PHP: 7.2
 return 'is PHP 7.2+';
 PHP
-
             ),
         ]);
     }

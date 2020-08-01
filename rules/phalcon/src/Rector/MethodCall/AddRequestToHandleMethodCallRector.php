@@ -28,7 +28,8 @@ final class AddRequestToHandleMethodCallRector extends AbstractRector
         return new RectorDefinition('Add $_SERVER REQUEST_URI to method call', [
             new CodeSample(
                 <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     public function run($di)
     {
         $application = new \Phalcon\Mvc\Application();
@@ -38,7 +39,8 @@ class SomeClass {
 PHP
 ,
                 <<<'PHP'
-class SomeClass {
+class SomeClass
+{
     public function run($di)
     {
         $application = new \Phalcon\Mvc\Application();
@@ -46,7 +48,6 @@ class SomeClass {
     }
 }
 PHP
-
             ),
         ]);
     }

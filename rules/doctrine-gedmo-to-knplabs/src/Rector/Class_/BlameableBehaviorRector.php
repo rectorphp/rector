@@ -89,7 +89,6 @@ class SomeClass implements BlameableInterface
     use BlameableTrait;
 }
 PHP
-
             ),
         ]);
     }

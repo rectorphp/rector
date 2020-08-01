@@ -62,7 +62,6 @@ class SomeTest extends TestCase
     }
 }
 PHP
-
             ),
         ]);
     }

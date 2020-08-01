@@ -34,7 +34,6 @@ final class SomeClass
     private $value;
 }
 PHP
-
             ),
         ]);
     }
