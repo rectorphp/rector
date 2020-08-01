@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\MagicDisclosure\Rector\ClassMethod\ReturnThisRemoveRector;
 use Rector\MagicDisclosure\Rector\MethodCall\DefluentMethodCallRector;
-use Rector\MagicDisclosure\Rector\MethodCall\SetterOnSetterMethodCallToStandaloneAssignRector;
+use Rector\MagicDisclosure\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector;
 use Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -20,5 +20,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(DefluentMethodCallRector::class);
 
-    $services->set(SetterOnSetterMethodCallToStandaloneAssignRector::class);
+    $services->set(MethodCallOnSetterMethodCallToStandaloneAssignRector::class);
 };

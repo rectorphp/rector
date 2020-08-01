@@ -6235,10 +6235,10 @@ Removes "return `$this;"` from *fluent interfaces* for specified classes.
 
 <br><br>
 
-### `SetterOnSetterMethodCallToStandaloneAssignRector`
+### `MethodCallOnSetterMethodCallToStandaloneAssignRector`
 
-- class: [`Rector\MagicDisclosure\Rector\MethodCall\SetterOnSetterMethodCallToStandaloneAssignRector`](/../master/rules/magic-disclosure/src/Rector/MethodCall/SetterOnSetterMethodCallToStandaloneAssignRector.php)
-- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodCall/SetterOnSetterMethodCallToStandaloneAssignRector/Fixture)
+- class: [`Rector\MagicDisclosure\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector`](/../master/rules/magic-disclosure/src/Rector/MethodCall/MethodCallOnSetterMethodCallToStandaloneAssignRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodCall/MethodCallOnSetterMethodCallToStandaloneAssignRector/Fixture)
 
 Change method call on setter to standalone assign before the setter
 

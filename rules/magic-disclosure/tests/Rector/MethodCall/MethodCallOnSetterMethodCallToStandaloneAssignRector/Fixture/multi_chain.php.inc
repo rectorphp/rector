@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\SetterOnSetterMethodCallToStandaloneAssignRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\Fixture;
 
-use Rector\MagicDisclosure\Tests\Rector\MethodCall\SetterOnSetterMethodCallToStandaloneAssignRector\Source\AnotherClass;
+use Rector\MagicDisclosure\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\Source\AnotherClass;
 
 class MultiChain
 {
@@ -10,7 +10,7 @@ class MultiChain
     {
         $this->anotherMethod(new AnotherClass())
             ->someFunction()
-            ->anoterFuction();
+            ->anotherFunction();
     }
 
     public function anotherMethod(AnotherClass $anotherClass): AnotherClass
@@ -23,9 +23,9 @@ class MultiChain
 -----
 <?php
 
-namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\SetterOnSetterMethodCallToStandaloneAssignRector\Fixture;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\Fixture;
 
-use Rector\MagicDisclosure\Tests\Rector\MethodCall\SetterOnSetterMethodCallToStandaloneAssignRector\Source\AnotherClass;
+use Rector\MagicDisclosure\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\Source\AnotherClass;
 
 class MultiChain
 {

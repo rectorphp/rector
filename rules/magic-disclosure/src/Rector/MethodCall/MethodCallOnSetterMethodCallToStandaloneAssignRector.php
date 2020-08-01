@@ -15,21 +15,33 @@ use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
 use Rector\NetteKdyby\Naming\VariableNaming;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
- * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\SetterOnSetterMethodCallToStandaloneAssignRector\SetterOnSetterMethodCallToStandaloneAssignRectorTest
+ * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
+ *
+ * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector\MethodCallOnSetterMethodCallToStandaloneAssignRectorTest
  */
-final class SetterOnSetterMethodCallToStandaloneAssignRector extends AbstractRector
+final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends AbstractRector
 {
     /**
      * @var VariableNaming
      */
     private $variableNaming;
 
-    public function __construct(VariableNaming $variableNaming)
-    {
+    /**
+     * @var ChainMethodCallNodeAnalyzer
+     */
+    private $chainMethodCallNodeAnalyzer;
+
+    public function __construct(
+        VariableNaming $variableNaming,
+        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer
+    ) {
         $this->variableNaming = $variableNaming;
+        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -66,7 +78,6 @@ class SomeClass
     }
 }
 PHP
-
             ),
         ]);
     }
@@ -84,12 +95,16 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->var instanceof MethodCall) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
-        $parentMethodCall = $node->var;
-        $new = $this->matchNewInFluentSetterMethodCall($parentMethodCall);
+        $rootMethodCall = $this->chainMethodCallNodeAnalyzer->resolveRootMethodCall($node);
+        if ($rootMethodCall === null) {
+            return null;
+        }
+
+        $new = $this->matchNewInFluentSetterMethodCall($rootMethodCall);
         if ($new === null) {
             return null;
         }
@@ -100,13 +115,18 @@ PHP
         $assignExpression = $this->createAssignExpression($newVariable, $new);
         $this->addNodeBeforeNode($assignExpression, $node);
 
-        $currentMethodCall = new MethodCall($newVariable, $node->name, $node->args);
-        $this->addNodeBeforeNode($currentMethodCall, $node);
+        // resolve chain calls
+        $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChainWithoutRootOne($node);
+        $chainMethodCalls = array_reverse($chainMethodCalls);
+        foreach ($chainMethodCalls as $chainMethodCall) {
+            $currentMethodCall = new MethodCall($newVariable, $chainMethodCall->name, $chainMethodCall->args);
+            $this->addNodeBeforeNode($currentMethodCall, $node);
+        }
 
-        // change new arg to variable
-        $parentMethodCall->args = [new Arg($newVariable)];
+        // change new arg to root variable
+        $rootMethodCall->args = [new Arg($newVariable)];
 
-        return $parentMethodCall;
+        return $rootMethodCall;
     }
 
     /**
@@ -143,5 +163,14 @@ PHP
     {
         $assign = new Assign($newVariable, $new);
         return new Expression($assign);
+    }
+
+    private function shouldSkip(MethodCall $methodCall): bool
+    {
+        if (! $methodCall->var instanceof MethodCall) {
+            return true;
+        }
+
+        return ! $this->chainMethodCallNodeAnalyzer->isLastChainMethodCall($methodCall);
     }
 }

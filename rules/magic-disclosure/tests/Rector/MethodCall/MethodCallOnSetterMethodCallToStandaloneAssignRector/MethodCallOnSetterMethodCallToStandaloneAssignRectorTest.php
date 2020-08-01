@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\SetterOnSetterMethodCallToStandaloneAssignRector;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\MagicDisclosure\Rector\MethodCall\SetterOnSetterMethodCallToStandaloneAssignRector;
+use Rector\MagicDisclosure\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class SetterOnSetterMethodCallToStandaloneAssignRectorTest extends AbstractRectorTestCase
+final class MethodCallOnSetterMethodCallToStandaloneAssignRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class SetterOnSetterMethodCallToStandaloneAssignRectorTest extends Abstrac
 
     protected function getRectorClass(): string
     {
-        return SetterOnSetterMethodCallToStandaloneAssignRector::class;
+        return MethodCallOnSetterMethodCallToStandaloneAssignRector::class;
     }
 }
