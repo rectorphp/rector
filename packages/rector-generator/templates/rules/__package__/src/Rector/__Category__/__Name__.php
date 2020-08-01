@@ -19,7 +19,8 @@ final class __Name__ extends AbstractRector
     {
         return new RectorDefinition('__Description__', [
             new CodeSample(
-                __CodeBeforeExample__,
+                __CodeBeforeExample__
+                ,
                 __CodeAfterExample__
             )
         ]);

@@ -1,4 +1,4 @@
-# All 547 Rectors Overview
+# All 549 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -31,7 +31,7 @@
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
 - [Nette](#nette) (14)
-- [NetteCodeQuality](#nettecodequality) (5)
+- [NetteCodeQuality](#nettecodequality) (7)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
@@ -6949,6 +6949,52 @@ Change `translate()` method call 2nd arg to variadic
 <br><br>
 
 ## NetteCodeQuality
+
+### `ArrayAccessGetControlToGetComponentMethodCallRector`
+
+- class: [`Rector\NetteCodeQuality\Rector\Assign\ArrayAccessGetControlToGetComponentMethodCallRector`](/../master/rules/nette-code-quality/src/Rector/Assign/ArrayAccessGetControlToGetComponentMethodCallRector.php)
+- [test fixtures](/../master/rules/nette-code-quality/tests/Rector/Assign/ArrayAccessGetControlToGetComponentMethodCallRector/Fixture)
+
+Change magic arrays access get, to explicit `$this->getComponent(...)` method
+
+```diff
+ use Nette\Application\UI\Presenter;
+
+ class SomeClass extends Presenter
+ {
+     public function some()
+     {
+-        $someControl = $this['whatever'];
++        $someControl = $this->getComponent('whatever');
+     }
+ }
+```
+
+<br><br>
+
+### `ArrayAccessSetControlToAddComponentMethodCallRector`
+
+- class: [`Rector\NetteCodeQuality\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector`](/../master/rules/nette-code-quality/src/Rector/Assign/ArrayAccessSetControlToAddComponentMethodCallRector.php)
+- [test fixtures](/../master/rules/nette-code-quality/tests/Rector/Assign/ArrayAccessSetControlToAddComponentMethodCallRector/Fixture)
+
+Change magic arrays access set, to explicit `$this->setComponent(...)` method
+
+```diff
+ use Nette\Application\UI\Control;
+ use Nette\Application\UI\Presenter;
+
+ class SomeClass extends Presenter
+ {
+     public function some()
+     {
+         $someControl = new Control();
+-        $this['whatever'] = $someControl;
++        $this->addComponent($someControl, 'whatever');
+     }
+ }
+```
+
+<br><br>
 
 ### `ArrayDimFetchControlToGetComponentMethodCallRector`
 
