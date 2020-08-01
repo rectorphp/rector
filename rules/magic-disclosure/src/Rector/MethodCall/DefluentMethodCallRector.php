@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
@@ -177,6 +178,11 @@ PHP
         }
 
         $calleeUniqueType = $calleeUniqueTypes[0];
+        // skip query and builder
+        // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?"
+        if ((bool) Strings::match($calleeUniqueType, '#(Query|Builder)$#')) {
+            return true;
+        }
 
         return ! $this->isMatchedType($calleeUniqueType);
     }
