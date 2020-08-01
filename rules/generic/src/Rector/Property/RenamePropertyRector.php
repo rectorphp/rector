@@ -38,7 +38,7 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
                 '$someObject->someOldProperty;',
                 '$someObject->someNewProperty;',
                 [
-                    '$oldToNewPropertyByTypes' => [
+                    self::OLD_TO_NEW_PROPERTY_BY_TYPES => [
                         'SomeClass' => [
                             'someOldProperty' => 'someNewProperty',
                         ],

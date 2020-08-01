@@ -46,10 +46,12 @@ $someObject->someMethod();'
 PHP
                     ,
                     [
-                        'ExampleClass' => [
-                            'someMethod' => [
-                                0 => [
-                                    'value' => 'true',
+                        self::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
+                            'ExampleClass' => [
+                                'someMethod' => [
+                                    0 => [
+                                        'value' => 'true',
+                                    ],
                                 ],
                             ],
                         ],

@@ -51,7 +51,9 @@ $someObject->someFunction()
 PHP
                 ,
                 [
-                    'SomeClass' => ['someFunction', 'otherFunction'],
+                    self::FLUENT_METHODS_BY_TYPE => [
+                        'SomeClass' => ['someFunction', 'otherFunction'],
+                    ],
                 ]
             ),
         ]);

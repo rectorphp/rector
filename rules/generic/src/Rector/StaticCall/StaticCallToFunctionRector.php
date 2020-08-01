@@ -43,7 +43,7 @@ final class StaticCallToFunctionRector extends AbstractRector implements Configu
                 'OldClass::oldMethod("args");',
                 'new_function("args");',
                 [
-                    '$staticCallToFunction' => [
+                    self::STATIC_CALL_TO_FUNCTION_BY_TYPE => [
                         'OldClass' => [
                             'oldMethod' => 'new_function',
                         ],

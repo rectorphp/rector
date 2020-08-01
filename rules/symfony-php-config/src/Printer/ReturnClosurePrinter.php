@@ -19,10 +19,12 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\PhpParser\Builder\UseBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use ReflectionClass;
 
 final class ReturnClosurePrinter
 {
@@ -68,12 +70,10 @@ final class ReturnClosurePrinter
         $this->useStmts = [];
         $this->addUseStmts('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator');
 
-        $stmts = $this->createClosureStmts($services);
-
         $closure = new Closure([
             'params' => [$this->createClosureParam()],
             'returnType' => new Identifier('void'),
-            'stmts' => $stmts,
+            'stmts' => $this->createClosureStmts($services),
         ]);
 
         $return = new Return_($closure);
@@ -136,7 +136,15 @@ final class ReturnClosurePrinter
                 continue;
             }
 
-            $args = $this->nodeFactory->createArgs(['configure', [[$argument, $value]]]);
+            if (! is_string($argument)) {
+                $message = sprintf('Invalid configuration for code sample in "%s" class', $serviceName);
+                throw new ShouldNotHappenException($message);
+            }
+
+            $constantName = $this->resolveClassContantNameFromValue($argument, $serviceName);
+            $classConstFetch = new ClassConstFetch(new Name($shortClassName), $constantName);
+
+            $args = $this->nodeFactory->createArgs(['configure', [[$classConstFetch, $value]]]);
             $methodCall = new MethodCall($methodCall, 'call', $args);
         }
 
@@ -165,5 +173,22 @@ final class ReturnClosurePrinter
         }
 
         return false;
+    }
+
+    private function resolveClassContantNameFromValue(string $constantValue, string $class)
+    {
+        $reflectionClass = new ReflectionClass($class);
+        foreach ($reflectionClass->getConstants() as $name => $value) {
+            if ($value === $constantValue) {
+                return $name;
+            }
+        }
+
+        $message = sprintf(
+            'Constant value "%s" for class "%s" could not be resolved. Make sure you use constants references there, not string values',
+            $constantValue,
+            $class
+        );
+        throw new ShouldNotHappenException($message);
     }
 }

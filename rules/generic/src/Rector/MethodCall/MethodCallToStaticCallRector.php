@@ -65,9 +65,11 @@ final class SomeClass
 PHP
 ,
                 [
-                    '$methodCallsToStaticCalls' => [
-                        'AnotherDependency' => [
-                            'process' => ['StaticCaller', 'anotherMethod'],
+                    self::METHOD_CALLS_TO_STATIC_CALLS => [
+                        '$methodCallsToStaticCalls' => [
+                            'AnotherDependency' => [
+                                'process' => ['StaticCaller', 'anotherMethod'],
+                            ],
                         ],
                     ],
                 ]

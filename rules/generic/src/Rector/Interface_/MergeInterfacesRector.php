@@ -49,7 +49,9 @@ class SomeClass implements SomeInterface
 PHP
                 ,
                 [
-                    'SomeOldInterface' => 'SomeInterface',
+                    self::OLD_TO_NEW_INTERFACES => [
+                        'SomeOldInterface' => 'SomeInterface',
+                    ],
                 ]
             ),
         ]);
