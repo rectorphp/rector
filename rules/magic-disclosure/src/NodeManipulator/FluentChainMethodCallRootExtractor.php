@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
@@ -33,20 +34,27 @@ final class FluentChainMethodCallRootExtractor
      */
     private $nodeNameResolver;
 
+    /**
+     * @var VariableNaming
+     */
+    private $variableNaming;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         NodeNameResolver $nodeNameResolver,
-        PropertyNaming $propertyNaming
+        PropertyNaming $propertyNaming,
+        VariableNaming $variableNaming
     ) {
         $this->propertyNaming = $propertyNaming;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->variableNaming = $variableNaming;
     }
 
     /**
      * @param MethodCall[] $methodCalls
      */
-    public function extractFromMethodCalls(array $methodCalls): ?AssignAndRootExpr
+    public function extractFromMethodCalls(array $methodCalls, string $kind): ?AssignAndRootExpr
     {
         foreach ($methodCalls as $methodCall) {
             if ($methodCall->var instanceof Variable) {
@@ -58,6 +66,13 @@ final class FluentChainMethodCallRootExtractor
             }
 
             if ($methodCall->var instanceof New_) {
+                // direct = no parent
+                if ($kind === 'in_args') {
+                    $variableName = $this->variableNaming->resolveFromNode($methodCall->var);
+                    $silentVariable = new Variable($variableName);
+                    return new AssignAndRootExpr($methodCall->var, $methodCall->var, $silentVariable);
+                }
+
                 return $this->matchMethodCallOnNew($methodCall);
             }
         }

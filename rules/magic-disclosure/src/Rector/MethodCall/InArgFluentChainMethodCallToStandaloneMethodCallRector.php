@@ -110,7 +110,7 @@ PHP
             return null;
         }
 
-        $result = $this->createStandaloneNodesToAddFromChainMethodCalls($node);
+        $result = $this->createStandaloneNodesToAddFromChainMethodCalls($node, 'in_args');
         if ($result === []) {
             return null;
         }
