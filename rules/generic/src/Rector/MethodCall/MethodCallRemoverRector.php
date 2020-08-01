@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\Manipulator\MethodCallManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -23,6 +24,16 @@ final class MethodCallRemoverRector extends AbstractRector implements Configurab
      * @var string[]
      */
     private $methodCallRemoverArgument;
+
+    /**
+     * @var MethodCallManipulator
+     */
+    private $methodCallManipulator;
+
+    public function __construct(MethodCallManipulator $methodCallManipulator)
+    {
+        $this->methodCallManipulator = $methodCallManipulator;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -71,8 +82,13 @@ PHP
                 continue;
             }
 
-            // todo resolve variable name
-            return new Variable('this');
+            $rootNodeName = $this->getRootNodeVariableName($node);
+
+            if ($rootNodeName === null) {
+                continue;
+            }
+
+            return new Variable($rootNodeName);
         }
 
         return $node;
@@ -81,5 +97,11 @@ PHP
     public function configure(array $configuration): void
     {
         $this->methodCallRemoverArgument = $configuration[self::METHOD_CALL_REMOVER_ARGUMENT] ?? [];
+    }
+
+    private function getRootNodeVariableName(MethodCall $node): ?string
+    {
+        $rootNode = $this->methodCallManipulator->resolveRootVariable($node);
+        return $this->getName($rootNode);
     }
 }

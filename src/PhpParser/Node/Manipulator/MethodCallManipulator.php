@@ -133,6 +133,17 @@ final class MethodCallManipulator
         });
     }
 
+    public function resolveRootVariable(MethodCall $methodCall): Node
+    {
+        $callerNode = $methodCall->var;
+
+        while ($callerNode instanceof MethodCall || $callerNode instanceof StaticCall) {
+            $callerNode = $callerNode instanceof StaticCall ? $callerNode->class : $callerNode->var;
+        }
+
+        return $callerNode;
+    }
+
     /**
      * @see https://stackoverflow.com/a/4507991/1348344
      * @param object[] $objects
@@ -186,16 +197,5 @@ final class MethodCallManipulator
         }
 
         return $parentNode;
-    }
-
-    private function resolveRootVariable(MethodCall $methodCall): Node
-    {
-        $callerNode = $methodCall->var;
-
-        while ($callerNode instanceof MethodCall || $callerNode instanceof StaticCall) {
-            $callerNode = $callerNode instanceof StaticCall ? $callerNode->class : $callerNode->var;
-        }
-
-        return $callerNode;
     }
 }

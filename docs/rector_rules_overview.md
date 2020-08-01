@@ -4981,7 +4981,7 @@ use Rector\Generic\Rector\MethodCall\MethodCallRemoverRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(MethodCallRemoverRector::class)
-        ->call('configure', [['$methodCallRemoverArgument', ['$methodCallRemoverArgument' => ['Car' => 'anything']]]]);
+        ->call('configure', [['$methodCallRemoverArgument', ['$methodCallRemoverArgument' => ['Car' => 'something']]]]);
 };
 ```
 
