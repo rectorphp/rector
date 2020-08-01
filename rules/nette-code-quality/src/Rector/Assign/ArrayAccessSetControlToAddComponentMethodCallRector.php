@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -91,8 +90,7 @@ PHP
             return false;
         }
 
-        $exprStaticType = $this->getObjectType($assign->expr);
-        if (! $exprStaticType->isSuperTypeOf(new ObjectType('Nette\Application\UI\Control'))->yes()) {
+        if (! $this->isObjectType($assign->expr, 'Nette\Application\UI\Control')) {
             return false;
         }
 
@@ -101,7 +99,6 @@ PHP
             return false;
         }
 
-        $variableStaticType = $this->getObjectType($arrayDimFetch->var);
-        return $variableStaticType->isSuperTypeOf(new ObjectType('Nette\Application\UI\Presenter'))->yes();
+        return $this->isObjectType($arrayDimFetch->var, 'Nette\Application\UI\Presenter');
     }
 }
