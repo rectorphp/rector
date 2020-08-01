@@ -141,7 +141,7 @@ final class ReturnClosurePrinter
                 throw new ShouldNotHappenException($message);
             }
 
-            $constantName = $this->resolveClassContantNameFromValue($argument, $serviceName);
+            $constantName = $this->resolveClassConstantNameFromValue($argument, $serviceName);
             $classConstFetch = new ClassConstFetch(new Name($shortClassName), $constantName);
 
             $args = $this->nodeFactory->createArgs(['configure', [[$classConstFetch, $value]]]);
@@ -175,7 +175,7 @@ final class ReturnClosurePrinter
         return false;
     }
 
-    private function resolveClassContantNameFromValue(string $constantValue, string $class)
+    private function resolveClassConstantNameFromValue(string $constantValue, string $class): string
     {
         $reflectionClass = new ReflectionClass($class);
         foreach ($reflectionClass->getConstants() as $name => $value) {
