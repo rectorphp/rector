@@ -1,4 +1,4 @@
-# All 546 Rectors Overview
+# All 547 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -6129,23 +6129,6 @@ Remove includes (include, include_once, require, require_once) from source
 
 ## MagicDisclosure
 
-### `DefluentMethodCallRector`
-
-- class: [`Rector\MagicDisclosure\Rector\MethodCall\DefluentMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/MethodCall/DefluentMethodCallRector.php)
-- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodCall/DefluentMethodCallRector/Fixture)
-
-Turns fluent interface calls to classic ones.
-
-```diff
- $someClass = new SomeClass();
--$someClass->someFunction()
--            ->otherFunction();
-+$someClass->someFunction();
-+$someClass->otherFunction();
-```
-
-<br><br>
-
 ### `DefluentReturnMethodCallRector`
 
 - class: [`Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/Return_/DefluentReturnMethodCallRector.php)
@@ -6158,6 +6141,23 @@ Turns return of fluent, to standalone call line and return of value
 -return $someClass->someFunction();
 +$someClass->someFunction();
 +return $someClass;
+```
+
+<br><br>
+
+### `FluentChainMethodCallToNormalMethodCallRector`
+
+- class: [`Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/MethodCall/FluentChainMethodCallToNormalMethodCallRector.php)
+- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodCall/FluentChainMethodCallToNormalMethodCallRector/Fixture)
+
+Turns fluent interface calls to classic ones.
+
+```diff
+ $someClass = new SomeClass();
+-$someClass->someFunction()
+-            ->otherFunction();
++$someClass->someFunction();
++$someClass->otherFunction();
 ```
 
 <br><br>
@@ -6213,10 +6213,9 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
-### `InArgChainMethodCallToStandaloneMethodCallRector`
+### `InArgFluentChainMethodCallToStandaloneMethodCallRector`
 
-- class: [`Rector\MagicDisclosure\Rector\MethodCall\InArgChainMethodCallToStandaloneMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/MethodCall/InArgChainMethodCallToStandaloneMethodCallRector.php)
-- [test fixtures](/../master/rules/magic-disclosure/tests/Rector/MethodCall/InArgChainMethodCallToStandaloneMethodCallRector/Fixture)
+- class: [`Rector\MagicDisclosure\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector`](/../master/rules/magic-disclosure/src/Rector/MethodCall/InArgFluentChainMethodCallToStandaloneMethodCallRector.php)
 
 Turns fluent interface calls to classic ones.
 
