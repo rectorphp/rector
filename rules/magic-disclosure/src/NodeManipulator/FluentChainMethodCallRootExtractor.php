@@ -16,7 +16,7 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
-final class ChainMethodCallRootExtractor
+final class FluentChainMethodCallRootExtractor
 {
     /**
      * @var PropertyNaming

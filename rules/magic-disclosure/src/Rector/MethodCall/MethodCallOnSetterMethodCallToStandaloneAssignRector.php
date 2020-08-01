@@ -12,9 +12,9 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\NodeAnalyzer\NewChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\NodeFactory\NonFluentMethodCallFactory;
+use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\NetteKdyby\Naming\VariableNaming;
 
 /**
@@ -30,30 +30,30 @@ final class MethodCallOnSetterMethodCallToStandaloneAssignRector extends Abstrac
     private $variableNaming;
 
     /**
-     * @var ChainMethodCallNodeAnalyzer
+     * @var FluentChainMethodCallNodeAnalyzer
      */
-    private $chainMethodCallNodeAnalyzer;
+    private $fluentChainMethodCallNodeAnalyzer;
 
     /**
-     * @var NonFluentMethodCallFactory
+     * @var NonFluentChainMethodCallFactory
      */
-    private $nonFluentMethodCallFactory;
+    private $nonFluentChainMethodCallFactory;
 
     /**
-     * @var NewChainMethodCallNodeAnalyzer
+     * @var NewFluentChainMethodCallNodeAnalyzer
      */
-    private $newChainMethodCallNodeAnalyzer;
+    private $newFluentChainMethodCallNodeAnalyzer;
 
     public function __construct(
         VariableNaming $variableNaming,
-        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
-        NonFluentMethodCallFactory $nonFluentMethodCallFactory,
-        NewChainMethodCallNodeAnalyzer $newChainMethodCallNodeAnalyzer
+        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
+        NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer
     ) {
         $this->variableNaming = $variableNaming;
-        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
-        $this->nonFluentMethodCallFactory = $nonFluentMethodCallFactory;
-        $this->newChainMethodCallNodeAnalyzer = $newChainMethodCallNodeAnalyzer;
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
+        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
+        $this->newFluentChainMethodCallNodeAnalyzer = $newFluentChainMethodCallNodeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -111,17 +111,17 @@ PHP
             return null;
         }
 
-        $rootMethodCall = $this->chainMethodCallNodeAnalyzer->resolveRootMethodCall($node);
+        $rootMethodCall = $this->fluentChainMethodCallNodeAnalyzer->resolveRootMethodCall($node);
         if ($rootMethodCall === null) {
             return null;
         }
 
-        $new = $this->newChainMethodCallNodeAnalyzer->matchNewInFluentSetterMethodCall($rootMethodCall);
+        $new = $this->newFluentChainMethodCallNodeAnalyzer->matchNewInFluentSetterMethodCall($rootMethodCall);
         if ($new === null) {
             return null;
         }
 
-        $newStmts = $this->nonFluentMethodCallFactory->createFromNewAndRootMethodCall($new, $node);
+        $newStmts = $this->nonFluentChainMethodCallFactory->createFromNewAndRootMethodCall($new, $node);
         $this->addNodesBeforeNode($newStmts, $node);
 
         // change new arg to root variable
@@ -140,7 +140,7 @@ PHP
             return true;
         }
 
-        return ! $this->chainMethodCallNodeAnalyzer->isLastChainMethodCall($methodCall);
+        return ! $this->fluentChainMethodCallNodeAnalyzer->isLastChainMethodCall($methodCall);
     }
 
     private function crateVariableFromNew(New_ $new): Variable

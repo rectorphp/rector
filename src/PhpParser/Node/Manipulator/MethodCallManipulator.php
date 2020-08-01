@@ -12,7 +12,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -29,18 +29,18 @@ final class MethodCallManipulator
     private $betterNodeFinder;
 
     /**
-     * @var ChainMethodCallNodeAnalyzer
+     * @var FluentChainMethodCallNodeAnalyzer
      */
-    private $chainMethodCallNodeAnalyzer;
+    private $fluentChainMethodCallNodeAnalyzer;
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         NodeNameResolver $nodeNameResolver,
-        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer
+        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
 
     /**
@@ -133,7 +133,7 @@ final class MethodCallManipulator
             }
 
             // cover fluent interfaces too
-            $callerNode = $this->chainMethodCallNodeAnalyzer->resolveRootVariable($node);
+            $callerNode = $this->fluentChainMethodCallNodeAnalyzer->resolveRootVariable($node);
             if (! $callerNode instanceof Variable) {
                 return false;
             }

@@ -23,7 +23,7 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
  * Utils for chain of MethodCall Node:
  * "$this->methodCall()->chainedMethodCall()"
  */
-final class ChainMethodCallNodeAnalyzer
+final class FluentChainMethodCallNodeAnalyzer
 {
     /**
      * @var NodeTypeResolver

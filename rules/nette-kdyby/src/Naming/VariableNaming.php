@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NetteKdyby\Naming;
 
+use PhpParser\Node\Name;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -164,7 +165,7 @@ final class VariableNaming
 
     private function resolveFromNew(New_ $new): string
     {
-        if ($new->class instanceof Node\Name) {
+        if ($new->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($new->class);
             return $this->classNaming->getShortName($className);
         }

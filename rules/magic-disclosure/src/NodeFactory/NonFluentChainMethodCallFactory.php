@@ -10,16 +10,16 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
-use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\NetteKdyby\Naming\VariableNaming;
 
-final class NonFluentMethodCallFactory
+final class NonFluentChainMethodCallFactory
 {
     /**
-     * @var ChainMethodCallNodeAnalyzer
+     * @var FluentChainMethodCallNodeAnalyzer
      */
-    private $chainMethodCallNodeAnalyzer;
+    private $fluentChainMethodCallNodeAnalyzer;
 
     /**
      * @var VariableNaming
@@ -27,10 +27,10 @@ final class NonFluentMethodCallFactory
     private $variableNaming;
 
     public function __construct(
-        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
+        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
         VariableNaming $variableNaming
     ) {
-        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
         $this->variableNaming = $variableNaming;
     }
 
@@ -46,7 +46,7 @@ final class NonFluentMethodCallFactory
         $newStmts[] = $this->createAssignExpression($newVariable, $new);
 
         // resolve chain calls
-        $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChainWithoutRootOne(
+        $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChainWithoutRootOne(
             $rootMethodCall
         );
 

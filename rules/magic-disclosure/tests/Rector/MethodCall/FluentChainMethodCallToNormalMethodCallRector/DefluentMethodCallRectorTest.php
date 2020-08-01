@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\DefluentMethodCallRector;
+namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\MagicDisclosure\Rector\MethodCall\DefluentMethodCallRector;
+use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DefluentMethodCallRectorTest extends AbstractRectorTestCase
@@ -26,6 +26,6 @@ final class DefluentMethodCallRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return DefluentMethodCallRector::class;
+        return FluentChainMethodCallToNormalMethodCallRector::class;
     }
 }

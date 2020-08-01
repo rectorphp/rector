@@ -13,10 +13,10 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\NodeAnalyzer\NewChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\NodeFactory\NonFluentMethodCallFactory;
-use Rector\MagicDisclosure\NodeManipulator\ChainMethodCallRootExtractor;
+use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
+use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\NetteKdyby\Naming\VariableNaming;
@@ -27,17 +27,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  * @see \Rector\MagicDisclosure\Tests\Rector\MethodCall\InArgChainMethodCallToStandaloneMethodCallRector\InArgChainMethodCallToStandaloneMethodCallRectorTest
  */
-final class InArgChainMethodCallToStandaloneMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
+final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
 {
     /**
-     * @var ChainMethodCallNodeAnalyzer
+     * @var FluentChainMethodCallNodeAnalyzer
      */
-    private $chainMethodCallNodeAnalyzer;
+    private $fluentChainMethodCallNodeAnalyzer;
 
     /**
-     * @var NonFluentMethodCallFactory
+     * @var NonFluentChainMethodCallFactory
      */
-    private $nonFluentMethodCallFactory;
+    private $nonFluentChainMethodCallFactory;
 
     /**
      * @var VariableNaming
@@ -45,27 +45,27 @@ final class InArgChainMethodCallToStandaloneMethodCallRector extends AbstractCon
     private $variableNaming;
 
     /**
-     * @var NewChainMethodCallNodeAnalyzer
+     * @var NewFluentChainMethodCallNodeAnalyzer
      */
-    private $newChainMethodCallNodeAnalyzer;
+    private $newFluentChainMethodCallNodeAnalyzer;
 
     /**
-     * @var ChainMethodCallRootExtractor
+     * @var FluentChainMethodCallRootExtractor
      */
-    private $chainMethodCallRootExtractor;
+    private $fluentChainMethodCallRootExtractor;
 
     public function __construct(
-        ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
-        NonFluentMethodCallFactory $nonFluentMethodCallFactory,
+        FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
         VariableNaming $variableNaming,
-        NewChainMethodCallNodeAnalyzer $newChainMethodCallNodeAnalyzer,
-        ChainMethodCallRootExtractor $chainMethodCallRootExtractor
+        NewFluentChainMethodCallNodeAnalyzer $newFluentChainMethodCallNodeAnalyzer,
+        FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor
     ) {
-        $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
-        $this->nonFluentMethodCallFactory = $nonFluentMethodCallFactory;
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
+        $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
         $this->variableNaming = $variableNaming;
-        $this->newChainMethodCallNodeAnalyzer = $newChainMethodCallNodeAnalyzer;
-        $this->chainMethodCallRootExtractor = $chainMethodCallRootExtractor;
+        $this->newFluentChainMethodCallNodeAnalyzer = $newFluentChainMethodCallNodeAnalyzer;
+        $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
     }
 
     public function getDefinition(): RectorDefinition
@@ -127,7 +127,7 @@ PHP
             return null;
         }
 
-        if (! $this->chainMethodCallNodeAnalyzer->isLastChainMethodCall($node)) {
+        if (! $this->fluentChainMethodCallNodeAnalyzer->isLastChainMethodCall($node)) {
             return null;
         }
 
@@ -138,9 +138,9 @@ PHP
         }
 
         // DUPLCIATED
-        $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($node);
+        $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($node);
 
-        $assignAndRootExpr = $this->chainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
+        $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
         if ($assignAndRootExpr === null) {
             return null;
         }
@@ -149,7 +149,7 @@ PHP
             return null;
         }
 
-        $nodesToAdd = $this->nonFluentMethodCallFactory->createFromAssignObjectAndMethodCalls(
+        $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromAssignObjectAndMethodCalls(
             $assignAndRootExpr,
             $chainMethodCalls
         );
@@ -191,11 +191,11 @@ PHP
 
     private function refactorNew(MethodCall $methodCall, New_ $new): void
     {
-        if (! $this->newChainMethodCallNodeAnalyzer->isNewMethodCallReturningSelf($methodCall)) {
+        if (! $this->newFluentChainMethodCallNodeAnalyzer->isNewMethodCallReturningSelf($methodCall)) {
             return;
         }
 
-        $nodesToAdd = $this->nonFluentMethodCallFactory->createFromNewAndRootMethodCall($new, $methodCall);
+        $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromNewAndRootMethodCall($new, $methodCall);
 
         $newVariable = $this->crateVariableFromNew($new);
         $nodesToAdd[] = $this->createFluentAsArg($methodCall, $newVariable);
@@ -210,7 +210,7 @@ PHP
      */
     private function shouldSkip(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
     {
-        $calleeUniqueTypes = $this->chainMethodCallNodeAnalyzer->resolveCalleeUniqueTypes(
+        $calleeUniqueTypes = $this->fluentChainMethodCallNodeAnalyzer->resolveCalleeUniqueTypes(
             $assignAndRootExpr,
             $chainMethodCalls
         );

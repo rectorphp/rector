@@ -6,7 +6,7 @@ namespace Rector\MagicDisclosure\Tests\Rector\MethodCall\InArgChainMethodCallToS
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\MagicDisclosure\Rector\MethodCall\InArgChainMethodCallToStandaloneMethodCallRector;
+use Rector\MagicDisclosure\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InArgChainMethodCallToStandaloneMethodCallRectorTest extends AbstractRectorTestCase
@@ -26,6 +26,6 @@ final class InArgChainMethodCallToStandaloneMethodCallRectorTest extends Abstrac
 
     protected function getRectorClass(): string
     {
-        return InArgChainMethodCallToStandaloneMethodCallRector::class;
+        return InArgFluentChainMethodCallToStandaloneMethodCallRector::class;
     }
 }

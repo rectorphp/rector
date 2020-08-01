@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PHPStan\Type\MixedType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class NewChainMethodCallNodeAnalyzer
+final class NewFluentChainMethodCallNodeAnalyzer
 {
     /**
      * @var NodeTypeResolver
