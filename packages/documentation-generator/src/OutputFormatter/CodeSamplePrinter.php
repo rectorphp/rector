@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\SymfonyPhpConfig\Printer\ReturnClosurePrinter;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class RectorCodeSamplePrinter
+final class CodeSamplePrinter
 {
     /**
      * @var SymfonyStyle
