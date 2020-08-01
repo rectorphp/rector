@@ -9,19 +9,18 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\MagicDisclosure\ConflictGuard\ParentClassMethodTypeOverrideGuard;
-use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\MagicDisclosure\Tests\Rector\ClassMethod\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
  */
-final class ReturnThisRemoveRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
+final class ReturnThisRemoveRector extends AbstractRector
 {
     /**
      * @var ParentClassMethodTypeOverrideGuard
@@ -36,7 +35,7 @@ final class ReturnThisRemoveRector extends AbstractConfigurableMatchTypeRector i
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Removes "return $this;" from *fluent interfaces* for specified classes.', [
-            new ConfiguredCodeSample(
+            new CodeSample(
                     <<<'PHP'
 class SomeExampleClass
 {
@@ -64,10 +63,6 @@ class SomeExampleClass
     }
 }
 PHP
-                ,
-                [
-                    self::TYPES_TO_MATCH => ['SomeExampleClass'],
-                ]
             ),
         ]);
     }
@@ -150,6 +145,6 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        return ! $this->isExprMatchingAllowedTypes($return->expr);
+        return false;
     }
 }
