@@ -26,6 +26,14 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class FluentChainMethodCallNodeAnalyzer
 {
     /**
+     * Types that look like fluent interface, but actually create a new object.
+     * Should be skipped, as they return different object. Not an fluent interface!
+     *
+     * @var string[]
+     */
+    private const KNOWN_FACTORY_FLUENT_TYPES = ['PHPStan\Analyser\MutatingScope'];
+
+    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -76,7 +84,19 @@ final class FluentChainMethodCallNodeAnalyzer
         $methodReturnStaticType = $this->nodeTypeResolver->getStaticType($methodCall);
 
         // is fluent type
-        return $calleeStaticType->equals($methodReturnStaticType);
+        if (! $calleeStaticType->equals($methodReturnStaticType)) {
+            return false;
+        }
+
+        if ($calleeStaticType instanceof TypeWithClassName) {
+            foreach (self::KNOWN_FACTORY_FLUENT_TYPES as $knownFactoryFluentTypes) {
+                if (is_a($calleeStaticType->getClassName(), $knownFactoryFluentTypes, true)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public function isLastChainMethodCall(MethodCall $methodCall): bool
