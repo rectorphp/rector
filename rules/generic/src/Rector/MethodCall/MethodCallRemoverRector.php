@@ -18,6 +18,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class MethodCallRemoverRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
     public const METHOD_CALL_REMOVER_ARGUMENT = '$methodCallRemoverArgument';
 
     /**
