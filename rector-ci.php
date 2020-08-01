@@ -38,6 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::NAMING,
         SetList::SYMFONY_PHP_CONFIG,
         SetList::ORDER,
+        SetList::DEFLUENT,
     ]);
 
     $parameters->set(Option::PATHS, [
