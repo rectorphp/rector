@@ -98,6 +98,16 @@ trait NodeCommandersTrait
         }
     }
 
+    /**
+     * @param Node[] $newNodes
+     */
+    protected function addNodesBeforeNode(array $newNodes, Node $positionNode): void
+    {
+        foreach ($newNodes as $newNode) {
+            $this->addNodeBeforeNode($newNode, $positionNode);
+        }
+    }
+
     protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
     {
         $this->nodesToAddCollector->addNodeAfterNode($newNode, $positionNode);

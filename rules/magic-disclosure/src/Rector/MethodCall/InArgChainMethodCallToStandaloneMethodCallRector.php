@@ -7,17 +7,19 @@ namespace Rector\MagicDisclosure\Rector\MethodCall;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MagicDisclosure\NodeAnalyzer\ChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeAnalyzer\NewChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\NodeFactory\NonFluentMethodCallFactory;
 use Rector\MagicDisclosure\NodeManipulator\ChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
+use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -33,23 +35,37 @@ final class InArgChainMethodCallToStandaloneMethodCallRector extends AbstractCon
     private $chainMethodCallNodeAnalyzer;
 
     /**
-     * @var ChainMethodCallRootExtractor
-     */
-    private $chainMethodCallRootExtractor;
-
-    /**
      * @var NonFluentMethodCallFactory
      */
     private $nonFluentMethodCallFactory;
 
+    /**
+     * @var VariableNaming
+     */
+    private $variableNaming;
+
+    /**
+     * @var NewChainMethodCallNodeAnalyzer
+     */
+    private $newChainMethodCallNodeAnalyzer;
+
+    /**
+     * @var ChainMethodCallRootExtractor
+     */
+    private $chainMethodCallRootExtractor;
+
     public function __construct(
         ChainMethodCallNodeAnalyzer $chainMethodCallNodeAnalyzer,
-        ChainMethodCallRootExtractor $chainMethodCallRootExtractor,
-        NonFluentMethodCallFactory $nonFluentMethodCallFactory
+        NonFluentMethodCallFactory $nonFluentMethodCallFactory,
+        VariableNaming $variableNaming,
+        NewChainMethodCallNodeAnalyzer $newChainMethodCallNodeAnalyzer,
+        ChainMethodCallRootExtractor $chainMethodCallRootExtractor
     ) {
         $this->chainMethodCallNodeAnalyzer = $chainMethodCallNodeAnalyzer;
-        $this->chainMethodCallRootExtractor = $chainMethodCallRootExtractor;
         $this->nonFluentMethodCallFactory = $nonFluentMethodCallFactory;
+        $this->variableNaming = $variableNaming;
+        $this->newChainMethodCallNodeAnalyzer = $newChainMethodCallNodeAnalyzer;
+        $this->chainMethodCallRootExtractor = $chainMethodCallRootExtractor;
     }
 
     public function getDefinition(): RectorDefinition
@@ -99,24 +115,30 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $methodCall = $this->matchMethodCall($node);
-        if ($methodCall === null) {
-            return null;
-        }
-
         if (! $this->hasParentType($node, Arg::class)) {
             return null;
         }
 
-        if (! $this->chainMethodCallNodeAnalyzer->isLastChainMethodCall($methodCall)) {
+        /** @var Arg $arg */
+        $arg = $node->getAttribute(AttributeKey::PARENT_NODE);
+        /** @var Node|null $parentMethodCall */
+        $parentMethodCall = $arg->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentMethodCall instanceof MethodCall) {
             return null;
         }
 
-        if ($this->isGetterMethodCall($methodCall)) {
+        if (! $this->chainMethodCallNodeAnalyzer->isLastChainMethodCall($node)) {
             return null;
         }
 
-        $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
+        // create instances from (new ...)->call, re-use from
+        if ($node->var instanceof New_) {
+            $this->refactorNew($node, $node->var);
+            return null;
+        }
+
+        // DUPLCIATED
+        $chainMethodCalls = $this->chainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($node);
 
         $assignAndRootExpr = $this->chainMethodCallRootExtractor->extractFromMethodCalls($chainMethodCalls);
         if ($assignAndRootExpr === null) {
@@ -132,39 +154,58 @@ PHP
             $chainMethodCalls
         );
 
-        $nodesToAdd = $this->addFluentAsArg($node, $assignAndRootExpr, $nodesToAdd);
+        $this->addNodesBeforeNode($nodesToAdd, $node);
 
-        $this->removeCurrentNode($node);
-
-        foreach ($nodesToAdd as $nodeToAdd) {
-            // needed to remove weird spacing
-            $nodeToAdd->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $this->addNodeAfterNode($nodeToAdd, $node);
-        }
-
-        return $node;
+        return $assignAndRootExpr->getCallerExpr();
     }
 
-    /**
-     * @param MethodCall|Return_ $node
-     */
-    private function matchMethodCall(Node $node): ?MethodCall
+    private function removeParentParent(MethodCall $node): void
     {
-        if ($node instanceof Return_) {
-            if ($node->expr === null) {
-                return null;
-            }
+        /** @var Arg $parent */
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-            if ($node->expr instanceof MethodCall) {
-                return $node->expr;
-            }
-            return null;
+        /** @var MethodCall $parentParent */
+        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+
+        $this->removeNode($parentParent);
+    }
+
+    private function createFluentAsArg(MethodCall $methodCall, Variable $variable): MethodCall
+    {
+        /** @var Arg $parent */
+        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        /** @var MethodCall $parentParent */
+        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+
+        $lastMethodCall = new MethodCall($parentParent->var, $parentParent->name);
+        $lastMethodCall->args[] = new Arg($variable);
+
+        return $lastMethodCall;
+    }
+
+    private function crateVariableFromNew(New_ $new): Variable
+    {
+        $variableName = $this->variableNaming->resolveFromNode($new);
+        return new Variable($variableName);
+    }
+
+    private function refactorNew(MethodCall $methodCall, New_ $new): void
+    {
+        if (! $this->newChainMethodCallNodeAnalyzer->isNewMethodCallReturningSelf($methodCall)) {
+            return;
         }
 
-        return $node;
+        $nodesToAdd = $this->nonFluentMethodCallFactory->createFromNewAndRootMethodCall($new, $methodCall);
+
+        $newVariable = $this->crateVariableFromNew($new);
+        $nodesToAdd[] = $this->createFluentAsArg($methodCall, $newVariable);
+
+        $this->addNodesBeforeNode($nodesToAdd, $methodCall);
+        $this->removeParentParent($methodCall);
     }
 
     /**
+     * @duplicated
      * @param MethodCall[] $chainMethodCalls
      */
     private function shouldSkip(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
@@ -186,64 +227,5 @@ PHP
         }
 
         return ! $this->isMatchedType($calleeUniqueType);
-    }
-
-    /**
-     * @param MethodCall|Return_ $node
-     */
-    private function removeCurrentNode(Node $node): void
-    {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign) {
-            $this->removeNode($parentNode);
-            return;
-        }
-
-        // part of method call
-        if ($parentNode instanceof Arg) {
-            $parentParent = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParent instanceof MethodCall) {
-                $this->removeNode($parentParent);
-            }
-            return;
-        }
-
-        $this->removeNode($node);
-    }
-
-    /**
-     * @param Return_|MethodCall $node
-     * @param Node[] $nodesToAdd
-     * @return Node[]
-     */
-    private function addFluentAsArg(Node $node, AssignAndRootExpr $assignAndRootExpr, array $nodesToAdd): array
-    {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Arg) {
-            return $nodesToAdd;
-        }
-
-        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentParent instanceof MethodCall) {
-            return $nodesToAdd;
-        }
-
-        $lastMethodCall = new MethodCall($parentParent->var, $parentParent->name);
-        $lastMethodCall->args[] = new Arg($assignAndRootExpr->getRootExpr());
-        $nodesToAdd[] = $lastMethodCall;
-
-        return $nodesToAdd;
-    }
-
-    private function isGetterMethodCall(MethodCall $methodCall): bool
-    {
-        if ($methodCall->var instanceof MethodCall) {
-            return false;
-        }
-        $methodCallStaticType = $this->getStaticType($methodCall);
-        $methodCallVarStaticType = $this->getStaticType($methodCall->var);
-
-        // getter short call type
-        return ! $methodCallStaticType->equals($methodCallVarStaticType);
     }
 }

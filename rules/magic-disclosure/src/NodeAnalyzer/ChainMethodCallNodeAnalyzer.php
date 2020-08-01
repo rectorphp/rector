@@ -163,7 +163,7 @@ final class ChainMethodCallNodeAnalyzer
         $chainMethodCalls = $this->collectAllMethodCallsInChain($methodCall);
 
         foreach ($chainMethodCalls as $key => $chainMethodCall) {
-            if (! $chainMethodCall->var instanceof MethodCall) {
+            if (! $chainMethodCall->var instanceof MethodCall && ! $chainMethodCall->var instanceof New_) {
                 unset($chainMethodCalls[$key]);
                 break;
             }
