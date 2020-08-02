@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
+use Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector;
+use Rector\Injection\ValueObject\StaticCallToMethodCall;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
 use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
@@ -12,6 +14,7 @@ use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/nette-30-return-types.php');
@@ -22,6 +25,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
     $services->set(RemoveParentCallWithoutParentRector::class);
+
+    $configuration = [];
+    $configuration[] = inline_service(StaticCallToMethodCall::class)
+        ->args(['Nette\Security\Passwords', 'hash', 'Nette\Security\Passwords', 'hash']);
+    $configuration[] = inline_service(StaticCallToMethodCall::class)
+        ->args(['Nette\Security\Passwords', 'verify', 'Nette\Security\Passwords', 'verify']);
+    $configuration[] = inline_service(StaticCallToMethodCall::class)
+        ->args(['Nette\Security\Passwords', 'needsRehash', 'Nette\Security\Passwords', 'needsRehash']);
+
+    $services->set(StaticCallToAnotherServiceConstructorInjectionRector::class)
+        // see https://github.com/nette/security/commit/e0da01080872b8493045e78535ff55546e4f02db
+        ->call('configure', [[
+            StaticCallToAnotherServiceConstructorInjectionRector::STATIC_CALLS_TO_METHOD_CALLS => $configuration,
+        ]]);
 
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
     $services->set(RenameClassConstantRector::class)
