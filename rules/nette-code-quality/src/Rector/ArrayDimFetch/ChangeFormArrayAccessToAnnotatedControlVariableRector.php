@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -88,6 +89,10 @@ PHP
         }
 
         if ($this->hasParentType($node, Isset_::class)) {
+            return null;
+        }
+
+        if ($this->hasParentType($node, Unset_::class)) {
             return null;
         }
 
