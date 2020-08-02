@@ -6,6 +6,7 @@ namespace Rector\NetteCodeQuality\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -83,6 +84,10 @@ PHP
     public function refactor(Node $node): ?Node
     {
         if ($this->isBeingAssignedOrInitialized($node)) {
+            return null;
+        }
+
+        if ($this->hasParentType($node, Isset_::class)) {
             return null;
         }
 

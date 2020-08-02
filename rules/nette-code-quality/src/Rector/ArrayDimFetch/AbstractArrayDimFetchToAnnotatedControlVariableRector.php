@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Rector\NetteCodeQuality\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -139,19 +142,22 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
         return $assignExpression;
     }
 
-    private function getClassMethodFirstLevelStatement(ArrayDimFetch $arrayDimFetch): Node
+    private function getClassMethodFirstLevelStatement(Node $node): Node
     {
-        $classMethod = $arrayDimFetch->getAttribute(AttributeKey::METHOD_NODE);
-        if (! $classMethod instanceof ClassMethod) {
+        $multiplierClosure = $this->matchMultiplierClosure($node);
+        $functionLike = $multiplierClosure ?? $node->getAttribute(AttributeKey::METHOD_NODE);
+
+        /** @var ClassMethod|Closure|null $functionLike */
+        if ($functionLike === null) {
             throw new ShouldNotHappenException();
         }
 
-        $currentStatement = $arrayDimFetch->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if (! $currentStatement instanceof Node) {
             throw new ShouldNotHappenException();
         }
 
-        while (! in_array($currentStatement, (array) $classMethod->stmts, true)) {
+        while (! in_array($currentStatement, (array) $functionLike->stmts, true)) {
             $parent = $currentStatement->getAttribute(AttributeKey::PARENT_NODE);
             if (! $parent instanceof Node) {
                 throw new ShouldNotHappenException();
@@ -161,5 +167,30 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
         }
 
         return $currentStatement;
+    }
+
+    /**
+     * Form might be costructured inside private closure for multiplier
+     * @see https://doc.nette.org/en/3.0/multiplier
+     */
+    private function matchMultiplierClosure(Node $node): ?Closure
+    {
+        /** @var Closure|null $closure */
+        $closure = $node->getAttribute(AttributeKey::CLOSURE_NODE);
+        if ($closure === null) {
+            return null;
+        }
+
+        $parent = $closure->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Arg) {
+            return null;
+        }
+
+        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentParent instanceof New_) {
+            return null;
+        }
+
+        return $closure;
     }
 }
