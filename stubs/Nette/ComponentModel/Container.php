@@ -98,7 +98,7 @@ abstract class Container implements IContainer
      * Returns component specified by name or path.
      * @param  bool  $throw  throw exception if component doesn't exist?
      */
-    final public function getComponent(string $name, bool $throw = true): ?IComponent
+    public function getComponent(string $name, bool $throw = true): ?IComponent
     {
         [$name] = $parts = explode(self::NAME_SEPARATOR, $name, 2);
 
