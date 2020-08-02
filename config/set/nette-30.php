@@ -34,6 +34,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Contributte\Events\Extra\Event\Security\LoggedOutEvent' => [
                     'NAME' => 'class',
                 ],
+                'Contributte\Events\Extra\Event\Application\ShutdownEvent' => [
+                    'NAME' => 'class',
+                ],
             ],
         ]]
     );
