@@ -1,4 +1,4 @@
-# All 548 Rectors Overview
+# All 549 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -19,7 +19,7 @@
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (41)
+- [Generic](#generic) (42)
 - [Guzzle](#guzzle) (1)
 - [Injection](#injection) (1)
 - [JMS](#jms) (2)
@@ -4811,6 +4811,30 @@ return function (ContainerConfigurator $containerConfigurator) : void {
  {
 -    public $someProperty;
 +    protected $someProperty;
+ }
+```
+
+<br><br>
+
+### `FormerNullableArgumentToScalarTypedRector`
+
+- class: [`Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector`](/../master/rules/generic/src/Rector/MethodCall/FormerNullableArgumentToScalarTypedRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/FormerNullableArgumentToScalarTypedRector/Fixture)
+
+Change null in argument, that is now not nullable anymore
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        $this->setValue(null);
++        $this->setValue('');
+     }
+
+     public function setValue(string $value)
+     {
+     }
  }
 ```
 

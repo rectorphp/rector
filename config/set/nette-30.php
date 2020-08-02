@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
+use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
 use Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector;
 use Rector\Injection\ValueObject\StaticCallToMethodCall;
@@ -23,8 +24,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
+    $services->set(AddDatePickerToDateControlRector::class);
+
+    $services->set(SetClassWithArgumentToSetFactoryRector::class);
+
+    $services->set(ChangeFormArrayAccessToAnnotatedControlVariableRector::class);
+
+    $services->set(GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector::class);
+
     // Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
     $services->set(RemoveParentCallWithoutParentRector::class);
+
+    // https://github.com/nette/utils/commit/d0041ba59f5d8bf1f5b3795fd76d43fb13ea2e15
+    $services->set(FormerNullableArgumentToScalarTypedRector::class);
 
     $configuration = [];
     $configuration[] = new StaticCallToMethodCall(
@@ -109,12 +121,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ],
             ],
         ]]);
-
-    $services->set(AddDatePickerToDateControlRector::class);
-
-    $services->set(SetClassWithArgumentToSetFactoryRector::class);
-
-    $services->set(ChangeFormArrayAccessToAnnotatedControlVariableRector::class);
-
-    $services->set(GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector::class);
 };

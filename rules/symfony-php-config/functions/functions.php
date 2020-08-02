@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\SymfonyPhpConfig;
 
+use Rector\Core\Exception\ShouldNotHappenException;
 use ReflectionClass;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 use Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
@@ -14,6 +15,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfi
  */
 function inline_objects(array $objects): array
 {
+    $inlineServices = [];
     foreach ($objects as $object) {
         $reflectionClass = new ReflectionClass($object);
 
@@ -34,6 +36,14 @@ function resolve_argument_values(ReflectionClass $reflectionClass, object $objec
     $argumentValues = [];
 
     $constructorMethodReflection = $reflectionClass->getConstructor();
+    if ($constructorMethodReflection === null) {
+        $message = sprintf(
+            'Constructor for "%s" was not found. Be sure to use only value objects',
+            $reflectionClass->getName()
+        );
+        throw new ShouldNotHappenException($message);
+    }
+
     foreach ($constructorMethodReflection->getParameters() as $constructorParameter) {
         $parameterName = $constructorParameter->getName();
         $propertyReflection = $reflectionClass->getProperty($parameterName);
