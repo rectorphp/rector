@@ -6,8 +6,11 @@ namespace Rector\Injection\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -108,19 +111,28 @@ PHP
             return null;
         }
 
-        foreach ($this->staticCallsToMethodCalls as $staticCallsToMethodCall) {
-            if (! $staticCallsToMethodCall->matchStaticCall($node)) {
+        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+        if (! $classMethod instanceof ClassMethod) {
+            return null;
+        }
+
+        foreach ($this->staticCallsToMethodCalls as $staticCallToMethodCall) {
+            if (! $staticCallToMethodCall->matchStaticCall($node)) {
                 continue;
             }
 
-            $serviceObjectType = new FullyQualifiedObjectType($staticCallsToMethodCall->getClassType());
+            if ($classMethod->isStatic()) {
+                return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
+            }
+
+            $serviceObjectType = new FullyQualifiedObjectType($staticCallToMethodCall->getClassType());
 
             $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
             $this->addPropertyToClass($classLike, $serviceObjectType, $propertyName);
 
             $propertyFetchNode = $this->createPropertyFetch('this', $propertyName);
 
-            return new MethodCall($propertyFetchNode, $staticCallsToMethodCall->getMethodName(), $node->args);
+            return new MethodCall($propertyFetchNode, $staticCallToMethodCall->getMethodName(), $node->args);
         }
 
         return $node;
@@ -129,5 +141,13 @@ PHP
     public function configure(array $configuration): void
     {
         $this->staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? [];
+    }
+
+    private function refactorToInstanceCall(
+        StaticCall $staticCall,
+        StaticCallToMethodCall $staticCallToMethodCall
+    ): MethodCall {
+        $new = new New_(new FullyQualified($staticCallToMethodCall->getClassType()));
+        return new MethodCall($new, $staticCallToMethodCall->getMethodName(), $staticCall->args);
     }
 }
