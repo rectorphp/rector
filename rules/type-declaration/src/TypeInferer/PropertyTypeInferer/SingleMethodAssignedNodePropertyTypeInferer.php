@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
@@ -28,7 +29,7 @@ final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInfe
             return new MixedType();
         }
 
-        $classMethod = $classLike->getMethod('__construct');
+        $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         if ($classMethod === null) {
             return new MixedType();
         }

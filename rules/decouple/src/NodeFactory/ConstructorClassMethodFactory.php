@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Builder\ParamBuilder;
+use Rector\Core\ValueObject\MethodName;
 
 final class ConstructorClassMethodFactory
 {
@@ -24,7 +25,7 @@ final class ConstructorClassMethodFactory
             return null;
         }
 
-        $methodBuilder = new MethodBuilder('__construct');
+        $methodBuilder = new MethodBuilder(MethodName::CONSTRUCT);
         $methodBuilder->makePublic();
 
         foreach ($properties as $propertyName => $property) {

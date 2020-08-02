@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony\NodeFactory\BuilderFormNodeFactory;
 use Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory;
 use ReflectionClass;
@@ -185,7 +186,7 @@ PHP
             return null;
         }
 
-        $constructorClassMethod = $formTypeClass->getMethod('__construct');
+        $constructorClassMethod = $formTypeClass->getMethod(MethodName::CONSTRUCT);
 
         // nothing we can do, out of scope
         if ($constructorClassMethod === null) {

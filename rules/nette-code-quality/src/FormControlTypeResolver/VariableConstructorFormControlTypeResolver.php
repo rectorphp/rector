@@ -7,6 +7,7 @@ namespace Rector\NetteCodeQuality\FormControlTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\Contract\MethodNamesByInputNamesResolverAwareInterface;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
@@ -70,7 +71,7 @@ final class VariableConstructorFormControlTypeResolver implements FormControlTyp
         }
 
         $constructorClassMethod = $this->functionLikeParsedNodesFinder->findClassMethod(
-            '__construct',
+            MethodName::CONSTRUCT,
             $formType->getClassName()
         );
         if ($constructorClassMethod === null) {

@@ -15,6 +15,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -125,7 +126,7 @@ PHP
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        if (! $this->isName($classMethod, '__construct')) {
+        if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
             return true;
         }
 

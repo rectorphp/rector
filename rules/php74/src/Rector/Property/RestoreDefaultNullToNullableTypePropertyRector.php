@@ -14,6 +14,7 @@ use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -98,7 +99,7 @@ PHP
             return false;
         }
 
-        $constructClassMethod = $classLike->getMethod('__construct');
+        $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         if (! $constructClassMethod instanceof ClassMethod) {
             return false;
         }

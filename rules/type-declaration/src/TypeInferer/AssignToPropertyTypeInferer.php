@@ -15,6 +15,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class AssignToPropertyTypeInferer extends AbstractTypeInferer
@@ -53,7 +54,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
 
             // is in constructor?
             $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
-            if ($methodName === '__construct') {
+            if ($methodName === MethodName::CONSTRUCT) {
                 $this->isAssignedInConstructor = true;
             }
 

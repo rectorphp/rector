@@ -23,6 +23,7 @@ use Rector\Core\PhpParser\Builder\ClassBuilder;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -133,7 +134,7 @@ final class UniqueObjectFactoryFactory
 
         $assigns = $this->createAssignsFromParams($params);
 
-        $methodBuilder = new MethodBuilder('__construct');
+        $methodBuilder = new MethodBuilder(MethodName::CONSTRUCT);
         $methodBuilder->makePublic();
         $methodBuilder->addParams($params);
         $methodBuilder->addStmts($assigns);
@@ -148,7 +149,7 @@ final class UniqueObjectFactoryFactory
     {
         $new = new New_(new FullyQualified($className));
 
-        $constructClassMethod = $class->getMethod('__construct');
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         $params = [];
         if ($constructClassMethod !== null) {
             foreach ($constructClassMethod->params as $param) {

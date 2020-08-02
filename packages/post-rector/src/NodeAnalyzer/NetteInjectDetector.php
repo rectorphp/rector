@@ -6,6 +6,7 @@ namespace Rector\PostRector\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
@@ -79,7 +80,7 @@ final class NetteInjectDetector
 
         // prefer local constructor
         $classReflection = new ReflectionClass($className);
-        if ($classReflection->hasMethod('__construct')) {
+        if ($classReflection->hasMethod(MethodName::CONSTRUCT)) {
             /** @var ReflectionMethod $constructorReflectionMethod */
             $constructorReflectionMethod = $classReflection->getConstructor();
 

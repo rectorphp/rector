@@ -14,6 +14,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -145,7 +146,7 @@ CODE_SAMPLE
 
     private function hasUuidInitAlreadyAdded(Class_ $class, string $uuidPropertyName): bool
     {
-        $constructClassMethod = $class->getMethod('__construct');
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod === null) {
             return false;
         }

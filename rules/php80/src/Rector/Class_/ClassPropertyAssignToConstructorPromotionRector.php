@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Php80\ValueObject\PromotionCandidate;
 
 /**
@@ -156,7 +157,7 @@ PHP
      */
     private function collectPromotionCandidatesFromClass(Class_ $class): array
     {
-        $constructClassMethod = $class->getMethod('__construct');
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod === null) {
             return [];
         }

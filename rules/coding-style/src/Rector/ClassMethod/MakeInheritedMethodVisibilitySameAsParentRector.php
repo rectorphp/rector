@@ -13,6 +13,7 @@ use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionMethod;
 
@@ -136,7 +137,7 @@ PHP
             return false;
         }
 
-        if ($methodName !== '__construct') {
+        if ($methodName !== MethodName::CONSTRUCT) {
             return false;
         }
 

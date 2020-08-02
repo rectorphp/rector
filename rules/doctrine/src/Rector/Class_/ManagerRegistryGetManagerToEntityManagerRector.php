@@ -20,6 +20,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 /**
@@ -102,7 +103,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $constructorClassMethod = $node->getMethod('__construct');
+        $constructorClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         if ($constructorClassMethod === null) {
             return null;
         }
