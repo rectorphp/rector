@@ -151,7 +151,10 @@
             "Rector\\Downgrade\\": "rules/downgrade/src",
             "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src",
             "Rector\\Injection\\": "rules/injection/src"
-        }
+        },
+        "files": [
+            "rules/symfony-php-config/functions/functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

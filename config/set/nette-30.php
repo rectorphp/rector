@@ -13,8 +13,8 @@ use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotate
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use function Rector\SymfonyPhpConfig\inline_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/nette-30-return-types.php');
@@ -27,17 +27,31 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveParentCallWithoutParentRector::class);
 
     $configuration = [];
-    $configuration[] = inline_service(StaticCallToMethodCall::class)
-        ->args(['Nette\Security\Passwords', 'hash', 'Nette\Security\Passwords', 'hash']);
-    $configuration[] = inline_service(StaticCallToMethodCall::class)
-        ->args(['Nette\Security\Passwords', 'verify', 'Nette\Security\Passwords', 'verify']);
-    $configuration[] = inline_service(StaticCallToMethodCall::class)
-        ->args(['Nette\Security\Passwords', 'needsRehash', 'Nette\Security\Passwords', 'needsRehash']);
+    $configuration[] = new StaticCallToMethodCall(
+        'Nette\Security\Passwords',
+        'hash',
+        'Nette\Security\Passwords',
+        'hash'
+    );
+    $configuration[] = new StaticCallToMethodCall(
+        'Nette\Security\Passwords',
+        'verify',
+        'Nette\Security\Passwords',
+        'verify'
+    );
+    $configuration[] = new StaticCallToMethodCall(
+        'Nette\Security\Passwords',
+        'needsRehash',
+        'Nette\Security\Passwords',
+        'needsRehash'
+    );
 
     $services->set(StaticCallToAnotherServiceConstructorInjectionRector::class)
         // see https://github.com/nette/security/commit/e0da01080872b8493045e78535ff55546e4f02db
         ->call('configure', [[
-            StaticCallToAnotherServiceConstructorInjectionRector::STATIC_CALLS_TO_METHOD_CALLS => $configuration,
+            StaticCallToAnotherServiceConstructorInjectionRector::STATIC_CALLS_TO_METHOD_CALLS => inline_objects(
+                $configuration
+            ),
         ]]);
 
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
