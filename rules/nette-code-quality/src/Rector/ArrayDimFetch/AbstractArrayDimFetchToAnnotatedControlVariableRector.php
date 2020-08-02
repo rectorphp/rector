@@ -7,7 +7,9 @@ namespace Rector\NetteCodeQuality\Rector\ArrayDimFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
@@ -139,19 +141,23 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
         return $assignExpression;
     }
 
-    private function getClassMethodFirstLevelStatement(ArrayDimFetch $arrayDimFetch): Node
+    private function getClassMethodFirstLevelStatement(Node $node): Node
     {
-        $classMethod = $arrayDimFetch->getAttribute(AttributeKey::METHOD_NODE);
-        if (! $classMethod instanceof ClassMethod) {
+        $functionLike = $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
+            $node->getAttribute(AttributeKey::FUNCTION_NODE) ??
+            $node->getAttribute(AttributeKey::METHOD_NODE);
+
+        /** @var ClassMethod|Closure|null */
+        if (! $functionLike instanceof FunctionLike) {
             throw new ShouldNotHappenException();
         }
 
-        $currentStatement = $arrayDimFetch->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if (! $currentStatement instanceof Node) {
             throw new ShouldNotHappenException();
         }
 
-        while (! in_array($currentStatement, (array) $classMethod->stmts, true)) {
+        while (! in_array($currentStatement, (array) $functionLike->stmts, true)) {
             $parent = $currentStatement->getAttribute(AttributeKey::PARENT_NODE);
             if (! $parent instanceof Node) {
                 throw new ShouldNotHappenException();
