@@ -24,9 +24,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveParentCallWithoutParentRector::class);
 
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
-    $services->set(RenameClassConstantRector::class)->call(
-        'configure',
-        [[
+    $services->set(RenameClassConstantRector::class)
+        ->call('configure', [[
             RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
                 'Contributte\Events\Extra\Event\Security\LoggedInEvent' => [
                     'NAME' => 'class',
@@ -41,15 +40,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]
     );
 
-    $services->set(RenameClassRector::class)->call('configure', [[
-        RenameClassRector::OLD_TO_NEW_CLASSES => [
-            # nextras/forms was split into 2 packages
-            'Nextras\FormComponents\Controls\DatePicker' => 'Nextras\FormComponents\Controls\DateControl',
-            # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
-            'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
-            'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
-        ],
-    ]]);
+    $services->set(RenameClassRector::class)
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                # nextras/forms was split into 2 packages
+                'Nextras\FormComponents\Controls\DatePicker' => 'Nextras\FormComponents\Controls\DateControl',
+                # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
+                'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
+                'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
+            ],
+        ]]);
 
     $services->set(MethodCallToStaticCallRector::class)
         ->call('configure', [[
