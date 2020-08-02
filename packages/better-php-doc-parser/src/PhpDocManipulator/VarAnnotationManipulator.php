@@ -27,7 +27,7 @@ final class VarAnnotationManipulator
 
     public function decorateNodeWithInlineVarType(
         Node $node,
-        TypeWithClassName $controlTypeWithClassName,
+        TypeWithClassName $typeWithClassName,
         string $variableName
     ): void {
         $phpDocInfo = $this->resolvePhpDocInfo($node);
@@ -38,7 +38,7 @@ final class VarAnnotationManipulator
         }
 
         $attributeAwareFullyQualifiedIdentifierTypeNode = new AttributeAwareFullyQualifiedIdentifierTypeNode(
-            $controlTypeWithClassName->getClassName()
+            $typeWithClassName->getClassName()
         );
 
         $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode(
