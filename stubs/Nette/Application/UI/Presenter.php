@@ -10,5 +10,4 @@ if (class_exists('Nette\Application\UI\Presenter')) {
 
 class Presenter extends Control
 {
-
 }

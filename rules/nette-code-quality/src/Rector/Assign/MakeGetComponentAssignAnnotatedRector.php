@@ -14,7 +14,6 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
@@ -207,7 +206,7 @@ PHP
         $methodName = sprintf('createComponent%s', ucfirst($componentName));
 
         $calledOnType = $scope->getType($expr);
-        if (! $calledOnType instanceof ObjectType) {
+        if (! $calledOnType instanceof TypeWithClassName) {
             return new MixedType();
         }
 
