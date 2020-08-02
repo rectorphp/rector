@@ -37,7 +37,7 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
                 'view("...", []);',
                 'Laravel\Templating\render("...", []);',
                 [
-                    '$oldFunctionToNewFunction' => [
+                    self::OLD_FUNCTION_TO_NEW_FUNCTION => [
                         'view' => 'Laravel\Templating\render',
                     ],
                 ]

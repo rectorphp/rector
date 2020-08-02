@@ -61,7 +61,7 @@ $object = $object->withAttribute('paging', ['a value']);
 PHP
                     ,
                     [
-                        '$methodNamesByTypes' => [
+                        self::METHOD_NAMES_BY_TYPES => [
                             'getParam' => [
                                 self::MATCH_PARAMETER => 'paging',
                                 self::REPLACE_WITH => 'getAttribute',

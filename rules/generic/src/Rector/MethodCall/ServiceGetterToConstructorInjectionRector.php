@@ -116,7 +116,7 @@ PHP
 
                 ,
                 [
-                    '$methodNamesByTypesToServiceTypes' => [
+                    self::METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES => [
                         'FirstService' => [
                             'getAnotherService' => 'AnotherService',
                         ],

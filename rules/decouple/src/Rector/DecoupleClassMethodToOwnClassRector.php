@@ -180,7 +180,7 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    '$methodNamesByClass' => [
+                    self::METHOD_NAMES_BY_CLASS => [
                         'SomeClass' => [
                             'someMethod' => [
                                 'class' => 'NewDecoupledClass',

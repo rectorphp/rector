@@ -5083,7 +5083,7 @@ use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(MethodCallToStaticCallRector::class)
-        ->call('configure', [[MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS, ['$methodCallsToStaticCalls' => ['AnotherDependency' => ['process' => ['StaticCaller', 'anotherMethod']]]]]]);
+        ->call('configure', [[MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS, ['AnotherDependency' => ['process' => ['StaticCaller', 'anotherMethod']]]]]);
 };
 ```
 

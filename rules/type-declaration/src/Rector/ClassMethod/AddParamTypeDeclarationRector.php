@@ -54,7 +54,7 @@ class SomeClass
 }
 PHP
             , [
-                '$typehintForParameterByMethodByClass' => [
+                self::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
                     'SomeClass' => [
                         'process' => [
                             0 => 'string',

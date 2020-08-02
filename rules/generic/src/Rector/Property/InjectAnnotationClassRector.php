@@ -107,7 +107,7 @@ class SomeController
 PHP
                     ,
                     [
-                        '$annotationClasses' => [PHPDIInject::class, JMSInject::class],
+                        self::ANNOTATION_CLASSES => [PHPDIInject::class, JMSInject::class],
                     ]
                 ),
             ]

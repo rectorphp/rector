@@ -43,7 +43,7 @@ $someObject->newMethodCall(false);
 PHP
                 ,
                 [
-                    '$oldPropertiesToNewMethodCallsByType' => [
+                    self::OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE => [
                         'SomeClass' => [
                             'oldPropertyName' => 'oldProperty',
                             'newMethodName' => 'newMethodCall',

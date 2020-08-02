@@ -36,7 +36,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      * @var string[][][][][]
      */
     private const CONFIGURATION = [
-        '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+        self::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
             'SomeExampleClass' => [
                 'someMethod' => [
                     0 => [

@@ -37,12 +37,8 @@ final class StaticCallToAnotherServiceConstructorInjectionRector extends Abstrac
      */
     private $propertyNaming;
 
-    /**
-     * @param StaticCallToMethodCall[] $staticCallsToMethodCalls
-     */
-    public function __construct(array $staticCallsToMethodCalls, PropertyNaming $propertyNaming)
+    public function __construct(PropertyNaming $propertyNaming)
     {
-        $this->staticCallsToMethodCalls = $staticCallsToMethodCalls;
         $this->propertyNaming = $propertyNaming;
     }
 
@@ -82,7 +78,7 @@ class SomeClass
 }
 PHP
             , [
-                '$staticCallsToMethodCalls' => [
+                self::STATIC_CALLS_TO_METHOD_CALLS => [
                     new StaticCallToMethodCall(
                         'Nette\Utils\FileSystem',
                         'write',

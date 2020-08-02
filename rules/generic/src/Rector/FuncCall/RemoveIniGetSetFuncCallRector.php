@@ -62,7 +62,7 @@ CODE_SAMPLE
                 ,
                 '',
                 [
-                    '$keysToRemove' => ['y2k_compliance'],
+                    self::KEYS_TO_REMOVE => ['y2k_compliance'],
                 ]
             ), ]
         );

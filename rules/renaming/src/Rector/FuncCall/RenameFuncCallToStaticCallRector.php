@@ -52,7 +52,7 @@ class SomeClass
 PHP
 
                 , [
-                    '$functionsToStaticCalls' => [
+                    self::FUNCTIONS_TO_STATIC_CALLS => [
                         'strPee' => ['Strings', 'strPaa'],
                     ],
                 ]),

@@ -61,7 +61,7 @@ class SomeClass
 }
 PHP
             , [
-                '$oldToNewMethodByType' => [
+                self::OLD_TO_NEW_METHOD_BY_TYPE => [
                     'SomeClass' => [
                         'getNode' => 'getNodes',
                     ],

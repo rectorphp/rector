@@ -72,7 +72,7 @@ class RandomValueObject
 }
 PHP
                 , [
-                    '$classToInstantiateByType' => [
+                    self::CLASS_TO_INSTANTIATE_BY_TYPE => [
                         'RandomDependency' => 'RandomDependency',
                     ],
                 ]

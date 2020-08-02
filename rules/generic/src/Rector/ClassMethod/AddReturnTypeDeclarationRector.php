@@ -53,7 +53,7 @@ class SomeClass
 PHP
                 ,
                 [
-                    '$typehintForMethodByClass' => [
+                    self::TYPEHINT_FOR_METHOD_BY_CLASS => [
                         'SomeClass' => [
                             'getData' => 'array',
                         ],
