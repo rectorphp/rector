@@ -12,6 +12,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 
@@ -146,6 +147,6 @@ final class ClassMethodNodeRemover
 
     private function isParentConstructStaticCall(Node $node): bool
     {
-        return $this->isStaticCallNamed($node, 'parent', '__construct');
+        return $this->isStaticCallNamed($node, 'parent', MethodName::CONSTRUCT);
     }
 }

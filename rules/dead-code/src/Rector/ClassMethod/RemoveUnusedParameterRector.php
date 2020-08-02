@@ -14,6 +14,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeManipulator\MagicMethodDetector;
 use Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -221,7 +222,7 @@ PHP
         foreach ((array) $classMethod->params as $i => $param) {
             if ($this->classMethodManipulator->isParameterUsedInClassMethod($param, $classMethod)) {
                 // reset to keep order of removed arguments, if not construtctor - probably autowired
-                if (! $this->isName($classMethod, '__construct')) {
+                if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
                     $unusedParameters = [];
                 }
 

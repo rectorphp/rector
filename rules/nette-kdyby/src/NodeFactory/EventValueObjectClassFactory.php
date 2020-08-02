@@ -18,6 +18,7 @@ use Rector\Core\PhpParser\Builder\ClassBuilder;
 use Rector\Core\PhpParser\Builder\MethodBuilder;
 use Rector\Core\PhpParser\Builder\NamespaceBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NetteKdyby\BlueprintFactory\VariableWithTypesFactory;
 use Rector\NetteKdyby\ValueObject\VariableWithType;
 
@@ -69,7 +70,7 @@ final class EventValueObjectClassFactory
      */
     private function createConstructClassMethod(array $variableWithTypes): ClassMethod
     {
-        $methodBuilder = new MethodBuilder('__construct');
+        $methodBuilder = new MethodBuilder(MethodName::CONSTRUCT);
         $methodBuilder->makePublic();
 
         foreach ($variableWithTypes as $variableWithType) {

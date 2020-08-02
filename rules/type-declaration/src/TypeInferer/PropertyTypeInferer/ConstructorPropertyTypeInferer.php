@@ -21,6 +21,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodPropertyFetchManipulator;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -48,7 +49,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
             return new MixedType();
         }
 
-        $classMethod = $classLike->getMethod('__construct');
+        $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         if ($classMethod === null) {
             return new MixedType();
         }

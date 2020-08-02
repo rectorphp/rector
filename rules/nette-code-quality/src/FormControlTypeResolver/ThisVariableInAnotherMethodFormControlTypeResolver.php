@@ -7,10 +7,10 @@ namespace Rector\NetteCodeQuality\FormControlTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\Contract\MethodNamesByInputNamesResolverAwareInterface;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
-use Rector\NetteCodeQuality\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ThisVariableInAnotherMethodFormControlTypeResolver implements FormControlTypeResolverInterface, MethodNamesByInputNamesResolverAwareInterface

@@ -10,6 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\DoctrineAnnotationGenerated\ConstantPreservingDocParser;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 
@@ -32,7 +33,7 @@ final class ChangeOriginalTypeToCustomRector extends AbstractRector implements C
             return null;
         }
 
-        if (! $this->isName($node, '__construct')) {
+        if (! $this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
 

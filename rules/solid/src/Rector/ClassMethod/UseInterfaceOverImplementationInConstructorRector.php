@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector\UseInterfaceOverImplementationInConstructorRectorTest
@@ -70,7 +71,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, '__construct')) {
+        if (! $this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
 

@@ -16,6 +16,7 @@ use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VendorLocker\VendorLockResolver;
 
@@ -163,7 +164,7 @@ PHP
         foreach ($propertyFetches as $propertyFetch) {
             $methodName = $propertyFetch->getAttribute(AttributeKey::METHOD_NAME);
             // this rector does not remove empty constructors
-            if ($methodName === '__construct') {
+            if ($methodName === MethodName::CONSTRUCT) {
                 continue;
             }
 

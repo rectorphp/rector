@@ -16,6 +16,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeFactory\InjectMethodFactory;
@@ -45,11 +46,6 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector impl
      * @var string
      */
     public const FRAMEWORK = 'framework';
-
-    /**
-     * @var string
-     */
-    private const CONSTRUCTOR_METHOD_NAME = '__construct';
 
     /**
      * @var string
@@ -178,7 +174,7 @@ PHP
             return null;
         }
 
-        $classMethod = $node->getMethod(self::CONSTRUCTOR_METHOD_NAME);
+        $classMethod = $node->getMethod(MethodName::CONSTRUCT);
         if ($classMethod === null) {
             return null;
         }
@@ -189,7 +185,7 @@ PHP
         $this->objectTypesToInject = [];
 
         foreach ($childrenClasses as $childrenClass) {
-            $constructorClassMethod = $childrenClass->getMethod(self::CONSTRUCTOR_METHOD_NAME);
+            $constructorClassMethod = $childrenClass->getMethod(MethodName::CONSTRUCT);
             if ($constructorClassMethod === null) {
                 continue;
             }
@@ -218,7 +214,7 @@ PHP
      */
     private function resolveConstructorParamClassTypes(Class_ $class): array
     {
-        $constructorClassMethod = $class->getMethod(self::CONSTRUCTOR_METHOD_NAME);
+        $constructorClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if ($constructorClassMethod === null) {
             return [];
         }

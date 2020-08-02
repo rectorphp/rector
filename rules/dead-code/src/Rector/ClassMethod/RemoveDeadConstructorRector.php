@@ -11,6 +11,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -68,7 +69,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($node, '__construct')) {
+        if (! $this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
 

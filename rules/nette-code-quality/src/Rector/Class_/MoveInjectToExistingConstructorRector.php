@@ -11,6 +11,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -98,7 +99,7 @@ PHP
             return null;
         }
 
-        $constructClassMethod = $node->getMethod('__construct');
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod === null) {
             return null;
         }

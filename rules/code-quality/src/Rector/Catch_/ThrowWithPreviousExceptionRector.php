@@ -17,6 +17,7 @@ use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -146,7 +147,7 @@ PHP
         }
 
         $reflectionClass = new ReflectionClass($fullyQualifiedName);
-        if (! $reflectionClass->hasMethod('__construct')) {
+        if (! $reflectionClass->hasMethod(MethodName::CONSTRUCT)) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
 

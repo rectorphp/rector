@@ -11,6 +11,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\JMS\JMSInjectParamsTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -69,7 +70,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, '__construct')) {
+        if (! $this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
 

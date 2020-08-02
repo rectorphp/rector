@@ -21,6 +21,7 @@ use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -205,7 +206,7 @@ PHP
     {
         $propertyTypeFromConstructor = null;
 
-        $constructClassMethod = $classLike->getMethod('__construct');
+        $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod !== null) {
             $propertyTypeFromConstructor = $this->resolveAssignedTypeInStmtsByPropertyName(
                 (array) $constructClassMethod->stmts,
@@ -230,7 +231,7 @@ PHP
 
         $this->traverseNodesWithCallable($stmts, function (Node $node) use ($propertyName, &$resolvedTypes): ?int {
             // skip constructor
-            if ($node instanceof ClassMethod && $this->isName($node, '__construct')) {
+            if ($node instanceof ClassMethod && $this->isName($node, MethodName::CONSTRUCT)) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
 

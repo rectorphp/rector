@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -59,7 +60,7 @@ final class ClassAnalyzer
             return $this->valueObjectStatusByClassName[$className];
         }
 
-        $constructClassMethod = $class->getMethod('__construct');
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
 
         if ($constructClassMethod === null) {
             return $this->analyseWithoutConstructor($class, $className);

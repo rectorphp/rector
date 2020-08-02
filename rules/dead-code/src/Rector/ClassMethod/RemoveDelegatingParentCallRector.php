@@ -18,6 +18,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 use ReflectionMethod;
@@ -249,7 +250,7 @@ PHP
     {
         if (! method_exists($className, $methodName)) {
             //internal classes don't have __construct method
-            if ($methodName === '__construct' && class_exists($className)) {
+            if ($methodName === MethodName::CONSTRUCT && class_exists($className)) {
                 return (new ReflectionClass($className))->getConstructor();
             }
             return null;
