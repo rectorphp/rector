@@ -6,8 +6,9 @@ class SetNameFluent extends \Symfony\Component\Console\Command\Command
 {
     public function configure()
     {
-        $this->setName('some:command')
-            ->setDescription('Description');
+        $this
+            ->setDescription('Description')
+            ->setName('some:command');
     }
 }
 
