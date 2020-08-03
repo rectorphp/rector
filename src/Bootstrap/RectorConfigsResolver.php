@@ -32,7 +32,8 @@ final class RectorConfigsResolver
     {
         $this->setResolver = new SetResolver();
         $this->configResolver = new ConfigResolver();
-        $this->setAwareConfigResolver = new SetAwareConfigResolver(new SetProvider());
+        $setProvider = new SetProvider();
+        $this->setAwareConfigResolver = new SetAwareConfigResolver($setProvider);
     }
 
     /**
