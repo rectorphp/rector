@@ -113,9 +113,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
                 'Nette\Forms\Controls\BaseControl' => [
-                    'setAttribute' => 'setHtmlAttribute'
-                ]
-            ]
+                    'setAttribute' => 'setHtmlAttribute',
+                ],
+            ],
         ]]);
 
     $services->set(RenameMethodRector::class)->call('configure', [[
