@@ -10,6 +10,7 @@ use Rector\Injection\ValueObject\StaticCallToMethodCall;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
+use Rector\Nette\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector;
 use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
 use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
@@ -20,9 +21,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/nette-30-return-types.php');
-
     $containerConfigurator->import(__DIR__ . '/nette-30-param-types.php');
-
     $services = $containerConfigurator->services();
     $services->set(AddDatePickerToDateControlRector::class);
     $services->set(SetClassWithArgumentToSetFactoryRector::class);
@@ -32,7 +31,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveParentCallWithoutParentRector::class);
     // https://github.com/nette/utils/commit/d0041ba59f5d8bf1f5b3795fd76d43fb13ea2e15
     $services->set(FormerNullableArgumentToScalarTypedRector::class);
-
     $configuration = [];
     $configuration[] = new StaticCallToMethodCall(
         'Nette\Security\Passwords',
@@ -52,14 +50,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'Nette\Security\Passwords',
         'needsRehash'
     );
-
-    $services->set(StaticCallToAnotherServiceConstructorInjectionRector::class)
-        ->call('configure', [[
-            StaticCallToAnotherServiceConstructorInjectionRector::STATIC_CALLS_TO_METHOD_CALLS => inline_objects(
-                $configuration
-            ),
-        ]]);
-
+    $services->set(StaticCallToAnotherServiceConstructorInjectionRector::class)->call(
+        'configure',
+        [[StaticCallToAnotherServiceConstructorInjectionRector::STATIC_CALLS_TO_METHOD_CALLS => inline_objects(
+            $configuration
+        )]]
+    );
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
     $services->set(RenameClassConstantRector::class)->call(
         'configure',
@@ -86,26 +82,23 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
         ],
     ]]);
-
     $services->set(BuilderExpandToHelperExpandRector::class);
-
     // json 2nd argument is now int typed
-    $services->set(ArgumentDefaultValueReplacerRector::class)
-        ->call('configure', [[
+    $services->set(ArgumentDefaultValueReplacerRector::class)->call(
+        'configure',
+        [[
             ArgumentDefaultValueReplacerRector::REPLACES_BY_METHOD_AND_TYPES => [
                 'Nette\Utils\Json' => [
                     'decode' => [
-                        1 => [
-                            [
-                                'before' => true,
-                                'after' => 'Nette\Utils\Json::FORCE_ARRAY',
-                            ],
-                        ],
+                        1 => [[
+                            'before' => true,
+                            'after' => 'Nette\Utils\Json::FORCE_ARRAY',
+                        ]],
                     ],
                 ],
             ],
-        ]]);
-
+        ]]
+    );
     $services->set(RenameMethodRector::class)->call('configure', [[
         RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
             'Nette\Forms\Controls\BaseControl' => [
@@ -123,4 +116,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ],
     ]]);
+    $services->set(MagicHtmlCallToAppendAttributeRector::class);
 };
