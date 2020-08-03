@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
+use Rector\Generic\Rector\Argument\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
 use Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector;
 use Rector\Injection\ValueObject\StaticCallToMethodCall;
@@ -87,6 +88,23 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]]);
 
     $services->set(BuilderExpandToHelperExpandRector::class);
+
+    // json 2nd argument is now int typed
+    $services->set(ArgumentDefaultValueReplacerRector::class)
+        ->call('configure', [[
+            ArgumentDefaultValueReplacerRector::REPLACES_BY_METHOD_AND_TYPES => [
+                'Nette\Utils\Json' => [
+                    'decode' => [
+                        1 => [
+                            [
+                                'before' => true,
+                                'after' => 'Nette\Utils\Json::FORCE_ARRAY',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]]);
 
     $services->set(RenameMethodRector::class)->call('configure', [[
         RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
