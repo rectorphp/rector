@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Cookie\SetCookie;
-use Rector\Generic\Rector\Function_\FunctionToMethodCallRector;
+use Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector;
 use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
 use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
@@ -29,9 +29,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             [[FluentChainMethodCallToNormalMethodCallRector::TYPES_TO_MATCH => '%classes_to_defluent%']]
         );
 
-    $services->set(FunctionToMethodCallRector::class)
+    $services->set(FuncCallToMethodCallRector::class)
         ->call('configure', [[
-            FunctionToMethodCallRector::FUNCTION_TO_METHOD_CALL => [
+            FuncCallToMethodCallRector::FUNCTION_TO_CLASS_TO_METHOD_CALL => [
                 'GuzzleHttp\json_decode' => ['GuzzleHttp\Utils', 'jsonDecode'],
                 'GuzzleHttp\get_path' => ['GuzzleHttp\Utils', 'getPath'],
             ],

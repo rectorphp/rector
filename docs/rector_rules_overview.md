@@ -4840,10 +4840,10 @@ Change null in argument, that is now not nullable anymore
 
 <br><br>
 
-### `FunctionToMethodCallRector`
+### `FuncCallToMethodCallRector`
 
-- class: [`Rector\Generic\Rector\Function_\FunctionToMethodCallRector`](/../master/rules/generic/src/Rector/Function_/FunctionToMethodCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/Function_/FunctionToMethodCallRector/Fixture)
+- class: [`Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector`](/../master/rules/generic/src/Rector/FuncCall/FuncCallToMethodCallRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/FuncCall/FuncCallToMethodCallRector/Fixture)
 
 Turns defined function calls to local method calls.
 
@@ -4851,20 +4851,36 @@ Turns defined function calls to local method calls.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Function_\FunctionToMethodCallRector;
+use Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(FunctionToMethodCallRector::class)
-        ->call('configure', [[FunctionToMethodCallRector::FUNCTION_TO_METHOD_CALL, ['view' => ['this', 'render']]]]);
+    $services->set(FuncCallToMethodCallRector::class)
+        ->call('configure', [[FuncCallToMethodCallRector::FUNCTION_TO_CLASS_TO_METHOD_CALL, ['view' => ['Namespaced\SomeRenderer', 'render']]]]);
 };
 ```
 
 ↓
 
 ```diff
--view("...", []);
-+$this->render("...", []);
+ class SomeClass
+ {
++    /**
++     * @var \Namespaced\SomeRenderer
++     */
++    private $someRenderer;
++
++    public function __construct(\Namespaced\SomeRenderer $someRenderer)
++    {
++        $this->someRenderer = $someRenderer;
++    }
++
+     public function run()
+     {
+-        view('...');
++        $this->someRenderer->view('...');
+     }
+ }
 ```
 
 <br><br>

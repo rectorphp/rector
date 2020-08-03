@@ -26,7 +26,7 @@ final class FacadeStaticCallToConstructorInjectionRector extends AbstractRector
 {
     /**
      * @see https://laravel.com/docs/5.7/facades#facades-vs-dependency-injection
-     * @var string[]
+     * @var array<string, string>
      */
     private const FACADE_TO_SERVICE_MAP = [
         'Illuminate\Support\Facades\App' => 'Illuminate\Foundation\Application',
