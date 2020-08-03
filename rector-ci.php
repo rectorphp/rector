@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\Core\Configuration\Option;
@@ -70,4 +71,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
         OrderPrivateMethodsByUseRector::class,
     ]);
+
+    $services
+        ->set(MoveServicesBySuffixToDirectoryRector::class)
+        ->call(
+            'configure',
+            [[
+                MoveServicesBySuffixToDirectoryRector::GROUP_NAMES_BY_SUFFIX => [
+                    'Repository',
+                    'Command',
+                    'Mapper',
+                    'Controller',
+                ],
+            ]]
+        );
 };

@@ -64,6 +64,7 @@ PHP
 
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
+        dump('refactor', $this->groupNamesBySuffix);die;
         $nodes = $this->parseFileInfoToNodes($smartFileInfo);
 
         $class = $this->betterNodeFinder->findFirstInstanceOf($nodes, Class_::class);
@@ -77,6 +78,7 @@ PHP
     public function configure(array $configuration): void
     {
         $this->groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? [];
+        dump('configure', $this->groupNamesBySuffix);
     }
 
     /**
