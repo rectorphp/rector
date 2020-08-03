@@ -82,6 +82,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->type !== null) {
+            return null;
+        }
+
         // is already set
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
