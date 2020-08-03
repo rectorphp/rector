@@ -705,4 +705,13 @@ final class SetList
      * @var string
      */
     public const SYMFONY_PHP_CONFIG = 'symfony-php-config';
+
+    // new kind of paths constants
+
+    /**
+     * @experimental
+     * @api
+     * @var string
+     */
+    public const REPOSITORY_AS_SERVICE = __DIR__ . '/../../../../config/set/repository-as-service.php';
 }
