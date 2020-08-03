@@ -242,10 +242,10 @@ PHP
     }
 
     /**
-     * @param Property|Param $propertyOrParam
+     * @param Property|Param $node
      */
-    private function skipSpecialType(Node $propertyOrParam): bool
+    private function skipSpecialType(Node $node): bool
     {
-        return $this->isObjectType($propertyOrParam, 'Ramsey\Uuid\UuidInterface');
+        return $this->isObjectType($node, 'Ramsey\Uuid\UuidInterface');
     }
 }
