@@ -9,704 +9,702 @@ final class SetList
     /**
      * @var string
      */
-    public const DEFLUENT = 'defluent';
+    public const DEFLUENT = __DIR__ . '/../../../../config/set/defluent.php';
 
     /**
      * @var string
      */
-    public const ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION = 'action-injection-to-constructor-injection';
+    public const ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION = __DIR__ . '/../../config/set/action-injection-to-constructor-injection.php';
 
     /**
      * @var string
      */
-    public const ARRAY_STR_FUNCTIONS_TO_STATIC_CALL = 'array-str-functions-to-static-call';
+    public const ARRAY_STR_FUNCTIONS_TO_STATIC_CALL = __DIR__ . '/../../../../config/set/laravel-array-str-functions-to-static-call.php';
 
     /**
      * @var string
      */
-    public const CAKEPHP_30 = 'cakephp30';
+    public const CAKEPHP_30 = __DIR__ . '/../../../../config/set/cakephp30.php';
 
     /**
      * @var string
      */
-    public const CAKEPHP_34 = 'cakephp34';
+    public const CAKEPHP_34 = __DIR__ . '/../../../../config/set/cakephp34.php';
 
     /**
      * @var string
      */
-    public const CAKEPHP_35 = 'cakephp35';
+    public const CAKEPHP_35 = __DIR__ . '/../../../../config/set/cakephp35.php';
 
     /**
      * @var string
      */
-    public const CAKEPHP_36 = 'cakephp36';
+    public const CAKEPHP_36 = __DIR__ . '/../../../../config/set/cakephp36.php';
 
     /**
      * @var string
      */
-    public const CAKEPHP_37 = 'cakephp37';
+    public const CAKEPHP_37 = __DIR__ . '/../../../../config/set/cakephp37.php';
 
     /**
      * @var string
      */
-    public const CAKEPHP_38 = 'cakephp38';
+    public const CAKEPHP_38 = __DIR__ . '/../../../../config/set/cakephp38.php';
 
     /**
      * @var string
      */
-    public const CAKEPHP_40 = 'cakephp40';
+    public const CAKEPHP_40 = __DIR__ . '/../../../../config/set/cakephp40.php';
 
     /**
      * @var string
      */
-    public const CAKEPHP_FLUENT_OPTIONS = 'cakephp-fluent-options';
+    public const CAKEPHP_FLUENT_OPTIONS = __DIR__ . '/../../../../config/set/cakephp-fluent-options.php';
 
     /**
      * @var string
      */
-    public const CODEIGNITER_40 = 'codeigniter-40';
+    public const CODEIGNITER_40 = __DIR__ . '/../../../../config/set/codeigniter-40.php';
 
     /**
      * @var string
      */
-    public const CODE_QUALITY = 'code-quality';
+    public const CODE_QUALITY = __DIR__ . '/../../../../config/set/code-quality.php';
 
     /**
      * @var string
      */
-    public const CODING_STYLE = 'coding-style';
+    public const CODING_STYLE = __DIR__ . '/../../../../config/set/coding-style.php';
 
     /**
      * @var string
      */
-    public const CONSTRUCTOR_INJECTIN_TO_ACTION_INJECTION = 'constructor-injectin-to-action-injection';
+    public const CONSTRUCTOR_INJECTIN_TO_ACTION_INJECTION = __DIR__ . '/../../config/set/constructor-injectin-to-action-injection.php';
 
     /**
      * @var string
      */
-    public const CONTRIBUTTE_TO_SYMFONY = 'contributte-to-symfony';
+    public const CONTRIBUTTE_TO_SYMFONY = __DIR__ . '/../../../../config/set/contributte-to-symfony.php';
 
     /**
      * @var string
      */
-    public const DEAD_CLASSES = 'dead-classes';
+    public const DEAD_CLASSES = __DIR__ . '/../../../../config/set/dead-classes.php';
 
     /**
      * @var string
      */
-    public const DEAD_CODE = 'dead-code';
+    public const DEAD_CODE = __DIR__ . '/../../../../config/set/dead-code.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_25 = 'doctrine25';
+    public const DOCTRINE_25 = __DIR__ . '/../../../../config/set/doctrine25.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_BEHAVIORS_20 = 'doctrine-behaviors-20';
+    public const DOCTRINE_BEHAVIORS_20 = __DIR__ . '/../../../../config/set/doctrine-behaviors-20.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_CODE_QUALITY = 'doctrine-code-quality';
+    public const DOCTRINE_CODE_QUALITY = __DIR__ . '/../../../../config/set/doctrine-code-quality.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_COMMON_20 = 'doctrine-common-20';
+    public const DOCTRINE_COMMON_20 = __DIR__ . '/../../../../config/set/doctrine-common-20.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_DBAL_210 = 'doctrine-dbal-210';
+    public const DOCTRINE_DBAL_210 = __DIR__ . '/../../../../config/set/doctrine-dbal-210.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_DBAL_30 = 'doctrine-dbal-30';
+    public const DOCTRINE_DBAL_30 = __DIR__ . '/../../../../config/set/doctrine-dbal-30.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_GEDMO_TO_KNPLABS = 'doctrine-gedmo-to-knplabs';
+    public const DOCTRINE_GEDMO_TO_KNPLABS = __DIR__ . '/../../../../config/set/doctrine-gedmo-to-knplabs.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_ID_TO_UUID_STEP_1 = 'doctrine-id-to-uuid-step-1';
+    public const DOCTRINE_ID_TO_UUID_STEP_1 = __DIR__ . '/../../../../config/set/doctrine-id-to-uuid-step-1.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_ID_TO_UUID_STEP_2 = 'doctrine-id-to-uuid-step-2';
+    public const DOCTRINE_ID_TO_UUID_STEP_2 = __DIR__ . '/../../../../config/set/doctrine-id-to-uuid-step-2.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_ID_TO_UUID_STEP_3 = 'doctrine-id-to-uuid-step-3';
+    public const DOCTRINE_ID_TO_UUID_STEP_3 = __DIR__ . '/../../../../config/set/doctrine-id-to-uuid-step-3.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_ID_TO_UUID_STEP_4 = 'doctrine-id-to-uuid-step-4';
+    public const DOCTRINE_ID_TO_UUID_STEP_4 = __DIR__ . '/../../../../config/set/doctrine-id-to-uuid-step-4.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_ID_TO_UUID_STEP_5 = 'doctrine-id-to-uuid-step-5';
+    public const DOCTRINE_ID_TO_UUID_STEP_5 = __DIR__ . '/../../../../config/set/doctrine-id-to-uuid-step-5.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_REPOSITORY_AS_SERVICE = 'doctrine-repository-as-service';
+    public const DOCTRINE_REPOSITORY_AS_SERVICE = __DIR__ . '/../../../../config/set/doctrine-repository-as-service.php';
 
     /**
      * @var string
      */
-    public const DOCTRINE_SERVICES = 'doctrine-services';
+    public const DOCTRINE_SERVICES = __DIR__ . '/../../../../config/set/doctrine-services.php';
 
     /**
      * @var string
      */
-    public const DOWNGRADE = 'downgrade';
+    public const DOWNGRADE = __DIR__ . '/../../../../config/set/downgrade.php';
 
     /**
      * @var string
      */
-    public const EASY_ADMIN_BUNDLE_20 = 'easy-admin-bundle20';
+    public const EASY_ADMIN_BUNDLE_20 = __DIR__ . '/../../../../config/set/easy-admin-bundle20.php';
 
     /**
      * @var string
      */
-    public const ELASTICSEARCH_DSL_50 = 'elasticsearch-dsl50';
+    public const ELASTICSEARCH_DSL_50 = __DIR__ . '/../../../../config/set/elasticsearch-dsl50.php';
 
     /**
      * @var string
      */
-    public const FRAMEWORK_EXTRA_BUNDLE_40 = 'framework-extra-bundle-40';
+    public const FRAMEWORK_EXTRA_BUNDLE_40 = __DIR__ . '/../../../../config/set/framework-extra-bundle-40.php';
 
     /**
      * @var string
      */
-    public const FRAMEWORK_EXTRA_BUNDLE_50 = 'framework-extra-bundle-50';
+    public const FRAMEWORK_EXTRA_BUNDLE_50 = __DIR__ . '/../../../../config/set/framework-extra-bundle-50.php';
 
     /**
      * @var string
      */
-    public const GMAGICK_TO_IMAGICK = 'gmagick_to_imagick';
+    public const GMAGICK_TO_IMAGICK = __DIR__ . '/../../../../config/set/gmagick_to_imagick.php';
 
     /**
      * @var string
      */
-    public const GUZZLE_50 = 'guzzle50';
+    public const GUZZLE_50 = __DIR__ . '/../../../../config/set/guzzle50.php';
 
     /**
      * @var string
      */
-    public const JMS_DECOUPLE = 'jms-decouple';
+    public const JMS_DECOUPLE = __DIR__ . '/../../../../config/set/jms-decouple.php';
 
     /**
      * @var string
      */
-    public const KDYBY_EVENTS_TO_CONTRIBUTTE_EVENT_DISPATCHER = 'kdyby-events-to-contributte-event-dispatcher';
+    public const KDYBY_EVENTS_TO_CONTRIBUTTE_EVENT_DISPATCHER = __DIR__ . '/../../config/set/kdyby-events-to-contributte-event-dispatcher.php';
 
     /**
      * @var string
      */
-    public const KDYBY_TO_SYMFONY = 'kdyby-to-symfony';
+    public const KDYBY_TO_SYMFONY = __DIR__ . '/../../../../config/set/kdyby-to-symfony.php';
 
     /**
      * @var string
      */
-    public const KDYBY_TRANSLATOR_TO_CONTRIBUTTE_TRANSLATION = 'kdyby-translator-to-contributte-translation';
+    public const KDYBY_TRANSLATOR_TO_CONTRIBUTTE_TRANSLATION = __DIR__ . '/../../config/set/kdyby-translator-to-contributte-translation.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_50 = 'laravel50';
+    public const LARAVEL_50 = __DIR__ . '/../../../../config/set/laravel50.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_51 = 'laravel51';
+    public const LARAVEL_51 = __DIR__ . '/../../../../config/set/laravel51.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_52 = 'laravel52';
+    public const LARAVEL_52 = __DIR__ . '/../../../../config/set/laravel52.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_53 = 'laravel53';
+    public const LARAVEL_53 = __DIR__ . '/../../../../config/set/laravel53.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_54 = 'laravel54';
+    public const LARAVEL_54 = __DIR__ . '/../../../../config/set/laravel54.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_55 = 'laravel55';
+    public const LARAVEL_55 = __DIR__ . '/../../../../config/set/laravel55.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_56 = 'laravel56';
+    public const LARAVEL_56 = __DIR__ . '/../../../../config/set/laravel56.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_57 = 'laravel57';
+    public const LARAVEL_57 = __DIR__ . '/../../../../config/set/laravel57.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_58 = 'laravel58';
+    public const LARAVEL_58 = __DIR__ . '/../../../../config/set/laravel58.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_60 = 'laravel60';
+    public const LARAVEL_60 = __DIR__ . '/../../../../config/set/laravel60.php';
 
     /**
      * @var string
      */
-    public const LARAVEL_STATIC_TO_INJECTION = 'laravel-static-to-injection';
+    public const LARAVEL_STATIC_TO_INJECTION = __DIR__ . '/../../../../config/set/laravel-static-to-injection.php';
 
     /**
      * @var string
      */
-    public const MOCKISTA_TO_MOCKERY = 'mockista-to-mockery';
+    public const MOCKISTA_TO_MOCKERY = __DIR__ . '/../../../../config/set/mockista-to-mockery.php';
 
     /**
      * @var string
      */
-    public const MONOLOG_20 = 'monolog20';
+    public const MONOLOG_20 = __DIR__ . '/../../../../config/set/monolog20.php';
 
     /**
      * @var string
      */
-    public const MYSQL_TO_MYSQLI = 'mysql-to-mysqli';
+    public const MYSQL_TO_MYSQLI = __DIR__ . '/../../../../config/set/mysql-to-mysqli.php';
 
     /**
      * @var string
      */
-    public const NAMING = 'naming';
+    public const NAMING = __DIR__ . '/../../../../config/set/naming.php';
 
     /**
      * @var string
      */
-    public const NETTE_30 = 'nette-30';
+    public const NETTE_30 = __DIR__ . '/../../../../config/set/nette-30.php';
 
     /**
      * @var string
      */
-    public const NETTE_CODE_QUALITY = 'nette-code-quality';
+    public const NETTE_CODE_QUALITY = __DIR__ . '/../../../../config/set/nette-code-quality.php';
 
     /**
      * @var string
      */
-    public const NETTE_CONTROL_TO_SYMFONY_CONTROLLER = 'nette-control-to-symfony-controller';
+    public const NETTE_CONTROL_TO_SYMFONY_CONTROLLER = __DIR__ . '/../../../../config/set/nette-control-to-symfony-controller.php';
 
     /**
      * @var string
      */
-    public const NETTE_FORMS_TO_SYMFONY = 'nette-forms-to-symfony';
+    public const NETTE_FORMS_TO_SYMFONY = __DIR__ . '/../../../../config/set/nette-forms-to-symfony.php';
 
     /**
      * @var string
      */
-    public const NETTE_PARAM_TYPES = 'nette-param-types';
+    public const NETTE_PARAM_TYPES = __DIR__ . '/../../../../config/set/nette-30-param-types.php';
 
     /**
      * @var string
      */
-    public const NETTE_RETURN_TYPES = 'nette-return-types';
+    public const NETTE_RETURN_TYPES = __DIR__ . '/../../../../config/set/nette-30-return-types.php';
 
     /**
      * @var string
      */
-    public const NETTE_TESTER_TO_PHPUNIT = 'nette-tester-to-phpunit';
+    public const NETTE_TESTER_TO_PHPUNIT = __DIR__ . '/../../../../config/set/nette-tester-to-phpunit.php';
 
     /**
      * @var string
      */
-    public const NETTE_TO_SYMFONY = 'nette-to-symfony';
+    public const NETTE_TO_SYMFONY = __DIR__ . '/../../../../config/set/nette-to-symfony.php';
 
     /**
      * @var string
      */
-    public const NETTE_UTILS_CODE_QUALITY = 'nette-utils-code-quality';
+    public const NETTE_UTILS_CODE_QUALITY = __DIR__ . '/../../../../config/set/nette-utils-code-quality.php';
 
     /**
      * @var string
      */
-    public const ORDER = 'order';
+    public const ORDER = __DIR__ . '/../../../../config/set/order.php';
 
     /**
      * @var string
      */
-    public const PERFORMANCE = 'performance';
+    public const PERFORMANCE = __DIR__ . '/../../../../config/set/performance.php';
 
     /**
      * @var string
      */
-    public const PHALCON_40 = 'phalcon40';
+    public const PHALCON_40 = __DIR__ . '/../../../../config/set/phalcon40.php';
 
     /**
      * @var string
      */
-    public const PHPEXCEL_TO_PHPSPREADSHEET = 'phpexcel-to-phpspreadsheet';
+    public const PHPEXCEL_TO_PHPSPREADSHEET = __DIR__ . '/../../../../config/set/phpexcel-to-phpspreadsheet.php';
 
     /**
      * @var string
      */
-    public const PHPSPEC_30 = 'phpspec30';
+    public const PHPSPEC_30 = __DIR__ . '/../../../../config/set/phpspec30.php';
 
     /**
      * @var string
      */
-    public const PHPSPEC_40 = 'phpspec40';
+    public const PHPSPEC_40 = __DIR__ . '/../../../../config/set/phpspec40.php';
 
     /**
      * @var string
      */
-    public const PHPSPEC_TO_PHPUNIT = 'phpspec-to-phpunit';
+    public const PHPSPEC_TO_PHPUNIT = __DIR__ . '/../../../../config/set/phpspec-to-phpunit.php';
 
     /**
      * @var string
      */
-    public const PHPSTAN = 'phpstan';
+    public const PHPSTAN = __DIR__ . '/../../../../config/set/phpstan.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT80_DMS = 'phpunit80-dms';
+    public const PHPUNIT80_DMS = __DIR__ . '/../../../../config/set/phpunit80-dms.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_40 = 'phpunit40';
+    public const PHPUNIT_40 = __DIR__ . '/../../../../config/set/phpunit40.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_50 = 'phpunit50';
+    public const PHPUNIT_50 = __DIR__ . '/../../../../config/set/phpunit50.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_60 = 'phpunit60';
+    public const PHPUNIT_60 = __DIR__ . '/../../../../config/set/phpunit60.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_70 = 'phpunit70';
+    public const PHPUNIT_70 = __DIR__ . '/../../../../config/set/phpunit70.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_75 = 'phpunit75';
+    public const PHPUNIT_75 = __DIR__ . '/../../../../config/set/phpunit75.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_80 = 'phpunit80';
+    public const PHPUNIT_80 = __DIR__ . '/../../../../config/set/phpunit80.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_90 = 'phpunit90';
+    public const PHPUNIT_90 = __DIR__ . '/../../../../config/set/phpunit90.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_91 = 'phpunit91';
+    public const PHPUNIT_91 = __DIR__ . '/../../../../config/set/phpunit91.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_CODE_QUALITY = 'phpunit-code-quality';
+    public const PHPUNIT_CODE_QUALITY = __DIR__ . '/../../../../config/set/phpunit-code-quality.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_EXCEPTION = 'phpunit-exception';
+    public const PHPUNIT_EXCEPTION = __DIR__ . '/../../../../config/set/phpunit-exception.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_INJECTOR = 'phpunit-injector';
+    public const PHPUNIT_INJECTOR = __DIR__ . '/../../../../config/set/phpunit-injector.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_MOCK = 'phpunit-mock';
+    public const PHPUNIT_MOCK = __DIR__ . '/../../../../config/set/phpunit-mock.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_SPECIFIC_METHOD = 'phpunit-specific-method';
+    public const PHPUNIT_SPECIFIC_METHOD = __DIR__ . '/../../../../config/set/phpunit-specific-method.php';
 
     /**
      * @var string
      */
-    public const PHPUNIT_YIELD_DATA_PROVIDER = 'phpunit-yield-data-provider';
+    public const PHPUNIT_YIELD_DATA_PROVIDER = __DIR__ . '/../../../../config/set/phpunit-yield-data-provider.php';
 
     /**
      * @var string
      */
-    public const PHP_52 = 'php52';
+    public const PHP_52 = __DIR__ . '/../../../../config/set/php52.php';
 
     /**
      * @var string
      */
-    public const PHP_53 = 'php53';
+    public const PHP_53 = __DIR__ . '/../../../../config/set/php53.php';
 
     /**
      * @var string
      */
-    public const PHP_54 = 'php54';
+    public const PHP_54 = __DIR__ . '/../../../../config/set/php54.php';
 
     /**
      * @var string
      */
-    public const PHP_55 = 'php55';
+    public const PHP_55 = __DIR__ . '/../../../../config/set/php55.php';
 
     /**
      * @var string
      */
-    public const PHP_56 = 'php56';
+    public const PHP_56 = __DIR__ . '/../../../../config/set/php56.php';
 
     /**
      * @var string
      */
-    public const PHP_70 = 'php70';
+    public const PHP_70 = __DIR__ . '/../../../../config/set/php70.php';
 
     /**
      * @var string
      */
-    public const PHP_71 = 'php71';
+    public const PHP_71 = __DIR__ . '/../../../../config/set/php71.php';
 
     /**
      * @var string
      */
-    public const PHP_72 = 'php72';
+    public const PHP_72 = __DIR__ . '/../../../../config/set/php72.php';
 
     /**
      * @var string
      */
-    public const PHP_73 = 'php73';
+    public const PHP_73 = __DIR__ . '/../../../../config/set/php73.php';
 
     /**
      * @var string
      */
-    public const PHP_74 = 'php74';
+    public const PHP_74 = __DIR__ . '/../../../../config/set/php74.php';
 
     /**
      * @var string
      */
-    public const PHP_80 = 'php80';
+    public const PHP_80 = __DIR__ . '/../../../../config/set/php80.php';
 
     /**
      * @var string
      */
-    public const PHP_CODE_SNIFFER_30 = 'php-code-sniffer30';
+    public const PHP_CODE_SNIFFER_30 = __DIR__ . '/../../../../config/set/php-code-sniffer30.php';
 
     /**
      * @var string
      */
-    public const PHP_DI_DECOUPLE = 'php-di-decouple';
+    public const PHP_DI_DECOUPLE = __DIR__ . '/../../../../config/set/php-di-decouple.php';
 
     /**
      * @var string
      */
-    public const PRIVATIZATION = 'privatization';
+    public const PRIVATIZATION = __DIR__ . '/../../../../config/set/privatization.php';
 
     /**
      * @var string
      */
-    public const PSR_4 = 'psr-4';
+    public const PSR_4 = __DIR__ . '/../../../../config/set/psr-4.php';
 
     /**
      * @var string
      */
-    public const SAFE_07 = 'safe07';
+    public const SAFE_07 = __DIR__ . '/../../../../config/set/safe07.php';
 
     /**
      * @var string
      */
-    public const SHOPWARE_55 = 'shopware55';
+    public const SHOPWARE_55 = __DIR__ . '/../../../../config/set/shopware55.php';
 
     /**
      * @var string
      */
-    public const SHOPWARE_56 = 'shopware56';
+    public const SHOPWARE_56 = __DIR__ . '/../../../../config/set/shopware56.php';
 
     /**
      * @var string
      */
-    public const SOLID = 'solid';
+    public const SOLID = __DIR__ . '/../../../../config/set/solid.php';
 
     /**
      * @var string
      */
-    public const SWIFTMAILER_60 = 'swiftmailer60';
+    public const SWIFTMAILER_60 = __DIR__ . '/../../../../config/set/swiftmailer60.php';
 
     /**
      * @var string
      */
-    public const SYLIUS_10 = 'sylius10';
+    public const SYLIUS_10 = __DIR__ . '/../../../../config/set/sylius10.php';
 
     /**
      * @var string
      */
-    public const SYLIUS_102 = 'sylius102';
+    public const SYLIUS_102 = __DIR__ . '/../../../../config/set/sylius102.php';
 
     /**
      * @var string
      */
-    public const SYLIUS_109 = 'sylius109';
+    public const SYLIUS_109 = __DIR__ . '/../../../../config/set/sylius109.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_50_TYPES = 'symfony50-types';
+    public const SYMFONY_26 = __DIR__ . '/../../../../config/set/symfony26.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_26 = 'symfony26';
+    public const SYMFONY_28 = __DIR__ . '/../../../../config/set/symfony28.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_28 = 'symfony28';
+    public const SYMFONY_30 = __DIR__ . '/../../../../config/set/symfony30.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_30 = 'symfony30';
+    public const SYMFONY_31 = __DIR__ . '/../../../../config/set/symfony31.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_31 = 'symfony31';
+    public const SYMFONY_32 = __DIR__ . '/../../../../config/set/symfony32.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_32 = 'symfony32';
+    public const SYMFONY_33 = __DIR__ . '/../../../../config/set/symfony33.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_33 = 'symfony33';
+    public const SYMFONY_34 = __DIR__ . '/../../../../config/set/symfony34.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_34 = 'symfony34';
+    public const SYMFONY_40 = __DIR__ . '/../../../../config/set/symfony40.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_40 = 'symfony40';
+    public const SYMFONY_41 = __DIR__ . '/../../../../config/set/symfony41.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_41 = 'symfony41';
+    public const SYMFONY_42 = __DIR__ . '/../../../../config/set/symfony42.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_42 = 'symfony42';
+    public const SYMFONY_43 = __DIR__ . '/../../../../config/set/symfony43.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_43 = 'symfony43';
+    public const SYMFONY_44 = __DIR__ . '/../../../../config/set/symfony44.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_44 = 'symfony44';
+    public const SYMFONY_50 = __DIR__ . '/../../../../config/set/symfony50.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_50 = 'symfony50';
+    public const SYMFONY_50_TYPES = __DIR__ . '/../../../../config/set/symfony50-types.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_CODE_QUALITY = 'symfony-code-quality';
+    public const SYMFONY_PHP_CONFIG = __DIR__ . '/../../../../config/set/symfony-php-config.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_CONSTRUCTOR_INJECTION = 'symfony-constructor-injection';
+    public const SYMFONY_CODE_QUALITY = __DIR__ . '/../../../../config/set/symfony-code-quality.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_PHPUNIT = 'symfony-phpunit';
+    public const SYMFONY_CONSTRUCTOR_INJECTION = __DIR__ . '/../../../../config/set/symfony-constructor-injection.php';
 
     /**
      * @var string
      */
-    public const TWIG_112 = 'twig112';
+    public const SYMFONY_PHPUNIT = __DIR__ . '/../../../../config/set/symfony-phpunit.php';
 
     /**
      * @var string
      */
-    public const TWIG_127 = 'twig127';
+    public const TWIG_112 = __DIR__ . '/../../../../config/set/twig112.php';
 
     /**
      * @var string
      */
-    public const TWIG_134 = 'twig134';
+    public const TWIG_127 = __DIR__ . '/../../../../config/set/twig127.php';
 
     /**
      * @var string
      */
-    public const TWIG_140 = 'twig140';
+    public const TWIG_134 = __DIR__ . '/../../../../config/set/twig134.php';
 
     /**
      * @var string
      */
-    public const TWIG_20 = 'twig20';
+    public const TWIG_140 = __DIR__ . '/../../../../config/set/twig140.php';
 
     /**
      * @var string
      */
-    public const TWIG_240 = 'twig240';
+    public const TWIG_20 = __DIR__ . '/../../../../config/set/twig20.php';
 
     /**
      * @var string
      */
-    public const TWIG_UNDERSCORE_TO_NAMESPACE = 'twig-underscore-to-namespace';
+    public const TWIG_240 = __DIR__ . '/../../../../config/set/twig240.php';
 
     /**
      * @var string
      */
-    public const TYPE_DECLARATION = 'type-declaration';
+    public const TWIG_UNDERSCORE_TO_NAMESPACE = __DIR__ . '/../../../../config/set/twig-underscore-to-namespace.php';
 
     /**
      * @var string
      */
-    public const UNWRAP_COMPAT = 'unwrap-compat';
+    public const TYPE_DECLARATION = __DIR__ . '/../../../../config/set/type-declaration.php';
 
     /**
      * @var string
      */
-    public const SYMFONY_PHP_CONFIG = 'symfony-php-config';
-
-    // new kind of paths constants
+    public const UNWRAP_COMPAT = __DIR__ . '/../../../../config/set/unwrap-compat.php';
 
     /**
      * @experimental
