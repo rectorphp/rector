@@ -8,7 +8,8 @@ class SetNameFluentChain extends \Symfony\Component\Console\Command\Command
     {
         $this
             ->setDescription('Description')
-            ->setName('some:command');
+            ->setName('some:command')
+            ->setHelp('help me pls!!!');
     }
 }
 
