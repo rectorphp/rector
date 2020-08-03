@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Bootstrap;
 
-use Rector\Core\Reflection\ConstantNameFromValueResolver;
 use Rector\Core\Set\SetResolver;
 use Rector\Set\SetProvider;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -33,7 +32,7 @@ final class RectorConfigsResolver
     {
         $this->setResolver = new SetResolver();
         $this->configResolver = new ConfigResolver();
-        $setProvider = new SetProvider(new ConstantNameFromValueResolver());
+        $setProvider = new SetProvider();
         $this->setAwareConfigResolver = new SetAwareConfigResolver($setProvider);
     }
 
