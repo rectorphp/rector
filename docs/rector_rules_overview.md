@@ -1,4 +1,4 @@
-# All 550 Rectors Overview
+# All 551 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -30,7 +30,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
-- [Nette](#nette) (15)
+- [Nette](#nette) (16)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -6810,6 +6810,29 @@ Changes `json_encode()/json_decode()` to safer and more verbose `Nette\Utils\Jso
 
 -        $prettyJsonString = json_encode($data, JSON_PRETTY_PRINT);
 +        $prettyJsonString = \Nette\Utils\Json::encode($data, \Nette\Utils\Json::PRETTY);
+     }
+ }
+```
+
+<br><br>
+
+### `MagicHtmlCallToAppendAttributeRector`
+
+- class: [`Rector\Nette\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector`](/../master/rules/nette/src/Rector/MethodCall/MagicHtmlCallToAppendAttributeRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/MethodCall/MagicHtmlCallToAppendAttributeRector/Fixture)
+
+Change magic `addClass()` etc. calls on Html to explicit methods
+
+```diff
+ use Nette\Utils\Html;
+
+ final class SomeClass
+ {
+     public function run()
+     {
+         $html = Html::el();
+-        $html->setClass('first');
++        $html->appendAttribute('class', 'first');
      }
  }
 ```
