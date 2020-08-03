@@ -6,10 +6,11 @@ namespace Rector\Architecture\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
@@ -83,7 +84,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->name instanceof Identifier) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -98,5 +99,15 @@ PHP
         $node->var = $this->createPropertyFetch('this', 'repository');
 
         return $node;
+    }
+
+    private function shouldSkip(MethodCall $methodCall): bool
+    {
+        $class = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return true;
+        }
+
+        return ! $this->isInObjectType($class, 'Doctrine\ORM\EntityRepository');
     }
 }
