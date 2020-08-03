@@ -164,6 +164,8 @@ PHP
             [$classConstFetch]
         );
 
+        $methodCall->setAttribute(AttributeKey::CLASS_NODE, $class);
+
         return $this->createPropertyAssignmentWithExpr('repository', $methodCall);
     }
 }
