@@ -116,6 +116,7 @@ final class ShortNameResolver
 
         return null;
     }
+
     /**
      * @param Node[] $stmts
      * @return string[]

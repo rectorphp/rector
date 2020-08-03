@@ -214,6 +214,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
         return $this->attributeAwareNodeFactory->createFromNode($tagValueNode, $docContent);
     }
+
     /**
      * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
      */
@@ -292,6 +293,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
         return $tag;
     }
+
     private function matchTagToPhpDocNodeFactory(string $tag): ?PhpDocNodeFactoryInterface
     {
         $currentPhpNode = $this->currentNodeProvider->getNode();
@@ -306,6 +308,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
         return $this->phpDocNodeFactories[$fullyQualifiedAnnotationClass] ?? null;
     }
+
     /**
      * @return string[]
      */

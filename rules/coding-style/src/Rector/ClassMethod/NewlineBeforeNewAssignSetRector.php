@@ -134,6 +134,7 @@ PHP
         // this is already empty line before
         return ! $this->isPreceededByEmptyLine($node, $key);
     }
+
     private function unwrapExpression(Node $node): Node
     {
         if ($node instanceof Expression) {
@@ -142,6 +143,7 @@ PHP
 
         return $node;
     }
+
     /**
      * @param Assign|MethodCall $node
      */

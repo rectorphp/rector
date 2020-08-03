@@ -110,6 +110,7 @@ PHP
             return $this->areNodesEqual($node, $variable);
         });
     }
+
     private function removeForeachValueAndUseArrayKeys(Foreach_ $foreach): void
     {
         // remove key value

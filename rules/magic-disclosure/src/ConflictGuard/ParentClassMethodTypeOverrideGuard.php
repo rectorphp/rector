@@ -84,6 +84,7 @@ final class ParentClassMethodTypeOverrideGuard
 
         return null;
     }
+
     private function getClassMethodByMethodReflection(MethodReflection $parentClassMethodReflection): ?ClassMethod
     {
         $methodName = $parentClassMethodReflection->getName();

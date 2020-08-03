@@ -121,6 +121,7 @@ PHP
         // getter short call type
         return ! $methodCallStaticType->equals($methodCallVarStaticType);
     }
+
     /**
      * @duplicated
      * @param MethodCall|Return_ $node

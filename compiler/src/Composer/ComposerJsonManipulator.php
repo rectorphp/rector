@@ -140,6 +140,7 @@ final class ComposerJsonManipulator
 
         return $json;
     }
+
     private function readRemoteFileToJson(string $jsonFilePath): array
     {
         $jsonFileContent = NetteFileSystem::read($jsonFilePath);

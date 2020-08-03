@@ -204,6 +204,7 @@ PHP
         $this->renameNameNode($this->resolvedNodeNames[$lowerAliasName], $lastName);
         $useUse->alias = null;
     }
+
     private function hasUseAlias(Use_ $use): bool
     {
         foreach ($use->uses as $useUse) {
@@ -214,6 +215,7 @@ PHP
 
         return false;
     }
+
     /**
      * @param NameAndParentValueObject[] $usedNameNodes
      */

@@ -101,6 +101,7 @@ final class EventClassNaming
 
         return $namespaceAbove . '\\Event\\' . $shortEventClassName;
     }
+
     /**
      * TomatoMarket, onBuy
      * ↓

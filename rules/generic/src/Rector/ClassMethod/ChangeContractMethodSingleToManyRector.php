@@ -130,6 +130,7 @@ PHP
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         $phpDocInfo->changeReturnType($arrayType);
     }
+
     private function wrapReturnValueToArray(ClassMethod $classMethod): void
     {
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {

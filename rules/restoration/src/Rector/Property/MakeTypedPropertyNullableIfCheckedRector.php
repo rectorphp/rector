@@ -174,6 +174,7 @@ PHP
 
         return $isBooleanNot;
     }
+
     /**
      * Matches:
      * $this-><someProprety> === null

@@ -121,6 +121,7 @@ PHP
 
         return $node;
     }
+
     private function getPrivateMethodCallOrderAndClassMethods(Class_ $class): array
     {
         return [$this->getLocalPrivateMethodCallOrder($class), $this->resolvePrivateClassMethods($class)];

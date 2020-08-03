@@ -125,6 +125,7 @@ final class ConditionResolver
 
         return new BinaryToVersionCompareCondition($versionCompareCondition, $binaryClass, $expectedValue);
     }
+
     private function resolveArgumentValue(FuncCall $funcCall, int $argumentPosition): ?string
     {
         /** @var string|null $version */

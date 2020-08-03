@@ -298,6 +298,7 @@ PHP
 
         return $inferedType->isSubTypeOf($currentType)->yes();
     }
+
     private function addReturnTypeToChildMethod(
         ClassLike $classLike,
         ClassMethod $classMethod,

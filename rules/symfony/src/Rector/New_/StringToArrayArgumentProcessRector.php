@@ -129,6 +129,7 @@ PHP
 
         $this->processPreviousAssign($node, $firstArgument);
     }
+
     /**
      * @return string[]
      */

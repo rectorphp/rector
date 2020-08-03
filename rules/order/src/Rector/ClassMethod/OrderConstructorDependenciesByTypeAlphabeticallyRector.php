@@ -94,6 +94,7 @@ PHP
     {
         $this->skipPatterns = $configuration[self::SKIP_PATTERNS] ?? [];
     }
+
     private function shouldSkip(ClassMethod $classMethod): bool
     {
         if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
@@ -134,6 +135,7 @@ PHP
 
         return $params;
     }
+
     /**
      * Match file against matches, no patterns provided, then it matches
      */

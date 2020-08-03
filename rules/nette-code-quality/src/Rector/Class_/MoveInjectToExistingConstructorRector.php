@@ -140,6 +140,7 @@ PHP
             $this->makePrivate($injectProperty);
         }
     }
+
     private function isInjectProperty(Property $property): bool
     {
         if (! $property->isPublic()) {

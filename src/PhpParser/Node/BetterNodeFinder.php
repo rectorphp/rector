@@ -293,6 +293,7 @@ final class BetterNodeFinder
 
         return false;
     }
+
     /**
      * @param Node|Node[] $nodes
      */

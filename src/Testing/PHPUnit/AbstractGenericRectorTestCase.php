@@ -255,6 +255,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         // to be implemented
         return '';
     }
+
     /**
      * @return SmartFileInfo[]
      */
@@ -267,6 +268,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
 
         return array_merge($configFileInfos, $setFileInfos);
     }
+
     private function getConfigFor3rdPartyTest(): string
     {
         $currentTestRectorClassesWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
@@ -279,6 +281,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
 
         return $configFileTempPath;
     }
+
     private function configurePhpVersionFeatures(): void
     {
         if ($this->getPhpVersion() === '') {

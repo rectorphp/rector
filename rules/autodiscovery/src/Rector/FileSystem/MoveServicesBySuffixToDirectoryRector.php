@@ -111,6 +111,7 @@ PHP
             return;
         }
     }
+
     private function isLocatedInExpectedLocation(
         string $groupName,
         string $suffixPattern,

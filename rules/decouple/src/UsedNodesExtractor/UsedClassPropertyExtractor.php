@@ -119,6 +119,7 @@ final class UsedClassPropertyExtractor
 
         return $classProperties;
     }
+
     private function isThisPropertyFetch(Node $node): bool
     {
         if ($node instanceof MethodCall) {

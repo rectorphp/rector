@@ -259,6 +259,7 @@ PHP
             $this->objectTypesToInject[] = $paramType;
         }
     }
+
     private function clearAbstractClassConstructor(ClassMethod $classMethod): void
     {
         foreach ($classMethod->getParams() as $key => $param) {
@@ -272,6 +273,7 @@ PHP
 
         $this->classMethodNodeRemover->removeClassMethodIfUseless($classMethod);
     }
+
     private function addInjectOrRequiredClassMethod(Class_ $class): void
     {
         /** @var string $className */

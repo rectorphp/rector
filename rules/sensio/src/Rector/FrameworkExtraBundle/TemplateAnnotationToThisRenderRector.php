@@ -182,6 +182,7 @@ PHP
             $this->refactorNoReturn($classMethod, $thisRenderMethodCall);
         }
     }
+
     /**
      * This skips anonymous functions and functions, as their returns doesn't influence current code
      *
@@ -218,6 +219,7 @@ PHP
 
         return $this->isReturnOfObjectType($lastReturn, self::RESPONSE_CLASS);
     }
+
     private function refactorReturn(
         Return_ $return,
         ClassMethod $classMethod,

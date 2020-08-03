@@ -190,6 +190,7 @@ final class TemplateVariablesFactory
         $configurationConstants = $this->configurationNodeFactory->createConfigurationConstants($ruleConfiguration);
         return $this->betterStandardPrinter->print($configurationConstants);
     }
+
     /**
      * @param array<string, mixed> $ruleConfiguration
      */
@@ -198,6 +199,7 @@ final class TemplateVariablesFactory
         $classMethod = $this->configurationNodeFactory->createConfigureClassMethod($ruleConfiguration);
         return $this->betterStandardPrinter->print($classMethod);
     }
+
     private function createNodeTypePhp(Configuration $configuration): string
     {
         $referencingClassConsts = [];

@@ -103,6 +103,7 @@ PHP
             return $this->createStaticCall('Mockery', 'mock', $node->args);
         });
     }
+
     /**
      * $mock->getMethod()->once
      * ↓
@@ -206,6 +207,7 @@ PHP
             [$node->name, $previousMethodCall->name] = [$previousMethodCall->name, $node->name];
         });
     }
+
     private function collectMockVariableName(FuncCall $funcCall): void
     {
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
@@ -228,6 +230,7 @@ PHP
 
         $this->mockVariableTypesByNames[$variableName] = $mockedType;
     }
+
     private function isMethodCallOrPropertyFetchOnMockVariable(Node $node): bool
     {
         if (! $node instanceof MethodCall && ! $this->isPropertyFetchDisguisedAsMethodCall($node)) {
@@ -243,6 +246,7 @@ PHP
 
         return isset($this->mockVariableTypesByNames[$variableName]);
     }
+
     /**
      * $mock->someMethodWithArgs()->once()
      * ↓
@@ -269,6 +273,7 @@ PHP
 
         return new MethodCall($expectsMethodCall, 'withAnyArgs');
     }
+
     private function isPropertyFetchDisguisedAsMethodCall(Node $node): bool
     {
         if (! $node instanceof PropertyFetch) {

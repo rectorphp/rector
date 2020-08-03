@@ -177,6 +177,7 @@ PHP
 
         return $phpDocInfo->hasByName('inject');
     }
+
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if ($classMethod->isPrivate()) {

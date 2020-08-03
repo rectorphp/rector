@@ -87,6 +87,7 @@ final class VariableRenamer
     {
         return $node instanceof Closure || $node instanceof Function_ || $node instanceof ClassMethod;
     }
+
     private function renameVariableIfMatchesName(Variable $variable, string $oldName, string $expectedName): ?Variable
     {
         if (! $this->nodeNameResolver->isName($variable, $oldName)) {

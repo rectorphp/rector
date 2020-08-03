@@ -60,6 +60,7 @@ final class FileHashComputer
 
         return $loader;
     }
+
     /**
      * @param mixed[] $array
      */

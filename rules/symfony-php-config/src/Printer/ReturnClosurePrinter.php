@@ -95,12 +95,14 @@ final class ReturnClosurePrinter
         $useBuilder = new UseBuilder($useImport);
         $this->useStmts[] = $useBuilder->getNode();
     }
+
     private function createClosureParam(): Param
     {
         $paramBuilder = new ParamBuilder(self::CONTAINER_CONFIGURATOR);
         $paramBuilder->setType('ContainerConfigurator');
         return $paramBuilder->getNode();
     }
+
     /**
      * @param mixed[] $services
      * @return Expression[]
@@ -129,6 +131,7 @@ final class ReturnClosurePrinter
         $nextCallIndentReplacement = ')' . PHP_EOL . Strings::indent('->', 8, ' ');
         return Strings::replace($content, '#\)->#', $nextCallIndentReplacement);
     }
+
     private function createServicesSetMethodCall(
         string $serviceName,
         Variable $servicesVariable,

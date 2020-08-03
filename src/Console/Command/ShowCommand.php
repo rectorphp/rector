@@ -105,6 +105,7 @@ final class ShowCommand extends AbstractCommand
             return ! $rector instanceof PostRectorInterface;
         });
     }
+
     /**
      * Resolve configuration by convention
      * @return mixed[]

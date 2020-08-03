@@ -128,6 +128,7 @@ final class LivingCodeManipulator
             $this->keepLivingCodeFromExpr($binaryOp->right)
         );
     }
+
     private function processIsset(Isset_ $isset): array
     {
         return array_merge(...array_map(function (Expr $expr): array {

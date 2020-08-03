@@ -232,6 +232,7 @@ PHP
             return $classConstFetch;
         });
     }
+
     private function createConstantNameFromVariable(Variable $variable): string
     {
         $variableName = $this->getName($variable);
@@ -243,6 +244,7 @@ PHP
 
         return strtoupper($constantName);
     }
+
     private function decorateWithVarAnnotation(ClassConst $classConst): void
     {
         $constStaticType = $this->getStaticType($classConst->consts[0]->value);

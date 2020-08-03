@@ -202,6 +202,7 @@ PHP
             $this->printNodesToFilePath($newStmtsSet, $fileDestination);
         }
     }
+
     /**
      * @param Node[] $nodes
      */

@@ -172,6 +172,7 @@ final class CompileCommand extends Command
             $output->write($buffer);
         });
     }
+
     private function restoreDependenciesLocallyIfNotCi(OutputInterface $output): void
     {
         if ($this->ciDetector->isCiDetected()) {

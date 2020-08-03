@@ -153,6 +153,7 @@ PHP
 
         return $methodCall;
     }
+
     private function refactorCollectionOptions(MethodCall $methodCall): void
     {
         $optionsArray = $this->matchOptionsArray($methodCall);

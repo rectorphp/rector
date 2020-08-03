@@ -116,6 +116,7 @@ final class NonPhpFileProcessor
             $this->smartFileSystem->chmod($neonYamlFileInfo->getRealPath(), $neonYamlFileInfo->getPerms());
         }
     }
+
     /**
      * @return string[]
      */

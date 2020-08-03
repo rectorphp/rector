@@ -78,6 +78,7 @@ final class VariableNaming
 
         return StaticRectorStrings::underscoreToPascalCase($variableName);
     }
+
     private function resolveBareFromNode(Node $node): string
     {
         $node = $this->unwrapNode($node);
@@ -113,6 +114,7 @@ final class VariableNaming
 
         throw new NotImplementedException();
     }
+
     private function unwrapNode(Node $node): ?Node
     {
         if ($node instanceof Arg) {
@@ -129,6 +131,7 @@ final class VariableNaming
 
         return $node;
     }
+
     private function resolveParamNameFromArrayDimFetch(ArrayDimFetch $arrayDimFetch): string
     {
         while ($arrayDimFetch instanceof ArrayDimFetch) {

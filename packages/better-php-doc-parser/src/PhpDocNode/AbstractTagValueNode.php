@@ -168,6 +168,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         return $this->tagValueNodeConfiguration->hasOpeningBracket() && $this->tagValueNodeConfiguration->hasClosingBracket();
     }
+
     private function correctArraySingleItemPrint(array $value, string $arrayItemAsString): string
     {
         if (count($value) !== 1) {
@@ -192,6 +193,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         return $nakedItem;
     }
+
     /**
      * @param PhpDocTagValueNode[] $tagValueNodes
      */

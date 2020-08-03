@@ -123,6 +123,7 @@ final class PropertyNaming
 
         return $className;
     }
+
     private function removePrefixesAndSuffixes(string $shortClassName): string
     {
         // is SomeInterface
@@ -202,6 +203,7 @@ final class PropertyNaming
 
         return $shortName;
     }
+
     private function isPrefixedInterface(string $shortClassName): bool
     {
         if (strlen($shortClassName) <= 3) {
@@ -214,6 +216,7 @@ final class PropertyNaming
 
         return ctype_upper($shortClassName[1]) && ctype_lower($shortClassName[2]);
     }
+
     private function isNumberOrUpper(string $char): bool
     {
         if (ctype_upper($char)) {

@@ -202,6 +202,7 @@ PHP
 
         return $expr->right instanceof NotEqual;
     }
+
     private function negateOrDeNegate(Expr $expr): Expr
     {
         if ($expr instanceof BooleanNot) {

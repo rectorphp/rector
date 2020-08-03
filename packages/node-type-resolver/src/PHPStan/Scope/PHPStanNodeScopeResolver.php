@@ -210,6 +210,7 @@ final class PHPStanNodeScopeResolver
             // @ignoreException
         }
     }
+
     /**
      * Remove comments, to enable scope resolving only from code, not docblocks
      *

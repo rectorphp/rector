@@ -236,6 +236,7 @@ final class ClassMethodAssignManipulator
 
         return $variableAssigns;
     }
+
     private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
     {
         foreach ($classMethod->params as $constructorParameter) {
@@ -246,6 +247,7 @@ final class ClassMethodAssignManipulator
 
         return false;
     }
+
     private function isExplicitlyReferenced(Node $node): bool
     {
         if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {

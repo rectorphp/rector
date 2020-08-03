@@ -169,6 +169,7 @@ PHP
             return new ClassConstFetch(new Name('self'), $constantName);
         });
     }
+
     /**
      * @param string[] $stringsToReplace
      */

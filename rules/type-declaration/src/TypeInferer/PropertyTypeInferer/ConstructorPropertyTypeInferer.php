@@ -164,6 +164,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
 
         return false;
     }
+
     private function resolveFullyQualifiedOrAliasedObjectType(Param $param): ?Type
     {
         if ($param->type === null) {

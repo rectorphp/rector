@@ -116,6 +116,7 @@ PHP
         // dummy approach, improve when needed
         $this->replaceGetNameOrGetValue($classMethodOrFunctionNode, $assign->var);
     }
+
     /**
      * @param ClassMethod|Function_ $functionLike
      */
@@ -143,6 +144,7 @@ PHP
             return $this->areNodesEqual($node->expr, $assignedExpr);
         });
     }
+
     private function refactorTokenInForeach(Foreach_ $tokensForeach): void
     {
         $singleToken = $tokensForeach->valueVar;

@@ -164,6 +164,7 @@ PHP
 
         return $methodBuilder->getNode();
     }
+
     /**
      * @param Node[] $nodes
      * @return Node[]

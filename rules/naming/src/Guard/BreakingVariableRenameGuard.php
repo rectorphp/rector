@@ -158,6 +158,7 @@ final class BreakingVariableRenameGuard
 
         return $trinaryLogic->maybe();
     }
+
     /**
      * @param ClassMethod|Function_|Closure $functionLike
      */
@@ -165,6 +166,7 @@ final class BreakingVariableRenameGuard
     {
         return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, Variable::class, $newName);
     }
+
     /**
      * @param ClassMethod|Function_|Closure $functionLike
      */

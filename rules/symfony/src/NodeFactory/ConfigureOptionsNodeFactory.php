@@ -60,6 +60,7 @@ final class ConfigureOptionsNodeFactory
 
         return [new Arg($array)];
     }
+
     private function createNull(): ConstFetch
     {
         return new ConstFetch(new Name('null'));

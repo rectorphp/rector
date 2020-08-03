@@ -263,6 +263,7 @@ PHP
         // can be opened
         return $classMethod->isProtected();
     }
+
     /**
      * @return Param[]
      */

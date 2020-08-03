@@ -137,6 +137,7 @@ final class ConfigurationNodeFactory
             PhpVersionFeature::BEFORE_TYPED_PROPERTIES
         );
     }
+
     private function createConstantInConfigurationCoalesce(
         string $constantName,
         Variable $configurationVariable

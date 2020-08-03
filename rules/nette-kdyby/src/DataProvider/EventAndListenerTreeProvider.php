@@ -149,6 +149,7 @@ final class EventAndListenerTreeProvider
             $this->eventAndListenerTrees[] = $eventAndListenerTree;
         }
     }
+
     private function resolveMagicProperty(MethodCall $methodCall): ?Property
     {
         /** @var string $methodName */

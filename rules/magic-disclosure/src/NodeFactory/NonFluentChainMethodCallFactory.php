@@ -88,6 +88,7 @@ final class NonFluentChainMethodCallFactory
         $assign = new Assign($newVariable, $new);
         return new Expression($assign);
     }
+
     private function isNewNodeNeeded(AssignAndRootExpr $assignAndRootExpr): bool
     {
         if (! $assignAndRootExpr->getRootExpr() instanceof New_) {
@@ -96,6 +97,7 @@ final class NonFluentChainMethodCallFactory
 
         return $assignAndRootExpr->getRootExpr() !== $assignAndRootExpr->getAssignExpr();
     }
+
     /**
      * @param MethodCall[] $chainMethodCalls
      * @return Expr[]

@@ -84,6 +84,7 @@ final class TemplateFinder
 
         return $filePaths;
     }
+
     private function resolveFixtureFilePath(bool $isPhpSnippet): string
     {
         if ($isPhpSnippet) {

@@ -169,6 +169,7 @@ PHP
             $this->getSubscribedEventsArrayManipulator->change($returnedExpr);
         });
     }
+
     private function refactorArrayWithEventTable(Array_ $array): void
     {
         foreach ($array->items as $arrayItem) {
@@ -181,6 +182,7 @@ PHP
             $arrayItem->value = new String_($methodName);
         }
     }
+
     private function resolveMethodNameFromKdybyEventName(Expr $expr): string
     {
         $kdybyEventName = $this->getValue($expr);

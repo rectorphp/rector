@@ -105,6 +105,7 @@ PHP
     {
         $this->oldToNewMethodsByClass = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASS] ?? [];
     }
+
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      * @param string|string[] $newMethod

@@ -37,6 +37,7 @@ final class ClassAnnotationMatcher
 
         return $fullyQualifiedClass;
     }
+
     private function resolveFullyQualifiedClass(?array $useNodes, Node $node, string $tag): string
     {
         if ($useNodes === null) {

@@ -204,6 +204,7 @@ final class RectorApplication
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
     }
+
     /**
      * @param SmartFileInfo[] $phpFileInfos
      */
@@ -215,6 +216,7 @@ final class RectorApplication
             }, 'parsing');
         }
     }
+
     /**
      * @param SmartFileInfo[] $phpFileInfos
      */
@@ -250,6 +252,7 @@ final class RectorApplication
             $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $smartFileInfo);
         }
     }
+
     private function processFileSystemRectors(SmartFileInfo $smartFileInfo): void
     {
         if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
@@ -274,6 +277,7 @@ final class RectorApplication
 
         $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
     }
+
     /**
      * This prevent CI report flood with 1 file = 1 line in progress bar
      */

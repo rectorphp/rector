@@ -71,6 +71,7 @@ final class CallTypeAnalyzer
 
         return $this->nodeTypeResolver->resolve($node->class);
     }
+
     /**
      * @param MethodCall|StaticCall $node
      * @return array<int, Type>

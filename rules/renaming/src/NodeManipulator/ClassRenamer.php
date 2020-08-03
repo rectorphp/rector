@@ -273,6 +273,7 @@ final class ClassRenamer
 
         return $foundClass instanceof ClassLike ? $foundClass : null;
     }
+
     /**
      * @param string[] $oldToNewClasses
      */

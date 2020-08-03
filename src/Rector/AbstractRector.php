@@ -328,6 +328,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         return false;
     }
+
     private function printDebugApplying(): void
     {
         if (! $this->symfonyStyle->isDebug()) {
@@ -343,6 +344,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->symfonyStyle->writeln('    [applying] ' . static::class);
         $this->previousAppliedClass = static::class;
     }
+
     private function hasNodeChanged(Node $originalNode, Node $node): bool
     {
         if ($this->isNameIdentical($node, $originalNode)) {

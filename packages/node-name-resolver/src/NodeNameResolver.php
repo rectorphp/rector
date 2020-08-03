@@ -221,6 +221,7 @@ final class NodeNameResolver
 
         throw new ShouldNotHappenException($message);
     }
+
     /**
      * @param Interface_|Trait_ $classLike
      */

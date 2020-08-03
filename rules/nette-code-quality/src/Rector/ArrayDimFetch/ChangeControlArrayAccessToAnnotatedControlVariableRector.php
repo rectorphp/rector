@@ -144,6 +144,7 @@ PHP
 
         return false;
     }
+
     private function resolveControlType(ArrayDimFetch $arrayDimFetch, string $controlName): ObjectType
     {
         $controlTypes = $this->methodNamesByInputNamesResolver->resolveExpr($arrayDimFetch);

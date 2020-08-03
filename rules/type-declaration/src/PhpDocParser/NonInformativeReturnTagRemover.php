@@ -116,6 +116,7 @@ final class NonInformativeReturnTagRemover
 
         $phpDocInfo->removeByType(ReturnTagValueNode::class);
     }
+
     private function removeNullableType(
         Type $returnType,
         ReturnTagValueNode $returnTagValueNode,
@@ -166,6 +167,7 @@ final class NonInformativeReturnTagRemover
             $phpDocInfo->removeByType(ReturnTagValueNode::class);
         }
     }
+
     /**
      * @param string[] $values
      */
@@ -177,6 +179,7 @@ final class NonInformativeReturnTagRemover
 
         return in_array($typeNode->name, $values, true);
     }
+
     private function matchNullabledType(Type $returnType): ?Type
     {
         if (! $returnType instanceof UnionType) {
@@ -201,6 +204,7 @@ final class NonInformativeReturnTagRemover
 
         return null;
     }
+
     private function matchNullabledReturnTagValueNode(ReturnTagValueNode $returnTagValueNode): ?TypeNode
     {
         if (! $returnTagValueNode->type instanceof UnionTypeNode) {

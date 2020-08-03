@@ -257,6 +257,7 @@ PHP
 
         return $dataProviderClassMethods;
     }
+
     /**
      * @param string[] $singleConfiguration
      */
@@ -268,6 +269,7 @@ PHP
 
         return $this->isName($methodCall->name, $singleConfiguration['old_method']);
     }
+
     private function createDataProviderMethodName(Node $node): string
     {
         /** @var string $methodName */
@@ -275,6 +277,7 @@ PHP
 
         return 'provideDataFor' . ucfirst($methodName);
     }
+
     /**
      * @return ParamAndArgValueObject[]
      */
@@ -288,6 +291,7 @@ PHP
         $itemsStaticType = $this->resolveItemStaticType($array, $isNestedArray);
         return $this->collectParamAndArgsFromNonNestedArray($array, $variableName, $itemsStaticType);
     }
+
     /**
      * @param ParamAndArgValueObject[] $paramAndArgs
      */
@@ -315,6 +319,7 @@ PHP
             $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
     }
+
     private function createDataProviderTagNode(string $dataProviderMethodName): PhpDocTagNode
     {
         return new AttributeAwarePhpDocTagNode('@dataProvider', new GenericTagValueNode(

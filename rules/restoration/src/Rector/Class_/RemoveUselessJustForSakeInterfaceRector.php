@@ -132,6 +132,7 @@ CODE_SAMPLE
             ),
         ]);
     }
+
     private function resolveClassFileLocation(string $implementedInterfaceName): string
     {
         $reflectionClass = new ReflectionClass($implementedInterfaceName);
@@ -188,6 +189,7 @@ CODE_SAMPLE
 
         $this->renamedClassesCollector->addClassRename($implementedInterfaceName, $className);
     }
+
     private function getParentInterfaceIfFound(string $implementedInterfaceName): ?string
     {
         $reflectionClass = new ReflectionClass($implementedInterfaceName);

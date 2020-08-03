@@ -169,6 +169,7 @@ final class DocBlockManipulator
 
         return true;
     }
+
     private function inlineDocContent(string $docContent): string
     {
         $docContent = Strings::replace($docContent, "#\n \* #", ' ');

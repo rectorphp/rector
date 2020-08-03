@@ -58,6 +58,7 @@ final class TagValueNodeConfigurationFactory
             $arrayEqualSign
         );
     }
+
     private function resolveSilentKey(PhpDocTagValueNode $phpDocTagValueNode): ?string
     {
         if ($phpDocTagValueNode instanceof SilentKeyNodeInterface) {

@@ -134,6 +134,7 @@ final class ThisRenderFactory
 
         return null;
     }
+
     /**
      * @param string[] $vars
      */

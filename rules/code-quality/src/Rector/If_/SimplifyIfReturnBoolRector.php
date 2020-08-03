@@ -186,6 +186,7 @@ PHP
 
         return new Return_($this->boolCastOrNullCompareIfNeeded(new BooleanNot($if->cond)));
     }
+
     /**
      * Matches: "else if"
      */

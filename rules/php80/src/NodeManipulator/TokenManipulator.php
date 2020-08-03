@@ -284,6 +284,7 @@ final class TokenManipulator
 
         return $this->valueResolver->isValue($node->dim, $value);
     }
+
     /**
      * @return ArrayDimFetch[]|ConstFetch[]|null
      */

@@ -182,6 +182,7 @@ PHP
 
         return is_a($varStaticType->getClassName(), 'Nette\Application\UI\Control', true);
     }
+
     private function resolveCreateComponentMethodCallReturnType(MethodCall $methodCall): Type
     {
         /** @var Scope|null $scope */
@@ -201,6 +202,7 @@ PHP
 
         return $this->resolveTypeFromShortControlNameAndVariable($firstArgumentValue, $scope, $methodCall->var);
     }
+
     private function resolveArrayDimFetchControlType(ArrayDimFetch $arrayDimFetch): Type
     {
         /** @var Scope|null $scope */

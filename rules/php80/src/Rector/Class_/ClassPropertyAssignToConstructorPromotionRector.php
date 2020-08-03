@@ -125,6 +125,7 @@ PHP
 
         return $this->promotionCandidates;
     }
+
     private function collectPromotionCandidate(Property $property, ClassMethod $constructClassMethod): void
     {
         $onlyProperty = $property->props[0];
@@ -158,6 +159,7 @@ PHP
             $this->promotionCandidates[] = new PromotionCandidate($property, $assign, $matchedParam);
         }
     }
+
     private function matchClassMethodParamByAssignedVariable(
         ClassMethod $classMethod,
         Expr $assignedExpr

@@ -112,6 +112,7 @@ final class EventValueObjectClassFactory
             $classBuilder->addStmt($getterClassMethod);
         }
     }
+
     private function wrapClassToNamespace(string $className, Class_ $class): Namespace_
     {
         $namespace = Strings::before($className, '\\', -1);
@@ -145,6 +146,7 @@ final class EventValueObjectClassFactory
             $usedVariableNames[] = $variablesWithType->getName();
         }
     }
+
     /**
      * @param VariableWithType[] $variableWithTypes
      */

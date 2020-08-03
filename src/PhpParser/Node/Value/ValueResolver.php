@@ -111,6 +111,7 @@ final class ValueResolver
 
         return null;
     }
+
     private function processConcat(Concat $concat, bool $resolvedClassReference): string
     {
         return $this->getValue($concat->left, $resolvedClassReference) . $this->getValue(

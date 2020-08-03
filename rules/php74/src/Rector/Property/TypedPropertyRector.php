@@ -165,6 +165,7 @@ PHP
     {
         $this->classLikeTypeOnly = $configuration[self::CLASS_LIKE_TYPE_ONLY] ?? false;
     }
+
     /**
      * @param Name|NullableType|PhpParserUnionType $node
      */

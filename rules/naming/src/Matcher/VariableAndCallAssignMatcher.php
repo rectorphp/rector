@@ -73,6 +73,7 @@ final class VariableAndCallAssignMatcher
 
         return null;
     }
+
     /**
      * @return ClassMethod|Function_|Closure|null
      */

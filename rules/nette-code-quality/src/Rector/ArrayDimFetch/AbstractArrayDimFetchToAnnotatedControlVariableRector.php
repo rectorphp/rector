@@ -159,6 +159,7 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
 
         return $currentStatement;
     }
+
     private function createAssignExpression(string $variableName, ArrayDimFetch $arrayDimFetch): Expression
     {
         $variable = new Variable($variableName);

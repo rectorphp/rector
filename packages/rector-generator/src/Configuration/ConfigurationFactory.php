@@ -82,6 +82,7 @@ final class ConfigurationFactory
 
         return null;
     }
+
     private function normalizeCode(string $code): string
     {
         if (Strings::startsWith($code, '<?php')) {
@@ -90,6 +91,7 @@ final class ConfigurationFactory
 
         return trim($code);
     }
+
     private function isPhpSnippet(string $code): bool
     {
         return Strings::startsWith($code, '<?php');

@@ -85,6 +85,7 @@ final class TemplateGuesser
         $bundle = Strings::replace($bundle, '#Bundle$#');
         return $bundle !== '' ? '@' . $bundle : '';
     }
+
     private function resolveController(string $class): string
     {
         $match = Strings::match($class, '#Controller\\\(.+)Controller$#');

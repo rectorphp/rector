@@ -135,6 +135,7 @@ final class RectorPrinter
         );
         throw new ShouldNotHappenException($message);
     }
+
     private function ensureCodeSampleExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
     {
         if (count($rectorDefinition->getCodeSamples()) !== 0) {
@@ -147,6 +148,7 @@ final class RectorPrinter
             'getDefinition'
         ));
     }
+
     private function getClassRelativePath(string $className): string
     {
         $rectorReflectionClass = new ReflectionClass($className);

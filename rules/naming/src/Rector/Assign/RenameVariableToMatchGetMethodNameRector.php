@@ -154,6 +154,7 @@ PHP
 
         return $node;
     }
+
     private function shouldSkip(VariableAndCallAssign $variableAndCallAssign, string $expectedName): bool
     {
         if ($this->namingConventionAnalyzer->isCallMatchingVariableName(

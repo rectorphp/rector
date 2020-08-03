@@ -164,6 +164,7 @@ PHP
 
         return count($assignVariableNames) <= 1;
     }
+
     /**
      * @param Case_[] $cases
      * @return MatchArm[]

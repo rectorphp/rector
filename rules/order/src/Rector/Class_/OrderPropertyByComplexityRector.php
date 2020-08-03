@@ -164,6 +164,7 @@ PHP
 
         return array_keys($propertyNameToRank);
     }
+
     private function getVisibilityAsString(Property $property): string
     {
         if ($property->isPrivate()) {

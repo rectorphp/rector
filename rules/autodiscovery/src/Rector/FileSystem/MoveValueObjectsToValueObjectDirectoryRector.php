@@ -186,6 +186,7 @@ CODE_SAMPLE
 
         return false;
     }
+
     private function isKnownServiceType(string $className): bool
     {
         foreach (self::COMMON_SERVICE_SUFFIXES as $commonServiceSuffix) {

@@ -92,6 +92,7 @@ PHP
     {
         $this->newArgumentPositionsByMethodAndClass = $configuration[self::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS] ?? [];
     }
+
     /**
      * @param StaticCall|MethodCall|ClassMethod $node
      */

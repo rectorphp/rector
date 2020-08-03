@@ -62,6 +62,7 @@ final class BuilderFormNodeFactory
 
         return $optionsParamBuilder->getNode();
     }
+
     /**
      * @param Node[] $nodes
      * @return Node[]

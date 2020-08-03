@@ -94,6 +94,7 @@ PHP
             return $this->createProphesizeMethodCall($node);
         });
     }
+
     private function revealMockArguments(ClassMethod $classMethod): void
     {
         if ($classMethod->stmts === null) {

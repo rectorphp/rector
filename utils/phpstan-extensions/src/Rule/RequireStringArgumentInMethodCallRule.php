@@ -113,6 +113,7 @@ final class RequireStringArgumentInMethodCallRule implements Rule
 
         return $constantName !== 'class';
     }
+
     private function isNodeVarType(MethodCall $methodCall, Scope $scope, string $desiredType): bool
     {
         if (trait_exists($desiredType)) {

@@ -141,6 +141,7 @@ final class ClassDependencyManipulator
 
         $this->classInsertManipulator->addInjectPropertyToClass($class, $propertyName, $propertyType);
     }
+
     private function isPropertyAlreadyAvailableInTheClassOrItsParents(Class_ $class, string $propertyName): bool
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);

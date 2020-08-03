@@ -99,6 +99,7 @@ PHP
 
         return $this->isName($classMethod->name, 'getBlockPrefix');
     }
+
     /**
      * return <$thisValue>;
      */

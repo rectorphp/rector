@@ -419,6 +419,7 @@ final class NodeFactory
             is_object($item) ? get_class($item) : $item
         ));
     }
+
     private function addPropertyType(Property $property, ?Type $type): void
     {
         if ($type === null) {

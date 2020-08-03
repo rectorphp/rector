@@ -224,6 +224,7 @@ PHP
 
         return $this->isName($parentParentNode, $functionName);
     }
+
     private function popFirstObjectType(Type $type): Type
     {
         if ($type instanceof UnionType) {

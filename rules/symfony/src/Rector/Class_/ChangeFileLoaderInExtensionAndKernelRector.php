@@ -144,6 +144,7 @@ PHP
         $this->from = $configuration[self::FROM];
         $this->to = $configuration[self::TO];
     }
+
     private function isKernelOrExtensionClass(Class_ $class): bool
     {
         if ($this->isObjectType($class, 'Symfony\Component\HttpKernel\DependencyInjection\Extension')) {
@@ -152,6 +153,7 @@ PHP
 
         return $this->isObjectType($class, 'Symfony\Component\HttpKernel\Kernel');
     }
+
     private function validateConfiguration(string $from, string $to): void
     {
         if (! isset(self::FILE_LOADERS_BY_TYPE[$from])) {

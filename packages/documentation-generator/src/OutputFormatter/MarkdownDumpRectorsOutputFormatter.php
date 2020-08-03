@@ -95,6 +95,7 @@ final class MarkdownDumpRectorsOutputFormatter
             }
         }
     }
+
     /**
      * @param RectorInterface[] $rectors
      * @return RectorInterface[][]
@@ -113,6 +114,7 @@ final class MarkdownDumpRectorsOutputFormatter
 
         return $rectorsByPackage;
     }
+
     /**
      * @param RectorInterface[][] $rectorsByGroup
      */

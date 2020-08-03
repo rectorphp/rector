@@ -159,6 +159,7 @@ final class CreateCommand extends Command
 
         throw new ShouldNotHappenException();
     }
+
     /**
      * @param string[] $generatedFilePaths
      */

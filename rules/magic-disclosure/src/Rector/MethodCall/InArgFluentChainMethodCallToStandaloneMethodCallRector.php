@@ -138,11 +138,13 @@ PHP
         $this->addNodesBeforeNode($nodesToAdd, $methodCall);
         $this->removeParentParent($methodCall);
     }
+
     private function crateVariableFromNew(New_ $new): Variable
     {
         $variableName = $this->variableNaming->resolveFromNode($new);
         return new Variable($variableName);
     }
+
     /**
      * @deprecated
      * @todo extact to factory
@@ -159,6 +161,7 @@ PHP
 
         return $lastMethodCall;
     }
+
     private function removeParentParent(MethodCall $methodCall): void
     {
         /** @var Arg $parent */

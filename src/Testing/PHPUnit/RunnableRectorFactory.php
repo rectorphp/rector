@@ -60,6 +60,7 @@ final class RunnableRectorFactory
 
         return sprintf(sys_get_temp_dir() . '/_rector_runnable_%s_%s', $hash, $smartFileInfo->getBasename('.inc'));
     }
+
     private function getTemporaryClassSuffix(): string
     {
         return Random::generate(30);

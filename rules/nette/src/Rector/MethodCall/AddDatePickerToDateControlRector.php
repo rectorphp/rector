@@ -99,6 +99,7 @@ PHP
 
         return $this->createAssign($node);
     }
+
     private function createAssign(MethodCall $methodCall): ?Node
     {
         $key = $methodCall->args[0]->value;

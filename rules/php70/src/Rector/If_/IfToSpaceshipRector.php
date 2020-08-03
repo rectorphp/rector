@@ -168,6 +168,7 @@ PHP
             }
         }
     }
+
     private function areVariablesEqual(BinaryOp $binaryOp, ?Expr $firstValue, ?Expr $secondValue): bool
     {
         if ($firstValue === null || $secondValue === null) {
@@ -219,6 +220,7 @@ PHP
             $this->processTernary($returnNode->expr);
         }
     }
+
     private function processTernary(Ternary $ternary): void
     {
         if ($ternary->cond instanceof Smaller) {

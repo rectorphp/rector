@@ -145,6 +145,7 @@ final class ListeningMethodsCollector
 
         $this->classMethodsByEventClass[$eventClass] = $classMethod;
     }
+
     private function resolveCustomClassMethodAndEventClass(
         ArrayItem $arrayItem,
         Class_ $class,
