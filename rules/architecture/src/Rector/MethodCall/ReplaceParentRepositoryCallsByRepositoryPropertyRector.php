@@ -103,11 +103,11 @@ PHP
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        $class = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return true;
         }
 
-        return ! $this->isInObjectType($class, 'Doctrine\ORM\EntityRepository');
+        return ! $this->isInObjectType($classLike, 'Doctrine\ORM\EntityRepository');
     }
 }
