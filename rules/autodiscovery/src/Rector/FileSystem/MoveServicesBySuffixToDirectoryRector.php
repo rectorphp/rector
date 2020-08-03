@@ -77,6 +77,7 @@ PHP
 
     public function configure(array $configuration): void
     {
+		dump($configuration);
         $this->groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? [];
         dump('configure', $this->groupNamesBySuffix);
     }
