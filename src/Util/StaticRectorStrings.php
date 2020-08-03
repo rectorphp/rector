@@ -109,6 +109,12 @@ final class StaticRectorStrings
         return strtoupper($underscore);
     }
 
+    public static function constantToDashes(string $string): string
+    {
+        $string = strtolower($string);
+        return Strings::replace($string, '#_#', '-');
+    }
+
     private static function camelCaseToGlue(string $input, string $glue): string
     {
         if ($input === strtolower($input)) {

@@ -13,6 +13,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
+use Rector\Core\Reflection\ConstantNameFromValueResolver;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\Finder\RectorsFinder;
@@ -144,7 +145,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     protected function provideConfigFileInfo(): ?SmartFileInfo
     {
         if ($this->provideSet() !== '') {
-            $setProvider = new SetProvider();
+            $setProvider = new SetProvider(new ConstantNameFromValueResolver());
             $set = $setProvider->provideByName($this->provideSet());
             if ($set === null) {
                 $message = sprintf('Invalid set name provided "%s"', $this->provideSet());

@@ -24,23 +24,16 @@ use Symplify\EasyCodingStandard\Configuration\Option;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(DisallowCommentAfterCodeSniff::class);
-
     $services->set(DuplicateSpacesSniff::class);
-
     $services->set(UseSpacingSniff::class);
-
     $services->set(StandaloneLineInMultilineArrayFixer::class);
-
     $services->set(LineLengthFixer::class);
 
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
-        ->call('configure', [
-            [
-                'annotations' => ['throws', 'author', 'package', 'group'],
-            ],
-        ]);
+        ->call('configure', [[
+            'annotations' => ['throws', 'author', 'package', 'group'],
+        ]]);
 
     $services->set(LineLengthFixer::class);
 

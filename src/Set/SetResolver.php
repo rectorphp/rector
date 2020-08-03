@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Set;
 
+use Rector\Core\Reflection\ConstantNameFromValueResolver;
 use Rector\Set\SetProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\SetConfigResolver\ValueObject\Set;
@@ -17,7 +18,7 @@ final class SetResolver
 
     public function __construct()
     {
-        $this->setProvider = new SetProvider();
+        $this->setProvider = new SetProvider(new ConstantNameFromValueResolver());
     }
 
     public function resolveSetFromInput(InputInterface $input): ?Set

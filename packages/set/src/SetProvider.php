@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Set;
 
+use Rector\Core\Reflection\ConstantNameFromValueResolver;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\Set\ValueObject\SetList;
 use Symplify\SetConfigResolver\Provider\AbstractSetProvider;
 use Symplify\SetConfigResolver\ValueObject\Set;
@@ -16,7 +18,7 @@ final class SetProvider extends AbstractSetProvider
      */
     private $sets = [];
 
-    public function __construct()
+    public function __construct(ConstantNameFromValueResolver $constantNameFromValueResolver)
     {
         $setNamesToSetPaths = [
             SetList::DEFLUENT => __DIR__ . '/../../../config/set/defluent.php',
@@ -164,6 +166,15 @@ final class SetProvider extends AbstractSetProvider
         foreach ($setNamesToSetPaths as $setName => $setPath) {
             $this->sets[] = new Set($setName, new SmartFileInfo($setPath));
         }
+
+        $setNamePaths = [SetList::REPOSITORY_AS_SERVICE];
+
+        // new kind of paths sets
+        foreach ($setNamePaths as $setNamePath) {
+            $setName = $constantNameFromValueResolver->resolveFromValueAndClass($setNamePath, SetList::class);
+            $setName = StaticRectorStrings::constantToDashes($setName);
+            $this->sets[] = new Set($setName, new SmartFileInfo($setNamePath));
+        }
     }
 
     /**
@@ -172,5 +183,24 @@ final class SetProvider extends AbstractSetProvider
     public function provide(): array
     {
         return $this->sets;
+    }
+
+    public function provideByName(string $setName): ?Set
+    {
+        $parentSet = parent::provideByName($setName);
+        if ($parentSet instanceof Set) {
+            return $parentSet;
+        }
+
+        // sencond approach by set path
+        foreach ($this->sets as $set) {
+            if (realpath($set->getSetFileInfo()->getRealPath()) !== realpath($setName)) {
+                continue;
+            }
+
+            return $set;
+        }
+
+        return null;
     }
 }

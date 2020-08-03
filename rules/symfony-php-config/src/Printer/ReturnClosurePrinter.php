@@ -24,7 +24,7 @@ use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\PhpParser\Builder\UseBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
-use ReflectionClass;
+use Rector\Core\Reflection\ConstantNameFromValueResolver;
 
 final class ReturnClosurePrinter
 {
@@ -53,15 +53,21 @@ final class ReturnClosurePrinter
      */
     private $classNaming;
 
+    /**
+     * @var ConstantNameFromValueResolver
+     */
+    private $constantNameFromValueResolver;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         ClassNaming $classNaming,
-        NodeFactory $nodeFactory
+        NodeFactory $nodeFactory,
+        ConstantNameFromValueResolver $constantNameFromValueResolver
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeFactory = $nodeFactory;
-
         $this->classNaming = $classNaming;
+        $this->constantNameFromValueResolver = $constantNameFromValueResolver;
     }
 
     public function printServices(array $services): string
@@ -141,7 +147,7 @@ final class ReturnClosurePrinter
                 throw new ShouldNotHappenException($message);
             }
 
-            $constantName = $this->resolveClassConstantNameFromValue($argument, $serviceName);
+            $constantName = $this->constantNameFromValueResolver->resolveFromValueAndClass($argument, $serviceName);
             $classConstFetch = new ClassConstFetch(new Name($shortClassName), $constantName);
 
             $args = $this->nodeFactory->createArgs(['configure', [[$classConstFetch, $value]]]);
@@ -173,22 +179,5 @@ final class ReturnClosurePrinter
         }
 
         return false;
-    }
-
-    private function resolveClassConstantNameFromValue(string $constantValue, string $class): string
-    {
-        $reflectionClass = new ReflectionClass($class);
-        foreach ($reflectionClass->getConstants() as $name => $value) {
-            if ($value === $constantValue) {
-                return $name;
-            }
-        }
-
-        $message = sprintf(
-            'Constant value "%s" for class "%s" could not be resolved. Make sure you use constants references there, not string values',
-            $constantValue,
-            $class
-        );
-        throw new ShouldNotHappenException($message);
     }
 }

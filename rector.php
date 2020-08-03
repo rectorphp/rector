@@ -3,23 +3,15 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Generic\Rector\Class_\AddConfigureClassMethodWithConstantRector;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/create-rector.php', null, 'not_found');
 
-    $services = $containerConfigurator->services();
-
-    $services->set(AddConfigureClassMethodWithConstantRector::class);
-
     $parameters = $containerConfigurator->parameters();
-
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-
-    $parameters->set(Option::SETS, [SetList::NAMING]);
-
+    $parameters->set(Option::SETS, [SetList::NAMING, SetList::REPOSITORY_AS_SERVICE]);
     $parameters->set(Option::PATHS, [
         __DIR__ . '/src',
         __DIR__ . '/tests',
