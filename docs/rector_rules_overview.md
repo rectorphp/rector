@@ -1,4 +1,4 @@
-# All 548 Rectors Overview
+# All 550 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -19,7 +19,7 @@
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (41)
+- [Generic](#generic) (42)
 - [Guzzle](#guzzle) (1)
 - [Injection](#injection) (1)
 - [JMS](#jms) (2)
@@ -30,7 +30,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
-- [Nette](#nette) (14)
+- [Nette](#nette) (15)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -4816,6 +4816,30 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
+### `FormerNullableArgumentToScalarTypedRector`
+
+- class: [`Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector`](/../master/rules/generic/src/Rector/MethodCall/FormerNullableArgumentToScalarTypedRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/FormerNullableArgumentToScalarTypedRector/Fixture)
+
+Change null in argument, that is now not nullable anymore
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        $this->setValue(null);
++        $this->setValue('');
+     }
+
+     public function setValue(string $value)
+     {
+     }
+ }
+```
+
+<br><br>
+
 ### `FunctionToMethodCallRector`
 
 - class: [`Rector\Generic\Rector\Function_\FunctionToMethodCallRector`](/../master/rules/generic/src/Rector/Function_/FunctionToMethodCallRector.php)
@@ -5083,7 +5107,7 @@ use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(MethodCallToStaticCallRector::class)
-        ->call('configure', [[MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS, ['$methodCallsToStaticCalls' => ['AnotherDependency' => ['process' => ['StaticCaller', 'anotherMethod']]]]]]);
+        ->call('configure', [[MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS, ['AnotherDependency' => ['process' => ['StaticCaller', 'anotherMethod']]]]]);
 };
 ```
 
@@ -6625,6 +6649,28 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
          $form = new Form();
 -        $form->addDatePicker('key', 'Label');
 +        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+     }
+ }
+```
+
+<br><br>
+
+### `BuilderExpandToHelperExpandRector`
+
+- class: [`Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector`](/../master/rules/nette/src/Rector/MethodCall/BuilderExpandToHelperExpandRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/MethodCall/BuilderExpandToHelperExpandRector/Fixture)
+
+Change `containerBuilder->expand()` to static call with parameters
+
+```diff
+ use Nette\DI\CompilerExtension;
+
+ final class SomeClass extends CompilerExtension
+ {
+     public function loadConfiguration()
+     {
+-        $value = $this->getContainerBuilder()->expand('%value');
++        $value = \Nette\DI\Helpers::expand('%value', $this->getContainerBuilder()->parameters);
      }
  }
 ```

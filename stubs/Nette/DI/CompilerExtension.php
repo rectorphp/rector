@@ -10,5 +10,8 @@ if (class_exists('Nette\DI\CompilerExtension')) {
 
 abstract class CompilerExtension
 {
-
+    public function getContainerBuilder(): ContainerBuilder
+    {
+        return new ContainerBuilder();
+    }
 }

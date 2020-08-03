@@ -66,10 +66,8 @@ PHP
 ,
                 [
                     self::METHOD_CALLS_TO_STATIC_CALLS => [
-                        '$methodCallsToStaticCalls' => [
-                            'AnotherDependency' => [
-                                'process' => ['StaticCaller', 'anotherMethod'],
-                            ],
+                        'AnotherDependency' => [
+                            'process' => ['StaticCaller', 'anotherMethod'],
                         ],
                     ],
                 ]

@@ -91,7 +91,7 @@ final class CheckoutEntityFactory
 PHP
                 ,
                 [
-                    '$staticTypes' => ['SomeStaticClass'],
+                    self::STATIC_TYPES => ['SomeStaticClass'],
                 ]
             ),
         ]);

@@ -46,7 +46,7 @@ $result = $someValue->getPath();
 PHP
                 ,
                 [
-                    '$methodNamesByType' => [
+                    self::METHOD_NAMES_BY_TYPE => [
                         'SomeObject' => 'getPath',
                     ],
                 ]

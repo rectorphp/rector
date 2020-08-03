@@ -51,7 +51,7 @@ class SomeClass
 PHP
                 ,
                 [
-                    '$typeToStaticCalls' => [
+                    self::TYPE_TO_STATIC_CALLS => [
                         'Cookie' => ['Cookie', 'create'],
                     ],
                 ]

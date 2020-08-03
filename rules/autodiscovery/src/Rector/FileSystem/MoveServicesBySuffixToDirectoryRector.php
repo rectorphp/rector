@@ -57,7 +57,7 @@ class ProductRepository
 PHP
             ,
             [
-                '$groupNamesBySuffix' => ['Repository'],
+                self::GROUP_NAMES_BY_SUFFIX => ['Repository'],
             ]
         )]);
     }

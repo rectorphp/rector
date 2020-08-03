@@ -147,7 +147,7 @@ final class AnotherClassFactory
 PHP
                 ,
                 [
-                    '$typesToServices' => ['StaticClass'],
+                    self::TYPES_TO_SERVICES => ['StaticClass'],
                 ]
             ), ]);
     }
