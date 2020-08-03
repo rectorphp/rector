@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -149,8 +150,13 @@ PHP
 
             /** @var string $oldName */
             $oldName = $this->getName($property);
+
             $expectedName = $this->expectedNameResolver->resolveForPropertyIfNotYet($property);
             if ($expectedName === null) {
+                continue;
+            }
+
+            if ($this->skipSpecialType($property)) {
                 continue;
             }
 
@@ -174,6 +180,7 @@ PHP
                 return null;
             }
 
+            /** @var PropertyFetch $node */
             $node->name = new Identifier($expectedName);
             return $node;
         });
@@ -215,6 +222,10 @@ PHP
                 continue;
             }
 
+            if ($this->skipSpecialType($param)) {
+                continue;
+            }
+
             // 1. rename param
             /** @var string $oldName */
             $oldName = $this->getName($param->var);
@@ -223,12 +234,18 @@ PHP
             // 2. rename param in the rest of the method
             $this->variableRenamer->renameVariableInFunctionLike($classMethod, null, $oldName, $expectedName);
 
-//            $this->renameVariableInClassMethod($classMethod, $oldName, $expectedName);
-
             // 3. rename @param variable in docblock too
             $this->propertyDocBlockManipulator->renameParameterNameInDocBlock($classMethod, $oldName, $expectedName);
 
             $this->hasChange = true;
         }
+    }
+
+    /**
+     * @param Property|Param $propertyOrParam
+     */
+    private function skipSpecialType(Node $propertyOrParam): bool
+    {
+        return $this->isObjectType($propertyOrParam, 'Ramsey\Uuid\UuidInterface');
     }
 }
