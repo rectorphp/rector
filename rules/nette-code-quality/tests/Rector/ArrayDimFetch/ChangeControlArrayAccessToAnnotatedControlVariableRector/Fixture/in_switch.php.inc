@@ -7,7 +7,7 @@ use Nette\Application\UI\Form;
 
 final class InSwitchPresenter extends Presenter
 {
-    public function run($value)
+    public function go($value)
     {
         switch ($value) {
             case 'form':
@@ -39,7 +39,7 @@ use Nette\Application\UI\Form;
 
 final class InSwitchPresenter extends Presenter
 {
-    public function run($value)
+    public function go($value)
     {
         /** @var \Nette\Application\UI\Form $someForm */
         $someForm = $this['some_form'];

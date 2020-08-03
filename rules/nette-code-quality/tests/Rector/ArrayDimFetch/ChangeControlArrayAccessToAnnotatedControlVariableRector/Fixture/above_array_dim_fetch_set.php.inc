@@ -7,7 +7,7 @@ use Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessT
 
 final class AboveArrayDimFetchSet extends Presenter
 {
-    public function run()
+    public function go()
     {
         $someControl = new SomeControl();
         $this['super_name'] = $someControl;
@@ -28,7 +28,7 @@ use Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayAccessT
 
 final class AboveArrayDimFetchSet extends Presenter
 {
-    public function run()
+    public function go()
     {
         $someControl = new SomeControl();
         $this['super_name'] = $someControl;

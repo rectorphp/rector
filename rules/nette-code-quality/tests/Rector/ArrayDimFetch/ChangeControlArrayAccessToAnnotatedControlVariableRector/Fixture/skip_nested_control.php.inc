@@ -6,7 +6,7 @@ use Nette\Application\UI\Presenter;
 
 final class SkipNestedControl extends Presenter
 {
-    public function run()
+    public function go()
     {
         if ($this['some-form']->isSubmitted()) {
         }

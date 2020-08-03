@@ -7,7 +7,7 @@ use Nette\Application\UI\Form;
 
 final class SomePresenter extends Presenter
 {
-    public function run()
+    public function go()
     {
         if ($this['some_form']->isSubmitted()) {
         }
@@ -30,7 +30,7 @@ use Nette\Application\UI\Form;
 
 final class SomePresenter extends Presenter
 {
-    public function run()
+    public function go()
     {
         /** @var \Nette\Application\UI\Form $someForm */
         $someForm = $this['some_form'];

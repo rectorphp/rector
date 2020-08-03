@@ -12,7 +12,7 @@ class ReuseParentPropertyWithSameType extends ParentWithSomeTypeToInjectProperty
      */
     private $context;
 
-    public function run()
+    public function go()
     {
         $someTypeToInject = $this->context->getByType(SomeTypeToInject::class);
     }
@@ -34,7 +34,7 @@ class ReuseParentPropertyWithSameType extends ParentWithSomeTypeToInjectProperty
      */
     private $context;
 
-    public function run()
+    public function go()
     {
         $someTypeToInject = $this->someTypeToInject;
     }

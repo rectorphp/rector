@@ -7,7 +7,7 @@ use Nette\Application\UI\Form;
 
 final class NestedInIf extends Presenter
 {
-    public function run($value)
+    public function go($value)
     {
         if ($value) {
             $this['someForm']->call();
@@ -35,7 +35,7 @@ use Nette\Application\UI\Form;
 
 final class NestedInIf extends Presenter
 {
-    public function run($value)
+    public function go($value)
     {
         /** @var \Nette\Application\UI\Form $someForm */
         $someForm = $this['someForm'];
