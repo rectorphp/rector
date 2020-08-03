@@ -86,15 +86,6 @@ PHP
         return $node;
     }
 
-    private function removeForeachValueAndUseArrayKeys(Foreach_ $foreach): void
-    {
-        // remove key value
-        $foreach->valueVar = $foreach->keyVar;
-        $foreach->keyVar = null;
-
-        $foreach->expr = $this->createFuncCall('array_keys', [$foreach->expr]);
-    }
-
     private function refactorArrayForeachValue(Array_ $array, Foreach_ $foreach): Array_
     {
         foreach ($array->items as $key => $arrayItem) {
@@ -118,5 +109,13 @@ PHP
         return (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use ($variable) {
             return $this->areNodesEqual($node, $variable);
         });
+    }
+    private function removeForeachValueAndUseArrayKeys(Foreach_ $foreach): void
+    {
+        // remove key value
+        $foreach->valueVar = $foreach->keyVar;
+        $foreach->keyVar = null;
+
+        $foreach->expr = $this->createFuncCall('array_keys', [$foreach->expr]);
     }
 }

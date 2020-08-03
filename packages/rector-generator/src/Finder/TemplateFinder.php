@@ -53,16 +53,6 @@ final class TemplateFinder
         return $this->finderSanitizer->sanitize($filePaths);
     }
 
-    private function resolveFixtureFilePath(bool $isPhpSnippet): string
-    {
-        if ($isPhpSnippet) {
-            return __DIR__ . '/../../templates/rules/__package__/tests/Rector/__Category__/__Name__/Fixture/fixture.php.inc';
-        }
-
-        // is html snippet
-        return __DIR__ . '/../../templates/rules/__package__/tests/Rector/__Category__/__Name__/Fixture/html_fixture.php.inc';
-    }
-
     /**
      * @param string[] $filePaths
      * @return string[]
@@ -93,6 +83,15 @@ final class TemplateFinder
         $filePaths[] = __DIR__ . '/../../templates/rules/__package__/src/Rector/__Category__/__Name__.php';
 
         return $filePaths;
+    }
+    private function resolveFixtureFilePath(bool $isPhpSnippet): string
+    {
+        if ($isPhpSnippet) {
+            return __DIR__ . '/../../templates/rules/__package__/tests/Rector/__Category__/__Name__/Fixture/fixture.php.inc';
+        }
+
+        // is html snippet
+        return __DIR__ . '/../../templates/rules/__package__/tests/Rector/__Category__/__Name__/Fixture/html_fixture.php.inc';
     }
 
     /**

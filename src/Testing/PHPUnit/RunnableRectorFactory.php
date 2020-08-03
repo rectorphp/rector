@@ -53,16 +53,15 @@ final class RunnableRectorFactory
         return new $runnableFullyQualifiedClassName();
     }
 
-    private function getTemporaryClassSuffix(): string
-    {
-        return Random::generate(30);
-    }
-
     private function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo): string
     {
         // warning: if this hash is too short, the file can becom "identical"; took me 1 hour to find out
         $hash = Strings::substring(md5($smartFileInfo->getRealPath()), -15);
 
         return sprintf(sys_get_temp_dir() . '/_rector_runnable_%s_%s', $hash, $smartFileInfo->getBasename('.inc'));
+    }
+    private function getTemporaryClassSuffix(): string
+    {
+        return Random::generate(30);
     }
 }

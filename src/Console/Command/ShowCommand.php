@@ -88,6 +88,24 @@ final class ShowCommand extends AbstractCommand
     }
 
     /**
+     * @param RectorInterface[] $rectors
+     * @return RectorInterface[]
+     */
+    private function filterAndSortRectors(array $rectors): array
+    {
+        sort($rectors);
+
+        return array_filter($rectors, function (RectorInterface $rector) {
+            // utils rules
+            if ($rector instanceof ClassSyncerRectorInterface) {
+                return false;
+            }
+
+            // skip as internal and always run
+            return ! $rector instanceof PostRectorInterface;
+        });
+    }
+    /**
      * Resolve configuration by convention
      * @return mixed[]
      */
@@ -120,24 +138,5 @@ final class ShowCommand extends AbstractCommand
         }
 
         return $configuration;
-    }
-
-    /**
-     * @param RectorInterface[] $rectors
-     * @return RectorInterface[]
-     */
-    private function filterAndSortRectors(array $rectors): array
-    {
-        sort($rectors);
-
-        return array_filter($rectors, function (RectorInterface $rector) {
-            // utils rules
-            if ($rector instanceof ClassSyncerRectorInterface) {
-                return false;
-            }
-
-            // skip as internal and always run
-            return ! $rector instanceof PostRectorInterface;
-        });
     }
 }

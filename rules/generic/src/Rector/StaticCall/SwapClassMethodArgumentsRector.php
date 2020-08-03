@@ -92,6 +92,23 @@ PHP
     {
         $this->newArgumentPositionsByMethodAndClass = $configuration[self::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS] ?? [];
     }
+    /**
+     * @param StaticCall|MethodCall|ClassMethod $node
+     */
+    private function refactorArgumentPositions(array $methodNameAndNewArgumentPositions, Node $node): void
+    {
+        foreach ($methodNameAndNewArgumentPositions as $methodName => $newArgumentPositions) {
+            if (! $this->isMethodStaticCallOrClassMethodName($node, $methodName)) {
+                continue;
+            }
+
+            if ($node instanceof ClassMethod) {
+                $this->swapParameters($node, $newArgumentPositions);
+            } else {
+                $this->swapArguments($node, $newArgumentPositions);
+            }
+        }
+    }
 
     /**
      * @param StaticCall|MethodCall|ClassMethod $node
@@ -129,24 +146,6 @@ PHP
 
         foreach ($newArguments as $newPosition => $argument) {
             $classMethod->params[$newPosition] = $argument;
-        }
-    }
-
-    /**
-     * @param StaticCall|MethodCall|ClassMethod $node
-     */
-    private function refactorArgumentPositions(array $methodNameAndNewArgumentPositions, Node $node): void
-    {
-        foreach ($methodNameAndNewArgumentPositions as $methodName => $newArgumentPositions) {
-            if (! $this->isMethodStaticCallOrClassMethodName($node, $methodName)) {
-                continue;
-            }
-
-            if ($node instanceof ClassMethod) {
-                $this->swapParameters($node, $newArgumentPositions);
-            } else {
-                $this->swapArguments($node, $newArgumentPositions);
-            }
         }
     }
 

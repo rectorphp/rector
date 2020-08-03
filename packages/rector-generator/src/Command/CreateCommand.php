@@ -146,6 +146,22 @@ final class CreateCommand extends Command
     /**
      * @param string[] $generatedFilePaths
      */
+    private function resolveTestCaseDirectoryPath(array $generatedFilePaths): string
+    {
+        foreach ($generatedFilePaths as $generatedFilePath) {
+            if (! Strings::endsWith($generatedFilePath, 'Test.php')) {
+                continue;
+            }
+
+            $generatedFileInfo = new SmartFileInfo($generatedFilePath);
+            return dirname($generatedFileInfo->getRelativeFilePathFromCwd());
+        }
+
+        throw new ShouldNotHappenException();
+    }
+    /**
+     * @param string[] $generatedFilePaths
+     */
     private function printSuccess(string $name, array $generatedFilePaths, string $testCaseFilePath): void
     {
         $message = sprintf('New files generated for "%s":', $name);
@@ -162,22 +178,5 @@ final class CreateCommand extends Command
         $message = sprintf('Make tests green again:%svendor/bin/phpunit %s', PHP_EOL . PHP_EOL, $testCaseFilePath);
 
         $this->symfonyStyle->success($message);
-    }
-
-    /**
-     * @param string[] $generatedFilePaths
-     */
-    private function resolveTestCaseDirectoryPath(array $generatedFilePaths): string
-    {
-        foreach ($generatedFilePaths as $generatedFilePath) {
-            if (! Strings::endsWith($generatedFilePath, 'Test.php')) {
-                continue;
-            }
-
-            $generatedFileInfo = new SmartFileInfo($generatedFilePath);
-            return dirname($generatedFileInfo->getRelativeFilePathFromCwd());
-        }
-
-        throw new ShouldNotHappenException();
     }
 }

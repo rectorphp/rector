@@ -202,6 +202,15 @@ PHP
             $this->printNodesToFilePath($newStmtsSet, $fileDestination);
         }
     }
+    /**
+     * @param Node[] $nodes
+     */
+    private function hasAtLeast2Classes(array $nodes): bool
+    {
+        $classes = $this->betterNodeFinder->findClassLikes($nodes);
+
+        return count($classes) > 1;
+    }
 
     private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string
     {
@@ -217,15 +226,5 @@ PHP
                 unset($namespace->stmts[$key]);
             }
         }
-    }
-
-    /**
-     * @param Node[] $nodes
-     */
-    private function hasAtLeast2Classes(array $nodes): bool
-    {
-        $classes = $this->betterNodeFinder->findClassLikes($nodes);
-
-        return count($classes) > 1;
     }
 }

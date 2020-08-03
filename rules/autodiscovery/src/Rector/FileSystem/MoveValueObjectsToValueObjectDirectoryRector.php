@@ -173,17 +173,6 @@ CODE_SAMPLE
         return $this->classAnalyzer->isValueObjectClass($class);
     }
 
-    private function isKnownServiceType(string $className): bool
-    {
-        foreach (self::COMMON_SERVICE_SUFFIXES as $commonServiceSuffix) {
-            if (Strings::endsWith($className, $commonServiceSuffix)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private function isSuffixMatch(Class_ $class): bool
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
@@ -192,6 +181,16 @@ CODE_SAMPLE
                 if (Strings::endsWith($className, $suffix)) {
                     return true;
                 }
+            }
+        }
+
+        return false;
+    }
+    private function isKnownServiceType(string $className): bool
+    {
+        foreach (self::COMMON_SERVICE_SUFFIXES as $commonServiceSuffix) {
+            if (Strings::endsWith($className, $commonServiceSuffix)) {
+                return true;
             }
         }
 

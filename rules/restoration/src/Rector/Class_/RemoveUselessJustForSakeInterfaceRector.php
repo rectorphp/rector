@@ -132,6 +132,16 @@ CODE_SAMPLE
             ),
         ]);
     }
+    private function resolveClassFileLocation(string $implementedInterfaceName): string
+    {
+        $reflectionClass = new ReflectionClass($implementedInterfaceName);
+        $fileName = $reflectionClass->getFileName();
+        if (! $fileName) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $fileName;
+    }
 
     /**
      * @return string[]
@@ -146,12 +156,14 @@ CODE_SAMPLE
         );
     }
 
-    private function getParentInterfaceIfFound(string $implementedInterfaceName): ?string
+    private function removeOrReplaceImlementedInterface(string $implementedInterfaceName, Class_ $class, int $key): void
     {
-        $reflectionClass = new ReflectionClass($implementedInterfaceName);
-
-        // get first parent interface
-        return $reflectionClass->getInterfaceNames()[0] ?? null;
+        $parentInterface = $this->getParentInterfaceIfFound($implementedInterfaceName);
+        if ($parentInterface !== null) {
+            $class->implements[$key] = new FullyQualified($parentInterface);
+        } else {
+            unset($class->implements[$key]);
+        }
     }
 
     private function removeInterfaceFile(string $interfaceName, string $classFileLocation): void
@@ -176,25 +188,11 @@ CODE_SAMPLE
 
         $this->renamedClassesCollector->addClassRename($implementedInterfaceName, $className);
     }
-
-    private function resolveClassFileLocation(string $implementedInterfaceName): string
+    private function getParentInterfaceIfFound(string $implementedInterfaceName): ?string
     {
         $reflectionClass = new ReflectionClass($implementedInterfaceName);
-        $fileName = $reflectionClass->getFileName();
-        if (! $fileName) {
-            throw new ShouldNotHappenException();
-        }
 
-        return $fileName;
-    }
-
-    private function removeOrReplaceImlementedInterface(string $implementedInterfaceName, Class_ $class, int $key): void
-    {
-        $parentInterface = $this->getParentInterfaceIfFound($implementedInterfaceName);
-        if ($parentInterface !== null) {
-            $class->implements[$key] = new FullyQualified($parentInterface);
-        } else {
-            unset($class->implements[$key]);
-        }
+        // get first parent interface
+        return $reflectionClass->getInterfaceNames()[0] ?? null;
     }
 }

@@ -90,6 +90,17 @@ final class ReturnClosurePrinter
         return $this->indentFluentCallToNewline($printedContent);
     }
 
+    private function addUseStmts(string $useImport): void
+    {
+        $useBuilder = new UseBuilder($useImport);
+        $this->useStmts[] = $useBuilder->getNode();
+    }
+    private function createClosureParam(): Param
+    {
+        $paramBuilder = new ParamBuilder(self::CONTAINER_CONFIGURATOR);
+        $paramBuilder->setType('ContainerConfigurator');
+        return $paramBuilder->getNode();
+    }
     /**
      * @param mixed[] $services
      * @return Expression[]
@@ -113,19 +124,11 @@ final class ReturnClosurePrinter
         return $stmts;
     }
 
-    private function createClosureParam(): Param
+    private function indentFluentCallToNewline(string $content): string
     {
-        $paramBuilder = new ParamBuilder(self::CONTAINER_CONFIGURATOR);
-        $paramBuilder->setType('ContainerConfigurator');
-        return $paramBuilder->getNode();
+        $nextCallIndentReplacement = ')' . PHP_EOL . Strings::indent('->', 8, ' ');
+        return Strings::replace($content, '#\)->#', $nextCallIndentReplacement);
     }
-
-    private function addUseStmts(string $useImport): void
-    {
-        $useBuilder = new UseBuilder($useImport);
-        $this->useStmts[] = $useBuilder->getNode();
-    }
-
     private function createServicesSetMethodCall(
         string $serviceName,
         Variable $servicesVariable,
@@ -155,12 +158,6 @@ final class ReturnClosurePrinter
         }
 
         return $methodCall;
-    }
-
-    private function indentFluentCallToNewline(string $content): string
-    {
-        $nextCallIndentReplacement = ')' . PHP_EOL . Strings::indent('->', 8, ' ');
-        return Strings::replace($content, '#\)->#', $nextCallIndentReplacement);
     }
 
     /**

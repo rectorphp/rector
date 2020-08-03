@@ -328,20 +328,28 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         return false;
     }
-
-    private function keepFileInfoAttribute(Node $node, Node $originalNode): void
+    private function printDebugApplying(): void
     {
-        if ($node->getAttribute(AttributeKey::FILE_INFO) instanceof SmartFileInfo) {
+        if (! $this->symfonyStyle->isDebug()) {
             return;
         }
 
-        if ($originalNode->getAttribute(AttributeKey::FILE_INFO) !== null) {
-            $node->setAttribute(AttributeKey::FILE_INFO, $originalNode->getAttribute(AttributeKey::FILE_INFO));
-        } elseif ($originalNode->getAttribute(AttributeKey::PARENT_NODE) !== null) {
-            /** @var Node $parentOriginalNode */
-            $parentOriginalNode = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
-            $node->setAttribute(AttributeKey::FILE_INFO, $parentOriginalNode->getAttribute(AttributeKey::FILE_INFO));
+        if ($this->previousAppliedClass === static::class) {
+            return;
         }
+
+        // prevent spamming with the same class over and over
+        // indented on purpose to improve log nesting under [refactoring]
+        $this->symfonyStyle->writeln('    [applying] ' . static::class);
+        $this->previousAppliedClass = static::class;
+    }
+    private function hasNodeChanged(Node $originalNode, Node $node): bool
+    {
+        if ($this->isNameIdentical($node, $originalNode)) {
+            return false;
+        }
+
+        return ! $this->areNodesEqual($originalNode, $node);
     }
 
     private function mirrorAttributes(Node $oldNode, Node $newNode): void
@@ -363,13 +371,19 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
     }
 
-    private function hasNodeChanged(Node $originalNode, Node $node): bool
+    private function keepFileInfoAttribute(Node $node, Node $originalNode): void
     {
-        if ($this->isNameIdentical($node, $originalNode)) {
-            return false;
+        if ($node->getAttribute(AttributeKey::FILE_INFO) instanceof SmartFileInfo) {
+            return;
         }
 
-        return ! $this->areNodesEqual($originalNode, $node);
+        if ($originalNode->getAttribute(AttributeKey::FILE_INFO) !== null) {
+            $node->setAttribute(AttributeKey::FILE_INFO, $originalNode->getAttribute(AttributeKey::FILE_INFO));
+        } elseif ($originalNode->getAttribute(AttributeKey::PARENT_NODE) !== null) {
+            /** @var Node $parentOriginalNode */
+            $parentOriginalNode = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
+            $node->setAttribute(AttributeKey::FILE_INFO, $parentOriginalNode->getAttribute(AttributeKey::FILE_INFO));
+        }
     }
 
     private function isNameIdentical(Node $node, Node $originalNode): bool
@@ -380,21 +394,5 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // names are the same
         return $this->areNodesEqual($originalNode->getAttribute(AttributeKey::ORIGINAL_NAME), $node);
-    }
-
-    private function printDebugApplying(): void
-    {
-        if (! $this->symfonyStyle->isDebug()) {
-            return;
-        }
-
-        if ($this->previousAppliedClass === static::class) {
-            return;
-        }
-
-        // prevent spamming with the same class over and over
-        // indented on purpose to improve log nesting under [refactoring]
-        $this->symfonyStyle->writeln('    [applying] ' . static::class);
-        $this->previousAppliedClass = static::class;
     }
 }

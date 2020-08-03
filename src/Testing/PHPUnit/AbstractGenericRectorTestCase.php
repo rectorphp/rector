@@ -255,6 +255,38 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         // to be implemented
         return '';
     }
+    /**
+     * @return SmartFileInfo[]
+     */
+    private function resolveConfigs(SmartFileInfo $configFileInfo): array
+    {
+        $configFileInfos = [$configFileInfo];
+
+        $rectorConfigsResolver = new RectorConfigsResolver();
+        $setFileInfos = $rectorConfigsResolver->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
+
+        return array_merge($configFileInfos, $setFileInfos);
+    }
+    private function getConfigFor3rdPartyTest(): string
+    {
+        $currentTestRectorClassesWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
+        $yamlContent = Yaml::dump([
+            'services' => $currentTestRectorClassesWithConfiguration,
+        ], Yaml::DUMP_OBJECT_AS_MAP);
+
+        $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/current_test.yaml');
+        $this->smartFileSystem->dumpFile($configFileTempPath, $yamlContent);
+
+        return $configFileTempPath;
+    }
+    private function configurePhpVersionFeatures(): void
+    {
+        if ($this->getPhpVersion() === '') {
+            return;
+        }
+
+        $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
+    }
 
     private function restoreOldParameterValues(): void
     {
@@ -308,40 +340,5 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         $smartFileSystem->dumpFile($configFileTempPath, $yamlContent);
 
         $this->bootKernelWithConfigs(RectorKernel::class, [$configFileTempPath]);
-    }
-
-    private function configurePhpVersionFeatures(): void
-    {
-        if ($this->getPhpVersion() === '') {
-            return;
-        }
-
-        $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
-    }
-
-    /**
-     * @return SmartFileInfo[]
-     */
-    private function resolveConfigs(SmartFileInfo $configFileInfo): array
-    {
-        $configFileInfos = [$configFileInfo];
-
-        $rectorConfigsResolver = new RectorConfigsResolver();
-        $setFileInfos = $rectorConfigsResolver->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
-
-        return array_merge($configFileInfos, $setFileInfos);
-    }
-
-    private function getConfigFor3rdPartyTest(): string
-    {
-        $currentTestRectorClassesWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
-        $yamlContent = Yaml::dump([
-            'services' => $currentTestRectorClassesWithConfiguration,
-        ], Yaml::DUMP_OBJECT_AS_MAP);
-
-        $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/current_test.yaml');
-        $this->smartFileSystem->dumpFile($configFileTempPath, $yamlContent);
-
-        return $configFileTempPath;
     }
 }

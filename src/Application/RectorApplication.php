@@ -171,21 +171,25 @@ final class RectorApplication
         $this->eventDispatcher->dispatch(new AfterProcessEvent());
     }
 
-    /**
-     * This prevent CI report flood with 1 file = 1 line in progress bar
-     */
-    private function configureStepCount(SymfonyStyle $symfonyStyle): void
+    private function prepareProgressBar(int $fileCount): void
     {
-        $privatesAccessor = new PrivatesAccessor();
-
-        /** @var ProgressBar $progressBar */
-        $progressBar = $privatesAccessor->getPrivateProperty($symfonyStyle, 'progressBar');
-        if ($progressBar->getMaxSteps() < 40) {
+        if ($this->symfonyStyle->isVerbose()) {
             return;
         }
 
-        $redrawFrequency = (int) ($progressBar->getMaxSteps() / 20);
-        $progressBar->setRedrawFrequency($redrawFrequency);
+        if (! $this->configuration->showProgressBar()) {
+            return;
+        }
+
+        // why 5? one for each cycle, so user sees some activity all the time
+        $stepMultiplier = 4;
+        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
+            ++$stepMultiplier;
+        }
+
+        $this->symfonyStyle->progressStart($fileCount * $stepMultiplier);
+
+        $this->configureStepCount($this->symfonyStyle);
     }
 
     /**
@@ -199,6 +203,28 @@ final class RectorApplication
         }
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
+    }
+    /**
+     * @param SmartFileInfo[] $phpFileInfos
+     */
+    private function parseFileInfosToNodes(array $phpFileInfos): void
+    {
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
+            }, 'parsing');
+        }
+    }
+    /**
+     * @param SmartFileInfo[] $phpFileInfos
+     */
+    private function refactoryNodesWithRectors(array $phpFileInfos): void
+    {
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
+                $this->fileProcessor->refactor($smartFileInfo);
+            }, 'refactoring');
+        }
     }
 
     private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback, string $phase): void
@@ -224,6 +250,15 @@ final class RectorApplication
             $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $smartFileInfo);
         }
     }
+    private function processFileSystemRectors(SmartFileInfo $smartFileInfo): void
+    {
+        if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
+            // skip, because this file exists no more
+            return;
+        }
+
+        $this->fileSystemFileProcessor->processFileInfo($smartFileInfo);
+    }
 
     private function printFileInfo(SmartFileInfo $fileInfo): void
     {
@@ -239,6 +274,22 @@ final class RectorApplication
 
         $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
     }
+    /**
+     * This prevent CI report flood with 1 file = 1 line in progress bar
+     */
+    private function configureStepCount(SymfonyStyle $symfonyStyle): void
+    {
+        $privatesAccessor = new PrivatesAccessor();
+
+        /** @var ProgressBar $progressBar */
+        $progressBar = $privatesAccessor->getPrivateProperty($symfonyStyle, 'progressBar');
+        if ($progressBar->getMaxSteps() < 40) {
+            return;
+        }
+
+        $redrawFrequency = (int) ($progressBar->getMaxSteps() / 20);
+        $progressBar->setRedrawFrequency($redrawFrequency);
+    }
 
     private function advance(SmartFileInfo $smartFileInfo, string $phase): void
     {
@@ -249,60 +300,5 @@ final class RectorApplication
         } elseif ($this->configuration->showProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }
-    }
-
-    private function processFileSystemRectors(SmartFileInfo $smartFileInfo): void
-    {
-        if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
-            // skip, because this file exists no more
-            return;
-        }
-
-        $this->fileSystemFileProcessor->processFileInfo($smartFileInfo);
-    }
-
-    /**
-     * @param SmartFileInfo[] $phpFileInfos
-     */
-    private function parseFileInfosToNodes(array $phpFileInfos): void
-    {
-        foreach ($phpFileInfos as $phpFileInfo) {
-            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
-            }, 'parsing');
-        }
-    }
-
-    /**
-     * @param SmartFileInfo[] $phpFileInfos
-     */
-    private function refactoryNodesWithRectors(array $phpFileInfos): void
-    {
-        foreach ($phpFileInfos as $phpFileInfo) {
-            $this->tryCatchWrapper($phpFileInfo, function (SmartFileInfo $smartFileInfo): void {
-                $this->fileProcessor->refactor($smartFileInfo);
-            }, 'refactoring');
-        }
-    }
-
-    private function prepareProgressBar(int $fileCount): void
-    {
-        if ($this->symfonyStyle->isVerbose()) {
-            return;
-        }
-
-        if (! $this->configuration->showProgressBar()) {
-            return;
-        }
-
-        // why 5? one for each cycle, so user sees some activity all the time
-        $stepMultiplier = 4;
-        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
-            ++$stepMultiplier;
-        }
-
-        $this->symfonyStyle->progressStart($fileCount * $stepMultiplier);
-
-        $this->configureStepCount($this->symfonyStyle);
     }
 }

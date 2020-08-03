@@ -169,6 +169,12 @@ final class DocBlockManipulator
 
         return true;
     }
+    private function inlineDocContent(string $docContent): string
+    {
+        $docContent = Strings::replace($docContent, "#\n \* #", ' ');
+
+        return Strings::replace($docContent, "#\n \*\/$#", ' */');
+    }
 
     /**
      * add // comments to phpdoc (only has /**
@@ -195,12 +201,5 @@ final class DocBlockManipulator
     private function removeSpacesAndAsterisks(string $content): string
     {
         return Strings::replace($content, '#(\s|\*)+#');
-    }
-
-    private function inlineDocContent(string $docContent): string
-    {
-        $docContent = Strings::replace($docContent, "#\n \* #", ' ');
-
-        return Strings::replace($docContent, "#\n \*\/$#", ' */');
     }
 }

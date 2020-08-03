@@ -55,16 +55,6 @@ final class VariableAndCallAssignMatcher
     }
 
     /**
-     * @return ClassMethod|Function_|Closure|null
-     */
-    private function getFunctionLike(Node $node): ?FunctionLike
-    {
-        return $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
-            $node->getAttribute(AttributeKey::METHOD_NODE) ??
-            $node->getAttribute(AttributeKey::FUNCTION_NODE);
-    }
-
-    /**
      * @return FuncCall|StaticCall|MethodCall|null
      */
     private function matchCall(Assign $assign): ?Node
@@ -82,5 +72,14 @@ final class VariableAndCallAssignMatcher
         }
 
         return null;
+    }
+    /**
+     * @return ClassMethod|Function_|Closure|null
+     */
+    private function getFunctionLike(Node $node): ?FunctionLike
+    {
+        return $node->getAttribute(AttributeKey::CLOSURE_NODE) ??
+            $node->getAttribute(AttributeKey::METHOD_NODE) ??
+            $node->getAttribute(AttributeKey::FUNCTION_NODE);
     }
 }

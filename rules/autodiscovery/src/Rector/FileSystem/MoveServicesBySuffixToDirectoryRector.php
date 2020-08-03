@@ -111,6 +111,15 @@ PHP
             return;
         }
     }
+    private function isLocatedInExpectedLocation(
+        string $groupName,
+        string $suffixPattern,
+        SmartFileInfo $smartFileInfo
+    ): bool {
+        $expectedLocationFilePattern = $this->createExpectedFileLocationPattern($groupName, $suffixPattern);
+
+        return (bool) Strings::match($smartFileInfo->getRealPath(), $expectedLocationFilePattern);
+    }
 
     /**
      * @param Node[] $nodes
@@ -132,15 +141,5 @@ PHP
     private function createExpectedFileLocationPattern(string $groupName, string $suffixPattern): string
     {
         return sprintf('#\/%s\/.+%s#', preg_quote($groupName, '#'), preg_quote($suffixPattern, '#'));
-    }
-
-    private function isLocatedInExpectedLocation(
-        string $groupName,
-        string $suffixPattern,
-        SmartFileInfo $smartFileInfo
-    ): bool {
-        $expectedLocationFilePattern = $this->createExpectedFileLocationPattern($groupName, $suffixPattern);
-
-        return (bool) Strings::match($smartFileInfo->getRealPath(), $expectedLocationFilePattern);
     }
 }

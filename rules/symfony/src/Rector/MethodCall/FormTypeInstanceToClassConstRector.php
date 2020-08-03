@@ -153,6 +153,35 @@ PHP
 
         return $methodCall;
     }
+    private function refactorCollectionOptions(MethodCall $methodCall): void
+    {
+        $optionsArray = $this->matchOptionsArray($methodCall);
+        if ($optionsArray === null) {
+            return;
+        }
+
+        foreach ($optionsArray->items as $arrayItem) {
+            if ($arrayItem->key === null) {
+                continue;
+            }
+
+            if (! $this->isValues($arrayItem->key, ['entry', 'entry_type'])) {
+                continue;
+            }
+
+            if (! $arrayItem->value instanceof New_) {
+                continue;
+            }
+
+            $newClass = $arrayItem->value->class;
+
+            if (! $newClass instanceof Name) {
+                continue;
+            }
+
+            $arrayItem->value = $this->createClassConstantReference($newClass->toString());
+        }
+    }
 
     /**
      * @param Arg[] $argNodes
@@ -242,35 +271,5 @@ PHP
         }
 
         $class->stmts[] = $this->configureOptionsNodeFactory->create($namesToArgs);
-    }
-
-    private function refactorCollectionOptions(MethodCall $methodCall): void
-    {
-        $optionsArray = $this->matchOptionsArray($methodCall);
-        if ($optionsArray === null) {
-            return;
-        }
-
-        foreach ($optionsArray->items as $arrayItem) {
-            if ($arrayItem->key === null) {
-                continue;
-            }
-
-            if (! $this->isValues($arrayItem->key, ['entry', 'entry_type'])) {
-                continue;
-            }
-
-            if (! $arrayItem->value instanceof New_) {
-                continue;
-            }
-
-            $newClass = $arrayItem->value->class;
-
-            if (! $newClass instanceof Name) {
-                continue;
-            }
-
-            $arrayItem->value = $this->createClassConstantReference($newClass->toString());
-        }
     }
 }

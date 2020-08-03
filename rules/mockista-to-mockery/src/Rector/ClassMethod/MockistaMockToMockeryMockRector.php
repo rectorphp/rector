@@ -90,45 +90,6 @@ PHP
         return $node;
     }
 
-    private function collectMockVariableName(FuncCall $funcCall): void
-    {
-        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Assign) {
-            return;
-        }
-
-        if (! $parentNode->var instanceof Variable) {
-            return;
-        }
-
-        /** @var Variable $variable */
-        $variable = $parentNode->var;
-
-        /** @var string $variableName */
-        $variableName = $this->getName($variable);
-
-        $type = $funcCall->args[0]->value;
-        $mockedType = $this->getValue($type);
-
-        $this->mockVariableTypesByNames[$variableName] = $mockedType;
-    }
-
-    private function isMethodCallOrPropertyFetchOnMockVariable(Node $node): bool
-    {
-        if (! $node instanceof MethodCall && ! $this->isPropertyFetchDisguisedAsMethodCall($node)) {
-            return false;
-        }
-
-        if (! $node->var instanceof Variable) {
-            return false;
-        }
-
-        /** @var string $variableName */
-        $variableName = $this->getName($node->var);
-
-        return isset($this->mockVariableTypesByNames[$variableName]);
-    }
-
     private function replaceMockWithMockerMockAndCollectMockVariableName(ClassMethod $classMethod): void
     {
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
@@ -140,6 +101,25 @@ PHP
             $this->collectMockVariableName($node);
 
             return $this->createStaticCall('Mockery', 'mock', $node->args);
+        });
+    }
+    /**
+     * $mock->getMethod()->once
+     * ↓
+     * $mock->getMethod()->once()
+     */
+    private function replaceMethodCallOncePropertyFetch(ClassMethod $classMethod): void
+    {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+            if (! $node instanceof PropertyFetch) {
+                return null;
+            }
+
+            if (! $this->isNames($node->name, ['once', 'twice'])) {
+                return null;
+            }
+
+            return new MethodCall($node->var, $node->name);
         });
     }
 
@@ -200,49 +180,69 @@ PHP
     }
 
     /**
-     * $mock->getMethod()->once
-     * ↓
-     * $mock->getMethod()->once()
+     * Order correction for @see replaceMethodCallWithExpects()
      */
-    private function replaceMethodCallOncePropertyFetch(ClassMethod $classMethod): void
+    private function switchWithAnyArgsAndOnceTwice(ClassMethod $classMethod): void
     {
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
-            if (! $node instanceof PropertyFetch) {
+            if (! $node instanceof MethodCall) {
                 return null;
             }
 
             if (! $this->isNames($node->name, ['once', 'twice'])) {
+                return;
+            }
+
+            if (! $node->var instanceof MethodCall) {
                 return null;
             }
 
-            return new MethodCall($node->var, $node->name);
+            /** @var MethodCall $previousMethodCall */
+            $previousMethodCall = $node->var;
+            if (! $this->isName($previousMethodCall->name, 'withAnyArgs')) {
+                return null;
+            }
+
+            [$node->name, $previousMethodCall->name] = [$previousMethodCall->name, $node->name];
         });
     }
-
-    private function isPropertyFetchDisguisedAsMethodCall(Node $node): bool
+    private function collectMockVariableName(FuncCall $funcCall): void
     {
-        if (! $node instanceof PropertyFetch) {
-            return false;
+        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Assign) {
+            return;
         }
 
-        if ($node->var instanceof MethodCall) {
-            return false;
+        if (! $parentNode->var instanceof Variable) {
+            return;
         }
 
-        $variableName = $this->getName($node->var);
-        if (! isset($this->mockVariableTypesByNames[$variableName])) {
-            return false;
-        }
+        /** @var Variable $variable */
+        $variable = $parentNode->var;
 
-        $mockVariableType = $this->mockVariableTypesByNames[$variableName];
-        $propertyName = $this->getName($node->name);
-        if ($propertyName === null) {
-            return false;
-        }
+        /** @var string $variableName */
+        $variableName = $this->getName($variable);
 
-        return method_exists($mockVariableType, $propertyName);
+        $type = $funcCall->args[0]->value;
+        $mockedType = $this->getValue($type);
+
+        $this->mockVariableTypesByNames[$variableName] = $mockedType;
     }
+    private function isMethodCallOrPropertyFetchOnMockVariable(Node $node): bool
+    {
+        if (! $node instanceof MethodCall && ! $this->isPropertyFetchDisguisedAsMethodCall($node)) {
+            return false;
+        }
 
+        if (! $node->var instanceof Variable) {
+            return false;
+        }
+
+        /** @var string $variableName */
+        $variableName = $this->getName($node->var);
+
+        return isset($this->mockVariableTypesByNames[$variableName]);
+    }
     /**
      * $mock->someMethodWithArgs()->once()
      * ↓
@@ -269,32 +269,27 @@ PHP
 
         return new MethodCall($expectsMethodCall, 'withAnyArgs');
     }
-
-    /**
-     * Order correction for @see replaceMethodCallWithExpects()
-     */
-    private function switchWithAnyArgsAndOnceTwice(ClassMethod $classMethod): void
+    private function isPropertyFetchDisguisedAsMethodCall(Node $node): bool
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
-            if (! $node instanceof MethodCall) {
-                return null;
-            }
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
 
-            if (! $this->isNames($node->name, ['once', 'twice'])) {
-                return;
-            }
+        if ($node->var instanceof MethodCall) {
+            return false;
+        }
 
-            if (! $node->var instanceof MethodCall) {
-                return null;
-            }
+        $variableName = $this->getName($node->var);
+        if (! isset($this->mockVariableTypesByNames[$variableName])) {
+            return false;
+        }
 
-            /** @var MethodCall $previousMethodCall */
-            $previousMethodCall = $node->var;
-            if (! $this->isName($previousMethodCall->name, 'withAnyArgs')) {
-                return null;
-            }
+        $mockVariableType = $this->mockVariableTypesByNames[$variableName];
+        $propertyName = $this->getName($node->name);
+        if ($propertyName === null) {
+            return false;
+        }
 
-            [$node->name, $previousMethodCall->name] = [$previousMethodCall->name, $node->name];
-        });
+        return method_exists($mockVariableType, $propertyName);
     }
 }

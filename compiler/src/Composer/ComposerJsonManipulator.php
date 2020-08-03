@@ -133,18 +133,17 @@ final class ComposerJsonManipulator
         return $json;
     }
 
-    private function readRemoteFileToJson(string $jsonFilePath): array
-    {
-        $jsonFileContent = NetteFileSystem::read($jsonFilePath);
-
-        return (array) Json::decode($jsonFileContent, Json::FORCE_ARRAY);
-    }
-
     private function allowDevDependnecies(array $json): array
     {
         $json['minimum-stability'] = 'dev';
         $json['prefer-stable'] = true;
 
         return $json;
+    }
+    private function readRemoteFileToJson(string $jsonFilePath): array
+    {
+        $jsonFileContent = NetteFileSystem::read($jsonFilePath);
+
+        return (array) Json::decode($jsonFileContent, Json::FORCE_ARRAY);
     }
 }

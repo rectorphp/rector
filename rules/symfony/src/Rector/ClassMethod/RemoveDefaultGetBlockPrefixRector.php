@@ -91,6 +91,14 @@ PHP
         return null;
     }
 
+    private function isObjectMethodNameMatch(ClassMethod $classMethod): bool
+    {
+        if (! $this->isInObjectType($classMethod, 'Symfony\Component\Form\AbstractType')) {
+            return false;
+        }
+
+        return $this->isName($classMethod->name, 'getBlockPrefix');
+    }
     /**
      * return <$thisValue>;
      */
@@ -106,14 +114,5 @@ PHP
         }
 
         return $onlyStmt->expr;
-    }
-
-    private function isObjectMethodNameMatch(ClassMethod $classMethod): bool
-    {
-        if (! $this->isInObjectType($classMethod, 'Symfony\Component\Form\AbstractType')) {
-            return false;
-        }
-
-        return $this->isName($classMethod->name, 'getBlockPrefix');
     }
 }

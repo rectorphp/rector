@@ -105,13 +105,21 @@ PHP
         $this->previousPreviousStmtVariableName = null;
     }
 
-    /**
-     * @param Assign|MethodCall $node
-     */
-    private function shouldSkipLeftVariable(Node $node): bool
+    private function resolveCurrentStmtVariableName(Node $node): ?string
     {
-        // local method call
-        return $this->isVariableName($node->var, 'this');
+        $node = $this->unwrapExpression($node);
+
+        if ($node instanceof Assign || $node instanceof MethodCall) {
+            if ($this->shouldSkipLeftVariable($node)) {
+                return null;
+            }
+
+            if (! $node->var instanceof MethodCall && ! $node->var instanceof StaticCall) {
+                return $this->getName($node->var);
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -125,6 +133,22 @@ PHP
 
         // this is already empty line before
         return ! $this->isPreceededByEmptyLine($node, $key);
+    }
+    private function unwrapExpression(Node $node): Node
+    {
+        if ($node instanceof Expression) {
+            return $node->expr;
+        }
+
+        return $node;
+    }
+    /**
+     * @param Assign|MethodCall $node
+     */
+    private function shouldSkipLeftVariable(Node $node): bool
+    {
+        // local method call
+        return $this->isVariableName($node->var, 'this');
     }
 
     private function isNewVariableThanBefore(?string $currentStmtVariableName): bool
@@ -161,31 +185,5 @@ PHP
         $currentNode = $node->stmts[$key];
 
         return abs($currentNode->getLine() - $previousNode->getLine()) >= 2;
-    }
-
-    private function unwrapExpression(Node $node): Node
-    {
-        if ($node instanceof Expression) {
-            return $node->expr;
-        }
-
-        return $node;
-    }
-
-    private function resolveCurrentStmtVariableName(Node $node): ?string
-    {
-        $node = $this->unwrapExpression($node);
-
-        if ($node instanceof Assign || $node instanceof MethodCall) {
-            if ($this->shouldSkipLeftVariable($node)) {
-                return null;
-            }
-
-            if (! $node->var instanceof MethodCall && ! $node->var instanceof StaticCall) {
-                return $this->getName($node->var);
-            }
-        }
-
-        return null;
     }
 }

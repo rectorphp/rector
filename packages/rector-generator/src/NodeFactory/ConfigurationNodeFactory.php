@@ -127,6 +127,16 @@ final class ConfigurationNodeFactory
         return $classMethod;
     }
 
+    /**
+     * So types are PHP 7.2 compatible
+     */
+    private function lowerPhpVersion(): void
+    {
+        $this->parameterProvider->changeParameter(
+            Option::PHP_VERSION_FEATURES,
+            PhpVersionFeature::BEFORE_TYPED_PROPERTIES
+        );
+    }
     private function createConstantInConfigurationCoalesce(
         string $constantName,
         Variable $configurationVariable
@@ -137,16 +147,5 @@ final class ConfigurationNodeFactory
         $emptyArray = new Array_([]);
 
         return new Coalesce($arrayDimFetch, $emptyArray);
-    }
-
-    /**
-     * So types are PHP 7.2 compatible
-     */
-    private function lowerPhpVersion(): void
-    {
-        $this->parameterProvider->changeParameter(
-            Option::PHP_VERSION_FEATURES,
-            PhpVersionFeature::BEFORE_TYPED_PROPERTIES
-        );
     }
 }

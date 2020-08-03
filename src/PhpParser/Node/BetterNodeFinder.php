@@ -281,6 +281,19 @@ final class BetterNodeFinder
     }
 
     /**
+     * @param string[] $types
+     */
+    private function isTypes(Node $node, array $types): bool
+    {
+        foreach ($types as $type) {
+            if (is_a($node, $type, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
      * @param Node|Node[] $nodes
      */
     private function findInstanceOfName($nodes, string $type, string $name): ?Node
@@ -294,19 +307,5 @@ final class BetterNodeFinder
         }
 
         return null;
-    }
-
-    /**
-     * @param string[] $types
-     */
-    private function isTypes(Node $node, array $types): bool
-    {
-        foreach ($types as $type) {
-            if (is_a($node, $type, true)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

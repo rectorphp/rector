@@ -204,6 +204,50 @@ PHP
         $this->renameNameNode($this->resolvedNodeNames[$lowerAliasName], $lastName);
         $useUse->alias = null;
     }
+    private function hasUseAlias(Use_ $use): bool
+    {
+        foreach ($use->uses as $useUse) {
+            if ($useUse->alias !== null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @param NameAndParentValueObject[] $usedNameNodes
+     */
+    private function renameNameNode(array $usedNameNodes, string $lastName): void
+    {
+        foreach ($usedNameNodes as $nameAndParent) {
+            $parentNode = $nameAndParent->getParentNode();
+            $usedName = $nameAndParent->getNameNode();
+
+            if ($parentNode instanceof TraitUse) {
+                $this->renameTraitUse($lastName, $parentNode, $usedName);
+            }
+
+            if ($parentNode instanceof Class_) {
+                $this->renameClass($lastName, $parentNode, $usedName);
+            }
+
+            if ($parentNode instanceof Param) {
+                $this->renameParam($lastName, $parentNode, $usedName);
+            }
+
+            if ($parentNode instanceof New_) {
+                $this->renameNew($lastName, $parentNode, $usedName);
+            }
+
+            if ($parentNode instanceof ClassMethod) {
+                $this->renameClassMethod($lastName, $parentNode, $usedName);
+            }
+
+            if ($parentNode instanceof Interface_) {
+                $this->renameInterface($lastName, $parentNode, $usedName);
+            }
+        }
+    }
 
     /**
      * @param Name|Identifier $usedNameNode
@@ -279,51 +323,5 @@ PHP
                 $interface->extends[$key] = new Name($lastName);
             }
         }
-    }
-
-    /**
-     * @param NameAndParentValueObject[] $usedNameNodes
-     */
-    private function renameNameNode(array $usedNameNodes, string $lastName): void
-    {
-        foreach ($usedNameNodes as $nameAndParent) {
-            $parentNode = $nameAndParent->getParentNode();
-            $usedName = $nameAndParent->getNameNode();
-
-            if ($parentNode instanceof TraitUse) {
-                $this->renameTraitUse($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof Class_) {
-                $this->renameClass($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof Param) {
-                $this->renameParam($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof New_) {
-                $this->renameNew($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof ClassMethod) {
-                $this->renameClassMethod($lastName, $parentNode, $usedName);
-            }
-
-            if ($parentNode instanceof Interface_) {
-                $this->renameInterface($lastName, $parentNode, $usedName);
-            }
-        }
-    }
-
-    private function hasUseAlias(Use_ $use): bool
-    {
-        foreach ($use->uses as $useUse) {
-            if ($useUse->alias !== null) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

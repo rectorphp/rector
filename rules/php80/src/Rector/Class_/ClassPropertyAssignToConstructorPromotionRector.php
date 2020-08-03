@@ -103,21 +103,28 @@ PHP
         return $node;
     }
 
-    private function matchClassMethodParamByAssignedVariable(
-        ClassMethod $classMethod,
-        Expr $assignedExpr
-    ): ?Param {
-        foreach ($classMethod->params as $param) {
-            if (! $this->areNodesEqual($assignedExpr, $param->var)) {
+    /**
+     * @return PromotionCandidate[]
+     */
+    private function collectPromotionCandidatesFromClass(Class_ $class): array
+    {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if ($constructClassMethod === null) {
+            return [];
+        }
+
+        $this->promotionCandidates = [];
+
+        foreach ($class->getProperties() as $property) {
+            if (count($property->props) !== 1) {
                 continue;
             }
 
-            return $param;
+            $this->collectPromotionCandidate($property, $constructClassMethod);
         }
 
-        return null;
+        return $this->promotionCandidates;
     }
-
     private function collectPromotionCandidate(Property $property, ClassMethod $constructClassMethod): void
     {
         $onlyProperty = $property->props[0];
@@ -151,27 +158,18 @@ PHP
             $this->promotionCandidates[] = new PromotionCandidate($property, $assign, $matchedParam);
         }
     }
-
-    /**
-     * @return PromotionCandidate[]
-     */
-    private function collectPromotionCandidatesFromClass(Class_ $class): array
-    {
-        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
-            return [];
-        }
-
-        $this->promotionCandidates = [];
-
-        foreach ($class->getProperties() as $property) {
-            if (count($property->props) !== 1) {
+    private function matchClassMethodParamByAssignedVariable(
+        ClassMethod $classMethod,
+        Expr $assignedExpr
+    ): ?Param {
+        foreach ($classMethod->params as $param) {
+            if (! $this->areNodesEqual($assignedExpr, $param->var)) {
                 continue;
             }
 
-            $this->collectPromotionCandidate($property, $constructClassMethod);
+            return $param;
         }
 
-        return $this->promotionCandidates;
+        return null;
     }
 }

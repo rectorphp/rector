@@ -132,19 +132,6 @@ PHP
         return $node;
     }
 
-    private function getVisibilityAsString(Property $property): string
-    {
-        if ($property->isPrivate()) {
-            return 'private';
-        }
-
-        if ($property->isProtected()) {
-            return 'protected';
-        }
-
-        return 'public';
-    }
-
     /**
      * @return Property[][]
      */
@@ -176,5 +163,17 @@ PHP
         );
 
         return array_keys($propertyNameToRank);
+    }
+    private function getVisibilityAsString(Property $property): string
+    {
+        if ($property->isPrivate()) {
+            return 'private';
+        }
+
+        if ($property->isProtected()) {
+            return 'protected';
+        }
+
+        return 'public';
     }
 }

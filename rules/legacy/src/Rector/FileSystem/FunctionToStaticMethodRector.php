@@ -128,24 +128,6 @@ PHP
      * @param Node[] $nodes
      * @return Node[]
      */
-    private function resolveNodesToPrint(array $nodes, Class_ $class): array
-    {
-        /** @var Namespace_|null $namespace */
-        $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
-        if ($namespace !== null) {
-            // put class first
-            $namespace->stmts = array_merge([$class], $namespace->stmts);
-
-            return [$namespace];
-        }
-
-        return [$class];
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
     private function getFileOrNamespaceStmts(array $nodes): array
     {
         /** @var Namespace_|null $namespace */
@@ -181,5 +163,22 @@ PHP
         $methodBuilder->addStmts($function->stmts);
 
         return $methodBuilder->getNode();
+    }
+    /**
+     * @param Node[] $nodes
+     * @return Node[]
+     */
+    private function resolveNodesToPrint(array $nodes, Class_ $class): array
+    {
+        /** @var Namespace_|null $namespace */
+        $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
+        if ($namespace !== null) {
+            // put class first
+            $namespace->stmts = array_merge([$class], $namespace->stmts);
+
+            return [$namespace];
+        }
+
+        return [$class];
     }
 }

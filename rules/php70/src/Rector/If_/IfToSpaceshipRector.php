@@ -153,29 +153,21 @@ PHP
         $this->secondValue = null;
     }
 
-    private function processTernary(Ternary $ternary): void
+    private function matchOnEqualFirstValueAndSecondValue(If_ $if): void
     {
-        if ($ternary->cond instanceof Smaller) {
-            $this->firstValue = $ternary->cond->left;
-            $this->secondValue = $ternary->cond->right;
+        $this->matchOnEqual($if);
 
-            if ($ternary->if !== null) {
-                $this->onSmaller = $this->getValue($ternary->if);
+        if ($if->else !== null) {
+            $this->processElse($if->else);
+        } else {
+            $this->nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+            if ($this->nextNode instanceof Return_ && $this->nextNode->expr instanceof Ternary) {
+                /** @var Ternary $ternary */
+                $ternary = $this->nextNode->expr;
+                $this->processTernary($ternary);
             }
-
-            $this->onGreater = $this->getValue($ternary->else);
-        } elseif ($ternary->cond instanceof Greater) {
-            $this->firstValue = $ternary->cond->right;
-            $this->secondValue = $ternary->cond->left;
-
-            if ($ternary->if !== null) {
-                $this->onGreater = $this->getValue($ternary->if);
-            }
-
-            $this->onSmaller = $this->getValue($ternary->else);
         }
     }
-
     private function areVariablesEqual(BinaryOp $binaryOp, ?Expr $firstValue, ?Expr $secondValue): bool
     {
         if ($firstValue === null || $secondValue === null) {
@@ -192,22 +184,6 @@ PHP
             $binaryOp->left,
             $secondValue
         );
-    }
-
-    private function matchOnEqualFirstValueAndSecondValue(If_ $if): void
-    {
-        $this->matchOnEqual($if);
-
-        if ($if->else !== null) {
-            $this->processElse($if->else);
-        } else {
-            $this->nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-            if ($this->nextNode instanceof Return_ && $this->nextNode->expr instanceof Ternary) {
-                /** @var Ternary $ternary */
-                $ternary = $this->nextNode->expr;
-                $this->processTernary($ternary);
-            }
-        }
     }
 
     private function matchOnEqual(If_ $if): void
@@ -241,6 +217,28 @@ PHP
         $returnNode = $else->stmts[0];
         if ($returnNode->expr instanceof Ternary) {
             $this->processTernary($returnNode->expr);
+        }
+    }
+    private function processTernary(Ternary $ternary): void
+    {
+        if ($ternary->cond instanceof Smaller) {
+            $this->firstValue = $ternary->cond->left;
+            $this->secondValue = $ternary->cond->right;
+
+            if ($ternary->if !== null) {
+                $this->onSmaller = $this->getValue($ternary->if);
+            }
+
+            $this->onGreater = $this->getValue($ternary->else);
+        } elseif ($ternary->cond instanceof Greater) {
+            $this->firstValue = $ternary->cond->right;
+            $this->secondValue = $ternary->cond->left;
+
+            if ($ternary->if !== null) {
+                $this->onGreater = $this->getValue($ternary->if);
+            }
+
+            $this->onSmaller = $this->getValue($ternary->else);
         }
     }
 }

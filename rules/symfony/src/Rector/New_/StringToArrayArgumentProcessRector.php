@@ -129,6 +129,14 @@ PHP
 
         $this->processPreviousAssign($node, $firstArgument);
     }
+    /**
+     * @return string[]
+     */
+    private function splitProcessCommandToItems(string $process): array
+    {
+        $privatesCaller = new PrivatesCaller();
+        return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', $process);
+    }
 
     private function processPreviousAssign(Node $node, Node $firstArgument): void
     {
@@ -160,14 +168,5 @@ PHP
 
             return $checkedNode;
         });
-    }
-
-    /**
-     * @return string[]
-     */
-    private function splitProcessCommandToItems(string $process): array
-    {
-        $privatesCaller = new PrivatesCaller();
-        return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', $process);
     }
 }

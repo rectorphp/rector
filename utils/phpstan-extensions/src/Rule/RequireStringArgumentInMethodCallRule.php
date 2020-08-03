@@ -94,24 +94,6 @@ final class RequireStringArgumentInMethodCallRule implements Rule
         return $positionsByMethods[$methodName] ?? null;
     }
 
-    private function isNodeVarType(MethodCall $methodCall, Scope $scope, string $desiredType): bool
-    {
-        if (trait_exists($desiredType)) {
-            $message = sprintf(
-                'Do not use trait "%s" as type to match, it breaks the matching. Use specific class that is in this trait',
-                $desiredType
-            );
-            throw new ShouldNotHappenException($message);
-        }
-
-        $methodVarType = $scope->getType($methodCall->var);
-        if (! $methodVarType instanceof TypeWithClassName) {
-            return false;
-        }
-
-        return is_a($methodVarType->getClassName(), $desiredType, true);
-    }
-
     /**
      * @param int[] $positions
      */
@@ -130,5 +112,22 @@ final class RequireStringArgumentInMethodCallRule implements Rule
         $constantName = $classConstFetch->name->toString();
 
         return $constantName !== 'class';
+    }
+    private function isNodeVarType(MethodCall $methodCall, Scope $scope, string $desiredType): bool
+    {
+        if (trait_exists($desiredType)) {
+            $message = sprintf(
+                'Do not use trait "%s" as type to match, it breaks the matching. Use specific class that is in this trait',
+                $desiredType
+            );
+            throw new ShouldNotHappenException($message);
+        }
+
+        $methodVarType = $scope->getType($methodCall->var);
+        if (! $methodVarType instanceof TypeWithClassName) {
+            return false;
+        }
+
+        return is_a($methodVarType->getClassName(), $desiredType, true);
     }
 }

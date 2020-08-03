@@ -39,11 +39,6 @@ final class ConfigureOptionsNodeFactory
         return $methodBuilder->getNode();
     }
 
-    private function createNull(): ConstFetch
-    {
-        return new ConstFetch(new Name('null'));
-    }
-
     private function createParam(): Param
     {
         $paramBuilder = new ParamBuilder('resolver');
@@ -64,5 +59,9 @@ final class ConfigureOptionsNodeFactory
         }
 
         return [new Arg($array)];
+    }
+    private function createNull(): ConstFetch
+    {
+        return new ConstFetch(new Name('null'));
     }
 }

@@ -122,27 +122,6 @@ final class RectorPrinter
         return null;
     }
 
-    private function getClassRelativePath(string $className): string
-    {
-        $rectorReflectionClass = new ReflectionClass($className);
-        $rectorSmartFileInfo = new SmartFileInfo($rectorReflectionClass->getFileName());
-
-        return $rectorSmartFileInfo->getRelativeFilePathFromCwd();
-    }
-
-    private function ensureCodeSampleExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
-    {
-        if (count($rectorDefinition->getCodeSamples()) !== 0) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Rector "%s" must have at least one code sample. Complete it in "%s()" method.',
-            get_class($rector),
-            'getDefinition'
-        ));
-    }
-
     private function ensureRectorDefinitionExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
     {
         if ($rectorDefinition->getDescription() !== '') {
@@ -155,5 +134,24 @@ final class RectorPrinter
             'getDefinition'
         );
         throw new ShouldNotHappenException($message);
+    }
+    private function ensureCodeSampleExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
+    {
+        if (count($rectorDefinition->getCodeSamples()) !== 0) {
+            return;
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'Rector "%s" must have at least one code sample. Complete it in "%s()" method.',
+            get_class($rector),
+            'getDefinition'
+        ));
+    }
+    private function getClassRelativePath(string $className): string
+    {
+        $rectorReflectionClass = new ReflectionClass($className);
+        $rectorSmartFileInfo = new SmartFileInfo($rectorReflectionClass->getFileName());
+
+        return $rectorSmartFileInfo->getRelativeFilePathFromCwd();
     }
 }

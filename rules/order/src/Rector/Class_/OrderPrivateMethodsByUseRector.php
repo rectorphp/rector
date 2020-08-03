@@ -121,6 +121,10 @@ PHP
 
         return $node;
     }
+    private function getPrivateMethodCallOrderAndClassMethods(Class_ $class): array
+    {
+        return [$this->getLocalPrivateMethodCallOrder($class), $this->resolvePrivateClassMethods($class)];
+    }
 
     /**
      * @return string[]
@@ -180,10 +184,5 @@ PHP
         }
 
         return $privateClassMethods;
-    }
-
-    private function getPrivateMethodCallOrderAndClassMethods(Class_ $node): array
-    {
-        return [$this->getLocalPrivateMethodCallOrder($node), $this->resolvePrivateClassMethods($node)];
     }
 }

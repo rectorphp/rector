@@ -105,6 +105,22 @@ PHP
     {
         $this->oldToNewMethodsByClass = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASS] ?? [];
     }
+    /**
+     * @param MethodCall|StaticCall|ClassMethod $node
+     * @param string|string[] $newMethod
+     */
+    private function skipClassMethod(Node $node, $newMethod, string $type): bool
+    {
+        if (! $node instanceof ClassMethod) {
+            return false;
+        }
+
+        if ($this->shouldSkipForAlreadyExistingClassMethod($node, $newMethod)) {
+            return true;
+        }
+
+        return $this->shouldSkipForExactClassMethodForClassMethod($node, $type);
+    }
 
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
@@ -148,23 +164,6 @@ PHP
         }
 
         return (bool) $classLike->getMethod($newMethod);
-    }
-
-    /**
-     * @param MethodCall|StaticCall|ClassMethod $node
-     * @param string|string[] $newMethod
-     */
-    private function skipClassMethod(Node $node, $newMethod, string $type): bool
-    {
-        if (! $node instanceof ClassMethod) {
-            return false;
-        }
-
-        if ($this->shouldSkipForAlreadyExistingClassMethod($node, $newMethod)) {
-            return true;
-        }
-
-        return $this->shouldSkipForExactClassMethodForClassMethod($node, $type);
     }
 
     private function shouldSkipForExactClassMethodForClassMethod(ClassMethod $classMethod, string $type): bool

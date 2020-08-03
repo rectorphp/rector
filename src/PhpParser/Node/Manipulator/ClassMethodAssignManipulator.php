@@ -197,26 +197,6 @@ final class ClassMethodAssignManipulator
         });
     }
 
-    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
-    {
-        foreach ($classMethod->params as $constructorParameter) {
-            if ($this->nodeNameResolver->isName($constructorParameter->var, $name)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function isExplicitlyReferenced(Node $node): bool
-    {
-        if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
-            return $node->byRef;
-        }
-
-        return false;
-    }
-
     /**
      * E.g. $a = $b = $c = '...';
      *
@@ -255,6 +235,24 @@ final class ClassMethodAssignManipulator
         }
 
         return $variableAssigns;
+    }
+    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
+    {
+        foreach ($classMethod->params as $constructorParameter) {
+            if ($this->nodeNameResolver->isName($constructorParameter->var, $name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    private function isExplicitlyReferenced(Node $node): bool
+    {
+        if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
+            return $node->byRef;
+        }
+
+        return false;
     }
 
     private function findParentForeach(Assign $assign): ?Foreach_

@@ -156,30 +156,18 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         );
     }
 
-    /**
-     * @param PhpDocTagValueNode[] $tagValueNodes
-     */
-    private function printTagValueNodesSeparatedByComma(array $tagValueNodes): string
+    private function shouldPrintEmptyBrackets(): bool
     {
-        if ($tagValueNodes === []) {
-            return '';
+        // @todo decouple
+        if ($this->tagValueNodeConfiguration->getOriginalContent() !== null && Strings::endsWith(
+            $this->tagValueNodeConfiguration->getOriginalContent(),
+            '()'
+        )) {
+            return true;
         }
 
-        $itemsAsStrings = [];
-        foreach ($tagValueNodes as $tagValueNode) {
-            $item = '';
-            if ($tagValueNode instanceof TagAwareNodeInterface) {
-                $item .= $tagValueNode->getTag();
-            }
-
-            $item .= (string) $tagValueNode;
-
-            $itemsAsStrings[] = $item;
-        }
-
-        return implode(', ', $itemsAsStrings);
+        return $this->tagValueNodeConfiguration->hasOpeningBracket() && $this->tagValueNodeConfiguration->hasClosingBracket();
     }
-
     private function correctArraySingleItemPrint(array $value, string $arrayItemAsString): string
     {
         if (count($value) !== 1) {
@@ -204,17 +192,27 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         return $nakedItem;
     }
-
-    private function shouldPrintEmptyBrackets(): bool
+    /**
+     * @param PhpDocTagValueNode[] $tagValueNodes
+     */
+    private function printTagValueNodesSeparatedByComma(array $tagValueNodes): string
     {
-        // @todo decouple
-        if ($this->tagValueNodeConfiguration->getOriginalContent() !== null && Strings::endsWith(
-            $this->tagValueNodeConfiguration->getOriginalContent(),
-            '()'
-        )) {
-            return true;
+        if ($tagValueNodes === []) {
+            return '';
         }
 
-        return $this->tagValueNodeConfiguration->hasOpeningBracket() && $this->tagValueNodeConfiguration->hasClosingBracket();
+        $itemsAsStrings = [];
+        foreach ($tagValueNodes as $tagValueNode) {
+            $item = '';
+            if ($tagValueNode instanceof TagAwareNodeInterface) {
+                $item .= $tagValueNode->getTag();
+            }
+
+            $item .= (string) $tagValueNode;
+
+            $itemsAsStrings[] = $item;
+        }
+
+        return implode(', ', $itemsAsStrings);
     }
 }

@@ -158,6 +158,24 @@ final class BreakingVariableRenameGuard
 
         return $trinaryLogic->maybe();
     }
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     */
+    private function skipOnConflictOtherVariable(FunctionLike $functionLike, string $newName): bool
+    {
+        return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, Variable::class, $newName);
+    }
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     */
+    private function isUsedInClosureUsesName(string $expectedName, FunctionLike $functionLike): bool
+    {
+        if (! $functionLike instanceof Closure) {
+            return false;
+        }
+
+        return $this->betterNodeFinder->hasVariableOfName((array) $functionLike->uses, $expectedName);
+    }
 
     private function isUsedInIfAndOtherBranches(Variable $variable, string $currentVariableName): bool
     {
@@ -193,25 +211,5 @@ final class BreakingVariableRenameGuard
         }
 
         return (bool) Strings::match($currentName, '#[\w+]At$#');
-    }
-
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
-    private function isUsedInClosureUsesName(string $expectedName, FunctionLike $functionLike): bool
-    {
-        if (! $functionLike instanceof Closure) {
-            return false;
-        }
-
-        return $this->betterNodeFinder->hasVariableOfName((array) $functionLike->uses, $expectedName);
-    }
-
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
-    private function skipOnConflictOtherVariable(FunctionLike $functionLike, string $newName): bool
-    {
-        return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, Variable::class, $newName);
     }
 }

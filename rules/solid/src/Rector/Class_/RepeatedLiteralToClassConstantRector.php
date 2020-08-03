@@ -154,20 +154,6 @@ PHP
         return $stringsToReplace;
     }
 
-    /**
-     * @param string[] $stringsToReplace
-     */
-    private function addClassConsts(array $stringsToReplace, Class_ $class): void
-    {
-        foreach ($stringsToReplace as $stringToReplace) {
-            $constantName = $this->createConstName($stringToReplace);
-
-            $classConst = $this->nodeFactory->createPrivateClassConst($constantName, new String_($stringToReplace));
-
-            $this->classInsertManipulator->addConstantToClass($class, $stringToReplace, $classConst);
-        }
-    }
-
     private function replaceStringsWithClassConstReferences(Class_ $class, array $stringsToReplace): void
     {
         $this->traverseNodesWithCallable($class, function (Node $node) use ($stringsToReplace) {
@@ -182,6 +168,19 @@ PHP
             $constantName = $this->createConstName($node->value);
             return new ClassConstFetch(new Name('self'), $constantName);
         });
+    }
+    /**
+     * @param string[] $stringsToReplace
+     */
+    private function addClassConsts(array $stringsToReplace, Class_ $class): void
+    {
+        foreach ($stringsToReplace as $stringToReplace) {
+            $constantName = $this->createConstName($stringToReplace);
+
+            $classConst = $this->nodeFactory->createPrivateClassConst($constantName, new String_($stringToReplace));
+
+            $this->classInsertManipulator->addConstantToClass($class, $stringToReplace, $classConst);
+        }
     }
 
     private function shouldSkipString(String_ $string): bool

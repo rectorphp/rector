@@ -129,33 +129,6 @@ PHP
         return false;
     }
 
-    /**
-     * @param Case_[] $cases
-     * @return MatchArm[]
-     */
-    private function createMatchArmsFromCases(array $cases): array
-    {
-        $matchArms = [];
-        foreach ($cases as $case) {
-            $stmt = $case->stmts[0];
-            if (! $stmt instanceof Expression) {
-                throw new ShouldNotHappenException();
-            }
-
-            $expr = $stmt->expr;
-
-            if ($expr instanceof Assign) {
-                $this->assignExpr = $expr->var;
-                $expr = $expr->expr;
-            }
-
-            $condList = $case->cond === null ? null : [$case->cond];
-            $matchArms[] = new MatchArm($condList, $expr);
-        }
-
-        return $matchArms;
-    }
-
     private function hasSingleStmtCases(Switch_ $switch): bool
     {
         foreach ($switch->cases as $case) {
@@ -190,5 +163,31 @@ PHP
         $assignVariableNames = array_unique($assignVariableNames);
 
         return count($assignVariableNames) <= 1;
+    }
+    /**
+     * @param Case_[] $cases
+     * @return MatchArm[]
+     */
+    private function createMatchArmsFromCases(array $cases): array
+    {
+        $matchArms = [];
+        foreach ($cases as $case) {
+            $stmt = $case->stmts[0];
+            if (! $stmt instanceof Expression) {
+                throw new ShouldNotHappenException();
+            }
+
+            $expr = $stmt->expr;
+
+            if ($expr instanceof Assign) {
+                $this->assignExpr = $expr->var;
+                $expr = $expr->expr;
+            }
+
+            $condList = $case->cond === null ? null : [$case->cond];
+            $matchArms[] = new MatchArm($condList, $expr);
+        }
+
+        return $matchArms;
     }
 }

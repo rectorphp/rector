@@ -94,6 +94,31 @@ PHP
             return $this->createProphesizeMethodCall($node);
         });
     }
+    private function revealMockArguments(ClassMethod $classMethod): void
+    {
+        if ($classMethod->stmts === null) {
+            return;
+        }
+
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) {
+            if (! $node instanceof Arg) {
+                return null;
+            }
+
+            if (! $node->value instanceof Variable) {
+                return null;
+            }
+
+            /** @var string $variableName */
+            $variableName = $this->getName($node->value);
+
+            if (! isset($this->mockVariableTypesByNames[$variableName])) {
+                return null;
+            }
+
+            return $this->createMethodCall($node->value, 'reveal');
+        });
+    }
 
     private function collectMockVariableName(StaticCall $staticCall): void
     {
@@ -121,31 +146,5 @@ PHP
     private function createProphesizeMethodCall(StaticCall $staticCall): MethodCall
     {
         return $this->createLocalMethodCall('prophesize', [$staticCall->args[0]]);
-    }
-
-    private function revealMockArguments(ClassMethod $classMethod): void
-    {
-        if ($classMethod->stmts === null) {
-            return;
-        }
-
-        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) {
-            if (! $node instanceof Arg) {
-                return null;
-            }
-
-            if (! $node->value instanceof Variable) {
-                return null;
-            }
-
-            /** @var string $variableName */
-            $variableName = $this->getName($node->value);
-
-            if (! isset($this->mockVariableTypesByNames[$variableName])) {
-                return null;
-            }
-
-            return $this->createMethodCall($node->value, 'reveal');
-        });
     }
 }

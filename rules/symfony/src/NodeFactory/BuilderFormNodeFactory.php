@@ -47,6 +47,21 @@ final class BuilderFormNodeFactory
         return $classMethodBuilder->getNode();
     }
 
+    private function createBuilderParam(): Param
+    {
+        $builderParamBuilder = new ParamBuilder('builder');
+        $builderParamBuilder->setType(new FullyQualified('Symfony\Component\Form\FormBuilderInterface'));
+
+        return $builderParamBuilder->getNode();
+    }
+
+    private function createOptionsParam(): Param
+    {
+        $optionsParamBuilder = new ParamBuilder('options');
+        $optionsParamBuilder->setType('array');
+
+        return $optionsParamBuilder->getNode();
+    }
     /**
      * @param Node[] $nodes
      * @return Node[]
@@ -78,21 +93,5 @@ final class BuilderFormNodeFactory
         }
 
         return $nodes;
-    }
-
-    private function createBuilderParam(): Param
-    {
-        $builderParamBuilder = new ParamBuilder('builder');
-        $builderParamBuilder->setType(new FullyQualified('Symfony\Component\Form\FormBuilderInterface'));
-
-        return $builderParamBuilder->getNode();
-    }
-
-    private function createOptionsParam(): Param
-    {
-        $optionsParamBuilder = new ParamBuilder('options');
-        $optionsParamBuilder->setType('array');
-
-        return $optionsParamBuilder->getNode();
     }
 }

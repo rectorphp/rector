@@ -162,6 +162,16 @@ final class CompileCommand extends Command
         return ShellCode::SUCCESS;
     }
 
+    private function downgradePHPStanCodeToPHP71(OutputInterface $output): void
+    {
+        // downgrade phpstan-src code from PHP 7.4 to PHP 7.1, see https://github.com/phpstan/phpstan-src/pull/202/files
+        $this->fixRequirePath();
+
+        $process = new Process(['php', 'vendor/phpstan/phpstan-src/bin/transform-source.php'], $this->buildDir);
+        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
+            $output->write($buffer);
+        });
+    }
     private function restoreDependenciesLocallyIfNotCi(OutputInterface $output): void
     {
         if ($this->ciDetector->isCiDetected()) {
@@ -169,17 +179,6 @@ final class CompileCommand extends Command
         }
 
         $process = new Process(['composer', 'install', self::ANSI], $this->buildDir, null, null, null);
-        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
-            $output->write($buffer);
-        });
-    }
-
-    private function downgradePHPStanCodeToPHP71(OutputInterface $output): void
-    {
-        // downgrade phpstan-src code from PHP 7.4 to PHP 7.1, see https://github.com/phpstan/phpstan-src/pull/202/files
-        $this->fixRequirePath();
-
-        $process = new Process(['php', 'vendor/phpstan/phpstan-src/bin/transform-source.php'], $this->buildDir);
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });

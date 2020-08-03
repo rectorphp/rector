@@ -58,6 +58,14 @@ final class TagValueNodeConfigurationFactory
             $arrayEqualSign
         );
     }
+    private function resolveSilentKey(PhpDocTagValueNode $phpDocTagValueNode): ?string
+    {
+        if ($phpDocTagValueNode instanceof SilentKeyNodeInterface) {
+            return $phpDocTagValueNode->getSilentKey();
+        }
+
+        return null;
+    }
 
     private function isKeyQuoted(string $originalContent, string $key, ?string $silentKey): bool
     {
@@ -72,17 +80,6 @@ final class TagValueNodeConfigurationFactory
         $quotedArrayPattern = sprintf('#%s=\{"(.*)"\}|\{"(.*)"\}#', $escapedKey);
 
         return (bool) Strings::match($originalContent, $quotedArrayPattern);
-    }
-
-    private function createQuotedKeyPattern(?string $silentKey, string $key, string $escapedKey): string
-    {
-        if ($silentKey === $key) {
-            // @see https://regex101.com/r/VgvK8C/4/
-            return sprintf('#(%s=")|\("#', $escapedKey);
-        }
-
-        // @see https://regex101.com/r/VgvK8C/3/
-        return sprintf('#%s="#', $escapedKey);
     }
 
     /**
@@ -114,12 +111,14 @@ final class TagValueNodeConfigurationFactory
         return ':';
     }
 
-    private function resolveSilentKey(PhpDocTagValueNode $phpDocTagValueNode): ?string
+    private function createQuotedKeyPattern(?string $silentKey, string $key, string $escapedKey): string
     {
-        if ($phpDocTagValueNode instanceof SilentKeyNodeInterface) {
-            return $phpDocTagValueNode->getSilentKey();
+        if ($silentKey === $key) {
+            // @see https://regex101.com/r/VgvK8C/4/
+            return sprintf('#(%s=")|\("#', $escapedKey);
         }
 
-        return null;
+        // @see https://regex101.com/r/VgvK8C/3/
+        return sprintf('#%s="#', $escapedKey);
     }
 }

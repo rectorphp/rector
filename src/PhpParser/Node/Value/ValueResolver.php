@@ -111,6 +111,13 @@ final class ValueResolver
 
         return null;
     }
+    private function processConcat(Concat $concat, bool $resolvedClassReference): string
+    {
+        return $this->getValue($concat->left, $resolvedClassReference) . $this->getValue(
+                $concat->right,
+                $resolvedClassReference
+            );
+    }
 
     private function getConstExprEvaluator(): ConstExprEvaluator
     {
@@ -223,13 +230,5 @@ final class ValueResolver
         }
 
         return $this->constExprEvaluator->evaluateDirectly($classConstNode->consts[0]->value);
-    }
-
-    private function processConcat(Concat $concat, bool $resolvedClassReference): string
-    {
-        return $this->getValue($concat->left, $resolvedClassReference) . $this->getValue(
-                $concat->right,
-                $resolvedClassReference
-            );
     }
 }

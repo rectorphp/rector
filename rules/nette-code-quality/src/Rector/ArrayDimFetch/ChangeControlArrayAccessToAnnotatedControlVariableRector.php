@@ -131,6 +131,19 @@ PHP
         return new Variable($variableName);
     }
 
+    private function shouldSkip(ArrayDimFetch $arrayDimFetch): bool
+    {
+        if ($this->isBeingAssignedOrInitialized($arrayDimFetch)) {
+            return true;
+        }
+
+        $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Isset_ || $parent instanceof Unset_) {
+            return ! $arrayDimFetch->dim instanceof Variable;
+        }
+
+        return false;
+    }
     private function resolveControlType(ArrayDimFetch $arrayDimFetch, string $controlName): ObjectType
     {
         $controlTypes = $this->methodNamesByInputNamesResolver->resolveExpr($arrayDimFetch);
@@ -145,19 +158,5 @@ PHP
         $controlType = $controlTypes[$controlName];
 
         return new ObjectType($controlType);
-    }
-
-    private function shouldSkip(ArrayDimFetch $arrayDimFetch): bool
-    {
-        if ($this->isBeingAssignedOrInitialized($arrayDimFetch)) {
-            return true;
-        }
-
-        $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Isset_ || $parent instanceof Unset_) {
-            return ! $arrayDimFetch->dim instanceof Variable;
-        }
-
-        return false;
     }
 }

@@ -125,21 +125,6 @@ PHP
         });
     }
 
-    private function isInjectProperty(Property $property): bool
-    {
-        if (! $property->isPublic()) {
-            return false;
-        }
-
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return false;
-        }
-
-        return (bool) $phpDocInfo->getTagsByName('inject');
-    }
-
     private function removeInjectAnnotation(Property $property): void
     {
         /** @var PhpDocInfo $phpDocInfo */
@@ -154,5 +139,19 @@ PHP
         } else {
             $this->makePrivate($injectProperty);
         }
+    }
+    private function isInjectProperty(Property $property): bool
+    {
+        if (! $property->isPublic()) {
+            return false;
+        }
+
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return false;
+        }
+
+        return (bool) $phpDocInfo->getTagsByName('inject');
     }
 }

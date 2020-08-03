@@ -212,29 +212,6 @@ PHP
         );
     }
 
-    /**
-     * @return Param[]
-     */
-    private function resolveUnusedParameters(ClassMethod $classMethod): array
-    {
-        $unusedParameters = [];
-
-        foreach ((array) $classMethod->params as $i => $param) {
-            if ($this->classMethodManipulator->isParameterUsedInClassMethod($param, $classMethod)) {
-                // reset to keep order of removed arguments, if not construtctor - probably autowired
-                if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
-                    $unusedParameters = [];
-                }
-
-                continue;
-            }
-
-            $unusedParameters[$i] = $param;
-        }
-
-        return $unusedParameters;
-    }
-
     private function shouldSkipOpenSourceAbstract(ClassMethod $classMethod, Class_ $class): bool
     {
         // skip as possible contract for 3rd party
@@ -285,5 +262,27 @@ PHP
 
         // can be opened
         return $classMethod->isProtected();
+    }
+    /**
+     * @return Param[]
+     */
+    private function resolveUnusedParameters(ClassMethod $classMethod): array
+    {
+        $unusedParameters = [];
+
+        foreach ((array) $classMethod->params as $i => $param) {
+            if ($this->classMethodManipulator->isParameterUsedInClassMethod($param, $classMethod)) {
+                // reset to keep order of removed arguments, if not construtctor - probably autowired
+                if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
+                    $unusedParameters = [];
+                }
+
+                continue;
+            }
+
+            $unusedParameters[$i] = $param;
+        }
+
+        return $unusedParameters;
     }
 }

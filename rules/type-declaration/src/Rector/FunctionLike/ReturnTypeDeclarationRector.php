@@ -257,31 +257,6 @@ PHP
         }
     }
 
-    private function addReturnTypeToChildMethod(
-        ClassLike $classLike,
-        ClassMethod $classMethod,
-        Type $returnType
-    ): void {
-        $methodName = $this->getName($classMethod);
-
-        $currentClassMethod = $classLike->getMethod($methodName);
-        if ($currentClassMethod === null) {
-            return;
-        }
-
-        $resolvedChildTypeNode = $this->resolveChildTypeNode($returnType);
-        if ($resolvedChildTypeNode === null) {
-            return;
-        }
-
-        $currentClassMethod->returnType = $resolvedChildTypeNode;
-
-        // make sure the type is not overridden
-        $currentClassMethod->returnType->setAttribute(AttributeKey::DO_NOT_CHANGE, true);
-
-        $this->notifyNodeFileInfo($currentClassMethod);
-    }
-
     private function isVoidDueToThrow(Node $node, Node $inferredReturnNode): bool
     {
         if (! $inferredReturnNode instanceof Identifier) {
@@ -322,5 +297,29 @@ PHP
         }
 
         return $inferedType->isSubTypeOf($currentType)->yes();
+    }
+    private function addReturnTypeToChildMethod(
+        ClassLike $classLike,
+        ClassMethod $classMethod,
+        Type $returnType
+    ): void {
+        $methodName = $this->getName($classMethod);
+
+        $currentClassMethod = $classLike->getMethod($methodName);
+        if ($currentClassMethod === null) {
+            return;
+        }
+
+        $resolvedChildTypeNode = $this->resolveChildTypeNode($returnType);
+        if ($resolvedChildTypeNode === null) {
+            return;
+        }
+
+        $currentClassMethod->returnType = $resolvedChildTypeNode;
+
+        // make sure the type is not overridden
+        $currentClassMethod->returnType->setAttribute(AttributeKey::DO_NOT_CHANGE, true);
+
+        $this->notifyNodeFileInfo($currentClassMethod);
     }
 }

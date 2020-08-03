@@ -103,19 +103,6 @@ final class ThisRenderFactory
         return $this->templateGuesser->resolveFromClassMethodNode($classMethod);
     }
 
-    /**
-     * @param string[] $vars
-     */
-    private function createArrayFromVars(array $vars): Array_
-    {
-        $arrayItems = [];
-        foreach ($vars as $var) {
-            $arrayItems[] = new ArrayItem(new Variable($var), new String_($var));
-        }
-
-        return new Array_($arrayItems);
-    }
-
     private function resolveParametersExpr(
         ?Return_ $return,
         SensioTemplateTagValueNode $sensioTemplateTagValueNode
@@ -146,5 +133,17 @@ final class ThisRenderFactory
         }
 
         return null;
+    }
+    /**
+     * @param string[] $vars
+     */
+    private function createArrayFromVars(array $vars): Array_
+    {
+        $arrayItems = [];
+        foreach ($vars as $var) {
+            $arrayItems[] = new ArrayItem(new Variable($var), new String_($var));
+        }
+
+        return new Array_($arrayItems);
     }
 }

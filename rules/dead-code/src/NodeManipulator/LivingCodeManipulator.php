@@ -121,18 +121,17 @@ final class LivingCodeManipulator
         );
     }
 
-    private function processIsset(Isset_ $isset): array
-    {
-        return array_merge(...array_map(function (Expr $expr): array {
-            return $this->keepLivingCodeFromExpr($expr);
-        }, $isset->vars));
-    }
-
     private function processBinary(BinaryOp $binaryOp): array
     {
         return array_merge(
             $this->keepLivingCodeFromExpr($binaryOp->left),
             $this->keepLivingCodeFromExpr($binaryOp->right)
         );
+    }
+    private function processIsset(Isset_ $isset): array
+    {
+        return array_merge(...array_map(function (Expr $expr): array {
+            return $this->keepLivingCodeFromExpr($expr);
+        }, $isset->vars));
     }
 }

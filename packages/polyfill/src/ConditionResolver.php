@@ -111,17 +111,6 @@ final class ConditionResolver
         return new VersionCompareCondition($firstVersion, $secondVersion, $versionCompareSign);
     }
 
-    private function resolveArgumentValue(FuncCall $funcCall, int $argumentPosition): ?string
-    {
-        /** @var string|null $version */
-        $version = $this->valueResolver->getValue($funcCall->args[$argumentPosition]->value);
-        if ($version === 'PHP_VERSION') {
-            return $this->phpVersionProvider->provide();
-        }
-
-        return $version;
-    }
-
     private function resolveFuncCall(
         FuncCall $funcCall,
         Expr $expr,
@@ -135,5 +124,15 @@ final class ConditionResolver
         $expectedValue = $this->valueResolver->getValue($expr);
 
         return new BinaryToVersionCompareCondition($versionCompareCondition, $binaryClass, $expectedValue);
+    }
+    private function resolveArgumentValue(FuncCall $funcCall, int $argumentPosition): ?string
+    {
+        /** @var string|null $version */
+        $version = $this->valueResolver->getValue($funcCall->args[$argumentPosition]->value);
+        if ($version === 'PHP_VERSION') {
+            return $this->phpVersionProvider->provide();
+        }
+
+        return $version;
     }
 }

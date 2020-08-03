@@ -419,6 +419,24 @@ final class NodeFactory
             is_object($item) ? get_class($item) : $item
         ));
     }
+    private function addPropertyType(Property $property, ?Type $type): void
+    {
+        if ($type === null) {
+            return;
+        }
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::TYPED_PROPERTIES)) {
+            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
+
+            if ($phpParserType !== null) {
+                $property->type = $phpParserType;
+                return;
+            }
+        }
+
+        $phpDocInfo->changeVarType($type);
+    }
 
     private function decorateParentPropertyProperty(Property $property): void
     {
@@ -439,25 +457,6 @@ final class NodeFactory
         }
 
         return $args;
-    }
-
-    private function addPropertyType(Property $property, ?Type $type): void
-    {
-        if ($type === null) {
-            return;
-        }
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::TYPED_PROPERTIES)) {
-            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
-
-            if ($phpParserType !== null) {
-                $property->type = $phpParserType;
-                return;
-            }
-        }
-
-        $phpDocInfo->changeVarType($type);
     }
 
     /**
