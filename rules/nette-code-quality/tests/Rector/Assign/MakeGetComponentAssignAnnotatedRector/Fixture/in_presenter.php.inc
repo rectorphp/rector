@@ -7,7 +7,7 @@ use Rector\NetteCodeQuality\Tests\Rector\Assign\MakeGetComponentAssignAnnotatedR
 
 final class InPresenter extends Presenter
 {
-    public function run()
+    public function go()
     {
         $anotherControl = $this->getComponent('another');
     }
@@ -32,7 +32,7 @@ use Rector\NetteCodeQuality\Tests\Rector\Assign\MakeGetComponentAssignAnnotatedR
 
 final class InPresenter extends Presenter
 {
-    public function run()
+    public function go()
     {
         /** @var \Rector\NetteCodeQuality\Tests\Rector\Assign\MakeGetComponentAssignAnnotatedRector\Source\AnotherControl $anotherControl */
         $anotherControl = $this->getComponent('another');

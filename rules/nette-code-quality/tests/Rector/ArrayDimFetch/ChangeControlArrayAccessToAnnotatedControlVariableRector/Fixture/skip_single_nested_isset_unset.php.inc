@@ -7,7 +7,7 @@ use Nette\Application\UI\Form;
 
 final class SkipSingleNestedIssetUnsedPresenter extends Presenter
 {
-    public function run()
+    public function go()
     {
         if (isset($this['someForm'])) {
             unset($this['someForm']);

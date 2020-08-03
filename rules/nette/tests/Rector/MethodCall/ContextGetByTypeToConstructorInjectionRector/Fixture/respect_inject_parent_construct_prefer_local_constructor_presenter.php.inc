@@ -17,7 +17,7 @@ final class RespectInjectParentConstructPreferLocalConstructorPresenter extends 
         $some = 100;
     }
 
-    public function run()
+    public function go()
     {
         $someTypeToInject = $this->context->getByType(ISomeInterfaceToInject::class);
     }
@@ -49,7 +49,7 @@ final class RespectInjectParentConstructPreferLocalConstructorPresenter extends 
         $this->someInterfaceToInject = $someInterfaceToInject;
     }
 
-    public function run()
+    public function go()
     {
         $someTypeToInject = $this->someInterfaceToInject;
     }

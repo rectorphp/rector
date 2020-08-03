@@ -7,7 +7,7 @@ use Nette\Application\UI\Form;
 
 final class SkipAlreadyPresenter extends Presenter
 {
-    public function run()
+    public function go()
     {
         /** @var \Nette\Application\UI\Form $someForm */
         $someForm = $this['some_form'];

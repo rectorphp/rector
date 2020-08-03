@@ -59,9 +59,8 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
         }
 
         $calleeUniqueType = $calleeUniqueTypes[0];
-        // skip query and builder
-        // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?"
-        if ((bool) Strings::match($calleeUniqueType, '#(Finder|Query|Builder|MutatingScope)$#')) {
+
+        if ($this->isKnownAllowedFluentType($calleeUniqueType)) {
             return true;
         }
 
@@ -94,5 +93,17 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
         );
 
         return [$nodesToAdd, $assignAndRootExpr];
+    }
+
+    private function isKnownAllowedFluentType(string $class): bool
+    {
+        // skip query and builder
+        // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?"
+        if ((bool) Strings::match($class, '#(Finder|Query|Builder|MutatingScope)$#')) {
+            return true;
+        }
+
+        // allowed fluent types
+        return is_a($class, 'Nette\Forms\Controls\BaseControl', true);
     }
 }

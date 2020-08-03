@@ -5,9 +5,9 @@ namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayA
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
 
-final class RaceConditionPreesnter extends Presenter
+final class RaceConditionPresenter extends Presenter
 {
-    public function run()
+    public function go()
     {
         if (isset($this['someForm'])) {
             unset($this['someForm']);
@@ -33,9 +33,9 @@ namespace Rector\NetteCodeQuality\Tests\Rector\ArrayDimFetch\ChangeControlArrayA
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Form;
 
-final class RaceConditionPreesnter extends Presenter
+final class RaceConditionPresenter extends Presenter
 {
-    public function run()
+    public function go()
     {
         if (isset($this['someForm'])) {
             unset($this['someForm']);

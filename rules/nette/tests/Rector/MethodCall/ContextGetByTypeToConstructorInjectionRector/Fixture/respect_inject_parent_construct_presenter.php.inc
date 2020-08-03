@@ -12,7 +12,7 @@ final class RespectInjectParentConstructPresenter extends ConstructorInjectionPa
      */
     private $context;
 
-    public function run()
+    public function go()
     {
         $someTypeToInject = $this->context->getByType(ISomeInterfaceToInject::class);
     }
@@ -39,7 +39,7 @@ final class RespectInjectParentConstructPresenter extends ConstructorInjectionPa
      */
     public $someInterfaceToInject;
 
-    public function run()
+    public function go()
     {
         $someTypeToInject = $this->someInterfaceToInject;
     }

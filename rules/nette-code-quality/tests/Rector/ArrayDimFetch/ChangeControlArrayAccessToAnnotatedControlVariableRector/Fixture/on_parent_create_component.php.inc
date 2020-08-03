@@ -7,7 +7,7 @@ use Nette\Application\UI\Presenter;
 
 final class OnParentCreateComponent extends SomeParentPresenter
 {
-    public function run()
+    public function go()
     {
         $this['someForm']->onSuccces[] = 'yes';
     }
@@ -32,7 +32,7 @@ use Nette\Application\UI\Presenter;
 
 final class OnParentCreateComponent extends SomeParentPresenter
 {
-    public function run()
+    public function go()
     {
         /** @var \Nette\Application\UI\Form $someForm */
         $someForm = $this['someForm'];
