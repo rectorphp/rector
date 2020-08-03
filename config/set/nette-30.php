@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
-use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
 use Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector;
 use Rector\Injection\ValueObject\StaticCallToMethodCall;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
+use Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
 use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
 use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
@@ -23,18 +23,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/nette-30-param-types.php');
 
     $services = $containerConfigurator->services();
-
     $services->set(AddDatePickerToDateControlRector::class);
-
     $services->set(SetClassWithArgumentToSetFactoryRector::class);
-
     $services->set(ChangeFormArrayAccessToAnnotatedControlVariableRector::class);
-
     $services->set(GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector::class);
-
     // Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
     $services->set(RemoveParentCallWithoutParentRector::class);
-
     // https://github.com/nette/utils/commit/d0041ba59f5d8bf1f5b3795fd76d43fb13ea2e15
     $services->set(FormerNullableArgumentToScalarTypedRector::class);
 
@@ -59,7 +53,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     );
 
     $services->set(StaticCallToAnotherServiceConstructorInjectionRector::class)
-        // see https://github.com/nette/security/commit/e0da01080872b8493045e78535ff55546e4f02db
         ->call('configure', [[
             StaticCallToAnotherServiceConstructorInjectionRector::STATIC_CALLS_TO_METHOD_CALLS => inline_objects(
                 $configuration
@@ -67,8 +60,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
-    $services->set(RenameClassConstantRector::class)
-        ->call('configure', [[
+    $services->set(RenameClassConstantRector::class)->call(
+        'configure',
+        [[
             RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
                 'Contributte\Events\Extra\Event\Security\LoggedInEvent' => [
                     'NAME' => 'class',
@@ -82,43 +76,33 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]]
     );
+    $services->set(RenameClassRector::class)->call('configure', [[
+        RenameClassRector::OLD_TO_NEW_CLASSES => [
+            # nextras/forms was split into 2 packages
+            'Nextras\FormComponents\Controls\DatePicker' => 'Nextras\FormComponents\Controls\DateControl',
+            # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
+            'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
+            'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
+        ],
+    ]]);
 
-    $services->set(RenameClassRector::class)
-        ->call('configure', [[
-            RenameClassRector::OLD_TO_NEW_CLASSES => [
-                # nextras/forms was split into 2 packages
-                'Nextras\FormComponents\Controls\DatePicker' => 'Nextras\FormComponents\Controls\DateControl',
-                # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
-                'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
-                'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
-            ],
-        ]]);
+    $services->set(BuilderExpandToHelperExpandRector::class);
 
-    $services->set(MethodCallToStaticCallRector::class)
-        ->call('configure', [[
-            MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => [
-                'Nette\DI\ContainerBuilder' => [
-                    'expand' => ['Nette\DI\Helpers', 'expand'],
-                ],
+    $services->set(RenameMethodRector::class)->call('configure', [[
+        RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+            'Nette\Forms\Controls\BaseControl' => [
+                # see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
+                'setType' => 'setHtmlType',
+                'setAttribute' => 'setHtmlAttribute',
             ],
-        ]]);
-
-    $services->set(RenameMethodRector::class)
-        ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Nette\Forms\Controls\BaseControl' => [
-                    # see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
-                    'setType' => 'setHtmlType',
-                    'setAttribute' => 'setHtmlAttribute',
-                ],
-                'Nette\DI\Definitions\ServiceDefinition' => [
-                    # see https://github.com/nette/di/commit/1705a5db431423fc610a6f339f88dead1b5dc4fb
-                    'setClass' => 'setType',
-                    'getClass' => 'getType',
-                ],
-                'Nette\DI\Definitions\Definition' => [
-                    'isAutowired' => 'getAutowired',
-                ],
+            'Nette\DI\Definitions\ServiceDefinition' => [
+                # see https://github.com/nette/di/commit/1705a5db431423fc610a6f339f88dead1b5dc4fb
+                'setClass' => 'setType',
+                'getClass' => 'getType',
             ],
-        ]]);
+            'Nette\DI\Definitions\Definition' => [
+                'isAutowired' => 'getAutowired',
+            ],
+        ],
+    ]]);
 };

@@ -1,4 +1,4 @@
-# All 549 Rectors Overview
+# All 550 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -30,7 +30,7 @@
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
 - [Naming](#naming) (3)
-- [Nette](#nette) (14)
+- [Nette](#nette) (15)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
@@ -6649,6 +6649,28 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
          $form = new Form();
 -        $form->addDatePicker('key', 'Label');
 +        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+     }
+ }
+```
+
+<br><br>
+
+### `BuilderExpandToHelperExpandRector`
+
+- class: [`Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector`](/../master/rules/nette/src/Rector/MethodCall/BuilderExpandToHelperExpandRector.php)
+- [test fixtures](/../master/rules/nette/tests/Rector/MethodCall/BuilderExpandToHelperExpandRector/Fixture)
+
+Change `containerBuilder->expand()` to static call with parameters
+
+```diff
+ use Nette\DI\CompilerExtension;
+
+ final class SomeClass extends CompilerExtension
+ {
+     public function loadConfiguration()
+     {
+-        $value = $this->getContainerBuilder()->expand('%value');
++        $value = \Nette\DI\Helpers::expand('%value', $this->getContainerBuilder()->parameters);
      }
  }
 ```
