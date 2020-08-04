@@ -50,8 +50,8 @@ trait AbstractRectorTrait
         return ! Strings::contains($name, 'AnonymousClass');
     }
 
-    protected function removeFinal(Class_ $node): void
+    protected function removeFinal(Class_ $class): void
     {
-        $node->flags -= Class_::MODIFIER_FINAL;
+        $class->flags -= Class_::MODIFIER_FINAL;
     }
 }

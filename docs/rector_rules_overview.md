@@ -1,4 +1,4 @@
-# All 550 Rectors Overview
+# All 551 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -29,7 +29,7 @@
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
-- [Naming](#naming) (3)
+- [Naming](#naming) (4)
 - [Nette](#nette) (16)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
@@ -6576,6 +6576,27 @@ Add mysql_query and mysql_error with connection
 <br><br>
 
 ## Naming
+
+### `RenameParamToMatchTypeRector`
+
+- class: [`Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector`](/../master/rules/naming/src/Rector/ClassMethod/RenameParamToMatchTypeRector.php)
+- [test fixtures](/../master/rules/naming/tests/Rector/ClassMethod/RenameParamToMatchTypeRector/Fixture)
+
+Rename variable to match new ClassType
+
+```diff
+ final class SomeClass
+ {
+-    public function run(Apple $pie)
++    public function run(Apple $apple)
+     {
+-        $food = $pie;
++        $food = $apple;
+     }
+ }
+```
+
+<br><br>
 
 ### `RenamePropertyToMatchTypeRector`
 
