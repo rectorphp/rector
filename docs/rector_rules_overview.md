@@ -4856,7 +4856,7 @@ use Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(FuncCallToMethodCallRector::class)
-        ->call('configure', [[FuncCallToMethodCallRector::FUNCTION_TO_CLASS_TO_METHOD_CALL, ['view' => ['Namespaced\SomeRenderer', 'render']]]]);
+        ->call('configure', [[FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL, ['view' => ['Namespaced\SomeRenderer', 'render']]]]);
 };
 ```
 

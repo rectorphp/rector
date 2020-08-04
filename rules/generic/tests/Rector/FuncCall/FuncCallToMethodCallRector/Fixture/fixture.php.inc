@@ -2,10 +2,6 @@
 
 namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
-function translate($value)
-{
-}
-
 final class SomeClass
 {
     public function run()
@@ -19,10 +15,6 @@ final class SomeClass
 <?php
 
 namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
-
-function translate($value)
-{
-}
 
 final class SomeClass
 {

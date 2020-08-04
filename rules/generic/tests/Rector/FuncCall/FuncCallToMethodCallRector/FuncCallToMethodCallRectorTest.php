@@ -32,7 +32,7 @@ final class FuncCallToMethodCallRectorTest extends AbstractRectorTestCase
     {
         return [
             FuncCallToMethodCallRector::class => [
-                FuncCallToMethodCallRector::FUNCTION_TO_CLASS_TO_METHOD_CALL => [
+                FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => [
                     'view' => ['Namespaced\SomeRenderer', 'render'],
                     'translate' => [SomeTranslator::class, 'translateMethod'],
                     'Rector\Generic\Tests\Rector\Function_\FuncCallToMethodCallRector\Source\some_view_function' => [
