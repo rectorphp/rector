@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Function_\FunctionToStaticCallRector;
+namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToStaticCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Function_\FunctionToStaticCallRector;
+use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class FunctionToStaticCallRectorTest extends AbstractRectorTestCase
+final class FuncCallToStaticCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -30,8 +30,8 @@ final class FunctionToStaticCallRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            FunctionToStaticCallRector::class => [
-                FunctionToStaticCallRector::FUNCTION_TO_STATIC_CALL => [
+            FuncCallToStaticCallRector::class => [
+                FuncCallToStaticCallRector::FUNCTION_TO_STATIC_CALL => [
                     'view' => ['SomeStaticClass', 'render'],
                     'SomeNamespaced\view' => ['AnotherStaticClass', 'render'],
                 ],

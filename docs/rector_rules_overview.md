@@ -4885,6 +4885,35 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
+### `FuncCallToStaticCallRector`
+
+- class: [`Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector`](/../master/rules/generic/src/Rector/FuncCall/FuncCallToStaticCallRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/FuncCall/FuncCallToStaticCallRector/Fixture)
+
+Turns defined function call to static method call.
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(FuncCallToStaticCallRector::class)
+        ->call('configure', [[FuncCallToStaticCallRector::FUNCTION_TO_STATIC_CALL, ['view' => ['SomeStaticClass', 'render']]]]);
+};
+```
+
+↓
+
+```diff
+-view("...", []);
++SomeClass::render("...", []);
+```
+
+<br><br>
+
 ### `FunctionToNewRector`
 
 - class: [`Rector\Generic\Rector\FuncCall\FunctionToNewRector`](/../master/rules/generic/src/Rector/FuncCall/FunctionToNewRector.php)
@@ -4901,35 +4930,6 @@ Change configured function calls to new Instance
 +        $array = new \Collection([]);
      }
  }
-```
-
-<br><br>
-
-### `FunctionToStaticCallRector`
-
-- class: [`Rector\Generic\Rector\Function_\FunctionToStaticCallRector`](/../master/rules/generic/src/Rector/Function_/FunctionToStaticCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/Function_/FunctionToStaticCallRector/Fixture)
-
-Turns defined function call to static method call.
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Function_\FunctionToStaticCallRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(FunctionToStaticCallRector::class)
-        ->call('configure', [[FunctionToStaticCallRector::FUNCTION_TO_STATIC_CALL, ['view' => ['SomeStaticClass', 'render']]]]);
-};
-```
-
-↓
-
-```diff
--view("...", []);
-+SomeClass::render("...", []);
 ```
 
 <br><br>

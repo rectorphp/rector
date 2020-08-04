@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Function_\FunctionToStaticCallRector;
+use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(FunctionToStaticCallRector::class)
+    $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
-            FunctionToStaticCallRector::FUNCTION_TO_STATIC_CALL => [
+            FuncCallToStaticCallRector::FUNCTION_TO_STATIC_CALL => [
                 'array_add' => [
                     # Arr
                     'Illuminate\Support\Arr',
