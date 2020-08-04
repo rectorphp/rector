@@ -106,9 +106,9 @@ final class RequireRectorCategoryByGetNodeTypesRule implements Rule
         return $allowedRectorCategories;
     }
 
-    private function resolveRectorClassReflection(ClassMethod $node, Scope $scope): ?ClassReflection
+    private function resolveRectorClassReflection(ClassMethod $classMethod, Scope $scope): ?ClassReflection
     {
-        if ($node->name->toString() !== 'getNodeTypes') {
+        if ($classMethod->name->toString() !== 'getNodeTypes') {
             return null;
         }
 
