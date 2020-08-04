@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Order\Tests;
 
+use Iterator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
@@ -25,18 +26,43 @@ class StmtOrderTest extends AbstractKernelTestCase
         $this->stmtOrder = self::$container->get(StmtOrder::class);
     }
 
-    public function testCreateOldToNewKeys(): void
+    public function dataProvider(): Iterator
     {
-        $desiredStmtOrder = ['first', 'second', 'third'];
-        $currentStmtOrder = ['third', 'first', 'second'];
-        $actual = $this->stmtOrder->createOldToNewKeys($desiredStmtOrder, $currentStmtOrder);
-
-        $expected = [
-            0 => 1,
-            1 => 2,
-            2 => 0,
+        yield [
+            ['first', 'second', 'third'],
+            ['third', 'first', 'second'],
+            [
+                0 => 1,
+                1 => 2,
+                2 => 0,
+            ],
         ];
+        yield [
+            ['first', 'second', 'third'],
+            ['third', 'second', 'first'],
+            [
+                0 => 2,
+                1 => 1,
+                2 => 0,
+            ],
+        ];
+        yield [
+            ['first', 'second', 'third'],
+            ['first', 'second', 'third'],
+            [
+                0 => 0,
+                1 => 1,
+                2 => 2,
+            ],
+        ];
+    }
 
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testCreateOldToNewKeys(array $desiredStmtOrder, array $currentStmtOrder, array $expected): void
+    {
+        $actual = $this->stmtOrder->createOldToNewKeys($desiredStmtOrder, $currentStmtOrder);
         $this->assertSame($expected, $actual);
     }
 
@@ -54,9 +80,8 @@ class StmtOrderTest extends AbstractKernelTestCase
 
         $expectedClass = $this->getExpectedClassNode();
 
-        $this->assertEquals($expectedClass->stmts, $actualClass->stmts);
+        $this->assertSame($expectedClass->stmts, $actualClass->stmts);
     }
-
 
     private function getExpectedClassNode(): Class_
     {
@@ -66,7 +91,6 @@ class StmtOrderTest extends AbstractKernelTestCase
         $expectedClass->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('service')]);
         return $expectedClass;
     }
-
 
     private function getTestClassNode(): Class_
     {
