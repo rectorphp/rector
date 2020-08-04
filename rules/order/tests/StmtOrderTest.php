@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Order\StmtOrder;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
@@ -28,11 +29,17 @@ final class StmtOrderTest extends AbstractKernelTestCase
      */
     private $stmtOrder;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
 
         $this->stmtOrder = self::$container->get(StmtOrder::class);
+        $this->nodeNameResolver = self::$container->get(NodeNameResolver::class);
     }
 
     public function dataProvider(): Iterator
@@ -80,7 +87,19 @@ final class StmtOrderTest extends AbstractKernelTestCase
         $class = $this->getTestClassNode();
         $actualClass = $this->stmtOrder->reorderClassStmtsByOldToNewKeys($class, self::OLD_TO_NEW_KEYS);
         $expectedClass = $this->getExpectedClassNode();
-        $this->assertSame($expectedClass->stmts, $actualClass->stmts);
+
+        $this->assertSame(
+            $this->nodeNameResolver->getName($expectedClass->stmts[0]),
+            $this->nodeNameResolver->getName($actualClass->stmts[0])
+        );
+        $this->assertSame(
+            $this->nodeNameResolver->getName($expectedClass->stmts[1]),
+            $this->nodeNameResolver->getName($actualClass->stmts[1])
+        );
+        $this->assertSame(
+            $this->nodeNameResolver->getName($expectedClass->stmts[2]),
+            $this->nodeNameResolver->getName($actualClass->stmts[2])
+        );
     }
 
     private function getExpectedClassNode(): Class_
