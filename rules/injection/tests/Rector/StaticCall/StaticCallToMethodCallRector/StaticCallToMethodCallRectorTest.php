@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Injection\Tests\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector;
+namespace Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector;
+use Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Injection\ValueObject\StaticCallToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class StaticCallToAnotherServiceConstructorInjectionRectorTest extends AbstractRectorTestCase
+final class StaticCallToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -37,8 +37,8 @@ final class StaticCallToAnotherServiceConstructorInjectionRectorTest extends Abs
         ];
 
         return [
-            StaticCallToAnotherServiceConstructorInjectionRector::class => [
-                StaticCallToAnotherServiceConstructorInjectionRector::STATIC_CALLS_TO_METHOD_CALLS => $configuration,
+            StaticCallToMethodCallRector::class => [
+                StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => $configuration,
             ],
         ];
     }

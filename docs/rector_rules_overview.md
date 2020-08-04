@@ -5834,10 +5834,10 @@ Changes getMessage(..., true) to `getMessageAsArray()`
 
 ## Injection
 
-### `StaticCallToAnotherServiceConstructorInjectionRector`
+### `StaticCallToMethodCallRector`
 
-- class: [`Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector`](/../master/rules/injection/src/Rector/StaticCall/StaticCallToAnotherServiceConstructorInjectionRector.php)
-- [test fixtures](/../master/rules/injection/tests/Rector/StaticCall/StaticCallToAnotherServiceConstructorInjectionRector/Fixture)
+- class: [`Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector`](/../master/rules/injection/src/Rector/StaticCall/StaticCallToMethodCallRector.php)
+- [test fixtures](/../master/rules/injection/tests/Rector/StaticCall/StaticCallToMethodCallRector/Fixture)
 
 Change static call to service method via constructor injection
 
@@ -5845,11 +5845,11 @@ Change static call to service method via constructor injection
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector;
+use Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(StaticCallToAnotherServiceConstructorInjectionRector::class);
+    $services->set(StaticCallToMethodCallRector::class);
 };
 ```
 
