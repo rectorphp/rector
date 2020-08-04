@@ -142,6 +142,7 @@ PHP
             $this->hasChanged = true;
         }
     }
+
     private function shouldSkipProperty(
         Property $property,
         string $oldName,

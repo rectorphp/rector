@@ -23,6 +23,7 @@ final class OrderPrivateMethodsByUseRector extends AbstractRector
      * @var int
      */
     private const MAX_ATTEMTPS = 5;
+
     /**
      * @var StmtOrder
      */
