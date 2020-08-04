@@ -19,7 +19,10 @@ use Rector\Order\StmtOrder;
  */
 final class OrderPrivateMethodsByUseRector extends AbstractRector
 {
-    const MAX_ATTEMTPS = 5;
+    /**
+     * @var int
+     */
+    private const MAX_ATTEMTPS = 5;
     /**
      * @var StmtOrder
      */

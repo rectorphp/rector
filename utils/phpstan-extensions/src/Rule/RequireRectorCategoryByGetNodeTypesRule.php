@@ -56,6 +56,27 @@ final class RequireRectorCategoryByGetNodeTypesRule implements Rule
 
         return [$errorMessage];
     }
+    private function resolveRectorClassReflection(ClassMethod $classMethod, Scope $scope): ?ClassReflection
+    {
+        if ($classMethod->name->toString() !== 'getNodeTypes') {
+            return null;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection === null) {
+            return null;
+        }
+
+        if ($classReflection->isInterface()) {
+            return null;
+        }
+
+        if ($classReflection->isAbstract()) {
+            return null;
+        }
+
+        return $classReflection;
+    }
 
     private function resolveRectorCategory(ClassReflection $classReflection): string
     {
@@ -104,27 +125,5 @@ final class RequireRectorCategoryByGetNodeTypesRule implements Rule
         }
 
         return $allowedRectorCategories;
-    }
-
-    private function resolveRectorClassReflection(ClassMethod $classMethod, Scope $scope): ?ClassReflection
-    {
-        if ($classMethod->name->toString() !== 'getNodeTypes') {
-            return null;
-        }
-
-        $classReflection = $scope->getClassReflection();
-        if ($classReflection === null) {
-            return null;
-        }
-
-        if ($classReflection->isInterface()) {
-            return null;
-        }
-
-        if ($classReflection->isAbstract()) {
-            return null;
-        }
-
-        return $classReflection;
     }
 }

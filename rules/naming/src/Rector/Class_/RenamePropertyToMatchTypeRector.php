@@ -142,6 +142,18 @@ PHP
             $this->hasChanged = true;
         }
     }
+    private function shouldSkipProperty(
+        Property $property,
+        string $oldName,
+        string $expectedName,
+        array $conflictingPropertyNames
+    ): bool {
+        if ($this->isObjectType($property, 'Ramsey\Uuid\UuidInterface')) {
+            return true;
+        }
+
+        return $this->shouldSkipPropertyRename($property, $oldName, $expectedName, $conflictingPropertyNames);
+    }
 
     private function renamePropertyFetchesInClass(ClassLike $classLike, string $oldName, string $expectedName): void
     {
@@ -171,18 +183,5 @@ PHP
         }
 
         return $this->breakingVariableRenameGuard->shouldSkipProperty($property, $currentName);
-    }
-
-    private function shouldSkipProperty(
-        Property $property,
-        string $oldName,
-        string $expectedName,
-        array $conflictingPropertyNames
-    ): bool {
-        if ($this->isObjectType($property, 'Ramsey\Uuid\UuidInterface')) {
-            return true;
-        }
-
-        return $this->shouldSkipPropertyRename($property, $oldName, $expectedName, $conflictingPropertyNames);
     }
 }
