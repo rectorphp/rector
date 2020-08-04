@@ -12,6 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 
 final class RectorNodeTraverser extends NodeTraverser
 {
@@ -99,20 +100,32 @@ final class RectorNodeTraverser extends NodeTraverser
                     continue;
                 }
 
-                if ($phpRector instanceof ConfigurableRectorInterface) {
-                    $phpRector->configure($configuration);
-                } elseif ($configuration !== []) {
-                    $message = sprintf(
-                        'Rule "%s" with configuration must implement "%s"',
-                        get_class($phpRector),
-                        ConfigurableRectorInterface::class
-                    );
-                    throw new ShouldNotHappenException($message);
-                }
+                $this->configureTestedRector($phpRector, $configuration);
 
                 $this->addVisitor($phpRector);
                 continue 2;
             }
+        }
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
+    private function configureTestedRector(PhpRectorInterface $phpRector, array $configuration): void
+    {
+        if (! StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            return;
+        }
+
+        if ($phpRector instanceof ConfigurableRectorInterface) {
+            $phpRector->configure($configuration);
+        } elseif ($configuration !== []) {
+            $message = sprintf(
+                'Rule "%s" with configuration must implement "%s"',
+                get_class($phpRector),
+                ConfigurableRectorInterface::class
+            );
+            throw new ShouldNotHappenException($message);
         }
     }
 }

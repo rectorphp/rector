@@ -7,6 +7,7 @@ namespace Rector\FileSystemRector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -57,10 +58,7 @@ final class FileSystemFileProcessor
                 continue;
             }
 
-            if ($fileSystemRector instanceof ConfigurableRectorInterface) {
-                $configuration = $this->enabledRectorsProvider->getRectorConfiguration($fileSystemRector);
-                $fileSystemRector->configure($configuration);
-            }
+            $this->configuredTestedRector($fileSystemRector);
 
             $this->currentRectorProvider->changeCurrentRector($fileSystemRector);
             $fileSystemRector->refactor($smartFileInfo);
@@ -70,5 +68,17 @@ final class FileSystemFileProcessor
     public function getFileSystemRectorsCount(): int
     {
         return count($this->fileSystemRectors);
+    }
+
+    private function configuredTestedRector(FileSystemRectorInterface $fileSystemRector): void
+    {
+        if (! StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            return;
+        }
+
+        if ($fileSystemRector instanceof ConfigurableRectorInterface) {
+            $configuration = $this->enabledRectorsProvider->getRectorConfiguration($fileSystemRector);
+            $fileSystemRector->configure($configuration);
+        }
     }
 }
