@@ -4914,10 +4914,10 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
-### `FunctionToNewRector`
+### `FuncCallToNewRector`
 
-- class: [`Rector\Generic\Rector\FuncCall\FunctionToNewRector`](/../master/rules/generic/src/Rector/FuncCall/FunctionToNewRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/FuncCall/FunctionToNewRector/Fixture)
+- class: [`Rector\Generic\Rector\FuncCall\FuncCallToNewRector`](/../master/rules/generic/src/Rector/FuncCall/FuncCallToNewRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/FuncCall/FuncCallToNewRector/Fixture)
 
 Change configured function calls to new Instance
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\FuncCall\FunctionToNewRector;
+use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
 use Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
 use Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector;
 use Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
@@ -19,9 +19,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(HelperFunctionToConstructorInjectionRector::class);
 
-    $services->set(FunctionToNewRector::class)
+    $services->set(FuncCallToNewRector::class)
         ->call('configure', [[
-            FunctionToNewRector::FUNCTION_TO_NEW => [
+            FuncCallToNewRector::FUNCTION_TO_NEW => [
                 'collect' => 'Illuminate\Support\Collection',
             ],
         ]]);

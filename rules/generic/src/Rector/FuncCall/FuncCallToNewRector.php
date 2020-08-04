@@ -14,9 +14,9 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\FuncCall\FunctionToNewRector\FunctionToNewRectorTest
+ * @see \Rector\Generic\Tests\Rector\FuncCall\FuncCallToNewRector\FuncCallToNewRectorTest
  */
-final class FunctionToNewRector extends AbstractRector implements ConfigurableRectorInterface
+final class FuncCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string

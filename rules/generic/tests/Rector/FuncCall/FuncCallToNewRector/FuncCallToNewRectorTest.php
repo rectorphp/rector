@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\FuncCall\FunctionToNewRector;
+namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToNewRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\FuncCall\FunctionToNewRector;
+use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class FunctionToNewRectorTest extends AbstractRectorTestCase
+final class FuncCallToNewRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -30,8 +30,8 @@ final class FunctionToNewRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            FunctionToNewRector::class => [
-                FunctionToNewRector::FUNCTION_TO_NEW => [
+            FuncCallToNewRector::class => [
+                FuncCallToNewRector::FUNCTION_TO_NEW => [
                     'collection' => ['Collection'],
                 ],
             ],
