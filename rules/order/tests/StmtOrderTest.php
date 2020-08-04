@@ -12,12 +12,20 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Order\StmtOrder;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-class StmtOrderTest extends AbstractKernelTestCase
+final class StmtOrderTest extends AbstractKernelTestCase
 {
     /**
      * @var StmtOrder
      */
     private $stmtOrder;
+    /**
+     * @var int[]
+     */
+    private const OLD_TO_NEW_KEYS = [
+        0 => 0,
+        1 => 2,
+        2 => 1,
+    ];
 
     protected function setUp(): void
     {
@@ -68,18 +76,9 @@ class StmtOrderTest extends AbstractKernelTestCase
 
     public function testReorderClassStmtsByOldToNewKeys(): void
     {
-        $oldToNewKeys = [
-            0 => 0,
-            1 => 2,
-            2 => 1,
-        ];
-
         $class = $this->getTestClassNode();
-
-        $actualClass = $this->stmtOrder->reorderClassStmtsByOldToNewKeys($class, $oldToNewKeys);
-
+        $actualClass = $this->stmtOrder->reorderClassStmtsByOldToNewKeys($class, self::OLD_TO_NEW_KEYS);
         $expectedClass = $this->getExpectedClassNode();
-
         $this->assertSame($expectedClass->stmts, $actualClass->stmts);
     }
 
