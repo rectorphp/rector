@@ -4921,7 +4921,7 @@ use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(FuncCallToStaticCallRector::class)
-        ->call('configure', [[FuncCallToStaticCallRector::FUNCTION_TO_STATIC_CALL, ['view' => ['SomeStaticClass', 'render']]]]);
+        ->call('configure', [[FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS, ['view' => ['SomeStaticClass', 'render']]]]);
 };
 ```
 
@@ -8315,8 +8315,8 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `AssertCompareToSpecificMethodRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertCompareToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertCompareToSpecificMethodRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertCompareToSpecificMethodRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertCompareToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertCompareToSpecificMethodRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertCompareToSpecificMethodRector/Fixture)
 
 Turns vague php-only method in PHPUnit TestCase to more specific
 
@@ -8334,8 +8334,8 @@ Turns vague php-only method in PHPUnit TestCase to more specific
 
 ### `AssertComparisonToSpecificMethodRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertComparisonToSpecificMethodRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertComparisonToSpecificMethodRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertComparisonToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertComparisonToSpecificMethodRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertComparisonToSpecificMethodRector/Fixture)
 
 Turns comparison operations to their method name alternatives in PHPUnit TestCase
 
@@ -8383,8 +8383,8 @@ Change `assertEquals()/assertNotEquals()` method parameters to new specific alte
 
 ### `AssertFalseStrposToContainsRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertFalseStrposToContainsRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertFalseStrposToContainsRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertFalseStrposToContainsRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertFalseStrposToContainsRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertFalseStrposToContainsRector/Fixture)
 
 Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -8402,8 +8402,8 @@ Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUni
 
 ### `AssertInstanceOfComparisonRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertInstanceOfComparisonRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertInstanceOfComparisonRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertInstanceOfComparisonRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertInstanceOfComparisonRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertInstanceOfComparisonRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertInstanceOfComparisonRector/Fixture)
 
 Turns instanceof comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -8421,8 +8421,8 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 
 ### `AssertIssetToSpecificMethodRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertIssetToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertIssetToSpecificMethodRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertIssetToSpecificMethodRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertIssetToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertIssetToSpecificMethodRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertIssetToSpecificMethodRector/Fixture)
 
 Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -8440,8 +8440,8 @@ Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 
 ### `AssertNotOperatorRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertNotOperatorRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertNotOperatorRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertNotOperatorRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertNotOperatorRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertNotOperatorRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertNotOperatorRector/Fixture)
 
 Turns not-operator comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -8459,8 +8459,8 @@ Turns not-operator comparisons to their method name alternatives in PHPUnit Test
 
 ### `AssertPropertyExistsRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertPropertyExistsRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertPropertyExistsRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertPropertyExistsRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertPropertyExistsRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertPropertyExistsRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertPropertyExistsRector/Fixture)
 
 Turns `property_exists` comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -8478,8 +8478,8 @@ Turns `property_exists` comparisons to their method name alternatives in PHPUnit
 
 ### `AssertRegExpRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertRegExpRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertRegExpRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertRegExpRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertRegExpRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertRegExpRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertRegExpRector/Fixture)
 
 Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -8497,8 +8497,8 @@ Turns `preg_match` comparisons to their method name alternatives in PHPUnit Test
 
 ### `AssertSameBoolNullToSpecificMethodRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertSameBoolNullToSpecificMethodRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertSameBoolNullToSpecificMethodRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertSameBoolNullToSpecificMethodRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertSameBoolNullToSpecificMethodRector/Fixture)
 
 Turns same bool and null comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -8516,8 +8516,8 @@ Turns same bool and null comparisons to their method name alternatives in PHPUni
 
 ### `AssertTrueFalseInternalTypeToSpecificMethodRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertTrueFalseInternalTypeToSpecificMethodRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertTrueFalseInternalTypeToSpecificMethodRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertTrueFalseInternalTypeToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertTrueFalseInternalTypeToSpecificMethodRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertTrueFalseInternalTypeToSpecificMethodRector/Fixture)
 
 Turns true/false with internal type comparisons to their method name alternatives in PHPUnit TestCase
 
@@ -8535,8 +8535,8 @@ Turns true/false with internal type comparisons to their method name alternative
 
 ### `AssertTrueFalseToSpecificMethodRector`
 
-- class: [`Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/SpecificMethod/AssertTrueFalseToSpecificMethodRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/SpecificMethod/AssertTrueFalseToSpecificMethodRector/Fixture)
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector/Fixture)
 
 Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible
 
