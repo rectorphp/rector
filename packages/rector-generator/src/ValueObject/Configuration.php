@@ -213,7 +213,7 @@ final class Configuration
     {
         foreach ($nodeTypes as $nodeType) {
             if (! class_exists($nodeType)) {
-                $message = sprintf('Node type "%s" doesn\'t exist or not imported in Rector recipe', $nodeType);
+                $message = sprintf('Node type "%s" does not exist or not imported in Rector recipe', $nodeType);
                 throw new ShouldNotHappenException($message);
             }
         }
