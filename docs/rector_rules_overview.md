@@ -4885,6 +4885,10 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> remove RenameFuncCallToStaticCallRector, duplicate of FuncCallToStaticCallRector
 ### `FuncCallToNewRector`
 
 - class: [`Rector\Generic\Rector\FuncCall\FuncCallToNewRector`](/../master/rules/generic/src/Rector/FuncCall/FuncCallToNewRector.php)
@@ -4905,6 +4909,11 @@ Change configured function calls to new Instance
 
 <br><br>
 
+<<<<<<< HEAD
+=======
+>>>>>>> rename FunctionToStaticCallRector to FuncCallToStaticCallRector
+=======
+>>>>>>> remove RenameFuncCallToStaticCallRector, duplicate of FuncCallToStaticCallRector
 ### `FuncCallToStaticCallRector`
 
 - class: [`Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector`](/../master/rules/generic/src/Rector/FuncCall/FuncCallToStaticCallRector.php)
@@ -4921,7 +4930,7 @@ use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(FuncCallToStaticCallRector::class)
-        ->call('configure', [[FuncCallToStaticCallRector::FUNCTION_TO_STATIC_CALL, ['view' => ['SomeStaticClass', 'render']]]]);
+        ->call('configure', [[FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS, ['view' => ['SomeStaticClass', 'render']]]]);
 };
 ```
 

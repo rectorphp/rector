@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
-            FuncCallToStaticCallRector::FUNCTION_TO_STATIC_CALL => [
+            FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => [
                 'array_add' => [
                     # Arr
                     'Illuminate\Support\Arr',

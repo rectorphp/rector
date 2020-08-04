@@ -20,7 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
-            FuncCallToStaticCallRector::FUNCTION_TO_STATIC_CALL => [
+            FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => [
                 'file_get_contents' => ['Nette\Utils\FileSystem', 'read'],
                 'unlink' => ['Nette\Utils\FileSystem', 'delete'],
                 'rmdir' => ['Nette\Utils\FileSystem', 'delete'],

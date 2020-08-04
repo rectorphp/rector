@@ -19,7 +19,7 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
     /**
      * @var string
      */
-    public const FUNCTION_TO_STATIC_CALL = '$functionToStaticCall';
+    public const FUNC_CALLS_TO_STATIC_CALLS = 'func_calls_to_static_calls';
 
     /**
      * @var string[]
@@ -33,7 +33,7 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
                 'view("...", []);',
                 'SomeClass::render("...", []);',
                 [
-                    self::FUNCTION_TO_STATIC_CALL => [
+                    self::FUNC_CALLS_TO_STATIC_CALLS => [
                         'view' => ['SomeStaticClass', 'render'],
                     ],
                 ]
@@ -69,6 +69,6 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
 
     public function configure(array $configuration): void
     {
-        $this->functionToStaticCall = $configuration[self::FUNCTION_TO_STATIC_CALL] ?? [];
+        $this->functionToStaticCall = $configuration[self::FUNC_CALLS_TO_STATIC_CALLS] ?? [];
     }
 }
