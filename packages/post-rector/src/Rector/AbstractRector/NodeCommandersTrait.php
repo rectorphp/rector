@@ -155,12 +155,12 @@ trait NodeCommandersTrait
     }
 
     protected function addPropertyWithoutConstructorToClass(
-        Class_ $classNode,
+        Class_ $class,
         ?Type $propertyType,
         string $propertyName
     ): void {
-        $this->propertyToAddCollector->addPropertyWithoutConstructorToClass($propertyName, $propertyType, $classNode);
-        $this->rectorChangeCollector->notifyNodeFileInfo($classNode);
+        $this->propertyToAddCollector->addPropertyWithoutConstructorToClass($propertyName, $propertyType, $class);
+        $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
 
     protected function removeNode(Node $node): void

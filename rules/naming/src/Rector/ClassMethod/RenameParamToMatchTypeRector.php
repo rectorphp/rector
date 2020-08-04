@@ -23,6 +23,10 @@ use Rector\Naming\VariableRenamer;
 final class RenameParamToMatchTypeRector extends AbstractRector
 {
     /**
+     * @var bool
+     */
+    private $hasChanged = false;
+    /**
      * @var ExpectedNameResolver
      */
     private $expectedNameResolver;
@@ -41,11 +45,6 @@ final class RenameParamToMatchTypeRector extends AbstractRector
      * @var PropertyDocBlockManipulator
      */
     private $propertyDocBlockManipulator;
-
-    /**
-     * @var bool
-     */
-    private $hasChanged = false;
 
     public function __construct(
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
