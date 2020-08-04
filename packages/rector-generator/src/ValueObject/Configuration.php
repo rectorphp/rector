@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\ValueObject;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticRectorStrings;
 use Symplify\SetConfigResolver\ValueObject\Set;
@@ -212,8 +213,12 @@ final class Configuration
     private function setNodeTypes(array $nodeTypes): void
     {
         foreach ($nodeTypes as $nodeType) {
-            if (! class_exists($nodeType)) {
-                $message = sprintf('Node type "%s" does not exist or not imported in Rector recipe', $nodeType);
+            if (! is_a($nodeType, Node::class, true)) {
+                $message = sprintf(
+                    'Node type "%s" does not exist, implement "%s" interface, or not imported in Rector recipe',
+                    $nodeType,
+                    Node::class
+                );
                 throw new ShouldNotHappenException($message);
             }
         }
