@@ -15,10 +15,6 @@ use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 final class StmtOrderTest extends AbstractKernelTestCase
 {
     /**
-     * @var StmtOrder
-     */
-    private $stmtOrder;
-    /**
      * @var int[]
      */
     private const OLD_TO_NEW_KEYS = [
@@ -26,6 +22,11 @@ final class StmtOrderTest extends AbstractKernelTestCase
         1 => 2,
         2 => 1,
     ];
+
+    /**
+     * @var StmtOrder
+     */
+    private $stmtOrder;
 
     protected function setUp(): void
     {
