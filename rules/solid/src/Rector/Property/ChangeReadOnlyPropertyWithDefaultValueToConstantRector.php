@@ -132,7 +132,7 @@ PHP
 
         $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
-            return false;
+            return true;
         }
 
         return $this->isObjectType($classLike, 'PHP_CodeSniffer\Sniffs\Sniff');
