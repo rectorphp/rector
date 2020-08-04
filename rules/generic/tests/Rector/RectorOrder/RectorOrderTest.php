@@ -6,9 +6,9 @@ namespace Rector\Generic\Tests\Rector\RectorOrder;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector;
-use Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector;
-use Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
+use Rector\PHPUnit\Rector\MethodCall\AssertComparisonToSpecificMethodRector;
+use Rector\PHPUnit\Rector\MethodCall\AssertFalseStrposToContainsRector;
+use Rector\PHPUnit\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
