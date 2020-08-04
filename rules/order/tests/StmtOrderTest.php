@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Order\Tests;
 
-
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\HttpKernel\RectorKernel;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Order\StmtOrder;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
@@ -51,18 +48,32 @@ class StmtOrderTest extends AbstractKernelTestCase
             2 => 1,
         ];
 
-        $class = new Class_('ClassUnderTest');
-        $class->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('name')]);
-        $class->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('service')]);
-        $class->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('price')]);
+        $class = $this->getTestClassNode();
 
         $actualClass = $this->stmtOrder->reorderClassStmtsByOldToNewKeys($class, $oldToNewKeys);
 
+        $expectedClass = $this->getExpectedClassNode();
+
+        $this->assertEquals($expectedClass->stmts, $actualClass->stmts);
+    }
+
+
+    private function getExpectedClassNode(): Class_
+    {
         $expectedClass = new Class_('ExpectedClass');
         $expectedClass->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('name')]);
         $expectedClass->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('price')]);
         $expectedClass->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('service')]);
+        return $expectedClass;
+    }
 
-        $this->assertEquals($expectedClass->stmts, $actualClass->stmts);
+
+    private function getTestClassNode(): Class_
+    {
+        $class = new Class_('ClassUnderTest');
+        $class->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('name')]);
+        $class->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('service')]);
+        $class->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('price')]);
+        return $class;
     }
 }
