@@ -26,6 +26,7 @@ final class RenameParamToMatchTypeRector extends AbstractRector
      * @var bool
      */
     private $hasChanged = false;
+
     /**
      * @var ExpectedNameResolver
      */
