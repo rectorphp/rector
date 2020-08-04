@@ -6,10 +6,10 @@ namespace Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\
 
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-abstract class ClassWithFileSystem
+abstract class ClassWithFileSystemMethod
 {
-    /**
-     * @var SmartFileSystem
-     */
-    public $smartFileSystemProperty;
+    public function getSmartFileSystem(): SmartFileSystem
+    {
+        return new SmartFileSystem();
+    }
 }

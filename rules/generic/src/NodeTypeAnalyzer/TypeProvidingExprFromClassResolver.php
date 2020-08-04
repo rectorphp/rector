@@ -39,6 +39,9 @@ final class TypeProvidingExprFromClassResolver
         $this->reflectionProvider = $reflectionProvider;
     }
 
+    /**
+     * @return MethodCall|PropertyFetch|null
+     */
     public function resolveTypeProvidingExprFromClass(Class_ $class, string $type): ?Expr
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);

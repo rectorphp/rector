@@ -6,23 +6,17 @@ namespace Rector\Generic\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
-use Rector\Naming\Naming\PropertyNaming;
+use Rector\Generic\Rector\AbstractToMethodCallRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 /**
  * @see \Rector\Generic\Tests\Rector\FuncCall\FuncCallToMethodCallRector\FuncCallToMethodCallRectorTest
  */
-final class FuncCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class FuncCallToMethodCallRector extends AbstractToMethodCallRector
 {
     /**
      * @var string
@@ -33,24 +27,6 @@ final class FuncCallToMethodCallRector extends AbstractRector implements Configu
      * @var array<string, array<string, string>>
      */
     private $functionToClassToMethod = [];
-
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var TypeProvidingExprFromClassResolver
-     */
-    private $typeProvidingExprFromClassResolver;
-
-    public function __construct(
-        PropertyNaming $propertyNaming,
-        TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver
-    ) {
-        $this->propertyNaming = $propertyNaming;
-        $this->typeProvidingExprFromClassResolver = $typeProvidingExprFromClassResolver;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -131,12 +107,7 @@ CODE_SAMPLE
             /** @var string $method */
             [$type, $method] = $classMethod;
 
-            $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass($classLike, $type);
-            if ($expr === null) {
-                $this->addPropertyTypeToClass($type, $classLike);
-                $expr = $this->createPropertyFetchFromClass($type);
-            }
-
+            $expr = $this->matchTypeProvidingExpr($classLike, $type);
             return $this->createMethodCall($expr, $method, $node->args);
         }
 
@@ -146,20 +117,5 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $this->functionToClassToMethod = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? [];
-    }
-
-    private function addPropertyTypeToClass(string $type, Class_ $class): void
-    {
-        $fullyQualifiedObjectType = new FullyQualifiedObjectType($type);
-        $propertyName = $this->propertyNaming->fqnToVariableName($fullyQualifiedObjectType);
-        $this->addPropertyToClass($class, $fullyQualifiedObjectType, $propertyName);
-    }
-
-    private function createPropertyFetchFromClass(string $class): PropertyFetch
-    {
-        $thisVariable = new Variable('this');
-        $propertyName = $this->propertyNaming->fqnToVariableName($class);
-
-        return new PropertyFetch($thisVariable, $propertyName);
     }
 }
