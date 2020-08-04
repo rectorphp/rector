@@ -32,9 +32,9 @@ class GitWrapperChange
      */
     protected $gitWrapper;
 
-    public function __construct(GitWrapper $gitWrapper)
+    public function __construct(GitWrapper $wrapper)
     {
-        $this->gitWrapper = $gitWrapper;
+        $this->gitWrapper = $wrapper;
     }
 }
 
