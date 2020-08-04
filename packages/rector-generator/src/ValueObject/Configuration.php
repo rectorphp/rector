@@ -99,7 +99,7 @@ final class Configuration
         $this->package = $package;
         $this->setName($name);
         $this->category = $category;
-        $this->nodeTypes = $nodeTypes;
+        $this->setNodeTypes($nodeTypes);
         $this->codeBefore = $codeBefore;
         $this->codeAfter = $codeAfter;
         $this->description = $description;
@@ -207,5 +207,17 @@ final class Configuration
         }
 
         $this->name = $name;
+    }
+
+    private function setNodeTypes(array $nodeTypes): void
+    {
+        foreach ($nodeTypes as $nodeType) {
+            if (class_exists($nodeType) !== true) {
+                $message = sprintf('Node type "%s" doesn\'t exist or not imported in Rector recipe', $nodeType);
+                throw new ShouldNotHappenException($message);
+            }
+        }
+
+        $this->nodeTypes = $nodeTypes;
     }
 }
