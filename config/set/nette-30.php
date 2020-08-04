@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\Argument\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
-use Rector\Injection\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector;
+use Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Injection\ValueObject\StaticCallToMethodCall;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
@@ -57,11 +57,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'Nette\Security\Passwords',
         'needsRehash'
     );
-    $services->set(StaticCallToAnotherServiceConstructorInjectionRector::class)->call(
+    $services->set(StaticCallToMethodCallRector::class)->call(
         'configure',
-        [[StaticCallToAnotherServiceConstructorInjectionRector::STATIC_CALLS_TO_METHOD_CALLS => inline_objects(
-            $configuration
-        )]]
+        [[StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_objects($configuration)]]
     );
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
     $services->set(RenameClassConstantRector::class)->call(

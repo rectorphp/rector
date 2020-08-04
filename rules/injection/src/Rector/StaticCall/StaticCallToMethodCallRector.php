@@ -21,11 +21,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 /**
- * @see \Rector\Injection\Tests\Rector\StaticCall\StaticCallToAnotherServiceConstructorInjectionRector\StaticCallToAnotherServiceConstructorInjectionRectorTest
+ * @see \Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\StaticCallToMethodCallRectorTest
  */
-final class StaticCallToAnotherServiceConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
+final class StaticCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @api
      * @var string
      */
     public const STATIC_CALLS_TO_METHOD_CALLS = '$staticCallsToMethodCalls';
