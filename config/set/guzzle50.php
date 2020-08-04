@@ -31,7 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FuncCallToMethodCallRector::class)
         ->call('configure', [[
-            FuncCallToMethodCallRector::FUNCTION_TO_CLASS_TO_METHOD_CALL => [
+            FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => [
                 'GuzzleHttp\json_decode' => ['GuzzleHttp\Utils', 'jsonDecode'],
                 'GuzzleHttp\get_path' => ['GuzzleHttp\Utils', 'getPath'],
             ],

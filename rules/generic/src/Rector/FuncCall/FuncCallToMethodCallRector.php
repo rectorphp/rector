@@ -13,6 +13,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -25,7 +26,7 @@ final class FuncCallToMethodCallRector extends AbstractRector implements Configu
     /**
      * @var string
      */
-    public const FUNCTION_TO_CLASS_TO_METHOD_CALL = 'function_to_class_to_method_call';
+    public const FUNC_CALL_TO_CLASS_METHOD_CALL = 'function_to_class_to_method_call';
 
     /**
      * @var array<string, array<string, string>>
@@ -37,9 +38,17 @@ final class FuncCallToMethodCallRector extends AbstractRector implements Configu
      */
     private $propertyNaming;
 
-    public function __construct(PropertyNaming $propertyNaming)
-    {
+    /**
+     * @var TypeProvidingExprFromClassResolver
+     */
+    private $typeProvidingExprFromClassResolver;
+
+    public function __construct(
+        PropertyNaming $propertyNaming,
+        TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver
+    ) {
         $this->propertyNaming = $propertyNaming;
+        $this->typeProvidingExprFromClassResolver = $typeProvidingExprFromClassResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -77,7 +86,7 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    self::FUNCTION_TO_CLASS_TO_METHOD_CALL => [
+                    self::FUNC_CALL_TO_CLASS_METHOD_CALL => [
                         'view' => ['Namespaced\SomeRenderer', 'render'],
                     ],
                 ]
@@ -108,18 +117,17 @@ CODE_SAMPLE
                 continue;
             }
 
-            [$class, $method] = $classMethod;
+            /** @var string $type */
+            /** @var string $method */
+            [$type, $method] = $classMethod;
 
-            $thisVariable = new Variable('this');
-            $propertyName = $this->propertyNaming->fqnToVariableName($class);
-            $propertyFetch = new PropertyFetch($thisVariable, $propertyName);
+            $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass($classLike, $type);
+            if ($expr === null) {
+                $this->addPropertyTypeToClass($type, $classLike);
+                $expr = $this->createPropertyFetchFromClass($type);
+            }
 
-            $serviceObjectType = new FullyQualifiedObjectType($class);
-
-            $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
-            $this->addPropertyToClass($classLike, $serviceObjectType, $propertyName);
-
-            return $this->createMethodCall($propertyFetch, $method, $node->args);
+            return $this->createMethodCall($expr, $method, $node->args);
         }
 
         return null;
@@ -127,6 +135,21 @@ CODE_SAMPLE
 
     public function configure(array $configuration): void
     {
-        $this->functionToClassToMethod = $configuration[self::FUNCTION_TO_CLASS_TO_METHOD_CALL] ?? [];
+        $this->functionToClassToMethod = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? [];
+    }
+
+    private function addPropertyTypeToClass(string $type, Class_ $class): void
+    {
+        $serviceObjectType = new FullyQualifiedObjectType($type);
+        $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
+        $this->addPropertyToClass($class, $serviceObjectType, $propertyName);
+    }
+
+    private function createPropertyFetchFromClass(string $class): PropertyFetch
+    {
+        $thisVariable = new Variable('this');
+        $propertyName = $this->propertyNaming->fqnToVariableName($class);
+
+        return new PropertyFetch($thisVariable, $propertyName);
     }
 }
