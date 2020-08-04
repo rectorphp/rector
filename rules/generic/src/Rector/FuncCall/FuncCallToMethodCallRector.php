@@ -140,9 +140,9 @@ CODE_SAMPLE
 
     private function addPropertyTypeToClass(string $type, Class_ $class): void
     {
-        $serviceObjectType = new FullyQualifiedObjectType($type);
-        $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
-        $this->addPropertyToClass($class, $serviceObjectType, $propertyName);
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType($type);
+        $propertyName = $this->propertyNaming->fqnToVariableName($fullyQualifiedObjectType);
+        $this->addPropertyToClass($class, $fullyQualifiedObjectType, $propertyName);
     }
 
     private function createPropertyFetchFromClass(string $class): PropertyFetch
