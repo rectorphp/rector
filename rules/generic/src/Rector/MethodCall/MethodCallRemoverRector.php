@@ -6,12 +6,10 @@ namespace Rector\Generic\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\MethodCallRemoverRector\MethodCallRemoverRectorTest
@@ -27,16 +25,6 @@ final class MethodCallRemoverRector extends AbstractRector implements Configurab
      * @var string[]
      */
     private $methodCallRemoverArgument = [];
-
-    /**
-     * @var FluentChainMethodCallNodeAnalyzer
-     */
-    private $fluentChainMethodCallNodeAnalyzer;
-
-    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
-    {
-        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -85,13 +73,7 @@ PHP
                 continue;
             }
 
-            $rootNodeName = $this->getRootNodeVariableName($node);
-
-            if ($rootNodeName === null) {
-                continue;
-            }
-
-            return new Variable($rootNodeName);
+            return $node->var;
         }
 
         return $node;
@@ -100,11 +82,5 @@ PHP
     public function configure(array $configuration): void
     {
         $this->methodCallRemoverArgument = $configuration[self::METHOD_CALL_REMOVER_ARGUMENT] ?? [];
-    }
-
-    private function getRootNodeVariableName(MethodCall $methodCall): ?string
-    {
-        $rootNode = $this->fluentChainMethodCallNodeAnalyzer->resolveRootVariable($methodCall);
-        return $this->getName($rootNode);
     }
 }
