@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -18,6 +19,7 @@ use Rector\Order\StmtOrder;
  */
 final class OrderPrivateMethodsByUseRector extends AbstractRector
 {
+    const MAX_ATTEMTPS = 5;
     /**
      * @var StmtOrder
      */
@@ -103,8 +105,8 @@ PHP
         $attempt = 0;
         while (array_values($desiredPrivateMethodCallOrder) !== array_values($privateClassMethodsByKey)) {
             $attempt++;
-            if ($attempt >= 5) {
-                break;
+            if ($attempt >= self::MAX_ATTEMTPS) {
+                throw new ShouldNotHappenException('Number of attempts to reorder the methods exceeded');
             }
 
             $oldToNewKeys = $this->stmtOrder->createOldToNewKeys(
