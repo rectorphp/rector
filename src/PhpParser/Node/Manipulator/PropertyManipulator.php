@@ -7,6 +7,7 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
@@ -31,6 +32,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyManipulator
 {
     use DoctrineTrait;
+
+    /**
+     * @var string[]
+     */
+    private const MODIFIED_FUNCTION_NAMES = ['end'];
 
     /**
      * @var BetterNodeFinder
@@ -166,9 +172,19 @@ final class PropertyManipulator
         }
 
         if ($parentNode instanceof Arg) {
-            return true;
+            return $this->isReadOnlyArg($parentNode);
         }
 
         return ! $this->assignManipulator->isNodeLeftPartOfAssign($node);
+    }
+
+    private function isReadOnlyArg(Arg $arg): bool
+    {
+        $parentParent = $arg->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentParent instanceof FuncCall) {
+            return true;
+        }
+
+        return ! $this->nodeNameResolver->isNames($parentParent, self::MODIFIED_FUNCTION_NAMES);
     }
 }
