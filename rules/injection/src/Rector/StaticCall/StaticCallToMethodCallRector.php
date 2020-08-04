@@ -11,19 +11,16 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\Rector\AbstractToMethodCallRector;
 use Rector\Injection\ValueObject\StaticCallToMethodCall;
-use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 /**
  * @see \Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\StaticCallToMethodCallRectorTest
  */
-final class StaticCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class StaticCallToMethodCallRector extends AbstractToMethodCallRector
 {
     /**
      * @api
@@ -35,16 +32,6 @@ final class StaticCallToMethodCallRector extends AbstractRector implements Confi
      * @var StaticCallToMethodCall[]
      */
     private $staticCallsToMethodCalls = [];
-
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    public function __construct(PropertyNaming $propertyNaming)
-    {
-        $this->propertyNaming = $propertyNaming;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -126,14 +113,8 @@ PHP
                 return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
             }
 
-            $serviceObjectType = new FullyQualifiedObjectType($staticCallToMethodCall->getClassType());
-
-            $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
-            $this->addPropertyToClass($classLike, $serviceObjectType, $propertyName);
-
-            $propertyFetchNode = $this->createPropertyFetch('this', $propertyName);
-
-            return new MethodCall($propertyFetchNode, $staticCallToMethodCall->getMethodName(), $node->args);
+            $expr = $this->matchTypeProvidingExpr($classLike, $staticCallToMethodCall->getClassType());
+            return new MethodCall($expr, $staticCallToMethodCall->getMethodName(), $node->args);
         }
 
         return $node;
