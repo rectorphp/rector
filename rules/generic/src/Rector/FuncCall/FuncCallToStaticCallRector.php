@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Function_;
+namespace Rector\Generic\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -12,9 +12,9 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Function_\FunctionToStaticCallRector\FunctionToStaticCallRectorTest
+ * @see \Rector\Generic\Tests\Rector\FuncCall\FuncCallToStaticCallRector\FuncCallToStaticCallRectorTest
  */
-final class FunctionToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class FuncCallToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string

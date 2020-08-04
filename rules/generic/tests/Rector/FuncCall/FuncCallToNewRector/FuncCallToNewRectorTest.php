@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFuncCallToStaticCallRector;
+namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToNewRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector;
+use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RenameFuncCallToStaticCallRectorTest extends AbstractRectorTestCase
+final class FuncCallToNewRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -24,12 +24,15 @@ final class RenameFuncCallToStaticCallRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            RenameFuncCallToStaticCallRector::class => [
-                RenameFuncCallToStaticCallRector::FUNCTIONS_TO_STATIC_CALLS => [
-                    'strPee' => ['Strings', 'strPaa'],
+            FuncCallToNewRector::class => [
+                FuncCallToNewRector::FUNCTION_TO_NEW => [
+                    'collection' => ['Collection'],
                 ],
             ],
         ];

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Function_\FunctionToStaticCallRector;
+use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector;
 use Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector;
 use Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
@@ -18,9 +18,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(FunctionToStaticCallRector::class)
+    $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
-            FunctionToStaticCallRector::FUNCTION_TO_STATIC_CALL => [
+            FuncCallToStaticCallRector::FUNCTION_TO_STATIC_CALL => [
                 'file_get_contents' => ['Nette\Utils\FileSystem', 'read'],
                 'unlink' => ['Nette\Utils\FileSystem', 'delete'],
                 'rmdir' => ['Nette\Utils\FileSystem', 'delete'],

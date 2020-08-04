@@ -1,4 +1,4 @@
-# All 551 Rectors Overview
+# All 550 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -61,7 +61,7 @@
 - [Privatization](#privatization) (7)
 - [RectorGenerator](#rectorgenerator) (1)
 - [RemovingStatic](#removingstatic) (4)
-- [Renaming](#renaming) (9)
+- [Renaming](#renaming) (8)
 - [Restoration](#restoration) (7)
 - [SOLID](#solid) (12)
 - [Sensio](#sensio) (3)
@@ -4885,10 +4885,10 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
-### `FunctionToNewRector`
+### `FuncCallToNewRector`
 
-- class: [`Rector\Generic\Rector\FuncCall\FunctionToNewRector`](/../master/rules/generic/src/Rector/FuncCall/FunctionToNewRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/FuncCall/FunctionToNewRector/Fixture)
+- class: [`Rector\Generic\Rector\FuncCall\FuncCallToNewRector`](/../master/rules/generic/src/Rector/FuncCall/FuncCallToNewRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/FuncCall/FuncCallToNewRector/Fixture)
 
 Change configured function calls to new Instance
 
@@ -4905,10 +4905,10 @@ Change configured function calls to new Instance
 
 <br><br>
 
-### `FunctionToStaticCallRector`
+### `FuncCallToStaticCallRector`
 
-- class: [`Rector\Generic\Rector\Function_\FunctionToStaticCallRector`](/../master/rules/generic/src/Rector/Function_/FunctionToStaticCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/Function_/FunctionToStaticCallRector/Fixture)
+- class: [`Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector`](/../master/rules/generic/src/Rector/FuncCall/FuncCallToStaticCallRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/FuncCall/FuncCallToStaticCallRector/Fixture)
 
 Turns defined function call to static method call.
 
@@ -4916,12 +4916,12 @@ Turns defined function call to static method call.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Function_\FunctionToStaticCallRector;
+use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(FunctionToStaticCallRector::class)
-        ->call('configure', [[FunctionToStaticCallRector::FUNCTION_TO_STATIC_CALL, ['view' => ['SomeStaticClass', 'render']]]]);
+    $services->set(FuncCallToStaticCallRector::class)
+        ->call('configure', [[FuncCallToStaticCallRector::FUNCTION_TO_STATIC_CALL, ['view' => ['SomeStaticClass', 'render']]]]);
 };
 ```
 
@@ -11860,41 +11860,6 @@ Replace constant by new ones
      {
 -        return MYSQL_ASSOC;
 +        return MYSQLI_ASSOC;
-     }
- }
-```
-
-<br><br>
-
-### `RenameFuncCallToStaticCallRector`
-
-- class: [`Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector`](/../master/rules/renaming/src/Rector/FuncCall/RenameFuncCallToStaticCallRector.php)
-- [test fixtures](/../master/rules/renaming/tests/Rector/FuncCall/RenameFuncCallToStaticCallRector/Fixture)
-
-Rename func call to static call
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(RenameFuncCallToStaticCallRector::class)
-        ->call('configure', [[RenameFuncCallToStaticCallRector::FUNCTIONS_TO_STATIC_CALLS, ['strPee' => ['Strings', 'strPaa']]]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        strPee('...');
-+        \Strings::strPaa('...');
      }
  }
 ```
