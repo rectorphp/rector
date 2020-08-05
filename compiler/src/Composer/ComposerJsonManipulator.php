@@ -35,6 +35,11 @@ final class ComposerJsonManipulator
     /**
      * @var string
      */
+    private const REQUIRE_DEV = 'require-dev';
+
+    /**
+     * @var string
+     */
     private $originalComposerJsonFileContent;
 
     /**
@@ -103,6 +108,10 @@ final class ComposerJsonManipulator
         // use dev-master till this get's to tagged: https://github.com/phpstan/phpstan-src/commit/535c0e25429c1e3dd0dd05f61b43a34830da2a09
         $json[self::REQUIRE]['phpstan/phpstan-src'] = 'dev-master';
         unset($json[self::REQUIRE][self::PHPSTAN_PHPSTAN]);
+
+        // remove conflicting dev deps
+        unset($json[self::REQUIRE_DEV]['slam/phpstan-extensions']);
+        unset($json[self::REQUIRE_DEV]['slevomat/coding-standard']);
 
         $json['repositories'][] = [
             'type' => 'vcs',
