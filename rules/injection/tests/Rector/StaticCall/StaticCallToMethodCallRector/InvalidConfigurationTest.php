@@ -18,6 +18,7 @@ final class InvalidConfigurationTest extends AbstractRectorTestCase
     private const CONFIGURATION = [
         ['Nette\Utils\FileSystem', 'write', 'Symplify\SmartFileSystem\SmartFileSystem', 'dumpFile'],
     ];
+
     /**
      * @dataProvider provideData()
      */
