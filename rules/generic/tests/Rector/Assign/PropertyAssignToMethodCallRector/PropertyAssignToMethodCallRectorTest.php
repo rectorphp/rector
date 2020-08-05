@@ -37,9 +37,6 @@ final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
                     ChoiceControl::class => [
                         'checkAllowedValues' => 'checkDefaultValue',
                     ],
-                    MultiChoiceControl::class => [
-                        'checkAllowedValues' => 'checkDefaultValue',
-                    ],
                 ],
             ],
         ];
