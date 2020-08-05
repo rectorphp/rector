@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Console;
+namespace Rector\Symfony\Rector\ClassConstFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  * - https://github.com/symfony/symfony/pull/22441/files
  * - https://github.com/symfony/symfony/blob/master/UPGRADE-3.3.md#console
  *
- * @see \Rector\Symfony\Tests\Rector\Console\ConsoleExceptionToErrorEventConstantRector\ConsoleExceptionToErrorEventConstantRectorTest
+ * @see \Rector\Symfony\Tests\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector\ConsoleExceptionToErrorEventConstantRectorTest
  */
 final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
 {

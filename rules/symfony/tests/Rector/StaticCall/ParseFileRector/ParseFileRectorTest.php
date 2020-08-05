@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExceptionToErrorEventConstantRector;
+namespace Rector\Symfony\Tests\Rector\StaticCall\ParseFileRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector;
+use Rector\Symfony\Rector\StaticCall\ParseFileRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ConsoleExceptionToErrorEventConstantRectorTest extends AbstractRectorTestCase
+final class ParseFileRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class ConsoleExceptionToErrorEventConstantRectorTest extends AbstractRecto
 
     protected function getRectorClass(): string
     {
-        return ConsoleExceptionToErrorEventConstantRector::class;
+        return ParseFileRector::class;
     }
 }

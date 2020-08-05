@@ -1,17 +1,16 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExecuteReturnIntRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class ExplicitReturnNullCommand extends Command
+final class NoReturnCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        // execute
-        return null;
+        $this->doSomething();
     }
 }
 
@@ -19,17 +18,17 @@ final class ExplicitReturnNullCommand extends Command
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExecuteReturnIntRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class ExplicitReturnNullCommand extends Command
+final class NoReturnCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        // execute
+        $this->doSomething();
         return 0;
     }
 }

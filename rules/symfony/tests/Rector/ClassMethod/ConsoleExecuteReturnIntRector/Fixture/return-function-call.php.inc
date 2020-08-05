@@ -1,16 +1,21 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExecuteReturnIntRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class NoReturnCommand extends Command
+final class ReturnFunctionCallCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->doSomething();
+        return $this->doSomething();
+    }
+
+    private function doSomething()
+    {
+        return null;
     }
 }
 
@@ -18,18 +23,22 @@ final class NoReturnCommand extends Command
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExecuteReturnIntRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class NoReturnCommand extends Command
+final class ReturnFunctionCallCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->doSomething();
-        return 0;
+        return (int) $this->doSomething();
+    }
+
+    private function doSomething()
+    {
+        return null;
     }
 }
 

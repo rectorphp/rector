@@ -1,22 +1,16 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExecuteReturnIntRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class MultipleReturnCommand extends Command
+final class EmptyReturnCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($earlyReturn) {
-            return null;
-        }
-
-        if ($erroCondition) {
-            return 1;
-        }
+        return;
     }
 }
 
@@ -24,23 +18,16 @@ final class MultipleReturnCommand extends Command
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExecuteReturnIntRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class MultipleReturnCommand extends Command
+final class EmptyReturnCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($earlyReturn) {
-            return 0;
-        }
-
-        if ($erroCondition) {
-            return 1;
-        }
         return 0;
     }
 }

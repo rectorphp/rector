@@ -1,19 +1,19 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExecuteReturnIntRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class SkipNestedReturn extends Command
+final class SkipFunctionNestedReturn extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        array_filter([0, 1], function ($a, $b) {
-            return false;
-        });
+        function go() {
+            return null;
+        }
 
-        return 1;
+        return 0;
     }
 }

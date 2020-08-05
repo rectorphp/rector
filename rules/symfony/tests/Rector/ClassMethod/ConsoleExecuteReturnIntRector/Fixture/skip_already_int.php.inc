@@ -1,19 +1,15 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Console\ConsoleExecuteReturnIntRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class SkipFunctionNestedReturn extends Command
+final class SkipAlreadyInt extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        function go() {
-            return null;
-        }
-
-        return 0;
+        return 2;
     }
 }
