@@ -76,6 +76,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         parent::setUp();
 
         $this->runnableRectorFactory = new RunnableRectorFactory();
+        $this->smartFileSystem = new SmartFileSystem();
 
         if ($this->provideConfigFileInfo() !== null) {
             $configFileInfos = $this->resolveConfigs($this->provideConfigFileInfo());
@@ -107,7 +108,6 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         $this->fileProcessor = static::$container->get(FileProcessor::class);
         $this->nonPhpFileProcessor = static::$container->get(NonPhpFileProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
-        $this->smartFileSystem = static::$container->get(SmartFileSystem::class);
 
         // needed for PHPStan, because the analyzed file is just create in /temp
         $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
