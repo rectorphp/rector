@@ -10,12 +10,6 @@ use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
-use SlevomatCodingStandard\Sniffs\Commenting\DisallowCommentAfterCodeSniff;
-use SlevomatCodingStandard\Sniffs\ControlStructures\AssignmentInConditionSniff;
-use SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff;
-use SlevomatCodingStandard\Sniffs\Namespaces\UseSpacingSniff;
-use SlevomatCodingStandard\Sniffs\Variables\UnusedVariableSniff;
-use SlevomatCodingStandard\Sniffs\Whitespaces\DuplicateSpacesSniff;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\ArrayNotation\StandaloneLineInMultilineArrayFixer;
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
@@ -24,9 +18,6 @@ use Symplify\EasyCodingStandard\Configuration\Option;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(DisallowCommentAfterCodeSniff::class);
-    $services->set(DuplicateSpacesSniff::class);
-    $services->set(UseSpacingSniff::class);
     $services->set(StandaloneLineInMultilineArrayFixer::class);
     $services->set(LineLengthFixer::class);
 
@@ -75,10 +66,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         GlobalNamespaceImportFixer::class => null,
         MethodDeclarationSniff::class . '.Underscore' => null,
         PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
-        AssignmentInConditionSniff::class . '.FoundInWhileCondition' => null,
-        UnusedVariableSniff::class . '.' . UnusedVariableSniff::CODE_UNUSED_VARIABLE => [
-            __DIR__ . '/rules/php-office/src/Rector/MethodCall/IncreaseColumnIndexRector.php',
-        ],
         CommentedOutCodeSniff::class . '.Found' => [
             __DIR__ . '/rules/php72/src/Rector/Each/ListEachRector.php',
             __DIR__ . '/rules/dead-code/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php',
@@ -91,13 +78,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
         UnaryOperatorSpacesFixer::class => null,
         StrictComparisonFixer::class => [__DIR__ . '/packages/polyfill/src/ConditionEvaluator.php'],
-        ReferenceUsedNamesOnlySniff::class . '.' . ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE => null,
-        ReferenceUsedNamesOnlySniff::class . '.' . ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME => [
-            __DIR__ . '/packages/better-php-doc-parser/src/PhpDocNodeFactory/Doctrine/Property_/DoctrineTargetEntityPhpDocNodeFactory.php',
-            __DIR__ . '/packages/better-php-doc-parser/src/PhpDocNodeFactory/Doctrine/Property_/JoinTablePhpDocNodeFactory.php',
-            __DIR__ . '/packages/better-php-doc-parser/src/PhpDocNodeFactory/Doctrine/Class_/TablePhpDocNodeFactory.php',
-            __DIR__ . '/packages/better-php-doc-parser/src/PhpDocNodeFactory/JMS/JMSInjectPhpDocNodeFactory.php',
-        ],
     ]);
 
     $parameters->set('line_ending', "\n");

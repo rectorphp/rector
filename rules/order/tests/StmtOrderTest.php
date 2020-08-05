@@ -102,15 +102,6 @@ final class StmtOrderTest extends AbstractKernelTestCase
         );
     }
 
-    private function getExpectedClassNode(): Class_
-    {
-        $expectedClass = new Class_('ExpectedClass');
-        $expectedClass->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('name')]);
-        $expectedClass->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('price')]);
-        $expectedClass->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('service')]);
-        return $expectedClass;
-    }
-
     private function getTestClassNode(): Class_
     {
         $class = new Class_('ClassUnderTest');
@@ -118,5 +109,14 @@ final class StmtOrderTest extends AbstractKernelTestCase
         $class->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('service')]);
         $class->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('price')]);
         return $class;
+    }
+
+    private function getExpectedClassNode(): Class_
+    {
+        $expectedClass = new Class_('ExpectedClass');
+        $expectedClass->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('name')]);
+        $expectedClass->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('price')]);
+        $expectedClass->stmts[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty('service')]);
+        return $expectedClass;
     }
 }
