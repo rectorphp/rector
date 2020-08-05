@@ -124,15 +124,25 @@ PHP
         return $assignAndRootExpr->getCallerExpr();
     }
 
-    private function removeParentParent(MethodCall $methodCall): void
+    private function refactorNew(MethodCall $methodCall, New_ $new): void
     {
-        /** @var Arg $parent */
-        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $this->newFluentChainMethodCallNodeAnalyzer->isNewMethodCallReturningSelf($methodCall)) {
+            return;
+        }
 
-        /** @var MethodCall $parentParent */
-        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromNewAndRootMethodCall($new, $methodCall);
 
-        $this->removeNode($parentParent);
+        $newVariable = $this->crateVariableFromNew($new);
+        $nodesToAdd[] = $this->createFluentAsArg($methodCall, $newVariable);
+
+        $this->addNodesBeforeNode($nodesToAdd, $methodCall);
+        $this->removeParentParent($methodCall);
+    }
+
+    private function crateVariableFromNew(New_ $new): Variable
+    {
+        $variableName = $this->variableNaming->resolveFromNode($new);
+        return new Variable($variableName);
     }
 
     /**
@@ -152,24 +162,14 @@ PHP
         return $lastMethodCall;
     }
 
-    private function crateVariableFromNew(New_ $new): Variable
+    private function removeParentParent(MethodCall $methodCall): void
     {
-        $variableName = $this->variableNaming->resolveFromNode($new);
-        return new Variable($variableName);
-    }
+        /** @var Arg $parent */
+        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
 
-    private function refactorNew(MethodCall $methodCall, New_ $new): void
-    {
-        if (! $this->newFluentChainMethodCallNodeAnalyzer->isNewMethodCallReturningSelf($methodCall)) {
-            return;
-        }
+        /** @var MethodCall $parentParent */
+        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
 
-        $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromNewAndRootMethodCall($new, $methodCall);
-
-        $newVariable = $this->crateVariableFromNew($new);
-        $nodesToAdd[] = $this->createFluentAsArg($methodCall, $newVariable);
-
-        $this->addNodesBeforeNode($nodesToAdd, $methodCall);
-        $this->removeParentParent($methodCall);
+        $this->removeNode($parentParent);
     }
 }

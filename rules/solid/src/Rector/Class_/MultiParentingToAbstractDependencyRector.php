@@ -234,38 +234,6 @@ PHP
         return $objectTypes;
     }
 
-    private function addInjectOrRequiredClassMethod(Class_ $class): void
-    {
-        /** @var string $className */
-        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
-
-        if (count($this->objectTypesToInject) === 0) {
-            return;
-        }
-
-        $injectClassMethod = $this->injectMethodFactory->createFromTypes(
-            $this->objectTypesToInject,
-            $className,
-            $this->framework
-        );
-
-        $this->classInsertManipulator->addAsFirstMethod($class, $injectClassMethod);
-    }
-
-    private function clearAbstractClassConstructor(ClassMethod $classMethod): void
-    {
-        foreach ($classMethod->getParams() as $key => $param) {
-            if (! $this->isObjectTypes($param, $this->objectTypesToInject)) {
-                continue;
-            }
-
-            unset($classMethod->params[$key]);
-            $this->classMethodNodeRemover->removeParamFromMethodBody($classMethod, $param);
-        }
-
-        $this->classMethodNodeRemover->removeClassMethodIfUseless($classMethod);
-    }
-
     /**
      * @param ObjectType[] $abstractClassConstructorParamTypes
      */
@@ -290,6 +258,38 @@ PHP
 
             $this->objectTypesToInject[] = $paramType;
         }
+    }
+
+    private function clearAbstractClassConstructor(ClassMethod $classMethod): void
+    {
+        foreach ($classMethod->getParams() as $key => $param) {
+            if (! $this->isObjectTypes($param, $this->objectTypesToInject)) {
+                continue;
+            }
+
+            unset($classMethod->params[$key]);
+            $this->classMethodNodeRemover->removeParamFromMethodBody($classMethod, $param);
+        }
+
+        $this->classMethodNodeRemover->removeClassMethodIfUseless($classMethod);
+    }
+
+    private function addInjectOrRequiredClassMethod(Class_ $class): void
+    {
+        /** @var string $className */
+        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+
+        if (count($this->objectTypesToInject) === 0) {
+            return;
+        }
+
+        $injectClassMethod = $this->injectMethodFactory->createFromTypes(
+            $this->objectTypesToInject,
+            $className,
+            $this->framework
+        );
+
+        $this->classInsertManipulator->addAsFirstMethod($class, $injectClassMethod);
     }
 
     private function popFirstObjectTypeFromUnionType(Type $paramType): Type

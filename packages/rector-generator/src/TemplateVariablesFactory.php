@@ -153,17 +153,6 @@ final class TemplateVariablesFactory
         return rtrim($sourceAsString);
     }
 
-    private function createNodeTypePhp(Configuration $configuration): string
-    {
-        $referencingClassConsts = [];
-        foreach ($configuration->getNodeTypes() as $nodeType) {
-            $referencingClassConsts[] = $this->nodeFactory->createClassConstReference($nodeType);
-        }
-
-        $array = $this->nodeFactory->createArray($referencingClassConsts);
-        return $this->betterStandardPrinter->print($array);
-    }
-
     /**
      * @param mixed[] $configuration
      */
@@ -196,18 +185,29 @@ final class TemplateVariablesFactory
     /**
      * @param array<string, mixed> $ruleConfiguration
      */
+    private function createConfigurationConstants(array $ruleConfiguration): string
+    {
+        $configurationConstants = $this->configurationNodeFactory->createConfigurationConstants($ruleConfiguration);
+        return $this->betterStandardPrinter->print($configurationConstants);
+    }
+
+    /**
+     * @param array<string, mixed> $ruleConfiguration
+     */
     private function createConfigureClassMethod(array $ruleConfiguration): string
     {
         $classMethod = $this->configurationNodeFactory->createConfigureClassMethod($ruleConfiguration);
         return $this->betterStandardPrinter->print($classMethod);
     }
 
-    /**
-     * @param array<string, mixed> $ruleConfiguration
-     */
-    private function createConfigurationConstants(array $ruleConfiguration): string
+    private function createNodeTypePhp(Configuration $configuration): string
     {
-        $configurationConstants = $this->configurationNodeFactory->createConfigurationConstants($ruleConfiguration);
-        return $this->betterStandardPrinter->print($configurationConstants);
+        $referencingClassConsts = [];
+        foreach ($configuration->getNodeTypes() as $nodeType) {
+            $referencingClassConsts[] = $this->nodeFactory->createClassConstReference($nodeType);
+        }
+
+        $array = $this->nodeFactory->createArray($referencingClassConsts);
+        return $this->betterStandardPrinter->print($array);
     }
 }

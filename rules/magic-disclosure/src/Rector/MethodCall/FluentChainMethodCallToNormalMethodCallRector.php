@@ -110,6 +110,18 @@ PHP
         return $node;
     }
 
+    private function isGetterMethodCall(MethodCall $methodCall): bool
+    {
+        if ($methodCall->var instanceof MethodCall) {
+            return false;
+        }
+        $methodCallStaticType = $this->getStaticType($methodCall);
+        $methodCallVarStaticType = $this->getStaticType($methodCall->var);
+
+        // getter short call type
+        return ! $methodCallStaticType->equals($methodCallVarStaticType);
+    }
+
     /**
      * @duplicated
      * @param MethodCall|Return_ $node
@@ -132,17 +144,5 @@ PHP
         }
 
         $this->removeNode($node);
-    }
-
-    private function isGetterMethodCall(MethodCall $methodCall): bool
-    {
-        if ($methodCall->var instanceof MethodCall) {
-            return false;
-        }
-        $methodCallStaticType = $this->getStaticType($methodCall);
-        $methodCallVarStaticType = $this->getStaticType($methodCall->var);
-
-        // getter short call type
-        return ! $methodCallStaticType->equals($methodCallVarStaticType);
     }
 }

@@ -152,29 +152,6 @@ PHP
         return $phpDocInfo->hasByNames(['api', 'required']);
     }
 
-    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
-    {
-        if ($classMethod->isPrivate()) {
-            return true;
-        }
-
-        if ($classMethod->isAbstract()) {
-            return true;
-        }
-
-        // skip for now
-        if ($classMethod->isStatic()) {
-            return true;
-        }
-
-        if ($this->isName($classMethod, '__*')) {
-            return true;
-        }
-
-        // possibly container service factories
-        return $this->isNames($classMethod, ['create', 'create*']);
-    }
-
     private function isControllerAction(Class_ $class, ClassMethod $classMethod): bool
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
@@ -199,5 +176,28 @@ PHP
         }
 
         return $phpDocInfo->hasByName('inject');
+    }
+
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
+    {
+        if ($classMethod->isPrivate()) {
+            return true;
+        }
+
+        if ($classMethod->isAbstract()) {
+            return true;
+        }
+
+        // skip for now
+        if ($classMethod->isStatic()) {
+            return true;
+        }
+
+        if ($this->isName($classMethod, '__*')) {
+            return true;
+        }
+
+        // possibly container service factories
+        return $this->isNames($classMethod, ['create', 'create*']);
     }
 }

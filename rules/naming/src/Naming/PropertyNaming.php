@@ -106,6 +106,24 @@ final class PropertyNaming
         return lcfirst($camelCaseName);
     }
 
+    private function getClassName(TypeWithClassName $typeWithClassName): string
+    {
+        if ($typeWithClassName instanceof ShortenedObjectType) {
+            return $typeWithClassName->getFullyQualifiedName();
+        }
+
+        return $typeWithClassName->getClassName();
+    }
+
+    private function resolveShortClassName(string $className): string
+    {
+        if (Strings::contains($className, '\\')) {
+            return Strings::after($className, '\\', -1);
+        }
+
+        return $className;
+    }
+
     private function removePrefixesAndSuffixes(string $shortClassName): string
     {
         // is SomeInterface
@@ -126,37 +144,6 @@ final class PropertyNaming
         return $shortClassName;
     }
 
-    private function isPrefixedInterface(string $shortClassName): bool
-    {
-        if (strlen($shortClassName) <= 3) {
-            return false;
-        }
-
-        if (! Strings::startsWith($shortClassName, 'I')) {
-            return false;
-        }
-
-        return ctype_upper($shortClassName[1]) && ctype_lower($shortClassName[2]);
-    }
-
-    private function getClassName(TypeWithClassName $typeWithClassName): string
-    {
-        if ($typeWithClassName instanceof ShortenedObjectType) {
-            return $typeWithClassName->getFullyQualifiedName();
-        }
-
-        return $typeWithClassName->getClassName();
-    }
-
-    private function resolveShortClassName(string $className): string
-    {
-        if (Strings::contains($className, '\\')) {
-            return Strings::after($className, '\\', -1);
-        }
-
-        return $className;
-    }
-
     private function normalizeUpperCase(string $shortClassName): string
     {
         // turns $SOMEUppercase => $someUppercase
@@ -171,13 +158,16 @@ final class PropertyNaming
         return $shortClassName;
     }
 
-    private function isNumberOrUpper(string $char): bool
+    /**
+     * @param ObjectType|string $objectType
+     */
+    private function resolveClassName($objectType): string
     {
-        if (ctype_upper($char)) {
-            return true;
+        if ($objectType instanceof ObjectType) {
+            return $objectType->getClassName();
         }
 
-        return ctype_digit($char);
+        return $objectType;
     }
 
     private function fqnToShortName(string $fqn): string
@@ -214,15 +204,25 @@ final class PropertyNaming
         return $shortName;
     }
 
-    /**
-     * @param ObjectType|string $objectType
-     */
-    private function resolveClassName($objectType): string
+    private function isPrefixedInterface(string $shortClassName): bool
     {
-        if ($objectType instanceof ObjectType) {
-            return $objectType->getClassName();
+        if (strlen($shortClassName) <= 3) {
+            return false;
         }
 
-        return $objectType;
+        if (! Strings::startsWith($shortClassName, 'I')) {
+            return false;
+        }
+
+        return ctype_upper($shortClassName[1]) && ctype_lower($shortClassName[2]);
+    }
+
+    private function isNumberOrUpper(string $char): bool
+    {
+        if (ctype_upper($char)) {
+            return true;
+        }
+
+        return ctype_digit($char);
     }
 }

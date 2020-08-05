@@ -118,20 +118,6 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         return $node;
     }
 
-    private function isConstantValue(Node $node): bool
-    {
-        $nodeClass = get_class($node);
-        if (in_array($nodeClass, [Array_::class, ConstFetch::class], true)) {
-            return true;
-        }
-
-        if (is_subclass_of($node, Scalar::class)) {
-            return true;
-        }
-
-        return $this->isVariableName($node, 'exp*');
-    }
-
     /**
      * @param MethodCall|StaticCall $node
      */
@@ -153,5 +139,19 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
         unset($oldArguments[0]);
 
         $node->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
+    }
+
+    private function isConstantValue(Node $node): bool
+    {
+        $nodeClass = get_class($node);
+        if (in_array($nodeClass, [Array_::class, ConstFetch::class], true)) {
+            return true;
+        }
+
+        if (is_subclass_of($node, Scalar::class)) {
+            return true;
+        }
+
+        return $this->isVariableName($node, 'exp*');
     }
 }

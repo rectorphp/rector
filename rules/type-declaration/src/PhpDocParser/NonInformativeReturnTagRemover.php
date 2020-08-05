@@ -82,18 +82,6 @@ final class NonInformativeReturnTagRemover
         $this->removeFullyQualifiedObjectType($returnType, $returnTagValueNode, $phpDocInfo);
     }
 
-    /**
-     * @param string[] $values
-     */
-    private function isIdentifierWithValues(TypeNode $typeNode, array $values): bool
-    {
-        if (! $typeNode instanceof IdentifierTypeNode) {
-            return false;
-        }
-
-        return in_array($typeNode->name, $values, true);
-    }
-
     private function removeNonUniqueUselessDocNames(
         Type $returnType,
         ReturnTagValueNode $returnTagValueNode,
@@ -113,29 +101,20 @@ final class NonInformativeReturnTagRemover
         }
     }
 
-    private function matchNullabledType(Type $returnType): ?Type
-    {
-        if (! $returnType instanceof UnionType) {
-            return null;
+    private function removeShortObjectType(
+        Type $returnType,
+        ReturnTagValueNode $returnTagValueNode,
+        ?PhpDocInfo $phpDocInfo
+    ): void {
+        if (! $returnType instanceof ShortenedObjectType) {
+            return;
         }
 
-        if (! $returnType->isSuperTypeOf(new NullType())->yes()) {
-            return null;
+        if (! $this->isIdentifierWithValues($returnTagValueNode->type, [$returnType->getShortName()])) {
+            return;
         }
 
-        if (count($returnType->getTypes()) !== 2) {
-            return null;
-        }
-
-        foreach ($returnType->getTypes() as $unionedReturnType) {
-            if ($unionedReturnType instanceof NullType) {
-                continue;
-            }
-
-            return $unionedReturnType;
-        }
-
-        return null;
+        $phpDocInfo->removeByType(ReturnTagValueNode::class);
     }
 
     private function removeNullableType(
@@ -168,43 +147,6 @@ final class NonInformativeReturnTagRemover
         $phpDocInfo->removeByType(ReturnTagValueNode::class);
     }
 
-    private function matchNullabledReturnTagValueNode(ReturnTagValueNode $returnTagValueNode): ?TypeNode
-    {
-        if (! $returnTagValueNode->type instanceof UnionTypeNode) {
-            return null;
-        }
-
-        if (count($returnTagValueNode->type->types) !== 2) {
-            return null;
-        }
-
-        foreach ($returnTagValueNode->type->types as $unionedReturnTagValueNode) {
-            if ($this->isIdentifierWithValues($unionedReturnTagValueNode, ['null'])) {
-                continue;
-            }
-
-            return $unionedReturnTagValueNode;
-        }
-
-        return null;
-    }
-
-    private function removeShortObjectType(
-        Type $returnType,
-        ReturnTagValueNode $returnTagValueNode,
-        ?PhpDocInfo $phpDocInfo
-    ): void {
-        if (! $returnType instanceof ShortenedObjectType) {
-            return;
-        }
-
-        if (! $this->isIdentifierWithValues($returnTagValueNode->type, [$returnType->getShortName()])) {
-            return;
-        }
-
-        $phpDocInfo->removeByType(ReturnTagValueNode::class);
-    }
-
     private function removeFullyQualifiedObjectType(
         Type $returnType,
         ReturnTagValueNode $returnTagValueNode,
@@ -224,6 +166,64 @@ final class NonInformativeReturnTagRemover
         if ($this->isClassNameAndPartMatch($className, $returnTagValueNodeType)) {
             $phpDocInfo->removeByType(ReturnTagValueNode::class);
         }
+    }
+
+    /**
+     * @param string[] $values
+     */
+    private function isIdentifierWithValues(TypeNode $typeNode, array $values): bool
+    {
+        if (! $typeNode instanceof IdentifierTypeNode) {
+            return false;
+        }
+
+        return in_array($typeNode->name, $values, true);
+    }
+
+    private function matchNullabledType(Type $returnType): ?Type
+    {
+        if (! $returnType instanceof UnionType) {
+            return null;
+        }
+
+        if (! $returnType->isSuperTypeOf(new NullType())->yes()) {
+            return null;
+        }
+
+        if (count($returnType->getTypes()) !== 2) {
+            return null;
+        }
+
+        foreach ($returnType->getTypes() as $unionedReturnType) {
+            if ($unionedReturnType instanceof NullType) {
+                continue;
+            }
+
+            return $unionedReturnType;
+        }
+
+        return null;
+    }
+
+    private function matchNullabledReturnTagValueNode(ReturnTagValueNode $returnTagValueNode): ?TypeNode
+    {
+        if (! $returnTagValueNode->type instanceof UnionTypeNode) {
+            return null;
+        }
+
+        if (count($returnTagValueNode->type->types) !== 2) {
+            return null;
+        }
+
+        foreach ($returnTagValueNode->type->types as $unionedReturnTagValueNode) {
+            if ($this->isIdentifierWithValues($unionedReturnTagValueNode, ['null'])) {
+                continue;
+            }
+
+            return $unionedReturnTagValueNode;
+        }
+
+        return null;
     }
 
     private function isClassNameAndPartMatch(string $className, string $returnTagValueNodeType): bool

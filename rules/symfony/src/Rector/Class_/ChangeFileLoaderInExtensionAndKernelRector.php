@@ -145,6 +145,28 @@ PHP
         $this->to = $configuration[self::TO];
     }
 
+    private function isKernelOrExtensionClass(Class_ $class): bool
+    {
+        if ($this->isObjectType($class, 'Symfony\Component\HttpKernel\DependencyInjection\Extension')) {
+            return true;
+        }
+
+        return $this->isObjectType($class, 'Symfony\Component\HttpKernel\Kernel');
+    }
+
+    private function validateConfiguration(string $from, string $to): void
+    {
+        if (! isset(self::FILE_LOADERS_BY_TYPE[$from])) {
+            $message = sprintf('File loader "%s" format is not supported', $from);
+            throw new InvalidConfigurationException($message);
+        }
+
+        if (! isset(self::FILE_LOADERS_BY_TYPE[$to])) {
+            $message = sprintf('File loader "%s" format is not supported', $to);
+            throw new InvalidConfigurationException($message);
+        }
+    }
+
     private function refactorLoadMethodCall(Node $node): ?Node
     {
         if (! $node instanceof MethodCall) {
@@ -181,27 +203,5 @@ PHP
 
             return $node;
         });
-    }
-
-    private function validateConfiguration(string $from, string $to): void
-    {
-        if (! isset(self::FILE_LOADERS_BY_TYPE[$from])) {
-            $message = sprintf('File loader "%s" format is not supported', $from);
-            throw new InvalidConfigurationException($message);
-        }
-
-        if (! isset(self::FILE_LOADERS_BY_TYPE[$to])) {
-            $message = sprintf('File loader "%s" format is not supported', $to);
-            throw new InvalidConfigurationException($message);
-        }
-    }
-
-    private function isKernelOrExtensionClass(Class_ $class): bool
-    {
-        if ($this->isObjectType($class, 'Symfony\Component\HttpKernel\DependencyInjection\Extension')) {
-            return true;
-        }
-
-        return $this->isObjectType($class, 'Symfony\Component\HttpKernel\Kernel');
     }
 }

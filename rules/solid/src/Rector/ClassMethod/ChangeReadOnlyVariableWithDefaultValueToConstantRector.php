@@ -192,34 +192,6 @@ PHP
         }
     }
 
-    private function createConstantNameFromVariable(Variable $variable): string
-    {
-        $variableName = $this->getName($variable);
-        if ($variableName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $constantName = StaticRectorStrings::camelCaseToUnderscore($variableName);
-
-        return strtoupper($constantName);
-    }
-
-    private function decorateWithVarAnnotation(ClassConst $classConst): void
-    {
-        $constStaticType = $this->getStaticType($classConst->consts[0]->value);
-        if ($constStaticType instanceof MixedType) {
-            return;
-        }
-
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
-        }
-
-        $phpDocInfo->changeVarType($constStaticType);
-    }
-
     private function createClassConst(Variable $variable, Expr $expr): ClassConst
     {
         $constantName = $this->createConstantNameFromVariable($variable);
@@ -259,5 +231,33 @@ PHP
 
             return $classConstFetch;
         });
+    }
+
+    private function createConstantNameFromVariable(Variable $variable): string
+    {
+        $variableName = $this->getName($variable);
+        if ($variableName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $constantName = StaticRectorStrings::camelCaseToUnderscore($variableName);
+
+        return strtoupper($constantName);
+    }
+
+    private function decorateWithVarAnnotation(ClassConst $classConst): void
+    {
+        $constStaticType = $this->getStaticType($classConst->consts[0]->value);
+        if ($constStaticType instanceof MixedType) {
+            return;
+        }
+
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
+        }
+
+        $phpDocInfo->changeVarType($constStaticType);
     }
 }

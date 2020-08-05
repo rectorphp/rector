@@ -84,21 +84,6 @@ final class EventClassNaming
         return $this->prependShortClassEventWithNamespace($shortEventClass, $class);
     }
 
-    /**
-     * TomatoMarket, onBuy
-     * ↓
-     * TomatoMarketBuyEvent
-     */
-    private function createShortEventClassNameFromClassAndProperty(string $class, string $property): string
-    {
-        $shortClassName = $this->classNaming->getShortName($class);
-
-        // "onMagic" => "Magic"
-        $shortPropertyName = Strings::substring($property, strlen('on'));
-
-        return $shortClassName . $shortPropertyName . self::EVENT;
-    }
-
     private function getShortEventClassName(MethodCall $methodCall): string
     {
         /** @var string $methodName */
@@ -115,5 +100,20 @@ final class EventClassNaming
         $namespaceAbove = Strings::before($orinalClassName, '\\', -1);
 
         return $namespaceAbove . '\\Event\\' . $shortEventClassName;
+    }
+
+    /**
+     * TomatoMarket, onBuy
+     * ↓
+     * TomatoMarketBuyEvent
+     */
+    private function createShortEventClassNameFromClassAndProperty(string $class, string $property): string
+    {
+        $shortClassName = $this->classNaming->getShortName($class);
+
+        // "onMagic" => "Magic"
+        $shortPropertyName = Strings::substring($property, strlen('on'));
+
+        return $shortClassName . $shortPropertyName . self::EVENT;
     }
 }

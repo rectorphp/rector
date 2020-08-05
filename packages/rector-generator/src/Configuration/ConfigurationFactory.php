@@ -67,20 +67,6 @@ final class ConfigurationFactory
         return (string) Strings::after($nodeTypes[0], '\\', -1);
     }
 
-    private function normalizeCode(string $code): string
-    {
-        if (Strings::startsWith($code, '<?php')) {
-            $code = ltrim($code, '<?php');
-        }
-
-        return trim($code);
-    }
-
-    private function isPhpSnippet(string $code): bool
-    {
-        return Strings::startsWith($code, '<?php');
-    }
-
     private function resolveExtraFileContent(array $rectorRecipe): ?string
     {
         return isset($rectorRecipe[RecipeOption::EXTRA_FILE_CONTENT]) ? $this->normalizeCode(
@@ -95,5 +81,19 @@ final class ConfigurationFactory
         }
 
         return null;
+    }
+
+    private function normalizeCode(string $code): string
+    {
+        if (Strings::startsWith($code, '<?php')) {
+            $code = ltrim($code, '<?php');
+        }
+
+        return trim($code);
+    }
+
+    private function isPhpSnippet(string $code): bool
+    {
+        return Strings::startsWith($code, '<?php');
     }
 }

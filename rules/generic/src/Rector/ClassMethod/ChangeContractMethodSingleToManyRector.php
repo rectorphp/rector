@@ -115,18 +115,6 @@ PHP
         $this->oldToNewMethodByType = $configuration[self::OLD_TO_NEW_METHOD_BY_TYPE] ?? [];
     }
 
-    private function wrapReturnValueToArray(ClassMethod $classMethod): void
-    {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
-            if (! $node instanceof Return_) {
-                return null;
-            }
-
-            $node->expr = $this->createArray([$node->expr]);
-            return null;
-        });
-    }
-
     private function keepOldReturnTypeInDocBlock(ClassMethod $classMethod): void
     {
         // keep old return type in the docblock
@@ -141,5 +129,17 @@ PHP
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         $phpDocInfo->changeReturnType($arrayType);
+    }
+
+    private function wrapReturnValueToArray(ClassMethod $classMethod): void
+    {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+            if (! $node instanceof Return_) {
+                return null;
+            }
+
+            $node->expr = $this->createArray([$node->expr]);
+            return null;
+        });
     }
 }

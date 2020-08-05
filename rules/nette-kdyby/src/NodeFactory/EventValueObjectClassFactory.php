@@ -65,30 +65,6 @@ final class EventValueObjectClassFactory
         return $this->wrapClassToNamespace($className, $class);
     }
 
-    /**
-     * @param VariableWithType[] $variableWithTypes
-     */
-    private function createConstructClassMethod(array $variableWithTypes): ClassMethod
-    {
-        $methodBuilder = new MethodBuilder(MethodName::CONSTRUCT);
-        $methodBuilder->makePublic();
-
-        foreach ($variableWithTypes as $variableWithType) {
-            $param = new Param(new Variable($variableWithType->getName()));
-
-            if ($variableWithType->getPhpParserTypeNode() !== null) {
-                $param->type = $variableWithType->getPhpParserTypeNode();
-            }
-
-            $methodBuilder->addParam($param);
-
-            $assign = $this->nodeFactory->createPropertyAssignment($variableWithType->getName());
-            $methodBuilder->addStmt($assign);
-        }
-
-        return $methodBuilder->getNode();
-    }
-
     private function createEventClassBuilder(string $className): ClassBuilder
     {
         $shortClassName = $this->classNaming->getShortName($className);
@@ -98,16 +74,6 @@ final class EventValueObjectClassFactory
         $classBuilder->extend(new FullyQualified('Symfony\Contracts\EventDispatcher\Event'));
 
         return $classBuilder;
-    }
-
-    private function wrapClassToNamespace(string $className, Class_ $class): Namespace_
-    {
-        $namespace = Strings::before($className, '\\', -1);
-
-        $namespaceBuilder = new NamespaceBuilder($namespace);
-        $namespaceBuilder->addStmt($class);
-
-        return $namespaceBuilder->getNode();
     }
 
     /**
@@ -147,6 +113,16 @@ final class EventValueObjectClassFactory
         }
     }
 
+    private function wrapClassToNamespace(string $className, Class_ $class): Namespace_
+    {
+        $namespace = Strings::before($className, '\\', -1);
+
+        $namespaceBuilder = new NamespaceBuilder($namespace);
+        $namespaceBuilder->addStmt($class);
+
+        return $namespaceBuilder->getNode();
+    }
+
     /**
      * @param VariableWithType[] $variablesWithTypes
      */
@@ -169,5 +145,29 @@ final class EventValueObjectClassFactory
 
             $usedVariableNames[] = $variablesWithType->getName();
         }
+    }
+
+    /**
+     * @param VariableWithType[] $variableWithTypes
+     */
+    private function createConstructClassMethod(array $variableWithTypes): ClassMethod
+    {
+        $methodBuilder = new MethodBuilder(MethodName::CONSTRUCT);
+        $methodBuilder->makePublic();
+
+        foreach ($variableWithTypes as $variableWithType) {
+            $param = new Param(new Variable($variableWithType->getName()));
+
+            if ($variableWithType->getPhpParserTypeNode() !== null) {
+                $param->type = $variableWithType->getPhpParserTypeNode();
+            }
+
+            $methodBuilder->addParam($param);
+
+            $assign = $this->nodeFactory->createPropertyAssignment($variableWithType->getName());
+            $methodBuilder->addStmt($assign);
+        }
+
+        return $methodBuilder->getNode();
     }
 }

@@ -101,17 +101,6 @@ final class NonPhpFileProcessor
         return $newContent;
     }
 
-    /**
-     * @return string[]
-     */
-    private function getOldToNewClasses(): array
-    {
-        return array_merge(
-            $this->changeConfiguration->getOldToNewClasses(),
-            $this->renamedClassesCollector->getOldToNewClasses()
-        );
-    }
-
     private function reportFileContentChange(SmartFileInfo $neonYamlFileInfo, string $newContent): void
     {
         $relativeFilePathFromCwd = $neonYamlFileInfo->getRelativeFilePathFromCwd();
@@ -126,5 +115,16 @@ final class NonPhpFileProcessor
             $this->smartFileSystem->dumpFile($neonYamlFileInfo->getRealPath(), $newContent);
             $this->smartFileSystem->chmod($neonYamlFileInfo->getRealPath(), $neonYamlFileInfo->getPerms());
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getOldToNewClasses(): array
+    {
+        return array_merge(
+            $this->changeConfiguration->getOldToNewClasses(),
+            $this->renamedClassesCollector->getOldToNewClasses()
+        );
     }
 }

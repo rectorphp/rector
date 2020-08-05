@@ -108,6 +108,23 @@ PHP
 
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
+     * @param string|string[] $newMethod
+     */
+    private function skipClassMethod(Node $node, $newMethod, string $type): bool
+    {
+        if (! $node instanceof ClassMethod) {
+            return false;
+        }
+
+        if ($this->shouldSkipForAlreadyExistingClassMethod($node, $newMethod)) {
+            return true;
+        }
+
+        return $this->shouldSkipForExactClassMethodForClassMethod($node, $type);
+    }
+
+    /**
+     * @param MethodCall|StaticCall|ClassMethod $node
      * @param string|mixed[] $newMethod
      */
     private function renameToMethod(Node $node, $newMethod): ?Node
@@ -148,23 +165,6 @@ PHP
         }
 
         return (bool) $classLike->getMethod($newMethod);
-    }
-
-    /**
-     * @param MethodCall|StaticCall|ClassMethod $node
-     * @param string|string[] $newMethod
-     */
-    private function skipClassMethod(Node $node, $newMethod, string $type): bool
-    {
-        if (! $node instanceof ClassMethod) {
-            return false;
-        }
-
-        if ($this->shouldSkipForAlreadyExistingClassMethod($node, $newMethod)) {
-            return true;
-        }
-
-        return $this->shouldSkipForExactClassMethodForClassMethod($node, $type);
     }
 
     private function shouldSkipForExactClassMethodForClassMethod(ClassMethod $classMethod, string $type): bool

@@ -285,6 +285,22 @@ final class TokenManipulator
         return $this->valueResolver->isValue($node->dim, $value);
     }
 
+    /**
+     * @return ArrayDimFetch[]|ConstFetch[]|null
+     */
+    private function matchTokenArrayDimFetchAndTConstantType(Identical $identical): ?array
+    {
+        if ($identical->left instanceof ArrayDimFetch && $identical->right instanceof ConstFetch) {
+            return [$identical->left, $identical->right];
+        }
+
+        if ($identical->right instanceof ArrayDimFetch && $identical->left instanceof ConstFetch) {
+            return [$identical->right, $identical->left];
+        }
+
+        return null;
+    }
+
     private function createIsTConstTypeMethodCall(ArrayDimFetch $arrayDimFetch, ConstFetch $constFetch): MethodCall
     {
         return new MethodCall($arrayDimFetch->var, 'is', [new Arg($constFetch)]);
@@ -308,22 +324,6 @@ final class TokenManipulator
         }
 
         return false;
-    }
-
-    /**
-     * @return ArrayDimFetch[]|ConstFetch[]|null
-     */
-    private function matchTokenArrayDimFetchAndTConstantType(Identical $identical): ?array
-    {
-        if ($identical->left instanceof ArrayDimFetch && $identical->right instanceof ConstFetch) {
-            return [$identical->left, $identical->right];
-        }
-
-        if ($identical->right instanceof ArrayDimFetch && $identical->left instanceof ConstFetch) {
-            return [$identical->right, $identical->left];
-        }
-
-        return null;
     }
 
     private function matchParentNodeInCaseOfIdenticalTrue(FuncCall $funcCall): Node

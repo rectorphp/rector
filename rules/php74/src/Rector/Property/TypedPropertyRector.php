@@ -166,6 +166,28 @@ PHP
         $this->classLikeTypeOnly = $configuration[self::CLASS_LIKE_TYPE_ONLY] ?? false;
     }
 
+    /**
+     * @param Name|NullableType|PhpParserUnionType $node
+     */
+    private function shouldSkipNonClassLikeType(Node $node): bool
+    {
+        if (! $this->classLikeTypeOnly) {
+            return false;
+        }
+
+        // unwrap nullable type
+        if ($node instanceof NullableType) {
+            $node = $node->type;
+        }
+
+        $typeName = $this->getName($node);
+        if ($typeName === null) {
+            return false;
+        }
+
+        return ! ClassExistenceStaticHelper::doesClassLikeExist($typeName);
+    }
+
     private function removeVarPhpTagValueNodeIfNotComment(Property $property, Type $type): void
     {
         // keep doctrine collection narrow type
@@ -243,27 +265,5 @@ PHP
     private function isArrayTypeNode(VarTagValueNode $varTagValueNode): bool
     {
         return $varTagValueNode->type instanceof ArrayTypeNode;
-    }
-
-    /**
-     * @param Name|NullableType|PhpParserUnionType $node
-     */
-    private function shouldSkipNonClassLikeType(Node $node): bool
-    {
-        if (! $this->classLikeTypeOnly) {
-            return false;
-        }
-
-        // unwrap nullable type
-        if ($node instanceof NullableType) {
-            $node = $node->type;
-        }
-
-        $typeName = $this->getName($node);
-        if ($typeName === null) {
-            return false;
-        }
-
-        return ! ClassExistenceStaticHelper::doesClassLikeExist($typeName);
     }
 }

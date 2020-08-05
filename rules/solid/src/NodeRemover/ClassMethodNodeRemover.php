@@ -98,6 +98,11 @@ final class ClassMethodNodeRemover
         $this->removeParamFromAssign($classMethod, $paramName);
     }
 
+    private function isParentConstructStaticCall(Node $node): bool
+    {
+        return $this->isStaticCallNamed($node, 'parent', MethodName::CONSTRUCT);
+    }
+
     private function removeParamFromArgs(StaticCall $staticCall, string $paramName): void
     {
         foreach ($staticCall->args as $key => $arg) {
@@ -143,10 +148,5 @@ final class ClassMethodNodeRemover
         }
 
         return $this->nodeNameResolver->isName($node->name, $method);
-    }
-
-    private function isParentConstructStaticCall(Node $node): bool
-    {
-        return $this->isStaticCallNamed($node, 'parent', MethodName::CONSTRUCT);
     }
 }

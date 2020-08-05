@@ -186,22 +186,6 @@ final class NodeNameResolver
     }
 
     /**
-     * @param Interface_|Trait_ $classLike
-     */
-    private function resolveNamespacedNameAwareNode(ClassLike $classLike): ?string
-    {
-        if (property_exists($classLike, 'namespacedName')) {
-            return $classLike->namespacedName->toString();
-        }
-
-        if ($classLike->name === null) {
-            return null;
-        }
-
-        return $this->getName($classLike->name);
-    }
-
-    /**
      * @param MethodCall|StaticCall $node
      */
     private function reportInvalidNodeForName(Node $node): void
@@ -236,6 +220,22 @@ final class NodeNameResolver
         }
 
         throw new ShouldNotHappenException($message);
+    }
+
+    /**
+     * @param Interface_|Trait_ $classLike
+     */
+    private function resolveNamespacedNameAwareNode(ClassLike $classLike): ?string
+    {
+        if (property_exists($classLike, 'namespacedName')) {
+            return $classLike->namespacedName->toString();
+        }
+
+        if ($classLike->name === null) {
+            return null;
+        }
+
+        return $this->getName($classLike->name);
     }
 
     private function matchRectorBacktraceCall(array $backtrace): ?array

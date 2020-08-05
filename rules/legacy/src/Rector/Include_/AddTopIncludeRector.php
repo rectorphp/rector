@@ -115,13 +115,6 @@ PHP
         return false;
     }
 
-    private function createInclude(): Include_
-    {
-        $filePathConcat = new Concat(new Dir(), new String_($this->autoloadFilePath));
-
-        return new Include_($filePathConcat, Include_::TYPE_REQUIRE_ONCE);
-    }
-
     /**
      * Find all includes and see if any match what we want to insert
      */
@@ -136,6 +129,13 @@ PHP
         }
 
         return false;
+    }
+
+    private function createInclude(): Include_
+    {
+        $filePathConcat = new Concat(new Dir(), new String_($this->autoloadFilePath));
+
+        return new Include_($filePathConcat, Include_::TYPE_REQUIRE_ONCE);
     }
 
     private function isTopFileInclude(Include_ $include): bool

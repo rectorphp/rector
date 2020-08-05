@@ -258,6 +258,75 @@ PHP
         return $dataProviderClassMethods;
     }
 
+    /**
+     * @param string[] $singleConfiguration
+     */
+    private function isMethodCallMatch(MethodCall $methodCall, array $singleConfiguration): bool
+    {
+        if (! $this->isObjectType($methodCall->var, $singleConfiguration['class'])) {
+            return false;
+        }
+
+        return $this->isName($methodCall->name, $singleConfiguration['old_method']);
+    }
+
+    private function createDataProviderMethodName(Node $node): string
+    {
+        /** @var string $methodName */
+        $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
+
+        return 'provideDataFor' . ucfirst($methodName);
+    }
+
+    /**
+     * @return ParamAndArgValueObject[]
+     */
+    private function collectParamAndArgsFromArray(Array_ $array, string $variableName): array
+    {
+        $isNestedArray = $this->isNestedArray($array);
+        if ($isNestedArray) {
+            return $this->collectParamAndArgsFromNestedArray($array, $variableName);
+        }
+
+        $itemsStaticType = $this->resolveItemStaticType($array, $isNestedArray);
+        return $this->collectParamAndArgsFromNonNestedArray($array, $variableName, $itemsStaticType);
+    }
+
+    /**
+     * @param ParamAndArgValueObject[] $paramAndArgs
+     */
+    private function refactorTestClassMethodParams(ClassMethod $classMethod, array $paramAndArgs): void
+    {
+        $classMethod->params = $this->createParams($paramAndArgs);
+
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        foreach ($paramAndArgs as $paramAndArg) {
+            $staticType = $paramAndArg->getType();
+
+            if (! $staticType instanceof UnionType) {
+                continue;
+            }
+
+            /** @var string $paramName */
+            $paramName = $this->getName($paramAndArg->getVariable());
+
+            /** @var TypeNode $staticTypeNode */
+            $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType);
+
+            $paramTagValueNode = $this->createParamTagNode($paramName, $staticTypeNode);
+            $phpDocInfo->addTagValueNode($paramTagValueNode);
+        }
+    }
+
+    private function createDataProviderTagNode(string $dataProviderMethodName): PhpDocTagNode
+    {
+        return new AttributeAwarePhpDocTagNode('@dataProvider', new GenericTagValueNode(
+            $dataProviderMethodName . '()'
+        ));
+    }
+
     private function isNestedArray(Array_ $array): bool
     {
         foreach ($array->items as $arrayItem) {
@@ -352,75 +421,6 @@ PHP
     private function createParamTagNode(string $name, TypeNode $typeNode): AttributeAwareParamTagValueNode
     {
         return new AttributeAwareParamTagValueNode($typeNode, false, '$' . $name, '', false);
-    }
-
-    /**
-     * @param string[] $singleConfiguration
-     */
-    private function isMethodCallMatch(MethodCall $methodCall, array $singleConfiguration): bool
-    {
-        if (! $this->isObjectType($methodCall->var, $singleConfiguration['class'])) {
-            return false;
-        }
-
-        return $this->isName($methodCall->name, $singleConfiguration['old_method']);
-    }
-
-    private function createDataProviderMethodName(Node $node): string
-    {
-        /** @var string $methodName */
-        $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
-
-        return 'provideDataFor' . ucfirst($methodName);
-    }
-
-    /**
-     * @return ParamAndArgValueObject[]
-     */
-    private function collectParamAndArgsFromArray(Array_ $array, string $variableName): array
-    {
-        $isNestedArray = $this->isNestedArray($array);
-        if ($isNestedArray) {
-            return $this->collectParamAndArgsFromNestedArray($array, $variableName);
-        }
-
-        $itemsStaticType = $this->resolveItemStaticType($array, $isNestedArray);
-        return $this->collectParamAndArgsFromNonNestedArray($array, $variableName, $itemsStaticType);
-    }
-
-    /**
-     * @param ParamAndArgValueObject[] $paramAndArgs
-     */
-    private function refactorTestClassMethodParams(ClassMethod $classMethod, array $paramAndArgs): void
-    {
-        $classMethod->params = $this->createParams($paramAndArgs);
-
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        foreach ($paramAndArgs as $paramAndArg) {
-            $staticType = $paramAndArg->getType();
-
-            if (! $staticType instanceof UnionType) {
-                continue;
-            }
-
-            /** @var string $paramName */
-            $paramName = $this->getName($paramAndArg->getVariable());
-
-            /** @var TypeNode $staticTypeNode */
-            $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType);
-
-            $paramTagValueNode = $this->createParamTagNode($paramName, $staticTypeNode);
-            $phpDocInfo->addTagValueNode($paramTagValueNode);
-        }
-    }
-
-    private function createDataProviderTagNode(string $dataProviderMethodName): PhpDocTagNode
-    {
-        return new AttributeAwarePhpDocTagNode('@dataProvider', new GenericTagValueNode(
-            $dataProviderMethodName . '()'
-        ));
     }
 
     private function setTypeIfNotNull(ParamAndArgValueObject $paramAndArgValueObject, Param $param): void

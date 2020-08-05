@@ -96,19 +96,6 @@ final class UsedClassPropertyExtractor
         return $properties;
     }
 
-    private function isThisPropertyFetch(Node $node): bool
-    {
-        if ($node instanceof MethodCall) {
-            return false;
-        }
-
-        if ($node instanceof StaticCall) {
-            return false;
-        }
-
-        return $this->nodeNameResolver->isName($node, 'this');
-    }
-
     /**
      * @param Property[] $classProperties
      * @return Property[]
@@ -131,5 +118,18 @@ final class UsedClassPropertyExtractor
         }
 
         return $classProperties;
+    }
+
+    private function isThisPropertyFetch(Node $node): bool
+    {
+        if ($node instanceof MethodCall) {
+            return false;
+        }
+
+        if ($node instanceof StaticCall) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($node, 'this');
     }
 }

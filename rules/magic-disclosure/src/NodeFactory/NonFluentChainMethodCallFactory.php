@@ -83,6 +83,21 @@ final class NonFluentChainMethodCallFactory
         return $nodesToAdd;
     }
 
+    private function createAssignExpression(Variable $newVariable, New_ $new): Expression
+    {
+        $assign = new Assign($newVariable, $new);
+        return new Expression($assign);
+    }
+
+    private function isNewNodeNeeded(AssignAndRootExpr $assignAndRootExpr): bool
+    {
+        if (! $assignAndRootExpr->getRootExpr() instanceof New_) {
+            return false;
+        }
+
+        return $assignAndRootExpr->getRootExpr() !== $assignAndRootExpr->getAssignExpr();
+    }
+
     /**
      * @param MethodCall[] $chainMethodCalls
      * @return Expr[]
@@ -104,20 +119,5 @@ final class NonFluentChainMethodCallFactory
         }
 
         return array_reverse($decoupledMethodCalls);
-    }
-
-    private function isNewNodeNeeded(AssignAndRootExpr $assignAndRootExpr): bool
-    {
-        if (! $assignAndRootExpr->getRootExpr() instanceof New_) {
-            return false;
-        }
-
-        return $assignAndRootExpr->getRootExpr() !== $assignAndRootExpr->getAssignExpr();
-    }
-
-    private function createAssignExpression(Variable $newVariable, New_ $new): Expression
-    {
-        $assign = new Assign($newVariable, $new);
-        return new Expression($assign);
     }
 }

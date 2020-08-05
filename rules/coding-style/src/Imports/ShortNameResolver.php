@@ -101,6 +101,22 @@ final class ShortNameResolver
         return array_unique($shortClassLikeNames);
     }
 
+    private function getNodeRealPath(Node $node): ?string
+    {
+        /** @var SmartFileInfo|null $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        if ($fileInfo !== null) {
+            return $fileInfo->getRealPath();
+        }
+
+        $currentFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+        if ($currentFileInfo !== null) {
+            return $currentFileInfo->getRealPath();
+        }
+
+        return null;
+    }
+
     /**
      * @param Node[] $stmts
      * @return string[]
@@ -138,22 +154,6 @@ final class ShortNameResolver
         $docBlockShortNames = $this->resolveFromDocBlocks($stmts);
 
         return array_merge($shortNames, $docBlockShortNames);
-    }
-
-    private function getNodeRealPath(Node $node): ?string
-    {
-        /** @var SmartFileInfo|null $fileInfo */
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        if ($fileInfo !== null) {
-            return $fileInfo->getRealPath();
-        }
-
-        $currentFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($currentFileInfo !== null) {
-            return $currentFileInfo->getRealPath();
-        }
-
-        return null;
     }
 
     /**

@@ -61,6 +61,18 @@ final class CallTypeAnalyzer
     }
 
     /**
+     * @param StaticCall|MethodCall $node
+     */
+    private function resolveCallerType(Node $node): Type
+    {
+        if ($node instanceof MethodCall) {
+            return $this->nodeTypeResolver->getStaticType($node->var);
+        }
+
+        return $this->nodeTypeResolver->resolve($node->class);
+    }
+
+    /**
      * @param MethodCall|StaticCall $node
      * @return array<int, Type>
      */
@@ -87,17 +99,5 @@ final class CallTypeAnalyzer
         }
 
         return $parameterTypes;
-    }
-
-    /**
-     * @param StaticCall|MethodCall $node
-     */
-    private function resolveCallerType(Node $node): Type
-    {
-        if ($node instanceof MethodCall) {
-            return $this->nodeTypeResolver->getStaticType($node->var);
-        }
-
-        return $this->nodeTypeResolver->resolve($node->class);
     }
 }

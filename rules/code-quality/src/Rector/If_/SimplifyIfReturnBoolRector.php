@@ -187,6 +187,24 @@ PHP
         return new Return_($this->boolCastOrNullCompareIfNeeded(new BooleanNot($if->cond)));
     }
 
+    /**
+     * Matches: "else if"
+     */
+    private function isElseSeparatedThenIf(If_ $if): bool
+    {
+        if ($if->else === null) {
+            return false;
+        }
+
+        if (count($if->else->stmts) !== 1) {
+            return false;
+        }
+
+        $onlyStmt = $if->else->stmts[0];
+
+        return $onlyStmt instanceof If_;
+    }
+
     private function isIfWithSingleReturnExpr(If_ $if): bool
     {
         if (count($if->stmts) !== 1) {
@@ -239,23 +257,5 @@ PHP
         }
 
         return ! $expr instanceof BinaryOp;
-    }
-
-    /**
-     * Matches: "else if"
-     */
-    private function isElseSeparatedThenIf(If_ $if): bool
-    {
-        if ($if->else === null) {
-            return false;
-        }
-
-        if (count($if->else->stmts) !== 1) {
-            return false;
-        }
-
-        $onlyStmt = $if->else->stmts[0];
-
-        return $onlyStmt instanceof If_;
     }
 }

@@ -121,32 +121,6 @@ PHP
         return $this->isBooleanNot($classLike, $onlyPropertyProperty);
     }
 
-    /**
-     * Matches:
-     * $this-><someProprety> === null
-     * null === $this-><someProprety>
-     */
-    private function matchPropertyFetchNameComparedToNull(Node $node): ?string
-    {
-        if (! $node instanceof Identical && ! $node instanceof NotIdentical) {
-            return null;
-        }
-
-        if ($node->left instanceof PropertyFetch && $this->isNull($node->right)) {
-            $propertyFetch = $node->left;
-        } elseif ($node->right instanceof PropertyFetch && $this->isNull($node->left)) {
-            $propertyFetch = $node->right;
-        } else {
-            return null;
-        }
-
-        if (! $this->isName($propertyFetch->var, 'this')) {
-            return null;
-        }
-
-        return $this->getName($propertyFetch->name);
-    }
-
     private function isIdenticalOrNotIdenticalToNull(Class_ $class, PropertyProperty $onlyPropertyProperty): bool
     {
         $isIdenticalOrNotIdenticalToNull = false;
@@ -199,5 +173,31 @@ PHP
         });
 
         return $isBooleanNot;
+    }
+
+    /**
+     * Matches:
+     * $this-><someProprety> === null
+     * null === $this-><someProprety>
+     */
+    private function matchPropertyFetchNameComparedToNull(Node $node): ?string
+    {
+        if (! $node instanceof Identical && ! $node instanceof NotIdentical) {
+            return null;
+        }
+
+        if ($node->left instanceof PropertyFetch && $this->isNull($node->right)) {
+            $propertyFetch = $node->left;
+        } elseif ($node->right instanceof PropertyFetch && $this->isNull($node->left)) {
+            $propertyFetch = $node->right;
+        } else {
+            return null;
+        }
+
+        if (! $this->isName($propertyFetch->var, 'this')) {
+            return null;
+        }
+
+        return $this->getName($propertyFetch->name);
     }
 }

@@ -134,16 +134,6 @@ PHP
         return $node;
     }
 
-    private function resolveMethodNameFromKdybyEventName(Expr $expr): string
-    {
-        $kdybyEventName = $this->getValue($expr);
-        if (Strings::contains($kdybyEventName, '::')) {
-            return (string) Strings::after($kdybyEventName, '::', - 1);
-        }
-
-        throw new NotImplementedException($kdybyEventName);
-    }
-
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
@@ -156,19 +146,6 @@ PHP
         }
 
         return ! $this->isName($classMethod, 'getSubscribedEvents');
-    }
-
-    private function refactorArrayWithEventTable(Array_ $array): void
-    {
-        foreach ($array->items as $arrayItem) {
-            if ($arrayItem->key !== null) {
-                continue;
-            }
-
-            $methodName = $this->resolveMethodNameFromKdybyEventName($arrayItem->value);
-            $arrayItem->key = $arrayItem->value;
-            $arrayItem->value = new String_($methodName);
-        }
     }
 
     private function refactorEventNames(ClassMethod $classMethod): void
@@ -191,5 +168,28 @@ PHP
 
             $this->getSubscribedEventsArrayManipulator->change($returnedExpr);
         });
+    }
+
+    private function refactorArrayWithEventTable(Array_ $array): void
+    {
+        foreach ($array->items as $arrayItem) {
+            if ($arrayItem->key !== null) {
+                continue;
+            }
+
+            $methodName = $this->resolveMethodNameFromKdybyEventName($arrayItem->value);
+            $arrayItem->key = $arrayItem->value;
+            $arrayItem->value = new String_($methodName);
+        }
+    }
+
+    private function resolveMethodNameFromKdybyEventName(Expr $expr): string
+    {
+        $kdybyEventName = $this->getValue($expr);
+        if (Strings::contains($kdybyEventName, '::')) {
+            return (string) Strings::after($kdybyEventName, '::', - 1);
+        }
+
+        throw new NotImplementedException($kdybyEventName);
     }
 }

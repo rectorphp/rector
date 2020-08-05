@@ -44,14 +44,6 @@ final class FileHashComputer
         ));
     }
 
-    /**
-     * @param mixed[] $array
-     */
-    private function arrayToHash(array $array): string
-    {
-        return md5(serialize($array));
-    }
-
     private function createFileLoader(SmartFileInfo $fileInfo, ContainerBuilder $containerBuilder): LoaderInterface
     {
         $fileLocator = new FileLocator([$fileInfo->getPath()]);
@@ -67,5 +59,13 @@ final class FileHashComputer
         }
 
         return $loader;
+    }
+
+    /**
+     * @param mixed[] $array
+     */
+    private function arrayToHash(array $array): string
+    {
+        return md5(serialize($array));
     }
 }

@@ -225,6 +225,21 @@ PHP
         return $this->isName($parentParentNode, $functionName);
     }
 
+    private function popFirstObjectType(Type $type): Type
+    {
+        if ($type instanceof UnionType) {
+            foreach ($type->getTypes() as $unionedType) {
+                if (! $unionedType instanceof ObjectType) {
+                    continue;
+                }
+
+                return $unionedType;
+            }
+        }
+
+        return $type;
+    }
+
     /**
      * @param Param[] $params
      * @return Param[]
@@ -267,20 +282,5 @@ PHP
             }
         }
         return false;
-    }
-
-    private function popFirstObjectType(Type $type): Type
-    {
-        if ($type instanceof UnionType) {
-            foreach ($type->getTypes() as $unionedType) {
-                if (! $unionedType instanceof ObjectType) {
-                    continue;
-                }
-
-                return $unionedType;
-            }
-        }
-
-        return $type;
     }
 }

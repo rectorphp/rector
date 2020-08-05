@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -18,6 +19,11 @@ use Rector\Order\StmtOrder;
  */
 final class OrderPrivateMethodsByUseRector extends AbstractRector
 {
+    /**
+     * @var int
+     */
+    private const MAX_ATTEMTPS = 5;
+
     /**
      * @var StmtOrder
      */
@@ -86,32 +92,58 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $desiredClassMethodOrder = $this->getLocalMethodCallOrder($node);
-        $privateClassMethodsByKey = $this->resolvePrivateClassMethods($node);
+        [$desiredPrivateMethodCallOrder, $privateClassMethodsByKey] = $this->getPrivateMethodCallOrderAndClassMethods(
+            $node
+        );
 
         // order is correct, nothing to change
-        if ($privateClassMethodsByKey === $desiredClassMethodOrder) {
+        if ($privateClassMethodsByKey === $desiredPrivateMethodCallOrder) {
             return null;
         }
 
         // different private method count, one of them is dead probably
-        if (count($desiredClassMethodOrder) !== count($desiredClassMethodOrder)) {
+        if (count($desiredPrivateMethodCallOrder) !== count($privateClassMethodsByKey)) {
             return null;
         }
 
-        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($desiredClassMethodOrder, $privateClassMethodsByKey);
+        $attempt = 0;
+        while (array_values($desiredPrivateMethodCallOrder) !== array_values($privateClassMethodsByKey)) {
+            $attempt++;
+            if ($attempt >= self::MAX_ATTEMTPS) {
+                throw new ShouldNotHappenException('Number of attempts to reorder the methods exceeded');
+            }
 
-        return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
+            $oldToNewKeys = $this->stmtOrder->createOldToNewKeys(
+                $desiredPrivateMethodCallOrder,
+                $privateClassMethodsByKey
+            );
+
+            $node = $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
+
+            [$desiredPrivateMethodCallOrder, $privateClassMethodsByKey] = $this->getPrivateMethodCallOrderAndClassMethods(
+                $node
+            );
+        }
+
+        return $node;
+    }
+
+    private function getPrivateMethodCallOrderAndClassMethods(Class_ $class): array
+    {
+        return [$this->getLocalPrivateMethodCallOrder($class), $this->resolvePrivateClassMethods($class)];
     }
 
     /**
      * @return string[]
      */
-    private function getLocalMethodCallOrder(Class_ $class): array
+    private function getLocalPrivateMethodCallOrder(Class_ $class): array
     {
-        $localMethodCallInOrder = [];
+        $localPrivateMethodCallInOrder = [];
 
-        $this->traverseNodesWithCallable($class->getMethods(), function (Node $node) use (&$localMethodCallInOrder) {
+        $this->traverseNodesWithCallable($class->getMethods(), function (Node $node) use (
+            &$localPrivateMethodCallInOrder,
+            $class
+        ) {
             if (! $node instanceof MethodCall) {
                 return null;
             }
@@ -125,12 +157,19 @@ PHP
                 return null;
             }
 
-            $localMethodCallInOrder[] = $methodName;
+            $classMethod = $class->getMethod($methodName);
+            if ($classMethod === null) {
+                return null;
+            }
+
+            if ($classMethod->isPrivate()) {
+                $localPrivateMethodCallInOrder[] = $methodName;
+            }
 
             return null;
         });
 
-        return array_unique($localMethodCallInOrder);
+        return array_unique($localPrivateMethodCallInOrder);
     }
 
     private function resolvePrivateClassMethods(Class_ $class): array

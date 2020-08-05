@@ -122,12 +122,18 @@ final class RectorPrinter
         return null;
     }
 
-    private function getClassRelativePath(string $className): string
+    private function ensureRectorDefinitionExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
     {
-        $rectorReflectionClass = new ReflectionClass($className);
-        $rectorSmartFileInfo = new SmartFileInfo($rectorReflectionClass->getFileName());
+        if ($rectorDefinition->getDescription() !== '') {
+            return;
+        }
 
-        return $rectorSmartFileInfo->getRelativeFilePathFromCwd();
+        $message = sprintf(
+            'Rector "%s" is missing description. Complete it in "%s()" method.',
+            get_class($rector),
+            'getDefinition'
+        );
+        throw new ShouldNotHappenException($message);
     }
 
     private function ensureCodeSampleExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
@@ -143,17 +149,11 @@ final class RectorPrinter
         ));
     }
 
-    private function ensureRectorDefinitionExists(RectorDefinition $rectorDefinition, RectorInterface $rector): void
+    private function getClassRelativePath(string $className): string
     {
-        if ($rectorDefinition->getDescription() !== '') {
-            return;
-        }
+        $rectorReflectionClass = new ReflectionClass($className);
+        $rectorSmartFileInfo = new SmartFileInfo($rectorReflectionClass->getFileName());
 
-        $message = sprintf(
-            'Rector "%s" is missing description. Complete it in "%s()" method.',
-            get_class($rector),
-            'getDefinition'
-        );
-        throw new ShouldNotHappenException($message);
+        return $rectorSmartFileInfo->getRelativeFilePathFromCwd();
     }
 }

@@ -100,28 +100,6 @@ PHP
         return $this->createAssign($node);
     }
 
-    private function resolveControlName(MethodCall $methodCall): string
-    {
-        $controlName = $methodCall->args[0]->value;
-        if (! $controlName instanceof String_) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $controlName->value . 'DateControl';
-    }
-
-    private function createDateTimeControlNew(MethodCall $methodCall): New_
-    {
-        $fullyQualified = new FullyQualified('Nextras\FormComponents\Controls\DateControl');
-        $new = new New_($fullyQualified);
-
-        if (isset($methodCall->args[1])) {
-            $new->args[] = $methodCall->args[1];
-        }
-
-        return $new;
-    }
-
     private function createAssign(MethodCall $methodCall): ?Node
     {
         $key = $methodCall->args[0]->value;
@@ -151,5 +129,27 @@ PHP
         }
 
         return $formAssign;
+    }
+
+    private function resolveControlName(MethodCall $methodCall): string
+    {
+        $controlName = $methodCall->args[0]->value;
+        if (! $controlName instanceof String_) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $controlName->value . 'DateControl';
+    }
+
+    private function createDateTimeControlNew(MethodCall $methodCall): New_
+    {
+        $fullyQualified = new FullyQualified('Nextras\FormComponents\Controls\DateControl');
+        $new = new New_($fullyQualified);
+
+        if (isset($methodCall->args[1])) {
+            $new->args[] = $methodCall->args[1];
+        }
+
+        return $new;
     }
 }

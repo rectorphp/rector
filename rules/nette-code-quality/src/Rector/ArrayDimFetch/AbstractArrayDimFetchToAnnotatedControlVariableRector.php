@@ -96,15 +96,6 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
         return $parent->expr === $arrayDimFetch;
     }
 
-    private function createAssignExpression(string $variableName, ArrayDimFetch $arrayDimFetch): Expression
-    {
-        $variable = new Variable($variableName);
-        $assignedArrayDimFetch = clone $arrayDimFetch;
-        $assign = new Assign($variable, $assignedArrayDimFetch);
-
-        return new Expression($assign);
-    }
-
     private function shouldSkipForAlreadyAddedInCurrentClassMethod(
         ArrayDimFetch $arrayDimFetch,
         string $variableName
@@ -167,6 +158,15 @@ abstract class AbstractArrayDimFetchToAnnotatedControlVariableRector extends Abs
         }
 
         return $currentStatement;
+    }
+
+    private function createAssignExpression(string $variableName, ArrayDimFetch $arrayDimFetch): Expression
+    {
+        $variable = new Variable($variableName);
+        $assignedArrayDimFetch = clone $arrayDimFetch;
+        $assign = new Assign($variable, $assignedArrayDimFetch);
+
+        return new Expression($assign);
     }
 
     /**

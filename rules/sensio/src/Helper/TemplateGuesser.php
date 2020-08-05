@@ -74,17 +74,6 @@ final class TemplateGuesser
         return $fullPath . $action . '.html.twig';
     }
 
-    private function resolveController(string $class): string
-    {
-        $match = Strings::match($class, '#Controller\\\(.+)Controller$#');
-        if (! $match) {
-            return '';
-        }
-
-        $controller = Strings::replace($match[1], '#([a-z\d])([A-Z])#', '\\1_\\2');
-        return str_replace('\\', '/', $controller);
-    }
-
     private function resolveBundle(string $class, string $namespace): string
     {
         $shortBundleClass = $this->bundleClassResolver->resolveShortBundleClassFromControllerClass($class);
@@ -95,5 +84,16 @@ final class TemplateGuesser
         $bundle = Strings::match($namespace, '#(?<bundle>[\w]*Bundle)#')['bundle'] ?? '';
         $bundle = Strings::replace($bundle, '#Bundle$#');
         return $bundle !== '' ? '@' . $bundle : '';
+    }
+
+    private function resolveController(string $class): string
+    {
+        $match = Strings::match($class, '#Controller\\\(.+)Controller$#');
+        if (! $match) {
+            return '';
+        }
+
+        $controller = Strings::replace($match[1], '#([a-z\d])([A-Z])#', '\\1_\\2');
+        return str_replace('\\', '/', $controller);
     }
 }

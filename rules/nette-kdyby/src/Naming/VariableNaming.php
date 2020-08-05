@@ -79,54 +79,6 @@ final class VariableNaming
         return StaticRectorStrings::underscoreToPascalCase($variableName);
     }
 
-    private function resolveFromPropertyFetch(PropertyFetch $propertyFetch): string
-    {
-        $varName = $this->nodeNameResolver->getName($propertyFetch->var);
-        if (! is_string($varName)) {
-            throw new NotImplementedException();
-        }
-
-        $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
-        if (! is_string($propertyName)) {
-            throw new NotImplementedException();
-        }
-
-        return $varName . ucfirst($propertyName);
-    }
-
-    private function resolveFromMethodCall(MethodCall $methodCall): string
-    {
-        $varName = $this->nodeNameResolver->getName($methodCall->var);
-        if (! is_string($varName)) {
-            throw new NotImplementedException();
-        }
-
-        $methodName = $this->nodeNameResolver->getName($methodCall->name);
-        if (! is_string($methodName)) {
-            throw new NotImplementedException();
-        }
-
-        return $varName . ucfirst($methodName);
-    }
-
-    private function resolveParamNameFromArrayDimFetch(ArrayDimFetch $arrayDimFetch): string
-    {
-        while ($arrayDimFetch instanceof ArrayDimFetch) {
-            if ($arrayDimFetch->dim instanceof Scalar) {
-                $valueName = $this->nodeNameResolver->getName($arrayDimFetch->var);
-                $dimName = $this->valueResolver->getValue($arrayDimFetch->dim);
-
-                $dimName = StaticRectorStrings::underscoreToCamelCase($dimName);
-
-                return $valueName . $dimName;
-            }
-
-            $arrayDimFetch = $arrayDimFetch->var;
-        }
-
-        return $this->resolveBareFromNode($arrayDimFetch);
-    }
-
     private function resolveBareFromNode(Node $node): string
     {
         $node = $this->unwrapNode($node);
@@ -163,16 +115,6 @@ final class VariableNaming
         throw new NotImplementedException();
     }
 
-    private function resolveFromNew(New_ $new): string
-    {
-        if ($new->class instanceof Name) {
-            $className = $this->nodeNameResolver->getName($new->class);
-            return $this->classNaming->getShortName($className);
-        }
-
-        throw new NotImplementedYetException();
-    }
-
     private function unwrapNode(Node $node): ?Node
     {
         if ($node instanceof Arg) {
@@ -188,5 +130,63 @@ final class VariableNaming
         }
 
         return $node;
+    }
+
+    private function resolveParamNameFromArrayDimFetch(ArrayDimFetch $arrayDimFetch): string
+    {
+        while ($arrayDimFetch instanceof ArrayDimFetch) {
+            if ($arrayDimFetch->dim instanceof Scalar) {
+                $valueName = $this->nodeNameResolver->getName($arrayDimFetch->var);
+                $dimName = $this->valueResolver->getValue($arrayDimFetch->dim);
+
+                $dimName = StaticRectorStrings::underscoreToCamelCase($dimName);
+
+                return $valueName . $dimName;
+            }
+
+            $arrayDimFetch = $arrayDimFetch->var;
+        }
+
+        return $this->resolveBareFromNode($arrayDimFetch);
+    }
+
+    private function resolveFromPropertyFetch(PropertyFetch $propertyFetch): string
+    {
+        $varName = $this->nodeNameResolver->getName($propertyFetch->var);
+        if (! is_string($varName)) {
+            throw new NotImplementedException();
+        }
+
+        $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
+        if (! is_string($propertyName)) {
+            throw new NotImplementedException();
+        }
+
+        return $varName . ucfirst($propertyName);
+    }
+
+    private function resolveFromMethodCall(MethodCall $methodCall): string
+    {
+        $varName = $this->nodeNameResolver->getName($methodCall->var);
+        if (! is_string($varName)) {
+            throw new NotImplementedException();
+        }
+
+        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        if (! is_string($methodName)) {
+            throw new NotImplementedException();
+        }
+
+        return $varName . ucfirst($methodName);
+    }
+
+    private function resolveFromNew(New_ $new): string
+    {
+        if ($new->class instanceof Name) {
+            $className = $this->nodeNameResolver->getName($new->class);
+            return $this->classNaming->getShortName($className);
+        }
+
+        throw new NotImplementedYetException();
     }
 }

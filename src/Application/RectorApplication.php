@@ -171,21 +171,25 @@ final class RectorApplication
         $this->eventDispatcher->dispatch(new AfterProcessEvent());
     }
 
-    /**
-     * This prevent CI report flood with 1 file = 1 line in progress bar
-     */
-    private function configureStepCount(SymfonyStyle $symfonyStyle): void
+    private function prepareProgressBar(int $fileCount): void
     {
-        $privatesAccessor = new PrivatesAccessor();
-
-        /** @var ProgressBar $progressBar */
-        $progressBar = $privatesAccessor->getPrivateProperty($symfonyStyle, 'progressBar');
-        if ($progressBar->getMaxSteps() < 40) {
+        if ($this->symfonyStyle->isVerbose()) {
             return;
         }
 
-        $redrawFrequency = (int) ($progressBar->getMaxSteps() / 20);
-        $progressBar->setRedrawFrequency($redrawFrequency);
+        if (! $this->configuration->showProgressBar()) {
+            return;
+        }
+
+        // why 5? one for each cycle, so user sees some activity all the time
+        $stepMultiplier = 4;
+        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
+            ++$stepMultiplier;
+        }
+
+        $this->symfonyStyle->progressStart($fileCount * $stepMultiplier);
+
+        $this->configureStepCount($this->symfonyStyle);
     }
 
     /**
@@ -199,66 +203,6 @@ final class RectorApplication
         }
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
-    }
-
-    private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback, string $phase): void
-    {
-        $this->advance($smartFileInfo, $phase);
-
-        try {
-            if (in_array($smartFileInfo, $this->notParsedFiles, true)) {
-                // we cannot process this file
-                return;
-            }
-
-            $callback($smartFileInfo);
-        } catch (AnalysedCodeException $analysedCodeException) {
-            $this->notParsedFiles[] = $smartFileInfo;
-
-            $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $smartFileInfo);
-        } catch (Throwable $throwable) {
-            if ($this->symfonyStyle->isVerbose()) {
-                throw $throwable;
-            }
-
-            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $smartFileInfo);
-        }
-    }
-
-    private function printFileInfo(SmartFileInfo $fileInfo): void
-    {
-        if ($this->removedAndAddedFilesCollector->isFileRemoved($fileInfo)) {
-            // skip, because this file exists no more
-            return;
-        }
-
-        $oldContent = $fileInfo->getContents();
-
-        $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString($fileInfo)
-            : $this->fileProcessor->printToFile($fileInfo);
-
-        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
-    }
-
-    private function advance(SmartFileInfo $smartFileInfo, string $phase): void
-    {
-        if ($this->symfonyStyle->isVerbose()) {
-            $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
-            $message = sprintf('[%s] %s', $phase, $relativeFilePath);
-            $this->symfonyStyle->writeln($message);
-        } elseif ($this->configuration->showProgressBar()) {
-            $this->symfonyStyle->progressAdvance();
-        }
-    }
-
-    private function processFileSystemRectors(SmartFileInfo $smartFileInfo): void
-    {
-        if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
-            // skip, because this file exists no more
-            return;
-        }
-
-        $this->fileSystemFileProcessor->processFileInfo($smartFileInfo);
     }
 
     /**
@@ -285,24 +229,80 @@ final class RectorApplication
         }
     }
 
-    private function prepareProgressBar(int $fileCount): void
+    private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback, string $phase): void
+    {
+        $this->advance($smartFileInfo, $phase);
+
+        try {
+            if (in_array($smartFileInfo, $this->notParsedFiles, true)) {
+                // we cannot process this file
+                return;
+            }
+
+            $callback($smartFileInfo);
+        } catch (AnalysedCodeException $analysedCodeException) {
+            $this->notParsedFiles[] = $smartFileInfo;
+
+            $this->errorAndDiffCollector->addAutoloadError($analysedCodeException, $smartFileInfo);
+        } catch (Throwable $throwable) {
+            if ($this->symfonyStyle->isVerbose()) {
+                throw $throwable;
+            }
+
+            $this->errorAndDiffCollector->addThrowableWithFileInfo($throwable, $smartFileInfo);
+        }
+    }
+
+    private function processFileSystemRectors(SmartFileInfo $smartFileInfo): void
+    {
+        if ($this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo)) {
+            // skip, because this file exists no more
+            return;
+        }
+
+        $this->fileSystemFileProcessor->processFileInfo($smartFileInfo);
+    }
+
+    private function printFileInfo(SmartFileInfo $fileInfo): void
+    {
+        if ($this->removedAndAddedFilesCollector->isFileRemoved($fileInfo)) {
+            // skip, because this file exists no more
+            return;
+        }
+
+        $oldContent = $fileInfo->getContents();
+
+        $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString($fileInfo)
+            : $this->fileProcessor->printToFile($fileInfo);
+
+        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
+    }
+
+    /**
+     * This prevent CI report flood with 1 file = 1 line in progress bar
+     */
+    private function configureStepCount(SymfonyStyle $symfonyStyle): void
+    {
+        $privatesAccessor = new PrivatesAccessor();
+
+        /** @var ProgressBar $progressBar */
+        $progressBar = $privatesAccessor->getPrivateProperty($symfonyStyle, 'progressBar');
+        if ($progressBar->getMaxSteps() < 40) {
+            return;
+        }
+
+        $redrawFrequency = (int) ($progressBar->getMaxSteps() / 20);
+        $progressBar->setRedrawFrequency($redrawFrequency);
+    }
+
+    private function advance(SmartFileInfo $smartFileInfo, string $phase): void
     {
         if ($this->symfonyStyle->isVerbose()) {
-            return;
+            $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
+            $message = sprintf('[%s] %s', $phase, $relativeFilePath);
+            $this->symfonyStyle->writeln($message);
+        } elseif ($this->configuration->showProgressBar()) {
+            $this->symfonyStyle->progressAdvance();
         }
-
-        if (! $this->configuration->showProgressBar()) {
-            return;
-        }
-
-        // why 5? one for each cycle, so user sees some activity all the time
-        $stepMultiplier = 4;
-        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() !== 0) {
-            ++$stepMultiplier;
-        }
-
-        $this->symfonyStyle->progressStart($fileCount * $stepMultiplier);
-
-        $this->configureStepCount($this->symfonyStyle);
     }
 }

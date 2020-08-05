@@ -139,6 +139,50 @@ PHP
         return $node;
     }
 
+    private function isGetComponentMethodCallOrArrayDimFetchOnControl(Expr $expr): bool
+    {
+        if ($this->isOnClassMethodCall($expr, 'Nette\Application\UI\Control', 'getComponent')) {
+            return true;
+        }
+
+        return $this->isArrayDimFetchStringOnControlVariable($expr);
+    }
+
+    private function resolveControlType(Assign $assign): Type
+    {
+        if ($assign->expr instanceof MethodCall) {
+            /** @var MethodCall $methodCall */
+            $methodCall = $assign->expr;
+            return $this->resolveCreateComponentMethodCallReturnType($methodCall);
+        }
+
+        if ($assign->expr instanceof ArrayDimFetch) {
+            /** @var ArrayDimFetch $arrayDimFetch */
+            $arrayDimFetch = $assign->expr;
+            return $this->resolveArrayDimFetchControlType($arrayDimFetch);
+        }
+
+        return new MixedType();
+    }
+
+    private function isArrayDimFetchStringOnControlVariable(Expr $expr): bool
+    {
+        if (! $expr instanceof ArrayDimFetch) {
+            return false;
+        }
+
+        if (! $expr->dim instanceof String_) {
+            return false;
+        }
+
+        $varStaticType = $this->getStaticType($expr->var);
+        if (! $varStaticType instanceof TypeWithClassName) {
+            return false;
+        }
+
+        return is_a($varStaticType->getClassName(), 'Nette\Application\UI\Control', true);
+    }
+
     private function resolveCreateComponentMethodCallReturnType(MethodCall $methodCall): Type
     {
         /** @var Scope|null $scope */
@@ -159,15 +203,6 @@ PHP
         return $this->resolveTypeFromShortControlNameAndVariable($firstArgumentValue, $scope, $methodCall->var);
     }
 
-    private function isGetComponentMethodCallOrArrayDimFetchOnControl(Expr $expr): bool
-    {
-        if ($this->isOnClassMethodCall($expr, 'Nette\Application\UI\Control', 'getComponent')) {
-            return true;
-        }
-
-        return $this->isArrayDimFetchStringOnControlVariable($expr);
-    }
-
     private function resolveArrayDimFetchControlType(ArrayDimFetch $arrayDimFetch): Type
     {
         /** @var Scope|null $scope */
@@ -177,24 +212,6 @@ PHP
         }
 
         return $this->resolveTypeFromShortControlNameAndVariable($arrayDimFetch->dim, $scope, $arrayDimFetch->var);
-    }
-
-    private function isArrayDimFetchStringOnControlVariable(Expr $expr): bool
-    {
-        if (! $expr instanceof ArrayDimFetch) {
-            return false;
-        }
-
-        if (! $expr->dim instanceof String_) {
-            return false;
-        }
-
-        $varStaticType = $this->getStaticType($expr->var);
-        if (! $varStaticType instanceof TypeWithClassName) {
-            return false;
-        }
-
-        return is_a($varStaticType->getClassName(), 'Nette\Application\UI\Control', true);
     }
 
     private function resolveTypeFromShortControlNameAndVariable(
@@ -218,22 +235,5 @@ PHP
         $method = $calledOnType->getMethod($methodName, $scope);
 
         return ParametersAcceptorSelector::selectSingle($method->getVariants())->getReturnType();
-    }
-
-    private function resolveControlType(Assign $assign): Type
-    {
-        if ($assign->expr instanceof MethodCall) {
-            /** @var MethodCall $methodCall */
-            $methodCall = $assign->expr;
-            return $this->resolveCreateComponentMethodCallReturnType($methodCall);
-        }
-
-        if ($assign->expr instanceof ArrayDimFetch) {
-            /** @var ArrayDimFetch $arrayDimFetch */
-            $arrayDimFetch = $assign->expr;
-            return $this->resolveArrayDimFetchControlType($arrayDimFetch);
-        }
-
-        return new MixedType();
     }
 }

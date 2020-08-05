@@ -175,15 +175,6 @@ PHP
         $foreach->stmts[] = $nestedIfWithOnlyReturn;
     }
 
-    private function negateOrDeNegate(Expr $expr): Expr
-    {
-        if ($expr instanceof BooleanNot) {
-            return $expr->expr;
-        }
-
-        return new BooleanNot($expr);
-    }
-
     /**
      * Matches:
      * $a == 1 || $b == 1
@@ -210,5 +201,14 @@ PHP
         }
 
         return $expr->right instanceof NotEqual;
+    }
+
+    private function negateOrDeNegate(Expr $expr): Expr
+    {
+        if ($expr instanceof BooleanNot) {
+            return $expr->expr;
+        }
+
+        return new BooleanNot($expr);
     }
 }

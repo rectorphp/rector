@@ -57,41 +57,6 @@ final class MarkdownDumpRectorsOutputFormatter
 
     /**
      * @param RectorInterface[] $rectors
-     * @return RectorInterface[][]
-     */
-    private function groupRectorsByPackage(array $rectors): array
-    {
-        $rectorsByPackage = [];
-        foreach ($rectors as $rector) {
-            $rectorClass = get_class($rector);
-            $package = $this->rectorMetadataResolver->resolvePackageFromRectorClass($rectorClass);
-            $rectorsByPackage[$package][] = $rector;
-        }
-
-        // sort groups by name to make them more readable
-        ksort($rectorsByPackage);
-
-        return $rectorsByPackage;
-    }
-
-    /**
-     * @param RectorInterface[][] $rectorsByGroup
-     */
-    private function printGroupsMenu(array $rectorsByGroup): void
-    {
-        foreach ($rectorsByGroup as $group => $rectors) {
-            $escapedGroup = str_replace('\\', '', $group);
-            $escapedGroup = Strings::webalize($escapedGroup, '_');
-            $message = sprintf('- [%s](#%s) (%d)', $group, $escapedGroup, count($rectors));
-
-            $this->symfonyStyle->writeln($message);
-        }
-
-        $this->symfonyStyle->newLine();
-    }
-
-    /**
-     * @param RectorInterface[] $rectors
      */
     private function printRectorsWithHeadline(array $rectors, string $headline): void
     {
@@ -129,5 +94,40 @@ final class MarkdownDumpRectorsOutputFormatter
                 $this->rectorPrinter->printRector($rector, $isRectorProject);
             }
         }
+    }
+
+    /**
+     * @param RectorInterface[] $rectors
+     * @return RectorInterface[][]
+     */
+    private function groupRectorsByPackage(array $rectors): array
+    {
+        $rectorsByPackage = [];
+        foreach ($rectors as $rector) {
+            $rectorClass = get_class($rector);
+            $package = $this->rectorMetadataResolver->resolvePackageFromRectorClass($rectorClass);
+            $rectorsByPackage[$package][] = $rector;
+        }
+
+        // sort groups by name to make them more readable
+        ksort($rectorsByPackage);
+
+        return $rectorsByPackage;
+    }
+
+    /**
+     * @param RectorInterface[][] $rectorsByGroup
+     */
+    private function printGroupsMenu(array $rectorsByGroup): void
+    {
+        foreach ($rectorsByGroup as $group => $rectors) {
+            $escapedGroup = str_replace('\\', '', $group);
+            $escapedGroup = Strings::webalize($escapedGroup, '_');
+            $message = sprintf('- [%s](#%s) (%d)', $group, $escapedGroup, count($rectors));
+
+            $this->symfonyStyle->writeln($message);
+        }
+
+        $this->symfonyStyle->newLine();
     }
 }

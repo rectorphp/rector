@@ -123,26 +123,6 @@ final class ListeningMethodsCollector
         return $this->classMethodsByEventClass;
     }
 
-    private function resolveCustomClassMethodAndEventClass(
-        ArrayItem $arrayItem,
-        Class_ $class,
-        string $eventClass
-    ): array {
-        // custom method name
-        $classMethodName = $this->valueResolver->getValue($arrayItem->value);
-        $classMethod = $class->getMethod($classMethodName);
-
-        if (Strings::contains($eventClass, '::')) {
-            [$dispatchingClass, $property] = Strings::split($eventClass, '#::#');
-            $eventClass = $this->eventClassNaming->createEventClassNameFromClassAndProperty(
-                $dispatchingClass,
-                $property
-            );
-        }
-
-        return [$classMethod, $eventClass];
-    }
-
     private function matchClassMethodByNodeValue(Class_ $class, Expr $expr): ?ClassMethod
     {
         $possibleMethodName = $this->valueResolver->getValue($expr);
@@ -164,5 +144,25 @@ final class ListeningMethodsCollector
         }
 
         $this->classMethodsByEventClass[$eventClass] = $classMethod;
+    }
+
+    private function resolveCustomClassMethodAndEventClass(
+        ArrayItem $arrayItem,
+        Class_ $class,
+        string $eventClass
+    ): array {
+        // custom method name
+        $classMethodName = $this->valueResolver->getValue($arrayItem->value);
+        $classMethod = $class->getMethod($classMethodName);
+
+        if (Strings::contains($eventClass, '::')) {
+            [$dispatchingClass, $property] = Strings::split($eventClass, '#::#');
+            $eventClass = $this->eventClassNaming->createEventClassNameFromClassAndProperty(
+                $dispatchingClass,
+                $property
+            );
+        }
+
+        return [$classMethod, $eventClass];
     }
 }

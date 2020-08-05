@@ -106,17 +106,6 @@ final class EventAndListenerTreeProvider
         return $this->eventAndListenerTrees;
     }
 
-    private function resolveMagicProperty(MethodCall $methodCall): ?Property
-    {
-        /** @var string $methodName */
-        $methodName = $this->nodeNameResolver->getName($methodCall->name);
-
-        /** @var Class_ $classLike */
-        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
-
-        return $classLike->getProperty($methodName);
-    }
-
     private function initializeEventAndListenerTrees(): void
     {
         if ($this->eventAndListenerTrees !== [] && ! StaticPHPUnitEnvironment::isPHPUnitRun()) {
@@ -159,6 +148,17 @@ final class EventAndListenerTreeProvider
 
             $this->eventAndListenerTrees[] = $eventAndListenerTree;
         }
+    }
+
+    private function resolveMagicProperty(MethodCall $methodCall): ?Property
+    {
+        /** @var string $methodName */
+        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+
+        /** @var Class_ $classLike */
+        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
+
+        return $classLike->getProperty($methodName);
     }
 
     /**

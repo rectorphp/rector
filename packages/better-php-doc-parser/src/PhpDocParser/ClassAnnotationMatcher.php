@@ -38,6 +38,24 @@ final class ClassAnnotationMatcher
         return $fullyQualifiedClass;
     }
 
+    private function resolveFullyQualifiedClass(?array $useNodes, Node $node, string $tag): string
+    {
+        if ($useNodes === null) {
+            /** @var string|null $namespace */
+            $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
+            if ($namespace !== null) {
+                $namespacedTag = $namespace . '\\' . $tag;
+                if (class_exists($namespacedTag)) {
+                    return $namespacedTag;
+                }
+            }
+
+            return $tag;
+        }
+
+        return $this->matchFullAnnotationClassWithUses($tag, $useNodes) ?? $tag;
+    }
+
     /**
      * @param Use_[] $uses
      */
@@ -76,23 +94,5 @@ final class ClassAnnotationMatcher
         }
 
         return $useUse->name . '\\' . $unaliasedShortClass;
-    }
-
-    private function resolveFullyQualifiedClass(?array $useNodes, Node $node, string $tag): string
-    {
-        if ($useNodes === null) {
-            /** @var string|null $namespace */
-            $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
-            if ($namespace !== null) {
-                $namespacedTag = $namespace . '\\' . $tag;
-                if (class_exists($namespacedTag)) {
-                    return $namespacedTag;
-                }
-            }
-
-            return $tag;
-        }
-
-        return $this->matchFullAnnotationClassWithUses($tag, $useNodes) ?? $tag;
     }
 }

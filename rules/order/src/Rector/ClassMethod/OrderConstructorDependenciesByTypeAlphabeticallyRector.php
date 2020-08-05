@@ -95,35 +95,6 @@ PHP
         $this->skipPatterns = $configuration[self::SKIP_PATTERNS] ?? [];
     }
 
-    /**
-     * @return Param[]
-     */
-    private function getSortedParams(ClassMethod $classMethod): array
-    {
-        $params = $classMethod->getParams();
-        usort($params, function (Param $firstParam, Param $secondParam) {
-            /** @var Name $firstParamType */
-            $firstParamType = $this->getParamType($firstParam);
-            /** @var Name $secondParamType */
-            $secondParamType = $this->getParamType($secondParam);
-
-            return $this->getShortName($firstParamType) <=> $this->getShortName($secondParamType);
-        });
-
-        return $params;
-    }
-
-    private function hasPrimitiveDataTypeParam(ClassMethod $classMethod): bool
-    {
-        foreach ($classMethod->params as $param) {
-            if ($param->type instanceof Identifier) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private function shouldSkip(ClassMethod $classMethod): bool
     {
         if (! $this->isName($classMethod, MethodName::CONSTRUCT)) {
@@ -148,22 +119,21 @@ PHP
     }
 
     /**
-     * @return Identifier|Name|UnionType|null
+     * @return Param[]
      */
-    private function getParamType(Param $param)
+    private function getSortedParams(ClassMethod $classMethod): array
     {
-        return $param->type instanceof NullableType ? $param->type->type : $param->type;
-    }
+        $params = $classMethod->getParams();
+        usort($params, function (Param $firstParam, Param $secondParam) {
+            /** @var Name $firstParamType */
+            $firstParamType = $this->getParamType($firstParam);
+            /** @var Name $secondParamType */
+            $secondParamType = $this->getParamType($secondParam);
 
-    private function hasParamWithNoType(ClassMethod $classMethod): bool
-    {
-        foreach ($classMethod->params as $param) {
-            if ($param->type === null) {
-                return true;
-            }
-        }
+            return $this->getShortName($firstParamType) <=> $this->getShortName($secondParamType);
+        });
 
-        return false;
+        return $params;
     }
 
     /**
@@ -182,5 +152,35 @@ PHP
         }
 
         return false;
+    }
+
+    private function hasPrimitiveDataTypeParam(ClassMethod $classMethod): bool
+    {
+        foreach ($classMethod->params as $param) {
+            if ($param->type instanceof Identifier) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasParamWithNoType(ClassMethod $classMethod): bool
+    {
+        foreach ($classMethod->params as $param) {
+            if ($param->type === null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return Identifier|Name|UnionType|null
+     */
+    private function getParamType(Param $param)
+    {
+        return $param->type instanceof NullableType ? $param->type->type : $param->type;
     }
 }

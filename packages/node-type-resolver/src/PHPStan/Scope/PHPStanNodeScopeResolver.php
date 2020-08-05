@@ -212,6 +212,25 @@ final class PHPStanNodeScopeResolver
     }
 
     /**
+     * Remove comments, to enable scope resolving only from code, not docblocks
+     *
+     * @param Node[] $nodes
+     */
+    private function removeCommentsFromNodes(array $nodes): void
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new class() extends NodeVisitorAbstract {
+            public function enterNode(Node $node): ?Node
+            {
+                $node->setAttribute('comments', null);
+                return $node;
+            }
+        });
+
+        $nodeTraverser->traverse($nodes);
+    }
+
+    /**
      * @param string[] $dependentFiles
      */
     private function reportCacheDebugAndSaveDependentFiles(SmartFileInfo $smartFileInfo, array $dependentFiles): void
@@ -258,24 +277,5 @@ final class PHPStanNodeScopeResolver
         if ($dependentFiles !== []) {
             $this->symfonyStyle->listing($dependentFiles);
         }
-    }
-
-    /**
-     * Remove comments, to enable scope resolving only from code, not docblocks
-     *
-     * @param Node[] $nodes
-     */
-    private function removeCommentsFromNodes(array $nodes): void
-    {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new class() extends NodeVisitorAbstract {
-            public function enterNode(Node $node): ?Node
-            {
-                $node->setAttribute('comments', null);
-                return $node;
-            }
-        });
-
-        $nodeTraverser->traverse($nodes);
     }
 }

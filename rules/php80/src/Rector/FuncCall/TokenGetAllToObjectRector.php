@@ -99,6 +99,24 @@ PHP
         return $this->createStaticCall('PhpToken', 'getAll', $node->args);
     }
 
+    private function refactorTokensVariable(FuncCall $funcCall): void
+    {
+        $assign = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $assign instanceof Assign) {
+            return;
+        }
+
+        $classMethodOrFunctionNode = $funcCall->getAttribute(AttributeKey::METHOD_NODE) ?:
+            $funcCall->getAttribute(AttributeKey::FUNCTION_NODE);
+
+        if ($classMethodOrFunctionNode === null) {
+            return;
+        }
+
+        // dummy approach, improve when needed
+        $this->replaceGetNameOrGetValue($classMethodOrFunctionNode, $assign->var);
+    }
+
     /**
      * @param ClassMethod|Function_ $functionLike
      */
@@ -108,6 +126,23 @@ PHP
         foreach ($tokensForeaches as $tokensForeach) {
             $this->refactorTokenInForeach($tokensForeach);
         }
+    }
+
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     * @return Foreach_[]
+     */
+    private function findForeachesOverTokenVariable(FunctionLike $functionLike, Expr $assignedExpr): array
+    {
+        return $this->betterNodeFinder->find((array) $functionLike->stmts, function (Node $node) use (
+            $assignedExpr
+        ): bool {
+            if (! $node instanceof Foreach_) {
+                return false;
+            }
+
+            return $this->areNodesEqual($node->expr, $assignedExpr);
+        });
     }
 
     private function refactorTokenInForeach(Foreach_ $tokensForeach): void
@@ -133,41 +168,6 @@ PHP
                 $this->unwrapStmts($node->stmts, $node);
                 $this->removeNode($node);
             }
-        });
-    }
-
-    private function refactorTokensVariable(FuncCall $funcCall): void
-    {
-        $assign = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $assign instanceof Assign) {
-            return;
-        }
-
-        $classMethodOrFunctionNode = $funcCall->getAttribute(AttributeKey::METHOD_NODE) ?:
-            $funcCall->getAttribute(AttributeKey::FUNCTION_NODE);
-
-        if ($classMethodOrFunctionNode === null) {
-            return;
-        }
-
-        // dummy approach, improve when needed
-        $this->replaceGetNameOrGetValue($classMethodOrFunctionNode, $assign->var);
-    }
-
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     * @return Foreach_[]
-     */
-    private function findForeachesOverTokenVariable(FunctionLike $functionLike, Expr $assignedExpr): array
-    {
-        return $this->betterNodeFinder->find((array) $functionLike->stmts, function (Node $node) use (
-            $assignedExpr
-        ): bool {
-            if (! $node instanceof Foreach_) {
-                return false;
-            }
-
-            return $this->areNodesEqual($node->expr, $assignedExpr);
         });
     }
 }

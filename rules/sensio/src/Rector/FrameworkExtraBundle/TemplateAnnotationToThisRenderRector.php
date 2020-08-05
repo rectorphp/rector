@@ -183,32 +183,30 @@ PHP
         }
     }
 
-    private function processClassMethodWithoutReturn(
-        ClassMethod $classMethod,
-        MethodCall $thisRenderMethodCall
-    ): void {
-        $classMethod->stmts[] = new Return_($thisRenderMethodCall);
-    }
+    /**
+     * This skips anonymous functions and functions, as their returns doesn't influence current code
+     *
+     * @param Node[] $stmts
+     * @return Return_[]
+     */
+    private function findReturnsInCurrentScope(array $stmts): array
+    {
+        $returns = [];
+        $this->traverseNodesWithCallable($stmts, function (Node $node) use (&$returns) {
+            if ($node instanceof Closure || $node instanceof Function_) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
 
-    private function processIsArrayOrResponseType(
-        Return_ $return,
-        Expr $returnExpr,
-        MethodCall $thisRenderMethodCall
-    ): void {
-        $this->removeNode($return);
+            if (! $node instanceof Return_) {
+                return null;
+            }
 
-        // create instance of Response → return response, or return $this->render
-        $responseVariable = new Variable('responseOrData');
+            $returns[] = $node;
 
-        $assign = new Assign($responseVariable, $returnExpr);
+            return null;
+        });
 
-        $if = new If_(new Instanceof_($responseVariable, new FullyQualified(self::RESPONSE_CLASS)));
-        $if->stmts[] = new Return_($responseVariable);
-
-        $thisRenderMethodCall->args[1] = new Arg($responseVariable);
-
-        $returnThisRender = new Return_($thisRenderMethodCall);
-        $this->addNodesAfterNode([$assign, $if, $returnThisRender], $return);
+        return $returns;
     }
 
     private function hasLastReturnResponse(ClassMethod $classMethod): bool
@@ -220,6 +218,32 @@ PHP
         }
 
         return $this->isReturnOfObjectType($lastReturn, self::RESPONSE_CLASS);
+    }
+
+    private function refactorReturn(
+        Return_ $return,
+        ClassMethod $classMethod,
+        SensioTemplateTagValueNode $sensioTemplateTagValueNode,
+        bool $hasThisRenderOrReturnsResponse
+    ): void {
+        // nothing we can do
+        if ($return->expr === null) {
+            return;
+        }
+
+        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
+        $thisRenderMethodCall = $this->thisRenderFactory->create(
+            $classMethod,
+            $return,
+            $sensioTemplateTagValueNode
+        );
+
+        $this->refactorReturnWithValue(
+            $return,
+            $hasThisRenderOrReturnsResponse,
+            $thisRenderMethodCall,
+            $classMethod
+        );
     }
 
     private function refactorNoReturn(ClassMethod $classMethod, MethodCall $thisRenderMethodCall): void
@@ -266,55 +290,31 @@ PHP
         $this->removePhpDocTagValueNode($classMethod, SensioTemplateTagValueNode::class);
     }
 
-    private function refactorReturn(
-        Return_ $return,
+    private function processClassMethodWithoutReturn(
         ClassMethod $classMethod,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode,
-        bool $hasThisRenderOrReturnsResponse
+        MethodCall $thisRenderMethodCall
     ): void {
-        // nothing we can do
-        if ($return->expr === null) {
-            return;
-        }
-
-        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
-        $thisRenderMethodCall = $this->thisRenderFactory->create(
-            $classMethod,
-            $return,
-            $sensioTemplateTagValueNode
-        );
-
-        $this->refactorReturnWithValue(
-            $return,
-            $hasThisRenderOrReturnsResponse,
-            $thisRenderMethodCall,
-            $classMethod
-        );
+        $classMethod->stmts[] = new Return_($thisRenderMethodCall);
     }
 
-    /**
-     * This skips anonymous functions and functions, as their returns doesn't influence current code
-     *
-     * @param Node[] $stmts
-     * @return Return_[]
-     */
-    private function findReturnsInCurrentScope(array $stmts): array
-    {
-        $returns = [];
-        $this->traverseNodesWithCallable($stmts, function (Node $node) use (&$returns) {
-            if ($node instanceof Closure || $node instanceof Function_) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
+    private function processIsArrayOrResponseType(
+        Return_ $return,
+        Expr $returnExpr,
+        MethodCall $thisRenderMethodCall
+    ): void {
+        $this->removeNode($return);
 
-            if (! $node instanceof Return_) {
-                return null;
-            }
+        // create instance of Response → return response, or return $this->render
+        $responseVariable = new Variable('responseOrData');
 
-            $returns[] = $node;
+        $assign = new Assign($responseVariable, $returnExpr);
 
-            return null;
-        });
+        $if = new If_(new Instanceof_($responseVariable, new FullyQualified(self::RESPONSE_CLASS)));
+        $if->stmts[] = new Return_($responseVariable);
 
-        return $returns;
+        $thisRenderMethodCall->args[1] = new Arg($responseVariable);
+
+        $returnThisRender = new Return_($thisRenderMethodCall);
+        $this->addNodesAfterNode([$assign, $if, $returnThisRender], $return);
     }
 }

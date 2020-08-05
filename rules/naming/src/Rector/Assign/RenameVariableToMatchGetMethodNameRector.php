@@ -155,6 +155,28 @@ PHP
         return $node;
     }
 
+    private function shouldSkip(VariableAndCallAssign $variableAndCallAssign, string $expectedName): bool
+    {
+        if ($this->namingConventionAnalyzer->isCallMatchingVariableName(
+            $variableAndCallAssign->getCall(),
+            $variableAndCallAssign->getVariableName(),
+            $expectedName
+        )) {
+            return true;
+        }
+
+        if ($this->isClassTypeWithChildren($variableAndCallAssign->getCall())) {
+            return true;
+        }
+
+        return $this->breakingVariableRenameGuard->shouldSkipVariable(
+            $variableAndCallAssign->getVariableName(),
+            $expectedName,
+            $variableAndCallAssign->getFunctionLike(),
+            $variableAndCallAssign->getVariable()
+        );
+    }
+
     private function renameVariable(VariableAndCallAssign $variableAndCallAssign, string $expectedName): void
     {
         $this->varTagValueNodeRenamer->renameAssignVarTagVariableName(
@@ -191,27 +213,5 @@ PHP
         }
 
         return $this->familyRelationsAnalyzer->isParentClass($callStaticType->getClassName());
-    }
-
-    private function shouldSkip(VariableAndCallAssign $variableAndCallAssign, string $expectedName): bool
-    {
-        if ($this->namingConventionAnalyzer->isCallMatchingVariableName(
-            $variableAndCallAssign->getCall(),
-            $variableAndCallAssign->getVariableName(),
-            $expectedName
-        )) {
-            return true;
-        }
-
-        if ($this->isClassTypeWithChildren($variableAndCallAssign->getCall())) {
-            return true;
-        }
-
-        return $this->breakingVariableRenameGuard->shouldSkipVariable(
-            $variableAndCallAssign->getVariableName(),
-            $expectedName,
-            $variableAndCallAssign->getFunctionLike(),
-            $variableAndCallAssign->getVariable()
-        );
     }
 }
