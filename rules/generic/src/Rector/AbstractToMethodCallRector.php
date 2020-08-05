@@ -8,7 +8,10 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Generic\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
@@ -39,12 +42,21 @@ abstract class AbstractToMethodCallRector extends AbstractRector implements Conf
     }
 
     /**
-     * @return MethodCall|PropertyFetch
+     * @param ClassMethod|Function_ $functionLike
+     * @return MethodCall|PropertyFetch|Variable
      */
-    protected function matchTypeProvidingExpr(Class_ $class, string $type): Expr
+    protected function matchTypeProvidingExpr(Class_ $class, FunctionLike $functionLike, string $type): Expr
     {
-        $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass($class, $type);
+        $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass(
+            $class,
+            $functionLike,
+            $type
+        );
         if ($expr !== null) {
+            if ($expr instanceof Variable) {
+                $this->addClassMethodParamForVariable($expr, $type, $functionLike);
+            }
+
             return $expr;
         }
 
@@ -65,5 +77,19 @@ abstract class AbstractToMethodCallRector extends AbstractRector implements Conf
         $propertyName = $this->propertyNaming->fqnToVariableName($type);
 
         return new PropertyFetch($thisVariable, $propertyName);
+    }
+
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     */
+    private function addClassMethodParamForVariable(Variable $variable, string $type, FunctionLike $functionLike): void
+    {
+        /** @var string $variableName */
+        $variableName = $this->getName($variable);
+
+        // add variable to __construct as dependency
+        $param = $this->nodeFactory->createParamFromNameAndType($variableName, new FullyQualifiedObjectType($type));
+
+        $functionLike->params[] = $param;
     }
 }

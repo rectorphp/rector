@@ -116,7 +116,7 @@ PHP
                 return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
             }
 
-            $expr = $this->matchTypeProvidingExpr($classLike, $staticCallToMethodCall->getClassType());
+            $expr = $this->matchTypeProvidingExpr($classLike, $classMethod, $staticCallToMethodCall->getClassType());
             return new MethodCall($expr, $staticCallToMethodCall->getMethodName(), $node->args);
         }
 
