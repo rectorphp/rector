@@ -8,7 +8,10 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -18,6 +21,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\ValueObject\MethodName;
+use Rector\Naming\Naming\PropertyNaming;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
@@ -33,16 +39,33 @@ final class TypeProvidingExprFromClassResolver
      */
     private $reflectionProvider;
 
-    public function __construct(TypeUnwrapper $typeUnwrapper, ReflectionProvider $reflectionProvider)
-    {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    /**
+     * @var PropertyNaming
+     */
+    private $propertyNaming;
+
+    public function __construct(
+        TypeUnwrapper $typeUnwrapper,
+        ReflectionProvider $reflectionProvider,
+        NodeNameResolver $nodeNameResolver,
+        PropertyNaming $propertyNaming
+    ) {
         $this->typeUnwrapper = $typeUnwrapper;
         $this->reflectionProvider = $reflectionProvider;
+        $this->nodeNameResolver = $nodeNameResolver;
+        $this->propertyNaming = $propertyNaming;
     }
 
     /**
-     * @return MethodCall|PropertyFetch|null
+     * @param ClassMethod|Function_ $functionLike
+     * @return MethodCall|PropertyFetch|Variable|null
      */
-    public function resolveTypeProvidingExprFromClass(Class_ $class, string $type): ?Expr
+    public function resolveTypeProvidingExprFromClass(Class_ $class, FunctionLike $functionLike, string $type): ?Expr
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
@@ -62,7 +85,13 @@ final class TypeProvidingExprFromClassResolver
             return null;
         }
 
-        return $this->resolvePropertyFetchProvidingType($classReflection, $scope, $type);
+        $propertyFetch = $this->resolvePropertyFetchProvidingType($classReflection, $scope, $type);
+        if ($propertyFetch !== null) {
+            return $propertyFetch;
+        }
+
+        // C. param in constructor?
+        return $this->resolveConstructorParamProvidingType($functionLike, $type);
     }
 
     private function resolveMethodCallProvidingType(ClassReflection $classReflection, string $type): ?MethodCall
@@ -117,5 +146,19 @@ final class TypeProvidingExprFromClassResolver
         }
 
         return $readableType->getClassName() === $type;
+    }
+
+    private function resolveConstructorParamProvidingType(FunctionLike $functionLike, string $type): ?Variable
+    {
+        if (! $functionLike instanceof ClassMethod) {
+            return null;
+        }
+
+        if (! $this->nodeNameResolver->isName($functionLike, MethodName::CONSTRUCT)) {
+            return null;
+        }
+
+        $variableName = $this->propertyNaming->fqnToVariableName($type);
+        return new Variable($variableName);
     }
 }

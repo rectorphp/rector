@@ -98,16 +98,16 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->functionToClassToMethod as $function => $classMethod) {
+        foreach ($this->functionToClassToMethod as $function => $classMethodName) {
             if (! $this->isName($node->name, $function)) {
                 continue;
             }
 
             /** @var string $type */
             /** @var string $method */
-            [$type, $method] = $classMethod;
+            [$type, $method] = $classMethodName;
 
-            $expr = $this->matchTypeProvidingExpr($classLike, $type);
+            $expr = $this->matchTypeProvidingExpr($classLike, $classMethod, $type);
             return $this->createMethodCall($expr, $method, $node->args);
         }
 
