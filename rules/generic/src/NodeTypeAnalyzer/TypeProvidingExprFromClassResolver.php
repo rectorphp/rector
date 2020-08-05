@@ -131,6 +131,20 @@ final class TypeProvidingExprFromClassResolver
         return null;
     }
 
+    private function resolveConstructorParamProvidingType(FunctionLike $functionLike, string $type): ?Variable
+    {
+        if (! $functionLike instanceof ClassMethod) {
+            return null;
+        }
+
+        if (! $this->nodeNameResolver->isName($functionLike, MethodName::CONSTRUCT)) {
+            return null;
+        }
+
+        $variableName = $this->propertyNaming->fqnToVariableName($type);
+        return new Variable($variableName);
+    }
+
     private function isMatchingType(Type $readableType, string $type): bool
     {
         if ($readableType instanceof MixedType) {
@@ -146,19 +160,5 @@ final class TypeProvidingExprFromClassResolver
         }
 
         return $readableType->getClassName() === $type;
-    }
-
-    private function resolveConstructorParamProvidingType(FunctionLike $functionLike, string $type): ?Variable
-    {
-        if (! $functionLike instanceof ClassMethod) {
-            return null;
-        }
-
-        if (! $this->nodeNameResolver->isName($functionLike, MethodName::CONSTRUCT)) {
-            return null;
-        }
-
-        $variableName = $this->propertyNaming->fqnToVariableName($type);
-        return new Variable($variableName);
     }
 }

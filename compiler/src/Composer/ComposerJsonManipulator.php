@@ -111,7 +111,6 @@ final class ComposerJsonManipulator
 
         // remove conflicting dev deps
         unset($json[self::REQUIRE_DEV]['slam/phpstan-extensions']);
-        unset($json[self::REQUIRE_DEV]['slevomat/coding-standard']);
 
         $json['repositories'][] = [
             'type' => 'vcs',

@@ -64,6 +64,20 @@ abstract class AbstractToMethodCallRector extends AbstractRector implements Conf
         return $this->createPropertyFetchFromClass($type);
     }
 
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     */
+    private function addClassMethodParamForVariable(Variable $variable, string $type, FunctionLike $functionLike): void
+    {
+        /** @var string $variableName */
+        $variableName = $this->getName($variable);
+
+        // add variable to __construct as dependency
+        $param = $this->nodeFactory->createParamFromNameAndType($variableName, new FullyQualifiedObjectType($type));
+
+        $functionLike->params[] = $param;
+    }
+
     private function addPropertyTypeToClass(string $type, Class_ $class): void
     {
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($type);
@@ -77,19 +91,5 @@ abstract class AbstractToMethodCallRector extends AbstractRector implements Conf
         $propertyName = $this->propertyNaming->fqnToVariableName($type);
 
         return new PropertyFetch($thisVariable, $propertyName);
-    }
-
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function addClassMethodParamForVariable(Variable $variable, string $type, FunctionLike $functionLike): void
-    {
-        /** @var string $variableName */
-        $variableName = $this->getName($variable);
-
-        // add variable to __construct as dependency
-        $param = $this->nodeFactory->createParamFromNameAndType($variableName, new FullyQualifiedObjectType($type));
-
-        $functionLike->params[] = $param;
     }
 }
