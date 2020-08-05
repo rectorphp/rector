@@ -16,6 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\Rector\AbstractToMethodCallRector;
 use Rector\Injection\ValueObject\StaticCallToMethodCall;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\StaticCallToMethodCallRectorTest
@@ -58,10 +59,12 @@ class SomeClass
      * @var SmartFileSystem
      */
     private $smartFileSystem;
+
     public function __construct(SmartFileSystem $smartFileSystem)
     {
         $this->smartFileSystem = $smartFileSystem;
     }
+
     public function run()
     {
         return $this->smartFileSystem->dumpFile('file', 'content');
@@ -122,7 +125,17 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? [];
+        $staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? [];
+
+        $message = sprintf(
+            'Configuration for "%s" must be in object of "%s". "%s" given',
+            self::class,
+            StaticCallToMethodCall::class,
+            gettype($staticCallsToMethodCalls)
+        );
+        Assert::allIsInstanceOf($staticCallsToMethodCalls, StaticCallToMethodCall::class, $message);
+
+        $this->staticCallsToMethodCalls = $staticCallsToMethodCalls;
     }
 
     private function refactorToInstanceCall(

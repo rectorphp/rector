@@ -8,7 +8,6 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Assign\PropertyAssignToMethodCallRector;
 use Rector\Generic\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
-use Rector\Generic\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
@@ -35,9 +34,6 @@ final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
             PropertyAssignToMethodCallRector::class => [
                 PropertyAssignToMethodCallRector::OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE => [
                     ChoiceControl::class => [
-                        'checkAllowedValues' => 'checkDefaultValue',
-                    ],
-                    MultiChoiceControl::class => [
                         'checkAllowedValues' => 'checkDefaultValue',
                     ],
                 ],
