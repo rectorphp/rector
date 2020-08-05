@@ -184,6 +184,10 @@ PHP
             return true;
         }
 
+        if (isset($this->useNamesAliasToName[$lowercasedLastName], $this->useNamesAliasToName[$lowercasedLastName][0]) && $this->useNamesAliasToName[$lowercasedLastName][0] === $aliasName) {
+            return true;
+        }
+
         // part of some @Doc annotation
         return in_array($lowercasedAliasName, $this->resolvedDocPossibleAliases, true);
     }
