@@ -135,12 +135,15 @@ PHP
                 continue;
             }
 
+            /** @var string $lastName */
             $lastName = $use->name->getLast();
             $lowercasedLastName = strtolower($lastName);
 
             /** @var string $aliasName */
             $aliasName = $this->getName($use->alias);
-            if ($this->shouldSkip($lastName, $aliasName)) {
+            $lowercasedAliasName = strtolower($aliasName);
+
+            if ($this->shouldSkip($lowercasedLastName, $aliasName)) {
                 continue;
             }
 
@@ -150,7 +153,7 @@ PHP
                 continue;
             }
 
-            $this->refactorAliasName($aliasName, $lastName, $use);
+            $this->refactorAliasName($lowercasedAliasName, $lastName, $use);
         }
 
         return $node;
@@ -171,37 +174,34 @@ PHP
         return $use->getAttribute(AttributeKey::NEXT_NODE);
     }
 
-    private function shouldSkip(string $lastName, string $aliasName): bool
+    private function shouldSkip(string $lowercasedLastName, string $aliasName): bool
     {
         // PHP is case insensitive
-        $loweredLastName = strtolower($lastName);
-        $loweredAliasName = strtolower($aliasName);
+        $lowercasedAliasName = strtolower($aliasName);
 
         // both are used → nothing to remove
-        if (isset($this->resolvedNodeNames[$loweredLastName], $this->resolvedNodeNames[$loweredAliasName])) {
+        if (isset($this->resolvedNodeNames[$lowercasedLastName], $this->resolvedNodeNames[$lowercasedAliasName])) {
             return true;
         }
 
         // part of some @Doc annotation
-        return in_array($loweredAliasName, $this->resolvedDocPossibleAliases, true);
+        return in_array($lowercasedAliasName, $this->resolvedDocPossibleAliases, true);
     }
 
-    private function refactorAliasName(string $aliasName, string $lastName, UseUse $useUse): void
+    private function refactorAliasName(string $lowercasedAliasName, string $lastName, UseUse $useUse): void
     {
         // only alias name is used → use last name directly
-
-        $lowerAliasName = strtolower($aliasName);
-        if (! isset($this->resolvedNodeNames[$lowerAliasName])) {
+        if (! isset($this->resolvedNodeNames[$lowercasedAliasName])) {
             return;
         }
 
         // keep to differentiate 2 aliases classes
-        $lowerLastName = strtolower($lastName);
-        if (count($this->useNamesAliasToName[$lowerLastName] ?? []) > 1) {
+        $lowercasedLastName = strtolower($lastName);
+        if (count($this->useNamesAliasToName[$lowercasedLastName] ?? []) > 1) {
             return;
         }
 
-        $this->renameNameNode($this->resolvedNodeNames[$lowerAliasName], $lastName);
+        $this->renameNameNode($this->resolvedNodeNames[$lowercasedAliasName], $lastName);
         $useUse->alias = null;
     }
 
