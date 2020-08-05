@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Twig\Rector;
+namespace Rector\Twig\Rector\Return_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -22,7 +22,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function
  *
- * @see \Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\SimpleFunctionAndFilterRectorTest
+ * @see \Rector\Twig\Tests\Rector\Return_\SimpleFunctionAndFilterRector\SimpleFunctionAndFilterRectorTest
  */
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {
