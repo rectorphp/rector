@@ -17,7 +17,6 @@ use Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector;
-use Rector\CodingStyle\Rector\FuncCall\SimpleArrayCallableToStringRector;
 use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
 use Rector\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector;
 use Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector;
@@ -39,8 +38,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(NullableCompareToNullRector::class);
-
-    $services->set(SimpleArrayCallableToStringRector::class);
 
     $services->set(IdenticalFalseToBooleanNotRector::class);
 

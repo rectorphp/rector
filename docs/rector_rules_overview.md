@@ -1,4 +1,4 @@
-# All 551 Rectors Overview
+# All 550 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -9,7 +9,7 @@
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
 - [CodeQuality](#codequality) (58)
-- [CodingStyle](#codingstyle) (36)
+- [CodingStyle](#codingstyle) (35)
 - [DeadCode](#deadcode) (40)
 - [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
@@ -2110,22 +2110,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 +        yield 'event' => 'callback';
      }
  }
-```
-
-<br><br>
-
-### `SimpleArrayCallableToStringRector`
-
-- class: [`Rector\CodingStyle\Rector\FuncCall\SimpleArrayCallableToStringRector`](/../master/rules/coding-style/src/Rector/FuncCall/SimpleArrayCallableToStringRector.php)
-- [test fixtures](/../master/rules/coding-style/tests/Rector/FuncCall/SimpleArrayCallableToStringRector/Fixture)
-
-Changes redundant anonymous bool functions to simple calls
-
-```diff
--$paths = array_filter($paths, function ($path): bool {
--    return is_dir($path);
--});
-+array_filter($paths, "is_dir");
 ```
 
 <br><br>
@@ -5865,10 +5849,12 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 +     * @var SmartFileSystem
 +     */
 +    private $smartFileSystem;
++
 +    public function __construct(SmartFileSystem $smartFileSystem)
 +    {
 +        $this->smartFileSystem = $smartFileSystem;
 +    }
++
      public function run()
      {
 -        return FileSystem::write('file', 'content');
