@@ -10,6 +10,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -17,8 +18,14 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentPregDelimiterRector\ConsistentPregDelimiterRectorTest
  */
-final class ConsistentPregDelimiterRector extends AbstractRector
+final class ConsistentPregDelimiterRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @api
+     * @var string
+     */
+    public const DELIMITER = 'delimiter';
+
     /**
      * @var string
      *
@@ -57,11 +64,6 @@ final class ConsistentPregDelimiterRector extends AbstractRector
      * @var string
      */
     private $delimiter;
-
-    public function __construct(string $delimiter = '#')
-    {
-        $this->delimiter = $delimiter;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -126,6 +128,11 @@ PHP
         }
 
         return null;
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->delimiter = $configuration[self::DELIMITER] ?? '#';
     }
 
     private function refactorFuncCall(FuncCall $funcCall): ?FuncCall
