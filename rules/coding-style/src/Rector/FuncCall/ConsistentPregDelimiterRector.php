@@ -156,9 +156,11 @@ PHP
             return;
         }
 
-        $value = $arg->value->value;
+        /** @var String_ $string */
+        $string = $arg->value;
+        $value = $string->value;
 
-        $arg->value->value = Strings::replace($value, self::INNER_PATTERN_PATTERN, function (array $match): string {
+        $string->value = Strings::replace($value, self::INNER_PATTERN_PATTERN, function (array $match): string {
             $innerPattern = $match['content'];
             // change delimiter
             if (strlen($innerPattern) > 2 && $innerPattern[0] === $innerPattern[strlen($innerPattern) - 1]) {
