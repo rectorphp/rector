@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRector\Fixture;
 
-final class Helpers
+final class ArrayCallWithReturnType
 {
     public function provideFilters(): array
     {
@@ -11,7 +11,7 @@ final class Helpers
         ];
     }
 
-    private function currency($value)
+    private function currency($value): string
     {
         return $value . ' €';
     }
@@ -23,18 +23,18 @@ final class Helpers
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRector\Fixture;
 
-final class Helpers
+final class ArrayCallWithReturnType
 {
     public function provideFilters(): array
     {
         return [
-            'filter_name' => function ($value) {
+            'filter_name' => function ($value) : string {
                 return $this->currency($value);
             }
         ];
     }
 
-    private function currency($value)
+    private function currency($value): string
     {
         return $value . ' €';
     }

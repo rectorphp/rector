@@ -42,6 +42,7 @@ final class ArrayCallableClassMethodReferenceAnalyzer
             return null;
         }
 
+        // $this, self, static, FQN
         if (! $this->isThisVariable($array->items[0]->value)) {
             return null;
         }
@@ -59,8 +60,6 @@ final class ArrayCallableClassMethodReferenceAnalyzer
         if ($className === null) {
             return null;
         }
-
-        dump($className, $methodName);
 
         return [$className, $methodName];
     }

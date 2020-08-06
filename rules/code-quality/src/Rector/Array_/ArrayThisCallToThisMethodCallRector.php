@@ -29,8 +29,9 @@ final class ArrayThisCallToThisMethodCallRector extends AbstractRector
      */
     private $arrayCallableClassMethodReferenceAnalyzer;
 
-    public function __construct(ArrayCallableClassMethodReferenceAnalyzer $arrayCallableClassMethodReferenceAnalyzer)
-    {
+    public function __construct(
+        ArrayCallableClassMethodReferenceAnalyzer $arrayCallableClassMethodReferenceAnalyzer
+    ) {
         $this->arrayCallableClassMethodReferenceAnalyzer = $arrayCallableClassMethodReferenceAnalyzer;
     }
 
@@ -84,7 +85,6 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-
         $arrayCallable = $this->arrayCallableClassMethodReferenceAnalyzer->match($node);
         if ($arrayCallable === null) {
             return null;
@@ -108,7 +108,10 @@ PHP
         $reflectionMethod = new ReflectionMethod($class, $method);
 
         if ($reflectionMethod->getNumberOfParameters() > 0) {
-            // @todo complete!
+            $classMethod = $this->functionLikeParsedNodesFinder->findClassMethod($method, $class);
+            if ($classMethod !== null) {
+                return $this->nodeFactory->createClosureFromClassMethod($classMethod);
+            }
 
             return null;
         }
