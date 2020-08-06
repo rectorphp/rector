@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -45,6 +46,7 @@ use Rector\Core\PhpParser\Builder\ParamBuilder;
 use Rector\Core\PhpParser\Builder\PropertyBuilder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -53,6 +55,11 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
  */
 final class NodeFactory
 {
+    /**
+     * @var string
+     */
+    private const THIS = 'this';
+
     /**
      * @var BuilderFactory
      */
@@ -73,16 +80,23 @@ final class NodeFactory
      */
     private $phpVersionProvider;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
     public function __construct(
         BuilderFactory $builderFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpVersionProvider $phpVersionProvider,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->builderFactory = $builderFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -131,12 +145,17 @@ final class NodeFactory
     /**
      * Creates "($args)"
      *
-     * @param mixed[] $arguments
+     * @param mixed[] $values
      * @return Arg[]
      */
-    public function createArgs(array $arguments): array
+    public function createArgs(array $values): array
     {
-        return $this->builderFactory->args($arguments);
+        $normalizedValues = [];
+        foreach ($values as $key => $value) {
+            $normalizedValues[$key] = $this->normalizeArgValue($value);
+        }
+
+        return $this->builderFactory->args($normalizedValues);
     }
 
     /**
@@ -151,7 +170,7 @@ final class NodeFactory
 
     public function createPropertyAssignmentWithExpr(string $propertyName, Expr $expr): Assign
     {
-        $propertyFetch = $this->createPropertyFetch('this', $propertyName);
+        $propertyFetch = $this->createPropertyFetch(self::THIS, $propertyName);
 
         return new Assign($propertyFetch, $expr);
     }
@@ -341,7 +360,7 @@ final class NodeFactory
         $methodBuilder = new MethodBuilder($getterMethod);
         $methodBuilder->makePublic();
 
-        $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+        $propertyFetch = new PropertyFetch(new Variable(self::THIS), $propertyName);
 
         $return = new Return_($propertyFetch);
         $methodBuilder->addStmt($return);
@@ -370,6 +389,26 @@ final class NodeFactory
         }
 
         return $previousConcat;
+    }
+
+    public function createClosureFromClassMethod(ClassMethod $classMethod): Closure
+    {
+        $classMethodName = $this->nodeNameResolver->getName($classMethod);
+        $args = $this->createArgs($classMethod->params);
+
+        $methodCall = new MethodCall(new Variable(self::THIS), $classMethodName, $args);
+        $return = new Return_($methodCall);
+
+        $subNodes = [
+            'params' => $classMethod->params,
+            'stmts' => [$return],
+        ];
+
+        if ($classMethod->returnType !== null) {
+            $subNodes['returnType'] = $classMethod->returnType;
+        }
+
+        return new Closure($subNodes);
     }
 
     /**
@@ -418,6 +457,19 @@ final class NodeFactory
             __METHOD__,
             is_object($item) ? get_class($item) : $item
         ));
+    }
+
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
+    private function normalizeArgValue($value)
+    {
+        if ($value instanceof Param) {
+            return $value->var;
+        }
+
+        return $value;
     }
 
     private function addPropertyType(Property $property, ?Type $type): void
