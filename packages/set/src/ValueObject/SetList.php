@@ -14,7 +14,7 @@ final class SetList
     /**
      * @var string
      */
-    public const ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION = __DIR__ . '/../../config/set/action-injection-to-constructor-injection.php';
+    public const ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION = __DIR__ . '/../../../../config/set/action-injection-to-constructor-injection.php';
 
     /**
      * @var string
@@ -79,7 +79,7 @@ final class SetList
     /**
      * @var string
      */
-    public const CONSTRUCTOR_INJECTIN_TO_ACTION_INJECTION = __DIR__ . '/../../config/set/constructor-injectin-to-action-injection.php';
+    public const CONSTRUCTOR_INJECTIN_TO_ACTION_INJECTION = __DIR__ . '/../../../../config/set/constructor-injectin-to-action-injection.php';
 
     /**
      * @var string
@@ -209,7 +209,7 @@ final class SetList
     /**
      * @var string
      */
-    public const KDYBY_EVENTS_TO_CONTRIBUTTE_EVENT_DISPATCHER = __DIR__ . '/../../config/set/kdyby-events-to-contributte-event-dispatcher.php';
+    public const KDYBY_EVENTS_TO_CONTRIBUTTE_EVENT_DISPATCHER = __DIR__ . '/../../../../config/set/kdyby-events-to-contributte-event-dispatcher.php';
 
     /**
      * @var string
@@ -219,7 +219,7 @@ final class SetList
     /**
      * @var string
      */
-    public const KDYBY_TRANSLATOR_TO_CONTRIBUTTE_TRANSLATION = __DIR__ . '/../../config/set/kdyby-translator-to-contributte-translation.php';
+    public const KDYBY_TRANSLATOR_TO_CONTRIBUTTE_TRANSLATION = __DIR__ . '/../../../../config/set/kdyby-translator-to-contributte-translation.php';
 
     /**
      * @var string
