@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Order;
 
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 
 final class StmtOrder
 {
@@ -29,13 +29,13 @@ final class StmtOrder
         return array_combine($oldKeys, $newKeys);
     }
 
-    public function reorderClassStmtsByOldToNewKeys(Class_ $class, array $oldToNewKeys): Class_
+    public function reorderClassStmtsByOldToNewKeys(ClassLike $classLike, array $oldToNewKeys): ClassLike
     {
         $reorderedStmts = [];
 
-        $stmtCount = count($class->stmts);
+        $stmtCount = count($classLike->stmts);
 
-        foreach ($class->stmts as $key => $stmt) {
+        foreach ($classLike->stmts as $key => $stmt) {
             if (! array_key_exists($key, $oldToNewKeys)) {
                 $reorderedStmts[$key] = $stmt;
                 continue;
@@ -44,7 +44,7 @@ final class StmtOrder
             // reorder here
             $newKey = $oldToNewKeys[$key];
 
-            $reorderedStmts[$key] = $class->stmts[$newKey];
+            $reorderedStmts[$key] = $classLike->stmts[$newKey];
         }
 
         for ($i = 0; $i < $stmtCount; ++$i) {
@@ -52,9 +52,9 @@ final class StmtOrder
                 continue;
             }
 
-            $class->stmts[$i] = $reorderedStmts[$i];
+            $classLike->stmts[$i] = $reorderedStmts[$i];
         }
 
-        return $class;
+        return $classLike;
     }
 }
