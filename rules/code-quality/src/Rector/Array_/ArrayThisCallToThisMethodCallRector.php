@@ -84,6 +84,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+
         $arrayCallable = $this->arrayCallableClassMethodReferenceAnalyzer->match($node);
         if ($arrayCallable === null) {
             return null;
@@ -105,7 +106,10 @@ PHP
         }
 
         $reflectionMethod = new ReflectionMethod($class, $method);
+
         if ($reflectionMethod->getNumberOfParameters() > 0) {
+            // @todo complete!
+
             return null;
         }
 
