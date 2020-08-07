@@ -1,4 +1,4 @@
-# All 550 Rectors Overview
+# All 551 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -36,7 +36,7 @@
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [NetteUtilsCodeQuality](#netteutilscodequality) (1)
-- [Order](#order) (5)
+- [Order](#order) (6)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
 - [PHPUnit](#phpunit) (37)
@@ -7744,6 +7744,25 @@ Order __constructor dependencies by type A-Z
 +        SymfonyStyle $symfonyStyle
      ) {
      }
+ }
+```
+
+<br><br>
+
+### `OrderMethodsByVisibilityRector`
+
+- class: [`Rector\Order\Rector\ClassLike\OrderMethodsByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderMethodsByVisibilityRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderMethodsByVisibilityRector/Fixture)
+
+Orders method by visibility
+
+```diff
+ class SomeClass
+ {
++    public function publicFunctionName();
+     protected function protectedFunctionName();
+     private function privateFunctionName();
+-    public function publicFunctionName();
  }
 ```
 
