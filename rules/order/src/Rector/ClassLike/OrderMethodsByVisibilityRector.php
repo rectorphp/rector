@@ -27,6 +27,29 @@ final class OrderMethodsByVisibilityRector extends AbstractRector
      */
     private const POSITION = 'position';
 
+    private const PREFERRED_ORDER = [
+        '__construct',
+        '__destruct',
+        '__call',
+        '__callStatic',
+        '__get',
+        '__set',
+        '__isset',
+        '__unset',
+        '__sleep',
+        '__wakeup',
+        '__serialize',
+        '__unserialize',
+        '__toString',
+        '__invoke',
+        '__set_state',
+        '__clone',
+        'setUpBeforeClass',
+        'tearDownAfterClass',
+        'setUp',
+        'tearDown',
+    ];
+
     /**
      * @var StmtOrder
      */
@@ -99,8 +122,10 @@ PHP
             $classMethods[$classMethodName][self::POSITION] = $position;
         }
 
-        $sortedProperties = $this->getMethodsSortedByVisibility($classMethods);
-        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($sortedProperties, $classMethodsByName);
+        $sortedMethods = $this->getMethodsSortedByVisibility($classMethods);
+        $methodsInPreferredOrder = $this->getMethodsInPreferredOrder($sortedMethods);
+
+        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($methodsInPreferredOrder, $classMethodsByName);
 
         return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
     }
@@ -138,5 +163,10 @@ PHP
         );
 
         return array_keys($classMethods);
+    }
+
+    private function getMethodsInPreferredOrder(array $sortedMethods): array
+    {
+        return array_unique(array_merge(self::PREFERRED_ORDER, $sortedMethods));
     }
 }
