@@ -36,7 +36,8 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent === null) {
             if (! $node instanceof Stmt) {
-                throw new ShouldNotHappenException('Only statement can appear at top level');
+                return null;
+//                throw new ShouldNotHappenException('Only statement can appear at top level');
             }
 
             $node->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $this->previousStmt);

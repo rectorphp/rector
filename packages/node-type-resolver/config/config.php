@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\PhpDoc\TypeNodeResolver;
@@ -43,4 +44,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(TypeNodeResolver::class)
         ->factory([ref(PHPStanServicesFactory::class), 'createTypeNodeResolver']);
+
+    $services->set(NodeConnectingVisitor::class);
 };

@@ -11,10 +11,10 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use PhpParser\ParserFactory;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class BetterNodeFinderTest extends AbstractKernelTestCase
@@ -73,7 +73,7 @@ final class BetterNodeFinderTest extends AbstractKernelTestCase
         }
 
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new ParentAndNextNodeVisitor());
+        $nodeTraverser->addVisitor(new NodeConnectingVisitor());
 
         return $nodeTraverser->traverse($nodes);
     }
