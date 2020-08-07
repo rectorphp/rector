@@ -118,6 +118,7 @@ PHP
                 $privateClassMethodsByKey
             );
 
+            /** @var Class_ $node */
             $node = $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
 
             [$desiredPrivateMethodCallOrder, $privateClassMethodsByKey] = $this->getPrivateMethodCallOrderAndClassMethods(

@@ -135,6 +135,11 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
         }
     }
 
+    /**
+     * Return interface type that extends @see \Rector\Core\Contract\Rector\RectorInterface;
+     */
+    abstract protected function getRectorInterface(): string;
+
     protected function getRectorClass(): string
     {
         // can be implemented
@@ -191,11 +196,6 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
 
         return [$rectorClass => null];
     }
-
-    /**
-     * Return interface type that extends @see \Rector\Core\Contract\Rector\RectorInterface;
-     */
-    abstract protected function getRectorInterface(): string;
 
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator
     {
