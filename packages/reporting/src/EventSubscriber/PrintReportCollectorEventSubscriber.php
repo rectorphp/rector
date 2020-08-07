@@ -38,14 +38,6 @@ final class PrintReportCollectorEventSubscriber implements EventSubscriberInterf
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    /**
-     * @return string[]
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [AfterReportEvent::class => 'printReportCollector'];
-    }
-
     public function printReportCollector(): void
     {
         if ($this->shouldSkip()) {
@@ -61,6 +53,13 @@ final class PrintReportCollectorEventSubscriber implements EventSubscriberInterf
 
             $this->symfonyStyle->newLine(2);
         }
+    }
+    /**
+     * @return string[]
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [AfterReportEvent::class => 'printReportCollector'];
     }
 
     private function shouldSkip(): bool
