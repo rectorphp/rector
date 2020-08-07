@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\FileSystem;
 
 use Nette\Utils\Strings;
+use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\ValueObject\Package;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -36,6 +37,12 @@ final class TemplateFileSystem
         // remove ".inc" protection from PHPUnit if not a test case
         if ($this->isNonFixtureFileWithIncSuffix($destination)) {
             $destination = Strings::before($destination, '.inc');
+        }
+
+        // special hack for tests, to PHPUnit doesn't load the generated file as test case
+        /** @var string $destination */
+        if (Strings::endsWith($destination, 'Test.php') && StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            $destination .= '.inc';
         }
 
         return $targetDirectory . DIRECTORY_SEPARATOR . $destination;

@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://github.com/rectorphp/rector/issues/3679
@@ -50,7 +51,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $nop = new Nop();
-        $comments = $node->getAttribute('comments');
+        $comments = $node->getAttribute(AttributeKey::COMMENTS);
         if ($comments) {
             $nop->setAttribute('comments', $comments);
             $this->addNodeAfterNode($nop, $node);

@@ -108,19 +108,25 @@ final class AttributeKey
     public const RESOLVED_NAME = 'resolvedName';
 
     /**
+     * @internal of php-parser, do not change
+     * @see https://github.com/nikic/PHP-Parser/pull/681/files
      * @var string
      */
-    public const PARENT_NODE = 'parentNode';
+    public const PARENT_NODE = 'parent';
 
     /**
+     * @internal of php-parser, do not change
+     * @see https://github.com/nikic/PHP-Parser/pull/681/files
      * @var string
      */
-    public const PREVIOUS_NODE = 'prevNode';
+    public const PREVIOUS_NODE = 'previous';
 
     /**
+     * @internal of php-parser, do not change
+     * @see https://github.com/nikic/PHP-Parser/pull/681/files
      * @var string
      */
-    public const NEXT_NODE = 'nextNode';
+    public const NEXT_NODE = 'next';
 
     /**
      * @var string

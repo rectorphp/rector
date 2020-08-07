@@ -8,12 +8,12 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
+use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use Rector\Core\Configuration\Configuration;
 use Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\PhpDocInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
@@ -30,11 +30,6 @@ final class NodeScopeAndMetadataDecorator
      * @var CloningVisitor
      */
     private $cloningVisitor;
-
-    /**
-     * @var ParentAndNextNodeVisitor
-     */
-    private $parentAndNextNodeVisitor;
 
     /**
      * @var FunctionMethodAndClassNodeVisitor
@@ -71,6 +66,11 @@ final class NodeScopeAndMetadataDecorator
      */
     private $phpDocInfoNodeVisitor;
 
+    /**
+     * @var NodeConnectingVisitor
+     */
+    private $nodeConnectingVisitor;
+
     public function __construct(
         CloningVisitor $cloningVisitor,
         Configuration $configuration,
@@ -79,12 +79,11 @@ final class NodeScopeAndMetadataDecorator
         NamespaceNodeVisitor $namespaceNodeVisitor,
         NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
         PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
-        ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         PhpDocInfoNodeVisitor $phpDocInfoNodeVisitor,
-        StatementNodeVisitor $statementNodeVisitor
+        StatementNodeVisitor $statementNodeVisitor,
+        NodeConnectingVisitor $nodeConnectingVisitor
     ) {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
-        $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
         $this->cloningVisitor = $cloningVisitor;
         $this->functionMethodAndClassNodeVisitor = $functionMethodAndClassNodeVisitor;
         $this->namespaceNodeVisitor = $namespaceNodeVisitor;
@@ -93,6 +92,7 @@ final class NodeScopeAndMetadataDecorator
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
         $this->configuration = $configuration;
         $this->phpDocInfoNodeVisitor = $phpDocInfoNodeVisitor;
+        $this->nodeConnectingVisitor = $nodeConnectingVisitor;
     }
 
     /**
@@ -128,7 +128,7 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser = new NodeTraverser();
         // needed also for format preserving printing
         $nodeTraverser->addVisitor($this->cloningVisitor);
-        $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
+        $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
         $nodeTraverser->addVisitor($this->phpDocInfoNodeVisitor);
@@ -151,7 +151,7 @@ final class NodeScopeAndMetadataDecorator
     public function decorateNodesFromString(array $nodes): array
     {
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
+        $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->statementNodeVisitor);
 

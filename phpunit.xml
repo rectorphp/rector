@@ -15,7 +15,7 @@
             <directory>tests</directory>
             <directory>utils/*/tests</directory>
             <exclude>packages/rector-generator/templates/*</exclude>
-            <exclude>packages/rector-generator/tests/RectorGenerator/Fixture/*</exclude>
+            <exclude>packages/rector-generator/tests/RectorGenerator/Fixture/expected</exclude>
             <exclude>rules/nette-tester-to-phpunit/tests/Rector/RenameTesterTestToPHPUnitToTestFileRector/Source/*</exclude>
         </testsuite>
     </testsuites>

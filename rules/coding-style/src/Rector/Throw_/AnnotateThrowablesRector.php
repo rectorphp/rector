@@ -227,7 +227,7 @@ PHP
     private function identifyThrownThrowablesInStaticCall(StaticCall $staticCall): array
     {
         $thrownClass = $staticCall->class;
-        $methodName = $thrownClass->getAttribute('nextNode');
+        $methodName = $thrownClass->getAttribute(AttributeKey::NEXT_NODE);
 
         if (! $thrownClass instanceof FullyQualified || ! $methodName instanceof Identifier) {
             throw new ShouldNotHappenException();

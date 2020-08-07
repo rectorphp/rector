@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassResolver
 {
@@ -31,7 +32,7 @@ final class ClassResolver
     public function getClassFromMethodCall(MethodCall $methodCall): ?FullyQualified
     {
         $class = null;
-        $previousExpression = $methodCall->getAttribute('previousExpression');
+        $previousExpression = $methodCall->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
 
         // [PhpParser\Node\Expr\Assign] $variable = new Class()
         if ($previousExpression instanceof Expression) {
@@ -82,7 +83,9 @@ final class ClassResolver
             return null;
         }
 
-        return new FullyQualified($class->getAttribute('className'));
+        /** @var string $className */
+        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+        return new FullyQualified($className);
     }
 
     private function tryToResolveClassMethodParams(ClassMethod $classMethod, MethodCall $methodCall): ?FullyQualified

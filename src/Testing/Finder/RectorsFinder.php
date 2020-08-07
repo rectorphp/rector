@@ -30,9 +30,14 @@ final class RectorsFinder
     {
         $allRectors = $this->findInDirectories(self::RECTOR_PATHS);
 
-        return array_map(function (RectorInterface $rector): string {
+        $rectorClasses = array_map(function (RectorInterface $rector): string {
             return get_class($rector);
         }, $allRectors);
+
+        // for consistency
+        sort($rectorClasses);
+
+        return $rectorClasses;
     }
 
     /**
