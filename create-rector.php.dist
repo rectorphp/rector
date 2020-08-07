@@ -7,41 +7,41 @@ use Rector\Core\Configuration\Option;
 use Rector\RectorGenerator\ValueObject\RecipeOption;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-// run "bin/rector create" to create a new Rector + tests from this config
+// run "bin/rector generate" to create a new Rector + tests from this config
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::RECTOR_RECIPE, [
+        // what category the package belongs to
         RecipeOption::PACKAGE => 'Nette',
+
+        // name the rule, what it does, in a something to something else
         RecipeOption::NAME => 'TranslateClassMethodToVariadicsRector',
+
+        // basically content of "getNodeTypes()"
         RecipeOption::NODE_TYPES => [
             MethodCall::class,
         ],
-        RecipeOption::DESCRIPTION => 'Change translate() method call 2nd arg to variadic',
+        RecipeOption::DESCRIPTION => 'Rename $name variable to $fullname',
         RecipeOption::CODE_BEFORE => <<<'CODE_SAMPLE'
 <?php
 
-use Nette\Localization\ITranslator;
-
-final class SomeClass implements ITranslator
+final class SomeClass
 {
-    public function translate($message, $count = null)
+    public function run()
     {
-        return [$message, $count];
+        return $name;
     }
 }
 CODE_SAMPLE,
         RecipeOption::CODE_AFTER => <<<'CODE_SAMPLE'
 <?php
 
-use Nette\Localization\ITranslator;
-
-final class SomeClass implements ITranslator
+final class SomeClass
 {
-    public function translate($message, ... $parameters)
+    public function run()
     {
-        $count = $parameters[0] ?? null;
-        return [$message, $count];
+        return $fullname;
     }
 }
 CODE_SAMPLE,
@@ -49,13 +49,16 @@ CODE_SAMPLE,
         RecipeOption::SOURCE => [
             'https://github.com/nette/utils/pull/178'
         ],
-        // e.g. symfony30, target set to add this Rule to; keep null if part of core
+
+        // OPTIONAL ↓
+
+        // e.g. symfony30, target set to add this Rule to
         RecipeOption::SET => null,
 
-        // OPTIONAL: only when configured
+        // only when configured
         RecipeOption::RULE_CONFIGURATION => null,
 
-        // OPTIONAL: extra file
+        // VERY OPTIONAL ↓ only when configured
         RecipeOption::EXTRA_FILE_NAME => null,
         RecipeOption::EXTRA_FILE_CONTENT => null,
     ]);
