@@ -54,6 +54,7 @@ final class PrintReportCollectorEventSubscriber implements EventSubscriberInterf
             $this->symfonyStyle->newLine(2);
         }
     }
+
     /**
      * @return string[]
      */

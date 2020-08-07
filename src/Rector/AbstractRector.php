@@ -147,6 +147,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         return is_a($parent, $type, true);
     }
+
     /**
      * @return int|Node|null
      */

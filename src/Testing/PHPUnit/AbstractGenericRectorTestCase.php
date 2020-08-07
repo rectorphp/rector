@@ -134,6 +134,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
             $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
         }
     }
+
     /**
      * Return interface type that extends @see \Rector\Core\Contract\Rector\RectorInterface;
      */
