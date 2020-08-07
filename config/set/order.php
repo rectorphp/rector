@@ -7,6 +7,7 @@ use Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector;
 use Rector\Order\Rector\Class_\OrderPropertyByComplexityRector;
 use Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector;
 use Rector\Order\Rector\ClassLike\OrderMethodsByVisibilityRector;
+use Rector\Order\Rector\ClassLike\OrderPropertiesByVisibilityRector;
 use Rector\Order\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -24,4 +25,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(OrderConstructorDependenciesByTypeAlphabeticallyRector::class);
 
     $services->set(OrderMethodsByVisibilityRector::class);
+
+    $services->set(OrderPropertiesByVisibilityRector::class);
 };

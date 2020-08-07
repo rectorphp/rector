@@ -116,7 +116,7 @@ PHP
             $classMethodsByName[$position] = $classMethodName;
 
             $classMethods[$classMethodName]['name'] = $classMethodName;
-            $classMethods[$classMethodName][self::VISIBILITY] = $this->getVisibilityOrder($classStmt);
+            $classMethods[$classMethodName][self::VISIBILITY] = $this->stmtOrder->getOrderByVisibility($classStmt);
             $classMethods[$classMethodName]['abstract'] = $classStmt->isAbstract();
             $classMethods[$classMethodName]['final'] = $classStmt->isFinal();
             $classMethods[$classMethodName]['static'] = $classStmt->isStatic();
@@ -129,19 +129,6 @@ PHP
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($methodsInPreferredOrder, $classMethodsByName);
 
         return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
-    }
-
-    private function getVisibilityOrder(ClassMethod $classMethod): int
-    {
-        if ($classMethod->isPrivate()) {
-            return 2;
-        }
-
-        if ($classMethod->isProtected()) {
-            return 1;
-        }
-
-        return 0;
     }
 
     private function getMethodsSortedByVisibility(array $classMethods): array
