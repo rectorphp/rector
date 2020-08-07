@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Order;
 
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 
 final class StmtOrder
 {
@@ -56,5 +59,21 @@ final class StmtOrder
         }
 
         return $classLike;
+    }
+
+    /**
+     * @param ClassMethod|Property $stmt
+     */
+    public function getOrderByVisibility(Stmt $stmt): int
+    {
+        if ($stmt->isPrivate()) {
+            return 2;
+        }
+
+        if ($stmt->isProtected()) {
+            return 1;
+        }
+
+        return 0;
     }
 }

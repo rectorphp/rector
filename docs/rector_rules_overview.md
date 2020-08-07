@@ -1,4 +1,4 @@
-# All 550 Rectors Overview
+# All 552 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -36,7 +36,7 @@
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [NetteUtilsCodeQuality](#netteutilscodequality) (1)
-- [Order](#order) (5)
+- [Order](#order) (7)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
 - [PHPUnit](#phpunit) (37)
@@ -7749,6 +7749,25 @@ Order __constructor dependencies by type A-Z
 
 <br><br>
 
+### `OrderMethodsByVisibilityRector`
+
+- class: [`Rector\Order\Rector\ClassLike\OrderMethodsByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderMethodsByVisibilityRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderMethodsByVisibilityRector/Fixture)
+
+Orders method by visibility
+
+```diff
+ class SomeClass
+ {
++    public function publicFunctionName();
+     protected function protectedFunctionName();
+     private function privateFunctionName();
+-    public function publicFunctionName();
+ }
+```
+
+<br><br>
+
 ### `OrderPrivateMethodsByUseRector`
 
 - class: [`Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector`](/../master/rules/order/src/Rector/Class_/OrderPrivateMethodsByUseRector.php)
@@ -7774,6 +7793,25 @@ Order private methods in order of their use
 +    private function call2()
      {
      }
+ }
+```
+
+<br><br>
+
+### `OrderPropertiesByVisibilityRector`
+
+- class: [`Rector\Order\Rector\ClassLike\OrderPropertiesByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderPropertiesByVisibilityRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderPropertiesByVisibilityRector/Fixture)
+
+Orders properties by visibility
+
+```diff
+ final class SomeClass
+ {
++    public $publicProperty;
+     protected $protectedProperty;
+     private $privateProperty;
+-    public $publicProperty;
  }
 ```
 
