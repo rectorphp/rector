@@ -117,6 +117,7 @@ PHP
 
             $classMethods[$classMethodName]['name'] = $classMethodName;
             $classMethods[$classMethodName][self::VISIBILITY] = $this->getVisibilityOrder($classStmt);
+            $classMethods[$classMethodName]['abstract'] = $classStmt->isAbstract();
             $classMethods[$classMethodName]['final'] = $classStmt->isFinal();
             $classMethods[$classMethodName]['static'] = $classStmt->isStatic();
             $classMethods[$classMethodName][self::POSITION] = $position;
@@ -151,11 +152,13 @@ PHP
                 return [
                     $firstArray[self::VISIBILITY],
                     $firstArray['static'],
+                    $secondArray['abstract'],
                     $firstArray['final'],
                     $firstArray[self::POSITION],
                 ] <=> [
                     $secondArray[self::VISIBILITY],
                     $secondArray['static'],
+                    $firstArray['abstract'],
                     $secondArray['final'],
                     $secondArray[self::POSITION],
                 ];
