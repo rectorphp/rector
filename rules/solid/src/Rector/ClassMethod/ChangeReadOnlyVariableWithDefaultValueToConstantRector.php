@@ -15,8 +15,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodAssignManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -35,9 +34,17 @@ final class ChangeReadOnlyVariableWithDefaultValueToConstantRector extends Abstr
      */
     private $classMethodAssignManipulator;
 
-    public function __construct(ClassMethodAssignManipulator $classMethodAssignManipulator)
-    {
+    /**
+     * @var VarAnnotationManipulator
+     */
+    private $varAnnotationManipulator;
+
+    public function __construct(
+        ClassMethodAssignManipulator $classMethodAssignManipulator,
+        VarAnnotationManipulator $varAnnotationManipulator
+    ) {
         $this->classMethodAssignManipulator = $classMethodAssignManipulator;
+        $this->varAnnotationManipulator = $varAnnotationManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -203,7 +210,8 @@ PHP
 
         $this->mirrorComments($classConst, $variable);
 
-        $this->decorateWithVarAnnotation($classConst);
+        $constantType = $this->getStaticType($classConst->consts[0]->value);
+        $this->varAnnotationManipulator->decorateNodeWithType($classConst, $constantType);
 
         return $classConst;
     }
@@ -243,21 +251,5 @@ PHP
         $constantName = StaticRectorStrings::camelCaseToUnderscore($variableName);
 
         return strtoupper($constantName);
-    }
-
-    private function decorateWithVarAnnotation(ClassConst $classConst): void
-    {
-        $constStaticType = $this->getStaticType($classConst->consts[0]->value);
-        if ($constStaticType instanceof MixedType) {
-            return;
-        }
-
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classConst->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($classConst);
-        }
-
-        $phpDocInfo->changeVarType($constStaticType);
     }
 }

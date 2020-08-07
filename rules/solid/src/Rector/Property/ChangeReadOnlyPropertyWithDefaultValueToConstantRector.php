@@ -115,7 +115,7 @@ PHP
         }
 
         // is property read only?
-        if (! $this->propertyManipulator->isReadOnlyProperty($node)) {
+        if ($this->propertyManipulator->isPropertyChangeable($node)) {
             return null;
         }
 

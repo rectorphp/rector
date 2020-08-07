@@ -7,7 +7,6 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
@@ -25,6 +24,7 @@ use Rector\Doctrine\AbstractRector\DoctrineTrait;
 use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\SOLID\Guard\VariableToConstantGuard;
 
 /**
  * "private $property"
@@ -32,11 +32,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyManipulator
 {
     use DoctrineTrait;
-
-    /**
-     * @var string[]
-     */
-    private const MODIFIED_FUNCTION_NAMES = ['end'];
 
     /**
      * @var BetterNodeFinder
@@ -63,18 +58,25 @@ final class PropertyManipulator
      */
     private $classLikeParsedNodesFinder;
 
+    /**
+     * @var VariableToConstantGuard
+     */
+    private $variableToConstantGuard;
+
     public function __construct(
         AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        VariableToConstantGuard $variableToConstantGuard
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->assignManipulator = $assignManipulator;
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
+        $this->variableToConstantGuard = $variableToConstantGuard;
     }
 
     /**
@@ -116,17 +118,6 @@ final class PropertyManipulator
         });
     }
 
-    public function isReadOnlyProperty(Property $property): bool
-    {
-        foreach ($this->getAllPropertyFetch($property) as $propertyFetch) {
-            if (! $this->isReadContext($propertyFetch)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public function isPropertyUsedInReadContext(Property $property): bool
     {
         if ($this->isDoctrineProperty($property)) {
@@ -157,8 +148,20 @@ final class PropertyManipulator
             if (! $this->isReadContext($node)) {
                 return false;
             }
+
             return $node->name instanceof Expr;
         });
+    }
+
+    public function isPropertyChangeable(Property $property): bool
+    {
+        foreach ($this->getAllPropertyFetch($property) as $propertyFetch) {
+            if ($this->isChangeableContext($propertyFetch)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -166,25 +169,38 @@ final class PropertyManipulator
      */
     private function isReadContext(Node $node): bool
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof PreInc || $parentNode instanceof PreDec || $parentNode instanceof PostInc || $parentNode instanceof PostDec) {
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof PreInc || $parent instanceof PreDec || $parent instanceof PostInc || $parent instanceof PostDec) {
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
         }
 
-        if ($parentNode instanceof Arg) {
-            return $this->isReadOnlyArg($parentNode);
+        if ($parent instanceof Arg) {
+            $readArg = $this->variableToConstantGuard->isReadArg($parent);
+            if ($readArg) {
+                return true;
+            }
         }
 
         return ! $this->assignManipulator->isNodeLeftPartOfAssign($node);
     }
 
-    private function isReadOnlyArg(Arg $arg): bool
+    /**
+     * @param PropertyFetch|StaticPropertyFetch $node
+     */
+    private function isChangeableContext(Node $node): bool
     {
-        $parentParent = $arg->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentParent instanceof FuncCall) {
-            return true;
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof PreInc || $parent instanceof PreDec || $parent instanceof PostInc || $parent instanceof PostDec) {
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
         }
 
-        return ! $this->nodeNameResolver->isNames($parentParent, self::MODIFIED_FUNCTION_NAMES);
+        if ($parent instanceof Arg) {
+            $readArg = $this->variableToConstantGuard->isReadArg($parent);
+            if (! $readArg) {
+                return true;
+            }
+        }
+
+        return $this->assignManipulator->isNodeLeftPartOfAssign($node);
     }
 }

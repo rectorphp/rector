@@ -6,6 +6,7 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -17,6 +18,7 @@ use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\SOLID\Guard\VariableToConstantGuard;
 
 final class VariableManipulator
 {
@@ -50,13 +52,19 @@ final class VariableManipulator
      */
     private $nodeNameResolver;
 
+    /**
+     * @var VariableToConstantGuard
+     */
+    private $variableToConstantGuard;
+
     public function __construct(
         ArrayManipulator $arrayManipulator,
         AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         CallableNodeTraverser $callableNodeTraverser,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        VariableToConstantGuard $variableToConstantGuard
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->assignManipulator = $assignManipulator;
@@ -64,6 +72,7 @@ final class VariableManipulator
         $this->betterNodeFinder = $betterNodeFinder;
         $this->arrayManipulator = $arrayManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->variableToConstantGuard = $variableToConstantGuard;
     }
 
     /**
@@ -110,7 +119,7 @@ final class VariableManipulator
      * @param Assign[] $assignsOfArrayToVariable
      * @return Assign[]
      */
-    public function filterOutReadOnlyVariables(array $assignsOfArrayToVariable, ClassMethod $classMethod): array
+    public function filterOutChangedVariables(array $assignsOfArrayToVariable, ClassMethod $classMethod): array
     {
         return array_filter($assignsOfArrayToVariable, function (Assign $assign) use ($classMethod) {
             /** @var Variable $variable */
@@ -137,7 +146,30 @@ final class VariableManipulator
      */
     private function isReadOnlyVariable(ClassMethod $classMethod, Variable $variable, Assign $assign): bool
     {
-        $variableUsages = $this->betterNodeFinder->find((array) $classMethod->getStmts(), function (Node $node) use (
+        $variableUsages = $this->collectVariableUsages($classMethod, $variable, $assign);
+
+        foreach ($variableUsages as $variableUsage) {
+            $parent = $variableUsage->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parent instanceof Arg && ! $this->variableToConstantGuard->isReadArg($parent)) {
+                return false;
+            }
+
+            if (! $this->assignManipulator->isNodeLeftPartOfAssign($variableUsage)) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return Variable[]
+     */
+    private function collectVariableUsages(ClassMethod $classMethod, Variable $variable, Assign $assign): array
+    {
+        return $this->betterNodeFinder->find((array) $classMethod->getStmts(), function (Node $node) use (
             $variable,
             $assign
         ) {
@@ -153,15 +185,5 @@ final class VariableManipulator
 
             return $this->betterStandardPrinter->areNodesEqual($node, $variable);
         });
-
-        foreach ($variableUsages as $variableUsage) {
-            if (! $this->assignManipulator->isNodeLeftPartOfAssign($variableUsage)) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
     }
 }

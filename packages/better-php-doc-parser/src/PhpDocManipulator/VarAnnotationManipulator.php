@@ -6,6 +6,8 @@ namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareFullyQualifiedIdentifierTypeNode;
@@ -48,6 +50,21 @@ final class VarAnnotationManipulator
         );
 
         $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
+    }
+
+    public function decorateNodeWithType(Node $node, Type $staticType): void
+    {
+        if ($staticType instanceof MixedType) {
+            return;
+        }
+
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
+        }
+
+        $phpDocInfo->changeVarType($staticType);
     }
 
     private function resolvePhpDocInfo(Node $node): PhpDocInfo

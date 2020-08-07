@@ -92,7 +92,7 @@ final class ClassMethodAssignManipulator
         $readOnlyVariableAssigns = $this->filterOutMultiAssigns($readOnlyVariableAssigns);
         $readOnlyVariableAssigns = $this->filterOutForeachVariables($readOnlyVariableAssigns);
 
-        return $this->variableManipulator->filterOutReadOnlyVariables($readOnlyVariableAssigns, $classMethod);
+        return $this->variableManipulator->filterOutChangedVariables($readOnlyVariableAssigns, $classMethod);
     }
 
     public function addParameterAndAssignToMethod(
@@ -165,7 +165,6 @@ final class ClassMethodAssignManipulator
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
             if ($parentNode !== null && $this->isExplicitlyReferenced($parentNode)) {
                 /** @var string $variableName */
                 $variableName = $this->nodeNameResolver->getName($node);
