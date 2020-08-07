@@ -1,64 +1,22 @@
-# Generating your own Rector from a Recipe
+# Generate a new Rector Rule
 
-## 1. Configure a Rector Recipe in `rector.php`
+Creating a new Rector rule means many small steps. You need to create rule file, test file, test fixtures, put it into right category, bla bla bla...
 
-```php
-<?php
+How can we **remove repeated work** and let us focus only on `refactor()` method?
 
-declare(strict_types=1);
+## What `generate` Command is Does?
 
-use PhpParser\Node\Expr\Assign;
-use Rector\Core\Configuration\Option;
-use Rector\Set\ValueObject\SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+It creates a bare structured Rule.
+Don't worry, also generates a test case, which is required to contribute.
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+## How to Generate Rector rule in 3 steps?
 
-    $parameters->set(Option::RECTOR_RECIPE, [
-        'package' => 'Celebrity',
-        'name' => 'SplitToExplodeRector',
-        'node_types' => [
-            Assign::class,
-        ],
-        'description' => 'Removes unneeded $a = $a assignments',
-        'code_before' => <<<'CODE_SAMPLE'
-<?php
+1. Copy [`create-rector.php.dist`](/../create-rector.php.dist) to `create-rector.php`
+2. Change parameters in `create-rector.php` to meet you need
+3. Run command
 
-class SomeClass
-{
-    public function run()
-    {
-        $a = $a;
-    }
-}
-CODE_SAMPLE,
-        'code_after' => <<<'CODE_SAMPLE'
-<?php
-
-class SomeClass
-{
-    public function run()
-    {
-    }
-}
-CODE_SAMPLE,
-        // e.g. link to RFC or headline in upgrade guide, 1 or more in the list
-        'source' => [
-        ],
-        // e.g. symfony30, target config to append this rector to
-        'set' => SetList::CODE_QUALITY,
-    ]);
-};
-```
-
-## 2. Generate it
-
-```bash
-vendor/bin/rector create
-
-# or for short
-vendor/bin/rector c
-```
+    ```bash
+    vendor/bin/rector generate
+    ```
 
 That's it :)
