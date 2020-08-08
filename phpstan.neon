@@ -287,10 +287,6 @@ parameters:
                 - *Test.php
                 - *TestCase.php
 
-        # iterable types
-        - '#with no value type specified in iterable type array#'
-        - '#type specified in iterable type (array|iterable)#'
-
         -
             message: "#^Cognitive complexity for \"Rector\\\\BetterPhpDocParser\\\\Printer\\\\WhitespaceDetector\\:\\:detectOldWhitespaces\\(\\)\" is 18, keep it under 9$#"
             count: 1
