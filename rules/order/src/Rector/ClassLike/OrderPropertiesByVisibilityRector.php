@@ -6,6 +6,7 @@ namespace Rector\Order\Rector\ClassLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -74,7 +75,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Node\Stmt\Interface_) {
+        if ($node instanceof Interface_) {
             return null;
         }
 
