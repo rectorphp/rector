@@ -32,6 +32,9 @@ final class StmtVisibilitySorter
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
+    /**
+     * @return array<string,array<string, mixed>>
+     */
     public function sortProperties(ClassLike $classLike): array
     {
         $properties = [];
@@ -63,6 +66,9 @@ final class StmtVisibilitySorter
         return $properties;
     }
 
+    /**
+     * @return array<string,array<string, mixed>>
+     */
     public function sortMethods(ClassLike $classLike): array
     {
         $classMethods = [];

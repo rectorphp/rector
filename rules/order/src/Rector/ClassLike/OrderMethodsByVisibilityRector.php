@@ -110,6 +110,9 @@ PHP
         return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
     }
 
+    /**
+     * @return string[]
+     */
     private function getMethodsInDesiredOrder(ClassLike $classLike): array
     {
         $classMethods = $this->stmtVisibilitySorter->sortMethods($classLike);
@@ -118,6 +121,10 @@ PHP
         return $this->applyPreferredPosition($classMethods);
     }
 
+    /**
+     * @param string[] $classMethods
+     * @return string[]
+     */
     private function applyPreferredPosition(array $classMethods): array
     {
         return array_unique(array_merge(self::PREFERRED_ORDER, $classMethods));

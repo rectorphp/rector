@@ -87,6 +87,9 @@ PHP
         return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
     }
 
+    /**
+     * @return string[]
+     */
     private function getPropertiesInDesiredPosition(ClassLike $classLike): array
     {
         $properties = $this->stmtVisibilitySorter->sortProperties($classLike);

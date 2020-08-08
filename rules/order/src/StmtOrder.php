@@ -20,7 +20,8 @@ final class StmtOrder
     }
 
     /**
-     * @param string[] $desiredStmtOrder
+     * @param array<int,string> $desiredStmtOrder
+     * @param array<int,string> $currentStmtOrder
      * @return int[]
      */
     public function createOldToNewKeys(array $desiredStmtOrder, array $currentStmtOrder): array
@@ -40,6 +41,9 @@ final class StmtOrder
         return array_combine($oldKeys, $newKeys);
     }
 
+    /**
+     * @param array<int,int> $oldToNewKeys
+     */
     public function reorderClassStmtsByOldToNewKeys(ClassLike $classLike, array $oldToNewKeys): ClassLike
     {
         $reorderedStmts = [];
@@ -69,6 +73,9 @@ final class StmtOrder
         return $classLike;
     }
 
+    /**
+     * @return array<int,string>
+     */
     public function getStmtsOfTypeOrder(ClassLike $classLike, string $type): array
     {
         $stmtsByPosition = [];
@@ -77,7 +84,12 @@ final class StmtOrder
                 continue;
             }
 
-            $stmtsByPosition[$position] = $this->nodeNameResolver->getName($classStmt);
+            $name = $this->nodeNameResolver->getName($classStmt);
+            if ($name === null) {
+                continue;
+            }
+
+            $stmtsByPosition[$position] = $name;
         }
 
         return $stmtsByPosition;

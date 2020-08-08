@@ -31,7 +31,7 @@ final class OrderConstructorDependenciesByTypeAlphabeticallyRector extends Abstr
     public const SKIP_PATTERNS = '$skipPatterns';
 
     /**
-     * @var array
+     * @var string[]
      */
     private $skipPatterns = [];
 
