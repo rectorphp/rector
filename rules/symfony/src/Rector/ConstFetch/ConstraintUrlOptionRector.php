@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Validator;
+namespace Rector\Symfony\Rector\ConstFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#validator
- * @see \Rector\Symfony\Tests\Rector\Validator\ConstraintUrlOptionRector\ConstraintUrlOptionRectorTest
+ * @see \Rector\Symfony\Tests\Rector\ConstFetch\ConstraintUrlOptionRector\ConstraintUrlOptionRectorTest
  */
 final class ConstraintUrlOptionRector extends AbstractRector
 {
