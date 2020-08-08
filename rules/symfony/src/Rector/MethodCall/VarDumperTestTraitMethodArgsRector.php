@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\VarDumper;
+namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRector\VarDumperTestTraitMethodArgsRectorTest
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\VarDumperTestTraitMethodArgsRector\VarDumperTestTraitMethodArgsRectorTest
  */
 final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 {

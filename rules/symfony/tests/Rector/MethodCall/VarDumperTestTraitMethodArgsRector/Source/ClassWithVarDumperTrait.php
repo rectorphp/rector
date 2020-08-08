@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRector\Source;
+namespace Rector\Symfony\Tests\Rector\MethodCall\VarDumperTestTraitMethodArgsRector\Source;
 
 use Symfony\Component\VarDumper\Test\VarDumperTestTrait;
 

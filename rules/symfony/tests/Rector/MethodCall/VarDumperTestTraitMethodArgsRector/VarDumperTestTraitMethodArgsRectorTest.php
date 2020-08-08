@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRector;
+namespace Rector\Symfony\Tests\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector;
+use Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class VarDumperTestTraitMethodArgsRectorTest extends AbstractRectorTestCase

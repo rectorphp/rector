@@ -5,10 +5,10 @@ declare(strict_types=1);
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
 use Rector\Symfony\Rector\Form\FormIsValidRector;
+use Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 use Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector;
 use Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector;
 use Rector\Symfony\Rector\Validator\ConstraintUrlOptionRector;
-use Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

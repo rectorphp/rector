@@ -1,6 +1,6 @@
 <?php
 
-use Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRector\Source\ClassWithVarDumperTrait;
+use Rector\Symfony\Tests\Rector\MethodCall\VarDumperTestTraitMethodArgsRector\Source\ClassWithVarDumperTrait;
 
 function varDumperTrait()
 {
@@ -13,7 +13,7 @@ function varDumperTrait()
 -----
 <?php
 
-use Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRector\Source\ClassWithVarDumperTrait;
+use Rector\Symfony\Tests\Rector\MethodCall\VarDumperTestTraitMethodArgsRector\Source\ClassWithVarDumperTrait;
 
 function varDumperTrait()
 {
