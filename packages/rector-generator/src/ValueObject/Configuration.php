@@ -210,6 +210,9 @@ final class Configuration
         $this->name = $name;
     }
 
+    /**
+     * @param string[] $nodeTypes
+     */
     private function setNodeTypes(array $nodeTypes): void
     {
         foreach ($nodeTypes as $nodeType) {

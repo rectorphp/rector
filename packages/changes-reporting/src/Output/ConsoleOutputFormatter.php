@@ -128,12 +128,15 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private function reportErrors(array $errors): void
     {
         foreach ($errors as $error) {
+            $errorMessage = $error->getMessage();
+            $errorMessage = $this->normalizePathsToRelativeWithLine($errorMessage);
+
             $message = sprintf(
                 'Could not process "%s" file%s, due to: %s"%s".',
                 $error->getFileInfo()->getRelativeFilePathFromCwd(),
                 $error->getRectorClass() ? ' by "' . $error->getRectorClass() . '"' : '',
                 PHP_EOL,
-                $error->getMessage()
+                $errorMessage
             );
 
             if ($error->getLine()) {
@@ -192,5 +195,11 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private function colorTextToRed(string $text): string
     {
         return '<fg=red>' . $text . '</fg=red>';
+    }
+
+    private function normalizePathsToRelativeWithLine(string $errorMessage): string
+    {
+        $errorMessage = Strings::replace($errorMessage, '#' . preg_quote(getcwd()) . '/#');
+        return $errorMessage = Strings::replace($errorMessage, '# on line #', ':');
     }
 }

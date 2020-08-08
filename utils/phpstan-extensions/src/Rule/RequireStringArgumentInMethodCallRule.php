@@ -34,6 +34,9 @@ final class RequireStringArgumentInMethodCallRule implements Rule
      */
     private $stringArgByMethodByType = [];
 
+    /**
+     * @param mixed[] $constantArgByMethodByType
+     */
     public function __construct(array $constantArgByMethodByType = [])
     {
         $this->stringArgByMethodByType = $constantArgByMethodByType;

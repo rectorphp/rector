@@ -28,10 +28,11 @@ parameters:
     # see https://github.com/symplify/coding-standard
     symplify:
         max_cognitive_complexity: 9 # default: 8
-        # @todo update, to make classes smaller
-        # max_class_cognitive_complexity: 40 # default: 50
+        max_class_cognitive_complexity: 50
+
         parent_classes:
             - Rector
+
         required_see_types:
             - PHPStan\Rules\Rule
             - Rector\Core\Rector\AbstractRector

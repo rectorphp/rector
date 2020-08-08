@@ -31,6 +31,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      */
     protected $tagValueNodeConfiguration;
 
+    /**
+     * @param mixed[] $items
+     */
     public function __construct(array $items, ?string $originalContent = null)
     {
         $this->items = $items;
