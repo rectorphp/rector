@@ -1,4 +1,4 @@
-# All 551 Rectors Overview
+# All 552 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -39,7 +39,7 @@
 - [Order](#order) (7)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
-- [PHPUnit](#phpunit) (36)
+- [PHPUnit](#phpunit) (37)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
 - [PSR4](#psr4) (3)
 - [Performance](#performance) (1)
