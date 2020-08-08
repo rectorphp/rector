@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace Rector\Order;
 
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class StmtOrder
 {
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(NodeNameResolver $nodeNameResolver)
+    {
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
+
     /**
      * @param string[] $desiredStmtOrder
      * @return int[]
@@ -61,19 +69,17 @@ final class StmtOrder
         return $classLike;
     }
 
-    /**
-     * @param ClassMethod|Property $stmt
-     */
-    public function getOrderByVisibility(Stmt $stmt): int
+    public function getStmtsOfTypeOrder(ClassLike $classLike, string $type): array
     {
-        if ($stmt->isPrivate()) {
-            return 2;
+        $stmtsByPosition = [];
+        foreach ($classLike->stmts as $position => $classStmt) {
+            if (! is_a($classStmt, $type)) {
+                continue;
+            }
+
+            $stmtsByPosition[$position] = $this->nodeNameResolver->getName($classStmt);
         }
 
-        if ($stmt->isProtected()) {
-            return 1;
-        }
-
-        return 0;
+        return $stmtsByPosition;
     }
 }

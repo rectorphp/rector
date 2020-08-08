@@ -11,22 +11,13 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Order\StmtOrder;
+use Rector\Order\StmtVisibilitySorter;
 
 /**
  * @see \Rector\Order\Tests\Rector\ClassLike\OrderMethodsByVisibilityRector\OrderMethodsByVisibilityRectorTest
  */
 final class OrderMethodsByVisibilityRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const VISIBILITY = 'visibility';
-
-    /**
-     * @var string
-     */
-    private const POSITION = 'position';
-
     private const PREFERRED_ORDER = [
         '__construct',
         '__destruct',
@@ -55,9 +46,15 @@ final class OrderMethodsByVisibilityRector extends AbstractRector
      */
     private $stmtOrder;
 
-    public function __construct(StmtOrder $stmtOrder)
+    /**
+     * @var StmtVisibilitySorter
+     */
+    private $stmtVisibilitySorter;
+
+    public function __construct(StmtOrder $stmtOrder, StmtVisibilitySorter $stmtVisibilitySorter)
     {
         $this->stmtOrder = $stmtOrder;
+        $this->stmtVisibilitySorter = $stmtVisibilitySorter;
     }
 
     public function getDefinition(): RectorDefinition
@@ -104,59 +101,24 @@ PHP
             return null;
         }
 
-        $classMethods = [];
-        $classMethodsByName = [];
-        foreach ($node->stmts as $position => $classStmt) {
-            if (! $classStmt instanceof ClassMethod) {
-                continue;
-            }
+        $currentMethodsOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, ClassMethod::class);
+        $methodsInDesiredOrder = $this->getMethodsInDesiredOrder($node);
 
-            /** @var string $classMethodName */
-            $classMethodName = $this->getName($classStmt);
-            $classMethodsByName[$position] = $classMethodName;
-
-            $classMethods[$classMethodName]['name'] = $classMethodName;
-            $classMethods[$classMethodName][self::VISIBILITY] = $this->stmtOrder->getOrderByVisibility($classStmt);
-            $classMethods[$classMethodName]['abstract'] = $classStmt->isAbstract();
-            $classMethods[$classMethodName]['final'] = $classStmt->isFinal();
-            $classMethods[$classMethodName]['static'] = $classStmt->isStatic();
-            $classMethods[$classMethodName][self::POSITION] = $position;
-        }
-
-        $sortedMethods = $this->getMethodsSortedByVisibility($classMethods);
-        $methodsInPreferredOrder = $this->getMethodsInPreferredOrder($sortedMethods);
-
-        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($methodsInPreferredOrder, $classMethodsByName);
+        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($methodsInDesiredOrder, $currentMethodsOrder);
 
         return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
     }
 
-    private function getMethodsSortedByVisibility(array $classMethods): array
+    private function getMethodsInDesiredOrder(ClassLike $classLike): array
     {
-        uasort(
-            $classMethods,
-            function (array $firstArray, array $secondArray): int {
-                return [
-                    $firstArray[self::VISIBILITY],
-                    $firstArray['static'],
-                    $secondArray['abstract'],
-                    $firstArray['final'],
-                    $firstArray[self::POSITION],
-                ] <=> [
-                    $secondArray[self::VISIBILITY],
-                    $secondArray['static'],
-                    $firstArray['abstract'],
-                    $secondArray['final'],
-                    $secondArray[self::POSITION],
-                ];
-            }
-        );
+        $classMethods = $this->stmtVisibilitySorter->sortMethods($classLike);
+        $classMethods = array_keys($classMethods);
 
-        return array_keys($classMethods);
+        return $this->applyPreferredPosition($classMethods);
     }
 
-    private function getMethodsInPreferredOrder(array $sortedMethods): array
+    private function applyPreferredPosition(array $classMethods): array
     {
-        return array_unique(array_merge(self::PREFERRED_ORDER, $sortedMethods));
+        return array_unique(array_merge(self::PREFERRED_ORDER, $classMethods));
     }
 }
