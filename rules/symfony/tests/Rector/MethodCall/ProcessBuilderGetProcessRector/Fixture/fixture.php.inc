@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\ProcessBuilderGetProcessRector\Fixture;
 
 use Symfony\Component\Process\ProcessBuilder;
 
@@ -16,7 +16,7 @@ function processBuilderGetProcess()
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\ProcessBuilderGetProcessRector\Fixture;
 
 use Symfony\Component\Process\ProcessBuilder;
 

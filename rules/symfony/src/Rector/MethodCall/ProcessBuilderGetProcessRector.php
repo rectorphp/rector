@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Process;
+namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -11,7 +11,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\ProcessBuilderGetProcessRectorTest
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\ProcessBuilderGetProcessRector\ProcessBuilderGetProcessRectorTest
  */
 final class ProcessBuilderGetProcessRector extends AbstractRector
 {
