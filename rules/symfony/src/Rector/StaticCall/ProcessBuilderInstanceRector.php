@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Process;
+namespace Rector\Symfony\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
@@ -14,7 +14,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\ProcessBuilderInstanceRectorTest
+ * @see \Rector\Symfony\Tests\Rector\StaticCall\ProcessBuilderInstanceRector\ProcessBuilderInstanceRectorTest
  */
 final class ProcessBuilderInstanceRector extends AbstractRector
 {

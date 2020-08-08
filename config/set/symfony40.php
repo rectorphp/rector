@@ -8,7 +8,7 @@ use Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgument
 use Rector\Symfony\Rector\Form\FormIsValidRector;
 use Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 use Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector;
-use Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector;
+use Rector\Symfony\Rector\StaticCall\ProcessBuilderInstanceRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
