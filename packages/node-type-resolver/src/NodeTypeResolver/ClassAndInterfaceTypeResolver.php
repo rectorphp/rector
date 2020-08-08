@@ -54,8 +54,11 @@ final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        /** @var ClassReflection $classReflection */
+        /** @var ClassReflection|null $classReflection */
         $classReflection = $nodeScope->getClassReflection();
+        if ($classReflection === null) {
+            return new MixedType();
+        }
 
         $classTypes = $this->classReflectionTypesResolver->resolve($classReflection);
 
