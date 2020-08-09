@@ -21,7 +21,7 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
     {
         $this->setParameter(
             Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
-            __DIR__ . '/../../../../../symfony/tests/Rector/FrameworkBundle/GetToConstructorInjectionRector/xml/services.xml'
+            __DIR__ . '/../../../../../symfony/tests/Rector/MethodCall/GetToConstructorInjectionRector/xml/services.xml'
         );
 
         $this->doTestFileInfo($fileInfo);

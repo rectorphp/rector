@@ -12906,8 +12906,8 @@ Returns int from Command::execute command
 
 ### `ConstraintUrlOptionRector`
 
-- class: [`Rector\Symfony\Rector\Validator\ConstraintUrlOptionRector`](/../master/rules/symfony/src/Rector/Validator/ConstraintUrlOptionRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Validator/ConstraintUrlOptionRector/Fixture)
+- class: [`Rector\Symfony\Rector\ConstFetch\ConstraintUrlOptionRector`](/../master/rules/symfony/src/Rector/ConstFetch/ConstraintUrlOptionRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/ConstFetch/ConstraintUrlOptionRector/Fixture)
 
 Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 
@@ -12937,8 +12937,8 @@ Turns old default value to parameter in `ContainerBuilder->build()` method in DI
 
 ### `ContainerGetToConstructorInjectionRector`
 
-- class: [`Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector`](/../master/rules/symfony/src/Rector/FrameworkBundle/ContainerGetToConstructorInjectionRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/FrameworkBundle/ContainerGetToConstructorInjectionRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector`](/../master/rules/symfony/src/Rector/MethodCall/ContainerGetToConstructorInjectionRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Fixture)
 
 Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
@@ -13036,8 +13036,8 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
 
 ### `GetParameterToConstructorInjectionRector`
 
-- class: [`Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector`](/../master/rules/symfony/src/Rector/FrameworkBundle/GetParameterToConstructorInjectionRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/FrameworkBundle/GetParameterToConstructorInjectionRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector`](/../master/rules/symfony/src/Rector/MethodCall/GetParameterToConstructorInjectionRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/GetParameterToConstructorInjectionRector/Fixture)
 
 Turns fetching of parameters via `getParameter()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
@@ -13087,8 +13087,8 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 
 ### `GetToConstructorInjectionRector`
 
-- class: [`Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector`](/../master/rules/symfony/src/Rector/FrameworkBundle/GetToConstructorInjectionRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/FrameworkBundle/GetToConstructorInjectionRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector`](/../master/rules/symfony/src/Rector/MethodCall/GetToConstructorInjectionRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/GetToConstructorInjectionRector/Fixture)
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
 
@@ -13199,8 +13199,8 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 
 ### `ParseFileRector`
 
-- class: [`Rector\Symfony\Rector\Yaml\ParseFileRector`](/../master/rules/symfony/src/Rector/Yaml/ParseFileRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Yaml/ParseFileRector/Fixture)
+- class: [`Rector\Symfony\Rector\StaticCall\ParseFileRector`](/../master/rules/symfony/src/Rector/StaticCall/ParseFileRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/StaticCall/ParseFileRector/Fixture)
 
 session > use_strict_mode is true by default and can be removed
 
@@ -13213,8 +13213,8 @@ session > use_strict_mode is true by default and can be removed
 
 ### `ProcessBuilderGetProcessRector`
 
-- class: [`Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector`](/../master/rules/symfony/src/Rector/Process/ProcessBuilderGetProcessRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Process/ProcessBuilderGetProcessRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\ProcessBuilderGetProcessRector`](/../master/rules/symfony/src/Rector/MethodCall/ProcessBuilderGetProcessRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/ProcessBuilderGetProcessRector/Fixture)
 
 Removes `$processBuilder->getProcess()` calls to `$processBuilder` in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
 
@@ -13230,8 +13230,8 @@ Removes `$processBuilder->getProcess()` calls to `$processBuilder` in Process in
 
 ### `ProcessBuilderInstanceRector`
 
-- class: [`Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector`](/../master/rules/symfony/src/Rector/Process/ProcessBuilderInstanceRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Process/ProcessBuilderInstanceRector/Fixture)
+- class: [`Rector\Symfony\Rector\StaticCall\ProcessBuilderInstanceRector`](/../master/rules/symfony/src/Rector/StaticCall/ProcessBuilderInstanceRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/StaticCall/ProcessBuilderInstanceRector/Fixture)
 
 Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.
 
@@ -13406,8 +13406,8 @@ Changes Process string argument to an array
 
 ### `VarDumperTestTraitMethodArgsRector`
 
-- class: [`Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector`](/../master/rules/symfony/src/Rector/VarDumper/VarDumperTestTraitMethodArgsRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/VarDumper/VarDumperTestTraitMethodArgsRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector`](/../master/rules/symfony/src/Rector/MethodCall/VarDumperTestTraitMethodArgsRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/VarDumperTestTraitMethodArgsRector/Fixture)
 
 Adds a new `$filter` argument in `VarDumperTestTrait->assertDumpEquals()` and `VarDumperTestTrait->assertDumpMatchesFormat()` in Validator in Symfony.
 
@@ -13570,8 +13570,8 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `SimpleFunctionAndFilterRector`
 
-- class: [`Rector\Twig\Rector\SimpleFunctionAndFilterRector`](/../master/rules/twig/src/Rector/SimpleFunctionAndFilterRector.php)
-- [test fixtures](/../master/rules/twig/tests/Rector/SimpleFunctionAndFilterRector/Fixture)
+- class: [`Rector\Twig\Rector\Return_\SimpleFunctionAndFilterRector`](/../master/rules/twig/src/Rector/Return_/SimpleFunctionAndFilterRector.php)
+- [test fixtures](/../master/rules/twig/tests/Rector/Return_/SimpleFunctionAndFilterRector/Fixture)
 
 Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
 

@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Symfony\Rector\FrameworkBundle\AbstractToConstructorInjectionRector;
+use Rector\Symfony\Rector\MethodCall\AbstractToConstructorInjectionRector;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
