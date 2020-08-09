@@ -116,6 +116,9 @@ final class StmtVisibilitySorter
         return $classMethods;
     }
 
+    /**
+     * @return array<string,array<string, mixed>>
+     */
     public function sortConstants(ClassLike $classLike): array
     {
         $constants = [];
