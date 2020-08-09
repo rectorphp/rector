@@ -1,4 +1,4 @@
-# All 552 Rectors Overview
+# All 551 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -39,7 +39,7 @@
 - [Order](#order) (7)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
-- [PHPUnit](#phpunit) (37)
+- [PHPUnit](#phpunit) (36)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
 - [PSR4](#psr4) (3)
 - [Performance](#performance) (1)
@@ -8636,29 +8636,6 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 +$this->setExpectedException(Exception::class);
 +$this->expectExceptionMessage("Message");
 +$this->expectExceptionCode("CODE");
-```
-
-<br><br>
-
-### `EnsureDataProviderInDocBlockRector`
-
-- class: [`Rector\PHPUnit\Rector\ClassMethod\EnsureDataProviderInDocBlockRector`](/../master/rules/phpunit/src/Rector/ClassMethod/EnsureDataProviderInDocBlockRector.php)
-- [test fixtures](/../master/rules/phpunit/tests/Rector/ClassMethod/EnsureDataProviderInDocBlockRector/Fixture)
-
-Data provider annotation must be in doc block
-
-```diff
- class SomeClass extends PHPUnit\Framework\TestCase
- {
--    /*
-+    /**
-      * @dataProvider testProvideData()
-      */
-     public function test()
-     {
-         $nothing = 5;
-     }
- }
 ```
 
 <br><br>

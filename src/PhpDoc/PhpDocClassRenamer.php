@@ -54,17 +54,17 @@ final class PhpDocClassRenamer
      */
     private function processDoctrineRelationTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo): void
     {
-        $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
-        if (! $relationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
+        $doctrineRelationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+        if (! $doctrineRelationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
             return;
         }
 
         foreach ($oldToNewClasses as $oldClass => $newClass) {
-            if ($relationTagValueNode->getFullyQualifiedTargetEntity() !== $oldClass) {
+            if ($doctrineRelationTagValueNode->getFullyQualifiedTargetEntity() !== $oldClass) {
                 continue;
             }
 
-            $relationTagValueNode->changeTargetEntity($newClass);
+            $doctrineRelationTagValueNode->changeTargetEntity($newClass);
             break;
         }
     }
