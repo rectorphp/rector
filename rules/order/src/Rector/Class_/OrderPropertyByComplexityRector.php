@@ -150,6 +150,10 @@ PHP
         return $propertyByVisibilityByPosition;
     }
 
+    /**
+     * @param array<string,array<string, mixed>> $propertyNameToRank
+     * @return string[]
+     */
     private function getSortedPropertiesByRankAndPosition(array $propertyNameToRank): array
     {
         uasort(

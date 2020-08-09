@@ -129,13 +129,16 @@ PHP
         return $node;
     }
 
+    /**
+     * @return array<int,array<int,string>>
+     */
     private function getPrivateMethodCallOrderAndClassMethods(Class_ $class): array
     {
         return [$this->getLocalPrivateMethodCallOrder($class), $this->resolvePrivateClassMethods($class)];
     }
 
     /**
-     * @return string[]
+     * @return array<int,string>
      */
     private function getLocalPrivateMethodCallOrder(Class_ $class): array
     {
@@ -173,6 +176,9 @@ PHP
         return array_unique($localPrivateMethodCallInOrder);
     }
 
+    /**
+     * @return array<int,string>
+     */
     private function resolvePrivateClassMethods(Class_ $class): array
     {
         $privateClassMethods = [];

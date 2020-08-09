@@ -77,7 +77,7 @@ PHP
             return null;
         }
 
-        $classConstConstsByValue = $this->resolveClastConstConstByUniqueValue($numericClassConstsByKey);
+        $classConstConstsByValue = $this->resolveClassConstConstByUniqueValue($numericClassConstsByKey);
 
         $sortedClassConstConstsByValue = $classConstConstsByValue;
         asort($sortedClassConstConstsByValue);
@@ -90,7 +90,7 @@ PHP
     }
 
     /**
-     * @return ClassConst[]
+     * @return array<int,ClassConst>
      */
     private function resolveClassConstByPosition(Class_ $class): array
     {
@@ -115,7 +115,11 @@ PHP
         return $classConstConstsByValue;
     }
 
-    private function resolveClastConstConstByUniqueValue(array $numericClassConstsByKey): array
+    /**
+     * @param array<int,ClassConst> $numericClassConstsByKey
+     * @return array<int,string>
+     */
+    private function resolveClassConstConstByUniqueValue(array $numericClassConstsByKey): array
     {
         $classConstConstsByValue = [];
         foreach ($numericClassConstsByKey as $position => $numericClassConst) {

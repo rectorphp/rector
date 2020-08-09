@@ -4,15 +4,24 @@ declare(strict_types=1);
 
 namespace Rector\Order;
 
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class StmtOrder
 {
     /**
-     * @param string[] $desiredStmtOrder
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(NodeNameResolver $nodeNameResolver)
+    {
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
+
+    /**
+     * @param array<int,string> $desiredStmtOrder
+     * @param array<int,string> $currentStmtOrder
      * @return int[]
      */
     public function createOldToNewKeys(array $desiredStmtOrder, array $currentStmtOrder): array
@@ -32,6 +41,9 @@ final class StmtOrder
         return array_combine($oldKeys, $newKeys);
     }
 
+    /**
+     * @param array<int,int> $oldToNewKeys
+     */
     public function reorderClassStmtsByOldToNewKeys(ClassLike $classLike, array $oldToNewKeys): ClassLike
     {
         $reorderedStmts = [];
@@ -62,18 +74,24 @@ final class StmtOrder
     }
 
     /**
-     * @param ClassMethod|Property $stmt
+     * @return array<int,string>
      */
-    public function getOrderByVisibility(Stmt $stmt): int
+    public function getStmtsOfTypeOrder(ClassLike $classLike, string $type): array
     {
-        if ($stmt->isPrivate()) {
-            return 2;
+        $stmtsByPosition = [];
+        foreach ($classLike->stmts as $position => $classStmt) {
+            if (! is_a($classStmt, $type)) {
+                continue;
+            }
+
+            $name = $this->nodeNameResolver->getName($classStmt);
+            if ($name === null) {
+                continue;
+            }
+
+            $stmtsByPosition[$position] = $name;
         }
 
-        if ($stmt->isProtected()) {
-            return 1;
-        }
-
-        return 0;
+        return $stmtsByPosition;
     }
 }

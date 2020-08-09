@@ -6,10 +6,13 @@ namespace Rector\Order\Rector\ClassLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Order\StmtOrder;
+use Rector\Order\StmtVisibilitySorter;
 
 /**
  * @see \Rector\Order\Tests\Rector\ClassLike\OrderPropertiesByVisibilityRector\OrderPropertiesByVisibilityRectorTest
@@ -17,23 +20,19 @@ use Rector\Order\StmtOrder;
 final class OrderPropertiesByVisibilityRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const VISIBILITY = 'visibility';
-
-    /**
-     * @var string
-     */
-    private const POSITION = 'position';
-
-    /**
      * @var StmtOrder
      */
     private $stmtOrder;
 
-    public function __construct(StmtOrder $stmtOrder)
+    /**
+     * @var StmtVisibilitySorter
+     */
+    private $stmtVisibilitySorter;
+
+    public function __construct(StmtOrder $stmtOrder, StmtVisibilitySorter $stmtVisibilitySorter)
     {
         $this->stmtOrder = $stmtOrder;
+        $this->stmtVisibilitySorter = $stmtVisibilitySorter;
     }
 
     public function getDefinition(): RectorDefinition
@@ -76,45 +75,24 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Node\Stmt\Interface_) {
+        if ($node instanceof Interface_) {
             return null;
         }
 
-        $properties = [];
-        $propertiesByName = [];
-        foreach ($node->stmts as $position => $propertyStmt) {
-            if (! $propertyStmt instanceof Node\Stmt\Property) {
-                continue;
-            }
+        $currentPropertiesOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, Property::class);
+        $propertiesInDesiredOrder = $this->getPropertiesInDesiredPosition($node);
 
-            /** @var string $propertyName */
-            $propertyName = $this->getName($propertyStmt);
-            $propertiesByName[$position] = $propertyName;
-
-            $properties[$propertyName]['name'] = $propertyName;
-            $properties[$propertyName][self::VISIBILITY] = $this->stmtOrder->getOrderByVisibility($propertyStmt);
-            $properties[$propertyName]['static'] = $propertyStmt->isStatic();
-            $properties[$propertyName][self::POSITION] = $position;
-        }
-
-        $sortedProperties = $this->getPropertiesSortedByVisibility($properties);
-        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($sortedProperties, $propertiesByName);
+        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($propertiesInDesiredOrder, $currentPropertiesOrder);
 
         return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
     }
 
-    private function getPropertiesSortedByVisibility(array $properties): array
+    /**
+     * @return string[]
+     */
+    private function getPropertiesInDesiredPosition(ClassLike $classLike): array
     {
-        uasort(
-            $properties,
-            function (array $firstArray, array $secondArray): int {
-                return [
-                    $firstArray[self::VISIBILITY],
-                    $firstArray['static'],
-                    $firstArray[self::POSITION],
-                ] <=> [$secondArray[self::VISIBILITY], $secondArray['static'], $secondArray[self::POSITION]];
-            }
-        );
+        $properties = $this->stmtVisibilitySorter->sortProperties($classLike);
 
         return array_keys($properties);
     }
