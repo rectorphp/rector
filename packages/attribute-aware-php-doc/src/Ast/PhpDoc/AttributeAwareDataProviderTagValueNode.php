@@ -32,6 +32,11 @@ final class AttributeAwareDataProviderTagValueNode implements PhpDocTagValueNode
         return $this->method;
     }
 
+    public function getMethodName(): string
+    {
+        return trim($this->method, '()');
+    }
+
     public function changeMethod(string $method): void
     {
         $this->method = $method;

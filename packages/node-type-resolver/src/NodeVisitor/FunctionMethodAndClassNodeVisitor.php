@@ -89,7 +89,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return int|Node|void|null
+     * @return \PhpParser\Node
      */
     public function enterNode(Node $node)
     {

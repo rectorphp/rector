@@ -7,6 +7,8 @@ namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
 use Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PHPStan\Reflection\ClassMemberAccessAnswerer;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Type;
@@ -43,6 +45,7 @@ final class ConstantStringTypeToCallReflectionResolver implements TypeToCallRefl
 
     /**
      * @param ConstantStringType $type
+     * @return FunctionReflection|null|MethodReflection
      */
     public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer)
     {

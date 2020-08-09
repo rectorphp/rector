@@ -36,7 +36,9 @@ final class PHPUnitTestCaseClassesProvider
         $robotLoader = $this->createRobotLoadForDirectories();
         $robotLoader->rebuild();
 
-        $this->phpUnitTestCaseClasses = array_keys($robotLoader->getIndexedClasses());
+        foreach (array_keys($robotLoader->getIndexedClasses()) as $className) {
+            $this->phpUnitTestCaseClasses[] = (string) $className;
+        }
 
         return $this->phpUnitTestCaseClasses;
     }

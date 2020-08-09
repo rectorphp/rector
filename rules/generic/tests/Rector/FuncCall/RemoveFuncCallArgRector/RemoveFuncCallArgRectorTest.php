@@ -28,6 +28,9 @@ final class RemoveFuncCallArgRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return int[][][][]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

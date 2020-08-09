@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
+    // @todo make part of Rector CI
     // add array-types
     $services->set(AddArrayParamDocTypeRector::class);
     $services->set(AddArrayReturnDocTypeRector::class);

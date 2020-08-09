@@ -39,6 +39,9 @@ final class FunctionAnnotationResolver
         $this->phpDocTagsFinder = $phpDocTagsFinder;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function extractFunctionAnnotatedThrows(ReflectionFunction $reflectionFunction): array
     {
         $docComment = $reflectionFunction->getDocComment();
@@ -52,6 +55,9 @@ final class FunctionAnnotationResolver
         return $this->expandAnnotatedClasses($reflectionFunction, $annotatedThrownClasses);
     }
 
+    /**
+     * @return mixed[]
+     */
     private function expandAnnotatedClasses(ReflectionFunction $reflectionFunction, array $classNames): array
     {
         $namespace = $this->functionParser->parseFunction($reflectionFunction);

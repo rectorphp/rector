@@ -180,7 +180,7 @@ PHP
 
     /**
      * @param Type[] $fetchedLocalPropertyNameToTypes
-     * @return string[]
+     * @return int[]|string[]
      */
     private function resolvePropertiesToComplete(Class_ $class, array $fetchedLocalPropertyNameToTypes): array
     {

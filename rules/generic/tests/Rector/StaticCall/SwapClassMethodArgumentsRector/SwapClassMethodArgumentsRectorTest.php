@@ -25,6 +25,9 @@ final class SwapClassMethodArgumentsRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return int[][][][][]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

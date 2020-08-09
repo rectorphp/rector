@@ -153,6 +153,7 @@ final class NodeNameResolver
 
     /**
      * @param Name[]|Node[] $nodes
+     * @return string[]
      */
     public function getNames(array $nodes): array
     {

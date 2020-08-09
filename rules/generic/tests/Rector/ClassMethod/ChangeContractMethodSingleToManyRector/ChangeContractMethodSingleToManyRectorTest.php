@@ -25,6 +25,9 @@ final class ChangeContractMethodSingleToManyRectorTest extends AbstractRectorTes
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return string[][][][]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

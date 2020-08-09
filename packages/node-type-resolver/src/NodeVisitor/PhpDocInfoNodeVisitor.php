@@ -21,7 +21,7 @@ final class PhpDocInfoNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return int|Node|void|null
+     * @return Node
      */
     public function enterNode(Node $node)
     {

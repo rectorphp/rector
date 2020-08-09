@@ -17,6 +17,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NetteKdyby\ContributeEventClassResolver;
 use Rector\NetteKdyby\ValueObject\EventAndListenerTree;
+use Rector\NetteKdyby\ValueObject\EventClassAndClassMethod;
 use Symfony\Contracts\EventDispatcher\Event;
 
 final class ListeningClassMethodArgumentManipulator
@@ -67,24 +68,29 @@ final class ListeningClassMethodArgumentManipulator
             return;
         }
 
-        $this->change($listenerClassMethods, $eventAndListenerTree);
+        $classMethodsByEventClass = [];
+        foreach ($listenerClassMethods as $listenerClassMethod) {
+            $classMethodsByEventClass[] = new EventClassAndClassMethod($className, $listenerClassMethod);
+        }
+
+        $this->change($classMethodsByEventClass, $eventAndListenerTree);
     }
 
     /**
-     * @param array<string, ClassMethod> $classMethodsByEventClass
+     * @param EventClassAndClassMethod[] $classMethodsByEventClass
      */
     public function change(array $classMethodsByEventClass, ?EventAndListenerTree $eventAndListenerTree = null): void
     {
-        foreach ($classMethodsByEventClass as $eventClass => $classMethod) {
+        foreach ($classMethodsByEventClass as $eventClassAndClassMethod) {
             // are attributes already replaced
-            if ($classMethod->getAttribute(self::EVENT_PARAMETER_REPLACED)) {
+            if ($eventClassAndClassMethod->getClassMethod()->getAttribute(self::EVENT_PARAMETER_REPLACED)) {
                 continue;
             }
 
-            /** @var ClassMethod $classMethod */
+            $classMethod = $eventClassAndClassMethod->getClassMethod();
             $oldParams = $classMethod->params;
 
-            $eventClass = $eventAndListenerTree !== null ? $eventAndListenerTree->getEventClassName() : $eventClass;
+            $eventClass = $eventAndListenerTree !== null ? $eventAndListenerTree->getEventClassName() : $eventClassAndClassMethod->getEventClass();
 
             $this->changeClassParamToEventClass($eventClass, $classMethod);
 

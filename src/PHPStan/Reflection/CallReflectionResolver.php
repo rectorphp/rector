@@ -57,7 +57,7 @@ final class CallReflectionResolver
 
     /**
      * @param FuncCall|MethodCall|StaticCall $node
-     * @return FunctionReflection|MethodReflection|null
+     * @return MethodReflection|FunctionReflection|null
      */
     public function resolveCall(Node $node)
     {

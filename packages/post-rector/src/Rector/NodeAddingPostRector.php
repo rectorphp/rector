@@ -37,7 +37,7 @@ final class NodeAddingPostRector extends AbstractPostRector
     }
 
     /**
-     * @return Node[]|Node|null
+     * @return mixed[]|Node
      */
     public function leaveNode(Node $node)
     {

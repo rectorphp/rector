@@ -71,6 +71,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
 
     /**
      * @var ClassConst[]
+     * @return \PhpParser\Node\Stmt\ClassConst[]
      */
     public function getConstantsByClass(Class_ $class): array
     {
@@ -80,6 +81,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
 
     /**
      * @var Type[]|null[]
+     * @return \PHPStan\Type\Type[]|null[]
      */
     public function getPropertiesByClass(Class_ $class): array
     {
@@ -89,6 +91,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
 
     /**
      * @var Type[]|null[]
+     * @return \PHPStan\Type\Type[]|null[]
      */
     public function getPropertiesWithoutConstructorByClass(Class_ $class): array
     {

@@ -80,6 +80,9 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
         return $this->printItemsToAttributeString($this->createAttributeItems());
     }
 
+    /**
+     * @return mixed[]
+     */
     private function createAttributeItems(): array
     {
         $items = $this->items;

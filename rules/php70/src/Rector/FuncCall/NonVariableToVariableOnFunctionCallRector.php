@@ -101,7 +101,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
     /**
      * @param FuncCall|MethodCall|StaticCall $node
      *
-     * @return array<int, Expr>
+     * @return Expr[]
      */
     private function getNonVariableArguments(Node $node): array
     {

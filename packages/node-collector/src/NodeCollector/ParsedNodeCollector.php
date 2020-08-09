@@ -84,7 +84,7 @@ final class ParsedNodeCollector
     /**
      * @template T of object
      * @param class-string<T> $type
-     * @return Node[]|iterable<T>
+     * @return \PhpParser\Node[]
      */
     public function getNodesByType(string $type): array
     {

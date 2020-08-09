@@ -35,7 +35,11 @@ final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwar
      */
     public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
-        $returnType = $this->createAttributeAwareReturnType($node, $docContent);
+        if ($node->returnType !== null) {
+            $returnType = $this->createAttributeAwareReturnType($node->returnType, $docContent);
+        } else {
+            $returnType = $node->returnType;
+        }
 
         foreach ($node->parameters as $key => $parameter) {
             $node->parameters[$key] = $this->attributeAwareNodeFactory->createFromNode($parameter, $docContent);
@@ -55,15 +59,8 @@ final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwar
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 
-    /**
-     * @return TypeNode&AttributeAwareNodeInterface
-     */
-    private function createAttributeAwareReturnType(MethodTagValueNode $methodTagValueNode, string $docContent)
+    private function createAttributeAwareReturnType(TypeNode $typeNode, string $docContent): AttributeAwareNodeInterface
     {
-        if ($methodTagValueNode->returnType !== null) {
-            return $this->attributeAwareNodeFactory->createFromNode($methodTagValueNode->returnType, $docContent);
-        }
-
-        return $methodTagValueNode->returnType;
+        return $this->attributeAwareNodeFactory->createFromNode($typeNode, $docContent);
     }
 }

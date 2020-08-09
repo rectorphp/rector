@@ -38,6 +38,9 @@ final class ReplaceHttpServerVarsByServerRector extends AbstractRector
         ]);
     }
 
+    /**
+     * @return string[]
+     */
     public function getNodeTypes(): array
     {
         return [Variable::class];

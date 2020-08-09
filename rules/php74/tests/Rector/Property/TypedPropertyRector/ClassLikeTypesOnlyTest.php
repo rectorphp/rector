@@ -24,6 +24,9 @@ final class ClassLikeTypesOnlyTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureClassLikeTypeOnly');
     }
 
+    /**
+     * @return bool[][]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

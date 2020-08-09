@@ -38,7 +38,7 @@ final class OnPropertyMagicCallProvider
     }
 
     /**
-     * @return MethodCall[]
+     * @return \PhpParser\Node\Expr\MethodCall[]&mixed[]|\PhpParser\Node\Expr\MethodCall[]
      */
     public function provide(): array
     {

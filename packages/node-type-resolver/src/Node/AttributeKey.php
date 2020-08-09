@@ -181,4 +181,9 @@ final class AttributeKey
      * @var string
      */
     public const CLOSURE_NODE = Closure::class;
+
+    /**
+     * @var string
+     */
+    public const PARAMETER_POSITION = 'parameter_position';
 }

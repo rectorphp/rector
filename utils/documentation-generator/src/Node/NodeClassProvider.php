@@ -9,7 +9,7 @@ use Nette\Loaders\RobotLoader;
 final class NodeClassProvider
 {
     /**
-     * @return class-string[]
+     * @return string[]
      */
     public function getNodeClasses(): array
     {
@@ -18,6 +18,11 @@ final class NodeClassProvider
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_robotloader_nodes');
         $robotLoader->rebuild();
 
-        return array_keys($robotLoader->getIndexedClasses());
+        $classNames = [];
+        foreach (array_keys($robotLoader->getIndexedClasses()) as $className) {
+            $classNames[] = (string) $className;
+        }
+
+        return $classNames;
     }
 }

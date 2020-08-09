@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\NetteKdyby\Naming\VariableNaming;
@@ -61,6 +62,7 @@ final class NonFluentChainMethodCallFactory
 
     /**
      * @param MethodCall[] $chainMethodCalls
+     * @return Expr[]|Return_[]
      */
     public function createFromAssignObjectAndMethodCalls(
         AssignAndRootExpr $assignAndRootExpr,
@@ -100,7 +102,7 @@ final class NonFluentChainMethodCallFactory
 
     /**
      * @param MethodCall[] $chainMethodCalls
-     * @return Expr[]
+     * @return \PhpParser\Node\Expr\Assign[]|\PhpParser\Node\Expr\MethodCall[]
      */
     private function createNonFluentMethodCalls(array $chainMethodCalls, AssignAndRootExpr $assignAndRootExpr): array
     {

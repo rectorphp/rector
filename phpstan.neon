@@ -50,7 +50,7 @@ parameters:
             'Hoa\Protocol\Node\Node': 'PhpParser\Node'
 
     # to allow installing with various phsptan versions without reporting old errors here
-    reportUnmatchedIgnoredErrors: false
+#    reportUnmatchedIgnoredErrors: false
 
     checkGenericClassInNonGenericObjectType: false
 
@@ -71,6 +71,10 @@ parameters:
         - config
 
     excludes_analyse:
+        # iterable types
+        - '#with no value type specified in iterable type array#'
+        - '#type specified in iterable type (array|iterable)#'
+
         # phsptan bug
         - utils/phpstan-extensions/src/Rule/PreventParentMethodVisibilityOverrideRule.php
         - utils/phpstan-extensions/src/Rule/KeepRectorNamespaceForRectorRule.php
@@ -91,6 +95,11 @@ parameters:
         - '*/tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Expected/Just*ExceptionWithoutNamespace.php'
 
     ignoreErrors:
+        # @todo remove
+        # iterable types
+        - '#with no value type specified in iterable type array#'
+        - '#type specified in iterable type (array|iterable)#'
+
         # false positive
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
 
@@ -119,7 +128,6 @@ parameters:
 
         # known values
         - '#Cannot access property \$value on PhpParser\\Node\\Expr\\ArrayItem\|null#'
-        - '#Method Rector\\Symfony\\Rector\\New_\\StringToArrayArgumentProcessRector::findPreviousNodeAssign\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
 
         # known values
         - '#Strict comparison using === between PhpParser\\Node\\Expr and null will always evaluate to false#'
@@ -239,7 +247,6 @@ parameters:
 
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\Core\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
-        - '#PHPDoc tag @return with type iterable<object\> is not subtype of native type array#'
         - '#Method Rector\\SOLID\\Reflection\\ParentConstantReflectionResolver\:\:(.*?)\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
         - '#Parameter \#1 \$firstStmt of method Rector\\Generic\\Rector\\MethodBody\\NormalToFluentRector\:\:isBothMethodCallMatch\(\) expects PhpParser\\Node\\Stmt\\Expression, PhpParser\\Node\\Stmt given#'
         - '#Method Rector\\Core\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
@@ -314,7 +321,6 @@ parameters:
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
 
         - '#Use explicit return value over magic &reference#'
-        - '#Method Rector\\Order\\StmtOrder\:\:createOldToNewKeys\(\) should return array<int\> but returns array\|false#'
 
         - '#In method "Rector\\Utils\\ProjectValidator\\Process\\ParallelTaskRunner\:\:(.*?)", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception#'
         # weird
@@ -324,25 +330,20 @@ parameters:
         - '#Class cognitive complexity for "DumpNodesCommand" is \d+, keep it under 50#'
         - '#Cognitive complexity for "Rector\\Utils\\DocumentationGenerator\\Command\\DumpNodesCommand\:\:execute\(\)" is \d+, keep it under 9#'
 
-        - '#Method Rector\\Utils\\DocumentationGenerator\\Node\\NodeClassProvider\:\:getNodeClasses\(\) should return array<class\-string\> but returns array<int, \(int\|string\)\>#'
-
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$class#'
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
-        - '#Method Rector\\Core\\Testing\\Finder\\RectorsFinder\:\:findInDirectories\(\) should return array<Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<object\>#'
         - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
 
         - '#Cognitive complexity for "Rector\\TypeDeclaration\\PHPStan\\Type\\ObjectTypeSpecifier\:\:matchShortenedObjectType\(\)" is 10, keep it under 9#'
         - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 9#'
-        - '#Cognitive complexity for "Rector\\NetteKdyby\\NodeResolver\\ListeningMethodsCollector\:\:collectFromClassAndGetSubscribedEventClassMethod\(\)" is 11, keep it under 9#'
         - '#Cognitive complexity for "Rector\\NetteKdyby\\ContributeEventClassResolver\:\:resolveGetterMethodByEventClassAndParam\(\)" is \d+, keep it under 9#'
         - '#Parameter \#1 \$type of class PhpParser\\Node\\NullableType constructor expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Parameter \#1 \$object of function get_class expects object, PhpParser\\Node\|null given#'
         - '#Class "Rector\\FileSystemRector\\Rector\\Removing\\RemoveProjectFileRector" is missing @see annotation with test case class reference#'
         - '#Parameter \#1 \$type of method PhpParser\\Builder\\Param\:\:setType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Parameter \#1 \$node of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirstAncestorInstanceOf\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\\Variable\|null given#'
-        - '#Parameter \#1 \$expr of method Rector\\MagicDisclosure\\Matcher\\ClassNameTypeMatcher\:\:doesExprMatchNames\(\) expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Parameter \#1 \$objectType of method Rector\\Naming\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
         - '#Method Rector\\Core\\PhpParser\\Node\\NodeFactory\:\:createConcat\(\) should return PhpParser\\Node\\Expr\\BinaryOp\\Concat\|null but returns PhpParser\\Node\\Expr#'
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirstNonAnonymousClass\(\) should return PhpParser\\Node\\Stmt\\Class_\|null but returns PhpParser\\Node\|null#'
@@ -378,12 +379,18 @@ parameters:
         - '#Cognitive complexity for "Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator\:\:keepLivingCodeFromExpr\(\)" is \d+, keep it under 9#'
         - '#Class with base "LexerFactory" name is already used in "PHPStan\\Parser\\LexerFactory", "Rector\\Core\\PhpParser\\Parser\\LexerFactory"\. Use unique name to make classes easy to recognize#'
         - '#Parameter \#1 \$files of method Symplify\\SmartFileSystem\\Finder\\FinderSanitizer\:\:sanitize\(\) expects \(iterable<SplFileInfo\|string\>&Nette\\Utils\\Finder\)\|Symfony\\Component\\Finder\\Finder, array<string\> given#'
-        - '#Method Rector\\Core\\PhpParser\\Node\\Manipulator\\ChainMethodCallManipulator\:\:resolveRootMethodCall\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\|null#'
-        - '#Static property Symplify\\PackageBuilder\\Tests\\AbstractKernelTestCase\:\:\$container \(Psr\\Container\\ContainerInterface\) does not accept Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container#'
         - '#Static property Rector\\Core\\Testing\\PHPUnit\\AbstractGenericRectorTestCase\:\:\$allRectorContainer \(Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container\|null\) does not accept Psr\\Container\\ContainerInterface#'
-        - '#Separate function "Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ref\(\)" in method call to standalone row to improve readability#'
-        - '#Class with base "(.*?)" name is already used in "_HumbugBox(.*?)#'
-        - '#Class Rector\\MagicDisclosure\\Tests\\Rector\\ClassMethod\\ReturnThisRemoveRector\\FixtureConfiguration\\SomeClass not found#'
         # stubs
         - '#Class Nette\\DI\\CompilerExtension not found#'
         - '#Class Latte\\Macros\\MacroSet not found#'
+
+
+        - '#Static property Symplify\\PackageBuilder\\Tests\\AbstractKernelTestCase\:\:\$container \(Psr\\Container\\ContainerInterface\) does not accept Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container#'
+
+        # wtf
+        -
+            message: '#Else branch is unreachable because ternary operator condition is always true#'
+            path: 'rules/psr4/src/Composer/PSR4NamespaceMatcher.php'
+
+        # false positive
+        - '#Empty array passed to foreach#'

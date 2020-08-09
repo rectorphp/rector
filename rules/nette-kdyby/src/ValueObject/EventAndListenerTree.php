@@ -81,7 +81,7 @@ final class EventAndListenerTree
     }
 
     /**
-     * @return array<string, ClassMethod>
+     * @return ClassMethod[]
      */
     public function getListenerClassMethodsByClass(string $className): array
     {

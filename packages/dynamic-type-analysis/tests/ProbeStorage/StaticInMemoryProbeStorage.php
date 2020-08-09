@@ -18,6 +18,9 @@ final class StaticInMemoryProbeStorage implements ProbeStorageInterface
         self::$probeItems[] = $probeItem;
     }
 
+    /**
+     * @return string[]
+     */
     public static function getProbeItems(): array
     {
         // remove empty values

@@ -20,6 +20,7 @@ final class ClosureTypeToCallReflectionResolver implements TypeToCallReflectionR
 
     /**
      * @param ClosureType $type
+     * @return NativeFunctionReflection
      */
     public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer)
     {

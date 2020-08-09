@@ -51,6 +51,9 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
         );
     }
 
+    /**
+     * @return string[]
+     */
     public static function getSubscribedEvents(): array
     {
         return [AfterProcessEvent::class => 'reportEntities'];

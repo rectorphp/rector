@@ -10,7 +10,7 @@ use Nette\Utils\Strings;
 final class PHPStanTypeClassFinder
 {
     /**
-     * @return string[]
+     * @return class-string[]
      */
     public function find(): array
     {

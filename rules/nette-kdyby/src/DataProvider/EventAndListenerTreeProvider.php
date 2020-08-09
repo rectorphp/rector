@@ -184,6 +184,9 @@ final class EventAndListenerTreeProvider
         return $listeningClassMethodsByClass;
     }
 
+    /**
+     * @return GetterMethodBlueprint[]
+     */
     private function resolveGetterNamesWithReturnTypeAndVariableName(Namespace_ $eventClassInNamespace): array
     {
         /** @var Class_ $eventClass */

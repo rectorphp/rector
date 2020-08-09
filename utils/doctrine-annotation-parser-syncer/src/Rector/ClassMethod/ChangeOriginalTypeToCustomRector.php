@@ -17,7 +17,7 @@ use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRecto
 final class ChangeOriginalTypeToCustomRector extends AbstractRector implements ClassSyncerRectorInterface
 {
     /**
-     * @return class-string[]
+     * @return string[]
      */
     public function getNodeTypes(): array
     {

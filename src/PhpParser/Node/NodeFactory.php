@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Error;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -461,7 +462,7 @@ final class NodeFactory
 
     /**
      * @param mixed $value
-     * @return mixed
+     * @return mixed|Error|\PhpParser\Node\Expr\Variable
      */
     private function normalizeArgValue($value)
     {

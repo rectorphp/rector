@@ -26,6 +26,9 @@ final class SafeTypesTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureSafeTypes');
     }
 
+    /**
+     * @return bool[][]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

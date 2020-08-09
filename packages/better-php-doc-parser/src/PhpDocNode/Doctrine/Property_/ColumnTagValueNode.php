@@ -38,6 +38,9 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements P
         return $this->printItemsToAttributeString($items);
     }
 
+    /**
+     * @return mixed[]
+     */
     private function createAttributeItems(): array
     {
         $items = $this->items;

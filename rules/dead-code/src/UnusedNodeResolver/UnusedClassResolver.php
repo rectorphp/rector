@@ -62,7 +62,7 @@ final class UnusedClassResolver
     }
 
     /**
-     * @return string[]
+     * @return string[]&mixed[]|string[]
      */
     private function getUsedClassNames(): array
     {

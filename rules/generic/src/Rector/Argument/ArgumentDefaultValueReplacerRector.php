@@ -200,6 +200,7 @@ PHP
     /**
      * @param Arg[] $argumentNodes
      * @param mixed[] $before
+     * @return mixed[]
      */
     private function resolveArgumentValuesToBeforeRecipe(array $argumentNodes, int $position, array $before): array
     {

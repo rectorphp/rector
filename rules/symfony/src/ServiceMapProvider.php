@@ -7,7 +7,6 @@ namespace Rector\Symfony;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
-use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\Exception\XmlContainerNotExistsException;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
@@ -117,6 +116,9 @@ final class ServiceMapProvider
         return $data;
     }
 
+    /**
+     * @return mixed[]
+     */
     private function createTagFromXmlElement(array $def): array
     {
         if (! isset($def[self::TAG])) {
@@ -182,6 +184,9 @@ final class ServiceMapProvider
         return $services;
     }
 
+    /**
+     * @return mixed[]
+     */
     private function unWrapAttributes(array $data): array
     {
         if (isset($data['@attributes'])) {
@@ -197,6 +202,7 @@ final class ServiceMapProvider
 
     /**
      * @param string|int $key
+     * @return mixed[]
      */
     private function convertedNestedArrayOrXml(array $value, array $data, $key): array
     {
@@ -213,7 +219,7 @@ final class ServiceMapProvider
 
     /**
      * @param mixed[] $tagsData
-     * @return TagInterface[]
+     * @return Tag[]|EventListenerTag[]
      */
     private function createTagsFromData(array $tagsData): array
     {

@@ -21,6 +21,9 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 
 final class ScalarTypeResolver implements NodeTypeResolverInterface
 {
+    /**
+     * @return string[]
+     */
     public function getNodeClasses(): array
     {
         return [Scalar::class];

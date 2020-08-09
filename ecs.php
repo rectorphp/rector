@@ -77,6 +77,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             '*TypeResolverTest.php',
         ],
         UnaryOperatorSpacesFixer::class => null,
+
+        // breaks on-purpose annotated variables
+        \PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer::class => null,
+
         StrictComparisonFixer::class => [__DIR__ . '/packages/polyfill/src/ConditionEvaluator.php'],
     ]);
 

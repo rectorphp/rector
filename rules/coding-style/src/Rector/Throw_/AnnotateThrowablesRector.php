@@ -236,6 +236,9 @@ PHP
         return $this->extractMethodReturns($thrownClass, $methodName);
     }
 
+    /**
+     * @return class-string[]
+     */
     private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
     {
         $fullyQualified = $this->classResolver->getClassFromMethodCall($methodCall);

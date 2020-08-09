@@ -10,10 +10,10 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NetteKdyby\Naming\EventClassNaming;
+use Rector\NetteKdyby\ValueObject\EventClassAndClassMethod;
 use Rector\NetteKdyby\ValueObject\NetteEventToContributeEventClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -30,9 +30,9 @@ final class ListeningMethodsCollector
     public const EVENT_TYPE_CUSTOM = 'custom';
 
     /**
-     * @var array<string, ClassMethod>
+     * @var EventClassAndClassMethod[]
      */
-    private $classMethodsByEventClass = [];
+    private $eventClassesAndClassMethods = [];
 
     /**
      * @var CallableNodeTraverser
@@ -60,7 +60,7 @@ final class ListeningMethodsCollector
     }
 
     /**
-     * @return array<string, ClassMethod>
+     * @return EventClassAndClassMethod[]
      */
     public function collectFromClassAndGetSubscribedEventClassMethod(
         ClassMethod $getSubscribedEventsClassMethod,
@@ -70,7 +70,7 @@ final class ListeningMethodsCollector
         /** @var Class_ $classLike */
         $classLike = $getSubscribedEventsClassMethod->getAttribute(AttributeKey::CLASS_NODE);
 
-        $this->classMethodsByEventClass = [];
+        $this->eventClassesAndClassMethods = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable(
             (array) $getSubscribedEventsClassMethod->stmts,
@@ -93,34 +93,37 @@ final class ListeningMethodsCollector
                 if ($type === self::EVENT_TYPE_CONTRIBUTTE) {
                     /** @var string $eventClass */
                     $this->resolveContributeEventClassAndSubscribedClassMethod($eventClass, $classMethod);
-                    return;
-                }
-
-                [$classMethod,
-            $eventClass] = $this->resolveCustomClassMethodAndEventClass($node, $classLike, $eventClass);
-                if ($classMethod === null) {
                     return null;
                 }
 
-                if (! is_string($eventClass)) {
+                $eventClassAndClassMethod = $this->resolveCustomClassMethodAndEventClass(
+                    $node,
+                    $classLike,
+                    $eventClass
+                );
+
+                if ($eventClassAndClassMethod === null) {
                     return null;
                 }
 
-                if (isset($this->classMethodsByEventClass[$eventClass])) {
-                    throw new ShouldNotHappenException(sprintf('"%s" class already has its class method', $eventClass));
-                }
-
-                $this->classMethodsByEventClass[$eventClass] = $classMethod;
+                $this->eventClassesAndClassMethods[] = $eventClassAndClassMethod;
+                return null;
             }
         );
 
         if ($eventClassName) {
-            return isset($this->classMethodsByEventClass[$eventClassName]) ? [
-                $this->classMethodsByEventClass[$eventClassName],
-            ] : [];
+            foreach ($this->eventClassesAndClassMethods as $eventClassAndClassMethod) {
+                if ($eventClassAndClassMethod->getEventClass() !== $eventClassName) {
+                    continue;
+                }
+
+                return [$eventClassAndClassMethod];
+            }
+
+            return [];
         }
 
-        return $this->classMethodsByEventClass;
+        return $this->eventClassesAndClassMethods;
     }
 
     private function matchClassMethodByNodeValue(Class_ $class, Expr $expr): ?ClassMethod
@@ -143,14 +146,14 @@ final class ListeningMethodsCollector
             return;
         }
 
-        $this->classMethodsByEventClass[$eventClass] = $classMethod;
+        $this->eventClassesAndClassMethods[] = new EventClassAndClassMethod($eventClass, $classMethod);
     }
 
     private function resolveCustomClassMethodAndEventClass(
         ArrayItem $arrayItem,
         Class_ $class,
         string $eventClass
-    ): array {
+    ): ?EventClassAndClassMethod {
         // custom method name
         $classMethodName = $this->valueResolver->getValue($arrayItem->value);
         $classMethod = $class->getMethod($classMethodName);
@@ -163,6 +166,14 @@ final class ListeningMethodsCollector
             );
         }
 
-        return [$classMethod, $eventClass];
+        if ($eventClass === null) {
+            return null;
+        }
+
+        if ($classMethod === null) {
+            return null;
+        }
+
+        return new EventClassAndClassMethod($eventClass, $classMethod);
     }
 }

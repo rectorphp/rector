@@ -17,7 +17,6 @@ use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\AutoBindParameter\DependencyInjection\CompilerPass\AutoBindParameterCompilerPass;
@@ -76,7 +75,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
     }
 
     /**
-     * @return BundleInterface[]
+     * @return ConsoleColorDiffBundle[]|ParameterNameGuardBundle[]
      */
     public function registerBundles(): array
     {

@@ -6,6 +6,9 @@ namespace Rector\Naming\PhpArray;
 
 final class ArrayFilter
 {
+    /**
+     * @return int[]|string[]
+     */
     public function filterWithAtLeastTwoOccurences(array $values): array
     {
         $valueToCount = array_count_values($values);

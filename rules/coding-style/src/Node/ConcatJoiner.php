@@ -25,7 +25,7 @@ final class ConcatJoiner
      * Joins all String_ nodes to string.
      * Returns that string + array of non-string nodes that were replaced by hash placeholders
      *
-     * @return string[]|Expr[][]
+     * @return \PhpParser\Node\Expr[][]|string[][]
      */
     public function joinToStringAndPlaceholderNodes(Concat $concat): array
     {

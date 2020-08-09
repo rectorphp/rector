@@ -39,7 +39,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return int|Node|null
+     * @return null|int
      */
     public function enterNode(Node $node)
     {
@@ -60,7 +60,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return int|Node|Node[]|null
+     * @return Nop|Node
      */
     public function leaveNode(Node $node)
     {

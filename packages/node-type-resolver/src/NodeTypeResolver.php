@@ -36,7 +36,7 @@ use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 final class NodeTypeResolver
 {
     /**
-     * @var NodeTypeResolverInterface[]
+     * @var array<class-string, NodeTypeResolverInterface>
      */
     private $nodeTypeResolvers = [];
 
@@ -369,6 +369,8 @@ final class NodeTypeResolver
             if (! is_a($node, $nodeClass)) {
                 continue;
             }
+
+            dump(get_class($nodeTypeResolver));
 
             return $nodeTypeResolver->resolve($node);
         }

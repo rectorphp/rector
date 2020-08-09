@@ -26,6 +26,9 @@ final class AddParamTypeDeclarationRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return string[][][][][]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
@@ -68,7 +67,7 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
     }
 
     /**
-     * @return Node[][]|AssignAndRootExpr[]
+     * @return mixed[][]|AssignAndRootExpr[][]
      */
     protected function createStandaloneNodesToAddFromChainMethodCalls(MethodCall $methodCall, string $kind): array
     {

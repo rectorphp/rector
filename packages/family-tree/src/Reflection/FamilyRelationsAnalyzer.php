@@ -7,7 +7,7 @@ namespace Rector\FamilyTree\Reflection;
 final class FamilyRelationsAnalyzer
 {
     /**
-     * @return string[]
+     * @return class-string[]
      */
     public function getChildrenOfClass(string $parentClass): array
     {

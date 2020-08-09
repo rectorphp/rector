@@ -83,12 +83,12 @@ final class RectorsFinder
             $rectors[] = $rector;
         }
 
-        return $this->sortObjectsByShortClassName($rectors);
+        return $this->sortRectorObjectsByShortClassName($rectors);
     }
 
     /**
      * @param string[] $directories
-     * @return string[]
+     * @return array<string>
      */
     private function findClassesInDirectoriesByName(array $directories, string $name): array
     {
@@ -102,14 +102,19 @@ final class RectorsFinder
         $robotLoader->excludeDirectory(__DIR__ . '/../../../packages/rector-generator/tests');
         $robotLoader->rebuild();
 
-        return array_keys($robotLoader->getIndexedClasses());
+        $classNames = [];
+        foreach (array_keys($robotLoader->getIndexedClasses()) as $className) {
+            $classNames[] = (string) $className;
+        }
+
+        return $classNames;
     }
 
     /**
-     * @param object[] $objects
-     * @return object[]
+     * @param RectorInterface[] $objects
+     * @return RectorInterface[]
      */
-    private function sortObjectsByShortClassName(array $objects): array
+    private function sortRectorObjectsByShortClassName(array $objects): array
     {
         usort(
             $objects,

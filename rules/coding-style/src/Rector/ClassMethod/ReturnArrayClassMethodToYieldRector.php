@@ -202,8 +202,10 @@ PHP
     {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo !== null) {
-            $phpDocInfo->removeByType(ReturnTagValueNode::class);
+        if ($phpDocInfo === null) {
+            return;
         }
+
+        $phpDocInfo->removeByType(ReturnTagValueNode::class);
     }
 }

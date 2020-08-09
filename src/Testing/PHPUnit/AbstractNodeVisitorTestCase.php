@@ -41,6 +41,9 @@ abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase
      */
     abstract protected function traverseNodes(array $nodes): void;
 
+    /**
+     * @return mixed[]
+     */
     protected function parseFileToAttribute(string $file, string $relevantAttribute): array
     {
         $fileInfo = new SmartFileInfo($file);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 
+use Iterator;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
@@ -26,6 +27,9 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
         $this->doTestFileInfo($fileInfo);
     }
 
+    /**
+     * @return Iterator
+     */
     public function provideData(): iterable
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRoot');

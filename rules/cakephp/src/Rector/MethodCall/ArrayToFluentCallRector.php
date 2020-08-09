@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CakePHP\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
@@ -188,6 +189,7 @@ PHP
     /**
      * @param (ArrayItem|null)[] $originalArrayItems
      * @param string[] $arrayMap
+     * @return Expr[][]
      */
     private function extractFluentMethods(array $originalArrayItems, array $arrayMap): array
     {

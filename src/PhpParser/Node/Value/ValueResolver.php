@@ -200,7 +200,7 @@ final class ValueResolver
     }
 
     /**
-     * @return mixed
+     * @return string|mixed
      */
     private function resolveClassConstFetch(ClassConstFetch $classConstFetch)
     {

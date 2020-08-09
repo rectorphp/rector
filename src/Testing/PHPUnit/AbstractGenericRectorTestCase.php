@@ -170,7 +170,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     }
 
     /**
-     * @return array<string, mixed[]>
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {
@@ -179,7 +179,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     }
 
     /**
-     * @return mixed[]|null[]
+     * @return mixed[][]|null[]
      */
     protected function getCurrentTestRectorClassesWithConfiguration(): array
     {

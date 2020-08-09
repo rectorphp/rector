@@ -57,12 +57,18 @@ final class NodesToAddCollector implements NodeCollectorInterface
         $this->nodesToAddAfter[$position][] = $this->wrapToExpression($addedNode);
     }
 
+    /**
+     * @return \PhpParser\Node\Stmt[]
+     */
     public function getNodesToAddAfterNode(Node $node): array
     {
         $position = spl_object_hash($node);
         return $this->nodesToAddAfter[$position] ?? [];
     }
 
+    /**
+     * @return \PhpParser\Node\Stmt[]
+     */
     public function getNodesToAddBeforeNode(Node $node): array
     {
         $position = spl_object_hash($node);

@@ -60,6 +60,9 @@ PHP
         ]);
     }
 
+    /**
+     * @return string[]
+     */
     public function getNodeTypes(): array
     {
         return [ArrayItem::class];
@@ -137,7 +140,7 @@ PHP
     }
 
     /**
-     * @return Expr[]
+     * @return \PhpParser\Node\Scalar\String_[]|\PhpParser\Node\Expr[]|\PhpParser\Node\Expr\ClassConstFetch[]|FuncCall[]|MethodCall[]
      */
     private function transformRulesSetToExpressionsArray(Expr $expr): array
     {
