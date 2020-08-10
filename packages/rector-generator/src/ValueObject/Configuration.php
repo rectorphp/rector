@@ -19,6 +19,11 @@ final class Configuration
     private $package;
 
     /**
+     * @var bool
+     */
+    private $isRectorRepository;
+
+    /**
      * @var string
      */
     private $name;
@@ -95,7 +100,8 @@ final class Configuration
         array $ruleConfiguration,
         array $source,
         ?Set $set,
-        bool $isPhpSnippet
+        bool $isPhpSnippet,
+        bool $isRectorRepository
     ) {
         $this->package = $package;
         $this->setName($name);
@@ -110,6 +116,7 @@ final class Configuration
         $this->extraFileContent = $extraFileContent;
         $this->extraFileName = $extraFileName;
         $this->ruleConfiguration = $ruleConfiguration;
+        $this->isRectorRepository = $isRectorRepository;
     }
 
     public function getDescription(): string
@@ -119,11 +126,19 @@ final class Configuration
 
     public function getPackage(): string
     {
+        if ($this->isRectorRepository === false) {
+            return 'Utils';
+        }
+
         return $this->package;
     }
 
     public function getPackageDirectory(): string
     {
+        if ($this->isRectorRepository === false) {
+            return 'rector';
+        }
+
         // special cases
         if ($this->package === 'PHPUnit') {
             return 'phpunit';
@@ -200,6 +215,11 @@ final class Configuration
         return $this->ruleConfiguration;
     }
 
+    public function isRectorRepository(): bool
+    {
+        return $this->isRectorRepository;
+    }
+
     private function setName(string $name): void
     {
         if (! Strings::endsWith($name, 'Rector')) {
@@ -210,9 +230,6 @@ final class Configuration
         $this->name = $name;
     }
 
-    /**
-     * @param string[] $nodeTypes
-     */
     private function setNodeTypes(array $nodeTypes): void
     {
         foreach ($nodeTypes as $nodeType) {

@@ -50,7 +50,7 @@ parameters:
             'Hoa\Protocol\Node\Node': 'PhpParser\Node'
 
     # to allow installing with various phsptan versions without reporting old errors here
-#    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
 
     checkGenericClassInNonGenericObjectType: false
 
@@ -187,9 +187,6 @@ parameters:
         - '#Call to function is_string\(\) with float will always evaluate to false#'
 
         - '#Method Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetIdToUuidValueRector\:\:getSetUuidMethodCallOnSameVariable\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\|null#'
-
-        # bugs
-        - '#Parameter \#1 \$items of class PhpParser\\Node\\Expr\\Array_ constructor expects array<PhpParser\\Node\\Expr\\ArrayItem\>, array<PhpParser\\Node\\Expr\\ArrayItem\|null\> given#'
 
         # known value
         - '#Method Rector\\StrictCodeQuality\\Rector\\Stmt\\VarInlineAnnotationToAssertRector\:\:findVariableByName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'

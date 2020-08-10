@@ -55,7 +55,9 @@ final class ComposerPackageAutoloadUpdater
             return;
         }
 
-        $composerJson['autoload'][self::PSR_4][$package->getSrcNamespace()] = $package->getSrcDirectory();
+        $srcAutoload = $configuration->isRectorRepository() ? 'autoload' : 'autoload-dev';
+        $composerJson[$srcAutoload][self::PSR_4][$package->getSrcNamespace()] = $package->getSrcDirectory();
+
         $composerJson['autoload-dev'][self::PSR_4][$package->getTestsNamespace()] = $package->getTestsDirectory();
 
         $this->jsonFileSystem->saveJsonToFile($composerJsonFilePath, $composerJson);
@@ -65,7 +67,7 @@ final class ComposerPackageAutoloadUpdater
 
     private function resolvePackage(Configuration $configuration): Package
     {
-        if ($configuration->getPackage() === Package::UTILS) {
+        if ($configuration->isRectorRepository() === false) {
             return new Package(
                 'Utils\\Rector\\',
                 'Utils\\Rector\\Tests\\',
@@ -84,7 +86,13 @@ final class ComposerPackageAutoloadUpdater
 
     private function isPackageAlreadyLoaded(array $composerJson, Package $package): bool
     {
-        return isset($composerJson['autoload'][self::PSR_4][$package->getSrcNamespace()]);
+        foreach (['autoload', 'autoload-dev'] as $autoloadSection) {
+            if (isset($composerJson[$autoloadSection][self::PSR_4][$package->getSrcNamespace()])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function rebuildAutoload(): void

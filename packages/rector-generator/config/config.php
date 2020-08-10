@@ -30,6 +30,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FileSystemGuard::class);
 
     $parameters = $containerConfigurator->parameters();
-
     $parameters->set(Option::RECTOR_RECIPE, []);
 };

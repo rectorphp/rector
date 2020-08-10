@@ -32,7 +32,7 @@ final class ConfigurationFactory
     /**
      * @param mixed[] $rectorRecipe
      */
-    public function createFromRectorRecipe(array $rectorRecipe): Configuration
+    public function createFromRectorRecipe(array $rectorRecipe, bool $isRectorRepository): Configuration
     {
         $this->recipeGuard->ensureRecipeIsValid($rectorRecipe);
 
@@ -55,7 +55,8 @@ final class ConfigurationFactory
             (array) $rectorRecipe[RecipeOption::RULE_CONFIGURATION],
             array_filter((array) $rectorRecipe[RecipeOption::SOURCE]),
             $set,
-            $this->isPhpSnippet($rectorRecipe[RecipeOption::CODE_BEFORE])
+            $this->isPhpSnippet($rectorRecipe[RecipeOption::CODE_BEFORE]),
+            $isRectorRepository
         );
     }
 

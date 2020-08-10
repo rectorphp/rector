@@ -105,7 +105,9 @@ final class CreateCommand extends Command
     {
         $rectorRecipe = $this->parameterProvider->provideParameter(Option::RECTOR_RECIPE);
 
-        $configuration = $this->configurationFactory->createFromRectorRecipe($rectorRecipe);
+        $isRectorRepository = $this->isRectorRepository();
+        $configuration = $this->configurationFactory->createFromRectorRecipe($rectorRecipe, $isRectorRepository);
+
         $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
 
         // setup psr-4 autoload, if not already in
@@ -118,7 +120,7 @@ final class CreateCommand extends Command
         $isUnwantedOverride = $this->overrideGuard->isUnwantedOverride(
             $templateFileInfos,
             $templateVariables,
-            $configuration->getPackage(),
+            $configuration,
             $targetDirectory
         );
         if ($isUnwantedOverride) {
@@ -179,5 +181,10 @@ final class CreateCommand extends Command
         $message = sprintf('Make tests green again:%svendor/bin/phpunit %s', PHP_EOL . PHP_EOL, $testCaseFilePath);
 
         $this->symfonyStyle->success($message);
+    }
+
+    private function isRectorRepository(): bool
+    {
+        return file_exists(__DIR__ . '/../../../../vendor');
     }
 }
