@@ -36,10 +36,10 @@
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [NetteUtilsCodeQuality](#netteutilscodequality) (1)
-- [Order](#order) (7)
+- [Order](#order) (8)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
-- [PHPUnit](#phpunit) (37)
+- [PHPUnit](#phpunit) (36)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
 - [PSR4](#psr4) (3)
 - [Performance](#performance) (1)
@@ -7719,6 +7719,26 @@ Order class constant order by their integer value
      const MODE_OFF = 2;
 -
 -    const MODE_MAYBE = 1;
+ }
+```
+
+<br><br>
+
+### `OrderConstantsByVisibilityRector`
+
+- class: [`Rector\Order\Rector\ClassLike\OrderConstantsByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderConstantsByVisibilityRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderConstantsByVisibilityRector/Fixture)
+
+Orders constants by visibility
+
+```diff
+ final class SomeClass
+ {
++    public const PUBLIC_CONST = 'public';
++    protected const PROTECTED_CONST = 'protected';
+     private const PRIVATE_CONST = 'private';
+-    protected const PROTECTED_CONST = 'protected';
+-    public const PUBLIC_CONST = 'public';
  }
 ```
 
