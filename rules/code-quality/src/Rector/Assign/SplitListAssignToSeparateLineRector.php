@@ -106,7 +106,15 @@ PHP
     {
         $standaloneAssigns = [];
         foreach ($node->items as $key => $leftArrayItem) {
+            if ($leftArrayItem === null) {
+                continue;
+            }
+
             $rightArrayItem = $rightArray->items[$key];
+
+            if ($rightArrayItem === null) {
+                continue;
+            }
 
             $standaloneAssigns[] = new Assign($leftArrayItem->value, $rightArrayItem);
         }

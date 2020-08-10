@@ -103,6 +103,10 @@ PHP
     private function refactorOptionsArray(Array_ $optionsArray): void
     {
         foreach ($optionsArray->items as $arrayItem) {
+            if ($arrayItem === null) {
+                continue;
+            }
+
             if ($arrayItem->key === null) {
                 continue;
             }

@@ -122,6 +122,10 @@ PHP
     private function findAndRemoveCascadeValidationOption(MethodCall $methodCall, Array_ $optionsArrayNode): bool
     {
         foreach ($optionsArrayNode->items as $key => $arrayItem) {
+            if ($arrayItem === null) {
+                continue;
+            }
+
             if (! $this->arrayManipulator->hasKeyName($arrayItem, 'cascade_validation')) {
                 continue;
             }

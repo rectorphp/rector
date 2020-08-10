@@ -93,7 +93,7 @@ PHP
         }
 
         foreach ($optionsArray->items as $optionsArrayItem) {
-            if ($optionsArrayItem->key === null) {
+            if ($optionsArrayItem === null || $optionsArrayItem->key === null) {
                 continue;
             }
 

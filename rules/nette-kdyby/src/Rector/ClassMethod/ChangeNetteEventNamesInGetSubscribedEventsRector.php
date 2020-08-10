@@ -173,6 +173,10 @@ PHP
     private function refactorArrayWithEventTable(Array_ $array): void
     {
         foreach ($array->items as $arrayItem) {
+            if ($arrayItem === null) {
+                continue;
+            }
+
             if ($arrayItem->key !== null) {
                 continue;
             }

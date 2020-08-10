@@ -33,7 +33,11 @@ final class GetSubscribedEventsArrayManipulator
 
     public function change(Array_ $array): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($array->items, function (Node $node): ?Node {
+        $arrayItems = array_filter($array->items, function (ArrayItem $arrayItem): bool {
+            return $arrayItem !== null;
+        });
+
+        $this->callableNodeTraverser->traverseNodesWithCallable($arrayItems, function (Node $node): ?Node {
             if (! $node instanceof ArrayItem) {
                 return null;
             }

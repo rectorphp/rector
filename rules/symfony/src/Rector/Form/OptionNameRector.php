@@ -64,6 +64,10 @@ PHP
         }
 
         foreach ($optionsArray->items as $arrayItemNode) {
+            if ($arrayItemNode === null) {
+                continue;
+            }
+
             if (! $arrayItemNode->key instanceof String_) {
                 continue;
             }

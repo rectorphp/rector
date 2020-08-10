@@ -117,6 +117,10 @@ PHP
         }
 
         foreach ($return->expr->items as $arrayItem) {
+            if ($arrayItem === null) {
+                continue;
+            }
+
             $eventInfo = $this->matchStringKeys($arrayItem);
             if ($eventInfo === null) {
                 $eventInfo = $this->matchClassConstKeys($arrayItem);

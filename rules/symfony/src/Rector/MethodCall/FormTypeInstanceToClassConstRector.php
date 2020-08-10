@@ -162,6 +162,10 @@ PHP
         }
 
         foreach ($optionsArray->items as $arrayItem) {
+            if ($arrayItem === null) {
+                continue;
+            }
+
             if ($arrayItem->key === null) {
                 continue;
             }

@@ -82,6 +82,10 @@ PHP
             }
 
             foreach ($nestedArrayItem->items as $nestedArrayItemItem) {
+                if ($nestedArrayItemItem === null) {
+                    continue;
+                }
+
                 $array->items[] = new ArrayItem($nestedArrayItemItem->value, $nestedArrayItemItem->key);
             }
         }
