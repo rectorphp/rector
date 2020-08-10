@@ -93,6 +93,10 @@ PHP
         $parametersArrayNode = $node->args[1]->value;
 
         foreach ($parametersArrayNode->items as $arrayItem) {
+            if ($arrayItem === null) {
+                continue;
+            }
+
             if (! $arrayItem->key instanceof String_) {
                 continue;
             }

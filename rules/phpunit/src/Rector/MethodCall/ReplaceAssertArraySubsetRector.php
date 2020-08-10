@@ -144,6 +144,10 @@ PHP
     private function collectExpectedKeysAndValues(Array_ $expectedArray): void
     {
         foreach ($expectedArray->items as $arrayItem) {
+            if ($arrayItem === null) {
+                continue;
+            }
+
             if ($arrayItem->key === null) {
                 continue;
             }

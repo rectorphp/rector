@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Order;
 
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -21,6 +22,11 @@ final class StmtVisibilitySorter
      * @var string
      */
     private const POSITION = 'position';
+
+    /**
+     * @var string
+     */
+    private const NAME = 'name';
 
     /**
      * @var NodeNameResolver
@@ -46,7 +52,7 @@ final class StmtVisibilitySorter
             /** @var string $propertyName */
             $propertyName = $this->nodeNameResolver->getName($propertyStmt);
 
-            $properties[$propertyName]['name'] = $propertyName;
+            $properties[$propertyName][self::NAME] = $propertyName;
             $properties[$propertyName][self::VISIBILITY] = $this->getVisibilityLevelOrder($propertyStmt);
             $properties[$propertyName]['static'] = $propertyStmt->isStatic();
             $properties[$propertyName][self::POSITION] = $position;
@@ -80,7 +86,7 @@ final class StmtVisibilitySorter
             /** @var string $classMethodName */
             $classMethodName = $this->nodeNameResolver->getName($classStmt);
 
-            $classMethods[$classMethodName]['name'] = $classMethodName;
+            $classMethods[$classMethodName][self::NAME] = $classMethodName;
             $classMethods[$classMethodName][self::VISIBILITY] = $this->getVisibilityLevelOrder($classStmt);
             $classMethods[$classMethodName]['abstract'] = $classStmt->isAbstract();
             $classMethods[$classMethodName]['final'] = $classStmt->isFinal();
@@ -111,7 +117,39 @@ final class StmtVisibilitySorter
     }
 
     /**
-     * @param ClassMethod|Property $stmt
+     * @return array<string,array<string, mixed>>
+     */
+    public function sortConstants(ClassLike $classLike): array
+    {
+        $constants = [];
+        foreach ($classLike->stmts as $position => $constantStmt) {
+            if (! $constantStmt instanceof ClassConst) {
+                continue;
+            }
+
+            /** @var string $constantName */
+            $constantName = $this->nodeNameResolver->getName($constantStmt);
+
+            $constants[$constantName][self::NAME] = $constantName;
+            $constants[$constantName][self::VISIBILITY] = $this->getVisibilityLevelOrder($constantStmt);
+            $constants[$constantName][self::POSITION] = $position;
+        }
+
+        uasort(
+            $constants,
+            function (array $firstArray, array $secondArray): int {
+                return [
+                    $firstArray[self::VISIBILITY],
+                    $firstArray[self::POSITION],
+                ] <=> [$secondArray[self::VISIBILITY], $secondArray[self::POSITION]];
+            }
+        );
+
+        return $constants;
+    }
+
+    /**
+     * @param ClassMethod|Property|ClassConst $stmt
      */
     private function getVisibilityLevelOrder(Stmt $stmt): int
     {

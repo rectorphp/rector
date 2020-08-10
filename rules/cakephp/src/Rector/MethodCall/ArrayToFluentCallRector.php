@@ -186,7 +186,7 @@ PHP
     }
 
     /**
-     * @param ArrayItem[] $originalArrayItems
+     * @param (ArrayItem|null)[] $originalArrayItems
      * @param string[] $arrayMap
      */
     private function extractFluentMethods(array $originalArrayItems, array $arrayMap): array
@@ -195,6 +195,10 @@ PHP
         $fluentCalls = [];
 
         foreach ($originalArrayItems as $arrayItem) {
+            if ($arrayItem === null) {
+                continue;
+            }
+
             $key = $arrayItem->key;
 
             if ($key instanceof String_ && isset($arrayMap[$key->value])) {
