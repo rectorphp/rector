@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
+namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
+use Rector\Symfony\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ContainerBuilderCompileEnvArgumentRectorTest extends AbstractRectorTestCase

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Symfony\Rector\ConstFetch\ConstraintUrlOptionRector;
-use Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
+use Rector\Symfony\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
 use Rector\Symfony\Rector\MethodCall\FormIsValidRector;
 use Rector\Symfony\Rector\MethodCall\ProcessBuilderGetProcessRector;
 use Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
