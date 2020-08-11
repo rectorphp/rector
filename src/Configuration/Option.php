@@ -24,6 +24,11 @@ final class Option
     /**
      * @var string
      */
+    public const OPTION_STOP_ON_VIOLATION = 'stop-on-violation';
+
+    /**
+     * @var string
+     */
     public const OPTION_OUTPUT_FORMAT = 'output-format';
 
     /**

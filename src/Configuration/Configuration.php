@@ -24,6 +24,11 @@ final class Configuration
     /**
      * @var bool
      */
+    private $isStopOnViolation = false;
+
+    /**
+     * @var bool
+     */
     private $showProgressBar = true;
 
     /**
@@ -127,6 +132,7 @@ final class Configuration
     public function resolveFromInput(InputInterface $input): void
     {
         $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
+        $this->isStopOnViolation = (bool) $input->getOption(Option::OPTION_STOP_ON_VIOLATION);
         $this->shouldClearCache = (bool) $input->getOption(Option::OPTION_CLEAR_CACHE);
         $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
@@ -185,6 +191,11 @@ final class Configuration
     public function isDryRun(): bool
     {
         return $this->isDryRun;
+    }
+
+    public function isStopOnViolation(): bool
+    {
+        return $this->isStopOnViolation;
     }
 
     public function showProgressBar(): bool

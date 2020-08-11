@@ -263,6 +263,10 @@ final class ProcessCommand extends AbstractCommand
             return ShellCode::ERROR;
         }
 
+        if ($this->configuration->isStopOnViolation() && $this->errorAndDiffCollector->getFileDiffsCount()) {
+            return ShellCode::ERROR;
+        }
+
         return ShellCode::SUCCESS;
     }
 
