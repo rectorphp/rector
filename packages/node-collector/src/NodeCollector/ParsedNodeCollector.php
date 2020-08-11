@@ -23,6 +23,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * All parsed nodes grouped type
+ * @template TNodeType of \PhpParser\Node
+ * @see https://phpstan.org/blog/generics-in-php-using-phpdocs
  */
 final class ParsedNodeCollector
 {
@@ -57,7 +59,7 @@ final class ParsedNodeCollector
     private $constantsByType = [];
 
     /**
-     * @var Node[][]
+     * @var array<array<TNodeType>>
      */
     private $simpleParsedNodesByType = [];
 
@@ -82,9 +84,8 @@ final class ParsedNodeCollector
     }
 
     /**
-     * @template T of object
-     * @param class-string<T> $type
-     * @return array<T>
+     * @param class-string<TNodeType> $type
+     * @return array<TNodeType>
      */
     public function getNodesByType(string $type): array
     {
@@ -197,7 +198,6 @@ final class ParsedNodeCollector
     {
         $newNodesByClass = [];
 
-        /** @var New_[] $news */
         $news = $this->getNodesByType(New_::class);
 
         foreach ($news as $new) {
