@@ -370,8 +370,6 @@ final class NodeTypeResolver
                 continue;
             }
 
-            dump(get_class($nodeTypeResolver));
-
             return $nodeTypeResolver->resolve($node);
         }
 

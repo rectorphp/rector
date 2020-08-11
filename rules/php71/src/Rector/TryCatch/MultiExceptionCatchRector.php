@@ -89,7 +89,7 @@ PHP
     }
 
     /**
-     * @return array<string, string[]>
+     * @return array<string, int[]>
      */
     private function collectCatchKeysByContent(TryCatch $tryCatch): array
     {

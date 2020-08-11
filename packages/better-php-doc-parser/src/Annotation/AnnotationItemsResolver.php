@@ -21,7 +21,7 @@ final class AnnotationItemsResolver
 
     /**
      * @param object|Annotation|mixed[] $annotationOrItems
-     * @return mixed[]|mixed
+     * @return mixed[]
      */
     public function resolve($annotationOrItems): array
     {

@@ -361,7 +361,6 @@ parameters:
         - '#Call to an undefined method PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier\:\:toString\(\)#'
         - '#Class Rector\\Renaming\\Tests\\Rector\\MethodCall\\RenameMethodRector\\Fixture\\SkipSelfMethodRename not found#'
 
-
         # fixed in symplfiy dev
         -
             message: '#Separate function "Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ref\(\)" in method call to standalone row to improve readability#'
@@ -391,3 +390,5 @@ parameters:
 
         # false positive
         - '#Empty array passed to foreach#'
+        - '#Parameter \#1 \$arrayItem of method Rector\\NetteKdyby\\NodeResolver\\ListeningMethodsCollector\:\:resolveCustomClassMethodAndEventClass\(\) expects PhpParser\\Node\\Expr\\ArrayItem, PhpParser\\Node given#'
+        - '#Method Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector\:\:resolvePropertiesToComplete\(\) should return array<int, PhpParser\\Node\\Stmt\\Property\> but returns array<int, \(int\|string\)\>#'

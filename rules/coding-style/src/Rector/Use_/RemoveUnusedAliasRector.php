@@ -35,7 +35,7 @@ final class RemoveUnusedAliasRector extends AbstractRector
     private $resolvedNodeNames = [];
 
     /**
-     * @var string[][]
+     * @var array<string, string[]>
      */
     private $useNamesAliasToName = [];
 

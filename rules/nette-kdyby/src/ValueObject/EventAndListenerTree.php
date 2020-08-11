@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NetteKdyby\ValueObject;
 
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;

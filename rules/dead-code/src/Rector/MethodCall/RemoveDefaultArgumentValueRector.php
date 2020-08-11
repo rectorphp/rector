@@ -168,7 +168,7 @@ PHP
     /**
      * @param StaticCall|MethodCall|FuncCall $node
      * @param Expr[]|mixed[] $defaultValues
-     * @return mixed[]|int[]&mixed[]
+     * @return int[]
      */
     private function resolveKeysToRemove(Node $node, array $defaultValues): array
     {
@@ -197,6 +197,7 @@ PHP
             return [];
         }
 
+        /** @var int[] $keysToRemove */
         return $keysToRemove;
     }
 

@@ -27,7 +27,7 @@ final class UseNameAliasToNameResolver
     }
 
     /**
-     * @return array<int, string[]>
+     * @return array<string, string[]>
      */
     public function resolve(Use_ $use): array
     {

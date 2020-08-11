@@ -88,10 +88,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         return null;
     }
 
-    /**
-     * @return \PhpParser\Node
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?Node
     {
         $this->processClass($node);
         $this->processMethod($node);

@@ -60,7 +60,7 @@ final class UseAddingPostRector extends AbstractPostRector
 
     /**
      * @param Stmt[] $nodes
-     * @return mixed[]|\PhpParser\Node\Stmt[]&mixed[]|\PhpParser\Node\Stmt[]
+     * @return Stmt[]
      */
     public function beforeTraverse(array $nodes): array
     {

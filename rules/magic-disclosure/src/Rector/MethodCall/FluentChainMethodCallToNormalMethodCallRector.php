@@ -73,20 +73,13 @@ PHP
             return null;
         }
 
-        $result = $this->createStandaloneNodesToAddFromChainMethodCalls($methodCall, 'normal');
-        if ($result === []) {
-            return null;
-        }
-
-        [$nodesToAdd, ] = $result;
-        if ($nodesToAdd === []) {
+        $assignAndRootExprAndNodesToAdd = $this->createStandaloneNodesToAddFromChainMethodCalls($methodCall, 'normal');
+        if ($assignAndRootExprAndNodesToAdd === null) {
             return null;
         }
 
         $this->removeCurrentNode($node);
-
-        /** @var Node[] $nodesToAdd */
-        $this->addNodesAfterNode($nodesToAdd, $node);
+        $this->addNodesAfterNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
 
         return null;
     }

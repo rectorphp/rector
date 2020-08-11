@@ -141,7 +141,7 @@ final class ParsedFunctionLikeNodeCollector
     }
 
     /**
-     * @return \PhpParser\Node\Expr\MethodCall[]|\PhpParser\Node\Expr\StaticCall[]|\Rector\NodeCollector\ValueObject\ArrayCallable[]
+     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
      */
     public function findByClassAndMethod(string $className, string $methodName): array
     {

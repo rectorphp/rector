@@ -58,7 +58,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
     }
 
     /**
-     * @return \PhpParser\Node\Stmt[]
+     * @return Stmt[]
      */
     public function getNodesToAddAfterNode(Node $node): array
     {
@@ -67,7 +67,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
     }
 
     /**
-     * @return \PhpParser\Node\Stmt[]
+     * @return Stmt[]
      */
     public function getNodesToAddBeforeNode(Node $node): array
     {

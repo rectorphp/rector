@@ -64,8 +64,7 @@ final class ListeningMethodsCollector
      */
     public function collectFromClassAndGetSubscribedEventClassMethod(
         ClassMethod $getSubscribedEventsClassMethod,
-        string $type,
-        ?string $eventClassName = null
+        string $type
     ): array {
         /** @var Class_ $classLike */
         $classLike = $getSubscribedEventsClassMethod->getAttribute(AttributeKey::CLASS_NODE);
@@ -75,15 +74,7 @@ final class ListeningMethodsCollector
         $this->callableNodeTraverser->traverseNodesWithCallable(
             (array) $getSubscribedEventsClassMethod->stmts,
             function (Node $node) use ($classLike, $type) {
-                if (! $node instanceof ArrayItem) {
-                    return null;
-                }
-
-                if ($node->key === null) {
-                    return null;
-                }
-
-                $classMethod = $this->matchClassMethodByNodeValue($classLike, $node->value);
+                $classMethod = $this->matchClassMethodByArrayItem($node, $classLike);
                 if ($classMethod === null) {
                     return null;
                 }
@@ -96,6 +87,7 @@ final class ListeningMethodsCollector
                     return null;
                 }
 
+                /** @var ArrayItem $node */
                 $eventClassAndClassMethod = $this->resolveCustomClassMethodAndEventClass(
                     $node,
                     $classLike,
@@ -111,19 +103,32 @@ final class ListeningMethodsCollector
             }
         );
 
-        if ($eventClassName) {
-            foreach ($this->eventClassesAndClassMethods as $eventClassAndClassMethod) {
-                if ($eventClassAndClassMethod->getEventClass() !== $eventClassName) {
-                    continue;
-                }
+        return $this->eventClassesAndClassMethods;
+    }
 
-                return [$eventClassAndClassMethod];
+    /**
+     * @return ClassMethod[]
+     */
+    public function classMethodsListeningToEventClass(
+        ClassMethod $getSubscribedEventsClassMethod,
+        string $type,
+        string $eventClassName
+    ): array {
+        $eventClassesAndClassMethods = $this->collectFromClassAndGetSubscribedEventClassMethod(
+            $getSubscribedEventsClassMethod,
+            $type
+        );
+
+        $classMethods = [];
+        foreach ($eventClassesAndClassMethods as $eventClassAndClassMethod) {
+            if ($eventClassAndClassMethod->getEventClass() !== $eventClassName) {
+                continue;
             }
 
-            return [];
+            $classMethods[] = $eventClassAndClassMethod->getClassMethod();
         }
 
-        return $this->eventClassesAndClassMethods;
+        return $classMethods;
     }
 
     private function matchClassMethodByNodeValue(Class_ $class, Expr $expr): ?ClassMethod
@@ -175,5 +180,18 @@ final class ListeningMethodsCollector
         }
 
         return new EventClassAndClassMethod($eventClass, $classMethod);
+    }
+
+    private function matchClassMethodByArrayItem(Node $node, Class_ $classLike): ?ClassMethod
+    {
+        if (! $node instanceof ArrayItem) {
+            return null;
+        }
+
+        if ($node->key === null) {
+            return null;
+        }
+
+        return $this->matchClassMethodByNodeValue($classLike, $node->value);
     }
 }

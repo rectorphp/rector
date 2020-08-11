@@ -64,7 +64,7 @@ PHP
     }
 
     /**
-     * @return mixed[]|null
+     * @return mixed[]
      */
     public function getExistingClasses(String_ $string): array
     {

@@ -62,7 +62,7 @@ final class UnusedClassResolver
     }
 
     /**
-     * @return string[]&mixed[]|string[]
+     * @return string[]
      */
     private function getUsedClassNames(): array
     {
@@ -79,7 +79,10 @@ final class UnusedClassResolver
 
         $cachedUsedClassNames = $this->sortAndUniqueArray($cachedUsedClassNames);
 
-        return $this->cachedUsedClassNames = $cachedUsedClassNames;
+        /** @var string[] $cachedUsedClassNames */
+        $this->cachedUsedClassNames = $cachedUsedClassNames;
+
+        return $this->cachedUsedClassNames;
     }
 
     /**

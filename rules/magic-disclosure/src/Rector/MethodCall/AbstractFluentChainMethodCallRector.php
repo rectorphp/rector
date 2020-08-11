@@ -12,6 +12,7 @@ use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
+use Rector\MagicDisclosure\ValueObject\AssignAndRootExprAndNodesToAdd;
 
 abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
 {
@@ -66,11 +67,10 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
         return ! $this->isMatchedType($calleeUniqueType);
     }
 
-    /**
-     * @return mixed[][]|AssignAndRootExpr[][]
-     */
-    protected function createStandaloneNodesToAddFromChainMethodCalls(MethodCall $methodCall, string $kind): array
-    {
+    protected function createStandaloneNodesToAddFromChainMethodCalls(
+        MethodCall $methodCall,
+        string $kind
+    ): ?AssignAndRootExprAndNodesToAdd {
         $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
         $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls(
             $chainMethodCalls,
@@ -78,11 +78,11 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
         );
 
         if ($assignAndRootExpr === null) {
-            return [];
+            return null;
         }
 
         if ($this->shouldSkipChainMethodCalls($assignAndRootExpr, $chainMethodCalls)) {
-            return [];
+            return null;
         }
 
         $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromAssignObjectAndMethodCalls(
@@ -91,7 +91,7 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
             $kind
         );
 
-        return [$nodesToAdd, $assignAndRootExpr];
+        return new AssignAndRootExprAndNodesToAdd($assignAndRootExpr, $nodesToAdd);
     }
 
     private function isKnownAllowedFluentType(string $class): bool

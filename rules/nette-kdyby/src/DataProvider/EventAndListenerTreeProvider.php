@@ -172,13 +172,13 @@ final class EventAndListenerTreeProvider
             /** @var string $className */
             $className = $getSubscribedClassMethod->getAttribute(AttributeKey::CLASS_NAME);
 
-            $currentListeningClassMethods = $this->listeningMethodsCollector->collectFromClassAndGetSubscribedEventClassMethod(
+            $listeningClassMethods = $this->listeningMethodsCollector->classMethodsListeningToEventClass(
                 $getSubscribedClassMethod,
                 ListeningMethodsCollector::EVENT_TYPE_CUSTOM,
                 $eventClassName
             );
 
-            $listeningClassMethodsByClass[$className] = $currentListeningClassMethods;
+            $listeningClassMethodsByClass[$className] = $listeningClassMethods;
         }
 
         return $listeningClassMethodsByClass;

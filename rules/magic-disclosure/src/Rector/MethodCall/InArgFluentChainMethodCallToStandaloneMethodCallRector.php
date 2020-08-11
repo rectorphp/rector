@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MagicDisclosure\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
-use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -110,18 +109,13 @@ PHP
             return null;
         }
 
-        $result = $this->createStandaloneNodesToAddFromChainMethodCalls($node, 'in_args');
-        if ($result === []) {
+        $assignAndRootExprAndNodesToAdd = $this->createStandaloneNodesToAddFromChainMethodCalls($node, 'in_args');
+        if ($assignAndRootExprAndNodesToAdd === null) {
             return null;
         }
 
-        [$nodesToAdd, $assignAndRootExpr] = $result;
-
-        /** @var Node[] $nodesToAdd */
-        $this->addNodesBeforeNode($nodesToAdd, $node);
-
-        /** @var AssignAndRootExpr $assignAndRootExpr */
-        return $assignAndRootExpr->getCallerExpr();
+        $this->addNodesBeforeNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
+        return $assignAndRootExprAndNodesToAdd->getRootCallerExpr();
     }
 
     private function refactorNew(MethodCall $methodCall, New_ $new): void

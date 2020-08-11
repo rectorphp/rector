@@ -20,10 +20,7 @@ final class PhpDocInfoNodeVisitor extends NodeVisitorAbstract
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
-    /**
-     * @return Node
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?Node
     {
         // also binds to the node
         $this->phpDocInfoFactory->createFromNode($node);
