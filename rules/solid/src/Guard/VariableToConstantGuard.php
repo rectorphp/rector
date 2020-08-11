@@ -56,6 +56,9 @@ final class VariableToConstantGuard
         return ! in_array($argumentPosition, $referenceParametersPositions, true);
     }
 
+    /**
+     * @return int[]
+     */
     private function resolveFunctionReferencePositions(string $functionName): array
     {
         if (isset($this->referencePositionsByFunctionName[$functionName])) {

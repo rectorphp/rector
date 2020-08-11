@@ -98,7 +98,6 @@ PHP
             if ($this->shouldSkipParam($param)) {
                 return null;
             }
-
             $type = $this->paramTypeInferer->inferParam($param);
             if ($type instanceof MixedType) {
                 return null;
@@ -125,11 +124,14 @@ PHP
 
         // not an array type
         $paramStaticType = $this->getStaticType($param);
+        if ($paramStaticType instanceof MixedType) {
+            return false;
+        }
+
         if (! $paramStaticType instanceof ArrayType) {
             return true;
         }
 
-        // is unknown type?
         if (! $paramStaticType->getIterableValueType() instanceof MixedType) {
             return true;
         }

@@ -200,10 +200,14 @@ final class EregToPcreTransformer
         return $i;
     }
 
+    /**
+     * @return mixed[]
+     */
     private function processSquareBracket(string $s, int $i, int $l, string $cls, bool $start): array
     {
         do {
             if ($s[$i] === '[' && $i + 1 < $l && Strings::contains('.=:', $s[$i + 1])) {
+                /** @var string $cls */
                 [$cls, $i] = $this->processCharacterClass($s, $i, $cls);
             } else {
                 $a = $s[$i++];
@@ -276,6 +280,9 @@ final class EregToPcreTransformer
         return $ii + 1;
     }
 
+    /**
+     * @return int[]|string[]
+     */
     private function processCharacterClass(string $content, int $i, string $cls): array
     {
         $offset = (int) $i;

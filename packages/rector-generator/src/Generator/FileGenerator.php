@@ -53,7 +53,7 @@ final class FileGenerator
             $generatedFilePaths[] = $this->generateFileInfoWithTemplateVariables(
                 $fileInfo,
                 $templateVariables,
-                $configuration->getPackage(),
+                $configuration,
                 $destinationDirectory
             );
         }
@@ -64,13 +64,13 @@ final class FileGenerator
     private function generateFileInfoWithTemplateVariables(
         SmartFileInfo $smartFileInfo,
         array $templateVariables,
-        string $package,
+        Configuration $configuration,
         string $targetDirectory
     ): string {
         $targetFilePath = $this->templateFileSystem->resolveDestination(
             $smartFileInfo,
             $templateVariables,
-            $package,
+            $configuration,
             $targetDirectory
         );
 

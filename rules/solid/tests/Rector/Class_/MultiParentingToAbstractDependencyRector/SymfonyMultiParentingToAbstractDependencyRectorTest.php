@@ -24,6 +24,9 @@ final class SymfonyMultiParentingToAbstractDependencyRectorTest extends Abstract
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureSymfony');
     }
 
+    /**
+     * @return string[][]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

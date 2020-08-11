@@ -181,7 +181,7 @@ final class ClassManipulator
 
     /**
      * @param Class_|Interface_ $classLike
-     * @return string[]
+     * @return mixed[]|mixed
      */
     public function getClassLikeNodeParentInterfaceNames(ClassLike $classLike)
     {

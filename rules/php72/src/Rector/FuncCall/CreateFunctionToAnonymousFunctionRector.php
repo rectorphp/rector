@@ -126,7 +126,7 @@ PHP
 
     /**
      * @param String_|Expr $node
-     * @return Stmt[]
+     * @return Stmt[]|Expression[]
      */
     private function parseStringToBody(Node $node): array
     {
@@ -136,7 +136,6 @@ PHP
         }
 
         $node = $this->inlineCodeParser->stringify($node);
-
         return $this->inlineCodeParser->parse($node);
     }
 

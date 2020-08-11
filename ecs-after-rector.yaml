@@ -1,3 +1,0 @@
-# for back compatibility
-imports:
-    - { resource: 'ecs-after-rector.php' }

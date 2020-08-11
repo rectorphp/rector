@@ -153,7 +153,7 @@ final class PhpDocInfo
     }
 
     /**
-     * @return PhpDocTagNode[]
+     * @return PhpDocTagNode[]|AttributeAwareNodeInterface[]
      */
     public function getTagsByName(string $name): array
     {

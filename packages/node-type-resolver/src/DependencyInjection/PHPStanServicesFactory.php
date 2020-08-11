@@ -155,6 +155,9 @@ final class PHPStanServicesFactory
         return $this->container->getByType(TypeNodeResolver::class);
     }
 
+    /**
+     * @return mixed[]
+     */
     private function appendPhpstanPHPUnitExtensionIfExists(
         string $currentWorkingDirectory,
         array $additionalConfigFiles

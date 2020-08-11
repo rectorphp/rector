@@ -35,7 +35,7 @@ final class TolerantRectorYamlFileLoader extends AbstractParameterMergingYamlFil
 
     /**
      * @param string $file
-     * @return mixed|mixed[]
+     * @return mixed[]
      */
     protected function loadFile($file)
     {

@@ -144,6 +144,10 @@ PHP
             }
 
             $class = $this->getName($node->class);
+            if ($class === null) {
+                return null;
+            }
+
             if (! in_array($class, $classesUsingTypes, true)) {
                 return null;
             }

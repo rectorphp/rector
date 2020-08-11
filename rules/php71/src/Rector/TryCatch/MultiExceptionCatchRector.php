@@ -76,6 +76,7 @@ PHP
             }
 
             $collectedTypes = $this->collectTypesFromCatchedByIds($node, $keys);
+
             $firstTryKey = array_shift($keys);
             $node->catches[$firstTryKey]->types = $collectedTypes;
 
@@ -88,7 +89,7 @@ PHP
     }
 
     /**
-     * @return int[][]
+     * @return array<string, int[]>
      */
     private function collectCatchKeysByContent(TryCatch $tryCatch): array
     {

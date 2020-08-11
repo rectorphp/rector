@@ -20,6 +20,9 @@ final class PhpDocTagsFinder
      */
     private const TAG_REGEX = '#%s[ a-zA-Z0-9_\|\\\t]+#';
 
+    /**
+     * @return mixed[]
+     */
     public function extractTagsFromStringedDocblock(string $dockblock, string $tagName): array
     {
         $tagName = '@' . ltrim($tagName, '@');

@@ -60,6 +60,9 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
         return $this->printItemsToAttributeString($this->createAttributeItems());
     }
 
+    /**
+     * @return mixed[]
+     */
     private function createAttributeItems(): array
     {
         $items = $this->items;

@@ -10,7 +10,7 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class PSR4AutoloadPathsProvider
 {
     /**
-     * @var string[]
+     * @var array<string, string[]>
      */
     private $cachedComposerJsonPSR4AutoloadPaths = [];
 
@@ -25,7 +25,7 @@ final class PSR4AutoloadPathsProvider
     }
 
     /**
-     * @return string[]|string[][]
+     * @return array<string, string[]>
      */
     public function provide(): array
     {
@@ -61,8 +61,8 @@ final class PSR4AutoloadPathsProvider
     }
 
     /**
-     * @param string[] $psr4Autoloads
-     * @return string[]
+     * @param array<string, string[]> $psr4Autoloads
+     * @return array<string, string[]>
      */
     private function removeEmptyNamespaces(array $psr4Autoloads): array
     {

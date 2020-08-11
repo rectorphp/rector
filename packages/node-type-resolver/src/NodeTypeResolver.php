@@ -36,7 +36,7 @@ use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 final class NodeTypeResolver
 {
     /**
-     * @var NodeTypeResolverInterface[]
+     * @var array<class-string, NodeTypeResolverInterface>
      */
     private $nodeTypeResolvers = [];
 

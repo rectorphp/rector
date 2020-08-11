@@ -60,6 +60,9 @@ final class ClassChildAnalyzer
         return false;
     }
 
+    /**
+     * @return class-string[]
+     */
     private function getChildClasses(Class_ $class): array
     {
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);

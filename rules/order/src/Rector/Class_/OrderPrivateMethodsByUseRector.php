@@ -130,7 +130,7 @@ PHP
     }
 
     /**
-     * @return array<int,array<int,string>>
+     * @return array<int, array<int, string>>
      */
     private function getPrivateMethodCallOrderAndClassMethods(Class_ $class): array
     {
@@ -177,7 +177,7 @@ PHP
     }
 
     /**
-     * @return array<int,string>
+     * @return array<int, string>
      */
     private function resolvePrivateClassMethods(Class_ $class): array
     {

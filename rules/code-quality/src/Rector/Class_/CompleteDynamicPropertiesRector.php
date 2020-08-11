@@ -113,6 +113,7 @@ PHP
         // remove other properties that are accessible from this scope
         /** @var string $class */
         $class = $this->getName($node);
+
         foreach ($propertiesToComplete as $key => $propertyToComplete) {
             /** @var string $propertyToComplete */
             if (! property_exists($class, $propertyToComplete)) {
@@ -130,44 +131,11 @@ PHP
     }
 
     /**
-     * @return Type[]
+     * @return array<string, Type>
      */
     private function resolveFetchedLocalPropertyNameToType(Class_ $class): array
     {
-        $fetchedLocalPropertyNameToTypes = [];
-
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
-            &$fetchedLocalPropertyNameToTypes
-        ): ?int {
-            // skip anonymous class scope
-            if ($this->isAnonymousClass($node)) {
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-            }
-
-            if (! $node instanceof PropertyFetch) {
-                return null;
-            }
-
-            if (! $this->isVariableName($node->var, 'this')) {
-                return null;
-            }
-
-            // special Laravel collection scope
-            if ($this->shouldSkipForLaravelCollection($node)) {
-                return null;
-            }
-
-            $propertyName = $this->getName($node->name);
-            if ($propertyName === null) {
-                return null;
-            }
-
-            $propertyFetchType = $this->resolvePropertyFetchType($node);
-
-            $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
-
-            return null;
-        });
+        $fetchedLocalPropertyNameToTypes = $this->resolveFetchedLocalPropertyNamesToTypes($class);
 
         // normalize types to union
         $fetchedLocalPropertyNameToType = [];
@@ -179,13 +147,14 @@ PHP
     }
 
     /**
-     * @param Type[] $fetchedLocalPropertyNameToTypes
-     * @return string[]
+     * @param array<string, Type> $fetchedLocalPropertyNameToTypes
+     * @return array<int, string>
      */
     private function resolvePropertiesToComplete(Class_ $class, array $fetchedLocalPropertyNameToTypes): array
     {
         $propertyNames = $this->getClassPropertyNames($class);
 
+        /** @var string[] $fetchedLocalPropertyNames */
         $fetchedLocalPropertyNames = array_keys($fetchedLocalPropertyNameToTypes);
 
         return array_diff($fetchedLocalPropertyNames, $propertyNames);
@@ -228,6 +197,63 @@ PHP
         return $newProperties;
     }
 
+    /**
+     * @return array<string, Type[]>
+     */
+    private function resolveFetchedLocalPropertyNamesToTypes(Class_ $class): array
+    {
+        $fetchedLocalPropertyNameToTypes = [];
+
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
+            &$fetchedLocalPropertyNameToTypes
+        ): ?int {
+            // skip anonymous class scope
+            if ($this->isAnonymousClass($node)) {
+                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+            }
+
+            if (! $node instanceof PropertyFetch) {
+                return null;
+            }
+
+            if (! $this->isVariableName($node->var, 'this')) {
+                return null;
+            }
+
+            // special Laravel collection scope
+            if ($this->shouldSkipForLaravelCollection($node)) {
+                return null;
+            }
+
+            $propertyName = $this->getName($node->name);
+            if ($propertyName === null) {
+                return null;
+            }
+
+            $propertyFetchType = $this->resolvePropertyFetchType($node);
+
+            $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
+
+            return null;
+        });
+
+        return $fetchedLocalPropertyNameToTypes;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getClassPropertyNames(Class_ $class): array
+    {
+        $propertyNames = [];
+
+        foreach ($class->getProperties() as $property) {
+            $propertyNames[] = $this->getName($property);
+        }
+
+        return $propertyNames;
+    }
+
     private function shouldSkipForLaravelCollection(Node $node): bool
     {
         $staticCallOrClassMethod = $this->betterNodeFinder->findFirstAncestorInstancesOf(
@@ -252,19 +278,5 @@ PHP
         }
 
         return new MixedType();
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClassPropertyNames(Class_ $class): array
-    {
-        $propertyNames = [];
-
-        foreach ($class->getProperties() as $property) {
-            $propertyNames[] = $this->getName($property);
-        }
-
-        return $propertyNames;
     }
 }

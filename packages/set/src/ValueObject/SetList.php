@@ -705,11 +705,4 @@ final class SetList
      * @var string
      */
     public const UNWRAP_COMPAT = __DIR__ . '/../../../../config/set/unwrap-compat.php';
-
-    /**
-     * @experimental
-     * @api
-     * @var string
-     */
-    public const REPOSITORY_AS_SERVICE = __DIR__ . '/../../../../config/set/repository-as-service.php';
 }

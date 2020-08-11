@@ -50,7 +50,7 @@ final class EnabledRectorsProvider
     }
 
     /**
-     * @return string[][]
+     * @return mixed[][]
      */
     public function getEnabledRectors(): array
     {
@@ -72,6 +72,9 @@ final class EnabledRectorsProvider
         return false;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getRectorConfiguration(RectorInterface $rector): array
     {
         foreach ($this->enabledRectorsWithConfiguration as $rectorClass => $configuration) {

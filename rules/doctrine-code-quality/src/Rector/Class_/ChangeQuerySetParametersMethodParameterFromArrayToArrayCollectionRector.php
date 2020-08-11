@@ -25,6 +25,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector extends AbstractRector
 {
+    /**
+     * @return string[]
+     */
     public function getNodeTypes(): array
     {
         return [MethodCall::class];

@@ -141,22 +141,27 @@ PHP
 
     private function processPreviousAssign(Node $node, Node $firstArgument): void
     {
-        /** @var Assign|null $previousNodeAssign */
         $previousNodeAssign = $this->findPreviousNodeAssign($node, $firstArgument);
+        if ($previousNodeAssign === null) {
+            return;
+        }
 
-        if ($previousNodeAssign instanceof Assign && $this->isFuncCallName($previousNodeAssign->expr, 'sprintf')) {
-            /** @var FuncCall $funcCall */
-            $funcCall = $previousNodeAssign->expr;
-            $arrayNode = $this->nodeTransformer->transformSprintfToArray($funcCall);
-            if ($arrayNode !== null) {
-                $previousNodeAssign->expr = $arrayNode;
-            }
+        if (! $this->isFuncCallName($previousNodeAssign->expr, 'sprintf')) {
+            return;
+        }
+
+        /** @var FuncCall $funcCall */
+        $funcCall = $previousNodeAssign->expr;
+        $arrayNode = $this->nodeTransformer->transformSprintfToArray($funcCall);
+        if ($arrayNode !== null) {
+            $previousNodeAssign->expr = $arrayNode;
         }
     }
 
     private function findPreviousNodeAssign(Node $node, Node $firstArgument): ?Assign
     {
-        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use (
+        /** @var Assign|null $assign */
+        $assign = $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use (
             $firstArgument
         ): ?Assign {
             if (! $checkedNode instanceof Assign) {
@@ -169,5 +174,7 @@ PHP
 
             return $checkedNode;
         });
+
+        return $assign;
     }
 }

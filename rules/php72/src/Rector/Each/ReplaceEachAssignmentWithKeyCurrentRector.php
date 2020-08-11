@@ -99,7 +99,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Node[]
+     * @return \PhpParser\Node\Expr\Assign[]|\PhpParser\Node\Expr\FuncCall[]
      */
     private function createNewNodes(Expr $assignVariable, Expr $eachedVariable): array
     {

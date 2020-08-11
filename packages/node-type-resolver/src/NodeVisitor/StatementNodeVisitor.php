@@ -7,7 +7,6 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class StatementNodeVisitor extends NodeVisitorAbstract
@@ -28,16 +27,12 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
         return null;
     }
 
-    /**
-     * @return int|Node|void|null
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?Node
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent === null) {
             if (! $node instanceof Stmt) {
                 return null;
-//                throw new ShouldNotHappenException('Only statement can appear at top level');
             }
 
             $node->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $this->previousStmt);
@@ -45,7 +40,7 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
             $this->previousStmt = $node;
         }
 
-        if (isset($node->stmts)) {
+        if (property_exists($node, 'stmts')) {
             $previous = $node;
             foreach ((array) $node->stmts as $stmt) {
                 $stmt->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $previous);
@@ -53,15 +48,21 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
                 $previous = $stmt;
             }
         }
-        if ($parent && ! $node->getAttribute(AttributeKey::CURRENT_STATEMENT)) {
+
+        $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+
+        if ($parent && ! $currentStmt) {
             $node->setAttribute(
                 AttributeKey::PREVIOUS_STATEMENT,
                 $parent->getAttribute(AttributeKey::PREVIOUS_STATEMENT)
             );
+
             $node->setAttribute(
                 AttributeKey::CURRENT_STATEMENT,
                 $parent->getAttribute(AttributeKey::CURRENT_STATEMENT)
             );
         }
+
+        return null;
     }
 }

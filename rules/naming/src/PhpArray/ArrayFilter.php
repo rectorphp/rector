@@ -6,6 +6,9 @@ namespace Rector\Naming\PhpArray;
 
 final class ArrayFilter
 {
+    /**
+     * @return string[]
+     */
     public function filterWithAtLeastTwoOccurences(array $values): array
     {
         $valueToCount = array_count_values($values);
@@ -16,6 +19,7 @@ final class ArrayFilter
                 continue;
             }
 
+            /** @var string $value */
             $duplicatedValues[] = $value;
         }
 

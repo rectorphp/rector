@@ -12,6 +12,9 @@ use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
  */
 trait PrintTagValueNodeTrait
 {
+    /**
+     * @return mixed[]
+     */
     protected function makeKeysExplicit(array $items): array
     {
         foreach ($items as $key => $contentItem) {
@@ -32,6 +35,7 @@ trait PrintTagValueNodeTrait
 
     /**
      * @param string[] $skipKeys
+     * @return mixed[]
      */
     protected function completeItemsQuotes(array $items, array $skipKeys = []): array
     {

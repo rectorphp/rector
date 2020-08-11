@@ -9,6 +9,7 @@ use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
+use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
 use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\ArrayNotation\StandaloneLineInMultilineArrayFixer;
@@ -77,6 +78,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             '*TypeResolverTest.php',
         ],
         UnaryOperatorSpacesFixer::class => null,
+
+        // breaks on-purpose annotated variables
+        ReturnAssignmentFixer::class => null,
+
         StrictComparisonFixer::class => [__DIR__ . '/packages/polyfill/src/ConditionEvaluator.php'],
     ]);
 

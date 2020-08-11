@@ -6,7 +6,6 @@ namespace Rector\CodingStyle\Rector\String_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
@@ -65,7 +64,7 @@ PHP
     }
 
     /**
-     * @return string[]
+     * @return mixed[]
      */
     public function getExistingClasses(String_ $string): array
     {
@@ -77,6 +76,9 @@ PHP
         });
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getParts(String_ $string, array $classNames): array
     {
         $classNames = array_map(function (string $className) {
@@ -93,7 +95,7 @@ PHP
 
     /**
      * @param string[] $parts
-     * @return Expr[]
+     * @return ClassConstFetch[]|\PhpParser\Node\Scalar\String_[]
      */
     private function createExpressionsToConcat(array $parts): array
     {

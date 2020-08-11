@@ -106,7 +106,7 @@ PHP
     }
 
     /**
-     * @return string[]
+     * @return class-string[]
      */
     private function getParentClasses(Class_ $class): array
     {

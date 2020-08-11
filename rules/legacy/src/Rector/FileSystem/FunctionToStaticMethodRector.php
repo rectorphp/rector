@@ -6,6 +6,7 @@ namespace Rector\Legacy\Rector\FileSystem;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -126,7 +127,7 @@ PHP
 
     /**
      * @param Node[] $nodes
-     * @return Node[]
+     * @return \PhpParser\Node[]|Stmt[]
      */
     private function getFileOrNamespaceStmts(array $nodes): array
     {
@@ -167,7 +168,7 @@ PHP
 
     /**
      * @param Node[] $nodes
-     * @return Node[]
+     * @return \PhpParser\Node\Stmt\Namespace_[]|Class_[]
      */
     private function resolveNodesToPrint(array $nodes, Class_ $class): array
     {

@@ -128,7 +128,7 @@ final class IfManipulator
     }
 
     /**
-     * @return If_[]
+     * @return mixed[]
      */
     public function collectNestedIfsWithOnlyReturn(If_ $if): array
     {

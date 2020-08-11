@@ -107,6 +107,9 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode implements Si
         return 'name';
     }
 
+    /**
+     * @return mixed[]
+     */
     private function addCustomItems(array $items): array
     {
         if ($this->indexes !== []) {

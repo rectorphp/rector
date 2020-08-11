@@ -64,6 +64,9 @@ final class SymfonyFormAbstractTypeFactory
         return $formTypeClass;
     }
 
+    /**
+     * @return Expression[]
+     */
     private function createBuildFormMethodCalls(array $methodCalls, Variable $formBuilderVariable): array
     {
         $buildFormMethodCalls = [];

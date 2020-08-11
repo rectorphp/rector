@@ -55,7 +55,7 @@ final class RemoveUnusedAssignVariableRector extends AbstractRector
     }
 
     /**
-     * @return class-string[]
+     * @return string[]
      */
     public function getNodeTypes(): array
     {

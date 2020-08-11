@@ -42,6 +42,9 @@ final class AttributeCollectingNodeVisitor extends NodeVisitorAbstract
         return null;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getCollectedAttributes(): array
     {
         return $this->attributes;

@@ -112,6 +112,9 @@ final class TagValueNodeConfiguration
         return $this->hasClosingBracket;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getKeysByQuotedStatus(): array
     {
         return $this->keysByQuotedStatus;

@@ -32,7 +32,7 @@ final class OutputFormatterCollector
     }
 
     /**
-     * @return string[]
+     * @return int[]|string[]
      */
     public function getNames(): array
     {

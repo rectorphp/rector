@@ -27,6 +27,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ *
  * @see \Rector\CodingStyle\Tests\Rector\String_\ManualJsonStringToJsonEncodeArrayRector\ManualJsonStringToJsonEncodeArrayRectorTest
  */
 final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
@@ -121,15 +122,17 @@ PHP
                 return null;
             }
 
-            /** @var Expr[] $placeholderNodes */
-            [$stringValue, $placeholderNodes] = $this->concatJoiner->joinToStringAndPlaceholderNodes($node->expr);
+            $concatStringAndPlaceholders = $this->concatJoiner->joinToStringAndPlaceholderNodes($node->expr);
 
             // B. just start of a json? join with all the strings that concat so same variable
             $concatExpressionJoinData = $this->collectContentAndPlaceholderNodesFromNextExpressions($node);
 
-            $placeholderNodes = array_merge($placeholderNodes, $concatExpressionJoinData->getPlaceholdersToNodes());
+            $placeholderNodes = array_merge(
+                $concatStringAndPlaceholders->getPlaceholderNodes(),
+                $concatExpressionJoinData->getPlaceholdersToNodes()
+            );
 
-            /** @var string $stringValue */
+            $stringValue = $concatStringAndPlaceholders->getContent();
             $stringValue .= $concatExpressionJoinData->getString();
 
             return $this->removeNodesAndCreateJsonEncodeFromStringValue(
@@ -176,12 +179,12 @@ PHP
             if ($valueNode instanceof String_) {
                 $concatExpressionJoinData->addString($valueNode->value);
             } elseif ($valueNode instanceof Concat) {
-                /** @var Expr[] $newPlaceholderNodes */
-                [$content, $newPlaceholderNodes] = $this->concatJoiner->joinToStringAndPlaceholderNodes($valueNode);
-                /** @var string $content */
+                $joinToStringAndPlaceholderNodes = $this->concatJoiner->joinToStringAndPlaceholderNodes($valueNode);
+
+                $content = $joinToStringAndPlaceholderNodes->getContent();
                 $concatExpressionJoinData->addString($content);
 
-                foreach ($newPlaceholderNodes as $placeholder => $expr) {
+                foreach ($joinToStringAndPlaceholderNodes->getPlaceholderNodes() as $placeholder => $expr) {
                     /** @var string $placeholder */
                     $concatExpressionJoinData->addPlaceholderToNode($placeholder, $expr);
                 }

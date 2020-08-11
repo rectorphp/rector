@@ -32,6 +32,9 @@ final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return mixed[][]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

@@ -46,6 +46,9 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
     }
 
+    /**
+     * @return string[]
+     */
     public function getNodeTypes(): array
     {
         return [Class_::class];
@@ -145,7 +148,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return string[]
+     * @return class-string[]
      */
     private function getInterfaceImplementers(string $interfaceName): array
     {

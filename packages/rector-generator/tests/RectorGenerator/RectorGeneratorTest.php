@@ -87,6 +87,6 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
     {
         $rectorRecipe = StaticRectorRecipeFactory::createWithConfiguration();
 
-        return $this->configurationFactory->createFromRectorRecipe($rectorRecipe);
+        return $this->configurationFactory->createFromRectorRecipe($rectorRecipe, true);
     }
 }

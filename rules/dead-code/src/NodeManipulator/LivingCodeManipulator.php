@@ -121,6 +121,9 @@ final class LivingCodeManipulator
         );
     }
 
+    /**
+     * @return \PhpParser\Node\Expr[]
+     */
     private function processBinary(BinaryOp $binaryOp): array
     {
         return array_merge(
@@ -129,6 +132,9 @@ final class LivingCodeManipulator
         );
     }
 
+    /**
+     * @return mixed[]
+     */
     private function processIsset(Isset_ $isset): array
     {
         return array_merge(...array_map(function (Expr $expr): array {

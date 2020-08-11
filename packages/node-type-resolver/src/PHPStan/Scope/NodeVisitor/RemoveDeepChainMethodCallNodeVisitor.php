@@ -38,10 +38,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
         $this->nestedChainMethodCallLimit = $nestedChainMethodCallLimit;
     }
 
-    /**
-     * @return int|Node|null
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?int
     {
         if (! $node instanceof Expression) {
             return null;
@@ -60,7 +57,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return int|Node|Node[]|null
+     * @return Nop|Node
      */
     public function leaveNode(Node $node)
     {

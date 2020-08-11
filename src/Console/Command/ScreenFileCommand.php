@@ -278,6 +278,9 @@ final class ScreenFileCommand extends AbstractCommand
         return $data;
     }
 
+    /**
+     * @return mixed[]
+     */
     private function addNameData(Node $node, array $data): array
     {
         if ($node instanceof Variable) {
@@ -295,6 +298,9 @@ final class ScreenFileCommand extends AbstractCommand
         return $data;
     }
 
+    /**
+     * @return mixed[]
+     */
     private function addVariableTypeData(Node $node, array $data): array
     {
         if ($node instanceof Variable) {

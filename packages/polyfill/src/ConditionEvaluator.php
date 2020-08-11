@@ -16,7 +16,7 @@ use Rector\Polyfill\ValueObject\VersionCompareCondition;
 final class ConditionEvaluator
 {
     /**
-     * @return bool|int|mixed|null
+     * @return bool|null|int
      */
     public function evaluate(ConditionInterface $condition)
     {

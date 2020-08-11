@@ -131,6 +131,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->classNodeAnalyzer = $classNodeAnalyzer;
     }
 
+    /**
+     * @return \PhpParser\Node[]|null
+     */
     public function beforeTraverse(array $nodes)
     {
         $this->previousAppliedClass = null;
@@ -149,7 +152,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @return int|Node|null
+     * @return null|Expression|\PhpParser\Node
      */
     final public function enterNode(Node $node)
     {

@@ -25,6 +25,9 @@ final class ChangeServiceArgumentsToMethodCallRectorTest extends AbstractRectorT
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return string[][][]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

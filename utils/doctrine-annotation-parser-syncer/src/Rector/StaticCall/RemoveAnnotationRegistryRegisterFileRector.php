@@ -23,7 +23,7 @@ final class RemoveAnnotationRegistryRegisterFileRector extends AbstractRector im
     }
 
     /**
-     * @return class-string[]
+     * @return string[]
      */
     public function getNodeTypes(): array
     {

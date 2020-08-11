@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
@@ -13,6 +12,7 @@ use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRector;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
+use Rector\MagicDisclosure\ValueObject\AssignAndRootExprAndNodesToAdd;
 
 abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
 {
@@ -67,11 +67,10 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
         return ! $this->isMatchedType($calleeUniqueType);
     }
 
-    /**
-     * @return Node[][]|AssignAndRootExpr[]
-     */
-    protected function createStandaloneNodesToAddFromChainMethodCalls(MethodCall $methodCall, string $kind): array
-    {
+    protected function createStandaloneNodesToAddFromChainMethodCalls(
+        MethodCall $methodCall,
+        string $kind
+    ): ?AssignAndRootExprAndNodesToAdd {
         $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
         $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls(
             $chainMethodCalls,
@@ -79,11 +78,11 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
         );
 
         if ($assignAndRootExpr === null) {
-            return [];
+            return null;
         }
 
         if ($this->shouldSkipChainMethodCalls($assignAndRootExpr, $chainMethodCalls)) {
-            return [];
+            return null;
         }
 
         $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromAssignObjectAndMethodCalls(
@@ -92,7 +91,7 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
             $kind
         );
 
-        return [$nodesToAdd, $assignAndRootExpr];
+        return new AssignAndRootExprAndNodesToAdd($assignAndRootExpr, $nodesToAdd);
     }
 
     private function isKnownAllowedFluentType(string $class): bool

@@ -137,7 +137,7 @@ PHP
 
     /**
      * @param StaticCall|FuncCall|MethodCall $node
-     * @return Expr[]
+     * @return \PhpParser\Node\Expr[]|\PhpParser\Node[]
      */
     private function resolveDefaultValuesFromCall(Node $node): array
     {
@@ -197,6 +197,7 @@ PHP
             return [];
         }
 
+        /** @var int[] $keysToRemove */
         return $keysToRemove;
     }
 
@@ -213,7 +214,7 @@ PHP
     }
 
     /**
-     * @return Expr[]
+     * @return \PhpParser\Node[]|\PhpParser\Node\Expr[]
      */
     private function resolveFuncCallDefaultParamValues(string $nodeName): array
     {

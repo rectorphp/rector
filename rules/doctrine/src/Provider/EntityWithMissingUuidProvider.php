@@ -48,7 +48,7 @@ final class EntityWithMissingUuidProvider
     }
 
     /**
-     * @return Class_[]
+     * @return \PhpParser\Node\Stmt\Class_[]
      */
     public function provide(): array
     {
@@ -76,7 +76,7 @@ final class EntityWithMissingUuidProvider
 
         $this->entitiesWithMissingUuidProperty = $entitiesWithMissingUuidProperty;
 
-        return $entitiesWithMissingUuidProperty;
+        return $this->entitiesWithMissingUuidProperty;
     }
 
     private function hasClassIdPropertyWithUuidType(Class_ $class): bool

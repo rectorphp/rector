@@ -27,7 +27,7 @@ final class NodeInfoResult
     }
 
     /**
-     * @return NodeInfo[][]
+     * @return array<string, NodeInfo[]>
      */
     public function getNodeInfos(): array
     {

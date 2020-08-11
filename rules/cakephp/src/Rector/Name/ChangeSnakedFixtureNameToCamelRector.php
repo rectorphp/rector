@@ -47,6 +47,9 @@ PHP
         ]);
     }
 
+    /**
+     * @return string[]
+     */
     public function getNodeTypes(): array
     {
         return [Property::class];

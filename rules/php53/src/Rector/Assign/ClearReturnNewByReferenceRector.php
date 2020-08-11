@@ -34,6 +34,9 @@ CODE_SAMPLE
             ), ]);
     }
 
+    /**
+     * @return string[]
+     */
     public function getNodeTypes(): array
     {
         return [AssignRef::class];

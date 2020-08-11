@@ -20,9 +20,9 @@ final class StmtOrder
     }
 
     /**
-     * @param array<int,string> $desiredStmtOrder
-     * @param array<int,string> $currentStmtOrder
-     * @return int[]
+     * @param array<int, string> $desiredStmtOrder
+     * @param array<int, string> $currentStmtOrder
+     * @return array<int, int>
      */
     public function createOldToNewKeys(array $desiredStmtOrder, array $currentStmtOrder): array
     {
@@ -38,11 +38,14 @@ final class StmtOrder
         $oldKeys = array_values($newKeys);
         sort($oldKeys);
 
-        return array_combine($oldKeys, $newKeys);
+        /** @var array<int, int> $oldToNewKeys */
+        $oldToNewKeys = array_combine($oldKeys, $newKeys);
+
+        return $oldToNewKeys;
     }
 
     /**
-     * @param array<int,int> $oldToNewKeys
+     * @param array<int, int> $oldToNewKeys
      */
     public function reorderClassStmtsByOldToNewKeys(ClassLike $classLike, array $oldToNewKeys): ClassLike
     {

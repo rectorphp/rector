@@ -27,7 +27,7 @@ final class UseNameAliasToNameResolver
     }
 
     /**
-     * @return string[][]
+     * @return array<string, string[]>
      */
     public function resolve(Use_ $use): array
     {
@@ -35,6 +35,10 @@ final class UseNameAliasToNameResolver
 
         $shortNames = $this->shortNameResolver->resolveForNode($use);
         foreach ($shortNames as $alias => $useImport) {
+            if (! is_string($alias)) {
+                continue;
+            }
+
             $shortName = $this->classNaming->getShortName($useImport);
             if ($shortName === $alias) {
                 continue;

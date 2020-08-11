@@ -80,7 +80,7 @@ final class PropertyManipulator
     }
 
     /**
-     * @return PropertyFetch[]|StaticPropertyFetch[]
+     * @return PropertyFetch[]
      */
     public function getAllPropertyFetch(Property $property): array
     {
@@ -95,7 +95,8 @@ final class PropertyManipulator
 
         $singleProperty = $property->props[0];
 
-        return $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use (
+        /** @var PropertyFetch[] $propertyFetches */
+        $propertyFetches = $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use (
             $singleProperty,
             $nodesToSearch
         ): bool {
@@ -116,6 +117,8 @@ final class PropertyManipulator
 
             return in_array($node->getAttribute(AttributeKey::CLASS_NODE), $nodesToSearch, true);
         });
+
+        return $propertyFetches;
     }
 
     public function isPropertyUsedInReadContext(Property $property): bool

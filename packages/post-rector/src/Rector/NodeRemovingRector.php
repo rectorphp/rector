@@ -74,7 +74,7 @@ final class NodeRemovingRector extends AbstractPostRector
     }
 
     /**
-     * @return int|Node|Node[]|null
+     * @return int|Node
      */
     public function leaveNode(Node $node)
     {

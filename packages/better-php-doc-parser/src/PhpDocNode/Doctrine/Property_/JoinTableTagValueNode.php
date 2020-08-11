@@ -122,6 +122,9 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         return $joinTableAttributeContent;
     }
 
+    /**
+     * @return string[]
+     */
     private function createItems(): array
     {
         $items = [];

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\CakePHP\ValueObject\ArrayItemsAndFluentClass;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -163,21 +164,21 @@ PHP
             return null;
         }
 
-        [$arrayItems, $fluentCalls] = $this->extractFluentMethods($argumentValue->items, $fluentMethods);
+        $arrayItemsAndFluentClass = $this->extractFluentMethods($argumentValue->items, $fluentMethods);
 
-        if ($arrayItems) {
-            $argumentValue->items = $arrayItems;
+        if ($arrayItemsAndFluentClass->getArrayItems() !== []) {
+            $argumentValue->items = $arrayItemsAndFluentClass->getArrayItems();
         } else {
             unset($methodCall->args[$argumentPosition - 1]);
         }
 
-        if (! $fluentCalls) {
+        if ($arrayItemsAndFluentClass->getFluentCalls() === []) {
             return null;
         }
 
         $node = $methodCall;
 
-        foreach ($fluentCalls as $method => $arg) {
+        foreach ($arrayItemsAndFluentClass->getFluentCalls() as $method => $arg) {
             $args = $this->createArgs([$arg]);
             $node = $this->createMethodCall($node, $method, $args);
         }
@@ -186,10 +187,10 @@ PHP
     }
 
     /**
-     * @param (ArrayItem|null)[] $originalArrayItems
+     * @param array<ArrayItem|null> $originalArrayItems
      * @param string[] $arrayMap
      */
-    private function extractFluentMethods(array $originalArrayItems, array $arrayMap): array
+    private function extractFluentMethods(array $originalArrayItems, array $arrayMap): ArrayItemsAndFluentClass
     {
         $newArrayItems = [];
         $fluentCalls = [];
@@ -199,15 +200,18 @@ PHP
                 continue;
             }
 
+            /** @var ArrayItem $arrayItem */
             $key = $arrayItem->key;
 
             if ($key instanceof String_ && isset($arrayMap[$key->value])) {
-                $fluentCalls[$arrayMap[$key->value]] = $arrayItem->value;
+                /** @var string $methodName */
+                $methodName = $arrayMap[$key->value];
+                $fluentCalls[$methodName] = $arrayItem->value;
             } else {
                 $newArrayItems[] = $arrayItem;
             }
         }
 
-        return [$newArrayItems, $fluentCalls];
+        return new ArrayItemsAndFluentClass($newArrayItems, $fluentCalls);
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser;
 
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -14,6 +13,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\ValueObject\SprintfStringAndArgs;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NodeTransformer
@@ -27,19 +27,15 @@ final class NodeTransformer
      */
     public function transformSprintfToArray(FuncCall $sprintfFuncCall): ?Array_
     {
-        /** @var Node[] $arrayItems */
-        [$arrayItems, $stringArgument] = $this->splitMessageAndArgs($sprintfFuncCall);
-        if (! $stringArgument instanceof String_) {
-            // we need to know "%x" parts → nothing we can do
+        $sprintfStringAndArgs = $this->splitMessageAndArgs($sprintfFuncCall);
+        if ($sprintfStringAndArgs === null) {
             return null;
         }
 
-        if ($arrayItems === []) {
-            return null;
-        }
+        $arrayItems = $sprintfStringAndArgs->getArrayItems();
+        $stringValue = $sprintfStringAndArgs->getStringValue();
 
-        $message = $stringArgument->value;
-        $messageParts = $this->splitBySpace($message);
+        $messageParts = $this->splitBySpace($stringValue);
 
         $arrayMessageParts = [];
 
@@ -112,10 +108,7 @@ final class NodeTransformer
         return new Array_($arrayItems);
     }
 
-    /**
-     * @return Node[][]|null[][]|Node[]|null[]
-     */
-    private function splitMessageAndArgs(FuncCall $sprintfFuncCall): array
+    private function splitMessageAndArgs(FuncCall $sprintfFuncCall): ?SprintfStringAndArgs
     {
         $stringArgument = null;
         $arrayItems = [];
@@ -127,7 +120,15 @@ final class NodeTransformer
             }
         }
 
-        return [$arrayItems, $stringArgument];
+        if (! $stringArgument instanceof String_) {
+            return null;
+        }
+
+        if ($arrayItems === []) {
+            return null;
+        }
+
+        return new SprintfStringAndArgs($stringArgument, $arrayItems);
     }
 
     /**
@@ -151,7 +152,7 @@ final class NodeTransformer
     }
 
     /**
-     * @return Node[]|string[]
+     * @return mixed[]|\PhpParser\Node\Expr[]|\PhpParser\Node\Scalar\String_[]
      */
     private function transformConcatItemToArrayItems(Expr $expr): array
     {
@@ -164,6 +165,7 @@ final class NodeTransformer
         }
 
         $arrayItems = [];
+
         $parts = $this->splitBySpace($expr->value);
         foreach ($parts as $part) {
             if (trim($part) !== '') {

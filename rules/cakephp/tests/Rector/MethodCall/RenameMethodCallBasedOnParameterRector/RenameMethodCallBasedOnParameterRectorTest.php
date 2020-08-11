@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 
+use Iterator;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 use Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\Source\SomeModelType;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
@@ -20,7 +21,7 @@ final class RenameMethodCallBasedOnParameterRectorTest extends AbstractRectorTes
     }
 
     /**
-     * @return string[]
+     * @return Iterator
      */
     public function provideData(): iterable
     {

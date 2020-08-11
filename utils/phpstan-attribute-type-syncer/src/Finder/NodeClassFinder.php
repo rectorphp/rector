@@ -29,7 +29,7 @@ final class NodeClassFinder
 
     /**
      * @param string[] $directories
-     * @return string[]
+     * @return class-string[]
      */
     private function findClassesByNamePatternInDirectories(string $namePattern, array $directories): array
     {

@@ -31,6 +31,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
      */
     protected $tagValueNodeConfiguration;
 
+    /**
+     * @param mixed[] $items
+     */
     public function __construct(array $items, ?string $originalContent = null)
     {
         $this->items = $items;
@@ -144,6 +147,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         );
     }
 
+    /**
+     * @return mixed[]|string[]
+     */
     protected function filterOutMissingItems(array $contentItems): array
     {
         if ($this->tagValueNodeConfiguration->getOrderedVisibleItems() === null) {

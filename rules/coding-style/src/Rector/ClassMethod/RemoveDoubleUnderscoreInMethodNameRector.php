@@ -49,6 +49,9 @@ CODE_SAMPLE
         ]);
     }
 
+    /**
+     * @return string[]
+     */
     public function getNodeTypes(): array
     {
         return [ClassMethod::class, MethodCall::class, StaticCall::class];

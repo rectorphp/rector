@@ -19,6 +19,11 @@ final class Configuration
     private $package;
 
     /**
+     * @var bool
+     */
+    private $isRectorRepository = false;
+
+    /**
      * @var string
      */
     private $name;
@@ -95,7 +100,8 @@ final class Configuration
         array $ruleConfiguration,
         array $source,
         ?Set $set,
-        bool $isPhpSnippet
+        bool $isPhpSnippet,
+        bool $isRectorRepository
     ) {
         $this->package = $package;
         $this->setName($name);
@@ -110,6 +116,7 @@ final class Configuration
         $this->extraFileContent = $extraFileContent;
         $this->extraFileName = $extraFileName;
         $this->ruleConfiguration = $ruleConfiguration;
+        $this->isRectorRepository = $isRectorRepository;
     }
 
     public function getDescription(): string
@@ -119,11 +126,19 @@ final class Configuration
 
     public function getPackage(): string
     {
+        if (! $this->isRectorRepository) {
+            return 'Utils';
+        }
+
         return $this->package;
     }
 
     public function getPackageDirectory(): string
     {
+        if (! $this->isRectorRepository) {
+            return 'rector';
+        }
+
         // special cases
         if ($this->package === 'PHPUnit') {
             return 'phpunit';
@@ -198,6 +213,11 @@ final class Configuration
     public function getRuleConfiguration(): array
     {
         return $this->ruleConfiguration;
+    }
+
+    public function isRectorRepository(): bool
+    {
+        return $this->isRectorRepository;
     }
 
     private function setName(string $name): void
