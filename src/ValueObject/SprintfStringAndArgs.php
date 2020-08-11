@@ -40,9 +40,4 @@ final class SprintfStringAndArgs
     {
         return $this->string->value;
     }
-
-    private function getString(): String_
-    {
-        return $this->string;
-    }
 }
