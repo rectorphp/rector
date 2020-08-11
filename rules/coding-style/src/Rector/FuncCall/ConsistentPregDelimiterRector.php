@@ -49,7 +49,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Conf
 
     /**
      * All with pattern as 2st argument
-     * @var int[][]
+     * @var array<string, array<string, int>>
      */
     private const STATIC_METHODS_WITH_REGEX_PATTERN = [
         'Nette\Utils\Strings' => [

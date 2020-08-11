@@ -36,7 +36,7 @@ final class RegexPatternArgumentManipulator
     ];
 
     /**
-     * @var int[][]
+     * @var array<string, array<string, int>>
      */
     private const STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION = [
         Strings::class => [

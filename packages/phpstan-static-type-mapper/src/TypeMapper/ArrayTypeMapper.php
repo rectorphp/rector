@@ -113,35 +113,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return new AttributeAwareUnionTypeNode($unionedArrayType);
     }
 
-    private function mapArrayUnionTypeToDocString(ArrayType $arrayType, UnionType $unionType): string
-    {
-        $unionedTypesAsString = [];
-
-        foreach ($unionType->getTypes() as $unionedArrayItemType) {
-            $unionedTypesAsString[] = $this->phpStanStaticTypeMapper->mapToDocString(
-                $unionedArrayItemType,
-                $arrayType
-            );
-        }
-
-        $unionedTypesAsString = array_values($unionedTypesAsString);
-        $unionedTypesAsString = array_unique($unionedTypesAsString);
-
-        return implode('|', $unionedTypesAsString);
-    }
-
-    private function createGenericArrayType(Type $keyType, TypeNode $itemTypeNode): AttributeAwareGenericTypeNode
-    {
-        /** @var IdentifierTypeNode $keyTypeNode */
-        $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($keyType);
-
-        $attributeAwareIdentifierTypeNode = new AttributeAwareIdentifierTypeNode('array');
-
-        // @see https://github.com/phpstan/phpdoc-parser/blob/98a088b17966bdf6ee25c8a4b634df313d8aa531/tests/PHPStan/Parser/PhpDocParserTest.php#L2692-L2696
-        $genericTypes = [$keyTypeNode, $itemTypeNode];
-        return new AttributeAwareGenericTypeNode($attributeAwareIdentifierTypeNode, $genericTypes);
-    }
-
     private function isGenericArrayCandidate(ArrayType $arrayType): bool
     {
         if ($arrayType->getKeyType() instanceof MixedType) {
@@ -169,5 +140,32 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
 
         return false;
+    }
+    private function createGenericArrayType(Type $keyType, TypeNode $itemTypeNode): AttributeAwareGenericTypeNode
+    {
+        /** @var IdentifierTypeNode $keyTypeNode */
+        $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($keyType);
+
+        $attributeAwareIdentifierTypeNode = new AttributeAwareIdentifierTypeNode('array');
+
+        // @see https://github.com/phpstan/phpdoc-parser/blob/98a088b17966bdf6ee25c8a4b634df313d8aa531/tests/PHPStan/Parser/PhpDocParserTest.php#L2692-L2696
+        $genericTypes = [$keyTypeNode, $itemTypeNode];
+        return new AttributeAwareGenericTypeNode($attributeAwareIdentifierTypeNode, $genericTypes);
+    }
+    private function mapArrayUnionTypeToDocString(ArrayType $arrayType, UnionType $unionType): string
+    {
+        $unionedTypesAsString = [];
+
+        foreach ($unionType->getTypes() as $unionedArrayItemType) {
+            $unionedTypesAsString[] = $this->phpStanStaticTypeMapper->mapToDocString(
+                $unionedArrayItemType,
+                $arrayType
+            );
+        }
+
+        $unionedTypesAsString = array_values($unionedTypesAsString);
+        $unionedTypesAsString = array_unique($unionedTypesAsString);
+
+        return implode('|', $unionedTypesAsString);
     }
 }
