@@ -12691,8 +12691,8 @@ Turn @var inline checks above code to `assert()` of hte type
 
 ### `ActionSuffixRemoverRector`
 
-- class: [`Rector\Symfony\Rector\Controller\ActionSuffixRemoverRector`](/../master/rules/symfony/src/Rector/Controller/ActionSuffixRemoverRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Controller/ActionSuffixRemoverRector/Fixture)
+- class: [`Rector\Symfony\Rector\ClassMethod\ActionSuffixRemoverRector`](/../master/rules/symfony/src/Rector/ClassMethod/ActionSuffixRemoverRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/ClassMethod/ActionSuffixRemoverRector/Fixture)
 
 Removes Action suffixes from methods in Symfony Controllers
 
@@ -12710,8 +12710,8 @@ Removes Action suffixes from methods in Symfony Controllers
 
 ### `AddFlashRector`
 
-- class: [`Rector\Symfony\Rector\Controller\AddFlashRector`](/../master/rules/symfony/src/Rector/Controller/AddFlashRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Controller/AddFlashRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\AddFlashRector`](/../master/rules/symfony/src/Rector/MethodCall/AddFlashRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/AddFlashRector/Fixture)
 
 Turns long flash adding to short helper method in Controller in Symfony
 
@@ -12866,8 +12866,8 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `ConsoleExceptionToErrorEventConstantRector`
 
-- class: [`Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector`](/../master/rules/symfony/src/Rector/Console/ConsoleExceptionToErrorEventConstantRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Console/ConsoleExceptionToErrorEventConstantRector/Fixture)
+- class: [`Rector\Symfony\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector`](/../master/rules/symfony/src/Rector/ClassConstFetch/ConsoleExceptionToErrorEventConstantRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/ClassConstFetch/ConsoleExceptionToErrorEventConstantRector/Fixture)
 
 Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 
@@ -12885,8 +12885,8 @@ Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 
 ### `ConsoleExecuteReturnIntRector`
 
-- class: [`Rector\Symfony\Rector\Console\ConsoleExecuteReturnIntRector`](/../master/rules/symfony/src/Rector/Console/ConsoleExecuteReturnIntRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Console/ConsoleExecuteReturnIntRector/Fixture)
+- class: [`Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector`](/../master/rules/symfony/src/Rector/ClassMethod/ConsoleExecuteReturnIntRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/ClassMethod/ConsoleExecuteReturnIntRector/Fixture)
 
 Returns int from Command::execute command
 
@@ -12920,8 +12920,8 @@ Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 
 ### `ContainerBuilderCompileEnvArgumentRector`
 
-- class: [`Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector`](/../master/rules/symfony/src/Rector/DependencyInjection/ContainerBuilderCompileEnvArgumentRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/DependencyInjection/ContainerBuilderCompileEnvArgumentRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector`](/../master/rules/symfony/src/Rector/MethodCall/ContainerBuilderCompileEnvArgumentRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/ContainerBuilderCompileEnvArgumentRector/Fixture)
 
 Turns old default value to parameter in `ContainerBuilder->build()` method in DI in Symfony
 
@@ -12966,8 +12966,8 @@ Turns fetching of dependencies via `$container->get()` in ContainerAware to cons
 
 ### `FormIsValidRector`
 
-- class: [`Rector\Symfony\Rector\Form\FormIsValidRector`](/../master/rules/symfony/src/Rector/Form/FormIsValidRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Form/FormIsValidRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\FormIsValidRector`](/../master/rules/symfony/src/Rector/MethodCall/FormIsValidRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/FormIsValidRector/Fixture)
 
 Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony
 
@@ -12981,8 +12981,8 @@ Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form i
 
 ### `FormTypeGetParentRector`
 
-- class: [`Rector\Symfony\Rector\Form\FormTypeGetParentRector`](/../master/rules/symfony/src/Rector/Form/FormTypeGetParentRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Form/FormTypeGetParentRector/Fixture)
+- class: [`Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector`](/../master/rules/symfony/src/Rector/ClassMethod/FormTypeGetParentRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/ClassMethod/FormTypeGetParentRector/Fixture)
 
 Turns string Form Type references to their `CONSTANT` alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
 
@@ -13064,8 +13064,8 @@ Turns fetching of parameters via `getParameter()` in ContainerAware to construct
 
 ### `GetRequestRector`
 
-- class: [`Rector\Symfony\Rector\HttpKernel\GetRequestRector`](/../master/rules/symfony/src/Rector/HttpKernel/GetRequestRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/HttpKernel/GetRequestRector/Fixture)
+- class: [`Rector\Symfony\Rector\ClassMethod\GetRequestRector`](/../master/rules/symfony/src/Rector/ClassMethod/GetRequestRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/ClassMethod/GetRequestRector/Fixture)
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
 
@@ -13184,8 +13184,8 @@ Merge removed @Method annotation to @Route one
 
 ### `OptionNameRector`
 
-- class: [`Rector\Symfony\Rector\Form\OptionNameRector`](/../master/rules/symfony/src/Rector/Form/OptionNameRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Form/OptionNameRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\OptionNameRector`](/../master/rules/symfony/src/Rector/MethodCall/OptionNameRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/OptionNameRector/Fixture)
 
 Turns old option names to new ones in FormTypes in Form in Symfony
 
@@ -13263,8 +13263,8 @@ Change "read_only" option in form to attribute
 
 ### `RedirectToRouteRector`
 
-- class: [`Rector\Symfony\Rector\Controller\RedirectToRouteRector`](/../master/rules/symfony/src/Rector/Controller/RedirectToRouteRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Controller/RedirectToRouteRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\RedirectToRouteRector`](/../master/rules/symfony/src/Rector/MethodCall/RedirectToRouteRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/RedirectToRouteRector/Fixture)
 
 Turns redirect to route to short helper method in Controller in Symfony
 
@@ -13376,8 +13376,8 @@ Simplify use of assertions in WebTestCase
 
 ### `StringFormTypeToClassRector`
 
-- class: [`Rector\Symfony\Rector\Form\StringFormTypeToClassRector`](/../master/rules/symfony/src/Rector/Form/StringFormTypeToClassRector.php)
-- [test fixtures](/../master/rules/symfony/tests/Rector/Form/StringFormTypeToClassRector/Fixture)
+- class: [`Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector`](/../master/rules/symfony/src/Rector/MethodCall/StringFormTypeToClassRector.php)
+- [test fixtures](/../master/rules/symfony/tests/Rector/MethodCall/StringFormTypeToClassRector/Fixture)
 
 Turns string Form Type references to their `CONSTANT` alternatives in FormTypes in Form in Symfony. To enable custom types, add `link` to your container XML `dump` in "parameters > symfony_container_xml_path"
 
