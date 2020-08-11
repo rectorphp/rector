@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Controller\AddFlashRector;
+namespace Rector\Symfony\Tests\Rector\MethodCall\AddFlashRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Symfony\Rector\Controller\AddFlashRector;
+use Rector\Symfony\Rector\MethodCall\AddFlashRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddFlashRectorTest extends AbstractRectorTestCase
