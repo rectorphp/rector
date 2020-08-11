@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Form;
+namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Symfony\Rector\MethodCall\AbstractFormAddRector;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\Form\OptionNameRector\OptionNameRectorTest
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\OptionNameRector\OptionNameRectorTest
  */
 final class OptionNameRector extends AbstractFormAddRector
 {

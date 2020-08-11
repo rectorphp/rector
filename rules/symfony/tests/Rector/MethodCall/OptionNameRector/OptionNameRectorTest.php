@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Form\OptionNameRector;
+namespace Rector\Symfony\Tests\Rector\MethodCall\OptionNameRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Symfony\Rector\Form\OptionNameRector;
+use Rector\Symfony\Rector\MethodCall\OptionNameRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class OptionNameRectorTest extends AbstractRectorTestCase

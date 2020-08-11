@@ -10,7 +10,6 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Core\Configuration\Option;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Symfony\Rector\MethodCall\AbstractFormAddRector;
 
 /**
  * Covers https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
