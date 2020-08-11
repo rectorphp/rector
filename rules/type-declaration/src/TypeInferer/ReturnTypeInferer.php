@@ -47,9 +47,13 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
                 continue;
             }
 
-            $type = $returnTypeInferer->inferFunctionLike($functionLike);
+            $originalType = $returnTypeInferer->inferFunctionLike($functionLike);
+            if ($originalType instanceof MixedType) {
+                continue;
+            }
 
-            $type = $this->typeNormalizer->normalizeArrayTypeAndArrayNever($type);
+            $type = $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
+
             $type = $this->typeNormalizer->uniqueateConstantArrayType($type);
             $type = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($type);
 

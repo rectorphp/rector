@@ -111,9 +111,11 @@ PHP
 
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            $phpDocInfo->changeReturnType($inferedType);
+        if ($phpDocInfo === null) {
+            return null;
         }
+
+        $phpDocInfo->changeReturnType($inferedType);
 
         return $node;
     }
