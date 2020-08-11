@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Form;
+namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
@@ -14,7 +14,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\FormTypeGetParentRectorTest
+ * @see \Rector\Symfony\Tests\Rector\ClassMethod\FormTypeGetParentRector\FormTypeGetParentRectorTest
  */
 final class FormTypeGetParentRector extends AbstractRector
 {

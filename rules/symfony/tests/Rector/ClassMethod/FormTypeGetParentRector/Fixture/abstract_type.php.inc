@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\FormTypeGetParentRector\Fixture;
 
 use Symfony\Component\Form\AbstractType;
 
@@ -21,7 +21,7 @@ class PermissionCollectionType extends AbstractType
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\FormTypeGetParentRector\Fixture;
 
 use Symfony\Component\Form\AbstractType;
 

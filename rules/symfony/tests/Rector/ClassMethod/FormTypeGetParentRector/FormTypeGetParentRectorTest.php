@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\FormTypeGetParentRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Symfony\Rector\Form\FormTypeGetParentRector;
+use Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FormTypeGetParentRectorTest extends AbstractRectorTestCase
