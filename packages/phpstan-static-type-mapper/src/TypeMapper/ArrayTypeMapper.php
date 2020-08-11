@@ -141,6 +141,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
         return false;
     }
+
     private function createGenericArrayType(Type $keyType, TypeNode $itemTypeNode): AttributeAwareGenericTypeNode
     {
         /** @var IdentifierTypeNode $keyTypeNode */
@@ -152,6 +153,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         $genericTypes = [$keyTypeNode, $itemTypeNode];
         return new AttributeAwareGenericTypeNode($attributeAwareIdentifierTypeNode, $genericTypes);
     }
+
     private function mapArrayUnionTypeToDocString(ArrayType $arrayType, UnionType $unionType): string
     {
         $unionedTypesAsString = [];
