@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Controller;
+namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\Controller\RedirectToRouteRector\RedirectToRouteRectorTest
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\RedirectToRouteRector\RedirectToRouteRectorTest
  */
 final class RedirectToRouteRector extends AbstractRector
 {

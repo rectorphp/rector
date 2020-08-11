@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Controller\RedirectToRouteRector;
+namespace Rector\Symfony\Tests\Rector\MethodCall\RedirectToRouteRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Symfony\Rector\Controller\RedirectToRouteRector;
+use Rector\Symfony\Rector\MethodCall\RedirectToRouteRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RedirectToRouteRectorTest extends AbstractRectorTestCase
