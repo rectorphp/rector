@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Controller\ActionSuffixRemoverRector;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Symfony\Rector\Controller\ActionSuffixRemoverRector;
+use Rector\Symfony\Rector\ClassMethod\ActionSuffixRemoverRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ActionSuffixRemoverRectorTest extends AbstractRectorTestCase

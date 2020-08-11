@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Controller;
+namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\Controller\ActionSuffixRemoverRector\ActionSuffixRemoverRectorTest
+ * @see \Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector\ActionSuffixRemoverRectorTest
  */
 final class ActionSuffixRemoverRector extends AbstractRector
 {
