@@ -40,7 +40,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector;
 class UnionNestedArrayScalars
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     public const STRING_ONLY = [
         'key' => 'value',

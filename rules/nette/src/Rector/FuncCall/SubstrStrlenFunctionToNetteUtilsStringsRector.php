@@ -17,7 +17,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class SubstrStrlenFunctionToNetteUtilsStringsRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const FUNCTION_TO_STATIC_METHOD = [
         'substr' => 'substring',

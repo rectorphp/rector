@@ -41,7 +41,7 @@ final class ReturnUuid
     private $amenityBuildings = [];
 
     /**
-     * @return \Ramsey\Uuid\UuidInterface[]
+     * @return array<int, \Ramsey\Uuid\UuidInterface>
      */
     public function getBuildingIds(): array
     {

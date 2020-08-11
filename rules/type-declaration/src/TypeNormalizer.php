@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration;
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -66,7 +65,8 @@ final class TypeNormalizer
         } else {
             $this->collectedNestedArrayTypes[] = new NestedArrayTypeValueObject(
                 $type->getItemType(),
-                $arrayNesting
+                $arrayNesting,
+                $type->getKeyType()
             );
         }
 
@@ -161,7 +161,7 @@ final class TypeNormalizer
         foreach ($collectedNestedArrayTypes as $collectedNestedArrayType) {
             $arrayType = $collectedNestedArrayType->getType();
             for ($i = 0; $i < $collectedNestedArrayType->getArrayNestingLevel(); ++$i) {
-                $arrayType = new ArrayType(new MixedType(), $arrayType);
+                $arrayType = new ArrayType($collectedNestedArrayType->getKeyType(), $arrayType);
             }
 
             /** @var ArrayType $arrayType */
