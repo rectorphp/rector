@@ -56,7 +56,7 @@ class SomeClass implements SomeInterface
 }
 PHP
             , [
-                '$interfaceByTrait' => [
+                self::INTERFACE_BY_TRAIT => [
                     'SomeTrait' => 'SomeInterface',
                 ],
             ]),
