@@ -8,7 +8,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
 use Rector\Symfony\Rector\Form\FormTypeGetParentRector;
 use Rector\Symfony\Rector\Form\OptionNameRector;
-use Rector\Symfony\Rector\Form\StringFormTypeToClassRector;
+use Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
 use Rector\Symfony\Rector\HttpKernel\GetRequestRector;
 use Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector;
 use Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector;

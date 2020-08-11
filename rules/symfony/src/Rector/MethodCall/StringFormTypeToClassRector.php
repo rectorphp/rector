@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Form;
+namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -15,7 +15,7 @@ use Rector\Symfony\Rector\MethodCall\AbstractFormAddRector;
 /**
  * Covers https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
  *
- * @see \Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\StringFormTypeToClassRectorTest
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\StringFormTypeToClassRector\StringFormTypeToClassRectorTest
  */
 final class StringFormTypeToClassRector extends AbstractFormAddRector
 {

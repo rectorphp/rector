@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\StringFormTypeToClassRector\Fixture;
 
 use Symfony\Component\Form\FormBuilder;
 
@@ -17,7 +17,7 @@ final class SomePresenter
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\StringFormTypeToClassRector\Fixture;
 
 use Symfony\Component\Form\FormBuilder;
 
