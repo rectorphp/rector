@@ -33,9 +33,9 @@ final class NodeTransformer
         }
 
         $arrayItems = $sprintfStringAndArgs->getArrayItems();
-        $message = $sprintfStringAndArgs->getStringValue();
+        $stringValue = $sprintfStringAndArgs->getStringValue();
 
-        $messageParts = $this->splitBySpace($message);
+        $messageParts = $this->splitBySpace($stringValue);
 
         $arrayMessageParts = [];
 

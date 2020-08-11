@@ -71,16 +71,6 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         return $this->resolveReturnStaticArrayTypeByParameterPosition($returns, $parameterPosition);
     }
 
-    private function getFunctionLikePhpDocInfo(Param $param): ?PhpDocInfo
-    {
-        $parent = $param->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof FunctionLike) {
-            return null;
-        }
-
-        return $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
-    }
-
     private function resolveDataProviderClassMethod(Param $param): ?ClassMethod
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
@@ -94,12 +84,12 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             return null;
         }
 
-        $class = $param->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
-        return $class->getMethod($attributeAwareDataProviderTagValueNode->getMethodName());
+        return $classLike->getMethod($attributeAwareDataProviderTagValueNode->getMethodName());
     }
 
     /**
@@ -136,5 +126,14 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($paramOnPositionTypes);
+    }
+    private function getFunctionLikePhpDocInfo(Param $param): ?PhpDocInfo
+    {
+        $parent = $param->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof FunctionLike) {
+            return null;
+        }
+
+        return $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
     }
 }

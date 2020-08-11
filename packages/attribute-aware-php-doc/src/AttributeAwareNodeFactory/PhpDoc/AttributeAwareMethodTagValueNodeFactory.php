@@ -55,11 +55,6 @@ final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwar
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 
-    private function createAttributeAwareReturnType(TypeNode $typeNode, string $docContent): AttributeAwareNodeInterface
-    {
-        return $this->attributeAwareNodeFactory->createFromNode($typeNode, $docContent);
-    }
-
     private function attributizeReturnType(
         MethodTagValueNode $methodTagValueNode,
         string $docContent
@@ -69,5 +64,9 @@ final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwar
         }
 
         return null;
+    }
+    private function createAttributeAwareReturnType(TypeNode $typeNode, string $docContent): AttributeAwareNodeInterface
+    {
+        return $this->attributeAwareNodeFactory->createFromNode($typeNode, $docContent);
     }
 }

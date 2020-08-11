@@ -17,8 +17,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     # order matters, this needs to be first to correctly detect parent repository
     $services->set(MoveRepositoryFromParentToConstructorRector::class);
+
     $services->set(ServiceLocatorToDIRector::class);
+
     $services->set(ReplaceParentRepositoryCallsByRepositoryPropertyRector::class);
+
     $services->set(RemoveRepositoryFromEntityAnnotationRector::class);
+
     $services->set(ReplaceParentRepositoryCallsByRepositoryPropertyRector::class);
 };

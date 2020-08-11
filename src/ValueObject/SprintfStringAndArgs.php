@@ -10,15 +10,13 @@ use PhpParser\Node\Scalar\String_;
 final class SprintfStringAndArgs
 {
     /**
-     * @var String_
-     */
-    private $string;
-
-    /**
      * @var Expr[]
      */
     private $arrayItems = [];
-
+    /**
+     * @var String_
+     */
+    private $string;
     /**
      * @param Expr[] $arrayItems
      */
@@ -27,12 +25,10 @@ final class SprintfStringAndArgs
         $this->string = $string;
         $this->arrayItems = $arrayItems;
     }
-
-    public function getString(): String_
+    private function getString(): String_
     {
         return $this->string;
     }
-
     /**
      * @return Expr[]
      */
@@ -40,7 +36,6 @@ final class SprintfStringAndArgs
     {
         return $this->arrayItems;
     }
-
     public function getStringValue(): string
     {
         return $this->string->value;

@@ -156,6 +156,11 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
         $this->reportRemovedNodes($errorAndDiffCollector);
     }
+    private function normalizePathsToRelativeWithLine(string $errorMessage): string
+    {
+        $errorMessage = Strings::replace($errorMessage, '#' . preg_quote(getcwd(), '#') . '/#');
+        return $errorMessage = Strings::replace($errorMessage, '# on line #', ':');
+    }
 
     private function reportRemovedNodes(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
@@ -195,11 +200,5 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private function colorTextToRed(string $text): string
     {
         return '<fg=red>' . $text . '</fg=red>';
-    }
-
-    private function normalizePathsToRelativeWithLine(string $errorMessage): string
-    {
-        $errorMessage = Strings::replace($errorMessage, '#' . preg_quote(getcwd()) . '/#');
-        return $errorMessage = Strings::replace($errorMessage, '# on line #', ':');
     }
 }

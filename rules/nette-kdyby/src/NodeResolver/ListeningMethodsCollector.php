@@ -131,14 +131,17 @@ final class ListeningMethodsCollector
         return $classMethods;
     }
 
-    private function matchClassMethodByNodeValue(Class_ $class, Expr $expr): ?ClassMethod
+    private function matchClassMethodByArrayItem(Node $node, Class_ $class): ?ClassMethod
     {
-        $possibleMethodName = $this->valueResolver->getValue($expr);
-        if (! is_string($possibleMethodName)) {
+        if (! $node instanceof ArrayItem) {
             return null;
         }
 
-        return $class->getMethod($possibleMethodName);
+        if ($node->key === null) {
+            return null;
+        }
+
+        return $this->matchClassMethodByNodeValue($class, $node->value);
     }
 
     private function resolveContributeEventClassAndSubscribedClassMethod(
@@ -182,16 +185,13 @@ final class ListeningMethodsCollector
         return new EventClassAndClassMethod($eventClass, $classMethod);
     }
 
-    private function matchClassMethodByArrayItem(Node $node, Class_ $classLike): ?ClassMethod
+    private function matchClassMethodByNodeValue(Class_ $class, Expr $expr): ?ClassMethod
     {
-        if (! $node instanceof ArrayItem) {
+        $possibleMethodName = $this->valueResolver->getValue($expr);
+        if (! is_string($possibleMethodName)) {
             return null;
         }
 
-        if ($node->key === null) {
-            return null;
-        }
-
-        return $this->matchClassMethodByNodeValue($classLike, $node->value);
+        return $class->getMethod($possibleMethodName);
     }
 }

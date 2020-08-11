@@ -144,6 +144,10 @@ final class CreateCommand extends Command
 
         return ShellCode::SUCCESS;
     }
+    private function isRectorRepository(): bool
+    {
+        return file_exists(__DIR__ . '/../../../../vendor');
+    }
 
     /**
      * @param string[] $generatedFilePaths
@@ -181,10 +185,5 @@ final class CreateCommand extends Command
         $message = sprintf('Make tests green again:%svendor/bin/phpunit %s', PHP_EOL . PHP_EOL, $testCaseFilePath);
 
         $this->symfonyStyle->success($message);
-    }
-
-    private function isRectorRepository(): bool
-    {
-        return file_exists(__DIR__ . '/../../../../vendor');
     }
 }

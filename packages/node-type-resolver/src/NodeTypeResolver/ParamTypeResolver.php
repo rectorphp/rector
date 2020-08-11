@@ -47,19 +47,12 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      */
     private $staticTypeMapper;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
-        NodeNameResolver $nodeNameResolver,
-        BetterNodeFinder $betterNodeFinder
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**

@@ -196,47 +196,6 @@ PHP
 
         return $newProperties;
     }
-
-    private function shouldSkipForLaravelCollection(Node $node): bool
-    {
-        $staticCallOrClassMethod = $this->betterNodeFinder->findFirstAncestorInstancesOf(
-            $node,
-            [ClassMethod::class, StaticCall::class]
-        );
-
-        if (! $staticCallOrClassMethod instanceof StaticCall) {
-            return false;
-        }
-
-        return $this->isName($staticCallOrClassMethod->class, self::LARAVEL_COLLECTION_CLASS);
-    }
-
-    private function resolvePropertyFetchType(Node $node): Type
-    {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        // possible get type
-        if ($parentNode instanceof Assign) {
-            return $this->getStaticType($parentNode->expr);
-        }
-
-        return new MixedType();
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClassPropertyNames(Class_ $class): array
-    {
-        $propertyNames = [];
-
-        foreach ($class->getProperties() as $property) {
-            $propertyNames[] = $this->getName($property);
-        }
-
-        return $propertyNames;
-    }
-
     /**
      * @return array<string, Type[]>
      */
@@ -278,5 +237,44 @@ PHP
         });
 
         return $fetchedLocalPropertyNameToTypes;
+    }
+    /**
+     * @return string[]
+     */
+    private function getClassPropertyNames(Class_ $class): array
+    {
+        $propertyNames = [];
+
+        foreach ($class->getProperties() as $property) {
+            $propertyNames[] = $this->getName($property);
+        }
+
+        return $propertyNames;
+    }
+
+    private function shouldSkipForLaravelCollection(Node $node): bool
+    {
+        $staticCallOrClassMethod = $this->betterNodeFinder->findFirstAncestorInstancesOf(
+            $node,
+            [ClassMethod::class, StaticCall::class]
+        );
+
+        if (! $staticCallOrClassMethod instanceof StaticCall) {
+            return false;
+        }
+
+        return $this->isName($staticCallOrClassMethod->class, self::LARAVEL_COLLECTION_CLASS);
+    }
+
+    private function resolvePropertyFetchType(Node $node): Type
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        // possible get type
+        if ($parentNode instanceof Assign) {
+            return $this->getStaticType($parentNode->expr);
+        }
+
+        return new MixedType();
     }
 }

@@ -14,7 +14,7 @@ final class ConcatStringAndPlaceholders
     /**
      * @var array
      */
-    private $placeholderNodes;
+    private $placeholderNodes = [];
 
     public function __construct(string $content, array $placeholderNodes)
     {

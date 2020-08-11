@@ -166,7 +166,7 @@ PHP
 
         $arrayItemsAndFluentClass = $this->extractFluentMethods($argumentValue->items, $fluentMethods);
 
-        if ($arrayItemsAndFluentClass->getArrayItems()) {
+        if ($arrayItemsAndFluentClass->getArrayItems() !== []) {
             $argumentValue->items = $arrayItemsAndFluentClass->getArrayItems();
         } else {
             unset($methodCall->args[$argumentPosition - 1]);

@@ -25,7 +25,7 @@ final class TemplateFileSystem
         $destination = $smartFileInfo->getRelativeFilePathFromDirectory(TemplateFinder::TEMPLATES_DIRECTORY);
 
         // normalize core package
-        if ($configuration->isRectorRepository() === false) {
+        if (!$configuration->isRectorRepository()) {
             // special keyword for 3rd party Rectors, not for core Github contribution
             $destination = Strings::replace($destination, '#packages\/__Package__#', 'utils/rector');
         }
