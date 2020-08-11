@@ -14,7 +14,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -47,10 +46,8 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      */
     private $staticTypeMapper;
 
-    public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
-        NodeNameResolver $nodeNameResolver
-    ) {
+    public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
     }

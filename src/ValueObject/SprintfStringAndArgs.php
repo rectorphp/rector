@@ -13,10 +13,12 @@ final class SprintfStringAndArgs
      * @var Expr[]
      */
     private $arrayItems = [];
+
     /**
      * @var String_
      */
     private $string;
+
     /**
      * @param Expr[] $arrayItems
      */
@@ -25,10 +27,7 @@ final class SprintfStringAndArgs
         $this->string = $string;
         $this->arrayItems = $arrayItems;
     }
-    private function getString(): String_
-    {
-        return $this->string;
-    }
+
     /**
      * @return Expr[]
      */
@@ -36,8 +35,14 @@ final class SprintfStringAndArgs
     {
         return $this->arrayItems;
     }
+
     public function getStringValue(): string
     {
         return $this->string->value;
+    }
+
+    private function getString(): String_
+    {
+        return $this->string;
     }
 }

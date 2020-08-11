@@ -196,6 +196,7 @@ PHP
 
         return $newProperties;
     }
+
     /**
      * @return array<string, Type[]>
      */
@@ -238,6 +239,7 @@ PHP
 
         return $fetchedLocalPropertyNameToTypes;
     }
+
     /**
      * @return string[]
      */

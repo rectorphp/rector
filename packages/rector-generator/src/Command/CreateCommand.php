@@ -144,6 +144,7 @@ final class CreateCommand extends Command
 
         return ShellCode::SUCCESS;
     }
+
     private function isRectorRepository(): bool
     {
         return file_exists(__DIR__ . '/../../../../vendor');

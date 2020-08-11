@@ -127,6 +127,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
 
         return $this->typeFactory->createMixedPassedOrUnionType($paramOnPositionTypes);
     }
+
     private function getFunctionLikePhpDocInfo(Param $param): ?PhpDocInfo
     {
         $parent = $param->getAttribute(AttributeKey::PARENT_NODE);

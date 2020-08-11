@@ -65,6 +65,7 @@ final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwar
 
         return null;
     }
+
     private function createAttributeAwareReturnType(TypeNode $typeNode, string $docContent): AttributeAwareNodeInterface
     {
         return $this->attributeAwareNodeFactory->createFromNode($typeNode, $docContent);

@@ -18,6 +18,11 @@ final class ComposerPackageAutoloadUpdater
     private const PSR_4 = 'psr-4';
 
     /**
+     * @var string
+     */
+    private const AUTOLOAD_DEV = 'autoload-dev';
+
+    /**
      * @var JsonFileSystem
      */
     private $jsonFileSystem;
@@ -26,10 +31,6 @@ final class ComposerPackageAutoloadUpdater
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-    /**
-     * @var string
-     */
-    private const AUTOLOAD_DEV = 'autoload-dev';
 
     public function __construct(JsonFileSystem $jsonFileSystem, SymfonyStyle $symfonyStyle)
     {
@@ -71,7 +72,7 @@ final class ComposerPackageAutoloadUpdater
 
     private function resolvePackage(Configuration $configuration): Package
     {
-        if (!$configuration->isRectorRepository()) {
+        if (! $configuration->isRectorRepository()) {
             return new Package(
                 'Utils\\Rector\\',
                 'Utils\\Rector\\Tests\\',

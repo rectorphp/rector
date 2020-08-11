@@ -156,6 +156,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
         $this->reportRemovedNodes($errorAndDiffCollector);
     }
+
     private function normalizePathsToRelativeWithLine(string $errorMessage): string
     {
         $errorMessage = Strings::replace($errorMessage, '#' . preg_quote(getcwd(), '#') . '/#');

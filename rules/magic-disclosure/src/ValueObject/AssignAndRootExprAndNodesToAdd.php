@@ -13,10 +13,12 @@ final class AssignAndRootExprAndNodesToAdd
      * @var array<Expr|Return_>
      */
     private $nodesToAdd = [];
+
     /**
      * @var AssignAndRootExpr
      */
     private $assignAndRootExpr;
+
     /**
      * @param array<Expr|Return_> $nodesToAdd
      */
@@ -25,6 +27,7 @@ final class AssignAndRootExprAndNodesToAdd
         $this->assignAndRootExpr = $assignAndRootExpr;
         $this->nodesToAdd = $nodesToAdd;
     }
+
     /**
      * @return array<Expr|Return_>
      */
@@ -32,6 +35,7 @@ final class AssignAndRootExprAndNodesToAdd
     {
         return $this->nodesToAdd;
     }
+
     public function getRootCallerExpr(): Expr
     {
         return $this->assignAndRootExpr->getCallerExpr();

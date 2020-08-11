@@ -126,7 +126,7 @@ final class Configuration
 
     public function getPackage(): string
     {
-        if (!$this->isRectorRepository) {
+        if (! $this->isRectorRepository) {
             return 'Utils';
         }
 
@@ -135,7 +135,7 @@ final class Configuration
 
     public function getPackageDirectory(): string
     {
-        if (!$this->isRectorRepository) {
+        if (! $this->isRectorRepository) {
             return 'rector';
         }
 
