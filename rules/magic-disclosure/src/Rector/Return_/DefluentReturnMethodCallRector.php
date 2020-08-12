@@ -63,8 +63,7 @@ PHP
 
         $variableReturn = new Return_($methodCall->var);
 
-        $this->addNodeAfterNode($methodCall, $node);
-        $this->addNodeAfterNode($variableReturn, $node);
+        $this->addNodesAfterNode([$methodCall, $variableReturn], $node);
 
         $this->removeNode($node);
 

@@ -73,16 +73,15 @@ PHP
                 return null;
             }
 
+            /** @var Const_[] $allConsts */
             $allConsts = $node->consts;
 
             /** @var Const_ $firstConst */
             $firstConst = array_shift($allConsts);
             $node->consts = [$firstConst];
 
-            foreach ($allConsts as $anotherConstant) {
-                $nextClassConst = new ClassConst([$anotherConstant], $node->flags, $node->getAttributes());
-                $this->addNodeAfterNode($nextClassConst, $node);
-            }
+            $nextClassConsts = $this->createNextClassConsts($allConsts, $node);
+            $this->addNodesAfterNode($nextClassConsts, $node);
 
             return $node;
         }
@@ -102,5 +101,20 @@ PHP
         }
 
         return $node;
+    }
+
+    /**
+     * @param Const_[] $consts
+     * @return ClassConst[]
+     */
+    private function createNextClassConsts(array $consts, ClassConst $classConst): array
+    {
+        $decoratedConsts = [];
+
+        foreach ($consts as $const) {
+            $decoratedConsts[] = new ClassConst([$const], $classConst->flags, $classConst->getAttributes());
+        }
+
+        return $decoratedConsts;
     }
 }

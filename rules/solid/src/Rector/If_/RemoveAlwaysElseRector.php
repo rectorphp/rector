@@ -88,9 +88,7 @@ PHP
         }
 
         if ($node->else !== null) {
-            foreach ($node->else->stmts as $stmt) {
-                $this->addNodeAfterNode($stmt, $node);
-            }
+            $this->addNodesAfterNode((array) $node->else->stmts, $node);
             $node->else = null;
             return $node;
         }

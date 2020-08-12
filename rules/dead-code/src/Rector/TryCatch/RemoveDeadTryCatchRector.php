@@ -81,9 +81,7 @@ PHP
             return null;
         }
 
-        foreach ($node->stmts as $tryStmt) {
-            $this->addNodeAfterNode($tryStmt, $node);
-        }
+        $this->addNodesAfterNode((array) $node->stmts, $node);
 
         $this->removeNode($node);
 

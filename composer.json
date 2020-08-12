@@ -34,7 +34,6 @@
         "symplify/autowire-array-parameter": "^8.1.20",
         "symplify/console-color-diff": "^8.1.20",
         "symplify/package-builder": "^8.1.20",
-        "symplify/parameter-name-guard": "^8.1.20",
         "symplify/set-config-resolver": "^8.1.20",
         "symplify/smart-file-system": "^8.1.20",
         "tracy/tracy": "^2.7"

@@ -17,6 +17,7 @@ use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\AutoBindParameter\DependencyInjection\CompilerPass\AutoBindParameterCompilerPass;
@@ -24,7 +25,6 @@ use Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArr
 use Symplify\ConsoleColorDiff\ConsoleColorDiffBundle;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
-use Symplify\ParameterNameGuard\Bundle\ParameterNameGuardBundle;
 
 final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterface
 {
@@ -75,11 +75,11 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
     }
 
     /**
-     * @return ConsoleColorDiffBundle[]|ParameterNameGuardBundle[]
+     * @return BundleInterface[]
      */
     public function registerBundles(): array
     {
-        return [new ConsoleColorDiffBundle(), new ParameterNameGuardBundle()];
+        return [new ConsoleColorDiffBundle()];
     }
 
     protected function build(ContainerBuilder $containerBuilder): void
