@@ -12,6 +12,7 @@ use Rector\Core\Exception\NotImplementedException;
 use ReflectionMethod;
 
 /**
+ * @deprecated Replace with https://github.com/symplify/symplify/pull/2054/files after it gets merged
  * @see \Rector\PHPStanExtensions\Tests\Rule\PreventParentMethodVisibilityOverrideRule\PreventParentMethodVisibilityOverrideRuleTest
  */
 final class PreventParentMethodVisibilityOverrideRule implements Rule
