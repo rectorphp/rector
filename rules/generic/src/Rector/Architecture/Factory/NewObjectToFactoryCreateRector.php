@@ -107,7 +107,7 @@ PHP
 
                 $factoryObjectType = new ObjectType($factoryClass);
 
-                $this->addPropertyToClass($classNode, $factoryObjectType, $propertyName);
+                $this->addConstrutorDependencyToClass($classNode, $factoryObjectType, $propertyName);
             }
 
             return new MethodCall(

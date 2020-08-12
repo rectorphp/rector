@@ -89,7 +89,7 @@ PHP
         $this->collectGlobalVariableNamesAndRefactorToPropertyFetch($node);
 
         foreach ($this->globalVariableNames as $globalVariableName) {
-            $this->addPropertyWithoutConstructorToClass($classLike, null, $globalVariableName);
+            $this->addPropertyToClass($classLike, null, $globalVariableName);
         }
 
         return $node;

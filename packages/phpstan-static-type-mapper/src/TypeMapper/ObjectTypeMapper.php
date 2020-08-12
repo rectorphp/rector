@@ -7,6 +7,7 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Generic\GenericObjectType;
@@ -18,10 +19,17 @@ use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
-final class ObjectTypeMapper implements TypeMapperInterface
+final class ObjectTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMapperAwareInterface
 {
+    /**
+     * @var PHPStanStaticTypeMapper
+     */
+    private $phpStanStaticTypeMapper;
+
     public function getNodeClass(): string
     {
         return ObjectType::class;
@@ -38,6 +46,18 @@ final class ObjectTypeMapper implements TypeMapperInterface
 
         if ($type instanceof AliasedObjectType) {
             return new IdentifierTypeNode($type->getClassName());
+        }
+
+        if ($type instanceof GenericObjectType) {
+            $identifierTypeNode = new IdentifierTypeNode('\\' . $type->getClassName());
+
+            $genericTypeNodes = [];
+            foreach ($type->getTypes() as $genericType) {
+                $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType);
+                $genericTypeNodes[] = $typeNode;
+            }
+
+            return new GenericTypeNode($identifierTypeNode, $genericTypeNodes);
         }
 
         return new IdentifierTypeNode('\\' . $type->getClassName());
@@ -97,5 +117,10 @@ final class ObjectTypeMapper implements TypeMapperInterface
         }
 
         return $type->getClassName();
+    }
+
+    public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    {
+        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
 }

@@ -36,6 +36,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -234,7 +235,6 @@ final class NodeFactory
         $propertyBuilder->makePrivate();
 
         $property = $propertyBuilder->getNode();
-
         $this->addPropertyType($property, $type);
 
         $this->decorateParentPropertyProperty($property);
@@ -485,6 +485,11 @@ final class NodeFactory
 
             if ($phpParserType !== null) {
                 $property->type = $phpParserType;
+
+                if ($type instanceof GenericObjectType) {
+                    $phpDocInfo->changeVarType($type);
+                }
+
                 return;
             }
         }

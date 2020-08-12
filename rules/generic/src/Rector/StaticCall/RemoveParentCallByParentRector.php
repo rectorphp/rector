@@ -14,6 +14,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
+ * @deprecated Lacks of edge-case like assign removal etc. Replaced by more specific rule.
  * @see \Rector\Generic\Tests\Rector\StaticCall\RemoveParentCallByParentRector\RemoveParentCallByParentRectorTest
  */
 final class RemoveParentCallByParentRector extends AbstractRector implements ConfigurableRectorInterface

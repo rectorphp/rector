@@ -252,7 +252,7 @@ PHP
         $assign = $this->nodeFactory->createPropertyAssignment($name);
         $classMethod->stmts[] = new Expression($assign);
 
-        $this->addPropertyToClass($class, $objectType, $name);
+        $this->addConstrutorDependencyToClass($class, $objectType, $name);
     }
 
     private function createEntityManagerParam(): Param

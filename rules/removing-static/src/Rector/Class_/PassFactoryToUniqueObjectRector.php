@@ -200,7 +200,7 @@ PHP
 
         foreach ($staticTypesInClass as $staticType) {
             $variableName = $this->propertyNaming->fqnToVariableName($staticType);
-            $this->addPropertyToClass($class, $staticType, $variableName);
+            $this->addConstrutorDependencyToClass($class, $staticType, $variableName);
 
             // is this an object? create factory for it next to this :)
             if ($this->uniqueObjectOrServiceDetector->isUniqueObject()) {

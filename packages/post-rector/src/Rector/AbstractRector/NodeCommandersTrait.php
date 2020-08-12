@@ -136,10 +136,10 @@ trait NodeCommandersTrait
         /** @var string $propertyName */
         $propertyName = $this->getName($property);
 
-        $this->addPropertyToClass($classNode, $propertyType, $propertyName);
+        $this->addConstrutorDependencyToClass($classNode, $propertyType, $propertyName);
     }
 
-    protected function addPropertyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void
+    protected function addConstrutorDependencyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void
     {
         $this->propertyToAddCollector->addPropertyToClass($propertyName, $propertyType, $class);
         $this->rectorChangeCollector->notifyNodeFileInfo($class);
@@ -151,11 +151,8 @@ trait NodeCommandersTrait
         $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
 
-    protected function addPropertyWithoutConstructorToClass(
-        Class_ $class,
-        ?Type $propertyType,
-        string $propertyName
-    ): void {
+    protected function addPropertyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void
+    {
         $this->propertyToAddCollector->addPropertyWithoutConstructorToClass($propertyName, $propertyType, $class);
         $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }

@@ -9,7 +9,6 @@ use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
 use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\Rector\Class_\RemoveParentRector;
 use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
-use Rector\Generic\Rector\ClassMethod\RemoveConstructorDependencyByParentRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -67,16 +66,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
                 'getEntityManager' => 'entityManager',
-            ],
-        ]]);
-
-    $services->set(RemoveConstructorDependencyByParentRector::class)
-        ->call('configure', [[
-            RemoveConstructorDependencyByParentRector::PARENT_TYPE_TO_PARAM_TYPES_TO_REMOVE => [
-                'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository' => [
-                    'Doctrine\Common\Persistence\ManagerRegistry',
-                    'Doctrine\Persistence\ManagerRegistry',
-                ],
             ],
         ]]);
 

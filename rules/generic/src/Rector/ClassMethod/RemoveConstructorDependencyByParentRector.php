@@ -14,6 +14,8 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
+ * @deprecated Very limited in removal, not covered with edge-cases.
+ *
  * @see \Rector\Generic\Tests\Rector\ClassMethod\RemoveConstructorDependencyByParentRector\RemoveConstructorDependencyByParentRectorTest
  */
 final class RemoveConstructorDependencyByParentRector extends AbstractRector implements ConfigurableRectorInterface

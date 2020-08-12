@@ -82,7 +82,7 @@ abstract class AbstractToMethodCallRector extends AbstractRector implements Conf
     {
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($type);
         $propertyName = $this->propertyNaming->fqnToVariableName($fullyQualifiedObjectType);
-        $this->addPropertyToClass($class, $fullyQualifiedObjectType, $propertyName);
+        $this->addConstrutorDependencyToClass($class, $fullyQualifiedObjectType, $propertyName);
     }
 
     private function createPropertyFetchFromClass(string $type): PropertyFetch

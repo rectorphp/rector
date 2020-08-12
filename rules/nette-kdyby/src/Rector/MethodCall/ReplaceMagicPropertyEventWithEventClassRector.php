@@ -118,7 +118,7 @@ PHP
 
         /** @var Class_ $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        $this->addPropertyToClass(
+        $this->addConstrutorDependencyToClass(
             $classLike,
             new FullyQualifiedObjectType(EventDispatcherInterface::class),
             'eventDispatcher'

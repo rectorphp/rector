@@ -113,7 +113,7 @@ PHP
 
             /** @var string $paramName */
             $paramName = $this->getName($paramNode->var);
-            $this->addPropertyToClass($class, $paramNodeType, $paramName);
+            $this->addConstrutorDependencyToClass($class, $paramNodeType, $paramName);
 
             $this->removeParam($classMethod, $key);
 
