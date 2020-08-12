@@ -160,6 +160,10 @@ final class DumpNodesCommand extends AbstractCommand
      * @var MarkdownDumpNodesOutputFormatter
      */
     private $markdownDumpNodesOutputFormatter;
+    /**
+     * @var string
+     */
+    private const SOME_METHOD = 'someMethod';
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
@@ -295,7 +299,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Function_::class) {
                     $node = new Function_('some_function');
                 } elseif ($nodeClass === ClassMethod::class) {
-                    $node = new ClassMethod('someMethod');
+                    $node = new ClassMethod(self::SOME_METHOD);
                     $node->flags |= Class_::MODIFIER_PUBLIC;
                 } elseif ($nodeClass === Case_::class) {
                     $node = new Case_(new ConstFetch(new Name('true')));
@@ -324,7 +328,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Global_::class) {
                     $node = new Global_([new Variable('globalVariable')]);
                 } elseif ($nodeClass === Precedence::class) {
-                    $node = new Precedence(new Name('SomeTrait'), 'someMethod', [new Name('overriddenTrait')]);
+                    $node = new Precedence(new Name('SomeTrait'), self::SOME_METHOD, [new Name('overriddenTrait')]);
                 } elseif ($nodeClass === Alias::class) {
                     $node = new Alias(new Name('SomeTrait'), 'method', Class_::MODIFIER_PUBLIC, 'aliasedMethod');
                 } elseif ($nodeClass === Throw_::class) {
@@ -426,7 +430,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === UnionType::class) {
                     $node = new UnionType([new Identifier(self::STRING), new Identifier('null')]);
                 } elseif ($nodeClass === NullsafeMethodCall::class) {
-                    $node = new NullsafeMethodCall($someVariableNode, new Identifier('someMethod'));
+                    $node = new NullsafeMethodCall($someVariableNode, new Identifier(self::SOME_METHOD));
                 } elseif ($nodeClass === NullsafePropertyFetch::class) {
                     $node = new NullsafePropertyFetch($someVariableNode, new Identifier('somePropety'));
                 } else {
