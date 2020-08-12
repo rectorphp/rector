@@ -1,4 +1,4 @@
-# All 559 Rectors Overview
+# All 558 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -69,7 +69,7 @@
 - [Symfony](#symfony) (33)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
-- [SymfonyPhpConfig](#symfonyphpconfig) (2)
+- [SymfonyPhpConfig](#symfonyphpconfig) (1)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -13749,25 +13749,6 @@ Move self::$container service fetching from test methods up to setUp method
 <br><br>
 
 ## SymfonyPhpConfig
-
-### `AddEmptyLineBetweenCallsInPhpConfigRector`
-
-- class: [`Rector\SymfonyPhpConfig\Rector\Closure\AddEmptyLineBetweenCallsInPhpConfigRector`](/../master/rules/symfony-php-config/src/Rector/Closure/AddEmptyLineBetweenCallsInPhpConfigRector.php)
-- [test fixtures](/../master/rules/symfony-php-config/tests/Rector/Closure/AddEmptyLineBetweenCallsInPhpConfigRector/Fixture)
-
-Make calls in PHP Symfony config separated by newline
-
-```diff
- use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
- return static function (ContainerConfigurator $containerConfigurator): void {
-     $parameters = $containerConfigurator->parameters();
-+
-     $parameters->set('key', 'value');
- };
-```
-
-<br><br>
 
 ### `ChangeServiceArgumentsToMethodCallRector`
 

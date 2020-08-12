@@ -9,7 +9,6 @@ use Rector\Core\Configuration\Option;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\SetList;
-use Rector\SymfonyPhpConfig\Rector\Closure\AddEmptyLineBetweenCallsInPhpConfigRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -23,8 +22,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
         ]);
 
-    $services->set(AddEmptyLineBetweenCallsInPhpConfigRector::class);
-
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::SETS, [
@@ -35,7 +32,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::SOLID,
         SetList::PRIVATIZATION,
         SetList::NAMING,
-        SetList::SYMFONY_PHP_CONFIG,
         SetList::ORDER,
         SetList::DEFLUENT,
     ]);
