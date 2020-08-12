@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 
 final class NodesToAddCollector implements NodeCollectorInterface
@@ -49,6 +50,19 @@ final class NodesToAddCollector implements NodeCollectorInterface
 
         $position = $this->resolveNearestExpressionPosition($positionNode);
         $this->nodesToAddBefore[$position][] = $this->wrapToExpression($addedNode);
+    }
+
+    /**
+     * @param Node[] $addedNodes
+     */
+    public function addNodesAfterNode(array $addedNodes, Node $positionNode): void
+    {
+        $position = $this->resolveNearestExpressionPosition($positionNode);
+        foreach ($addedNodes as $addedNode) {
+            // prevent fluent method weird indent
+            $addedNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $this->nodesToAddAfter[$position][] = $this->wrapToExpression($addedNode);
+        }
     }
 
     public function addNodeAfterNode(Node $addedNode, Node $positionNode): void

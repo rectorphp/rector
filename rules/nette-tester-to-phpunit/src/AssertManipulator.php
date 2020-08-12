@@ -230,9 +230,7 @@ final class AssertManipulator
 
         /** @var Closure $closure */
         $closure = $staticCall->args[0]->value;
-        foreach ((array) $closure->stmts as $callableStmt) {
-            $this->nodesToAddCollector->addNodeAfterNode($callableStmt, $staticCall);
-        }
+        $this->nodesToAddCollector->addNodesAfterNode((array) $closure->stmts, $staticCall);
 
         $this->nodesToRemoveCollector->addNodeToRemove($staticCall);
     }
@@ -259,10 +257,7 @@ final class AssertManipulator
         /** @var Closure $closure */
         $closure = $staticCall->args[0]->value;
 
-        foreach ((array) $closure->stmts as $callableStmt) {
-            $this->nodesToAddCollector->addNodeAfterNode($callableStmt, $staticCall);
-        }
-
+        $this->nodesToAddCollector->addNodesAfterNode((array) $closure->stmts, $staticCall);
         $this->nodesToRemoveCollector->addNodeToRemove($staticCall);
 
         /** @var ClassMethod|null $classMethod */

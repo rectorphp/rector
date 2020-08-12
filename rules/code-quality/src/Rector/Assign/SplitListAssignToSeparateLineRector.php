@@ -71,9 +71,7 @@ PHP
         $rightArray = $node->expr;
 
         $standaloneAssigns = $this->createStandaloneAssigns($leftArray, $rightArray);
-        foreach ($standaloneAssigns as $standaloneAssign) {
-            $this->addNodeAfterNode($standaloneAssign, $node);
-        }
+        $this->addNodesAfterNode($standaloneAssigns, $node);
 
         $this->removeNode($node);
 

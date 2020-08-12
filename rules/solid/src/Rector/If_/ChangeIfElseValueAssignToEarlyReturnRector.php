@@ -116,10 +116,7 @@ PHP
         $elseStmts[$lastElseStmtKey] = new Return_($assign->expr);
 
         $node->else = null;
-
-        foreach ($elseStmts as $elseStmt) {
-            $this->addNodeAfterNode($elseStmt, $node);
-        }
+        $this->addNodesAfterNode($elseStmts, $node);
 
         $this->removeNode($nextNode);
 
