@@ -83,6 +83,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RemoveConstructorDependencyByParentRector::PARENT_TYPE_TO_PARAM_TYPES_TO_REMOVE => [
                 'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository' => [
                     'Doctrine\Common\Persistence\ManagerRegistry',
+                    'Doctrine\Persistence\ManagerRegistry',
                 ],
             ],
         ]]);
