@@ -34,6 +34,8 @@ use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
@@ -423,6 +425,10 @@ final class DumpNodesCommand extends AbstractCommand
                     $node = new Arg($someVariableNode);
                 } elseif ($nodeClass === UnionType::class) {
                     $node = new UnionType([new Identifier(self::STRING), new Identifier('null')]);
+                } elseif ($nodeClass === NullsafeMethodCall::class) {
+                    $node = new NullsafeMethodCall($someVariableNode, new Identifier('someMethod'));
+                } elseif ($nodeClass === NullsafePropertyFetch::class) {
+                    $node = new NullsafePropertyFetch($someVariableNode, new Identifier('somePropety'));
                 } else {
                     throw new ShouldNotHappenException(sprintf(
                         'Implement a new printer for "%s" node in "%s"',

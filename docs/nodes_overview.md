@@ -58,7 +58,7 @@ $someVariable[0]
 
 #### Public Properties
 
- * `$items` - `/** @var ArrayItem[] Items */`
+ * `$items` - `/** @var (ArrayItem|null)[] Items */`
 <br>
 
 ### `PhpParser\Node\Expr\ArrowFunction`
@@ -430,6 +430,41 @@ new class
 
  * `$class` - `/** @var Node\Name|Expr|Node\Stmt\Class_ Class name */`
  * `$args` - `/** @var Node\Arg[] Arguments */`
+<br>
+
+### `PhpParser\Node\Expr\NullsafeMethodCall`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+$someVariable?->someMethod()
+```
+
+#### Public Properties
+
+ * `$var` - `/** @var Expr Variable holding object */`
+ * `$name` - `/** @var Identifier|Expr Method name */`
+ * `$args` - `/** @var Arg[] Arguments */`
+<br>
+
+### `PhpParser\Node\Expr\NullsafePropertyFetch`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+$someVariable?->somePropety
+```
+
+#### Public Properties
+
+ * `$var` - `/** @var Expr Variable holding object */`
+ * `$name` - `/** @var Identifier|Expr Property name */`
 <br>
 
 ### `PhpParser\Node\Expr\PostDec`
