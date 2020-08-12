@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -55,13 +56,7 @@ PHP
             return null;
         }
 
-        // is handled by @see \Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector
-        if ($this->hasParentType($node, Return_::class)) {
-            return null;
-        }
-
-        // is handled by @see InArgChainMethodCallToStandaloneMethodCallRector
-        if ($this->hasParentType($node, Arg::class)) {
+        if ($this->isHandledByAnotherRule($node)) {
             return null;
         }
 
@@ -103,6 +98,18 @@ PHP
         return $node;
     }
 
+    /**
+     * Is handled by:
+     * @see DefluentReturnMethodCallRector
+     * @see InArgFluentChainMethodCallToStandaloneMethodCallRector
+     *
+     * @param MethodCall|Return_ $node
+     */
+    private function isHandledByAnotherRule(Node $node): bool
+    {
+        return $this->hasParentTypes($node, [Return_::class, Arg::class]);
+    }
+
     private function isGetterMethodCall(MethodCall $methodCall): bool
     {
         if ($methodCall->var instanceof MethodCall) {
@@ -121,15 +128,15 @@ PHP
      */
     private function removeCurrentNode(Node $node): void
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign) {
-            $this->removeNode($parentNode);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Assign) {
+            $this->removeNode($parent);
             return;
         }
 
         // part of method call
-        if ($parentNode instanceof Arg) {
-            $parentParent = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Arg) {
+            $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentParent instanceof MethodCall) {
                 $this->removeNode($parentParent);
             }

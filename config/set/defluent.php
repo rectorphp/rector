@@ -16,12 +16,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ReturnThisRemoveRector::class);
-
     $services->set(DefluentReturnMethodCallRector::class);
-
     $services->set(FluentChainMethodCallToNormalMethodCallRector::class);
-
     $services->set(MethodCallOnSetterMethodCallToStandaloneAssignRector::class);
-
     $services->set(InArgFluentChainMethodCallToStandaloneMethodCallRector::class);
 };

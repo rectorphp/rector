@@ -88,11 +88,7 @@ PHP
             return null;
         }
 
-        if ($this->hasParentType($node, Isset_::class)) {
-            return null;
-        }
-
-        if ($this->hasParentType($node, Unset_::class)) {
+        if ($this->hasParentTypes($node, [Isset_::class, Unset_::class])) {
             return null;
         }
 

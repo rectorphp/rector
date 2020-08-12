@@ -41,12 +41,13 @@ parameters:
         old_to_preffered_classes:
             # prevent PHPStorm autocomplete mess
             'Symfony\Component\DependencyInjection\Variable': 'PhpParser\Node\Expr\Variable'
+            'phpDocumentor\Reflection\Types\Expression': 'PhpParser\Node\Stmt\Expression'
             'phpDocumentor\Reflection\DocBlock\Tags\Param': 'PhpParser\Node\Param'
-            'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
-            'Closure': 'PhpParser\Node\Expr\Closure'
             'phpDocumentor\Reflection\DocBlock\Tags\Return_': 'PhpParser\Node\Stmt\Return_'
+            'Closure': 'PhpParser\Node\Expr\Closure'
             'PHPUnit\TextUI\Configuration\Variable': 'PhpParser\Node\Expr\Variable'
             'PhpCsFixer\FixerDefinition\CodeSample': 'Rector\Core\RectorDefinition\CodeSample'
+            'SebastianBergmann\Type\MixedType': 'PHPStan\Type\MixedType'
             'Hoa\Protocol\Node\Node': 'PhpParser\Node'
 
     # to allow installing with various phsptan versions without reporting old errors here

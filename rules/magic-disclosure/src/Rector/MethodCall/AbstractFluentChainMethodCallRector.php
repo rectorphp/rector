@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\MagicDisclosure\NodeAnalyzer\ChainCallsStaticTypeResolver;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
@@ -16,6 +16,23 @@ use Rector\MagicDisclosure\ValueObject\AssignAndRootExprAndNodesToAdd;
 
 abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
 {
+    /**
+     * Skip query and builder
+     * @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?
+     *
+     * @var string[]
+     */
+    private const ALLOWED_TYPES = [
+        'Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator',
+        'Nette\Forms\Controls\BaseControl',
+        'PHPStan\Analyser\Scope',
+        'DateTime',
+        'DateTimeInterface',
+        '*Finder',
+        '*Builder',
+        '*Query',
+    ];
+
     /**
      * @var FluentChainMethodCallNodeAnalyzer
      */
@@ -32,16 +49,23 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
     protected $nonFluentChainMethodCallFactory;
 
     /**
+     * @var ChainCallsStaticTypeResolver
+     */
+    private $chainCallsStaticTypeResolver;
+
+    /**
      * @required
      */
     public function autowireAbstractFluentChainMethodCallRector(
         FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
         FluentChainMethodCallRootExtractor $fluentChainMethodCallRootExtractor,
-        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory
+        NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
+        ChainCallsStaticTypeResolver $chainCallsStaticTypeResolver
     ): void {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
         $this->fluentChainMethodCallRootExtractor = $fluentChainMethodCallRootExtractor;
         $this->nonFluentChainMethodCallFactory = $nonFluentChainMethodCallFactory;
+        $this->chainCallsStaticTypeResolver = $chainCallsStaticTypeResolver;
     }
 
     /**
@@ -49,22 +73,18 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
      */
     protected function shouldSkipChainMethodCalls(AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls): bool
     {
-        $calleeUniqueTypes = $this->fluentChainMethodCallNodeAnalyzer->resolveCalleeUniqueTypes(
+        $calleeUniqueTypes = $this->chainCallsStaticTypeResolver->resolveCalleeUniqueTypes(
             $assignAndRootExpr,
             $chainMethodCalls
         );
 
-        if (count($calleeUniqueTypes) !== 1) {
+        if (! $this->isCorrectTypeCount($calleeUniqueTypes, $assignAndRootExpr)) {
             return true;
         }
 
-        $calleeUniqueType = $calleeUniqueTypes[0];
+        $calleeUniqueType = $this->resolveCalleeUniqueType($assignAndRootExpr, $calleeUniqueTypes);
 
-        if ($this->isKnownAllowedFluentType($calleeUniqueType)) {
-            return true;
-        }
-
-        return ! $this->isMatchedType($calleeUniqueType);
+        return $this->isAllowedType($calleeUniqueType, self::ALLOWED_TYPES);
     }
 
     protected function createStandaloneNodesToAddFromChainMethodCalls(
@@ -72,6 +92,7 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
         string $kind
     ): ?AssignAndRootExprAndNodesToAdd {
         $chainMethodCalls = $this->fluentChainMethodCallNodeAnalyzer->collectAllMethodCallsInChain($methodCall);
+
         $assignAndRootExpr = $this->fluentChainMethodCallRootExtractor->extractFromMethodCalls(
             $chainMethodCalls,
             $kind
@@ -94,15 +115,31 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
         return new AssignAndRootExprAndNodesToAdd($assignAndRootExpr, $nodesToAdd);
     }
 
-    private function isKnownAllowedFluentType(string $class): bool
+    /**
+     * @param string[] $calleeUniqueTypes
+     */
+    private function isCorrectTypeCount(array $calleeUniqueTypes, AssignAndRootExpr $assignAndRootExpr): bool
     {
-        // skip query and builder
-        // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?"
-        if ((bool) Strings::match($class, '#(Finder|DateTime|DateTimeInterface|Query|Builder|MutatingScope)$#')) {
-            return true;
+        if (count($calleeUniqueTypes) === 0) {
+            return false;
         }
 
-        // allowed fluent types
-        return is_a($class, 'Nette\Forms\Controls\BaseControl', true);
+        if ($assignAndRootExpr->isFirstCallFactory()) {
+            return count($calleeUniqueTypes) === 2;
+        }
+
+        return count($calleeUniqueTypes) === 1;
+    }
+
+    /**
+     * @param string[] $calleeUniqueTypes
+     */
+    private function resolveCalleeUniqueType(AssignAndRootExpr $assignAndRootExpr, array $calleeUniqueTypes): string
+    {
+        if (! $assignAndRootExpr->isFirstCallFactory()) {
+            return $calleeUniqueTypes[0];
+        }
+
+        return $calleeUniqueTypes[1] ?? $calleeUniqueTypes[0];
     }
 }

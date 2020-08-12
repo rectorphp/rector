@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MagicDisclosure\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -109,7 +110,10 @@ PHP
             return null;
         }
 
-        $assignAndRootExprAndNodesToAdd = $this->createStandaloneNodesToAddFromChainMethodCalls($node, 'in_args');
+        $assignAndRootExprAndNodesToAdd = $this->createStandaloneNodesToAddFromChainMethodCalls(
+            $node,
+            FluentChainMethodCallRootExtractor::KIND_IN_ARGS
+        );
         if ($assignAndRootExprAndNodesToAdd === null) {
             return null;
         }
