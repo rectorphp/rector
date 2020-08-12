@@ -11,7 +11,6 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Naming\Naming\PropertyNaming;
 
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector\MethodCallToPropertyFetchRectorTest
@@ -25,19 +24,9 @@ final class MethodCallToPropertyFetchRector extends AbstractRector implements Co
     public const METHOD_CALL_TO_PROPERTY_FETCHES = '$methodCallToPropertyFetchCollection';
 
     /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
      * @var array<string, string>
      */
     private $methodCallToPropertyFetchCollection = [];
-
-    public function __construct(PropertyNaming $propertyNaming)
-    {
-        $this->propertyNaming = $propertyNaming;
-    }
 
     public function getDefinition(): RectorDefinition
     {

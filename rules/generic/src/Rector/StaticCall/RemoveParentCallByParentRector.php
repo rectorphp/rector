@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -26,19 +25,9 @@ final class RemoveParentCallByParentRector extends AbstractRector implements Con
     public const PARENT_CLASSES = 'parent_classes';
 
     /**
-     * @var ClassMethodManipulator
-     */
-    private $classMethodManipulator;
-
-    /**
      * @var string[]
      */
     private $parentClasses = [];
-
-    public function __construct(ClassMethodManipulator $classMethodManipulator)
-    {
-        $this->classMethodManipulator = $classMethodManipulator;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -83,8 +72,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
