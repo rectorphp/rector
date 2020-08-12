@@ -12,7 +12,6 @@ use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Generic\Rector\ClassMethod\RemoveConstructorDependencyByParentRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
-use Rector\Generic\Rector\StaticCall\RemoveParentCallByParentRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 /**
@@ -68,13 +67,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
                 'getEntityManager' => 'entityManager',
-            ],
-        ]]);
-
-    $services->set(RemoveParentCallByParentRector::class)
-        ->call('configure', [[
-            RemoveParentCallByParentRector::PARENT_CLASSES => [
-                'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository',
             ],
         ]]);
 
