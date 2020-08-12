@@ -11,7 +11,7 @@ use Rector\Generic\Rector\New_\NewToStaticCallRector;
 use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector;
+use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

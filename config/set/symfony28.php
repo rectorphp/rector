@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\Argument\ArgumentDefaultValueReplacerRector;
-use Rector\Symfony\Rector\Yaml\ParseFileRector;
+use Rector\Symfony\Rector\StaticCall\ParseFileRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

@@ -216,7 +216,7 @@ parameters:
         # false positive
         - '#Comparison operation "<" between 0 and 2 is always true#'
 
-        - '#Method Rector\\Symfony\\Rector\\FrameworkBundle\\AbstractToConstructorInjectionRector\:\:getServiceTypeFromMethodCallArgument\(\) should return PHPStan\\Type\\Type but returns PHPStan\\Type\\Type\|null#'
+        - '#Method Rector\\Symfony\\Rector\\MethodCall\\AbstractToConstructorInjectionRector\:\:getServiceTypeFromMethodCallArgument\(\) should return PHPStan\\Type\\Type but returns PHPStan\\Type\\Type\|null#'
 
         - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
         - '#Unable to resolve the template type ExpectedType in call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)#'

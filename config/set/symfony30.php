@@ -5,16 +5,16 @@ declare(strict_types=1);
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector;
+use Rector\Symfony\Rector\ClassMethod\GetRequestRector;
 use Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
-use Rector\Symfony\Rector\Form\FormTypeGetParentRector;
-use Rector\Symfony\Rector\Form\OptionNameRector;
-use Rector\Symfony\Rector\Form\StringFormTypeToClassRector;
-use Rector\Symfony\Rector\HttpKernel\GetRequestRector;
 use Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector;
 use Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector;
 use Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector;
 use Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector;
+use Rector\Symfony\Rector\MethodCall\OptionNameRector;
 use Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
+use Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

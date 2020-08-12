@@ -20,10 +20,14 @@
 namespace Rector\DoctrineAnnotationGenerated;
 
 use Doctrine\Common\Annotations\Annotation\Attribute;
-use ReflectionClass;
 use Doctrine\Common\Annotations\Annotation\Enum;
 use Doctrine\Common\Annotations\Annotation\Target;
 use Doctrine\Common\Annotations\Annotation\Attributes;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionProperty;
+use RuntimeException;
+use stdClass;
 /**
  * A parser for docblock annotations.
  *
@@ -47,7 +51,7 @@ final class ConstantPreservingDocParser
     /**
      * The lexer.
      *
-     * @var \Doctrine\Common\Annotations\DocLexer
+     * @var DocLexer
      */
     private $lexer;
     /**
@@ -59,7 +63,7 @@ final class ConstantPreservingDocParser
     /**
      * Doc parser used to collect annotation target.
      *
-     * @var \Doctrine\Common\Annotations\DocParser
+     * @var DocParser
      */
     private static $metadataParser;
     /**
@@ -181,8 +185,7 @@ final class ConstantPreservingDocParser
      * @param string $namespace
      *
      * @return void
-     *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function addNamespace($namespace)
     {
@@ -197,8 +200,7 @@ final class ConstantPreservingDocParser
      * @param array $imports
      *
      * @return void
-     *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function setImports(array $imports)
     {
@@ -225,6 +227,8 @@ final class ConstantPreservingDocParser
      * @param string $context The parsing context.
      *
      * @return array Array of annotations. If no annotations are found, an empty array is returned.
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
     public function parse($input, $context = '')
     {
@@ -241,10 +245,8 @@ final class ConstantPreservingDocParser
      * Finds the first valid annotation
      *
      * @param string $input The docblock string to parse
-     *
-     * @return int|null
      */
-    private function findInitialTokenPosition($input)
+    private function findInitialTokenPosition($input): ?int
     {
         $pos = 0;
         // search for first valid annotation
@@ -262,14 +264,15 @@ final class ConstantPreservingDocParser
      * Attempts to match the given token with the current lookahead token.
      * If they match, updates the lookahead token; otherwise raises a syntax error.
      *
-     * @param integer $token Type of token.
+     * @param int $token Type of token.
      *
-     * @return boolean True if tokens match; false otherwise.
+     * @return bool True if tokens match; false otherwise.
+     * @throws AnnotationException
      */
-    private function match($token)
+    private function match(int $token): bool
     {
         if (!$this->lexer->isNextToken($token)) {
-            $this->syntaxError($this->lexer->getLiteral($token));
+            throw $this->syntaxError($this->lexer->getLiteral($token));
         }
         return $this->lexer->moveNext();
     }
@@ -279,14 +282,12 @@ final class ConstantPreservingDocParser
      * If any of them matches, this method updates the lookahead token; otherwise
      * a syntax error is raised.
      *
-     * @param array $tokens
-     *
-     * @return boolean
+     * @throws AnnotationException
      */
-    private function matchAny(array $tokens)
+    private function matchAny(array $tokens): bool
     {
         if (!$this->lexer->isNextTokenAny($tokens)) {
-            $this->syntaxError(implode(' or ', array_map([$this->lexer, 'getLiteral'], $tokens)));
+            throw $this->syntaxError(implode(' or ', array_map([$this->lexer, 'getLiteral'], $tokens)));
         }
         return $this->lexer->moveNext();
     }
@@ -295,12 +296,8 @@ final class ConstantPreservingDocParser
      *
      * @param string     $expected Expected string.
      * @param array|null $token    Optional token.
-     *
-     * @return void
-     *
-     * @throws AnnotationException
      */
-    private function syntaxError($expected, $token = null)
+    private function syntaxError(string $expected, ?array $token = null): \Doctrine\Common\Annotations\AnnotationException
     {
         if ($token === null) {
             $token = $this->lexer->lookahead;
@@ -311,17 +308,13 @@ final class ConstantPreservingDocParser
             $message .= ' in ' . $this->context;
         }
         $message .= '.';
-        throw \Doctrine\Common\Annotations\AnnotationException::syntaxError($message);
+        return \Doctrine\Common\Annotations\AnnotationException::syntaxError($message);
     }
     /**
      * Attempts to check if a class exists or not. This never goes through the PHP autoloading mechanism
      * but uses the {@link AnnotationRegistry} to load classes.
-     *
-     * @param string $fqcn
-     *
-     * @return boolean
      */
-    private function classExists($fqcn)
+    private function classExists(string $fqcn): bool
     {
         if (isset($this->classExists[$fqcn])) {
             return $this->classExists[$fqcn];
@@ -338,9 +331,10 @@ final class ConstantPreservingDocParser
      *
      * @param string $name The annotation name
      *
-     * @return void
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
-    private function collectAnnotationMetadata($name)
+    private function collectAnnotationMetadata(string $name): void
     {
         if (self::$metadataParser === null) {
             self::$metadataParser = new self();
@@ -406,13 +400,8 @@ final class ConstantPreservingDocParser
     }
     /**
      * Collects parsing metadata for a given attribute.
-     *
-     * @param array     $metadata
-     * @param Attribute $attribute
-     *
-     * @return void
      */
-    private function collectAttributeTypeMetadata(&$metadata, \Doctrine\Common\Annotations\Annotation\Attribute $attribute)
+    private function collectAttributeTypeMetadata(array &$metadata, \Doctrine\Common\Annotations\Annotation\Attribute $attribute): void
     {
         // handle internal type declaration
         $type = self::$typeMap[$attribute->type] ?? $attribute->type;
@@ -448,9 +437,10 @@ final class ConstantPreservingDocParser
     /**
      * Annotations ::= Annotation {[ "*" ]* [Annotation]}*
      *
-     * @return array
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
-    private function Annotations()
+    private function Annotations(): array
     {
         $annotations = [];
         while (null !== $this->lexer->lookahead) {
@@ -486,6 +476,7 @@ final class ConstantPreservingDocParser
      * @return mixed False if it is not a valid annotation.
      *
      * @throws AnnotationException
+     * @throws ReflectionException
      */
     private function Annotation()
     {
@@ -617,9 +608,10 @@ final class ConstantPreservingDocParser
     /**
      * MethodCall ::= ["(" [Values] ")"]
      *
-     * @return array
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
-    private function MethodCall()
+    private function MethodCall(): array
     {
         $values = [];
         if (!$this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_OPEN_PARENTHESIS)) {
@@ -635,9 +627,10 @@ final class ConstantPreservingDocParser
     /**
      * Values ::= Array | Value {"," Value}* [","]
      *
-     * @return array
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
-    private function Values()
+    private function Values(): array
     {
         $values = [$this->Value()];
         while ($this->lexer->isNextToken(\Doctrine\Common\Annotations\DocLexer::T_COMMA)) {
@@ -648,7 +641,7 @@ final class ConstantPreservingDocParser
             $token = $this->lexer->lookahead;
             $value = $this->Value();
             if (!is_object($value) && !is_array($value)) {
-                $this->syntaxError('Value', $token);
+                throw $this->syntaxError('Value', $token);
             }
             $values[] = $value;
         }
@@ -752,13 +745,13 @@ final class ConstantPreservingDocParser
     /**
      * Identifier ::= string
      *
-     * @return string
+     * @throws AnnotationException
      */
-    private function Identifier()
+    private function Identifier(): string
     {
         // check if we have an annotation
         if (!$this->lexer->isNextTokenAny(self::$classIdentifiers)) {
-            $this->syntaxError('namespace separator or identifier');
+            throw $this->syntaxError('namespace separator or identifier');
         }
         $this->lexer->moveNext();
         $className = $this->lexer->token['value'];
@@ -773,6 +766,8 @@ final class ConstantPreservingDocParser
      * Value ::= PlainValue | FieldAssignment
      *
      * @return mixed
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
     private function Value()
     {
@@ -786,6 +781,8 @@ final class ConstantPreservingDocParser
      * PlainValue ::= integer | string | float | boolean | Array | Annotation
      *
      * @return mixed
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
     private function PlainValue()
     {
@@ -818,16 +815,16 @@ final class ConstantPreservingDocParser
                 $this->match(\Doctrine\Common\Annotations\DocLexer::T_NULL);
                 return null;
             default:
-                $this->syntaxError('PlainValue');
+                throw $this->syntaxError('PlainValue');
         }
     }
     /**
      * FieldAssignment ::= FieldName "=" PlainValue
      * FieldName ::= identifier
-     *
-     * @return \stdClass
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
-    private function FieldAssignment()
+    private function FieldAssignment(): \stdClass
     {
         $this->match(\Doctrine\Common\Annotations\DocLexer::T_IDENTIFIER);
         $fieldName = $this->lexer->token['value'];
@@ -839,10 +836,10 @@ final class ConstantPreservingDocParser
     }
     /**
      * Array ::= "{" ArrayEntry {"," ArrayEntry}* [","] "}"
-     *
-     * @return array
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
-    private function Arrayx()
+    private function Arrayx(): array
     {
         $array = $values = [];
         $this->match(\Doctrine\Common\Annotations\DocLexer::T_OPEN_CURLY_BRACES);
@@ -876,9 +873,10 @@ final class ConstantPreservingDocParser
      * KeyValuePair ::= Key ("=" | ":") PlainValue | Constant
      * Key ::= string | integer | Constant
      *
-     * @return array
+     * @throws AnnotationException
+     * @throws ReflectionException
      */
-    private function ArrayEntry()
+    private function ArrayEntry(): array
     {
         $peek = $this->lexer->glimpse();
         if (\Doctrine\Common\Annotations\DocLexer::T_EQUALS === $peek['type'] || \Doctrine\Common\Annotations\DocLexer::T_COLON === $peek['type']) {
@@ -895,12 +893,8 @@ final class ConstantPreservingDocParser
     }
     /**
      * Checks whether the given $name matches any ignored annotation name or namespace
-     *
-     * @param string $name
-     *
-     * @return bool
      */
-    private function isIgnoredAnnotation($name)
+    private function isIgnoredAnnotation(string $name): bool
     {
         if ($this->ignoreNotImportedAnnotations || isset($this->ignoredAnnotationNames[$name])) {
             return true;

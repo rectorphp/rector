@@ -240,7 +240,7 @@
         },
         "classmap": [
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
-            "rules/symfony/tests/Rector/FrameworkBundle/ContainerGetToConstructorInjectionRector/Source",
+            "rules/symfony/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "rules/autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
             "rules/cakephp/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source",
