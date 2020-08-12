@@ -29,6 +29,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceParentRepositoryCallsByRepositoryPropertyRector::class);
     $services->set(RemoveRepositoryFromEntityAnnotationRector::class);
 
+    // covers "extends ServiceEntityRepository"
+    // @see https://github.com/doctrine/DoctrineBundle/pull/727/files
     $services->set(AddPropertyByParentRector::class)
         ->call('configure', [[
             AddPropertyByParentRector::PARENT_TYPES_TO_DEPENDENCIES => [
