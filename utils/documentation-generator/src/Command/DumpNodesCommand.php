@@ -142,6 +142,11 @@ final class DumpNodesCommand extends AbstractCommand
     private const SOME_CLASS = 'SomeClass';
 
     /**
+     * @var string
+     */
+    private const SOME_METHOD = 'someMethod';
+
+    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -160,10 +165,6 @@ final class DumpNodesCommand extends AbstractCommand
      * @var MarkdownDumpNodesOutputFormatter
      */
     private $markdownDumpNodesOutputFormatter;
-    /**
-     * @var string
-     */
-    private const SOME_METHOD = 'someMethod';
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
