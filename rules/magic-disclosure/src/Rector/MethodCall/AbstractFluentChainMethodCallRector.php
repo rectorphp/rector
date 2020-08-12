@@ -98,7 +98,7 @@ abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableM
     {
         // skip query and builder
         // @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?"
-        if ((bool) Strings::match($class, '#(Finder|Query|Builder|MutatingScope)$#')) {
+        if ((bool) Strings::match($class, '#(Finder|DateTime|DateTimeInterface|Query|Builder|MutatingScope)$#')) {
             return true;
         }
 

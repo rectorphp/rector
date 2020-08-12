@@ -379,8 +379,6 @@ parameters:
         - '#Static property Rector\\Core\\Testing\\PHPUnit\\AbstractGenericRectorTestCase\:\:\$allRectorContainer \(Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container\|null\) does not accept Psr\\Container\\ContainerInterface#'
         # stubs
         - '#Class Nette\\DI\\CompilerExtension not found#'
-        - '#Class Latte\\Macros\\MacroSet not found#'
-
 
         - '#Static property Symplify\\PackageBuilder\\Tests\\AbstractKernelTestCase\:\:\$container \(Psr\\Container\\ContainerInterface\) does not accept Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container#'
 
@@ -390,9 +388,7 @@ parameters:
             path: 'rules/psr4/src/Composer/PSR4NamespaceMatcher.php'
 
         # false positive
-        - '#Empty array passed to foreach#'
         - '#Parameter \#1 \$arrayItem of method Rector\\NetteKdyby\\NodeResolver\\ListeningMethodsCollector\:\:resolveCustomClassMethodAndEventClass\(\) expects PhpParser\\Node\\Expr\\ArrayItem, PhpParser\\Node given#'
-        - '#Method Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector\:\:resolvePropertiesToComplete\(\) should return array<int, PhpParser\\Node\\Stmt\\Property\> but returns array<int, \(int\|string\)\>#'
         - '#Parameter \#1 \$type of method Rector\\NodeCollector\\NodeCollector\\ParsedNodeCollector<TNodeType of PhpParser\\Node\>\:\:getNodesByType\(\) expects class\-string<TNodeType of PhpParser\\Node\>, string given#'
 
         - '#Class with base "(.*?)" name is already used in "_HumbugBox(.*?)"#'
