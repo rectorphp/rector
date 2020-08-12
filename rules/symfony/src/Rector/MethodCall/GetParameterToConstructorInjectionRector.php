@@ -102,7 +102,7 @@ PHP
             return null;
         }
 
-        $this->addConstrutorDependencyToClass($classLike, new StringType(), $propertyName);
+        $this->addConstructorDependencyToClass($classLike, new StringType(), $propertyName);
 
         return $this->createPropertyFetch('this', $propertyName);
     }

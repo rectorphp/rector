@@ -6,6 +6,7 @@ use Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRecto
 use Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
 use Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector;
 use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
+use Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector;
 use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\Rector\Class_\RemoveParentRector;
 use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
@@ -30,6 +31,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // covers "extends ServiceEntityRepository"
     // @see https://github.com/doctrine/DoctrineBundle/pull/727/files
+    $services->set(ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector::class);
+
     $services->set(RemoveAnnotationRector::class)
         ->call('configure', [[
             RemoveAnnotationRector::ANNOTATIONS_TO_REMOVE => ['method'],

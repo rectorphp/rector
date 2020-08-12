@@ -101,7 +101,7 @@ CODE_SAMPLE
                 $propertyType = new ObjectType($typeToAdd);
                 /** @var string $propertyName */
                 $propertyName = $this->propertyNaming->getExpectedNameFromType($propertyType);
-                $this->addConstrutorDependencyToClass($node, $propertyType, $propertyName);
+                $this->addConstructorDependencyToClass($node, $propertyType, $propertyName);
             }
         }
 

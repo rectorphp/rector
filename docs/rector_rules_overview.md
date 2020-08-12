@@ -1,4 +1,4 @@
-# All 558 Rectors Overview
+# All 557 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -13,13 +13,13 @@
 - [DeadCode](#deadcode) (40)
 - [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
-- [Doctrine](#doctrine) (16)
+- [Doctrine](#doctrine) (17)
 - [DoctrineCodeQuality](#doctrinecodequality) (2)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (49)
+- [Generic](#generic) (47)
 - [Guzzle](#guzzle) (1)
 - [Injection](#injection) (1)
 - [JMS](#jms) (2)
@@ -3876,6 +3876,41 @@ Remove temporary *Uuid relation properties
 
 <br><br>
 
+### `ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector`
+
+- class: [`Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector`](/../master/rules/doctrine/src/Rector/ClassMethod/ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector.php)
+- [test fixtures](/../master/rules/doctrine/tests/Rector/ClassMethod/ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector/Fixture)
+
+Change ServiceEntityRepository to dependency injection, with repository property
+
+```diff
+ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+ use Doctrine\Persistence\ManagerRegistry;
+
+ final class ProjectRepository extends ServiceEntityRepository
+ {
+-    public function __construct(ManagerRegistry $registry)
++    /**
++     * @var \Doctrine\ORM\EntityManagerInterface
++     */
++    private $entityManager;
++
++    /**
++     * @var \Doctrine\ORM\EntityRepository<Project>
++     */
++    private $repository;
++
++    public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
+     {
+-        parent::__construct($registry, Project::class);
++        $this->repository = $entityManager->getRepository(Project::class);
++        $this->entityManager = $entityManager;
+     }
+ }
+```
+
+<br><br>
+
 ## DoctrineCodeQuality
 
 ### `ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`
@@ -5491,40 +5526,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
-### `RemoveConstructorDependencyByParentRector`
-
-- class: [`Rector\Generic\Rector\ClassMethod\RemoveConstructorDependencyByParentRector`](/../master/rules/generic/src/Rector/ClassMethod/RemoveConstructorDependencyByParentRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/ClassMethod/RemoveConstructorDependencyByParentRector/Fixture)
-
-Removes params in constructor by parent type and param names
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\ClassMethod\RemoveConstructorDependencyByParentRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(RemoveConstructorDependencyByParentRector::class)
-        ->call('configure', [[RemoveConstructorDependencyByParentRector::PARENT_TYPE_TO_PARAM_TYPES_TO_REMOVE, ['SomeParentClass' => ['someType']]]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass extends SomeParentClass
- {
--    public function __construct(SomeType $someType)
-+    public function __construct()
-     {
-     }
- }
-```
-
-<br><br>
-
 ### `RemoveFuncCallArgRector`
 
 - class: [`Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector`](/../master/rules/generic/src/Rector/FuncCall/RemoveFuncCallArgRector.php)
@@ -5609,40 +5610,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 -class SomeClass implements SomeInterface
 +class SomeClass
  {
- }
-```
-
-<br><br>
-
-### `RemoveParentCallByParentRector`
-
-- class: [`Rector\Generic\Rector\StaticCall\RemoveParentCallByParentRector`](/../master/rules/generic/src/Rector/StaticCall/RemoveParentCallByParentRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/StaticCall/RemoveParentCallByParentRector/Fixture)
-
-Remove parent call by parent class
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\StaticCall\RemoveParentCallByParentRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(RemoveParentCallByParentRector::class)
-        ->call('configure', [[RemoveParentCallByParentRector::PARENT_CLASSES, ['SomeParentClass']]]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass extends SomeParentClass
- {
-     public function run()
-     {
--        parent::someCall();
-     }
  }
 ```
 
@@ -11590,8 +11557,8 @@ Rename "*Spec.php" file to "*Test.php" file
 
 ### `UnwrapFutureCompatibleIfFunctionExistsRector`
 
-- class: [`Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector`](/../master/packages/polyfill/src/Rector/If_/UnwrapFutureCompatibleIfFunctionExistsRector.php)
-- [test fixtures](/../master/packages/polyfill/tests/Rector/If_/UnwrapFutureCompatibleIfFunctionExistsRector/Fixture)
+- class: [`Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector`](/../master/rules/polyfill/src/Rector/If_/UnwrapFutureCompatibleIfFunctionExistsRector.php)
+- [test fixtures](/../master/rules/polyfill/tests/Rector/If_/UnwrapFutureCompatibleIfFunctionExistsRector/Fixture)
 
 Remove functions exists if with else for always existing
 
@@ -11615,8 +11582,8 @@ Remove functions exists if with else for always existing
 
 ### `UnwrapFutureCompatibleIfPhpVersionRector`
 
-- class: [`Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector`](/../master/packages/polyfill/src/Rector/If_/UnwrapFutureCompatibleIfPhpVersionRector.php)
-- [test fixtures](/../master/packages/polyfill/tests/Rector/If_/UnwrapFutureCompatibleIfPhpVersionRector/Fixture)
+- class: [`Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector`](/../master/rules/polyfill/src/Rector/If_/UnwrapFutureCompatibleIfPhpVersionRector.php)
+- [test fixtures](/../master/rules/polyfill/tests/Rector/If_/UnwrapFutureCompatibleIfPhpVersionRector/Fixture)
 
 Remove php version checks if they are passed
 

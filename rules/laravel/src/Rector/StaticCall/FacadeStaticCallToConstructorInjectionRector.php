@@ -141,7 +141,7 @@ PHP
             $serviceObjectType = new FullyQualifiedObjectType($serviceClass);
 
             $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
-            $this->addConstrutorDependencyToClass($classLike, $serviceObjectType, $propertyName);
+            $this->addConstructorDependencyToClass($classLike, $serviceObjectType, $propertyName);
 
             $propertyFetchNode = $this->createPropertyFetch('this', $propertyName);
             return new MethodCall($propertyFetchNode, $node->name, $node->args);

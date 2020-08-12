@@ -108,7 +108,7 @@ PHP
         }
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($functionChange->getClass());
-        $this->addConstrutorDependencyToClass($classLike, $fullyQualifiedObjectType, $functionChange->getProperty());
+        $this->addConstructorDependencyToClass($classLike, $fullyQualifiedObjectType, $functionChange->getProperty());
 
         $propertyFetchNode = $this->createPropertyFetch('this', $functionChange->getProperty());
 

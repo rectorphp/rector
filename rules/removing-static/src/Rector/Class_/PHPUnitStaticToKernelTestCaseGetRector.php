@@ -178,7 +178,7 @@ PHP
         // add via constructor
         foreach ($newPropertyTypes as $newPropertyType) {
             $newPropertyName = $this->propertyNaming->fqnToVariableName($newPropertyType);
-            $this->addConstrutorDependencyToClass($class, $newPropertyType, $newPropertyName);
+            $this->addConstructorDependencyToClass($class, $newPropertyType, $newPropertyName);
         }
 
         return $class;

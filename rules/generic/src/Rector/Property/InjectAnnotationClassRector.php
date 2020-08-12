@@ -224,7 +224,7 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        $this->addConstrutorDependencyToClass($classLike, $type, $name);
+        $this->addConstructorDependencyToClass($classLike, $type, $name);
 
         return $property;
     }

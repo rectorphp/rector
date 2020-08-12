@@ -5,28 +5,18 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Doctrine\NodeFactory\RepositoryNodeFactory;
+use Rector\Doctrine\Type\RepositoryTypeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 /**
  * @sponsor Thanks https://www.luzanky.cz/ for sponsoring this rule
@@ -43,9 +33,22 @@ final class ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositor
     private const SERVICE_ENTITY_REPOSITORY_CLASS = 'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository';
 
     /**
-     * @var Expr|null
+     * @var RepositoryNodeFactory
      */
-    private $entityReference;
+    private $repositoryNodeFactory;
+
+    /**
+     * @var RepositoryTypeFactory
+     */
+    private $repositoryTypeFactory;
+
+    public function __construct(
+        RepositoryNodeFactory $repositoryNodeFactory,
+        RepositoryTypeFactory $repositoryTypeFactory
+    ) {
+        $this->repositoryNodeFactory = $repositoryNodeFactory;
+        $this->repositoryTypeFactory = $repositoryTypeFactory;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -77,6 +80,9 @@ final class ProjectRepository extends ServiceEntityRepository
      */
     private $entityManager;
 
+    /**
+     * @var \Doctrine\ORM\EntityRepository<Project>
+     */
     private $repository;
 
     public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
@@ -102,6 +108,7 @@ PHP
     /**
      * @param ClassMethod $node
      *
+     * For reference, possible manager registry param types:
      * - Doctrine\Common\Persistence\ManagerRegistry
      * - Doctrine\Persistence\ManagerRegistry
      */
@@ -111,9 +118,9 @@ PHP
             return null;
         }
 
-        /** @var ClassLike|null $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
+        /** @var ClassLike|null $classLike */
+        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
             return null;
         }
 
@@ -121,66 +128,18 @@ PHP
         $node->params = [];
 
         // 2. remove parent::__construct()
-        $this->removeParentConstructAndCollectEntityReference($node);
+        $entityReferenceExpr = $this->removeParentConstructAndCollectEntityReference($node);
 
         // 3. add $entityManager->getRepository() fetch assign
-        $node->stmts[] = $this->createRepositoryAssign();
+        $node->stmts[] = $this->repositoryNodeFactory->createRepositoryAssign($entityReferenceExpr);
 
         // 4. add $repository property
-        $this->addRepositoryProperty($class);
+        $this->addRepositoryProperty($classLike, $entityReferenceExpr);
 
         // 5. add param + add property, dependency
-        $this->addEntityManagerDependency($class);
+        $this->addServiceConstructorDependencyToClass($classLike, 'Doctrine\ORM\EntityManagerInterface');
 
         return $node;
-    }
-
-    /**
-     * @todo extract to RepositoryNodeFactory
-     */
-    private function createRepositoryAssign(): Expression
-    {
-        $propertyFetch = new PropertyFetch(new Variable('this'), new Identifier('repository'));
-        $assign = new Assign($propertyFetch, $this->createGetRepositoryMethodCall());
-
-        return new Expression($assign);
-    }
-
-    /**
-     * @todo extract to RepositoryNodeFactory
-     */
-    private function createGetRepositoryMethodCall(): MethodCall
-    {
-        if ($this->entityReference === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        return new MethodCall(new Variable('entityManager'), 'getRepository', [new Arg($this->entityReference)]);
-    }
-
-    /**
-     * @todo extract to RepositoryNodeFactory
-     */
-    private function addEntityManagerDependency(Class_ $class): void
-    {
-        $entityManagerType = new ObjectType('Doctrine\ORM\EntityManagerInterface');
-        $this->addConstrutorDependencyToClass($class, $entityManagerType, 'entityManager');
-    }
-
-    private function removeParentConstructAndCollectEntityReference(ClassMethod $classMethod): void
-    {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
-            if (! $node instanceof StaticCall) {
-                return null;
-            }
-
-            if (! $this->isName($node->class, 'parent')) {
-                return null;
-            }
-
-            $this->entityReference = $node->args[1]->value;
-            $this->removeNode($node);
-        });
     }
 
     private function shouldSkip(ClassMethod $classMethod): bool
@@ -194,26 +153,35 @@ PHP
         return $parentClassName !== self::SERVICE_ENTITY_REPOSITORY_CLASS;
     }
 
-    /**
-     * @todo extract to RepositoryNodeFactory
-     */
-    private function addRepositoryProperty(Class_ $class): void
+    private function removeParentConstructAndCollectEntityReference(ClassMethod $classMethod): Expr
     {
-        if ($this->entityReference === null) {
+        $entityReferenceExpr = null;
+
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
+            &$entityReferenceExpr
+        ) {
+            if (! $node instanceof StaticCall) {
+                return null;
+            }
+
+            if (! $this->isName($node->class, 'parent')) {
+                return null;
+            }
+
+            $entityReferenceExpr = $node->args[1]->value;
+            $this->removeNode($node);
+        });
+
+        if ($entityReferenceExpr === null) {
             throw new ShouldNotHappenException();
         }
 
-        if ($this->entityReference instanceof ClassConstFetch) {
-            /** @var string $className */
-            $className = $this->getName($this->entityReference->class);
-        } else {
-            throw new NotImplementedYetException();
-        }
+        return $entityReferenceExpr;
+    }
 
-        $this->addPropertyToClass(
-            $class,
-            new GenericObjectType('Doctrine\ORM\EntityRepository', [new FullyQualifiedObjectType($className)]),
-            'repository'
-        );
+    private function addRepositoryProperty(Class_ $class, Expr $entityReferenceExpr): void
+    {
+        $repositoryPropertyType = $this->repositoryTypeFactory->createRepositoryPropertyType($entityReferenceExpr);
+        $this->addPropertyToClass($class, $repositoryPropertyType, 'repository');
     }
 }

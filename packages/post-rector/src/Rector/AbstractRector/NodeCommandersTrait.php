@@ -14,6 +14,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -60,6 +61,11 @@ trait NodeCommandersTrait
     private $rectorChangeCollector;
 
     /**
+     * @var PropertyNaming
+     */
+    private $propertyNaming;
+
+    /**
      * @required
      */
     public function autowireNodeCommandersTrait(
@@ -68,7 +74,8 @@ trait NodeCommandersTrait
         UseNodesToAddCollector $useNodesToAddCollector,
         NodesToAddCollector $nodesToAddCollector,
         NodesToReplaceCollector $nodesToReplaceCollector,
-        RectorChangeCollector $rectorChangeCollector
+        RectorChangeCollector $rectorChangeCollector,
+        PropertyNaming $propertyNaming
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->propertyToAddCollector = $propertyToAddCollector;
@@ -76,6 +83,7 @@ trait NodeCommandersTrait
         $this->nodesToReplaceCollector = $nodesToReplaceCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
         $this->rectorChangeCollector = $rectorChangeCollector;
+        $this->propertyNaming = $propertyNaming;
     }
 
     /**
@@ -136,10 +144,18 @@ trait NodeCommandersTrait
         /** @var string $propertyName */
         $propertyName = $this->getName($property);
 
-        $this->addConstrutorDependencyToClass($classNode, $propertyType, $propertyName);
+        $this->addConstructorDependencyToClass($classNode, $propertyType, $propertyName);
     }
 
-    protected function addConstrutorDependencyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void
+    protected function addServiceConstructorDependencyToClass(Class_ $class, string $className): void
+    {
+        $serviceObjectType = new ObjectType($className);
+
+        $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
+        $this->addConstructorDependencyToClass($class, $serviceObjectType, $propertyName);
+    }
+
+    protected function addConstructorDependencyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void
     {
         $this->propertyToAddCollector->addPropertyToClass($propertyName, $propertyType, $class);
         $this->rectorChangeCollector->notifyNodeFileInfo($class);

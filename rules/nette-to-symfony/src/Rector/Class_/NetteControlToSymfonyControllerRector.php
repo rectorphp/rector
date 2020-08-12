@@ -185,7 +185,7 @@ PHP
                 throw new ShouldNotHappenException();
             }
 
-            $this->addConstrutorDependencyToClass(
+            $this->addConstructorDependencyToClass(
                 $classLike,
                 new FullyQualifiedObjectType('Nette\Http\Session'),
                 'session'
