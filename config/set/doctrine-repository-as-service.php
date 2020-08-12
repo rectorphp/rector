@@ -6,13 +6,12 @@ use Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRecto
 use Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
 use Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector;
 use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
+use Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector;
 use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\Rector\Class_\RemoveParentRector;
 use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
-use Rector\Generic\Rector\ClassMethod\RemoveConstructorDependencyByParentRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
-use Rector\Generic\Rector\StaticCall\RemoveParentCallByParentRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 /**
@@ -32,6 +31,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // covers "extends ServiceEntityRepository"
     // @see https://github.com/doctrine/DoctrineBundle/pull/727/files
+    $services->set(ServiceEntityRepositoryConstructorToDependencyInjectionWithRepositoryPropertyRector::class);
+
     $services->set(RemoveAnnotationRector::class)
         ->call('configure', [[
             RemoveAnnotationRector::ANNOTATIONS_TO_REMOVE => ['method'],
@@ -68,23 +69,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
                 'getEntityManager' => 'entityManager',
-            ],
-        ]]);
-
-    $services->set(RemoveParentCallByParentRector::class)
-        ->call('configure', [[
-            RemoveParentCallByParentRector::PARENT_CLASSES => [
-                'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository',
-            ],
-        ]]);
-
-    $services->set(RemoveConstructorDependencyByParentRector::class)
-        ->call('configure', [[
-            RemoveConstructorDependencyByParentRector::PARENT_TYPE_TO_PARAM_TYPES_TO_REMOVE => [
-                'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository' => [
-                    'Doctrine\Common\Persistence\ManagerRegistry',
-                    'Doctrine\Persistence\ManagerRegistry',
-                ],
             ],
         ]]);
 

@@ -165,7 +165,7 @@ PHP
             $propertyName = $this->propertyNaming->fqnToVariableName($matchedObjectType) . self::FACTORY;
             $propertyType = new FullyQualifiedObjectType($matchedObjectType->getClassName() . self::FACTORY);
 
-            $this->addPropertyToClass($node, $propertyType, $propertyName);
+            $this->addConstructorDependencyToClass($node, $propertyType, $propertyName);
         }
 
         return $node;

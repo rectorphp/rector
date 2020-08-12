@@ -144,7 +144,7 @@ PHP
 
         $repositoryObjectType = new ObjectType($repositoryFqn);
 
-        $this->addPropertyToClass(
+        $this->addConstructorDependencyToClass(
             $classLike,
             $repositoryObjectType,
             $this->propertyNaming->fqnToVariableName($repositoryObjectType)

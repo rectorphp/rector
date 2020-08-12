@@ -158,7 +158,7 @@ PHP
                 $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
 
                 /** @var Class_ $classLike */
-                $this->addPropertyToClass($classLike, $serviceObjectType, $propertyName);
+                $this->addConstructorDependencyToClass($classLike, $serviceObjectType, $propertyName);
 
                 return new PropertyFetch(new Variable('this'), new Identifier($propertyName));
             }

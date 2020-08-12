@@ -185,7 +185,11 @@ PHP
                 throw new ShouldNotHappenException();
             }
 
-            $this->addPropertyToClass($classLike, new FullyQualifiedObjectType('Nette\Http\Session'), 'session');
+            $this->addConstructorDependencyToClass(
+                $classLike,
+                new FullyQualifiedObjectType('Nette\Http\Session'),
+                'session'
+            );
 
             return $node;
         });
