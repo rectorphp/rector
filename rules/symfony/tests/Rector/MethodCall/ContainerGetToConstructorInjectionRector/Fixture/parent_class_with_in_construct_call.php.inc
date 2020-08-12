@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Source\ThisClassCallsMethodInConstructor;
+use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ThisClassCallsMethodInConstructor;
 
 final class ParentClassWithInConstructCall extends ThisClassCallsMethodInConstructor
 {
@@ -18,9 +18,9 @@ final class ParentClassWithInConstructCall extends ThisClassCallsMethodInConstru
 -----
 <?php
 
-namespace Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Source\ThisClassCallsMethodInConstructor;
+use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ThisClassCallsMethodInConstructor;
 
 final class ParentClassWithInConstructCall extends ThisClassCallsMethodInConstructor
 {

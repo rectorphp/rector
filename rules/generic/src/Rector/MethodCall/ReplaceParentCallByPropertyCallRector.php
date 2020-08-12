@@ -88,10 +88,11 @@ CODE_SAMPLE
                 }
 
                 $node->var = $this->createPropertyFetch('this', $propertyName);
+                return $node;
             }
         }
 
-        return $node;
+        return null;
     }
 
     public function configure(array $configuration): void
