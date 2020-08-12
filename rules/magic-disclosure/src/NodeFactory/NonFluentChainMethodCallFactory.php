@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
+use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\NetteKdyby\Naming\VariableNaming;
 
@@ -71,14 +72,20 @@ final class NonFluentChainMethodCallFactory
     ): array {
         $nodesToAdd = [];
 
-        if ($this->isNewNodeNeeded($assignAndRootExpr)) {
-            $nodesToAdd[] = $assignAndRootExpr->getFirstAssign();
+        $isNewNodeNeeded = $this->isNewNodeNeeded($assignAndRootExpr);
+        if ($isNewNodeNeeded) {
+            $nodesToAdd[] = $assignAndRootExpr->createFirstAssign();
         }
 
-        $decoupledMethodCalls = $this->createNonFluentMethodCalls($chainMethodCalls, $assignAndRootExpr);
+        $decoupledMethodCalls = $this->createNonFluentMethodCalls(
+            $chainMethodCalls,
+            $assignAndRootExpr,
+            $isNewNodeNeeded
+        );
+
         $nodesToAdd = array_merge($nodesToAdd, $decoupledMethodCalls);
 
-        if ($assignAndRootExpr->getSilentVariable() !== null && $kind !== 'in_args') {
+        if ($assignAndRootExpr->getSilentVariable() !== null && $kind !== FluentChainMethodCallRootExtractor::KIND_IN_ARGS) {
             $nodesToAdd[] = $assignAndRootExpr->getReturnSilentVariable();
         }
 
@@ -93,23 +100,39 @@ final class NonFluentChainMethodCallFactory
 
     private function isNewNodeNeeded(AssignAndRootExpr $assignAndRootExpr): bool
     {
-        if (! $assignAndRootExpr->getRootExpr() instanceof New_) {
+        if ($assignAndRootExpr->isFirstCallFactory()) {
+            return true;
+        }
+
+        if ($assignAndRootExpr->getRootExpr() === $assignAndRootExpr->getAssignExpr()) {
             return false;
         }
 
-        return $assignAndRootExpr->getRootExpr() !== $assignAndRootExpr->getAssignExpr();
+        return $assignAndRootExpr->getRootExpr() instanceof New_;
     }
 
     /**
      * @param MethodCall[] $chainMethodCalls
      * @return \PhpParser\Node\Expr\Assign[]|\PhpParser\Node\Expr\MethodCall[]
      */
-    private function createNonFluentMethodCalls(array $chainMethodCalls, AssignAndRootExpr $assignAndRootExpr): array
-    {
+    private function createNonFluentMethodCalls(
+        array $chainMethodCalls,
+        AssignAndRootExpr $assignAndRootExpr,
+        bool $isNewNodeNeeded
+    ): array {
         $decoupledMethodCalls = [];
 
-        foreach ($chainMethodCalls as $chainMethodCall) {
-            $chainMethodCall->var = $assignAndRootExpr->getCallerExpr();
+        $lastKey = array_key_last($chainMethodCalls);
+
+        foreach ($chainMethodCalls as $key => $chainMethodCall) {
+            // skip first, already handled
+            if ($key === $lastKey && $assignAndRootExpr->isFirstCallFactory() && $isNewNodeNeeded) {
+                continue;
+            }
+
+            $var = $this->resolveMethodCallVar($assignAndRootExpr, $key);
+
+            $chainMethodCall->var = $var;
             $decoupledMethodCalls[] = $chainMethodCall;
         }
 
@@ -121,5 +144,19 @@ final class NonFluentChainMethodCallFactory
         }
 
         return array_reverse($decoupledMethodCalls);
+    }
+
+    private function resolveMethodCallVar(AssignAndRootExpr $assignAndRootExpr, int $key): Expr
+    {
+        if (! $assignAndRootExpr->isFirstCallFactory()) {
+            return $assignAndRootExpr->getCallerExpr();
+        }
+
+        // very first call
+        if ($key !== 0) {
+            return $assignAndRootExpr->getCallerExpr();
+        }
+
+        return $assignAndRootExpr->getFactoryAssignVariable();
     }
 }

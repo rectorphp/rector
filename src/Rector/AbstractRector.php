@@ -141,6 +141,20 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return parent::beforeTraverse($nodes);
     }
 
+    /**
+     * @param string[] $types
+     */
+    public function hasParentTypes(Node $node, array $types): bool
+    {
+        foreach ($types as $type) {
+            if ($this->hasParentType($node, $type)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function hasParentType(Node $node, string $type): bool
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -319,6 +333,24 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return new Bool_($expr);
+    }
+
+    /**
+     * @param string[] $allowedTypes
+     */
+    protected function isAllowedType(string $currentType, array $allowedTypes): bool
+    {
+        foreach ($allowedTypes as $allowedType) {
+            if (is_a($currentType, $allowedType, true)) {
+                return true;
+            }
+
+            if (fnmatch($allowedType, $currentType, FNM_NOESCAPE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function isMatchingNodeType(string $nodeClass): bool

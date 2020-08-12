@@ -6,12 +6,20 @@ namespace Rector\MagicDisclosure\ValueObject;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class AssignAndRootExpr
 {
+    /**
+     * @var bool
+     */
+    private $isFirstCallFactory = false;
+
     /**
      * @var Expr
      */
@@ -27,11 +35,16 @@ final class AssignAndRootExpr
      */
     private $silentVariable;
 
-    public function __construct(Expr $assignExpr, Expr $rootExpr, ?Variable $silentVariable = null)
-    {
+    public function __construct(
+        Expr $assignExpr,
+        Expr $rootExpr,
+        ?Variable $silentVariable = null,
+        bool $isFirstCallFactory = false
+    ) {
         $this->assignExpr = $assignExpr;
         $this->rootExpr = $rootExpr;
         $this->silentVariable = $silentVariable;
+        $this->isFirstCallFactory = $isFirstCallFactory;
     }
 
     public function getAssignExpr(): Expr
@@ -58,8 +71,18 @@ final class AssignAndRootExpr
         return new Return_($this->silentVariable);
     }
 
-    public function getFirstAssign(): Assign
+    public function createFirstAssign(): Assign
     {
+        if ($this->isFirstCallFactory && $this->getFirstAssign() !== null) {
+            /** @var Assign $currentMethodCall */
+            $currentMethodCall = $this->getFirstAssign()->expr;
+            while ($currentMethodCall->var instanceof MethodCall) {
+                $currentMethodCall = $currentMethodCall->var;
+            }
+
+            return new Assign($this->getFirstAssign()->var, $currentMethodCall);
+        }
+
         return new Assign($this->assignExpr, $this->rootExpr);
     }
 
@@ -70,5 +93,34 @@ final class AssignAndRootExpr
         }
 
         return $this->assignExpr;
+    }
+
+    public function isFirstCallFactory(): bool
+    {
+        return $this->isFirstCallFactory;
+    }
+
+    public function getFactoryAssignVariable(): Expr
+    {
+        $firstAssign = $this->getFirstAssign();
+        if ($firstAssign === null) {
+            return $this->getCallerExpr();
+        }
+
+        return $firstAssign->var;
+    }
+
+    private function getFirstAssign(): ?Assign
+    {
+        $currentStmt = $this->assignExpr->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (! $currentStmt instanceof Expression) {
+            return null;
+        }
+
+        if ($currentStmt->expr instanceof Assign) {
+            return $currentStmt->expr;
+        }
+
+        return null;
     }
 }
