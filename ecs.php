@@ -82,7 +82,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // breaks on-purpose annotated variables
         ReturnAssignmentFixer::class => null,
 
-        StrictComparisonFixer::class => [__DIR__ . '/packages/polyfill/src/ConditionEvaluator.php'],
+        StrictComparisonFixer::class => [__DIR__ . '/rules/polyfill/src/ConditionEvaluator.php'],
     ]);
 
     $parameters->set('line_ending', "\n");
