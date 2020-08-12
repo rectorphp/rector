@@ -13,7 +13,7 @@
         "php": "^7.2.4",
         "ext-json": "*",
         "composer/xdebug-handler": "^1.4",
-        "doctrine/annotations": "^1.10.2",
+        "doctrine/annotations": "^1.10.4",
         "doctrine/inflector": "^1.4|^2.0",
         "jean85/pretty-package-versions": "^1.2",
         "nette/robot-loader": "^3.2",

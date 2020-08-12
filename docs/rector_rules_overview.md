@@ -1,4 +1,4 @@
-# All 552 Rectors Overview
+# All 558 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -19,7 +19,7 @@
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (42)
+- [Generic](#generic) (49)
 - [Guzzle](#guzzle) (1)
 - [Injection](#injection) (1)
 - [JMS](#jms) (2)
@@ -69,7 +69,7 @@
 - [Symfony](#symfony) (33)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
-- [SymfonyPhpConfig](#symfonyphpconfig) (2)
+- [SymfonyPhpConfig](#symfonyphpconfig) (1)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -4474,6 +4474,45 @@ Add method parent call, in case new parent method is added
 
 <br><br>
 
+### `AddPropertyByParentRector`
+
+- class: [`Rector\Generic\Rector\Class_\AddPropertyByParentRector`](/../master/rules/generic/src/Rector/Class_/AddPropertyByParentRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/Class_/AddPropertyByParentRector/Fixture)
+
+Add dependency via constructor by parent class type
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(AddPropertyByParentRector::class)
+        ->call('configure', [[AddPropertyByParentRector::PARENT_TYPES_TO_DEPENDENCIES, ['SomeParentClass' => ['SomeDependency']]]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass extends SomeParentClass
+ {
++    /**
++     * @var SomeDependency
++     */
++    private $someDependency;
++
++    public function __construct(SomeDependency $someDependency)
++    {
++        $this->someDependency = $someDependency;
++    }
+ }
+```
+
+<br><br>
+
 ### `AddReturnTypeDeclarationRector`
 
 - class: [`Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector`](/../master/rules/generic/src/Rector/ClassMethod/AddReturnTypeDeclarationRector.php)
@@ -5051,6 +5090,41 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
+### `MethodCallToPropertyFetchRector`
+
+- class: [`Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToPropertyFetchRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/MethodCallToPropertyFetchRector/Fixture)
+
+Turns method call "$this->something()" to property fetch "$this->something"
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(MethodCallToPropertyFetchRector::class)
+        ->call('configure', [[MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES, ['someMethod' => 'someProperty']]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $this->someMethod();
++        $this->someProperty;
+     }
+ }
+```
+
+<br><br>
+
 ### `MethodCallToReturnRector`
 
 - class: [`Rector\Generic\Rector\MethodCall\MethodCallToReturnRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToReturnRector.php)
@@ -5384,6 +5458,73 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
+### `RemoveAnnotationRector`
+
+- class: [`Rector\Generic\Rector\ClassLike\RemoveAnnotationRector`](/../master/rules/generic/src/Rector/ClassLike/RemoveAnnotationRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/ClassLike/RemoveAnnotationRector/Fixture)
+
+Remove annotation by names
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(RemoveAnnotationRector::class)
+        ->call('configure', [[RemoveAnnotationRector::ANNOTATIONS_TO_REMOVE, ['method']]]);
+};
+```
+
+↓
+
+```diff
+-/**
+- * @method getName()
+- */
+ final class SomeClass
+ {
+ }
+```
+
+<br><br>
+
+### `RemoveConstructorDependencyByParentRector`
+
+- class: [`Rector\Generic\Rector\ClassMethod\RemoveConstructorDependencyByParentRector`](/../master/rules/generic/src/Rector/ClassMethod/RemoveConstructorDependencyByParentRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/ClassMethod/RemoveConstructorDependencyByParentRector/Fixture)
+
+Removes params in constructor by parent type and param names
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\ClassMethod\RemoveConstructorDependencyByParentRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(RemoveConstructorDependencyByParentRector::class)
+        ->call('configure', [[RemoveConstructorDependencyByParentRector::PARENT_TYPE_TO_PARAM_TYPES_TO_REMOVE, ['SomeParentClass' => ['someType']]]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass extends SomeParentClass
+ {
+-    public function __construct(SomeType $someType)
++    public function __construct()
+     {
+     }
+ }
+```
+
+<br><br>
+
 ### `RemoveFuncCallArgRector`
 
 - class: [`Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector`](/../master/rules/generic/src/Rector/FuncCall/RemoveFuncCallArgRector.php)
@@ -5473,6 +5614,71 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
+### `RemoveParentCallByParentRector`
+
+- class: [`Rector\Generic\Rector\StaticCall\RemoveParentCallByParentRector`](/../master/rules/generic/src/Rector/StaticCall/RemoveParentCallByParentRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/StaticCall/RemoveParentCallByParentRector/Fixture)
+
+Remove parent call by parent class
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\StaticCall\RemoveParentCallByParentRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(RemoveParentCallByParentRector::class)
+        ->call('configure', [[RemoveParentCallByParentRector::PARENT_CLASSES, ['SomeParentClass']]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass extends SomeParentClass
+ {
+     public function run()
+     {
+-        parent::someCall();
+     }
+ }
+```
+
+<br><br>
+
+### `RemoveParentRector`
+
+- class: [`Rector\Generic\Rector\Class_\RemoveParentRector`](/../master/rules/generic/src/Rector/Class_/RemoveParentRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/Class_/RemoveParentRector/Fixture)
+
+Removes extends class by name
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\Class_\RemoveParentRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(RemoveParentRector::class)
+        ->call('configure', [[RemoveParentRector::PARENT_TYPES_TO_REMOVE, ['SomeParentClass']]]);
+};
+```
+
+↓
+
+```diff
+-final class SomeClass extends SomeParentClass
++final class SomeClass
+ {
+ }
+```
+
+<br><br>
+
 ### `RemoveTraitRector`
 
 - class: [`Rector\Generic\Rector\ClassLike\RemoveTraitRector`](/../master/rules/generic/src/Rector/ClassLike/RemoveTraitRector.php)
@@ -5543,6 +5749,41 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 ```diff
 -$someObject->someOldProperty;
 +$someObject->someNewProperty;
+```
+
+<br><br>
+
+### `ReplaceParentCallByPropertyCallRector`
+
+- class: [`Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector`](/../master/rules/generic/src/Rector/MethodCall/ReplaceParentCallByPropertyCallRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/ReplaceParentCallByPropertyCallRector/Fixture)
+
+Changes method calls in child of specific types to defined property method call
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ReplaceParentCallByPropertyCallRector::class)
+        ->call('configure', [[ReplaceParentCallByPropertyCallRector::PARENT_TYPE_TO_METHOD_NAME_TO_PROPERTY_FETCH, ['SomeTypeToReplace' => ['someMethodCall' => 'someProperty']]]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function run(SomeTypeToReplace $someTypeToReplace)
+     {
+-        $someTypeToReplace->someMethodCall();
++        $this->someProperty->someMethodCall();
+     }
+ }
 ```
 
 <br><br>
@@ -13508,25 +13749,6 @@ Move self::$container service fetching from test methods up to setUp method
 <br><br>
 
 ## SymfonyPhpConfig
-
-### `AddEmptyLineBetweenCallsInPhpConfigRector`
-
-- class: [`Rector\SymfonyPhpConfig\Rector\Closure\AddEmptyLineBetweenCallsInPhpConfigRector`](/../master/rules/symfony-php-config/src/Rector/Closure/AddEmptyLineBetweenCallsInPhpConfigRector.php)
-- [test fixtures](/../master/rules/symfony-php-config/tests/Rector/Closure/AddEmptyLineBetweenCallsInPhpConfigRector/Fixture)
-
-Make calls in PHP Symfony config separated by newline
-
-```diff
- use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
- return static function (ContainerConfigurator $containerConfigurator): void {
-     $parameters = $containerConfigurator->parameters();
-+
-     $parameters->set('key', 'value');
- };
-```
-
-<br><br>
 
 ### `ChangeServiceArgumentsToMethodCallRector`
 

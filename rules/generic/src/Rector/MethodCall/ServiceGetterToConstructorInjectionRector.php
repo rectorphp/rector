@@ -20,7 +20,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
- * @see \Rector\Generic\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
  */
 final class ServiceGetterToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {

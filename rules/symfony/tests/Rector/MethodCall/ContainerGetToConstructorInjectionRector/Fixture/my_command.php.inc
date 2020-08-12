@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
+use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,9 +18,9 @@ final class MyCommand extends ContainerAwareParentCommand
 -----
 <?php
 
-namespace Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
+use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
+use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
 final class FirstClass extends ContainerAwareParentClass
 {
@@ -18,9 +18,9 @@ final class FirstClass extends ContainerAwareParentClass
 -----
 <?php
 
-namespace Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
+use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
 final class FirstClass extends ContainerAwareParentClass
 {

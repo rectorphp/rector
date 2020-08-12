@@ -195,13 +195,13 @@ trait NodeTypeResolverTrait
         }
 
         if ($node instanceof ClassMethod) {
-            /** @var Class_|null $class */
-            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-            if ($class === null) {
+            /** @var Class_|null $classLike */
+            $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+            if ($classLike === null) {
                 return false;
             }
 
-            return $this->isObjectType($class, $type);
+            return $this->isObjectType($classLike, $type);
         }
 
         return false;

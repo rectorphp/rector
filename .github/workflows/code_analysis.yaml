@@ -36,12 +36,10 @@ jobs:
                         run: bin/rector validate-sets --ansi
 
                     -
-                        name: 'Validate PHPStan AttributeAware Doc Types'
-                        run: bin/rector sync-types
-
-                    -
-                        name: 'Validate PHPStan Static Type Mappers'
-                        run: bin/rector check-static-type-mappers
+                        name: 'Validate PHPStan Compatibility'
+                        run: |
+                            bin/rector sync-types
+                            bin/rector check-static-type-mappers
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
