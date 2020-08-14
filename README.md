@@ -95,14 +95,14 @@ Featured open-source projects have **prepared sets**. You can find them in [`/co
 Let's say you pick the [`symfony40`](/config/set/symfony40.php) set and you want to upgrade your `/src` directory:
 
 ```bash
-vendor/bin/rector process src --set symfony40 --dry-run
+vendor/bin/rector process src/ --set symfony40 --dry-run
 ```
 
 Rector will show you diff of files that it *would* change. To *make* the changes, drop `--dry-run`:
 
 ```bash
 # apply upgrades to your code
-vendor/bin/rector process src --set symfony40
+vendor/bin/rector process src/ --set symfony40
 ```
 
 Some sets, such as [`code-quality`](/config/set/code-quality.php) can be used on a regular basis. **The best practice is to  use config over command line**:
@@ -154,7 +154,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 Then let Rector refactor your code:
 
 ```bash
-vendor/bin/rector process src
+vendor/bin/rector process src/
 ```
 
 :+1:
@@ -193,7 +193,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 Rector relies on whatever autoload setup the project it is fixing is using by using the Composer autoloader as default. To specify your own autoload file, use `--autoload-file` option:
 
 ```bash
-vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
+vendor/bin/rector process ../project/ --autoload-file ../project/vendor/autoload.php
 ```
 
 Or use a `rector.php` configuration file:
@@ -286,13 +286,13 @@ class SomeClass
 Do you have config that includes many sets and Rectors? You might want to run only a single Rector. The `--only` argument allows that, e.g.:
 
 ```bash
-vendor/bin/rector process src --set solid --only Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector
+vendor/bin/rector process src/ --set solid --only Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector
 ```
 
 Or just short name:
 
 ```bash
-vendor/bin/rector process src --set solid --only FinalizeClassesWithoutChildrenRector
+vendor/bin/rector process src/ --set solid --only FinalizeClassesWithoutChildrenRector
 ```
 
 Both will run only `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`.
@@ -445,7 +445,7 @@ Execution can be limited to changed files using the `process` option `--match-gi
 This option will filter the files included by the configuration, creating an intersection with the files listed in `git diff`.
 
 ```bash
-vendor/bin/rector process src --match-git-diff
+vendor/bin/rector process src/ --match-git-diff
 ```
 
 This option is useful in CI with pull-requests that only change few files.

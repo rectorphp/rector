@@ -47,4 +47,4 @@ jobs:
                     ../rector-dir/vendor/bin/rector --ansi
 
                     # autoload errors due to remove --dev and mixed dependencies in /src and /tests
-                    ../rector-dir/vendor/bin/rector process src --set code-quality --ansi
+                    ../rector-dir/vendor/bin/rector process src/ --set code-quality --ansi
