@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Rector\SymfonyPhpConfig\Printer;
 
 use Nette\Utils\Strings;
+use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
@@ -156,7 +158,10 @@ final class ReturnClosurePrinter
             $constantName = $this->constantNameFromValueResolver->resolveFromValueAndClass($argument, $serviceName);
             $classConstFetch = new ClassConstFetch(new Name($shortClassName), $constantName);
 
-            $args = $this->nodeFactory->createArgs(['configure', [[$classConstFetch, $value]]]);
+            $args = $this->nodeFactory->createArgs(
+                ['configure', [[new ArrayItem(BuilderHelpers::normalizeValue($value), $classConstFetch)]]]
+            );
+
             $methodCall = new MethodCall($methodCall, 'call', $args);
         }
 
