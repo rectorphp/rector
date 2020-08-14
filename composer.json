@@ -31,6 +31,7 @@
         "symfony/finder": "^4.4.8|^5.0.6",
         "symfony/process": "^4.4.8|^5.0.6",
         "symplify/auto-bind-parameter": "^8.2.2",
+        "symplify/easy-testing": "^8.2.2",
         "symplify/autowire-array-parameter": "^8.2.2",
         "symplify/console-color-diff": "^8.2.2",
         "symplify/package-builder": "^8.2.2",
