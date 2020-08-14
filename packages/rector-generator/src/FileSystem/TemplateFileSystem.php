@@ -27,7 +27,7 @@ final class TemplateFileSystem
         // normalize core package
         if (! $configuration->isRectorRepository()) {
             // special keyword for 3rd party Rectors, not for core Github contribution
-            $destination = Strings::replace($destination, '#packages\/__Package__#', 'utils/rector');
+            $destination = Strings::replace($destination, '#(packages|rules)\/__package__#i', 'utils/rector');
         }
 
         // remove _Configured|_Extra prefix
