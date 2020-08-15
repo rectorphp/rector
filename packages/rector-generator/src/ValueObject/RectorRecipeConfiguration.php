@@ -67,6 +67,7 @@ final class RectorRecipeConfiguration
      * @var array<string, mixed>
      */
     private $ruleConfiguration = [];
+
     /**
      * @var string|null
      */

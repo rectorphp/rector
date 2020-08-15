@@ -94,6 +94,7 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
             self::DESTINATION_DIRECTORY
         );
     }
+
     private function createConfiguration(bool $isRectorRepository): RectorRecipeConfiguration
     {
         $rectorRecipe = StaticRectorRecipeFactory::createWithConfiguration();
