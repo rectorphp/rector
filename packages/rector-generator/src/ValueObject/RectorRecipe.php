@@ -255,18 +255,16 @@ final class RectorRecipe
         $this->nodeTypes = $nodeTypes;
     }
 
-    private function setCodeBefore(string $codeBefore): string
+    private function setCodeBefore(string $codeBefore): void
     {
         $this->setIsPhpSnippet($codeBefore);
 
-        $codeBefore = $this->normalizeCode($codeBefore);
-        return $this->codeBefore = $codeBefore;
+        $this->codeBefore = $this->normalizeCode($codeBefore);
     }
 
-    private function setCodeAfter(string $codeAfter): string
+    private function setCodeAfter(string $codeAfter): void
     {
-        $codeAfter = $this->normalizeCode($codeAfter);
-        return $this->codeAfter = $codeAfter;
+        $this->codeAfter = $this->normalizeCode($codeAfter);
     }
 
     private function setResources(array $resources): void
