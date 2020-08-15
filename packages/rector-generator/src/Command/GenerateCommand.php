@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\Command;
 
 use Nette\Utils\Strings;
-use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
 use Rector\RectorGenerator\Config\ConfigFilesystem;
-use Rector\RectorGenerator\Configuration\ConfigurationFactory;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\Generator\FileGenerator;
 use Rector\RectorGenerator\Guard\OverrideGuard;
+use Rector\RectorGenerator\Provider\RectorRecipeProvider;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,20 +19,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class CreateCommand extends Command
+final class GenerateCommand extends Command
 {
     /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
-
-    /**
-     * @var ConfigurationFactory
-     */
-    private $configurationFactory;
 
     /**
      * @var TemplateVariablesFactory
@@ -61,70 +54,61 @@ final class CreateCommand extends Command
     private $overrideGuard;
 
     /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
      * @var FileGenerator
      */
     private $fileGenerator;
 
+    /**
+     * @var RectorRecipeProvider
+     */
+    private $rectorRecipeProvider;
+
     public function __construct(
         ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
         ConfigFilesystem $configFilesystem,
-        ConfigurationFactory $configurationFactory,
         FileGenerator $fileGenerator,
         OverrideGuard $overrideGuard,
-        ParameterProvider $parameterProvider,
         SymfonyStyle $symfonyStyle,
         TemplateFinder $templateFinder,
-        TemplateVariablesFactory $templateVariablesFactory
+        TemplateVariablesFactory $templateVariablesFactory,
+        RectorRecipeProvider $rectorRecipeProvider
     ) {
         parent::__construct();
 
         $this->symfonyStyle = $symfonyStyle;
-        $this->configurationFactory = $configurationFactory;
         $this->templateVariablesFactory = $templateVariablesFactory;
         $this->composerPackageAutoloadUpdater = $composerPackageAutoloadUpdater;
         $this->templateFinder = $templateFinder;
         $this->configFilesystem = $configFilesystem;
         $this->overrideGuard = $overrideGuard;
-        $this->parameterProvider = $parameterProvider;
         $this->fileGenerator = $fileGenerator;
+        $this->rectorRecipeProvider = $rectorRecipeProvider;
     }
 
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setAliases(['c', 'generate', 'g']);
+        $this->setAliases(['c', 'create', 'g']);
         $this->setDescription('[DEV] Create a new Rector, in a proper location, with new tests');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rectorRecipe = $this->parameterProvider->provideParameter(Option::RECTOR_RECIPE);
+        $rectorRecipe = $this->rectorRecipeProvider->provide();
 
-        $isRectorRepository = $this->isRectorRepository();
-
-        $rectorRecipeConfiguration = $this->configurationFactory->createFromRectorRecipe(
-            $rectorRecipe,
-            $isRectorRepository
-        );
-
-        $templateVariables = $this->templateVariablesFactory->createFromConfiguration($rectorRecipeConfiguration);
+        $templateVariables = $this->templateVariablesFactory->createFromRectorRecipe($rectorRecipe);
 
         // setup psr-4 autoload, if not already in
-        $this->composerPackageAutoloadUpdater->processComposerAutoload($rectorRecipeConfiguration);
+        $this->composerPackageAutoloadUpdater->processComposerAutoload($rectorRecipe);
 
-        $templateFileInfos = $this->templateFinder->find($rectorRecipeConfiguration);
+        $templateFileInfos = $this->templateFinder->find($rectorRecipe);
 
         $targetDirectory = getcwd();
 
         $isUnwantedOverride = $this->overrideGuard->isUnwantedOverride(
             $templateFileInfos,
             $templateVariables,
-            $rectorRecipeConfiguration,
+            $rectorRecipe,
             $targetDirectory
         );
         if ($isUnwantedOverride) {
@@ -136,15 +120,15 @@ final class CreateCommand extends Command
         $generatedFilePaths = $this->fileGenerator->generateFiles(
             $templateFileInfos,
             $templateVariables,
-            $rectorRecipeConfiguration,
+            $rectorRecipe,
             $targetDirectory
         );
 
         $testCaseDirectoryPath = $this->resolveTestCaseDirectoryPath($generatedFilePaths);
 
-        $this->configFilesystem->appendRectorServiceToSet($rectorRecipeConfiguration, $templateVariables);
+        $this->configFilesystem->appendRectorServiceToSet($rectorRecipe, $templateVariables);
 
-        $this->printSuccess($rectorRecipeConfiguration->getName(), $generatedFilePaths, $testCaseDirectoryPath);
+        $this->printSuccess($rectorRecipe->getName(), $generatedFilePaths, $testCaseDirectoryPath);
 
         return ShellCode::SUCCESS;
     }

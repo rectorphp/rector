@@ -2,64 +2,68 @@
 
 declare(strict_types=1);
 
-use PhpParser\Node\Expr\MethodCall;
-use Rector\Core\Configuration\Option;
-use Rector\RectorGenerator\ValueObject\RecipeOption;
+use PhpParser\Node\Stmt\ClassMethod;
+use Rector\RectorGenerator\Provider\RectorRecipeProvider;
+use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Rector\SymfonyPhpConfig\inline_object;
 
-// run "bin/rector generate" to create a new Rector + tests from this config
+// run "bin/rector generate" to a new Rector basic schema + tests from this config
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+    $services = $containerConfigurator->services();
 
-    $parameters->set(Option::RECTOR_RECIPE, [
-        // what category the package belongs to
-        RecipeOption::PACKAGE => 'Nette',
+    $rectorRecipe = new RectorRecipe(
+        // category
+        'Symfony',
+        // name
+        'RenameClassMethod',
+        // node types - this will get in "getNodeTypes()" method
+        [ClassMethod::class],
+        // description
+        'Change some class method to different name',
 
-        // name the rule, what it does, in a something to something else
-        RecipeOption::NAME => 'TranslateClassMethodToVariadicsRector',
-
-        // basically content of "getNodeTypes()"
-        RecipeOption::NODE_TYPES => [
-            MethodCall::class,
-        ],
-        RecipeOption::DESCRIPTION => 'Rename $name variable to $fullname',
-        RecipeOption::CODE_BEFORE => <<<'CODE_SAMPLE'
+        // code before
+        <<<'CODE_SAMPLE'
 <?php
 
-final class SomeClass
+class SomeClass
 {
     public function run()
     {
-        return $name;
     }
 }
 CODE_SAMPLE,
-        RecipeOption::CODE_AFTER => <<<'CODE_SAMPLE'
+        // code after
+        <<<'CODE_SAMPLE'
 <?php
 
-final class SomeClass
+class SomeClass
 {
-    public function run()
+    public function go()
     {
-        return $fullname;
     }
 }
 CODE_SAMPLE,
-        // e.g. link to RFC or headline in upgrade guide, 1 or more in the list
-        RecipeOption::SOURCE => [
-            'https://github.com/nette/utils/pull/178'
+        // informational resources on "why" the change, e.g. RFC, upgrade guide on Github
+        [
+            'https://...'
         ],
 
         // OPTIONAL ↓
 
-        // e.g. symfony30, target set to add this Rule to
-        RecipeOption::SET => null,
+        // e.g. symfony30, target set to add this Rule to; keep null if part of core
+        // set, use `SetList::SOME_CONSTANT` for this
+        null,
 
-        // only when configured
-        RecipeOption::RULE_CONFIGURATION => null,
+        // configuration in array
+        [],
 
-        // VERY OPTIONAL ↓ only when configured
-        RecipeOption::EXTRA_FILE_NAME => null,
-        RecipeOption::EXTRA_FILE_CONTENT => null,
-    ]);
+        // extra file name
+        null,
+        // extra file content
+        null
+    );
+
+    $services->set(RectorRecipeProvider::class)
+        ->arg('$rectorRecipe', inline_object($rectorRecipe));
 };

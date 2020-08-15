@@ -7,7 +7,7 @@ namespace Rector\RectorGenerator\Generator;
 use Nette\Utils\Strings;
 use Rector\RectorGenerator\FileSystem\TemplateFileSystem;
 use Rector\RectorGenerator\TemplateFactory;
-use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
+use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -45,7 +45,7 @@ final class FileGenerator
     public function generateFiles(
         array $templateFileInfos,
         array $templateVariables,
-        RectorRecipeConfiguration $rectorRecipeConfiguration,
+        RectorRecipe $rectorRecipe,
         string $destinationDirectory
     ): array {
         $generatedFilePaths = [];
@@ -54,7 +54,7 @@ final class FileGenerator
             $generatedFilePaths[] = $this->generateFileInfoWithTemplateVariables(
                 $fileInfo,
                 $templateVariables,
-                $rectorRecipeConfiguration,
+                $rectorRecipe,
                 $destinationDirectory
             );
         }
@@ -65,7 +65,7 @@ final class FileGenerator
     private function generateFileInfoWithTemplateVariables(
         SmartFileInfo $smartFileInfo,
         array $templateVariables,
-        RectorRecipeConfiguration $rectorRecipeConfiguration,
+        RectorRecipe $rectorRecipeConfiguration,
         string $targetDirectory
     ): string {
         $targetFilePath = $this->templateFileSystem->resolveDestination(

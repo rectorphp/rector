@@ -12,7 +12,8 @@ use Rector\Core\PhpParser\Parser\Parser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\RectorGenerator\Rector\Closure\AddNewServiceToSymfonyPhpConfigRector;
 use Rector\RectorGenerator\TemplateFactory;
-use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
+use Rector\RectorGenerator\ValueObject\RectorRecipe;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ConfigFilesystem
@@ -64,16 +65,15 @@ final class ConfigFilesystem
     /**
      * @param string[] $templateVariables
      */
-    public function appendRectorServiceToSet(
-        RectorRecipeConfiguration $rectorRecipeConfiguration,
-        array $templateVariables
-    ): void {
-        if ($rectorRecipeConfiguration->getSetConfig() === null) {
+    public function appendRectorServiceToSet(RectorRecipe $rectorRecipe, array $templateVariables): void
+    {
+        if ($rectorRecipe->getSet() === null) {
             return;
         }
 
-        $setConfigFileInfo = $rectorRecipeConfiguration->getSetConfig();
-        $setFileContents = $setConfigFileInfo->getContents();
+        $setFilePath = $rectorRecipe->getSet();
+        $setFileInfo = new SmartFileInfo($setFilePath);
+        $setFileContents = $setFileInfo->getContents();
 
         // already added?
         $rectorFqnName = $this->templateFactory->create(self::RECTOR_FQN_NAME_PATTERN, $templateVariables);
@@ -82,7 +82,7 @@ final class ConfigFilesystem
         }
 
         // 1. parse the file
-        $setConfigNodes = $this->parser->parseFileInfo($setConfigFileInfo);
+        $setConfigNodes = $this->parser->parseFileInfo($setFileInfo);
 
         // 2. add the set() call
         $this->decorateNamesToFullyQualified($setConfigNodes);
@@ -95,7 +95,7 @@ final class ConfigFilesystem
 
         // 3. print the content back to file
         $changedSetConfigContent = $this->betterStandardPrinter->prettyPrintFile($setConfigNodes);
-        $this->smartFileSystem->dumpFile($setConfigFileInfo->getRealPath(), $changedSetConfigContent);
+        $this->smartFileSystem->dumpFile($setFileInfo->getRealPath(), $changedSetConfigContent);
     }
 
     /**
