@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\Order\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Order\PropertyRanker;
-use Rector\Order\StmtOrder;
 
 /**
  * @see \Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\OrderPropertyByComplexityRectorTest
@@ -19,28 +19,12 @@ use Rector\Order\StmtOrder;
 final class OrderPropertyByComplexityRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const RANK = 'rank';
-
-    /**
-     * @var string
-     */
-    private const POSITION = 'position';
-
-    /**
-     * @var StmtOrder
-     */
-    private $stmtOrder;
-
-    /**
      * @var PropertyRanker
      */
     private $propertyRanker;
 
-    public function __construct(PropertyRanker $propertyRanker, StmtOrder $stmtOrder)
+    public function __construct(PropertyRanker $propertyRanker)
     {
-        $this->stmtOrder = $stmtOrder;
         $this->propertyRanker = $propertyRanker;
     }
 
@@ -107,78 +91,87 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $propertyByVisibilityByPosition = $this->resolvePropertyByVisibilityByPosition($node);
-
-        foreach ($propertyByVisibilityByPosition as $propertyByPosition) {
-            $propertyNameToRank = [];
-            $propertyPositionByName = [];
-
-            foreach ($propertyByPosition as $position => $property) {
-                /** @var string $propertyName */
-                $propertyName = $this->getName($property);
-
-                $propertyPositionByName[$position] = $propertyName;
-                $propertyNameToRank[$propertyName][self::RANK] = $this->propertyRanker->rank($property);
-                $propertyNameToRank[$propertyName][self::POSITION] = $position;
-            }
-
-            $sortedPropertyByRank = $this->getSortedPropertiesByRankAndPosition($propertyNameToRank);
-
-            $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($sortedPropertyByRank, $propertyPositionByName);
-
-            $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
-        }
-
+        $node->stmts = $this->sortPublicPropertiesByComplexity($node->stmts);
+        $node->stmts = $this->sortProtectedPropertiesByComplexity($node->stmts);
+        $node->stmts = $this->sortPrivatePropertiesByComplexity($node->stmts);
         return $node;
     }
 
     /**
-     * @return Property[][]
+     * @param Stmt[] $stmts
+     * @return Stmt[]
      */
-    private function resolvePropertyByVisibilityByPosition(Class_ $class): array
+    private function sortPublicPropertiesByComplexity(array $stmts)
     {
-        $propertyByVisibilityByPosition = [];
-        foreach ($class->stmts as $position => $classStmt) {
-            if (! $classStmt instanceof Property) {
-                continue;
+        usort(
+            $stmts,
+            function (Stmt $firstStmt, Stmt $secondStmt): int {
+                if (! $firstStmt instanceof Property || ! $secondStmt instanceof Property) {
+                    return $firstStmt->getLine() <=> $secondStmt->getLine();
+                }
+
+                if (! $firstStmt->isPublic() || ! $secondStmt->isPublic()) {
+                    return $firstStmt->getLine() <=> $secondStmt->getLine();
+                }
+
+                return [
+                    $this->propertyRanker->rank($firstStmt),
+                    $firstStmt->getLine(),
+                ] <=> [$this->propertyRanker->rank($secondStmt), $secondStmt->getLine()];
             }
-
-            $visibility = $this->getVisibilityAsString($classStmt);
-            $propertyByVisibilityByPosition[$visibility][$position] = $classStmt;
-        }
-
-        return $propertyByVisibilityByPosition;
+        );
+        return $stmts;
     }
 
     /**
-     * @param array<string,array<string, mixed>> $propertyNameToRank
-     * @return string[]
+     * @param Stmt[] $stmts
+     * @return Stmt[]
      */
-    private function getSortedPropertiesByRankAndPosition(array $propertyNameToRank): array
+    private function sortProtectedPropertiesByComplexity(array $stmts)
     {
-        uasort(
-            $propertyNameToRank,
-            function (array $firstArray, array $secondArray): int {
-                return [$firstArray[self::RANK], $firstArray[self::POSITION]] <=> [
-                    $secondArray[self::RANK],
-                    $secondArray[self::POSITION],
-                ];
+        usort(
+            $stmts,
+            function (Stmt $firstStmt, Stmt $secondStmt): int {
+                if (! $firstStmt instanceof Property || ! $secondStmt instanceof Property) {
+                    return $firstStmt->getLine() <=> $secondStmt->getLine();
+                }
+
+                if (! $firstStmt->isProtected() || ! $secondStmt->isProtected()) {
+                    return $firstStmt->getLine() <=> $secondStmt->getLine();
+                }
+
+                return [
+                    $this->propertyRanker->rank($firstStmt),
+                    $firstStmt->getLine(),
+                ] <=> [$this->propertyRanker->rank($secondStmt), $secondStmt->getLine()];
             }
         );
-
-        return array_keys($propertyNameToRank);
+        return $stmts;
     }
 
-    private function getVisibilityAsString(Property $property): string
+    /**
+     * @param Stmt[] $stmts
+     * @return Stmt[]
+     */
+    private function sortPrivatePropertiesByComplexity(array $stmts)
     {
-        if ($property->isPrivate()) {
-            return 'private';
-        }
+        usort(
+            $stmts,
+            function (Stmt $firstStmt, Stmt $secondStmt): int {
+                if (! $firstStmt instanceof Property || ! $secondStmt instanceof Property) {
+                    return $firstStmt->getLine() <=> $secondStmt->getLine();
+                }
 
-        if ($property->isProtected()) {
-            return 'protected';
-        }
+                if (! $firstStmt->isPrivate() || ! $secondStmt->isPrivate()) {
+                    return $firstStmt->getLine() <=> $secondStmt->getLine();
+                }
 
-        return 'public';
+                return [
+                    $this->propertyRanker->rank($firstStmt),
+                    $firstStmt->getLine(),
+                ] <=> [$this->propertyRanker->rank($secondStmt), $secondStmt->getLine()];
+            }
+        );
+        return $stmts;
     }
 }

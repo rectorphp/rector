@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Rector\Order\Rector\ClassLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Order\StmtOrder;
 use Rector\Order\StmtVisibilitySorter;
 
 /**
@@ -43,18 +42,12 @@ final class OrderMethodsByVisibilityRector extends AbstractRector
     ];
 
     /**
-     * @var StmtOrder
-     */
-    private $stmtOrder;
-
-    /**
      * @var StmtVisibilitySorter
      */
     private $stmtVisibilitySorter;
 
-    public function __construct(StmtOrder $stmtOrder, StmtVisibilitySorter $stmtVisibilitySorter)
+    public function __construct(StmtVisibilitySorter $stmtVisibilitySorter)
     {
-        $this->stmtOrder = $stmtOrder;
         $this->stmtVisibilitySorter = $stmtVisibilitySorter;
     }
 
@@ -102,31 +95,23 @@ PHP
             return null;
         }
 
-        $currentMethodsOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, ClassMethod::class);
-        $methodsInDesiredOrder = $this->getMethodsInDesiredOrder($node);
+        $node->stmts = $this->stmtVisibilitySorter->sortMethods($node->stmts);
+        $node->stmts = $this->applyPreferredOrder($node->stmts);
 
-        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($methodsInDesiredOrder, $currentMethodsOrder);
-
-        return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
+        return $node;
     }
 
     /**
-     * @return string[]
+     * @param Stmt[] $stmts
      */
-    private function getMethodsInDesiredOrder(ClassLike $classLike): array
+    private function applyPreferredOrder(array $stmts): array
     {
-        $classMethods = $this->stmtVisibilitySorter->sortMethods($classLike);
-        $classMethods = array_keys($classMethods);
+        $stmtsByName = [];
+        foreach ($stmts as $stmt) {
+            $stmtsByName[$this->getName($stmt)] = $stmt;
+        }
 
-        return $this->applyPreferredPosition($classMethods);
-    }
-
-    /**
-     * @param string[] $classMethods
-     * @return string[]
-     */
-    private function applyPreferredPosition(array $classMethods): array
-    {
-        return array_unique(array_merge(self::PREFERRED_ORDER, $classMethods));
+        $usedPreferredMethods = array_intersect_key(array_flip(self::PREFERRED_ORDER), $stmtsByName);
+        return array_merge($usedPreferredMethods, $stmtsByName);
     }
 }

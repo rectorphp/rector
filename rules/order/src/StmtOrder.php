@@ -5,20 +5,9 @@ declare(strict_types=1);
 namespace Rector\Order;
 
 use PhpParser\Node\Stmt\ClassLike;
-use Rector\NodeNameResolver\NodeNameResolver;
 
 final class StmtOrder
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-    }
-
     /**
      * @param array<int, string> $desiredStmtOrder
      * @param array<int, string> $currentStmtOrder
@@ -74,27 +63,5 @@ final class StmtOrder
         }
 
         return $classLike;
-    }
-
-    /**
-     * @return array<int,string>
-     */
-    public function getStmtsOfTypeOrder(ClassLike $classLike, string $type): array
-    {
-        $stmtsByPosition = [];
-        foreach ($classLike->stmts as $position => $classStmt) {
-            if (! is_a($classStmt, $type)) {
-                continue;
-            }
-
-            $name = $this->nodeNameResolver->getName($classStmt);
-            if ($name === null) {
-                continue;
-            }
-
-            $stmtsByPosition[$position] = $name;
-        }
-
-        return $stmtsByPosition;
     }
 }

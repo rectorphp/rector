@@ -7,11 +7,9 @@ namespace Rector\Order\Rector\ClassLike;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Order\StmtOrder;
 use Rector\Order\StmtVisibilitySorter;
 
 /**
@@ -20,18 +18,12 @@ use Rector\Order\StmtVisibilitySorter;
 final class OrderPropertiesByVisibilityRector extends AbstractRector
 {
     /**
-     * @var StmtOrder
-     */
-    private $stmtOrder;
-
-    /**
      * @var StmtVisibilitySorter
      */
     private $stmtVisibilitySorter;
 
-    public function __construct(StmtOrder $stmtOrder, StmtVisibilitySorter $stmtVisibilitySorter)
+    public function __construct(StmtVisibilitySorter $stmtVisibilitySorter)
     {
-        $this->stmtOrder = $stmtOrder;
         $this->stmtVisibilitySorter = $stmtVisibilitySorter;
     }
 
@@ -79,21 +71,7 @@ PHP
             return null;
         }
 
-        $currentPropertiesOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, Property::class);
-        $propertiesInDesiredOrder = $this->getPropertiesInDesiredPosition($node);
-
-        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($propertiesInDesiredOrder, $currentPropertiesOrder);
-
-        return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getPropertiesInDesiredPosition(ClassLike $classLike): array
-    {
-        $properties = $this->stmtVisibilitySorter->sortProperties($classLike);
-
-        return array_keys($properties);
+        $node->stmts = $this->stmtVisibilitySorter->sortProperties($node->stmts);
+        return $node;
     }
 }

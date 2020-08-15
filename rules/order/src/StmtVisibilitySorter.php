@@ -6,146 +6,90 @@ namespace Rector\Order;
 
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeNameResolver\NodeNameResolver;
 
 final class StmtVisibilitySorter
 {
     /**
-     * @var string
+     * @var Property[]
+     * @return Property[]
      */
-    private const VISIBILITY = 'visibility';
-
-    /**
-     * @var string
-     */
-    private const POSITION = 'position';
-
-    /**
-     * @var string
-     */
-    private const NAME = 'name';
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function sortProperties(array $stmts): array
     {
-        $this->nodeNameResolver = $nodeNameResolver;
-    }
-
-    /**
-     * @return array<string,array<string, mixed>>
-     */
-    public function sortProperties(ClassLike $classLike): array
-    {
-        $properties = [];
-        foreach ($classLike->stmts as $position => $propertyStmt) {
-            if (! $propertyStmt instanceof Property) {
-                continue;
-            }
-
-            /** @var string $propertyName */
-            $propertyName = $this->nodeNameResolver->getName($propertyStmt);
-
-            $properties[$propertyName][self::NAME] = $propertyName;
-            $properties[$propertyName][self::VISIBILITY] = $this->getVisibilityLevelOrder($propertyStmt);
-            $properties[$propertyName]['static'] = $propertyStmt->isStatic();
-            $properties[$propertyName][self::POSITION] = $position;
-        }
-
-        uasort(
-            $properties,
-            function (array $firstArray, array $secondArray): int {
+        usort(
+            $stmts,
+            function (Stmt $firstStmt, Stmt $secondStmt): int {
+                if (! $firstStmt instanceof Property || ! $secondStmt instanceof Property) {
+                    return $firstStmt->getLine() <=> $secondStmt->getLine();
+                }
                 return [
-                    $firstArray[self::VISIBILITY],
-                    $firstArray['static'],
-                    $firstArray[self::POSITION],
-                ] <=> [$secondArray[self::VISIBILITY], $secondArray['static'], $secondArray[self::POSITION]];
-            }
-        );
-
-        return $properties;
-    }
-
-    /**
-     * @return array<string,array<string, mixed>>
-     */
-    public function sortMethods(ClassLike $classLike): array
-    {
-        $classMethods = [];
-        foreach ($classLike->stmts as $position => $classStmt) {
-            if (! $classStmt instanceof ClassMethod) {
-                continue;
-            }
-
-            /** @var string $classMethodName */
-            $classMethodName = $this->nodeNameResolver->getName($classStmt);
-
-            $classMethods[$classMethodName][self::NAME] = $classMethodName;
-            $classMethods[$classMethodName][self::VISIBILITY] = $this->getVisibilityLevelOrder($classStmt);
-            $classMethods[$classMethodName]['abstract'] = $classStmt->isAbstract();
-            $classMethods[$classMethodName]['final'] = $classStmt->isFinal();
-            $classMethods[$classMethodName]['static'] = $classStmt->isStatic();
-            $classMethods[$classMethodName][self::POSITION] = $position;
-        }
-
-        uasort(
-            $classMethods,
-            function (array $firstArray, array $secondArray): int {
-                return [
-                    $firstArray[self::VISIBILITY],
-                    $firstArray['static'],
-                    $secondArray['abstract'],
-                    $firstArray['final'],
-                    $firstArray[self::POSITION],
+                    $this->getVisibilityLevelOrder($firstStmt),
+                    $firstStmt->isStatic(),
+                    $firstStmt->getLine(),
                 ] <=> [
-                    $secondArray[self::VISIBILITY],
-                    $secondArray['static'],
-                    $firstArray['abstract'],
-                    $secondArray['final'],
-                    $secondArray[self::POSITION],
+                    $this->getVisibilityLevelOrder($secondStmt),
+                    $secondStmt->isStatic(),
+                    $secondStmt->getLine(),
                 ];
             }
         );
 
-        return $classMethods;
+        return $stmts;
     }
 
     /**
-     * @return array<string,array<string, mixed>>
+     * @var ClassMethod[]
+     * @return ClassMethod[]
      */
-    public function sortConstants(ClassLike $classLike): array
+    public function sortMethods(array $stmts): array
     {
-        $constants = [];
-        foreach ($classLike->stmts as $position => $constantStmt) {
-            if (! $constantStmt instanceof ClassConst) {
-                continue;
-            }
-
-            /** @var string $constantName */
-            $constantName = $this->nodeNameResolver->getName($constantStmt);
-
-            $constants[$constantName][self::NAME] = $constantName;
-            $constants[$constantName][self::VISIBILITY] = $this->getVisibilityLevelOrder($constantStmt);
-            $constants[$constantName][self::POSITION] = $position;
-        }
-
-        uasort(
-            $constants,
-            function (array $firstArray, array $secondArray): int {
+        usort(
+            $stmts,
+            function (Stmt $firstStmt, Stmt $secondStmt): int {
+                if (! $firstStmt instanceof ClassMethod || ! $secondStmt instanceof ClassMethod) {
+                    return $firstStmt->getLine() <=> $secondStmt->getLine();
+                }
                 return [
-                    $firstArray[self::VISIBILITY],
-                    $firstArray[self::POSITION],
-                ] <=> [$secondArray[self::VISIBILITY], $secondArray[self::POSITION]];
+                    $this->getVisibilityLevelOrder($firstStmt),
+                    $firstStmt->isStatic(),
+                    $secondStmt->isAbstract(),
+                    $firstStmt->isFinal(),
+                    $firstStmt->getLine(),
+                ] <=> [
+                    $this->getVisibilityLevelOrder($secondStmt),
+                    $secondStmt->isStatic(),
+                    $firstStmt->isAbstract(),
+                    $secondStmt->isFinal(),
+                    $secondStmt->getLine(),
+                ];
             }
         );
 
-        return $constants;
+        return $stmts;
+    }
+
+    /**
+     * @var ClassConst[]
+     * @return ClassConst[]
+     */
+    public function sortConstants(array $stmts): array
+    {
+        usort(
+            $stmts,
+            function (Stmt $firstStmt, Stmt $secondStmt): int {
+                if (! $firstStmt instanceof ClassConst || ! $secondStmt instanceof ClassConst) {
+                    return $firstStmt->getLine() <=> $secondStmt->getLine();
+                }
+
+                return [
+                    $this->getVisibilityLevelOrder($firstStmt),
+                    $firstStmt->getLine(),
+                ] <=> [$this->getVisibilityLevelOrder($secondStmt), $secondStmt->getLine()];
+            }
+        );
+
+        return $stmts;
     }
 
     /**
