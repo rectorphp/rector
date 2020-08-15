@@ -81,12 +81,6 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
         $this->assertDirectoryEquals(__DIR__ . '/Fixture/expected_3rd_party', self::DESTINATION_DIRECTORY);
     }
 
-    private function createConfiguration(bool $isRectorRepository): RectorRecipeConfiguration
-    {
-        $rectorRecipe = StaticRectorRecipeFactory::createWithConfiguration();
-        return $this->configurationFactory->createFromRectorRecipe($rectorRecipe, $isRectorRepository);
-    }
-
     private function doGenerateFiles(bool $isRectorRepository): void
     {
         $rectorRecipeConfiguration = $this->createConfiguration($isRectorRepository);
@@ -99,5 +93,10 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
             $rectorRecipeConfiguration,
             self::DESTINATION_DIRECTORY
         );
+    }
+    private function createConfiguration(bool $isRectorRepository): RectorRecipeConfiguration
+    {
+        $rectorRecipe = StaticRectorRecipeFactory::createWithConfiguration();
+        return $this->configurationFactory->createFromRectorRecipe($rectorRecipe, $isRectorRepository);
     }
 }
