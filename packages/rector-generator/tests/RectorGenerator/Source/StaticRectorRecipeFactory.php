@@ -5,20 +5,18 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\Tests\RectorGenerator\Source;
 
 use PhpParser\Node\Expr\MethodCall;
-use Rector\RectorGenerator\ValueObject\RecipeOption;
+use Rector\RectorGenerator\ValueObject\RectorRecipe;
 
 final class StaticRectorRecipeFactory
 {
-    public static function createWithConfiguration(): array
+    public static function createRectorRecipe(bool $isRectorRepository): RectorRecipe
     {
-        return [
-            RecipeOption::PACKAGE => 'ModeratePackage',
-            RecipeOption::NAME => 'WhateverRector',
-            RecipeOption::NODE_TYPES => [
-                MethodCall::class,
-            ],
-            RecipeOption::DESCRIPTION => 'Change $service->arg(...) to $service->call(...)',
-            RecipeOption::CODE_BEFORE => <<<'CODE_SAMPLE'
+        return new RectorRecipe(
+            'ModeratePackage',
+            'WhateverRector',
+            [MethodCall::class],
+            'Change $service->arg(...) to $service->call(...)',
+            <<<'CODE_SAMPLE'
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -30,7 +28,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$key', 'value');
 }
 CODE_SAMPLE,
-            RecipeOption::CODE_AFTER => <<<'CODE_SAMPLE'
+            <<<'CODE_SAMPLE'
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -45,20 +43,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 }
 CODE_SAMPLE,
             // e.g. link to RFC or headline in upgrade guide, 1 or more in the list
-            RecipeOption::SOURCE => null,
+            [],
             // e.g. symfony30, target set to add this Rule to; keep null if part of core
-            RecipeOption::SET => null,
+            null,
 
             // OPTIONAL: only when configured
-            RecipeOption::RULE_CONFIGURATION => [
+            [
                 'CLASS_TYPE_TO_METHOD_NAME' => [
                     'SomeClass' => 'configure'
                 ]
             ],
-
-            // OPTIONAL: extra file
-            RecipeOption::EXTRA_FILE_NAME => null,
-            RecipeOption::EXTRA_FILE_CONTENT => null,
-        ];
+            null,
+            null,
+            $isRectorRepository
+        );
     }
 }

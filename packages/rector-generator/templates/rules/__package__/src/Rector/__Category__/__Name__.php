@@ -10,7 +10,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
-__Source__
+__Resources__
  * @see \Rector\__Package__\Tests\Rector\__Category__\__Name__\__Name__Test
  */
 final class __Name__ extends AbstractRector

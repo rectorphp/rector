@@ -9,6 +9,16 @@ use ReflectionClass;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 use Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
 
+function inline_object(object $object): InlineServiceConfigurator
+{
+    $reflectionClass = new ReflectionClass($object);
+
+    $className = $reflectionClass->getName();
+    $argumentValues = resolve_argument_values($reflectionClass, $object);
+
+    return inline_service($className)->args($argumentValues);
+}
+
 /**
  * @param object[] $objects
  * @return InlineServiceConfigurator[]
@@ -17,12 +27,7 @@ function inline_objects(array $objects): array
 {
     $inlineServices = [];
     foreach ($objects as $object) {
-        $reflectionClass = new ReflectionClass($object);
-
-        $className = $reflectionClass->getName();
-        $argumentValues = resolve_argument_values($reflectionClass, $object);
-
-        $inlineServices[] = inline_service($className)->args($argumentValues);
+        $inlineServices[] = inline_object($object);
     }
 
     return $inlineServices;

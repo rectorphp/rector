@@ -7,8 +7,7 @@ namespace Rector\RectorGenerator\FileSystem;
 use Nette\Utils\Strings;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\RectorGenerator\Finder\TemplateFinder;
-use Rector\RectorGenerator\ValueObject\Package;
-use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
+use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TemplateFileSystem
@@ -19,13 +18,13 @@ final class TemplateFileSystem
     public function resolveDestination(
         SmartFileInfo $smartFileInfo,
         array $templateVariables,
-        RectorRecipeConfiguration $rectorRecipeConfiguration,
+        RectorRecipe $rectorRecipe,
         string $targetDirectory
     ): string {
         $destination = $smartFileInfo->getRelativeFilePathFromDirectory(TemplateFinder::TEMPLATES_DIRECTORY);
 
         // normalize core package
-        if (! $rectorRecipeConfiguration->isRectorRepository()) {
+        if (! $rectorRecipe->isRectorRepository()) {
             // special keyword for 3rd party Rectors, not for core Github contribution
             $destination = Strings::replace($destination, '#(packages|rules)\/__package__#i', 'utils/rector');
         }

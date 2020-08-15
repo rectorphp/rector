@@ -29,9 +29,4 @@ final class SetResolver
 
         return $this->setProvider->provideByName($setOption);
     }
-
-    public function resolveSetByName(string $name): ?Set
-    {
-        return $this->setProvider->provideByName($name);
-    }
 }
