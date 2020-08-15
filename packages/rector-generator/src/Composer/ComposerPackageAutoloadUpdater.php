@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\Composer;
 
 use Rector\RectorGenerator\FileSystem\JsonFileSystem;
-use Rector\RectorGenerator\ValueObject\Configuration;
 use Rector\RectorGenerator\ValueObject\Package;
+use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 
@@ -38,12 +38,12 @@ final class ComposerPackageAutoloadUpdater
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function processComposerAutoload(Configuration $configuration): void
+    public function processComposerAutoload(RectorRecipeConfiguration $rectorRecipeConfiguration): void
     {
         $composerJsonFilePath = getcwd() . '/composer.json';
         $composerJson = $this->jsonFileSystem->loadFileToJson($composerJsonFilePath);
 
-        $package = $this->resolvePackage($configuration);
+        $package = $this->resolvePackage($rectorRecipeConfiguration);
 
         if ($this->isPackageAlreadyLoaded($composerJson, $package)) {
             return;
@@ -60,7 +60,7 @@ final class ComposerPackageAutoloadUpdater
             return;
         }
 
-        $srcAutoload = $configuration->isRectorRepository() ? 'autoload' : self::AUTOLOAD_DEV;
+        $srcAutoload = $rectorRecipeConfiguration->isRectorRepository() ? 'autoload' : self::AUTOLOAD_DEV;
         $composerJson[$srcAutoload][self::PSR_4][$package->getSrcNamespace()] = $package->getSrcDirectory();
 
         $composerJson[self::AUTOLOAD_DEV][self::PSR_4][$package->getTestsNamespace()] = $package->getTestsDirectory();
@@ -70,9 +70,9 @@ final class ComposerPackageAutoloadUpdater
         $this->rebuildAutoload();
     }
 
-    private function resolvePackage(Configuration $configuration): Package
+    private function resolvePackage(RectorRecipeConfiguration $rectorRecipeConfiguration): Package
     {
-        if (! $configuration->isRectorRepository()) {
+        if (! $rectorRecipeConfiguration->isRectorRepository()) {
             return new Package(
                 'Utils\\Rector\\',
                 'Utils\\Rector\\Tests\\',
@@ -82,10 +82,10 @@ final class ComposerPackageAutoloadUpdater
         }
 
         return new Package(
-            'Rector\\' . $configuration->getPackage() . '\\',
-            'Rector\\' . $configuration->getPackage() . '\\Tests\\',
-            'rules/' . $configuration->getPackageDirectory() . '/src',
-            'rules/' . $configuration->getPackageDirectory() . '/tests'
+            'Rector\\' . $rectorRecipeConfiguration->getPackage() . '\\',
+            'Rector\\' . $rectorRecipeConfiguration->getPackage() . '\\Tests\\',
+            'rules/' . $rectorRecipeConfiguration->getPackageDirectory() . '/src',
+            'rules/' . $rectorRecipeConfiguration->getPackageDirectory() . '/tests'
         );
     }
 

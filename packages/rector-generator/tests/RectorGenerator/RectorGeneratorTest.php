@@ -10,7 +10,7 @@ use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\Generator\FileGenerator;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\Tests\RectorGenerator\Source\StaticRectorRecipeFactory;
-use Rector\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
 use Symplify\EasyTesting\PHPUnit\Behavior\DirectoryAssertableTrait;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -69,24 +69,35 @@ final class RectorGeneratorTest extends AbstractKernelTestCase
 
     public function test(): void
     {
-        $configuration = $this->createConfiguration();
-        $templateFileInfos = $this->templateFinder->find($configuration);
-        $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
-
-        $this->fileGenerator->generateFiles(
-            $templateFileInfos,
-            $templateVariables,
-            $configuration,
-            self::DESTINATION_DIRECTORY
-        );
+        $this->doGenerateFiles(true);
 
         $this->assertDirectoryEquals(__DIR__ . '/Fixture/expected', self::DESTINATION_DIRECTORY);
     }
 
-    private function createConfiguration(): Configuration
+    public function test3rdParty(): void
+    {
+        $this->doGenerateFiles(false);
+
+        $this->assertDirectoryEquals(__DIR__ . '/Fixture/expected_3rd_party', self::DESTINATION_DIRECTORY);
+    }
+
+    private function createConfiguration(bool $isRectorRepository): RectorRecipeConfiguration
     {
         $rectorRecipe = StaticRectorRecipeFactory::createWithConfiguration();
+        return $this->configurationFactory->createFromRectorRecipe($rectorRecipe, $isRectorRepository);
+    }
 
-        return $this->configurationFactory->createFromRectorRecipe($rectorRecipe, true);
+    private function doGenerateFiles(bool $isRectorRepository): void
+    {
+        $rectorRecipeConfiguration = $this->createConfiguration($isRectorRepository);
+        $templateFileInfos = $this->templateFinder->find($rectorRecipeConfiguration);
+        $templateVariables = $this->templateVariablesFactory->createFromConfiguration($rectorRecipeConfiguration);
+
+        $this->fileGenerator->generateFiles(
+            $templateFileInfos,
+            $templateVariables,
+            $rectorRecipeConfiguration,
+            self::DESTINATION_DIRECTORY
+        );
     }
 }

@@ -106,21 +106,25 @@ final class CreateCommand extends Command
         $rectorRecipe = $this->parameterProvider->provideParameter(Option::RECTOR_RECIPE);
 
         $isRectorRepository = $this->isRectorRepository();
-        $configuration = $this->configurationFactory->createFromRectorRecipe($rectorRecipe, $isRectorRepository);
 
-        $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
+        $rectorRecipeConfiguration = $this->configurationFactory->createFromRectorRecipe(
+            $rectorRecipe,
+            $isRectorRepository
+        );
+
+        $templateVariables = $this->templateVariablesFactory->createFromConfiguration($rectorRecipeConfiguration);
 
         // setup psr-4 autoload, if not already in
-        $this->composerPackageAutoloadUpdater->processComposerAutoload($configuration);
+        $this->composerPackageAutoloadUpdater->processComposerAutoload($rectorRecipeConfiguration);
 
-        $templateFileInfos = $this->templateFinder->find($configuration);
+        $templateFileInfos = $this->templateFinder->find($rectorRecipeConfiguration);
 
         $targetDirectory = getcwd();
 
         $isUnwantedOverride = $this->overrideGuard->isUnwantedOverride(
             $templateFileInfos,
             $templateVariables,
-            $configuration,
+            $rectorRecipeConfiguration,
             $targetDirectory
         );
         if ($isUnwantedOverride) {
@@ -132,15 +136,15 @@ final class CreateCommand extends Command
         $generatedFilePaths = $this->fileGenerator->generateFiles(
             $templateFileInfos,
             $templateVariables,
-            $configuration,
+            $rectorRecipeConfiguration,
             $targetDirectory
         );
 
         $testCaseDirectoryPath = $this->resolveTestCaseDirectoryPath($generatedFilePaths);
 
-        $this->configFilesystem->appendRectorServiceToSet($configuration, $templateVariables);
+        $this->configFilesystem->appendRectorServiceToSet($rectorRecipeConfiguration, $templateVariables);
 
-        $this->printSuccess($configuration->getName(), $generatedFilePaths, $testCaseDirectoryPath);
+        $this->printSuccess($rectorRecipeConfiguration->getName(), $generatedFilePaths, $testCaseDirectoryPath);
 
         return ShellCode::SUCCESS;
     }

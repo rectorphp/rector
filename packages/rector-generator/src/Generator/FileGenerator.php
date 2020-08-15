@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\RectorGenerator\Generator;
 
+use Nette\Utils\Strings;
 use Rector\RectorGenerator\FileSystem\TemplateFileSystem;
 use Rector\RectorGenerator\TemplateFactory;
-use Rector\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -44,7 +45,7 @@ final class FileGenerator
     public function generateFiles(
         array $templateFileInfos,
         array $templateVariables,
-        Configuration $configuration,
+        RectorRecipeConfiguration $rectorRecipeConfiguration,
         string $destinationDirectory
     ): array {
         $generatedFilePaths = [];
@@ -53,7 +54,7 @@ final class FileGenerator
             $generatedFilePaths[] = $this->generateFileInfoWithTemplateVariables(
                 $fileInfo,
                 $templateVariables,
-                $configuration,
+                $rectorRecipeConfiguration,
                 $destinationDirectory
             );
         }
@@ -64,17 +65,23 @@ final class FileGenerator
     private function generateFileInfoWithTemplateVariables(
         SmartFileInfo $smartFileInfo,
         array $templateVariables,
-        Configuration $configuration,
+        RectorRecipeConfiguration $rectorRecipeConfiguration,
         string $targetDirectory
     ): string {
         $targetFilePath = $this->templateFileSystem->resolveDestination(
             $smartFileInfo,
             $templateVariables,
-            $configuration,
+            $rectorRecipeConfiguration,
             $targetDirectory
         );
 
         $content = $this->templateFactory->create($smartFileInfo->getContents(), $templateVariables);
+
+        // replace "Rector\Utils\" with "Utils\Rector\" for 3rd party packages
+        if (! $rectorRecipeConfiguration->isRectorRepository()) {
+            $content = Strings::replace($content, '#Rector\\\\Utils#', 'Utils\Rector');
+        }
+
         $this->smartFileSystem->dumpFile($targetFilePath, $content);
 
         return $targetFilePath;

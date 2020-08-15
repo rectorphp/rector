@@ -7,8 +7,8 @@ namespace Rector\RectorGenerator\Configuration;
 use Nette\Utils\Strings;
 use Rector\Core\Set\SetResolver;
 use Rector\RectorGenerator\Guard\RecipeGuard;
-use Rector\RectorGenerator\ValueObject\Configuration;
 use Rector\RectorGenerator\ValueObject\RecipeOption;
+use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
 use Symplify\SetConfigResolver\ValueObject\Set;
 
 final class ConfigurationFactory
@@ -32,7 +32,7 @@ final class ConfigurationFactory
     /**
      * @param mixed[] $rectorRecipe
      */
-    public function createFromRectorRecipe(array $rectorRecipe, bool $isRectorRepository): Configuration
+    public function createFromRectorRecipe(array $rectorRecipe, bool $isRectorRepository): RectorRecipeConfiguration
     {
         $this->recipeGuard->ensureRecipeIsValid($rectorRecipe, $isRectorRepository);
 
@@ -42,7 +42,7 @@ final class ConfigurationFactory
         $extraFileContent = $this->resolveExtraFileContent($rectorRecipe);
         $set = $this->resolveeSet($rectorRecipe);
 
-        return new Configuration(
+        return new RectorRecipeConfiguration(
             $rectorRecipe[RecipeOption::PACKAGE],
             $rectorRecipe[RecipeOption::NAME],
             $category,
@@ -61,6 +61,9 @@ final class ConfigurationFactory
     }
 
     /**
+     * Covered by PHPStan
+     * @see \Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
+     *
      * @param class-string[] $nodeTypes
      */
     private function resolveCategoryFromFqnNodeTypes(array $nodeTypes): string
