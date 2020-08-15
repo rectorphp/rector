@@ -15,7 +15,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\PHPUnit\Tests\Rector\AssertEqualsToSameRector\AssertEqualsToSameRectorTest
+ * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsToSameRector\AssertEqualsToSameRectorTest
  */
 final class AssertEqualsToSameRector extends AbstractPHPUnitRector
 {
