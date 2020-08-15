@@ -19,11 +19,6 @@ final class Configuration
     public const PACKAGE_UTILS = 'Utils';
 
     /**
-     * @var string|null
-     */
-    private $package;
-
-    /**
      * @var bool
      */
     private $isRectorRepository = false;
@@ -72,6 +67,10 @@ final class Configuration
      * @var array<string, mixed>
      */
     private $ruleConfiguration = [];
+    /**
+     * @var string|null
+     */
+    private $package;
 
     /**
      * @var Set|null
