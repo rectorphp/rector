@@ -257,7 +257,7 @@ final class RectorRecipe
 
     private function setCodeBefore(string $codeBefore): void
     {
-        $this->setIsPhpSnippet($codeBefore);
+        $this->detectIsPhpSnippet($codeBefore);
 
         $this->codeBefore = $this->normalizeCode($codeBefore);
     }
@@ -308,9 +308,10 @@ final class RectorRecipe
         $this->category = (string) Strings::after($this->nodeTypes[0], '\\', -1);
     }
 
-    private function setIsPhpSnippet(string $codeBefore): void
+    private function detectIsPhpSnippet(string $codeBefore): void
     {
-        $this->isPhpSnippet = Strings::startsWith($codeBefore, '<?php');
+        // dummy yet effective way to detect PHP snippet from HTML
+        $this->isPhpSnippet = Strings::startsWith($codeBefore, '<?php') || Strings::match($codeBefore, '#^class #ms');
     }
 
     private function normalizeCode(string $code): string
