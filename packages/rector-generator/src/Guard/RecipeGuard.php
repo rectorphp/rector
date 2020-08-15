@@ -31,9 +31,16 @@ final class RecipeGuard
      */
     public function ensureRecipeIsValid(array $rectorRecipe, bool $isRectorRepository): void
     {
-        $requiredKeysCount = count(self::REQUIRED_KEYS);
+        if ($rectorRecipe === []) {
+            $message = 'Make sure the "rector-recipe.php" config file is imported. Are you sure its in your main config?';
+            throw new ConfigurationException($message);
+        }
 
-        if (count(array_intersect(array_keys($rectorRecipe), self::REQUIRED_KEYS)) !== $requiredKeysCount) {
+        $requiredKeysCount = count(self::REQUIRED_KEYS);
+        $providedKeys = array_intersect(array_keys($rectorRecipe), self::REQUIRED_KEYS);
+        $providedKeysCount = count($providedKeys);
+
+        if ($providedKeysCount !== $requiredKeysCount) {
             $message = sprintf(
                 'Make sure "%s" keys are present in "parameters > %s"',
                 Option::RECTOR_RECIPE,
