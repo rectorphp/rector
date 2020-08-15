@@ -61,7 +61,7 @@ final class RecipeGuard
         }
 
         // only can be empty or utils when outside Rector repository
-        if (!$isRectorRepository) {
+        if (! $isRectorRepository) {
             return;
         }
 

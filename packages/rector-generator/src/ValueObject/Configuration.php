@@ -67,6 +67,7 @@ final class Configuration
      * @var array<string, mixed>
      */
     private $ruleConfiguration = [];
+
     /**
      * @var string|null
      */
