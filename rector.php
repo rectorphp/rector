@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddArrayParamDocTypeRector::class);
     $services->set(AddArrayReturnDocTypeRector::class);
 
-    $containerConfigurator->import(__DIR__ . '/create-rector.php', null, 'not_found');
+    $containerConfigurator->import(__DIR__ . '/rector-recipe.php', null, 'not_found');
 
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);

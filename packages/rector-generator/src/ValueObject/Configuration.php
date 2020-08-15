@@ -16,7 +16,7 @@ final class Configuration
     /**
      * @var string
      */
-    private $package;
+    public const PACKAGE_UTILS = 'Utils';
 
     /**
      * @var bool
@@ -69,6 +69,11 @@ final class Configuration
     private $ruleConfiguration = [];
 
     /**
+     * @var string|null
+     */
+    private $package;
+
+    /**
      * @var Set|null
      */
     private $set;
@@ -88,7 +93,7 @@ final class Configuration
      * @param string[] $source
      */
     public function __construct(
-        string $package,
+        ?string $package,
         string $name,
         string $category,
         array $nodeTypes,
@@ -126,8 +131,8 @@ final class Configuration
 
     public function getPackage(): string
     {
-        if (! $this->isRectorRepository) {
-            return 'Utils';
+        if (! $this->isRectorRepository || $this->package === null || $this->package === '') {
+            return self::PACKAGE_UTILS;
         }
 
         return $this->package;
@@ -144,7 +149,7 @@ final class Configuration
             return 'phpunit';
         }
 
-        return StaticRectorStrings::camelCaseToDashes($this->package);
+        return StaticRectorStrings::camelCaseToDashes($this->getPackage());
     }
 
     public function getName(): string
