@@ -37,18 +37,22 @@ final class RectorRecipe
      * @var string
      */
     private $codeAfter;
+
     /**
      * @var bool
      */
     private $isRectorRepository = false;
+
     /**
      * @var bool
      */
     private $isPhpSnippet = true;
+
     /**
      * @var string
      */
     private $category;
+
     /**
      * @var class-string[]
      */
@@ -63,10 +67,12 @@ final class RectorRecipe
      * @var mixed[]
      */
     private $configration = [];
+
     /**
      * @var string|null
      */
     private $package;
+
     /**
      * @var string|null
      */
@@ -222,6 +228,7 @@ final class RectorRecipe
 
         $this->name = $name;
     }
+
     /**
      * @param class-string[] $nodeTypes
      */
@@ -302,10 +309,12 @@ final class RectorRecipe
     {
         $this->category = (string) Strings::after($this->nodeTypes[0], '\\', -1);
     }
+
     private function setIsPhpSnippet(string $codeBefore): void
     {
         $this->isPhpSnippet = Strings::startsWith($codeBefore, '<?php');
     }
+
     private function normalizeCode(string $code): string
     {
         if (Strings::startsWith($code, '<?php')) {

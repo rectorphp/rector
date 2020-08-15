@@ -10,13 +10,14 @@ use Rector\RectorGenerator\ValueObject\RectorRecipe;
 final class RectorRecipeProvider
 {
     /**
-     * @var RectorRecipe|null
-     */
-    private $rectorRecipe;
-    /**
      * @var string
      */
     private const MESSAGE = 'Make sure the "rector-recipe.php" config file is imported and parameter set. Are you sure its in your main config?';
+
+    /**
+     * @var RectorRecipe|null
+     */
+    private $rectorRecipe;
 
     /**
      * Parameter must be configured in the rector config
