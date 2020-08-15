@@ -16,16 +16,6 @@ use PhpParser\Node\Expr\Variable;
 final class VariableAssignPair
 {
     /**
-     * @var Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch
-     */
-    private $variable;
-
-    /**
-     * @var Assign|AssignOp|AssignRef
-     */
-    private $assign;
-
-    /**
      * @param Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch $variable
      * @param Assign|AssignOp|AssignRef $node
      */
@@ -34,7 +24,6 @@ final class VariableAssignPair
         $this->variable = $variable;
         $this->assign = $node;
     }
-
     /**
      * @return Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch
      */
@@ -42,7 +31,6 @@ final class VariableAssignPair
     {
         return $this->variable;
     }
-
     /**
      * @return Assign|AssignOp|AssignRef
      */

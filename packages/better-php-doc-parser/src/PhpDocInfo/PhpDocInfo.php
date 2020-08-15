@@ -47,11 +47,6 @@ final class PhpDocInfo
     private $originalContent;
 
     /**
-     * @var bool
-     */
-    private $isSingleLine = false;
-
-    /**
      * @var mixed[]
      */
     private $tokens = [];

@@ -26,11 +26,6 @@ final class ConditionalSetValue
      */
     private $newSetMethod;
 
-    /**
-     * @var bool
-     */
-    private $hasRow = false;
-
     public function __construct(
         string $oldMethod,
         string $newGetMethod,

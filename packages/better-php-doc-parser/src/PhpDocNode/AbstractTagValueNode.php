@@ -17,20 +17,15 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
 {
-    use AttributeTrait;
-    use PrintTagValueNodeTrait;
     use ArrayPartPhpDocTagPrinterTrait;
-
     /**
      * @var mixed[]
      */
     protected $items = [];
-
     /**
      * @var TagValueNodeConfiguration
      */
     protected $tagValueNodeConfiguration;
-
     /**
      * @param mixed[] $items
      */
@@ -39,7 +34,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         $this->items = $items;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
-
     /**
      * Generic fallback
      */
@@ -47,7 +41,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     {
         return $this->printItems($this->items);
     }
-
     /**
      * @return mixed[]
      */
@@ -55,7 +48,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     {
         return $this->items;
     }
-
     protected function printItems(array $items): string
     {
         $items = $this->completeItemsQuotes($items);
@@ -64,7 +56,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         return $this->printContentItems($items);
     }
-
     /**
      * @param string[] $items
      */
@@ -103,7 +94,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             $this->tagValueNodeConfiguration->hasNewlineBeforeClosing() ? PHP_EOL : ''
         );
     }
-
     /**
      * @param PhpDocTagValueNode[] $tagValueNodes
      */
@@ -131,7 +121,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             $closingSpace
         );
     }
-
     protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
     {
         $tagValueNodeConfigurationFactory = new TagValueNodeConfigurationFactory();
@@ -146,7 +135,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             $this
         );
     }
-
     /**
      * @return mixed[]|string[]
      */
@@ -161,7 +149,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             $this->tagValueNodeConfiguration->getOrderedVisibleItems()
         );
     }
-
     private function shouldPrintEmptyBrackets(): bool
     {
         // @todo decouple
@@ -174,7 +161,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         return $this->tagValueNodeConfiguration->hasOpeningBracket() && $this->tagValueNodeConfiguration->hasClosingBracket();
     }
-
     private function correctArraySingleItemPrint(array $value, string $arrayItemAsString): string
     {
         if (count($value) !== 1) {
@@ -199,7 +185,6 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         return $nakedItem;
     }
-
     /**
      * @param PhpDocTagValueNode[] $tagValueNodes
      */

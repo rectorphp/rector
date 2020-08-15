@@ -15,11 +15,6 @@ final class AttributeAwareParamTagValueNode extends ParamTagValueNode implements
     use AttributeTrait;
 
     /**
-     * @var bool
-     */
-    private $isReference = false;
-
-    /**
      * The constructor override is needed to add support for reference &
      * @see https://github.com/rectorphp/rector/issues/1734
      */

@@ -17,90 +17,45 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class Configuration
 {
     /**
-     * @var bool
-     */
-    private $isDryRun = false;
-
-    /**
-     * @var bool
-     */
-    private $showProgressBar = true;
-
-    /**
-     * @var bool
-     */
-    private $areAnyPhpRectorsLoaded = false;
-
-    /**
-     * @var bool
-     */
-    private $mustMatchGitDiff = false;
-
-    /**
      * @var string
      */
     private $outputFile;
-
-    /**
-     * @var bool
-     */
-    private $shouldClearCache = false;
-
     /**
      * @var string
      */
     private $outputFormat;
-
-    /**
-     * @var bool
-     */
-    private $isCacheDebug = false;
-
-    /**
-     * @var bool
-     */
-    private $isCacheEnabled = false;
-
     /**
      * @var SmartFileInfo[]
      */
     private $fileInfos = [];
-
     /**
      * @var string[]
      */
     private $fileExtensions = [];
-
     /**
      * @var string[]
      */
     private $paths = [];
-
     /**
      * @var CiDetector
      */
     private $ciDetector;
-
     /**
      * @var OnlyRuleResolver
      */
     private $onlyRuleResolver;
-
     /**
      * @var ParameterProvider
      */
     private $parameterProvider;
-
     /**
      * @var SmartFileInfo|null
      */
     private $configFileInfo;
-
     /**
      * @var string|null
      */
     private $onlyRector;
-
     /**
      * @param string[] $fileExtensions
      * @param string[] $paths
@@ -120,7 +75,6 @@ final class Configuration
         $this->onlyRuleResolver = $onlyRuleResolver;
         $this->parameterProvider = $parameterProvider;
     }
-
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
@@ -149,7 +103,6 @@ final class Configuration
             $this->paths = $commandLinePaths;
         }
     }
-
     /**
      * @api
      */
@@ -157,7 +110,6 @@ final class Configuration
     {
         $this->configFileInfo = $firstResolvedConfigFileInfo;
     }
-
     public function getConfigFilePath(): ?string
     {
         if ($this->configFileInfo === null) {
@@ -166,14 +118,12 @@ final class Configuration
 
         return $this->configFileInfo->getRealPath();
     }
-
     public function getPrettyVersion(): string
     {
         $version = PrettyVersions::getVersion('rector/rector');
 
         return $version->getPrettyVersion();
     }
-
     /**
      * @forTests
      */
@@ -181,12 +131,10 @@ final class Configuration
     {
         $this->isDryRun = $isDryRun;
     }
-
     public function isDryRun(): bool
     {
         return $this->isDryRun;
     }
-
     public function showProgressBar(): bool
     {
         if ($this->ciDetector->isCiDetected()) {
@@ -199,7 +147,6 @@ final class Configuration
 
         return $this->showProgressBar;
     }
-
     public function areAnyPhpRectorsLoaded(): bool
     {
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
@@ -208,27 +155,22 @@ final class Configuration
 
         return $this->areAnyPhpRectorsLoaded;
     }
-
     public function setAreAnyPhpRectorsLoaded(bool $areAnyPhpRectorsLoaded): void
     {
         $this->areAnyPhpRectorsLoaded = $areAnyPhpRectorsLoaded;
     }
-
     public function mustMatchGitDiff(): bool
     {
         return $this->mustMatchGitDiff;
     }
-
     public function getOnlyRector(): ?string
     {
         return $this->onlyRector;
     }
-
     public function getOutputFile(): ?string
     {
         return $this->outputFile;
     }
-
     /**
      * @param SmartFileInfo[] $fileInfos
      */
@@ -236,7 +178,6 @@ final class Configuration
     {
         $this->fileInfos = $fileInfos;
     }
-
     /**
      * @return SmartFileInfo[]
      */
@@ -244,22 +185,18 @@ final class Configuration
     {
         return $this->fileInfos;
     }
-
     public function shouldClearCache(): bool
     {
         return $this->shouldClearCache;
     }
-
     public function isCacheDebug(): bool
     {
         return $this->isCacheDebug;
     }
-
     public function isCacheEnabled(): bool
     {
         return $this->isCacheEnabled;
     }
-
     /**
      * @return string[]
      */
@@ -267,7 +204,6 @@ final class Configuration
     {
         return $this->fileExtensions;
     }
-
     /**
      * @return string[]
      */
@@ -275,12 +211,10 @@ final class Configuration
     {
         return $this->paths;
     }
-
     public function getOutputFormat(): string
     {
         return $this->outputFormat;
     }
-
     public function validateConfigParameters(): void
     {
         $symfonyContainerXmlPath = (string) $this->parameterProvider->provideParameter(
@@ -301,7 +235,6 @@ final class Configuration
         );
         throw new InvalidConfigurationException($message);
     }
-
     private function canShowProgressBar(InputInterface $input): bool
     {
         $noProgressBar = (bool) $input->getOption(Option::OPTION_NO_PROGRESS_BAR);
@@ -314,7 +247,6 @@ final class Configuration
         }
         return $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== CheckstyleOutputFormatter::NAME;
     }
-
     private function setOnlyRector(string $rector): void
     {
         $this->onlyRector = $this->onlyRuleResolver->resolve($rector);

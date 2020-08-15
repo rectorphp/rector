@@ -19,11 +19,6 @@ final class NodeInfo
     private $printedContent;
 
     /**
-     * @var bool
-     */
-    private $hasRequiredArguments = false;
-
-    /**
      * @var string[]
      */
     private $publicPropertyInfos = [];

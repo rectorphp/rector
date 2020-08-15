@@ -19,11 +19,6 @@ final class RectorRecipeConfiguration
     public const PACKAGE_UTILS = 'Utils';
 
     /**
-     * @var bool
-     */
-    private $isRectorRepository = false;
-
-    /**
      * @var string
      */
     private $name;
@@ -47,11 +42,6 @@ final class RectorRecipeConfiguration
      * @var string
      */
     private $description;
-
-    /**
-     * @var bool
-     */
-    private $isPhpSnippet = false;
 
     /**
      * @var string[]
