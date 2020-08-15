@@ -34,7 +34,7 @@ final class ConfigurationFactory
      */
     public function createFromRectorRecipe(array $rectorRecipe, bool $isRectorRepository): Configuration
     {
-        $this->recipeGuard->ensureRecipeIsValid($rectorRecipe);
+        $this->recipeGuard->ensureRecipeIsValid($rectorRecipe, $isRectorRepository);
 
         $nodeTypeClasses = $rectorRecipe[RecipeOption::NODE_TYPES];
 
