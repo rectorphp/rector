@@ -56,6 +56,14 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         return $this->items;
     }
 
+    /**
+     * @param mixed $value
+     */
+    public function changeItem(string $key, $value): void
+    {
+        $this->items[$key] = $value;
+    }
+
     protected function printItems(array $items): string
     {
         $items = $this->completeItemsQuotes($items);
