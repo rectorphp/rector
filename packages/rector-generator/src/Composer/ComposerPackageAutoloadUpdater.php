@@ -38,12 +38,12 @@ final class ComposerPackageAutoloadUpdater
         $this->symfonyStyle = $symfonyStyle;
     }
 
-    public function processComposerAutoload(RectorRecipe $recipeConfiguration): void
+    public function processComposerAutoload(RectorRecipe $rectorRecipe): void
     {
         $composerJsonFilePath = getcwd() . '/composer.json';
         $composerJson = $this->jsonFileSystem->loadFileToJson($composerJsonFilePath);
 
-        $package = $this->resolvePackage($recipeConfiguration);
+        $package = $this->resolvePackage($rectorRecipe);
 
         if ($this->isPackageAlreadyLoaded($composerJson, $package)) {
             return;
@@ -60,7 +60,7 @@ final class ComposerPackageAutoloadUpdater
             return;
         }
 
-        $srcAutoload = $recipeConfiguration->isRectorRepository() ? 'autoload' : self::AUTOLOAD_DEV;
+        $srcAutoload = $rectorRecipe->isRectorRepository() ? 'autoload' : self::AUTOLOAD_DEV;
         $composerJson[$srcAutoload][self::PSR_4][$package->getSrcNamespace()] = $package->getSrcDirectory();
 
         $composerJson[self::AUTOLOAD_DEV][self::PSR_4][$package->getTestsNamespace()] = $package->getTestsDirectory();

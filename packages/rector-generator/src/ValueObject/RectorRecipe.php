@@ -19,19 +19,9 @@ final class RectorRecipe
     private const PACKAGE_UTILS = 'Utils';
 
     /**
-     * @var string|null
-     */
-    private $package;
-
-    /**
      * @var string
      */
     private $name;
-
-    /**
-     * @var class-string[]
-     */
-    private $nodeTypes = [];
 
     /**
      * @var string
@@ -47,6 +37,22 @@ final class RectorRecipe
      * @var string
      */
     private $codeAfter;
+    /**
+     * @var bool
+     */
+    private $isRectorRepository = false;
+    /**
+     * @var bool
+     */
+    private $isPhpSnippet = true;
+    /**
+     * @var string
+     */
+    private $category;
+    /**
+     * @var class-string[]
+     */
+    private $nodeTypes = [];
 
     /**
      * @var mixed[]
@@ -54,14 +60,17 @@ final class RectorRecipe
     private $resources = [];
 
     /**
-     * @var string|null
-     */
-    private $set;
-
-    /**
      * @var mixed[]
      */
     private $configration = [];
+    /**
+     * @var string|null
+     */
+    private $package;
+    /**
+     * @var string|null
+     */
+    private $set;
 
     /**
      * @var string|null
@@ -72,21 +81,6 @@ final class RectorRecipe
      * @var string|null
      */
     private $extraFileContent;
-
-    /**
-     * @var bool
-     */
-    private $isRectorRepository = false;
-
-    /**
-     * @var bool
-     */
-    private $isPhpSnippet = true;
-
-    /**
-     * @var string
-     */
-    private $category;
 
     /**
      * @param class-string[] $nodeTypes
@@ -130,7 +124,7 @@ final class RectorRecipe
     public function getPackage(): string
     {
         $recipePackage = $this->package;
-        if (! $this->isRectorRepository() || $recipePackage === null || $recipePackage === '') {
+        if (! $this->isRectorRepository || $recipePackage === null || $recipePackage === '') {
             return self::PACKAGE_UTILS;
         }
 
@@ -219,6 +213,15 @@ final class RectorRecipe
         return StaticRectorStrings::camelCaseToDashes($this->getPackage());
     }
 
+    private function setName(string $name): void
+    {
+        if (! Strings::endsWith($name, 'Rector')) {
+            $message = sprintf('Rector name "%s" must end with "Rector"', $name);
+            throw new ConfigurationException($message);
+        }
+
+        $this->name = $name;
+    }
     /**
      * @param class-string[] $nodeTypes
      */
@@ -245,16 +248,6 @@ final class RectorRecipe
         $this->nodeTypes = $nodeTypes;
     }
 
-    private function setName(string $name): void
-    {
-        if (! Strings::endsWith($name, 'Rector')) {
-            $message = sprintf('Rector name "%s" must end with "Rector"', $name);
-            throw new ConfigurationException($message);
-        }
-
-        $this->name = $name;
-    }
-
     private function setCodeBefore(string $codeBefore): string
     {
         $this->setIsPhpSnippet($codeBefore);
@@ -269,13 +262,9 @@ final class RectorRecipe
         return $this->codeAfter = $codeAfter;
     }
 
-    private function normalizeCode(string $code): string
+    private function setResources(array $resources): void
     {
-        if (Strings::startsWith($code, '<?php')) {
-            $code = ltrim($code, '<?php');
-        }
-
-        return trim($code);
+        $this->resources = array_filter($resources);
     }
 
     private function setExtraFileContent(?string $extraFileContent): void
@@ -285,16 +274,6 @@ final class RectorRecipe
         }
 
         $this->extraFileContent = $this->normalizeCode($extraFileContent);
-    }
-
-    private function setResources(array $resources): void
-    {
-        $this->resources = array_filter($resources);
-    }
-
-    private function setIsPhpSnippet(string $codeBefore): void
-    {
-        $this->isPhpSnippet = Strings::startsWith($codeBefore, '<?php');
     }
 
     private function setIsRectorRepository(?bool $isRectorRepository): void
@@ -321,6 +300,18 @@ final class RectorRecipe
 
     private function resolveCategory(): void
     {
-        $this->category = (string) Strings::after($this->getNodeTypes()[0], '\\', -1);
+        $this->category = (string) Strings::after($this->nodeTypes[0], '\\', -1);
+    }
+    private function setIsPhpSnippet(string $codeBefore): void
+    {
+        $this->isPhpSnippet = Strings::startsWith($codeBefore, '<?php');
+    }
+    private function normalizeCode(string $code): string
+    {
+        if (Strings::startsWith($code, '<?php')) {
+            $code = ltrim($code, '<?php');
+        }
+
+        return trim($code);
     }
 }

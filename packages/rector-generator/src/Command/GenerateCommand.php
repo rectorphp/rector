@@ -133,11 +133,6 @@ final class GenerateCommand extends Command
         return ShellCode::SUCCESS;
     }
 
-    private function isRectorRepository(): bool
-    {
-        return file_exists(__DIR__ . '/../../../../vendor');
-    }
-
     /**
      * @param string[] $generatedFilePaths
      */

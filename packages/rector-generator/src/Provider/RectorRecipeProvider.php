@@ -13,6 +13,10 @@ final class RectorRecipeProvider
      * @var RectorRecipe|null
      */
     private $rectorRecipe;
+    /**
+     * @var string
+     */
+    private const MESSAGE = 'Make sure the "rector-recipe.php" config file is imported and parameter set. Are you sure its in your main config?';
 
     /**
      * Parameter must be configured in the rector config
@@ -25,8 +29,7 @@ final class RectorRecipeProvider
     public function provide(): RectorRecipe
     {
         if ($this->rectorRecipe === null) {
-            $message = 'Make sure the "rector-recipe.php" config file is imported and parameter set. Are you sure its in your main config?';
-            throw new ConfigurationException($message);
+            throw new ConfigurationException(self::MESSAGE);
         }
 
         return $this->rectorRecipe;
