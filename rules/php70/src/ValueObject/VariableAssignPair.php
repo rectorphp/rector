@@ -24,6 +24,7 @@ final class VariableAssignPair
         $this->variable = $variable;
         $this->assign = $node;
     }
+
     /**
      * @return Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch
      */
@@ -31,6 +32,7 @@ final class VariableAssignPair
     {
         return $this->variable;
     }
+
     /**
      * @return Assign|AssignOp|AssignRef
      */

@@ -19,14 +19,17 @@ final class AssignAndRootExpr
      * @var Expr
      */
     private $assignExpr;
+
     /**
      * @var Expr
      */
     private $rootExpr;
+
     /**
      * @var Variable|null
      */
     private $silentVariable;
+
     public function __construct(
         Expr $assignExpr,
         Expr $rootExpr,
@@ -38,18 +41,22 @@ final class AssignAndRootExpr
         $this->silentVariable = $silentVariable;
         $this->isFirstCallFactory = $isFirstCallFactory;
     }
+
     public function getAssignExpr(): Expr
     {
         return $this->assignExpr;
     }
+
     public function getRootExpr(): Expr
     {
         return $this->rootExpr;
     }
+
     public function getSilentVariable(): ?Variable
     {
         return $this->silentVariable;
     }
+
     public function getReturnSilentVariable(): Return_
     {
         if ($this->silentVariable === null) {
@@ -58,6 +65,7 @@ final class AssignAndRootExpr
 
         return new Return_($this->silentVariable);
     }
+
     public function createFirstAssign(): Assign
     {
         if ($this->isFirstCallFactory && $this->getFirstAssign() !== null) {
@@ -72,6 +80,7 @@ final class AssignAndRootExpr
 
         return new Assign($this->assignExpr, $this->rootExpr);
     }
+
     public function getCallerExpr(): Expr
     {
         if ($this->silentVariable !== null) {
@@ -80,10 +89,12 @@ final class AssignAndRootExpr
 
         return $this->assignExpr;
     }
+
     public function isFirstCallFactory(): bool
     {
         return $this->isFirstCallFactory;
     }
+
     public function getFactoryAssignVariable(): Expr
     {
         $firstAssign = $this->getFirstAssign();
@@ -93,6 +104,7 @@ final class AssignAndRootExpr
 
         return $firstAssign->var;
     }
+
     private function getFirstAssign(): ?Assign
     {
         $currentStmt = $this->assignExpr->getAttribute(AttributeKey::CURRENT_STATEMENT);

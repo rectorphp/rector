@@ -12,14 +12,17 @@ final class ConstantVisibility
         $this->isProtected = $isProtected;
         $this->isPrivate = $isPrivate;
     }
+
     public function isPublic(): bool
     {
         return $this->isPublic;
     }
+
     public function isProtected(): bool
     {
         return $this->isProtected;
     }
+
     public function isPrivate(): bool
     {
         return $this->isPrivate;

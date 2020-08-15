@@ -7,14 +7,12 @@ namespace Rector\Core\Rector\AbstractRector;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\ChangesReporting\Rector\AbstractRector\NotifyingRemovingNodeTrait;
-use Rector\Doctrine\AbstractRector\DoctrineTrait;
-use Rector\PostRector\Rector\AbstractRector\NodeCommandersTrait;
 use Rector\Reporting\Rector\AbstractRector\NodeReportCollectorTrait;
 
 trait AbstractRectorTrait
 {
     use NodeReportCollectorTrait;
+
     protected function isNonAnonymousClass(?Node $node): bool
     {
         if ($node === null) {
@@ -32,6 +30,7 @@ trait AbstractRectorTrait
 
         return ! Strings::contains($name, 'AnonymousClass');
     }
+
     protected function removeFinal(Class_ $class): void
     {
         $class->flags -= Class_::MODIFIER_FINAL;

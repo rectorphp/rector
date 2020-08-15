@@ -12,14 +12,17 @@ final class UnionTypeAnalysis
         $this->hasIterable = $hasIterable;
         $this->hasArray = $hasArray;
     }
+
     public function isNullableType(): bool
     {
         return $this->isNullableType;
     }
+
     public function hasIterable(): bool
     {
         return $this->hasIterable;
     }
+
     public function hasArray(): bool
     {
         return $this->hasArray;

@@ -13,14 +13,17 @@ final class StrStartsWithValueObject
      * @var FuncCall
      */
     private $funcCall;
+
     /**
      * @var Expr
      */
     private $haystackExpr;
+
     /**
      * @var Expr
      */
     private $needleExpr;
+
     public function __construct(FuncCall $funcCall, Expr $haystackExpr, Expr $needleExpr, bool $isPositive)
     {
         $this->funcCall = $funcCall;
@@ -28,18 +31,22 @@ final class StrStartsWithValueObject
         $this->isPositive = $isPositive;
         $this->needleExpr = $needleExpr;
     }
+
     public function getFuncCall(): FuncCall
     {
         return $this->funcCall;
     }
+
     public function getHaystackExpr(): Expr
     {
         return $this->haystackExpr;
     }
+
     public function isPositive(): bool
     {
         return $this->isPositive;
     }
+
     public function getNeedleExpr(): Expr
     {
         return $this->needleExpr;
