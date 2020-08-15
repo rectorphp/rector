@@ -91,9 +91,17 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
             if (defined('RECTOR_REPOSITORY')) {
                 $this->createRectorRepositoryContainer();
             } else {
+                $rootRectorPhp = getcwd() . '/rector.php';
+                $configs = [];
+
+                if (file_exists($rootRectorPhp)) {
+                    $configs[] = $rootRectorPhp;
+                }
+
                 // 3rd party
-                $configFor3rdPartyTest = $this->getConfigFor3rdPartyTest();
-                $this->bootKernelWithConfigs(RectorKernel::class, [$configFor3rdPartyTest]);
+                $configs[] = $this->getConfigFor3rdPartyTest();
+
+                $this->bootKernelWithConfigs(RectorKernel::class, $configs);
             }
 
             $enabledRectorsProvider = self::$container->get(EnabledRectorsProvider::class);
