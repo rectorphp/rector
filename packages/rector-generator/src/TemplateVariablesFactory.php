@@ -14,7 +14,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\RectorGenerator\Config\ConfigFilesystem;
 use Rector\RectorGenerator\NodeFactory\ConfigurationNodeFactory;
-use Rector\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
 
 final class TemplateVariablesFactory
 {
@@ -68,57 +68,56 @@ final class TemplateVariablesFactory
     /**
      * @return string[]
      */
-    public function createFromConfiguration(Configuration $configuration): array
+    public function createFromConfiguration(RectorRecipeConfiguration $rectorRecipeConfiguration): array
     {
         $data = [
-            self::VARIABLE_PACKAGE => $configuration->getPackage(),
-            self::VARIABLE_PACKAGE_LOWERCASE => $configuration->getPackageDirectory(),
-            '__Category__' => $configuration->getCategory(),
-            '__Description__' => $configuration->getDescription(),
-            '__Name__' => $configuration->getName(),
-            '__CodeBefore__' => trim($configuration->getCodeBefore()) . PHP_EOL,
-            '__CodeBeforeExample__' => $this->createCodeForDefinition($configuration->getCodeBefore()),
-            '__CodeAfter__' => trim($configuration->getCodeAfter()) . PHP_EOL,
-            '__CodeAfterExample__' => $this->createCodeForDefinition($configuration->getCodeAfter()),
-            '__Source__' => $this->createSourceDocBlock($configuration->getSource()),
+            self::VARIABLE_PACKAGE => $rectorRecipeConfiguration->getPackage(),
+            self::VARIABLE_PACKAGE_LOWERCASE => $rectorRecipeConfiguration->getPackageDirectory(),
+            '__Category__' => $rectorRecipeConfiguration->getCategory(),
+            '__Description__' => $rectorRecipeConfiguration->getDescription(),
+            '__Name__' => $rectorRecipeConfiguration->getName(),
+            '__CodeBefore__' => trim($rectorRecipeConfiguration->getCodeBefore()) . PHP_EOL,
+            '__CodeBeforeExample__' => $this->createCodeForDefinition($rectorRecipeConfiguration->getCodeBefore()),
+            '__CodeAfter__' => trim($rectorRecipeConfiguration->getCodeAfter()) . PHP_EOL,
+            '__CodeAfterExample__' => $this->createCodeForDefinition($rectorRecipeConfiguration->getCodeAfter()),
+            '__Source__' => $this->createSourceDocBlock($rectorRecipeConfiguration->getSource()),
         ];
 
         $rectorClass = $this->templateFactory->create(ConfigFilesystem::RECTOR_FQN_NAME_PATTERN, $data);
-        $data['__RectorClass_'] = $rectorClass;
 
-        if ($configuration->getRuleConfiguration() !== []) {
+        if ($rectorRecipeConfiguration->getRuleConfiguration() !== []) {
             $data['__TestRuleConfiguration__'] = $this->createRuleConfiguration(
-                $data['__RectorClass_'],
-                $configuration->getRuleConfiguration()
+                $rectorClass,
+                $rectorRecipeConfiguration->getRuleConfiguration()
             );
             $data['__RuleConfiguration__'] = $this->createRuleConfiguration(
                 self::SELF,
-                $configuration->getRuleConfiguration()
+                $rectorRecipeConfiguration->getRuleConfiguration()
             );
 
             $data['__ConfigurationProperties__'] = $this->createConfigurationProperty(
-                $configuration->getRuleConfiguration()
+                $rectorRecipeConfiguration->getRuleConfiguration()
             );
 
             $data['__ConfigurationConstants__'] = $this->createConfigurationConstants(
-                $configuration->getRuleConfiguration()
+                $rectorRecipeConfiguration->getRuleConfiguration()
             );
 
             $data['__ConfigureClassMethod__'] = $this->createConfigureClassMethod(
-                $configuration->getRuleConfiguration()
+                $rectorRecipeConfiguration->getRuleConfiguration()
             );
         }
 
-        if ($configuration->getExtraFileContent() !== null && $configuration->getExtraFileName() !== null) {
-            $data['__ExtraFileName__'] = $configuration->getExtraFileName();
-            $data['__ExtraFileContent__'] = trim($configuration->getExtraFileContent()) . PHP_EOL;
+        if ($rectorRecipeConfiguration->getExtraFileContent() !== null && $rectorRecipeConfiguration->getExtraFileName() !== null) {
+            $data['__ExtraFileName__'] = $rectorRecipeConfiguration->getExtraFileName();
+            $data['__ExtraFileContent__'] = trim($rectorRecipeConfiguration->getExtraFileContent()) . PHP_EOL;
             $data['__ExtraFileContentExample__'] = $this->createCodeForDefinition(
-                $configuration->getExtraFileContent()
+                $rectorRecipeConfiguration->getExtraFileContent()
             );
         }
 
-        $data['__NodeTypesPhp__'] = $this->createNodeTypePhp($configuration);
-        $data['__NodeTypesDoc__'] = '\\' . implode('|\\', $configuration->getNodeTypes());
+        $data['__NodeTypesPhp__'] = $this->createNodeTypePhp($rectorRecipeConfiguration);
+        $data['__NodeTypesDoc__'] = '\\' . implode('|\\', $rectorRecipeConfiguration->getNodeTypes());
 
         return $data;
     }
@@ -200,10 +199,10 @@ final class TemplateVariablesFactory
         return $this->betterStandardPrinter->print($classMethod);
     }
 
-    private function createNodeTypePhp(Configuration $configuration): string
+    private function createNodeTypePhp(RectorRecipeConfiguration $rectorRecipeConfiguration): string
     {
         $referencingClassConsts = [];
-        foreach ($configuration->getNodeTypes() as $nodeType) {
+        foreach ($rectorRecipeConfiguration->getNodeTypes() as $nodeType) {
             $referencingClassConsts[] = $this->nodeFactory->createClassConstReference($nodeType);
         }
 

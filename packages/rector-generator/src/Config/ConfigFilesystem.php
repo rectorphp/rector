@@ -12,7 +12,7 @@ use Rector\Core\PhpParser\Parser\Parser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\RectorGenerator\Rector\Closure\AddNewServiceToSymfonyPhpConfigRector;
 use Rector\RectorGenerator\TemplateFactory;
-use Rector\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ConfigFilesystem
@@ -64,13 +64,15 @@ final class ConfigFilesystem
     /**
      * @param string[] $templateVariables
      */
-    public function appendRectorServiceToSet(Configuration $configuration, array $templateVariables): void
-    {
-        if ($configuration->getSetConfig() === null) {
+    public function appendRectorServiceToSet(
+        RectorRecipeConfiguration $rectorRecipeConfiguration,
+        array $templateVariables
+    ): void {
+        if ($rectorRecipeConfiguration->getSetConfig() === null) {
             return;
         }
 
-        $setConfigFileInfo = $configuration->getSetConfig();
+        $setConfigFileInfo = $rectorRecipeConfiguration->getSetConfig();
         $setFileContents = $setConfigFileInfo->getContents();
 
         // already added?

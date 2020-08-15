@@ -7,8 +7,8 @@ namespace Rector\RectorGenerator\Guard;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Configuration\Option;
 use Rector\RectorGenerator\Exception\ConfigurationException;
-use Rector\RectorGenerator\ValueObject\Configuration;
 use Rector\RectorGenerator\ValueObject\RecipeOption;
+use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
 
 final class RecipeGuard
 {
@@ -56,7 +56,7 @@ final class RecipeGuard
 
     private function validatePackageOption(?string $package, bool $isRectorRepository): void
     {
-        if ($package !== '' && $package !== null && $package !== Configuration::PACKAGE_UTILS) {
+        if ($package !== '' && $package !== null && $package !== RectorRecipeConfiguration::PACKAGE_UTILS) {
             return;
         }
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\Guard;
 
 use Rector\RectorGenerator\FileSystem\TemplateFileSystem;
-use Rector\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\RectorRecipeConfiguration;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -33,13 +33,13 @@ final class OverrideGuard
     public function isUnwantedOverride(
         array $templateFileInfos,
         array $templateVariables,
-        Configuration $configuration,
+        RectorRecipeConfiguration $rectorRecipeConfiguration,
         string $targetDirectory
     ): bool {
         foreach ($templateFileInfos as $templateFileInfo) {
             if (! $this->doesFileInfoAlreadyExist(
                 $templateVariables,
-                $configuration,
+                $rectorRecipeConfiguration,
                 $templateFileInfo,
                 $targetDirectory
             )) {
@@ -54,14 +54,14 @@ final class OverrideGuard
 
     private function doesFileInfoAlreadyExist(
         array $templateVariables,
-        Configuration $configuration,
+        RectorRecipeConfiguration $rectorRecipeConfiguration,
         SmartFileInfo $templateFileInfo,
         string $targetDirectory
     ): bool {
         $destination = $this->templateFileSystem->resolveDestination(
             $templateFileInfo,
             $templateVariables,
-            $configuration,
+            $rectorRecipeConfiguration,
             $targetDirectory
         );
 

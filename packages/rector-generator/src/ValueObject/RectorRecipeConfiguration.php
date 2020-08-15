@@ -11,7 +11,7 @@ use Rector\Core\Util\StaticRectorStrings;
 use Symplify\SetConfigResolver\ValueObject\Set;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class Configuration
+final class RectorRecipeConfiguration
 {
     /**
      * @var string
@@ -235,6 +235,9 @@ final class Configuration
         $this->name = $name;
     }
 
+    /**
+     * @param string[] $nodeTypes
+     */
     private function setNodeTypes(array $nodeTypes): void
     {
         foreach ($nodeTypes as $nodeType) {
