@@ -84,11 +84,10 @@ final class TemplateVariablesFactory
         ];
 
         $rectorClass = $this->templateFactory->create(ConfigFilesystem::RECTOR_FQN_NAME_PATTERN, $data);
-        $data['__RectorClass_'] = $rectorClass;
 
         if ($configuration->getRuleConfiguration() !== []) {
             $data['__TestRuleConfiguration__'] = $this->createRuleConfiguration(
-                $data['__RectorClass_'],
+                $rectorClass,
                 $configuration->getRuleConfiguration()
             );
             $data['__RuleConfiguration__'] = $this->createRuleConfiguration(
