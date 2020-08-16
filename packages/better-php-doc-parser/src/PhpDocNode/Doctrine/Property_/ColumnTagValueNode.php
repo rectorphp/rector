@@ -32,6 +32,14 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode implements P
         return '@ORM\Column';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    public function getOptions(): array
+    {
+        return $this->items['options'] ?? [];
+    }
+
     public function toAttributeString(): string
     {
         $items = $this->createAttributeItems();
