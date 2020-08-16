@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector;
+namespace Rector\Order\Tests\Rector\ClassLike\OrderPropertyByComplexityRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Order\Rector\Class_\OrderPropertyByComplexityRector;
+use Rector\Order\Rector\ClassLike\OrderPropertyByComplexityRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class OrderPropertyByComplexityRectorTest extends AbstractRectorTestCase

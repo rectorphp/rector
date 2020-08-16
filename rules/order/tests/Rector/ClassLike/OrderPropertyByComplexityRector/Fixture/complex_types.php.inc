@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Fixture;
+namespace Rector\Order\Tests\Rector\ClassLike\OrderPropertyByComplexityRector\Fixture;
 
-use Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Source\AnotherSimpleType;
-use Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Source\ComplexType;
+use Rector\Order\Tests\Rector\ClassLike\OrderPropertyByComplexityRector\Source\AnotherSimpleType;
+use Rector\Order\Tests\Rector\ClassLike\OrderPropertyByComplexityRector\Source\ComplexType;
 
 class ComplexTypes
 {
@@ -64,10 +64,10 @@ class ComplexTypes
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Fixture;
+namespace Rector\Order\Tests\Rector\ClassLike\OrderPropertyByComplexityRector\Fixture;
 
-use Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Source\AnotherSimpleType;
-use Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Source\ComplexType;
+use Rector\Order\Tests\Rector\ClassLike\OrderPropertyByComplexityRector\Source\AnotherSimpleType;
+use Rector\Order\Tests\Rector\ClassLike\OrderPropertyByComplexityRector\Source\ComplexType;
 
 class ComplexTypes
 {
