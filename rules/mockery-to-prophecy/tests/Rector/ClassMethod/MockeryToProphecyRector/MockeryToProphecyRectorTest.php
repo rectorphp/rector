@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\MockeryToProphecy\Tests\Rector\MethodCall\MockeryToProphecyRector;
+namespace Rector\MockeryToProphecy\Tests\Rector\ClassMethod\MockeryToProphecyRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\MockeryToProphecy\Rector\MethodCall\MockeryCreateMockToProphizeRector;
+use Rector\MockeryToProphecy\Rector\ClassMethod\MockeryCreateMockToProphizeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MockeryToProphecyRectorTest extends AbstractRectorTestCase

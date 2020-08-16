@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MockeryToProphecy\Rector\MethodCall;
+namespace Rector\MockeryToProphecy\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -17,7 +17,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\MockeryToProphecy\Tests\Rector\MethodCall\MockeryToProphecyRector\MockeryToProphecyRectorTest
+ * @see \Rector\MockeryToProphecy\Tests\Rector\ClassMethod\MockeryToProphecyRector\MockeryToProphecyRectorTest
  */
 final class MockeryCreateMockToProphizeRector extends AbstractPHPUnitRector
 {
