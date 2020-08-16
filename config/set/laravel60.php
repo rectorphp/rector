@@ -7,7 +7,7 @@ use Rector\Generic\Rector\MethodCall\MethodCallToReturnRector;
 use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
+use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

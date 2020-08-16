@@ -12422,7 +12422,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `RenameStaticMethodRector`
 
-- class: [`Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector`](/../master/rules/renaming/src/Rector/MethodCall/RenameStaticMethodRector.php)
+- class: [`Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector`](/../master/rules/renaming/src/Rector/MethodCall/RenameStaticMethodRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/MethodCall/RenameStaticMethodRector/Fixture)
 
 Turns method names to new ones.
@@ -12431,7 +12431,7 @@ Turns method names to new ones.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
+use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
@@ -12451,7 +12451,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
+use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
@@ -12806,7 +12806,7 @@ Change property with read only status with default value to constant
 
 ### `ChangeReadOnlyVariableWithDefaultValueToConstantRector`
 
-- class: [`Rector\SOLID\Rector\ClassMethod\ChangeReadOnlyVariableWithDefaultValueToConstantRector`](/../master/rules/solid/src/Rector/ClassMethod/ChangeReadOnlyVariableWithDefaultValueToConstantRector.php)
+- class: [`Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector`](/../master/rules/solid/src/Rector/ClassMethod/ChangeReadOnlyVariableWithDefaultValueToConstantRector.php)
 - [test fixtures](/../master/rules/solid/tests/Rector/ClassMethod/ChangeReadOnlyVariableWithDefaultValueToConstantRector/Fixture)
 
 Change variable with read only status with default value to constant
@@ -13071,7 +13071,7 @@ Replace Sensio @Route annotation with Symfony one
 
 ### `TemplateAnnotationToThisRenderRector`
 
-- class: [`Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationToThisRenderRector`](/../master/rules/sensio/src/Rector/FrameworkExtraBundle/TemplateAnnotationToThisRenderRector.php)
+- class: [`Rector\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector`](/../master/rules/sensio/src/Rector/FrameworkExtraBundle/TemplateAnnotationToThisRenderRector.php)
 - [test fixtures](/../master/rules/sensio/tests/Rector/FrameworkExtraBundle/TemplateAnnotationToThisRenderRector/Fixture)
 
 Turns `@Template` annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony

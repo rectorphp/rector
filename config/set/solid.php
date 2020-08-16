@@ -6,7 +6,7 @@ use Rector\Decomplex\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyl
 use Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 use Rector\SOLID\Rector\Class_\RepeatedLiteralToClassConstantRector;
-use Rector\SOLID\Rector\ClassMethod\ChangeReadOnlyVariableWithDefaultValueToConstantRector;
+use Rector\SOLID\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector;
 use Rector\SOLID\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector;
 use Rector\SOLID\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
 use Rector\SOLID\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
