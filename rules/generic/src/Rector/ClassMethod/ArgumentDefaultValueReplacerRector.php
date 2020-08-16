@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Argument;
+namespace Rector\Generic\Rector\ClassMethod;
 
 use Nette\Utils\Strings;
 use PhpParser\BuilderHelpers;
@@ -17,7 +17,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector\ArgumentDefaultValueReplacerRectorTest
+ * @see \Rector\Generic\Tests\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\ArgumentDefaultValueReplacerRectorTest
  */
 final class ArgumentDefaultValueReplacerRector extends AbstractRector implements ConfigurableRectorInterface
 {

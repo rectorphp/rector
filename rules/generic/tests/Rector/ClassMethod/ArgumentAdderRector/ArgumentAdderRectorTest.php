@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Argument\ArgumentAdderRector;
+namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Argument\ArgumentAdderRector;
-use Rector\Generic\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
-use Rector\Generic\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeParentClient;
+use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeContainerBuilder;
+use Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeParentClient;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArgumentAdderRectorTest extends AbstractRectorTestCase

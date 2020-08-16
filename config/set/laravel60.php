@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Argument\ArgumentAdderRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

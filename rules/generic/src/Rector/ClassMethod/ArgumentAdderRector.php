@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Argument;
+namespace Rector\Generic\Rector\ClassMethod;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
@@ -23,7 +23,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Argument\ArgumentAdderRector\ArgumentAdderRectorTest
+ * @see \Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\ArgumentAdderRectorTest
  */
 final class ArgumentAdderRector extends AbstractRector implements ConfigurableRectorInterface
 {

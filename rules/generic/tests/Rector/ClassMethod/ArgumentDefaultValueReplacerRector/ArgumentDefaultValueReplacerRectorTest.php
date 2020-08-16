@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector;
+namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Argument\ArgumentDefaultValueReplacerRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCase

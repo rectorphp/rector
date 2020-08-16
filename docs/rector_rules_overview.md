@@ -4782,7 +4782,7 @@ Turns non-private properties with `@annotation` to private properties and constr
 
 ### `ArgumentAdderRector`
 
-- class: [`Rector\Generic\Rector\Argument\ArgumentAdderRector`](/../master/rules/generic/src/Rector/Argument/ArgumentAdderRector.php)
+- class: [`Rector\Generic\Rector\ClassMethod\ArgumentAdderRector`](/../master/rules/generic/src/Rector/Argument/ArgumentAdderRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Argument/ArgumentAdderRector/Fixture)
 
 This Rector adds new default arguments in calls of defined methods and class types.
@@ -4791,7 +4791,7 @@ This Rector adds new default arguments in calls of defined methods and class typ
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Argument\ArgumentAdderRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
@@ -4812,7 +4812,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Argument\ArgumentAdderRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
@@ -4837,7 +4837,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `ArgumentDefaultValueReplacerRector`
 
-- class: [`Rector\Generic\Rector\Argument\ArgumentDefaultValueReplacerRector`](/../master/rules/generic/src/Rector/Argument/ArgumentDefaultValueReplacerRector.php)
+- class: [`Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector`](/../master/rules/generic/src/Rector/Argument/ArgumentDefaultValueReplacerRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Argument/ArgumentDefaultValueReplacerRector/Fixture)
 
 Replaces defined map of arguments in defined methods and their calls.
@@ -4846,7 +4846,7 @@ Replaces defined map of arguments in defined methods and their calls.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Argument\ArgumentDefaultValueReplacerRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

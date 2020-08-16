@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
-use Rector\Generic\Rector\Argument\ArgumentDefaultValueReplacerRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
 use Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Injection\ValueObject\StaticCallToMethodCall;
