@@ -5211,7 +5211,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `MergeInterfacesRector`
 
-- class: [`Rector\Generic\Rector\Interface_\MergeInterfacesRector`](/../master/rules/generic/src/Rector/Interface_/MergeInterfacesRector.php)
+- class: [`Rector\Generic\Rector\Class_\MergeInterfacesRector`](/../master/rules/generic/src/Rector/Interface_/MergeInterfacesRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Interface_/MergeInterfacesRector/Fixture)
 
 Merges old interface to a new one, that already has its methods
@@ -5220,7 +5220,7 @@ Merges old interface to a new one, that already has its methods
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Interface_\MergeInterfacesRector;
+use Rector\Generic\Rector\Class_\MergeInterfacesRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
