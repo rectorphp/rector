@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector;
+namespace Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
-use Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector\Source\DifferentClass;
-use Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector\Source\LocalFormEvents;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
+use Rector\Renaming\Tests\Rector\ClassConstFetchRenameClassConstantRector\Source\DifferentClass;
+use Rector\Renaming\Tests\Rector\ClassConstFetchRenameClassConstantRector\Source\LocalFormEvents;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameClassConstantRectorTest extends AbstractRectorTestCase

@@ -12242,7 +12242,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `RenameClassConstantRector`
 
-- class: [`Rector\Renaming\Rector\Constant\RenameClassConstantRector`](/../master/rules/renaming/src/Rector/Constant/RenameClassConstantRector.php)
+- class: [`Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector`](/../master/rules/renaming/src/Rector/Constant/RenameClassConstantRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Constant/RenameClassConstantRector/Fixture)
 
 Replaces defined class constants in their calls.
@@ -12251,7 +12251,7 @@ Replaces defined class constants in their calls.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Rector\Constant;
+namespace Rector\Renaming\Rector\ClassConstFetch;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -15,7 +15,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector\RenameClassConstantRectorTest
+ * @see \Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\RenameClassConstantRectorTest
  */
 final class RenameClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
