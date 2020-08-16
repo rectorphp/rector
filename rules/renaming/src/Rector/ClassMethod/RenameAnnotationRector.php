@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Rector\Annotation;
+namespace Rector\Renaming\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Renaming\Tests\Rector\Annotation\RenameAnnotationRector\RenameAnnotationRectorTest
+ * @see \Rector\Renaming\Tests\Rector\ClassMethod\RenameAnnotationRector\RenameAnnotationRectorTest
  */
 final class RenameAnnotationRector extends AbstractPHPUnitRector implements ConfigurableRectorInterface
 {

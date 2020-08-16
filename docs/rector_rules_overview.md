@@ -9480,7 +9480,7 @@ Refactor "*TestListener.php" to particular "*Hook.php" files
 
 ### `TryCatchToExpectExceptionRector`
 
-- class: [`Rector\PHPUnit\Rector\TryCatchToExpectExceptionRector`](/../master/rules/phpunit/src/Rector/TryCatchToExpectExceptionRector.php)
+- class: [`Rector\PHPUnit\Rector\ClassMethod\TryCatchToExpectExceptionRector`](/../master/rules/phpunit/src/Rector/TryCatchToExpectExceptionRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/TryCatchToExpectExceptionRector/Fixture)
 
 Turns try/catch to `expectException()` call
@@ -12205,7 +12205,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `RenameAnnotationRector`
 
-- class: [`Rector\Renaming\Rector\Annotation\RenameAnnotationRector`](/../master/rules/renaming/src/Rector/Annotation/RenameAnnotationRector.php)
+- class: [`Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector`](/../master/rules/renaming/src/Rector/Annotation/RenameAnnotationRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Annotation/RenameAnnotationRector/Fixture)
 
 Turns defined annotations above properties and methods to their new values.
@@ -12214,7 +12214,7 @@ Turns defined annotations above properties and methods to their new values.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Renaming\Rector\Annotation\RenameAnnotationRector;
+use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

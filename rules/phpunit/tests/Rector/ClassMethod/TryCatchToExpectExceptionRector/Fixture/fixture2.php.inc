@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\TryCatchToExpectExceptionRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\TryCatchToExpectExceptionRector\Fixture;
 
 final class MyTest2 extends \PHPUnit\Framework\TestCase
 {
@@ -21,7 +21,7 @@ final class MyTest2 extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\TryCatchToExpectExceptionRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\TryCatchToExpectExceptionRector\Fixture;
 
 final class MyTest2 extends \PHPUnit\Framework\TestCase
 {

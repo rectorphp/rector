@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Annotation\RenameAnnotationRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\ClassMethod\RenameAnnotationRector\Fixture;
 
 final class MyRenameClassTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,7 +16,7 @@ final class MyRenameClassTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Annotation\RenameAnnotationRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\ClassMethod\RenameAnnotationRector\Fixture;
 
 final class MyRenameClassTest extends \PHPUnit\Framework\TestCase
 {
