@@ -5761,7 +5761,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `RemoveInterfacesRector`
 
-- class: [`Rector\Generic\Rector\Interface_\RemoveInterfacesRector`](/../master/rules/generic/src/Rector/Interface_/RemoveInterfacesRector.php)
+- class: [`Rector\Generic\Rector\Class_\RemoveInterfacesRector`](/../master/rules/generic/src/Rector/Interface_/RemoveInterfacesRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Interface_/RemoveInterfacesRector/Fixture)
 
 Removes interfaces usage from class.
@@ -5770,7 +5770,7 @@ Removes interfaces usage from class.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Interface_\RemoveInterfacesRector;
+use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
