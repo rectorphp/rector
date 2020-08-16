@@ -9,9 +9,9 @@ use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRe
 use Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector;
 use Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector;
 use Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;
-use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

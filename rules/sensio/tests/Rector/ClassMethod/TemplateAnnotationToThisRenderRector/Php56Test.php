@@ -9,7 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Sensio\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class Php5d6Test extends AbstractRectorTestCase
+final class Php56Test extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

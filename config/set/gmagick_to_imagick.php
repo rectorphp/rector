@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://www.php.net/manual/en/book.gmagick.php → https://www.php.net/manual/en/book.imagick.php

@@ -7,8 +7,8 @@ use Rector\Generic\Rector\MethodBody\NormalToFluentRector;
 use Rector\Generic\Rector\Property\PropertyToMethodRector;
 use Rector\Generic\Rector\Property\RenamePropertyRector;
 use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
-use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
