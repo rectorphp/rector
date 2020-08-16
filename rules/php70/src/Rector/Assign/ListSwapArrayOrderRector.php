@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Rector\List_;
+namespace Rector\Php70\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -16,7 +16,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 
 /**
  * @source http://php.net/manual/en/migration70.incompatible.php#migration70.incompatible.variable-handling.list
- * @see \Rector\Php70\Tests\Rector\List_\ListSwapArrayOrderRector\ListSwapArrayOrderRectorTest
+ * @see \Rector\Php70\Tests\Rector\Assign\ListSwapArrayOrderRector\ListSwapArrayOrderRectorTest
  */
 final class ListSwapArrayOrderRector extends AbstractRector
 {

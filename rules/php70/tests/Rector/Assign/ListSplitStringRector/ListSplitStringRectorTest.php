@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests\Rector\List_\ListSplitStringRector;
+namespace Rector\Php70\Tests\Rector\Assign\ListSplitStringRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Php70\Rector\List_\ListSplitStringRector;
+use Rector\Php70\Rector\Assign\ListSplitStringRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ListSplitStringRectorTest extends AbstractRectorTestCase

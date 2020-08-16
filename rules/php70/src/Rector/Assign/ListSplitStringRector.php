@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Rector\List_;
+namespace Rector\Php70\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  * @source http://php.net/manual/en/migration70.incompatible.php#migration70.incompatible.variable-handling.list
  *
  * @see https://stackoverflow.com/a/47965344/1348344
- * @see \Rector\Php70\Tests\Rector\List_\ListSplitStringRector\ListSplitStringRectorTest
+ * @see \Rector\Php70\Tests\Rector\Assign\ListSplitStringRector\ListSplitStringRectorTest
  */
 final class ListSplitStringRector extends AbstractRector
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php70\Tests\Rector\List_\ListSwapArrayOrderRector\Fixture;
+namespace Rector\Php70\Tests\Rector\Assign\ListSwapArrayOrderRector\Fixture;
 
 class SkipEmpty
 {
@@ -14,7 +14,7 @@ class SkipEmpty
 -----
 <?php
 
-namespace Rector\Php70\Tests\Rector\List_\ListSwapArrayOrderRector\Fixture;
+namespace Rector\Php70\Tests\Rector\Assign\ListSwapArrayOrderRector\Fixture;
 
 class SkipEmpty
 {

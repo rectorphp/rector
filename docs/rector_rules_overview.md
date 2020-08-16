@@ -10151,7 +10151,7 @@ Changes if/else to spaceship <=> where useful
 
 ### `ListSplitStringRector`
 
-- class: [`Rector\Php70\Rector\List_\ListSplitStringRector`](/../master/rules/php70/src/Rector/List_/ListSplitStringRector.php)
+- class: [`Rector\Php70\Rector\Assign\ListSplitStringRector`](/../master/rules/php70/src/Rector/List_/ListSplitStringRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/List_/ListSplitStringRector/Fixture)
 
 `list()` cannot split string directly anymore, use `str_split()`
@@ -10165,7 +10165,7 @@ Changes if/else to spaceship <=> where useful
 
 ### `ListSwapArrayOrderRector`
 
-- class: [`Rector\Php70\Rector\List_\ListSwapArrayOrderRector`](/../master/rules/php70/src/Rector/List_/ListSwapArrayOrderRector.php)
+- class: [`Rector\Php70\Rector\Assign\ListSwapArrayOrderRector`](/../master/rules/php70/src/Rector/List_/ListSwapArrayOrderRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/List_/ListSwapArrayOrderRector/Fixture)
 
 `list()` assigns variables in reverse order - relevant in array assign
