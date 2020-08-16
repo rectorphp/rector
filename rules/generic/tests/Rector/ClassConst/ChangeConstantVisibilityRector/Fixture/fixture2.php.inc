@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
+namespace Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture;
 
 class AnotherClassWithInvalidConstants
 {
@@ -11,7 +11,7 @@ class AnotherClassWithInvalidConstants
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
+namespace Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture;
 
 class AnotherClassWithInvalidConstants
 {

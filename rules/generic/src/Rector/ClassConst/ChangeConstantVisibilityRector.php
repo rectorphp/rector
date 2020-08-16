@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Visibility;
+namespace Rector\Generic\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
@@ -12,7 +12,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Visibility\ChangeConstantVisibilityRector\ChangeConstantVisibilityRectorTest
+ * @see \Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\ChangeConstantVisibilityRectorTest
  */
 final class ChangeConstantVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {

@@ -4897,7 +4897,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `ChangeConstantVisibilityRector`
 
-- class: [`Rector\Generic\Rector\Visibility\ChangeConstantVisibilityRector`](/../master/rules/generic/src/Rector/Visibility/ChangeConstantVisibilityRector.php)
+- class: [`Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector`](/../master/rules/generic/src/Rector/Visibility/ChangeConstantVisibilityRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Visibility/ChangeConstantVisibilityRector/Fixture)
 
 Change visibility of constant from parent class.
@@ -4906,7 +4906,7 @@ Change visibility of constant from parent class.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Visibility\ChangeConstantVisibilityRector;
+use Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
