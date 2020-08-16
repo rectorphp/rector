@@ -78,6 +78,7 @@ final class SetterClassMethodAnalyzer
 
         return $propertyFetch;
     }
+
     /**
      * @return null|Property
      */
@@ -95,6 +96,7 @@ final class SetterClassMethodAnalyzer
 
         return $classLike->getProperty($propertyName);
     }
+
     private function matchDateTimeSetterPropertyFetch(ClassMethod $classMethod): ?PropertyFetch
     {
         $propertyFetch = $this->matchSetterOnlyPropertyFetch($classMethod);
