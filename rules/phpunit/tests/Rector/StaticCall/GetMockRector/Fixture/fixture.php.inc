@@ -12,7 +12,7 @@ final class MyGetMockTest extends \PHPUnit\Framework\TestCase
 
 ?>
 -----
-ex<?php
+<?php
 
 namespace Rector\PHPUnit\Tests\Rector\StaticCall\GetMockRector\Fixture;
 

@@ -68,7 +68,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         MethodDeclarationSniff::class . '.Underscore' => null,
         PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
         CommentedOutCodeSniff::class . '.Found' => [
-            __DIR__ . '/rules/php72/src/Rector/Each/ListEachRector.php',
+            __DIR__ . '/rules/php72/src/Rector/Assign/ListEachRector.php',
             __DIR__ . '/rules/dead-code/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php',
             __DIR__ . '/rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php',
         ],

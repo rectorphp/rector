@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
+use Rector\Php70\Rector\Assign\ListSplitStringRector;
+use Rector\Php70\Rector\Assign\ListSwapArrayOrderRector;
 use Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector;
+use Rector\Php70\Rector\ClassMethod\Php4ConstructorRector;
 use Rector\Php70\Rector\FuncCall\CallUserMethodRector;
 use Rector\Php70\Rector\FuncCall\EregToPregMatchRector;
 use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
@@ -10,11 +13,8 @@ use Rector\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector;
 use Rector\Php70\Rector\FuncCall\RandomFunctionRector;
 use Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector;
 use Rector\Php70\Rector\FunctionLike\ExceptionHandlerTypehintRector;
-use Rector\Php70\Rector\FunctionLike\Php4ConstructorRector;
 use Rector\Php70\Rector\If_\IfToSpaceshipRector;
 use Rector\Php70\Rector\List_\EmptyListRector;
-use Rector\Php70\Rector\Assign\ListSplitStringRector;
-use Rector\Php70\Rector\Assign\ListSwapArrayOrderRector;
 use Rector\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector;
 use Rector\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector;
 use Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector;

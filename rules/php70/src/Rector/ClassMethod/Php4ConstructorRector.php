@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Rector\FunctionLike;
+namespace Rector\Php70\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
@@ -19,7 +19,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://wiki.php.net/rfc/remove_php4_constructors
- * @see \Rector\Php70\Tests\Rector\FunctionLike\Php4ConstructorRector\Php4ConstructorRectorTest
+ * @see \Rector\Php70\Tests\Rector\ClassMethod\Php4ConstructorRector\Php4ConstructorRectorTest
  */
 final class Php4ConstructorRector extends AbstractRector
 {

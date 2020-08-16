@@ -9839,7 +9839,7 @@ Remove unused private method
 
 ### `ClearReturnNewByReferenceRector`
 
-- class: [`Rector\Php53\Rector\Assign\ClearReturnNewByReferenceRector`](/../master/rules/php53/src/Rector/Assign/ClearReturnNewByReferenceRector.php)
+- class: [`Rector\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector`](/../master/rules/php53/src/Rector/Assign/ClearReturnNewByReferenceRector.php)
 - [test fixtures](/../master/rules/php53/tests/Rector/Assign/ClearReturnNewByReferenceRector/Fixture)
 
 Remove reference from "$assign = &new Value;"
@@ -10207,7 +10207,7 @@ Transform non variable like arguments to variable where a function or method exp
 
 ### `Php4ConstructorRector`
 
-- class: [`Rector\Php70\Rector\FunctionLike\Php4ConstructorRector`](/../master/rules/php70/src/Rector/FunctionLike/Php4ConstructorRector.php)
+- class: [`Rector\Php70\Rector\ClassMethod\Php4ConstructorRector`](/../master/rules/php70/src/Rector/FunctionLike/Php4ConstructorRector.php)
 - [test fixtures](/../master/rules/php70/tests/Rector/FunctionLike/Php4ConstructorRector/Fixture)
 
 Changes PHP 4 style constructor to __construct.

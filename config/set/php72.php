@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-use Rector\Php72\Rector\ConstFetch\BarewordStringRector;
 use Rector\Php72\Rector\Assign\ListEachRector;
 use Rector\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector;
-use Rector\Php72\Rector\While_\WhileEachToForeachRector;
+use Rector\Php72\Rector\ConstFetch\BarewordStringRector;
 use Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
 use Rector\Php72\Rector\FuncCall\GetClassOnNullRector;
 use Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector;
@@ -13,6 +12,7 @@ use Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector;
 use Rector\Php72\Rector\FuncCall\StringifyDefineRector;
 use Rector\Php72\Rector\FuncCall\StringsAssertNakedRector;
 use Rector\Php72\Rector\Unset_\UnsetCastRector;
+use Rector\Php72\Rector\While_\WhileEachToForeachRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php70\Tests\Rector\FunctionLike\Php4ConstructorRector;
+namespace Rector\Php70\Tests\Rector\ClassMethod\Php4ConstructorRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Php70\Rector\FunctionLike\Php4ConstructorRector;
+use Rector\Php70\Rector\ClassMethod\Php4ConstructorRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
