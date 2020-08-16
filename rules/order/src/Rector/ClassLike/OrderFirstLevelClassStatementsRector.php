@@ -48,6 +48,7 @@ PHP
             ),
         ]);
     }
+
     /**
      * @return string[]
      */
@@ -55,6 +56,7 @@ PHP
     {
         return [ClassLike::class];
     }
+
     /**
      * @param ClassLike $node
      */
@@ -68,6 +70,7 @@ PHP
 
         return $node;
     }
+
     /**
      * @param Stmt[] $stmts
      * @return Stmt[]
@@ -86,6 +89,7 @@ PHP
 
         return $stmts;
     }
+
     private function getOrder(Stmt $stmt): int
     {
         if ($stmt instanceof ClassMethod) {
