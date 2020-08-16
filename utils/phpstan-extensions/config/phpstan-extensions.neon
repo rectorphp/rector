@@ -1,8 +1,8 @@
 services:
     # prepared for Igor
-    -
-        class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
-        tags: [phpstan.rules.rule]
+#    -
+#        class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
+#        tags: [phpstan.rules.rule]
 
     -
         class: Symplify\CodingStandard\Rules\PreventParentMethodVisibilityOverrideRule
