@@ -86,9 +86,9 @@ PHP
     /**
      * @return string[]
      */
-    private function getPropertiesInDesiredPosition(Class_ $classLike): array
+    private function getPropertiesInDesiredPosition(Class_ $class): array
     {
-        $constants = $this->stmtVisibilitySorter->sortConstants($classLike);
+        $constants = $this->stmtVisibilitySorter->sortConstants($class);
 
         return array_keys($constants);
     }

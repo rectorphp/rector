@@ -138,19 +138,19 @@ PHP
     /**
      * @return array<int, array<int, string>>
      */
-    private function getPrivateMethodCallOrderAndClassMethods(ClassLike $class): array
+    private function getPrivateMethodCallOrderAndClassMethods(ClassLike $classLike): array
     {
-        return [$this->getLocalPrivateMethodCallOrder($class), $this->resolvePrivateClassMethods($class)];
+        return [$this->getLocalPrivateMethodCallOrder($classLike), $this->resolvePrivateClassMethods($classLike)];
     }
 
     /**
      * @return array<int,string>
      */
-    private function getLocalPrivateMethodCallOrder(ClassLike $class): array
+    private function getLocalPrivateMethodCallOrder(ClassLike $classLike): array
     {
         $localPrivateMethodCallInOrder = [];
 
-        $this->traverseNodesWithCallable($class->getMethods(), function (Node $node) use (
+        $this->traverseNodesWithCallable($classLike->getMethods(), function (Node $node) use (
             &$localPrivateMethodCallInOrder,
             $class
         ) {
@@ -185,11 +185,11 @@ PHP
     /**
      * @return array<int, string>
      */
-    private function resolvePrivateClassMethods(ClassLike $class): array
+    private function resolvePrivateClassMethods(ClassLike $classLike): array
     {
         $privateClassMethods = [];
 
-        foreach ($class->stmts as $key => $classStmt) {
+        foreach ($classLike->stmts as $key => $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
                 continue;
             }

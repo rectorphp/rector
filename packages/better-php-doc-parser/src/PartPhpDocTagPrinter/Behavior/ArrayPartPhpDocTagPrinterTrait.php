@@ -74,19 +74,6 @@ trait ArrayPartPhpDocTagPrinterTrait
         );
     }
 
-    private function isValueWithoutQuotes(?string $key, TagValueNodeConfiguration $tagValueNodeConfiguration): bool
-    {
-        if ($key === null) {
-            return false;
-        }
-
-        if (! array_key_exists($key, $tagValueNodeConfiguration->getKeysByQuotedStatus())) {
-            return false;
-        }
-
-        return ! $tagValueNodeConfiguration->getKeysByQuotedStatus()[$key];
-    }
-
     private function createKeyPart(?string $key, TagValueNodeConfiguration $tagValueNodeConfiguration): string
     {
         if ($key === null) {
@@ -98,6 +85,18 @@ trait ArrayPartPhpDocTagPrinterTrait
         }
 
         return $key . '=';
+    }
+    private function isValueWithoutQuotes(?string $key, TagValueNodeConfiguration $tagValueNodeConfiguration): bool
+    {
+        if ($key === null) {
+            return false;
+        }
+
+        if (! array_key_exists($key, $tagValueNodeConfiguration->getKeysByQuotedStatus())) {
+            return false;
+        }
+
+        return ! $tagValueNodeConfiguration->getKeysByQuotedStatus()[$key];
     }
 
     private function quoteKeys(array $item, string $key, string $json, string $originalContent): string
