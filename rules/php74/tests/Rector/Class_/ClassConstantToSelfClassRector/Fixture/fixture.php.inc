@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\MagicConstClass\ClassConstantToSelfClassRector\Fixture;
+namespace Rector\Php74\Tests\Rector\Class_\ClassConstantToSelfClassRector\Fixture;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\MagicConstClass\ClassConstantToSelfClassRector\Fixture;
+namespace Rector\Php74\Tests\Rector\Class_\ClassConstantToSelfClassRector\Fixture;
 
 class SomeClass
 {

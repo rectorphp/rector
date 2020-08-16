@@ -11017,7 +11017,7 @@ Change string calls on ReflectionType
 
 ### `ClassConstantToSelfClassRector`
 
-- class: [`Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector`](/../master/rules/php74/src/Rector/MagicConstClass/ClassConstantToSelfClassRector.php)
+- class: [`Rector\Php74\Rector\Class_\ClassConstantToSelfClassRector`](/../master/rules/php74/src/Rector/MagicConstClass/ClassConstantToSelfClassRector.php)
 - [test fixtures](/../master/rules/php74/tests/Rector/MagicConstClass/ClassConstantToSelfClassRector/Fixture)
 
 Change `__CLASS__` to self::class
