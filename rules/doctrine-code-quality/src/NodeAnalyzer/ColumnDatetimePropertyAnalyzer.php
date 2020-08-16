@@ -18,15 +18,9 @@ final class ColumnDatetimePropertyAnalyzer
      */
     private $doctrineDocBlockResolver;
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    public function __construct(DoctrineDocBlockResolver $doctrineDocBlockResolver, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(DoctrineDocBlockResolver $doctrineDocBlockResolver)
     {
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function matchDateTimeColumnTagValueNodeInProperty(Property $property): ?ColumnTagValueNode
@@ -51,7 +45,7 @@ final class ColumnDatetimePropertyAnalyzer
         return $columnTagValueNode;
     }
 
-    public function hasDefaultNowOption(ColumnTagValueNode $columnTagValueNode): bool
+    private function hasDefaultNowOption(ColumnTagValueNode $columnTagValueNode): bool
     {
         $options = $columnTagValueNode->getOptions();
 

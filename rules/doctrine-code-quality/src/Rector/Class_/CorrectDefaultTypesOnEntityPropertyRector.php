@@ -117,7 +117,8 @@ PHP
         if ($defaultExpr instanceof String_) {
             $propertyProperty->default = boolval($defaultExpr->value) ? $this->createTrue() : $this->createFalse();
             return $property;
-        } elseif ($defaultExpr instanceof ConstFetch) {
+        }
+        if ($defaultExpr instanceof ConstFetch) {
             // already ok
             return null;
         }
@@ -132,11 +133,12 @@ PHP
         }
 
         $defaultExpr = $propertyProperty->default;
-
         if ($defaultExpr instanceof String_) {
             $propertyProperty->default = new LNumber(intval($defaultExpr->value));
             return $property;
-        } elseif ($defaultExpr instanceof LNumber) {
+        }
+
+        if ($defaultExpr instanceof LNumber) {
             // already correct
             return null;
         }

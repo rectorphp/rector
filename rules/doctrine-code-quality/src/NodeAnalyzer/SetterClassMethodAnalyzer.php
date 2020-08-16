@@ -55,7 +55,7 @@ final class SetterClassMethodAnalyzer
         return $this->getPropertyByPropertyFetch($classMethod, $propertyFetch);
     }
 
-    public function matchDateTimeSetterPropertyFetch(ClassMethod $classMethod): ?PropertyFetch
+    private function matchDateTimeSetterPropertyFetch(ClassMethod $classMethod): ?PropertyFetch
     {
         $propertyFetch = $this->matchSetterOnlyPropertyFetch($classMethod);
         if ($propertyFetch === null) {
@@ -79,7 +79,7 @@ final class SetterClassMethodAnalyzer
     /**
      * @return null|Property
      */
-    public function getPropertyByPropertyFetch(ClassMethod $classMethod, PropertyFetch $propertyFetch)
+    private function getPropertyByPropertyFetch(ClassMethod $classMethod, PropertyFetch $propertyFetch)
     {
         $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
@@ -92,9 +92,6 @@ final class SetterClassMethodAnalyzer
         }
 
         $property = $classLike->getProperty($propertyName);
-        if ($property === null) {
-            return null;
-        }
 
         return $property;
     }
