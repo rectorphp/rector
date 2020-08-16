@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\ClassMethod\Fixture;
+namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

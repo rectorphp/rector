@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\ClassMethod\FixtureDifferentBundleName\SomeActionBundle;
+namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\FixtureDifferentBundleName\SomeActionBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

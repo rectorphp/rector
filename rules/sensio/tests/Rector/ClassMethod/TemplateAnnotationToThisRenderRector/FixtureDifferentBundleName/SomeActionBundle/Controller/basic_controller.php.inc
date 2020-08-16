@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\ClassMethod\FixtureDifferentBundleName\SomeActionBundle\Controller;
+namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\FixtureDifferentBundleName\SomeActionBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +20,7 @@ class BasicController extends AbstractController
 -----
 <?php
 
-namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\ClassMethod\FixtureDifferentBundleName\SomeActionBundle\Controller;
+namespace Rector\Sensio\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\FixtureDifferentBundleName\SomeActionBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
