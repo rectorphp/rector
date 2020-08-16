@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
+use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
 use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector;
 use Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector;

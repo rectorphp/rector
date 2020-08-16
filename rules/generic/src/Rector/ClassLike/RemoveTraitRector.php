@@ -78,6 +78,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof Interface_) {
+            return null;
+        }
+
         $usedTraits = $this->classManipulator->getUsedTraits($node);
         if ($usedTraits === []) {
             return null;

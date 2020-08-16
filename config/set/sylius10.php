@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
