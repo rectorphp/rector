@@ -5839,7 +5839,7 @@ Remove specific traits from code
 
 ### `RenameClassConstantsUseToStringsRector`
 
-- class: [`Rector\Generic\Rector\Constant\RenameClassConstantsUseToStringsRector`](/../master/rules/generic/src/Rector/Constant/RenameClassConstantsUseToStringsRector.php)
+- class: [`Rector\Generic\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector`](/../master/rules/generic/src/Rector/Constant/RenameClassConstantsUseToStringsRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Constant/RenameClassConstantsUseToStringsRector/Fixture)
 
 Replaces constant by value
@@ -5848,7 +5848,7 @@ Replaces constant by value
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Constant\RenameClassConstantsUseToStringsRector;
+use Rector\Generic\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

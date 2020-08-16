@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Constant;
+namespace Rector\Generic\Rector\ClassConstFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\RenameClassConstantsUseToStringsRectorTest
+ * @see \Rector\Generic\Tests\Rector\ClassConstFetch\RenameClassConstantsUseToStringsRector\RenameClassConstantsUseToStringsRectorTest
  */
 final class RenameClassConstantsUseToStringsRector extends AbstractRector implements ConfigurableRectorInterface
 {
