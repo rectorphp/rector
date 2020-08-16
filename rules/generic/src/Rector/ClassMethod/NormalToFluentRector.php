@@ -15,7 +15,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\MethodBody\NormalToFluentRector\NormalToFluentRectorTest
+ * @see \Rector\Generic\Tests\Rector\MethodCall\NormalToFluentRector\NormalToFluentRectorTest
  */
 final class NormalToFluentRector extends AbstractRector implements ConfigurableRectorInterface
 {
