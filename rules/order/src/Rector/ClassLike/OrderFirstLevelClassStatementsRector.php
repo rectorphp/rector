@@ -20,10 +20,6 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class OrderFirstLevelClassStatementsRector extends AbstractRector
 {
-    public function __construct()
-    {
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Orders first level Class statements', [
@@ -52,7 +48,6 @@ PHP
             ),
         ]);
     }
-
     /**
      * @return string[]
      */
@@ -60,7 +55,6 @@ PHP
     {
         return [ClassLike::class];
     }
-
     /**
      * @param ClassLike $node
      */
@@ -74,25 +68,6 @@ PHP
 
         return $node;
     }
-
-    private function getOrder(Stmt $stmt): int
-    {
-        if ($stmt instanceof ClassMethod) {
-            return 3;
-        }
-
-        if ($stmt instanceof Property) {
-            return 2;
-        }
-
-        if ($stmt instanceof ClassConst) {
-            return 1;
-        }
-
-        // TraitUse
-        return 0;
-    }
-
     /**
      * @param Stmt[] $stmts
      * @return Stmt[]
@@ -110,5 +85,22 @@ PHP
         );
 
         return $stmts;
+    }
+    private function getOrder(Stmt $stmt): int
+    {
+        if ($stmt instanceof ClassMethod) {
+            return 3;
+        }
+
+        if ($stmt instanceof Property) {
+            return 2;
+        }
+
+        if ($stmt instanceof ClassConst) {
+            return 1;
+        }
+
+        // TraitUse
+        return 0;
     }
 }
