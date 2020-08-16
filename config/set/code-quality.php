@@ -62,7 +62,7 @@ use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
-use Rector\Renaming\Rector\Function_\RenameFunctionRector;
+use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\SOLID\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

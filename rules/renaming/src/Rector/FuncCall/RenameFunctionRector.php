@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Rector\Function_;
+namespace Rector\Renaming\Rector\FuncCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Renaming\Tests\Rector\Function_\RenameFunctionRector\RenameFunctionRectorTest
+ * @see \Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector\RenameFunctionRectorTest
  */
 final class RenameFunctionRector extends AbstractRector implements ConfigurableRectorInterface
 {

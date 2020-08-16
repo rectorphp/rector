@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Renaming\Tests\Rector\Function_\RenameFunctionRector;
+namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Renaming\Rector\Function_\RenameFunctionRector;
+use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameFunctionRectorTest extends AbstractRectorTestCase

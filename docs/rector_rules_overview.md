@@ -12334,7 +12334,7 @@ Replace constant by new ones
 
 ### `RenameFunctionRector`
 
-- class: [`Rector\Renaming\Rector\Function_\RenameFunctionRector`](/../master/rules/renaming/src/Rector/Function_/RenameFunctionRector.php)
+- class: [`Rector\Renaming\Rector\FuncCall\RenameFunctionRector`](/../master/rules/renaming/src/Rector/Function_/RenameFunctionRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Function_/RenameFunctionRector/Fixture)
 
 Turns defined function call new one.
@@ -12343,7 +12343,7 @@ Turns defined function call new one.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Renaming\Rector\Function_\RenameFunctionRector;
+use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

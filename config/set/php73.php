@@ -11,7 +11,7 @@ use Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector;
 use Rector\Php73\Rector\FuncCall\SensitiveDefineRector;
 use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
 use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;
-use Rector\Renaming\Rector\Function_\RenameFunctionRector;
+use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

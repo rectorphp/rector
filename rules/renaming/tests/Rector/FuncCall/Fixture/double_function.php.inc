@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Function_\RenameFunctionRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector\Fixture;
 
 class DoubleFunction
 {
@@ -14,7 +14,7 @@ class DoubleFunction
 -----
 <?php
 
-namespace Rector\Renaming\Tests\Rector\Function_\RenameFunctionRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\FuncCall\RenameFunctionRector\Fixture;
 
 class DoubleFunction
 {

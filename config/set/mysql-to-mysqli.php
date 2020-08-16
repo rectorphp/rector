@@ -8,7 +8,7 @@ use Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector;
 use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
-use Rector\Renaming\Rector\Function_\RenameFunctionRector;
+use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

@@ -13,7 +13,7 @@ use Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector;
 use Rector\Php72\Rector\FuncCall\StringifyDefineRector;
 use Rector\Php72\Rector\FuncCall\StringsAssertNakedRector;
 use Rector\Php72\Rector\Unset_\UnsetCastRector;
-use Rector\Renaming\Rector\Function_\RenameFunctionRector;
+use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
