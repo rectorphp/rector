@@ -1,4 +1,4 @@
-# All 557 Rectors Overview
+# All 559 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -36,10 +36,10 @@
 - [NetteTesterToPHPUnit](#nettetestertophpunit) (3)
 - [NetteToSymfony](#nettetosymfony) (9)
 - [NetteUtilsCodeQuality](#netteutilscodequality) (1)
-- [Order](#order) (8)
+- [Order](#order) (9)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
-- [PHPUnit](#phpunit) (36)
+- [PHPUnit](#phpunit) (37)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
 - [PSR4](#psr4) (3)
 - [Performance](#performance) (1)
@@ -7934,8 +7934,8 @@ Order class constant order by their integer value
 
 ### `OrderConstantsByVisibilityRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderConstantsByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderConstantsByVisibilityRector.php)
-- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderConstantsByVisibilityRector/Fixture)
+- class: [`Rector\Order\Rector\Class_\OrderConstantsByVisibilityRector`](/../master/rules/order/src/Rector/Class_/OrderConstantsByVisibilityRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderConstantsByVisibilityRector/Fixture)
 
 Orders constants by visibility
 
@@ -7977,6 +7977,28 @@ Order __constructor dependencies by type A-Z
 
 <br><br>
 
+### `OrderFirstLevelClassStatementsRector`
+
+- class: [`Rector\Order\Rector\ClassLike\OrderFirstLevelClassStatementsRector`](/../master/rules/order/src/Rector/ClassLike/OrderFirstLevelClassStatementsRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderFirstLevelClassStatementsRector/Fixture)
+
+Orders first level Class statements
+
+```diff
+ final class SomeClass
+ {
++    use TraitName;
++    private const CONST_NAME = 'constant_value';
++    protected $propertyName;
+     public function functionName();
+-    protected $propertyName;
+-    private const CONST_NAME = 'constant_value';
+-    use TraitName;
+ }
+```
+
+<br><br>
+
 ### `OrderMethodsByVisibilityRector`
 
 - class: [`Rector\Order\Rector\ClassLike\OrderMethodsByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderMethodsByVisibilityRector.php)
@@ -7998,8 +8020,8 @@ Orders method by visibility
 
 ### `OrderPrivateMethodsByUseRector`
 
-- class: [`Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector`](/../master/rules/order/src/Rector/Class_/OrderPrivateMethodsByUseRector.php)
-- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderPrivateMethodsByUseRector/Fixture)
+- class: [`Rector\Order\Rector\ClassLike\OrderPrivateMethodsByUseRector`](/../master/rules/order/src/Rector/ClassLike/OrderPrivateMethodsByUseRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderPrivateMethodsByUseRector/Fixture)
 
 Order private methods in order of their use
 
@@ -8047,8 +8069,8 @@ Orders properties by visibility
 
 ### `OrderPropertyByComplexityRector`
 
-- class: [`Rector\Order\Rector\Class_\OrderPropertyByComplexityRector`](/../master/rules/order/src/Rector/Class_/OrderPropertyByComplexityRector.php)
-- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderPropertyByComplexityRector/Fixture)
+- class: [`Rector\Order\Rector\ClassLike\OrderPropertyByComplexityRector`](/../master/rules/order/src/Rector/ClassLike/OrderPropertyByComplexityRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderPropertyByComplexityRector/Fixture)
 
 Order properties by complexity, from the simplest like scalars to the most complex, like union or collections
 
@@ -8650,6 +8672,25 @@ Change `assertEquals()/assertNotEquals()` method parameters to new specific alte
 +        $this->assertEqualsIgnoringCase('string', $value, 'message');
      }
  }
+```
+
+<br><br>
+
+### `AssertEqualsToSameRector`
+
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertEqualsToSameRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertEqualsToSameRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertEqualsToSameRector/Fixture)
+
+Turns `assertEquals()` into stricter `assertSame()` for scalar values in PHPUnit TestCase
+
+```diff
+-$this->assertEquals(2, $result, "message");
++$this->assertSame(2, $result, "message");
+```
+
+```diff
+-$this->assertEquals($aString, $result, "message");
++$this->assertSame($aString, $result, "message");
 ```
 
 <br><br>
