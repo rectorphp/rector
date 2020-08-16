@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
+use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;

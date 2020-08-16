@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\Argument\ArgumentAdderRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToReturnRector;
-use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
+use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;

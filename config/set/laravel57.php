@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\Argument\ArgumentAdderRector;
 use Rector\Generic\Rector\Argument\ArgumentRemoverRector;
-use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
+use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

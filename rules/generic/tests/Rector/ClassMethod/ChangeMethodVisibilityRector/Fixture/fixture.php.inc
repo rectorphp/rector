@@ -1,6 +1,6 @@
 <?php
 
-use Rector\Generic\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source\ParentObject;
+use Rector\Generic\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector\Source\ParentObject;
 
 class ClassThatInherits extends ParentObject
 {
@@ -19,7 +19,7 @@ class ClassThatInherits extends ParentObject
 -----
 <?php
 
-use Rector\Generic\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source\ParentObject;
+use Rector\Generic\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector\Source\ParentObject;
 
 class ClassThatInherits extends ParentObject
 {

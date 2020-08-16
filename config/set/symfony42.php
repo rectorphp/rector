@@ -8,7 +8,7 @@ use Rector\Generic\Rector\Argument\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\Rector\New_\NewToStaticCallRector;
-use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
+use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;

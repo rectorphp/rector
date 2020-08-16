@@ -4973,7 +4973,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `ChangeMethodVisibilityRector`
 
-- class: [`Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector`](/../master/rules/generic/src/Rector/Visibility/ChangeMethodVisibilityRector.php)
+- class: [`Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector`](/../master/rules/generic/src/Rector/Visibility/ChangeMethodVisibilityRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Visibility/ChangeMethodVisibilityRector/Fixture)
 
 Change visibility of method from parent class.
@@ -4982,7 +4982,7 @@ Change visibility of method from parent class.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
+use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
