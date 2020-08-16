@@ -5868,7 +5868,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `RenamePropertyRector`
 
-- class: [`Rector\Generic\Rector\Property\RenamePropertyRector`](/../master/rules/generic/src/Rector/Property/RenamePropertyRector.php)
+- class: [`Rector\Generic\Rector\PropertyFetch\RenamePropertyRector`](/../master/rules/generic/src/Rector/Property/RenamePropertyRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Property/RenamePropertyRector/Fixture)
 
 Replaces defined old properties by new ones.
@@ -5877,7 +5877,7 @@ Replaces defined old properties by new ones.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Property\RenamePropertyRector;
+use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

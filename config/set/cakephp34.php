@@ -6,7 +6,7 @@ use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\MethodBody\NormalToFluentRector;
 use Rector\Generic\Rector\Property\PropertyToMethodRector;
-use Rector\Generic\Rector\Property\RenamePropertyRector;
+use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Property\RenamePropertyRector;
+namespace Rector\Generic\Tests\Rector\PropertyFetch\RenamePropertyRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Property\RenamePropertyRector;
-use Rector\Generic\Tests\Rector\Property\RenamePropertyRector\Source\ClassWithProperties;
+use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Generic\Tests\Rector\PropertyFetch\RenamePropertyRector\Source\ClassWithProperties;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenamePropertyRectorTest extends AbstractRectorTestCase
