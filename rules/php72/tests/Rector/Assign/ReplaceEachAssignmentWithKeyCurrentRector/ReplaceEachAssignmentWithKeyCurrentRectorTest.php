@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php72\Tests\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector;
+namespace Rector\Php72\Tests\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Php72\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector;
+use Rector\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php72\Tests\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
+namespace Rector\Php72\Tests\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
 
 use Rector\Core\Testing\Contract\RunnableInterface;
 
@@ -20,7 +20,7 @@ class EachFixture implements RunnableInterface
 -----
 <?php
 
-namespace Rector\Php72\Tests\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
+namespace Rector\Php72\Tests\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\Fixture;
 
 use Rector\Core\Testing\Contract\RunnableInterface;
 

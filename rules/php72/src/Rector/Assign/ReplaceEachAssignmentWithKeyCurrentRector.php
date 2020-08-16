@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php72\Rector\Each;
+namespace Rector\Php72\Rector\Assign;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
@@ -21,7 +21,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
  *
- * @see \Rector\Php72\Tests\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector\ReplaceEachAssignmentWithKeyCurrentRectorTest
+ * @see \Rector\Php72\Tests\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\ReplaceEachAssignmentWithKeyCurrentRectorTest
  */
 final class ReplaceEachAssignmentWithKeyCurrentRector extends AbstractRector
 {

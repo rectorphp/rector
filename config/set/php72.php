@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Rector\Php72\Rector\ConstFetch\BarewordStringRector;
-use Rector\Php72\Rector\Each\ListEachRector;
-use Rector\Php72\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector;
-use Rector\Php72\Rector\Each\WhileEachToForeachRector;
+use Rector\Php72\Rector\Assign\ListEachRector;
+use Rector\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector;
+use Rector\Php72\Rector\While_\WhileEachToForeachRector;
 use Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
 use Rector\Php72\Rector\FuncCall\GetClassOnNullRector;
 use Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector;

@@ -2,19 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php72\Tests\Rector\Each\ListEachRector;
+namespace Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Php72\Rector\Each\ListEachRector;
+use Rector\Php72\Rector\While_\WhileEachToForeachRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * Test battery inspired by:
- * - https://stackoverflow.com/q/46492621/1348344 + Drupal refactorings
- * - https://stackoverflow.com/a/51278641/1348344
- */
-final class ListEachRectorTest extends AbstractRectorTestCase
+final class WhileEachToForeachRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -31,6 +26,6 @@ final class ListEachRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ListEachRector::class;
+        return WhileEachToForeachRector::class;
     }
 }

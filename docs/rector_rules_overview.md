@@ -10617,7 +10617,7 @@ Incomplete class returns inverted bool on `is_object()`
 
 ### `ListEachRector`
 
-- class: [`Rector\Php72\Rector\Each\ListEachRector`](/../master/rules/php72/src/Rector/Each/ListEachRector.php)
+- class: [`Rector\Php72\Rector\Assign\ListEachRector`](/../master/rules/php72/src/Rector/Each/ListEachRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/Each/ListEachRector/Fixture)
 
 `each()` function is deprecated, use `key()` and `current()` instead
@@ -10649,7 +10649,7 @@ Use `$result` argument in `parse_str()` function
 
 ### `ReplaceEachAssignmentWithKeyCurrentRector`
 
-- class: [`Rector\Php72\Rector\Each\ReplaceEachAssignmentWithKeyCurrentRector`](/../master/rules/php72/src/Rector/Each/ReplaceEachAssignmentWithKeyCurrentRector.php)
+- class: [`Rector\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector`](/../master/rules/php72/src/Rector/Each/ReplaceEachAssignmentWithKeyCurrentRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/Each/ReplaceEachAssignmentWithKeyCurrentRector/Fixture)
 
 Replace `each()` assign outside loop
@@ -10725,7 +10725,7 @@ Removes (unset) cast
 
 ### `WhileEachToForeachRector`
 
-- class: [`Rector\Php72\Rector\Each\WhileEachToForeachRector`](/../master/rules/php72/src/Rector/Each/WhileEachToForeachRector.php)
+- class: [`Rector\Php72\Rector\While_\WhileEachToForeachRector`](/../master/rules/php72/src/Rector/Each/WhileEachToForeachRector.php)
 - [test fixtures](/../master/rules/php72/tests/Rector/Each/WhileEachToForeachRector/Fixture)
 
 `each()` function is deprecated, use `foreach()` instead.

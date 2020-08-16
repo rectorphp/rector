@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php72\Rector\Each;
+namespace Rector\Php72\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -18,7 +18,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @source https://wiki.php.net/rfc/deprecations_php_7_2#each
  *
- * @see \Rector\Php72\Tests\Rector\Each\ListEachRector\ListEachRectorTest
+ * @see \Rector\Php72\Tests\Rector\Assign\ListEachRector\ListEachRectorTest
  */
 final class ListEachRector extends AbstractRector
 {

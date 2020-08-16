@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php72\Rector\Each;
+namespace Rector\Php72\Rector\While_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
@@ -19,7 +19,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @source https://wiki.php.net/rfc/deprecations_php_7_2#each
  *
- * @see \Rector\Php72\Tests\Rector\Each\WhileEachToForeachRector\WhileEachToForeachRectorTest
+ * @see \Rector\Php72\Tests\Rector\While_\WhileEachToForeachRector\WhileEachToForeachRectorTest
  */
 final class WhileEachToForeachRector extends AbstractRector
 {
