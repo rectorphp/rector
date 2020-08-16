@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Visibility\ChangePropertyVisibilityRector;
+namespace Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Visibility\ChangePropertyVisibilityRector;
-use Rector\Generic\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject;
+use Rector\Generic\Rector\Property\ChangePropertyVisibilityRector;
+use Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector\Source\ParentObject;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
@@ -39,7 +39,7 @@ final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
                         'toBePrivateProperty' => 'private',
                         'toBePublicStaticProperty' => 'public',
                     ],
-                    'Rector\Generic\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Fixture\NormalObject' => [
+                    'Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector\Fixture\NormalObject' => [
                         'toBePublicStaticProperty' => 'public',
                     ],
                 ],

@@ -5014,7 +5014,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `ChangePropertyVisibilityRector`
 
-- class: [`Rector\Generic\Rector\Visibility\ChangePropertyVisibilityRector`](/../master/rules/generic/src/Rector/Visibility/ChangePropertyVisibilityRector.php)
+- class: [`Rector\Generic\Rector\Property\ChangePropertyVisibilityRector`](/../master/rules/generic/src/Rector/Visibility/ChangePropertyVisibilityRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Visibility/ChangePropertyVisibilityRector/Fixture)
 
 Change visibility of property from parent class.
@@ -5023,7 +5023,7 @@ Change visibility of property from parent class.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Visibility\ChangePropertyVisibilityRector;
+use Rector\Generic\Rector\Property\ChangePropertyVisibilityRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

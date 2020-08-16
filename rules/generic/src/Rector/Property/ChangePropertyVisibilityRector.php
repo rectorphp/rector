@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Visibility;
+namespace Rector\Generic\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Visibility\ChangePropertyVisibilityRector\ChangePropertyVisibilityRectorTest
+ * @see \Rector\Generic\Tests\Rector\Property\ChangePropertyVisibilityRector\ChangePropertyVisibilityRectorTest
  */
 final class ChangePropertyVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
