@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Rector\Assign;
+namespace Rector\NetteToSymfony\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -36,7 +36,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see https://symfony.com/doc/current/forms.html#creating-form-classes
  *
- * @see \Rector\NetteToSymfony\Tests\Rector\Assign\FormControlToControllerAndFormTypeRector\FormControlToControllerAndFormTypeRectorTest
+ * @see \Rector\NetteToSymfony\Tests\Rector\Class_\FormControlToControllerAndFormTypeRector\FormControlToControllerAndFormTypeRectorTest
  */
 final class FormControlToControllerAndFormTypeRector extends AbstractRector
 {

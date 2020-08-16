@@ -7814,7 +7814,7 @@ Interface factories are not needed in Symfony. Clear constructor injection is us
 
 ### `FormControlToControllerAndFormTypeRector`
 
-- class: [`Rector\NetteToSymfony\Rector\Assign\FormControlToControllerAndFormTypeRector`](/../master/rules/nette-to-symfony/src/Rector/Assign/FormControlToControllerAndFormTypeRector.php)
+- class: [`Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector`](/../master/rules/nette-to-symfony/src/Rector/Assign/FormControlToControllerAndFormTypeRector.php)
 - [test fixtures](/../master/rules/nette-to-symfony/tests/Rector/Assign/FormControlToControllerAndFormTypeRector/Fixture)
 
 Change Form that extends Control to Controller and decoupled FormType

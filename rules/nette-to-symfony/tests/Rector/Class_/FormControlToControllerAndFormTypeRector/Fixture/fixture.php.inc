@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\Assign\FormControlToControllerAndFormTypeRector\Fixture;
+namespace Rector\NetteToSymfony\Tests\Rector\Class_\FormControlToControllerAndFormTypeRector\Fixture;
 
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Control;
@@ -25,7 +25,7 @@ class SomeForm extends Control
 -----
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\Assign\FormControlToControllerAndFormTypeRector\Fixture;
+namespace Rector\NetteToSymfony\Tests\Rector\Class_\FormControlToControllerAndFormTypeRector\Fixture;
 
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Control;
