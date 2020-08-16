@@ -55,47 +55,6 @@ final class SetterClassMethodAnalyzer
         return $this->getPropertyByPropertyFetch($classMethod, $propertyFetch);
     }
 
-    private function matchDateTimeSetterPropertyFetch(ClassMethod $classMethod): ?PropertyFetch
-    {
-        $propertyFetch = $this->matchSetterOnlyPropertyFetch($classMethod);
-        if ($propertyFetch === null) {
-            return null;
-        }
-
-        $param = $classMethod->params[0];
-        $paramType = $this->nodeTypeResolver->getStaticType($param);
-
-        if (! $paramType instanceof TypeWithClassName) {
-            return null;
-        }
-
-        if ($paramType->getClassName() !== 'DateTimeInterface') {
-            return null;
-        }
-
-        return $propertyFetch;
-    }
-
-    /**
-     * @return null|Property
-     */
-    private function getPropertyByPropertyFetch(ClassMethod $classMethod, PropertyFetch $propertyFetch)
-    {
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return null;
-        }
-
-        $propertyName = $this->nodeNameResolver->getName($propertyFetch);
-        if ($propertyName === null) {
-            return null;
-        }
-
-        $property = $classLike->getProperty($propertyName);
-
-        return $property;
-    }
-
     /**
      * Matches:
      *
@@ -114,6 +73,43 @@ final class SetterClassMethodAnalyzer
         // is nullable param
         $onlyParam = $classMethod->params[0];
         if (! $this->nodeTypeResolver->isNullableObjectType($onlyParam)) {
+            return null;
+        }
+
+        return $propertyFetch;
+    }
+    /**
+     * @return null|Property
+     */
+    private function getPropertyByPropertyFetch(ClassMethod $classMethod, PropertyFetch $propertyFetch)
+    {
+        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classLike instanceof Class_) {
+            return null;
+        }
+
+        $propertyName = $this->nodeNameResolver->getName($propertyFetch);
+        if ($propertyName === null) {
+            return null;
+        }
+
+        return $classLike->getProperty($propertyName);
+    }
+    private function matchDateTimeSetterPropertyFetch(ClassMethod $classMethod): ?PropertyFetch
+    {
+        $propertyFetch = $this->matchSetterOnlyPropertyFetch($classMethod);
+        if ($propertyFetch === null) {
+            return null;
+        }
+
+        $param = $classMethod->params[0];
+        $paramType = $this->nodeTypeResolver->getStaticType($param);
+
+        if (! $paramType instanceof TypeWithClassName) {
+            return null;
+        }
+
+        if ($paramType->getClassName() !== 'DateTimeInterface') {
             return null;
         }
 

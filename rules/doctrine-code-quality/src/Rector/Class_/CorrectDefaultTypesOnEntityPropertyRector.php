@@ -134,7 +134,7 @@ PHP
 
         $defaultExpr = $propertyProperty->default;
         if ($defaultExpr instanceof String_) {
-            $propertyProperty->default = new LNumber(intval($defaultExpr->value));
+            $propertyProperty->default = new LNumber((int) $defaultExpr->value);
             return $property;
         }
 

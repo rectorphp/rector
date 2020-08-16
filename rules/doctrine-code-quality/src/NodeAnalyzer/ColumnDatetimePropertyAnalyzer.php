@@ -43,22 +43,4 @@ final class ColumnDatetimePropertyAnalyzer
 
         return $columnTagValueNode;
     }
-
-    private function hasDefaultNowOption(ColumnTagValueNode $columnTagValueNode): bool
-    {
-        $options = $columnTagValueNode->getOptions();
-
-        foreach ($options as $optionName => $optionValue) {
-            if ($optionName !== 'default') {
-                continue;
-            }
-
-            // @todo support mutliple "now" formats
-            if ($optionValue === 'now()') {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
