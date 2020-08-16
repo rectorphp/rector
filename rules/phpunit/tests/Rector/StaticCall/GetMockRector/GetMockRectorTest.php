@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Tests\Rector\GetMockRector;
+namespace Rector\PHPUnit\Tests\Rector\StaticCall\GetMockRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\PHPUnit\Rector\GetMockRector;
+use Rector\PHPUnit\Rector\StaticCall\GetMockRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class GetMockRectorTest extends AbstractRectorTestCase

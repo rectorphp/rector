@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Rector;
+namespace Rector\PHPUnit\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  * @see https://github.com/sebastianbergmann/phpunit/blob/5.7.0/src/Framework/TestCase.php#L1623
  * @see https://github.com/sebastianbergmann/phpunit/blob/6.0.0/src/Framework/TestCase.php#L1452
  *
- * @see \Rector\PHPUnit\Tests\Rector\GetMockRector\GetMockRectorTest
+ * @see \Rector\PHPUnit\Tests\Rector\StaticCall\GetMockRector\GetMockRectorTest
  */
 final class GetMockRector extends AbstractPHPUnitRector
 {

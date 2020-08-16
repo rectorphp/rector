@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\GetMockRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\StaticCall\GetMockRector\Fixture;
 
 final class GetMockMultiTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,7 +14,7 @@ final class GetMockMultiTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\GetMockRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\StaticCall\GetMockRector\Fixture;
 
 final class GetMockMultiTest extends \PHPUnit\Framework\TestCase
 {

@@ -9156,7 +9156,7 @@ Remove `getMockBuilder()` to `createMock()`
 
 ### `GetMockRector`
 
-- class: [`Rector\PHPUnit\Rector\GetMockRector`](/../master/rules/phpunit/src/Rector/GetMockRector.php)
+- class: [`Rector\PHPUnit\Rector\StaticCall\GetMockRector`](/../master/rules/phpunit/src/Rector/GetMockRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/GetMockRector/Fixture)
 
 Turns getMock*() methods to `createMock()`
