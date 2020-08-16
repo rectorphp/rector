@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Argument\SwapFuncCallArgumentsRector;
+use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
 use Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;

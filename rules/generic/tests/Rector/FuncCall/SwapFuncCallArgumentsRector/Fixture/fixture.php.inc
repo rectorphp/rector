@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\Argument\SwapFuncCallArgumentsRector\Fixture;
+namespace Rector\Generic\Tests\Rector\FuncCall\SwapFuncCallArgumentsRector\Fixture;
 
 final class SomeClass
 {
@@ -14,7 +14,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\Argument\SwapFuncCallArgumentsRector\Fixture;
+namespace Rector\Generic\Tests\Rector\FuncCall\SwapFuncCallArgumentsRector\Fixture;
 
 final class SomeClass
 {

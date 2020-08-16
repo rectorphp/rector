@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Argument;
+namespace Rector\Generic\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -12,7 +12,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Argument\SwapFuncCallArgumentsRector\SwapFuncCallArgumentsRectorTest
+ * @see \Rector\Generic\Tests\Rector\FuncCall\SwapFuncCallArgumentsRector\SwapFuncCallArgumentsRectorTest
  */
 final class SwapFuncCallArgumentsRector extends AbstractRector implements ConfigurableRectorInterface
 {

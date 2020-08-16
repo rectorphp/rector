@@ -6129,7 +6129,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `SwapFuncCallArgumentsRector`
 
-- class: [`Rector\Generic\Rector\Argument\SwapFuncCallArgumentsRector`](/../master/rules/generic/src/Rector/Argument/SwapFuncCallArgumentsRector.php)
+- class: [`Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector`](/../master/rules/generic/src/Rector/Argument/SwapFuncCallArgumentsRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Argument/SwapFuncCallArgumentsRector/Fixture)
 
 Swap arguments in function calls
