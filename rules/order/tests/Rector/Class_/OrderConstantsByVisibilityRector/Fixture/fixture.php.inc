@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\ClassLike\OrderConstantsByVisibilityRector\Fixture;
+namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\Fixture;
 
-abstract class AbstractClass
+final class SomeClass
 {
     private const PRIVATE_CONST = 'private';
     protected const PROTECTED_CONST = 'protected';
@@ -13,9 +13,9 @@ abstract class AbstractClass
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\ClassLike\OrderConstantsByVisibilityRector\Fixture;
+namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\Fixture;
 
-abstract class AbstractClass
+final class SomeClass
 {
     public const PUBLIC_CONST = 'public';
     protected const PROTECTED_CONST = 'protected';

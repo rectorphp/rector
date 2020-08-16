@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector;
+namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector;
 
-use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Order\Rector\Class_\OrderPropertyByComplexityRector;
+use Rector\Order\Rector\Class_\OrderConstantsByVisibilityRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class OrderPropertyByComplexityRectorTest extends AbstractRectorTestCase
+final class OrderConstantsByVisibilityRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -19,13 +18,13 @@ final class OrderPropertyByComplexityRectorTest extends AbstractRectorTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideData(): Iterator
+    public function provideData(): \Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string
     {
-        return OrderPropertyByComplexityRector::class;
+        return OrderConstantsByVisibilityRector::class;
     }
 }

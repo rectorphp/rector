@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Fixture;
+namespace Rector\Order\Tests\Rector\ClassLike\OrderPropertyByComplexityRector\Fixture;
 
 class VisibilityClass
 {
@@ -24,7 +24,7 @@ class VisibilityClass
 -----
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\Fixture;
+namespace Rector\Order\Tests\Rector\ClassLike\OrderPropertyByComplexityRector\Fixture;
 
 class VisibilityClass
 {

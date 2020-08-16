@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\Fixture;
+namespace Rector\Order\Tests\Rector\ClassLike\OrderPrivateMethodsByUseRector\Fixture;
 
 class DifferentAmountOfMethodsClass
 {

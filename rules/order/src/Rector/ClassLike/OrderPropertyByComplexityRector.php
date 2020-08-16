@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Rector\Class_;
+namespace Rector\Order\Rector\ClassLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -14,7 +15,7 @@ use Rector\Order\PropertyRanker;
 use Rector\Order\StmtOrder;
 
 /**
- * @see \Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\OrderPropertyByComplexityRectorTest
+ * @see \Rector\Order\Tests\Rector\ClassLike\OrderPropertyByComplexityRector\OrderPropertyByComplexityRectorTest
  */
 final class OrderPropertyByComplexityRector extends AbstractRector
 {
@@ -99,14 +100,18 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class];
+        return [ClassLike::class];
     }
 
     /**
-     * @param Class_ $node
+     * @param ClassLike $node
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof Interface_) {
+            return null;
+        }
+
         $propertyByVisibilityByPosition = $this->resolvePropertyByVisibilityByPosition($node);
 
         foreach ($propertyByVisibilityByPosition as $propertyByPosition) {
@@ -135,10 +140,10 @@ PHP
     /**
      * @return Property[][]
      */
-    private function resolvePropertyByVisibilityByPosition(Class_ $class): array
+    private function resolvePropertyByVisibilityByPosition(ClassLike $classLike): array
     {
         $propertyByVisibilityByPosition = [];
-        foreach ($class->stmts as $position => $classStmt) {
+        foreach ($classLike->stmts as $position => $classStmt) {
             if (! $classStmt instanceof Property) {
                 continue;
             }

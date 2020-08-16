@@ -132,29 +132,6 @@ trait ComplexRemovalTrait
         $this->removeNode($property);
     }
 
-    private function removeAssignNode(Assign $assign): void
-    {
-        $currentStatement = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $this->addLivingCodeBeforeNode($assign->var, $currentStatement);
-
-        /** @var Assign $assign */
-        $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Expression) {
-            $this->addLivingCodeBeforeNode($assign->expr, $currentStatement);
-            $this->removeNode($assign);
-        } else {
-            $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($assign, $assign->expr);
-            $this->rectorChangeCollector->notifyNodeFileInfo($assign->expr);
-        }
-    }
-
-    private function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
-    {
-        foreach ($this->livingCodeManipulator->keepLivingCodeFromExpr($expr) as $expr) {
-            $this->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
-        }
-    }
-
     /**
      * @param MethodCall|StaticCall $node
      */
@@ -205,6 +182,22 @@ trait ComplexRemovalTrait
         return $assign;
     }
 
+    private function removeAssignNode(Assign $assign): void
+    {
+        $currentStatement = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $this->addLivingCodeBeforeNode($assign->var, $currentStatement);
+
+        /** @var Assign $assign */
+        $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Expression) {
+            $this->addLivingCodeBeforeNode($assign->expr, $currentStatement);
+            $this->removeNode($assign);
+        } else {
+            $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($assign, $assign->expr);
+            $this->rectorChangeCollector->notifyNodeFileInfo($assign->expr);
+        }
+    }
+
     private function removeConstructorDependency(Assign $assign): void
     {
         $methodName = $assign->getAttribute(AttributeKey::METHOD_NAME);
@@ -229,6 +222,13 @@ trait ComplexRemovalTrait
             }
 
             $this->removeNode($param);
+        }
+    }
+
+    private function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
+    {
+        foreach ($this->livingCodeManipulator->keepLivingCodeFromExpr($expr) as $expr) {
+            $this->addNodeBeforeNode(new Expression($expr), $addBeforeThisNode);
         }
     }
 }
