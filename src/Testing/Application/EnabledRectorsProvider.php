@@ -7,7 +7,7 @@ namespace Rector\Core\Testing\Application;
 use Rector\Core\Configuration\ChangeConfiguration;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 
 final class EnabledRectorsProvider
 {

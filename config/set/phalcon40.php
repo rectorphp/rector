@@ -6,7 +6,7 @@ use Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector;
 use Rector\Phalcon\Rector\Assign\FlashWithCssClassesToExtraCallRector;
 use Rector\Phalcon\Rector\Assign\NewApplicationToToFactoryWithDefaultContainerRector;
 use Rector\Phalcon\Rector\MethodCall\AddRequestToHandleMethodCallRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

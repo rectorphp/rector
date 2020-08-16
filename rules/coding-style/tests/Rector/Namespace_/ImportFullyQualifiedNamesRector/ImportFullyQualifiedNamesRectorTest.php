@@ -7,7 +7,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 use Iterator;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

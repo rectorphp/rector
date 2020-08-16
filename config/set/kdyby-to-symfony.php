@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
 use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

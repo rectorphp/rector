@@ -12273,7 +12273,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `RenameClassRector`
 
-- class: [`Rector\Renaming\Rector\Class_\RenameClassRector`](/../master/rules/renaming/src/Rector/Class_/RenameClassRector.php)
+- class: [`Rector\Renaming\Rector\Name\RenameClassRector`](/../master/rules/renaming/src/Rector/Class_/RenameClassRector.php)
 - [test fixtures](/../master/rules/renaming/tests/Rector/Class_/RenameClassRector/Fixture)
 
 Replaces defined classes by new ones.
@@ -12282,7 +12282,7 @@ Replaces defined classes by new ones.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

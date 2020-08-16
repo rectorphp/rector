@@ -9,7 +9,7 @@ use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\Rector\New_\NewToStaticCallRector;
 use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector;

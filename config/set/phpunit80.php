@@ -7,7 +7,7 @@ use Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeR
 use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

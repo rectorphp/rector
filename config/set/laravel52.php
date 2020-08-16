@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\String_\StringToClassConstantRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # see: https://laravel.com/docs/5.2/upgrade

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\Argument\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

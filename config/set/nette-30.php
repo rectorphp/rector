@@ -13,7 +13,7 @@ use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCo
 use Rector\Nette\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector;
 use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
 use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use function Rector\SymfonyPhpConfig\inline_objects;

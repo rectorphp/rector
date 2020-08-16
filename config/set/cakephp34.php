@@ -7,7 +7,7 @@ use Rector\Generic\Rector\MethodBody\NormalToFluentRector;
 use Rector\Generic\Rector\Property\PropertyToMethodRector;
 use Rector\Generic\Rector\Property\RenamePropertyRector;
 use Rector\Generic\Rector\Visibility\ChangeMethodVisibilityRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

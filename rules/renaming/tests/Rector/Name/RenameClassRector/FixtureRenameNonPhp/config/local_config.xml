@@ -1,0 +1,7 @@
+<services>
+    <class name="Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass"/>
+</services>
+-----
+<services>
+    <class name="Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass"/>
+</services>

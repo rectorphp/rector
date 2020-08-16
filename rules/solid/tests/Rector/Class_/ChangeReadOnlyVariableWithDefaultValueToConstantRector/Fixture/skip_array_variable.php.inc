@@ -2,7 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector\Fixture;
 
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\Yaml\Yaml;
 
 class SkipArrayVariable

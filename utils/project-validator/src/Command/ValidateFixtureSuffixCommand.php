@@ -80,7 +80,7 @@ final class ValidateFixtureSuffixCommand extends Command
             ->notPath('#expected#')
             ->notPath('DoctrineRepositoryAsService/Fixture/PostController.php')
             ->notPath('Namespace_/ImportFullyQualifiedNamesRector/Fixture/SharedShortName.php')
-            ->notPath('Class_/RenameClassRector/Fixture/DuplicatedClass.php')
+            ->notPath('Name/RenameClassRector/Fixture/DuplicatedClass.php')
             ->in(__DIR__ . '/../../../../tests')
             ->in(__DIR__ . '/../../../../packages/*/tests')
             ->in(__DIR__ . '/../../../../rules/*/tests');

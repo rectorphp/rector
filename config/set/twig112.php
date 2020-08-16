@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # see https://stackoverflow.com/a/43495506/1348344

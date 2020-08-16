@@ -1,0 +1,7 @@
+services:
+    -
+        class: Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\OldClass
+-----
+services:
+    -
+        class: Rector\Renaming\Tests\Rector\Name\RenameClassRector\Source\NewClass

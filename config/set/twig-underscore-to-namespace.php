@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
