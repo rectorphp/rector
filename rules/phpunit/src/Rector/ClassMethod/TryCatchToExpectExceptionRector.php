@@ -17,7 +17,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\PHPUnit\Tests\Rector\TryCatchToExpectExceptionRector\TryCatchToExpectExceptionRectorTest
+ * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\TryCatchToExpectExceptionRector\TryCatchToExpectExceptionRectorTest
  */
 final class TryCatchToExpectExceptionRector extends AbstractPHPUnitRector
 {
