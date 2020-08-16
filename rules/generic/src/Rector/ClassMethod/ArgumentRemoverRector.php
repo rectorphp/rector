@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Argument;
+namespace Rector\Generic\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -15,7 +15,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Argument\ArgumentRemoverRector\ArgumentRemoverRectorTest
+ * @see \Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\ArgumentRemoverRectorTest
  */
 final class ArgumentRemoverRector extends AbstractRector implements ConfigurableRectorInterface
 {
