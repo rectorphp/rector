@@ -11523,7 +11523,7 @@ Change docs types to union types, where possible (properties are covered by Type
 
 ### `ChangeGlobalVariablesToPropertiesRector`
 
-- class: [`Rector\PhpDeglobalize\Rector\Class_\ChangeGlobalVariablesToPropertiesRector`](/../master/rules/php-deglobalize/src/Rector/Class_/ChangeGlobalVariablesToPropertiesRector.php)
+- class: [`Rector\PhpDeglobalize\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector`](/../master/rules/php-deglobalize/src/Rector/Class_/ChangeGlobalVariablesToPropertiesRector.php)
 - [test fixtures](/../master/rules/php-deglobalize/tests/Rector/Class_/ChangeGlobalVariablesToPropertiesRector/Fixture)
 
 Change global `$variables` to private properties

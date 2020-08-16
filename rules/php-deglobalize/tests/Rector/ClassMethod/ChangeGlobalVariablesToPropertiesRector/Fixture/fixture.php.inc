@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PhpDeglobalize\Tests\Rector\Class_\ChangeGlobalVariablesToPropertiesRector\Fixture;
+namespace Rector\PhpDeglobalize\Tests\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\Fixture;
 
 class SomeClass
 {
@@ -21,7 +21,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\PhpDeglobalize\Tests\Rector\Class_\ChangeGlobalVariablesToPropertiesRector\Fixture;
+namespace Rector\PhpDeglobalize\Tests\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\Fixture;
 
 class SomeClass
 {
