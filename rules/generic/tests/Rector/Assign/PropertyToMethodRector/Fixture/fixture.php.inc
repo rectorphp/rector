@@ -1,6 +1,6 @@
 <?php
 
-use Rector\Generic\Tests\Rector\Property\PropertyToMethodRector\Source\Translator;
+use Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector\Source\Translator;
 
 class CustomTranslator extends Translator
 {
@@ -18,7 +18,7 @@ class CustomTranslator extends Translator
 -----
 <?php
 
-use Rector\Generic\Tests\Rector\Property\PropertyToMethodRector\Source\Translator;
+use Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector\Source\Translator;
 
 class CustomTranslator extends Translator
 {
