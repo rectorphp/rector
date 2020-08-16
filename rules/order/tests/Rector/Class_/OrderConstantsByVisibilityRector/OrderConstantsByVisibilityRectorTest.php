@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Tests\Rector\ClassLike\OrderConstantsByVisibilityRector;
+namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector;
 
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Order\Rector\ClassLike\OrderConstantsByVisibilityRector;
+use Rector\Order\Rector\Class_\OrderConstantsByVisibilityRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class OrderConstantsByVisibilityRectorTest extends AbstractRectorTestCase

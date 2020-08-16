@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Rector\ClassLike;
+namespace Rector\Order\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -16,7 +15,7 @@ use Rector\Order\StmtOrder;
 use Rector\Order\StmtVisibilitySorter;
 
 /**
- * @see \Rector\Order\Tests\Rector\ClassLike\OrderConstantsByVisibilityRector\OrderConstantsByVisibilityRectorTest
+ * @see \Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\OrderConstantsByVisibilityRectorTest
  */
 final class OrderConstantsByVisibilityRector extends AbstractRector
 {
@@ -68,22 +67,14 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [ClassLike::class];
+        return [Class_::class];
     }
 
     /**
-     * @param ClassLike $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Interface_) {
-            return null;
-        }
-
-        if ($node instanceof Trait_) {
-            return null;
-        }
-
         $currentPropertiesOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, ClassConst::class);
         $propertiesInDesiredOrder = $this->getPropertiesInDesiredPosition($node);
 
@@ -95,7 +86,7 @@ PHP
     /**
      * @return string[]
      */
-    private function getPropertiesInDesiredPosition(ClassLike $classLike): array
+    private function getPropertiesInDesiredPosition(Class_ $classLike): array
     {
         $constants = $this->stmtVisibilitySorter->sortConstants($classLike);
 
