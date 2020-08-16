@@ -7,8 +7,8 @@ namespace Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
-use Rector\Renaming\Tests\Rector\ClassConstFetchRenameClassConstantRector\Source\DifferentClass;
-use Rector\Renaming\Tests\Rector\ClassConstFetchRenameClassConstantRector\Source\LocalFormEvents;
+use Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\Source\DifferentClass;
+use Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\Source\LocalFormEvents;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameClassConstantRectorTest extends AbstractRectorTestCase
