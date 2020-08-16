@@ -11588,7 +11588,7 @@ Migrate PhpSpec behavior to PHPUnit test
 
 ### `MockVariableToPropertyFetchRector`
 
-- class: [`Rector\PhpSpecToPHPUnit\Rector\ClassMethod\MockVariableToPropertyFetchRector`](/../master/rules/php-spec-to-phpunit/src/Rector/ClassMethod/MockVariableToPropertyFetchRector.php)
+- class: [`Rector\PhpSpecToPHPUnit\Rector\Variable\MockVariableToPropertyFetchRector`](/../master/rules/php-spec-to-phpunit/src/Rector/ClassMethod/MockVariableToPropertyFetchRector.php)
 
 Migrate PhpSpec behavior to PHPUnit test
 

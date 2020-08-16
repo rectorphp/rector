@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use Rector\PhpSpecToPHPUnit\Rector\Class_\AddMockPropertiesRector;
 use Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector;
-use Rector\PhpSpecToPHPUnit\Rector\ClassMethod\MockVariableToPropertyFetchRector;
 use Rector\PhpSpecToPHPUnit\Rector\ClassMethod\PhpSpecMethodToPHPUnitMethodRector;
 use Rector\PhpSpecToPHPUnit\Rector\FileSystem\RenameSpecFileToTestFileRector;
 use Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecMocksToPHPUnitMocksRector;
 use Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecPromisesToPHPUnitAssertRector;
+use Rector\PhpSpecToPHPUnit\Rector\Variable\MockVariableToPropertyFetchRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # see: https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
