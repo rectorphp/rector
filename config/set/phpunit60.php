@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
+use Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector;
 use Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector;
 use Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

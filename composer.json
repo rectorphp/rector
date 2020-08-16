@@ -247,7 +247,7 @@
             "rules/cakephp/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source",
             "tests/Source",
             "rules/psr4/tests/Rector/MultipleClassFileToPsr4ClassesRector/Source",
-            "rules/generic/tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source"
+            "rules/generic/tests/Rector/Name/PseudoNamespaceToNamespaceRector/Source"
         ],
         "files": [
             "rules/generic/tests/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
@@ -260,7 +260,7 @@
             "rules/renaming/tests/Rector/Name/RenameClassRector/Source/Twig_Extension_Sandbox.php",
             "rules/renaming/tests/Rector/Name/RenameClassRector/Source/TwigFilter.php",
             "rules/renaming/tests/Rector/Name/RenameClassRector/Source/Manual_Twig_Filter.php",
-            "rules/generic/tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
+            "rules/generic/tests/Rector/Name/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Foo.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/Function_/count.php",
             "rules/coding-style/tests/Rector/Namespace_/ImportFullyQualifiedNamesRector/Source/AnotherClass.php",

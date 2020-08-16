@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
+namespace Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
+use Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
@@ -35,7 +35,7 @@ final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
                     // namespace prefix => excluded classes
                     'PHPUnit_' => ['PHPUnit_Framework_MockObject_MockObject'],
                     'ChangeMe_' => ['KeepMe_'],
-                    'Rector_Generic_Tests_Rector_Namespace__PseudoNamespaceToNamespaceRector_Fixture_' => [],
+                    'Rector_Generic_Tests_Rector_Name_PseudoNamespaceToNamespaceRector_Fixture_' => [],
                 ],
             ],
         ];

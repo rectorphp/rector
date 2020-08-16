@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Property;
+namespace Rector\Generic\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -15,7 +15,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Property\PropertyToMethodRector\PropertyToMethodRectorTest
+ * @see \Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector\PropertyToMethodRectorTest
  */
 final class PropertyToMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {

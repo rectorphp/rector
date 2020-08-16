@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
+use Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

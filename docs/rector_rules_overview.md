@@ -5587,7 +5587,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `PropertyToMethodRector`
 
-- class: [`Rector\Generic\Rector\Property\PropertyToMethodRector`](/../master/rules/generic/src/Rector/Property/PropertyToMethodRector.php)
+- class: [`Rector\Generic\Rector\Assign\PropertyToMethodRector`](/../master/rules/generic/src/Rector/Property/PropertyToMethodRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Property/PropertyToMethodRector/Fixture)
 
 Replaces properties assign calls be defined methods.
@@ -5596,7 +5596,7 @@ Replaces properties assign calls be defined methods.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Property\PropertyToMethodRector;
+use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
@@ -5618,7 +5618,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Property\PropertyToMethodRector;
+use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
@@ -5638,7 +5638,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `PseudoNamespaceToNamespaceRector`
 
-- class: [`Rector\Generic\Rector\Namespace_\PseudoNamespaceToNamespaceRector`](/../master/rules/generic/src/Rector/Namespace_/PseudoNamespaceToNamespaceRector.php)
+- class: [`Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector`](/../master/rules/generic/src/Rector/Namespace_/PseudoNamespaceToNamespaceRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Fixture)
 
 Replaces defined Pseudo_Namespaces by Namespace\Ones.
@@ -5647,7 +5647,7 @@ Replaces defined Pseudo_Namespaces by Namespace\Ones.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Namespace_\PseudoNamespaceToNamespaceRector;
+use Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

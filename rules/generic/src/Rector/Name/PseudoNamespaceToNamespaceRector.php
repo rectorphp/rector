@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Namespace_;
+namespace Rector\Generic\Rector\Name;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -25,7 +25,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
+ * @see \Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
  */
 final class PseudoNamespaceToNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {

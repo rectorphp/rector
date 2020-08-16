@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Property\PropertyToMethodRector;
+namespace Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Property\PropertyToMethodRector;
+use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Tests\Rector\Property\PropertyToMethodRector\Source\Translator;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
