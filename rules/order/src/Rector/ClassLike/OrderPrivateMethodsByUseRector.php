@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Rector\Class_;
+namespace Rector\Order\Rector\ClassLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -15,7 +17,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Order\StmtOrder;
 
 /**
- * @see \Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector\OrderPrivateMethodsByUseRectorTest
+ * @see \Rector\Order\Tests\Rector\ClassLike\OrderPrivateMethodsByUseRector\OrderPrivateMethodsByUseRectorTest
  */
 final class OrderPrivateMethodsByUseRector extends AbstractRector
 {
@@ -84,14 +86,18 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class];
+        return [ClassLike::class];
     }
 
     /**
-     * @param Class_ $node
+     * @param ClassLike $node
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof Interface_) {
+            return null;
+        }
+
         [$desiredPrivateMethodCallOrder, $privateClassMethodsByKey] = $this->getPrivateMethodCallOrderAndClassMethods(
             $node
         );
@@ -132,7 +138,7 @@ PHP
     /**
      * @return array<int, array<int, string>>
      */
-    private function getPrivateMethodCallOrderAndClassMethods(Class_ $class): array
+    private function getPrivateMethodCallOrderAndClassMethods(ClassLike $class): array
     {
         return [$this->getLocalPrivateMethodCallOrder($class), $this->resolvePrivateClassMethods($class)];
     }
@@ -140,7 +146,7 @@ PHP
     /**
      * @return array<int,string>
      */
-    private function getLocalPrivateMethodCallOrder(Class_ $class): array
+    private function getLocalPrivateMethodCallOrder(ClassLike $class): array
     {
         $localPrivateMethodCallInOrder = [];
 
@@ -179,7 +185,7 @@ PHP
     /**
      * @return array<int, string>
      */
-    private function resolvePrivateClassMethods(Class_ $class): array
+    private function resolvePrivateClassMethods(ClassLike $class): array
     {
         $privateClassMethods = [];
 

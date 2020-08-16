@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Order\Tests\Rector\Class_\OrderPrivateMethodsByUseRector;
+namespace Rector\Order\Tests\Rector\ClassLike\OrderPrivateMethodsByUseRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector;
+use Rector\Order\Rector\ClassLike\OrderPrivateMethodsByUseRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class OrderPrivateMethodsByUseRectorTest extends AbstractRectorTestCase
