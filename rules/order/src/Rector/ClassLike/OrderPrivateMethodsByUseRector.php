@@ -152,7 +152,7 @@ PHP
 
         $this->traverseNodesWithCallable($classLike->getMethods(), function (Node $node) use (
             &$localPrivateMethodCallInOrder,
-            $class
+            $classLike
         ) {
             if (! $node instanceof MethodCall) {
                 return null;
@@ -167,7 +167,7 @@ PHP
                 return null;
             }
 
-            $classMethod = $class->getMethod($methodName);
+            $classMethod = $classLike->getMethod($methodName);
             if ($classMethod === null) {
                 return null;
             }
