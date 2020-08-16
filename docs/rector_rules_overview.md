@@ -5337,7 +5337,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `MethodCallToReturnRector`
 
-- class: [`Rector\Generic\Rector\MethodCall\MethodCallToReturnRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToReturnRector.php)
+- class: [`Rector\Generic\Rector\Expression\MethodCallToReturnRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToReturnRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/MethodCallToReturnRector/Fixture)
 
 Wrap method call to return
@@ -5346,7 +5346,7 @@ Wrap method call to return
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\MethodCall\MethodCallToReturnRector;
+use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
@@ -5493,7 +5493,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `NormalToFluentRector`
 
-- class: [`Rector\Generic\Rector\MethodBody\NormalToFluentRector`](/../master/rules/generic/src/Rector/MethodBody/NormalToFluentRector.php)
+- class: [`Rector\Generic\Rector\ClassMethod\NormalToFluentRector`](/../master/rules/generic/src/Rector/MethodBody/NormalToFluentRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/MethodBody/NormalToFluentRector/Fixture)
 
 Turns fluent interface calls to classic ones.
@@ -5502,7 +5502,7 @@ Turns fluent interface calls to classic ones.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\MethodBody\NormalToFluentRector;
+use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

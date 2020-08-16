@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
-use Rector\Generic\Rector\MethodBody\NormalToFluentRector;
+use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

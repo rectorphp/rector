@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\MethodBody\NormalToFluentRector;
+namespace Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\MethodBody\NormalToFluentRector;
-use Rector\Generic\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
+use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
+use Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class NormalToFluentRectorTest extends AbstractRectorTestCase
+final class MethodCallToReturnRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -31,9 +31,9 @@ final class NormalToFluentRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            NormalToFluentRector::class => [
-                NormalToFluentRector::FLUENT_METHODS_BY_TYPE => [
-                    FluentInterfaceClass::class => ['someFunction', 'otherFunction', 'joinThisAsWell'],
+            MethodCallToReturnRector::class => [
+                MethodCallToReturnRector::METHOD_NAMES_BY_TYPE => [
+                    ReturnDeny::class => ['deny'],
                 ],
             ],
         ];

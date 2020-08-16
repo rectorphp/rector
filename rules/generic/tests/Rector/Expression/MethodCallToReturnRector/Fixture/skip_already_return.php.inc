@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\MethodCall\MethodCallToReturnRector\Fixture;
+namespace Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\Fixture;
 
-use Rector\Generic\Tests\Rector\MethodCall\MethodCallToReturnRector\Source\ReturnDeny;
+use Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
 
 class SkipAlreadyReturn
 {
