@@ -1,4 +1,4 @@
-# All 559 Rectors Overview
+# All 564 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -14,7 +14,7 @@
 - [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (17)
-- [DoctrineCodeQuality](#doctrinecodequality) (2)
+- [DoctrineCodeQuality](#doctrinecodequality) (7)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
@@ -3949,6 +3949,62 @@ Change array to ArrayCollection in setParameters method of query builder
 
 <br><br>
 
+### `CorrectDatetimeEntityPropertyDefaultToConstructorRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\Class_\CorrectDatetimeEntityPropertyDefaultToConstructorRector`](/../master/rules/doctrine-code-quality/src/Rector/Class_/CorrectDatetimeEntityPropertyDefaultToConstructorRector.php)
+- [test fixtures](/../master/rules/doctrine-code-quality/tests/Rector/Property/CorrectDatetimeEntityPropertyDefaultToConstructorRector/Fixture)
+
+Change default value in string on datetime property to entity constructor
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity()
+  */
+ class User
+ {
+     /**
+-     * @ORM\Column(name="log_cas", type="datetime", nullable=false, options={"default"="1900-01-01 00=00=00"})
++     * @ORM\Column(name="log_cas", type="datetime", nullable=false)
+      */
+-    private $when = '1900-01-01 00:00:00';
++    private $when;
++
++    public function __construct()
++    {
++        $this->when = new DateTime('1900-01-01 00:00:00');
++    }
+ }
+```
+
+<br><br>
+
+### `CorrectDefaultTypesOnEntityPropertyRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\Class_\CorrectDefaultTypesOnEntityPropertyRector`](/../master/rules/doctrine-code-quality/src/Rector/Class_/CorrectDefaultTypesOnEntityPropertyRector.php)
+- [test fixtures](/../master/rules/doctrine-code-quality/tests/Rector/Property/CorrectDefaultTypesOnEntityPropertyRector/Fixture)
+
+Change default value types to match Doctrine annotation type
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity()
+  */
+ class User
+ {
+     /**
+      * @ORM\Column(name="is_old", type="boolean")
+      */
+-    private $isOld = '0';
++    private $isOld = false;
+ }
+```
+
+<br><br>
+
 ### `InitializeDefaultEntityCollectionRector`
 
 - class: [`Rector\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector`](/../master/rules/doctrine-code-quality/src/Rector/Class_/InitializeDefaultEntityCollectionRector.php)
@@ -3972,6 +4028,99 @@ Initialize collection property in Entity constructor
 +    public function __construct()
 +    {
 +        $this->marketingEvents = new ArrayCollection();
++    }
+ }
+```
+
+<br><br>
+
+### `MakeEntityDateTimePropertyDateTimeInterfaceRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\ClassMethod\MakeEntityDateTimePropertyDateTimeInterfaceRector`](/../master/rules/doctrine-code-quality/src/Rector/ClassMethod/MakeEntityDateTimePropertyDateTimeInterfaceRector.php)
+- [test fixtures](/../master/rules/doctrine-code-quality/tests/Rector/ClassMethod/MakeEntityDateTimePropertyDateTimeInterfaceRector/Fixture)
+
+Make maker bundle generate DateTime property accept DateTimeInterface too
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity()
+  */
+ class User
+ {
+     /**
+-     * @var DateTime|null
++     * @var DateTimeInterface|null
+      */
+     private $bornAt;
+
+     public function setBornAt(DateTimeInterface $bornAt)
+     {
+         $this->bornAt = $bornAt;
+     }
+ }
+```
+
+<br><br>
+
+### `MakeEntitySetterNullabilityInSyncWithPropertyRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector`](/../master/rules/doctrine-code-quality/src/Rector/ClassMethod/MakeEntitySetterNullabilityInSyncWithPropertyRector.php)
+- [test fixtures](/../master/rules/doctrine-code-quality/tests/Rector/ClassMethod/MakeEntitySetterNullabilityInSyncWithPropertyRector/Fixture)
+
+Make nullability in setter class method with respect to property
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity()
+  */
+ class Product
+ {
+     /**
+      * @ORM\ManyToOne(targetEntity="AnotherEntity")
+      */
+     private $anotherEntity;
+
+-    public function setAnotherEntity(?AnotherEntity $anotherEntity)
++    public function setAnotherEntity(AnotherEntity $anotherEntity)
+     {
+         $this->anotherEntity = $anotherEntity;
+     }
+ }
+```
+
+<br><br>
+
+### `MoveCurrentDateTimeDefaultInEntityToConstructorRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector`](/../master/rules/doctrine-code-quality/src/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php)
+- [test fixtures](/../master/rules/doctrine-code-quality/tests/Rector/Property/MoveCurrentDateTimeDefaultInEntityToConstructorRector/Fixture)
+
+Move default value for entity property to constructor, the safest place
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity()
+  */
+ class User
+ {
+     /**
+      * @var DateTimeInterface
+      *
+-     * @ORM\Column(type="datetime", nullable=false, options={"default"="now()"})
++     * @ORM\Column(type="datetime", nullable=false)
+      */
+-    private $when = 'now()';
++    private $when;
++
++    public function __construct()
++    {
++        $this->when = new \DateTime();
 +    }
  }
 ```

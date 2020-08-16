@@ -78,7 +78,7 @@ PHP
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getNodeTypes(): array
     {
