@@ -7,7 +7,7 @@ namespace Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Assign\PropertyToMethodRector;
-use Rector\Generic\Tests\Rector\Property\PropertyToMethodRector\Source\Translator;
+use Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector\Source\Translator;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PropertyToMethodRectorTest extends AbstractRectorTestCase
@@ -39,7 +39,7 @@ final class PropertyToMethodRectorTest extends AbstractRectorTestCase
                             'set' => 'setLocale',
                         ],
                     ],
-                    'Rector\Generic\Tests\Rector\Property\PropertyToMethodRector\Fixture\SomeClassWithParameters' => [
+                    'Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector\Fixture\SomeClassWithParameters' => [
                         'parameter' => [
                             'get' => [
                                 'method' => 'getConfig',
