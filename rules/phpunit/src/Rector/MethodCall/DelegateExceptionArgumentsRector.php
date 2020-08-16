@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Rector;
+namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\PHPUnit\Tests\Rector\DelegateExceptionArgumentsRector\DelegateExceptionArgumentsRectorTest
+ * @see \Rector\PHPUnit\Tests\Rector\MethodCall\DelegateExceptionArgumentsRector\DelegateExceptionArgumentsRectorTest
  */
 final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
 {

@@ -9070,7 +9070,7 @@ Replaces `createMock()` with `createStub()` when relevant
 
 ### `DelegateExceptionArgumentsRector`
 
-- class: [`Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector`](/../master/rules/phpunit/src/Rector/DelegateExceptionArgumentsRector.php)
+- class: [`Rector\PHPUnit\Rector\MethodCall\DelegateExceptionArgumentsRector`](/../master/rules/phpunit/src/Rector/DelegateExceptionArgumentsRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/DelegateExceptionArgumentsRector/Fixture)
 
 Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
