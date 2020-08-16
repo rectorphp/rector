@@ -6471,7 +6471,7 @@ Adds an include file at the top of matching files, except class definitions
 
 ### `ChangeSingletonToServiceRector`
 
-- class: [`Rector\Legacy\Rector\ClassMethod\ChangeSingletonToServiceRector`](/../master/rules/legacy/src/Rector/ClassMethod/ChangeSingletonToServiceRector.php)
+- class: [`Rector\Legacy\Rector\Class_\ChangeSingletonToServiceRector`](/../master/rules/legacy/src/Rector/ClassMethod/ChangeSingletonToServiceRector.php)
 - [test fixtures](/../master/rules/legacy/tests/Rector/ClassMethod/ChangeSingletonToServiceRector/Fixture)
 
 Change singleton class to normal class that can be registered as a service

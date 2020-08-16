@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Legacy\Tests\Rector\ClassMethod\ChangeSingletonToServiceRector\Fixture;
+namespace Rector\Legacy\Tests\Rector\Class_\ChangeSingletonToServiceRector\Fixture;
 
 class NonEmptyProtectedConstruct
 {
@@ -25,7 +25,7 @@ class NonEmptyProtectedConstruct
 -----
 <?php
 
-namespace Rector\Legacy\Tests\Rector\ClassMethod\ChangeSingletonToServiceRector\Fixture;
+namespace Rector\Legacy\Tests\Rector\Class_\ChangeSingletonToServiceRector\Fixture;
 
 class NonEmptyProtectedConstruct
 {
