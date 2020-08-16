@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Laravel\Tests\Rector\Class_\InlineValidationRulesToArrayDefinitionRector;
+namespace Rector\Laravel\Tests\Rector\ArrayItem\InlineValidationRulesToArrayDefinitionRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Laravel\Rector\Class_\InlineValidationRulesToArrayDefinitionRector;
+use Rector\Laravel\Rector\ArrayItem\InlineValidationRulesToArrayDefinitionRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InlineValidationRulesToArrayDefinitionRectorTest extends AbstractRectorTestCase

@@ -6365,7 +6365,7 @@ Move help facade-like function calls to constructor injection
 
 ### `InlineValidationRulesToArrayDefinitionRector`
 
-- class: [`Rector\Laravel\Rector\Class_\InlineValidationRulesToArrayDefinitionRector`](/../master/rules/laravel/src/Rector/Class_/InlineValidationRulesToArrayDefinitionRector.php)
+- class: [`Rector\Laravel\Rector\ArrayItem\InlineValidationRulesToArrayDefinitionRector`](/../master/rules/laravel/src/Rector/Class_/InlineValidationRulesToArrayDefinitionRector.php)
 - [test fixtures](/../master/rules/laravel/tests/Rector/Class_/InlineValidationRulesToArrayDefinitionRector/Fixture)
 
 Transforms inline validation rules to array definition

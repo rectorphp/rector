@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Laravel\Tests\Rector\Class_\InlineValidationRulesToArrayDefinitionRector\Fixture;
+namespace Rector\Laravel\Tests\Rector\ArrayItem\InlineValidationRulesToArrayDefinitionRector\Fixture;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -20,7 +20,7 @@ class SomeClass extends FormRequest
 -----
 <?php
 
-namespace Rector\Laravel\Tests\Rector\Class_\InlineValidationRulesToArrayDefinitionRector\Fixture;
+namespace Rector\Laravel\Tests\Rector\ArrayItem\InlineValidationRulesToArrayDefinitionRector\Fixture;
 
 use Illuminate\Foundation\Http\FormRequest;
 

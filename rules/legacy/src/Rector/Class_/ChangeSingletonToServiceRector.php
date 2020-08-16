@@ -16,7 +16,7 @@ use Rector\Legacy\NodeAnalyzer\SingletonClassMethodAnalyzer;
  * @see https://3v4l.org/lifbH
  * @see https://stackoverflow.com/a/203359/1348344
  * @see http://cleancode.blog/2017/07/20/how-to-avoid-many-instances-in-singleton-pattern/
- * @see \Rector\Legacy\Tests\Rector\ClassMethod\ChangeSingletonToServiceRector\ChangeSingletonToServiceRectorTest
+ * @see \Rector\Legacy\Tests\Rector\Class_\ChangeSingletonToServiceRector\ChangeSingletonToServiceRectorTest
  */
 final class ChangeSingletonToServiceRector extends AbstractRector
 {

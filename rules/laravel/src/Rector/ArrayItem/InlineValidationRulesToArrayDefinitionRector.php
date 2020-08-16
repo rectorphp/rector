@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Laravel\Rector\Class_;
+namespace Rector\Laravel\Rector\ArrayItem;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -21,7 +21,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Laravel\Tests\Rector\Class_\InlineValidationRulesToArrayDefinitionRector\InlineValidationRulesToArrayDefinitionRectorTest
+ * @see \Rector\Laravel\Tests\Rector\ArrayItem\InlineValidationRulesToArrayDefinitionRector\InlineValidationRulesToArrayDefinitionRectorTest
  */
 final class InlineValidationRulesToArrayDefinitionRector extends AbstractRector
 {
