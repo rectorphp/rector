@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector\Fixture;
+namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\NetteFormToSymfonyFormRector\Fixture;
 
-use Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector\Source\NettePresenter;
+use Rector\NetteToSymfony\Tests\Rector\MethodCall\NetteFormToSymfonyFormRector\Source\NettePresenter;
 use Nette\Application\UI\Form;
 
 class SomePresenter extends NettePresenter
@@ -34,9 +34,9 @@ class SomePresenter extends NettePresenter
 -----
 <?php
 
-namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector\Fixture;
+namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\NetteFormToSymfonyFormRector\Fixture;
 
-use Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector\Source\NettePresenter;
+use Rector\NetteToSymfony\Tests\Rector\MethodCall\NetteFormToSymfonyFormRector\Source\NettePresenter;
 use Nette\Application\UI\Form;
 
 class SomePresenter extends NettePresenter

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector;
+namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\NetteFormToSymfonyFormRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\NetteToSymfony\Rector\Class_\NetteFormToSymfonyFormRector;
+use Rector\NetteToSymfony\Rector\MethodCall\NetteFormToSymfonyFormRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NetteFormToSymfonyFormRectorTest extends AbstractRectorTestCase

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Rector\Class_;
+namespace Rector\NetteToSymfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -25,7 +25,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  * @see https://github.com/nette/forms/blob/master/src/Forms/Container.php
  * ↓
  * @see https://github.com/symfony/symfony/tree/master/src/Symfony/Component/Form/Extension/Core/Type
- * @see \Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector\NetteFormToSymfonyFormRectorTest
+ * @see \Rector\NetteToSymfony\Tests\Rector\MethodCall\NetteFormToSymfonyFormRector\NetteFormToSymfonyFormRectorTest
  */
 final class NetteFormToSymfonyFormRector extends AbstractRector
 {

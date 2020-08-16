@@ -7945,7 +7945,7 @@ Migrate Nette Component to Symfony Controller
 
 ### `NetteFormToSymfonyFormRector`
 
-- class: [`Rector\NetteToSymfony\Rector\Class_\NetteFormToSymfonyFormRector`](/../master/rules/nette-to-symfony/src/Rector/Class_/NetteFormToSymfonyFormRector.php)
+- class: [`Rector\NetteToSymfony\Rector\MethodCall\NetteFormToSymfonyFormRector`](/../master/rules/nette-to-symfony/src/Rector/Class_/NetteFormToSymfonyFormRector.php)
 - [test fixtures](/../master/rules/nette-to-symfony/tests/Rector/Class_/NetteFormToSymfonyFormRector/Fixture)
 
 Migrate Nette\Forms in Presenter to Symfony
