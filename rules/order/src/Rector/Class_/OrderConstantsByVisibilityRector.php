@@ -7,7 +7,6 @@ namespace Rector\Order\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\ClassLike;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;

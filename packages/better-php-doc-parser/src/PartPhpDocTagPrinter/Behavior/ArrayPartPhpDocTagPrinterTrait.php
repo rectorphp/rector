@@ -86,6 +86,7 @@ trait ArrayPartPhpDocTagPrinterTrait
 
         return $key . '=';
     }
+
     private function isValueWithoutQuotes(?string $key, TagValueNodeConfiguration $tagValueNodeConfiguration): bool
     {
         if ($key === null) {

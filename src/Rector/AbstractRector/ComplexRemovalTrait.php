@@ -181,6 +181,7 @@ trait ComplexRemovalTrait
 
         return $assign;
     }
+
     private function removeAssignNode(Assign $assign): void
     {
         $currentStatement = $assign->getAttribute(AttributeKey::CURRENT_STATEMENT);
@@ -223,6 +224,7 @@ trait ComplexRemovalTrait
             $this->removeNode($param);
         }
     }
+
     private function addLivingCodeBeforeNode(Expr $expr, Node $addBeforeThisNode): void
     {
         foreach ($this->livingCodeManipulator->keepLivingCodeFromExpr($expr) as $expr) {
