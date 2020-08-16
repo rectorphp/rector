@@ -9086,7 +9086,7 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 
 ### `ExceptionAnnotationRector`
 
-- class: [`Rector\PHPUnit\Rector\ExceptionAnnotationRector`](/../master/rules/phpunit/src/Rector/ExceptionAnnotationRector.php)
+- class: [`Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector`](/../master/rules/phpunit/src/Rector/ExceptionAnnotationRector.php)
 - [test fixtures](/../master/rules/phpunit/tests/Rector/ExceptionAnnotationRector/Fixture)
 
 Changes `@expectedException annotations to expectException*() methods

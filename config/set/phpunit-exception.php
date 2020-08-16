@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector;
-use Rector\PHPUnit\Rector\ExceptionAnnotationRector;
+use Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

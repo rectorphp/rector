@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\ExceptionAnnotationRector\Fixture;
 
 final class MyTest3 extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +16,7 @@ final class MyTest3 extends \PHPUnit_Framework_TestCase
 -----
 <?php
 
-namespace Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\Fixture;
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\ExceptionAnnotationRector\Fixture;
 
 final class MyTest3 extends \PHPUnit_Framework_TestCase
 {

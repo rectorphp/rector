@@ -71,7 +71,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(Rector\PHPUnit\Rector\ExceptionAnnotationRector::class);
+    $services->set(Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector::class);
     $services->set(Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)
         ->arg('$oldToNewMethodsByClass', [
              PHPUnit\Framework\TestClass::class => [

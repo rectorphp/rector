@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPUnit\Rector;
+namespace Rector\PHPUnit\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -20,7 +20,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  * @see https://thephp.cc/news/2016/02/questioning-phpunit-best-practices
  * @see https://github.com/sebastianbergmann/phpunit/commit/17c09b33ac5d9cad1459ace0ae7b1f942d1e9afd
  *
- * @see \Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\ExceptionAnnotationRectorTest
+ * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\ExceptionAnnotationRector\ExceptionAnnotationRectorTest
  */
 final class ExceptionAnnotationRector extends AbstractPHPUnitRector
 {
