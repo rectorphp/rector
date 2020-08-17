@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\FunctionLike\UseIncrementAssignRector;
+namespace Rector\CodingStyle\Tests\Rector\Plus\UseIncrementAssignRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\FunctionLike\UseIncrementAssignRector;
+use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

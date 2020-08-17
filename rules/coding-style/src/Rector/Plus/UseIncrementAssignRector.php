@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Rector\FunctionLike;
+namespace Rector\CodingStyle\Rector\Plus;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\AssignOp\Minus;
@@ -15,7 +15,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\FunctionLike\UseIncrementAssignRector\UseIncrementAssignRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\Plus\UseIncrementAssignRector\UseIncrementAssignRectorTest
  */
 final class UseIncrementAssignRector extends AbstractRector
 {
