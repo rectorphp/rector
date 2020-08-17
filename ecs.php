@@ -69,7 +69,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         PhpdocTypesFixer::class => [__DIR__ . '/rules/php74/src/Rector/Double/RealToFloatTypeCastRector.php'],
         CommentedOutCodeSniff::class . '.Found' => [
             __DIR__ . '/rules/php72/src/Rector/Assign/ListEachRector.php',
-            __DIR__ . '/rules/dead-code/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php',
+            __DIR__ . '/rules/dead-code/src/Rector/FunctionLike/RemoveOverriddenValuesRector.php',
             __DIR__ . '/rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php',
         ],
         PhpUnitStrictFixer::class => [
