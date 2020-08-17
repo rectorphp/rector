@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\BinaryOp\SimplifyDeMorganBinaryRector;
+namespace Rector\CodeQuality\Tests\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\BinaryOp\SimplifyDeMorganBinaryRector;
+use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\BinaryOp;
+namespace Rector\CodeQuality\Rector\BooleanNot;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see https://robots.thoughtbot.com/clearer-conditionals-using-de-morgans-laws
  * @see https://stackoverflow.com/questions/20043664/de-morgans-law
- * @see \Rector\CodeQuality\Tests\Rector\BinaryOp\SimplifyDeMorganBinaryRector\SimplifyDeMorganBinaryRectorTest
+ * @see \Rector\CodeQuality\Tests\Rector\BooleanNot\SimplifyDeMorganBinaryRector\SimplifyDeMorganBinaryRectorTest
  */
 final class SimplifyDeMorganBinaryRector extends AbstractRector
 {
