@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Rector\Class_;
+namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -23,7 +23,7 @@ use Rector\VendorLocker\VendorLockResolver;
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
  *
- * @see \Rector\DeadCode\Tests\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector\RemoveSetterOnlyPropertyAndMethodCallRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\RemoveSetterOnlyPropertyAndMethodCallRectorTest
  */
 final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
 {

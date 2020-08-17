@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector\deal_with_property_of_methodcall;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\deal_with_property_of_methodcall;
 
 class MyClass
 {
@@ -22,7 +22,7 @@ class MyClass
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector\deal_with_property_of_methodcall;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\deal_with_property_of_methodcall;
 
 class MyClass
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector\node_removal_on_non_expression;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\node_removal_on_non_expression;
 
 class SomeClass
 {
@@ -22,7 +22,7 @@ class SomeClass
 ?>
 -----
 <?php
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector\node_removal_on_non_expression;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\node_removal_on_non_expression;
 
 class SomeClass
 {

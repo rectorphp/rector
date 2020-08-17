@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector;
+namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\DeadCode\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector;
+use Rector\DeadCode\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveSetterOnlyPropertyAndMethodCallRectorTest extends AbstractRectorTestCase
