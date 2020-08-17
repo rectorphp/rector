@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\FunctionLike\RemoveAlwaysTrueConditionSetInConstructorRector\Fixture;
 
 final class ConstantStringWithValue
 {
@@ -23,7 +23,7 @@ final class ConstantStringWithValue
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\FunctionLike\RemoveAlwaysTrueConditionSetInConstructorRector\Fixture;
 
 final class ConstantStringWithValue
 {

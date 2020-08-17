@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\If_;
+namespace Rector\CodeQuality\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -29,7 +29,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 /**
  * @see https://phpstan.org/r/e909844a-084e-427e-92ac-fed3c2aeabab
  *
- * @see \Rector\CodeQuality\Tests\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector\RemoveAlwaysTrueConditionSetInConstructorRectorTest
+ * @see \Rector\CodeQuality\Tests\Rector\FunctionLike\RemoveAlwaysTrueConditionSetInConstructorRector\RemoveAlwaysTrueConditionSetInConstructorRectorTest
  */
 final class RemoveAlwaysTrueConditionSetInConstructorRector extends AbstractRector
 {
