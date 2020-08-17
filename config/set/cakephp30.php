@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CakePHP\Rector\Name\ImplicitShortClassNameUseStatementRector;
-use Rector\CakePHP\Rector\StaticCall\AppUsesStaticCallToUseStatementRector;
+use Rector\CakePHP\Rector\Expression\AppUsesStaticCallToUseStatementRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

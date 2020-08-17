@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Rector\StaticCall;
+namespace Rector\CakePHP\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
@@ -22,7 +22,7 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
  * @see https://github.com/cakephp/upgrade/blob/756410c8b7d5aff9daec3fa1fe750a3858d422ac/src/Shell/Task/AppUsesTask.php
  * @see https://github.com/cakephp/upgrade/search?q=uses&unscoped_q=uses
  *
- * @see \Rector\CakePHP\Tests\Rector\StaticCall\AppUsesStaticCallToUseStatementRector\AppUsesStaticCallToUseStatementRectorTest
+ * @see \Rector\CakePHP\Tests\Rector\Expression\AppUsesStaticCallToUseStatementRector\AppUsesStaticCallToUseStatementRectorTest
  */
 final class AppUsesStaticCallToUseStatementRector extends AbstractRector
 {
