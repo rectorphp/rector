@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\Fixture;
 
 function have_some_fun()
 {
@@ -15,7 +15,7 @@ function have_some_fun()
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\Fixture;
 
 function have_some_fun()
 {

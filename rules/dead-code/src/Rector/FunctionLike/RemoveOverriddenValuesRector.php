@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Rector\ClassMethod;
+namespace Rector\DeadCode\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -17,7 +17,7 @@ use Rector\NodeNestingScope\FlowOfControlLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector\RemoveOverriddenValuesRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\RemoveOverriddenValuesRectorTest
  */
 final class RemoveOverriddenValuesRector extends AbstractRector
 {

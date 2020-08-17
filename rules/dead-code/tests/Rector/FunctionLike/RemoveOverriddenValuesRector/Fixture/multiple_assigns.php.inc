@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\Fixture;
 
 final class MultipleAssigns
 {
@@ -22,7 +22,7 @@ final class MultipleAssigns
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector\Fixture;
 
 final class MultipleAssigns
 {
