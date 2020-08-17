@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Property\UnderscoreToPascalCasePropertyNameRector;
+namespace Rector\CodingStyle\Tests\Rector\PropertyProperty\UnderscoreToPascalCasePropertyNameRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\Property\UnderscoreToPascalCasePropertyNameRector;
+use Rector\CodingStyle\Rector\PropertyProperty\UnderscoreToPascalCasePropertyNameRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

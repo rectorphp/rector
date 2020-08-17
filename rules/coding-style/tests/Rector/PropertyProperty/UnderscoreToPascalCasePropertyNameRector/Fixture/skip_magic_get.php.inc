@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Property\UnderscoreToPascalCasePropertyNameRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\PropertyProperty\UnderscoreToPascalCasePropertyNameRector\Fixture;
 
 class SkipMagicGet
 {
