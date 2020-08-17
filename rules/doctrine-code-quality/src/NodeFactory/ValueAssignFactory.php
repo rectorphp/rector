@@ -47,10 +47,8 @@ final class ValueAssignFactory
 
     private function addDateTimeArgumentIfNotDefault(Expr $defaultExpr, New_ $dateTimeNew): void
     {
-        if ($defaultExpr instanceof String_) {
-            if ($defaultExpr->value === 'now' || $defaultExpr->value === 'now()') {
-                return;
-            }
+        if ($defaultExpr instanceof String_ && ($defaultExpr->value === 'now' || $defaultExpr->value === 'now()')) {
+            return;
         }
 
         $dateTimeNew->args[] = new Arg($defaultExpr);
