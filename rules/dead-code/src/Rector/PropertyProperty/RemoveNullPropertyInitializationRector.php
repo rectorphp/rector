@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Rector\Property;
+namespace Rector\DeadCode\Rector\PropertyProperty;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use function strtolower;
 
 /**
- * @see \Rector\DeadCode\Tests\Rector\Property\RemoveNullPropertyInitializationRector\RemoveNullPropertyInitializationRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\PropertyProperty\RemoveNullPropertyInitializationRector\RemoveNullPropertyInitializationRectorTest
  */
 final class RemoveNullPropertyInitializationRector extends AbstractRector
 {

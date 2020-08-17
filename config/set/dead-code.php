@@ -31,7 +31,7 @@ use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector;
 use Rector\DeadCode\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector;
 use Rector\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector;
-use Rector\DeadCode\Rector\Property\RemoveNullPropertyInitializationRector;
+use Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\DeadCode\Rector\Stmt\RemoveDeadStmtRector;
