@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Fixture;
+namespace Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\Fixture;
 
-use Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Source\EventManager;
+use Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\Source\EventManager;
 
 final class WithPropertyDependency
 {
@@ -30,9 +30,9 @@ final class WithPropertyDependency
 
 declare(strict_types=1);
 
-namespace Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Fixture;
+namespace Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\Fixture;
 
-use Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Source\EventManager;
+use Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\Source\EventManager;
 
 final class WithPropertyDependency
 {

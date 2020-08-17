@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Fixture;
+namespace Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\Fixture;
 
 final class ExtraClassName
 {

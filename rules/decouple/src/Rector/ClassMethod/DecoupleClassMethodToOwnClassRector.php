@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Decouple\Rector;
+namespace Rector\Decouple\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
@@ -25,7 +25,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
- * @see \Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\DecoupleClassMethodToOwnClassRectorTest
+ * @see \Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\DecoupleClassMethodToOwnClassRectorTest
  */
 final class DecoupleClassMethodToOwnClassRector extends AbstractRector implements ConfigurableRectorInterface
 {

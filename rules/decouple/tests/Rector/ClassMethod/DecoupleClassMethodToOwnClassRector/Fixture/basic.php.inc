@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Fixture;
+namespace Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\Fixture;
 
 final class Basic
 {
@@ -28,7 +28,7 @@ final class Basic
 
 declare(strict_types=1);
 
-namespace Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Fixture;
+namespace Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\Fixture;
 
 final class Basic
 {

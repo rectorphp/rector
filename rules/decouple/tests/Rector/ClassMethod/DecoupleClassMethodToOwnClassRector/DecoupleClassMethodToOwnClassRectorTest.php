@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector;
+namespace Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Decouple\Rector\DecoupleClassMethodToOwnClassRector;
-use Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Source\AbstractFather;
+use Rector\Decouple\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector;
+use Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\Source\AbstractFather;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DecoupleClassMethodToOwnClassRectorTest extends AbstractRectorTestCase
@@ -50,14 +50,14 @@ final class DecoupleClassMethodToOwnClassRectorTest extends AbstractRectorTestCa
         return [
             DecoupleClassMethodToOwnClassRector::class => [
                 DecoupleClassMethodToOwnClassRector::METHOD_NAMES_BY_CLASS => [
-                    'Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Fixture\Basic' => [
+                    'Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\Fixture\Basic' => [
                         'someMethod' => [
                             'method' => 'newMethodName',
                             'class' => 'ExtraClassName',
                             // optionally: "parent_class" =>
                         ],
                     ],
-                    'Rector\Decouple\Tests\Rector\DecoupleClassMethodToOwnClassRector\Fixture\WithPropertyDependency' => [
+                    'Rector\Decouple\Tests\Rector\ClassMethod\DecoupleClassMethodToOwnClassRector\Fixture\WithPropertyDependency' => [
                         'usingProperty' => [
                             'method' => 'newUsingProperty',
                             'class' => 'ExtraUsingProperty',
