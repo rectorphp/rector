@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Rector\Name;
+namespace Rector\CakePHP\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
@@ -14,7 +14,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\CakePHP\Tests\Rector\Name\ChangeSnakedFixtureNameToCamel\ChangeSnakedFixtureNameToCamelTest
+ * @see \Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToCamel\ChangeSnakedFixtureNameToCamelTest
  *
  * @see https://book.cakephp.org/3.0/en/appendices/3-7-migration-guide.html
  */

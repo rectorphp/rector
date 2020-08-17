@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Tests\Rector\Name\ChangeSnakedFixtureNameToCamel;
+namespace Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToCamel;
 
 use Iterator;
-use Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector;
+use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToCamelRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

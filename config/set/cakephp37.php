@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
-use Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector;
+use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToCamelRector;
 use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
