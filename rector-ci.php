@@ -19,8 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ReturnArrayClassMethodToYieldRector::METHODS_BY_TYPE => [
                 TestCase::class => ['provideData', 'provideData*', 'dataProvider', 'dataProvider*'],
             ],
-        ],
-        ]);
+        ]]);
 
     $parameters = $containerConfigurator->parameters();
 

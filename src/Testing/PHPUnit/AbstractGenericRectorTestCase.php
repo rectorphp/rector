@@ -16,13 +16,13 @@ use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\Finder\RectorsFinder;
+use Rector\Core\Testing\PhpConfigPrinter\PhpConfigPrinterFactory;
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
 use Rector\Set\SetProvider;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Yaml\Yaml;
 use Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
@@ -91,6 +91,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
             if (defined('RECTOR_REPOSITORY')) {
                 $this->createRectorRepositoryContainer();
             } else {
+                // boot core config, where 3rd party services might be loaded
                 $rootRectorPhp = getcwd() . '/rector.php';
                 $configs = [];
 
@@ -100,7 +101,6 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
 
                 // 3rd party
                 $configs[] = $this->getConfigFor3rdPartyTest();
-
                 $this->bootKernelWithConfigs(RectorKernel::class, $configs);
             }
 
@@ -187,7 +187,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     }
 
     /**
-     * @return mixed[][]|null[]
+     * @return array<string, mixed[]|null>
      */
     protected function getCurrentTestRectorClassesWithConfiguration(): array
     {
@@ -279,15 +279,12 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
 
     private function getConfigFor3rdPartyTest(): string
     {
-        $currentTestRectorClassesWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
-        $yamlContent = Yaml::dump([
-            'services' => $currentTestRectorClassesWithConfiguration,
-        ], Yaml::DUMP_OBJECT_AS_MAP);
+        $rectorClassesWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
 
-        $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/current_test.yaml');
-        $this->smartFileSystem->dumpFile($configFileTempPath, $yamlContent);
+        $filePath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/current_test.php');
+        $this->createPhpConfigFileAndDumpToPath($rectorClassesWithConfiguration, $filePath);
 
-        return $configFileTempPath;
+        return $filePath;
     }
 
     private function configurePhpVersionFeatures(): void
@@ -340,16 +337,21 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
             $listForConfig[$rectorClass] = null;
         }
 
-        // @todo PHP dump
-        $yamlContent = Yaml::dump([
-            'services' => $listForConfig,
-        ], Yaml::DUMP_OBJECT_AS_MAP);
+        $filePath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.php');
+        $this->createPhpConfigFileAndDumpToPath($listForConfig, $filePath);
 
-        $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.yaml');
+        $this->bootKernelWithConfigs(RectorKernel::class, [$filePath]);
+    }
 
-        $smartFileSystem = new SmartFileSystem();
-        $smartFileSystem->dumpFile($configFileTempPath, $yamlContent);
+    /**
+     * @param array<string, mixed[]|null> $rectorClassesWithConfiguration
+     */
+    private function createPhpConfigFileAndDumpToPath(array $rectorClassesWithConfiguration, string $filePath): void
+    {
+        $phpConfigPrinterFactory = new PhpConfigPrinterFactory();
+        $phpConfigPrinter = $phpConfigPrinterFactory->create();
 
-        $this->bootKernelWithConfigs(RectorKernel::class, [$configFileTempPath]);
+        $fileContent = $phpConfigPrinter->printConfiguredServices($rectorClassesWithConfiguration);
+        $this->smartFileSystem->dumpFile($filePath, $fileContent);
     }
 }

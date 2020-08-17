@@ -4,18 +4,9 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Set\ValueObject\SetList;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    // @todo make part of Rector CI
-    // add array-types
-    $services->set(AddArrayParamDocTypeRector::class);
-    $services->set(AddArrayReturnDocTypeRector::class);
-
     $containerConfigurator->import(__DIR__ . '/rector-recipe.php', null, 'not_found');
 
     $parameters = $containerConfigurator->parameters();
