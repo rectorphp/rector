@@ -111,68 +111,54 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class, Property::class];
+        return [Class_::class];
     }
 
     /**
-     * @param Class_|Property $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Property) {
-            return $this->refactorProperty($node);
+        foreach ($node->getProperties() as $property) {
+            $this->refactorProperty($property, $node);
         }
 
-        if ($node instanceof Class_) {
-            return $this->refactorClass($node);
-        }
-
-        return null;
+        return $node;
     }
 
-    private function refactorProperty(Property $property): ?Property
+    private function refactorProperty(Property $property, Class_ $class): ?Property
     {
-        if (! $this->isObjectType($property, 'DateTimeInterface')) {
-            return null;
-        }
-
         $columnTagValueNode = $this->columnDatetimePropertyAnalyzer->matchDateTimeColumnTagValueNodeInProperty(
             $property
         );
+
         if ($columnTagValueNode === null) {
             return null;
         }
 
+        // 1. remove default options from database level
         $this->columnDatetimePropertyManipulator->removeDefaultOption($columnTagValueNode);
 
         // 2. remove default value
+        $this->refactorClass($class, $property);
+
+        // 3. remove default from property
         $onlyProperty = $property->props[0];
         $onlyProperty->default = null;
 
         return $property;
     }
 
-    private function refactorClass(Class_ $class): ?Class_
+    private function refactorClass(Class_ $class, Property $property): void
     {
-        foreach ($class->getProperties() as $property) {
-            if (! $this->isObjectType($property, 'DateTimeInterface')) {
-                return null;
-            }
+        /** @var string $propertyName */
+        $propertyName = $this->getName($property);
+        $onlyProperty = $property->props[0];
 
-            $columnTagValueNode = $this->columnDatetimePropertyAnalyzer->matchDateTimeColumnTagValueNodeInProperty(
-                $property
-            );
-
-            if ($columnTagValueNode === null) {
-                continue;
-            }
-
-            /** @var string $propertyName */
-            $propertyName = $this->getName($property);
-            $assign = $this->valueAssignFactory->createDefaultDateTimeAssign($propertyName);
-            $this->constructorManipulator->addStmtToConstructor($class, $assign);
-        }
-
-        return $class;
+        $expression = $this->valueAssignFactory->createDefaultDateTimeWithValueAssign(
+            $propertyName,
+            $onlyProperty->default
+        );
+        $this->constructorManipulator->addStmtToConstructor($class, $expression);
     }
 }

@@ -1,4 +1,4 @@
-# All 565 Rectors Overview
+# All 564 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -14,7 +14,7 @@
 - [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (17)
-- [DoctrineCodeQuality](#doctrinecodequality) (8)
+- [DoctrineCodeQuality](#doctrinecodequality) (7)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
@@ -3970,37 +3970,6 @@ Change array to ArrayCollection in setParameters method of query builder
              ->getResult()
          ;
      }
- }
-```
-
-<br><br>
-
-### `CorrectDatetimeEntityPropertyDefaultToConstructorRector`
-
-- class: [`Rector\DoctrineCodeQuality\Rector\Class_\CorrectDatetimeEntityPropertyDefaultToConstructorRector`](/../master/rules/doctrine-code-quality/src/Rector/Class_/CorrectDatetimeEntityPropertyDefaultToConstructorRector.php)
-- [test fixtures](/../master/rules/doctrine-code-quality/tests/Rector/Property/CorrectDatetimeEntityPropertyDefaultToConstructorRector/Fixture)
-
-Change default value in string on datetime property to entity constructor
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity()
-  */
- class User
- {
-     /**
--     * @ORM\Column(name="log_cas", type="datetime", nullable=false, options={"default"="1900-01-01 00=00=00"})
-+     * @ORM\Column(name="log_cas", type="datetime", nullable=false)
-      */
--    private $when = '1900-01-01 00:00:00';
-+    private $when;
-+
-+    public function __construct()
-+    {
-+        $this->when = new DateTime('1900-01-01 00:00:00');
-+    }
  }
 ```
 

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class User
+class MoveFullDate
 {
     /**
      * @ORM\Column(type="datetime", nullable=false, options={"default"="1900-01-01 00=00=00"})
@@ -26,7 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class User
+class MoveFullDate
 {
     /**
      * @ORM\Column(type="datetime", nullable=false)

@@ -6,6 +6,7 @@ namespace Rector\DoctrineCodeQuality\Tests\Rector\Property\MoveCurrentDateTimeDe
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveCurrentDateTimeDefaultInEntityToConstructorRectorTest extends AbstractRectorTestCase
@@ -25,6 +26,6 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRectorTest extends Ab
 
     protected function getRectorClass(): string
     {
-        return \Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector::class;
+        return MoveCurrentDateTimeDefaultInEntityToConstructorRector::class;
     }
 }

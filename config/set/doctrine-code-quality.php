@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
-use Rector\DoctrineCodeQuality\Rector\Class_\CorrectDatetimeEntityPropertyDefaultToConstructorRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\CorrectDefaultTypesOnEntityPropertyRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector;
 use Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
@@ -20,6 +19,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MakeEntityDateTimePropertyDateTimeInterfaceRector::class);
     $services->set(MoveCurrentDateTimeDefaultInEntityToConstructorRector::class);
     $services->set(CorrectDefaultTypesOnEntityPropertyRector::class);
-    $services->set(CorrectDatetimeEntityPropertyDefaultToConstructorRector::class);
     $services->set(ChangeBigIntEntityPropertyToIntTypeRector::class);
 };
