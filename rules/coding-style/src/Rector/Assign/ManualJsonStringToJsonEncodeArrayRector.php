@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Rector\String_;
+namespace Rector\CodingStyle\Rector\Assign;
 
 use Nette\Utils\Json;
 use Nette\Utils\JsonException;
@@ -28,7 +28,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
  *
- * @see \Rector\CodingStyle\Tests\Rector\String_\ManualJsonStringToJsonEncodeArrayRector\ManualJsonStringToJsonEncodeArrayRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\ManualJsonStringToJsonEncodeArrayRectorTest
  */
 final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
 {

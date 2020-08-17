@@ -23,7 +23,7 @@ use Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector;
 use Rector\CodingStyle\Rector\Property\UnderscoreToPascalCasePropertyNameRector;
-use Rector\CodingStyle\Rector\String_\ManualJsonStringToJsonEncodeArrayRector;
+use Rector\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;

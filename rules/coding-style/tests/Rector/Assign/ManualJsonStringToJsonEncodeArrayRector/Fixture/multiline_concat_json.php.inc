@@ -1,19 +1,19 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\ManualJsonStringToJsonEncodeArrayRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\Fixture;
 
-final class AssignWithConcat
+final class MultilineConcatJson
 {
     public function run()
     {
         $someJsonAsString = '{"role_name":"admin","numberz":{"id":"';
-        $someJsonAsString = $someJsonAsString . 5 . '"}}';
+        $someJsonAsString .= 5 . '"}}';
     }
 
     public function fun()
     {
         $someJsonAsString = '{"role_name":"admin","numberz":{"id":"5';
-        $someJsonAsString = $someJsonAsString . '"}}';
+        $someJsonAsString .= '"}}';
     }
 }
 
@@ -21,9 +21,9 @@ final class AssignWithConcat
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\String_\ManualJsonStringToJsonEncodeArrayRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector\Fixture;
 
-final class AssignWithConcat
+final class MultilineConcatJson
 {
     public function run()
     {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\String_\ManualJsonStringToJsonEncodeArrayRector;
+namespace Rector\CodingStyle\Tests\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\String_\ManualJsonStringToJsonEncodeArrayRector;
+use Rector\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
