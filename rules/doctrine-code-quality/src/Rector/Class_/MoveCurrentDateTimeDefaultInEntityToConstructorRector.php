@@ -160,7 +160,6 @@ PHP
         $defaultExpr = $onlyProperty->default;
 
         $expression = $this->valueAssignFactory->createDefaultDateTimeWithValueAssign($propertyName, $defaultExpr);
-
         $this->constructorManipulator->addStmtToConstructor($class, $expression);
     }
 }
