@@ -122,10 +122,6 @@ PHP
 
     private function refactorProperty(Property $property, Class_ $class): void
     {
-        if (! $this->isDoctrineProperty($property)) {
-            return;
-        }
-
         // nothing to change → skip
         $onlyProperty = $property->props[0];
         if ($onlyProperty->default === null) {
@@ -135,6 +131,7 @@ PHP
         $columnTagValueNode = $this->columnDatetimePropertyAnalyzer->matchDateTimeColumnTagValueNodeInProperty(
             $property
         );
+
         if ($columnTagValueNode === null) {
             return;
         }

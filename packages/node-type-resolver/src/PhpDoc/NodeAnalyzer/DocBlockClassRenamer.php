@@ -37,6 +37,20 @@ final class DocBlockClassRenamer
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
 
+    /**
+     * @param Type[] $oldTypes
+     */
+    public function renamePhpDocTypes(
+        PhpDocNode $phpDocNode,
+        array $oldTypes,
+        Type $newType,
+        Node $phpParserNode
+    ): void {
+        foreach ($oldTypes as $oldType) {
+            $this->renamePhpDocType($phpDocNode, $oldType, $newType, $phpParserNode);
+        }
+    }
+
     public function renamePhpDocType(
         PhpDocNode $phpDocNode,
         Type $oldType,

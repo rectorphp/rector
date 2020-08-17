@@ -84,7 +84,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $columnTagValueNode = $this->columnPropertyAnalyzer->matchDoctrineColumnTagValue($node);
+        $columnTagValueNode = $this->columnPropertyAnalyzer->matchDoctrineColumnTagValueNode($node);
         if ($columnTagValueNode === null) {
             return null;
         }
