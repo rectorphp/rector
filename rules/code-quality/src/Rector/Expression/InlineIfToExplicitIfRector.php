@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\BinaryOp;
+namespace Rector\CodeQuality\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -17,7 +17,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see https://3v4l.org/dmHCC
  *
- * @see \Rector\CodeQuality\Tests\Rector\BinaryOp\InlineIfToExplicitIfRector\InlineIfToExplicitIfRectorTest
+ * @see \Rector\CodeQuality\Tests\Rector\Expression\InlineIfToExplicitIfRector\InlineIfToExplicitIfRectorTest
  */
 final class InlineIfToExplicitIfRector extends AbstractRector
 {

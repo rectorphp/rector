@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\BinaryOp\InlineIfToExplicitIfRector;
+namespace Rector\CodeQuality\Tests\Rector\Expression\InlineIfToExplicitIfRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\BinaryOp\InlineIfToExplicitIfRector;
+use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

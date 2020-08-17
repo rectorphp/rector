@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\BinaryOp\InlineIfToExplicitIfRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\Expression\InlineIfToExplicitIfRector\Fixture;
 
 class SomeClass
 {
@@ -16,7 +16,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\CodeQuality\Tests\Rector\BinaryOp\InlineIfToExplicitIfRector\Fixture;
+namespace Rector\CodeQuality\Tests\Rector\Expression\InlineIfToExplicitIfRector\Fixture;
 
 class SomeClass
 {
