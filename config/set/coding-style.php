@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
-use Rector\CodingStyle\Rector\Assign\UseIncrementAssignRector;
+use Rector\CodingStyle\Rector\FunctionLike\UseIncrementAssignRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
 use Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector;

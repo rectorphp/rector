@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Assign\UseIncrementAssignRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\FunctionLike\UseIncrementAssignRector\Fixture;
 
 class SomeClass
 {
@@ -18,7 +18,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Assign\UseIncrementAssignRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\FunctionLike\UseIncrementAssignRector\Fixture;
 
 class SomeClass
 {
