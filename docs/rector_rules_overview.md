@@ -1,4 +1,4 @@
-# All 564 Rectors Overview
+# All 565 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -14,7 +14,7 @@
 - [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (17)
-- [DoctrineCodeQuality](#doctrinecodequality) (7)
+- [DoctrineCodeQuality](#doctrinecodequality) (8)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
@@ -3912,6 +3912,32 @@ Change ServiceEntityRepository to dependency injection, with repository property
 <br><br>
 
 ## DoctrineCodeQuality
+
+### `ChangeBigIntEntityPropertyToIntTypeRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector`](/../master/rules/doctrine-code-quality/src/Rector/Property/ChangeBigIntEntityPropertyToIntTypeRector.php)
+- [test fixtures](/../master/rules/doctrine-code-quality/tests/Rector/Property/ChangeBigIntEntityPropertyToIntTypeRector/Fixture)
+
+Change database type "bigint" for @var/type declaration to string
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity()
+  */
+ class SomeEntity
+ {
+     /**
+-     * @var int|null
++     * @var string|null
+      * @ORM\Column(type="bigint", nullable=true)
+      */
+     private $bigNumber;
+ }
+```
+
+<br><br>
 
 ### `ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`
 
