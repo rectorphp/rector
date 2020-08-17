@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Rector\Stmt;
+namespace Rector\DeadCode\Rector\Expression;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
@@ -14,7 +14,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\DeadCode\Tests\Rector\Stmt\RemoveDeadStmtRector\RemoveDeadStmtRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\Expression\RemoveDeadStmtRector\RemoveDeadStmtRectorTest
  */
 final class RemoveDeadStmtRector extends AbstractRector
 {

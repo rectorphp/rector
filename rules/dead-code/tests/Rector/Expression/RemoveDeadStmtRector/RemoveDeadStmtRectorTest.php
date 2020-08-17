@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveDeadStmtRector;
+namespace Rector\DeadCode\Tests\Rector\Expression\RemoveDeadStmtRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\DeadCode\Rector\Stmt\RemoveDeadStmtRector;
+use Rector\DeadCode\Rector\Expression\RemoveDeadStmtRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemoveDeadStmtRectorTest extends AbstractRectorTestCase
