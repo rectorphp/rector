@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Rector\Instanceof_;
+namespace Rector\DeadCode\Rector\BinaryOp;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -14,7 +14,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\DeadCode\Tests\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector\RemoveDuplicatedInstanceOfRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector\RemoveDuplicatedInstanceOfRectorTest
  */
 final class RemoveDuplicatedInstanceOfRector extends AbstractRector
 {
