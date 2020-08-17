@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\ClassLike;
+namespace Rector\Generic\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Generic\Tests\Rector\ClassLike\RemoveTraitRector\RemoveTraitRectorTest
+ * @see \Rector\Generic\Tests\Rector\Class_\RemoveTraitRector\RemoveTraitRectorTest
  */
 final class RemoveTraitRector extends AbstractRector implements ConfigurableRectorInterface
 {
@@ -78,10 +78,6 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Interface_) {
-            return null;
-        }
-
         $usedTraits = $this->classManipulator->getUsedTraits($node);
         if ($usedTraits === []) {
             return null;
