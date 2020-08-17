@@ -25,6 +25,6 @@ final class CorrectDefaultTypesOnEntityPropertyRectorTest extends AbstractRector
 
     protected function getRectorClass(): string
     {
-        return \Rector\DoctrineCodeQuality\Rector\Class_\CorrectDefaultTypesOnEntityPropertyRector::class;
+        return \Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector::class;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection\Fixture;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\MethodCall\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection\Fixture;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -24,7 +24,7 @@ class SomeRepository extends EntityRepository
 -----
 <?php
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection\Fixture;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\MethodCall\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection\Fixture;
 
 use Doctrine\ORM\EntityRepository;
 

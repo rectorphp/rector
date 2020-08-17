@@ -3941,7 +3941,7 @@ Change database type "bigint" for @var/type declaration to string
 
 ### `ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`
 
-- class: [`Rector\DoctrineCodeQuality\Rector\Class_\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`](/../master/rules/doctrine-code-quality/src/Rector/Class_/ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector.php)
+- class: [`Rector\DoctrineCodeQuality\Rector\MethodCall\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`](/../master/rules/doctrine-code-quality/src/Rector/Class_/ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector.php)
 - [test fixtures](/../master/rules/doctrine-code-quality/tests/Rector/Class_/ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection/Fixture)
 
 Change array to ArrayCollection in setParameters method of query builder
@@ -4008,7 +4008,7 @@ Change default value in string on datetime property to entity constructor
 
 ### `CorrectDefaultTypesOnEntityPropertyRector`
 
-- class: [`Rector\DoctrineCodeQuality\Rector\Class_\CorrectDefaultTypesOnEntityPropertyRector`](/../master/rules/doctrine-code-quality/src/Rector/Class_/CorrectDefaultTypesOnEntityPropertyRector.php)
+- class: [`Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector`](/../master/rules/doctrine-code-quality/src/Rector/Class_/CorrectDefaultTypesOnEntityPropertyRector.php)
 - [test fixtures](/../master/rules/doctrine-code-quality/tests/Rector/Property/CorrectDefaultTypesOnEntityPropertyRector/Fixture)
 
 Change default value types to match Doctrine annotation type

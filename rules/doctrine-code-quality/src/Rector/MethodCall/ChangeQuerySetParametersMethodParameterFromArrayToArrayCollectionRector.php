@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DoctrineCodeQuality\Rector\Class_;
+namespace Rector\DoctrineCodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -21,7 +21,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see https://github.com/doctrine/orm/blob/2.7/UPGRADE.md#query-querybuilder-and-nativequery-parameters-bc-break
  *
- * @see \Rector\DoctrineCodeQuality\Tests\Rector\Class_\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRectorTest
+ * @see \Rector\DoctrineCodeQuality\Tests\Rector\MethodCall\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRectorTest
  */
 final class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector extends AbstractRector
 {
