@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\BooleanOp\LogicalToBooleanRector;
+namespace Rector\CodeQuality\Tests\Rector\LogicalAnd\LogicalToBooleanRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\BooleanOp\LogicalToBooleanRector;
+use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

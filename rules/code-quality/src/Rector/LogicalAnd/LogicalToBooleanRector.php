@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Rector\BooleanOp;
+namespace Rector\CodeQuality\Rector\LogicalAnd;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see https://stackoverflow.com/questions/5998309/logical-operators-or-or
  * @see https://stackoverflow.com/questions/9454870/php-xor-how-to-use-with-if
- * @see \Rector\CodeQuality\Tests\Rector\BooleanOp\LogicalToBooleanRector\LogicalToBooleanRectorTest
+ * @see \Rector\CodeQuality\Tests\Rector\LogicalAnd\LogicalToBooleanRector\LogicalToBooleanRectorTest
  */
 final class LogicalToBooleanRector extends AbstractRector
 {

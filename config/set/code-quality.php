@@ -9,7 +9,7 @@ use Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector;
 use Rector\CodeQuality\Rector\BinaryOp\InlineIfToExplicitIfRector;
 use Rector\CodeQuality\Rector\BinaryOp\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
-use Rector\CodeQuality\Rector\BooleanOp\LogicalToBooleanRector;
+use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
 use Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
