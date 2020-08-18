@@ -16,6 +16,7 @@ use Symplify\CodingStandard\Fixer\ArrayNotation\StandaloneLineInMultilineArrayFi
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
 use Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff;
 use Symplify\EasyCodingStandard\Configuration\Option;
+use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -51,7 +52,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/config/set',
     ]);
 
-    $parameters->set(Option::SETS, ['psr12', 'php70', 'php71', 'symplify', 'common', 'clean-code']);
+    $parameters->set(Option::SETS, [
+        SetList::PSR_12,
+        SetList::PHP_70,
+        SetList::PHP_71,
+        SetList::SYMPLIFY,
+        SetList::COMMON,
+        SetList::CLEAN_CODE,
+    ]);
 
     $parameters->set(Option::EXCLUDE_PATHS, [
         '*/Source/*',
