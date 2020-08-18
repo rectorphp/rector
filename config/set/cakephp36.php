@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Property\PropertyToMethodRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
-use Rector\Generic\Rector\Argument\ArgumentDefaultValueReplacerRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
 use Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Injection\ValueObject\StaticCallToMethodCall;
@@ -13,9 +13,9 @@ use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCo
 use Rector\Nette\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector;
 use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
 use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotatedControlVariableRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
-use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use function Rector\SymfonyPhpConfig\inline_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

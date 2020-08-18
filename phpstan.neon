@@ -165,9 +165,9 @@ parameters:
 
         # known value
         - '#Cannot cast array<string\>\|bool\|string\|null to string#'
-        - '#Method Rector\\Legacy\\Rector\\ClassMethod\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
+        - '#Method Rector\\Legacy\\Rector\\Class_\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
 
-        - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\String_\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExpressionAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
+        - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExpressionAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
 
         # array is callable
         - '#If condition is always true#'
@@ -247,7 +247,7 @@ parameters:
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\Core\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         - '#Method Rector\\SOLID\\Reflection\\ParentConstantReflectionResolver\:\:(.*?)\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
-        - '#Parameter \#1 \$firstStmt of method Rector\\Generic\\Rector\\MethodBody\\NormalToFluentRector\:\:isBothMethodCallMatch\(\) expects PhpParser\\Node\\Stmt\\Expression, PhpParser\\Node\\Stmt given#'
+        - '#Parameter \#1 \$firstStmt of method Rector\\Generic\\Rector\\ClassMethod\\NormalToFluentRector\:\:isBothMethodCallMatch\(\) expects PhpParser\\Node\\Stmt\\Expression, PhpParser\\Node\\Stmt given#'
         - '#Method Rector\\Core\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
 
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
@@ -393,3 +393,12 @@ parameters:
         - '#Parameter \#1 \$type of method Rector\\NodeCollector\\NodeCollector\\ParsedNodeCollector<TNodeType of PhpParser\\Node\>\:\:getNodesByType\(\) expects class\-string<TNodeType of PhpParser\\Node\>, string given#'
 
         - '#Class with base "(.*?)" name is already used in "_HumbugBox(.*?)"#'
+
+        #tmp
+        -
+            message: '#Class (.*?) has invalid namespace category (.*?)\. Pick one of\: (.*?)#'
+            path: 'rules/generic/src/Rector/Architecture'
+
+        -
+            message: '#Class "Rector\\RectorGenerator\\ValueObject\\RectorRecipe" has invalid namespace category "ValueObject"\. Pick one of\: ""#'
+            path: packages/rector-generator/src/ValueObject/RectorRecipe.php

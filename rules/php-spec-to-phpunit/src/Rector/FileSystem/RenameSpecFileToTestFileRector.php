@@ -14,7 +14,7 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @see https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
  *
- * @see \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
+ * @see \Rector\PhpSpecToPHPUnit\Tests\Rector\Variable\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
  */
 final class RenameSpecFileToTestFileRector extends AbstractFileSystemRector
 {

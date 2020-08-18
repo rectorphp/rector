@@ -1,7 +1,0 @@
-<services>
-    <class name="Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass"/>
-</services>
------
-<services>
-    <class name="Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass"/>
-</services>

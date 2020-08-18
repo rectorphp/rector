@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Php53\Rector\Assign\ClearReturnNewByReferenceRector;
+use Rector\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector;
 use Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
 use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
 use Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector;

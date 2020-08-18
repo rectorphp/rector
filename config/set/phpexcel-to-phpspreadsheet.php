@@ -16,9 +16,9 @@ use Rector\PHPOffice\Rector\StaticCall\ChangeDataTypeForValueRector;
 use Rector\PHPOffice\Rector\StaticCall\ChangeIOFactoryArgumentRector;
 use Rector\PHPOffice\Rector\StaticCall\ChangePdfWriterRector;
 use Rector\PHPOffice\Rector\StaticCall\ChangeSearchLocationToRegisterReaderRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md

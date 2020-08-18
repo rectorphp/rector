@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\NetteToSymfony\Rector\Class_\NetteFormToSymfonyFormRector;
+use Rector\NetteToSymfony\Rector\MethodCall\NetteFormToSymfonyFormRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

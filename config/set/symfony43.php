@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Argument\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

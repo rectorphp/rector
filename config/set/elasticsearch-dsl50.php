@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://github.com/ongr-io/ElasticsearchDSL/blob/5.x/CHANGELOG.md

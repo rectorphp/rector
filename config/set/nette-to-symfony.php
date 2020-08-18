@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
+use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\Rector\Interface_\RemoveInterfacesRector;
-use Rector\NetteToSymfony\Rector\Assign\FormControlToControllerAndFormTypeRector;
+use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
 use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector;
 use Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector;
 use Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector;
 use Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;
-use Rector\Renaming\Rector\Class_\RenameClassRector;
-use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

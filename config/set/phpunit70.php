@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector;
-use Rector\Renaming\Rector\Annotation\RenameAnnotationRector;
+use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
