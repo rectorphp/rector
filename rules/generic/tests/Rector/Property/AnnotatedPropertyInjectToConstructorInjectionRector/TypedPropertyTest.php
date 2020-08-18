@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector;
+namespace Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector;
+use Rector\Generic\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TypedPropertyTest extends AbstractRectorTestCase

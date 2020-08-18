@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Architecture\DependencyInjection;
+namespace Rector\Generic\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -22,7 +22,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  * - http://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations
  * - https://github.com/rectorphp/rector/issues/700#issue-370301169
  *
- * @see \Rector\Generic\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\AnnotatedPropertyInjectToConstructorInjectionRectorTest
+ * @see \Rector\Generic\Tests\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector\AnnotatedPropertyInjectToConstructorInjectionRectorTest
  */
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
