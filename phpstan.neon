@@ -392,11 +392,6 @@ parameters:
 
         - '#Class with base "(.*?)" name is already used in "_HumbugBox(.*?)"#'
 
-        #tmp
-        -
-            message: '#Class (.*?) has invalid namespace category (.*?)\. Pick one of\: (.*?)#'
-            path: 'rules/generic/src/Rector/Architecture'
-
         -
             message: '#Class "Rector\\RectorGenerator\\ValueObject\\RectorRecipe" has invalid namespace category "ValueObject"\. Pick one of\: ""#'
             path: packages/rector-generator/src/ValueObject/RectorRecipe.php
