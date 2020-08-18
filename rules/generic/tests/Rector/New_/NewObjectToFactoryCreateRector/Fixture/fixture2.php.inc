@@ -2,15 +2,15 @@
 
 namespace Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
 
-use Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
+use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClass;
 
 final class SomeOtherController
 {
     /**
-     * @var \Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory
+     * @var \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory
      */
     private $mySomeFactory;
-    public function __construct(\Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $mySomeFactory)
+    public function __construct(\Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory $mySomeFactory)
     {
         $this->mySomeFactory = $mySomeFactory;
     }
@@ -26,15 +26,15 @@ final class SomeOtherController
 
 namespace Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
 
-use Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
+use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClass;
 
 final class SomeOtherController
 {
     /**
-     * @var \Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory
+     * @var \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory
      */
     private $mySomeFactory;
-    public function __construct(\Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $mySomeFactory)
+    public function __construct(\Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory $mySomeFactory)
     {
         $this->mySomeFactory = $mySomeFactory;
     }

@@ -2,7 +2,7 @@
 
 namespace Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
 
-use Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
+use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClass;
 
 final class SomeController
 {
@@ -18,12 +18,12 @@ final class SomeController
 
 namespace Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
 
-use Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
+use Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClass;
 
 final class SomeController
 {
-    private \Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory;
-    public function __construct(\Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory)
+    private \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory;
+    public function __construct(\Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory)
     {
         $this->myClassFactory = $myClassFactory;
     }

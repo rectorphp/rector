@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\Class_\ActionInjectionToConstructorInjectionRector;
-use Rector\Generic\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector;
+use Rector\Generic\Rector\Variable\ReplaceVariableByPropertyFetchRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

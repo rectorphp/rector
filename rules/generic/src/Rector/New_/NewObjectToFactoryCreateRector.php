@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Architecture\Factory;
+namespace Rector\Generic\Rector\New_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -20,7 +20,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\NewObjectToFactoryCreateRectorTest
+ * @see \Rector\Generic\Tests\Rector\New_\NewObjectToFactoryCreateRector\NewObjectToFactoryCreateRectorTest
  */
 final class NewObjectToFactoryCreateRector extends AbstractRector implements ConfigurableRectorInterface
 {

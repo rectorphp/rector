@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Class_\ActionInjectionToConstructorInjectionRector;
-use Rector\Generic\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector;
+use Rector\Generic\Rector\Variable\ReplaceVariableByPropertyFetchRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ActionInjectionToConstructorInjectionRectorTest extends AbstractRectorTestCase

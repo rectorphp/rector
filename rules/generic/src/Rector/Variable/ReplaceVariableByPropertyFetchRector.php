@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Architecture\DependencyInjection;
+namespace Rector\Generic\Rector\Variable;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
