@@ -4603,8 +4603,8 @@ Remove file relative to project directory
 
 ### `ActionInjectionToConstructorInjectionRector`
 
-- class: [`Rector\Generic\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector`](/../master/rules/generic/src/Rector/Architecture/DependencyInjection/ActionInjectionToConstructorInjectionRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/Architecture/DependencyInjection/ActionInjectionToConstructorInjectionRector/Fixture)
+- class: [`Rector\Generic\Rector\Class_\ActionInjectionToConstructorInjectionRector`](/../master/rules/generic/src/Rector/Class_/ActionInjectionToConstructorInjectionRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/Class_/ActionInjectionToConstructorInjectionRector/Fixture)
 
 Turns action injection in Controllers to constructor injection
 
@@ -4759,8 +4759,8 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `AnnotatedPropertyInjectToConstructorInjectionRector`
 
-- class: [`Rector\Generic\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector`](/../master/rules/generic/src/Rector/Architecture/DependencyInjection/AnnotatedPropertyInjectToConstructorInjectionRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/Architecture/DependencyInjection/AnnotatedPropertyInjectToConstructorInjectionRector/Fixture)
+- class: [`Rector\Generic\Rector\Property\AnnotatedPropertyInjectToConstructorInjectionRector`](/../master/rules/generic/src/Rector/Property/AnnotatedPropertyInjectToConstructorInjectionRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/Property/AnnotatedPropertyInjectToConstructorInjectionRector/Fixture)
 
 Turns non-private properties with `@annotation` to private properties and constructor injection
 
@@ -5419,8 +5419,8 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `NewObjectToFactoryCreateRector`
 
-- class: [`Rector\Generic\Rector\Architecture\Factory\NewObjectToFactoryCreateRector`](/../master/rules/generic/src/Rector/Architecture/Factory/NewObjectToFactoryCreateRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/Architecture/Factory/NewObjectToFactoryCreateRector/Fixture)
+- class: [`Rector\Generic\Rector\New_\NewObjectToFactoryCreateRector`](/../master/rules/generic/src/Rector/New_/NewObjectToFactoryCreateRector.php)
+- [test fixtures](/../master/rules/generic/tests/Rector/New_/NewObjectToFactoryCreateRector/Fixture)
 
 Replaces creating object instances with "new" keyword with factory method.
 
@@ -5428,7 +5428,7 @@ Replaces creating object instances with "new" keyword with factory method.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Architecture\Factory\NewObjectToFactoryCreateRector;
+use Rector\Generic\Rector\New_\NewObjectToFactoryCreateRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
@@ -5932,7 +5932,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `ReplaceVariableByPropertyFetchRector`
 
-- class: [`Rector\Generic\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector`](/../master/rules/generic/src/Rector/Architecture/DependencyInjection/ReplaceVariableByPropertyFetchRector.php)
+- class: [`Rector\Generic\Rector\Variable\ReplaceVariableByPropertyFetchRector`](/../master/rules/generic/src/Rector/Variable/ReplaceVariableByPropertyFetchRector.php)
 
 Turns variable in controller action to property fetch, as follow up to action injection variable to property change.
 
