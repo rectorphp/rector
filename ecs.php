@@ -93,5 +93,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         StrictComparisonFixer::class => [__DIR__ . '/rules/polyfill/src/ConditionEvaluator.php'],
     ]);
 
-    $parameters->set('line_ending', "\n");
+    $parameters->set(Option::LINE_ENDING, "\n");
 };
