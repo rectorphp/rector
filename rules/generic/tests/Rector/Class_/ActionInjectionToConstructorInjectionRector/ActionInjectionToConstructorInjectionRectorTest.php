@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector;
+namespace Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector;
+use Rector\Generic\Rector\Class_\ActionInjectionToConstructorInjectionRector;
 use Rector\Generic\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

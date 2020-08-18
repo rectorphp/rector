@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector;
+use Rector\Generic\Rector\Class_\ActionInjectionToConstructorInjectionRector;
 use Rector\Generic\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

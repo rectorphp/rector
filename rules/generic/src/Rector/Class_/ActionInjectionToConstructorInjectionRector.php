@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Architecture\DependencyInjection;
+namespace Rector\Generic\Rector\Class_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -17,7 +17,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\ServiceMapProvider;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\ActionInjectionToConstructorInjectionRectorTest
+ * @see \Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\ActionInjectionToConstructorInjectionRectorTest
  */
 final class ActionInjectionToConstructorInjectionRector extends AbstractRector
 {
