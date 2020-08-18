@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\ActionInjectionToConstructorInjectionRectorTest
+ * @see \Rector\Generic\Tests\Rector\Class_\ActionInjectionToConstructorInjectionRector\ActionInjectionToConstructorInjectionRectorTest
  */
 final class ReplaceVariableByPropertyFetchRector extends AbstractRector
 {
