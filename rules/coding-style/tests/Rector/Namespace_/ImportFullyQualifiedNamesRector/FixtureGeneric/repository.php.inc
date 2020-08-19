@@ -4,12 +4,15 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 class Repository
 {
-    private \Doctrine\ORM\EntityManagerInterface $entityManager;
+    /**
+     * @var \Doctrine\ORM\EntityManagerInterface
+     */
+    private $entityManager;
 
     /**
      * @var \Doctrine\ORM\EntityRepository<\Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Generic\SomeGeneral>
      */
-    private \Doctrine\ORM\EntityRepository $repository;
+    private $repository;
 }
 
 ?>
@@ -23,12 +26,15 @@ use Doctrine\ORM\EntityRepository;
 use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Generic\SomeGeneral;
 class Repository
 {
-    private EntityManagerInterface $entityManager;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
 
     /**
      * @var EntityRepository<SomeGeneral>
      */
-    private EntityRepository $repository;
+    private $repository;
 }
 
 ?>

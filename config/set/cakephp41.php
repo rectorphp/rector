@@ -19,31 +19,35 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->set(RenameMethodRector::class)
-        ->arg(RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS, [
-            'Cake\Database\Schema\TableSchema' => [
-                'getPrimary' => 'getPrimaryKey',
+        ->call('configure', [[
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+                'Cake\Database\Schema\TableSchema' => [
+                    'getPrimary' => 'getPrimaryKey',
+                ],
+                'Cake\Database\Type\DateTimeType' => [
+                    'setTimezone' => 'setDatabaseTimezone',
+                ],
+                'Cake\Database\Expression\QueryExpression' => [
+                    'or_' => 'or',
+                    'and_' => 'and',
+                ],
+                'Cake\View\Form\ContextInterface' => [
+                    'primaryKey' => 'getPrimaryKey',
+                ],
+                'Cake\Http\Middleware\CsrfProtectionMiddleware' => [
+                    'whitelistCallback' => 'skipCheckCallback',
+                ],
             ],
-            'Cake\Database\Type\DateTimeType' => [
-                'setTimezone' => 'setDatabaseTimezone',
-            ],
-            'Cake\Database\Expression\QueryExpression' => [
-                'or_' => 'or',
-                'and_' => 'and',
-            ],
-            'Cake\View\Form\ContextInterface' => [
-                'primaryKey' => 'getPrimaryKey',
-            ],
-            'Cake\Http\Middleware\CsrfProtectionMiddleware' => [
-                'whitelistCallback' => 'skipCheckCallback',
-            ],
-        ]);
+        ]]);
 
     $services->set(ModalToGetSetRector::class)
-        ->arg(ModalToGetSetRector::METHOD_NAMES_BY_TYPES, [
-            'Cake\Form\Form' => [
-                'schema' => [
-                    'set' => 'setSchema',
-                    'get' => 'getSchema',
+        ->call('configure', [
+            ModalToGetSetRector::METHOD_NAMES_BY_TYPES => [
+                'Cake\Form\Form' => [
+                    'schema' => [
+                        'set' => 'setSchema',
+                        'get' => 'getSchema',
+                    ],
                 ],
             ],
         ]);
