@@ -18,6 +18,7 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      * @dataProvider provideDataFunction()
+     * @dataProvider provideDataGeneric()
      */
     public function test(SmartFileInfo $fileInfo): void
     {
@@ -36,9 +37,13 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureFunction');
     }
 
+    public function provideDataGeneric(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureGeneric');
+    }
+
     protected function getRectorClass(): string
     {
-        // the must be some Rector class to run
         return RenameClassRector::class;
     }
 }
