@@ -14,6 +14,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -38,7 +39,7 @@ final class PhpDocNodeTraverser
             $phpDocChildNode->value = $callable($phpDocChildNode->value, $docContent);
 
             if ($this->isValueNodeWithType($phpDocChildNode->value)) {
-                /** @var ParamTagValueNode|VarTagValueNode|ReturnTagValueNode $valueNode */
+                /** @var ParamTagValueNode|VarTagValueNode|ReturnTagValueNode|GenericTypeNode $valueNode */
                 $valueNode = $phpDocChildNode->value;
 
                 $valueNode->type = $this->traverseTypeNode($valueNode->type, $docContent, $callable);
@@ -59,8 +60,14 @@ final class PhpDocNodeTraverser
     {
         $typeNode = $callable($typeNode, $docContent);
 
-        if ($typeNode instanceof ArrayTypeNode || $typeNode instanceof NullableTypeNode) {
+        if ($typeNode instanceof ArrayTypeNode || $typeNode instanceof NullableTypeNode || $typeNode instanceof GenericTypeNode) {
             $typeNode->type = $this->traverseTypeNode($typeNode->type, $docContent, $callable);
+        }
+
+        if ($typeNode instanceof GenericTypeNode) {
+            foreach ($typeNode->genericTypes as $key => $genericType) {
+                $typeNode->genericTypes[$key] = $this->traverseTypeNode($genericType, $docContent, $callable);
+            }
         }
 
         if ($typeNode instanceof UnionTypeNode || $typeNode instanceof IntersectionTypeNode) {

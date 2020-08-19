@@ -7,7 +7,7 @@ class Repository
     private \Doctrine\ORM\EntityManagerInterface $entityManager;
 
     /**
-     * @var \Doctrine\ORM\EntityRepository<\Luzanky\Security\Entity\UsersNastaveni>
+     * @var \Doctrine\ORM\EntityRepository<\Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Generic\SomeGeneral>
      */
     private \Doctrine\ORM\EntityRepository $repository;
 }
@@ -20,12 +20,13 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Generic\SomeGeneral;
 class Repository
 {
     private EntityManagerInterface $entityManager;
 
     /**
-     * @var EntityRepository<\Luzanky\Security\Entity\UsersNastaveni>
+     * @var EntityRepository<SomeGeneral>
      */
     private EntityRepository $repository;
 }
