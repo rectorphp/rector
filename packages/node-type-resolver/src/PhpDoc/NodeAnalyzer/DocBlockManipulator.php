@@ -37,10 +37,6 @@ final class DocBlockManipulator
 
     public function changeType(Node $node, Type $oldType, Type $newType): void
     {
-        if (! $this->hasNodeTypeTags($node)) {
-            return;
-        }
-
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 

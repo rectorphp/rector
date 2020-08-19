@@ -15,7 +15,7 @@ class SkipArrayVariable
             # rector.yaml
             'services' => [
                 RenameClassRector::class => [
-                    '$oldToNewClasses' => $oldToNewClasses,
+                    RenameClassRector::OLD_TO_NEW_CLASSES => $oldToNewClasses,
                 ],
             ],
         ];

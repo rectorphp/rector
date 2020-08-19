@@ -26,7 +26,7 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
     /**
      * @var string
      */
-    public const OLD_TO_NEW_CLASSES = '$oldToNewClasses';
+    public const OLD_TO_NEW_CLASSES = 'old_to_new_classes';
 
     /**
      * @var string[]
