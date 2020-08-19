@@ -110,21 +110,7 @@ PHP
             return null;
         }
 
-        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
-        if ($isStaticMethod) {
-            return null;
-        }
-
-        if ($this->isNames($node->class, ['self', 'parent', 'static'])) {
-            return null;
-        }
-
-        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($className === $parentClassName) {
-            return null;
-        }
-
-        if ($className === null) {
+        if ($this->shouldSkip($methodName, $className, $node)) {
             return null;
         }
 
@@ -176,5 +162,24 @@ PHP
 
         // required parameters in constructor, nothing we can do
         return ! (bool) $classConstructorReflection->getNumberOfRequiredParameters();
+    }
+
+    private function shouldSkip(string $methodName, string $className, StaticCall $staticCall): bool
+    {
+        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
+        if ($isStaticMethod) {
+            return true;
+        }
+
+        if ($this->isNames($staticCall->class, ['self', 'parent', 'static', 'class'])) {
+            return true;
+        }
+
+        $parentClassName = $staticCall->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        if ($className === $parentClassName) {
+            return true;
+        }
+
+        return $className === null;
     }
 }
