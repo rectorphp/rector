@@ -349,9 +349,9 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     private function createPhpConfigFileAndDumpToPath(array $rectorClassesWithConfiguration, string $filePath): void
     {
         $phpConfigPrinterFactory = new PhpConfigPrinterFactory();
-        $phpConfigPrinter = $phpConfigPrinterFactory->create();
+        $smartPhpConfigPrinter = $phpConfigPrinterFactory->create();
 
-        $fileContent = $phpConfigPrinter->printConfiguredServices($rectorClassesWithConfiguration);
+        $fileContent = $smartPhpConfigPrinter->printConfiguredServices($rectorClassesWithConfiguration);
         $this->smartFileSystem->dumpFile($filePath, $fileContent);
     }
 }

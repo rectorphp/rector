@@ -15,6 +15,7 @@ final class PhpConfigPrinterFactory
         $phpConfigPrinterKernel->setConfigs([__DIR__ . '/config/php-config-printer-config.php']);
 
         $phpConfigPrinterKernel->boot();
+
         $container = $phpConfigPrinterKernel->getContainer();
 
         return $container->get(SmartPhpConfigPrinter::class);
