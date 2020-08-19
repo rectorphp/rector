@@ -35,7 +35,7 @@ final class CompactController extends AbstractController
         $hello = 'hi';
         $world = 'earth';
 
-        return $this->render('@FrameworkExtra/index.html.twig', ['hello' => $hello, 'world' => $world]);
+        return $this->render('index.html.twig', ['hello' => $hello, 'world' => $world]);
     }
 }
 
