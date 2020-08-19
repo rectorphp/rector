@@ -147,23 +147,6 @@ PHP
         return $this->getName($node->class);
     }
 
-    private function isInstantiable(string $className): bool
-    {
-        $reflectionClass = new ReflectionClass($className);
-        $classConstructorReflection = $reflectionClass->getConstructor();
-
-        if ($classConstructorReflection === null) {
-            return true;
-        }
-
-        if (! $classConstructorReflection->isPublic()) {
-            return false;
-        }
-
-        // required parameters in constructor, nothing we can do
-        return ! (bool) $classConstructorReflection->getNumberOfRequiredParameters();
-    }
-
     private function shouldSkip(string $methodName, string $className, StaticCall $staticCall): bool
     {
         $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
@@ -181,5 +164,21 @@ PHP
         }
 
         return $className === null;
+    }
+    private function isInstantiable(string $className): bool
+    {
+        $reflectionClass = new ReflectionClass($className);
+        $classConstructorReflection = $reflectionClass->getConstructor();
+
+        if ($classConstructorReflection === null) {
+            return true;
+        }
+
+        if (! $classConstructorReflection->isPublic()) {
+            return false;
+        }
+
+        // required parameters in constructor, nothing we can do
+        return ! (bool) $classConstructorReflection->getNumberOfRequiredParameters();
     }
 }
