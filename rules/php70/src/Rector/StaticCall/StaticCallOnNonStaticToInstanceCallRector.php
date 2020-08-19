@@ -165,6 +165,7 @@ PHP
 
         return $className === null;
     }
+
     private function isInstantiable(string $className): bool
     {
         $reflectionClass = new ReflectionClass($className);
