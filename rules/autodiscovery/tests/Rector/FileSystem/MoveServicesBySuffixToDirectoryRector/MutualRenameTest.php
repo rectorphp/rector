@@ -6,6 +6,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDir
 
 use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
+use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFilePathAndContent;
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -14,7 +15,7 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
     /**
      * @dataProvider provideData()
      *
-     * @param string[][] $extraFiles
+     * @param InputFilePathWithExpectedFilePathAndContent[] $extraFiles
      */
     public function test(
         SmartFileInfo $originalFileInfo,
@@ -22,16 +23,13 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
         string $expectedFileContent,
         array $extraFiles = []
     ): void {
-        $extraFilePaths = array_keys($extraFiles);
-        $this->doTestFileInfo($originalFileInfo, $extraFilePaths);
+        //$extraFilePaths = array_keys($extraFiles);
+        $this->doTestFileInfo($originalFileInfo, $extraFiles);
 
         $this->assertFileExists($expectedFileLocation);
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
 
-        foreach ($extraFiles as $extraFile) {
-            $this->assertFileExists($extraFile['location']);
-            $this->assertFileEquals($extraFile['content'], $extraFile['location']);
-        }
+        $this->doTestExtraFileInfos($extraFiles);
     }
 
     public function provideData(): Iterator
@@ -43,10 +41,11 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
 
             // extra files
             [
-                __DIR__ . '/SourceMutualRename/Entity/UserWithSpaceMapper.php' => [
-                    'location' => $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/UserWithSpaceMapper.php',
-                    'content' => __DIR__ . '/ExpectedMutualRename/Mapper/UserWithSpaceMapper.php.inc',
-                ],
+                new InputFilePathWithExpectedFilePathAndContent(
+                __DIR__ . '/SourceMutualRename/Entity/UserWithSpaceMapper.php',
+                    $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/UserWithSpaceMapper.php',
+                    __DIR__ . '/ExpectedMutualRename/Mapper/UserWithSpaceMapper.php.inc'
+                ),
             ],
         ];
 
@@ -58,16 +57,18 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
 
             // extra files
             [
-                __DIR__ . '/SourceMutualRename/Controller/Nested/AbstractBaseMapper.php' => [
-                    'location' => $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/Nested/AbstractBaseMapper.php',
-                    'content' => __DIR__ . '/ExpectedMutualRename/Mapper/Nested/AbstractBaseMapper.php.inc',
-                ],
+                new InputFilePathWithExpectedFilePathAndContent(
+                __DIR__ . '/SourceMutualRename/Controller/Nested/AbstractBaseMapper.php',
+                    $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/Nested/AbstractBaseMapper.php',
+                     __DIR__ . '/ExpectedMutualRename/Mapper/Nested/AbstractBaseMapper.php.inc'
+                ),
 
                 // includes NEON/YAML file renames
-                __DIR__ . '/SourceMutualRename/config/some_config.neon' => [
-                    'location' => $this->getFixtureTempDirectory() . '/SourceMutualRename/config/some_config.neon',
-                    'content' => __DIR__ . '/ExpectedMutualRename/config/expected_some_config.neon',
-                ],
+                new InputFilePathWithExpectedFilePathAndContent(
+                    __DIR__ . '/SourceMutualRename/config/some_config.neon',
+                     $this->getFixtureTempDirectory() . '/SourceMutualRename/config/some_config.neon',
+                     __DIR__ . '/ExpectedMutualRename/config/expected_some_config.neon',
+                ),
             ],
         ];
     }
