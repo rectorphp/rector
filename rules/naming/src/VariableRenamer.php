@@ -90,18 +90,6 @@ final class VariableRenamer
         );
     }
 
-    private function renameVariableIfMatchesName(Variable $variable, string $oldName, string $expectedName): ?Variable
-    {
-        if (! $this->nodeNameResolver->isName($variable, $oldName)) {
-            return null;
-        }
-
-        $variable->name = $expectedName;
-        $this->varTagValueNodeRenamer->renameAssignVarTagVariableName($variable, $oldName, $expectedName);
-
-        return $variable;
-    }
-
     private function isParamInParentFunction(Variable $variable): bool
     {
         /** @var Closure|null $closure */
@@ -122,5 +110,16 @@ final class VariableRenamer
         }
 
         return false;
+    }
+    private function renameVariableIfMatchesName(Variable $variable, string $oldName, string $expectedName): ?Variable
+    {
+        if (! $this->nodeNameResolver->isName($variable, $oldName)) {
+            return null;
+        }
+
+        $variable->name = $expectedName;
+        $this->varTagValueNodeRenamer->renameAssignVarTagVariableName($variable, $oldName, $expectedName);
+
+        return $variable;
     }
 }
