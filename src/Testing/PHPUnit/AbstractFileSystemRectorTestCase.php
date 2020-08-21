@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
+use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFilePathAndContent;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -39,7 +40,8 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
     }
 
     /**
-     * @param string[] $extraFiles
+     * @param InputFilePathWithExpectedFilePathAndContent[] $extraFiles
+     * @todo decouple to own method later
      */
     protected function doTestFileInfo(
         SmartFileInfo $fileInfo,
@@ -47,7 +49,6 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         bool $autolaod = true
     ): SmartFileInfo {
         $temporaryFileInfo = $this->createTemporaryFilePathFromFilePath($fileInfo);
-
         if ($autolaod) {
             require_once $temporaryFileInfo->getRealPath();
         }
@@ -63,7 +64,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $filesInfos = [$temporaryFileInfo];
 
         foreach ($extraFiles as $extraFile) {
-            $extraFileInfo = new SmartFileInfo($extraFile);
+            $extraFileInfo = $extraFile->getInputFileInfo();
 
             $temporaryExtraFileInfo = $this->createTemporaryFilePathFromFilePath($extraFileInfo);
             $this->fileSystemFileProcessor->processFileInfo($temporaryExtraFileInfo);
@@ -98,6 +99,17 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
     protected function getFixtureTempDirectory(): string
     {
         return sys_get_temp_dir() . '/rector_temp_tests';
+    }
+
+    /**
+     * @param InputFilePathWithExpectedFilePathAndContent[] $inputFilePathWithExpectedFilePathAndContents
+     */
+    protected function doTestExtraFileInfos(array $inputFilePathWithExpectedFilePathAndContents): void
+    {
+        foreach ($inputFilePathWithExpectedFilePathAndContents as $extraFile) {
+            $this->assertFileExists($extraFile->getExpectedFilePath());
+            $this->assertFileEquals($extraFile->getExpectedContent(), $extraFile->getExpectedFilePath());
+        }
     }
 
     private function createTemporaryFilePathFromFilePath(SmartFileInfo $fileInfo): SmartFileInfo
