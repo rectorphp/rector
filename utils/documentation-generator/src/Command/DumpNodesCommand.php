@@ -46,6 +46,7 @@ use PhpParser\Node\Expr\ShellExec;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Throw_ as ThrowExpr;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
@@ -434,6 +435,8 @@ final class DumpNodesCommand extends AbstractCommand
                     $node = new NullsafeMethodCall($someVariableNode, new Identifier(self::SOME_METHOD));
                 } elseif ($nodeClass === NullsafePropertyFetch::class) {
                     $node = new NullsafePropertyFetch($someVariableNode, new Identifier('somePropety'));
+                } elseif ($nodeClass === ThrowExpr::class) {
+                    $node = new Throw_($someVariableNode);
                 } else {
                     throw new ShouldNotHappenException(sprintf(
                         'Implement a new printer for "%s" node in "%s"',

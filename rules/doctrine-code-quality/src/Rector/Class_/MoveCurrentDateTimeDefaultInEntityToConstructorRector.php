@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
@@ -155,10 +156,11 @@ PHP
         $propertyName = $this->getName($property);
         $onlyProperty = $property->props[0];
 
-        $expression = $this->valueAssignFactory->createDefaultDateTimeWithValueAssign(
-            $propertyName,
-            $onlyProperty->default
-        );
+        /** @var Expr $defaultExpr */
+        $defaultExpr = $onlyProperty->default;
+
+        $expression = $this->valueAssignFactory->createDefaultDateTimeWithValueAssign($propertyName, $defaultExpr);
+
         $this->constructorManipulator->addStmtToConstructor($class, $expression);
     }
 }

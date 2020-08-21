@@ -633,6 +633,22 @@ $someVariable ? true : false
  * `$else` - `/** @var Expr Expression for false */`
 <br>
 
+### `PhpParser\Node\Expr\Throw_`
+
+ * requires arguments on construct
+
+
+#### Example PHP Code
+
+```php
+throw $someVariable;
+```
+
+#### Public Properties
+
+ * `$expr` - `/** @var Node\Expr Expression */`
+<br>
+
 ### `PhpParser\Node\Expr\UnaryMinus`
 
  * requires arguments on construct
@@ -2524,6 +2540,7 @@ $someVariable
 
 #### Public Properties
 
+ * `$name` - `/** @var Identifier|null Parameter name (for named parameters) */`
  * `$value` - `/** @var Expr Value to pass */`
  * `$byRef` - `/** @var bool Whether to pass by ref */`
  * `$unpack` - `/** @var bool Whether to unpack the argument */`
