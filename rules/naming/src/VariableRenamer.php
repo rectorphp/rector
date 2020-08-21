@@ -9,12 +9,13 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class VariableRenamer
 {
@@ -66,11 +67,17 @@ final class VariableRenamer
                     return null;
                 }
 
-                if ($this->isScopingNode($node)) {
-                    return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+                if (! $node instanceof Variable) {
+                    return null;
                 }
 
-                if (! $node instanceof Variable) {
+                // skip param names
+                $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+                if ($parent instanceof Param) {
+                    return null;
+                }
+
+                if ($this->isParamInParentFunction($node)) {
                     return null;
                 }
 
@@ -83,9 +90,26 @@ final class VariableRenamer
         );
     }
 
-    private function isScopingNode(Node $node): bool
+    private function isParamInParentFunction(Variable $variable): bool
     {
-        return $node instanceof Closure || $node instanceof Function_ || $node instanceof ClassMethod;
+        /** @var Closure|null $closure */
+        $closure = $variable->getAttribute(AttributeKey::CLOSURE_NODE);
+        if ($closure === null) {
+            return false;
+        }
+
+        $variableName = $this->nodeNameResolver->getName($variable);
+        if ($variableName === null) {
+            return false;
+        }
+
+        foreach ($closure->params as $param) {
+            if ($this->nodeNameResolver->isName($param, $variableName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function renameVariableIfMatchesName(Variable $variable, string $oldName, string $expectedName): ?Variable
