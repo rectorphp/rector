@@ -111,6 +111,7 @@ final class VariableRenamer
 
         return false;
     }
+
     private function renameVariableIfMatchesName(Variable $variable, string $oldName, string $expectedName): ?Variable
     {
         if (! $this->nodeNameResolver->isName($variable, $oldName)) {
