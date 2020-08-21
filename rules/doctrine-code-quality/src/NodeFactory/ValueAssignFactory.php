@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 
 final class ValueAssignFactory
@@ -27,7 +28,7 @@ final class ValueAssignFactory
     {
         $propertyFetch = $this->createPropertyFetch($propertyName);
         $newDateTime = $this->createNewDateTime();
-        $newDateTime->args[] = new Arg($defaultExpr);
+        $this->addDateTimeArgumentIfNotDefault($defaultExpr, $newDateTime);
 
         $assign = new Assign($propertyFetch, $newDateTime);
 
@@ -42,5 +43,14 @@ final class ValueAssignFactory
     private function createNewDateTime(): New_
     {
         return new New_(new FullyQualified('DateTime'));
+    }
+
+    private function addDateTimeArgumentIfNotDefault(Expr $defaultExpr, New_ $dateTimeNew): void
+    {
+        if ($defaultExpr instanceof String_ && ($defaultExpr->value === 'now' || $defaultExpr->value === 'now()')) {
+            return;
+        }
+
+        $dateTimeNew->args[] = new Arg($defaultExpr);
     }
 }
