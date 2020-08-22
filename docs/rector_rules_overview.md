@@ -1,4 +1,4 @@
-# All 565 Rectors Overview
+# All 566 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -29,7 +29,7 @@
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
-- [Naming](#naming) (5)
+- [Naming](#naming) (6)
 - [Nette](#nette) (16)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
@@ -6934,6 +6934,31 @@ Change getter method names to start with get/provide
 +    public function getName(): string
      {
          return $this->name;
+     }
+ }
+```
+
+<br><br>
+
+### `MakeIsserClassMethodNameStartWithIsRector`
+
+- class: [`Rector\Naming\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector`](/../master/rules/naming/src/Rector/ClassMethod/MakeIsserClassMethodNameStartWithIsRector.php)
+- [test fixtures](/../master/rules/naming/tests/Rector/ClassMethod/MakeIsserClassMethodNameStartWithIsRector/Fixture)
+
+Change is method names to start with is/has/was
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var bool
+      */
+     private $isActive = false;
+
+-    public function getIsActive()
++    public function isActive()
+     {
+         return $this->isActive;
      }
  }
 ```

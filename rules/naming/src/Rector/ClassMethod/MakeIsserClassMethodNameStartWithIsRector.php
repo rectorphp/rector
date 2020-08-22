@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -19,14 +16,14 @@ use Rector\Naming\Naming\MethodNameResolver;
 use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
 
 /**
- * @see \Rector\Naming\Tests\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector\MakeGetterClassMethodNameStartWithGetRectorTest
+ * @see \Rector\Naming\Tests\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector\MakeIsserClassMethodNameStartWithIsRectorTest
  */
-final class MakeGetterClassMethodNameStartWithGetRector extends AbstractRector
+final class MakeIsserClassMethodNameStartWithIsRector extends AbstractRector
 {
     /**
      * @var string
      */
-    private const GETTER_NAME_PATTERN = '#^(is|should|has|was|must|get|provide|__)#';
+    private const ISSER_NAME_PATTERN = '#^(is|has|was|must|should|__)#';
 
     /**
      * @var MethodNameResolver
@@ -48,19 +45,19 @@ final class MakeGetterClassMethodNameStartWithGetRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change getter method names to start with get/provide', [
+        return new RectorDefinition('Change is method names to start with is/has/was', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
 {
     /**
-     * @var string
+     * @var bool
      */
-    private $name;
+    private $isActive = false;
 
-    public function name(): string
+    public function getIsActive()
     {
-        return $this->name;
+        return $this->isActive;
     }
 }
 PHP
@@ -70,13 +67,13 @@ PHP
 class SomeClass
 {
     /**
-     * @var string
+     * @var bool
      */
-    private $name;
+    private $isActive = false;
 
-    public function getName(): string
+    public function isActive()
     {
-        return $this->name;
+        return $this->isActive;
     }
 }
 PHP
@@ -98,54 +95,53 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isAlreadyGetterNamedClassMethod($node)) {
+        if ($this->isAlreadyIsserNamedClassMethod($node)) {
             return null;
         }
 
-        $getterClassMethodReturnedExpr = $this->matchGetterClassMethodReturnedExpr($node);
+        $getterClassMethodReturnedExpr = $this->matchIsserClassMethodReturnedExpr($node);
         if ($getterClassMethodReturnedExpr === null) {
             return null;
         }
 
-        $getterMethodName = $this->methodNameResolver->resolveGetterFromReturnedExpr($getterClassMethodReturnedExpr);
-        if ($getterMethodName === null) {
+        $isserMethodName = $this->methodNameResolver->resolveIsserFromReturnedExpr($getterClassMethodReturnedExpr);
+        if ($isserMethodName === null) {
             return null;
         }
 
-        if ($this->isName($node->name, $getterMethodName)) {
+        if ($this->isName($node->name, $isserMethodName)) {
             return null;
         }
 
-        $node->name = new Identifier($getterMethodName);
+        $node->name = new Identifier($isserMethodName);
 
-        $this->updateClassMethodCalls($node, $getterMethodName);
+        $this->updateClassMethodCalls($node, $isserMethodName);
 
         return $node;
     }
 
-    private function isAlreadyGetterNamedClassMethod(ClassMethod $classMethod): bool
+    private function isAlreadyIsserNamedClassMethod(ClassMethod $classMethod): bool
     {
-        return $this->isName($classMethod, self::GETTER_NAME_PATTERN);
+        return $this->isName($classMethod, self::ISSER_NAME_PATTERN);
     }
 
-    private function matchGetterClassMethodReturnedExpr(ClassMethod $classMethod): ?Expr
+    private function matchIsserClassMethodReturnedExpr(ClassMethod $classMethod): ?Node\Expr
     {
         if (count((array) $classMethod->stmts) !== 1) {
             return null;
         }
 
         $onlyStmt = $classMethod->stmts[0];
-        if (! $onlyStmt instanceof Return_) {
+        if (! $onlyStmt instanceof Node\Stmt\Return_) {
             return null;
         }
 
-        if (! $onlyStmt->expr instanceof PropertyFetch) {
+        if (! $onlyStmt->expr instanceof Node\Expr\PropertyFetch) {
             return null;
         }
 
         $propertyStaticType = $this->getStaticType($onlyStmt->expr);
-        // is handled by boolish Rector → skip here
-        if ($propertyStaticType instanceof BooleanType) {
+        if (! $propertyStaticType instanceof BooleanType) {
             return null;
         }
 
