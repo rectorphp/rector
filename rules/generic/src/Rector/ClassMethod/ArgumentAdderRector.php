@@ -33,7 +33,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     public const POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES = '$positionWithDefaultValueByMethodNamesByClassTypes';
 
     /**
-     * @var mixed[]
+     * @var string[][][][][]
      */
     private const EXAMPLE_CONFIGURATION = [
         self::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [

@@ -85,6 +85,20 @@ final class ShowCommand extends AbstractCommand
         });
     }
 
+    private function printConfiguration(RectorInterface $rector): void
+    {
+        $configuration = $this->resolveConfiguration($rector);
+        if ($configuration === []) {
+            return;
+        }
+
+        $configurationYamlContent = $this->yamlPrinter->printYamlToString($configuration);
+
+        $lines = explode(PHP_EOL, $configurationYamlContent);
+        $indentedContent = '      ' . implode(PHP_EOL . '      ', $lines);
+
+        $this->symfonyStyle->writeln($indentedContent);
+    }
     /**
      * Resolve configuration by convention
      * @return mixed[]
@@ -112,20 +126,5 @@ final class ShowCommand extends AbstractCommand
         }
 
         return $configuration;
-    }
-
-    private function printConfiguration(RectorInterface $rector): void
-    {
-        $configuration = $this->resolveConfiguration($rector);
-        if ($configuration === []) {
-            return;
-        }
-
-        $configurationYamlContent = $this->yamlPrinter->printYamlToString($configuration);
-
-        $lines = explode(PHP_EOL, $configurationYamlContent);
-        $indentedContent = '      ' . implode(PHP_EOL . '      ', $lines);
-
-        $this->symfonyStyle->writeln($indentedContent);
     }
 }
