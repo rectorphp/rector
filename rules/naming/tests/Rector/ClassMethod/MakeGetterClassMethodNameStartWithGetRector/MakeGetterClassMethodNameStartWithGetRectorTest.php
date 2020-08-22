@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\DoctrineCodeQuality\Tests\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector;
+namespace Rector\Naming\Tests\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\DoctrineCodeQuality\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector;
+use Rector\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ChangeBigIntEntityPropertyToIntTypeRectorTest extends AbstractRectorTestCase
+final class MakeGetterClassMethodNameStartWithGetRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class ChangeBigIntEntityPropertyToIntTypeRectorTest extends AbstractRector
 
     protected function getRectorClass(): string
     {
-        return ChangeBigIntEntityPropertyToIntTypeRector::class;
+        return MakeGetterClassMethodNameStartWithGetRector::class;
     }
 }

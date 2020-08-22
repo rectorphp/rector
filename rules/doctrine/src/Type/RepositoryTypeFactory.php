@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Type;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PHPStan\Type\Generic\GenericObjectType;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -24,7 +25,7 @@ final class RepositoryTypeFactory
 
     public function createRepositoryPropertyType(Expr $entityReferenceExpr): GenericObjectType
     {
-        if (! $entityReferenceExpr instanceof Expr\ClassConstFetch) {
+        if (! $entityReferenceExpr instanceof ClassConstFetch) {
             throw new NotImplementedYetException();
         }
 

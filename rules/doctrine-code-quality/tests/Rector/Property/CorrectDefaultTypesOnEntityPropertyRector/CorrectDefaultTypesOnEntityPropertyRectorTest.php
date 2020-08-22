@@ -6,6 +6,7 @@ namespace Rector\DoctrineCodeQuality\Tests\Rector\Property\CorrectDefaultTypesOn
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CorrectDefaultTypesOnEntityPropertyRectorTest extends AbstractRectorTestCase
@@ -25,6 +26,6 @@ final class CorrectDefaultTypesOnEntityPropertyRectorTest extends AbstractRector
 
     protected function getRectorClass(): string
     {
-        return \Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector::class;
+        return CorrectDefaultTypesOnEntityPropertyRector::class;
     }
 }

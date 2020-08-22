@@ -7,6 +7,10 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
@@ -33,11 +37,7 @@ final class AssertEqualsToSameRector extends AbstractPHPUnitRector
      *
      * @var string[]
      */
-    private const SCALAR_TYPES = [
-        \PHPStan\Type\FloatType::class,
-        \PHPStan\Type\IntegerType::class,
-        \PHPStan\Type\StringType::class,
-    ];
+    private const SCALAR_TYPES = [FloatType::class, IntegerType::class, StringType::class];
 
     /**
      * @var IdentifierManipulator
@@ -105,7 +105,7 @@ final class AssertEqualsToSameRector extends AbstractPHPUnitRector
 
     private function getNodeType(Expr $expr): Type
     {
-        /** @var \PHPStan\Analyser\Scope $nodeScope */
+        /** @var Scope $nodeScope */
         $nodeScope = $expr->getAttribute(AttributeKey::SCOPE);
 
         return $nodeScope->getType($expr);
