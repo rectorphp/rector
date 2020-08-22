@@ -3,6 +3,7 @@ includes:
     - vendor/symplify/phpstan-extensions/config/config.neon
     - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
     - vendor/slam/phpstan-extensions/conf/slam-rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
     # see https://github.com/symplify/coding-standard
     - vendor/symplify/coding-standard/config/symplify-rules.neon
@@ -375,7 +376,6 @@ parameters:
         # is nested expr
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$expr#'
         - '#Cognitive complexity for "Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator\:\:keepLivingCodeFromExpr\(\)" is \d+, keep it under 9#'
-        - '#Class with base "LexerFactory" name is already used in "PHPStan\\Parser\\LexerFactory", "Rector\\Core\\PhpParser\\Parser\\LexerFactory"\. Use unique name to make classes easy to recognize#'
         - '#Parameter \#1 \$files of method Symplify\\SmartFileSystem\\Finder\\FinderSanitizer\:\:sanitize\(\) expects \(iterable<SplFileInfo\|string\>&Nette\\Utils\\Finder\)\|Symfony\\Component\\Finder\\Finder, array<string\> given#'
         - '#Static property Rector\\Core\\Testing\\PHPUnit\\AbstractGenericRectorTestCase\:\:\$allRectorContainer \(Rector\\Naming\\Tests\\Rector\\Class_\\RenamePropertyToMatchTypeRector\\Source\\ContainerInterface\|Symfony\\Component\\DependencyInjection\\Container\|null\) does not accept Psr\\Container\\ContainerInterface#'
         # stubs

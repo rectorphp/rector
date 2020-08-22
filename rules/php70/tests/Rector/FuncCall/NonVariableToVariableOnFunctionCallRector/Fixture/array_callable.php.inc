@@ -37,15 +37,15 @@ function arrayCallable()
     $bar = bar();
     [ArrayCallable::class, 'someStaticMethod']($bar);
     $callable = [ArrayCallable::class, 'someStaticMethod'];
-    $bar = bar();
-    $callable($bar);
+    $bar2 = bar();
+    $callable($bar2);
 
     $arrayCallable = new ArrayCallable();
-    $bar = bar();
-    [$arrayCallable, 'someMethod']($bar);
+    $bar3 = bar();
+    [$arrayCallable, 'someMethod']($bar3);
     $callable = [$arrayCallable, 'someMethod'];
-    $bar = bar();
-    $callable($bar);
+    $bar4 = bar();
+    $callable($bar4);
 }
 
 ?>

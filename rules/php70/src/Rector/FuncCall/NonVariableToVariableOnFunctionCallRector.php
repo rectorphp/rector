@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php70\Rector\FuncCall;
 
-use function lcfirst;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -13,20 +12,20 @@ use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Type\MixedType;
 use Rector\Core\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\ValueObject\VariableAssignPair;
 
@@ -38,18 +37,19 @@ use Rector\Php70\ValueObject\VariableAssignPair;
 final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const DEFAULT_VARIABLE_NAME = 'tmp';
-
-    /**
      * @var CallReflectionResolver
      */
     private $callReflectionResolver;
 
-    public function __construct(CallReflectionResolver $callReflectionResolver)
+    /**
+     * @var VariableNaming
+     */
+    private $variableNaming;
+
+    public function __construct(CallReflectionResolver $callReflectionResolver, VariableNaming $variableNaming)
     {
         $this->callReflectionResolver = $callReflectionResolver;
+        $this->variableNaming = $variableNaming;
     }
 
     public function getDefinition(): RectorDefinition
@@ -73,27 +73,32 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof MutatingScope) {
-            return null;
-        }
-
         $arguments = $this->getNonVariableArguments($node);
         if ($arguments === []) {
             return null;
         }
 
+        $scopeNode = $node->getAttribute(AttributeKey::METHOD_NODE) ?? $node->getAttribute(
+            AttributeKey::FUNCTION_NODE
+        ) ?? $node->getAttribute(AttributeKey::CLOSURE_NODE);
+        /** @var Scope $currentScope */
+        $currentScope = $scopeNode->getAttribute(AttributeKey::SCOPE);
+
         foreach ($arguments as $key => $argument) {
-            $replacements = $this->getReplacementsFor($argument, $scope);
+            $replacements = $this->getReplacementsFor($argument, $currentScope, $scopeNode);
 
             $current = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-            $this->addNodeBeforeNode($replacements->assign(), $current instanceof Return_ ? $current : $node);
-            $node->args[$key]->value = $replacements->variable();
+            $this->addNodeBeforeNode($replacements->getAssign(), $current instanceof Return_ ? $current : $node);
+            $node->args[$key]->value = $replacements->getVariable();
 
-            $scope = $scope->assignExpression($replacements->variable(), $scope->getType($replacements->variable()));
+            // add variable name to scope, so we prevent duplication of new variable of the same name
+            $currentScope = $currentScope->assignExpression(
+                $replacements->getVariable(),
+                $currentScope->getType($replacements->getVariable())
+            );
         }
 
-        $node->setAttribute(AttributeKey::SCOPE, $scope);
+        $scopeNode->setAttribute(AttributeKey::SCOPE, $currentScope);
 
         return $node;
     }
@@ -139,20 +144,24 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         return $arguments;
     }
 
-    private function getReplacementsFor(Expr $expr, Scope $scope): VariableAssignPair
+    private function getReplacementsFor(Expr $expr, MutatingScope $currentScope, Node $scopeNode): VariableAssignPair
     {
-        if (
-            (
-                $expr instanceof Assign
-                || $expr instanceof AssignRef
-                || $expr instanceof AssignOp
-            )
-            && $this->isVariableLikeNode($expr->var)
-        ) {
+        /** @var Assign|AssignOp|AssignRef $expr */
+        if ($this->isAssign($expr) && $this->isVariableLikeNode($expr->var)) {
             return new VariableAssignPair($expr->var, $expr);
         }
 
-        $variable = new Variable($this->getVariableNameFor($expr, $scope));
+        $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
+            $expr,
+            $currentScope,
+            'tmp'
+        );
+
+        $variable = new Variable($variableName);
+
+        // add a new scope with this variable
+        $newVariableAwareScope = $currentScope->assignExpression($variable, new MixedType());
+        $scopeNode->setAttribute(AttributeKey::SCOPE, $newVariableAwareScope);
 
         return new VariableAssignPair($variable, new Assign($variable, $expr));
     }
@@ -165,16 +174,16 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
             || $node instanceof StaticPropertyFetch;
     }
 
-    private function getVariableNameFor(Expr $expr, Scope $scope): string
+    private function isAssign(Expr $expr): bool
     {
-        if ($expr instanceof New_ && $expr->class instanceof Name) {
-            $name = $this->getShortName($expr->class);
-        } elseif ($expr instanceof MethodCall || $expr instanceof StaticCall) {
-            $name = $this->getName($expr->name);
-        } else {
-            $name = $this->getName($expr);
+        if ($expr instanceof Assign) {
+            return true;
         }
 
-        return lcfirst($this->createCountedValueName($name ?? self::DEFAULT_VARIABLE_NAME, $scope));
+        if ($expr instanceof AssignRef) {
+            return true;
+        }
+
+        return $expr instanceof AssignOp;
     }
 }

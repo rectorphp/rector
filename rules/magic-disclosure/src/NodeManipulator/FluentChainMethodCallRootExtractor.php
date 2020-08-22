@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\MagicDisclosure\NodeAnalyzer\ExprStringTypeResolver;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
@@ -79,9 +80,7 @@ final class FluentChainMethodCallRootExtractor
             if ($methodCall->var instanceof New_) {
                 // direct = no parent
                 if ($kind === self::KIND_IN_ARGS) {
-                    $variableName = $this->variableNaming->resolveFromNode($methodCall->var);
-                    $silentVariable = new Variable($variableName);
-                    return new AssignAndRootExpr($methodCall->var, $methodCall->var, $silentVariable);
+                    return $this->resolveKindInArgs($methodCall);
                 }
 
                 return $this->matchMethodCallOnNew($methodCall);
@@ -149,5 +148,16 @@ final class FluentChainMethodCallRootExtractor
 
         // no assign, just standalone call
         return null;
+    }
+
+    private function resolveKindInArgs(MethodCall $methodCall): AssignAndRootExpr
+    {
+        $variableName = $this->variableNaming->resolveFromNode($methodCall->var);
+        if ($variableName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $silentVariable = new Variable($variableName);
+        return new AssignAndRootExpr($methodCall->var, $methodCall->var, $silentVariable);
     }
 }

@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MagicDisclosure\NodeAnalyzer\NewFluentChainMethodCallNodeAnalyzer;
@@ -126,6 +127,10 @@ PHP
     private function crateVariableFromNew(New_ $new): Variable
     {
         $variableName = $this->variableNaming->resolveFromNode($new);
+        if ($variableName === null) {
+            throw new ShouldNotHappenException();
+        }
+
         return new Variable($variableName);
     }
 }

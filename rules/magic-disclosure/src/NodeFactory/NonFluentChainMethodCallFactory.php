@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\NodeManipulator\FluentChainMethodCallRootExtractor;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
@@ -42,6 +43,10 @@ final class NonFluentChainMethodCallFactory
     public function createFromNewAndRootMethodCall(New_ $new, MethodCall $rootMethodCall): array
     {
         $variableName = $this->variableNaming->resolveFromNode($new);
+        if ($variableName === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $newVariable = new Variable($variableName);
 
         $newStmts = [];

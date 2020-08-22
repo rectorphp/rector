@@ -20,7 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->exclude([
             __DIR__ . '/../src/Exception/*',
             __DIR__ . '/../src/ValueObject/*',
-            __DIR__ . '/../src/Rector/*',
+            __DIR__ . '/../src/Rector',
         ]);
 
     $services->set(AddNewServiceToSymfonyPhpConfigRector::class)

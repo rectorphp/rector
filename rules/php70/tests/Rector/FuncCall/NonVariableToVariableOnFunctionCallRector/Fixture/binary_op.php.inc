@@ -18,8 +18,8 @@ function binaryOp()
 {
     $tmp = 1 + 1;
     reset($tmp);
-    $tmp = 2 + $var;
-    reset($tmp);
+    $tmp2 = 2 + $var;
+    reset($tmp2);
 }
 
 ?>

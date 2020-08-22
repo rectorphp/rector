@@ -32,15 +32,15 @@ function funcCalls()
     reset($bar);
     $baz = baz();
     byRef(bar(), $baz);
-    $bar = bar();
-    $baz = baz();
-    allByRef($bar, $baz);
+    $bar2 = bar();
+    $baz2 = baz();
+    allByRef($bar2, $baz2);
     $tmp = 1;
     $tmp2 = 2;
     allByRef($tmp, $tmp2);
-    $bar = bar();
+    $bar3 = bar();
 
-    return byRef(1, $bar);
+    return byRef(1, $bar3);
 }
 
 ?>

@@ -35,12 +35,12 @@ function stringyCalls()
     'reset'($bar);
 
     $functionName = 'reset';
-    $bar = bar();
-    $functionName($bar);
+    $bar2 = bar();
+    $functionName($bar2);
 
     $methodName = MyClass::class.'::staticMethod';
-    $bar = bar();
-    $methodName($bar);
+    $bar3 = bar();
+    $methodName($bar3);
 }
 
 ?>

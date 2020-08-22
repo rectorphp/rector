@@ -22,8 +22,8 @@ function anonymousFunction()
     $bar = bar();
     $anonymousFunction($bar);
     $staticAnonymousFunction = static function (&$bar) {};
-    $bar = bar();
-    $staticAnonymousFunction($bar);
+    $bar2 = bar();
+    $staticAnonymousFunction($bar2);
 }
 
 ?>

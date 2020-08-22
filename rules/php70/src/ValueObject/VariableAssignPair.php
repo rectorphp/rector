@@ -38,7 +38,7 @@ final class VariableAssignPair
     /**
      * @return Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch
      */
-    public function variable(): Node
+    public function getVariable(): Node
     {
         return $this->variable;
     }
@@ -46,7 +46,7 @@ final class VariableAssignPair
     /**
      * @return Assign|AssignOp|AssignRef
      */
-    public function assign(): Node
+    public function getAssign(): Node
     {
         return $this->assign;
     }
