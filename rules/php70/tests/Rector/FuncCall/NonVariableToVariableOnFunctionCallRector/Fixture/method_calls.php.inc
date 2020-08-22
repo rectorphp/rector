@@ -57,8 +57,8 @@ function methodCalls()
     $aClass = new AClass();
     $baz = baz();
     $aClass->baz($baz);
-    $bar = bar();
-    $aClass->child()->bar($bar);
+    $bar2 = bar();
+    $aClass->child()->bar($bar2);
 }
 
 ?>

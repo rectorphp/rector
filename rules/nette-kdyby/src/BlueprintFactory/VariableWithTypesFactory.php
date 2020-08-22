@@ -7,6 +7,7 @@ namespace Rector\NetteKdyby\BlueprintFactory;
 use PhpParser\Node\Arg;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\NetteKdyby\ValueObject\VariableWithType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -50,6 +51,9 @@ final class VariableWithTypesFactory
         foreach ($args as $arg) {
             $staticType = $this->nodeTypeResolver->getStaticType($arg->value);
             $variableName = $this->variableNaming->resolveFromNodeAndType($arg, $staticType);
+            if ($variableName === null) {
+                throw new ShouldNotHappenException();
+            }
 
             // compensate for static
             if ($staticType instanceof StaticType) {

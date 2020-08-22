@@ -173,6 +173,10 @@ final class ContributeEventClassResolver
     private function createGetterFromParamAndStaticType(Param $param, Type $type): string
     {
         $variableName = $this->variableNaming->resolveFromNodeAndType($param, $type);
+        if ($variableName === null) {
+            throw new ShouldNotHappenException();
+        }
+
         return 'get' . ucfirst($variableName);
     }
 }

@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
-use PHPStan\Analyser\Scope;
 use Rector\AnonymousClass\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
@@ -249,28 +248,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected function isAnonymousClass(Node $node): bool
     {
         return $this->classNodeAnalyzer->isAnonymousClass($node);
-    }
-
-    protected function createCountedValueName(string $countedValueName, ?Scope $scope): string
-    {
-        if ($scope === null) {
-            return $countedValueName;
-        }
-
-        // make sure variable name is unique
-        if (! $scope->hasVariableType($countedValueName)->yes()) {
-            return $countedValueName;
-        }
-
-        // we need to add number suffix until the variable is unique
-        $i = 2;
-        $countedValueNamePart = $countedValueName;
-        while ($scope->hasVariableType($countedValueName)->yes()) {
-            $countedValueName = $countedValueNamePart . $i;
-            ++$i;
-        }
-
-        return $countedValueName;
     }
 
     protected function mirrorComments(Node $newNode, Node $oldNode): void
