@@ -33,9 +33,9 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     public const POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES = '$positionWithDefaultValueByMethodNamesByClassTypes';
 
     /**
-     * @var string[][][][][]
+     * @var mixed[]
      */
-    private const CONFIGURATION = [
+    private const EXAMPLE_CONFIGURATION = [
         self::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
             'SomeExampleClass' => [
                 'someMethod' => [
@@ -70,7 +70,7 @@ $someObject = new SomeExampleClass;
 $someObject->someMethod(true);
 PHP
                     ,
-                    self::CONFIGURATION
+                    self::EXAMPLE_CONFIGURATION
                 ),
                 new ConfiguredCodeSample(
                     <<<'PHP'
@@ -91,7 +91,7 @@ class MyCustomClass extends SomeExampleClass
 }
 PHP
                     ,
-                    self::CONFIGURATION
+                    self::EXAMPLE_CONFIGURATION
                 ),
             ]
         );
@@ -127,6 +127,9 @@ PHP
         return $node;
     }
 
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration): void
     {
         $this->positionWithDefaultValueByMethodNamesByClassTypes = $configuration[self::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES] ?? [];
