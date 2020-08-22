@@ -1,11 +1,11 @@
-# All 566 Rectors Overview
+# All 565 Rectors Overview
 
 - [Projects](#projects)
 ---
 
 ## Projects
 
-- [Architecture](#architecture) (4)
+- [Architecture](#architecture) (3)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
 - [CodeQuality](#codequality) (58)
@@ -74,37 +74,6 @@
 - [TypeDeclaration](#typedeclaration) (9)
 
 ## Architecture
-
-### `ConstructorInjectionToActionInjectionRector`
-
-- class: [`Rector\Architecture\Rector\Class_\ConstructorInjectionToActionInjectionRector`](/../master/rules/architecture/src/Rector/Class_/ConstructorInjectionToActionInjectionRector.php)
-- [test fixtures](/../master/rules/architecture/tests/Rector/Class_/ConstructorInjectionToActionInjectionRector/Fixture)
-
-Move constructor injection dependency in Controller to action injection
-
-```diff
- final class SomeController
- {
--    /**
--     * @var ProductRepository
--     */
--    private $productRepository;
--
--    public function __construct(ProductRepository $productRepository)
-+    public function default(ProductRepository $productRepository)
-     {
--        $this->productRepository = $productRepository;
--    }
--
--    public function default()
--    {
--        $products = $this->productRepository->fetchAll();
-+        $products = $productRepository->fetchAll();
-     }
- }
-```
-
-<br><br>
 
 ### `MoveRepositoryFromParentToConstructorRector`
 
@@ -322,7 +291,9 @@ Change `App::uses()` to use imports
 Moves array options to fluent setter method calls.
 
 ```diff
- class ArticlesTable extends \Cake\ORM\Table
+ use Cake\ORM\Table;
+
+ final class ArticlesTable extends Table
  {
      public function initialize(array $config)
      {
@@ -5057,8 +5028,7 @@ use Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(FuncCallToMethodCallRector::class)
-        ->call('configure', [[FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => ['view' => ['Namespaced\SomeRenderer', 'render']]]]);
+    $services->set(FuncCallToMethodCallRector::class);
 };
 ```
 
@@ -5122,8 +5092,7 @@ use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(FuncCallToStaticCallRector::class)
-        ->call('configure', [[FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => ['view' => ['SomeStaticClass', 'render']]]]);
+    $services->set(FuncCallToStaticCallRector::class);
 };
 ```
 
@@ -12454,8 +12423,7 @@ use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(RenameStaticMethodRector::class)
-        ->call('configure', [[RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => ['SomeClass' => ['oldMethod' => ['AnotherExampleClass', 'newStaticMethod']]]]]);
+    $services->set(RenameStaticMethodRector::class);
 };
 ```
 
@@ -12474,8 +12442,7 @@ use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(RenameStaticMethodRector::class)
-        ->call('configure', [[RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => ['SomeClass' => ['oldMethod' => 'newStaticMethod']]]]);
+    $services->set(RenameStaticMethodRector::class);
 };
 ```
 
@@ -12505,8 +12472,7 @@ use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRecto
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(CompleteImportForPartialAnnotationRector::class)
-        ->call('configure', [[CompleteImportForPartialAnnotationRector::USE_IMPORTS_TO_RESTORE => [['Doctrine\ORM\Mapping', 'ORM']]]]);
+    $services->set(CompleteImportForPartialAnnotationRector::class);
 };
 ```
 

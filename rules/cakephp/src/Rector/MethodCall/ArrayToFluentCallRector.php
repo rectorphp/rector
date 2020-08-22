@@ -55,7 +55,9 @@ final class ArrayToFluentCallRector extends AbstractRector implements Configurab
         return new RectorDefinition('Moves array options to fluent setter method calls.', [
             new CodeSample(
                 <<<'PHP'
-class ArticlesTable extends \Cake\ORM\Table
+use Cake\ORM\Table;
+
+final class ArticlesTable extends Table
 {
     public function initialize(array $config)
     {
@@ -68,7 +70,9 @@ class ArticlesTable extends \Cake\ORM\Table
 PHP
                 ,
                 <<<'PHP'
-class ArticlesTable extends \Cake\ORM\Table
+use Cake\ORM\Table;
+
+final class ArticlesTable extends Table
 {
     public function initialize(array $config)
     {

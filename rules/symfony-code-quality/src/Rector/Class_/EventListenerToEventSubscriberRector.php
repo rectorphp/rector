@@ -27,6 +27,7 @@ use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
+use Rector\SymfonyCodeQuality\ValueObject\EventNameToClassAndConstant;
 
 /**
  * @see \Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\EventListenerToEventSubscriberRectorTest
@@ -49,23 +50,9 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     private const CONSOLE_EVENTS_CLASS = 'Symfony\Component\Console\ConsoleEvents';
 
     /**
-     * @var string[][]
+     * @var EventNameToClassAndConstant[]
      */
-    private const EVENT_NAMES_TO_CLASS_CONSTANTS = [
-        // kernel events
-        'kernel.request' => [self::KERNEL_EVENTS_CLASS, 'REQUEST'],
-        'kernel.exception' => [self::KERNEL_EVENTS_CLASS, 'EXCEPTION'],
-        'kernel.view' => [self::KERNEL_EVENTS_CLASS, 'VIEW'],
-        'kernel.controller' => [self::KERNEL_EVENTS_CLASS, 'CONTROLLER'],
-        'kernel.controller_arguments' => [self::KERNEL_EVENTS_CLASS, 'CONTROLLER_ARGUMENTS'],
-        'kernel.response' => [self::KERNEL_EVENTS_CLASS, 'RESPONSE'],
-        'kernel.terminate' => [self::KERNEL_EVENTS_CLASS, 'TERMINATE'],
-        'kernel.finish_request' => [self::KERNEL_EVENTS_CLASS, 'FINISH_REQUEST'],
-        // console events
-        'console.command' => [self::CONSOLE_EVENTS_CLASS, 'COMMAND'],
-        'console.terminate' => [self::CONSOLE_EVENTS_CLASS, 'TERMINATE'],
-        'console.error' => [self::CONSOLE_EVENTS_CLASS, 'ERROR'],
-    ];
+    private $eventNamesToClassConstants = [];
 
     /**
      * @var bool
@@ -85,6 +72,26 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     public function __construct(ServiceMapProvider $applicationServiceMapProvider)
     {
         $this->applicationServiceMapProvider = $applicationServiceMapProvider;
+
+        $this->eventNamesToClassConstants = [
+            // kernel events
+            new EventNameToClassAndConstant('kernel.request', self::KERNEL_EVENTS_CLASS, 'REQUEST'),
+            new EventNameToClassAndConstant('kernel.exception', self::KERNEL_EVENTS_CLASS, 'EXCEPTION'),
+            new EventNameToClassAndConstant('kernel.view', self::KERNEL_EVENTS_CLASS, 'VIEW'),
+            new EventNameToClassAndConstant('kernel.controller', self::KERNEL_EVENTS_CLASS, 'CONTROLLER'),
+            new EventNameToClassAndConstant(
+                'kernel.controller_arguments',
+                self::KERNEL_EVENTS_CLASS,
+                'CONTROLLER_ARGUMENTS'
+            ),
+            new EventNameToClassAndConstant('kernel.response', self::KERNEL_EVENTS_CLASS, 'RESPONSE'),
+            new EventNameToClassAndConstant('kernel.terminate', self::KERNEL_EVENTS_CLASS, 'TERMINATE'),
+            new EventNameToClassAndConstant('kernel.finish_request', self::KERNEL_EVENTS_CLASS, 'FINISH_REQUEST'),
+            // console events
+            new EventNameToClassAndConstant('console.command', self::CONSOLE_EVENTS_CLASS, 'COMMAND'),
+            new EventNameToClassAndConstant('console.terminate', self::CONSOLE_EVENTS_CLASS, 'TERMINATE'),
+            new EventNameToClassAndConstant('console.error', self::CONSOLE_EVENTS_CLASS, 'ERROR'),
+        ];
     }
 
     public function getDefinition(): RectorDefinition
@@ -277,10 +284,15 @@ PHP
         }
 
         // is string a that could be caught in constant, e.g. KernelEvents?
-        if (isset(self::EVENT_NAMES_TO_CLASS_CONSTANTS[$eventName])) {
-            [$class, $constant] = self::EVENT_NAMES_TO_CLASS_CONSTANTS[$eventName];
+        foreach ($this->eventNamesToClassConstants as $eventNameToClassConstant) {
+            if ($eventNameToClassConstant->getEventName() !== $eventName) {
+                continue;
+            }
 
-            return $this->createClassConstFetch($class, $constant);
+            return $this->createClassConstFetch(
+                $eventNameToClassConstant->getEventClass(),
+                $eventNameToClassConstant->getEventConstant()
+            );
         }
 
         return new String_($eventName);

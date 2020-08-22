@@ -177,7 +177,8 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         if ($funcCallOrEmptyNodeName === 'is_a') {
-            [$object, $class] = $funcCallOrEmptyNodeArgs;
+            $object = $funcCallOrEmptyNodeArgs[0];
+            $class = $funcCallOrEmptyNodeArgs[1];
 
             return array_merge([$class, $object], $oldArguments);
         }
