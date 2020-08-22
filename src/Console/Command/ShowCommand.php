@@ -99,6 +99,7 @@ final class ShowCommand extends AbstractCommand
 
         $this->symfonyStyle->writeln($indentedContent);
     }
+
     /**
      * Resolve configuration by convention
      * @return mixed[]
