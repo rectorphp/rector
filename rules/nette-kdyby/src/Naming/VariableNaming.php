@@ -6,6 +6,7 @@ namespace Rector\NetteKdyby\Naming;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\FuncCall;
@@ -88,7 +89,7 @@ final class VariableNaming
     }
 
     public function resolveFromNodeWithScopeCountAndFallbackName(
-        Node\Expr $expr,
+        Expr $expr,
         Scope $scope,
         string $fallbackName
     ): string {
@@ -233,6 +234,10 @@ final class VariableNaming
         $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
         if (! is_string($propertyName)) {
             throw new NotImplementedException();
+        }
+
+        if ($varName === 'this') {
+            return $propertyName;
         }
 
         return $varName . ucfirst($propertyName);

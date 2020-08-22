@@ -6,6 +6,7 @@ namespace Rector\DoctrineCodeQuality\Tests\Rector\ClassMethod\MakeEntityDateTime
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\DoctrineCodeQuality\Rector\ClassMethod\MakeEntityDateTimePropertyDateTimeInterfaceRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MakeEntityDateTimePropertyDateTimeInterfaceRectorTest extends AbstractRectorTestCase
@@ -25,6 +26,6 @@ final class MakeEntityDateTimePropertyDateTimeInterfaceRectorTest extends Abstra
 
     protected function getRectorClass(): string
     {
-        return \Rector\DoctrineCodeQuality\Rector\ClassMethod\MakeEntityDateTimePropertyDateTimeInterfaceRector::class;
+        return MakeEntityDateTimePropertyDateTimeInterfaceRector::class;
     }
 }

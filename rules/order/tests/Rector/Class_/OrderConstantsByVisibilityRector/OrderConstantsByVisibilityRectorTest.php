@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector;
 
+use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Order\Rector\Class_\OrderConstantsByVisibilityRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -18,7 +19,7 @@ final class OrderConstantsByVisibilityRectorTest extends AbstractRectorTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideData(): \Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

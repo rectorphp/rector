@@ -1,4 +1,4 @@
-# All 564 Rectors Overview
+# All 565 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -29,7 +29,7 @@
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
-- [Naming](#naming) (4)
+- [Naming](#naming) (5)
 - [Nette](#nette) (16)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
@@ -6914,6 +6914,31 @@ Add mysql_query and mysql_error with connection
 <br><br>
 
 ## Naming
+
+### `MakeGetterClassMethodNameStartWithGetRector`
+
+- class: [`Rector\Naming\Rector\ClassMethod\MakeGetterClassMethodNameStartWithGetRector`](/../master/rules/naming/src/Rector/ClassMethod/MakeGetterClassMethodNameStartWithGetRector.php)
+- [test fixtures](/../master/rules/naming/tests/Rector/ClassMethod/MakeGetterClassMethodNameStartWithGetRector/Fixture)
+
+Change getter method names to start with get/provide
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var string
+      */
+     private $name;
+
+-    public function name(): string
++    public function getName(): string
+     {
+         return $this->name;
+     }
+ }
+```
+
+<br><br>
 
 ### `RenameParamToMatchTypeRector`
 
