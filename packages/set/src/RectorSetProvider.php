@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Set;
 
+use Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\Set\ValueObject\SetList;
@@ -68,6 +69,9 @@ final class RectorSetProvider extends AbstractSetProvider
             }
 
             $setName = StaticRectorStrings::constantToDashes($name);
+
+            // remove `-` before numbers
+            $setName = Strings::replace($setName, '#\-(\d+)#', '$1');
             $this->sets[] = new Set($setName, new SmartFileInfo($setPath));
         }
     }
