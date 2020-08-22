@@ -122,6 +122,10 @@ PHP
         return $node;
     }
 
+    private function isAlreadyGetterNamedClassMethod(ClassMethod $classMethod): bool
+    {
+        return $this->isName($classMethod, self::GETTER_NAME_PATTERN);
+    }
     private function matchGetterClassMethodReturnedExpr(ClassMethod $classMethod): ?Expr
     {
         if (count((array) $classMethod->stmts) !== 1) {
@@ -138,11 +142,6 @@ PHP
         }
 
         return $onlyStmt->expr;
-    }
-
-    private function isAlreadyGetterNamedClassMethod(ClassMethod $classMethod): bool
-    {
-        return $this->isName($classMethod, self::GETTER_NAME_PATTERN);
     }
 
     private function updateClassMethodCalls(ClassMethod $classMethod, string $newClassMethodName): void
