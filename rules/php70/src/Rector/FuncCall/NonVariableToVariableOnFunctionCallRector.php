@@ -150,6 +150,12 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
 
         return $arguments;
     }
+    private function resolveScopeNode(Node $node): Node
+    {
+        return $node->getAttribute(AttributeKey::METHOD_NODE) ??
+            $node->getAttribute(AttributeKey::FUNCTION_NODE) ??
+            $node->getAttribute(AttributeKey::CLOSURE_NODE);
+    }
 
     private function getReplacementsFor(Expr $expr, MutatingScope $mutatingScope, Node $scopeNode): VariableAssignPair
     {
@@ -192,12 +198,5 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         }
 
         return $expr instanceof AssignOp;
-    }
-
-    private function resolveScopeNode(Node $node): Node
-    {
-        return $node->getAttribute(AttributeKey::METHOD_NODE) ??
-            $node->getAttribute(AttributeKey::FUNCTION_NODE) ??
-            $node->getAttribute(AttributeKey::CLOSURE_NODE);
     }
 }
