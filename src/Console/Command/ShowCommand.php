@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\NeonYaml\YamlPrinter;
-use Rector\Core\Php\TypeAnalyzer;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\RectorGenerator\Contract\InternalRectorInterface;
 use ReflectionClass;
-use ReflectionNamedType;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -30,11 +29,6 @@ final class ShowCommand extends AbstractCommand
     private $symfonyStyle;
 
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @var YamlPrinter
      */
     private $yamlPrinter;
@@ -42,15 +36,10 @@ final class ShowCommand extends AbstractCommand
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(
-        SymfonyStyle $symfonyStyle,
-        array $rectors,
-        TypeAnalyzer $typeAnalyzer,
-        YamlPrinter $yamlPrinter
-    ) {
+    public function __construct(SymfonyStyle $symfonyStyle, array $rectors, YamlPrinter $yamlPrinter)
+    {
         $this->symfonyStyle = $symfonyStyle;
         $this->rectors = $rectors;
-        $this->typeAnalyzer = $typeAnalyzer;
         $this->yamlPrinter = $yamlPrinter;
 
         parent::__construct();
@@ -68,17 +57,7 @@ final class ShowCommand extends AbstractCommand
 
         foreach ($rectors as $rector) {
             $this->symfonyStyle->writeln(' * ' . get_class($rector));
-            $configuration = $this->resolveConfiguration($rector);
-            if ($configuration === []) {
-                continue;
-            }
-
-            $configurationYamlContent = $this->yamlPrinter->printYamlToString($configuration);
-
-            $lines = explode(PHP_EOL, $configurationYamlContent);
-            $indentedContent = '      ' . implode(PHP_EOL . '      ', $lines);
-
-            $this->symfonyStyle->writeln($indentedContent);
+            $this->printConfiguration($rector);
         }
         $message = sprintf('%d loaded Rectors', count($rectors));
 
@@ -106,36 +85,45 @@ final class ShowCommand extends AbstractCommand
         });
     }
 
+    private function printConfiguration(RectorInterface $rector): void
+    {
+        $configuration = $this->resolveConfiguration($rector);
+        if ($configuration === []) {
+            return;
+        }
+
+        $configurationYamlContent = $this->yamlPrinter->printYamlToString($configuration);
+
+        $lines = explode(PHP_EOL, $configurationYamlContent);
+        $indentedContent = '      ' . implode(PHP_EOL . '      ', $lines);
+
+        $this->symfonyStyle->writeln($indentedContent);
+    }
+
     /**
      * Resolve configuration by convention
      * @return mixed[]
      */
     private function resolveConfiguration(RectorInterface $rector): array
     {
-        $reflectionClass = new ReflectionClass($rector);
-
-        $constructorReflection = $reflectionClass->getConstructor();
-        if ($constructorReflection === null) {
+        if (! $rector instanceof ConfigurableRectorInterface) {
             return [];
         }
 
+        $reflectionClass = new ReflectionClass($rector);
+
         $configuration = [];
-        foreach ($constructorReflection->getParameters() as $reflectionParameter) {
-            $parameterType = $reflectionParameter->getType();
-            $parameterTypeName = (string) ($parameterType instanceof ReflectionNamedType ? $parameterType->getName() : null);
-            if (! $this->typeAnalyzer->isPhpReservedType($parameterTypeName)) {
+        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+            $reflectionProperty->setAccessible(true);
+
+            $configurationValue = $reflectionProperty->getValue($rector);
+
+            // probably service → skip
+            if (is_object($configurationValue)) {
                 continue;
             }
 
-            if (! $reflectionClass->hasProperty($reflectionParameter->getName())) {
-                continue;
-            }
-
-            $propertyReflection = $reflectionClass->getProperty($reflectionParameter->getName());
-            $propertyReflection->setAccessible(true);
-
-            $configurationValue = $propertyReflection->getValue($rector);
-            $configuration[$reflectionParameter->getName()] = $configurationValue;
+            $configuration[$reflectionProperty->getName()] = $configurationValue;
         }
 
         return $configuration;
