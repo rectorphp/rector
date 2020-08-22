@@ -150,6 +150,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
 
         return $arguments;
     }
+
     private function resolveScopeNode(Node $node): Node
     {
         return $node->getAttribute(AttributeKey::METHOD_NODE) ??
