@@ -78,17 +78,24 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
             return null;
         }
 
-        $scopeNode = $node->getAttribute(AttributeKey::METHOD_NODE) ?? $node->getAttribute(
-            AttributeKey::FUNCTION_NODE
-        ) ?? $node->getAttribute(AttributeKey::CLOSURE_NODE);
-        /** @var Scope $currentScope */
+        $scopeNode = $this->resolveScopeNode($node);
+
         $currentScope = $scopeNode->getAttribute(AttributeKey::SCOPE);
+        if (! $currentScope instanceof MutatingScope) {
+            return null;
+        }
 
         foreach ($arguments as $key => $argument) {
             $replacements = $this->getReplacementsFor($argument, $currentScope, $scopeNode);
 
             $current = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-            $this->addNodeBeforeNode($replacements->getAssign(), $current instanceof Return_ ? $current : $node);
+
+            $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+            $this->addNodeBeforeNode(
+                $replacements->getAssign(),
+                $current instanceof Return_ ? $current : $currentStatement
+            );
+
             $node->args[$key]->value = $replacements->getVariable();
 
             // add variable name to scope, so we prevent duplication of new variable of the same name
@@ -142,6 +149,13 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         }
 
         return $arguments;
+    }
+
+    private function resolveScopeNode(Node $node): Node
+    {
+        return $node->getAttribute(AttributeKey::METHOD_NODE) ??
+            $node->getAttribute(AttributeKey::FUNCTION_NODE) ??
+            $node->getAttribute(AttributeKey::CLOSURE_NODE);
     }
 
     private function getReplacementsFor(Expr $expr, MutatingScope $mutatingScope, Node $scopeNode): VariableAssignPair
