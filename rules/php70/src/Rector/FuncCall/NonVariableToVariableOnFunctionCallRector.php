@@ -144,7 +144,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
         return $arguments;
     }
 
-    private function getReplacementsFor(Expr $expr, MutatingScope $currentScope, Node $scopeNode): VariableAssignPair
+    private function getReplacementsFor(Expr $expr, MutatingScope $mutatingScope, Node $scopeNode): VariableAssignPair
     {
         /** @var Assign|AssignOp|AssignRef $expr */
         if ($this->isAssign($expr) && $this->isVariableLikeNode($expr->var)) {
@@ -153,14 +153,14 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
 
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
             $expr,
-            $currentScope,
+            $mutatingScope,
             'tmp'
         );
 
         $variable = new Variable($variableName);
 
         // add a new scope with this variable
-        $newVariableAwareScope = $currentScope->assignExpression($variable, new MixedType());
+        $newVariableAwareScope = $mutatingScope->assignExpression($variable, new MixedType());
         $scopeNode->setAttribute(AttributeKey::SCOPE, $newVariableAwareScope);
 
         return new VariableAssignPair($variable, new Assign($variable, $expr));

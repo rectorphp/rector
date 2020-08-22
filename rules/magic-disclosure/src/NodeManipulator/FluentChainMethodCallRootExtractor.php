@@ -118,6 +118,16 @@ final class FluentChainMethodCallRootExtractor
         return $variableStaticType !== $calledMethodStaticType;
     }
 
+    private function resolveKindInArgs(MethodCall $methodCall): AssignAndRootExpr
+    {
+        $variableName = $this->variableNaming->resolveFromNode($methodCall->var);
+        if ($variableName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $silentVariable = new Variable($variableName);
+        return new AssignAndRootExpr($methodCall->var, $methodCall->var, $silentVariable);
+    }
     private function matchMethodCallOnNew(MethodCall $methodCall): ?AssignAndRootExpr
     {
         // we need assigned left variable here
@@ -148,16 +158,5 @@ final class FluentChainMethodCallRootExtractor
 
         // no assign, just standalone call
         return null;
-    }
-
-    private function resolveKindInArgs(MethodCall $methodCall): AssignAndRootExpr
-    {
-        $variableName = $this->variableNaming->resolveFromNode($methodCall->var);
-        if ($variableName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $silentVariable = new Variable($variableName);
-        return new AssignAndRootExpr($methodCall->var, $methodCall->var, $silentVariable);
     }
 }
