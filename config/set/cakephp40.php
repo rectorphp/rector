@@ -10,6 +10,8 @@ use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
+use Rector\Renaming\ValueObject\StaticCallRename;
+use function Rector\SymfonyPhpConfig\inline_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -67,15 +69,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]]);
 
+    $configuration = [
+        new StaticCallRename('Router', 'pushRequest', 'Router', 'setRequest'),
+        new StaticCallRename('Router', 'setRequestInfo', 'Router', 'setRequest'),
+        new StaticCallRename('Router', 'setRequestContext', 'Router', 'setRequest'),
+    ];
+
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                'Router' => [
-                    'pushRequest' => 'setRequest',
-                    'setRequestInfo' => 'setRequest',
-                    'setRequestContext' => 'setRequest',
-                ],
-            ],
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_objects($configuration),
         ]]);
 
     $services->set(RenamePropertyRector::class)

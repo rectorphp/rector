@@ -12,6 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Renaming\ValueObject\StaticCallRename;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\StaticCall\RenameStaticMethodRector\RenameStaticMethodRectorTest
@@ -21,12 +22,17 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
     /**
      * @var string
      */
-    public const OLD_TO_NEW_METHODS_BY_CLASSES = '$oldToNewMethodByClasses';
+    public const OLD_TO_NEW_METHODS_BY_CLASSES = 'old_to_new_method_by_classes';
 
     /**
-     * @var string[][]|string[][][]
+     * @var string
      */
-    private $oldToNewMethodByClasses = [];
+    private const SOME_CLASS = 'SomeClass';
+
+    /**
+     * @var StaticCallRename[]
+     */
+    private $staticMethodRenames = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -36,9 +42,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
                 'AnotherExampleClass::newStaticMethod();',
                 [
                     self::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                        'SomeClass' => [
-                            'oldMethod' => ['AnotherExampleClass', 'newStaticMethod'],
-                        ],
+                        new StaticCallRename(self::SOME_CLASS, 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'),
                     ],
                 ]
             ),
@@ -47,9 +51,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
                 'SomeClass::newStaticMethod();',
                 [
                     self::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                        'SomeClass' => [
-                            'oldMethod' => 'newStaticMethod',
-                        ],
+                        new StaticCallRename(self::SOME_CLASS, 'oldMethod', self::SOME_CLASS, 'newStaticMethod'),
                     ],
                 ]
             ),
@@ -69,18 +71,16 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->oldToNewMethodByClasses as $type => $oldToNewMethods) {
-            if (! $this->isObjectType($node->class, $type)) {
+        foreach ($this->staticMethodRenames as $staticMethodRename) {
+            if (! $this->isObjectType($node->class, $staticMethodRename->getOldClass())) {
                 continue;
             }
 
-            foreach ($oldToNewMethods as $oldMethod => $newMethod) {
-                if (! $this->isName($node->name, $oldMethod)) {
-                    continue;
-                }
-
-                return $this->rename($node, $newMethod);
+            if (! $this->isName($node->name, $staticMethodRename->getOldMethod())) {
+                continue;
             }
+
+            return $this->rename($node, $staticMethodRename);
         }
 
         return null;
@@ -88,20 +88,15 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
 
     public function configure(array $configuration): void
     {
-        $this->oldToNewMethodByClasses = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES] ?? [];
+        $this->staticMethodRenames = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES] ?? [];
     }
 
-    /**
-     * @param string|string[] $newMethod
-     */
-    private function rename(StaticCall $staticCall, $newMethod): StaticCall
+    private function rename(StaticCall $staticCall, StaticCallRename $staticCallRename): StaticCall
     {
-        if (is_array($newMethod)) {
-            [$newClass, $newMethod] = $newMethod;
-            $staticCall->class = new Name($newClass);
-            $staticCall->name = new Identifier($newMethod);
-        } else {
-            $staticCall->name = new Identifier($newMethod);
+        $staticCall->name = new Identifier($staticCallRename->getNewMethod());
+
+        if ($staticCallRename->hasClassChanged()) {
+            $staticCall->class = new Name($staticCallRename->getNewClass());
         }
 
         return $staticCall;

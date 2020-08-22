@@ -77,7 +77,7 @@ final class EventClassNaming
 
     public function createEventClassNameFromClassPropertyReference(string $classAndPropertyName): string
     {
-        [$class, $property] = Strings::split($classAndPropertyName, '#::#');
+        [$class, $property] = explode('::', $classAndPropertyName);
 
         $shortEventClass = $this->createShortEventClassNameFromClassAndProperty($class, $property);
 

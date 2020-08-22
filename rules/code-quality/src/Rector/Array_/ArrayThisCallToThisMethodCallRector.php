@@ -17,7 +17,6 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableClassMethodReferenceAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionMethod;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Array_\ArrayThisCallToThisMethodCallRector\ArrayThisCallToThisMethodCallRectorTest
@@ -106,7 +105,10 @@ PHP
 
         $reflectionMethod = $arrayCallable->getReflectionMethod();
         if ($reflectionMethod->getNumberOfParameters() > 0) {
-            $classMethod = $this->functionLikeParsedNodesFinder->findClassMethod($arrayCallable->getMethod(), $arrayCallable->getClass());
+            $classMethod = $this->functionLikeParsedNodesFinder->findClassMethod(
+                $arrayCallable->getMethod(),
+                $arrayCallable->getClass()
+            );
             if ($classMethod !== null) {
                 return $this->nodeFactory->createClosureFromClassMethod($classMethod);
             }

@@ -167,7 +167,7 @@ final class ListeningMethodsCollector
         $classMethod = $class->getMethod($classMethodName);
 
         if (Strings::contains($eventClass, '::')) {
-            [$dispatchingClass, $property] = Strings::split($eventClass, '#::#');
+            [$dispatchingClass, $property] = explode('::', $eventClass);
             $eventClass = $this->eventClassNaming->createEventClassNameFromClassAndProperty(
                 $dispatchingClass,
                 $property

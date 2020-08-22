@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector;
 use Rector\Generic\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\SomeTranslator;
+use Rector\Generic\ValueObject\FuncNameToMethodCallName;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FuncCallToMethodCallRectorTest extends AbstractRectorTestCase
@@ -33,12 +34,13 @@ final class FuncCallToMethodCallRectorTest extends AbstractRectorTestCase
         return [
             FuncCallToMethodCallRector::class => [
                 FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => [
-                    'view' => ['Namespaced\SomeRenderer', 'render'],
-                    'translate' => [SomeTranslator::class, 'translateMethod'],
-                    'Rector\Generic\Tests\Rector\Function_\FuncCallToMethodCallRector\Source\some_view_function' => [
+                    new FuncNameToMethodCallName('view', 'Namespaced\SomeRenderer', 'render'),
+                    new FuncNameToMethodCallName('translate', SomeTranslator::class, 'translateMethod'),
+                    new FuncNameToMethodCallName(
+                        'Rector\Generic\Tests\Rector\Function_\FuncCallToMethodCallRector\Source\some_view_function',
                         'Namespaced\SomeRenderer',
                         'render',
-                    ],
+                    ),
                 ],
             ],
         ];

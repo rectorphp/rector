@@ -5,9 +5,11 @@ declare(strict_types=1);
 use GuzzleHttp\Cookie\SetCookie;
 use Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector;
 use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
+use Rector\Generic\ValueObject\FuncNameToMethodCallName;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
 use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use function Rector\SymfonyPhpConfig\inline_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -29,12 +31,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             [[FluentChainMethodCallToNormalMethodCallRector::TYPES_TO_MATCH => '%classes_to_defluent%']]
         );
 
+    $configuration = [
+        new FuncNameToMethodCallName('GuzzleHttp\json_decode', 'GuzzleHttp\Utils', 'jsonDecode'),
+        new FuncNameToMethodCallName('GuzzleHttp\get_path', 'GuzzleHttp\Utils', 'getPath'),
+    ];
+
     $services->set(FuncCallToMethodCallRector::class)
         ->call('configure', [[
-            FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => [
-                'GuzzleHttp\json_decode' => ['GuzzleHttp\Utils', 'jsonDecode'],
-                'GuzzleHttp\get_path' => ['GuzzleHttp\Utils', 'getPath'],
-            ],
+            FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => inline_objects($configuration),
         ]]);
 
     $services->set(StaticCallToFunctionRector::class)

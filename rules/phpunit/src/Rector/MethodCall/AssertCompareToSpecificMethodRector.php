@@ -13,6 +13,7 @@ use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertCompareToSpecificMethodRector\AssertCompareToSpecificMethodRectorTest
@@ -20,15 +21,30 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[][]
+     * @var string
      */
-    private const DEFAULT_OLD_TO_NEW_METHODS = [
-        'count' => ['assertCount', 'assertNotCount'],
-        'sizeof' => ['assertCount', 'assertNotCount'],
-        'iterator_count' => ['assertCount', 'assertNotCount'],
-        'gettype' => ['assertInternalType', 'assertNotInternalType'],
-        'get_class' => ['assertInstanceOf', 'assertNotInstanceOf'],
-    ];
+    private const ASSERT_COUNT = 'assertCount';
+
+    /**
+     * @var string
+     */
+    private const ASSERT_NOT_COUNT = 'assertNotCount';
+
+    /**
+     * @var FunctionNameWithAssertMethods[]
+     */
+    private $functionNamesWithAssertMethods = [];
+
+    public function __construct()
+    {
+        $this->functionNamesWithAssertMethods = [
+            new FunctionNameWithAssertMethods('count', self::ASSERT_COUNT, self::ASSERT_NOT_COUNT),
+            new FunctionNameWithAssertMethods('sizeof', self::ASSERT_COUNT, self::ASSERT_NOT_COUNT),
+            new FunctionNameWithAssertMethods('iterator_count', self::ASSERT_COUNT, self::ASSERT_NOT_COUNT),
+            new FunctionNameWithAssertMethods('gettype', 'assertInternalType', 'assertNotInternalType'),
+            new FunctionNameWithAssertMethods('get_class', 'assertInstanceOf', 'assertNotInstanceOf'),
+        ];
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -88,35 +104,29 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private function processFuncCallArgumentValue(Node $node, FuncCall $funcCall, Arg $requiredArg): ?Node
     {
-        $name = $this->getName($funcCall);
-        if ($name === null) {
-            return null;
+        foreach ($this->functionNamesWithAssertMethods as $functionNameWithAssertMethods) {
+            if (! $this->isName($funcCall, $functionNameWithAssertMethods->getFunctionName())) {
+                continue;
+            }
+
+            $this->renameMethod($node, $functionNameWithAssertMethods);
+            $this->moveFunctionArgumentsUp($node, $funcCall, $requiredArg);
+
+            return $node;
         }
 
-        if (! isset(self::DEFAULT_OLD_TO_NEW_METHODS[$name])) {
-            return null;
-        }
-
-        $this->renameMethod($node, $name);
-        $this->moveFunctionArgumentsUp($node, $funcCall, $requiredArg);
-
-        return $node;
+        return null;
     }
 
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function renameMethod(Node $node, string $funcName): void
+    private function renameMethod(Node $node, FunctionNameWithAssertMethods $functionNameWithAssertMethods): void
     {
-        /** @var string $oldMethodName */
-        $oldMethodName = $this->getName($node->name);
-
-        [$trueMethodName, $falseMethodName] = self::DEFAULT_OLD_TO_NEW_METHODS[$funcName];
-
-        if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $trueMethodName) {
-            $node->name = new Identifier($trueMethodName);
-        } elseif (in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $falseMethodName) {
-            $node->name = new Identifier($falseMethodName);
+        if ($this->isNames($node->name, ['assertSame', 'assertEquals'])) {
+            $node->name = new Identifier($functionNameWithAssertMethods->getAssetMethodName());
+        } elseif ($this->isNames($node->name, ['assertNotSame', 'assertNotEquals'])) {
+            $node->name = new Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
         }
     }
 

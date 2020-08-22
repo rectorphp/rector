@@ -398,8 +398,11 @@ parameters:
 
 
         -
-            message: '#Array explosion is not allow, use value object to pass data instead#'
+            message: '#Array explosion is not allowed\. Use value object to pass data instead#'
             paths:
-                - src/*
-                - tests/*
-                - rules/*
+                # working with cvs file
+                - packages/dynamic-type-analysis/src/Probe/TypeStaticProbe.php
+                # 3rd party package
+                - utils/project-validator/src/Command/ValidateFixtureContentCommand.php
+                - src/Testing/PHPUnit/AbstractRectorTestCase.php
+                - rules/php70/src/EregToPcreTransformer.php

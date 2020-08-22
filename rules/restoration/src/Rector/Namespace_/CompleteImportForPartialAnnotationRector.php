@@ -11,11 +11,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Builder\UseBuilder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Restoration\ValueObject\UseWithAlias;
 
 /**
  * @see \Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnnotationRector\CompleteImportForPartialAnnotationRectorTest
@@ -29,16 +29,7 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector impl
     public const USE_IMPORTS_TO_RESTORE = '$useImportsToRestore';
 
     /**
-     * @var string[][]
-     */
-    private const DEFAULT_IMPORTS_TO_RESTORE = [
-        ['Doctrine\ORM\Mapping', 'ORM'],
-        ['Symfony\Component\Validator\Constraints', 'Assert'],
-        ['JMS\Serializer\Annotation', 'Serializer'],
-    ];
-
-    /**
-     * @var mixed[]
+     * @var UseWithAlias[]
      */
     private $useImportsToRestore = [];
 
@@ -69,7 +60,7 @@ class SomeClass
 PHP
                 ,
                 [
-                    self::USE_IMPORTS_TO_RESTORE => [['Doctrine\ORM\Mapping', 'ORM']],
+                    self::USE_IMPORTS_TO_RESTORE => [new UseWithAlias('Doctrine\ORM\Mapping', 'ORM')],
                 ]
             ),
         ]);
@@ -95,39 +86,32 @@ PHP
         }
 
         foreach ($this->useImportsToRestore as $useImportToRestore) {
-            if (is_array($useImportToRestore)) {
-                [$import, $alias] = $useImportToRestore;
-                $annotationToSeek = $alias;
-            } else {
-                if (! is_string($useImportToRestore)) {
-                    throw new ShouldNotHappenException();
-                }
-
-                $import = $useImportToRestore;
-                $alias = '';
-                $annotationToSeek = Strings::after($import, '\\', -1);
-            }
-
-            $annotationToSeek = '#\*\s+\@' . $annotationToSeek . '#';
+            $annotationToSeek = '#\*\s+\@' . $useImportToRestore->getAlias() . '#';
             if (! Strings::match($this->print($class), $annotationToSeek)) {
                 continue;
             }
 
-            $node = $this->addImportToNamespaceIfMissing($node, $import, $alias);
+            $node = $this->addImportToNamespaceIfMissing($node, $useImportToRestore);
         }
 
         return $node;
     }
 
+    /**
+     * @param UseWithAlias[][] $configuration
+     */
     public function configure(array $configuration): void
     {
-        $this->useImportsToRestore = array_merge(
-            $configuration[self::USE_IMPORTS_TO_RESTORE] ?? [],
-            self::DEFAULT_IMPORTS_TO_RESTORE
-        );
+        $default = [
+            new UseWithAlias('Doctrine\ORM\Mapping', 'ORM'),
+            new UseWithAlias('Symfony\Component\Validator\Constraints', 'Assert'),
+            new UseWithAlias('JMS\Serializer\Annotation', 'Serializer'),
+        ];
+
+        $this->useImportsToRestore = array_merge($configuration[self::USE_IMPORTS_TO_RESTORE] ?? [], $default);
     }
 
-    private function addImportToNamespaceIfMissing(Namespace_ $namespace, string $import, string $alias): Namespace_
+    private function addImportToNamespaceIfMissing(Namespace_ $namespace, UseWithAlias $useWithAlias): Namespace_
     {
         foreach ($namespace->stmts as $stmt) {
             if (! $stmt instanceof Use_) {
@@ -137,19 +121,22 @@ PHP
             $useUse = $stmt->uses[0];
 
             // already there
-            if ($this->isName($useUse->name, $import) && (string) $useUse->alias === $alias) {
+            if ($this->isName(
+                $useUse->name,
+                $useWithAlias->getUse()
+            ) && (string) $useUse->alias === $useWithAlias->getAlias()) {
                 return $namespace;
             }
         }
 
-        return $this->addImportToNamespace($namespace, $import, $alias);
+        return $this->addImportToNamespace($namespace, $useWithAlias);
     }
 
-    private function addImportToNamespace(Namespace_ $namespace, string $name, string $alias): Namespace_
+    private function addImportToNamespace(Namespace_ $namespace, UseWithAlias $useWithAlias): Namespace_
     {
-        $useBuilder = new UseBuilder($name);
-        if ($alias !== '') {
-            $useBuilder->as($alias);
+        $useBuilder = new UseBuilder($useWithAlias->getUse());
+        if ($useWithAlias->getAlias() !== '') {
+            $useBuilder->as($useWithAlias->getAlias());
         }
 
         /** @var Stmt $use */

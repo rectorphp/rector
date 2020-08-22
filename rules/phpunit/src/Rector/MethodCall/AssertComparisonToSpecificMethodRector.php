@@ -24,6 +24,7 @@ use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethods;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertComparisonToSpecificMethodRector\AssertComparisonToSpecificMethodRectorTest
@@ -31,18 +32,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[][]
+     * @var BinaryOpWithAssertMethods[]
      */
-    private const DEFAULT_OLD_TO_NEW_METHODS = [
-        Identical::class => ['assertSame', 'assertNotSame'],
-        NotIdentical::class => ['assertNotSame', 'assertSame'],
-        Equal::class => ['assertEquals', 'assertNotEquals'],
-        NotEqual::class => ['assertNotEquals', 'assertEquals'],
-        Greater::class => ['assertGreaterThan', 'assertLessThan'],
-        Smaller::class => ['assertLessThan', 'assertGreaterThan'],
-        GreaterOrEqual::class => ['assertGreaterThanOrEqual', 'assertLessThanOrEqual'],
-        SmallerOrEqual::class => ['assertLessThanOrEqual', 'assertGreaterThanOrEqual'],
-    ];
+    private $oldToNewMethods = [];
 
     /**
      * @var IdentifierManipulator
@@ -52,6 +44,25 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     public function __construct(IdentifierManipulator $identifierManipulator)
     {
         $this->identifierManipulator = $identifierManipulator;
+
+        $this->oldToNewMethods = [
+            new BinaryOpWithAssertMethods(Identical::class, 'assertSame', 'assertNotSame'),
+            new BinaryOpWithAssertMethods(NotIdentical::class, 'assertNotSame', 'assertSame'),
+            new BinaryOpWithAssertMethods(Equal::class, 'assertEquals', 'assertNotEquals'),
+            new BinaryOpWithAssertMethods(NotEqual::class, 'assertNotEquals', 'assertEquals'),
+            new BinaryOpWithAssertMethods(Greater::class, 'assertGreaterThan', 'assertLessThan'),
+            new BinaryOpWithAssertMethods(Smaller::class, 'assertLessThan', 'assertGreaterThan'),
+            new BinaryOpWithAssertMethods(
+                GreaterOrEqual::class,
+                'assertGreaterThanOrEqual',
+                'assertLessThanOrEqual'
+            ),
+            new BinaryOpWithAssertMethods(
+                SmallerOrEqual::class,
+                'assertLessThanOrEqual',
+                'assertGreaterThanOrEqual'
+            ),
+        ];
     }
 
     public function getDefinition(): RectorDefinition
@@ -101,21 +112,22 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private function processCallWithBinaryOp(Node $node, BinaryOp $binaryOp): ?Node
     {
-        $binaryOpClass = get_class($binaryOp);
+        foreach ($this->oldToNewMethods as $binaryOpWithAssertAndNotAssertMethodNames) {
+            if (get_class($binaryOp) !== $binaryOpWithAssertAndNotAssertMethodNames->getBinaryOpClass()) {
+                continue;
+            }
 
-        if (! isset(self::DEFAULT_OLD_TO_NEW_METHODS[$binaryOpClass])) {
-            return null;
+            $this->identifierManipulator->renameNodeWithMap($node, [
+                'assertTrue' => $binaryOpWithAssertAndNotAssertMethodNames->getAssetMethodName(),
+                'assertFalse' => $binaryOpWithAssertAndNotAssertMethodNames->getNotAssertMethodName(),
+            ]);
+
+            $this->changeArgumentsOrder($node);
+
+            return $node;
         }
 
-        [$trueMethodName, $falseMethodName] = self::DEFAULT_OLD_TO_NEW_METHODS[$binaryOpClass];
-        $this->identifierManipulator->renameNodeWithMap($node, [
-            'assertTrue' => $trueMethodName,
-            'assertFalse' => $falseMethodName,
-        ]);
-
-        $this->changeArgumentsOrder($node);
-
-        return $node;
+        return null;
     }
 
     /**

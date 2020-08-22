@@ -14,6 +14,7 @@ use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector\AssertTrueFalseToSpecificMethodRectorTest
@@ -21,22 +22,27 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[][]|bool[][]
+     * @var FunctionNameWithAssertMethods[]
      */
-    private const OLD_TO_NEW_METHODS = [
-        'is_readable' => ['assertIsReadable', 'assertNotIsReadable'],
-        'array_key_exists' => ['assertArrayHasKey', 'assertArrayNotHasKey'],
-        'array_search' => ['assertContains', 'assertNotContains'],
-        'in_array' => ['assertContains', 'assertNotContains'],
-        'empty' => ['assertEmpty', 'assertNotEmpty'],
-        'file_exists' => ['assertFileExists', 'assertFileNotExists'],
-        'is_dir' => ['assertDirectoryExists', 'assertDirectoryNotExists'],
-        'is_infinite' => ['assertInfinite', 'assertFinite'],
-        'is_null' => ['assertNull', 'assertNotNull'],
-        'is_writable' => ['assertIsWritable', 'assertNotIsWritable'],
-        'is_nan' => ['assertNan', false],
-        'is_a' => ['assertInstanceOf', 'assertNotInstanceOf'],
-    ];
+    private $functionNameWithAssertMethods = [];
+
+    public function __construct()
+    {
+        $this->functionNameWithAssertMethods = [
+            new FunctionNameWithAssertMethods('is_readable', 'assertIsReadable', 'assertNotIsReadable'),
+            new FunctionNameWithAssertMethods('array_key_exists', 'assertArrayHasKey', 'assertArrayNotHasKey'),
+            new FunctionNameWithAssertMethods('array_search', 'assertContains', 'assertNotContains'),
+            new FunctionNameWithAssertMethods('in_array', 'assertContains', 'assertNotContains'),
+            new FunctionNameWithAssertMethods('empty', 'assertEmpty', 'assertNotEmpty'),
+            new FunctionNameWithAssertMethods('file_exists', 'assertFileExists', 'assertFileNotExists'),
+            new FunctionNameWithAssertMethods('is_dir', 'assertDirectoryExists', 'assertDirectoryNotExists'),
+            new FunctionNameWithAssertMethods('is_infinite', 'assertInfinite', 'assertFinite'),
+            new FunctionNameWithAssertMethods('is_null', 'assertNull', 'assertNotNull'),
+            new FunctionNameWithAssertMethods('is_writable', 'assertIsWritable', 'assertNotIsWritable'),
+            new FunctionNameWithAssertMethods('is_nan', 'assertNan', ''),
+            new FunctionNameWithAssertMethods('is_a', 'assertInstanceOf', 'assertNotInstanceOf'),
+        ];
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -77,36 +83,47 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
 
-        $oldMethods = array_keys(self::OLD_TO_NEW_METHODS);
-        if (! $this->isNames($firstArgumentValue, $oldMethods)) {
-            return null;
+        foreach ($this->functionNameWithAssertMethods as $functionNameWithAssertMethod) {
+            if (! $this->isName($firstArgumentValue, $functionNameWithAssertMethod->getFunctionName())) {
+                continue;
+            }
+
+            $name = $this->getName($firstArgumentValue);
+            if ($name === null) {
+                return null;
+            }
+
+            $this->renameMethod($node, $functionNameWithAssertMethod);
+            $this->moveFunctionArgumentsUp($node);
+
+            return $node;
         }
 
-        $name = $this->getName($firstArgumentValue);
-        if ($name === null) {
-            return null;
-        }
-
-        $this->renameMethod($node, $name);
-        $this->moveFunctionArgumentsUp($node);
-
-        return $node;
+        return null;
     }
 
-    private function renameMethod(MethodCall $methodCall, string $funcName): void
-    {
+    private function renameMethod(
+        MethodCall $methodCall,
+        FunctionNameWithAssertMethods $functionNameWithAssertMethods
+    ): void {
         /** @var Identifier $identifierNode */
         $identifierNode = $methodCall->name;
         $oldMethodName = $identifierNode->toString();
 
-        [$trueMethodName, $falseMethodName] = self::OLD_TO_NEW_METHODS[$funcName];
-
-        if ($trueMethodName && in_array($oldMethodName, ['assertTrue', 'assertNotFalse'], true)) {
-            $methodCall->name = new Identifier($trueMethodName);
+        if ($functionNameWithAssertMethods->getAssetMethodName() && in_array(
+            $oldMethodName,
+            ['assertTrue', 'assertNotFalse'],
+            true
+        )) {
+            $methodCall->name = new Identifier($functionNameWithAssertMethods->getAssetMethodName());
         }
 
-        if ($falseMethodName && in_array($oldMethodName, ['assertFalse', 'assertNotTrue'], true)) {
-            $methodCall->name = new Identifier($falseMethodName);
+        if ($functionNameWithAssertMethods->getNotAssertMethodName() && in_array(
+            $oldMethodName,
+            ['assertFalse', 'assertNotTrue'],
+            true
+        )) {
+            $methodCall->name = new Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
         }
     }
 
