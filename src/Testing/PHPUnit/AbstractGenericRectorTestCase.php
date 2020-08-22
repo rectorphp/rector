@@ -157,8 +157,8 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     protected function provideConfigFileInfo(): ?SmartFileInfo
     {
         if ($this->provideSet() !== '') {
-            $setProvider = new RectorSetProvider();
-            $set = $setProvider->provideByName($this->provideSet());
+            $rectorSetProvider = new RectorSetProvider();
+            $set = $rectorSetProvider->provideByName($this->provideSet());
             if ($set === null) {
                 $message = sprintf('Invalid set name provided "%s"', $this->provideSet());
                 throw new ShouldNotHappenException($message);

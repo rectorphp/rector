@@ -13,11 +13,11 @@ final class SetResolver
     /**
      * @var RectorSetProvider
      */
-    private $setProvider;
+    private $rectorSetProvider;
 
     public function __construct()
     {
-        $this->setProvider = new RectorSetProvider();
+        $this->rectorSetProvider = new RectorSetProvider();
     }
 
     public function resolveSetFromInput(InputInterface $input): ?Set
@@ -27,6 +27,6 @@ final class SetResolver
             return null;
         }
 
-        return $this->setProvider->provideByName($setOption);
+        return $this->rectorSetProvider->provideByName($setOption);
     }
 }

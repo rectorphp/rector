@@ -51,16 +51,16 @@ final class ValidateSetsCommand extends Command
     /**
      * @var RectorSetProvider
      */
-    private $staticSetProvider;
+    private $rectorSetProvider;
 
     public function __construct(
         CpuCoreCountResolver $cpuCoreCountResolver,
         ParallelTaskRunner $parallelTaskRunner,
-        RectorSetProvider $staticSetProvider
+        RectorSetProvider $rectorSetProvider
     ) {
         $this->cpuCoreCountResolver = $cpuCoreCountResolver;
         $this->parallelTaskRunner = $parallelTaskRunner;
-        $this->staticSetProvider = $staticSetProvider;
+        $this->rectorSetProvider = $rectorSetProvider;
 
         parent::__construct();
     }
@@ -90,7 +90,7 @@ final class ValidateSetsCommand extends Command
     private function createSetTasks(): array
     {
         $setTasks = [];
-        foreach ($this->staticSetProvider->provideSetNames() as $setName) {
+        foreach ($this->rectorSetProvider->provideSetNames() as $setName) {
             if (in_array($setName, self::EXCLUDED_SETS, true)) {
                 continue;
             }
