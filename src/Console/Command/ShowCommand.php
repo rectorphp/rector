@@ -8,6 +8,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\NeonYaml\YamlPrinter;
 use Rector\Core\Php\TypeAnalyzer;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use Rector\RectorGenerator\Contract\InternalRectorInterface;
 use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 use ReflectionClass;
 use ReflectionNamedType;
@@ -97,7 +98,7 @@ final class ShowCommand extends AbstractCommand
 
         return array_filter($rectors, function (RectorInterface $rector) {
             // utils rules
-            if ($rector instanceof ClassSyncerRectorInterface) {
+            if ($rector instanceof InternalRectorInterface) {
                 return false;
             }
 

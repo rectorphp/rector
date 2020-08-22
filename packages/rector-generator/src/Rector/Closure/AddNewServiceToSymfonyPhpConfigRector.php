@@ -16,9 +16,10 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\RectorGenerator\Contract\InternalRectorInterface;
 use Rector\SymfonyPhpConfig\NodeAnalyzer\SymfonyPhpConfigClosureAnalyzer;
 
-final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector
+final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector implements InternalRectorInterface
 {
     /**
      * @var SymfonyPhpConfigClosureAnalyzer
@@ -41,7 +42,7 @@ final class AddNewServiceToSymfonyPhpConfigRector extends AbstractRector
     }
 
     /**
-     * @return array<int, string>
+     * @return string[]
      */
     public function getNodeTypes(): array
     {

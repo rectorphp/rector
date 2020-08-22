@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector;
 
-interface ClassSyncerRectorInterface
+use Rector\RectorGenerator\Contract\InternalRectorInterface;
+
+interface ClassSyncerRectorInterface extends InternalRectorInterface
 {
 }
