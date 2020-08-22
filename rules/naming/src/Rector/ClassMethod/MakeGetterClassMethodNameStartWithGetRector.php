@@ -126,6 +126,7 @@ PHP
     {
         return $this->isName($classMethod, self::GETTER_NAME_PATTERN);
     }
+
     private function matchGetterClassMethodReturnedExpr(ClassMethod $classMethod): ?Expr
     {
         if (count((array) $classMethod->stmts) !== 1) {
