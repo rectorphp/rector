@@ -128,6 +128,7 @@ final class FluentChainMethodCallRootExtractor
         $silentVariable = new Variable($variableName);
         return new AssignAndRootExpr($methodCall->var, $methodCall->var, $silentVariable);
     }
+
     private function matchMethodCallOnNew(MethodCall $methodCall): ?AssignAndRootExpr
     {
         // we need assigned left variable here
