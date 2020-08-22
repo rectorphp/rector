@@ -9,7 +9,6 @@ use Rector\Core\NeonYaml\YamlPrinter;
 use Rector\Core\Php\TypeAnalyzer;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\RectorGenerator\Contract\InternalRectorInterface;
-use Rector\Utils\DoctrineAnnotationParserSyncer\Contract\Rector\ClassSyncerRectorInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 use Symfony\Component\Console\Input\InputInterface;

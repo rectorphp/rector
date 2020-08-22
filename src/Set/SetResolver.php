@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\Core\Set;
 
-use Rector\Set\SetProvider;
+use Rector\Set\RectorSetProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\SetConfigResolver\ValueObject\Set;
 
 final class SetResolver
 {
     /**
-     * @var SetProvider
+     * @var RectorSetProvider
      */
     private $setProvider;
 
     public function __construct()
     {
-        $this->setProvider = new SetProvider();
+        $this->setProvider = new RectorSetProvider();
     }
 
     public function resolveSetFromInput(InputInterface $input): ?Set

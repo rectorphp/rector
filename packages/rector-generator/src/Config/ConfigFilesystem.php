@@ -89,7 +89,7 @@ final class ConfigFilesystem
 
         $nodeTraverser = new NodeTraverser();
 
-        $this->addNewServiceToSymfonyPhpConfigRector->CsetRectorClass($rectorFqnName);
+        $this->addNewServiceToSymfonyPhpConfigRector->setRectorClass($rectorFqnName);
         $nodeTraverser->addVisitor($this->addNewServiceToSymfonyPhpConfigRector);
         $setConfigNodes = $nodeTraverser->traverse($setConfigNodes);
 

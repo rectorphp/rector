@@ -18,7 +18,7 @@ use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\Core\Testing\Finder\RectorsFinder;
 use Rector\Core\Testing\PhpConfigPrinter\PhpConfigPrinterFactory;
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
-use Rector\Set\SetProvider;
+use Rector\Set\RectorSetProvider;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
@@ -157,7 +157,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     protected function provideConfigFileInfo(): ?SmartFileInfo
     {
         if ($this->provideSet() !== '') {
-            $setProvider = new SetProvider();
+            $setProvider = new RectorSetProvider();
             $set = $setProvider->provideByName($this->provideSet());
             if ($set === null) {
                 $message = sprintf('Invalid set name provided "%s"', $this->provideSet());
