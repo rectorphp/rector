@@ -47,6 +47,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/config/set',
     ]);
 
+    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
+
     $parameters->set(Option::AUTOLOAD_PATHS, [__DIR__ . '/compiler/src']);
 
     $parameters->set(Option::EXCLUDE_PATHS, [

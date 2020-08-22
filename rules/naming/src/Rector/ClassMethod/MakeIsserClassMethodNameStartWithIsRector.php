@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Rector\Naming\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -125,18 +128,18 @@ PHP
         return $this->isName($classMethod, self::ISSER_NAME_PATTERN);
     }
 
-    private function matchIsserClassMethodReturnedExpr(ClassMethod $classMethod): ?Node\Expr
+    private function matchIsserClassMethodReturnedExpr(ClassMethod $classMethod): ?Expr
     {
         if (count((array) $classMethod->stmts) !== 1) {
             return null;
         }
 
         $onlyStmt = $classMethod->stmts[0];
-        if (! $onlyStmt instanceof Node\Stmt\Return_) {
+        if (! $onlyStmt instanceof Return_) {
             return null;
         }
 
-        if (! $onlyStmt->expr instanceof Node\Expr\PropertyFetch) {
+        if (! $onlyStmt->expr instanceof PropertyFetch) {
             return null;
         }
 
