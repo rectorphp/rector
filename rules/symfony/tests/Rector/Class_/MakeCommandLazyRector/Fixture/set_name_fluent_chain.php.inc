@@ -24,7 +24,9 @@ class SetNameFluentChain extends \Symfony\Component\Console\Command\Command
     protected static $defaultName = 'some:command';
     public function configure()
     {
-        $this->setDescription('Description');
+        $this
+            ->setDescription('Description')
+            ->setHelp('help me pls!!!');
     }
 }
 

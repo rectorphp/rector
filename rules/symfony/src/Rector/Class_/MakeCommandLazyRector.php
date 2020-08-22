@@ -144,6 +144,11 @@ PHP
                 return null;
             }
 
+            // is chain call? → remove by variable nulling
+            if ($node->var instanceof MethodCall) {
+                return $node->var;
+            }
+
             $this->removeNode($node);
         });
 
