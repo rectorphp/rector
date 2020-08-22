@@ -13,8 +13,10 @@ use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Console\Application;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
+use Symplify\EasyCodingStandard\Bootstrap\InvalidSetReporter;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use Symplify\SetConfigResolver\Exception\SetNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 @ini_set('memory_limit', '-1'); // @ intentionally: continue anyway
@@ -77,16 +79,18 @@ try {
 
     $container = $rectorContainerFactory->createFromConfigs($configFileInfos);
 
-    /** @var Configuration $configuration */
-    $configuration = $container->get(Configuration::class);
-    $configuration->setFirstResolverConfigFileInfo($rectorConfigsResolver->getFirstResolvedConfig());
-
     if ($rectorConfigsResolver->getFirstResolvedConfig()) {
+        /** @var Configuration $configuration */
+        $configuration = $container->get(Configuration::class);
+        $configuration->setFirstResolverConfigFileInfo($rectorConfigsResolver->getFirstResolvedConfig());
+
         /** @var ChangedFilesDetector $changedFilesDetector */
         $changedFilesDetector = $container->get(ChangedFilesDetector::class);
         $changedFilesDetector->setFirstResolvedConfigFileInfo($rectorConfigsResolver->getFirstResolvedConfig());
     }
-
+} catch (SetNotFoundException $setNotFoundException) {
+    (new InvalidSetReporter())->report($setNotFoundException);
+    exit(ShellCode::ERROR);
 } catch (Throwable $throwable) {
     $symfonyStyle->error($throwable->getMessage());
     exit(ShellCode::ERROR);

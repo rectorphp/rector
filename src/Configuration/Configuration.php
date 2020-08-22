@@ -153,7 +153,7 @@ final class Configuration
     /**
      * @api
      */
-    public function setFirstResolverConfigFileInfo(?SmartFileInfo $firstResolvedConfigFileInfo): void
+    public function setFirstResolverConfigFileInfo(SmartFileInfo $firstResolvedConfigFileInfo): void
     {
         $this->configFileInfo = $firstResolvedConfigFileInfo;
     }
