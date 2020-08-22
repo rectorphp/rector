@@ -96,18 +96,16 @@ final class ParsedFunctionLikeNodeCollector
 
         // array callable - [$this, 'someCall']
         if ($node instanceof Array_) {
-            $arrayCallableClassAndMethod = $this->arrayCallableClassMethodReferenceAnalyzer->match($node);
-            if ($arrayCallableClassAndMethod === null) {
+            $arrayCallable = $this->arrayCallableClassMethodReferenceAnalyzer->match($node);
+            if ($arrayCallable === null) {
                 return;
             }
 
-            [$className, $methodName] = $arrayCallableClassAndMethod;
-            if (! method_exists($className, $methodName)) {
+            if (! $arrayCallable->isExistingMethod()) {
                 return;
             }
 
-            $arrayCallable = new ArrayCallable($className, $methodName);
-            $this->arrayCallablesByTypeAndMethod[$className][$methodName][] = $arrayCallable;
+            $this->arrayCallablesByTypeAndMethod[$arrayCallable->getClass()][$arrayCallable->getMethod()][] = $arrayCallable;
 
             return;
         }

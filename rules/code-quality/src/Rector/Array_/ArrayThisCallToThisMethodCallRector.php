@@ -100,15 +100,13 @@ PHP
             return null;
         }
 
-        [$class, $method] = $arrayCallable;
-        if (! method_exists($class, $method)) {
+        if (! $arrayCallable->isExistingMethod()) {
             return null;
         }
 
-        $reflectionMethod = new ReflectionMethod($class, $method);
-
+        $reflectionMethod = $arrayCallable->getReflectionMethod();
         if ($reflectionMethod->getNumberOfParameters() > 0) {
-            $classMethod = $this->functionLikeParsedNodesFinder->findClassMethod($method, $class);
+            $classMethod = $this->functionLikeParsedNodesFinder->findClassMethod($arrayCallable->getMethod(), $arrayCallable->getClass());
             if ($classMethod !== null) {
                 return $this->nodeFactory->createClosureFromClassMethod($classMethod);
             }
@@ -116,7 +114,7 @@ PHP
             return null;
         }
 
-        return new MethodCall(new Variable('this'), $method);
+        return new MethodCall(new Variable('this'), $arrayCallable->getMethod());
     }
 
     private function isAssignedToNetteMagicOnProperty(Array_ $array): bool

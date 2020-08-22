@@ -395,3 +395,11 @@ parameters:
         -
             message: '#Class "Rector\\RectorGenerator\\ValueObject\\RectorRecipe" has invalid namespace category "ValueObject"\. Pick one of\: ""#'
             path: packages/rector-generator/src/ValueObject/RectorRecipe.php
+
+
+        -
+            message: '#Array explosion is not allow, use value object to pass data instead#'
+            paths:
+                - src/*
+                - tests/*
+                - rules/*
