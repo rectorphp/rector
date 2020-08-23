@@ -12618,8 +12618,13 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
+<<<<<<< HEAD
             RenameMethodRector::METHOD_CALL_RENAMES => [
                 \Rector\SymfonyPhpConfig\inline_object(new Rector\Renaming\ValueObject\MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'))]
+=======
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'))]
+>>>>>>> moving parameter typehint to objects
         ]]);
 };
 ```
@@ -14264,7 +14269,25 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 ↓
 
 ```diff
+ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
+
+     $services->set(RenameMethodRector::class)
+         ->call('configure', [[
+-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+-                'Illuminate\Auth\Access\Gate' => [
+-                    'access' => 'inspect',
+-                ]
+-            ]]
+-        ]);
++            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => \Rector\SymfonyPhpConfig\inline_value_objects([
++                new \Rector\Renaming\ValueObject\MethodCallRename('Illuminate\Auth\Access\Gate', 'access', 'inspect'),
++            ])
++        ]]);
+ }
 ```
 
 <br><br>
@@ -14425,10 +14448,8 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            AddParamTypeDeclarationRector::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
-                'SomeClass' => [
-                'process' => [
-                'string']]]
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\TypeDeclaration\ValueObject\ParameterTypehint('SomeClass', 'process', 0, 'string'))]
         ]]);
 };
 ```

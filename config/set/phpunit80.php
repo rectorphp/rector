@@ -18,7 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            AddParamTypeDeclarationRector::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => [
                 'PHPUnit\Framework\TestCase' => [
                     '__construct' => [
                         # https://github.com/rectorphp/rector/issues/1024

@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            AddParamTypeDeclarationRector::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => [
                 'Symfony\Component\EventDispatcher\EventDispatcherInterface' => [
                     'addListener' => [
                         # see https://github.com/symfony/symfony/issues/32179:

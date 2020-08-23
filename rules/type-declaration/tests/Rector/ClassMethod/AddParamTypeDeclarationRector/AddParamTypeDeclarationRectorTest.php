@@ -9,6 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ClassMetadataFactory;
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ParserInterface;
+use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddParamTypeDeclarationRectorTest extends AbstractRectorTestCase
@@ -27,28 +28,21 @@ final class AddParamTypeDeclarationRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return string[][][][][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {
         return [
             AddParamTypeDeclarationRector::class => [
-                AddParamTypeDeclarationRector::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
-                    ParentInterfaceWithChangeTypeInterface::class => [
-                        'process' => [
-                            0 => 'string',
-                        ],
-                    ],
-                    ParserInterface::class => [
-                        'parse' => [
-                            0 => 'string',
-                        ],
-                    ],
-                    ClassMetadataFactory::class => [
-                        'setEntityManager' => [
-                            0 => 'Doctrine\ORM\EntityManagerInterface',
-                        ],
-                    ],
+                AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => [
+                    new ParameterTypehint(ParentInterfaceWithChangeTypeInterface::class, 'process', 0, 'string'),
+                    new ParameterTypehint(ParserInterface::class, 'parse', 0, 'string'),
+                    new ParameterTypehint(
+                        ClassMetadataFactory::class,
+                        'setEntityManager',
+                        0,
+                        'Doctrine\ORM\EntityManagerInterface'
+                    ),
                 ],
             ],
         ];
