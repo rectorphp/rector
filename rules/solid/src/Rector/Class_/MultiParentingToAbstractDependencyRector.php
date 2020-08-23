@@ -140,7 +140,8 @@ class SecondChild extends AbstractParentClass
 PHP
 ,
                     [
-                        self::FRAMEWORK => self::FRAMEWORK_NETTE, ]
+                        self::FRAMEWORK => self::FRAMEWORK_NETTE,
+                    ]
                 ),
             ]
         );
