@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Laravel\Rector\StaticCall;
 
-use Illuminate\Contracts\Cache\Store;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -16,6 +15,7 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition;
 
 /**
  * @see https://github.com/laravel/framework/pull/27276
@@ -23,6 +23,22 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class MinutesToSecondsInCacheRector extends AbstractRector
 {
+    /**
+     * @var TypeToTimeMethodAndPosition[]
+     */
+    private $typeToTimeMethodsAndPositions = [];
+
+    public function __construct()
+    {
+        $this->typeToTimeMethodsAndPositions = [
+            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', 'put', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Support\Facades\Cache', 'add', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', 'put', 2),
+            new TypeToTimeMethodAndPosition('Illuminate\Contracts\Cache\Store', 'putMany', 1),
+            new TypeToTimeMethodAndPosition('Illuminate\Cache\DynamoDbStore', 'add', 2),
+        ];
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -66,46 +82,23 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->getTypesToMethods() as $type => $methodsToArguments) {
-            if (! $this->isObjectType($node, $type)) {
+        foreach ($this->typeToTimeMethodsAndPositions as $typeToTimeMethodAndPosition) {
+            if (! $this->isObjectType($node, $typeToTimeMethodAndPosition->getType())) {
                 continue;
             }
 
-            foreach ($methodsToArguments as $method => $argumentPosition) {
-                if (! $this->isName($node->name, $method)) {
-                    continue;
-                }
-
-                if (! isset($node->args[$argumentPosition])) {
-                    continue;
-                }
-
-                return $this->processArgumentPosition($node, $argumentPosition);
+            if (! $this->isName($node->name, $typeToTimeMethodAndPosition->getMethodName())) {
+                continue;
             }
+
+            if (! isset($node->args[$typeToTimeMethodAndPosition->getPosition()])) {
+                continue;
+            }
+
+            return $this->processArgumentPosition($node, $typeToTimeMethodAndPosition->getPosition());
         }
 
         return $node;
-    }
-
-    /**
-     * @return int[][]
-     */
-    private function getTypesToMethods(): array
-    {
-        return [
-            'Illuminate\Support\Facades\Cache' => [
-                // time argument position
-                'put' => 2,
-                'add' => 2,
-            ],
-            Store::class => [
-                'put' => 2,
-                'putMany' => 1,
-            ],
-            'Illuminate\Cache\DynamoDbStore' => [
-                'add' => 2,
-            ],
-        ];
     }
 
     /**

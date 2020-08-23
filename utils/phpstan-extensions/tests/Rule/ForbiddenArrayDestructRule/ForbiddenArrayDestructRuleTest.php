@@ -21,9 +21,9 @@ final class ForbiddenArrayDestructRuleTest extends RuleTestCase
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Source/ClassWithArrayDestruct.php', [[ForbiddenArrayDestructRule::ERROR_MESSAGE, 11]]];
-        yield [__DIR__ . '/Source/SkipSwap.php', []];
-        yield [__DIR__ . '/Source/SkipExplode.php', []];
+        yield [__DIR__ . '/Fixture/ClassWithArrayDestruct.php', [[ForbiddenArrayDestructRule::ERROR_MESSAGE, 11]]];
+        yield [__DIR__ . '/Fixture/SkipSwap.php', []];
+        yield [__DIR__ . '/Fixture/SkipExplode.php', []];
     }
 
     protected function getRule(): Rule

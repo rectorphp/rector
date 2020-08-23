@@ -21,10 +21,10 @@ final class KeepRectorNamespaceForRectorRuleTest extends RuleTestCase
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Source/Rector/ClassInCorrectNamespaceRector.php', []];
+        yield [__DIR__ . '/Fixture/Rector/ClassInCorrectNamespaceRector.php', []];
 
         $errorMessage = sprintf(KeepRectorNamespaceForRectorRule::ERROR_MESSAGE, 'WrongClass');
-        yield [__DIR__ . '/Source/Rector/WrongClass.php', [[$errorMessage, 7]]];
+        yield [__DIR__ . '/Fixture/Rector/WrongClass.php', [[$errorMessage, 7]]];
     }
 
     protected function getRule(): Rule

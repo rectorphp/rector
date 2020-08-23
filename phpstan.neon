@@ -1,9 +1,9 @@
 includes:
     - utils/phpstan-extensions/config/phpstan-extensions.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/slam/phpstan-extensions/conf/slam-rules.neon
     - vendor/symplify/phpstan-extensions/config/config.neon
     - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
-    - vendor/slam/phpstan-extensions/conf/slam-rules.neon
-    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
     # see https://github.com/symplify/coding-standard
     - vendor/symplify/coding-standard/config/symplify-rules.neon
@@ -399,7 +399,7 @@ parameters:
         - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExprAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
 
         -
-            message: '#Array explosion is not allowed\. Use value object to pass data instead#'
+            message: '#Array (with keys|explosion) is not allowed\. Use value object to pass data instead#'
             paths:
                 # working with cvs file
                 - packages/dynamic-type-analysis/src/Probe/TypeStaticProbe.php
@@ -407,3 +407,13 @@ parameters:
                 - utils/project-validator/src/Command/ValidateFixtureContentCommand.php
                 - src/Testing/PHPUnit/AbstractRectorTestCase.php
                 - rules/php70/src/EregToPcreTransformer.php
+                # output format
+                - packages/changes-reporting/src/Output/JsonOutputFormatter.php
+                # template variables
+                - packages/rector-generator/src/TemplateVariablesFactory.php
+                # output format to json
+                - rules/doctrine/src/Collector/UuidMigrationDataCollector.php
+                # should be replaced by symplify/composer-json-manipulator in the future
+                - compiler/src/Composer/ComposerJsonManipulator.php
+                # not sure how to improve
+                - rules/symfony/src/ValueObject/Tag/EventListenerTag.php
