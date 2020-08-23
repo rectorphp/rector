@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Renaming\Rector\MethodCall;
 
-use PhpParser\BuilderHelpers;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -17,6 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Renaming\ValueObject\MethodCallRename;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\RenameMethodRectorTest
@@ -26,16 +25,12 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
     /**
      * @var string
      */
-    public const OLD_TO_NEW_METHODS_BY_CLASS = '$oldToNewMethodsByClass';
+    public const OLD_TO_NEW_METHODS_BY_CLASS = 'old_to_new_methods_by_class';
 
     /**
-     * class => [
-     *     oldMethod => newMethod
-     * ]
-     *
-     * @var array<string, array<string, string>>
+     * @var MethodCallRename[]
      */
-    private $oldToNewMethodsByClass = [];
+    private $methodCallRenames = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -53,11 +48,7 @@ PHP
                 ,
                 [
                     self::OLD_TO_NEW_METHODS_BY_CLASS => [
-                        'SomeExampleClass' => [
-                            '$oldToNewMethodsByClass' => [
-                                'oldMethod' => 'newMethod',
-                            ],
-                        ],
+                        new MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'),
                     ],
                 ]
             ),
@@ -77,25 +68,22 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->oldToNewMethodsByClass as $type => $oldToNewMethods) {
-            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $type)) {
+        foreach ($this->methodCallRenames as $methodCallRename) {
+            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $methodCallRename->getOldClass())) {
                 continue;
             }
 
-            foreach ($oldToNewMethods as $oldMethod => $newMethod) {
-                if (! $this->isName($node->name, $oldMethod)) {
-                    continue;
-                }
-
-                if ($this->skipClassMethod($node, $newMethod, $type)) {
-                    continue;
-                }
-
-                $newNode = $this->renameToMethod($node, $newMethod);
-                if ($newNode !== null) {
-                    return $newNode;
-                }
+            if (! $this->isName($node->name, $methodCallRename->getOldMethod())) {
+                continue;
             }
+
+            if ($this->skipClassMethod($node, $methodCallRename)) {
+                continue;
+            }
+
+            $node->name = new Identifier($methodCallRename->getNewMethod());
+
+            return $node;
         }
 
         return null;
@@ -103,57 +91,29 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->oldToNewMethodsByClass = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASS] ?? [];
+        $this->methodCallRenames = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASS] ?? [];
     }
 
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
-     * @param string|string[] $newMethod
      */
-    private function skipClassMethod(Node $node, $newMethod, string $type): bool
+    private function skipClassMethod(Node $node, MethodCallRename $methodCallRename): bool
     {
         if (! $node instanceof ClassMethod) {
             return false;
         }
 
-        if ($this->shouldSkipForAlreadyExistingClassMethod($node, $newMethod)) {
+        if ($this->shouldSkipForAlreadyExistingClassMethod($node, $methodCallRename)) {
             return true;
         }
 
-        return $this->shouldSkipForExactClassMethodForClassMethod($node, $type);
+        return $this->shouldSkipForExactClassMethodForClassMethod($node, $methodCallRename->getOldClass());
     }
 
-    /**
-     * @param MethodCall|StaticCall|ClassMethod $node
-     * @param string|mixed[] $newMethod
-     */
-    private function renameToMethod(Node $node, $newMethod): ?Node
-    {
-        if (is_string($newMethod)) {
-            $node->name = new Identifier($newMethod);
-
-            return $node;
-        }
-
-        // special case for array dim fetch
-        if (! $node instanceof ClassMethod) {
-            $node->name = new Identifier($newMethod['name']);
-
-            return new ArrayDimFetch($node, BuilderHelpers::normalizeValue($newMethod['array_key']));
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string|mixed[] $newMethod
-     */
-    private function shouldSkipForAlreadyExistingClassMethod(ClassMethod $classMethod, $newMethod): bool
-    {
-        if (! is_string($newMethod)) {
-            return false;
-        }
-
+    private function shouldSkipForAlreadyExistingClassMethod(
+        ClassMethod $classMethod,
+        MethodCallRename $methodCallRename
+    ): bool {
         if (! $classMethod instanceof ClassMethod) {
             return false;
         }
@@ -164,7 +124,7 @@ PHP
             return false;
         }
 
-        return (bool) $classLike->getMethod($newMethod);
+        return (bool) $classLike->getMethod($methodCallRename->getNewMethod());
     }
 
     private function shouldSkipForExactClassMethodForClassMethod(ClassMethod $classMethod, string $type): bool

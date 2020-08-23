@@ -70,8 +70,8 @@ parameters:
         - tests
         - compiler/src
         - utils
-        # this cannot be put it, because it wipes PHPStan cache on each run
-        #- config
+        # this cannot be put it, because it wipes PHPStan cache on each run :( - must run in separate
+        #- config/set
 
     excludes_analyse:
         # iterable types

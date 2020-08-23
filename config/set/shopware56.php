@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -11,15 +13,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
+    $configuration = [
+        new MethodCallRename('Enlight_Controller_Response_Response', 'getHttpResponseCode', 'getStatusCode'),
+        new MethodCallRename('Enlight_Controller_Response_Response', 'setHttpResponseCode', 'setStatusCode'),
+        new MethodCallRename('Enlight_Controller_Response_Response', 'sendCookies', 'sendHeaders'),
+        new MethodCallRename('Enlight_Controller_Response_Response', 'setBody', 'setContent'),
+    ];
+
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Enlight_Controller_Response_Response' => [
-                    'getHttpResponseCode' => 'getStatusCode',
-                    'setHttpResponseCode' => 'setStatusCode',
-                    'sendCookies' => 'sendHeaders',
-                    'setBody' => 'setContent',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_objects($configuration),
         ]]);
 };
