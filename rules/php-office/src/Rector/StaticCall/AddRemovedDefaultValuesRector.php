@@ -673,7 +673,7 @@ PHP
             }
 
             if (is_string($defaultValue) && Strings::contains($defaultValue, '::')) {
-                [$className, $constant] = Strings::split($defaultValue, '#::#');
+                [$className, $constant] = explode('::', $defaultValue);
                 $classConstant = $this->createClassConstFetch($className, $constant);
                 $arg = new Arg($classConstant);
             } else {

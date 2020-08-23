@@ -66,7 +66,7 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
         }
 
         /** @var Empty_ $emptyOrNotIdenticalNode */
-        [, $emptyOrNotIdenticalNode] = $matchedNodes;
+        $emptyOrNotIdenticalNode = $matchedNodes->getSecondExpr();
 
         return new Identical($emptyOrNotIdenticalNode->expr, new Array_());
     }

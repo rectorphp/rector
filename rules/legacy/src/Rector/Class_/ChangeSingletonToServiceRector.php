@@ -11,6 +11,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Legacy\NodeAnalyzer\SingletonClassMethodAnalyzer;
+use Rector\Legacy\ValueObject\PropertyAndClassMethodName;
 
 /**
  * @see https://3v4l.org/lifbH
@@ -83,20 +84,15 @@ PHP
             return null;
         }
 
-        $match = $this->matchStaticPropertyFetchAndGetSingletonMethodName($node);
-        if ($match === null) {
+        $propertyAndClassMethodName = $this->matchStaticPropertyFetchAndGetSingletonMethodName($node);
+        if ($propertyAndClassMethodName === null) {
             return null;
         }
 
-        [$singletonPropertyName, $getSingletonMethodName] = $match;
-
-        return $this->refactorClassStmts($node, $getSingletonMethodName, $singletonPropertyName);
+        return $this->refactorClassStmts($node, $propertyAndClassMethodName);
     }
 
-    /**
-     * @return string[]|null
-     */
-    private function matchStaticPropertyFetchAndGetSingletonMethodName(Class_ $class): ?array
+    private function matchStaticPropertyFetchAndGetSingletonMethodName(Class_ $class): ?PropertyAndClassMethodName
     {
         foreach ($class->getMethods() as $classMethod) {
             if (! $classMethod->isStatic()) {
@@ -108,7 +104,13 @@ PHP
                 return null;
             }
 
-            return [$this->getName($staticPropertyFetch), $this->getName($classMethod)];
+            /** @var string $propertyName */
+            $propertyName = $this->getName($staticPropertyFetch);
+
+            /** @var string $classMethodName */
+            $classMethodName = $this->getName($classMethod);
+
+            return new PropertyAndClassMethodName($propertyName, $classMethodName);
         }
 
         return null;
@@ -116,32 +118,31 @@ PHP
 
     private function refactorClassStmts(
         Class_ $class,
-        string $getSingletonMethodName,
-        string $singletonPropertyName
+        PropertyAndClassMethodName $propertyAndClassMethodName
     ): Class_ {
-        foreach ($class->getMethods() as $property) {
-            if ($this->isName($property, $getSingletonMethodName)) {
-                $this->removeNodeFromStatements($class, $property);
+        foreach ($class->getMethods() as $method) {
+            if ($this->isName($method, $propertyAndClassMethodName->getClassMethodName())) {
+                $this->removeNodeFromStatements($class, $method);
                 continue;
             }
 
-            if (! $this->isNames($property, [MethodName::CONSTRUCT, '__clone', '__wakeup'])) {
+            if (! $this->isNames($method, [MethodName::CONSTRUCT, '__clone', '__wakeup'])) {
                 continue;
             }
 
-            if ($property->isPublic()) {
+            if ($method->isPublic()) {
                 continue;
             }
 
             // remove non-public empty
-            if ($property->stmts === []) {
-                $this->removeNodeFromStatements($class, $property);
+            if ($method->stmts === []) {
+                $this->removeNodeFromStatements($class, $method);
             } else {
-                $this->makePublic($property);
+                $this->makePublic($method);
             }
         }
 
-        $this->removePropertyByName($class, $singletonPropertyName);
+        $this->removePropertyByName($class, $propertyAndClassMethodName->getPropertyName());
 
         return $class;
     }

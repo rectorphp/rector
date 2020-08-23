@@ -54,7 +54,7 @@ final class IdenticalFalseToBooleanNotRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node,
             function (Node $node): bool {
                 return ! $node instanceof BinaryOp;
@@ -64,12 +64,12 @@ final class IdenticalFalseToBooleanNotRector extends AbstractRector
             }
         );
 
-        if ($matchedNodes === null) {
+        if ($twoNodeMatch === null) {
             return null;
         }
 
         /** @var Expr $comparedNode */
-        [$comparedNode, ] = $matchedNodes;
+        $comparedNode = $twoNodeMatch->getFirstExpr();
 
         $staticType = $this->getStaticType($comparedNode);
 

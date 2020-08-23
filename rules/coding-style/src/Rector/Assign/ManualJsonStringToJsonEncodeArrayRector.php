@@ -20,6 +20,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\CodingStyle\Node\ConcatJoiner;
 use Rector\CodingStyle\Node\ConcatManipulator;
 use Rector\CodingStyle\ValueObject\ConcatExpressionJoinData;
+use Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -172,14 +173,15 @@ PHP
 
         $currentNode = $assign;
 
-        while ([$nodeToRemove, $valueNode] = $this->matchNextExpressionAssignConcatToSameVariable(
-            $assign->var,
-            $currentNode
-        )) {
-            if ($valueNode instanceof String_) {
-                $concatExpressionJoinData->addString($valueNode->value);
-            } elseif ($valueNode instanceof Concat) {
-                $joinToStringAndPlaceholderNodes = $this->concatJoiner->joinToStringAndPlaceholderNodes($valueNode);
+        while ($nextExprAndConcatItem = $this->matchNextExprAssignConcatToSameVariable($assign->var, $currentNode)) {
+            $concatItemNode = $nextExprAndConcatItem->getConcatItemNode();
+
+            if ($concatItemNode instanceof String_) {
+                $concatExpressionJoinData->addString($concatItemNode->value);
+            } elseif ($concatItemNode instanceof Concat) {
+                $joinToStringAndPlaceholderNodes = $this->concatJoiner->joinToStringAndPlaceholderNodes(
+                    $concatItemNode
+                );
 
                 $content = $joinToStringAndPlaceholderNodes->getContent();
                 $concatExpressionJoinData->addString($content);
@@ -188,14 +190,14 @@ PHP
                     /** @var string $placeholder */
                     $concatExpressionJoinData->addPlaceholderToNode($placeholder, $expr);
                 }
-            } elseif ($valueNode instanceof Expr) {
-                $objectHash = '____' . spl_object_hash($valueNode) . '____';
+            } elseif ($concatItemNode instanceof Expr) {
+                $objectHash = '____' . spl_object_hash($concatItemNode) . '____';
 
                 $concatExpressionJoinData->addString($objectHash);
-                $concatExpressionJoinData->addPlaceholderToNode($objectHash, $valueNode);
+                $concatExpressionJoinData->addPlaceholderToNode($objectHash, $concatItemNode);
             }
 
-            $concatExpressionJoinData->addNodeToRemove($nodeToRemove);
+            $concatExpressionJoinData->addNodeToRemove($nextExprAndConcatItem->getRemovedExpr());
 
             // jump to next one
             $currentNode = $this->getNextExpression($currentNode);
@@ -258,9 +260,8 @@ PHP
 
     /**
      * @param Assign|ConcatAssign $currentNode
-     * @return Node[]|null
      */
-    private function matchNextExpressionAssignConcatToSameVariable(Expr $expr, Node $currentNode): ?array
+    private function matchNextExprAssignConcatToSameVariable(Expr $expr, Node $currentNode): ?NodeToRemoveAndConcatItem
     {
         $nextExpression = $this->getNextExpression($currentNode);
         if (! $nextExpression instanceof Expression) {
@@ -276,7 +277,7 @@ PHP
                 return null;
             }
 
-            return [$nextExpressionNode, $nextExpressionNode->expr];
+            return new NodeToRemoveAndConcatItem($nextExpressionNode, $nextExpressionNode->expr);
         }
 
         // $value = $value . '...';
@@ -300,7 +301,7 @@ PHP
             // return all but first node
             $allButFirstConcatItem = $this->concatManipulator->removeFirstItemFromConcat($nextExpressionNode->expr);
 
-            return [$nextExpressionNode, $allButFirstConcatItem];
+            return new NodeToRemoveAndConcatItem($nextExpressionNode, $allButFirstConcatItem);
         }
 
         return null;

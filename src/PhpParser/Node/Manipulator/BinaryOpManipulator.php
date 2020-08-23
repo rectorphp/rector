@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BooleanNot;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
+use Rector\Php71\ValueObject\TwoNodeMatch;
 
 final class BinaryOpManipulator
 {
@@ -31,13 +32,12 @@ final class BinaryOpManipulator
      *
      * @param callable|string $firstCondition callable or Node to instanceof
      * @param callable|string $secondCondition callable or Node to instanceof
-     * @return Node[]|null
      */
     public function matchFirstAndSecondConditionNode(
         BinaryOp $binaryOp,
         $firstCondition,
         $secondCondition
-    ): ?array {
+    ): ?TwoNodeMatch {
         $this->validateCondition($firstCondition);
         $this->validateCondition($secondCondition);
 
@@ -45,11 +45,11 @@ final class BinaryOpManipulator
         $secondCondition = $this->normalizeCondition($secondCondition);
 
         if ($firstCondition($binaryOp->left, $binaryOp->right) && $secondCondition($binaryOp->right, $binaryOp->left)) {
-            return [$binaryOp->left, $binaryOp->right];
+            return new TwoNodeMatch($binaryOp->left, $binaryOp->right);
         }
 
         if ($firstCondition($binaryOp->right, $binaryOp->left) && $secondCondition($binaryOp->left, $binaryOp->right)) {
-            return [$binaryOp->right, $binaryOp->left];
+            return new TwoNodeMatch($binaryOp->right, $binaryOp->left);
         }
 
         return null;

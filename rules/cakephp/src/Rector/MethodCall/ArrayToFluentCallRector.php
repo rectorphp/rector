@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\CakePHP\ValueObject\ArrayItemsAndFluentClass;
+use Rector\CakePHP\ValueObject\PositionAndClassType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -99,19 +100,17 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $config = $this->matchTypeAndMethodName($node);
-        if ($config === null) {
+        $positionAndClassType = $this->matchTypeAndMethodName($node);
+        if ($positionAndClassType === null) {
             return null;
         }
 
-        [$argumentPosition, $class] = $config;
-
-        $fluentMethods = $this->configurableClasses[$class] ?? [];
+        $fluentMethods = $this->configurableClasses[$positionAndClassType->getClassType()] ?? [];
         if (! $fluentMethods) {
             return null;
         }
 
-        return $this->replaceArrayToFluentMethodCalls($node, $argumentPosition, $fluentMethods);
+        return $this->replaceArrayToFluentMethodCalls($node, $positionAndClassType->getPosition(), $fluentMethods);
     }
 
     public function configure(array $configuration): void
@@ -120,10 +119,7 @@ PHP
         $this->factoryMethods = $configuration[self::FACTORY_METHODS] ?? [];
     }
 
-    /**
-     * @return mixed[]|null
-     */
-    private function matchTypeAndMethodName(MethodCall $methodCall): ?array
+    private function matchTypeAndMethodName(MethodCall $methodCall): ?PositionAndClassType
     {
         foreach ($this->factoryMethods as $className => $methodName) {
             if (! $this->isObjectType($methodCall->var, $className)) {
@@ -145,7 +141,7 @@ PHP
             $argumentPosition = $config[self::ARGUMENT_POSITION] ?? 1;
             $class = $config[self::CLASSNAME];
 
-            return [$argumentPosition, $class];
+            return new PositionAndClassType($argumentPosition, $class);
         }
 
         return null;

@@ -59,7 +59,7 @@ final class GetClassToInstanceOfRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node,
             function (Node $node): bool {
                 return $this->isClassReference($node);
@@ -69,13 +69,14 @@ final class GetClassToInstanceOfRector extends AbstractRector
             }
         );
 
-        if ($matchedNodes === null) {
+        if ($twoNodeMatch === null) {
             return null;
         }
 
         /** @var ClassConstFetch $classReferenceNode */
+        $classReferenceNode = $twoNodeMatch->getFirstExpr();
         /** @var FuncCall $funcCallNode */
-        [$classReferenceNode, $funcCallNode] = $matchedNodes;
+        $funcCallNode = $twoNodeMatch->getSecondExpr();
 
         $varNode = $funcCallNode->args[0]->value;
         $className = $this->matchClassName($classReferenceNode);

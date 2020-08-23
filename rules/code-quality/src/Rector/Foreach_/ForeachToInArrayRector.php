@@ -22,6 +22,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php71\ValueObject\TwoNodeMatch;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\ForeachToInArrayRectorTest
@@ -93,13 +94,12 @@ PHP
         $ifCondition = $firstNodeInsideForeach->cond;
         $foreachValueVar = $node->valueVar;
 
-        $matchedNodes = $this->matchNodes($ifCondition, $foreachValueVar);
-        if ($matchedNodes === null) {
+        $twoNodeMatch = $this->matchNodes($ifCondition, $foreachValueVar);
+        if ($twoNodeMatch === null) {
             return null;
         }
 
-        [, $comparedNode] = $matchedNodes;
-
+        $comparedNode = $twoNodeMatch->getSecondExpr();
         if (! $this->isIfBodyABoolReturnNode($firstNodeInsideForeach)) {
             return null;
         }
@@ -176,10 +176,7 @@ PHP
         return ! $ifCondition instanceof Identical && ! $ifCondition instanceof Equal;
     }
 
-    /**
-     * @return Node[]|null
-     */
-    private function matchNodes(BinaryOp $binaryOp, Expr $expr): ?array
+    private function matchNodes(BinaryOp $binaryOp, Expr $expr): ?TwoNodeMatch
     {
         return $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $binaryOp,

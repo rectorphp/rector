@@ -56,7 +56,7 @@ final class SimplifyArraySearchRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node,
             function (Node $node): bool {
                 return $this->isFuncCallName($node, 'array_search');
@@ -66,12 +66,12 @@ final class SimplifyArraySearchRector extends AbstractRector
             }
         );
 
-        if ($matchedNodes === null) {
+        if ($twoNodeMatch === null) {
             return null;
         }
 
         /** @var FuncCall $arraySearchFuncCall */
-        [$arraySearchFuncCall, ] = $matchedNodes;
+        $arraySearchFuncCall = $twoNodeMatch->getFirstExpr();
 
         $inArrayFuncCall = $this->createFuncCall('in_array', $arraySearchFuncCall->args);
 

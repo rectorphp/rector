@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
-use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -13,7 +12,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
@@ -26,11 +24,6 @@ final class ClassManipulator
     private $nodeNameResolver;
 
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -41,13 +34,11 @@ final class ClassManipulator
     private $nodesToRemoveCollector;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         NodesToRemoveCollector $nodesToRemoveCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
@@ -91,11 +82,6 @@ final class ClassManipulator
         }
 
         return false;
-    }
-
-    public function removeProperty(Class_ $class, string $propertyName): void
-    {
-        $this->removeProperties($class, [$propertyName]);
     }
 
     /**
@@ -205,23 +191,5 @@ final class ClassManipulator
 
             $this->nodesToRemoveCollector->addNodeToRemove($implement);
         }
-    }
-
-    /**
-     * @param string[] $propertyNames
-     */
-    private function removeProperties(Class_ $class, array $propertyNames): void
-    {
-        $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames) {
-            if (! $node instanceof Property) {
-                return null;
-            }
-
-            if (! $this->nodeNameResolver->isNames($node, $propertyNames)) {
-                return null;
-            }
-
-            $this->nodesToRemoveCollector->addNodeToRemove($node);
-        });
     }
 }

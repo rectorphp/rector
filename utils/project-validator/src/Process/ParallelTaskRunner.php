@@ -217,6 +217,6 @@ final class ParallelTaskRunner
     private function printSuccess(string $set, int $totalTasks): void
     {
         $message = sprintf('(%d/%d) Set "%s" is OK', $this->finishedProcessCount, $totalTasks, $set);
-        $this->symfonyStyle->success($message);
+        $this->symfonyStyle->note($message);
     }
 }

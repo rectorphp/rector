@@ -50,14 +50,14 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     private const CONSOLE_EVENTS_CLASS = 'Symfony\Component\Console\ConsoleEvents';
 
     /**
-     * @var EventNameToClassAndConstant[]
-     */
-    private $eventNamesToClassConstants = [];
-
-    /**
      * @var bool
      */
     private $areListenerClassesLoaded = false;
+
+    /**
+     * @var EventNameToClassAndConstant[]
+     */
+    private $eventNamesToClassConstants = [];
 
     /**
      * @var ServiceDefinition[][][]

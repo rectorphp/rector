@@ -175,28 +175,6 @@ final class ClassMethodManipulator
         return $paramName;
     }
 
-    public function removeUnusedParameters(ClassMethod $classMethod): void
-    {
-        foreach ($classMethod->getParams() as $param) {
-            if (! $this->isParameterUsedInClassMethod($param, $classMethod)) {
-                $this->removeParameter($param, $classMethod);
-            }
-        }
-    }
-
-    public function findMethodParamByName(ClassMethod $classMethod, string $name): ?Param
-    {
-        foreach ($classMethod->params as $param) {
-            if (! $this->nodeNameResolver->isName($param, $name)) {
-                continue;
-            }
-
-            return $param;
-        }
-
-        return null;
-    }
-
     private function isMethodInParent(string $class, string $method): bool
     {
         foreach (class_parents($class) as $parentClass) {
