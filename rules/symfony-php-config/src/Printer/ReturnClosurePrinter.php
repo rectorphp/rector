@@ -12,10 +12,12 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
@@ -27,7 +29,12 @@ use Rector\Core\PhpParser\Builder\UseBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Reflection\ConstantNameFromValueResolver;
+use Rector\SymfonyPhpConfig\NodeFactory\NewValueObjectFactory;
 
+/**
+ * @deprecated
+ * @todo use migrify package https://github.com/migrify/php-config-printer
+ */
 final class ReturnClosurePrinter
 {
     /**
@@ -60,18 +67,28 @@ final class ReturnClosurePrinter
      */
     private $constantNameFromValueResolver;
 
+    /**
+     * @var NewValueObjectFactory
+     */
+    private $newValueObjectFactory;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         ClassNaming $classNaming,
         NodeFactory $nodeFactory,
-        ConstantNameFromValueResolver $constantNameFromValueResolver
+        ConstantNameFromValueResolver $constantNameFromValueResolver,
+        NewValueObjectFactory $newValueObjectFactory
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeFactory = $nodeFactory;
         $this->classNaming = $classNaming;
         $this->constantNameFromValueResolver = $constantNameFromValueResolver;
+        $this->newValueObjectFactory = $newValueObjectFactory;
     }
 
+    /**
+     * @todo use migrify package
+     */
     public function printServices(array $services): string
     {
         // reset for each services
@@ -88,6 +105,8 @@ final class ReturnClosurePrinter
 
         $rootStmts = array_merge($this->useStmts, [new Nop(), $return]);
         $printedContent = $this->betterStandardPrinter->prettyPrintFile($rootStmts);
+
+        $printedContent = $this->indentArray($printedContent);
 
         return $this->indentFluentCallToNewline($printedContent);
     }
@@ -128,6 +147,23 @@ final class ReturnClosurePrinter
         return $stmts;
     }
 
+    /**
+     * @todo replace with https://github.com/symplify/symplify/issues/2055 when done
+     */
+    private function indentArray(string $printedContent): string
+    {
+        // open array
+        $printedContent = Strings::replace($printedContent, '#\[\[#', '[[' . PHP_EOL . str_repeat(' ', 12));
+
+        // nested array
+        $printedContent = Strings::replace($printedContent, '#\=> \[#', '=> [' . PHP_EOL . str_repeat(' ', 16));
+
+        // close array
+        $printedContent = Strings::replace($printedContent, '#\]\]\)#', PHP_EOL . str_repeat(' ', 8) . ']])');
+
+        return $printedContent;
+    }
+
     private function indentFluentCallToNewline(string $content): string
     {
         $nextCallIndentReplacement = ')' . PHP_EOL . Strings::indent('->', 8, ' ');
@@ -146,10 +182,6 @@ final class ReturnClosurePrinter
         $methodCall = new MethodCall($servicesVariable, 'set', $args);
 
         foreach ($serviceParameters as $argument => $value) {
-            if ($this->shouldSkipObjectConfiguration($value)) {
-                continue;
-            }
-
             if (! is_string($argument)) {
                 $message = sprintf('Invalid configuration for code sample in "%s" class', $serviceName);
                 throw new ShouldNotHappenException($message);
@@ -159,7 +191,7 @@ final class ReturnClosurePrinter
             $classConstFetch = new ClassConstFetch(new Name($shortClassName), $constantName);
 
             $args = $this->nodeFactory->createArgs(
-                ['configure', [[new ArrayItem(BuilderHelpers::normalizeValue($value), $classConstFetch)]]]
+                ['configure', [[$this->createConfigureArgs($value, $classConstFetch)]]]
             );
 
             $methodCall = new MethodCall($methodCall, 'call', $args);
@@ -169,20 +201,26 @@ final class ReturnClosurePrinter
     }
 
     /**
-     * @param mixed[]|mixed $value
+     * @param mixed|mixed[] $value
      */
-    private function shouldSkipObjectConfiguration($value): bool
+    private function createConfigureArgs($value, ClassConstFetch $classConstFetch): ArrayItem
     {
-        if (! is_array($value)) {
-            return false;
-        }
-        foreach ($value as $singleValue) {
-            // new PHP configuraiton style
-            if (is_object($singleValue)) {
-                return true;
+        if (is_array($value)) {
+            foreach ($value as $key => $subValue) {
+                // PHP object configuration
+                if (is_object($subValue)) {
+                    $new = $this->newValueObjectFactory->create($subValue);
+                    $args = [new Arg($new)];
+
+                    // create arguments from object properties
+                    $inlineObjectFuncCall = new FuncCall(new FullyQualified(
+                        'Rector\SymfonyPhpConfig\inline_object'
+                    ), $args);
+                    $value[$key] = $inlineObjectFuncCall;
+                }
             }
         }
 
-        return false;
+        return new ArrayItem(BuilderHelpers::normalizeValue($value), $classConstFetch);
     }
 }

@@ -43,7 +43,7 @@ final class ForbiddenArrayDestructRule implements Rule
             return [];
         }
 
-        // swaps are allowed
+        // "explode()" is allowed
         if ($node->expr instanceof FuncCall && $this->isName($node->expr, 'explode')) {
             return [];
         }
