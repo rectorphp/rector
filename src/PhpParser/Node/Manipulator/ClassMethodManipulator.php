@@ -203,15 +203,4 @@ final class ClassMethodManipulator
 
         throw new ShouldNotHappenException();
     }
-
-    private function removeParameter(Param $param, ClassMethod $classMethod): void
-    {
-        foreach ($classMethod->params as $key => $constructorParam) {
-            if (! $this->nodeNameResolver->areNamesEqual($constructorParam, $param)) {
-                continue;
-            }
-
-            unset($classMethod->params[$key]);
-        }
-    }
 }
