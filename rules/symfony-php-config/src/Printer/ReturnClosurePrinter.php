@@ -28,6 +28,10 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Reflection\ConstantNameFromValueResolver;
 
+/**
+ * @deprecated
+ * @todo use migrify package https://github.com/migrify/php-config-printer
+ */
 final class ReturnClosurePrinter
 {
     /**
@@ -72,6 +76,9 @@ final class ReturnClosurePrinter
         $this->constantNameFromValueResolver = $constantNameFromValueResolver;
     }
 
+    /**
+     * @todo use migrify package
+     */
     public function printServices(array $services): string
     {
         // reset for each services
@@ -147,6 +154,9 @@ final class ReturnClosurePrinter
 
         foreach ($serviceParameters as $argument => $value) {
             if ($this->shouldSkipObjectConfiguration($value)) {
+                dump($value);
+                die;
+
                 continue;
             }
 
