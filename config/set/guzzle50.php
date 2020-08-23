@@ -9,6 +9,7 @@ use Rector\Generic\ValueObject\FuncNameToMethodCallName;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
 use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -57,10 +58,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'GuzzleHttp\Message\MessageInterface' => [
-                    'getHeaderLines' => 'getHeaderAsArray',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('GuzzleHttp\Message\MessageInterface', 'getHeaderLines', 'getHeaderAsArray'),
+            ]),
         ]]);
 };

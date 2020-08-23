@@ -6,6 +6,8 @@ use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -22,14 +24,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Kdyby\Translation\Translator' => [
-                    'translate' => 'trans',
-                ],
-                'Kdyby\RabbitMq\IConsumer' => [
-                    'process' => 'execute',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Kdyby\Translation\Translator', 'translate', 'trans'),
+                new MethodCallRename('Kdyby\RabbitMq\IConsumer', 'process', 'execute'),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

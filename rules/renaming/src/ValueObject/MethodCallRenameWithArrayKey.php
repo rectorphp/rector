@@ -6,7 +6,7 @@ namespace Rector\Renaming\ValueObject;
 
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 
-final class MethodCallRename implements MethodCallRenameInterface
+final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
 {
     /**
      * @var string
@@ -23,11 +23,20 @@ final class MethodCallRename implements MethodCallRenameInterface
      */
     private $newMethod;
 
-    public function __construct(string $oldClass, string $oldMethod, string $newMethod)
+    /**
+     * @var mixed
+     */
+    private $arrayKey;
+
+    /**
+     * @param mixed $arrayKey
+     */
+    public function __construct(string $oldClass, string $oldMethod, string $newMethod, $arrayKey)
     {
         $this->oldClass = $oldClass;
         $this->oldMethod = $oldMethod;
         $this->newMethod = $newMethod;
+        $this->arrayKey = $arrayKey;
     }
 
     public function getOldClass(): string
@@ -43,5 +52,13 @@ final class MethodCallRename implements MethodCallRenameInterface
     public function getNewMethod(): string
     {
         return $this->newMethod;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getArrayKey()
+    {
+        return $this->arrayKey;
     }
 }

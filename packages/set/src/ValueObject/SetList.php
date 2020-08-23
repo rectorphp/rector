@@ -79,11 +79,6 @@ final class SetList
     /**
      * @var string
      */
-    public const CONSTRUCTOR_INJECTIN_TO_ACTION_INJECTION = __DIR__ . '/../../../../config/set/constructor-injectin-to-action-injection.php';
-
-    /**
-     * @var string
-     */
     public const CONTRIBUTTE_TO_SYMFONY = __DIR__ . '/../../../../config/set/contributte-to-symfony.php';
 
     /**

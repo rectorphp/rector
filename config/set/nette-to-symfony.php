@@ -12,6 +12,8 @@ use Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesG
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -55,20 +57,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Nette\Application\IPresenter' => [
-                    'run' => '__invoke',
-                ],
-                'Nette\DI\Container' => [
-                    'getByType' => 'get',
-                ],
-                'Nette\Configurator' => [
-                    'addConfig' => 'load',
-                ],
-                'Symfony\Component\Config\Loader\LoaderInterface' => [
-                    'addConfig' => 'load',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Nette\Application\IPresenter', 'run', '__invoke'),
+                new MethodCallRename('Nette\DI\Container', 'getByType', 'get'),
+                new MethodCallRename('Nette\Configurator', 'addConfig', 'load'),
+                new MethodCallRename('Symfony\Component\Config\Loader\LoaderInterface', 'addConfig', 'load'),
+            ]),
         ]]);
 
     $services->set(RemoveInterfacesRector::class)

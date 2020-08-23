@@ -14,12 +14,14 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Renaming\ValueObject\MethodCallRename;
 
+/**
+ * @see \Rector\SymfonyPhpConfig\Tests\Rector\ArrayItem\ReplaceArrayWithObjectRector\ReplaceArrayWithObjectRectorTest
+ */
 final class ReplaceArrayWithObjectRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
@@ -33,74 +35,11 @@ final class ReplaceArrayWithObjectRector extends AbstractRector implements Confi
      */
     private $constantNamesToValueObjects = [];
 
-    public function getNodeTypes(): array
-    {
-        return [ArrayItem::class];
-    }
-
-    /**
-     * @param ArrayItem $node
-     */
-    public function refactor(Node $node): ?Node
-    {
-        if (! $node->key instanceof ClassConstFetch) {
-            return null;
-        }
-
-        foreach ($this->constantNamesToValueObjects as $constantName => $valueObjectClass) {
-            if (! $this->isValue($node->key, $constantName)) {
-                continue;
-            }
-
-            // already converted
-            if ($node->value instanceof FuncCall) {
-                return null;
-            }
-
-            if (! $node->value instanceof Array_) {
-                return null;
-            }
-
-            /** @var Array_ $configurationValueArray */
-            $configurationValueArray = $node->value;
-
-            $newItems = [];
-            foreach ($node->value->items as $key => $nestedArrayItem) {
-                if (! $nestedArrayItem instanceof ArrayItem) {
-                    continue;
-                }
-
-                if (! $nestedArrayItem->key instanceof String_) {
-                    throw new ShouldNotHappenException();
-                }
-
-                if (! $nestedArrayItem->value instanceof Array_) {
-                    continue;
-                }
-
-                foreach ($nestedArrayItem->value->items as $nestedNestedArrayItem) {
-                    $ars = [$nestedArrayItem->key, $nestedNestedArrayItem->key, $nestedNestedArrayItem->value];
-                    $newItems[] = new New_(new FullyQualified($valueObjectClass), $ars);
-                }
-            }
-
-            $configurationValueArray->items = $newItems;
-
-            // wrap with inline objects
-            $args = [new Arg($configurationValueArray)];
-            $node->value = new FuncCall(new FullyQualified('Rector\SymfonyPhpConfig\inline_objects'), $args);
-
-            return $node;
-        }
-
-        return null;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replace complex array configuration in configs with value object', [
             new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -127,25 +66,115 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Illuminate\Auth\Access\Gate' => [
-                    'access' => 'inspect',
-                ]
-            ]]
-        ]);
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => \Rector\SymfonyPhpConfig\inline_value_objects([
+                new \Rector\Renaming\ValueObject\MethodCallRename('Illuminate\Auth\Access\Gate', 'access', 'inspect'),
+            ])
+        ]]);
 }
 CODE_SAMPLE
-,
-            [
-                self::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
-                    'Rector\Renaming\Rector\MethodCall\RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS' => MethodCallRename::class,
-                ],
-            ]),
+                ,
+                [
+                    self::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
+                        'Rector\Renaming\Rector\MethodCall\RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS' => MethodCallRename::class,
+                    ],
+                ]),
         ]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [ArrayItem::class];
+    }
+
+    /**
+     * @param ArrayItem $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (! $node->key instanceof ClassConstFetch) {
+            return null;
+        }
+
+        foreach ($this->constantNamesToValueObjects as $constantName => $valueObjectClass) {
+            if ($this->shouldSkip($node, $constantName)) {
+                continue;
+            }
+
+            /** @var Array_ $configurationValueArray */
+            $configurationValueArray = $node->value;
+
+            $newItems = [];
+            foreach ($configurationValueArray->items as $nestedArrayItem) {
+                if ($this->shouldSkipNestedArrayItem($nestedArrayItem)) {
+                    continue;
+                }
+
+                /** @var Array_ $nestedArrayItemArray */
+                $nestedArrayItemArray = $nestedArrayItem->value;
+
+                foreach ($nestedArrayItemArray->items as $nestedNestedArrayItem) {
+                    $args = $this->createArgs(
+                        /** @var ArrayItem $nestedArrayItem */
+                        /** @var ArrayItem $nestedNestedArrayItem */
+                        [$nestedArrayItem->key, $nestedNestedArrayItem->key, $nestedNestedArrayItem->value]
+                    );
+                    $new = new New_(new FullyQualified($valueObjectClass), $args);
+                    $newItems[] = new ArrayItem($new);
+                }
+            }
+
+            $configurationValueArray->items = $newItems;
+
+            // wrap with inline objects
+            $args = [new Arg($configurationValueArray)];
+            $node->value = new FuncCall(new FullyQualified('Rector\SymfonyPhpConfig\inline_value_objects'), $args);
+
+            return $node;
+        }
+
+        return null;
     }
 
     public function configure(array $configuration): void
     {
         $this->constantNamesToValueObjects = $configuration[self::CONSTANT_NAMES_TO_VALUE_OBJECTS] ?? [];
+    }
+
+    private function shouldSkip(ArrayItem $arrayItem, string $constantName): bool
+    {
+        if ($arrayItem->key === null) {
+            return true;
+        }
+
+        if (! $this->isValue($arrayItem->key, $constantName)) {
+            return true;
+        }
+
+        // already converted
+        if ($arrayItem->value instanceof FuncCall) {
+            return true;
+        }
+
+        return ! $arrayItem->value instanceof Array_;
+    }
+
+    private function shouldSkipNestedArrayItem(?ArrayItem $nestedArrayItem): bool
+    {
+        if (! $nestedArrayItem instanceof ArrayItem) {
+            return true;
+        }
+
+        if ($nestedArrayItem->key === null) {
+            return true;
+        }
+
+        if (! $nestedArrayItem->key instanceof String_) {
+            return true;
+        }
+
+        return ! $nestedArrayItem->value instanceof Array_;
     }
 }

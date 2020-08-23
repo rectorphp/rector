@@ -6,6 +6,8 @@ use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -14,22 +16,34 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Sylius\Component\Core\Repository\OrderRepositoryInterface' => [
-                    # source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-100-beta3-to-100
-                    'count' => 'countPlacedOrders',
-                    'countByChannel' => 'countFulfilledByChannel',
-                ],
-                'Sylius\Component\Product\Repository\ProductVariantRepositoryInterface' => [
-                    'findByCodeAndProductCode' => 'findByCodesAndProductCode',
-                ],
-                'Sylius\Component\Core\Model\OrderInterface' => [
-                    'getLastNewPayment' => 'getLastPayment',
-                ],
-                'Sylius\Component\Taxonomy\Model\TaxonInterface' => [
-                    'getParents ' => 'getAncestors',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                // source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-100-beta3-to-100
+                new MethodCallRename(
+                    'Sylius\Component\Core\Repository\OrderRepositoryInterface',
+                    'count',
+                    'countPlacedOrders'
+                ),
+                new MethodCallRename(
+                    'Sylius\Component\Core\Repository\OrderRepositoryInterface',
+                    'countByChannel',
+                    'countFulfilledByChannel'
+                ),
+                new MethodCallRename(
+                    'Sylius\Component\Product\Repository\ProductVariantRepositoryInterface',
+                    'findByCodeAndProductCode',
+                    'findByCodesAndProductCode'
+                ),
+                new MethodCallRename(
+                    'Sylius\Component\Core\Model\OrderInterface',
+                    'getLastNewPayment',
+                    'getLastPayment'
+                ),
+                new MethodCallRename(
+                    'Sylius\Component\Taxonomy\Model\TaxonInterface',
+                    'getParents ',
+                    'getAncestors'
+                ),
+            ]),
         ]]);
 
     $services->set(AddParamTypeDeclarationRector::class)

@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -13,15 +15,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # source: https://book.cakephp.org/3.0/en/appendices/3-6-migration-guide.html
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Cake\ORM\Table' => [
-                    'association' => 'getAssociation',
-                ],
-                'Cake\Validation\ValidationSet' => [
-                    'isPresenceRequired' => 'requirePresence',
-                    'isEmptyAllowed' => 'allowEmpty',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Cake\ORM\Table', 'association', 'getAssociation'),
+                new MethodCallRename('Cake\Validation\ValidationSet', 'isPresenceRequired', 'requirePresence'),
+                new MethodCallRename('Cake\Validation\ValidationSet', 'isEmptyAllowed', 'allowEmpty'),
+            ]),
         ]]);
 
     $services->set(PropertyToMethodRector::class)

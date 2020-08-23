@@ -3,7 +3,6 @@
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\Fixture;
 
 use Rector\DeadCode\Tests\Rector\Property\RemoveSetterOnlyPropertyAndMethodCallRector\Source\PostTemplate;
-
 use Doctrine\ORM\Mapping as ORM;
 
 class KeepManyToOne

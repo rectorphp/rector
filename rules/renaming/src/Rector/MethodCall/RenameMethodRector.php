@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Renaming\Rector\MethodCall;
 
+use PhpParser\BuilderHelpers;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -15,7 +17,9 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\RenameMethodRectorTest
@@ -28,7 +32,7 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
     public const OLD_TO_NEW_METHODS_BY_CLASS = 'old_to_new_methods_by_class';
 
     /**
-     * @var MethodCallRename[]
+     * @var MethodCallRenameInterface[]
      */
     private $methodCallRenames = [];
 
@@ -83,6 +87,10 @@ PHP
 
             $node->name = new Identifier($methodCallRename->getNewMethod());
 
+            if ($methodCallRename instanceof MethodCallRenameWithArrayKey && ! $node instanceof ClassMethod) {
+                return new ArrayDimFetch($node, BuilderHelpers::normalizeValue($methodCallRename->getArrayKey()));
+            }
+
             return $node;
         }
 
@@ -97,7 +105,7 @@ PHP
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    private function skipClassMethod(Node $node, MethodCallRename $methodCallRename): bool
+    private function skipClassMethod(Node $node, MethodCallRenameInterface $methodCallRename): bool
     {
         if (! $node instanceof ClassMethod) {
             return false;
@@ -112,7 +120,7 @@ PHP
 
     private function shouldSkipForAlreadyExistingClassMethod(
         ClassMethod $classMethod,
-        MethodCallRename $methodCallRename
+        MethodCallRenameInterface $methodCallRename
     ): bool {
         if (! $classMethod instanceof ClassMethod) {
             return false;

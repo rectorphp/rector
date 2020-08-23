@@ -7,6 +7,8 @@ use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToCamelRector;
 use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # source: https://book.cakephp.org/3.0/en/appendices/3-7-migration-guide.html
@@ -15,23 +17,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Cake\Form\Form' => [
-                    'errors' => 'getErrors',
-                ],
-                'Cake\Validation\Validation' => [
-                    'cc' => 'creditCard',
-                ],
-                'Cake\Filesystem\Folder' => [
-                    'normalizePath' => 'correctSlashFor',
-                ],
-                'Cake\Http\Client\Response' => [
-                    'body' => 'getStringBody',
-                ],
-                'Cake\Core\Plugin' => [
-                    'unload' => 'clear',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Cake\Form\Form', 'errors', 'getErrors'),
+                new MethodCallRename('Cake\Validation\Validation', 'cc', 'creditCard'),
+                new MethodCallRename('Cake\Filesystem\Folder', 'normalizePath', 'correctSlashFor'),
+                new MethodCallRename('Cake\Http\Client\Response', 'body', 'getStringBody'),
+                new MethodCallRename('Cake\Core\Plugin', 'unload', 'clear'),
+            ]),
         ]]);
 
     $services->set(PropertyToMethodRector::class)

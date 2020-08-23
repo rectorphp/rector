@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # source: https://book.cakephp.org/3.0/en/appendices/3-5-migration-guide.html
@@ -21,13 +23,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Cake\Database\Schema\TableSchema' => [
-                    'column' => 'getColumn',
-                    'constraint' => 'getConstraint',
-                    'index' => 'getIndex',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Cake\Database\Schema\TableSchema', 'column', 'getColumn'),
+                new MethodCallRename('Cake\Database\Schema\TableSchema', 'constraint', 'getConstraint'),
+                new MethodCallRename('Cake\Database\Schema\TableSchema', 'index', 'getIndex'),
+            ]),
         ]]);
 
     $services->set(ModalToGetSetRector::class)

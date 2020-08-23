@@ -10,6 +10,7 @@ use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\StaticCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
@@ -46,27 +47,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Cake\Form\Form' => [
-                    'errors' => 'getErrors',
-                ],
-                'Cake\Mailer\Email' => [
-                    'set' => 'setViewVars',
-                ],
-                'Cake\ORM\EntityInterface' => [
-                    'unsetProperty' => 'unset',
-                ],
-                'Cake\Cache\Cache' => [
-                    'engine' => 'pool',
-                ],
-                'Cake\Http\Cookie\Cookie' => [
-                    'getStringValue' => 'getScalarValue',
-                ],
-                'Cake\Validation\Validator' => [
-                    'containsNonAlphaNumeric' => 'notAlphaNumeric',
-                    'errors' => 'validate',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Cake\Form\Form', 'errors', 'getErrors'),
+                new MethodCallRename('Cake\Mailer\Email', 'set', 'setViewVars'),
+                new MethodCallRename('Cake\ORM\EntityInterface', 'unsetProperty', 'unset'),
+                new MethodCallRename('Cake\Cache\Cache', 'engine', 'pool'),
+                new MethodCallRename('Cake\Http\Cookie\Cookie', 'getStringValue', 'getScalarValue'),
+                new MethodCallRename('Cake\Validation\Validator', 'containsNonAlphaNumeric', 'notAlphaNumeric'),
+                new MethodCallRename('Cake\Validation\Validator', 'errors', 'validate'),
+            ]),
         ]]);
 
     $configuration = [

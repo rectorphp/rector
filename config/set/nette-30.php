@@ -16,6 +16,7 @@ use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotate
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -118,29 +119,29 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameMethodRector::class)
         // @see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Nette\Forms\Controls\BaseControl' => [
-                    'setAttribute' => 'setHtmlAttribute',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setAttribute', 'setHtmlAttribute'),
+            ]),
         ]]);
 
     $services->set(RenameMethodRector::class)->call('configure', [[
-        RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-            'Nette\Forms\Controls\BaseControl' => [
+        RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+            new MethodCallRename(
+                'Nette\Forms\Controls\BaseControl',
                 # see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
-                'setType' => 'setHtmlType',
-                'setAttribute' => 'setHtmlAttribute',
-            ],
-            'Nette\DI\Definitions\ServiceDefinition' => [
+                'setType',
+                'setHtmlType'
+            ),
+            new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setAttribute', 'setHtmlAttribute'),
+            new MethodCallRename(
+                'Nette\DI\Definitions\ServiceDefinition',
                 # see https://github.com/nette/di/commit/1705a5db431423fc610a6f339f88dead1b5dc4fb
-                'setClass' => 'setType',
-                'getClass' => 'getType',
-            ],
-            'Nette\DI\Definitions\Definition' => [
-                'isAutowired' => 'getAutowired',
-            ],
-        ],
+                'setClass',
+                'setType'
+            ),
+            new MethodCallRename('Nette\DI\Definitions\ServiceDefinition', 'getClass', 'getType'),
+            new MethodCallRename('Nette\DI\Definitions\Definition', 'isAutowired', 'getAutowired'),
+        ]),
     ]]);
 
     $services->set(MagicHtmlCallToAppendAttributeRector::class);

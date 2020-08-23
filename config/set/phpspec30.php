@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -11,13 +13,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'PhpSpec\ServiceContainer' => [
-                    # @see http://www.phpspec.net/en/stable/manual/upgrading-to-phpspec-3.html
-                    'set' => 'define',
-                    'setShared' => 'define',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                // @see http://www.phpspec.net/en/stable/manual/upgrading-to-phpspec-3.html
+                new MethodCallRename('PhpSpec\ServiceContainer', 'set', 'define'),
+                new MethodCallRename('PhpSpec\ServiceContainer', 'setShared', 'define'),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

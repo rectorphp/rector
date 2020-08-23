@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # see: https://laravel.com/docs/5.0/upgrade
@@ -21,16 +23,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Illuminate\Contracts\Pagination\Paginator' => [
-                    'links' => 'render',
-                    'getFrom' => 'firstItem',
-                    'getTo' => 'lastItem',
-                    'getPerPage' => 'perPage',
-                    'getCurrentPage' => 'currentPage',
-                    'getLastPage' => 'lastPage',
-                    'getTotal' => 'total',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Illuminate\Contracts\Pagination\Paginator', 'links', 'render'),
+                new MethodCallRename('Illuminate\Contracts\Pagination\Paginator', 'getFrom', 'firstItem'),
+                new MethodCallRename('Illuminate\Contracts\Pagination\Paginator', 'getTo', 'lastItem'),
+                new MethodCallRename('Illuminate\Contracts\Pagination\Paginator', 'getPerPage', 'perPage'),
+                new MethodCallRename('Illuminate\Contracts\Pagination\Paginator', 'getCurrentPage', 'currentPage'),
+                new MethodCallRename('Illuminate\Contracts\Pagination\Paginator', 'getLastPage', 'lastPage'),
+                new MethodCallRename('Illuminate\Contracts\Pagination\Paginator', 'getTotal', 'total'),
+            ]),
         ]]);
 };

@@ -408,3 +408,8 @@ parameters:
                 - compiler/src/Composer/ComposerJsonManipulator.php
                 # not sure how to improve
                 - rules/symfony/src/ValueObject/Tag/EventListenerTag.php
+
+        - '#Cannot access property \$key on PhpParser\\Node\\Expr\\ArrayItem\|null#'
+        - '#Class Nette\\DI\\CompilerExtension not found#'
+        - '#Class Latte\\Macros\\MacroSet not found#'
+

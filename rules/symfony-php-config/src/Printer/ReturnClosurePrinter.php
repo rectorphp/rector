@@ -214,7 +214,7 @@ final class ReturnClosurePrinter
 
                     // create arguments from object properties
                     $inlineObjectFuncCall = new FuncCall(new FullyQualified(
-                        'Rector\SymfonyPhpConfig\inline_object'
+                        'Rector\SymfonyPhpConfig\inline_value_object'
                     ), $args);
                     $value[$key] = $inlineObjectFuncCall;
                 }

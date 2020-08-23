@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -20,24 +22,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Cake\Database\Schema\TableSchema' => [
-                    'getPrimary' => 'getPrimaryKey',
-                ],
-                'Cake\Database\Type\DateTimeType' => [
-                    'setTimezone' => 'setDatabaseTimezone',
-                ],
-                'Cake\Database\Expression\QueryExpression' => [
-                    'or_' => 'or',
-                    'and_' => 'and',
-                ],
-                'Cake\View\Form\ContextInterface' => [
-                    'primaryKey' => 'getPrimaryKey',
-                ],
-                'Cake\Http\Middleware\CsrfProtectionMiddleware' => [
-                    'whitelistCallback' => 'skipCheckCallback',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Cake\Database\Schema\TableSchema', 'getPrimary', 'getPrimaryKey'),
+                new MethodCallRename('Cake\Database\Type\DateTimeType', 'setTimezone', 'setDatabaseTimezone'),
+                new MethodCallRename('Cake\Database\Expression\QueryExpression', 'or_', 'or'),
+                new MethodCallRename('Cake\Database\Expression\QueryExpression', 'and_', 'and'),
+                new MethodCallRename('Cake\View\Form\ContextInterface', 'primaryKey', 'getPrimaryKey'),
+                new MethodCallRename(
+                    'Cake\Http\Middleware\CsrfProtectionMiddleware',
+                    'whitelistCallback',
+                    'skipCheckCallback'
+                ),
+            ]),
         ]]);
 
     $services->set(ModalToGetSetRector::class)

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://github.com/Seldaek/monolog/commit/39f8a20e6dadc0194e846b254c5f23d1c732290b#diff-dce565f403e044caa5e6a0d988339430
@@ -11,21 +13,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Monolog\Logger' => [
-                    'addDebug' => 'debug',
-                    'addInfo' => 'info',
-                    'addNotice' => 'notice',
-                    'addWarning' => 'warning',
-                    'addError' => 'error',
-                    'addCritical' => 'critical',
-                    'addAlert' => 'alert',
-                    'addEmergency' => 'emergency',
-                    'warn' => 'warning',
-                    'err' => 'error',
-                    'crit' => 'critical',
-                    'emerg' => 'emergency',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Monolog\Logger', 'addDebug', 'debug'),
+                new MethodCallRename('Monolog\Logger', 'addInfo', 'info'),
+                new MethodCallRename('Monolog\Logger', 'addNotice', 'notice'),
+                new MethodCallRename('Monolog\Logger', 'addWarning', 'warning'),
+                new MethodCallRename('Monolog\Logger', 'addError', 'error'),
+                new MethodCallRename('Monolog\Logger', 'addCritical', 'critical'),
+                new MethodCallRename('Monolog\Logger', 'addAlert', 'alert'),
+                new MethodCallRename('Monolog\Logger', 'addEmergency', 'emergency'),
+                new MethodCallRename('Monolog\Logger', 'warn', 'warning'),
+                new MethodCallRename('Monolog\Logger', 'err', 'error'),
+                new MethodCallRename('Monolog\Logger', 'crit', 'critical'),
+                new MethodCallRename('Monolog\Logger', 'emerg', 'emergency'),
+            ]),
         ]]);
 };
