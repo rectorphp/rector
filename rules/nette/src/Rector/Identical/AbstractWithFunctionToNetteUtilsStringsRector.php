@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\Identical;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Nette\ValueObject\ContentExprAndNeedleExpr;
 
 abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRector
 {
@@ -27,25 +27,14 @@ abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRec
      */
     public function refactor(Node $node): ?Node
     {
-        $contentAndNeedle = null;
-
-        if ($node->left instanceof Variable) {
-            $contentAndNeedle = $this->matchContentAndNeedleOfSubstrOfVariableLength($node->right, $node->left);
-        }
-
-        if ($node->right instanceof Variable) {
-            $contentAndNeedle = $this->matchContentAndNeedleOfSubstrOfVariableLength($node->left, $node->right);
-        }
-
-        if ($contentAndNeedle === null) {
+        $contentExprAndNeedleExpr = $this->resolveContentExprAndNeedleExpr($node);
+        if ($contentExprAndNeedleExpr === null) {
             return null;
         }
 
-        [$contentNode, $needleNode] = $contentAndNeedle;
-
         $staticCall = $this->createStaticCall('Nette\Utils\Strings', $this->getMethodName(), [
-            $contentNode,
-            $needleNode,
+            $contentExprAndNeedleExpr->getContentExpr(),
+            $contentExprAndNeedleExpr->getNeedleExpr(),
         ]);
 
         if ($node instanceof NotIdentical) {
@@ -57,11 +46,24 @@ abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRec
 
     abstract protected function getMethodName(): string;
 
-    /**
-     * @return Expr[]|null
-     */
     abstract protected function matchContentAndNeedleOfSubstrOfVariableLength(
         Node $node,
         Variable $variable
-    ): ?array;
+    ): ?ContentExprAndNeedleExpr;
+
+    /**
+     * @param Identical|NotIdentical $node
+     */
+    private function resolveContentExprAndNeedleExpr($node): ?ContentExprAndNeedleExpr
+    {
+        if ($node->left instanceof Variable) {
+            return $this->matchContentAndNeedleOfSubstrOfVariableLength($node->right, $node->left);
+        }
+
+        if ($node->right instanceof Variable) {
+            return $this->matchContentAndNeedleOfSubstrOfVariableLength($node->left, $node->right);
+        }
+
+        return null;
+    }
 }

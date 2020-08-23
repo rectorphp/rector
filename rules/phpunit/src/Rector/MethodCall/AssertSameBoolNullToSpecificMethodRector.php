@@ -8,11 +8,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
 use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\PHPUnit\ValueObject\ConstantWithAssertMethods;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector\AssertSameBoolNullToSpecificMethodRectorTest
@@ -20,18 +20,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[][]
+     * @var ConstantWithAssertMethods[]
      */
-    private const CONST_VALUE_TO_NEW_METHOD_NAMES = [
-        'null' => ['assertNull', 'assertNotNull'],
-        'true' => ['assertTrue', 'assertNotTrue'],
-        'false' => ['assertFalse', 'assertNotFalse'],
-    ];
-
-    /**
-     * @var string
-     */
-    private $constantName;
+    private $constantWithAssertMethods = [];
 
     /**
      * @var IdentifierManipulator
@@ -41,6 +32,12 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
     public function __construct(IdentifierManipulator $identifierManipulator)
     {
         $this->identifierManipulator = $identifierManipulator;
+
+        $this->constantWithAssertMethods = [
+            new ConstantWithAssertMethods('null', 'assertNull', 'assertNotNull'),
+            new ConstantWithAssertMethods('true', 'assertTrue', 'assertNotTrue'),
+            new ConstantWithAssertMethods('false', 'assertFalse', 'assertNotFalse'),
+        ];
     }
 
     public function getDefinition(): RectorDefinition
@@ -74,28 +71,29 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
         if (! $firstArgumentValue instanceof ConstFetch) {
             return null;
         }
-        /** @var Identifier $constatName */
-        $constatName = $firstArgumentValue->name;
-        $this->constantName = $constatName->toLowerString();
-        if (! isset(self::CONST_VALUE_TO_NEW_METHOD_NAMES[$this->constantName])) {
-            return null;
-        }
-        $this->renameMethod($node);
-        $this->moveArguments($node);
 
-        return $node;
+        foreach ($this->constantWithAssertMethods as $constantWithAssertMethod) {
+            if (! $this->isName($firstArgumentValue, $constantWithAssertMethod->getConstant())) {
+                continue;
+            }
+
+            $this->renameMethod($node, $constantWithAssertMethod);
+            $this->moveArguments($node);
+
+            return $node;
+        }
+
+        return null;
     }
 
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function renameMethod(Node $node): void
+    private function renameMethod(Node $node, ConstantWithAssertMethods $constantWithAssertMethods): void
     {
-        [$sameMethodName, $notSameMethodName] = self::CONST_VALUE_TO_NEW_METHOD_NAMES[$this->constantName];
-
         $this->identifierManipulator->renameNodeWithMap($node, [
-            'assertSame' => $sameMethodName,
-            'assertNotSame' => $notSameMethodName,
+            'assertSame' => $constantWithAssertMethods->getAssetMethodName(),
+            'assertNotSame' => $constantWithAssertMethods->getNotAssertMethodName(),
         ]);
     }
 

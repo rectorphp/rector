@@ -80,7 +80,7 @@ final class SimplifyConditionsRector extends AbstractRector
 
     private function processIdenticalAndNotIdentical(BinaryOp $binaryOp): ?Node
     {
-        $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $binaryOp,
             function (Node $binaryOp): bool {
                 return $binaryOp instanceof Identical || $binaryOp instanceof NotIdentical;
@@ -90,12 +90,14 @@ final class SimplifyConditionsRector extends AbstractRector
             }
         );
 
-        if ($matchedNodes === null) {
-            return $matchedNodes;
+        if ($twoNodeMatch === null) {
+            return $twoNodeMatch;
         }
 
         /** @var Identical|NotIdentical $subBinaryOp */
-        [$subBinaryOp, $otherNode] = $matchedNodes;
+        $subBinaryOp = $twoNodeMatch->getFirstExpr();
+
+        $otherNode = $twoNodeMatch->getSecondExpr();
         if ($this->isFalse($otherNode)) {
             return $this->createInversedBooleanOp($subBinaryOp);
         }

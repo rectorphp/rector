@@ -54,14 +54,15 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
             return null;
         }
 
-        [$key, $array] = $node->args;
+        $keyArg = $node->args[0];
+        $arrayArg = $node->args[1];
 
         /** @var FuncCall $innerFuncCallNode */
-        $innerFuncCallNode = $array->value;
-        $array = $innerFuncCallNode->args[0];
+        $innerFuncCallNode = $arrayArg->value;
+        $arrayArg = $innerFuncCallNode->args[0];
 
         $node->name = new Name('array_key_exists');
-        $node->args = [$key, $array];
+        $node->args = [$keyArg, $arrayArg];
 
         return $node;
     }

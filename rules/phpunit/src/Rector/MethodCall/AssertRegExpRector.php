@@ -143,7 +143,9 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
 
         /** @var FuncCall $pregMatchFunction */
         $pregMatchFunction = $oldArguments[1]->value;
-        [$regex, $variable] = $pregMatchFunction->args;
+
+        $regex = $pregMatchFunction->args[0];
+        $variable = $pregMatchFunction->args[1];
 
         unset($oldArguments[0], $oldArguments[1]);
 

@@ -8,6 +8,8 @@ use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
+use Rector\Renaming\ValueObject\StaticCallRename;
+use function Rector\SymfonyPhpConfig\inline_objects;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -46,17 +48,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]]);
 
+    $configuration = [
+        # https://github.com/laravel/framework/commit/55785d3514a8149d4858acef40c56a31b6b2ccd1
+        new StaticCallRename('Illuminate\Support\Facades\Input', 'get', 'Illuminate\Support\Facades\Request', 'input'),
+    ];
+
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                'Illuminate\Support\Facades\Input' => [
-                    'get' => [
-                        # https://github.com/laravel/framework/commit/55785d3514a8149d4858acef40c56a31b6b2ccd1
-                        'Illuminate\Support\Facades\Request',
-                        'input',
-                    ],
-                ],
-            ],
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_objects($configuration),
         ]]);
 
     $services->set(RenameClassRector::class)

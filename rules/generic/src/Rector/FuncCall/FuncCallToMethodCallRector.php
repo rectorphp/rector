@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\Rector\AbstractToMethodCallRector;
+use Rector\Generic\ValueObject\FuncNameToMethodCallName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -24,9 +25,9 @@ final class FuncCallToMethodCallRector extends AbstractToMethodCallRector
     public const FUNC_CALL_TO_CLASS_METHOD_CALL = 'function_to_class_to_method_call';
 
     /**
-     * @var array<string, array<string, string>>
+     * @var FuncNameToMethodCallName[]
      */
-    private $functionToClassToMethod = [];
+    private $funcNameToMethodCallNames = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -64,7 +65,7 @@ CODE_SAMPLE
                 ,
                 [
                     self::FUNC_CALL_TO_CLASS_METHOD_CALL => [
-                        'view' => ['Namespaced\SomeRenderer', 'render'],
+                        new FuncNameToMethodCallName('view', 'Namespaced\SomeRenderer', 'render'),
                     ],
                 ]
             ),
@@ -98,17 +99,17 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->functionToClassToMethod as $function => $classMethodName) {
-            if (! $this->isName($node->name, $function)) {
+        foreach ($this->funcNameToMethodCallNames as $funcNameToMethodCallName) {
+            if (! $this->isName($node->name, $funcNameToMethodCallName->getOldFuncName())) {
                 continue;
             }
 
-            /** @var string $type */
-            /** @var string $method */
-            [$type, $method] = $classMethodName;
-
-            $expr = $this->matchTypeProvidingExpr($classLike, $classMethod, $type);
-            return $this->createMethodCall($expr, $method, $node->args);
+            $expr = $this->matchTypeProvidingExpr(
+                $classLike,
+                $classMethod,
+                $funcNameToMethodCallName->getNewClassName()
+            );
+            return $this->createMethodCall($expr, $funcNameToMethodCallName->getNewMethodName(), $node->args);
         }
 
         return null;
@@ -116,6 +117,6 @@ CODE_SAMPLE
 
     public function configure(array $configuration): void
     {
-        $this->functionToClassToMethod = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? [];
+        $this->funcNameToMethodCallNames = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? [];
     }
 }

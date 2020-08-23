@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\String_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -74,7 +73,7 @@ PHP
         }
 
         // a possible constant reference
-        [$possibleClass, $secondPart] = Strings::split($node->value, '#::#');
+        [$possibleClass, $secondPart] = explode('::', $node->value);
 
         if (! class_exists($possibleClass)) {
             return null;

@@ -14,6 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
+use Rector\Php71\ValueObject\TwoNodeMatch;
 
 /**
  * @see \Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector\ChangeIdenticalUuidToEqualsMethodCallRectorTest
@@ -74,29 +75,27 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $match = $this->matchEntityCallAndComparedVariable($node);
-        if ($match === null) {
+        $twoNodeMatch = $this->matchEntityCallAndComparedVariable($node);
+        if ($twoNodeMatch === null) {
             return null;
         }
 
-        [$entityMethodCall, $comparedVariable] = $match;
+        $entityMethodCall = $twoNodeMatch->getFirstExpr();
+        $comparedVariable = $twoNodeMatch->getSecondExpr();
 
         $staticCall = $this->createStaticCall(Uuid::class, 'fromString', [$comparedVariable]);
 
         return $this->createMethodCall($entityMethodCall, 'equals', [$staticCall]);
     }
 
-    /**
-     * @return Expr[]|null
-     */
-    private function matchEntityCallAndComparedVariable(Node $node): ?array
+    private function matchEntityCallAndComparedVariable(Node $node): ?TwoNodeMatch
     {
         if ($this->doctrineEntityManipulator->isMethodCallOnDoctrineEntity($node->left, 'getId')) {
             if ($this->isAlreadyUuidType($node->right)) {
                 return null;
             }
 
-            return [$node->left, $node->right];
+            return new TwoNodeMatch($node->left, $node->right);
         }
 
         if ($this->doctrineEntityManipulator->isMethodCallOnDoctrineEntity($node->right, 'getId')) {
@@ -104,7 +103,7 @@ PHP
                 return null;
             }
 
-            return [$node->right, $node->left];
+            return new TwoNodeMatch($node->right, $node->left);
         }
 
         return null;

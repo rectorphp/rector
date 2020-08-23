@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -26,9 +27,8 @@ final class ArrayCallableClassMethodReferenceAnalyzer
 
     /**
      * Matches array like: "[$this, 'methodName']" → ['ClassName', 'methodName']
-     * @return string[]|null
      */
-    public function match(Array_ $array): ?array
+    public function match(Array_ $array): ?ArrayCallable
     {
         if (count($array->items) !== 2) {
             return null;
@@ -61,7 +61,7 @@ final class ArrayCallableClassMethodReferenceAnalyzer
             return null;
         }
 
-        return [$className, $methodName];
+        return new ArrayCallable($className, $methodName);
     }
 
     private function isThisVariable(Node $node): bool

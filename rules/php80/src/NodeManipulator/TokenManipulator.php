@@ -25,6 +25,7 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\Php80\ValueObject\ArrayDimFetchAndConstFetch;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 
 final class TokenManipulator
@@ -162,23 +163,22 @@ final class TokenManipulator
                 return null;
             }
 
-            $tokenArrayDimFetchAndTConstantType = $this->matchTokenArrayDimFetchAndTConstantType($node);
-            if ($tokenArrayDimFetchAndTConstantType === null) {
+            $arrayDimFetchAndConstFetch = $this->matchArrayDimFetchAndConstFetch($node);
+            if ($arrayDimFetchAndConstFetch === null) {
                 return null;
             }
 
-            [$arrayDimFetch, $constFetch] = $tokenArrayDimFetchAndTConstantType;
-
-            /** @var ArrayDimFetch $arrayDimFetch */
-            if (! $this->isArrayDimFetchWithDimIntegerValue($arrayDimFetch, 0)) {
+            if (! $this->isArrayDimFetchWithDimIntegerValue($arrayDimFetchAndConstFetch->getArrayDimFetch(), 0)) {
                 return null;
             }
+
+            $arrayDimFetch = $arrayDimFetchAndConstFetch->getArrayDimFetch();
+            $constFetch = $arrayDimFetchAndConstFetch->getConstFetch();
 
             if (! $this->betterStandardPrinter->areNodesEqual($arrayDimFetch->var, $singleTokenExpr)) {
                 return null;
             }
 
-            /** @var ConstFetch $constFetch */
             $constName = $this->nodeNameResolver->getName($constFetch);
             if ($constName === null) {
                 return null;
@@ -188,7 +188,10 @@ final class TokenManipulator
                 return null;
             }
 
-            return $this->createIsTConstTypeMethodCall($arrayDimFetch, $constFetch);
+            return $this->createIsTConstTypeMethodCall(
+                $arrayDimFetch,
+                $arrayDimFetchAndConstFetch->getConstFetch()
+            );
         });
     }
 
@@ -285,17 +288,14 @@ final class TokenManipulator
         return $this->valueResolver->isValue($node->dim, $value);
     }
 
-    /**
-     * @return ArrayDimFetch[]|ConstFetch[]|null
-     */
-    private function matchTokenArrayDimFetchAndTConstantType(Identical $identical): ?array
+    private function matchArrayDimFetchAndConstFetch(Identical $identical): ?ArrayDimFetchAndConstFetch
     {
         if ($identical->left instanceof ArrayDimFetch && $identical->right instanceof ConstFetch) {
-            return [$identical->left, $identical->right];
+            return new ArrayDimFetchAndConstFetch($identical->left, $identical->right);
         }
 
         if ($identical->right instanceof ArrayDimFetch && $identical->left instanceof ConstFetch) {
-            return [$identical->right, $identical->left];
+            return new ArrayDimFetchAndConstFetch($identical->right, $identical->left);
         }
 
         return null;

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\Identical;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Nette\ValueObject\ContentExprAndNeedleExpr;
 
 /**
  * @see https://github.com/nette/utils/blob/master/src/Utils/Strings.php
@@ -54,11 +54,10 @@ PHP
         return 'endsWith';
     }
 
-    /**
-     * @return Expr[]|null
-     */
-    protected function matchContentAndNeedleOfSubstrOfVariableLength(Node $node, Variable $variable): ?array
-    {
+    protected function matchContentAndNeedleOfSubstrOfVariableLength(
+        Node $node,
+        Variable $variable
+    ): ?ContentExprAndNeedleExpr {
         if (! $this->isFuncCallName($node, 'substr')) {
             return null;
         }
@@ -79,7 +78,7 @@ PHP
         $strlenFuncCall = $unaryMinus->expr;
 
         if ($this->areNodesEqual($strlenFuncCall->args[0]->value, $variable)) {
-            return [$node->args[0]->value, $strlenFuncCall->args[0]->value];
+            return new ContentExprAndNeedleExpr($node->args[0]->value, $strlenFuncCall->args[0]->value);
         }
 
         return null;

@@ -19,6 +19,8 @@ use Rector\PHPOffice\Rector\StaticCall\ChangeSearchLocationToRegisterReaderRecto
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
+use Rector\Renaming\ValueObject\StaticCallRename;
+use function Rector\SymfonyPhpConfig\inline_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md
@@ -70,21 +72,44 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]]);
 
+    $configuration = [
+        new StaticCallRename('PHPExcel_Shared_Date', 'ExcelToPHP', 'PHPExcel_Shared_Date', 'excelToTimestamp'),
+        new StaticCallRename(
+            'PHPExcel_Shared_Date',
+            'ExcelToPHPObject',
+            'PHPExcel_Shared_Date',
+            'excelToDateTimeObject'
+        ),
+        new StaticCallRename(
+            'PHPExcel_Shared_Date',
+            'FormattedPHPToExcel',
+            'PHPExcel_Shared_Date',
+            'formattedPHPToExcel'
+        ),
+        new StaticCallRename('PHPExcel_Calculation_DateTime', 'DAYOFWEEK', 'PHPExcel_Calculation_DateTime', 'WEEKDAY'),
+        new StaticCallRename(
+            'PHPExcel_Calculation_DateTime',
+            'WEEKOFYEAR',
+            'PHPExcel_Calculation_DateTime',
+            'WEEKNUCM'
+        ),
+        new StaticCallRename(
+            'PHPExcel_Calculation_DateTime',
+            'SECONDOFMINUTE',
+            'PHPExcel_Calculation_DateTime',
+            'SECOND'
+        ),
+        new StaticCallRename(
+            'PHPExcel_Calculation_DateTime',
+            'MINUTEOFHOUR',
+            'PHPExcel_Calculation_DateTime',
+            'MINUTE'
+        ),
+    ];
+
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                'PHPExcel_Shared_Date' => [
-                    'ExcelToPHP' => 'excelToTimestamp',
-                    'ExcelToPHPObject' => 'excelToDateTimeObject',
-                    'FormattedPHPToExcel' => 'formattedPHPToExcel',
-                ],
-                'PHPExcel_Calculation_DateTime' => [
-                    'DAYOFWEEK' => 'WEEKDAY',
-                    'WEEKOFYEAR' => 'WEEKNUCM',
-                    'SECONDOFMINUTE' => 'SECOND',
-                    'MINUTEOFHOUR' => 'MINUTE',
-                ],
-            ],
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_objects($configuration),
         ]]);
 
     $services->set(RenameClassRector::class)

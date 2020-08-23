@@ -94,7 +94,8 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return null;
         }
 
-        [$firstArgument, $secondArgument] = $propertyExistsMethodCall->args;
+        $firstArgument = $propertyExistsMethodCall->args[0];
+        $secondArgument = $propertyExistsMethodCall->args[1];
 
         if ($firstArgument->value instanceof Variable) {
             $secondArg = new Variable($firstArgument->value->name);

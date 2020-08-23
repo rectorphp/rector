@@ -34,19 +34,21 @@ final class IsArrayAndDualCheckToAble
 
     public function processBooleanOr(BooleanOr $booleanOr, string $type, string $newMethodName): ?FuncCall
     {
-        $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $booleanOr,
             Instanceof_::class,
             FuncCall::class
         );
 
-        if ($matchedNodes === null) {
+        if ($twoNodeMatch === null) {
             return null;
         }
 
         /** @var Instanceof_ $instanceOfNode */
+        $instanceOfNode = $twoNodeMatch->getFirstExpr();
+
         /** @var FuncCall $funcCallNode */
-        [$instanceOfNode, $funcCallNode] = $matchedNodes;
+        $funcCallNode = $twoNodeMatch->getSecondExpr();
 
         $instanceOfClass = $instanceOfNode->class;
         if ($instanceOfClass instanceof Expr) {

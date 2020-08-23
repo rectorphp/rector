@@ -7,6 +7,7 @@ namespace Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnn
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
+use Rector\Restoration\ValueObject\UseWithAlias;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CompleteImportForPartialAnnotationRectorTest extends AbstractRectorTestCase
@@ -32,7 +33,7 @@ final class CompleteImportForPartialAnnotationRectorTest extends AbstractRectorT
         return [
             CompleteImportForPartialAnnotationRector::class => [
                 CompleteImportForPartialAnnotationRector::USE_IMPORTS_TO_RESTORE => [
-                    ['Doctrine\ORM\Mapping', 'ORM'],
+                    new UseWithAlias('Doctrine\ORM\Mapping', 'ORM'),
                 ],
             ],
         ];

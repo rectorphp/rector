@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\OpeningAndClosingSpace;
 use Rector\Doctrine\Uuid\JoinTableNameResolver;
 
 final class PhpDocTagNodeFactory
@@ -68,7 +69,10 @@ final class PhpDocTagNodeFactory
             $uuidJoinTable,
             null,
             [new JoinColumnTagValueNode(['referencedColumnName' => self::UUID])],
-            [new JoinColumnTagValueNode(['referencedColumnName' => self::UUID])]
+            [new JoinColumnTagValueNode(['referencedColumnName' => self::UUID])],
+            '',
+            new OpeningAndClosingSpace('', ''),
+            new OpeningAndClosingSpace('', '')
         );
 
         return new SpacelessPhpDocTagNode($joinTableTagValueNode->getShortName(), $joinTableTagValueNode);

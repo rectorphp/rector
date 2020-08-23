@@ -71,27 +71,32 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
             return null;
         }
 
-        [$classOrObject, $method] = $constantArrayType->getValueTypes();
+        if (count($constantArrayType->getValueTypes()) !== 2) {
+            return null;
+        }
 
-        if (! $method instanceof ConstantStringType) {
+        $classOrObjectType = $constantArrayType->getValueTypes()[0];
+        $methodType = $constantArrayType->getValueTypes()[1];
+
+        if (! $methodType instanceof ConstantStringType) {
             return ConstantArrayTypeAndMethod::createUnknown();
         }
 
-        if ($classOrObject instanceof ConstantStringType) {
-            if (! $this->reflectionProvider->hasClass($classOrObject->getValue())) {
+        if ($classOrObjectType instanceof ConstantStringType) {
+            if (! $this->reflectionProvider->hasClass($classOrObjectType->getValue())) {
                 return ConstantArrayTypeAndMethod::createUnknown();
             }
 
-            $type = new ObjectType($this->reflectionProvider->getClass($classOrObject->getValue())->getName());
-        } elseif ((new ObjectWithoutClassType())->isSuperTypeOf($classOrObject)->yes()) {
-            $type = $classOrObject;
+            $type = new ObjectType($this->reflectionProvider->getClass($classOrObjectType->getValue())->getName());
+        } elseif ((new ObjectWithoutClassType())->isSuperTypeOf($classOrObjectType)->yes()) {
+            $type = $classOrObjectType;
         } else {
             return ConstantArrayTypeAndMethod::createUnknown();
         }
 
-        $trinaryLogic = $type->hasMethod($method->getValue());
+        $trinaryLogic = $type->hasMethod($methodType->getValue());
         if (! $trinaryLogic->no()) {
-            return ConstantArrayTypeAndMethod::createConcrete($type, $method->getValue(), $trinaryLogic);
+            return ConstantArrayTypeAndMethod::createConcrete($type, $methodType->getValue(), $trinaryLogic);
         }
 
         return null;
