@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\Renaming;
 
-use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\Compiler\Exception\CompilerShouldNotHappenException;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class JetbrainsStubsRenamer
 {
@@ -18,9 +18,15 @@ final class JetbrainsStubsRenamer
      */
     private $symfonyStyle;
 
-    public function __construct(SymfonyStyle $symfonyStyle)
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(SymfonyStyle $symfonyStyle, SmartFileSystem $smartFileSystem)
     {
         $this->symfonyStyle = $symfonyStyle;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function renamePhpStormStubs(string $buildDir): void
@@ -48,7 +54,7 @@ final class JetbrainsStubsRenamer
             $path = $stubFileInfo->getPathname();
 
             $filenameWithStubSuffix = dirname($path) . '/' . $stubFileInfo->getBasename('.php') . '.stub';
-            FileSystem::rename($path, $filenameWithStubSuffix);
+            $this->smartFileSystem->rename($path, $filenameWithStubSuffix);
         }
     }
 
@@ -60,10 +66,10 @@ final class JetbrainsStubsRenamer
             throw new CompilerShouldNotHappenException(sprintf('File "%s" was not found', $stubsMapPath));
         }
 
-        $stubsMapContents = FileSystem::read($stubsMapPath);
+        $stubsMapContents = $this->smartFileSystem->readFile($stubsMapPath);
         $stubsMapContents = Strings::replace($stubsMapContents, '#\.php\',#m', ".stub',");
 
-        FileSystem::write($stubsMapPath, $stubsMapContents);
+        $this->smartFileSystem->dumpFile($stubsMapPath, $stubsMapContents);
     }
 
     /**

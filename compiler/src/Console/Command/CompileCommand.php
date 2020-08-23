@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\Console\Command;
 
-use Nette\Utils\FileSystem;
 use OndraM\CiDetector\CiDetector;
 use Rector\Compiler\Composer\ComposerJsonManipulator;
 use Rector\Compiler\Renaming\JetbrainsStubsRenamer;
@@ -14,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * Inspired by @see https://github.com/phpstan/phpstan-src/blob/f939d23155627b5c2ec6eef36d976dddea22c0c5/compiler/src/Console/CompileCommand.php
@@ -60,13 +60,19 @@ final class CompileCommand extends Command
      */
     private $ciDetector;
 
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
     public function __construct(
         string $dataDir,
         string $buildDir,
         ComposerJsonManipulator $composerJsonManipulator,
         SymfonyStyle $symfonyStyle,
         JetbrainsStubsRenamer $jetbrainsStubsRenamer,
-        CiDetector $ciDetector
+        CiDetector $ciDetector,
+        SmartFileSystem $smartFileSystem
     ) {
         $this->dataDir = $dataDir;
         $this->buildDir = $buildDir;
@@ -75,6 +81,7 @@ final class CompileCommand extends Command
         $this->jetbrainsStubsRenamer = $jetbrainsStubsRenamer;
         $this->symfonyStyle = $symfonyStyle;
         $this->ciDetector = $ciDetector;
+        $this->smartFileSystem = $smartFileSystem;
 
         parent::__construct();
     }
@@ -189,7 +196,7 @@ final class CompileCommand extends Command
     {
         // fix require path first
         $filePath = __DIR__ . '/../../../../vendor/phpstan/phpstan-src/bin/transform-source.php';
-        $fileContent = FileSystem::read($filePath);
+        $fileContent = $this->smartFileSystem->readFile($filePath);
 
         $fileContent = str_replace(
             "__DIR__ . '/../vendor/autoload.php'",
@@ -197,6 +204,6 @@ final class CompileCommand extends Command
             $fileContent
         );
 
-        FileSystem::write($filePath, $fileContent);
+        $this->smartFileSystem->dumpFile($filePath, $fileContent);
     }
 }
