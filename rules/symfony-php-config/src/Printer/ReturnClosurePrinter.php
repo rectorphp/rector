@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\SymfonyPhpConfig\Printer;
 
-use Rector\SymfonyPhpConfig\NodeFactory\NewValueObjectFactory;
 use Nette\Utils\Strings;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
@@ -30,6 +29,7 @@ use Rector\Core\PhpParser\Builder\UseBuilder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Reflection\ConstantNameFromValueResolver;
+use Rector\SymfonyPhpConfig\NodeFactory\NewValueObjectFactory;
 
 /**
  * @deprecated
@@ -146,6 +146,7 @@ final class ReturnClosurePrinter
 
         return $stmts;
     }
+
     /**
      * @todo replace with https://github.com/symplify/symplify/issues/2055 when done
      */
