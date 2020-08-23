@@ -166,9 +166,7 @@ parameters:
 
         # known value
         - '#Cannot cast array<string\>\|bool\|string\|null to string#'
-        - '#Method Rector\\Legacy\\Rector\\Class_\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
 
-        - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExpressionAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
 
         # array is callable
         - '#If condition is always true#'
@@ -254,7 +252,6 @@ parameters:
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
         - '#Cannot call method (.*?)\(\) on Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\|null#'
 
-        - '#Right side of && is always true#'
         - '#Parameter \#(.*?) (.*?) of class PhpParser\\Node\\Expr\\BinaryOp\\(.*?) constructor expects PhpParser\\Node\\Expr, PhpParser\\Node given#'
 
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$description#'
@@ -283,11 +280,6 @@ parameters:
         - '#Class (.*?) should be written with \:\:class notation, string found#'
         - '#Parameter \#2 \$key of method Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode\:\:printArrayItem\(\) expects string\|null, int\|string given#'
         - '#Method Rector\\Naming\\Naming\\PropertyNaming\:\:resolveShortClassName\(\) should return string but returns string\|null#'
-
-        -
-            message: "#^Class cognitive complexity for \"PhpDocInfo\" is 53, keep it under 50$#"
-            count: 1
-            path: packages/better-php-doc-parser/src/PhpDocInfo/PhpDocInfo.php
 
         -
             message: "#in iterable type Iterator#"
@@ -402,7 +394,6 @@ parameters:
             message: '#Array (with keys|explosion) is not allowed\. Use value object to pass data instead#'
             paths:
                 # working with cvs file
-                - packages/dynamic-type-analysis/src/Probe/TypeStaticProbe.php
                 # 3rd party package
                 - utils/project-validator/src/Command/ValidateFixtureContentCommand.php
                 - src/Testing/PHPUnit/AbstractRectorTestCase.php
