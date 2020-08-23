@@ -33,9 +33,9 @@ final class NewValueObjectFactory
 
     private function resolvePropertyValuesFromValueObject(string $valueObjectClass, object $valueObject): array
     {
-        $valueObjectClassReflection = new ReflectionClass($valueObjectClass);
+        $reflectionClass = new ReflectionClass($valueObjectClass);
         $propertyValues = [];
-        foreach ($valueObjectClassReflection->getProperties() as $propertyReflection) {
+        foreach ($reflectionClass->getProperties() as $propertyReflection) {
             $propertyReflection->setAccessible(true);
 
             $propertyValues[] = $propertyReflection->getValue($valueObject);

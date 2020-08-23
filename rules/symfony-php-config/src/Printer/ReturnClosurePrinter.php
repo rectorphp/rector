@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\SymfonyPhpConfig\Printer;
 
+use Rector\SymfonyPhpConfig\NodeFactory\NewValueObjectFactory;
 use Nette\Utils\Strings;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
@@ -67,7 +68,7 @@ final class ReturnClosurePrinter
     private $constantNameFromValueResolver;
 
     /**
-     * @var \Rector\SymfonyPhpConfig\NodeFactory\NewValueObjectFactory
+     * @var NewValueObjectFactory
      */
     private $newValueObjectFactory;
 
@@ -76,7 +77,7 @@ final class ReturnClosurePrinter
         ClassNaming $classNaming,
         NodeFactory $nodeFactory,
         ConstantNameFromValueResolver $constantNameFromValueResolver,
-        \Rector\SymfonyPhpConfig\NodeFactory\NewValueObjectFactory $newValueObjectFactory
+        NewValueObjectFactory $newValueObjectFactory
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeFactory = $nodeFactory;
@@ -145,6 +146,22 @@ final class ReturnClosurePrinter
 
         return $stmts;
     }
+    /**
+     * @todo replace with https://github.com/symplify/symplify/issues/2055 when done
+     */
+    private function indentArray(string $printedContent): string
+    {
+        // open array
+        $printedContent = Strings::replace($printedContent, '#\[\[#', '[[' . PHP_EOL . str_repeat(' ', 12));
+
+        // nested array
+        $printedContent = Strings::replace($printedContent, '#\=> \[#', '=> [' . PHP_EOL . str_repeat(' ', 16));
+
+        // close array
+        $printedContent = Strings::replace($printedContent, '#\]\]\)#', PHP_EOL . str_repeat(' ', 8) . ']])');
+
+        return $printedContent;
+    }
 
     private function indentFluentCallToNewline(string $content): string
     {
@@ -204,22 +221,5 @@ final class ReturnClosurePrinter
         }
 
         return new ArrayItem(BuilderHelpers::normalizeValue($value), $classConstFetch);
-    }
-
-    /**
-     * @todo replace with https://github.com/symplify/symplify/issues/2055 when done
-     */
-    private function indentArray(string $printedContent): string
-    {
-        // open array
-        $printedContent = Strings::replace($printedContent, '#\[\[#', '[[' . PHP_EOL . str_repeat(' ', 12));
-
-        // nested array
-        $printedContent = Strings::replace($printedContent, '#\=> \[#', '=> [' . PHP_EOL . str_repeat(' ', 16));
-
-        // close array
-        $printedContent = Strings::replace($printedContent, '#\]\]\)#', PHP_EOL . str_repeat(' ', 8) . ']])');
-
-        return $printedContent;
     }
 }
