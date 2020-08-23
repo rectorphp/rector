@@ -400,16 +400,11 @@ final class NodeFactory
         $methodCall = new MethodCall(new Variable(self::THIS), $classMethodName, $args);
         $return = new Return_($methodCall);
 
-        $subNodes = [
+        return new Closure([
             'params' => $classMethod->params,
             'stmts' => [$return],
-        ];
-
-        if ($classMethod->returnType !== null) {
-            $subNodes['returnType'] = $classMethod->returnType;
-        }
-
-        return new Closure($subNodes);
+            'returnType' => $classMethod->returnType,
+        ]);
     }
 
     /**

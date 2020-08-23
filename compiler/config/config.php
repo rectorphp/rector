@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 use OndraM\CiDetector\CiDetector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\Filesystem\Filesystem;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set('dataDir', __DIR__ . '/../build');
-
     $parameters->set('buildDir', __DIR__ . '/../..');
 
     $services = $containerConfigurator->services();
@@ -27,7 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/PhpScoper/*',
         ]);
 
-    $services->set(Filesystem::class);
+    $services->set(SmartFileSystem::class);
 
     $services->set(CiDetector::class);
 };

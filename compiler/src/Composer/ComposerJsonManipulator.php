@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\Composer;
 
-use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
-use Symfony\Component\Filesystem\Filesystem;
 use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ComposerJsonManipulator
 {
@@ -43,24 +42,24 @@ final class ComposerJsonManipulator
     private $originalComposerJsonFileContent;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var ConsoleDiffer
      */
     private $consoleDiffer;
 
-    public function __construct(ConsoleDiffer $consoleDiffer, Filesystem $filesystem)
+    /**
+     * @var SmartFileSystem
+     */
+    private $smartFileSystem;
+
+    public function __construct(ConsoleDiffer $consoleDiffer, SmartFileSystem $smartFileSystem)
     {
-        $this->filesystem = $filesystem;
         $this->consoleDiffer = $consoleDiffer;
+        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function fixComposerJson(string $composerJsonFile): void
     {
-        $fileContent = NetteFileSystem::read($composerJsonFile);
+        $fileContent = $this->smartFileSystem->readFile($composerJsonFile);
         $this->originalComposerJsonFileContent = $fileContent;
 
         $json = Json::decode($fileContent, Json::FORCE_ARRAY);
@@ -74,7 +73,7 @@ final class ComposerJsonManipulator
             $this->consoleDiffer->diff($this->originalComposerJsonFileContent, $encodedJson);
         }
 
-        $this->filesystem->dumpFile($composerJsonFile, $encodedJson);
+        $this->smartFileSystem->dumpFile($composerJsonFile, $encodedJson);
     }
 
     /**
@@ -82,7 +81,7 @@ final class ComposerJsonManipulator
      */
     public function restoreComposerJson(string $composerJsonFile): void
     {
-        $this->filesystem->dumpFile($composerJsonFile, $this->originalComposerJsonFileContent);
+        $this->smartFileSystem->dumpFile($composerJsonFile, $this->originalComposerJsonFileContent);
     }
 
     private function removeDevKeys(array $json): array
@@ -151,7 +150,7 @@ final class ComposerJsonManipulator
 
     private function readRemoteFileToJson(string $jsonFilePath): array
     {
-        $jsonFileContent = NetteFileSystem::read($jsonFilePath);
+        $jsonFileContent = $this->smartFileSystem->readFile($jsonFilePath);
 
         return (array) Json::decode($jsonFileContent, Json::FORCE_ARRAY);
     }

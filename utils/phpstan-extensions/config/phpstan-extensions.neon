@@ -1,5 +1,9 @@
 services:
     -
+        class: Rector\PHPStanExtensions\Rule\ForbiddenArrayWithStringKeysRule
+        tags: [phpstan.rules.rule]
+
+    -
         class: Rector\PHPStanExtensions\Rule\ForbiddenArrayDestructRule
         tags: [phpstan.rules.rule]
 

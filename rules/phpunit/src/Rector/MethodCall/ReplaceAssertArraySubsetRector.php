@@ -10,11 +10,13 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -22,26 +24,19 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/3494
  * @see https://github.com/sebastianbergmann/phpunit/issues/3495
+ *
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\ReplaceAssertArraySubsetRector\ReplaceAssertArraySubsetRectorTest
  */
 final class ReplaceAssertArraySubsetRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var Expr[]
-     */
-    private $expectedKeys = [];
-
-    /**
-     * @var Expr[][]
-     */
-    private $expectedValuesWithKeys = [];
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replace deprecated "assertArraySubset()" method with alternative methods', [
             new CodeSample(
                 <<<'PHP'
-class SomeTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
 {
     public function test()
     {
@@ -55,7 +50,9 @@ class SomeTest extends \PHPUnit\Framework\TestCase
 PHP
                 ,
                 <<<'PHP'
-class SomeTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SomeTest extends TestCase
 {
     public function test()
     {
@@ -87,16 +84,13 @@ PHP
             return null;
         }
 
-        $this->reset();
-
         $expectedArray = $this->matchArray($node->args[0]->value);
         if ($expectedArray === null) {
             return null;
         }
 
-        $this->collectExpectedKeysAndValues($expectedArray);
-
-        if ($this->expectedKeys === []) {
+        $expectedArrayItems = $this->collectExpectedKeysAndValues($expectedArray);
+        if ($expectedArrayItems === []) {
             // no keys → intersect!
             $funcCall = new FuncCall(new Name('array_intersect'));
             $funcCall->args[] = new Arg($expectedArray);
@@ -109,19 +103,13 @@ PHP
 
             $this->addNodeAfterNode($assertTrue, $node);
         } else {
-            $this->addKeyAsserts($node);
-            $this->addValueAsserts($node);
+            $this->addKeyAsserts($node, $expectedArrayItems);
+            $this->addValueAsserts($node, $expectedArrayItems);
         }
 
         $this->removeNode($node);
 
         return null;
-    }
-
-    private function reset(): void
-    {
-        $this->expectedKeys = [];
-        $this->expectedValuesWithKeys = [];
     }
 
     private function matchArray(Expr $expr): ?Array_
@@ -141,8 +129,13 @@ PHP
         return BuilderHelpers::normalizeValue($value);
     }
 
-    private function collectExpectedKeysAndValues(Array_ $expectedArray): void
+    /**
+     * @return ArrayItem[]
+     */
+    private function collectExpectedKeysAndValues(Array_ $expectedArray): array
     {
+        $expectedArrayItems = [];
+
         foreach ($expectedArray->items as $arrayItem) {
             if ($arrayItem === null) {
                 continue;
@@ -152,23 +145,26 @@ PHP
                 continue;
             }
 
-            $this->expectedKeys[] = $arrayItem->key;
-
-            $this->expectedValuesWithKeys[] = [
-                'key' => $arrayItem->key,
-                'value' => $arrayItem->value,
-            ];
+            $expectedArrayItems[] = $arrayItem;
         }
+
+        return $expectedArrayItems;
     }
 
     /**
      * @param MethodCall|StaticCall $node
+     * @param ArrayItem[] $expectedArrayItems
      */
-    private function addKeyAsserts(Node $node): void
+    private function addKeyAsserts(Node $node, array $expectedArrayItems): void
     {
-        foreach ($this->expectedKeys as $expectedKey) {
+        foreach ($expectedArrayItems as $expectedArrayItem) {
             $assertArrayHasKey = $this->createPHPUnitCallWithName($node, 'assertArrayHasKey');
-            $assertArrayHasKey->args[0] = new Arg($expectedKey);
+
+            if ($expectedArrayItem->key === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            $assertArrayHasKey->args[0] = new Arg($expectedArrayItem->key);
             $assertArrayHasKey->args[1] = $node->args[1];
 
             $this->addNodeAfterNode($assertArrayHasKey, $node);
@@ -177,19 +173,19 @@ PHP
 
     /**
      * @param MethodCall|StaticCall $node
+     * @param ArrayItem[] $expectedArrayItems
      */
-    private function addValueAsserts(Node $node): void
+    private function addValueAsserts(Node $node, array $expectedArrayItems): void
     {
         $assertMethodName = $this->resolveAssertMethodName($node);
 
-        foreach ($this->expectedValuesWithKeys as $expectedValueWithKey) {
-            $expectedKey = $expectedValueWithKey['key'];
-            $expectedValue = $expectedValueWithKey['value'];
-
+        foreach ($expectedArrayItems as $expectedArrayItem) {
             $assertSame = $this->createPHPUnitCallWithName($node, $assertMethodName);
-            $assertSame->args[0] = new Arg($expectedValue);
+            $assertSame->args[0] = new Arg($expectedArrayItem->value);
 
-            $arrayDimFetch = new ArrayDimFetch($node->args[1]->value, BuilderHelpers::normalizeValue($expectedKey));
+            $arrayDimFetch = new ArrayDimFetch($node->args[1]->value, BuilderHelpers::normalizeValue(
+                $expectedArrayItem->key
+            ));
             $assertSame->args[1] = new Arg($arrayDimFetch);
 
             $this->addNodeAfterNode($assertSame, $node);
