@@ -214,11 +214,7 @@ CODE_SAMPLE
 
     private function collectNestedArguments(ArrayItem $arrayItem, int $key): void
     {
-        if ($arrayItem->key === null) {
-            $this->nestedArguments[] = new LNumber($key);
-        } else {
-            $this->nestedArguments[] = $arrayItem->key;
-        }
+        $this->nestedArguments[] = $arrayItem->key === null ? new LNumber($key) : $arrayItem->key;
 
         if (! $arrayItem->value instanceof Array_) {
             $this->nestedArguments[] = $arrayItem->value;
