@@ -15,7 +15,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # source: https://book.cakephp.org/3.0/en/appendices/3-6-migration-guide.html
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 new MethodCallRename('Cake\ORM\Table', 'association', 'getAssociation'),
                 new MethodCallRename('Cake\Validation\ValidationSet', 'isPresenceRequired', 'requirePresence'),
                 new MethodCallRename('Cake\Validation\ValidationSet', 'isEmptyAllowed', 'allowEmpty'),

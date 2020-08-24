@@ -15,7 +15,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
                 new MethodCallRename(
                     'Symfony\Component\Console\Helper\TableStyle',

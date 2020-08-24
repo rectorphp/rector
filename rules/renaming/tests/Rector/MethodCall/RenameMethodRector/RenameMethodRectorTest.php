@@ -36,7 +36,7 @@ final class RenameMethodRectorTest extends AbstractRectorTestCase
     {
         return [
             RenameMethodRector::class => [
-                RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+                RenameMethodRector::METHOD_CALL_RENAMES => [
                     new MethodCallRename(AbstractType::class, 'setDefaultOptions', 'configureOptions'),
                     new MethodCallRename(Html::class, 'add', 'addHtml'),
                     new MethodCallRename('*Presenter', 'run', '__invoke'),

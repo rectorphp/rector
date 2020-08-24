@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 new MethodCallRename('Cake\Database\Schema\TableSchema', 'column', 'getColumn'),
                 new MethodCallRename('Cake\Database\Schema\TableSchema', 'constraint', 'getConstraint'),
                 new MethodCallRename('Cake\Database\Schema\TableSchema', 'index', 'getIndex'),

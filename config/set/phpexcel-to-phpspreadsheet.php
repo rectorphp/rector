@@ -60,7 +60,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # beware! this can be run only once, since its circular change
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 // https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#worksheetsetsharedstyle
                 new MethodCallRename('PHPExcel_Worksheet', 'setSharedStyle', 'duplicateStyle'),
                 // https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#worksheetgetselectedcell
