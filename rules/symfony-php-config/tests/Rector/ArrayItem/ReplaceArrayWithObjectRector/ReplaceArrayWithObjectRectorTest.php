@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
+use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReplaceArrayWithObjectRectorTest extends AbstractRectorTestCase
@@ -34,6 +35,7 @@ final class ReplaceArrayWithObjectRectorTest extends AbstractRectorTestCase
             ReplaceArrayWithObjectRector::class => [
                 ReplaceArrayWithObjectRector::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
                     'Rector\Renaming\Rector\MethodCall\RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS' => MethodCallRename::class,
+                    'Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS' => ParameterTypehint::class,
                 ],
             ],
         ];
