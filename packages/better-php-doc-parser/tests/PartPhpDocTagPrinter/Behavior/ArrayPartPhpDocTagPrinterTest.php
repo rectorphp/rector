@@ -43,10 +43,11 @@ final class ArrayPartPhpDocTagPrinterTest extends TestCase
         yield [['strict' => false], 'option', 'option={"strict":false}'];
 
         // multiple items, separated by comma
-        yield [[
-            'less' => 'NO',
-            'more' => 'YES',
-        ], 'what', 'what={"less":"NO", "more":"YES"}'];
+        yield [
+            [
+                'less' => 'NO',
+                'more' => 'YES',
+            ], 'what', 'what={"less":"NO", "more":"YES"}', ];
 
         // preslash
         yield [['\John'], 'name', 'name={"\John"}'];

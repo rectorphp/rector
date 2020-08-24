@@ -16,7 +16,7 @@ use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotate
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use function Rector\SymfonyPhpConfig\inline_objects;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -59,7 +59,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     );
     $services->set(StaticCallToMethodCallRector::class)->call(
         'configure',
-        [[StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_objects($configuration)]]
+        [[StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_value_objects($configuration)]]
     );
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
     $services->set(RenameClassConstantRector::class)->call(

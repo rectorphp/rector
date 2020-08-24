@@ -66,7 +66,7 @@ final class TemplateVariablesFactory
     }
 
     /**
-     * @return string[]
+     * @return array<string, mixed>
      */
     public function createFromRectorRecipe(RectorRecipe $rectorRecipe): array
     {
@@ -85,26 +85,26 @@ final class TemplateVariablesFactory
 
         $rectorClass = $this->templateFactory->create(ConfigFilesystem::RECTOR_FQN_NAME_PATTERN, $data);
 
-        if ($rectorRecipe->getConfigration() !== []) {
+        if ($rectorRecipe->getConfiguration() !== []) {
             $data['__TestRuleConfiguration__'] = $this->createRuleConfiguration(
                 $rectorClass,
-                $rectorRecipe->getConfigration()
+                $rectorRecipe->getConfiguration()
             );
             $data['__RuleConfiguration__'] = $this->createRuleConfiguration(
                 self::SELF,
-                $rectorRecipe->getConfigration()
+                $rectorRecipe->getConfiguration()
             );
 
             $data['__ConfigurationProperties__'] = $this->createConfigurationProperty(
-                $rectorRecipe->getConfigration()
+                $rectorRecipe->getConfiguration()
             );
 
             $data['__ConfigurationConstants__'] = $this->createConfigurationConstants(
-                $rectorRecipe->getConfigration()
+                $rectorRecipe->getConfiguration()
             );
 
             $data['__ConfigureClassMethod__'] = $this->createConfigureClassMethod(
-                $rectorRecipe->getConfigration()
+                $rectorRecipe->getConfiguration()
             );
         }
 
