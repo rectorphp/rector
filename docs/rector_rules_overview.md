@@ -12618,17 +12618,8 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-<<<<<<< HEAD
-<<<<<<< HEAD
             RenameMethodRector::METHOD_CALL_RENAMES => [
-                \Rector\SymfonyPhpConfig\inline_object(new Rector\Renaming\ValueObject\MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'))]
-=======
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-=======
-            RenameMethodRector::METHOD_CALL_RENAMES => [
->>>>>>> rename constnats
                 \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'))]
->>>>>>> moving parameter typehint to objects
         ]]);
 };
 ```
