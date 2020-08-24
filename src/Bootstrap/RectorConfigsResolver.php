@@ -81,6 +81,12 @@ final class RectorConfigsResolver
 
         $setFileInfos = $this->resolveSetFileInfosFromConfigFileInfos($configFileInfos);
 
+        // autoload rector recipe file if present
+        $rectorRecipeFilePath = getcwd() . '/rector-recipe.php';
+        if (file_exists($rectorRecipeFilePath)) {
+            $configFileInfos[] = new SmartFileInfo($rectorRecipeFilePath);
+        }
+
         return array_merge($configFileInfos, $setFileInfos);
     }
 }

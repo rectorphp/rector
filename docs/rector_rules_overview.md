@@ -5106,7 +5106,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(FuncCallToMethodCallRector::class)
         ->call('configure', [[
             FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => [
-                \Rector\SymfonyPhpConfig\inline_object(new Rector\Generic\ValueObject\FuncNameToMethodCallName('view', 'Namespaced\SomeRenderer', 'render'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\FuncNameToMethodCallName('view', 'Namespaced\SomeRenderer', 'render'))]
         ]]);
 };
 ```
@@ -5174,7 +5174,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
             FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_object(new Rector\Generic\ValueObject\FuncNameToStaticCallName('view', 'SomeStaticClass', 'render'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\FuncNameToStaticCallName('view', 'SomeStaticClass', 'render'))]
         ]]);
 };
 ```
@@ -6353,7 +6353,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(StaticCallToMethodCallRector::class)
         ->call('configure', [[
             StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_object(new Rector\Injection\ValueObject\StaticCallToMethodCall('Nette\Utils\FileSystem', 'write', 'Symplify\SmartFileSystem\SmartFileSystem', 'dumpFile'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Injection\ValueObject\StaticCallToMethodCall('Nette\Utils\FileSystem', 'write', 'Symplify\SmartFileSystem\SmartFileSystem', 'dumpFile'))]
         ]]);
 };
 ```
@@ -12684,7 +12684,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
             RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                \Rector\SymfonyPhpConfig\inline_object(new Rector\Renaming\ValueObject\StaticCallRename('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\StaticCallRename('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'))]
         ]]);
 };
 ```
@@ -12707,7 +12707,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
             RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                \Rector\SymfonyPhpConfig\inline_object(new Rector\Renaming\ValueObject\StaticCallRename('SomeClass', 'oldMethod', 'SomeClass', 'newStaticMethod'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\StaticCallRename('SomeClass', 'oldMethod', 'SomeClass', 'newStaticMethod'))]
         ]]);
 };
 ```
@@ -12741,7 +12741,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(CompleteImportForPartialAnnotationRector::class)
         ->call('configure', [[
             CompleteImportForPartialAnnotationRector::USE_IMPORTS_TO_RESTORE => [
-                \Rector\SymfonyPhpConfig\inline_object(new Rector\Restoration\ValueObject\UseWithAlias('Doctrine\ORM\Mapping', 'ORM'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Restoration\ValueObject\UseWithAlias('Doctrine\ORM\Mapping', 'ORM'))]
         ]]);
 };
 ```

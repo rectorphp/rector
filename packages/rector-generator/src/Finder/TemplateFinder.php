@@ -62,7 +62,7 @@ final class TemplateFinder
      */
     private function addRuleAndTestCase(RectorRecipe $rectorRecipe, array $filePaths): array
     {
-        if ($rectorRecipe->getConfigration() !== []) {
+        if ($rectorRecipe->getConfiguration() !== []) {
             $filePaths[] = __DIR__ . '/../../templates/rules/__package__/src/Rector/__Category__/__Configured__Name__.php';
 
             if ($rectorRecipe->getExtraFileContent()) {

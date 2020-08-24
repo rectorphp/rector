@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Generic\ValueObject\FuncNameToStaticCallName;
-use function Rector\SymfonyPhpConfig\inline_objects;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -57,6 +57,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
-            FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => inline_objects($configuration),
+            FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => inline_value_objects($configuration),
         ]]);
 };

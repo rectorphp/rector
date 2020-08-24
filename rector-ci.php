@@ -56,6 +56,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages/doctrine-annotation-generated/src/*',
         // tempalte files
         __DIR__ . '/packages/rector-generator/templates/*',
+        // public api
+        __DIR__ . '/packages/rector-generator/src/ValueObject/RectorRecipe.php',
+        __DIR__ . '/rules/symfony-php-config/functions/functions.php',
     ]);
 
     $parameters->set(Option::EXCLUDE_RECTORS, [

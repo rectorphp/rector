@@ -66,12 +66,13 @@ final class RectorRecipe
     /**
      * @var mixed[]
      */
-    private $configration = [];
+    private $configuration = [];
 
     /**
-     * @var string|null
+     * Use default package name, if not overriden manually
+     * @var string
      */
-    private $package;
+    private $package = self::PACKAGE_UTILS;
 
     /**
      * @var string|null
@@ -88,24 +89,15 @@ final class RectorRecipe
      */
     private $extraFileContent;
 
-    /**
-     * @param class-string[] $nodeTypes
-     * @param mixed[] $configration
-     */
     public function __construct(
-        ?string $package,
         string $name,
         array $nodeTypes,
         string $description,
         string $codeBefore,
-        string $codeAfter,
-        array $resources,
-        ?string $set = null,
-        array $configration = [],
-        ?string $extraFileName = null,
-        ?string $extraFileContent = null,
-        ?bool $isRectorRepository = null
+        string $codeAfter
     ) {
+        $this->isRectorRepository = file_exists(__DIR__ . '/../../../../vendor');
+
         $this->setName($name);
         $this->setNodeTypes($nodeTypes);
 
@@ -113,28 +105,13 @@ final class RectorRecipe
 
         $this->setCodeBefore($codeBefore);
         $this->setCodeAfter($codeAfter);
-        $this->setResources($resources);
 
-        $this->set = $set;
-        $this->configration = $configration;
-        $this->extraFileName = $extraFileName;
-        $this->setExtraFileContent($extraFileContent);
-        $this->setIsRectorRepository($isRectorRepository);
-
-        // last on purpose, depends on isRectorRepository
-        $this->setPackage($package);
-
-        $this->resolveCategory();
+        $this->resolveCategory($nodeTypes);
     }
 
     public function getPackage(): string
     {
-        $recipePackage = $this->package;
-        if (! $this->isRectorRepository || $recipePackage === null || $recipePackage === '') {
-            return self::PACKAGE_UTILS;
-        }
-
-        return $recipePackage;
+        return $this->package;
     }
 
     public function getName(): string
@@ -167,6 +144,11 @@ final class RectorRecipe
         return $this->resources;
     }
 
+    public function setSet(string $set): void
+    {
+        $this->set = $set;
+    }
+
     public function getSet(): ?string
     {
         return $this->set;
@@ -175,9 +157,9 @@ final class RectorRecipe
     /**
      * @return array<string, mixed>
      */
-    public function getConfigration(): array
+    public function getConfiguration(): array
     {
-        return $this->configration;
+        return $this->configuration;
     }
 
     public function getExtraFileName(): ?string
@@ -217,6 +199,50 @@ final class RectorRecipe
         }
 
         return StaticRectorStrings::camelCaseToDashes($this->getPackage());
+    }
+
+    /**
+     * @api
+     */
+    public function setPackage(string $package): void
+    {
+        $this->package = $package;
+    }
+
+    /**
+     * @api
+     */
+    public function addExtraFile(string $extraFileName, string $extraFileContent): void
+    {
+        $this->extraFileName = $extraFileName;
+        $this->extraFileContent = $this->normalizeCode($extraFileContent);
+    }
+
+    /**
+     * @api
+     * @param mixed[] $configuration
+     */
+    public function setConfiguration(array $configuration): void
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * @api
+     * @param string[] $resources
+     */
+    public function setResources(array $resources): void
+    {
+        $this->resources = array_filter($resources);
+    }
+
+    /**
+     * For testing purposes
+     * @api
+     */
+    public function setIsRectorRepository(bool $isRectorRepository): void
+    {
+        $this->isRectorRepository = $isRectorRepository;
     }
 
     private function setName(string $name): void
@@ -267,45 +293,12 @@ final class RectorRecipe
         $this->codeAfter = $this->normalizeCode($codeAfter);
     }
 
-    private function setResources(array $resources): void
+    /**
+     * @param string[] $nodeTypes
+     */
+    private function resolveCategory(array $nodeTypes): void
     {
-        $this->resources = array_filter($resources);
-    }
-
-    private function setExtraFileContent(?string $extraFileContent): void
-    {
-        if ($extraFileContent === null) {
-            return;
-        }
-
-        $this->extraFileContent = $this->normalizeCode($extraFileContent);
-    }
-
-    private function setIsRectorRepository(?bool $isRectorRepository): void
-    {
-        $this->isRectorRepository = $isRectorRepository ?? file_exists(__DIR__ . '/../../../../vendor');
-    }
-
-    private function setPackage(?string $package): void
-    {
-        if ($package !== '' && $package !== null && $package !== self::PACKAGE_UTILS) {
-            $this->package = $package;
-            return;
-        }
-
-        // only can be empty or utils when outside Rector repository
-        if (! $this->isRectorRepository) {
-            $this->package = $package;
-            return;
-        }
-
-        $message = sprintf('Parameter "package" cannot be empty or "Utils", when in Rector repository');
-        throw new ConfigurationException($message);
-    }
-
-    private function resolveCategory(): void
-    {
-        $this->category = (string) Strings::after($this->nodeTypes[0], '\\', -1);
+        $this->category = (string) Strings::after($nodeTypes[0], '\\', -1);
     }
 
     private function detectIsPhpSnippet(string $codeBefore): void
