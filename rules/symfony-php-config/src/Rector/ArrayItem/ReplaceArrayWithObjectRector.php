@@ -196,15 +196,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                if ($arrayItem->key === null) {
-                    $this->nestedArguments[] = new LNumber($key);
-                } else {
-                    $this->nestedArguments[] = $arrayItem->key;
-                }
-
-                if (! $arrayItem->value instanceof Array_) {
-                    $this->nestedArguments[] = $arrayItem->value;
-                }
+                $this->collectNestedArguments($arrayItem, $key);
 
                 $this->collectArgumentsFromNestedArrayAndCreateNew($arrayItem->value, $valueObjectClass);
             }
@@ -217,6 +209,19 @@ CODE_SAMPLE
             $this->newItems[] = new ArrayItem($new);
 
             $this->nestedArguments = [];
+        }
+    }
+
+    private function collectNestedArguments(ArrayItem $arrayItem, int $key): void
+    {
+        if ($arrayItem->key === null) {
+            $this->nestedArguments[] = new LNumber($key);
+        } else {
+            $this->nestedArguments[] = $arrayItem->key;
+        }
+
+        if (! $arrayItem->value instanceof Array_) {
+            $this->nestedArguments[] = $arrayItem->value;
         }
     }
 }

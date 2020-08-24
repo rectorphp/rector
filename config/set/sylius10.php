@@ -9,6 +9,7 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -48,11 +49,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => [
-                'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext' => [
-                    '__construct' => ['Sylius\Component\Core\Storage\CartStorageInterface'],
-                ],
-            ],
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
+                new ParameterTypehint(
+                    'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext',
+                    '__construct',
+                    0,
+                    'Sylius\Component\Core\Storage\CartStorageInterface'
+                ),
+            ]),
         ]]);
 
     $services->set(ArgumentAdderRector::class)

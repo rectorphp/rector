@@ -8,7 +8,9 @@ use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -18,15 +20,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
-            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => [
-                'PHPUnit\Framework\TestCase' => [
-                    '__construct' => [
-                        # https://github.com/rectorphp/rector/issues/1024
-                        # no type, $dataName
-                        2 => '',
-                    ],
-                ],
-            ],
+            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
+                // https://github.com/rectorphp/rector/issues/1024 - no type, $dataName
+                new ParameterTypehint('PHPUnit\Framework\TestCase', '__construct', 2, ''),
+            ]),
         ]]);
 
     $services->set(SpecificAssertContainsRector::class);
