@@ -119,13 +119,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameMethodRector::class)
         // @see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 new MethodCallRename('Nette\Forms\Controls\BaseControl', 'setAttribute', 'setHtmlAttribute'),
             ]),
         ]]);
 
     $services->set(RenameMethodRector::class)->call('configure', [[
-        RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+        RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
             new MethodCallRename(
                 'Nette\Forms\Controls\BaseControl',
                 # see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a

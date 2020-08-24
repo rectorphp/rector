@@ -20,6 +20,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\RenameMethodRectorTest
@@ -29,7 +30,7 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
     /**
      * @var string
      */
-    public const OLD_TO_NEW_METHODS_BY_CLASS = 'old_to_new_methods_by_class';
+    public const METHOD_CALL_RENAMES = 'old_to_new_methods_by_class';
 
     /**
      * @var MethodCallRenameInterface[]
@@ -51,7 +52,7 @@ $someObject->newMethod();
 PHP
                 ,
                 [
-                    self::OLD_TO_NEW_METHODS_BY_CLASS => [
+                    self::METHOD_CALL_RENAMES => [
                         new MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'),
                     ],
                 ]
@@ -99,7 +100,10 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->methodCallRenames = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASS] ?? [];
+        $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? [];
+        Assert::allIsInstanceOf($methodCallRenames, MethodCallRenameInterface::class);
+
+        $this->methodCallRenames = $methodCallRenames;
     }
 
     /**

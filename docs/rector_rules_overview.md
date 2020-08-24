@@ -12618,7 +12618,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+            RenameMethodRector::METHOD_CALL_RENAMES => [
                 \Rector\SymfonyPhpConfig\inline_object(new Rector\Renaming\ValueObject\MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'))]
         ]]);
 };

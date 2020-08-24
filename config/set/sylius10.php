@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 // source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-100-beta3-to-100
                 new MethodCallRename(
                     'Sylius\Component\Core\Repository\OrderRepositoryInterface',

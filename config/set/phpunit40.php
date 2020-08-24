@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+            RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 new MethodCallRename(
                     'PHPUnit_Framework_MockObject_MockObject',
                     # see https://github.com/sebastianbergmann/phpunit-mock-objects/issues/137
