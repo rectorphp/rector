@@ -69,7 +69,7 @@ CODE_SAMPLE
     // [RECTOR CORE CONTRIBUTION]
     // [RECTOR CORE CONTRIBUTION - REQUIRED]
     // package name, basically part namespace in `rule/<package>/src`, use PascalCase
-    $rectorRecipe->setPackage('SomePackage');
+    // $rectorRecipe->setPackage('Generic');
 
     // [RECTOR CORE CONTRIBUTION - OPTIONAL]
     // set the rule belongs to; is optional, because e.g. generic rules don't need a specific set to belong to
