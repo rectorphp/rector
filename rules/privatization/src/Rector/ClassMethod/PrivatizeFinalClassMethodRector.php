@@ -11,12 +11,23 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 
 /**
  * @see \Rector\Privatization\Tests\Rector\ClassMethod\PrivatizeFinalClassMethodRector\PrivatizeFinalClassMethodRectorTest
  */
 final class PrivatizeFinalClassMethodRector extends AbstractRector
 {
+    /**
+     * @var ClassMethodVisibilityGuard
+     */
+    private $classMethodVisibilityGuard;
+
+    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard)
+    {
+        $this->classMethodVisibilityGuard = $classMethodVisibilityGuard;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change protected class method to private if possible', [
@@ -73,7 +84,7 @@ PHP
             return $node;
         }
 
-        if ($this->isClassMethodVisibilityGuardedByParent($node, $classLike)) {
+        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($node, $classLike)) {
             return null;
         }
 
@@ -89,34 +100,5 @@ PHP
         }
 
         return ! $classMethod->isProtected();
-    }
-
-    private function isClassMethodVisibilityGuardedByParent(ClassMethod $classMethod, Class_ $class): bool
-    {
-        if ($class->extends === null) {
-            return false;
-        }
-
-        $parentClasses = $this->getParentClasses($class);
-        $propertyName = $this->getName($classMethod);
-
-        foreach ($parentClasses as $parentClass) {
-            if (method_exists($parentClass, $propertyName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return class-string[]
-     */
-    private function getParentClasses(Class_ $class): array
-    {
-        /** @var string $className */
-        $className = $this->getName($class);
-
-        return class_parents($className);
     }
 }

@@ -9,6 +9,8 @@ use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -264,63 +266,50 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ]]);
 
+    $configuration = [
+        new MethodCallRename('Cake\Network\Request', 'param', 'getParam'),
+        new MethodCallRename('Cake\Network\Request', 'data', 'getData'),
+        new MethodCallRename('Cake\Network\Request', 'query', 'getQuery'),
+        new MethodCallRename('Cake\Network\Request', 'cookie', 'getCookie'),
+        new MethodCallRename('Cake\Network\Request', 'method', 'getMethod'),
+        new MethodCallRename('Cake\Network\Request', 'setInput', 'withBody'),
+        new MethodCallRename('Cake\Network\Response', 'location', 'withLocation'),
+        new MethodCallRename('Cake\Network\Response', 'disableCache', 'withDisabledCache'),
+        new MethodCallRename('Cake\Network\Response', 'type', 'withType'),
+        new MethodCallRename('Cake\Network\Response', 'charset', 'withCharset'),
+        new MethodCallRename('Cake\Network\Response', 'cache', 'withCache'),
+        new MethodCallRename('Cake\Network\Response', 'modified', 'withModified'),
+        new MethodCallRename('Cake\Network\Response', 'expires', 'withExpires'),
+        new MethodCallRename('Cake\Network\Response', 'sharable', 'withSharable'),
+        new MethodCallRename('Cake\Network\Response', 'maxAge', 'withMaxAge'),
+        new MethodCallRename('Cake\Network\Response', 'vary', 'withVary'),
+        new MethodCallRename('Cake\Network\Response', 'etag', 'withEtag'),
+        new MethodCallRename('Cake\Network\Response', 'compress', 'withCompression'),
+        new MethodCallRename('Cake\Network\Response', 'length', 'withLength'),
+        new MethodCallRename('Cake\Network\Response', 'mustRevalidate', 'withMustRevalidate'),
+        new MethodCallRename('Cake\Network\Response', 'notModified', 'withNotModified'),
+        new MethodCallRename('Cake\Network\Response', 'cookie', 'withCookie'),
+        new MethodCallRename('Cake\Network\Response', 'file', 'withFile'),
+        new MethodCallRename('Cake\Network\Response', 'download', 'withDownload'),
+        # psr-7
+        new MethodCallRename('Cake\Network\Response', 'header', 'getHeader'),
+        new MethodCallRename('Cake\Network\Response', 'body', 'withBody'),
+        new MethodCallRename('Cake\Network\Response', 'statusCode', 'getStatusCode'),
+        new MethodCallRename('Cake\Network\Response', 'protocol', 'getProtocolVersion'),
+        new MethodCallRename('Cake\Event\Event', 'name', 'getName'),
+        new MethodCallRename('Cake\Event\Event', 'subject', 'getSubject'),
+        new MethodCallRename('Cake\Event\Event', 'result', 'getResult'),
+        new MethodCallRename('Cake\Event\Event', 'data', 'getData'),
+        new MethodCallRename('Cake\View\Helper\FormHelper', 'input', 'control'),
+        new MethodCallRename('Cake\View\Helper\FormHelper', 'inputs', 'controls'),
+        new MethodCallRename('Cake\View\Helper\FormHelper', 'allInputs', 'allControls'),
+        new MethodCallRename('Cake\Mailer\Mailer', 'layout', 'setLayout'),
+        new MethodCallRename('Cake\Routing\Route\Route', 'parse', 'parseRequest'),
+        new MethodCallRename('Cake\Routing\Router', 'parse', 'parseRequest'),
+    ];
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Cake\Network\Request' => [
-                    'param' => 'getParam',
-                    'data' => 'getData',
-                    'query' => 'getQuery',
-                    'cookie' => 'getCookie',
-                    'method' => 'getMethod',
-                    'setInput' => 'withBody',
-                ],
-                'Cake\Network\Response' => [
-                    'location' => 'withLocation',
-                    'disableCache' => 'withDisabledCache',
-                    'type' => 'withType',
-                    'charset' => 'withCharset',
-                    'cache' => 'withCache',
-                    'modified' => 'withModified',
-                    'expires' => 'withExpires',
-                    'sharable' => 'withSharable',
-                    'maxAge' => 'withMaxAge',
-                    'vary' => 'withVary',
-                    'etag' => 'withEtag',
-                    'compress' => 'withCompression',
-                    'length' => 'withLength',
-                    'mustRevalidate' => 'withMustRevalidate',
-                    'notModified' => 'withNotModified',
-                    'cookie' => 'withCookie',
-                    'file' => 'withFile',
-                    'download' => 'withDownload',
-                    # psr-7
-                    'header' => 'getHeader',
-                    'body' => 'withBody',
-                    'statusCode' => 'getStatusCode',
-                    'protocol' => 'getProtocolVersion',
-                ],
-                'Cake\Event\Event' => [
-                    'name' => 'getName',
-                    'subject' => 'getSubject',
-                    'result' => 'getResult',
-                    'data' => 'getData',
-                ],
-                'Cake\View\Helper\FormHelper' => [
-                    'input' => 'control',
-                    'inputs' => 'controls',
-                    'allInputs' => 'allControls',
-                ],
-                'Cake\Mailer\Mailer' => [
-                    'layout' => 'setLayout',
-                ],
-                'Cake\Routing\Route\Route' => [
-                    'parse' => 'parseRequest',
-                ],
-                'Cake\Routing\Router' => [
-                    'parse' => 'parseRequest',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects($configuration),
         ]]);
 
     $services->set(ChangeMethodVisibilityRector::class)

@@ -6,6 +6,8 @@ use Rector\PHPUnit\Rector\Class_\TestListenerToHooksRector;
 use Rector\PHPUnit\Rector\MethodCall\ExplicitPhpErrorApiRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -19,10 +21,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                # see https://github.com/sebastianbergmann/phpunit/issues/3957
-                'expectExceptionMessageRegExp' => 'expectExceptionMessageMatches',
-                'assertRegExp' => 'assertMatchesRegularExpression',
-            ],
+            // see https://github.com/sebastianbergmann/phpunit/issues/3957
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename(
+                    'PHPUnit\Framework\TestCase',
+                    'expectExceptionMessageRegExp',
+                    'expectExceptionMessageMatches'
+                ),
+                new MethodCallRename('PHPUnit\Framework\TestCase', 'assertRegExp', 'assertMatchesRegularExpression'),
+            ]),
         ]]);
 };

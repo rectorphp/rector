@@ -8,6 +8,7 @@ use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\StaticCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
@@ -31,21 +32,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Illuminate\Auth\Access\Gate' => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename(
+                    'Illuminate\Auth\Access\Gate',
                     # https://github.com/laravel/framework/commit/69de466ddc25966a0f6551f48acab1afa7bb9424
-                    'access' => 'inspect',
-                ],
-                'Illuminate\Support\Facades\Lang' => [
+                    'access',
+                    'inspect'
+                ),
+                new MethodCallRename(
+                    'Illuminate\Support\Facades\Lang',
                     # https://github.com/laravel/framework/commit/efbe23c4116f86846ad6edc0d95cd56f4175a446
-                    'trans' => 'get',
-                    'transChoice' => 'choice',
-                ],
-                'Illuminate\Translation\Translator' => [
+                    'trans',
+                    'get'
+                ),
+                new MethodCallRename('Illuminate\Support\Facades\Lang', 'transChoice', 'choice'),
+                new MethodCallRename(
+                    'Illuminate\Translation\Translator',
                     # https://github.com/laravel/framework/commit/697b898a1c89881c91af83ecc4493fa681e2aa38
-                    'getFromJson' => 'get',
-                ],
-            ],
+                    'getFromJson',
+                    'get'
+                ),
+            ]),
         ]]);
 
     $configuration = [

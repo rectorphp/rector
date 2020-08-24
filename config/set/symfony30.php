@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector;
 use Rector\Symfony\Rector\ClassMethod\GetRequestRector;
 use Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
@@ -15,6 +16,7 @@ use Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector;
 use Rector\Symfony\Rector\MethodCall\OptionNameRector;
 use Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 use Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -65,84 +67,112 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader' => [
-                    # class loader
-                    'registerNamespaces' => 'addPrefixes',
-                    'registerPrefixes' => 'addPrefixes',
-                    'registerNamespace' => 'addPrefix',
-                    'registerPrefix' => 'addPrefix',
-                    'getNamespaces' => 'getPrefixes',
-                    'getNamespaceFallbacks' => 'getFallbackDirs',
-                    'getPrefixFallbacks' => 'getFallbackDirs',
-                ],
-                'Symfony\Component\Form\AbstractType' => [
-                    # form
-                    'getName' => 'getBlockPrefix',
-                    'setDefaultOptions' => 'configureOptions',
-                ],
-                'Symfony\Component\Form\FormTypeInterface' => [
-                    'getName' => 'getBlockPrefix',
-                    'setDefaultOptions' => 'configureOptions',
-                ],
-                'Symfony\Component\Form\ResolvedFormTypeInterface' => [
-                    'getName' => 'getBlockPrefix',
-                ],
-                'Symfony\Component\Form\AbstractTypeExtension' => [
-                    'setDefaultOptions' => 'configureOptions',
-                ],
-                'Symfony\Component\Form\Form' => [
-                    'bind' => 'submit',
-                    'isBound' => 'isSubmitted',
-                ],
-                'Symfony\Component\Process\Process' => [
-                    # process
-                    'setStdin' => 'setInput',
-                    'getStdin' => 'getInput',
-                ],
-                'Symfony\Bridge\Monolog\Logger' => [
-                    # monolog
-                    'emerg' => 'emergency',
-                    'crit' => 'critical',
-                    'err' => 'error',
-                    'warn' => 'warning',
-                ],
-                'Symfony\Component\HttpKernel\Log\LoggerInterface' => [
-                    # http kernel
-                    'emerg' => 'emergency',
-                    'crit' => 'critical',
-                    'err' => 'error',
-                    'warn' => 'warning',
-                ],
-                'Symfony\Component\HttpKernel\Log\NullLogger' => [
-                    'emerg' => 'emergency',
-                    'crit' => 'critical',
-                    'err' => 'error',
-                    'warn' => 'warning',
-                ],
-                'Symfony\Component\PropertyAccess\PropertyAccess' => [
-                    # property access
-                    'getPropertyAccessor' => 'createPropertyAccessor',
-                ],
-                # serialazer
-                'Symfony\Component\Serializer\Exception\Exception' => 'Symfony\Component\Serializer\Exception\ExceptionInterface',
-                'Symfony\Component\Translation\Dumper\FileDumper' => [
-                    # translator
-                    'format' => 'formatCatalogue',
-                ],
-                'Symfony\Component\Translation\Translator' => [
-                    'getMessages' => 'getCatalogue',
-                ],
-                'Symfony\Component\Validator\ConstraintViolationInterface' => [
-                    # validator
-                    'getMessageParameters' => 'getParameters',
-                    'getMessagePluralization' => 'getPlural',
-                ],
-                'Symfony\Component\Validator\ConstraintViolation' => [
-                    'getMessageParameters' => 'getParameters',
-                    'getMessagePluralization' => 'getPlural',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                // class loader
+                new MethodCallRename(
+                    'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
+                    'registerNamespaces',
+                    'addPrefixes'
+                ),
+                new MethodCallRename(
+                    'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
+                    'registerPrefixes',
+                    'addPrefixes'
+                ),
+                new MethodCallRename(
+                    'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
+                    'registerNamespace',
+                    'addPrefix'
+                ),
+                new MethodCallRename(
+                    'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
+                    'registerPrefix',
+                    'addPrefix'
+                ),
+                new MethodCallRename(
+                    'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
+                    'getNamespaces',
+                    'getPrefixes'
+                ),
+                new MethodCallRename(
+                    'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
+                    'getNamespaceFallbacks',
+                    'getFallbackDirs'
+                ),
+                new MethodCallRename(
+                    'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
+                    'getPrefixFallbacks',
+                    'getFallbackDirs'
+                ),
+                // form
+                new MethodCallRename('Symfony\Component\Form\AbstractType', 'getName', 'getBlockPrefix'),
+                new MethodCallRename('Symfony\Component\Form\AbstractType', 'setDefaultOptions', 'configureOptions'),
+                new MethodCallRename('Symfony\Component\Form\FormTypeInterface', 'getName', 'getBlockPrefix'),
+                new MethodCallRename(
+                    'Symfony\Component\Form\FormTypeInterface',
+                    'setDefaultOptions',
+                    'configureOptions'
+                ),
+                new MethodCallRename('Symfony\Component\Form\ResolvedFormTypeInterface', 'getName', 'getBlockPrefix'),
+                new MethodCallRename(
+                    'Symfony\Component\Form\AbstractTypeExtension',
+                    'setDefaultOptions',
+                    'configureOptions'
+                ),
+                new MethodCallRename('Symfony\Component\Form\Form', 'bind', 'submit'),
+                new MethodCallRename('Symfony\Component\Form\Form', 'isBound', 'isSubmitted'),
+                // process
+                new MethodCallRename('Symfony\Component\Process\Process', 'setStdin', 'setInput'),
+                new MethodCallRename('Symfony\Component\Process\Process', 'getStdin', 'getInput'),
+                // monolog
+                new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'emerg', 'emergency'),
+                new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'crit', 'critical'),
+                new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'err', 'error'),
+                new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'warn', 'warning'),
+                # http kernel
+                new MethodCallRename('Symfony\Component\HttpKernel\Log\LoggerInterface', 'emerg', 'emergency'),
+                new MethodCallRename('Symfony\Component\HttpKernel\Log\LoggerInterface', 'crit', 'critical'),
+                new MethodCallRename('Symfony\Component\HttpKernel\Log\LoggerInterface', 'err', 'error'),
+                new MethodCallRename('Symfony\Component\HttpKernel\Log\LoggerInterface', 'warn', 'warning'),
+                new MethodCallRename('Symfony\Component\HttpKernel\Log\NullLogger', 'emerg', 'emergency'),
+                new MethodCallRename('Symfony\Component\HttpKernel\Log\NullLogger', 'crit', 'critical'),
+                new MethodCallRename('Symfony\Component\HttpKernel\Log\NullLogger', 'err', 'error'),
+                new MethodCallRename('Symfony\Component\HttpKernel\Log\NullLogger', 'warn', 'warning'),
+                // property access
+                new MethodCallRename(
+                    'getPropertyAccessor',
+                    'Symfony\Component\PropertyAccess\PropertyAccess',
+                    'createPropertyAccessor'
+                ),
+                // translator
+                new MethodCallRename(
+                    'Symfony\Component\Translation\Dumper\FileDumper',
+                    'format',
+                    'formatCatalogue'
+                ),
+                new MethodCallRename('Symfony\Component\Translation\Translator', 'getMessages', 'getCatalogue'),
+                // validator
+                new MethodCallRename(
+                    'Symfony\Component\Validator\ConstraintViolationInterface',
+                    'getMessageParameters',
+                    'getParameters'
+                ),
+                new MethodCallRename(
+                    'Symfony\Component\Validator\ConstraintViolationInterface',
+                    'getMessagePluralization',
+                    'getPlural'
+                ),
+                new MethodCallRename(
+                    'Symfony\Component\Validator\ConstraintViolation',
+                    'getMessageParameters',
+                    'getParameters'
+                ),
+                new MethodCallRename(
+                    'Symfony\Component\Validator\ConstraintViolation',
+                    'getMessagePluralization',
+                    'getPlural'
+                ),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

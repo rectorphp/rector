@@ -6,8 +6,10 @@ use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
@@ -19,14 +21,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Symfony\Component\BrowserKit\Response' => [
-                    'getStatus' => 'getStatusCode',
-                ],
-                'Symfony\Component\Security\Http\Firewall' => [
-                    'handleRequest' => 'callListeners',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Symfony\Component\BrowserKit\Response', 'getStatus', 'getStatusCode'),
+                new MethodCallRename('Symfony\Component\Security\Http\Firewall', 'handleRequest', 'callListeners'),
+            ]),
         ]]);
 
     $services->set(MakeDispatchFirstArgumentEventRector::class);

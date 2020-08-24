@@ -149,7 +149,8 @@ PHP
                 [
                     self::TYPES_TO_SERVICES => ['StaticClass'],
                 ]
-            ), ]);
+            ), ]
+        );
     }
 
     /**

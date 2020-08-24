@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://github.com/symfony/symfony/blob/master/UPGRADE-4.1.md
@@ -12,30 +15,44 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
                 # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
-                'Symfony\Component\Console\Helper\TableStyle' => [
-                    'setHorizontalBorderChar' => 'setHorizontalBorderChars',
-                    'setVerticalBorderChar' => 'setVerticalBorderChars',
-                    'getVerticalBorderChar' => [
-                        # special case to "getVerticalBorderChar" → "getBorderChars()[3]"
-                        'name' => 'getBorderChars',
-                        'array_key' => 3,
-                    ],
-                    'getHorizontalBorderChar' => [
-                        'name' => 'getBorderChars',
-                        'array_key' => 2,
-                    ],
-                    'setCrossingChar' => 'setDefaultCrossingChar',
-                ],
-                'Symfony\Component\HttpFoundation\File\UploadedFile' => [
-                    'getClientSize' => 'getSize',
-                ],
-                'Symfony\Component\Workflow\DefinitionBuilder' => [
-                    'reset' => 'clear',
-                    'add' => 'addWorkflow',
-                ],
-            ],
+                new MethodCallRename(
+                    'Symfony\Component\Console\Helper\TableStyle',
+                    'setHorizontalBorderChar',
+                    'setHorizontalBorderChars'
+                ),
+                # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
+                new MethodCallRename(
+                    'Symfony\Component\Console\Helper\TableStyle',
+                    'setVerticalBorderChar',
+                    'setVerticalBorderChars'
+                ),
+                # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
+                new MethodCallRename(
+                    'Symfony\Component\Console\Helper\TableStyle',
+                    'setCrossingChar',
+                    'setDefaultCrossingChar'
+                ),
+                new MethodCallRename('Symfony\Component\HttpFoundation\File\UploadedFile', 'getClientSize', 'getSize'),
+                new MethodCallRename('Symfony\Component\Workflow\DefinitionBuilder', 'reset', 'clear'),
+                new MethodCallRename('Symfony\Component\Workflow\DefinitionBuilder', 'add', 'addWorkflow'),
+                # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
+                new MethodCallRenameWithArrayKey(
+                    'Symfony\Component\Console\Helper\TableStyle',
+                    'getVerticalBorderChar',
+                    # special case to "getVerticalBorderChar" → "getBorderChars()[3]"
+                    'getBorderChars',
+                    3
+                ),
+                # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
+                new MethodCallRenameWithArrayKey(
+                    'Symfony\Component\Console\Helper\TableStyle',
+                    'getHorizontalBorderChar',
+                    'getBorderChars',
+                    2
+                ),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

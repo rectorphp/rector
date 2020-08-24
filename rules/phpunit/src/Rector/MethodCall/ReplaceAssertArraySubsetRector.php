@@ -52,7 +52,7 @@ PHP
                 <<<'PHP'
 use PHPUnit\Framework\TestCase;
 
-class SomeTest extends TestCase
+final class SomeTest extends TestCase
 {
     public function test()
     {

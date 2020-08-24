@@ -1,4 +1,4 @@
-# All 565 Rectors Overview
+# All 566 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -69,7 +69,7 @@
 - [Symfony](#symfony) (33)
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
-- [SymfonyPhpConfig](#symfonyphpconfig) (1)
+- [SymfonyPhpConfig](#symfonyphpconfig) (2)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -9473,7 +9473,9 @@ Remove `expect($this->any())` from mocks as it has no added value
 Replace deprecated "assertArraySubset()" method with alternative methods
 
 ```diff
- class SomeTest extends \PHPUnit\Framework\TestCase
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
  {
      public function test()
      {
@@ -12617,9 +12619,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
             RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'SomeExampleClass' => [
-                '$oldToNewMethodsByClass' => [
-                'oldMethod' => 'newMethod']]]
+                \Rector\SymfonyPhpConfig\inline_object(new Rector\Renaming\ValueObject\MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'))]
         ]]);
 };
 ```
@@ -14234,6 +14234,37 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 +            '$key' => 'value
 +        ]]);
  }
+```
+
+<br><br>
+
+### `ReplaceArrayWithObjectRector`
+
+- class: [`Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector`](/../master/rules/symfony-php-config/src/Rector/ArrayItem/ReplaceArrayWithObjectRector.php)
+- [test fixtures](/../master/rules/symfony-php-config/tests/Rector/ArrayItem/ReplaceArrayWithObjectRector/Fixture)
+
+Replace complex array configuration in configs with value object
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ReplaceArrayWithObjectRector::class)
+        ->call('configure', [[
+            ReplaceArrayWithObjectRector::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
+                'Rector\Renaming\Rector\MethodCall\RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS' => 'Rector\Renaming\ValueObject\MethodCallRename']
+        ]]);
+};
+```
+
+↓
+
+```diff
+
 ```
 
 <br><br>

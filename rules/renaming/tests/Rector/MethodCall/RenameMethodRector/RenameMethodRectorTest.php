@@ -10,7 +10,8 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture\SkipSelfMethodRename;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
-use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\FormMacros;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameMethodRectorTest extends AbstractRectorTestCase
@@ -36,25 +37,12 @@ final class RenameMethodRectorTest extends AbstractRectorTestCase
         return [
             RenameMethodRector::class => [
                 RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                    AbstractType::class => [
-                        'setDefaultOptions' => 'configureOptions',
-                    ],
-                    Html::class => [
-                        'add' => 'addHtml',
-                        'addToArray' => [
-                            'name' => 'addHtmlArray',
-                            'array_key' => 'hi',
-                        ],
-                    ],
-                    FormMacros::class => [
-                        'renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin'],
-                    ],
-                    '*Presenter' => [
-                        'run' => '__invoke',
-                    ],
-                    SkipSelfMethodRename::class => [
-                        'preventPHPStormRefactoring' => 'gone',
-                    ],
+                    new MethodCallRename(AbstractType::class, 'setDefaultOptions', 'configureOptions'),
+                    new MethodCallRename(Html::class, 'add', 'addHtml'),
+                    new MethodCallRename('*Presenter', 'run', '__invoke'),
+                    new MethodCallRename(SkipSelfMethodRename::class, 'preventPHPStormRefactoring', 'gone'),
+                    // with array key
+                    new MethodCallRenameWithArrayKey(Html::class, 'addToArray', 'addToHtmlArray', 'hey'),
                 ],
             ],
         ];

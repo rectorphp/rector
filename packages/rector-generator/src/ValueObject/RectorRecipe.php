@@ -103,6 +103,10 @@ final class RectorRecipe
 
         $this->description = $description;
 
+        if ($codeBefore === $codeAfter) {
+            throw new ConfigurationException('Code before and after are identical. They have to be different');
+        }
+
         $this->setCodeBefore($codeBefore);
         $this->setCodeAfter($codeAfter);
 

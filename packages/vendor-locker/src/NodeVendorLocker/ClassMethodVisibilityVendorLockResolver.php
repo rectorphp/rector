@@ -6,7 +6,12 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 
+/**
+ * @deprecated
+ * Merge with @see ClassMethodVisibilityGuard
+ */
 final class ClassMethodVisibilityVendorLockResolver extends AbstractNodeVendorLockResolver
 {
     /**
@@ -46,8 +51,8 @@ final class ClassMethodVisibilityVendorLockResolver extends AbstractNodeVendorLo
 
     private function isInterfaceMethod(ClassMethod $classMethod, string $className): bool
     {
-        $interfaceMethods = $this->getInterfaceMethods($className);
-        return $this->nodeNameResolver->isNames($classMethod, $interfaceMethods);
+        $interfaceMethodNames = $this->getInterfaceMethodNames($className);
+        return $this->nodeNameResolver->isNames($classMethod, $interfaceMethodNames);
     }
 
     private function hasParentMethod(string $className, string $methodName): bool
@@ -87,7 +92,7 @@ final class ClassMethodVisibilityVendorLockResolver extends AbstractNodeVendorLo
     /**
      * @return string[]
      */
-    private function getInterfaceMethods(string $className): array
+    private function getInterfaceMethodNames(string $className): array
     {
         $interfaces = class_implements($className);
 

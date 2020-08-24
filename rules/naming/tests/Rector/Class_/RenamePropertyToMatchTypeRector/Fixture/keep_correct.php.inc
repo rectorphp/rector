@@ -3,7 +3,6 @@
 namespace Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Fixture;
 
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\AMP;
-
 use DateTime;
 
 class KeepCorrect

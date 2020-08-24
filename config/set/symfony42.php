@@ -11,9 +11,11 @@ use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\Rector\New_\NewToStaticCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://github.com/symfony/symfony/pull/28447
@@ -119,14 +121,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Symfony\Component\Cache\CacheItem' => [
-                    'getPreviousTags' => 'getMetadata',
-                ],
-                'Symfony\Component\Form\AbstractTypeExtension' => [
-                    'getExtendedType' => 'getExtendedTypes',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Symfony\Component\Cache\CacheItem', 'getPreviousTags', 'getMetadata'),
+                new MethodCallRename(
+                    'Symfony\Component\Form\AbstractTypeExtension',
+                    'getExtendedType',
+                    'getExtendedTypes'
+                ),
+            ]),
         ]]);
 
     $services->set(AddReturnTypeDeclarationRector::class)

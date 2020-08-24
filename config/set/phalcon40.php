@@ -9,6 +9,8 @@ use Rector\Phalcon\Rector\MethodCall\AddRequestToHandleMethodCallRector;
 use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://docs.phalcon.io/4.0/en/upgrade#general-notes
@@ -106,44 +108,28 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
-            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => [
-                'Phalcon\Acl\AdapterInterface' => [
-                    'isResource' => 'isComponent',
-                    'addResource' => 'addComponent',
-                    'addResourceAccess' => 'addComponentAccess',
-                    'dropResourceAccess' => 'dropComponentAccess',
-                    'getActiveResource' => 'getActiveComponent',
-                    'getResources' => 'getComponents',
-                ],
-                'Phalcon\Acl\Adapter\Memory' => [
-                    'isResource' => 'isComponent',
-                    'addResource' => 'addComponent',
-                    'addResourceAccess' => 'addComponentAccess',
-                    'dropResourceAccess' => 'dropComponentAccess',
-                    'getResources' => 'getComponents',
-                ],
-                'Phalcon\Cli\Console' => [
-                    'addModules' => 'registerModules',
-                ],
-                'Phalcon\Dispatcher' => [
-                    'setModelBinding' => 'setModelBinder',
-                ],
-                'Phalcon\Assets\Manager' => [
-                    'addResource' => 'addAsset',
-                    'addResourceByType' => 'addAssetByType',
-                    'collectionResourcesByType' => 'collectionAssetsByType',
-                ],
-                'Phalcon\Http\RequestInterface' => [
-                    'isSecureRequest' => 'isSecure',
-                    'isSoapRequested' => 'isSoap',
-                ],
-                'Phalcon\Paginator' => [
-                    'getPaginate' => 'paginate',
-                ],
-                'Phalcon\Mvc\Model\Criteria' => [
-                    'order' => 'orderBy',
-                ],
-            ],
+            RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS => inline_value_objects([
+                new MethodCallRename('Phalcon\Acl\AdapterInterface', 'isResource', 'isComponent'),
+                new MethodCallRename('Phalcon\Acl\AdapterInterface', 'addResource', 'addComponent'),
+                new MethodCallRename('Phalcon\Acl\AdapterInterface', 'addResourceAccess', 'addComponentAccess'),
+                new MethodCallRename('Phalcon\Acl\AdapterInterface', 'dropResourceAccess', 'dropComponentAccess'),
+                new MethodCallRename('Phalcon\Acl\AdapterInterface', 'getActiveResource', 'getActiveComponent'),
+                new MethodCallRename('Phalcon\Acl\AdapterInterface', 'getResources', 'getComponents'),
+                new MethodCallRename('Phalcon\Acl\Adapter\Memory', 'isResource', 'isComponent'),
+                new MethodCallRename('Phalcon\Acl\Adapter\Memory', 'addResource', 'addComponent'),
+                new MethodCallRename('Phalcon\Acl\Adapter\Memory', 'addResourceAccess', 'addComponentAccess'),
+                new MethodCallRename('Phalcon\Acl\Adapter\Memory', 'dropResourceAccess', 'dropComponentAccess'),
+                new MethodCallRename('Phalcon\Acl\Adapter\Memory', 'getResources', 'getComponents'),
+                new MethodCallRename('Phalcon\Cli\Console', 'addModules', 'registerModules'),
+                new MethodCallRename('Phalcon\Dispatcher', 'setModelBinding', 'setModelBinder'),
+                new MethodCallRename('Phalcon\Assets\Manager', 'addResource', 'addAsset'),
+                new MethodCallRename('Phalcon\Assets\Manager', 'addResourceByType', 'addAssetByType'),
+                new MethodCallRename('Phalcon\Assets\Manager', 'collectionResourcesByType', 'collectionAssetsByType'),
+                new MethodCallRename('Phalcon\Http\RequestInterface', 'isSecureRequest', 'isSecure'),
+                new MethodCallRename('Phalcon\Http\RequestInterface', 'isSoapRequested', 'isSoap'),
+                new MethodCallRename('Phalcon\Paginator', 'getPaginate', 'paginate'),
+                new MethodCallRename('Phalcon\Mvc\Model\Criteria', 'order', 'orderBy'),
+            ]),
         ]]);
 
     $services->set(RenameConstantRector::class)
