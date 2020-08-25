@@ -6,6 +6,8 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
@@ -52,6 +54,10 @@ final class ClassMethodPropertyFetchManipulator
             }
 
             if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
+                return null;
+            }
+
+            if ($node->expr instanceof MethodCall || $node->expr instanceof StaticCall) {
                 return null;
             }
 
