@@ -4875,7 +4875,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
+            ArgumentRemoverRector::REMOVED_ARGUMENTS => [
                 'ExampleClass' => [
                 'someMethod' => [
                 [
@@ -6294,7 +6294,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(WrapReturnRector::class)
         ->call('configure', [[
-            WrapReturnRector::TYPE_TO_METHOD_TO_WRAP => [
+            WrapReturnRector::TYPE_METHOD_WRAPS => [
                 'SomeClass' => [
                 'getItem' => 'array']]
         ]]);

@@ -96,7 +96,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddMethodParentCallRector::class)
         ->call('configure', [[
             AddMethodParentCallRector::METHODS_BY_PARENT_TYPES => [
-                'Symfony\Component\EventDispatcher\EventDispatcher' => ['__construct'],
+                'Symfony\Component\EventDispatcher\EventDispatcher' => '__construct',
             ],
         ]]);
 };

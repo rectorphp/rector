@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
+use Rector\Generic\ValueObject\RemovedArgument;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
@@ -31,12 +32,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
-                'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister' => [
-                    'getSelectJoinColumnSQL' => [
-                        4 => null,
-                    ],
-                ],
-            ],
+            ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects([
+                new RemovedArgument(
+                    'Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister',
+                    'getSelectJoinColumnSQL',
+                    4,
+                    null
+                ),
+            ]),
         ]]);
 };

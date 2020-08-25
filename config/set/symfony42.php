@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
@@ -10,6 +11,8 @@ use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\Rector\New_\NewToStaticCallRector;
 use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\RemovedArgument;
+use Rector\Generic\ValueObject\TypeMethodWrap;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -150,11 +153,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(WrapReturnRector::class)
         ->call('configure', [[
-            WrapReturnRector::TYPE_TO_METHOD_TO_WRAP => [
-                'Symfony\Component\Form\AbstractTypeExtension' => [
-                    'getExtendedTypes' => 'array',
-                ],
-            ],
+            WrapReturnRector::TYPE_METHOD_WRAPS => inline_value_objects([
+                new TypeMethodWrap('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', true),
+            ]),
         ]]);
 
     $services->set(ArgumentDefaultValueReplacerRector::class)
@@ -178,14 +179,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
-                'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector' => [
-                    '__construct' => [
-                        # https://github.com/symfony/symfony/commit/f5c355e1ba399a1b3512367647d902148bdaf09f
-                        null,
-                        null,
-                    ],
-                ],
-            ],
+            # https://github.com/symfony/symfony/commit/f5c355e1ba399a1b3512367647d902148bdaf09f
+            ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects([
+                new RemovedArgument(
+                    'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector',
+                    '__construct',
+                    0,
+                    null
+                ),
+                new RemovedArgument(
+                    'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector',
+                    '__construct',
+                    1,
+                    null
+                ),
+            ]),
         ]]);
 };
