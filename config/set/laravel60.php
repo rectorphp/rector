@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
+use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
@@ -77,12 +78,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => [
-                'Illuminate\Foundation\Http\FormRequest' => [
-                    # https://github.com/laravel/framework/commit/e47e91417ab22e6af001db1dcbe75b87db218c1d
-                    'validationData' => 'public',
-                ],
-            ],
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
+                new MethodVisibility('Illuminate\Foundation\Http\FormRequest', 'validationData', 'public'),
+            ]),
         ]]);
 
     $services->set(ArgumentAdderRector::class)

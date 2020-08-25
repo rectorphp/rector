@@ -5,12 +5,14 @@ declare(strict_types=1);
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
+
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\Rector\New_\NewToStaticCallRector;
 use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Generic\ValueObject\TypeMethodWrap;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -144,11 +146,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => [
-                'Symfony\Component\Form\AbstractTypeExtension' => [
-                    'getExtendedTypes' => 'static',
-                ],
-            ],
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
+                new MethodVisibility('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', 'static'),
+            ]),
         ]]);
 
     $services->set(WrapReturnRector::class)
