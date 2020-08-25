@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
+
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\MethodReturnType;
@@ -11,8 +12,10 @@ use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
+use Rector\Renaming\ValueObject\ClassConstantRename;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\StaticCallRename;
+use Rector\SymfonyPhpConfig\inline_value_objects;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
@@ -33,18 +36,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
-                'Cake\View\View' => [
-                    'NAME_ELEMENT' => 'TYPE_ELEMENT',
-                    'NAME_LAYOUT' => 'TYPE_LAYOUT',
-                ],
-                'Cake\Mailer\Email' => [
-                    'MESSAGE_HTML' => 'Cake\Mailer\Message::MESSAGE_HTML',
-                    'MESSAGE_TEXT' => 'Cake\Mailer\Message::MESSAGE_TEXT',
-                    'MESSAGE_BOTH' => 'Cake\Mailer\Message::MESSAGE_BOTH',
-                    'EMAIL_PATTERN' => 'Cake\Mailer\Message::EMAIL_PATTERN',
-                ],
-            ],
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
+                new ClassConstantRename('Cake\View\View', 'NAME_ELEMENT', 'TYPE_ELEMENT'),
+                new ClassConstantRename('Cake\View\View', 'NAME_LAYOUT', 'TYPE_LAYOUT'),
+                new ClassConstantRename('Cake\Mailer\Email', 'MESSAGE_HTML', 'Cake\Mailer\Message::MESSAGE_HTML'),
+                new ClassConstantRename('Cake\Mailer\Email', 'MESSAGE_TEXT', 'Cake\Mailer\Message::MESSAGE_TEXT'),
+                new ClassConstantRename('Cake\Mailer\Email', 'MESSAGE_BOTH', 'Cake\Mailer\Message::MESSAGE_BOTH'),
+                new ClassConstantRename('Cake\Mailer\Email', 'EMAIL_PATTERN', 'Cake\Mailer\Message::EMAIL_PATTERN'),
+            ]),
         ]]);
 
     $services->set(RenameMethodRector::class)
@@ -60,15 +59,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    $configuration = [
-        new StaticCallRename('Router', 'pushRequest', 'Router', 'setRequest'),
-        new StaticCallRename('Router', 'setRequestInfo', 'Router', 'setRequest'),
-        new StaticCallRename('Router', 'setRequestContext', 'Router', 'setRequest'),
-    ];
-
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_value_objects($configuration),
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_value_objects([
+                new StaticCallRename('Router', 'pushRequest', 'Router', 'setRequest'),
+                new StaticCallRename('Router', 'setRequestInfo', 'Router', 'setRequest'),
+                new StaticCallRename('Router', 'setRequestContext', 'Router', 'setRequest'),
+            ]),
         ]]);
 
     $services->set(RenamePropertyRector::class)

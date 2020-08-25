@@ -37,7 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Component\HttpFoundation\Cookie',
                     'Symfony\Component\HttpFoundation\Cookie',
                     'create'
-                )
+                ),
             ]),
         ]]);
 

@@ -12487,7 +12487,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => [
                 'SomeClass' => [
                 'OLD_CONSTANT' => 'NEW_CONSTANT', 'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT']]
         ]]);

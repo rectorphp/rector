@@ -9,6 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\Source\DifferentClass;
 use Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\Source\LocalFormEvents;
+use Rector\Renaming\ValueObject\ClassConstantRename;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameClassConstantRectorTest extends AbstractRectorTestCase
@@ -33,13 +34,15 @@ final class RenameClassConstantRectorTest extends AbstractRectorTestCase
     {
         return [
             RenameClassConstantRector::class => [
-                RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
-                    LocalFormEvents::class => [
-                        'PRE_BIND' => 'PRE_SUBMIT',
-                        'BIND' => 'SUBMIT',
-                        'POST_BIND' => 'POST_SUBMIT',
-                        'OLD_CONSTANT' => DifferentClass::class . '::NEW_CONSTANT',
-                    ],
+                RenameClassConstantRector::CLASS_CONSTANT_RENAME => [
+                    new ClassConstantRename(LocalFormEvents::class, 'PRE_BIND', 'PRE_SUBMIT'),
+                    new ClassConstantRename(LocalFormEvents::class, 'BIND', 'SUBMIT'),
+                    new ClassConstantRename(LocalFormEvents::class, 'POST_BIND', 'POST_SUBMIT'),
+                    new ClassConstantRename(
+                        LocalFormEvents::class,
+                        'OLD_CONSTANT',
+                        DifferentClass::class . '::NEW_CONSTANT'
+                    ),
                 ],
             ],
         ];
