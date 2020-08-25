@@ -72,18 +72,8 @@ PHP
             return null;
         }
 
-        foreach ($node->args as $key => $arg) {
-            if ($arg->value instanceof Array_) {
-                $this->unsetUnusedArrayElements($node, $scope, $arg->value);
-                continue;
-            }
-
-            $argValue = $this->getValue($arg->value);
-            if (! $scope->hasVariableType($argValue)->no()) {
-                continue;
-            }
-            unset($node->args[$key]);
-        }
+        $this->unsetUnusedArrayElements($node, $scope);
+        $this->unsetUnusedArguments($node, $scope);
 
         if ($node->args === []) {
             return new Array_();
@@ -92,18 +82,42 @@ PHP
         return $node;
     }
 
-    private function unsetUnusedArrayElements(Node $node, Scope $scope, Array_ $array): void
+    private function unsetUnusedArrayElements(Node $node, Scope $scope): void
     {
-        foreach ($array->items as $key => $item) {
-            $value = $this->getValue($item->value);
-            if ($scope->hasVariableType($value)->yes()) {
+        foreach ($node->args as $key => $arg) {
+            if (! $arg->value instanceof Array_) {
                 continue;
             }
 
-            unset($array->items[$key]);
-        }
+            $array = &$arg->value;
 
-        if ($arg->value->items === []) {
+            foreach ($array->items as $arrayKey => $item) {
+                $value = $this->getValue($item->value);
+                if ($scope->hasVariableType($value)->yes()) {
+                    continue;
+                }
+
+                unset($array->items[$arrayKey]);
+            }
+
+            if ($arg->value->items === []) {
+                unset($node->args[$key]);
+            }
+        }
+    }
+
+    private function unsetUnusedArguments(Node $node, Scope $scope): void
+    {
+        foreach ($node->args as $key => $arg) {
+            if ($arg->value instanceof Array_) {
+                continue;
+            }
+
+            $argValue = $this->getValue($arg->value);
+            if (! $scope->hasVariableType($argValue)->no()) {
+                continue;
+            }
+
             unset($node->args[$key]);
         }
     }
