@@ -554,21 +554,6 @@ final class SetList
     /**
      * @var string
      */
-    public const SYLIUS_10 = __DIR__ . '/../../../../config/set/sylius10.php';
-
-    /**
-     * @var string
-     */
-    public const SYLIUS_102 = __DIR__ . '/../../../../config/set/sylius102.php';
-
-    /**
-     * @var string
-     */
-    public const SYLIUS_109 = __DIR__ . '/../../../../config/set/sylius109.php';
-
-    /**
-     * @var string
-     */
     public const SYMFONY_26 = __DIR__ . '/../../../../config/set/symfony26.php';
 
     /**

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Generic\ValueObject\MethodReturnType;
 use Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
@@ -42,17 +43,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
-                'PHPUnit\Framework\TestCase' => [
-                    'setUpBeforeClass' => 'void',
-                    'setUp' => 'void',
-                    'assertPreConditions' => 'void',
-                    'assertPostConditions' => 'void',
-                    'tearDown' => 'void',
-                    'tearDownAfterClass' => 'void',
-                    'onNotSuccessfulTest' => 'void',
-                ],
-            ],
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects(
+                [
+                    new MethodReturnType('PHPUnit\Framework\TestCase', 'setUpBeforeClass', 'void'),
+                    new MethodReturnType('PHPUnit\Framework\TestCase', 'setUp', 'void'),
+                    new MethodReturnType('PHPUnit\Framework\TestCase', 'assertPreConditions', 'void'),
+                    new MethodReturnType('PHPUnit\Framework\TestCase', 'assertPostConditions', 'void'),
+                    new MethodReturnType('PHPUnit\Framework\TestCase', 'tearDown', 'void'),
+                    new MethodReturnType('PHPUnit\Framework\TestCase', 'tearDownAfterClass', 'void'),
+                    new MethodReturnType('PHPUnit\Framework\TestCase', 'onNotSuccessfulTest', 'void'), ]
+            ),
         ]]);
 
     $services->set(ReplaceAssertArraySubsetRector::class);

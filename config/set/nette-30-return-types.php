@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Generic\ValueObject\MethodReturnType;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -11,318 +13,326 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # scalar type hints, see https://github.com/nette/security/commit/84024f612fb3f55f5d6e3e3e28eef1ad0388fa56
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
-                'Nette\Mail\Mailer' => [
-                    'send' => 'void',
-                ],
-                'Nette\Forms\Rendering\DefaultFormRenderer' => [
-                    'renderControl' => 'Nette\Utils\Html',
-                ],
-                'Nette\Caching\Cache' => [
-                    'generateKey' => 'string',
-                ],
-                'Nette\Security\IResource' => [
-                    'getResourceId' => 'string',
-                ],
-                'Nette\Security\IAuthenticator' => [
-                    'authenticate' => 'Nette\Security\IIdentity',
-                ],
-                'Nette\Security\IAuthorizator' => [
-                    'isAllowed' => 'bool',
-                ],
-                'Nette\Security\Identity' => [
-                    'getData' => 'array',
-                ],
-                'Nette\Security\IIdentity' => [
-                    'getRoles' => 'array',
-                ],
-                'Nette\Security\User' => [
-                    'getStorage' => 'Nette\Security\IUserStorage',
-                    'login' => 'void',
-                    'logout' => 'void',
-                    'isLoggedIn' => 'bool',
-                    'getIdentity' => '?Nette\Security\IIdentity',
-                    'getAuthenticator' => '?Nette\Security\IAuthenticator',
-                    'getAuthorizator' => '?Nette\Security\IAuthorizator',
-                    'getLogoutReason' => '?int',
-                    'getRoles' => 'array',
-                    'isInRole' => 'bool',
-                    'isAllowed' => 'bool',
-                ],
-                'Nette\Security\IUserStorage' => [
-                    'isAuthenticated' => 'bool',
-                    'getIdentity' => '?Nette\Security\IIdentity',
-                    'getLogoutReason' => '?int',
-                ],
-                # scalar type hints, see https://github.com/nette/component-model/commit/f69df2ca224cad7b07f1c8835679393263ea6771
-                'Nette\ComponentModel\Component' => [
-                    'lookup' => 'Nette\ComponentModel\IComponent',
-                    'lookupPath' => '?string',
-                    'monitor' => 'void',
-                    'unmonitor' => 'void',
-                    'attached' => 'void',
-                    'detached' => 'void',
-                    'getName' => '?string',
-                ],
-                'Nette\ComponentModel\IComponent' => [
-                    'getName' => '?string',
-                    'getParent' => '?Nette\ComponentModel\IContainer',
-                ],
-                'Nette\ComponentModel\Container' => [
-                    'removeComponent' => 'void',
-                    'getComponent' => '?Nette\ComponentModel\IComponent',
-                    'createComponent' => '?Nette\ComponentModel\IComponent',
-                    'getComponents' => 'Iterator',
-                    'validateChildComponent' => 'void',
-                    '_isCloning' => '?Nette\ComponentModel\IComponent',
-                ],
-                'Nette\ComponentModel\IContainer' => [
-                    'removeComponent' => 'void',
-                    'getComponent' => '?Nette\ComponentModel\IContainer',
-                    'getComponents' => 'Iterator',
-                ],
-                # scalar type hints, see https://github.com/nette/application/commit/b71d69c507f90b48fbc1e40447d451b4b5c6f063
-                'Nette\Application\Application' => [
-                    'run' => 'void',
-                    'createInitialRequest' => 'Nette\Application\Request',
-                    'processRequest' => 'void',
-                    'processException' => 'void',
-                    'getRequests' => 'array',
-                    'getPresenter' => '?Nette\Application\IPresenter',
-                    'getRouter' => '?Nette\Application\IRouter',
-                    'getPresenterFactory' => '?Nette\Application\IPresenterFactory',
-                ],
-                'Nette\Application\Helpers' => [
-                    'splitName' => 'array',
-                ],
-                'Nette\Application\IPresenter' => [
-                    'run' => 'Nette\Application\IResponse',
-                ],
-                'Nette\Application\IPresenterFactory' => [
-                    'getPresenterClass' => 'string',
-                    'createPresenter' => 'Nette\Application\IPresenter',
-                ],
-                'Nette\Application\PresenterFactory' => [
-                    'formatPresenterClass' => 'string',
-                    'unformatPresenterClass' => '?string',
-                ],
-                'Nette\Application\IResponse' => [
-                    'send' => 'void',
-                ],
-                'Nette\Application\Responses\FileResponse' => [
-                    'getFile' => 'string',
-                    'getName' => 'string',
-                    'getContentType' => 'string',
-                ],
-                'Nette\Application\Responses\ForwardResponse' => [
-                    'getRequest' => 'Nette\Application\Request',
-                ],
-                'Nette\Application\Request' => [
-                    'getPresenterName' => 'string',
-                    'getParameters' => 'array',
-                    'getFiles' => 'array',
-                    'getMethod' => '?string',
-                    'isMethod' => 'bool',
-                    'hasFlag' => 'bool',
-                ],
-                'Nette\Application\RedirectResponse' => [
-                    'getUrl' => 'string',
-                    'getCode' => 'int',
-                ],
-                'Nette\Application\JsonResponse' => [
-                    'getContentType' => 'string',
-                ],
-                'Nette\Application\IRouter' => [
-                    'match' => '?Nette\Application\Request',
-                    'constructUrl' => '?string',
-                ],
-                'Nette\Application\Routers\Route' => [
-                    'getMask' => 'string',
-                    'getDefaults' => 'array',
-                    'getFlags' => 'int',
-                    'getTargetPresenters' => '?array',
-                ],
-                'Nette\Application\Routers\RouteList' => [
-                    'warmupCache' => 'void',
-                    'offsetSet' => 'void',
-                    'getModule' => '?string',
-                ],
-                'Nette\Application\Routers\CliRouter' => [
-                    'getDefaults' => 'array',
-                ],
-                'Nette\Application\UI\Component' => [
-                    'getPresenter' => '?Nette\Application\UI\Presenter',
-                    'getUniqueId' => 'string',
-                    'tryCall' => 'bool',
-                    'checkRequirements' => 'void',
-                    'getReflection' => 'Nette\Application\UI\ComponentReflection',
-                    'loadState' => 'void',
-                    'saveState' => 'void',
-                    'getParameters' => 'array',
-                    'getParameterId' => 'string',
-                    'getPersistentParams' => 'array',
-                    'signalReceived' => 'void',
-                    'formatSignalMethod' => 'void',
-                    'link' => 'string',
-                    'lazyLink' => 'Nette\Application\UI\Link',
-                    'isLinkCurrent' => 'bool',
-                    'redirect' => 'void',
-                    'redirectPermanent' => 'void',
-                    'offsetSet' => 'void',
-                    'offsetGet' => 'Nette\ComponentModel\IComponent',
-                    'offsetExists' => 'void',
-                    'offsetUnset' => 'void',
-                ],
-                'Nette\Application\UI\Presenter' => [
-                    'getRequest' => 'Nette\Application\Request',
-                    'getPresenter' => 'Nette\Application\UI\Presenter',
-                    'getUniqueId' => 'string',
-                    'checkRequirements' => 'void',
-                    'processSignal' => 'void',
-                    'getSignal' => '?array',
-                    'isSignalReceiver' => 'bool',
-                    'getAction' => 'string',
-                    'changeAction' => 'void',
-                    'getView' => 'string',
-                    'sendTemplate' => 'void',
-                    'findLayoutTemplateFile' => '?string',
-                    'formatLayoutTemplateFiles' => 'array',
-                    'formatTemplateFiles' => 'array',
-                    'formatActionMethod' => 'string',
-                    'formatRenderMethod' => 'string',
-                    'createTemplate' => 'Nette\Application\UI\ITemplate',
-                    'getPayload' => 'stdClass',
-                    'isAjax' => 'bool',
-                    'sendPayload' => 'void',
-                    'sendJson' => 'void',
-                    'sendResponse' => 'void',
-                    'terminate' => 'void',
-                    'forward' => 'void',
-                    'redirectUrl' => 'void',
-                    'error' => 'void',
-                    'getLastCreatedRequest' => '?Nette\Application\Request',
-                    'getLastCreatedRequestFlag' => 'bool',
-                    'canonicalize' => 'void',
-                    'lastModified' => 'void',
-                    'createRequest' => '?string',
-                    'argsToParams' => 'void',
-                    'handleInvalidLink' => 'string',
-                    'storeRequest' => 'string',
-                    'restoreRequest' => 'void',
-                    'getPersistentComponents' => 'array',
-                    'getGlobalState' => 'array',
-                    'saveGlobalState' => 'void',
-                    'initGlobalParameters' => 'void',
-                    'popGlobalParameters' => 'array',
-                    'getFlashKey' => '?string',
-                    'hasFlashSession' => 'bool',
-                    'getFlashSession' => 'Nette\Http\SessionSection',
-                    'getContext' => 'Nette\DI\Container',
-                    'getHttpRequest' => 'Nette\Http\IRequest',
-                    'getHttpResponse' => 'Nette\Http\IResponse',
-                    'getUser' => 'Nette\Security\User',
-                    'getTemplateFactory' => 'Nette\Application\UI\ITemplateFactory',
-                ],
-                'Nette\Application\Exception\BadRequestException' => [
-                    'getHttpCode' => 'int',
-                ],
-                'Nette\Bridges\ApplicationDI\LatteExtension' => [
-                    'addMacro' => 'void',
-                ],
-                'Nette\Bridges\ApplicationDI\PresenterFactoryCallback' => [
-                    '__invoke' => 'Nette\Application\IPresenter',
-                ],
-                'Nette\Bridges\ApplicationLatte\ILatteFactory' => [
-                    'create' => 'Latte\Engine',
-                ],
-                'Nette\Bridges\ApplicationLatte\Template' => [
-                    'getLatte' => 'Latte\Engine',
-                    'render' => 'void',
-                    '__toString' => 'string',
-                    'getFile' => '?string',
-                    'getParameters' => 'array',
-                    '__set' => 'void',
-                    '__unset' => 'void',
-                ],
-                'Nette\Bridges\ApplicationLatte\TemplateFactory' => [
-                    'createTemplate' => 'Nette\Application\UI\ITemplate',
-                ],
-                'Nette\Bridges\ApplicationLatte\UIMacros' => [
-                    'initialize' => 'void',
-                ],
-                'Nette\Bridges\ApplicationTracy\RoutingPanel' => [
-                    'initializePanel' => 'void',
-                    'getTab' => 'string',
-                    'getPanel' => 'string',
-                ],
-                'Nette\Bridges\ApplicationLatte\UIRuntime' => [
-                    'initialize' => 'void',
-                ],
-                'Nette\Application\UI\ComponentReflection' => [
-                    'getPersistentParams' => 'array',
-                    'getPersistentComponents' => 'array',
-                    'hasCallableMethod' => 'bool',
-                    'combineArgs' => 'array',
-                    'convertType' => 'bool',
-                    'parseAnnotation' => '?array',
-                    'getParameterType' => 'array',
-                    'hasAnnotation' => 'bool',
-                    'getMethods' => 'array',
-                ],
-                'Nette\Application\UI\Control' => [
-                    'getTemplate' => 'Nette\Application\UI\ITemplate',
-                    'createTemplate' => 'Nette\Application\UI\ITemplate',
-                    'templatePrepareFilters' => 'void',
-                    'flashMessage' => 'stdClass',
-                    'redrawControl' => 'void',
-                    'isControlInvalid' => 'bool',
-                    'getSnippetId' => 'string',
-                ],
-                'Nette\Application\UI\Form' => [
-                    'getPresenter' => '?Nette\Application\UI\Presenter',
-                    'signalReceived' => 'void',
-                ],
-                'Nette\Application\UI\IRenderable' => [
-                    'redrawControl' => 'void',
-                    'isControlInvalid' => 'bool',
-                ],
-                'Nette\Application\UI\ITemplate' => [
-                    'render' => 'void',
-                    'getFile' => '?string',
-                ],
-                'Nette\Application\UI\ITemplateFactory' => [
-                    'createTemplate' => 'Nette\Application\UI\ITemplate',
-                ],
-                'Nette\Application\UI\Link' => [
-                    'getDestination' => 'string',
-                    'getParameters' => 'array',
-                    '__toString' => 'string',
-                ],
-                'Nette\Application\UI\MethodReflection' => [
-                    'hasAnnotation' => 'bool',
-                ],
-                'Nette\Application\UI\IStatePersistent' => [
-                    'loadState' => 'void',
-                    'saveState' => 'void',
-                ],
-                'Nette\Application\UI\ISignalReceiver' => [
-                    'signalReceived' => 'void',
-                ],
-                'Nette\Application\Routers\SimpleRouter' => [
-                    'match' => '?Nette\Application\Request',
-                    'getDefaults' => 'array',
-                    'getFlags' => 'int',
-                ],
-                'Nette\Application\LinkGenerator' => [
-                    'link' => 'string',
-                ],
-                'Nette\Application\MicroPresenter' => [
-                    'getContext' => '?Nette\DI\Container',
-                    'createTemplate' => 'Nette\Application\UI\ITemplate',
-                    'redirectUrl' => 'Nette\Application\Responses\RedirectResponse',
-                    'error' => 'void',
-                    'getRequest' => '?Nette\Application\Request',
-                ],
-            ],
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+                new MethodReturnType('Nette\Mail\Mailer', 'send', 'void'),
+                new MethodReturnType(
+                    'Nette\Forms\Rendering\DefaultFormRenderer',
+                    'renderControl',
+                    'Nette\Utils\Html'
+                ),
+                new MethodReturnType('Nette\Caching\Cache', 'generateKey', 'string'),
+                new MethodReturnType('Nette\Security\IResource', 'getResourceId', 'string'),
+                new MethodReturnType('Nette\Security\IAuthenticator', 'authenticate', 'Nette\Security\IIdentity'),
+                new MethodReturnType('Nette\Security\IAuthorizator', 'isAllowed', 'bool'),
+                new MethodReturnType('Nette\Security\Identity', 'getData', 'array'),
+                new MethodReturnType('Nette\Security\IIdentity', 'getRoles', 'array'),
+                new MethodReturnType('Nette\Security\User', 'getStorage', 'Nette\Security\IUserStorage'),
+                new MethodReturnType('Nette\Security\User', 'login', 'void'),
+                new MethodReturnType('Nette\Security\User', 'logout', 'void'),
+                new MethodReturnType('Nette\Security\User', 'isLoggedIn', 'bool'),
+                new MethodReturnType('Nette\Security\User', 'getIdentity', '?Nette\Security\IIdentity'),
+                new MethodReturnType('Nette\Security\User', 'getAuthenticator', '?Nette\Security\IAuthenticator'),
+                new MethodReturnType('Nette\Security\User', 'getAuthorizator', '?Nette\Security\IAuthorizator'),
+                new MethodReturnType('Nette\Security\User', 'getLogoutReason', '?int'),
+                new MethodReturnType('Nette\Security\User', 'getRoles', 'array'),
+                new MethodReturnType('Nette\Security\User', 'isInRole', 'bool'),
+                new MethodReturnType('Nette\Security\User', 'isAllowed', 'bool'),
+                new MethodReturnType('Nette\Security\IUserStorage', 'isAuthenticated', 'bool'),
+                new MethodReturnType('Nette\Security\IUserStorage', 'getIdentity', '?Nette\Security\IIdentity'),
+                new MethodReturnType('Nette\Security\IUserStorage', 'getLogoutReason', '?int'),
+                new MethodReturnType('Nette\ComponentModel\Component', 'lookup', 'Nette\ComponentModel\IComponent'),
+                new MethodReturnType('Nette\ComponentModel\Component', 'lookupPath', '?string'),
+                new MethodReturnType('Nette\ComponentModel\Component', 'monitor', 'void'),
+                new MethodReturnType('Nette\ComponentModel\Component', 'unmonitor', 'void'),
+                new MethodReturnType('Nette\ComponentModel\Component', 'attached', 'void'),
+                new MethodReturnType('Nette\ComponentModel\Component', 'detached', 'void'),
+                new MethodReturnType('Nette\ComponentModel\Component', 'getName', '?string'),
+                new MethodReturnType('Nette\ComponentModel\IComponent', 'getName', '?string'),
+                new MethodReturnType(
+                    'Nette\ComponentModel\IComponent',
+                    'getParent',
+                    '?Nette\ComponentModel\IContainer'
+                ),
+                new MethodReturnType('Nette\ComponentModel\Container', 'removeComponent', 'void'),
+                new MethodReturnType(
+                    'Nette\ComponentModel\Container',
+                    'getComponent',
+                    '?Nette\ComponentModel\IComponent'
+                ),
+                new MethodReturnType(
+                    'Nette\ComponentModel\Container',
+                    'createComponent',
+                    '?Nette\ComponentModel\IComponent'
+                ),
+                new MethodReturnType('Nette\ComponentModel\Container', 'getComponents', 'Iterator'),
+                new MethodReturnType('Nette\ComponentModel\Container', 'validateChildComponent', 'void'),
+                new MethodReturnType(
+                    'Nette\ComponentModel\Container',
+                    '_isCloning',
+                    '?Nette\ComponentModel\IComponent'
+                ),
+                new MethodReturnType('Nette\ComponentModel\IContainer', 'removeComponent', 'void'),
+                new MethodReturnType(
+                    'Nette\ComponentModel\IContainer',
+                    'getComponent',
+                    '?Nette\ComponentModel\IContainer'
+                ),
+                new MethodReturnType('Nette\ComponentModel\IContainer', 'getComponents', 'Iterator'),
+                new MethodReturnType('Nette\Application\Application', 'run', 'void'),
+                new MethodReturnType(
+                    'Nette\Application\Application',
+                    'createInitialRequest',
+                    'Nette\Application\Request'
+                ),
+                new MethodReturnType('Nette\Application\Application', 'processRequest', 'void'),
+                new MethodReturnType('Nette\Application\Application', 'processException', 'void'),
+                new MethodReturnType('Nette\Application\Application', 'getRequests', 'array'),
+                new MethodReturnType(
+                    'Nette\Application\Application',
+                    'getPresenter',
+                    '?Nette\Application\IPresenter'
+                ),
+                new MethodReturnType('Nette\Application\Application', 'getRouter', '?Nette\Application\IRouter'),
+                new MethodReturnType(
+                    'Nette\Application\Application',
+                    'getPresenterFactory',
+                    '?Nette\Application\IPresenterFactory'
+                ),
+                new MethodReturnType('Nette\Application\Helpers', 'splitName', 'array'),
+                new MethodReturnType('Nette\Application\IPresenter', 'run', 'Nette\Application\IResponse'),
+                new MethodReturnType('Nette\Application\IPresenterFactory', 'getPresenterClass', 'string'),
+                new MethodReturnType(
+                    'Nette\Application\IPresenterFactory',
+                    'createPresenter',
+                    'Nette\Application\IPresenter'
+                ),
+                new MethodReturnType('Nette\Application\PresenterFactory', 'formatPresenterClass', 'string'),
+                new MethodReturnType('Nette\Application\PresenterFactory', 'unformatPresenterClass', '?string'),
+                new MethodReturnType('Nette\Application\IResponse', 'send', 'void'),
+                new MethodReturnType('Nette\Application\Responses\FileResponse', 'getFile', 'string'),
+                new MethodReturnType('Nette\Application\Responses\FileResponse', 'getName', 'string'),
+                new MethodReturnType('Nette\Application\Responses\FileResponse', 'getContentType', 'string'),
+                new MethodReturnType(
+                    'Nette\Application\Responses\ForwardResponse',
+                    'getRequest',
+                    'Nette\Application\Request'
+                ),
+                new MethodReturnType('Nette\Application\Request', 'getPresenterName', 'string'),
+                new MethodReturnType('Nette\Application\Request', 'getParameters', 'array'),
+                new MethodReturnType('Nette\Application\Request', 'getFiles', 'array'),
+                new MethodReturnType('Nette\Application\Request', 'getMethod', '?string'),
+                new MethodReturnType('Nette\Application\Request', 'isMethod', 'bool'),
+                new MethodReturnType('Nette\Application\Request', 'hasFlag', 'bool'),
+                new MethodReturnType('Nette\Application\RedirectResponse', 'getUrl', 'string'),
+                new MethodReturnType('Nette\Application\RedirectResponse', 'getCode', 'int'),
+                new MethodReturnType('Nette\Application\JsonResponse', 'getContentType', 'string'),
+                new MethodReturnType('Nette\Application\IRouter', 'match', '?Nette\Application\Request'),
+                new MethodReturnType('Nette\Application\IRouter', 'constructUrl', '?string'),
+                new MethodReturnType('Nette\Application\Routers\Route', 'getMask', 'string'),
+                new MethodReturnType('Nette\Application\Routers\Route', 'getDefaults', 'array'),
+                new MethodReturnType('Nette\Application\Routers\Route', 'getFlags', 'int'),
+                new MethodReturnType('Nette\Application\Routers\Route', 'getTargetPresenters', '?array'),
+                new MethodReturnType('Nette\Application\Routers\RouteList', 'warmupCache', 'void'),
+                new MethodReturnType('Nette\Application\Routers\RouteList', 'offsetSet', 'void'),
+                new MethodReturnType('Nette\Application\Routers\RouteList', 'getModule', '?string'),
+                new MethodReturnType('Nette\Application\Routers\CliRouter', 'getDefaults', 'array'),
+                new MethodReturnType(
+                    'Nette\Application\UI\Component',
+                    'getPresenter',
+                    '?Nette\Application\UI\Presenter'
+                ),
+                new MethodReturnType('Nette\Application\UI\Component', 'getUniqueId', 'string'),
+                new MethodReturnType('Nette\Application\UI\Component', 'tryCall', 'bool'),
+                new MethodReturnType('Nette\Application\UI\Component', 'checkRequirements', 'void'),
+                new MethodReturnType(
+                    'Nette\Application\UI\Component',
+                    'getReflection',
+                    'Nette\Application\UI\ComponentReflection'
+                ),
+                new MethodReturnType('Nette\Application\UI\Component', 'loadState', 'void'),
+                new MethodReturnType('Nette\Application\UI\Component', 'saveState', 'void'),
+                new MethodReturnType('Nette\Application\UI\Component', 'getParameters', 'array'),
+                new MethodReturnType('Nette\Application\UI\Component', 'getParameterId', 'string'),
+                new MethodReturnType('Nette\Application\UI\Component', 'getPersistentParams', 'array'),
+                new MethodReturnType('Nette\Application\UI\Component', 'signalReceived', 'void'),
+                new MethodReturnType('Nette\Application\UI\Component', 'formatSignalMethod', 'void'),
+                new MethodReturnType('Nette\Application\UI\Component', 'link', 'string'),
+                new MethodReturnType('Nette\Application\UI\Component', 'lazyLink', 'Nette\Application\UI\Link'),
+                new MethodReturnType('Nette\Application\UI\Component', 'isLinkCurrent', 'bool'),
+                new MethodReturnType('Nette\Application\UI\Component', 'redirect', 'void'),
+                new MethodReturnType('Nette\Application\UI\Component', 'redirectPermanent', 'void'),
+                new MethodReturnType('Nette\Application\UI\Component', 'offsetSet', 'void'),
+                new MethodReturnType(
+                    'Nette\Application\UI\Component',
+                    'offsetGet',
+                    'Nette\ComponentModel\IComponent'
+                ),
+                new MethodReturnType('Nette\Application\UI\Component', 'offsetExists', 'void'),
+                new MethodReturnType('Nette\Application\UI\Component', 'offsetUnset', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getRequest', 'Nette\Application\Request'),
+                new MethodReturnType(
+                    'Nette\Application\UI\Presenter',
+                    'getPresenter',
+                    'Nette\Application\UI\Presenter'
+                ),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getUniqueId', 'string'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'checkRequirements', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'processSignal', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getSignal', '?array'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'isSignalReceiver', 'bool'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getAction', 'string'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'changeAction', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getView', 'string'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'sendTemplate', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'findLayoutTemplateFile', '?string'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'formatLayoutTemplateFiles', 'array'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'formatTemplateFiles', 'array'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'formatActionMethod', 'string'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'formatRenderMethod', 'string'),
+                new MethodReturnType(
+                    'Nette\Application\UI\Presenter',
+                    'createTemplate',
+                    'Nette\Application\UI\ITemplate'
+                ),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getPayload', 'stdClass'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'isAjax', 'bool'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'sendPayload', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'sendJson', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'sendResponse', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'terminate', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'forward', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'redirectUrl', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'error', 'void'),
+                new MethodReturnType(
+                    'Nette\Application\UI\Presenter',
+                    'getLastCreatedRequest',
+                    '?Nette\Application\Request'
+                ),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getLastCreatedRequestFlag', 'bool'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'canonicalize', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'lastModified', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'createRequest', '?string'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'argsToParams', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'handleInvalidLink', 'string'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'storeRequest', 'string'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'restoreRequest', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getPersistentComponents', 'array'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getGlobalState', 'array'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'saveGlobalState', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'initGlobalParameters', 'void'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'popGlobalParameters', 'array'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getFlashKey', '?string'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'hasFlashSession', 'bool'),
+                new MethodReturnType(
+                    'Nette\Application\UI\Presenter',
+                    'getFlashSession',
+                    'Nette\Http\SessionSection'
+                ),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getContext', 'Nette\DI\Container'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getHttpRequest', 'Nette\Http\IRequest'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getHttpResponse', 'Nette\Http\IResponse'),
+                new MethodReturnType('Nette\Application\UI\Presenter', 'getUser', 'Nette\Security\User'),
+                new MethodReturnType(
+                    'Nette\Application\UI\Presenter',
+                    'getTemplateFactory',
+                    'Nette\Application\UI\ITemplateFactory'
+                ),
+                new MethodReturnType('Nette\Application\Exception\BadRequestException', 'getHttpCode', 'int'),
+                new MethodReturnType('Nette\Bridges\ApplicationDI\LatteExtension', 'addMacro', 'void'),
+                new MethodReturnType(
+                    'Nette\Bridges\ApplicationDI\PresenterFactoryCallback',
+                    '__invoke',
+                    'Nette\Application\IPresenter'
+                ),
+                new MethodReturnType('Nette\Bridges\ApplicationLatte\ILatteFactory', 'create', 'Latte\Engine'),
+                new MethodReturnType('Nette\Bridges\ApplicationLatte\Template', 'getLatte', 'Latte\Engine'),
+                new MethodReturnType('Nette\Bridges\ApplicationLatte\Template', 'render', 'void'),
+                new MethodReturnType('Nette\Bridges\ApplicationLatte\Template', '__toString', 'string'),
+                new MethodReturnType('Nette\Bridges\ApplicationLatte\Template', 'getFile', '?string'),
+                new MethodReturnType('Nette\Bridges\ApplicationLatte\Template', 'getParameters', 'array'),
+                new MethodReturnType('Nette\Bridges\ApplicationLatte\Template', '__set', 'void'),
+                new MethodReturnType('Nette\Bridges\ApplicationLatte\Template', '__unset', 'void'),
+                new MethodReturnType(
+                    'Nette\Bridges\ApplicationLatte\TemplateFactory',
+                    'createTemplate',
+                    'Nette\Application\UI\ITemplate'
+                ),
+                new MethodReturnType('Nette\Bridges\ApplicationLatte\UIMacros', 'initialize', 'void'),
+                new MethodReturnType('Nette\Bridges\ApplicationTracy\RoutingPanel', 'initializePanel', 'void'),
+                new MethodReturnType('Nette\Bridges\ApplicationTracy\RoutingPanel', 'getTab', 'string'),
+                new MethodReturnType('Nette\Bridges\ApplicationTracy\RoutingPanel', 'getPanel', 'string'),
+                new MethodReturnType('Nette\Bridges\ApplicationLatte\UIRuntime', 'initialize', 'void'),
+                new MethodReturnType('Nette\Application\UI\ComponentReflection', 'getPersistentParams', 'array'),
+                new MethodReturnType(
+                    'Nette\Application\UI\ComponentReflection',
+                    'getPersistentComponents',
+                    'array'
+                ),
+                new MethodReturnType('Nette\Application\UI\ComponentReflection', 'hasCallableMethod', 'bool'),
+                new MethodReturnType('Nette\Application\UI\ComponentReflection', 'combineArgs', 'array'),
+                new MethodReturnType('Nette\Application\UI\ComponentReflection', 'convertType', 'bool'),
+                new MethodReturnType('Nette\Application\UI\ComponentReflection', 'parseAnnotation', '?array'),
+                new MethodReturnType('Nette\Application\UI\ComponentReflection', 'getParameterType', 'array'),
+                new MethodReturnType('Nette\Application\UI\ComponentReflection', 'hasAnnotation', 'bool'),
+                new MethodReturnType('Nette\Application\UI\ComponentReflection', 'getMethods', 'array'),
+                new MethodReturnType(
+                    'Nette\Application\UI\Control',
+                    'getTemplate',
+                    'Nette\Application\UI\ITemplate'
+                ),
+                new MethodReturnType(
+                    'Nette\Application\UI\Control',
+                    'createTemplate',
+                    'Nette\Application\UI\ITemplate'
+                ),
+                new MethodReturnType('Nette\Application\UI\Control', 'templatePrepareFilters', 'void'),
+                new MethodReturnType('Nette\Application\UI\Control', 'flashMessage', 'stdClass'),
+                new MethodReturnType('Nette\Application\UI\Control', 'redrawControl', 'void'),
+                new MethodReturnType('Nette\Application\UI\Control', 'isControlInvalid', 'bool'),
+                new MethodReturnType('Nette\Application\UI\Control', 'getSnippetId', 'string'),
+                new MethodReturnType(
+                    'Nette\Application\UI\Form',
+                    'getPresenter',
+                    '?Nette\Application\UI\Presenter'
+                ),
+                new MethodReturnType('Nette\Application\UI\Form', 'signalReceived', 'void'),
+                new MethodReturnType('Nette\Application\UI\IRenderable', 'redrawControl', 'void'),
+                new MethodReturnType('Nette\Application\UI\IRenderable', 'isControlInvalid', 'bool'),
+                new MethodReturnType('Nette\Application\UI\ITemplate', 'render', 'void'),
+                new MethodReturnType('Nette\Application\UI\ITemplate', 'getFile', '?string'),
+                new MethodReturnType(
+                    'Nette\Application\UI\ITemplateFactory',
+                    'createTemplate',
+                    'Nette\Application\UI\ITemplate'
+                ),
+                new MethodReturnType('Nette\Application\UI\Link', 'getDestination', 'string'),
+                new MethodReturnType('Nette\Application\UI\Link', 'getParameters', 'array'),
+                new MethodReturnType('Nette\Application\UI\Link', '__toString', 'string'),
+                new MethodReturnType('Nette\Application\UI\MethodReflection', 'hasAnnotation', 'bool'),
+                new MethodReturnType('Nette\Application\UI\IStatePersistent', 'loadState', 'void'),
+                new MethodReturnType('Nette\Application\UI\IStatePersistent', 'saveState', 'void'),
+                new MethodReturnType('Nette\Application\UI\ISignalReceiver', 'signalReceived', 'void'),
+                new MethodReturnType(
+                    'Nette\Application\Routers\SimpleRouter',
+                    'match',
+                    '?Nette\Application\Request'
+                ),
+                new MethodReturnType('Nette\Application\Routers\SimpleRouter', 'getDefaults', 'array'),
+                new MethodReturnType('Nette\Application\Routers\SimpleRouter', 'getFlags', 'int'),
+                new MethodReturnType('Nette\Application\LinkGenerator', 'link', 'string'),
+                new MethodReturnType('Nette\Application\MicroPresenter', 'getContext', '?Nette\DI\Container'),
+                new MethodReturnType(
+                    'Nette\Application\MicroPresenter',
+                    'createTemplate',
+                    'Nette\Application\UI\ITemplate'
+                ),
+                new MethodReturnType(
+                    'Nette\Application\MicroPresenter',
+                    'redirectUrl',
+                    'Nette\Application\Responses\RedirectResponse'
+                ),
+                new MethodReturnType('Nette\Application\MicroPresenter', 'error', 'void'),
+                new MethodReturnType('Nette\Application\MicroPresenter', 'getRequest', '?Nette\Application\Request'),
+            ]),
         ]]);
 };

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Generic\ValueObject\MethodReturnType;
 use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
 use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector;
 use Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector;
@@ -18,30 +19,26 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/nette-to-symfony-doctrine.php');
-
     $containerConfigurator->import(__DIR__ . '/nette-control-to-symfony-controller.php');
-
     $containerConfigurator->import(__DIR__ . '/nette-tester-to-phpunit.php');
-
     $containerConfigurator->import(__DIR__ . '/kdyby-to-symfony.php');
 
     $services = $containerConfigurator->services();
 
     $services->set(DeleteFactoryInterfaceRector::class);
-
     $services->set(FromHttpRequestGetHeaderToHeadersGetRector::class);
-
     $services->set(FromRequestGetParameterToAttributesGetRector::class);
-
     $services->set(RouterListToControllerAnnotationsRector::class);
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
-                'Nette\Application\IPresenter' => [
-                    'run' => 'Symfony\Component\HttpFoundation\Response',
-                ],
-            ],
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+                new MethodReturnType(
+                    'Nette\Application\IPresenter',
+                    'run',
+                    'Symfony\Component\HttpFoundation\Response'
+                ),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

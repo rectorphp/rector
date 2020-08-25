@@ -9,6 +9,7 @@ use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\Rector\New_\NewToStaticCallRector;
+use Rector\Generic\ValueObject\MethodReturnType;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -133,11 +134,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
-                'Symfony\Component\Form\AbstractTypeExtension' => [
-                    'getExtendedTypes' => 'iterable',
-                ],
-            ],
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+                new MethodReturnType('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', 'iterable'),
+            ]),
         ]]);
 
     $services->set(ChangeMethodVisibilityRector::class)

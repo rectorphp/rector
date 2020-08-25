@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
+use Rector\Generic\ValueObject\MethodReturnType;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
 use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
@@ -16,6 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ReplaceArrayWithObjectRector::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
                 // 'Rector\Renaming\Rector\MethodCall\RenameMethodRector::OLD_TO_NEW_METHODS_BY_CLASS' => MethodCallRename::class,
                 'Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS' => ParameterTypehint::class,
+                'Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES' => MethodReturnType::class,
             ],
         ]]);
 
