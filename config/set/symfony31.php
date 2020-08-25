@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
+use Rector\Generic\ValueObject\ReplacedArgument;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -10,38 +12,38 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
-            ArgumentDefaultValueReplacerRector::REPLACES_BY_METHOD_AND_TYPES => [
-                # replace args - covers https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.1.md#yaml
-                'Symfony\Component\Yaml\Yaml' => [
-                    'parse' => [
-                        1 => [
-                            [
-                                'before' => [false, false, true],
-                                'after' => 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP',
-                            ], [
-                                'before' => [false, true],
-                                'after' => 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT',
-                            ], [
-                                'before' => true,
-                                'after' => 'Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE',
-                            ], [
-                                'before' => false,
-                                'after' => 0,
-                            ],
-                        ],
-                    ],
-                    'dump' => [
-                        3 => [
-                            [
-                                'before' => [false, true],
-                                'after' => 'Symfony\Component\Yaml\Yaml::DUMP_OBJECT',
-                            ], [
-                                'before' => true,
-                                'after' => 'Symfony\Component\Yaml\Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
+            ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects([
+                new ReplacedArgument('Symfony\Component\Yaml\Yaml', 'parse', 1, [
+                    false,
+                    false,
+                    true,
+                ], 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP'),
+                new ReplacedArgument('Symfony\Component\Yaml\Yaml', 'parse', 1, [
+                    false,
+                    true,
+                ], 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT'),
+                new ReplacedArgument(
+                    'Symfony\Component\Yaml\Yaml',
+                    'parse',
+                    1,
+                    true,
+                    'Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE'
+                ),
+                new ReplacedArgument('Symfony\Component\Yaml\Yaml', 'parse', 1, false, 0),
+                new ReplacedArgument(
+                    'Symfony\Component\Yaml\Yaml',
+                    'dump',
+                    3,
+                    [false, true],
+                    'Symfony\Component\Yaml\Yaml::DUMP_OBJECT'
+                ),
+                new ReplacedArgument(
+                    'Symfony\Component\Yaml\Yaml',
+                    'dump',
+                    3,
+                    true,
+                    'Symfony\Component\Yaml\Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE'
+                ),
+            ]),
         ]]);
 };

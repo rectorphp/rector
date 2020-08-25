@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
+use Rector\Generic\ValueObject\ReplacedArgument;
 use Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Injection\ValueObject\StaticCallToMethodCall;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
@@ -93,26 +94,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
-            ArgumentDefaultValueReplacerRector::REPLACES_BY_METHOD_AND_TYPES => [
+            ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects([
                 // json 2nd argument is now int typed
-                'Nette\Utils\Json' => [
-                    'decode' => [
-                        1 => [[
-                            'before' => true,
-                            'after' => 'Nette\Utils\Json::FORCE_ARRAY',
-                        ]],
-                    ],
-                ],
+                new ReplacedArgument('Nette\Utils\Json', 'decode', 1, true, 'Nette\Utils\Json::FORCE_ARRAY'),
                 // @see https://github.com/nette/forms/commit/574b97f9d5e7a902a224e57d7d584e7afc9fefec
-                'Nette\Forms\Form' => [
-                    'getValues' => [
-                        0 => [[
-                            'before' => true,
-                            'after' => 'array',
-                        ]],
-                    ],
-                ],
-            ],
+                new ReplacedArgument('Nette\Forms\Form', 'decode', 0, true, 'array'),
+            ]),
         ]]
     );
 

@@ -412,4 +412,4 @@ parameters:
         - '#Cannot access property \$key on PhpParser\\Node\\Expr\\ArrayItem\|null#'
         - '#Class Nette\\DI\\CompilerExtension not found#'
         - '#Class Latte\\Macros\\MacroSet not found#'
-
+        - '#Method Rector\\Generic\\Rector\\ClassMethod\\ArgumentDefaultValueReplacerRector\:\:processArrayReplacement\(\) never returns array<PhpParser\\Node\\Arg\> so it can be removed from the return typehint#'

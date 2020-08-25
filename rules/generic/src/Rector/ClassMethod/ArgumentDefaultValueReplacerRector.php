@@ -15,6 +15,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\ReplacedArgument;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\ClassMethod\ArgumentDefaultValueReplacerRector\ArgumentDefaultValueReplacerRectorTest
@@ -24,22 +26,12 @@ final class ArgumentDefaultValueReplacerRector extends AbstractRector implements
     /**
      * @var string
      */
-    public const REPLACES_BY_METHOD_AND_TYPES = '$replacesByMethodAndTypes';
+    public const REPLACED_ARGUMENTS = 'replaced_arguments';
 
     /**
-     * @var string
+     * @var ReplacedArgument[]
      */
-    private const BEFORE = 'before';
-
-    /**
-     * @var string
-     */
-    private const AFTER = 'after';
-
-    /**
-     * @var mixed[]
-     */
-    private $replacesByMethodAndTypes = [];
+    private $replacedArguments = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -58,17 +50,14 @@ $someObject->someMethod(false);'
 PHP
                     ,
                     [
-                        self::REPLACES_BY_METHOD_AND_TYPES => [
-                            'SomeExampleClass' => [
-                                'someMethod' => [
-                                    0 => [
-                                        [
-                                            self::BEFORE => 'SomeClass::OLD_CONSTANT',
-                                            self::AFTER => 'false',
-                                        ],
-                                    ],
-                                ],
-                            ],
+                        self::REPLACED_ARGUMENTS => [
+                            new ReplacedArgument(
+                                'SomeExampleClass',
+                                'someMethod',
+                                0,
+                                'SomeClass::OLD_CONSTANT',
+                                'false'
+                            ),
                         ],
                     ]
                 ),
@@ -89,18 +78,16 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->replacesByMethodAndTypes as $type => $replacesByMethods) {
-            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $type)) {
+        foreach ($this->replacedArguments as $replacedArgument) {
+            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $replacedArgument->getClass())) {
                 continue;
             }
 
-            foreach ($replacesByMethods as $method => $replaces) {
-                if (! $this->isName($node->name, $method)) {
-                    continue;
-                }
-
-                $this->processReplaces($node, $replaces);
+            if (! $this->isName($node->name, $replacedArgument->getMethod())) {
+                continue;
             }
+
+            $this->processReplaces($node, $replacedArgument);
         }
 
         return $node;
@@ -108,23 +95,22 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->replacesByMethodAndTypes = $configuration[self::REPLACES_BY_METHOD_AND_TYPES] ?? [];
+        $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? [];
+        Assert::allIsInstanceOf($replacedArguments, ReplacedArgument::class);
+        $this->replacedArguments = $replacedArguments;
     }
 
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
-     * @param mixed[] $replaces
      */
-    private function processReplaces(Node $node, array $replaces): Node
+    private function processReplaces(Node $node, ReplacedArgument $replacedArgument): ?Node
     {
-        foreach ($replaces as $position => $oldToNewValues) {
-            if ($node instanceof ClassMethod) {
-                if (! isset($node->params[$position])) {
-                    continue;
-                }
-            } elseif (isset($node->args[$position])) {
-                $this->processArgs($node, $position, $oldToNewValues);
+        if ($node instanceof ClassMethod) {
+            if (! isset($node->params[$replacedArgument->getPosition()])) {
+                return null;
             }
+        } elseif (isset($node->args[$replacedArgument->getPosition()])) {
+            $this->processArgs($node, $replacedArgument);
         }
 
         return $node;
@@ -132,25 +118,20 @@ PHP
 
     /**
      * @param MethodCall|StaticCall $node
-     * @param mixed[] $oldToNewValues
      */
-    private function processArgs(Node $node, int $position, array $oldToNewValues): void
+    private function processArgs(Node $node, ReplacedArgument $replacedArgument): void
     {
+        $position = $replacedArgument->getPosition();
+
         $argValue = $this->getValue($node->args[$position]->value);
 
-        foreach ($oldToNewValues as $oldToNewValue) {
-            $oldValue = $oldToNewValue[self::BEFORE];
-            $newValue = $oldToNewValue[self::AFTER];
+        if (is_scalar($replacedArgument->getValueBefore()) && $argValue === $replacedArgument->getValueBefore()) {
+            $node->args[$position] = $this->normalizeValueToArgument($replacedArgument->getValueAfter());
+        } elseif (is_array($replacedArgument->getValueBefore())) {
+            $newArgs = $this->processArrayReplacement($node->args, $replacedArgument);
 
-            if (is_scalar($oldValue) && $argValue === $oldValue) {
-                $node->args[$position] = $this->normalizeValueToArgument($newValue);
-            } elseif (is_array($oldValue)) {
-                $newArgs = $this->processArrayReplacement($node->args, $position, $oldValue, $newValue);
-
-                if ($newArgs) {
-                    $node->args = $newArgs;
-                    break;
-                }
+            if ($newArgs) {
+                $node->args = $newArgs;
             }
         }
     }
@@ -173,23 +154,23 @@ PHP
 
     /**
      * @param Arg[] $argumentNodes
-     * @param mixed[] $before
-     * @param mixed|mixed[] $after
      * @return Arg[]|null
      */
-    private function processArrayReplacement(array $argumentNodes, int $position, array $before, $after): ?array
+    private function processArrayReplacement(array $argumentNodes, ReplacedArgument $replacedArgument): ?array
     {
-        $argumentValues = $this->resolveArgumentValuesToBeforeRecipe($argumentNodes, $position, $before);
-        if ($argumentValues !== $before) {
+        $argumentValues = $this->resolveArgumentValuesToBeforeRecipe($argumentNodes, $replacedArgument);
+        if ($argumentValues !== $replacedArgument->getValueBefore()) {
             return null;
         }
 
-        if (is_string($after)) {
-            $argumentNodes[$position] = $this->normalizeValueToArgument($after);
+        if (is_string($replacedArgument->getValueAfter())) {
+            $argumentNodes[$replacedArgument->getPosition()] = $this->normalizeValueToArgument(
+                $replacedArgument->getValueAfter()
+            );
 
             // clear following arguments
-            $argumentCountToClear = count($before);
-            for ($i = $position + 1; $i <= $position + $argumentCountToClear; ++$i) {
+            $argumentCountToClear = count($replacedArgument->getValueBefore());
+            for ($i = $replacedArgument->getPosition() + 1; $i <= $replacedArgument->getPosition() + $argumentCountToClear; ++$i) {
                 unset($argumentNodes[$i]);
             }
         }
@@ -199,21 +180,24 @@ PHP
 
     /**
      * @param Arg[] $argumentNodes
-     * @param mixed[] $before
      * @return mixed[]
      */
-    private function resolveArgumentValuesToBeforeRecipe(array $argumentNodes, int $position, array $before): array
-    {
+    private function resolveArgumentValuesToBeforeRecipe(
+        array $argumentNodes,
+        ReplacedArgument $replacedArgument
+    ): array {
         $argumentValues = [];
 
-        $beforeArgumentCount = count($before);
+        /** @var mixed[] $valueBefore */
+        $valueBefore = $replacedArgument->getValueBefore();
+        $beforeArgumentCount = count($valueBefore);
 
         for ($i = 0; $i < $beforeArgumentCount; ++$i) {
-            if (! isset($argumentNodes[$position + $i])) {
+            if (! isset($argumentNodes[$replacedArgument->getPosition() + $i])) {
                 continue;
             }
 
-            $nextArg = $argumentNodes[$position + $i];
+            $nextArg = $argumentNodes[$replacedArgument->getPosition() + $i];
             $argumentValues[] = $this->getValue($nextArg->value);
         }
 
