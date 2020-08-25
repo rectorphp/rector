@@ -5,7 +5,9 @@ declare(strict_types=1);
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
+use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # see: https://laravel.com/docs/5.7/upgrade
@@ -52,14 +54,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
-                'Illuminate\Foundation\Application' => [
-                    'register' => [
-                        1 => [
-                            'name' => 'options',
-                        ],
-                    ],
-                ],
-            ],
+            ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects([
+                new RemovedArgument('Illuminate\Foundation\Application', 'register', 1, ['name' => 'options']),
+            ]),
         ]]);
 };

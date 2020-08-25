@@ -13,6 +13,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\RemovedArgument;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\ArgumentRemoverRectorTest
@@ -22,12 +24,12 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
     /**
      * @var string
      */
-    public const POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE = '$positionsByMethodNameByClassType';
+    public const REMOVED_ARGUMENTS = 'removed_arguments';
 
     /**
-     * @var mixed[]
+     * @var RemovedArgument[]
      */
-    private $positionsByMethodNameByClassType = [];
+    private $removedArguments = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -46,15 +48,7 @@ $someObject->someMethod();'
 PHP
                     ,
                     [
-                        self::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
-                            'ExampleClass' => [
-                                'someMethod' => [
-                                    0 => [
-                                        'value' => 'true',
-                                    ],
-                                ],
-                            ],
-                        ],
+                        self::REMOVED_ARGUMENTS => [new RemovedArgument('ExampleClass', 'someMethod', 0, 'true')],
                     ]
                 ),
             ]
@@ -74,20 +68,16 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->positionsByMethodNameByClassType as $type => $positionByMethodName) {
-            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $type)) {
+        foreach ($this->removedArguments as $removedArgument) {
+            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $removedArgument->getClass())) {
                 continue;
             }
 
-            foreach ($positionByMethodName as $methodName => $positions) {
-                if (! $this->isName($node->name, $methodName)) {
-                    continue;
-                }
-
-                foreach ($positions as $position => $match) {
-                    $this->processPosition($node, $position, $match);
-                }
+            if (! $this->isName($node->name, $removedArgument->getMethod())) {
+                continue;
             }
+
+            $this->processPosition($node, $removedArgument);
         }
 
         return $node;
@@ -95,37 +85,39 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->positionsByMethodNameByClassType = $configuration[self::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE] ?? [];
+        $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? [];
+        Assert::allIsInstanceOf($removedArguments, RemovedArgument::class);
+        $this->removedArguments = $removedArguments;
     }
 
     /**
      * @param ClassMethod|StaticCall|MethodCall $node
-     * @param mixed[]|null $match
      */
-    private function processPosition(Node $node, int $position, ?array $match): void
+    private function processPosition(Node $node, RemovedArgument $removedArgument): void
     {
-        if ($match === null) {
+        if ($removedArgument->getValue() === null) {
             if ($node instanceof MethodCall || $node instanceof StaticCall) {
-                unset($node->args[$position]);
+                unset($node->args[$removedArgument->getPosition()]);
             } else {
-                unset($node->params[$position]);
+                unset($node->params[$removedArgument->getPosition()]);
             }
+
+            return;
         }
 
-        if ($match) {
-            if (isset($match['name'])) {
-                $this->removeByName($node, $position, $match['name']);
-                return;
-            }
+        $match = $removedArgument->getValue();
+        if (isset($match['name'])) {
+            $this->removeByName($node, $removedArgument->getPosition(), $match['name']);
+            return;
+        }
 
-            // only argument specific value can be removed
-            if ($node instanceof ClassMethod || ! isset($node->args[$position])) {
-                return;
-            }
+        // only argument specific value can be removed
+        if ($node instanceof ClassMethod || ! isset($node->args[$removedArgument->getPosition()])) {
+            return;
+        }
 
-            if ($this->isArgumentValueMatch($node->args[$position], $match)) {
-                unset($node->args[$position]);
-            }
+        if ($this->isArgumentValueMatch($node->args[$removedArgument->getPosition()], $match)) {
+            unset($node->args[$removedArgument->getPosition()]);
         }
     }
 

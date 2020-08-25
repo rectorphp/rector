@@ -4875,7 +4875,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
+            ArgumentRemoverRector::REMOVED_ARGUMENTS => [
                 'ExampleClass' => [
                 'someMethod' => [
                 [

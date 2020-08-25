@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
+use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Symfony\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -11,13 +13,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
-            ArgumentRemoverRector::POSITIONS_BY_METHOD_NAME_BY_CLASS_TYPE => [
-                'Symfony\Component\Yaml\Yaml' => [
-                    'parse' => [
-                        2 => ['Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'],
-                    ],
-                ],
-            ],
+            ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects([
+                new RemovedArgument(
+                    'Symfony\Component\Yaml\Yaml',
+                    'parse',
+                    2,
+                    ['Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS']
+                ),
+            ]),
         ]]);
 
     $services->set(MergeMethodAnnotationToRouteAnnotationRector::class);
