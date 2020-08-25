@@ -6897,7 +6897,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
-            UnsetAndIssetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
+            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => [
                 'SomeContainer' => [
                 'isset' => 'hasService']]
         ]]);
@@ -6922,7 +6922,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
-            UnsetAndIssetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
+            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => [
                 'SomeContainer' => [
                 'unset' => 'removeService']]
         ]]);

@@ -12,6 +12,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\MagicDisclosure\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\UnsetAndIssetToMethodCallRectorTest
@@ -21,25 +23,17 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector implements Co
     /**
      * @var string
      */
-    public const TYPE_TO_METHOD_CALLS = 'type_to_method_calls';
+    public const ISSET_UNSET_TO_METHOD_CALL = 'isset_unset_to_method_call';
 
     /**
-     * @var string
+     * @var IssetUnsetToMethodCall[]
      */
-    private const ISSET = 'isset';
-
-    /**
-     * @var string
-     */
-    private const UNSET = 'unset';
-
-    /**
-     * @var string[][]
-     */
-    private $typeToMethodCalls = [];
+    private $issetUnsetToMethodCalls = [];
 
     public function getDefinition(): RectorDefinition
     {
+        $configuration = new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService');
+
         return new RectorDefinition('Turns defined `__isset`/`__unset` calls to specific method calls.', [
             new ConfiguredCodeSample(
 <<<'PHP'
@@ -53,11 +47,7 @@ $container->hasService("someKey");
 PHP
                 ,
                 [
-                    self::TYPE_TO_METHOD_CALLS => [
-                        'SomeContainer' => [
-                            self::ISSET => 'hasService',
-                        ],
-                    ],
+                    self::ISSET_UNSET_TO_METHOD_CALL => [$configuration],
                 ]
             ),
             new ConfiguredCodeSample(
@@ -72,11 +62,7 @@ $container->removeService("someKey");
 PHP
                 ,
                 [
-                    self::TYPE_TO_METHOD_CALLS => [
-                        'SomeContainer' => [
-                            self::UNSET => 'removeService',
-                        ],
-                    ],
+                    self::ISSET_UNSET_TO_METHOD_CALL => [$configuration],
                 ]
             ),
         ]);
@@ -100,12 +86,12 @@ PHP
                 continue;
             }
 
-            foreach ($this->typeToMethodCalls as $type => $transformation) {
-                if (! $this->isObjectType($arrayDimFetchNode, $type)) {
+            foreach ($this->issetUnsetToMethodCalls as $issetUnsetToMethodCall) {
+                if (! $this->isObjectType($arrayDimFetchNode, $issetUnsetToMethodCall->getType())) {
                     continue;
                 }
 
-                $newNode = $this->processArrayDimFetchNode($node, $arrayDimFetchNode, $transformation);
+                $newNode = $this->processArrayDimFetchNode($node, $arrayDimFetchNode, $issetUnsetToMethodCall);
                 if ($newNode !== null) {
                     return $newNode;
                 }
@@ -117,37 +103,37 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->typeToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? [];
+        $issetUnsetToMethodCalls = $configuration[self::ISSET_UNSET_TO_METHOD_CALL] ?? [];
+        Assert::allIsInstanceOf($issetUnsetToMethodCalls, IssetUnsetToMethodCall::class);
+
+        $this->issetUnsetToMethodCalls = $issetUnsetToMethodCalls;
     }
 
-    /**
-     * @param string[] $methodsNamesByType
-     */
     private function processArrayDimFetchNode(
         Node $node,
         ArrayDimFetch $arrayDimFetch,
-        array $methodsNamesByType
+        IssetUnsetToMethodCall $issetUnsetToMethodCall
     ): ?Node {
         if ($node instanceof Isset_) {
-            if (! isset($methodsNamesByType[self::ISSET])) {
+            if (! $issetUnsetToMethodCall->getIssetMethodCall()) {
                 return null;
             }
 
             return $this->createMethodCall(
                 $arrayDimFetch->var,
-                $methodsNamesByType[self::ISSET],
+                $issetUnsetToMethodCall->getIssetMethodCall(),
                 [$arrayDimFetch->dim]
             );
         }
 
         if ($node instanceof Unset_) {
-            if (! isset($methodsNamesByType[self::UNSET])) {
+            if (! $issetUnsetToMethodCall->getUnsedMethodCall()) {
                 return null;
             }
 
             return $this->createMethodCall(
                 $arrayDimFetch->var,
-                $methodsNamesByType[self::UNSET],
+                $issetUnsetToMethodCall->getUnsedMethodCall(),
                 [$arrayDimFetch->dim]
             );
         }
