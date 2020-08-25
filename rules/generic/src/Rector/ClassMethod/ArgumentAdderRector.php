@@ -17,10 +17,13 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\AddedArgument;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\ArgumentAdderRectorTest
@@ -30,32 +33,36 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     /**
      * @var string
      */
-    public const POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES = '$positionWithDefaultValueByMethodNamesByClassTypes';
+    public const ADDED_ARGUMENTS = 'added_arguments';
 
     /**
-     * @var string[][][][][]
+     * @var string
      */
-    private const EXAMPLE_CONFIGURATION = [
-        self::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
-            'SomeExampleClass' => [
-                'someMethod' => [
-                    0 => [
-                        'name' => 'someArgument',
-                        'default_value' => 'true',
-                        'type' => 'SomeType',
-                    ],
-                ],
-            ],
-        ],
-    ];
+    public const SCOPE_PARENT_CALL = 'parent_call';
 
     /**
-     * @var mixed[]
+     * @var string
      */
-    private $positionWithDefaultValueByMethodNamesByClassTypes = [];
+    public const SCOPE_METHOD_CALL = 'method_call';
+
+    /**
+     * @var string
+     */
+    public const SCOPE_CLASS_METHOD = 'class_method';
+
+    /**
+     * @var AddedArgument[]
+     */
+    private $addedArguments = [];
 
     public function getDefinition(): RectorDefinition
     {
+        $exampleConfiguration = [
+            self::ADDED_ARGUMENTS => [
+                new AddedArgument('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType'),
+            ],
+        ];
+
         return new RectorDefinition(
             'This Rector adds new default arguments in calls of defined methods and class types.',
             [
@@ -70,7 +77,7 @@ $someObject = new SomeExampleClass;
 $someObject->someMethod(true);
 PHP
                     ,
-                    self::EXAMPLE_CONFIGURATION
+                    $exampleConfiguration
                 ),
                 new ConfiguredCodeSample(
                     <<<'PHP'
@@ -91,7 +98,7 @@ class MyCustomClass extends SomeExampleClass
 }
 PHP
                     ,
-                    self::EXAMPLE_CONFIGURATION
+                    $exampleConfiguration
                 ),
             ]
         );
@@ -110,18 +117,16 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->positionWithDefaultValueByMethodNamesByClassTypes as $type => $positionWithDefaultValueByMethodNames) {
-            if (! $this->isObjectTypeMatch($node, $type)) {
+        foreach ($this->addedArguments as $addedArgument) {
+            if (! $this->isObjectTypeMatch($node, $addedArgument->getClass())) {
                 continue;
             }
 
-            foreach ($positionWithDefaultValueByMethodNames as $method => $positionWithDefaultValues) {
-                if (! $this->isName($node->name, $method)) {
-                    continue;
-                }
-
-                $this->processPositionWithDefaultValues($node, $positionWithDefaultValues);
+            if (! $this->isName($node->name, $addedArgument->getMethod())) {
+                continue;
             }
+
+            $this->processPositionWithDefaultValues($node, $addedArgument);
         }
 
         return $node;
@@ -132,7 +137,9 @@ PHP
      */
     public function configure(array $configuration): void
     {
-        $this->positionWithDefaultValueByMethodNamesByClassTypes = $configuration[self::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES] ?? [];
+        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? [];
+        Assert::allIsInstanceOf($addedArguments, AddedArgument::class);
+        $this->addedArguments = $addedArguments;
     }
 
     /**
@@ -162,48 +169,56 @@ PHP
 
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
-     * @param mixed[] $positionWithDefaultValues
      */
-    private function processPositionWithDefaultValues(Node $node, array $positionWithDefaultValues): void
+    private function processPositionWithDefaultValues(Node $node, AddedArgument $addedArgument): void
     {
-        foreach ($positionWithDefaultValues as $position => $parameterConfiguration) {
-            $name = $parameterConfiguration['name'];
-            $defaultValue = $parameterConfiguration['default_value'] ?? null;
-            $type = $parameterConfiguration['type'] ?? null;
+        if ($this->shouldSkipParameter($node, $addedArgument)) {
+            return;
+        }
 
-            if ($this->shouldSkipParameter($node, $position, $name, $parameterConfiguration)) {
-                continue;
-            }
+        $defaultValue = $addedArgument->getArgumentDefaultValue();
+        $argumentType = $addedArgument->getArgumentType();
 
-            if ($node instanceof ClassMethod) {
-                $this->addClassMethodParam($node, $name, $defaultValue, $type, $position);
-            } elseif ($node instanceof StaticCall) {
-                $this->processStaticCall($node, $position, $name);
-            } else {
-                $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
-                $node->args[$position] = $arg;
+        $position = $addedArgument->getPosition();
+
+        if ($node instanceof ClassMethod) {
+            $argumentName = $addedArgument->getArgumentName();
+            if ($argumentName === null) {
+                throw new ShouldNotHappenException();
             }
+            $this->addClassMethodParam($node, $argumentName, $defaultValue, $argumentType, $position);
+        } elseif ($node instanceof StaticCall) {
+            $argumentName = $addedArgument->getArgumentName();
+            if ($argumentName === null) {
+                throw new ShouldNotHappenException();
+            }
+            $this->processStaticCall($node, $position, $argumentName);
+        } else {
+            $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
+            $node->args[$position] = $arg;
         }
     }
 
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
-     * @param mixed[] $parameterConfiguration
      */
-    private function shouldSkipParameter(Node $node, int $position, string $name, array $parameterConfiguration): bool
+    private function shouldSkipParameter(Node $node, AddedArgument $addedArgument): bool
     {
+        $position = $addedArgument->getPosition();
+        $argumentName = $addedArgument->getArgumentName();
+
         if ($node instanceof ClassMethod) {
             // already added?
-            return isset($node->params[$position]) && $this->isName($node->params[$position], $name);
+            return isset($node->params[$position]) && $this->isName($node->params[$position], $argumentName);
         }
 
         // already added?
-        if (isset($node->args[$position]) && $this->isName($node->args[$position], $name)) {
+        if (isset($node->args[$position]) && $this->isName($node->args[$position], $argumentName)) {
             return true;
         }
 
         // is correct scope?
-        return ! $this->isInCorrectScope($node, $parameterConfiguration);
+        return ! $this->isInCorrectScope($node, $addedArgument);
     }
 
     /**
@@ -239,19 +254,17 @@ PHP
 
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
-     * @param mixed[] $parameterConfiguration
      */
-    private function isInCorrectScope(Node $node, array $parameterConfiguration): bool
+    private function isInCorrectScope(Node $node, AddedArgument $addedArgument): bool
     {
-        if (! isset($parameterConfiguration['scope'])) {
+        if ($addedArgument->getScope() === null) {
             return true;
         }
 
-        /** @var string[] $scope */
-        $scope = $parameterConfiguration['scope'];
+        $scope = $addedArgument->getScope();
 
         if ($node instanceof ClassMethod) {
-            return in_array('class_method', $scope, true);
+            return $scope === self::SCOPE_CLASS_METHOD;
         }
 
         if ($node instanceof StaticCall) {
@@ -260,13 +273,13 @@ PHP
             }
 
             if ($this->isName($node->class, 'parent')) {
-                return in_array('parent_call', $scope, true);
+                return $scope === self::SCOPE_PARENT_CALL;
             }
 
-            return in_array('method_call', $scope, true);
+            return $scope === self::SCOPE_METHOD_CALL;
         }
 
         // MethodCall
-        return in_array('method_call', $scope, true);
+        return $scope === self::SCOPE_METHOD_CALL;
     }
 }

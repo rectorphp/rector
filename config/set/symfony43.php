@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
+
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Generic\ValueObject\AddedArgument;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -80,17 +82,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#workflow
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
-                'Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface' => [
-                    'setMarking' => [
-                        # type: array
-                        2 => [
-                            'name' => 'context',
-                            'default_value' => [],
-                        ],
-                    ],
-                ],
-            ],
+            ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
+                new AddedArgument(
+                    'Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface',
+                    'setMarking',
+                    2,
+                    'context',
+                    []
+                ),
+            ]),
         ]]);
 
     $services->set(AddMethodParentCallRector::class)

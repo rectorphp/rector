@@ -9,6 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeContainerBuilder;
 use Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeParentClient;
+use Rector\Generic\ValueObject\AddedArgument;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArgumentAdderRectorTest extends AbstractRectorTestCase
@@ -33,35 +34,29 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
     {
         return [
             ArgumentAdderRector::class => [
-                ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
-                    SomeContainerBuilder::class => [
-                        'compile' => [
-                            0 => [
-                                'name' => 'isCompiled',
-                                'default_value' => false,
-                            ],
-                        ],
-                        'addCompilerPass' => [
-                            2 => [
-                                'name' => 'priority',
-                                'default_value' => 0,
-                                'type' => 'int',
-                            ],
-                        ],
-                    ],
+                ArgumentAdderRector::ADDED_ARGUMENTS => [
+                    new AddedArgument(SomeContainerBuilder::class, 'compile', 0, 'isCompiled', false),
+                    new AddedArgument(SomeContainerBuilder::class, 'addCompilerPass', 2, 'priority', 0, 'int'),
 
                     // scoped
-                    SomeParentClient::class => [
-                        'submit' => [
-                            2 => [
-                                'name' => 'serverParameters',
-                                'default_value' => [],
-                                'type' => 'array',
-                                // scope!
-                                'scope' => ['parent_call', 'class_method'],
-                            ],
-                        ],
-                    ],
+                    new AddedArgument(
+                        SomeParentClient::class,
+                        'submit',
+                        2,
+                        'serverParameters',
+                        [],
+                        'array',
+                        ArgumentAdderRector::SCOPE_PARENT_CALL
+                    ),
+                    new AddedArgument(
+                        SomeParentClient::class,
+                        'submit',
+                        2,
+                        'serverParameters',
+                        [],
+                        'array',
+                        ArgumentAdderRector::SCOPE_CLASS_METHOD
+                    ),
                 ],
             ],
         ];

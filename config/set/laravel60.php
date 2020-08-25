@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
+use Rector\Generic\ValueObject\AddedArgument;
 use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -85,40 +86,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
-                'Illuminate\Database\Capsule\Manager' => [
-                    'table' => [
-                        1 => [
-                            # https://github.com/laravel/framework/commit/6c1e014943a508afb2c10869c3175f7783a004e1
-                            'name' => 'as',
-                            'default_value' => 'null',
-                        ],
-                    ],
-                ],
-                'Illuminate\Database\Connection' => [
-                    'table' => [
-                        1 => [
-                            'name' => 'as',
-                            'default_value' => 'null',
-                        ],
-                    ],
-                ],
-                'Illuminate\Database\ConnectionInterface' => [
-                    'table' => [
-                        1 => [
-                            'name' => 'as',
-                            'default_value' => 'null',
-                        ],
-                    ],
-                ],
-                'Illuminate\Database\Query\Builder' => [
-                    'from' => [
-                        1 => [
-                            'name' => 'as',
-                            'default_value' => 'null',
-                        ],
-                    ],
-                ],
-            ],
+            ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
+                // https://github.com/laravel/framework/commit/6c1e014943a508afb2c10869c3175f7783a004e1
+                new AddedArgument('Illuminate\Database\Capsule\Manager', 'table', 1, 'as', 'null'),
+                new AddedArgument('Illuminate\Database\Connection', 'table', 1, 'as', 'null'),
+                new AddedArgument('Illuminate\Database\ConnectionInterface', 'table', 1, 'as', 'null'),
+                new AddedArgument('Illuminate\Database\Query\Builder', 'from', 1, 'as', 'null'),
+            ]),
         ]]);
 };

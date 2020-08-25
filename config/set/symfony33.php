@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Generic\ValueObject\AddedArgument;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -15,30 +16,29 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
-                'Symfony\Component\DependencyInjection\ContainerBuilder' => [
-                    'compile' => [
-                        2 => [
-                            'name' => '__unknown__',
-                            'default_value' => 0,
-                        ],
-                    ],
-                    'addCompilerPass' => [
-                        2 => [
-                            'name' => 'priority',
-                            'default_value' => 0,
-                        ],
-                    ],
-                ],
-                'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph' => [
-                    'connect' => [
-                        6 => [
-                            'name' => 'weak',
-                            'default_value' => false,
-                        ],
-                    ],
-                ],
-            ],
+            ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
+                new AddedArgument(
+                    'Symfony\Component\DependencyInjection\ContainerBuilder',
+                    'compile',
+                    2,
+                    '__unknown__',
+                    0
+                ),
+                new AddedArgument(
+                    'Symfony\Component\DependencyInjection\ContainerBuilder',
+                    'addCompilerPass',
+                    2,
+                    'priority',
+                    0
+                ),
+                new AddedArgument(
+                    'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph',
+                    'connect',
+                    6,
+                    'weak',
+                    false
+                ),
+            ]),
         ]]);
 
     $services->set(ConsoleExceptionToErrorEventConstantRector::class);
