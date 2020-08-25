@@ -4839,7 +4839,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
-            ArgumentDefaultValueReplacerRector::REPLACES_BY_METHOD_AND_TYPES => [
+            ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => [
                 'SomeExampleClass' => [
                 'someMethod' => [
                 [
