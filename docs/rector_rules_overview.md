@@ -6233,7 +6233,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(SwapClassMethodArgumentsRector::class)
         ->call('configure', [[
-            SwapClassMethodArgumentsRector::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS => [
+            SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => [
                 'SomeClass' => [
                 'run' => [
                 1, 0]]]

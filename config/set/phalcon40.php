@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector;
+use Rector\Generic\ValueObject\ArgumentSwap;
 use Rector\Phalcon\Rector\Assign\FlashWithCssClassesToExtraCallRector;
 use Rector\Phalcon\Rector\Assign\NewApplicationToToFactoryWithDefaultContainerRector;
 use Rector\Phalcon\Rector\MethodCall\AddRequestToHandleMethodCallRector;
@@ -21,11 +22,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # see https://github.com/rectorphp/rector/issues/2408#issue-534441142
     $services->set(SwapClassMethodArgumentsRector::class)
         ->call('configure', [[
-            SwapClassMethodArgumentsRector::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS => [
-                'Phalcon\Model' => [
-                    'assign' => [0, 2, 1],
-                ],
-            ],
+            SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => inline_value_objects([
+                new ArgumentSwap('Phalcon\Model', 'assign', [0, 2, 1]),
+            ]),
         ]]);
 
     # for class renames is better - https://docs.phalcon.io/4.0/en/upgrade#cheat-sheet

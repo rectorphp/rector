@@ -13,6 +13,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\ArgumentSwap;
 
 /**
  * @see \Rector\Generic\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\SwapClassMethodArgumentsRectorTest
@@ -22,12 +23,12 @@ final class SwapClassMethodArgumentsRector extends AbstractRector implements Con
     /**
      * @var string
      */
-    public const NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS = 'new_argument_positions_by_method_and_class';
+    public const ARGUMENT_SWAPS = 'argument_swaps';
 
     /**
-     * @var int[][][]
+     * @var ArgumentSwap[]
      */
-    private $newArgumentPositionsByMethodAndClass = [];
+    private $argumentSwaps = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -55,11 +56,7 @@ PHP
 
             ,
             [
-                self::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS => [
-                    'SomeClass' => [
-                        'run' => [1, 0],
-                    ],
-                ],
+                self::ARGUMENT_SWAPS => [new ArgumentSwap('SomeClass', 'run', [1, 0])],
             ]),
         ]);
     }
@@ -77,12 +74,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->newArgumentPositionsByMethodAndClass as $class => $methodNameAndNewArgumentPositions) {
-            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $class)) {
+        foreach ($this->argumentSwaps as $argumentSwap) {
+            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $argumentSwap->getClass())) {
                 continue;
             }
 
-            $this->refactorArgumentPositions($methodNameAndNewArgumentPositions, $node);
+            $this->refactorArgumentPositions($argumentSwap, $node);
         }
 
         return $node;
@@ -90,24 +87,22 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->newArgumentPositionsByMethodAndClass = $configuration[self::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS] ?? [];
+        $this->argumentSwaps = $configuration[self::ARGUMENT_SWAPS] ?? [];
     }
 
     /**
      * @param StaticCall|MethodCall|ClassMethod $node
      */
-    private function refactorArgumentPositions(array $methodNameAndNewArgumentPositions, Node $node): void
+    private function refactorArgumentPositions(ArgumentSwap $argumentSwap, Node $node): void
     {
-        foreach ($methodNameAndNewArgumentPositions as $methodName => $newArgumentPositions) {
-            if (! $this->isMethodStaticCallOrClassMethodName($node, $methodName)) {
-                continue;
-            }
+        if (! $this->isMethodStaticCallOrClassMethodName($node, $argumentSwap->getMethod())) {
+            return;
+        }
 
-            if ($node instanceof ClassMethod) {
-                $this->swapParameters($node, $newArgumentPositions);
-            } else {
-                $this->swapArguments($node, $newArgumentPositions);
-            }
+        if ($node instanceof ClassMethod) {
+            $this->swapParameters($node, $argumentSwap->getOrder());
+        } else {
+            $this->swapArguments($node, $argumentSwap->getOrder());
         }
     }
 
@@ -132,7 +127,7 @@ PHP
     }
 
     /**
-     * @param int[] $newParameterPositions
+     * @param array<int, int> $newParameterPositions
      */
     private function swapParameters(ClassMethod $classMethod, array $newParameterPositions): void
     {
