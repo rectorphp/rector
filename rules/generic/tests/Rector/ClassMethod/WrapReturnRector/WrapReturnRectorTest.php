@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
+use Rector\Generic\ValueObject\TypeMethodWrap;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class WrapReturnRectorTest extends AbstractRectorTestCase
@@ -32,10 +33,8 @@ final class WrapReturnRectorTest extends AbstractRectorTestCase
     {
         return [
             WrapReturnRector::class => [
-                WrapReturnRector::TYPE_TO_METHOD_TO_WRAP => [
-                    SomeReturnClass::class => [
-                        'getItem' => 'array',
-                    ],
+                WrapReturnRector::TYPE_METHOD_WRAPS => [
+                    new TypeMethodWrap(SomeReturnClass::class, 'getItem', true),
                 ],
             ],
         ];

@@ -283,6 +283,9 @@
             "vendor/bin/phpstan analyse --ansi --error-format symplify",
             "vendor/bin/phpstan analyse config/set --ansi --error-format symplify"
         ],
+        "phpstan-config": [
+            "vendor/bin/phpstan analyse config/set --ansi --error-format symplify"
+        ],
         "changelog": [
             "vendor/bin/changelog-linker dump-merges --in-categories --ansi",
             "vendor/bin/changelog-linker link --ansi",
