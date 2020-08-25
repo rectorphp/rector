@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
+use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
@@ -31,16 +32,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
-                'Illuminate\Routing\Router' => [
-                    'addRoute' => 'public',
-                ],
-                'Illuminate\Contracts\Auth\Access\Gate' => [
-                    'raw' => 'public',
-                ],
-                'Illuminate\Database\Grammar' => [
-                    'getDateFormat' => 'public',
-                ],
-            ],
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
+                new MethodVisibility('Illuminate\Routing\Router', 'addRoute', 'public'),
+                new MethodVisibility('Illuminate\Contracts\Auth\Access\Gate', 'raw', 'public'),
+                new MethodVisibility('Illuminate\Database\Grammar', 'getDateFormat', 'public'),
+            ]),
         ]]);
 };

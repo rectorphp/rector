@@ -7,6 +7,7 @@ use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -314,14 +315,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
-                'Cake\Mailer\MailerAwareTrait' => [
-                    'getMailer' => 'protected',
-                ],
-                'Cake\View\CellTrait' => [
-                    'cell' => 'protected',
-                ],
-            ],
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
+                new MethodVisibility('Cake\Mailer\MailerAwareTrait', 'getMailer', 'protected'),
+                new MethodVisibility('Cake\View\CellTrait', 'cell', 'protected'),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

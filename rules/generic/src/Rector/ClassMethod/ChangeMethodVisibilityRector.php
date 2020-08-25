@@ -10,7 +10,9 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest
@@ -20,12 +22,12 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
     /**
      * @var string
      */
-    public const METHOD_TO_VISIBILITY_BY_CLASS = 'method_to_visibility_by_class';
+    public const METHOD_VISIBILITIES = 'method_visibilities';
 
     /**
-     * @var string[][] { class => [ method name => visibility ] }
+     * @var MethodVisibility[]
      */
-    private $methodToVisibilityByClass = [];
+    private $methodVisibilities = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -65,10 +67,8 @@ class MyClass extends FrameworkClass
 PHP
                 ,
                 [
-                    self::METHOD_TO_VISIBILITY_BY_CLASS => [
-                        'FrameworkClass' => [
-                            'someMethod' => 'protected',
-                        ],
+                    self::METHOD_VISIBILITIES => [
+                        new MethodVisibility('FrameworkClass', 'someMethod', 'protected'),
                     ],
                 ]
             )]
@@ -94,28 +94,29 @@ PHP
         }
 
         $nodeParentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if (! isset($this->methodToVisibilityByClass[$nodeParentClassName])) {
-            return null;
-        }
-        $methodName = $this->getName($node);
-        if ($methodName === null) {
-            return null;
-        }
 
-        if (! isset($this->methodToVisibilityByClass[$nodeParentClassName][$methodName])) {
-            return null;
+        foreach ($this->methodVisibilities as $methodVisibility) {
+            if ($methodVisibility->getClass() !== $nodeParentClassName) {
+                continue;
+            }
+
+            if (! $this->isName($node, $methodVisibility->getMethod())) {
+                continue;
+            }
+
+            $this->changeNodeVisibility($node, $methodVisibility->getVisibility());
+
+            return $node;
         }
-
-        $nodeParentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        $visibility = $this->methodToVisibilityByClass[$nodeParentClassName][$methodName];
-
-        $this->changeNodeVisibility($node, $visibility);
 
         return $node;
     }
 
     public function configure(array $configuration): void
     {
-        $this->methodToVisibilityByClass = $configuration[self::METHOD_TO_VISIBILITY_BY_CLASS] ?? [];
+        $methodVisibilities = $configuration[self::METHOD_VISIBILITIES] ?? [];
+        Assert::allIsInstanceOf($methodVisibilities, MethodVisibility::class);
+
+        $this->methodVisibilities = $methodVisibilities;
     }
 }

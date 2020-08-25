@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Tests\Rector\ClassMethod\ChangeMethodVisibilityRector\Source\ParentObject;
+use Rector\Generic\ValueObject\MethodVisibility;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
@@ -32,13 +33,11 @@ final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
     {
         return [
             ChangeMethodVisibilityRector::class => [
-                ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
-                    ParentObject::class => [
-                        'toBePublicMethod' => 'public',
-                        'toBeProtectedMethod' => 'protected',
-                        'toBePrivateMethod' => 'private',
-                        'toBePublicStaticMethod' => 'public',
-                    ],
+                ChangeMethodVisibilityRector::METHOD_VISIBILITIES => [
+                    new MethodVisibility(ParentObject::class, 'toBePublicMethod', 'public'),
+                    new MethodVisibility(ParentObject::class, 'toBeProtectedMethod', 'protected'),
+                    new MethodVisibility(ParentObject::class, 'toBePrivateMethod', 'private'),
+                    new MethodVisibility(ParentObject::class, 'toBePublicStaticMethod', 'public'),
                 ],
             ],
         ];
