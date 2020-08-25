@@ -73,12 +73,15 @@ PHP
         }
 
         foreach ($node->args as $key => $arg) {
-            $argValue = $this->getValue($arg->value);
-
-            if (! $scope->hasVariableType($argValue)->no()) {
+            if ($arg->value instanceof Array_) {
+                $this->unsetUnusedArrayElements($node, $scope, $arg->value);
                 continue;
             }
 
+            $argValue = $this->getValue($arg->value);
+            if (! $scope->hasVariableType($argValue)->no()) {
+                continue;
+            }
             unset($node->args[$key]);
         }
 
@@ -87,5 +90,21 @@ PHP
         }
 
         return $node;
+    }
+
+    private function unsetUnusedArrayElements(Node $node, Scope $scope, Array_ $array): void
+    {
+        foreach ($array->items as $key => $item) {
+            $value = $this->getValue($item->value);
+            if ($scope->hasVariableType($value)->yes()) {
+                continue;
+            }
+
+            unset($array->items[$key]);
+        }
+
+        if ($arg->value->items === []) {
+            unset($node->args[$key]);
+        }
     }
 }
