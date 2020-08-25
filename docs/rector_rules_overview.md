@@ -12446,7 +12446,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameAnnotationRector::class)
         ->call('configure', [[
-            RenameAnnotationRector::CLASS_TO_ANNOTATION_MAP => [
+            RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => [
                 'PHPUnit\Framework\TestCase' => [
                 'test' => 'scenario']]
         ]]);
