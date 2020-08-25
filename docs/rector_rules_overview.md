@@ -4995,7 +4995,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => [
                 'FrameworkClass' => [
                 'someMethod' => 'protected']]
         ]]);

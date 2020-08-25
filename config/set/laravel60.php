@@ -77,7 +77,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => [
                 'Illuminate\Foundation\Http\FormRequest' => [
                     # https://github.com/laravel/framework/commit/e47e91417ab22e6af001db1dcbe75b87db218c1d
                     'validationData' => 'public',

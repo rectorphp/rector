@@ -144,7 +144,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
-            ChangeMethodVisibilityRector::METHOD_TO_VISIBILITY_BY_CLASS => [
+            ChangeMethodVisibilityRector::METHOD_VISIBILITIES => [
                 'Symfony\Component\Form\AbstractTypeExtension' => [
                     'getExtendedTypes' => 'static',
                 ],
