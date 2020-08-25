@@ -85,7 +85,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
+            ArgumentAdderRector::ADDED_ARGUMENTS => [
                 'Illuminate\Database\Capsule\Manager' => [
                     'table' => [
                         1 => [

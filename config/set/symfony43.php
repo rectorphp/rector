@@ -80,7 +80,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#workflow
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
+            ArgumentAdderRector::ADDED_ARGUMENTS => [
                 'Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface' => [
                     'setMarking' => [
                         # type: array

@@ -4772,7 +4772,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
+            ArgumentAdderRector::ADDED_ARGUMENTS => [
                 'SomeExampleClass' => [
                 'someMethod' => [
                 [
@@ -4799,7 +4799,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::POSITION_WITH_DEFAULT_VALUE_BY_METHOD_NAMES_BY_CLASS_TYPES => [
+            ArgumentAdderRector::ADDED_ARGUMENTS => [
                 'SomeExampleClass' => [
                 'someMethod' => [
                 [
