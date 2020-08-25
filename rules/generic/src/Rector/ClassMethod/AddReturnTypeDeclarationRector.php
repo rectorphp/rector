@@ -71,7 +71,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         foreach ($this->methodReturnTypes as $methodReturnType) {
-            if (! $this->isObjectType($node, $methodReturnType->getType())) {
+            if (! $this->isObjectType($node, $methodReturnType->getClass())) {
                 continue;
             }
 
@@ -79,7 +79,7 @@ PHP
                 continue;
             }
 
-            $this->processClassMethodNodeWithTypehints($node, $methodReturnType->getType());
+            $this->processClassMethodNodeWithTypehints($node, $methodReturnType->getReturnType());
 
             return $node;
         }
@@ -97,14 +97,14 @@ PHP
 
     private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, string $newType): void
     {
-        // already set → no change
-        if ($classMethod->returnType && $this->isName($classMethod->returnType, $newType)) {
-            return;
-        }
-
         // remove it
         if ($newType === '') {
             $classMethod->returnType = null;
+            return;
+        }
+
+        // already set → no change
+        if ($classMethod->returnType && $this->isName($classMethod->returnType, $newType)) {
             return;
         }
 

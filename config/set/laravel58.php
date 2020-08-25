@@ -21,13 +21,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects(
-                [
-                    new MethodReturnType('Illuminate\Contracts\Cache\Repository', 'put', 'bool'),
-                    new MethodReturnType('Illuminate\Contracts\Cache\Repository', 'forever', 'bool'),
-                    new MethodReturnType('Illuminate\Contracts\Cache\Store', 'put', 'bool'),
-                    new MethodReturnType('Illuminate\Contracts\Cache\Store', 'putMany', 'bool'),
-                    new MethodReturnType('Illuminate\Contracts\Cache\Store', 'forever', 'bool'), ]
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+                new MethodReturnType('Illuminate\Contracts\Cache\Repository', 'put', 'bool'),
+                new MethodReturnType('Illuminate\Contracts\Cache\Repository', 'forever', 'bool'),
+                new MethodReturnType('Illuminate\Contracts\Cache\Store', 'put', 'bool'),
+                new MethodReturnType('Illuminate\Contracts\Cache\Store', 'putMany', 'bool'),
+                new MethodReturnType('Illuminate\Contracts\Cache\Store', 'forever', 'bool'), ]
             ),
         ]]);
 

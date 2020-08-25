@@ -15,26 +15,19 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/nette-to-symfony-doctrine.php');
-
     $containerConfigurator->import(__DIR__ . '/nette-control-to-symfony-controller.php');
-
     $containerConfigurator->import(__DIR__ . '/nette-tester-to-phpunit.php');
-
     $containerConfigurator->import(__DIR__ . '/kdyby-to-symfony.php');
 
     $services = $containerConfigurator->services();
 
     $services->set(DeleteFactoryInterfaceRector::class);
-
     $services->set(FromHttpRequestGetHeaderToHeadersGetRector::class);
-
     $services->set(FromRequestGetParameterToAttributesGetRector::class);
-
     $services->set(RouterListToControllerAnnotationsRector::class);
 
     $services->set(AddReturnTypeDeclarationRector::class)

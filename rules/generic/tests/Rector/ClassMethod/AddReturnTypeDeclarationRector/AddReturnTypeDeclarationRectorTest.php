@@ -50,7 +50,7 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
                         '?SomeType'
                     ),
                     new MethodReturnType(
-                        'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClassclass',
+                        'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\RemoveReturnType',
                         'clear',
                         ''
                     ),

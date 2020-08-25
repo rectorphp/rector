@@ -15,10 +15,6 @@ class SomeClass
     public function nullable(): array
     {
     }
-
-    public function clear(): array
-    {
-    }
 }
 
 ?>
@@ -38,10 +34,6 @@ class SomeClass
     }
 
     public function nullable(): ?\SomeType
-    {
-    }
-
-    public function clear()
     {
     }
 }

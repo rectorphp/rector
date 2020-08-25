@@ -19,13 +19,13 @@ final class MethodReturnType
     /**
      * @var string
      */
-    private $type;
+    private $returnType;
 
-    public function __construct(string $class, string $method, string $type)
+    public function __construct(string $class, string $method, string $returnType)
     {
         $this->class = $class;
         $this->method = $method;
-        $this->type = $type;
+        $this->returnType = $returnType;
     }
 
     public function getClass(): string
@@ -38,8 +38,8 @@ final class MethodReturnType
         return $this->method;
     }
 
-    public function getType(): string
+    public function getReturnType(): string
     {
-        return $this->type;
+        return $this->returnType;
     }
 }
