@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\String_\StringToClassConstantRector;
+use Rector\Generic\ValueObject\StringToClassConstant;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # see: https://laravel.com/docs/5.2/upgrade
@@ -21,22 +23,34 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StringToClassConstantRector::class)
         ->call('configure', [[
-            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => [
-                'artisan.start' => ['Illuminate\Console\Events\ArtisanStarting', 'class'],
-                'auth.attempting' => ['Illuminate\Auth\Events\Attempting', 'class'],
-                'auth.login' => ['Illuminate\Auth\Events\Login', 'class'],
-                'auth.logout' => ['Illuminate\Auth\Events\Logout', 'class'],
-                'cache.missed' => ['Illuminate\Cache\Events\CacheMissed', 'class'],
-                'cache.hit' => ['Illuminate\Cache\Events\CacheHit', 'class'],
-                'cache.write' => ['Illuminate\Cache\Events\KeyWritten', 'class'],
-                'cache.delete' => ['Illuminate\Cache\Events\KeyForgotten', 'class'],
-                'illuminate.query' => ['Illuminate\Database\Events\QueryExecuted', 'class'],
-                'illuminate.queue.before' => ['Illuminate\Queue\Events\JobProcessing', 'class'],
-                'illuminate.queue.after' => ['Illuminate\Queue\Events\JobProcessed', 'class'],
-                'illuminate.queue.failed' => ['Illuminate\Queue\Events\JobFailed', 'class'],
-                'illuminate.queue.stopping' => ['Illuminate\Queue\Events\WorkerStopping', 'class'],
-                'mailer.sending' => ['Illuminate\Mail\Events\MessageSending', 'class'],
-                'router.matched' => ['Illuminate\Routing\Events\RouteMatched', 'class'],
-            ],
+            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => inline_value_objects([
+                new StringToClassConstant('artisan.start', 'Illuminate\Console\Events\ArtisanStarting', 'class'),
+                new StringToClassConstant('auth.attempting', 'Illuminate\Auth\Events\Attempting', 'class'),
+                new StringToClassConstant('auth.login', 'Illuminate\Auth\Events\Login', 'class'),
+                new StringToClassConstant('auth.logout', 'Illuminate\Auth\Events\Logout', 'class'),
+                new StringToClassConstant('cache.missed', 'Illuminate\Cache\Events\CacheMissed', 'class'),
+                new StringToClassConstant('cache.hit', 'Illuminate\Cache\Events\CacheHit', 'class'),
+                new StringToClassConstant('cache.write', 'Illuminate\Cache\Events\KeyWritten', 'class'),
+                new StringToClassConstant('cache.delete', 'Illuminate\Cache\Events\KeyForgotten', 'class'),
+                new StringToClassConstant('illuminate.query', 'Illuminate\Database\Events\QueryExecuted', 'class'),
+                new StringToClassConstant(
+                    'illuminate.queue.before',
+                    'Illuminate\Queue\Events\JobProcessing',
+                    'class'
+                ),
+                new StringToClassConstant(
+                    'illuminate.queue.after',
+                    'Illuminate\Queue\Events\JobProcessed',
+                    'class'
+                ),
+                new StringToClassConstant('illuminate.queue.failed', 'Illuminate\Queue\Events\JobFailed', 'class'),
+                new StringToClassConstant(
+                    'illuminate.queue.stopping',
+                    'Illuminate\Queue\Events\WorkerStopping',
+                    'class'
+                ),
+                new StringToClassConstant('mailer.sending', 'Illuminate\Mail\Events\MessageSending', 'class'),
+                new StringToClassConstant('router.matched', 'Illuminate\Routing\Events\RouteMatched', 'class'),
+            ]),
         ]]);
 };

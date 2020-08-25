@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\String_\StringToClassConstantRector;
+use Rector\Generic\ValueObject\StringToClassConstant;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -16,11 +17,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StringToClassConstantRector::class)
         ->call('configure', [[
-            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => [
-                'kernel.handled' => ['Illuminate\Foundation\Http\Events\RequestHandled', 'class'],
-                'locale.changed' => ['Illuminate\Foundation\Events\LocaleUpdated', 'class'],
-                'illuminate.log' => ['Illuminate\Log\Events\MessageLogged', 'class'],
-            ],
+            StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => inline_value_objects([
+                new StringToClassConstant(
+                    'kernel.handled',
+                    'Illuminate\Foundation\Http\Events\RequestHandled',
+                    'class'
+                ),
+                new StringToClassConstant('locale.changed', 'Illuminate\Foundation\Events\LocaleUpdated', 'class'),
+                new StringToClassConstant('illuminate.log', 'Illuminate\Log\Events\MessageLogged', 'class'),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

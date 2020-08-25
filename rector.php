@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Generic\ValueObject\RenamedProperty;
+use Rector\Generic\ValueObject\StringToClassConstant;
 use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceArrayWithObjectRector::class)
         ->call('configure', [[
             ReplaceArrayWithObjectRector::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
-                'Rector\Generic\Rector\PropertyFetch\RenamePropertyRector::RENAMED_PROPERTIES' => RenamedProperty::class,
+                'Rector\Generic\Rector\String_\StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS' => StringToClassConstant::class,
             ],
         ]]);
 
