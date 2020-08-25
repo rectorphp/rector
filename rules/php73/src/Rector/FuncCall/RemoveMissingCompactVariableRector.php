@@ -89,15 +89,13 @@ PHP
                 continue;
             }
 
-            $array = &$arg->value;
-
-            foreach ($array->items as $arrayKey => $item) {
+            foreach ($arg->value->items as $arrayKey => $item) {
                 $value = $this->getValue($item->value);
                 if ($scope->hasVariableType($value)->yes()) {
                     continue;
                 }
 
-                unset($array->items[$arrayKey]);
+                unset($arg->value->items[$arrayKey]);
             }
 
             if ($arg->value->items === []) {
