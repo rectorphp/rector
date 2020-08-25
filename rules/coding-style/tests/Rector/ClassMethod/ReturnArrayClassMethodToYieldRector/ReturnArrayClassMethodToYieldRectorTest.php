@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Source\EventSubscriberInterface;
 use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Source\ParentTestCase;
+use Rector\CodingStyle\ValueObject\MethodToYield;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -34,10 +35,11 @@ final class ReturnArrayClassMethodToYieldRectorTest extends AbstractRectorTestCa
     {
         return [
             ReturnArrayClassMethodToYieldRector::class => [
-                ReturnArrayClassMethodToYieldRector::METHODS_BY_TYPE => [
-                    EventSubscriberInterface::class => ['getSubscribedEvents'],
-                    ParentTestCase::class => ['provide*', 'dataProvider*'],
-                    TestCase::class => ['provideData'],
+                ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => [
+                    new MethodToYield(EventSubscriberInterface::class, 'getSubscribedEvents'),
+                    new MethodToYield(ParentTestCase::class, 'provide*'),
+                    new MethodToYield(ParentTestCase::class, 'dataProvider*'),
+                    new MethodToYield(TestCase::class, 'provideData'),
                 ],
             ],
         ];

@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->call('configure', [[
-            ReturnArrayClassMethodToYieldRector::METHODS_BY_TYPE => [
+            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => [
                 TestCase::class => ['provideData', 'provideData*', 'dataProvider', 'dataProvider*'],
             ],
         ]]);

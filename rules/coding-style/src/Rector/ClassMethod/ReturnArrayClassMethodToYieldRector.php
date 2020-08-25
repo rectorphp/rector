@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\CodingStyle\ValueObject\MethodToYield;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTransformer;
@@ -20,6 +21,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see https://medium.com/tech-tajawal/use-memory-gently-with-yield-in-php-7e62e2480b8d
@@ -32,12 +34,12 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
     /**
      * @var string
      */
-    public const METHODS_BY_TYPE = 'methods_by_type';
+    public const METHODS_TO_YIELDS = 'methods_to_yields';
 
     /**
-     * @var string[][]
+     * @var MethodToYield[]
      */
-    private $methodsByType = [];
+    private $methodsToYields = [];
 
     /**
      * @var Comment[]
@@ -84,8 +86,8 @@ class SomeEventSubscriber implements EventSubscriberInterface
 PHP
                 ,
                 [
-                    self::METHODS_BY_TYPE => [
-                        'EventSubscriberInterface' => ['getSubscribedEvents'],
+                    self::METHODS_TO_YIELDS => [
+                        new MethodToYield('EventSubscriberInterface', 'getSubscribedEvents'),
                     ],
                 ]
             ),
@@ -106,26 +108,24 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $hasChanged = false;
-        foreach ($this->methodsByType as $type => $methods) {
-            if (! $this->isObjectType($node, $type)) {
+        foreach ($this->methodsToYields as $methodToYield) {
+            if (! $this->isObjectType($node, $methodToYield->getType())) {
                 continue;
             }
 
-            foreach ($methods as $methodName) {
-                if (! $this->isName($node, $methodName)) {
-                    continue;
-                }
-
-                $arrayNode = $this->collectReturnArrayNodesFromClassMethod($node);
-                if ($arrayNode === null) {
-                    continue;
-                }
-
-                $this->transformArrayToYieldsOnMethodNode($node, $arrayNode);
-
-                $this->completeComments($node);
-                $hasChanged = true;
+            if (! $this->isName($node, $methodToYield->getMethod())) {
+                continue;
             }
+
+            $arrayNode = $this->collectReturnArrayNodesFromClassMethod($node);
+            if ($arrayNode === null) {
+                continue;
+            }
+
+            $this->transformArrayToYieldsOnMethodNode($node, $arrayNode);
+
+            $this->completeComments($node);
+            $hasChanged = true;
         }
 
         if (! $hasChanged) {
@@ -137,7 +137,9 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->methodsByType = $configuration[self::METHODS_BY_TYPE] ?? [];
+        $methodsToYields = $configuration[self::METHODS_TO_YIELDS] ?? [];
+        Assert::allIsInstanceOf($methodsToYields, MethodToYield::class);
+        $this->methodsToYields = $methodsToYields;
     }
 
     private function collectReturnArrayNodesFromClassMethod(ClassMethod $classMethod): ?Array_

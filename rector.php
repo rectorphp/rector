@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall;
 use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -13,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceArrayWithObjectRector::class)
         ->call('configure', [[
             ReplaceArrayWithObjectRector::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
-                'Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector::TYPE_TO_METHOD_CALLS' => IssetUnsetToMethodCall::class,
+                'Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS' => \Rector\CodingStyle\ValueObject\MethodToYield::class,
             ],
         ]]);
 

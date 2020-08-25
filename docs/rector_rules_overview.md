@@ -2078,7 +2078,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->call('configure', [[
-            ReturnArrayClassMethodToYieldRector::METHODS_BY_TYPE => [
+            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => [
                 'EventSubscriberInterface' => [
                 'getSubscribedEvents']]
         ]]);
