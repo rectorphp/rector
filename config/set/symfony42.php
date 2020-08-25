@@ -3,14 +3,13 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
-
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\Rector\New_\NewToStaticCallRector;
+use Rector\Generic\ValueObject\AddedArgument;
 use Rector\Generic\ValueObject\MethodReturnType;
 use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Generic\ValueObject\RemovedArgument;
@@ -57,72 +56,91 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => [
-                'Symfony\Component\BrowserKit\Client' => [
-                    'submit' => [
-                        2 => [
-                            # https://github.com/symfony/symfony/commit/fa2063efe43109aea093d6fbfc12d675dba82146
-                            # https://github.com/symfony/symfony/commit/e3aa90f852f69040be19da3d8729cdf02d238ec7
-                            'name' => 'serverParameters',
-                            'default_value' => [],
-                            'scope' => ['method_call'],
-                        ],
-                    ],
-                ],
-                'Symfony\Component\DomCrawler\Crawler' => [
-                    'children' => [[
-                        # https://github.com/symfony/symfony/commit/f634afdb6f573e4af8d89aaa605e0c7d4058676d
-                        # $selector
-                        'default_value' => null,
-                        'scope' => ['method_call'],
-                    ]],
-                ],
-                'Symfony\Component\Finder\Finder' => [
-                    'sortByName' => [[
-                        # $useNaturalSort
-                        'default_value' => false,
-                        'scope' => ['method_call'],
-                    ]],
-                ],
-                'Symfony\Bridge\Monolog\Processor\DebugProcessor' => [
-                    'getLogs' => [[
-                        # $request
-                        'default_value' => null,
-                        'scope' => ['method_call'],
-                    ]],
-                    'countErrors' => [[
-                        # $request
-                        'default_value' => null,
-                        'scope' => ['method_call'],
-                    ]],
-                ],
-                'Symfony\Bridge\Monolog\Logger' => [
-                    'getLogs' => [[
-                        # $request
-                        'default_value' => null,
-                        'scope' => ['method_call'],
-                    ]],
-                    'countErrors' => [[
-                        # $request
-                        'default_value' => null,
-                        'scope' => ['method_call'],
-                    ]],
-                ],
-                'Symfony\Component\Serializer\Normalizer' => [
-                    'handleCircularReference' => [
-                        1 => [
-                            # $format
-                            'default_value' => null,
-                            'scope' => ['method_call'],
-                        ],
-                        2 => [
-                            # $context
-                            'default_value' => [],
-                            'scope' => ['method_call'],
-                        ],
-                    ],
-                ],
-            ],
+            ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
+                // https://github.com/symfony/symfony/commit/fa2063efe43109aea093d6fbfc12d675dba82146
+                // https://github.com/symfony/symfony/commit/e3aa90f852f69040be19da3d8729cdf02d238ec7
+                new AddedArgument(
+                    'Symfony\Component\BrowserKit\Client',
+                    'submit',
+                    2,
+                    'serverParameters',
+                    [],
+                    null,
+                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                ),
+                new AddedArgument(
+                    'Symfony\Component\DomCrawler\Crawler',
+                    'children',
+                    0,
+                    null,
+                    null,
+                    null,
+                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                ),
+                new AddedArgument(
+                    'Symfony\Component\Finder\Finder',
+                    'sortByName',
+                    0,
+                    null,
+                    false,
+                    null,
+                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                ),
+                new AddedArgument(
+                    'Symfony\Bridge\Monolog\Processor\DebugProcessor',
+                    'getLogs',
+                    0,
+                    null,
+                    null,
+                    null,
+                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                ),
+                new AddedArgument(
+                    'Symfony\Bridge\Monolog\Processor\DebugProcessor',
+                    'countErrors',
+                    0,
+                    'default_value',
+                    null,
+                    null,
+                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                ),
+                new AddedArgument(
+                    'Symfony\Bridge\Monolog\Logger',
+                    'getLogs',
+                    0,
+                    'default_value',
+                    null,
+                    null,
+                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                ),
+                new AddedArgument(
+                    'Symfony\Bridge\Monolog\Logger',
+                    'countErrors',
+                    0,
+                    'default_value',
+                    null,
+                    null,
+                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                ),
+                new AddedArgument(
+                    'Symfony\Component\Serializer\Normalizer',
+                    'handleCircularReference',
+                    1,
+                    null,
+                    null,
+                    null,
+                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                ),
+                new AddedArgument(
+                    'Symfony\Component\Serializer\Normalizer',
+                    'handleCircularReference',
+                    2,
+                    null,
+                    null,
+                    null,
+                    ArgumentAdderRector::SCOPE_METHOD_CALL
+                ),
+            ]),
         ]]);
 
     $services->set(RenameMethodRector::class)

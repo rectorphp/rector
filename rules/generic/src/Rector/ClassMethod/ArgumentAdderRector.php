@@ -17,6 +17,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -37,17 +38,17 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     /**
      * @var string
      */
-    private const SCOPE_PARENT_CALL = 'parent_call';
+    public const SCOPE_PARENT_CALL = 'parent_call';
 
     /**
      * @var string
      */
-    private const SCOPE_METHOD_CALL = 'method_call';
+    public const SCOPE_METHOD_CALL = 'method_call';
 
     /**
      * @var string
      */
-    private const SCOPE_CLASS_METHOD = 'class_method';
+    public const SCOPE_CLASS_METHOD = 'class_method';
 
     /**
      * @var AddedArgument[]
@@ -176,14 +177,22 @@ PHP
         }
 
         $defaultValue = $addedArgument->getArgumentDefaultValue();
-        $type = $addedArgument->getArgumentType();
+        $argumentType = $addedArgument->getArgumentType();
 
         $position = $addedArgument->getPosition();
 
         if ($node instanceof ClassMethod) {
-            $this->addClassMethodParam($node, $addedArgument->getArgumentName(), $defaultValue, $type, $position);
+            $argumentName = $addedArgument->getArgumentName();
+            if ($argumentName === null) {
+                throw new ShouldNotHappenException();
+            }
+            $this->addClassMethodParam($node, $argumentName, $defaultValue, $argumentType, $position);
         } elseif ($node instanceof StaticCall) {
-            $this->processStaticCall($node, $position, $addedArgument->getArgumentName());
+            $argumentName = $addedArgument->getArgumentName();
+            if ($argumentName === null) {
+                throw new ShouldNotHappenException();
+            }
+            $this->processStaticCall($node, $position, $argumentName);
         } else {
             $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
             $node->args[$position] = $arg;
@@ -248,14 +257,14 @@ PHP
      */
     private function isInCorrectScope(Node $node, AddedArgument $addedArgument): bool
     {
-        if ($addedArgument->getScope() === []) {
+        if ($addedArgument->getScope() === null) {
             return true;
         }
 
         $scope = $addedArgument->getScope();
 
         if ($node instanceof ClassMethod) {
-            return in_array(self::SCOPE_CLASS_METHOD, $scope, true);
+            return $scope === self::SCOPE_CLASS_METHOD;
         }
 
         if ($node instanceof StaticCall) {
@@ -264,13 +273,13 @@ PHP
             }
 
             if ($this->isName($node->class, 'parent')) {
-                return in_array(self::SCOPE_PARENT_CALL, $scope, true);
+                return $scope === self::SCOPE_PARENT_CALL;
             }
 
-            return in_array(self::SCOPE_METHOD_CALL, $scope, true);
+            return $scope === self::SCOPE_METHOD_CALL;
         }
 
         // MethodCall
-        return in_array(self::SCOPE_METHOD_CALL, $scope, true);
+        return $scope === self::SCOPE_METHOD_CALL;
     }
 }

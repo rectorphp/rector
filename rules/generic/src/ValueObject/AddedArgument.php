@@ -22,12 +22,12 @@ final class AddedArgument
     private $position;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $argumentName;
 
     /**
-     * @var string|null
+     * @var mixed|null
      */
     private $argumentDefaultValue;
 
@@ -37,18 +37,21 @@ final class AddedArgument
     private $argumentType;
 
     /**
-     * @var string[]
+     * @var string|null
      */
-    private $scope = [];
+    private $scope;
 
+    /**
+     * @param mixed|null $argumentDefaultValue
+     */
     public function __construct(
         string $class,
         string $method,
         int $position,
-        string $argumentName,
-        ?string $argumentDefaultValue = null,
+        ?string $argumentName = null,
+        $argumentDefaultValue = null,
         ?string $argumentType = null,
-        array $scope = []
+        ?string $scope = null
     ) {
         $this->class = $class;
         $this->method = $method;
@@ -74,12 +77,15 @@ final class AddedArgument
         return $this->position;
     }
 
-    public function getArgumentName(): string
+    public function getArgumentName(): ?string
     {
         return $this->argumentName;
     }
 
-    public function getArgumentDefaultValue(): ?string
+    /**
+     * @return mixed|null
+     */
+    public function getArgumentDefaultValue()
     {
         return $this->argumentDefaultValue;
     }
@@ -89,10 +95,7 @@ final class AddedArgument
         return $this->argumentType;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getScope(): array
+    public function getScope(): ?string
     {
         return $this->scope;
     }
