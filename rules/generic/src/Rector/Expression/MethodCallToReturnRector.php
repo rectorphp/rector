@@ -12,7 +12,9 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\MethodCallWrap;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\MethodCallToReturnRectorTest
@@ -22,12 +24,12 @@ final class MethodCallToReturnRector extends AbstractRector implements Configura
     /**
      * @var string
      */
-    public const METHOD_NAMES_BY_TYPE = 'method_names_by_type';
+    public const METHOD_CALL_WRAPS = 'method_call_wraps';
 
     /**
-     * @var string[][]
+     * @var MethodCallWrap[]
      */
-    private $methodNamesByType = [];
+    private $methodCallWraps = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -64,7 +66,7 @@ class SomeClass
 PHP
 
             , [
-                self::METHOD_NAMES_BY_TYPE => [
+                self::METHOD_CALL_WRAPS => [
                     'SomeClass' => ['deny'],
                 ],
             ]),
@@ -95,17 +97,19 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? [];
+        $methodCallWraps = $configuration[self::METHOD_CALL_WRAPS] ?? [];
+        Assert::allIsInstanceOf($methodCallWraps, MethodCallWrap::class);
+        $this->methodCallWraps = $methodCallWraps;
     }
 
     private function refactorMethodCall(MethodCall $methodCall): ?Node
     {
-        foreach ($this->methodNamesByType as $methodType => $methodNames) {
-            if (! $this->isObjectType($methodCall->var, $methodType)) {
+        foreach ($this->methodCallWraps as $methodCallWrap) {
+            if (! $this->isObjectType($methodCall->var, $methodCallWrap->getClass())) {
                 continue;
             }
 
-            if (! $this->isNames($methodCall->name, $methodNames)) {
+            if (! $this->isName($methodCall->name, $methodCallWrap->getMethod())) {
                 continue;
             }
 

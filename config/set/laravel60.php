@@ -6,6 +6,7 @@ use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
 use Rector\Generic\ValueObject\AddedArgument;
+use Rector\Generic\ValueObject\MethodCallWrap;
 use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -24,9 +25,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MethodCallToReturnRector::class)
         ->call('configure', [[
-            MethodCallToReturnRector::METHOD_NAMES_BY_TYPE => [
-                'Illuminate\Auth\Access\HandlesAuthorization' => ['deny'],
-            ],
+            MethodCallToReturnRector::METHOD_CALL_WRAPS => inline_value_objects([
+                new MethodCallWrap('Illuminate\Auth\Access\HandlesAuthorization', 'deny'),
+            ]),
         ]]);
 
     # https://github.com/laravel/framework/commit/67a38ba0fa2acfbd1f4af4bf7d462bb4419cc091

@@ -5392,7 +5392,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(MethodCallToReturnRector::class)
         ->call('configure', [[
-            MethodCallToReturnRector::METHOD_NAMES_BY_TYPE => [
+            MethodCallToReturnRector::METHOD_CALL_WRAPS => [
                 'SomeClass' => [
                 'deny']]
         ]]);

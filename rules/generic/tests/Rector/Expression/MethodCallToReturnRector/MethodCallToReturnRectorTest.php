@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
 use Rector\Generic\Tests\Rector\Expression\MethodCallToReturnRector\Source\ReturnDeny;
+use Rector\Generic\ValueObject\MethodCallWrap;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToReturnRectorTest extends AbstractRectorTestCase
@@ -32,9 +33,7 @@ final class MethodCallToReturnRectorTest extends AbstractRectorTestCase
     {
         return [
             MethodCallToReturnRector::class => [
-                MethodCallToReturnRector::METHOD_NAMES_BY_TYPE => [
-                    ReturnDeny::class => ['deny'],
-                ],
+                MethodCallToReturnRector::METHOD_CALL_WRAPS => [new MethodCallWrap(ReturnDeny::class, 'deny')],
             ],
         ];
     }

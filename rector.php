@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Renaming\ValueObject\RenamedAnnotationInType;
+use Rector\Generic\ValueObject\MethodCallWrap;
 use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceArrayWithObjectRector::class)
         ->call('configure', [[
             ReplaceArrayWithObjectRector::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
-                'Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES' => RenamedAnnotationInType::class,
+                'Rector\Generic\Rector\Expression\MethodCallToReturnRector::METHOD_CALL_WRAPS' => MethodCallWrap::class,
             ],
         ]]);
 

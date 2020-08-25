@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Rector\Renaming\ValueObject\RenamedAnnotationInType;
 use Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector;
 use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\ValueObject\RenamedAnnotationInType;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/phpunit-exception.php');
