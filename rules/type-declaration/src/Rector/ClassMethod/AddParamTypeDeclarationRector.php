@@ -16,6 +16,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\AddParamTypeDeclarationRectorTest
@@ -25,12 +27,12 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
     /**
      * @var string
      */
-    public const TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS = '$typehintForParameterByMethodByClass';
+    public const PARAMETER_TYPEHINTS = 'parameter_typehintgs';
 
     /**
-     * @var mixed[]
+     * @var ParameterTypehint[]
      */
-    private $typehintForParameterByMethodByClass = [];
+    private $parameterTypehints = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -54,13 +56,7 @@ class SomeClass
 }
 PHP
             , [
-                self::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS => [
-                    'SomeClass' => [
-                        'process' => [
-                            0 => 'string',
-                        ],
-                    ],
-                ],
+                self::PARAMETER_TYPEHINTS => [new ParameterTypehint('SomeClass', 'process', 0, 'string')],
             ]),
         ]);
     }
@@ -85,18 +81,16 @@ PHP
         /** @var ClassLike $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-        foreach ($this->typehintForParameterByMethodByClass as $objectType => $typehintForParameterByMethod) {
-            if (! $this->isObjectType($classLike, $objectType)) {
+        foreach ($this->parameterTypehints as $parameterTypehint) {
+            if (! $this->isObjectType($classLike, $parameterTypehint->getClassName())) {
                 continue;
             }
 
-            foreach ($typehintForParameterByMethod as $methodName => $typehintByParameterPosition) {
-                if (! $this->isName($node, $methodName)) {
-                    continue;
-                }
-
-                $this->refactorClassMethodWithTypehintByParameterPosition($node, $typehintByParameterPosition);
+            if (! $this->isName($node, $parameterTypehint->getMethodName())) {
+                continue;
             }
+
+            $this->refactorClassMethodWithTypehintByParameterPosition($node, $parameterTypehint);
         }
 
         return $node;
@@ -104,7 +98,9 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->typehintForParameterByMethodByClass = $configuration[self::TYPEHINT_FOR_PARAMETER_BY_METHOD_BY_CLASS] ?? [];
+        $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? [];
+        Assert::allIsInstanceOf($parameterTypehints, ParameterTypehint::class);
+        $this->parameterTypehints = $parameterTypehints;
     }
 
     private function shouldSkip(ClassMethod $classMethod): bool
@@ -145,32 +141,30 @@ PHP
 
     private function refactorClassMethodWithTypehintByParameterPosition(
         ClassMethod $classMethod,
-        array $typehintByParameterPosition
+        ParameterTypehint $parameterTypehint
     ): void {
-        foreach ($typehintByParameterPosition as $parameterPosition => $type) {
-            if (! isset($classMethod->params[$parameterPosition])) {
-                continue;
-            }
-
-            $parameter = $classMethod->params[$parameterPosition];
-            $this->refactorParameter($parameter, $type);
+        $parameter = $classMethod->params[$parameterTypehint->getPosition()] ?? null;
+        if ($parameter === null) {
+            return;
         }
+
+        $this->refactorParameter($parameter, $parameterTypehint);
     }
 
-    private function refactorParameter(Param $param, string $newType): void
+    private function refactorParameter(Param $param, ParameterTypehint $parameterTypehint): void
     {
         // already set → no change
-        if ($param->type && $this->isName($param->type, $newType)) {
+        if ($param->type && $this->isName($param->type, $parameterTypehint->getTypehint())) {
             return;
         }
 
         // remove it
-        if ($newType === '') {
+        if ($parameterTypehint->getTypehint() === '') {
             $param->type = null;
             return;
         }
 
-        $returnTypeNode = $this->staticTypeMapper->mapStringToPhpParserNode($newType);
+        $returnTypeNode = $this->staticTypeMapper->mapStringToPhpParserNode($parameterTypehint->getTypehint());
         $param->type = $returnTypeNode;
     }
 }

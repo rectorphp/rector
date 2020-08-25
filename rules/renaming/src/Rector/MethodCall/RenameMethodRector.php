@@ -30,7 +30,7 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
     /**
      * @var string
      */
-    public const METHOD_CALL_RENAMES = 'old_to_new_methods_by_class';
+    public const METHOD_CALL_RENAMES = 'method_call_renames';
 
     /**
      * @var MethodCallRenameInterface[]

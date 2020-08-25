@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -34,6 +35,21 @@ final class ReplaceArrayWithObjectRector extends AbstractRector implements Confi
      * @var array<string, string>
      */
     private $constantNamesToValueObjects = [];
+
+    /**
+     * @var mixed[]
+     */
+    private $newItems = [];
+
+    /**
+     * @var mixed[]
+     */
+    private $arguments = [];
+
+    /**
+     * @var array
+     */
+    private $nestedArguments = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -106,27 +122,21 @@ CODE_SAMPLE
             /** @var Array_ $configurationValueArray */
             $configurationValueArray = $node->value;
 
-            $newItems = [];
+            $this->newItems = [];
             foreach ($configurationValueArray->items as $nestedArrayItem) {
                 if ($this->shouldSkipNestedArrayItem($nestedArrayItem)) {
                     continue;
                 }
 
-                /** @var Array_ $nestedArrayItemArray */
-                $nestedArrayItemArray = $nestedArrayItem->value;
+                /** @var ArrayItem $nestedArrayItem */
+                $this->arguments = [$nestedArrayItem->key];
 
-                foreach ($nestedArrayItemArray->items as $nestedNestedArrayItem) {
-                    $args = $this->createArgs(
-                        /** @var ArrayItem $nestedArrayItem */
-                        /** @var ArrayItem $nestedNestedArrayItem */
-                        [$nestedArrayItem->key, $nestedNestedArrayItem->key, $nestedNestedArrayItem->value]
-                    );
-                    $new = new New_(new FullyQualified($valueObjectClass), $args);
-                    $newItems[] = new ArrayItem($new);
-                }
+                $this->nestedArguments = [];
+
+                $this->collectArgumentsFromNestedArrayAndCreateNew($nestedArrayItem->value, $valueObjectClass);
             }
 
-            $configurationValueArray->items = $newItems;
+            $configurationValueArray->items = $this->newItems;
 
             // wrap with inline objects
             $args = [new Arg($configurationValueArray)];
@@ -176,5 +186,38 @@ CODE_SAMPLE
         }
 
         return ! $nestedArrayItem->value instanceof Array_;
+    }
+
+    private function collectArgumentsFromNestedArrayAndCreateNew(Node $valueNode, string $valueObjectClass): void
+    {
+        if ($valueNode instanceof Array_) {
+            foreach ((array) $valueNode->items as $key => $arrayItem) {
+                if (! $arrayItem instanceof ArrayItem) {
+                    continue;
+                }
+
+                $this->collectNestedArguments($arrayItem, $key);
+
+                $this->collectArgumentsFromNestedArrayAndCreateNew($arrayItem->value, $valueObjectClass);
+            }
+        } else {
+            $arguments = array_merge($this->arguments, $this->nestedArguments);
+
+            $args = $this->createArgs($arguments);
+
+            $new = new New_(new FullyQualified($valueObjectClass), $args);
+            $this->newItems[] = new ArrayItem($new);
+
+            $this->nestedArguments = [];
+        }
+    }
+
+    private function collectNestedArguments(ArrayItem $arrayItem, int $key): void
+    {
+        $this->nestedArguments[] = $arrayItem->key === null ? new LNumber($key) : $arrayItem->key;
+
+        if (! $arrayItem->value instanceof Array_) {
+            $this->nestedArguments[] = $arrayItem->value;
+        }
     }
 }
