@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Generic\ValueObject\AddedArgument;
+use Rector\Generic\ValueObject\TypeToStaticCall;
 use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceArrayWithObjectRector::class)
         ->call('configure', [[
             ReplaceArrayWithObjectRector::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
-                'Rector\Generic\Rector\ClassMethod\ArgumentAdderRector::ADDED_ARGUMENTS' => AddedArgument::class,
+                'Rector\Generic\Rector\New_\NewToStaticCallRector::TYPE_TO_STATIC_CALLS' => TypeToStaticCall::class,
             ],
         ]]);
 
