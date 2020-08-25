@@ -8,6 +8,7 @@ use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\MethodVisibility;
+use Rector\Generic\ValueObject\RenamedProperty;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -61,11 +62,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
-                'Cake\Network\Request' => [
-                    '_session' => 'session',
-                ],
-            ],
+            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
+                new RenamedProperty('Cake\Network\Request', '_session', 'session'),
+            ]),
         ]]);
 
     $services->set(ModalToGetSetRector::class)

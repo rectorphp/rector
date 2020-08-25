@@ -5988,7 +5988,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
+            RenamePropertyRector::RENAMED_PROPERTIES => [
                 'SomeClass' => [
                 'someOldProperty' => 'someNewProperty']]
         ]]);

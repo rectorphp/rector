@@ -11,6 +11,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\RenamedProperty;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\PropertyFetch\RenamePropertyRector\RenamePropertyRectorTest
@@ -20,16 +22,12 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     /**
      * @var string
      */
-    public const OLD_TO_NEW_PROPERTY_BY_TYPES = 'old_to_new_property_by_types';
+    public const RENAMED_PROPERTIES = 'old_to_new_property_by_types';
 
     /**
-     * class => [
-     *     oldProperty => newProperty
-     * ]
-     *
-     * @var string[][]
+     * @var RenamedProperty[]
      */
-    private $oldToNewPropertyByTypes = [];
+    private $renamedProperties = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -38,10 +36,8 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
                 '$someObject->someOldProperty;',
                 '$someObject->someNewProperty;',
                 [
-                    self::OLD_TO_NEW_PROPERTY_BY_TYPES => [
-                        'SomeClass' => [
-                            'someOldProperty' => 'someNewProperty',
-                        ],
+                    self::RENAMED_PROPERTIES => [
+                        new RenamedProperty('SomeClass', 'someOldProperty', 'someNewProperty'),
                     ],
                 ]
             ),
@@ -61,25 +57,26 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->oldToNewPropertyByTypes as $type => $oldToNewProperties) {
-            if (! $this->isObjectType($node->var, $type)) {
+        foreach ($this->renamedProperties as $renamedProperty) {
+            if (! $this->isObjectType($node->var, $renamedProperty->getType())) {
                 continue;
             }
 
-            foreach ($oldToNewProperties as $oldProperty => $newProperty) {
-                if (! $this->isName($node, $oldProperty)) {
-                    continue;
-                }
-
-                $node->name = new Identifier($newProperty);
+            if (! $this->isName($node, $renamedProperty->getOldProperty())) {
+                continue;
             }
+
+            $node->name = new Identifier($renamedProperty->getNewProperty());
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
     public function configure(array $configuration): void
     {
-        $this->oldToNewPropertyByTypes = $configuration[self::OLD_TO_NEW_PROPERTY_BY_TYPES] ?? [];
+        $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? [];
+        Assert::allIsInstanceOf($renamedProperties, RenamedProperty::class);
+        $this->renamedProperties = $renamedProperties;
     }
 }

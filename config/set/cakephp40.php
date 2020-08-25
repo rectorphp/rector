@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
-
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\RenamedProperty;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -15,7 +15,6 @@ use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\ClassConstantRename;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\StaticCallRename;
-use Rector\SymfonyPhpConfig\inline_value_objects;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
@@ -70,11 +69,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
-                'Cake\ORM\Entity' => [
-                    '_properties' => '_fields',
-                ],
-            ],
+            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
+                new RenamedProperty('Cake\ORM\Entity', '_properties', '_fields'),
+            ]),
         ]]);
 
     $services->set(AddReturnTypeDeclarationRector::class)

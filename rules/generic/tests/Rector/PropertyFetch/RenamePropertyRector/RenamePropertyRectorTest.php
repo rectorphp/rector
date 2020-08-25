@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\Tests\Rector\PropertyFetch\RenamePropertyRector\Source\ClassWithProperties;
+use Rector\Generic\ValueObject\RenamedProperty;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenamePropertyRectorTest extends AbstractRectorTestCase
@@ -32,11 +33,9 @@ final class RenamePropertyRectorTest extends AbstractRectorTestCase
     {
         return [
             RenamePropertyRector::class => [
-                RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
-                    ClassWithProperties::class => [
-                        'oldProperty' => 'newProperty',
-                        'anotherOldProperty' => 'anotherNewProperty',
-                    ],
+                RenamePropertyRector::RENAMED_PROPERTIES => [
+                    new RenamedProperty(ClassWithProperties::class, 'oldProperty', 'newProperty'),
+                    new RenamedProperty(ClassWithProperties::class, 'anotherOldProperty', 'anotherNewProperty'),
                 ],
             ],
         ];
