@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -24,10 +24,10 @@ final class AddMethodParentCallRector extends AbstractRector implements Configur
     /**
      * @var string
      */
-    public const METHODS_BY_PARENT_TYPES = '$methodsByParentTypes';
+    public const METHODS_BY_PARENT_TYPES = 'methods_by_parent_type';
 
     /**
-     * @var mixed[]
+     * @var array<string, string>
      */
     private $methodsByParentTypes = [];
 
@@ -36,7 +36,7 @@ final class AddMethodParentCallRector extends AbstractRector implements Configur
         return new RectorDefinition(
             'Add method parent call, in case new parent method is added',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'PHP'
 class SunshineCommand extends ParentClassWithNewConstructor
 {
@@ -58,6 +58,11 @@ class SunshineCommand extends ParentClassWithNewConstructor
     }
 }
 PHP
+                    , [
+                        self::METHODS_BY_PARENT_TYPES => [
+                            'ParentClassWithNewConstructor' => '__construct',
+                        ],
+                    ]
                 ),
             ]
         );
@@ -84,7 +89,7 @@ PHP
         /** @var string $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
-        foreach ($this->methodsByParentTypes as $type => $methods) {
+        foreach ($this->methodsByParentTypes as $type => $method) {
             if (! $this->isObjectType($classLike, $type)) {
                 continue;
             }
@@ -94,15 +99,13 @@ PHP
                 continue;
             }
 
-            foreach ($methods as $method) {
-                if ($this->shouldSkipMethod($node, $method)) {
-                    continue;
-                }
-
-                $node->stmts[] = $this->createParentStaticCall($method);
-
-                return $node;
+            if ($this->shouldSkipMethod($node, $method)) {
+                continue;
             }
+
+            $node->stmts[] = $this->createParentStaticCall($method);
+
+            return $node;
         }
 
         return null;
