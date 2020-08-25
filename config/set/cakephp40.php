@@ -6,6 +6,7 @@ use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Generic\ValueObject\MethodReturnType;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -81,40 +82,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
-                'Cake\Http\BaseApplication' => [
-                    'bootstrap' => 'void',
-                    'bootstrapCli' => 'void',
-                    'middleware' => 'Cake\Http\MiddlewareQueue',
-                ],
-                'Cake\Console\Shell' => [
-                    'initialize' => 'void',
-                ],
-                'Cake\Controller\Component' => [
-                    'initialize' => 'void',
-                ],
-                'Cake\Controller\Controller' => [
-                    'initialize' => 'void',
-                    'render' => 'Cake\Http\Response',
-                ],
-                'Cake\Form\Form' => [
-                    'validate' => 'bool',
-                    '_buildSchema' => 'Cake\Form\Schema',
-                ],
-                'Cake\ORM\Behavior' => [
-                    'initialize' => 'void',
-                ],
-                'Cake\ORM\Table' => [
-                    'initialize' => 'void',
-                    'updateAll' => 'int',
-                    'deleteAll' => 'int',
-                    'validationDefault' => 'Cake\Validation\Validator',
-                    'buildRules' => 'Cake\ORM\RulesChecker',
-                ],
-                'Cake\View\Helper' => [
-                    'initialize' => 'void',
-                ],
-            ],
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects(
+                [
+                    new MethodReturnType('Cake\Http\BaseApplication', 'bootstrap', 'void'),
+                    new MethodReturnType('Cake\Http\BaseApplication', 'bootstrapCli', 'void'),
+                    new MethodReturnType('Cake\Http\BaseApplication', 'middleware', 'Cake\Http\MiddlewareQueue'),
+                    new MethodReturnType('Cake\Console\Shell', 'initialize', 'void'),
+                    new MethodReturnType('Cake\Controller\Component', 'initialize', 'void'),
+                    new MethodReturnType('Cake\Controller\Controller', 'initialize', 'void'),
+                    new MethodReturnType('Cake\Controller\Controller', 'render', 'Cake\Http\Response'),
+                    new MethodReturnType('Cake\Form\Form', 'validate', 'bool'),
+                    new MethodReturnType('Cake\Form\Form', '_buildSchema', 'Cake\Form\Schema'),
+                    new MethodReturnType('Cake\ORM\Behavior', 'initialize', 'void'),
+                    new MethodReturnType('Cake\ORM\Table', 'initialize', 'void'),
+                    new MethodReturnType('Cake\ORM\Table', 'updateAll', 'int'),
+                    new MethodReturnType('Cake\ORM\Table', 'deleteAll', 'int'),
+                    new MethodReturnType('Cake\ORM\Table', 'validationDefault', 'Cake\Validation\Validator'),
+                    new MethodReturnType('Cake\ORM\Table', 'buildRules', 'Cake\ORM\RulesChecker'),
+                    new MethodReturnType('Cake\View\Helper', 'initialize', 'void'), ]
+            ),
         ]]);
 
     $services->set(AddParamTypeDeclarationRector::class)

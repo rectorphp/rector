@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
+use Rector\Generic\ValueObject\MethodReturnType;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
@@ -32,16 +33,28 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
     {
         return [
             AddReturnTypeDeclarationRector::class => [
-                AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
-                    'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass' => [
-                        'parse' => 'array',
-                        'resolve' => 'SomeType',
-                        'nullable' => '?SomeType',
-                        'clear' => '',
-                    ],
-                    PHPUnitTestCase::class => [
-                        'tearDown' => 'void',
-                    ],
+                AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => [
+                    new MethodReturnType(
+                        'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass',
+                        'parse',
+                        'array'
+                    ),
+                    new MethodReturnType(
+                        'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass',
+                        'resolve',
+                        'SomeType'
+                    ),
+                    new MethodReturnType(
+                        'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass',
+                        'nullable',
+                        '?SomeType'
+                    ),
+                    new MethodReturnType(
+                        'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClassclass',
+                        'clear',
+                        ''
+                    ),
+                    new MethodReturnType(PHPUnitTestCase::class, 'tearDown', 'void'),
                 ],
             ],
         ];

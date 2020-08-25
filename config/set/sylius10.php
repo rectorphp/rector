@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Generic\ValueObject\MethodReturnType;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -81,23 +82,26 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
-                'Sylius\Component\Order\Model\OrderInterface' => [
-                    'getAdjustmentsRecursively' => [
-                        'array' => 'Doctrine\Common\Collections\Collection',
-                    ],
-                ],
-                'Sylius\Component\Order\Model\OrderItemInterface' => [
-                    'getAdjustmentsRecursively' => [
-                        'array' => 'Doctrine\Common\Collections\Collection',
-                    ],
-                ],
-                'Sylius\Component\Registry\PrioritizedServiceRegistryInterface' => [
-                    'all' => [
-                        'Zend\Stdlib\PriorityQueue' => 'iterable',
-                    ],
-                ],
-            ],
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+                new MethodReturnType(
+                    'Sylius\Component\Order\Model\OrderInterface',
+                    'getAdjustmentsRecursively',
+                    'array',
+                    'Doctrine\Common\Collections\Collection'
+                ),
+                new MethodReturnType(
+                    'Sylius\Component\Order\Model\OrderItemInterface',
+                    'getAdjustmentsRecursively',
+                    'array',
+                    'Doctrine\Common\Collections\Collection'
+                ),
+                new MethodReturnType(
+                    'Sylius\Component\Registry\PrioritizedServiceRegistryInterface',
+                    'all',
+                    'Zend\Stdlib\PriorityQueue',
+                    'iterable'
+                ),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

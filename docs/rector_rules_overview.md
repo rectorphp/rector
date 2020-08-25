@@ -4711,7 +4711,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => [
                 'SomeClass' => [
                 'getData' => 'array']]
         ]]);

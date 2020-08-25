@@ -10,6 +10,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\MethodReturnType;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\AddReturnTypeDeclarationRectorTest
@@ -19,16 +21,12 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
     /**
      * @var string
      */
-    public const TYPEHINT_FOR_METHOD_BY_CLASS = '$typehintForMethodByClass';
+    public const METHOD_RETURN_TYPES = 'method_return_types';
 
     /**
-     * class => [
-     *      method => typehting
-     * ]
-     *
-     * @var string[][]
+     * @var MethodReturnType[]
      */
-    private $typehintForMethodByClass = [];
+    private $methodReturnTypes = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -53,11 +51,7 @@ class SomeClass
 PHP
                 ,
                 [
-                    self::TYPEHINT_FOR_METHOD_BY_CLASS => [
-                        'SomeClass' => [
-                            'getData' => 'array',
-                        ],
-                    ],
+                    self::METHOD_RETURN_TYPES => [new MethodReturnType('SomeClass', 'getData', 'array')],
                 ]
             ),
         ]);
@@ -76,20 +70,18 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->typehintForMethodByClass as $type => $methodsToTypehints) {
-            if (! $this->isObjectType($node, $type)) {
+        foreach ($this->methodReturnTypes as $methodReturnType) {
+            if (! $this->isObjectType($node, $methodReturnType->getType())) {
                 continue;
             }
 
-            foreach ($methodsToTypehints as $method => $typehint) {
-                if (! $this->isName($node, $method)) {
-                    continue;
-                }
-
-                $this->processClassMethodNodeWithTypehints($node, $typehint);
-
-                return $node;
+            if (! $this->isName($node, $methodReturnType->getMethod())) {
+                continue;
             }
+
+            $this->processClassMethodNodeWithTypehints($node, $methodReturnType->getType());
+
+            return $node;
         }
 
         return null;
@@ -97,7 +89,10 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->typehintForMethodByClass = $configuration[self::TYPEHINT_FOR_METHOD_BY_CLASS] ?? [];
+        $methodReturnTypes = $configuration[self::METHOD_RETURN_TYPES] ?? [];
+        Assert::allIsInstanceOf($methodReturnTypes, MethodReturnType::class);
+
+        $this->methodReturnTypes = $methodReturnTypes;
     }
 
     private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, string $newType): void

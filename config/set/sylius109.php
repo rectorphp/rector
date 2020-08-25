@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Generic\ValueObject\MethodReturnType;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -10,11 +12,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
-            AddReturnTypeDeclarationRector::TYPEHINT_FOR_METHOD_BY_CLASS => [
-                'Sylius\Bundle\CoreBundle\Templating\Helper\VariantResolverHelper' => [
-                    # source: https://github.com/Sylius/Sylius/blob/master/UPGRADE-1.0.md#upgrade-from-108-to-109
-                    'resolveVariant' => '?Sylius\Component\Product\Model\ProductVariantInterface',
-                ],
-            ],
+            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
+                new MethodReturnType(
+                    'Sylius\Bundle\CoreBundle\Templating\Helper\VariantResolverHelper',
+                    'resolveVariant',
+                    '?Sylius\Component\Product\Model\ProductVariantInterface'
+                ),
+            ]),
         ]]);
 };
