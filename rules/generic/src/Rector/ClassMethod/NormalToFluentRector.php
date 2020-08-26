@@ -13,6 +13,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\CallToFluent;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\NormalToFluentRector\NormalToFluentRectorTest
@@ -22,12 +24,12 @@ final class NormalToFluentRector extends AbstractRector implements ConfigurableR
     /**
      * @var string
      */
-    public const FLUENT_METHODS_BY_TYPE = 'fluent_methods_by_type';
+    public const CALLS_TO_FLUENT = 'calls_to_fluent';
 
     /**
-     * @var string[][]
+     * @var CallToFluent[]
      */
-    private $fluentMethodsByType = [];
+    private $callsToFluent = [];
 
     /**
      * @var MethodCall[]
@@ -51,8 +53,9 @@ $someObject->someFunction()
 PHP
                 ,
                 [
-                    self::FLUENT_METHODS_BY_TYPE => [
-                        'SomeClass' => ['someFunction', 'otherFunction'],
+                    self::CALLS_TO_FLUENT => [
+                        new CallToFluent('SomeClass', 'someFunction'),
+                        new CallToFluent('SomeClass', 'otherFunction'),
                     ],
                 ]
             ),
@@ -115,7 +118,9 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->fluentMethodsByType = $configuration[self::FLUENT_METHODS_BY_TYPE] ?? [];
+        $callsToFluent = $configuration[self::CALLS_TO_FLUENT] ?? [];
+        Assert::allIsInstanceOf($callsToFluent, CallToFluent::class);
+        $this->callsToFluent = $callsToFluent;
     }
 
     private function shouldSkipPreviousStmt(Node $node, int $i, Stmt $stmt): bool
@@ -195,13 +200,13 @@ PHP
 
     private function matchMethodCall(MethodCall $methodCall): ?string
     {
-        foreach ($this->fluentMethodsByType as $type => $methodNames) {
-            if (! $this->isObjectType($methodCall, $type)) {
+        foreach ($this->callsToFluent as $callToFluent) {
+            if (! $this->isObjectType($methodCall, $callToFluent->getClass())) {
                 continue;
             }
 
-            if ($this->isNames($methodCall->name, $methodNames)) {
-                return $type;
+            if ($this->isName($methodCall->name, $callToFluent->getMethod())) {
+                return $callToFluent->getClass();
             }
         }
 

@@ -8,6 +8,7 @@ use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Generic\ValueObject\CallToFluent;
 use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Generic\ValueObject\PropertyToMethodCall;
 use Rector\Generic\ValueObject\RenamedProperty;
@@ -250,28 +251,26 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
-            NormalToFluentRector::FLUENT_METHODS_BY_TYPE => [
-                'Cake\Network\Response' => [
-                    'withLocation',
-                    'withHeader',
-                    'withDisabledCache',
-                    'withType',
-                    'withCharset',
-                    'withCache',
-                    'withModified',
-                    'withExpires',
-                    'withSharable',
-                    'withMaxAge',
-                    'withVary',
-                    'withEtag',
-                    'withCompression',
-                    'withLength',
-                    'withMustRevalidate',
-                    'withNotModified',
-                    'withCookie',
-                    'withFile',
-                    'withDownload',
-                ],
-            ],
+            NormalToFluentRector::CALLS_TO_FLUENT => inline_value_objects([
+                new CallToFluent('Cake\Network\Response', 'withLocation'),
+                new CallToFluent('Cake\Network\Response', 'withHeader'),
+                new CallToFluent('Cake\Network\Response', 'withDisabledCache'),
+                new CallToFluent('Cake\Network\Response', 'withType'),
+                new CallToFluent('Cake\Network\Response', 'withCharset'),
+                new CallToFluent('Cake\Network\Response', 'withCache'),
+                new CallToFluent('Cake\Network\Response', 'withModified'),
+                new CallToFluent('Cake\Network\Response', 'withExpires'),
+                new CallToFluent('Cake\Network\Response', 'withSharable'),
+                new CallToFluent('Cake\Network\Response', 'withMaxAge'),
+                new CallToFluent('Cake\Network\Response', 'withVary'),
+                new CallToFluent('Cake\Network\Response', 'withEtag'),
+                new CallToFluent('Cake\Network\Response', 'withCompression'),
+                new CallToFluent('Cake\Network\Response', 'withLength'),
+                new CallToFluent('Cake\Network\Response', 'withMustRevalidate'),
+                new CallToFluent('Cake\Network\Response', 'withNotModified'),
+                new CallToFluent('Cake\Network\Response', 'withCookie'),
+                new CallToFluent('Cake\Network\Response', 'withFile'),
+                new CallToFluent('Cake\Network\Response', 'withDownload'),
+            ]),
         ]]);
 };

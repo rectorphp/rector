@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Tests\Rector\MethodCall\NormalToFluentRector\Source\FluentInterfaceClass;
+use Rector\Generic\ValueObject\CallToFluent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NormalToFluentRectorTest extends AbstractRectorTestCase
@@ -32,8 +33,10 @@ final class NormalToFluentRectorTest extends AbstractRectorTestCase
     {
         return [
             NormalToFluentRector::class => [
-                NormalToFluentRector::FLUENT_METHODS_BY_TYPE => [
-                    FluentInterfaceClass::class => ['someFunction', 'otherFunction', 'joinThisAsWell'],
+                NormalToFluentRector::CALLS_TO_FLUENT => [
+                    new CallToFluent(FluentInterfaceClass::class, 'someFunction'),
+                    new CallToFluent(FluentInterfaceClass::class, 'otherFunction'),
+                    new CallToFluent(FluentInterfaceClass::class, 'joinThisAsWell'),
                 ],
             ],
         ];
