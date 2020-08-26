@@ -7,6 +7,7 @@ use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToCamelRector;
 use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
 use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
+use Rector\Generic\ValueObject\MethodCallRenameWithAddedArguments;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
@@ -105,12 +106,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
         ->call('configure', [[
-            MethodCallToAnotherMethodCallWithArgumentsRector::OLD_METHODS_TO_NEW_METHODS_WITH_ARGS_BY_TYPE => [
-                'Cake\Database\Query' => [
-                    'join' => ['clause', ['join']],
-                    'from' => ['clause', ['from']],
-                ],
-            ],
+            MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => inline_value_objects(
+                [
+                    new MethodCallRenameWithAddedArguments('Cake\Database\Query', 'join', 'clause', ['join']),
+                    new MethodCallRenameWithAddedArguments('Cake\Database\Query', 'from', 'clause', ['from']),
+                ]
+            ),
         ]]);
 
     $services->set(ModalToGetSetRector::class)

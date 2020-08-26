@@ -11,6 +11,9 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\MethodCallRenameWithAddedArguments;
+use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\MethodCallToAnotherMethodCallWithArgumentsRectorTest
@@ -20,12 +23,12 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     /**
      * @var string
      */
-    public const OLD_METHODS_TO_NEW_METHODS_WITH_ARGS_BY_TYPE = 'old_methods_to_new_methods_with_args_by_type';
+    public const METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS = 'method_call_renames_with_added_arguments';
 
     /**
-     * @var mixed[][][]
+     * @var MethodCallRenameWithAddedArguments[]
      */
-    private $oldMethodsToNewMethodsWithArgsByType = [];
+    private $methodCallRenamesWithAddedArguments = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -42,10 +45,8 @@ $serviceDefinition->addTag('inject');
 PHP
                 ,
                 [
-                    self::OLD_METHODS_TO_NEW_METHODS_WITH_ARGS_BY_TYPE => [
-                        'Nette\DI\ServiceDefinition' => [
-                            'setInject' => [['addTag', ['inject']]],
-                        ],
+                    self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => [
+                        new MethodCallRenameWithArrayKey('Nette\DI\ServiceDefinition', 'setInject', 'addTag', 'inject'),
                     ],
                 ]
             ),
@@ -65,21 +66,19 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->oldMethodsToNewMethodsWithArgsByType as $type => $oldMethodsToNewMethodsWithArgs) {
-            if (! $this->isObjectType($node, $type)) {
+        foreach ($this->methodCallRenamesWithAddedArguments as $methodCallRenamedWithAddedArgument) {
+            if (! $this->isObjectType($node, $methodCallRenamedWithAddedArgument->getType())) {
                 continue;
             }
 
-            foreach ($oldMethodsToNewMethodsWithArgs as $oldMethod => $newMethodsWithArgs) {
-                if (! $this->isName($node->name, $oldMethod)) {
-                    continue;
-                }
-
-                $node->name = new Identifier($newMethodsWithArgs[0]);
-                $node->args = $this->createArgs($newMethodsWithArgs[1]);
-
-                return $node;
+            if (! $this->isName($node->name, $methodCallRenamedWithAddedArgument->getOldMethod())) {
+                continue;
             }
+
+            $node->name = new Identifier($methodCallRenamedWithAddedArgument->getNewMethod());
+            $node->args = $this->createArgs($methodCallRenamedWithAddedArgument->getNewArguments());
+
+            return $node;
         }
 
         return null;
@@ -87,6 +86,8 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->oldMethodsToNewMethodsWithArgsByType = $configuration[self::OLD_METHODS_TO_NEW_METHODS_WITH_ARGS_BY_TYPE] ?? [];
+        $methodCallRenamesWithAddedArguments = $configuration[self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS] ?? [];
+        Assert::allIsInstanceOf($methodCallRenamesWithAddedArguments, MethodCallRenameWithAddedArguments::class);
+        $this->methodCallRenamesWithAddedArguments = $methodCallRenamesWithAddedArguments;
     }
 }
