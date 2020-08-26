@@ -11,8 +11,10 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\ParentDependency;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\Class_\AddPropertyByParentRector\AddPropertyByParentRectorTest
@@ -23,12 +25,12 @@ final class AddPropertyByParentRector extends AbstractRector implements Configur
      * @api
      * @var string
      */
-    public const PARENT_TYPES_TO_DEPENDENCIES = 'parent_types_to_dependencies';
+    public const PARENT_DEPENDENCIES = 'parent_dependencies';
 
     /**
-     * @var array<string, string[]>
+     * @var ParentDependency[]
      */
-    private $parentsDependenciesToAdd = [];
+    private $parentDependencies = [];
 
     /**
      * @var PropertyNaming
@@ -74,7 +76,7 @@ final class SomeClass extends SomeParentClass
 CODE_SAMPLE
                 ,
                 [
-                    self::PARENT_TYPES_TO_DEPENDENCIES => [
+                    self::PARENT_DEPENDENCIES => [
                         'SomeParentClass' => ['SomeDependency'],
                     ],
                 ]
@@ -92,17 +94,15 @@ CODE_SAMPLE
         }
 
         $currentParentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        foreach ($this->parentsDependenciesToAdd as $parentClass => $typesToAdd) {
-            if ($currentParentClassName !== $parentClass) {
+        foreach ($this->parentDependencies as $parentDependency) {
+            if ($currentParentClassName !== $parentDependency->getParentClass()) {
                 continue;
             }
 
-            foreach ($typesToAdd as $typeToAdd) {
-                $propertyType = new ObjectType($typeToAdd);
-                /** @var string $propertyName */
-                $propertyName = $this->propertyNaming->getExpectedNameFromType($propertyType);
-                $this->addConstructorDependencyToClass($node, $propertyType, $propertyName);
-            }
+            $propertyType = new ObjectType($parentDependency->getDependencyType());
+            /** @var string $propertyName */
+            $propertyName = $this->propertyNaming->getExpectedNameFromType($propertyType);
+            $this->addConstructorDependencyToClass($node, $propertyType, $propertyName);
         }
 
         return $node;
@@ -110,6 +110,8 @@ CODE_SAMPLE
 
     public function configure(array $configuration): void
     {
-        $this->parentsDependenciesToAdd = $configuration[self::PARENT_TYPES_TO_DEPENDENCIES] ?? [];
+        $parentDependencies = $configuration[self::PARENT_DEPENDENCIES] ?? [];
+        Assert::allIsInstanceOf($parentDependencies, ParentDependency::class);
+        $this->parentDependencies = $parentDependencies;
     }
 }

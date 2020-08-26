@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
+use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -39,12 +40,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [
             ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
-                'Cake\Form\Form' => [
-                    'schema' => [
-                        'set' => 'setSchema',
-                        'get' => 'getSchema',
-                    ],
-                ],
+                new UnprefixedMethodToGetSet('Cake\Form\Form', 'schema'),
             ],
         ]);
 };

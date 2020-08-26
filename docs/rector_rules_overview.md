@@ -4668,7 +4668,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(AddPropertyByParentRector::class)
         ->call('configure', [[
-            AddPropertyByParentRector::PARENT_TYPES_TO_DEPENDENCIES => [
+            AddPropertyByParentRector::PARENT_DEPENDENCIES => [
                 'SomeParentClass' => [
                 'SomeDependency']]
         ]]);
