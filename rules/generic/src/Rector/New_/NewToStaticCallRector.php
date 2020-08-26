@@ -10,6 +10,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\TypeToStaticCall;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\New_\NewToStaticCallRector\NewToStaticCallRectorTest
@@ -19,10 +21,10 @@ final class NewToStaticCallRector extends AbstractRector implements Configurable
     /**
      * @var string
      */
-    public const TYPE_TO_STATIC_CALLS = '$typeToStaticCalls';
+    public const TYPE_TO_STATIC_CALLS = 'type_to_static_calls';
 
     /**
-     * @var string[]
+     * @var TypeToStaticCall[]
      */
     private $typeToStaticCalls = [];
 
@@ -51,9 +53,7 @@ class SomeClass
 PHP
                 ,
                 [
-                    self::TYPE_TO_STATIC_CALLS => [
-                        'Cookie' => ['Cookie', 'create'],
-                    ],
+                    self::TYPE_TO_STATIC_CALLS => [new TypeToStaticCall('Cookie', 'Cookie', 'create')],
                 ]
             ),
         ]);
@@ -72,12 +72,16 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->typeToStaticCalls as $type => $staticCall) {
-            if (! $this->isObjectType($node->class, $type)) {
+        foreach ($this->typeToStaticCalls as $typeToStaticCall) {
+            if (! $this->isObjectType($node->class, $typeToStaticCall->getType())) {
                 continue;
             }
 
-            return $this->createStaticCall($staticCall[0], $staticCall[1], $node->args);
+            return $this->createStaticCall(
+                $typeToStaticCall->getStaticCallClass(),
+                $typeToStaticCall->getStaticCallMethod(),
+                $node->args
+            );
         }
 
         return null;
@@ -85,6 +89,8 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? [];
+        $typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? [];
+        Assert::allIsInstanceOf($typeToStaticCalls, TypeToStaticCall::class);
+        $this->typeToStaticCalls = $typeToStaticCalls;
     }
 }

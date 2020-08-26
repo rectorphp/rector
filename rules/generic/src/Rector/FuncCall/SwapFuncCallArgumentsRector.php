@@ -8,8 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\FunctionArgumentSwap;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\FuncCall\SwapFuncCallArgumentsRector\SwapFuncCallArgumentsRectorTest
@@ -19,17 +21,17 @@ final class SwapFuncCallArgumentsRector extends AbstractRector implements Config
     /**
      * @var string
      */
-    public const NEW_ARGUMENT_POSITIONS_BY_FUNCTION_NAME = 'new_argument_positions_by_function_name';
+    public const FUNCTION_ARGUMENT_SWAPS = 'new_argument_positions_by_function_name';
 
     /**
-     * @var int[][]
+     * @var FunctionArgumentSwap[]
      */
-    private $newArgumentPositionsByFunctionName = [];
+    private $functionArgumentSwaps = [];
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Swap arguments in function calls', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 final class SomeClass
 {
@@ -49,6 +51,9 @@ final class SomeClass
     }
 }
 PHP
+                , [
+                    self::FUNCTION_ARGUMENT_SWAPS => [new FunctionArgumentSwap('some_function', [1, 0])],
+                ]
             ),
         ]);
     }
@@ -66,13 +71,13 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->newArgumentPositionsByFunctionName as $functionName => $newArgumentPositions) {
-            if (! $this->isName($node, $functionName)) {
+        foreach ($this->functionArgumentSwaps as $functionArgumentSwap) {
+            if (! $this->isName($node, $functionArgumentSwap->getFunction())) {
                 continue;
             }
 
             $newArguments = [];
-            foreach ($newArgumentPositions as $oldPosition => $newPosition) {
+            foreach ($functionArgumentSwap->getOrder() as $oldPosition => $newPosition) {
                 if (! isset($node->args[$oldPosition]) || ! isset($node->args[$newPosition])) {
                     continue;
                 }
@@ -90,6 +95,8 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->newArgumentPositionsByFunctionName = $configuration[self::NEW_ARGUMENT_POSITIONS_BY_FUNCTION_NAME] ?? [];
+        $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? [];
+        Assert::allIsInstanceOf($functionArgumentSwaps, FunctionArgumentSwap::class);
+        $this->functionArgumentSwaps = $functionArgumentSwaps;
     }
 }

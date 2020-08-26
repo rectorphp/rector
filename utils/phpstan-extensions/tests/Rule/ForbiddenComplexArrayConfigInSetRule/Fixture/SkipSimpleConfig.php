@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ServiceGetterToConstructorInjectionRector::class)
         ->call('configure', [[
-            ServiceGetterToConstructorInjectionRector::METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES => [
+            ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
                 'Doctrine\Common\Persistence\ManagerRegistry' => 'simple'
             ]
         ]]);

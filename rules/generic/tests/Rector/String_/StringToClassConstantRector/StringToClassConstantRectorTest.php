@@ -7,6 +7,7 @@ namespace Rector\Generic\Tests\Rector\String_\StringToClassConstantRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\String_\StringToClassConstantRector;
+use Rector\Generic\ValueObject\StringToClassConstant;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class StringToClassConstantRectorTest extends AbstractRectorTestCase
@@ -32,8 +33,8 @@ final class StringToClassConstantRectorTest extends AbstractRectorTestCase
         return [
             StringToClassConstantRector::class => [
                 StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => [
-                    'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
-                    'compiler.to_class' => ['Yet\AnotherClass', 'class'],
+                    new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT'),
+                    new StringToClassConstant('compiler.to_class', 'Yet\AnotherClass', 'class'),
                 ],
             ],
         ];

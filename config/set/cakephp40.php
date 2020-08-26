@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
+use Rector\CakePHP\ValueObject\CallWithParamRename;
+use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\RenamedProperty;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
+use Rector\Renaming\ValueObject\ClassConstantRename;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\StaticCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
@@ -33,18 +37,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
-                'Cake\View\View' => [
-                    'NAME_ELEMENT' => 'TYPE_ELEMENT',
-                    'NAME_LAYOUT' => 'TYPE_LAYOUT',
-                ],
-                'Cake\Mailer\Email' => [
-                    'MESSAGE_HTML' => 'Cake\Mailer\Message::MESSAGE_HTML',
-                    'MESSAGE_TEXT' => 'Cake\Mailer\Message::MESSAGE_TEXT',
-                    'MESSAGE_BOTH' => 'Cake\Mailer\Message::MESSAGE_BOTH',
-                    'EMAIL_PATTERN' => 'Cake\Mailer\Message::EMAIL_PATTERN',
-                ],
-            ],
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
+                new ClassConstantRename('Cake\View\View', 'NAME_ELEMENT', 'TYPE_ELEMENT'),
+                new ClassConstantRename('Cake\View\View', 'NAME_LAYOUT', 'TYPE_LAYOUT'),
+                new ClassConstantRename('Cake\Mailer\Email', 'MESSAGE_HTML', 'Cake\Mailer\Message::MESSAGE_HTML'),
+                new ClassConstantRename('Cake\Mailer\Email', 'MESSAGE_TEXT', 'Cake\Mailer\Message::MESSAGE_TEXT'),
+                new ClassConstantRename('Cake\Mailer\Email', 'MESSAGE_BOTH', 'Cake\Mailer\Message::MESSAGE_BOTH'),
+                new ClassConstantRename('Cake\Mailer\Email', 'EMAIL_PATTERN', 'Cake\Mailer\Message::EMAIL_PATTERN'),
+            ]),
         ]]);
 
     $services->set(RenameMethodRector::class)
@@ -60,24 +60,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    $configuration = [
-        new StaticCallRename('Router', 'pushRequest', 'Router', 'setRequest'),
-        new StaticCallRename('Router', 'setRequestInfo', 'Router', 'setRequest'),
-        new StaticCallRename('Router', 'setRequestContext', 'Router', 'setRequest'),
-    ];
-
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
-            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_value_objects($configuration),
+            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_value_objects([
+                new StaticCallRename('Router', 'pushRequest', 'Router', 'setRequest'),
+                new StaticCallRename('Router', 'setRequestInfo', 'Router', 'setRequest'),
+                new StaticCallRename('Router', 'setRequestContext', 'Router', 'setRequest'),
+            ]),
         ]]);
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
-                'Cake\ORM\Entity' => [
-                    '_properties' => '_fields',
-                ],
-            ],
+            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
+                new RenamedProperty('Cake\ORM\Entity', '_properties', '_fields'),
+            ]),
         ]]);
 
     $services->set(AddReturnTypeDeclarationRector::class)
@@ -142,39 +138,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->call('configure', [[
-            RenameMethodCallBasedOnParameterRector::METHOD_NAMES_BY_TYPES => [
-                'getParam' => [
-                    'match_parameter' => 'paging',
-                    'replace_with' => 'getAttribute',
-                ],
-                'withParam' => [
-                    'match_parameter' => 'paging',
-                    'replace_with' => 'withAttribute',
-                ],
-            ],
+            RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => inline_value_objects([
+                new CallWithParamRename('Cake\Http\ServerRequest', 'getParam', 'paging', 'getAttribute'),
+                new CallWithParamRename('Cake\Http\ServerRequest', 'withParam', 'paging', 'withAttribute'),
+            ]),
         ]]);
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            ModalToGetSetRector::METHOD_NAMES_BY_TYPES => [
-                'Cake\Console\ConsoleIo' => [
-                    'styles' => [
-                        'set' => 'setStyle',
-                        'get' => 'getStyle',
-                    ],
-                ],
-                'Cake\Console\ConsoleOutput' => [
-                    'styles' => [
-                        'set' => 'setStyle',
-                        'get' => 'getStyle',
-                    ],
-                ],
-                'Cake\ORM\EntityInterface' => [
-                    'isNew' => [
-                        'set' => 'setNew',
-                        'get' => 'isNew',
-                    ],
-                ],
-            ],
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
+                new UnprefixedMethodToGetSet('Cake\Console\ConsoleIo', 'styles', 'setStyle', 'getStyle'),
+                new UnprefixedMethodToGetSet('Cake\Console\ConsoleOutput', 'styles', 'setStyle', 'getStyle'),
+                new UnprefixedMethodToGetSet('Cake\ORM\EntityInterface', 'isNew', 'setNew', 'isNew'),
+            ]),
         ]]);
 };

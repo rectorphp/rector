@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\RenamedProperty;
 use Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -32,10 +33,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
-                'Illuminate\Routing\UrlGenerator' => [
-                    'cachedSchema' => 'cachedScheme',
-                ],
-            ],
+            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
+                new RenamedProperty('Illuminate\Routing\UrlGenerator', 'cachedSchema', 'cachedScheme'),
+            ]),
         ]]);
 };

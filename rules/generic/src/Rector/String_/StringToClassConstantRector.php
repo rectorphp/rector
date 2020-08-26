@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\Generic\Rector\String_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\StringToClassConstant;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\String_\StringToClassConstantRector\StringToClassConstantRectorTest
@@ -24,7 +24,7 @@ final class StringToClassConstantRector extends AbstractRector implements Config
     public const STRINGS_TO_CLASS_CONSTANTS = 'strings_to_class_constants';
 
     /**
-     * @var string[][]
+     * @var StringToClassConstant[]
      */
     private $stringsToClassConstants = [];
 
@@ -54,7 +54,7 @@ PHP
                 ,
                 [
                     self::STRINGS_TO_CLASS_CONSTANTS => [
-                        'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
+                        new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT'),
                     ],
                 ]
             ),
@@ -74,12 +74,15 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->stringsToClassConstants as $string => $classConstant) {
-            if (! $this->isValue($node, $string)) {
+        foreach ($this->stringsToClassConstants as $stringToClassConstant) {
+            if (! $this->isValue($node, $stringToClassConstant->getString())) {
                 continue;
             }
 
-            return new ClassConstFetch(new FullyQualified($classConstant[0]), $classConstant[1]);
+            return $this->createClassConstFetch(
+                $stringToClassConstant->getClass(),
+                $stringToClassConstant->getConstant()
+            );
         }
 
         return $node;
@@ -87,6 +90,8 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->stringsToClassConstants = $configuration[self::STRINGS_TO_CLASS_CONSTANTS] ?? [];
+        $stringToClassConstants = $configuration[self::STRINGS_TO_CLASS_CONSTANTS] ?? [];
+        Assert::allIsInstanceOf($stringToClassConstants, StringToClassConstant::class);
+        $this->stringsToClassConstants = $stringToClassConstants;
     }
 }

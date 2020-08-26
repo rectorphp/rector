@@ -7,6 +7,7 @@ namespace Rector\Renaming\Tests\Rector\ClassMethod\RenameAnnotationRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
+use Rector\Renaming\ValueObject\RenamedAnnotationInType;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameAnnotationRectorTest extends AbstractRectorTestCase
@@ -31,10 +32,8 @@ final class RenameAnnotationRectorTest extends AbstractRectorTestCase
     {
         return [
             RenameAnnotationRector::class => [
-                RenameAnnotationRector::CLASS_TO_ANNOTATION_MAP => [
-                    'PHPUnit\Framework\TestCase' => [
-                        'scenario' => 'test',
-                    ],
+                RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => [
+                    new RenamedAnnotationInType('PHPUnit\Framework\TestCase', 'scenario', 'test'),
                 ],
             ],
         ];

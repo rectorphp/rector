@@ -9,6 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 use Rector\Generic\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService;
 use Rector\Generic\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
+use Rector\Generic\ValueObject\MethodCallToService;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRectorTestCase
@@ -38,10 +39,8 @@ final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRector
     {
         return [
             ServiceGetterToConstructorInjectionRector::class => [
-                ServiceGetterToConstructorInjectionRector::METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES => [
-                    FirstService::class => [
-                        'getAnotherService' => AnotherService::class,
-                    ],
+                ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
+                    new MethodCallToService(FirstService::class, 'getAnotherService', AnotherService::class),
                 ],
             ],
         ];

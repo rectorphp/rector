@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
+
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
 use Rector\Generic\ValueObject\ReplacedArgument;
@@ -17,6 +18,7 @@ use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotate
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\ClassConstantRename;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -35,60 +37,52 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeFormArrayAccessToAnnotatedControlVariableRector::class);
 
     $services->set(GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector::class);
+
     // Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
     $services->set(RemoveParentCallWithoutParentRector::class);
+
     // https://github.com/nette/utils/commit/d0041ba59f5d8bf1f5b3795fd76d43fb13ea2e15
     $services->set(FormerNullableArgumentToScalarTypedRector::class);
 
-    $configuration = [];
-    $configuration[] = new StaticCallToMethodCall(
-        'Nette\Security\Passwords',
-        'hash',
-        'Nette\Security\Passwords',
-        'hash'
-    );
-    $configuration[] = new StaticCallToMethodCall(
-        'Nette\Security\Passwords',
-        'verify',
-        'Nette\Security\Passwords',
-        'verify'
-    );
-    $configuration[] = new StaticCallToMethodCall(
-        'Nette\Security\Passwords',
-        'needsRehash',
-        'Nette\Security\Passwords',
-        'needsRehash'
-    );
-    $services->set(StaticCallToMethodCallRector::class)->call(
-        'configure',
-        [[StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_value_objects($configuration)]]
-    );
+    $services->set(StaticCallToMethodCallRector::class)
+        ->call('configure', [[
+            StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_value_objects([
+                new StaticCallToMethodCall('Nette\Security\Passwords', 'hash', 'Nette\Security\Passwords', 'hash'),
+                new StaticCallToMethodCall(
+                    'Nette\Security\Passwords',
+                    'verify',
+                    'Nette\Security\Passwords',
+                    'verify'
+                ),
+                new StaticCallToMethodCall(
+                    'Nette\Security\Passwords',
+                    'needsRehash',
+                    'Nette\Security\Passwords',
+                    'needsRehash'
+                ),
+            ]),
+        ]]);
+
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
-    $services->set(RenameClassConstantRector::class)->call(
-        'configure',
-        [[
-            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
-                'Contributte\Events\Extra\Event\Security\LoggedInEvent' => [
-                    'NAME' => 'class',
-                ],
-                'Contributte\Events\Extra\Event\Security\LoggedOutEvent' => [
-                    'NAME' => 'class',
-                ],
-                'Contributte\Events\Extra\Event\Application\ShutdownEvent' => [
-                    'NAME' => 'class',
-                ],
+    $services->set(RenameClassConstantRector::class)
+        ->call('configure', [[
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
+                new ClassConstantRename('Contributte\Events\Extra\Event\Security\LoggedInEvent', 'NAME', 'class'),
+                new ClassConstantRename('Contributte\Events\Extra\Event\Security\LoggedOutEvent', 'NAME', 'class'),
+                new ClassConstantRename('Contributte\Events\Extra\Event\Application\ShutdownEvent', 'NAME', 'class'),
+            ]),
+        ]]);
+
+    $services->set(RenameClassRector::class)
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                # nextras/forms was split into 2 packages
+                'Nextras\FormComponents\Controls\DatePicker' => 'Nextras\FormComponents\Controls\DateControl',
+                # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
+                'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
+                'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
             ],
-        ]]
-    );
-    $services->set(RenameClassRector::class)->call('configure', [[
-        RenameClassRector::OLD_TO_NEW_CLASSES => [
-            # nextras/forms was split into 2 packages
-            'Nextras\FormComponents\Controls\DatePicker' => 'Nextras\FormComponents\Controls\DateControl',
-            # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
-            'Nette\DI\ServiceDefinition' => 'Nette\DI\Definitions\ServiceDefinition',
-            'Nette\DI\Statement' => 'Nette\DI\Definitions\Statement',
-        ],
-    ]]);
+        ]]);
 
     $services->set(BuilderExpandToHelperExpandRector::class);
 

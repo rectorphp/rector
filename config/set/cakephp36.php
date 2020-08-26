@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\Assign\PropertyToMethodRector;
+use Rector\Generic\ValueObject\PropertyToMethodCall;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -24,24 +25,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PER_CLASS_PROPERTY_TO_METHODS => [
-                'Cake\Controller\Controller' => [
-                    'name' => [
-                        'get' => 'getName',
-                        'set' => 'setName',
-                    ],
-                    'plugin' => [
-                        'get' => 'getPlugin',
-                        'set' => 'setPlugin',
-                    ],
-                ],
-                'Cake\Form\Form' => [
-                    'validator' => [
-                        'get' => 'getValidator',
-                        'set' => 'setValidator',
-                    ],
-                ],
-            ],
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
+                new PropertyToMethodCall('Cake\Controller\Controller', 'name', 'getName', 'setName'),
+                new PropertyToMethodCall('Cake\Controller\Controller', 'plugin', 'getPlugin', 'setPlugin'),
+                new PropertyToMethodCall('Cake\Form\Form', 'validator', 'getValidator', 'setValidator'),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

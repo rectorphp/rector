@@ -8,13 +8,18 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\PropertyToMethodCall;
+use Webmozart\Assert\Assert;
 
 /**
+ * @todo extract to "transform" or similar set, along with other static call to something else,
+ * it's like rename, just with node type change
+ *
  * @see \Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector\PropertyToMethodRectorTest
  */
 final class PropertyToMethodRector extends AbstractRector implements ConfigurableRectorInterface
@@ -22,17 +27,12 @@ final class PropertyToMethodRector extends AbstractRector implements Configurabl
     /**
      * @var string
      */
-    public const PER_CLASS_PROPERTY_TO_METHODS = 'per_class_property_to_methods';
+    public const PROPERTIES_TO_METHOD_CALLS = 'properties_to_method_calls';
 
     /**
-     * @var string
+     * @var PropertyToMethodCall[]
      */
-    private const GET = 'get';
-
-    /**
-     * @var string[][][]
-     */
-    private $perClassPropertyToMethods = [];
+    private $propertiesToMethodCalls = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -49,13 +49,8 @@ $object->setProperty($value);
 PHP
                 ,
                 [
-                    self::PER_CLASS_PROPERTY_TO_METHODS => [
-                        'SomeObject' => [
-                            'property' => [
-                                self::GET => 'getProperty',
-                                'set' => 'setProperty',
-                            ],
-                        ],
+                    self::PROPERTIES_TO_METHOD_CALLS => [
+                        new PropertyToMethodCall('SomeObject', 'property', 'getProperty', 'setProperty'),
                     ],
                 ]
             ),
@@ -69,15 +64,8 @@ $result = $object->getProperty('someArg');
 PHP
                 ,
                 [
-                    self::PER_CLASS_PROPERTY_TO_METHODS => [
-                        'SomeObject' => [
-                            'property' => [
-                                self::GET => [
-                                    'method' => 'getConfig',
-                                    'arguments' => ['someArg'],
-                                ],
-                            ],
-                        ],
+                    self::PROPERTIES_TO_METHOD_CALLS => [
+                        new PropertyToMethodCall('SomeObject', 'property', 'getConfig', null, ['someArg']),
                     ],
                 ]
             ),
@@ -110,7 +98,9 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->perClassPropertyToMethods = $configuration[self::PER_CLASS_PROPERTY_TO_METHODS] ?? [];
+        $propertiesToMethodCalls = $configuration[self::PROPERTIES_TO_METHOD_CALLS] ?? [];
+        Assert::allIsInstanceOf($propertiesToMethodCalls, PropertyToMethodCall::class);
+        $this->propertiesToMethodCalls = $propertiesToMethodCalls;
     }
 
     private function processSetter(Assign $assign): ?Node
@@ -118,9 +108,13 @@ PHP
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $assign->var;
 
-        $newMethodMatch = $this->matchPropertyFetchCandidate($propertyFetchNode);
-        if ($newMethodMatch === null) {
+        $propertyToMethodCall = $this->matchPropertyFetchCandidate($propertyFetchNode);
+        if ($propertyToMethodCall === null) {
             return null;
+        }
+
+        if ($propertyToMethodCall->getNewSetMethod() === null) {
+            throw new ShouldNotHappenException();
         }
 
         $args = $this->createArgs([$assign->expr]);
@@ -128,7 +122,7 @@ PHP
         /** @var Variable $variable */
         $variable = $propertyFetchNode->var;
 
-        return $this->createMethodCall($variable, $newMethodMatch['set'], $args);
+        return $this->createMethodCall($variable, $propertyToMethodCall->getNewSetMethod(), $args);
     }
 
     private function processGetter(Assign $assign): ?Node
@@ -136,28 +130,19 @@ PHP
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $assign->expr;
 
-        $newMethodMatch = $this->matchPropertyFetchCandidate($propertyFetchNode);
-        if ($newMethodMatch === null) {
+        $propertyToMethodCall = $this->matchPropertyFetchCandidate($propertyFetchNode);
+        if ($propertyToMethodCall === null) {
             return null;
         }
 
         // simple method name
-        if (is_string($newMethodMatch[self::GET])) {
-            $assign->expr = $this->createMethodCall($propertyFetchNode->var, $newMethodMatch[self::GET]);
+        if ($propertyToMethodCall->getNewGetMethod() !== '') {
+            $assign->expr = $this->createMethodCall($propertyFetchNode->var, $propertyToMethodCall->getNewGetMethod());
 
-            return $assign;
-
-            // method with argument
-        }
-
-        if (is_array($newMethodMatch[self::GET])) {
-            $args = $this->createArgs($newMethodMatch[self::GET]['arguments']);
-
-            $assign->expr = $this->createMethodCall(
-                $propertyFetchNode->var,
-                $newMethodMatch[self::GET]['method'],
-                $args
-            );
+            if ($propertyToMethodCall->getNewGetArguments() !== []) {
+                $args = $this->createArgs($propertyToMethodCall->getNewGetArguments());
+                $assign->expr->args = $args;
+            }
 
             return $assign;
         }
@@ -165,27 +150,18 @@ PHP
         return $assign;
     }
 
-    /**
-     * @return mixed[]|null
-     */
-    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch): ?array
+    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch): ?PropertyToMethodCall
     {
-        foreach ($this->perClassPropertyToMethods as $type => $propertyToMethods) {
-            $properties = array_keys($propertyToMethods);
-
-            if (! $this->isObjectType($propertyFetch->var, $type)) {
+        foreach ($this->propertiesToMethodCalls as $propertyToMethodCall) {
+            if (! $this->isObjectType($propertyFetch->var, $propertyToMethodCall->getOldType())) {
                 continue;
             }
 
-            if (! $this->isNames($propertyFetch, $properties)) {
+            if (! $this->isName($propertyFetch, $propertyToMethodCall->getOldProperty())) {
                 continue;
             }
 
-            /** @var Identifier $identifierNode */
-            $identifierNode = $propertyFetch->name;
-
-            //[$type];
-            return $propertyToMethods[$identifierNode->toString()];
+            return $propertyToMethodCall;
         }
 
         return null;

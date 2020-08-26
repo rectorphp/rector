@@ -13,6 +13,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Renaming\ValueObject\ClassConstantRename;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\ClassConstFetch\RenameClassConstantRector\RenameClassConstantRectorTest
@@ -22,16 +24,12 @@ final class RenameClassConstantRector extends AbstractRector implements Configur
     /**
      * @var string
      */
-    public const OLD_TO_NEW_CONSTANTS_BY_CLASS = '$oldToNewConstantsByClass';
+    public const CLASS_CONSTANT_RENAME = 'constant_rename';
 
     /**
-     * class => [
-     *      OLD_CONSTANT => NEW_CONSTANT
-     * ]
-     *
-     * @var array<string, array<string, string>>
+     * @var ClassConstantRename[]
      */
-    private $oldToNewConstantsByClass = [];
+    private $classConstantRenames = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -48,11 +46,9 @@ $value = DifferentClass::NEW_CONSTANT;
 PHP
                 ,
                 [
-                    self::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
-                        'SomeClass' => [
-                            'OLD_CONSTANT' => 'NEW_CONSTANT',
-                            'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT',
-                        ],
+                    self::CLASS_CONSTANT_RENAME => [
+                        new ClassConstantRename('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
+                        new ClassConstantRename('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'),
                     ],
                 ]
             ),
@@ -72,24 +68,22 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->oldToNewConstantsByClass as $type => $oldToNewConstants) {
-            if (! $this->isObjectType($node, $type)) {
+        foreach ($this->classConstantRenames as $classConstantRename) {
+            if (! $this->isObjectType($node, $classConstantRename->getOldClass())) {
                 continue;
             }
 
-            foreach ($oldToNewConstants as $oldConstant => $newConstant) {
-                if (! $this->isName($node->name, $oldConstant)) {
-                    continue;
-                }
-
-                if (Strings::contains($newConstant, '::')) {
-                    return $this->createClassConstantFetchNodeFromDoubleColonFormat($newConstant);
-                }
-
-                $node->name = new Identifier($newConstant);
-
-                return $node;
+            if (! $this->isName($node->name, $classConstantRename->getOldConstant())) {
+                continue;
             }
+
+            if (Strings::contains($classConstantRename->getNewConstant(), '::')) {
+                return $this->createClassConstantFetchNodeFromDoubleColonFormat($classConstantRename->getNewConstant());
+            }
+
+            $node->name = new Identifier($classConstantRename->getNewConstant());
+
+            return $node;
         }
 
         return $node;
@@ -100,7 +94,9 @@ PHP
      */
     public function configure(array $configuration): void
     {
-        $this->oldToNewConstantsByClass = $configuration[self::OLD_TO_NEW_CONSTANTS_BY_CLASS] ?? [];
+        $classConstantRenames = $configuration[self::CLASS_CONSTANT_RENAME] ?? [];
+        Assert::allIsInstanceOf($classConstantRenames, ClassConstantRename::class);
+        $this->classConstantRenames = $classConstantRenames;
     }
 
     private function createClassConstantFetchNodeFromDoubleColonFormat(string $constant): ClassConstFetch

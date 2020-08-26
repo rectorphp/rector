@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector;
 use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
+use Rector\Renaming\ValueObject\RenamedAnnotationInType;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -13,11 +15,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameAnnotationRector::class)
         ->call('configure', [[
-            RenameAnnotationRector::CLASS_TO_ANNOTATION_MAP => [
-                'PHPUnit\Framework\TestCase' => [
-                    'scenario' => 'test',
-                ],
-            ],
+            RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => inline_value_objects([
+                new RenamedAnnotationInType('PHPUnit\Framework\TestCase', 'scenario', 'test'),
+            ]),
         ]]);
 
     $services->set(RemoveDataProviderTestPrefixRector::class);

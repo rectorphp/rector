@@ -392,7 +392,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->call('configure', [[
-            RenameMethodCallBasedOnParameterRector::METHOD_NAMES_BY_TYPES => [
+            RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => [
                 'getParam' => [
                 'match_parameter' => 'paging', 'replace_with' => 'getAttribute'], 'withParam' => [
                 'match_parameter' => 'paging', 'replace_with' => 'withAttribute']]
@@ -2078,7 +2078,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->call('configure', [[
-            ReturnArrayClassMethodToYieldRector::METHODS_BY_TYPE => [
+            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => [
                 'EventSubscriberInterface' => [
                 'getSubscribedEvents']]
         ]]);
@@ -4668,7 +4668,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(AddPropertyByParentRector::class)
         ->call('configure', [[
-            AddPropertyByParentRector::PARENT_TYPES_TO_DEPENDENCIES => [
+            AddPropertyByParentRector::PARENT_DEPENDENCIES => [
                 'SomeParentClass' => [
                 'SomeDependency']]
         ]]);
@@ -5318,7 +5318,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
         ->call('configure', [[
-            MethodCallToAnotherMethodCallWithArgumentsRector::OLD_METHODS_TO_NEW_METHODS_WITH_ARGS_BY_TYPE => [
+            MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => [
                 'Nette\DI\ServiceDefinition' => [
                 'setInject' => [
                 [
@@ -5392,7 +5392,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(MethodCallToReturnRector::class)
         ->call('configure', [[
-            MethodCallToReturnRector::METHOD_NAMES_BY_TYPE => [
+            MethodCallToReturnRector::METHOD_CALL_WRAPS => [
                 'SomeClass' => [
                 'deny']]
         ]]);
@@ -5671,7 +5671,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PER_CLASS_PROPERTY_TO_METHODS => [
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
                 'SomeObject' => [
                 'property' => [
                 'get' => 'getProperty', 'set' => 'setProperty']]]
@@ -5698,7 +5698,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PER_CLASS_PROPERTY_TO_METHODS => [
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
                 'SomeObject' => [
                 'property' => [
                 'get' => [
@@ -5806,7 +5806,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RemoveFuncCallArgRector::class)
         ->call('configure', [[
-            RemoveFuncCallArgRector::ARGUMENT_POSITION_BY_FUNCTION_NAME => [
+            RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => [
                 'remove_last_arg' => [
                 1]]
         ]]);
@@ -5988,7 +5988,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
+            RenamePropertyRector::RENAMED_PROPERTIES => [
                 'SomeClass' => [
                 'someOldProperty' => 'someNewProperty']]
         ]]);
@@ -6021,7 +6021,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ReplaceParentCallByPropertyCallRector::class)
         ->call('configure', [[
-            ReplaceParentCallByPropertyCallRector::PARENT_TYPE_TO_METHOD_NAME_TO_PROPERTY_FETCH => [
+            ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => [
                 'SomeTypeToReplace' => [
                 'someMethodCall' => 'someProperty']]
         ]]);
@@ -6089,7 +6089,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ServiceGetterToConstructorInjectionRector::class)
         ->call('configure', [[
-            ServiceGetterToConstructorInjectionRector::METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES => [
+            ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
                 'FirstService' => [
                 'getAnotherService' => 'AnotherService']]
         ]]);
@@ -6161,7 +6161,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(StaticCallToFunctionRector::class)
         ->call('configure', [[
-            StaticCallToFunctionRector::STATIC_CALL_TO_FUNCTION_BY_TYPE => [
+            StaticCallToFunctionRector::STATIC_CALLS_TO_FUNCTIONS => [
                 'OldClass' => [
                 'oldMethod' => 'new_function']]
         ]]);
@@ -6233,7 +6233,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(SwapClassMethodArgumentsRector::class)
         ->call('configure', [[
-            SwapClassMethodArgumentsRector::NEW_ARGUMENT_POSITIONS_BY_METHOD_AND_CLASS => [
+            SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => [
                 'SomeClass' => [
                 'run' => [
                 1, 0]]]
@@ -6897,7 +6897,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
-            UnsetAndIssetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
+            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => [
                 'SomeContainer' => [
                 'isset' => 'hasService']]
         ]]);
@@ -6922,7 +6922,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
-            UnsetAndIssetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
+            UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => [
                 'SomeContainer' => [
                 'unset' => 'removeService']]
         ]]);
@@ -12446,7 +12446,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameAnnotationRector::class)
         ->call('configure', [[
-            RenameAnnotationRector::CLASS_TO_ANNOTATION_MAP => [
+            RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => [
                 'PHPUnit\Framework\TestCase' => [
                 'test' => 'scenario']]
         ]]);
@@ -12487,7 +12487,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => [
                 'SomeClass' => [
                 'OLD_CONSTANT' => 'NEW_CONSTANT', 'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT']]
         ]]);

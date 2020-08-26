@@ -534,16 +534,6 @@ final class SetList
     /**
      * @var string
      */
-    public const SHOPWARE_55 = __DIR__ . '/../../../../config/set/shopware55.php';
-
-    /**
-     * @var string
-     */
-    public const SHOPWARE_56 = __DIR__ . '/../../../../config/set/shopware56.php';
-
-    /**
-     * @var string
-     */
     public const SOLID = __DIR__ . '/../../../../config/set/solid.php';
 
     /**

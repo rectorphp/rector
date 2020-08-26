@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Generic\ValueObject\RenamedProperty;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -23,14 +24,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
-            RenamePropertyRector::OLD_TO_NEW_PROPERTY_BY_TYPES => [
-                'Illuminate\Database\Eloquent\Concerns\HasEvents' => [
-                    'events' => 'dispatchesEvents',
-                ],
-                'Illuminate\Database\Eloquent\Relations\Pivot' => [
-                    'parent' => 'pivotParent',
-                ],
-            ],
+            RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
+                new RenamedProperty('Illuminate\Database\Eloquent\Concerns\HasEvents', 'events', 'dispatchesEvents'),
+                new RenamedProperty('Illuminate\Database\Eloquent\Relations\Pivot', 'parent', 'pivotParent'),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

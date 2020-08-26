@@ -7,6 +7,7 @@ namespace Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParamete
 use Iterator;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 use Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\Source\SomeModelType;
+use Rector\CakePHP\ValueObject\CallWithParamRename;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -35,18 +36,9 @@ final class RenameMethodCallBasedOnParameterRectorTest extends AbstractRectorTes
     {
         return [
             RenameMethodCallBasedOnParameterRector::class => [
-                RenameMethodCallBasedOnParameterRector::METHOD_NAMES_BY_TYPES => [
-                    SomeModelType::class => [
-                        'invalidNoOptions' => [],
-                        'getParam' => [
-                            'match_parameter' => 'paging',
-                            'replace_with' => 'getAttribute',
-                        ],
-                        'withParam' => [
-                            'match_parameter' => 'paging',
-                            'replace_with' => 'withAttribute',
-                        ],
-                    ],
+                RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => [
+                    new CallWithParamRename(SomeModelType::class, 'getParam', 'paging', 'getAttribute'),
+                    new CallWithParamRename(SomeModelType::class, 'withParam', 'paging', 'withAttribute'),
                 ],
             ],
         ];

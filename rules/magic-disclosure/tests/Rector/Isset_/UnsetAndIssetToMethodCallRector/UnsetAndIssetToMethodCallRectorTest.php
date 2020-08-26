@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MagicDisclosure\Rector\Isset_\UnsetAndIssetToMethodCallRector;
 use Rector\MagicDisclosure\Tests\Rector\Isset_\UnsetAndIssetToMethodCallRector\Source\LocalContainer;
+use Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase
@@ -32,11 +33,8 @@ final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase
     {
         return [
             UnsetAndIssetToMethodCallRector::class => [
-                UnsetAndIssetToMethodCallRector::TYPE_TO_METHOD_CALLS => [
-                    LocalContainer::class => [
-                        'isset' => 'hasService',
-                        'unset' => 'removeService',
-                    ],
+                UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => [
+                    new IssetUnsetToMethodCall(LocalContainer::class, 'hasService', 'removeService'),
                 ],
             ],
         ];

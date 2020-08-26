@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
+
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\ValueObject\MethodReturnType;
 use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
@@ -13,6 +14,7 @@ use Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesG
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\ClassConstantRename;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -69,79 +71,343 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
-                'Nette\Http\*Response' => [
-                    'S100_CONTINUE' => 'Symfony\Component\HttpFoundation\Response::HTTP_CONTINUE',
-                    'S101_SWITCHING_PROTOCOLS' => 'Symfony\Component\HttpFoundation\Response::HTTP_SWITCHING_PROTOCOLS',
-                    'S102_PROCESSING' => 'Symfony\Component\HttpFoundation\Response::HTTP_PROCESSING',
-                    'S200_OK' => 'Symfony\Component\HttpFoundation\Response::HTTP_OK',
-                    'S201_CREATED' => 'Symfony\Component\HttpFoundation\Response::HTTP_CREATED',
-                    'S202_ACCEPTED' => 'Symfony\Component\HttpFoundation\Response::HTTP_ACCEPTED',
-                    'S203_NON_AUTHORITATIVE_INFORMATION' => 'Symfony\Component\HttpFoundation\Response::HTTP_NON_AUTHORITATIVE_INFORMATION',
-                    'S204_NO_CONTENT' => 'Symfony\Component\HttpFoundation\Response::HTTP_NO_CONTENT',
-                    'S205_RESET_CONTENT' => 'Symfony\Component\HttpFoundation\Response::HTTP_RESET_CONTENT',
-                    'S206_PARTIAL_CONTENT' => 'Symfony\Component\HttpFoundation\Response::HTTP_PARTIAL_CONTENT',
-                    'S207_MULTI_STATUS' => 'Symfony\Component\HttpFoundation\Response::HTTP_MULTI_STATUS',
-                    'S208_ALREADY_REPORTED' => 'Symfony\Component\HttpFoundation\Response::HTTP_ALREADY_REPORTED',
-                    'S226_IM_USED' => 'Symfony\Component\HttpFoundation\Response::HTTP_IM_USED',
-                    'S300_MULTIPLE_CHOICES' => 'Symfony\Component\HttpFoundation\Response::HTTP_MULTIPLE_CHOICES',
-                    'S301_MOVED_PERMANENTLY' => 'Symfony\Component\HttpFoundation\Response::HTTP_MOVED_PERMANENTLY',
-                    'S302_FOUND' => 'Symfony\Component\HttpFoundation\Response::HTTP_FOUND',
-                    'S303_SEE_OTHER' => 'Symfony\Component\HttpFoundation\Response::HTTP_SEE_OTHER',
-                    'S303_POST_GET' => 'Symfony\Component\HttpFoundation\Response::HTTP_SEE_OTHER',
-                    'S304_NOT_MODIFIED' => 'Symfony\Component\HttpFoundation\Response::HTTP_NOT_MODIFIED',
-                    'S305_USE_PROXY' => 'Symfony\Component\HttpFoundation\Response::HTTP_USE_PROXY',
-                    'S307_TEMPORARY_REDIRECT' => 'Symfony\Component\HttpFoundation\Response::HTTP_TEMPORARY_REDIRECT',
-                    'S308_PERMANENT_REDIRECT' => 'Symfony\Component\HttpFoundation\Response::HTTP_PERMANENTLY_REDIRECT',
-                    'S400_BAD_REQUEST' => 'Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST',
-                    'S401_UNAUTHORIZED' => 'Symfony\Component\HttpFoundation\Response::HTTP_UNAUTHORIZED',
-                    'S402_PAYMENT_REQUIRED' => 'Symfony\Component\HttpFoundation\Response::HTTP_PAYMENT_REQUIRED',
-                    'S403_FORBIDDEN' => 'Symfony\Component\HttpFoundation\Response::HTTP_FORBIDDEN',
-                    'S404_NOT_FOUND' => 'Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND',
-                    'S405_METHOD_NOT_ALLOWED' => 'Symfony\Component\HttpFoundation\Response::HTTP_METHOD_NOT_ALLOWED',
-                    'S406_NOT_ACCEPTABLE' => 'Symfony\Component\HttpFoundation\Response::HTTP_NOT_ACCEPTABLE',
-                    'S407_PROXY_AUTHENTICATION_REQUIRED' => 'Symfony\Component\HttpFoundation\Response::HTTP_PROXY_AUTHENTICATION_REQUIRED',
-                    'S408_REQUEST_TIMEOUT' => 'Symfony\Component\HttpFoundation\Response::HTTP_REQUEST_TIMEOUT',
-                    'S409_CONFLICT' => 'Symfony\Component\HttpFoundation\Response::HTTP_CONFLICT',
-                    'S410_GONE' => 'Symfony\Component\HttpFoundation\Response::HTTP_GONE',
-                    'S411_LENGTH_REQUIRED' => 'Symfony\Component\HttpFoundation\Response::HTTP_LENGTH_REQUIRED',
-                    'S412_PRECONDITION_FAILED' => 'Symfony\Component\HttpFoundation\Response::HTTP_PRECONDITION_FAILED',
-                    'S413_REQUEST_ENTITY_TOO_LARGE' => 'Symfony\Component\HttpFoundation\Response::HTTP_REQUEST_ENTITY_TOO_LARGE',
-                    'S414_REQUEST_URI_TOO_LONG' => 'Symfony\Component\HttpFoundation\Response::HTTP_REQUEST_URI_TOO_LONG',
-                    'S415_UNSUPPORTED_MEDIA_TYPE' => 'Symfony\Component\HttpFoundation\Response::HTTP_UNSUPPORTED_MEDIA_TYPE',
-                    'S416_REQUESTED_RANGE_NOT_SATISFIABLE' => 'Symfony\Component\HttpFoundation\Response::HTTP_REQUESTED_RANGE_NOT_SATISFIABLE',
-                    'S417_EXPECTATION_FAILED' => 'Symfony\Component\HttpFoundation\Response::HTTP_EXPECTATION_FAILED',
-                    'S421_MISDIRECTED_REQUEST' => 'Symfony\Component\HttpFoundation\Response::HTTP_MISDIRECTED_REQUEST',
-                    'S422_UNPROCESSABLE_ENTITY' => 'Symfony\Component\HttpFoundation\Response::HTTP_UNPROCESSABLE_ENTITY',
-                    'S423_LOCKED' => 'Symfony\Component\HttpFoundation\Response::HTTP_LOCKED',
-                    'S424_FAILED_DEPENDENCY' => 'Symfony\Component\HttpFoundation\Response::HTTP_FAILED_DEPENDENCY',
-                    'S426_UPGRADE_REQUIRED' => 'Symfony\Component\HttpFoundation\Response::HTTP_UPGRADE_REQUIRED',
-                    'S428_PRECONDITION_REQUIRED' => 'Symfony\Component\HttpFoundation\Response::HTTP_PRECONDITION_REQUIRED',
-                    'S429_TOO_MANY_REQUESTS' => 'Symfony\Component\HttpFoundation\Response::HTTP_TOO_MANY_REQUESTS',
-                    'S431_REQUEST_HEADER_FIELDS_TOO_LARGE' => 'Symfony\Component\HttpFoundation\Response::HTTP_REQUEST_HEADER_FIELDS_TOO_LARGE',
-                    'S451_UNAVAILABLE_FOR_LEGAL_REASONS' => 'Symfony\Component\HttpFoundation\Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS',
-                    'S500_INTERNAL_SERVER_ERROR' => 'Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR',
-                    'S501_NOT_IMPLEMENTED' => 'Symfony\Component\HttpFoundation\Response::HTTP_NOT_IMPLEMENTED',
-                    'S502_BAD_GATEWAY' => 'Symfony\Component\HttpFoundation\Response::HTTP_BAD_GATEWAY',
-                    'S503_SERVICE_UNAVAILABLE' => 'Symfony\Component\HttpFoundation\Response::HTTP_SERVICE_UNAVAILABLE',
-                    'S504_GATEWAY_TIMEOUT' => 'Symfony\Component\HttpFoundation\Response::HTTP_GATEWAY_TIMEOUT',
-                    'S505_HTTP_VERSION_NOT_SUPPORTED' => 'Symfony\Component\HttpFoundation\Response::HTTP_VERSION_NOT_SUPPORTED',
-                    'S506_VARIANT_ALSO_NEGOTIATES' => 'Symfony\Component\HttpFoundation\Response::HTTP_VARIANT_ALSO_NEGOTIATES_EXPERIMENTAL',
-                    'S507_INSUFFICIENT_STORAGE' => 'Symfony\Component\HttpFoundation\Response::HTTP_INSUFFICIENT_STORAGE',
-                    'S508_LOOP_DETECTED' => 'Symfony\Component\HttpFoundation\Response::HTTP_LOOP_DETECTED',
-                    'S510_NOT_EXTENDED' => 'Symfony\Component\HttpFoundation\Response::HTTP_NOT_EXTENDED',
-                    'S511_NETWORK_AUTHENTICATION_REQUIRED' => 'Symfony\Component\HttpFoundation\Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED',
-                ],
-                'Nette\Http\*Request' => [
-                    'GET' => 'Symfony\Component\HttpFoundation\Request::METHOD_GET',
-                    'POST' => 'Symfony\Component\HttpFoundation\Request::METHOD_POST',
-                    'HEAD' => 'Symfony\Component\HttpFoundation\Request::METHOD_HEAD',
-                    'PUT' => 'Symfony\Component\HttpFoundation\Request::METHOD_PUT',
-                    'DELETE' => 'Symfony\Component\HttpFoundation\Request::METHOD_DELETE',
-                    'PATCH' => 'Symfony\Component\HttpFoundation\Request::METHOD_PATCH',
-                    'OPTIONS' => 'Symfony\Component\HttpFoundation\Request::METHOD_OPTIONS',
-                ],
-            ],
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S100_CONTINUE',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_CONTINUE'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S101_SWITCHING_PROTOCOLS',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_SWITCHING_PROTOCOLS'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S102_PROCESSING',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_PROCESSING'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S200_OK',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_OK'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S201_CREATED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_CREATED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S202_ACCEPTED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_ACCEPTED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S203_NON_AUTHORITATIVE_INFORMATION',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_NON_AUTHORITATIVE_INFORMATION'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S204_NO_CONTENT',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_NO_CONTENT'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S205_RESET_CONTENT',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_RESET_CONTENT'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S206_PARTIAL_CONTENT',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_PARTIAL_CONTENT'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S207_MULTI_STATUS',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_MULTI_STATUS'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S208_ALREADY_REPORTED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_ALREADY_REPORTED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S226_IM_USED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_IM_USED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S300_MULTIPLE_CHOICES',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_MULTIPLE_CHOICES'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S301_MOVED_PERMANENTLY',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_MOVED_PERMANENTLY'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S302_FOUND',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_FOUND'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S303_SEE_OTHER',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_SEE_OTHER'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S303_POST_GET',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_SEE_OTHER'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S304_NOT_MODIFIED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_NOT_MODIFIED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S305_USE_PROXY',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_USE_PROXY'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S307_TEMPORARY_REDIRECT',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_TEMPORARY_REDIRECT'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S308_PERMANENT_REDIRECT',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_PERMANENTLY_REDIRECT'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S400_BAD_REQUEST',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S401_UNAUTHORIZED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_UNAUTHORIZED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S402_PAYMENT_REQUIRED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_PAYMENT_REQUIRED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S403_FORBIDDEN',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_FORBIDDEN'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S404_NOT_FOUND',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S405_METHOD_NOT_ALLOWED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_METHOD_NOT_ALLOWED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S406_NOT_ACCEPTABLE',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_NOT_ACCEPTABLE'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S407_PROXY_AUTHENTICATION_REQUIRED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_PROXY_AUTHENTICATION_REQUIRED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S408_REQUEST_TIMEOUT',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_REQUEST_TIMEOUT'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S409_CONFLICT',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_CONFLICT'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S410_GONE',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_GONE'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S411_LENGTH_REQUIRED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_LENGTH_REQUIRED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S412_PRECONDITION_FAILED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_PRECONDITION_FAILED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S413_REQUEST_ENTITY_TOO_LARGE',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_REQUEST_ENTITY_TOO_LARGE'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S414_REQUEST_URI_TOO_LONG',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_REQUEST_URI_TOO_LONG'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S415_UNSUPPORTED_MEDIA_TYPE',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_UNSUPPORTED_MEDIA_TYPE'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S416_REQUESTED_RANGE_NOT_SATISFIABLE',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_REQUESTED_RANGE_NOT_SATISFIABLE'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S417_EXPECTATION_FAILED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_EXPECTATION_FAILED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S421_MISDIRECTED_REQUEST',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_MISDIRECTED_REQUEST'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S422_UNPROCESSABLE_ENTITY',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_UNPROCESSABLE_ENTITY'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S423_LOCKED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_LOCKED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S424_FAILED_DEPENDENCY',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_FAILED_DEPENDENCY'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S426_UPGRADE_REQUIRED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_UPGRADE_REQUIRED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S428_PRECONDITION_REQUIRED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_PRECONDITION_REQUIRED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S429_TOO_MANY_REQUESTS',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_TOO_MANY_REQUESTS'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S431_REQUEST_HEADER_FIELDS_TOO_LARGE',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_REQUEST_HEADER_FIELDS_TOO_LARGE'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S451_UNAVAILABLE_FOR_LEGAL_REASONS',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S500_INTERNAL_SERVER_ERROR',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S501_NOT_IMPLEMENTED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_NOT_IMPLEMENTED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S502_BAD_GATEWAY',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_BAD_GATEWAY'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S503_SERVICE_UNAVAILABLE',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_SERVICE_UNAVAILABLE'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S504_GATEWAY_TIMEOUT',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_GATEWAY_TIMEOUT'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S505_HTTP_VERSION_NOT_SUPPORTED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_VERSION_NOT_SUPPORTED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S506_VARIANT_ALSO_NEGOTIATES',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_VARIANT_ALSO_NEGOTIATES_EXPERIMENTAL'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S507_INSUFFICIENT_STORAGE',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_INSUFFICIENT_STORAGE'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S508_LOOP_DETECTED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_LOOP_DETECTED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S510_NOT_EXTENDED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_NOT_EXTENDED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Response',
+                    'S511_NETWORK_AUTHENTICATION_REQUIRED',
+                    'Symfony\Component\HttpFoundation\Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Request',
+                    'GET',
+                    'Symfony\Component\HttpFoundation\Request::METHOD_GET'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Request',
+                    'POST',
+                    'Symfony\Component\HttpFoundation\Request::METHOD_POST'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Request',
+                    'HEAD',
+                    'Symfony\Component\HttpFoundation\Request::METHOD_HEAD'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Request',
+                    'PUT',
+                    'Symfony\Component\HttpFoundation\Request::METHOD_PUT'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Request',
+                    'DELETE',
+                    'Symfony\Component\HttpFoundation\Request::METHOD_DELETE'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Request',
+                    'PATCH',
+                    'Symfony\Component\HttpFoundation\Request::METHOD_PATCH'
+                ),
+                new ClassConstantRename(
+                    'Nette\Http\*Request',
+                    'OPTIONS',
+                    'Symfony\Component\HttpFoundation\Request::METHOD_OPTIONS'
+                ),
+            ]),
         ]]);
 
     $services->set(FormControlToControllerAndFormTypeRector::class);

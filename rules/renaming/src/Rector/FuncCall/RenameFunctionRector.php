@@ -6,7 +6,6 @@ namespace Rector\Renaming\Rector\FuncCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -26,7 +25,7 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
     public const OLD_FUNCTION_TO_NEW_FUNCTION = '$oldFunctionToNewFunction';
 
     /**
-     * @var string[]|string[][]
+     * @var array<string, string>
      */
     private $oldFunctionToNewFunction = [];
 
@@ -63,12 +62,6 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
                 continue;
             }
 
-            // rename of function into wrap function
-            // e.g. one($arg) → three(two($agr));
-            if (is_array($newFunction)) {
-                return $this->wrapFuncCalls($node, $newFunction);
-            }
-
             $node->name = Strings::contains($newFunction, '\\') ? new FullyQualified($newFunction) : new Name(
                 $newFunction
             );
@@ -83,23 +76,5 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
     public function configure(array $configuration): void
     {
         $this->oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? [];
-    }
-
-    /**
-     * @param string[] $newFunctions
-     */
-    private function wrapFuncCalls(FuncCall $funcCall, array $newFunctions): FuncCall
-    {
-        $previousNode = null;
-        $newFunctions = array_reverse($newFunctions);
-
-        foreach ($newFunctions as $wrapFunction) {
-            $arguments = $previousNode === null ? $funcCall->args : [new Arg($previousNode)];
-
-            $funcCall = new FuncCall(new FullyQualified($wrapFunction), $arguments);
-            $previousNode = $funcCall;
-        }
-
-        return $funcCall;
     }
 }

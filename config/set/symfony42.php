@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
+
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
@@ -15,6 +16,7 @@ use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Generic\ValueObject\ReplacedArgument;
 use Rector\Generic\ValueObject\TypeMethodWrap;
+use Rector\Generic\ValueObject\TypeToStaticCall;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -28,12 +30,15 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $services->set(NewToStaticCallRector::class)
         ->call('configure', [[
-            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => [
-                'Symfony\Component\HttpFoundation\Cookie' => ['Symfony\Component\HttpFoundation\Cookie', 'create'],
-            ],
+            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => inline_value_objects([
+                new TypeToStaticCall(
+                    'Symfony\Component\HttpFoundation\Cookie',
+                    'Symfony\Component\HttpFoundation\Cookie',
+                    'create'
+                ),
+            ]),
         ]]);
 
     $services->set(RenameClassRector::class)

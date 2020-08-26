@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\ClassConstantRename;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector;
 use Rector\Symfony\Rector\ClassMethod\GetRequestRector;
@@ -16,6 +18,7 @@ use Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector;
 use Rector\Symfony\Rector\MethodCall\OptionNameRector;
 use Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 use Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
+use Rector\SymfonyPhpConfig\inline_value_objects;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -26,43 +29,42 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # - https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md
     # php
     $services->set(GetRequestRector::class);
-
     $services->set(FormTypeGetParentRector::class);
-
     $services->set(OptionNameRector::class);
-
     $services->set(ReadOnlyOptionToAttributeRector::class);
 
     # forms
     $services->set(FormTypeInstanceToClassConstRector::class);
-
     $services->set(StringFormTypeToClassRector::class);
-
     $services->set(CascadeValidationFormBuilderRector::class);
-
     $services->set(RemoveDefaultGetBlockPrefixRector::class);
 
     # forms - collection
     $services->set(ChangeCollectionTypeOptionTypeFromStringToClassReferenceRector::class);
-
     $services->set(ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class);
 
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
-            RenameClassConstantRector::OLD_TO_NEW_CONSTANTS_BY_CLASS => [
-                'Symfony\Component\Form\FormEvents' => [
-                    # general
-                    # form
-                    'PRE_BIND' => 'PRE_SUBMIT',
-                    'BIND' => 'SUBMIT',
-                    'POST_BIND' => 'POST_SUBMIT',
-                ],
-                'Symfony\Component\Form\Extension\Core\DataTransformer' => [
-                    'ROUND_HALFEVEN' => 'ROUND_HALF_EVEN',
-                    'ROUND_HALFUP' => 'ROUND_HALF_UP',
-                    'ROUND_HALFDOWN' => 'ROUND_HALF_DOWN',
-                ],
-            ],
+            RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
+                new ClassConstantRename('Symfony\Component\Form\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'),
+                new ClassConstantRename('Symfony\Component\Form\FormEvents', 'BIND', 'SUBMIT'),
+                new ClassConstantRename('Symfony\Component\Form\FormEvents', 'POST_BIND', 'POST_SUBMIT'),
+                new ClassConstantRename(
+                    'Symfony\Component\Form\Extension\Core\DataTransformer',
+                    'ROUND_HALFEVEN',
+                    'ROUND_HALF_EVEN'
+                ),
+                new ClassConstantRename(
+                    'Symfony\Component\Form\Extension\Core\DataTransformer',
+                    'ROUND_HALFUP',
+                    'ROUND_HALF_UP'
+                ),
+                new ClassConstantRename(
+                    'Symfony\Component\Form\Extension\Core\DataTransformer',
+                    'ROUND_HALFDOWN',
+                    'ROUND_HALF_DOWN'
+                ),
+            ]),
         ]]);
 
     $services->set(RenameMethodRector::class)

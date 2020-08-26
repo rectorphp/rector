@@ -14,6 +14,8 @@ use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Renaming\ValueObject\RenamedAnnotationInType;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\ClassMethod\RenameAnnotationRector\RenameAnnotationRectorTest
@@ -23,12 +25,12 @@ final class RenameAnnotationRector extends AbstractPHPUnitRector implements Conf
     /**
      * @var string
      */
-    public const CLASS_TO_ANNOTATION_MAP = '$classToAnnotationMap';
+    public const RENAMED_ANNOTATIONS_IN_TYPES = 'renamed_annotations_in_types';
 
     /**
-     * @var string[][]
+     * @var RenamedAnnotationInType[]
      */
-    private $classToAnnotationMap = [];
+    private $renamedAnnotationInTypes = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -61,10 +63,8 @@ class SomeTest extends PHPUnit\Framework\TestCase
 PHP
                     ,
                     [
-                        self::CLASS_TO_ANNOTATION_MAP => [
-                            'PHPUnit\Framework\TestCase' => [
-                                'test' => 'scenario',
-                            ],
+                        self::RENAMED_ANNOTATIONS_IN_TYPES => [
+                            new RenamedAnnotationInType('PHPUnit\Framework\TestCase', 'test', 'scenario'),
                         ],
                     ]
                 ),
@@ -94,19 +94,16 @@ PHP
             return null;
         }
 
-        foreach ($this->classToAnnotationMap as $type => $annotationMap) {
-            /** @var string $type */
-            if (! $this->isObjectType($classLike, $type)) {
+        foreach ($this->renamedAnnotationInTypes as $renamedAnnotationInType) {
+            if (! $this->isObjectType($classLike, $renamedAnnotationInType->getType())) {
                 continue;
             }
 
-            foreach ($annotationMap as $oldAnnotation => $newAnnotation) {
-                if (! $phpDocInfo->hasByName($oldAnnotation)) {
-                    continue;
-                }
-
-                $this->docBlockManipulator->replaceAnnotationInNode($node, $oldAnnotation, $newAnnotation);
+            if (! $phpDocInfo->hasByName($renamedAnnotationInType->getOldAnnotation())) {
+                continue;
             }
+
+            $this->docBlockManipulator->replaceAnnotationInNode($node, $renamedAnnotationInType);
         }
 
         return $node;
@@ -114,6 +111,8 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->classToAnnotationMap = $configuration[self::CLASS_TO_ANNOTATION_MAP] ?? [];
+        $renamedAnnotationsInTypes = $configuration[self::RENAMED_ANNOTATIONS_IN_TYPES] ?? [];
+        Assert::allIsInstanceOf($renamedAnnotationsInTypes, RenamedAnnotationInType::class);
+        $this->renamedAnnotationInTypes = $renamedAnnotationsInTypes;
     }
 }

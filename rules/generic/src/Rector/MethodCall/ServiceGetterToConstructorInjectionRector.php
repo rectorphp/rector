@@ -15,8 +15,10 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\MethodCallToService;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
@@ -26,12 +28,12 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector imp
     /**
      * @var string
      */
-    public const METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES = '$methodNamesByTypesToServiceTypes';
+    public const METHOD_CALL_TO_SERVICES = 'method_call_to_services';
 
     /**
-     * @var mixed[]
+     * @var MethodCallToService[]
      */
-    private $methodNamesByTypesToServiceTypes = [];
+    private $methodCallToServices = [];
 
     /**
      * @var PropertyNaming
@@ -112,13 +114,10 @@ final class SomeClass
     }
 }
 PHP
-
                 ,
                 [
-                    self::METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES => [
-                        'FirstService' => [
-                            'getAnotherService' => 'AnotherService',
-                        ],
+                    self::METHOD_CALL_TO_SERVICES => [
+                        new MethodCallToService('FirstService', 'getAnotherService', 'AnotherService'),
                     ],
                 ]
             ),
@@ -143,25 +142,23 @@ PHP
             return null;
         }
 
-        foreach ($this->methodNamesByTypesToServiceTypes as $type => $methodNamesToServiceTypes) {
-            if (! $this->isObjectType($node->var, $type)) {
+        foreach ($this->methodCallToServices as $methodCallToService) {
+            if (! $this->isObjectType($node->var, $methodCallToService->getOldType())) {
                 continue;
             }
 
-            foreach ($methodNamesToServiceTypes as $methodName => $serviceType) {
-                if (! $this->isName($node->name, $methodName)) {
-                    continue;
-                }
-
-                $serviceObjectType = new ObjectType($serviceType);
-
-                $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
-
-                /** @var Class_ $classLike */
-                $this->addConstructorDependencyToClass($classLike, $serviceObjectType, $propertyName);
-
-                return new PropertyFetch(new Variable('this'), new Identifier($propertyName));
+            if (! $this->isName($node->name, $methodCallToService->getOldMethod())) {
+                continue;
             }
+
+            $serviceObjectType = new ObjectType($methodCallToService->getServiceType());
+
+            $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
+
+            /** @var Class_ $classLike */
+            $this->addConstructorDependencyToClass($classLike, $serviceObjectType, $propertyName);
+
+            return new PropertyFetch(new Variable('this'), new Identifier($propertyName));
         }
 
         return $node;
@@ -169,6 +166,8 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->methodNamesByTypesToServiceTypes = $configuration[self::METHOD_NAMES_BY_TYPES_TO_SERVICE_TYPES] ?? [];
+        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? [];
+        Assert::allIsInstanceOf($methodCallToServices, MethodCallToService::class);
+        $this->methodCallToServices = $methodCallToServices;
     }
 }

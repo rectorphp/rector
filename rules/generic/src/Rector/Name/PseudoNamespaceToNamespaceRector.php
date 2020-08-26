@@ -21,8 +21,10 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\NamespacePrefixWithExcludedClasses;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\Name\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
@@ -41,6 +43,11 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
     private const SPLIT_BY_UNDERSCORE_PATTERN = '#([a-zA-Z])(_)?(_)([a-zA-Z])#';
 
     /**
+     * @var NamespacePrefixWithExcludedClasses[]
+     */
+    private $namespacePrefixesWithExcludedClasses = [];
+
+    /**
      * @var PhpDocTypeRenamer
      */
     private $phpDocTypeRenamer;
@@ -54,11 +61,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
      * @var string|null
      */
     private $newNamespace;
-
-    /**
-     * @var string[][]|null[]
-     */
-    private $namespacePrefixesWithExcludedClasses = [];
 
     public function __construct(
         ClassInsertManipulator $classInsertManipulator,
@@ -86,7 +88,7 @@ PHP
                 ,
                 [
                     self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => [
-                        'Some_' => ['Some_Class_To_Keep'],
+                        new NamespacePrefixWithExcludedClasses('Some_', ['Some_Class_To_Keep']),
                     ],
                 ]
             ),
@@ -108,8 +110,8 @@ PHP
     public function refactor(Node $node): ?Node
     {
         // replace on @var/@param/@return/@throws
-        foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefix => $excludedClasses) {
-            $this->phpDocTypeRenamer->changeUnderscoreType($node, $namespacePrefix, $excludedClasses ?? []);
+        foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefixWithExcludedClasses) {
+            $this->phpDocTypeRenamer->changeUnderscoreType($node, $namespacePrefixWithExcludedClasses);
         }
 
         if ($node instanceof Name || $node instanceof Identifier) {
@@ -145,7 +147,9 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? [];
+        $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? [];
+        Assert::allIsInstanceOf($namespacePrefixesWithExcludedClasses, NamespacePrefixWithExcludedClasses::class);
+        $this->namespacePrefixesWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
     }
 
     /**
@@ -159,11 +163,12 @@ PHP
             return null;
         }
 
-        foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefix => $excludedClasses) {
-            if (! $this->isName($node, $namespacePrefix . '*')) {
+        foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefixWithExcludedClasses) {
+            if (! $this->isName($node, $namespacePrefixWithExcludedClasses->getNamespacePrefix() . '*')) {
                 continue;
             }
 
+            $excludedClasses = $namespacePrefixWithExcludedClasses->getExcludedClasses();
             if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
                 return null;
             }
@@ -214,7 +219,6 @@ PHP
         }
 
         $this->newNamespace = $newNamespace;
-
         $identifier->name = $lastNewNamePart;
 
         return $identifier;
