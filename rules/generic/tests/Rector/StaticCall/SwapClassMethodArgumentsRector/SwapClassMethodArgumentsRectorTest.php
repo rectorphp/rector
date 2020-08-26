@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector;
 use Rector\Generic\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture\SomeClass;
+use Rector\Generic\ValueObject\ArgumentSwap;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SwapClassMethodArgumentsRectorTest extends AbstractRectorTestCase
@@ -26,16 +27,14 @@ final class SwapClassMethodArgumentsRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return int[][][][][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {
         return [
             SwapClassMethodArgumentsRector::class => [
                 SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => [
-                    SomeClass::class => [
-                        'run' => [1, 0],
-                    ],
+                    new ArgumentSwap(SomeClass::class, 'run', [1, 0]),
                 ],
             ],
         ];

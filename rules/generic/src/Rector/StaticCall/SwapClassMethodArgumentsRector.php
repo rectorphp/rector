@@ -14,6 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\ArgumentSwap;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\SwapClassMethodArgumentsRectorTest
@@ -87,7 +88,9 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->argumentSwaps = $configuration[self::ARGUMENT_SWAPS] ?? [];
+        $argumentSwaps = $configuration[self::ARGUMENT_SWAPS] ?? [];
+        Assert::allIsInstanceOf($argumentSwaps, ArgumentSwap::class);
+        $this->argumentSwaps = $argumentSwaps;
     }
 
     /**

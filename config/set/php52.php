@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Rector\Generic\ValueObject\RemovedFunctionArgument;
 use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
+use Rector\Generic\ValueObject\RemovedFunctionArgument;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();

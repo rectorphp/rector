@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Generic\ValueObject\RemovedFunctionArgument;
-use Rector\Generic\ValueObject\StringToClassConstant;
 use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

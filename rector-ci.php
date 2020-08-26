@@ -5,10 +5,12 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
+use Rector\CodingStyle\ValueObject\MethodToYield;
 use Rector\Core\Configuration\Option;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\SetList;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -16,9 +18,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->call('configure', [[
-            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => [
-                TestCase::class => ['provideData', 'provideData*', 'dataProvider', 'dataProvider*'],
-            ],
+            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => inline_value_objects([
+                new MethodToYield(TestCase::class, 'provideData'),
+                new MethodToYield(TestCase::class, 'provideData*'),
+                new MethodToYield(TestCase::class, 'dataProvider'),
+                new MethodToYield(TestCase::class, 'dataProvider*'),
+            ]),
         ]]);
 
     $parameters = $containerConfigurator->parameters();
