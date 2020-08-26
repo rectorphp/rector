@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Generic\ValueObject\RemovedFunctionArgument;
+use Rector\Generic\ValueObject\NamespacePrefixWithExcludedClasses;
 use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceArrayWithObjectRector::class)
         ->call('configure', [[
             ReplaceArrayWithObjectRector::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
-                'Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS' => RemovedFunctionArgument::class,
+                'Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES' => NamespacePrefixWithExcludedClasses::class,
             ],
         ]]);
 

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector;
+
+use Rector\Generic\ValueObject\NamespacePrefixWithExcludedClasses;
 use Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector;
 use Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -37,17 +39,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
-            PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => [
-                'PHPUnit_' => [
-                    # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
+            // ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
+            PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => inline_value_objects(
+                [new NamespacePrefixWithExcludedClasses('PHPUnit_', [
                     'PHPUnit_Framework_MockObject_MockObject',
                     'PHPUnit_Framework_MockObject_Invocation_Object',
                     'PHPUnit_Framework_MockObject_Matcher_Invocation',
                     'PHPUnit_Framework_MockObject_Matcher_Parameters',
                     'PHPUnit_Framework_MockObject_Stub_Return',
                     'PHPUnit_Framework_MockObject_Stub',
-                ],
-            ],
+                ])]
+            ),
         ]]);
 
     $services->set(AddDoesNotPerformAssertionToNonAssertingTestRector::class);
