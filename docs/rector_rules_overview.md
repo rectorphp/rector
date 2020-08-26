@@ -5565,7 +5565,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
-            NormalToFluentRector::FLUENT_METHODS_BY_TYPE => [
+            NormalToFluentRector::CALLS_TO_FLUENT => [
                 'SomeClass' => [
                 'someFunction', 'otherFunction']]
         ]]);

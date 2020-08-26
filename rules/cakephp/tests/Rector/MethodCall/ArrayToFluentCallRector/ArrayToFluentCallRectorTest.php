@@ -8,20 +8,22 @@ use Iterator;
 use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
 use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\ConfigurableClass;
 use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\FactoryClass;
+use Rector\CakePHP\ValueObject\ArrayToFluentCall;
+use Rector\CakePHP\ValueObject\FactoryMethod;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArrayToFluentCallRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
     {
         $this->doTestFileInfo($fileInfo);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
@@ -33,19 +35,14 @@ final class ArrayToFluentCallRectorTest extends AbstractRectorTestCase
     {
         return [
             ArrayToFluentCallRector::class => [
-                ArrayToFluentCallRector::CONFIGURABLE_CLASSES => [
-                    ConfigurableClass::class => [
+                ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => [
+                    new ArrayToFluentCall(ConfigurableClass::class, [
                         'name' => 'setName',
                         'size' => 'setSize',
-                    ],
+                    ]),
                 ],
                 ArrayToFluentCallRector::FACTORY_METHODS => [
-                    FactoryClass::class => [
-                        'buildClass' => [
-                            'argumentPosition' => 2,
-                            'class' => ConfigurableClass::class,
-                        ],
-                    ],
+                    new FactoryMethod(FactoryClass::class, 'buildClass', ConfigurableClass::class, 2),
                 ],
             ],
         ];

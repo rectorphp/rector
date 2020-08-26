@@ -8,6 +8,7 @@ use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Generic\ValueObject\CallToFluent;
 use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Generic\ValueObject\PropertyToMethodCall;
 use Rector\Generic\ValueObject\RenamedProperty;
@@ -250,8 +251,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
-            NormalToFluentRector::FLUENT_METHODS_BY_TYPE => [
-                'Cake\Network\Response' => [
+            NormalToFluentRector::CALLS_TO_FLUENT => inline_value_objects([
+                new CallToFluent('Cake\Network\Response', [
                     'withLocation',
                     'withHeader',
                     'withDisabledCache',
@@ -271,7 +272,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'withCookie',
                     'withFile',
                     'withDownload',
-                ],
-            ],
+                ]),
+            ]),
         ]]);
 };

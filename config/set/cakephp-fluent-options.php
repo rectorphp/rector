@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
+use Rector\CakePHP\ValueObject\ArrayToFluentCall;
+use Rector\CakePHP\ValueObject\FactoryMethod;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -10,8 +13,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ArrayToFluentCallRector::class)
         ->call('configure', [[
-            ArrayToFluentCallRector::CONFIGURABLE_CLASSES => [
-                'Cake\ORM\Association' => [
+            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => inline_value_objects([
+                new ArrayToFluentCall('Cake\ORM\Association', [
                     'bindingKey' => 'setBindingKey',
                     'cascadeCallbacks' => 'setCascadeCallbacks',
                     'className' => 'setClassName',
@@ -30,8 +33,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     # BelongsToMany only
                     'targetForeignKey' => 'setTargetForeignKey',
                     'through' => 'setThrough',
-                ],
-                'Cake\ORM\Query' => [
+                ]),
+                new ArrayToFluentCall('Cake\ORM\Query', [
                     'fields' => 'select',
                     'conditions' => 'where',
                     'join' => 'join',
@@ -42,12 +45,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'having' => 'having',
                     'contain' => 'contain',
                     'page' => 'page',
-                ],
-            ],
-        ]])
-        ->call('configure', [[
-            ArrayToFluentCallRector::CONFIGURABLE_CLASSES => [
-                'Cake\ORM\Association' => [
+                ]),
+                new ArrayToFluentCall('Cake\ORM\Association', [
                     'bindingKey' => 'setBindingKey',
                     'cascadeCallbacks' => 'setCascadeCallbacks',
                     'className' => 'setClassName',
@@ -66,8 +65,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     # BelongsToMany only
                     'targetForeignKey' => 'setTargetForeignKey',
                     'through' => 'setThrough',
-                ],
-                'Cake\ORM\Query' => [
+                ]),
+                new ArrayToFluentCall('Cake\ORM\Query', [
                     'fields' => 'select',
                     'conditions' => 'where',
                     'join' => 'join',
@@ -78,31 +77,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'having' => 'having',
                     'contain' => 'contain',
                     'page' => 'page',
-                ],
-            ],
-            ArrayToFluentCallRector::FACTORY_METHODS => [
-                'Cake\ORM\Table' => [
-                    'belongsTo' => [
-                        'argumentPosition' => 2,
-                        'class' => 'Cake\ORM\Association',
-                    ],
-                    'belongsToMany' => [
-                        'argumentPosition' => 2,
-                        'class' => 'Cake\ORM\Association',
-                    ],
-                    'hasMany' => [
-                        'argumentPosition' => 2,
-                        'class' => 'Cake\ORM\Association',
-                    ],
-                    'hasOne' => [
-                        'argumentPosition' => 2,
-                        'class' => 'Cake\ORM\Association',
-                    ],
-                    'find' => [
-                        'argumentPosition' => 2,
-                        'class' => 'Cake\ORM\Query',
-                    ],
-                ],
-            ],
+                ]),
+            ]),
+            ArrayToFluentCallRector::FACTORY_METHODS => inline_value_objects([
+                new FactoryMethod('Cake\ORM\Table', 'belongsTo', 'Cake\ORM\Association', 2),
+                new FactoryMethod('Cake\ORM\Table', 'belongsToMany', 'Cake\ORM\Association', 2),
+                new FactoryMethod('Cake\ORM\Table', 'hasMany', 'Cake\ORM\Association', 2),
+                new FactoryMethod('Cake\ORM\Table', 'hasOne', 'Cake\ORM\Association', 2),
+                new FactoryMethod('Cake\ORM\Table', 'find', 'Cake\ORM\Query', 2),
+            ]),
         ]]);
 };
