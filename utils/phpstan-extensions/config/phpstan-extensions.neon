@@ -1,7 +1,7 @@
 services:
-    -
-        class: Rector\PHPStanExtensions\Rule\ForbiddenComplexArrayConfigInSetRule
-        tags: [phpstan.rules.rule]
+#    -
+#        class: Rector\PHPStanExtensions\Rule\ForbiddenComplexArrayConfigInSetRule
+#        tags: [phpstan.rules.rule]
 
     -
         class: Rector\PHPStanExtensions\Rule\ForbiddenArrayWithStringKeysRule
