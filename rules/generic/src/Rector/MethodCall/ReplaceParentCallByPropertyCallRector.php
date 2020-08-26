@@ -10,6 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\ParentCallToProperty;
 
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\ReplaceParentCallByPropertyCallRectorTest
@@ -19,13 +20,12 @@ final class ReplaceParentCallByPropertyCallRector extends AbstractRector impleme
     /**
      * @var string
      */
-    public const PARENT_TYPE_TO_METHOD_NAME_TO_PROPERTY_FETCH = 'parnet_type_to_method_name_to_property_fetch';
+    public const PARENT_CALLS_TO_PROPERTIES = 'parent_calls_to_properties';
 
     /**
-    AddPropertyByParentRector.php:103
-     * @var array<string, array<string, string>>
+     * @var ParentCallToProperty[]
      */
-    private $replaceParentCallByPropertyArguments = [];
+    private $parentCallToProperties = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -53,10 +53,8 @@ final class SomeClass
 CODE_SAMPLE
                     ,
                     [
-                        self::PARENT_TYPE_TO_METHOD_NAME_TO_PROPERTY_FETCH => [
-                            'SomeTypeToReplace' => [
-                                'someMethodCall' => 'someProperty',
-                            ],
+                        self::PARENT_CALLS_TO_PROPERTIES => [
+                            new ParentCallToProperty('SomeTypeToReplace', 'someMethodCall', 'someProperty'),
                         ],
                     ]
                 ),
@@ -77,19 +75,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->replaceParentCallByPropertyArguments as $type => $methodNamesToPropertyNames) {
-            if (! $this->isObjectType($node->var, $type)) {
+        foreach ($this->parentCallToProperties as $parentCallToProperty) {
+            if (! $this->isObjectType($node->var, $parentCallToProperty->getClass())) {
                 continue;
             }
 
-            foreach ($methodNamesToPropertyNames as $methodName => $propertyName) {
-                if (! $this->isName($node->name, $methodName)) {
-                    continue;
-                }
-
-                $node->var = $this->createPropertyFetch('this', $propertyName);
-                return $node;
+            if (! $this->isName($node->name, $parentCallToProperty->getMethod())) {
+                continue;
             }
+
+            $node->var = $this->createPropertyFetch('this', $parentCallToProperty->getProperty());
+            return $node;
         }
 
         return null;
@@ -97,6 +93,6 @@ CODE_SAMPLE
 
     public function configure(array $configuration): void
     {
-        $this->replaceParentCallByPropertyArguments = $configuration[self::PARENT_TYPE_TO_METHOD_NAME_TO_PROPERTY_FETCH] ?? [];
+        $this->parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? [];
     }
 }

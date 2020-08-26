@@ -6021,7 +6021,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ReplaceParentCallByPropertyCallRector::class)
         ->call('configure', [[
-            ReplaceParentCallByPropertyCallRector::PARENT_TYPE_TO_METHOD_NAME_TO_PROPERTY_FETCH => [
+            ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => [
                 'SomeTypeToReplace' => [
                 'someMethodCall' => 'someProperty']]
         ]]);
