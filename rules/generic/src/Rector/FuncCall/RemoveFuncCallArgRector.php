@@ -10,6 +10,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\RemovedFunctionArgument;
+use Webmozart\Assert\Assert;
 
 /**
  * @sponsor Thanks https://twitter.com/afilina & Zenika (CAN) for sponsoring this rule - visit them on https://zenika.ca/en/en
@@ -21,12 +23,12 @@ final class RemoveFuncCallArgRector extends AbstractRector implements Configurab
     /**
      * @var string
      */
-    public const ARGUMENT_POSITION_BY_FUNCTION_NAME = 'argument_position_by_function_Name';
+    public const REMOVED_FUNCTION_ARGUMENTS = 'removed_function_arguments';
 
     /**
-     * @var int[][]
+     * @var RemovedFunctionArgument[]
      */
-    private $argumentPositionByFunctionName = [];
+    private $removedFunctionArguments = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -40,9 +42,7 @@ CODE_SAMPLE
 remove_last_arg(1);
 CODE_SAMPLE
                 , [
-                    self::ARGUMENT_POSITION_BY_FUNCTION_NAME => [
-                        'remove_last_arg' => [1],
-                    ],
+                    self::REMOVED_FUNCTION_ARGUMENTS => [new RemovedFunctionArgument('remove_last_arg', 1)],
                 ]),
         ]);
     }
@@ -60,13 +60,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->argumentPositionByFunctionName as $functionName => $agumentPositions) {
-            if (! $this->isName($node->name, $functionName)) {
+        foreach ($this->removedFunctionArguments as $removedFunctionArgument) {
+            if (! $this->isName($node->name, $removedFunctionArgument->getFunction())) {
                 continue;
             }
 
             foreach (array_keys($node->args) as $position) {
-                if (! in_array($position, $agumentPositions, true)) {
+                if ($removedFunctionArgument->getArgumentPosition() !== $position) {
                     continue;
                 }
 
@@ -79,6 +79,8 @@ CODE_SAMPLE
 
     public function configure(array $configuration): void
     {
-        $this->argumentPositionByFunctionName = $configuration[self::ARGUMENT_POSITION_BY_FUNCTION_NAME] ?? [];
+        $removedFunctionArguments = $configuration[self::REMOVED_FUNCTION_ARGUMENTS] ?? [];
+        Assert::allIsInstanceOf($removedFunctionArguments, RemovedFunctionArgument::class);
+        $this->removedFunctionArguments = $removedFunctionArguments;
     }
 }

@@ -7,6 +7,7 @@ namespace Rector\Generic\Tests\Rector\FuncCall\RemoveFuncCallArgRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
+use Rector\Generic\ValueObject\RemovedFunctionArgument;
 use SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -29,14 +30,14 @@ final class RemoveFuncCallArgRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return int[][][][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {
         return [
             RemoveFuncCallArgRector::class => [
-                RemoveFuncCallArgRector::ARGUMENT_POSITION_BY_FUNCTION_NAME => [
-                    'ldap_first_attribute' => [2],
+                RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => [
+                    new RemovedFunctionArgument('ldap_first_attribute', 2),
                 ],
             ],
         ];

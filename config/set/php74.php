@@ -34,7 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 #apache_request_headers_function
                 # https://wiki.php.net/rfc/deprecations_php_7_4
                 'apache_request_headers' => 'getallheaders',
-                'hebrevc' => ['nl2br', 'hebrev'],
+                //'hebrevc' => ['nl2br', 'hebrev'],
             ],
         ]]);
 

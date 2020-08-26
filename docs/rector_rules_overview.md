@@ -5806,7 +5806,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RemoveFuncCallArgRector::class)
         ->call('configure', [[
-            RemoveFuncCallArgRector::ARGUMENT_POSITION_BY_FUNCTION_NAME => [
+            RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => [
                 'remove_last_arg' => [
                 1]]
         ]]);
