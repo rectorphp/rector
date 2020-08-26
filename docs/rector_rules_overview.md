@@ -6161,7 +6161,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(StaticCallToFunctionRector::class)
         ->call('configure', [[
-            StaticCallToFunctionRector::STATIC_CALL_TO_FUNCTION_BY_TYPE => [
+            StaticCallToFunctionRector::STATIC_CALLS_TO_FUNCTIONS => [
                 'OldClass' => [
                 'oldMethod' => 'new_function']]
         ]]);

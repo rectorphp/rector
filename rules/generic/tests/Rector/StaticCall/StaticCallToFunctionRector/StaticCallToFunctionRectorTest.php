@@ -32,7 +32,7 @@ final class StaticCallToFunctionRectorTest extends AbstractRectorTestCase
     {
         return [
             StaticCallToFunctionRector::class => [
-                StaticCallToFunctionRector::STATIC_CALL_TO_FUNCTION_BY_TYPE => [
+                StaticCallToFunctionRector::STATIC_CALLS_TO_FUNCTIONS => [
                     SomeOldStaticClass::class => [
                         'render' => 'view',
                     ],

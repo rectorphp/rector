@@ -6,6 +6,7 @@ use GuzzleHttp\Cookie\SetCookie;
 use Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector;
 use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
 use Rector\Generic\ValueObject\FuncNameToMethodCallName;
+use Rector\Generic\ValueObject\StaticCallToFunction;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
 use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -44,14 +45,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StaticCallToFunctionRector::class)
         ->call('configure', [[
-            StaticCallToFunctionRector::STATIC_CALL_TO_FUNCTION_BY_TYPE => [
-                'GuzzleHttp\Utils' => [
-                    'setPath' => 'GuzzleHttp\set_path',
-                ],
-                'GuzzleHttp\Pool' => [
-                    'batch' => 'GuzzleHttp\Pool\batch',
-                ],
-            ],
+            StaticCallToFunctionRector::STATIC_CALLS_TO_FUNCTIONS => inline_value_objects([
+                new StaticCallToFunction('GuzzleHttp\Utils', 'setPath', 'GuzzleHttp\set_path'),
+                new StaticCallToFunction('GuzzleHttp\Pool', 'batch', 'GuzzleHttp\Pool\batch'),
+            ]),
         ]]);
 
     $services->set(MessageAsArrayRector::class);

@@ -12,6 +12,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\StaticCallToFunction;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\StaticCall\StaticCallToFunctionRector\StaticCallToFunctionRectorTest
@@ -21,19 +23,19 @@ final class StaticCallToFunctionRector extends AbstractRector implements Configu
     /**
      * @var string
      */
-    public const STATIC_CALL_TO_FUNCTION_BY_TYPE = 'static_call_to_function_by_type';
+    public const STATIC_CALLS_TO_FUNCTIONS = 'static_calls_to_functions';
 
     /**
-     * @var string[][]
+     * @var StaticCallToFunction[]
      */
-    private $staticCallToFunctionByType = [];
+    private $staticCallsToFunctions = [];
 
     /**
-     * @param string[][] $staticCallToFunctionByType
+     * @param StaticCallToFunction[] $staticCallToFunctions
      */
-    public function __construct(array $staticCallToFunctionByType = [])
+    public function __construct(array $staticCallToFunctions = [])
     {
-        $this->staticCallToFunctionByType = $staticCallToFunctionByType;
+        $this->staticCallsToFunctions = $staticCallToFunctions;
     }
 
     public function getDefinition(): RectorDefinition
@@ -43,10 +45,8 @@ final class StaticCallToFunctionRector extends AbstractRector implements Configu
                 'OldClass::oldMethod("args");',
                 'new_function("args");',
                 [
-                    self::STATIC_CALL_TO_FUNCTION_BY_TYPE => [
-                        'OldClass' => [
-                            'oldMethod' => 'new_function',
-                        ],
+                    self::STATIC_CALLS_TO_FUNCTIONS => [
+                        new StaticCallToFunction('OldClass', 'oldMethod', 'new_function'),
                     ],
                 ]
             ),
@@ -66,18 +66,16 @@ final class StaticCallToFunctionRector extends AbstractRector implements Configu
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->staticCallToFunctionByType as $type => $methodNamesToFunctions) {
-            if (! $this->isObjectType($node, $type)) {
+        foreach ($this->staticCallsToFunctions as $staticCallsToFunctions) {
+            if (! $this->isObjectType($node, $staticCallsToFunctions->getClass())) {
                 continue;
             }
 
-            foreach ($methodNamesToFunctions as $methodName => $function) {
-                if (! $this->isName($node->name, $methodName)) {
-                    continue;
-                }
-
-                return new FuncCall(new FullyQualified($function), $node->args);
+            if (! $this->isName($node->name, $staticCallsToFunctions->getMethod())) {
+                continue;
             }
+
+            return new FuncCall(new FullyQualified($staticCallsToFunctions->getFunction()), $node->args);
         }
 
         return null;
@@ -85,6 +83,8 @@ final class StaticCallToFunctionRector extends AbstractRector implements Configu
 
     public function configure(array $configuration): void
     {
-        $this->staticCallToFunctionByType = $configuration[self::STATIC_CALL_TO_FUNCTION_BY_TYPE] ?? [];
+        $staticCallsToFunctions = $configuration[self::STATIC_CALLS_TO_FUNCTIONS] ?? [];
+        Assert::allIsInstanceOf($staticCallsToFunctions, StaticCallToFunction::class);
+        $this->staticCallsToFunctions = $staticCallsToFunctions;
     }
 }
