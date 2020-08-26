@@ -24,7 +24,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PER_CLASS_PROPERTY_TO_METHODS => [
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
                 'Cake\Controller\Controller' => [
                     'name' => [
                         'get' => 'getName',

@@ -9,6 +9,7 @@ use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\MethodVisibility;
+use Rector\Generic\ValueObject\PropertyToMethodCall;
 use Rector\Generic\ValueObject\RenamedProperty;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -21,44 +22,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
-            PropertyToMethodRector::PER_CLASS_PROPERTY_TO_METHODS => [
-                'Cake\Network\Request' => [
-                    'params' => [
-                        'get' => [
-                            # source: https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html
-                            'method' => 'getAttribute',
-                            'arguments' => ['params'],
-                        ],
-                    ],
-                    'data' => [
-                        'get' => 'getData',
-                    ],
-                    'query' => [
-                        'get' => 'getQueryParams',
-                    ],
-                    'cookies' => [
-                        'get' => 'getCookie',
-                    ],
-                    'base' => [
-                        'get' => [
-                            'method' => 'getAttribute',
-                            'arguments' => ['base'],
-                        ],
-                    ],
-                    'webroot' => [
-                        'get' => [
-                            'method' => 'getAttribute',
-                            'arguments' => ['webroot'],
-                        ],
-                    ],
-                    'here' => [
-                        'get' => [
-                            'method' => 'getAttribute',
-                            'arguments' => ['here'],
-                        ],
-                    ],
-                ],
-            ],
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
+                // source: https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html
+                new PropertyToMethodCall('Cake\Network\Request', 'params', 'getAttribute', null, ['params']),
+
+                new PropertyToMethodCall('Cake\Network\Request', 'data', 'getData'),
+                new PropertyToMethodCall('Cake\Network\Request', 'query', 'getQueryParams'),
+                new PropertyToMethodCall('Cake\Network\Request', 'cookies', 'getCookie'),
+                new PropertyToMethodCall('Cake\Network\Request', 'base', 'getAttribute', null, ['base']),
+                new PropertyToMethodCall('Cake\Network\Request', 'webroot', 'getAttribute', null, ['webroot']),
+                new PropertyToMethodCall('Cake\Network\Request', 'here', 'getAttribute', null, ['here']),
+            ]),
         ]]);
 
     $services->set(RenamePropertyRector::class)
