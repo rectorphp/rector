@@ -22,14 +22,13 @@ final class PropertyToMethodCall
     private $newGetMethod;
 
     /**
+     * @var array
+     */
+    private $newGetArguments = [];
+    /**
      * @var string|null
      */
     private $newSetMethod;
-
-    /**
-     * @var array
-     */
-    private $newGetArguments;
 
     public function __construct(
         string $oldType,
