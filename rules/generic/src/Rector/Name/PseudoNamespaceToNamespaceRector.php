@@ -43,6 +43,11 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
     private const SPLIT_BY_UNDERSCORE_PATTERN = '#([a-zA-Z])(_)?(_)([a-zA-Z])#';
 
     /**
+     * @var NamespacePrefixWithExcludedClasses[]
+     */
+    private $namespacePrefixesWithExcludedClasses = [];
+
+    /**
      * @var PhpDocTypeRenamer
      */
     private $phpDocTypeRenamer;
@@ -56,11 +61,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
      * @var string|null
      */
     private $newNamespace;
-
-    /**
-     * @var NamespacePrefixWithExcludedClasses[]
-     */
-    private $namespacePrefixesWithExcludedClasses = [];
 
     public function __construct(
         ClassInsertManipulator $classInsertManipulator,

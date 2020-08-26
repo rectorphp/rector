@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
 use Rector\Generic\Tests\Rector\StaticCall\StaticCallToFunctionRector\Source\SomeOldStaticClass;
+use Rector\Generic\ValueObject\StaticCallToFunction;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class StaticCallToFunctionRectorTest extends AbstractRectorTestCase
@@ -33,9 +34,7 @@ final class StaticCallToFunctionRectorTest extends AbstractRectorTestCase
         return [
             StaticCallToFunctionRector::class => [
                 StaticCallToFunctionRector::STATIC_CALLS_TO_FUNCTIONS => [
-                    SomeOldStaticClass::class => [
-                        'render' => 'view',
-                    ],
+                    new StaticCallToFunction(SomeOldStaticClass::class, 'render', 'view'),
                 ],
             ],
         ];

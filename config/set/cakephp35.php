@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
+use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -32,111 +33,48 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
-                'Cake\Cache\Cache' => [
-                    'config' => null,
-                    'registry' => null,
-                ],
-                'Cake\Console\Shell' => [
-                    'io' => null,
-                ],
-                'Cake\Console\ConsoleIo' => [
-                    'outputAs' => null,
-                ],
-                'Cake\Console\ConsoleOutput' => [
-                    'outputAs' => null,
-                ],
-                'Cake\Database\Connection' => [
-                    'logger' => null,
-                ],
-                'Cake\Database\TypedResultInterface' => [
-                    'returnType' => null,
-                ],
-                'Cake\Database\TypedResultTrait' => [
-                    'returnType' => null,
-                ],
-                'Cake\Database\Log\LoggingStatement' => [
-                    'logger' => null,
-                ],
-                'Cake\Datasource\ModelAwareTrait' => [
-                    'modelType' => null,
-                ],
-                'Cake\Database\Query' => [
-                    'valueBinder' => [
-                        'get' => 'getValueBinder',
-                        'set' => 'valueBinder',
-                    ],
-                ],
-                'Cake\Database\Schema\TableSchema' => [
-                    'columnType' => null,
-                ],
-                'Cake\Datasource\QueryTrait' => [
-                    'eagerLoaded' => [
-                        'get' => 'isEagerLoaded',
-                        'set' => 'eagerLoaded',
-                    ],
-                ],
-                'Cake\Event\EventDispatcherInterface' => [
-                    'eventManager' => null,
-                ],
-                'Cake\Event\EventDispatcherTrait' => [
-                    'eventManager' => null,
-                ],
-                'Cake\Error\Debugger' => [
-                    'outputAs' => [
-                        'get' => 'getOutputFormat',
-                        'set' => 'setOutputFormat',
-                    ],
-                ],
-                'Cake\Http\ServerRequest' => [
-                    'env' => [
-                        'get' => 'getEnv',
-                        'set' => 'withEnv',
-                    ],
-                    'charset' => [
-                        'get' => 'getCharset',
-                        'set' => 'withCharset',
-                    ],
-                ],
-                'Cake\I18n\I18n' => [
-                    'locale' => null,
-                    'translator' => null,
-                    'defaultLocale' => null,
-                    'defaultFormatter' => null,
-                ],
-                'Cake\ORM\Association\BelongsToMany' => [
-                    'sort' => null,
-                ],
-                'Cake\ORM\LocatorAwareTrait' => [
-                    'tableLocator' => null,
-                ],
-                'Cake\ORM\Table' => [
-                    'validator' => null,
-                ],
-                'Cake\Routing\RouteBuilder' => [
-                    'extensions' => null,
-                    'routeClass' => null,
-                ],
-                'Cake\Routing\RouteCollection' => [
-                    'extensions' => null,
-                ],
-                'Cake\TestSuite\TestFixture' => [
-                    'schema' => null,
-                ],
-                'Cake\Utility\Security' => [
-                    'salt' => null,
-                ],
-                'Cake\View\View' => [
-                    'template' => null,
-                    'layout' => null,
-                    'theme' => null,
-                    'templatePath' => null,
-                    'layoutPath' => null,
-                    'autoLayout' => [
-                        'get' => 'isAutoLayoutEnabled',
-                        'set' => 'enableAutoLayout',
-                    ],
-                ],
-            ],
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
+                new UnprefixedMethodToGetSet('Cake\Cache\Cache', 'config'),
+                new UnprefixedMethodToGetSet('Cake\Cache\Cache', 'registry'),
+                new UnprefixedMethodToGetSet('Cake\Console\Shell', 'io'),
+                new UnprefixedMethodToGetSet('Cake\Console\ConsoleIo', 'outputAs'),
+                new UnprefixedMethodToGetSet('Cake\Console\ConsoleOutput', 'outputAs'),
+                new UnprefixedMethodToGetSet('Cake\Database\Connection', 'logger'),
+                new UnprefixedMethodToGetSet('Cake\Database\TypedResultInterface', 'returnType'),
+                new UnprefixedMethodToGetSet('Cake\Database\TypedResultTrait', 'returnType'),
+                new UnprefixedMethodToGetSet('Cake\Database\Log\LoggingStatement', 'logger'),
+                new UnprefixedMethodToGetSet('Cake\Datasource\ModelAwareTrait', 'modelType'),
+                new UnprefixedMethodToGetSet('Cake\Database\Query', 'valueBinder', 'getValueBinder', 'valueBinder'),
+                new UnprefixedMethodToGetSet('Cake\Database\Schema\TableSchema', 'columnType'),
+                new UnprefixedMethodToGetSet(
+                    'Cake\Datasource\QueryTrait',
+                    'eagerLoaded',
+                    'isEagerLoaded',
+                    'eagerLoaded'
+                ),
+                new UnprefixedMethodToGetSet('Cake\Event\EventDispatcherInterface', 'eventManager'),
+                new UnprefixedMethodToGetSet('Cake\Event\EventDispatcherTrait', 'eventManager'),
+                new UnprefixedMethodToGetSet('Cake\Error\Debugger', 'outputAs', 'getOutputFormat', 'setOutputFormat'),
+                new UnprefixedMethodToGetSet('Cake\Http\ServerRequest', 'env', 'getEnv', 'withEnv'),
+                new UnprefixedMethodToGetSet('Cake\Http\ServerRequest', 'charset', 'getCharset', 'withCharset'),
+                new UnprefixedMethodToGetSet('Cake\I18n\I18n', 'locale'),
+                new UnprefixedMethodToGetSet('Cake\I18n\I18n', 'translator'),
+                new UnprefixedMethodToGetSet('Cake\I18n\I18n', 'defaultLocale'),
+                new UnprefixedMethodToGetSet('Cake\I18n\I18n', 'defaultFormatter'),
+                new UnprefixedMethodToGetSet('Cake\ORM\Association\BelongsToMany', 'sort'),
+                new UnprefixedMethodToGetSet('Cake\ORM\LocatorAwareTrait', 'tableLocator'),
+                new UnprefixedMethodToGetSet('Cake\ORM\Table', 'validator'),
+                new UnprefixedMethodToGetSet('Cake\Routing\RouteBuilder', 'extensions'),
+                new UnprefixedMethodToGetSet('Cake\Routing\RouteBuilder', 'routeClass'),
+                new UnprefixedMethodToGetSet('Cake\Routing\RouteCollection', 'extensions'),
+                new UnprefixedMethodToGetSet('Cake\TestSuite\TestFixture', 'schema'),
+                new UnprefixedMethodToGetSet('Cake\Utility\Security', 'salt'),
+                new UnprefixedMethodToGetSet('Cake\View\View', 'template'),
+                new UnprefixedMethodToGetSet('Cake\View\View', 'layout'),
+                new UnprefixedMethodToGetSet('Cake\View\View', 'theme'),
+                new UnprefixedMethodToGetSet('Cake\View\View', 'templatePath'),
+                new UnprefixedMethodToGetSet('Cake\View\View', 'layoutPath'),
+                new UnprefixedMethodToGetSet('Cake\View\View', 'autoLayout', 'isAutoLayoutEnabled', 'enableAutoLayout'),
+            ]),
         ]]);
 };

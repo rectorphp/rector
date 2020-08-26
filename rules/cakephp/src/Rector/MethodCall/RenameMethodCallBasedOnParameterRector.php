@@ -7,15 +7,17 @@ namespace Rector\CakePHP\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\String_;
+use Rector\CakePHP\ValueObject\CallWithParamRename;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see https://book.cakephp.org/4.0/en/appendices/4-0-migration-guide.html
  * @see https://github.com/cakephp/cakephp/commit/77017145961bb697b4256040b947029259f66a9b
+ *
  * @see \Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\RenameMethodCallBasedOnParameterRectorTest
  */
 final class RenameMethodCallBasedOnParameterRector extends AbstractRector implements ConfigurableRectorInterface
@@ -23,22 +25,12 @@ final class RenameMethodCallBasedOnParameterRector extends AbstractRector implem
     /**
      * @var string
      */
-    public const METHOD_NAMES_BY_TYPES = '$methodNamesByTypes';
+    public const CALLS_WITH_PARAM_RENAMES = 'calls_with_param_renames';
 
     /**
-     * @var string
+     * @var CallWithParamRename[]
      */
-    private const MATCH_PARAMETER = 'match_parameter';
-
-    /**
-     * @var string
-     */
-    private const REPLACE_WITH = 'replace_with';
-
-    /**
-     * @var mixed[]
-     */
-    private $methodNamesByTypes = [];
+    private $callsWithParamRenames = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -61,15 +53,9 @@ $object = $object->withAttribute('paging', ['a value']);
 PHP
                     ,
                     [
-                        self::METHOD_NAMES_BY_TYPES => [
-                            'getParam' => [
-                                self::MATCH_PARAMETER => 'paging',
-                                self::REPLACE_WITH => 'getAttribute',
-                            ],
-                            'withParam' => [
-                                self::MATCH_PARAMETER => 'paging',
-                                self::REPLACE_WITH => 'withAttribute',
-                            ],
+                        self::CALLS_WITH_PARAM_RENAMES => [
+                            new CallWithParamRename('ServerRequest', 'getParam', 'paging', 'getAttribute'),
+                            new CallWithParamRename('ServerRequest', 'withParam', 'paging', 'withAttribute'),
                         ],
                     ]
                 ),
@@ -90,57 +76,44 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $config = $this->matchTypeAndMethodName($node);
-        if ($config === null) {
+        $callWithParamRename = $this->matchTypeAndMethodName($node);
+        if ($callWithParamRename === null) {
             return null;
         }
 
-        $node->name = new Identifier($config[self::REPLACE_WITH]);
+        $node->name = new Identifier($callWithParamRename->getNewMethod());
 
         return $node;
     }
 
     public function configure(array $configuration): void
     {
-        $this->methodNamesByTypes = $configuration[self::METHOD_NAMES_BY_TYPES] ?? [];
+        $callsWithParamNames = $configuration[self::CALLS_WITH_PARAM_RENAMES] ?? [];
+        Assert::allIsInstanceOf($callsWithParamNames, CallWithParamRename::class);
+        $this->callsWithParamRenames = $callsWithParamNames;
     }
 
-    /**
-     * @return string[]
-     */
-    private function matchTypeAndMethodName(MethodCall $methodCall): ?array
+    private function matchTypeAndMethodName(MethodCall $methodCall): ?CallWithParamRename
     {
-        foreach ($this->methodNamesByTypes as $type => $methodMapping) {
-            /** @var string[] $methodNames */
-            $methodNames = array_keys($methodMapping);
-            if (! $this->isObjectType($methodCall, $type)) {
+        foreach ($this->callsWithParamRenames as $callWithParamRename) {
+            if (! $this->isObjectType($methodCall, $callWithParamRename->getOldClass())) {
                 continue;
             }
 
-            if (! $this->isNames($methodCall->name, $methodNames)) {
+            if (! $this->isName($methodCall->name, $callWithParamRename->getOldMethod())) {
                 continue;
             }
 
-            $currentMethodName = $this->getName($methodCall->name);
-            if ($currentMethodName === null) {
-                continue;
-            }
-            $config = $methodMapping[$currentMethodName];
-            if (! isset($config[self::MATCH_PARAMETER])) {
-                continue;
-            }
             if (count($methodCall->args) < 1) {
                 continue;
             }
+
             $arg = $methodCall->args[0];
-            if (! ($arg->value instanceof String_)) {
-                continue;
-            }
-            if ($arg->value->value !== $config[self::MATCH_PARAMETER]) {
+            if (! $this->isValue($arg->value, $callWithParamRename->getParameterName())) {
                 continue;
             }
 
-            return $config;
+            return $callWithParamRename;
         }
 
         return null;

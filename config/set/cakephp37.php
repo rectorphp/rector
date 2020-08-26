@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToCamelRector;
+use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
 use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -114,20 +115,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
-                'Cake\Database\Connection' => [
-                    'logQueries' => [
-                        'set' => 'enableQueryLogging',
-                        'get' => 'isQueryLoggingEnabled',
-                    ],
-                ],
-                'Cake\ORM\Association' => [
-                    'className' => [
-                        'set' => 'setClassName',
-                        'get' => 'getClassName',
-                    ],
-                ],
-            ],
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
+                new UnprefixedMethodToGetSet(
+                    'Cake\Database\Connection',
+                    'logQueries',
+                    'isQueryLoggingEnabled',
+                    'enableQueryLogging'
+                ),
+                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'className', 'getClassName', 'setClassName'),
+            ]),
         ]]);
 
     $services->set(ChangeSnakedFixtureNameToCamelRector::class);

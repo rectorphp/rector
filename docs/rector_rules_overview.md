@@ -392,7 +392,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->call('configure', [[
-            RenameMethodCallBasedOnParameterRector::METHOD_NAMES_BY_TYPES => [
+            RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => [
                 'getParam' => [
                 'match_parameter' => 'paging', 'replace_with' => 'getAttribute'], 'withParam' => [
                 'match_parameter' => 'paging', 'replace_with' => 'withAttribute']]

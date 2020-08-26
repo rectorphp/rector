@@ -133,10 +133,10 @@ PHP
             return $unprefixedMethodToGetSet->getGetMethod();
         }
 
-        $argumentType = $unprefixedMethodToGetSet->getFirstArgumentType();
+        $firstArgumentType = $unprefixedMethodToGetSet->getFirstArgumentType();
         $argumentValue = $methodCall->args[0]->value;
 
-        if ($argumentType === 'array' && $argumentValue instanceof Array_) {
+        if ($firstArgumentType === 'array' && $argumentValue instanceof Array_) {
             return $unprefixedMethodToGetSet->getSetMethod();
         }
 

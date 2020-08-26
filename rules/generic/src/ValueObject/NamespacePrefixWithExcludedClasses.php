@@ -14,7 +14,7 @@ final class NamespacePrefixWithExcludedClasses
     /**
      * @var string[]
      */
-    private $excludedClasses;
+    private $excludedClasses = [];
 
     /**
      * @param string[] $excludedClasses

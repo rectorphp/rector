@@ -32,7 +32,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector implements Co
 
     public function getDefinition(): RectorDefinition
     {
-        $configuration = new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService');
+        $issetUnsetToMethodCall = new IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService');
 
         return new RectorDefinition('Turns defined `__isset`/`__unset` calls to specific method calls.', [
             new ConfiguredCodeSample(
@@ -47,7 +47,7 @@ $container->hasService("someKey");
 PHP
                 ,
                 [
-                    self::ISSET_UNSET_TO_METHOD_CALL => [$configuration],
+                    self::ISSET_UNSET_TO_METHOD_CALL => [$issetUnsetToMethodCall],
                 ]
             ),
             new ConfiguredCodeSample(
@@ -62,7 +62,7 @@ $container->removeService("someKey");
 PHP
                 ,
                 [
-                    self::ISSET_UNSET_TO_METHOD_CALL => [$configuration],
+                    self::ISSET_UNSET_TO_METHOD_CALL => [$issetUnsetToMethodCall],
                 ]
             ),
         ]);
@@ -115,7 +115,7 @@ PHP
         IssetUnsetToMethodCall $issetUnsetToMethodCall
     ): ?Node {
         if ($node instanceof Isset_) {
-            if (! $issetUnsetToMethodCall->getIssetMethodCall()) {
+            if ($issetUnsetToMethodCall->getIssetMethodCall() === '') {
                 return null;
             }
 
@@ -127,7 +127,7 @@ PHP
         }
 
         if ($node instanceof Unset_) {
-            if (! $issetUnsetToMethodCall->getUnsedMethodCall()) {
+            if ($issetUnsetToMethodCall->getUnsedMethodCall() === '') {
                 return null;
             }
 
