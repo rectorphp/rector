@@ -136,7 +136,7 @@ PHP
         }
 
         // simple method name
-        if ($propertyToMethodCall->getNewGetMethod()) {
+        if ($propertyToMethodCall->getNewGetMethod() !== '') {
             $assign->expr = $this->createMethodCall($propertyFetchNode->var, $propertyToMethodCall->getNewGetMethod());
 
             if ($propertyToMethodCall->getNewGetArguments() !== []) {
