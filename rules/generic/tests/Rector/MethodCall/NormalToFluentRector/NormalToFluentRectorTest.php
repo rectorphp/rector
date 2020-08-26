@@ -34,9 +34,11 @@ final class NormalToFluentRectorTest extends AbstractRectorTestCase
         return [
             NormalToFluentRector::class => [
                 NormalToFluentRector::CALLS_TO_FLUENT => [
-                    new CallToFluent(FluentInterfaceClass::class, 'someFunction'),
-                    new CallToFluent(FluentInterfaceClass::class, 'otherFunction'),
-                    new CallToFluent(FluentInterfaceClass::class, 'joinThisAsWell'),
+                    new CallToFluent(FluentInterfaceClass::class, [
+                        'someFunction',
+                        'otherFunction',
+                        'joinThisAsWell',
+                    ]),
                 ],
             ],
         ];

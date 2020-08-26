@@ -53,10 +53,7 @@ $someObject->someFunction()
 PHP
                 ,
                 [
-                    self::CALLS_TO_FLUENT => [
-                        new CallToFluent('SomeClass', 'someFunction'),
-                        new CallToFluent('SomeClass', 'otherFunction'),
-                    ],
+                    self::CALLS_TO_FLUENT => [new CallToFluent('SomeClass', ['someFunction', 'otherFunction'])],
                 ]
             ),
         ]);
@@ -205,7 +202,7 @@ PHP
                 continue;
             }
 
-            if ($this->isName($methodCall->name, $callToFluent->getMethod())) {
+            if ($this->isNames($methodCall->name, $callToFluent->getMethodNames())) {
                 return $callToFluent->getClass();
             }
         }

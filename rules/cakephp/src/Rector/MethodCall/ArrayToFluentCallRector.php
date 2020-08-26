@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\CakePHP\ValueObject\ArrayItemsAndFluentClass;
 use Rector\CakePHP\ValueObject\ArrayToFluentCall;
-use Rector\CakePHP\ValueObject\PositionAndClassType;
+use Rector\CakePHP\ValueObject\FactoryMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -31,17 +31,7 @@ final class ArrayToFluentCallRector extends AbstractRector implements Configurab
     /**
      * @var string
      */
-    public const FACTORY_METHODS = '$factoryMethods';
-
-    /**
-     * @var string
-     */
-    private const ARGUMENT_POSITION = 'argumentPosition';
-
-    /**
-     * @var string
-     */
-    private const CLASSNAME = 'class';
+    public const FACTORY_METHODS = 'factory_methods';
 
     /**
      * @var ArrayToFluentCall[]
@@ -49,7 +39,7 @@ final class ArrayToFluentCallRector extends AbstractRector implements Configurab
     private $arraysToFluentCalls = [];
 
     /**
-     * @var mixed[]
+     * @var FactoryMethod[]
      */
     private $factoryMethods = [];
 
@@ -110,17 +100,20 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $positionAndClassType = $this->matchTypeAndMethodName($node);
-        if ($positionAndClassType === null) {
+        $factoryMethod = $this->matchTypeAndMethodName($node);
+        if ($factoryMethod === null) {
             return null;
         }
 
-        $fluentMethods = $this->arraysToFluentCalls[$positionAndClassType->getClassType()] ?? [];
-        if (! $fluentMethods) {
-            return null;
+        foreach ($this->arraysToFluentCalls as $arraysToFluentCall) {
+            if ($arraysToFluentCall->getClass() !== $factoryMethod->getNewClass()) {
+                continue;
+            }
+
+            return $this->replaceArrayToFluentMethodCalls($node, $factoryMethod->getPosition(), $arraysToFluentCall);
         }
 
-        return $this->replaceArrayToFluentMethodCalls($node, $positionAndClassType->getPosition(), $fluentMethods);
+        return null;
     }
 
     public function configure(array $configuration): void
@@ -129,44 +122,32 @@ PHP
         Assert::allIsInstanceOf($arraysToFluentCalls, ArrayToFluentCall::class);
         $this->arraysToFluentCalls = $arraysToFluentCalls;
 
-        $this->factoryMethods = $configuration[self::FACTORY_METHODS] ?? [];
+        $factoryMethods = $configuration[self::FACTORY_METHODS] ?? [];
+        Assert::allIsInstanceOf($factoryMethods, FactoryMethod::class);
+        $this->factoryMethods = $factoryMethods;
     }
 
-    private function matchTypeAndMethodName(MethodCall $methodCall): ?PositionAndClassType
+    private function matchTypeAndMethodName(MethodCall $methodCall): ?FactoryMethod
     {
-        foreach ($this->factoryMethods as $className => $methodName) {
-            if (! $this->isObjectType($methodCall->var, $className)) {
+        foreach ($this->factoryMethods as $factoryMethod) {
+            if (! $this->isObjectType($methodCall->var, $factoryMethod->getType())) {
                 continue;
             }
 
-            /** @var string[] $methodNames */
-            $methodNames = array_keys($methodName);
-            if (! $this->isNames($methodCall->name, $methodNames)) {
+            if (! $this->isName($methodCall->name, $factoryMethod->getMethod())) {
                 continue;
             }
 
-            $currentMethodName = $this->getName($methodCall->name);
-            if ($currentMethodName === null) {
-                continue;
-            }
-
-            $config = $methodName[$currentMethodName];
-            $argumentPosition = $config[self::ARGUMENT_POSITION] ?? 1;
-            $class = $config[self::CLASSNAME];
-
-            return new PositionAndClassType($argumentPosition, $class);
+            return $factoryMethod;
         }
 
         return null;
     }
 
-    /**
-     * @param string[] $fluentMethods
-     */
     private function replaceArrayToFluentMethodCalls(
         MethodCall $methodCall,
         int $argumentPosition,
-        array $fluentMethods
+        ArrayToFluentCall $arrayToFluentCall
     ): ?MethodCall {
         if (count($methodCall->args) !== $argumentPosition) {
             return null;
@@ -177,7 +158,10 @@ PHP
             return null;
         }
 
-        $arrayItemsAndFluentClass = $this->extractFluentMethods($argumentValue->items, $fluentMethods);
+        $arrayItemsAndFluentClass = $this->extractFluentMethods(
+            $argumentValue->items,
+            $arrayToFluentCall->getArrayKeysToFluentCalls()
+        );
 
         if ($arrayItemsAndFluentClass->getArrayItems() !== []) {
             $argumentValue->items = $arrayItemsAndFluentClass->getArrayItems();
@@ -201,7 +185,7 @@ PHP
 
     /**
      * @param array<ArrayItem|null> $originalArrayItems
-     * @param string[] $arrayMap
+     * @param array<string, string> $arrayMap
      */
     private function extractFluentMethods(array $originalArrayItems, array $arrayMap): ArrayItemsAndFluentClass
     {

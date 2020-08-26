@@ -12,14 +12,17 @@ final class CallToFluent
     private $class;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $method;
+    private $methodNames = [];
 
-    public function __construct(string $class, string $method)
+    /**
+     * @param string[] $methodNames
+     */
+    public function __construct(string $class, array $methodNames)
     {
         $this->class = $class;
-        $this->method = $method;
+        $this->methodNames = $methodNames;
     }
 
     public function getClass(): string
@@ -27,8 +30,11 @@ final class CallToFluent
         return $this->class;
     }
 
-    public function getMethod(): string
+    /**
+     * @return string[]
+     */
+    public function getMethodNames(): array
     {
-        return $this->method;
+        return $this->methodNames;
     }
 }
