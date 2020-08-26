@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 use Rector\Generic\ValueObject\MethodCallToService;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -11,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ServiceGetterToConstructorInjectionRector::class)
         ->call('configure', [[
-            ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
+            ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => inline_value_objects([
                 new MethodCallToService(
                     'Doctrine\Common\Persistence\ManagerRegistry',
                     'getConnection',
@@ -22,6 +23,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'getConfiguration',
                     'Doctrine\ORM\Configuration'
                 ),
-            ],
+            ]),
         ]]);
 };

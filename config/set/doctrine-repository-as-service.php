@@ -43,12 +43,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddPropertyByParentRector::class)
         ->call('configure', [[
-            AddPropertyByParentRector::PARENT_DEPENDENCIES => [
+            AddPropertyByParentRector::PARENT_DEPENDENCIES => inline_value_objects([
                 new ParentDependency(
                     'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository',
                     'Doctrine\ORM\EntityManagerInterface'
                 ),
-            ],
+            ]),
         ]]);
 
     $services->set(ReplaceParentCallByPropertyCallRector::class)
