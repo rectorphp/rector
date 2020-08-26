@@ -10,11 +10,13 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\CakePHP\ValueObject\ArrayItemsAndFluentClass;
+use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Rector\CakePHP\ValueObject\PositionAndClassType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\ArrayToFluentCallRectorTest
@@ -24,7 +26,7 @@ final class ArrayToFluentCallRector extends AbstractRector implements Configurab
     /**
      * @var string
      */
-    public const CONFIGURABLE_CLASSES = '$configurableClasses';
+    public const ARRAYS_TO_FLUENT_CALLS = 'arrays_to_fluent_calls';
 
     /**
      * @var string
@@ -42,9 +44,9 @@ final class ArrayToFluentCallRector extends AbstractRector implements Configurab
     private const CLASSNAME = 'class';
 
     /**
-     * @var mixed[]
+     * @var ArrayToFluentCall[]
      */
-    private $configurableClasses = [];
+    private $arraysToFluentCalls = [];
 
     /**
      * @var mixed[]
@@ -54,7 +56,7 @@ final class ArrayToFluentCallRector extends AbstractRector implements Configurab
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Moves array options to fluent setter method calls.', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 use Cake\ORM\Table;
 
@@ -83,6 +85,14 @@ final class ArticlesTable extends Table
     }
 }
 PHP
+                , [
+                    self::ARRAYS_TO_FLUENT_CALLS => [
+                        new ArrayToFluentCall('ArticlesTable', [
+                            'foreignKey' => 'setForeignKey',
+                            'propertyName' => 'setProperty',
+                        ]),
+                    ],
+                ]
             ),
         ]);
     }
@@ -105,7 +115,7 @@ PHP
             return null;
         }
 
-        $fluentMethods = $this->configurableClasses[$positionAndClassType->getClassType()] ?? [];
+        $fluentMethods = $this->arraysToFluentCalls[$positionAndClassType->getClassType()] ?? [];
         if (! $fluentMethods) {
             return null;
         }
@@ -115,7 +125,10 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->configurableClasses = $configuration[self::CONFIGURABLE_CLASSES] ?? [];
+        $arraysToFluentCalls = $configuration[self::ARRAYS_TO_FLUENT_CALLS] ?? [];
+        Assert::allIsInstanceOf($arraysToFluentCalls, ArrayToFluentCall::class);
+        $this->arraysToFluentCalls = $arraysToFluentCalls;
+
         $this->factoryMethods = $configuration[self::FACTORY_METHODS] ?? [];
     }
 

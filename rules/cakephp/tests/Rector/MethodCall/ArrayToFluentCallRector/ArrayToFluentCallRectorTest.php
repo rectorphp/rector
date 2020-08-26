@@ -8,6 +8,7 @@ use Iterator;
 use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
 use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\ConfigurableClass;
 use Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\Source\FactoryClass;
+use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -33,11 +34,11 @@ final class ArrayToFluentCallRectorTest extends AbstractRectorTestCase
     {
         return [
             ArrayToFluentCallRector::class => [
-                ArrayToFluentCallRector::CONFIGURABLE_CLASSES => [
-                    ConfigurableClass::class => [
+                ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => [
+                    new ArrayToFluentCall(ConfigurableClass::class, [
                         'name' => 'setName',
                         'size' => 'setSize',
-                    ],
+                    ]),
                 ],
                 ArrayToFluentCallRector::FACTORY_METHODS => [
                     FactoryClass::class => [
