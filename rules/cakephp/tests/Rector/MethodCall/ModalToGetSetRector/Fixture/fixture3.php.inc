@@ -8,9 +8,6 @@ function modalToGetSet3()
 
     $config = $object->method();
     $config = $object->method('key');
-
-    $otherObject = 'var';
-    $config = $object->$otherObject('key');
 }
 
 ?>
@@ -25,9 +22,6 @@ function modalToGetSet3()
 
     $config = $object->getMethod();
     $config = $object->setMethod('key');
-
-    $otherObject = 'var';
-    $config = $object->$otherObject('key');
 }
 
 ?>

@@ -8,14 +8,17 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
+use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#deprecated-combined-get-set-methods
  * @see https://github.com/cakephp/cakephp/commit/326292688c5e6d08945a3cafa4b6ffb33e714eea#diff-e7c0f0d636ca50a0350e9be316d8b0f9
+ *
  * @see \Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\ModalToGetSetRectorTest
  */
 final class ModalToGetSetRector extends AbstractRector implements ConfigurableRectorInterface
@@ -23,34 +26,19 @@ final class ModalToGetSetRector extends AbstractRector implements ConfigurableRe
     /**
      * @var string
      */
-    public const METHOD_NAMES_BY_TYPES = '$methodNamesByTypes';
+    public const UNPREFIXED_METHODS_TO_GET_SET = 'unprefixed_methods_to_get_set';
 
     /**
-     * @var string
+     * @var UnprefixedMethodToGetSet[]
      */
-    private const SET = 'set';
-
-    /**
-     * @var string
-     */
-    private const GET = 'get';
-
-    /**
-     * @var string
-     */
-    private const MINIMAL_ARGUMENT_COUNT = 'minimal_argument_count';
-
-    /**
-     * @var mixed[]
-     */
-    private $methodNamesByTypes = [];
+    private $unprefixedMethodsToGetSet = [];
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
             'Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'PHP'
 $object = new InstanceConfigTrait;
 
@@ -70,6 +58,11 @@ $config = $object->getConfig('key');
 $object->setConfig('key', 'value');
 $object->setConfig(['key' => 'value']);
 PHP
+                    , [
+                        self::UNPREFIXED_METHODS_TO_GET_SET => [
+                            new UnprefixedMethodToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig'),
+                        ],
+                    ]
                 ),
             ]
         );
@@ -88,12 +81,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $typeAndMethodNames = $this->matchTypeAndMethodName($node);
-        if ($typeAndMethodNames === null) {
+        $unprefixedMethodToGetSet = $this->matchTypeAndMethodName($node);
+        if ($unprefixedMethodToGetSet === null) {
             return null;
         }
 
-        $newName = $this->resolveNewMethodNameByCondition($node, $typeAndMethodNames);
+        $newName = $this->resolveNewMethodNameByCondition($node, $unprefixedMethodToGetSet);
         $node->name = new Identifier($newName);
 
         return $node;
@@ -101,70 +94,52 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->methodNamesByTypes = $configuration[self::METHOD_NAMES_BY_TYPES] ?? [];
+        $unprefixedMethodsToGetSet = $configuration[self::UNPREFIXED_METHODS_TO_GET_SET] ?? [];
+        Assert::allIsInstanceOf($unprefixedMethodsToGetSet, UnprefixedMethodToGetSet::class);
+        $this->unprefixedMethodsToGetSet = $unprefixedMethodsToGetSet;
     }
 
-    /**
-     * @return string[]
-     */
-    private function matchTypeAndMethodName(MethodCall $methodCall): ?array
+    private function matchTypeAndMethodName(MethodCall $methodCall): ?UnprefixedMethodToGetSet
     {
-        foreach ($this->methodNamesByTypes as $type => $methodNamesToGetAndSetNames) {
-            /** @var string[] $methodNames */
-            $methodNames = array_keys($methodNamesToGetAndSetNames);
-            if (! $this->isObjectType($methodCall->var, $type)) {
+        foreach ($this->unprefixedMethodsToGetSet as $unprefixedMethodToGetSet) {
+            if (! $this->isObjectType($methodCall->var, $unprefixedMethodToGetSet->getType())) {
                 continue;
             }
 
-            if (! $this->isNames($methodCall->name, $methodNames)) {
+            if (! $this->isName($methodCall->name, $unprefixedMethodToGetSet->getUnprefixedMethod())) {
                 continue;
             }
 
-            $currentMethodName = $this->getName($methodCall->name);
-            if ($currentMethodName === null) {
-                continue;
-            }
-
-            $config = $methodNamesToGetAndSetNames[$currentMethodName];
-
-            // default
-            $config[self::SET] = $config[self::SET] ?? self::SET . ucfirst($currentMethodName);
-            $config[self::GET] = $config[self::GET] ?? self::GET . ucfirst($currentMethodName);
-
-            // default minimal argument count for setter
-            $config[self::MINIMAL_ARGUMENT_COUNT] = $config[self::MINIMAL_ARGUMENT_COUNT] ?? 1;
-
-            return $config;
+            return $unprefixedMethodToGetSet;
         }
 
         return null;
     }
 
-    /**
-     * @param mixed[] $config
-     */
-    private function resolveNewMethodNameByCondition(MethodCall $methodCall, array $config): string
-    {
-        if (count($methodCall->args) >= $config[self::MINIMAL_ARGUMENT_COUNT]) {
-            return $config[self::SET];
+    private function resolveNewMethodNameByCondition(
+        MethodCall $methodCall,
+        UnprefixedMethodToGetSet $unprefixedMethodToGetSet
+    ): string {
+        if (count($methodCall->args) >= $unprefixedMethodToGetSet->getMinimalSetterArgumentCount()) {
+            return $unprefixedMethodToGetSet->getSetMethod();
         }
 
         if (! isset($methodCall->args[0])) {
-            return $config[self::GET];
+            return $unprefixedMethodToGetSet->getGetMethod();
         }
 
         // first argument type that is considered setter
-        if (! isset($config['first_argument_type_to_set'])) {
-            return $config[self::GET];
+        if ($unprefixedMethodToGetSet->getFirstArgumentType() === null) {
+            return $unprefixedMethodToGetSet->getGetMethod();
         }
 
-        $argumentType = $config['first_argument_type_to_set'];
+        $argumentType = $unprefixedMethodToGetSet->getFirstArgumentType();
         $argumentValue = $methodCall->args[0]->value;
 
         if ($argumentType === 'array' && $argumentValue instanceof Array_) {
-            return $config[self::SET];
+            return $unprefixedMethodToGetSet->getSetMethod();
         }
 
-        return $config[self::GET];
+        return $unprefixedMethodToGetSet->getGetMethod();
     }
 }

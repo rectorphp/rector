@@ -69,7 +69,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            ModalToGetSetRector::METHOD_NAMES_BY_TYPES => [
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
                 'Cake\Core\InstanceConfigTrait' => [
                     'config' => [
                         'minimal_argument_count' => 2,

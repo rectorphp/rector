@@ -32,7 +32,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
-            ModalToGetSetRector::METHOD_NAMES_BY_TYPES => [
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
                 'Cake\Cache\Cache' => [
                     'config' => null,
                     'registry' => null,

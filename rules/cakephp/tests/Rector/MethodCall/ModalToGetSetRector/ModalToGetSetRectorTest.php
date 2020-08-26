@@ -7,6 +7,7 @@ namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector;
 use Iterator;
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source\SomeModelType;
+use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -32,25 +33,23 @@ final class ModalToGetSetRectorTest extends AbstractRectorTestCase
     {
         return [
             ModalToGetSetRector::class => [
-                ModalToGetSetRector::METHOD_NAMES_BY_TYPES => [
-                    SomeModelType::class => [
-                        'config' => [
-                            'get' => 'getConfig',
-                            'minimal_argument_count' => 2,
-                            'first_argument_type_to_set' => 'array',
-                        ],
-                        'customMethod' => [
-                            'get' => 'customMethodGetName',
-                            'set' => 'customMethodSetName',
-                            'minimal_argument_count' => 2,
-                            'first_argument_type_to_set' => 'array',
-                        ],
-                        'makeEntity' => [
-                            'get' => 'createEntity',
-                            'set' => 'generateEntity',
-                        ],
-                        'method' => null,
-                    ],
+                ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
+                    new UnprefixedMethodToGetSet(SomeModelType::class, 'config', null, null, 2, 'array'),
+                    new UnprefixedMethodToGetSet(
+                        SomeModelType::class,
+                        'customMethod',
+                        'customMethodGetName',
+                        'customMethodSetName',
+                        2,
+                        'array'
+                    ),
+                    new UnprefixedMethodToGetSet(
+                        SomeModelType::class,
+                        'makeEntity',
+                        'createEntity',
+                        'generateEntity'
+                    ),
+                    new UnprefixedMethodToGetSet(SomeModelType::class, 'method'),
                 ],
             ],
         ];
