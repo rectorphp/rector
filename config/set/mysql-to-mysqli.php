@@ -3,12 +3,14 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
+use Rector\Generic\ValueObject\FunctionArgumentSwap;
 use Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector;
 use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
+use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -26,13 +28,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     # first swap arguments, then rename
     $services->set(SwapFuncCallArgumentsRector::class)
         ->call('configure', [[
-            SwapFuncCallArgumentsRector::NEW_ARGUMENT_POSITIONS_BY_FUNCTION_NAME => [
-                'mysql_real_escape_string' => [1, 0],
-                'mysql_select_db' => [1, 0],
-                'mysql_set_charset' => [1, 0],
-                'mysql_query' => [1, 0],
-                'mysql_fetch_row' => [1, 0],
-            ],
+            SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => inline_value_objects([
+                new FunctionArgumentSwap('mysql_real_escape_string', [1, 0]),
+                new FunctionArgumentSwap('mysql_select_db', [1, 0]),
+                new FunctionArgumentSwap('mysql_set_charset', [1, 0]),
+                new FunctionArgumentSwap('mysql_query', [1, 0]),
+                new FunctionArgumentSwap('mysql_fetch_row', [1, 0]),
+            ]),
         ]]);
 
     $services->set(RenameFunctionRector::class)
