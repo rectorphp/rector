@@ -25,6 +25,7 @@ final class PropertyToMethodCall
      * @var array
      */
     private $newGetArguments = [];
+
     /**
      * @var string|null
      */
