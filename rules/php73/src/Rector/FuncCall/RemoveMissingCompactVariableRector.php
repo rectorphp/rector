@@ -76,6 +76,7 @@ PHP
         $this->unsetUnusedArguments($node, $scope);
 
         if ($node->args === []) {
+            // Replaces the `compact()` call without any arguments with the empty array.
             return new Array_();
         }
 
@@ -99,6 +100,7 @@ PHP
             }
 
             if ($arg->value->items === []) {
+                // Drops empty array from `compact()` arguments.
                 unset($node->args[$key]);
             }
         }
