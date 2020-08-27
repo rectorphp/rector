@@ -108,7 +108,7 @@ PHP
                 return null;
             }
 
-            $staticType = $this->getStaticType($node);
+            $staticType = $this->getStaticType($node); // Then `LNumber("7_200")` breaks PHPStan
             if ($staticType instanceof UnionType) {
                 if ($staticType->isSuperTypeOf(new ObjectType('mysqli'))) {
                     return true;

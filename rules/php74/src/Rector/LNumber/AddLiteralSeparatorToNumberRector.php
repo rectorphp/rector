@@ -96,6 +96,7 @@ PHP
         }
 
         $node->value = $literalSeparatedNumber;
+        //              ^^^ When becomes a string, classes that expect LNumber to have int get broken.
 
         return $node;
     }
@@ -107,6 +108,7 @@ PHP
     {
         // already separated
         if (Strings::contains($numericValueAsString, '_')) {
+            // TODO: Unreachable statement. `7_200` becomes `Scalar\LNumber( (int) 7200 )`
             return true;
         }
 
