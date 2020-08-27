@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
@@ -24,6 +25,7 @@ use PHPStan\Type\Type;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -145,7 +147,10 @@ final class VariableNaming
             return $this->resolveFromPropertyFetch($node);
         }
 
-        if ($node instanceof MethodCall) {
+        if ($node instanceof MethodCall
+            || $node instanceof NullsafeMethodCall
+            || $node instanceof StaticCall
+        ) {
             return $this->resolveFromMethodCall($node);
         }
 
@@ -243,13 +248,26 @@ final class VariableNaming
         return $varName . ucfirst($propertyName);
     }
 
-    private function resolveFromMethodCall(MethodCall $methodCall): ?string
+    private function resolveFromMethodCall(Expr $expr): ?string
     {
-        if ($methodCall->name instanceof MethodCall) {
-            return $this->resolveFromMethodCall($methodCall->name);
+        if (! $expr instanceof MethodCall
+            && ! $expr instanceof NullsafeMethodCall
+            && ! $expr instanceof StaticCall
+        ) {
+            $allowedTypes = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
+
+            throw new ShouldNotHappenException(sprintf(
+                'Only "%s" are supported, "%s" given',
+                implode('", "', $allowedTypes),
+                get_class($expr)
+            ));
         }
 
-        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        if ($expr->name instanceof MethodCall) {
+            return $this->resolveFromMethodCall($expr->name);
+        }
+
+        $methodName = $this->nodeNameResolver->getName($expr->name);
         if (! is_string($methodName)) {
             return null;
         }
