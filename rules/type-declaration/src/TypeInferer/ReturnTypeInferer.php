@@ -52,10 +52,11 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
                 continue;
             }
 
-            $type = $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
-
-            $type = $this->typeNormalizer->uniqueateConstantArrayType($type);
-            $type = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($type);
+            $type = $originalType;
+//            $type = $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
+//
+//            $type = $this->typeNormalizer->uniqueateConstantArrayType($type);
+//            $type = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($type);
 
             // in case of void, check return type of children methods
             if ($type instanceof MixedType) {
