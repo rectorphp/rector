@@ -74,7 +74,7 @@ final class TypeNormalizer
         return $this->createUnionedTypesFromArrayTypes($this->collectedNestedArrayTypes);
     }
 
-    public function uniqueateConstantArrayType(Type $type): Type
+    private function uniqueateConstantArrayType(Type $type): Type
     {
         if (! $type instanceof ConstantArrayType) {
             return $type;
