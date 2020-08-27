@@ -254,7 +254,13 @@ final class VariableNaming
             && ! $expr instanceof NullsafeMethodCall
             && ! $expr instanceof StaticCall
         ) {
-            throw new ShouldNotHappenException('Only method calls are supported');
+            $allowedTypes = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
+
+            throw new ShouldNotHappenException(sprintf(
+                'Only "%s" are supported, "%s" given',
+                implode('", "', $allowedTypes),
+                get_class($expr)
+            ));
         }
 
         if ($expr->name instanceof MethodCall) {
