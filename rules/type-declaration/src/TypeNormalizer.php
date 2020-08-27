@@ -29,15 +29,9 @@ final class TypeNormalizer
      */
     private $typeFactory;
 
-    /**
-     * @var TypeHasher
-     */
-    private $typeHasher;
-
-    public function __construct(TypeFactory $typeFactory, TypeHasher $typeHasher)
+    public function __construct(TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;
-        $this->typeHasher = $typeHasher;
     }
 
     /**
