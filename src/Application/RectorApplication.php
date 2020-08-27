@@ -115,7 +115,7 @@ final class RectorApplication
      */
     public function runOnFileInfos(array $phpFileInfos): void
     {
-        if (! $phpFileInfos) {
+        if ($phpFileInfos === []) {
             return;
         }
 

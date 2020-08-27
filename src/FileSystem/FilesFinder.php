@@ -100,7 +100,7 @@ final class FilesFinder
      */
     private function findInDirectories(array $directories, array $suffixes): array
     {
-        if (! $directories) {
+        if ($directories === []) {
             return [];
         }
 

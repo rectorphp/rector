@@ -80,7 +80,7 @@ final class CallReflectionResolver
 
         $variants = $reflection->getVariants();
 
-        if (! $variants) {
+        if ($variants === []) {
             return null;
         }
 

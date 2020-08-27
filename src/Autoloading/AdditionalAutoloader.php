@@ -93,7 +93,7 @@ final class AdditionalAutoloader
      */
     private function autoloadDirectories(array $directories): void
     {
-        if (! $directories) {
+        if ($directories === []) {
             return;
         }
 

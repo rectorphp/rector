@@ -145,7 +145,7 @@ final class Configuration
 
         $commandLinePaths = (array) $input->getArgument(Option::SOURCE);
         // manual command line value has priority
-        if ($commandLinePaths) {
+        if ($commandLinePaths !== []) {
             $this->paths = $commandLinePaths;
         }
     }
