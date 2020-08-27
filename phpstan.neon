@@ -12,22 +12,18 @@ rules:
     # should be fixed in next part of symplify CS release
     - Symplify\CodingStandard\Rules\NoClassWithStaticMethodWithoutStaticNameRule
     - Symplify\CodingStandard\Rules\SeeAnnotationToTestRule
-
-services:
-    # this rule prevents bug in phar like these: https://github.com/rectorphp/rector/pull/3692/files
-    -
-        class: Rector\PHPStanExtensions\Rule\RequireStringArgumentInMethodCallRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            constantArgByMethodByType:
-                Rector\Core\Rector\AbstractRector:
-                    isObjectType: [1]
+    - Symplify\CodingStandard\Rules\NoReferenceRule
 
 parameters:
     level: max
 
     # see https://github.com/symplify/coding-standard
     symplify:
+        # this rule prevents bug in phar like these: https://github.com/rectorphp/rector/pull/3692/files
+        string_arg_by_method_by_type:
+            Rector\Core\Rector\AbstractRector:
+                isObjectType: [1]
+
         max_cognitive_complexity: 9 # default: 8
         max_class_cognitive_complexity: 50
 
@@ -312,8 +308,6 @@ parameters:
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 9$#"
 
-        - '#Use explicit return value over magic &reference#'
-
         - '#In method "Rector\\Utils\\ProjectValidator\\Process\\ParallelTaskRunner\:\:(.*?)", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception#'
         # weird
 
@@ -391,7 +385,7 @@ parameters:
         - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExprAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
 
         -
-            message: '#Array (with keys|explosion) is not allowed\. Use value object to pass data instead#'
+            message: '#Array (with keys|destruct) is not allowed\. Use value object to pass data instead#'
             paths:
                 # working with cvs file
                 # 3rd party package
@@ -409,7 +403,32 @@ parameters:
                 # not sure how to improve
                 - rules/symfony/src/ValueObject/Tag/EventListenerTag.php
 
+        -
+            message: '#Use explicit return value over magic &reference#'
+            paths:
+                # 3rd party code
+                -  rules/php70/src/EregToPcreTransformer.php
+
         - '#Cannot access property \$key on PhpParser\\Node\\Expr\\ArrayItem\|null#'
         - '#Class Nette\\DI\\CompilerExtension not found#'
         - '#Class Latte\\Macros\\MacroSet not found#'
         - '#Method Rector\\Generic\\Rector\\ClassMethod\\ArgumentDefaultValueReplacerRector\:\:processArrayReplacement\(\) never returns array<PhpParser\\Node\\Arg\> so it can be removed from the return typehint#'
+
+        # symfony/console
+        -
+            message: '#Cannot cast array<string\>\|string\|true to string#'
+            path: 'src/Configuration/Configuration.php'
+
+        -
+             message: '#Use explicit return value over magic &reference#'
+             path: 'rules/dead-code/src/Rector/BinaryOp/RemoveDuplicatedInstanceOfRector.php'
+
+        -
+            message: '#Class with base "NodeNameResolver" name is already used in "Symplify\\CodingStandard\\PhpParser\\NodeNameResolver", "Rector\\NodeNameResolver\\NodeNameResolver"\. Use unique name to make classes easy to recognize#'
+            path: 'packages/node-name-resolver/src/NodeNameResolver.php'
+
+
+        -
+            # parent-method required
+            message: '#Use explicit return value over magic &reference#'
+            path: 'src/PhpParser/Printer/BetterStandardPrinter.php'

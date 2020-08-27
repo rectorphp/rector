@@ -11,6 +11,12 @@ class SomeClassTest extends TestCaseWithGetContainer
         $someService = $this->getContainer()->get(SomeService::class);
         $someService->someMethod();
     }
+
+    public function nested()
+    {
+        $someService = $this->getContainer()->get(SomeService::class);
+        $someService->anotherMethod();
+    }
 }
 
 class SomeService { }
@@ -32,6 +38,11 @@ class SomeClassTest extends TestCaseWithGetContainer
     public function test()
     {
         $this->someService->someMethod();
+    }
+
+    public function nested()
+    {
+        $this->someService->anotherMethod();
     }
 }
 

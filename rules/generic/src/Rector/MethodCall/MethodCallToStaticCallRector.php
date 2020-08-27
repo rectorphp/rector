@@ -10,6 +10,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\MethodCallToStaticCall;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\MethodCall\MethodCallToStaticCallRector\MethodCallToStaticCallRectorTest
@@ -22,7 +24,7 @@ final class MethodCallToStaticCallRector extends AbstractRector implements Confi
     public const METHOD_CALLS_TO_STATIC_CALLS = 'method_calls_to_static_calls';
 
     /**
-     * @var array<string, array<string, string>>
+     * @var MethodCallToStaticCall[]
      */
     private $methodCallsToStaticCalls = [];
 
@@ -66,9 +68,7 @@ PHP
 ,
                 [
                     self::METHOD_CALLS_TO_STATIC_CALLS => [
-                        'AnotherDependency' => [
-                            'process' => ['StaticCaller', 'anotherMethod'],
-                        ],
+                        new MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod'),
                     ],
                 ]
             ),
@@ -88,22 +88,20 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->methodCallsToStaticCalls === []) {
-            return null;
-        }
-
-        foreach ($this->methodCallsToStaticCalls as $class => $staticCallsByMethod) {
-            if (! $this->isObjectType($node->var, $class)) {
+        foreach ($this->methodCallsToStaticCalls as $methodCallToStaticCall) {
+            if (! $this->isObjectType($node->var, $methodCallToStaticCall->getOldClass())) {
                 continue;
             }
 
-            foreach ($staticCallsByMethod as $method => $staticCall) {
-                if (! $this->isName($node->name, $method)) {
-                    continue;
-                }
-
-                return $this->createStaticCall($staticCall[0], $staticCall[1], $node->args);
+            if (! $this->isName($node->name, $methodCallToStaticCall->getOldMethod())) {
+                continue;
             }
+
+            return $this->createStaticCall(
+                $methodCallToStaticCall->getNewClass(),
+                $methodCallToStaticCall->getNewMethod(),
+                $node->args
+            );
         }
 
         return null;
@@ -111,6 +109,8 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->methodCallsToStaticCalls = $configuration[self::METHOD_CALLS_TO_STATIC_CALLS] ?? [];
+        $methodCallsToStaticCalls = $configuration[self::METHOD_CALLS_TO_STATIC_CALLS] ?? [];
+        Assert::allIsInstanceOf($methodCallsToStaticCalls, MethodCallToStaticCall::class);
+        $this->methodCallsToStaticCalls = $methodCallsToStaticCalls;
     }
 }
