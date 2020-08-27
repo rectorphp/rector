@@ -19,9 +19,22 @@ final class AddArrayReturnDocTypeRectorTest extends AbstractRectorTestCase
         $this->doTestFileInfo($fileInfo);
     }
 
+    /**
+     * @dataProvider provideDataRectorUseCases()
+     */
+    public function testRectorUseCases(SmartFileInfo $fileInfo): void
+    {
+        $this->doTestFileInfo($fileInfo);
+    }
+
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+    }
+
+    public function provideDataRectorUseCases(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/RectorUseCasesFixture');
     }
 
     protected function getRectorClass(): string
