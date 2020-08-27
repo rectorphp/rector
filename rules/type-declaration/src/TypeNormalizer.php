@@ -74,6 +74,35 @@ final class TypeNormalizer
         return $this->createUnionedTypesFromArrayTypes($this->collectedNestedArrayTypes);
     }
 
+    /**
+     * From "string[]|mixed[]" based on empty array to to "string[]"
+     */
+    public function normalizeArrayTypeAndArrayNever(Type $type): Type
+    {
+        if (! $type instanceof UnionType) {
+            return $type;
+        }
+
+        $nonNeverTypes = [];
+        foreach ($type->getTypes() as $unionedType) {
+            if ($unionedType instanceof NonEmptyArrayType) {
+                continue;
+            }
+
+            if (! $unionedType instanceof ArrayType) {
+                return $type;
+            }
+
+            if ($unionedType->getItemType() instanceof NeverType) {
+                continue;
+            }
+
+            $nonNeverTypes[] = $unionedType;
+        }
+
+        return $this->typeFactory->createMixedPassedOrUnionType($nonNeverTypes);
+    }
+
     private function uniqueateConstantArrayType(Type $type): Type
     {
         if (! $type instanceof ConstantArrayType) {
@@ -111,35 +140,6 @@ final class TypeNormalizer
         }
 
         return new ConstantArrayType($keyTypes, $uniqueTypes);
-    }
-
-    /**
-     * From "string[]|mixed[]" based on empty array to to "string[]"
-     */
-    public function normalizeArrayTypeAndArrayNever(Type $type): Type
-    {
-        if (! $type instanceof UnionType) {
-            return $type;
-        }
-
-        $nonNeverTypes = [];
-        foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType instanceof NonEmptyArrayType) {
-                continue;
-            }
-
-            if (! $unionedType instanceof ArrayType) {
-                return $type;
-            }
-
-            if ($unionedType->getItemType() instanceof NeverType) {
-                continue;
-            }
-
-            $nonNeverTypes[] = $unionedType;
-        }
-
-        return $this->typeFactory->createMixedPassedOrUnionType($nonNeverTypes);
     }
 
     private function collectNestedArrayTypeFromUnionType(UnionType $unionType, int $arrayNesting): void
