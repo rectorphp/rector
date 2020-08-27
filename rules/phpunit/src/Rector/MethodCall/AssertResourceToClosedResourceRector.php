@@ -12,7 +12,9 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see https://github.com/sebastianbergmann/phpunit/pull/4365
+ * @source https://github.com/sebastianbergmann/phpunit/pull/4365
+ *
+ * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertResourceToClosedResourceRector\AssertResourceToClosedResourceRectorTest
  */
 final class AssertResourceToClosedResourceRector extends AbstractPHPUnitRector
 {
