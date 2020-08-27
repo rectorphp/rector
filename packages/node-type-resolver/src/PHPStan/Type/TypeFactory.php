@@ -91,9 +91,8 @@ final class TypeFactory
         // unwrap union types
         $unwrappedTypes = [];
         foreach ($types as $key => $type) {
-            if ($type instanceof UnionType) {
-                $unwrappedTypes = $type->getTypes();
-
+            if ($type instanceof UnionType || $type instanceof IntersectionType) {
+                $unwrappedTypes = array_merge($unwrappedTypes, $type->getTypes());
                 unset($types[$key]);
             }
         }
