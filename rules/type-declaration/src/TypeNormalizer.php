@@ -10,7 +10,6 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\PHPStan\TypeFactoryStaticHelper;
 use Rector\TypeDeclaration\ValueObject\NestedArrayTypeValueObject;
 
