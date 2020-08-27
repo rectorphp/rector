@@ -14,6 +14,7 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPUnit\Collector\FormerVariablesByMethodCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\SymfonyPHPUnit\Naming\ServiceNaming;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeAnalyzer;
@@ -50,13 +51,19 @@ final class OnContainerGetCallManipulator
      */
     private $nodesToRemoveCollector;
 
+    /**
+     * @var FormerVariablesByMethodCollector
+     */
+    private $formerVariablesByMethodCollector;
+
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
         KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
         NodeNameResolver $nodeNameResolver,
         NodesToRemoveCollector $nodesToRemoveCollector,
         ServiceNaming $serviceNaming,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        FormerVariablesByMethodCollector $formerVariablesByMethodCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
@@ -64,19 +71,16 @@ final class OnContainerGetCallManipulator
         $this->kernelTestCaseNodeAnalyzer = $kernelTestCaseNodeAnalyzer;
         $this->valueResolver = $valueResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
+        $this->formerVariablesByMethodCollector = $formerVariablesByMethodCollector;
     }
 
     /**
      * E.g. $someService ↓
      * $this->someService
-     *
-     * @param string[][] $formerVariablesByMethods
      */
-    public function replaceFormerVariablesWithPropertyFetch(Class_ $class, array $formerVariablesByMethods): void
+    public function replaceFormerVariablesWithPropertyFetch(Class_ $class): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
-            $formerVariablesByMethods
-        ): ?PropertyFetch {
+        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node): ?PropertyFetch {
             if (! $node instanceof Variable) {
                 return null;
             }
@@ -86,28 +90,29 @@ final class OnContainerGetCallManipulator
                 return null;
             }
 
-            /** @var string $methodName */
+            /** @var string|null $methodName */
             $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
-            if (! isset($formerVariablesByMethods[$methodName][$variableName])) {
+            if ($methodName === null) {
                 return null;
             }
 
-            $serviceType = $formerVariablesByMethods[$methodName][$variableName];
+            $serviceType = $this->formerVariablesByMethodCollector->getTypeByVariableByMethod(
+                $methodName,
+                $variableName
+            );
+            if ($serviceType === null) {
+                return null;
+            }
+
             $propertyName = $this->serviceNaming->resolvePropertyNameFromServiceType($serviceType);
 
             return new PropertyFetch(new Variable('this'), $propertyName);
         });
     }
 
-    /**
-     * @return string[][]
-     */
-    public function removeAndCollectFormerAssignedVariables(Class_ $class, bool $skipSetUpMethod = true): array
+    public function removeAndCollectFormerAssignedVariables(Class_ $class, bool $skipSetUpMethod = true): void
     {
-        $formerVariablesByMethods = [];
-
         $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
-            &$formerVariablesByMethods,
             $skipSetUpMethod
         ): ?PropertyFetch {
             if (! $node instanceof MethodCall) {
@@ -128,29 +133,18 @@ final class OnContainerGetCallManipulator
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
             if ($parentNode instanceof Assign) {
-                $this->processAssign($node, $parentNode, $type, $formerVariablesByMethods);
+                $this->processAssign($node, $parentNode, $type);
                 return null;
             }
 
             $propertyName = $this->serviceNaming->resolvePropertyNameFromServiceType($type);
-
             return new PropertyFetch(new Variable('this'), $propertyName);
         });
-
-        return $formerVariablesByMethods;
     }
 
-    /**
-     * @param string[][] $formerVariablesByMethods
-     */
-    private function processAssign(
-        MethodCall $methodCall,
-        Assign $assign,
-        string $type,
-        array &$formerVariablesByMethods
-    ): void {
+    private function processAssign(MethodCall $methodCall, Assign $assign, string $type): void
+    {
         $variableName = $this->nodeNameResolver->getName($assign->var);
         if ($variableName === null) {
             return;
@@ -158,8 +152,8 @@ final class OnContainerGetCallManipulator
 
         /** @var string $methodName */
         $methodName = $methodCall->getAttribute(AttributeKey::METHOD_NAME);
-        $formerVariablesByMethods[$methodName][$variableName] = $type;
 
+        $this->formerVariablesByMethodCollector->addMethodVariable($methodName, $variableName, $type);
         $this->nodesToRemoveCollector->addNodeToRemove($assign);
     }
 }

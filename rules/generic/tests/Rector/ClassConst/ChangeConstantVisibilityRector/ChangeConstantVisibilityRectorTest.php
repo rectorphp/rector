@@ -8,6 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Source\ParentObject;
+use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
@@ -32,15 +33,15 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
     {
         return [
             ChangeConstantVisibilityRector::class => [
-                ChangeConstantVisibilityRector::CONSTANT_TO_VISIBILITY_BY_CLASS => [
-                    ParentObject::class => [
-                        'TO_BE_PUBLIC_CONSTANT' => 'public',
-                        'TO_BE_PROTECTED_CONSTANT' => 'protected',
-                        'TO_BE_PRIVATE_CONSTANT' => 'private',
-                    ],
-                    'Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\AnotherClassWithInvalidConstants' => [
-                        'TO_BE_PRIVATE_CONSTANT' => 'private',
-                    ],
+                ChangeConstantVisibilityRector::CLASS_CONSTANT_VISIBILITY_CHANGES => [
+                    new ClassConstantVisibilityChange(ParentObject::class, 'TO_BE_PUBLIC_CONSTANT', 'public'),
+                    new ClassConstantVisibilityChange(ParentObject::class, 'TO_BE_PROTECTED_CONSTANT', 'protected'),
+                    new ClassConstantVisibilityChange(ParentObject::class, 'TO_BE_PRIVATE_CONSTANT', 'private'),
+                    new ClassConstantVisibilityChange(
+                        'Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\AnotherClassWithInvalidConstants',
+                        'TO_BE_PRIVATE_CONSTANT',
+                        'private'
+                    ),
                 ],
             ],
         ];

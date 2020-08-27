@@ -142,12 +142,10 @@ PHP
         $node->stmts = array_merge($privateProperties, $node->stmts);
 
         // 4. remove old in-method $property assigns
-        $formerVariablesByMethods = $this->onContainerGetCallManipulator->removeAndCollectFormerAssignedVariables(
-            $node
-        );
+        $this->onContainerGetCallManipulator->removeAndCollectFormerAssignedVariables($node);
 
         // 5. replace former variables by $this->someProperty
-        $this->onContainerGetCallManipulator->replaceFormerVariablesWithPropertyFetch($node, $formerVariablesByMethods);
+        $this->onContainerGetCallManipulator->replaceFormerVariablesWithPropertyFetch($node);
 
         return $node;
     }

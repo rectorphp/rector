@@ -15,6 +15,7 @@ use PhpParser\NodeVisitorAbstract;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
+use PHPStan\Analyser\Scope;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\ChangedFilesDetector;
@@ -127,10 +128,11 @@ final class PHPStanNodeScopeResolver
         $this->dependentFiles = [];
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
-        $nodeCallback = function (Node $node, MutatingScope $scope): void {
+        $nodeCallback = function (Node $node, Scope $scope): void {
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
             if ($node instanceof Class_ || $node instanceof Interface_) {
+                /** @var Scope $scope */
                 $scope = $this->resolveClassOrInterfaceScope($node, $scope);
             }
 
@@ -180,30 +182,29 @@ final class PHPStanNodeScopeResolver
     /**
      * @param Class_|Interface_ $classLike
      */
-    private function resolveClassOrInterfaceScope(
-        ClassLike $classLike,
-        MutatingScope $mutatingScope
-    ): MutatingScope {
+    private function resolveClassOrInterfaceScope(ClassLike $classLike, Scope $scope): MutatingScope
+    {
         $className = $this->resolveClassName($classLike);
 
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
         if ($classLike instanceof Class_ && Strings::match($className, '#^AnonymousClass(\w+)#')) {
-            $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $mutatingScope);
+            $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $scope);
         } else {
             $classReflection = $this->reflectionProvider->getClass($className);
         }
 
-        return $mutatingScope->enterClass($classReflection);
+        /** @var MutatingScope $scope */
+        return $scope->enterClass($classReflection);
     }
 
-    private function resolveDependentFiles(Node $node, MutatingScope $mutatingScope): void
+    private function resolveDependentFiles(Node $node, Scope $scope): void
     {
         if (! $this->configuration->isCacheEnabled()) {
             return;
         }
 
         try {
-            foreach ($this->dependencyResolver->resolveDependencies($node, $mutatingScope) as $dependentFile) {
+            foreach ($this->dependencyResolver->resolveDependencies($node, $scope) as $dependentFile) {
                 $this->dependentFiles[] = $dependentFile;
             }
         } catch (AnalysedCodeException $analysedCodeException) {

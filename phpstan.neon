@@ -403,7 +403,32 @@ parameters:
                 # not sure how to improve
                 - rules/symfony/src/ValueObject/Tag/EventListenerTag.php
 
+        -
+            message: '#Use explicit return value over magic &reference#'
+            paths:
+                # 3rd party code
+                -  rules/php70/src/EregToPcreTransformer.php
+
         - '#Cannot access property \$key on PhpParser\\Node\\Expr\\ArrayItem\|null#'
         - '#Class Nette\\DI\\CompilerExtension not found#'
         - '#Class Latte\\Macros\\MacroSet not found#'
         - '#Method Rector\\Generic\\Rector\\ClassMethod\\ArgumentDefaultValueReplacerRector\:\:processArrayReplacement\(\) never returns array<PhpParser\\Node\\Arg\> so it can be removed from the return typehint#'
+
+        # symfony/console
+        -
+            message: '#Cannot cast array<string\>\|string\|true to string#'
+            path: 'src/Configuration/Configuration.php'
+
+        -
+             message: '#Use explicit return value over magic &reference#'
+             path: 'rules/dead-code/src/Rector/BinaryOp/RemoveDuplicatedInstanceOfRector.php'
+
+        -
+            message: '#Class with base "NodeNameResolver" name is already used in "Symplify\\CodingStandard\\PhpParser\\NodeNameResolver", "Rector\\NodeNameResolver\\NodeNameResolver"\. Use unique name to make classes easy to recognize#'
+            path: 'packages/node-name-resolver/src/NodeNameResolver.php'
+
+
+        -
+            # parent-method required
+            message: '#Use explicit return value over magic &reference#'
+            path: 'src/PhpParser/Printer/BetterStandardPrinter.php'
