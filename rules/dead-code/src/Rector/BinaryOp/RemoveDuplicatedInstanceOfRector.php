@@ -101,7 +101,7 @@ PHP
 
     private function traverseBinaryOpAndRemoveDuplicatedInstanceOfs(BinaryOp $binaryOp): Node
     {
-        $this->traverseNodesWithCallable([&$binaryOp], function (Node &$node): ?Node {
+        $this->traverseNodesWithCallable([&$binaryOp], function (Node $node): ?Node {
             if (! $node instanceof BinaryOp) {
                 return null;
             }

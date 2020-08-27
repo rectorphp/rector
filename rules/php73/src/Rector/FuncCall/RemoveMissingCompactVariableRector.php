@@ -72,20 +72,53 @@ PHP
             return null;
         }
 
-        foreach ($node->args as $key => $arg) {
-            $argValue = $this->getValue($arg->value);
+        $this->unsetUnusedArrayElements($node, $scope);
+        $this->unsetUnusedArguments($node, $scope);
 
+        if ($node->args === []) {
+            // Replaces the `compact()` call without any arguments with the empty array.
+            return new Array_();
+        }
+
+        return $node;
+    }
+
+    private function unsetUnusedArrayElements(Node $node, Scope $scope): void
+    {
+        foreach ($node->args as $key => $arg) {
+            if (! $arg->value instanceof Array_) {
+                continue;
+            }
+
+            foreach ($arg->value->items as $arrayKey => $item) {
+                $value = $this->getValue($item->value);
+                if ($scope->hasVariableType($value)->yes()) {
+                    continue;
+                }
+
+                unset($arg->value->items[$arrayKey]);
+            }
+
+            if ($arg->value->items === []) {
+                // Drops empty array from `compact()` arguments.
+                unset($node->args[$key]);
+            }
+        }
+    }
+
+    private function unsetUnusedArguments(Node $node, Scope $scope): void
+    {
+        foreach ($node->args as $key => $arg) {
+            if ($arg->value instanceof Array_) {
+                continue;
+            }
+
+            $argValue = $this->getValue($arg->value);
             if (! $scope->hasVariableType($argValue)->no()) {
                 continue;
             }
 
             unset($node->args[$key]);
         }
-
-        if ($node->args === []) {
-            return new Array_();
-        }
-
-        return $node;
     }
 }

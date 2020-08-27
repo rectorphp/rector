@@ -7,6 +7,7 @@ namespace Rector\Generic\Tests\Rector\MethodCall\MethodCallToStaticCallRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
+use Rector\Generic\ValueObject\MethodCallToStaticCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToStaticCallRectorTest extends AbstractRectorTestCase
@@ -25,16 +26,14 @@ final class MethodCallToStaticCallRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return string[][][][][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {
         return [
             MethodCallToStaticCallRector::class => [
                 MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => [
-                    AnotherDependency::class => [
-                        'process' => ['StaticCaller', 'anotherMethod'],
-                    ],
+                    new MethodCallToStaticCall(AnotherDependency::class, 'process', 'StaticCaller', 'anotherMethod'),
                 ],
             ],
         ];

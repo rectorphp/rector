@@ -10,6 +10,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Generic\ValueObject\ClassConstantVisibilityChange;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\ClassConst\ChangeConstantVisibilityRector\ChangeConstantVisibilityRectorTest
@@ -19,12 +21,12 @@ final class ChangeConstantVisibilityRector extends AbstractRector implements Con
     /**
      * @var string
      */
-    public const CONSTANT_TO_VISIBILITY_BY_CLASS = '$constantToVisibilityByClass';
+    public const CLASS_CONSTANT_VISIBILITY_CHANGES = 'class_constant_visibility_changes';
 
     /**
-     * @var string[][] { class => [ method name => visibility ] }
+     * @var ClassConstantVisibilityChange[]
      */
-    private $constantToVisibilityByClass = [];
+    private $classConstantVisibilityChanges = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -56,10 +58,8 @@ class MyClass extends FrameworkClass
 PHP
                 ,
                 [
-                    self::CONSTANT_TO_VISIBILITY_BY_CLASS => [
-                        'ParentObject' => [
-                            'SOME_CONSTANT' => 'protected',
-                        ],
+                    self::CLASS_CONSTANT_VISIBILITY_CHANGES => [
+                        new ClassConstantVisibilityChange('ParentObject', 'SOME_CONSTANT', 'protected'),
                     ],
                 ]
             )]
@@ -79,20 +79,18 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->constantToVisibilityByClass as $class => $constantsToVisibility) {
-            if (! $this->isObjectType($node, $class)) {
+        foreach ($this->classConstantVisibilityChanges as $classConstantVisibilityChange) {
+            if (! $this->isObjectType($node, $classConstantVisibilityChange->getClass())) {
                 continue;
             }
 
-            foreach ($constantsToVisibility as $constant => $visibility) {
-                if (! $this->isName($node, $constant)) {
-                    continue;
-                }
-
-                $this->changeNodeVisibility($node, $visibility);
-
-                return $node;
+            if (! $this->isName($node, $classConstantVisibilityChange->getConstant())) {
+                continue;
             }
+
+            $this->changeNodeVisibility($node, $classConstantVisibilityChange->getVisibility());
+
+            return $node;
         }
 
         return null;
@@ -100,6 +98,8 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->constantToVisibilityByClass = $configuration[self::CONSTANT_TO_VISIBILITY_BY_CLASS] ?? [];
+        $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? [];
+        Assert::allIsInstanceOf($classConstantVisibilityChanges, ClassConstantVisibilityChange::class);
+        $this->classConstantVisibilityChanges = $classConstantVisibilityChanges;
     }
 }

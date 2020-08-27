@@ -13,6 +13,7 @@ use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPUnit\Collector\FormerVariablesByMethodCollector;
 use Rector\PHPUnit\Manipulator\OnContainerGetCallManipulator;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeFactory;
 use Rector\SymfonyPHPUnit\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector;
@@ -49,16 +50,23 @@ final class SelfContainerGetMethodCallFromTestToInjectPropertyRector extends Abs
      */
     private $classManipulator;
 
+    /**
+     * @var FormerVariablesByMethodCollector
+     */
+    private $formerVariablesByMethodCollector;
+
     public function __construct(
         ClassManipulator $classManipulator,
         KernelTestCaseNodeFactory $kernelTestCaseNodeFactory,
         OnContainerGetCallManipulator $onContainerGetCallManipulator,
-        SelfContainerMethodCallCollector $selfContainerMethodCallCollector
+        SelfContainerMethodCallCollector $selfContainerMethodCallCollector,
+        FormerVariablesByMethodCollector $formerVariablesByMethodCollector
     ) {
         $this->selfContainerMethodCallCollector = $selfContainerMethodCallCollector;
         $this->kernelTestCaseNodeFactory = $kernelTestCaseNodeFactory;
         $this->onContainerGetCallManipulator = $onContainerGetCallManipulator;
         $this->classManipulator = $classManipulator;
+        $this->formerVariablesByMethodCollector = $formerVariablesByMethodCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,7 +83,10 @@ class SomeClassTest extends TestCase {
         $someService = $this->getContainer()->get(SomeService::class);
     }
 }
-class SomeService { }
+
+class SomeService
+{
+}
 PHP
 ,
                     <<<'PHP'
@@ -91,7 +102,10 @@ class SomeClassTest extends TestCase {
         $someService = $this->someService;
     }
 }
-class SomeService { }
+
+class SomeService
+{
+}
 PHP
             ),
             ]
@@ -136,13 +150,12 @@ PHP
         $node->stmts = array_merge($privateProperties, $node->stmts);
 
         // 4. remove old in-method $property assigns
-        $formerVariablesByMethods = $this->onContainerGetCallManipulator->removeAndCollectFormerAssignedVariables(
-            $node,
-            false
-        );
+        $this->formerVariablesByMethodCollector->reset();
+
+        $this->onContainerGetCallManipulator->removeAndCollectFormerAssignedVariables($node, false);
 
         // 4. replace former variables by $this->someProperty
-        $this->onContainerGetCallManipulator->replaceFormerVariablesWithPropertyFetch($node, $formerVariablesByMethods);
+        $this->onContainerGetCallManipulator->replaceFormerVariablesWithPropertyFetch($node);
 
         return $node;
     }

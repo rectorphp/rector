@@ -1,19 +1,5 @@
 services:
     -
-        class: Rector\PHPStanExtensions\Rule\ForbiddenComplexArrayConfigInSetRule
-        tags: [phpstan.rules.rule]
-
-    # @todo move to symplify
-    -
-        class: Rector\PHPStanExtensions\Rule\ForbiddenArrayWithStringKeysRule
-        tags: [phpstan.rules.rule]
-
-    # @todo move to symplify
-    -
-        class: Rector\PHPStanExtensions\Rule\ForbiddenArrayDestructRule
-        tags: [phpstan.rules.rule]
-
-    -
         class: Rector\PHPStanExtensions\Rule\RequireRectorCategoryByGetNodeTypesRule
         tags: [phpstan.rules.rule]
 

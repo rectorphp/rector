@@ -4911,7 +4911,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ChangeConstantVisibilityRector::class)
         ->call('configure', [[
-            ChangeConstantVisibilityRector::CONSTANT_TO_VISIBILITY_BY_CLASS => [
+            ChangeConstantVisibilityRector::CLASS_CONSTANT_VISIBILITY_CHANGES => [
                 'ParentObject' => [
                 'SOME_CONSTANT' => 'protected']]
         ]]);

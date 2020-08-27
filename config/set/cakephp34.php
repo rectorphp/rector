@@ -26,7 +26,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
                 // source: https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html
                 new PropertyToMethodCall('Cake\Network\Request', 'params', 'getAttribute', null, ['params']),
-
                 new PropertyToMethodCall('Cake\Network\Request', 'data', 'getData'),
                 new PropertyToMethodCall('Cake\Network\Request', 'query', 'getQueryParams'),
                 new PropertyToMethodCall('Cake\Network\Request', 'cookies', 'getCookie'),
@@ -240,14 +239,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(RenameClassRector::class)
-        ->call(
-            'configure',
-            [[
-                RenameClassRector::OLD_TO_NEW_CLASSES => [
-                    'Cake\Database\Schema\Table' => 'Cake\Database\Schema\TableSchema',
-                ],
-            ]]
-        );
+        ->call('configure', [[
+            RenameClassRector::OLD_TO_NEW_CLASSES => [
+                'Cake\Database\Schema\Table' => 'Cake\Database\Schema\TableSchema',
+            ],
+        ]]);
 
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
