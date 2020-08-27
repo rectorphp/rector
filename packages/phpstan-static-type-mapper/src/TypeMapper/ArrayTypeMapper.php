@@ -71,7 +71,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
         $arrayType = $type->getKeysArray();
         if ($arrayType instanceof ConstantArrayType) {
             foreach ($arrayType->getKeyTypes() as $key) {
-                if (!$key instanceof ConstantIntegerType) {
+                if (! $key instanceof ConstantIntegerType) {
                     $allIntegerKeys = false;
                 }
             }
@@ -88,13 +88,9 @@ final class ArrayTypeMapper implements TypeMapperInterface
             }
         }
 
-        if ($allIntegerKeys && !$unionValue) {
+        if ($allIntegerKeys && ! $unionValue) {
             return new ArrayTypeNode($itemTypeNode);
         }
-
-
-        /** @var IdentifierTypeNode $keyTypeNode */
-        $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getKeyType());
 
         $attributeAwareIdentifierTypeNode = new AttributeAwareIdentifierTypeNode('array');
 
