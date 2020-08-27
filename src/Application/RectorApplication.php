@@ -115,11 +115,11 @@ final class RectorApplication
      */
     public function runOnFileInfos(array $phpFileInfos): void
     {
-        $fileCount = count($phpFileInfos);
-        if ($fileCount === 0) {
+        if (! $phpFileInfos) {
             return;
         }
 
+        $fileCount = count($phpFileInfos);
         $this->prepareProgressBar($fileCount);
 
         // PHPStan has to know about all files!

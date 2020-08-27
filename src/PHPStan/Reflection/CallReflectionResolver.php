@@ -79,12 +79,12 @@ final class CallReflectionResolver
         }
 
         $variants = $reflection->getVariants();
-        $nbVariants = count($variants);
 
-        if ($nbVariants === 0) {
+        if (! $variants) {
             return null;
         }
 
+        $nbVariants = count($variants);
         if ($nbVariants === 1) {
             return ParametersAcceptorSelector::selectSingle($variants);
         }
