@@ -30,6 +30,16 @@ final class RepeatedLiteralToClassConstantRector extends AbstractRector
     private const VALUE = 'value';
 
     /**
+     * @var string
+     */
+    private const NUMBERS = 'numbers';
+
+    /**
+     * @var string
+     */
+    private const UNDERSCORE = '_';
+
+    /**
      * @var int
      */
     private const MINIMAL_VALUE_OCCURRENCE = 3;
@@ -218,10 +228,38 @@ PHP
 
     private function createConstName(string $value): string
     {
-        $value = StaticRectorStrings::camelCaseToUnderscore($value);
-        $value = Strings::replace($value, '#[-\\\/]#', '_');
+        // replace slashes and dashes
+        $value = Strings::replace($value, '#[-\\\/]#', self::UNDERSCORE);
 
-        return strtoupper($value);
+        // find beginning numbers
+        $beginningNumbers = '';
+
+        $matches = Strings::match($value, '#(?<' . self::NUMBERS . '>[0-9]*)(?<' . self::VALUE . '>.*)#');
+
+        if (isset($matches[self::NUMBERS])) {
+            $beginningNumbers = $matches[self::NUMBERS];
+        }
+
+        if (isset($matches[self::VALUE])) {
+            $value = $matches[self::VALUE];
+        }
+
+        // convert camelcase parts to underscore
+        $parts = array_map(
+            function (string $v) {
+                return StaticRectorStrings::camelCaseToUnderscore($v);
+            },
+            explode(self::UNDERSCORE, $value)
+        );
+
+        // apply "CONST" prefix if constant beginning with number
+        if ($beginningNumbers !== '') {
+            $parts = array_merge(['CONST', $beginningNumbers], $parts);
+        }
+
+        $value = implode(self::UNDERSCORE, $parts);
+
+        return strtoupper(Strings::replace($value, '#_+#', self::UNDERSCORE));
     }
 
     private function isNativeConstantResemblingValue(string $value): bool
