@@ -13,6 +13,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
@@ -119,6 +120,11 @@ final class ArrayTypeMapper implements TypeMapperInterface
             return false;
         }
 
+        // skip simple arrays, like "string[]", from converting to obvious "array<int, string>"
+        if ($this->isIntegerKeyAndNonNestedArray($arrayType)) {
+            return false;
+        }
+
         if ($arrayType->getKeyType() instanceof NeverType) {
             return false;
         }
@@ -169,5 +175,14 @@ final class ArrayTypeMapper implements TypeMapperInterface
         $unionedTypesAsString = array_unique($unionedTypesAsString);
 
         return implode('|', $unionedTypesAsString);
+    }
+
+    private function isIntegerKeyAndNonNestedArray(ArrayType $arrayType): bool
+    {
+        if (! $arrayType->getKeyType() instanceof IntegerType) {
+            return false;
+        }
+
+        return ! $arrayType->getItemType() instanceof ArrayType;
     }
 }

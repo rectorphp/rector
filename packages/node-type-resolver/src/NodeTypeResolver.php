@@ -354,7 +354,6 @@ final class NodeTypeResolver
 
         if ($scope instanceof Scope) {
             $arrayType = $scope->getType($expr);
-
             if ($arrayType !== null) {
                 return $arrayType;
             }
