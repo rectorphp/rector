@@ -12,22 +12,27 @@ namespace Rector\Autodiscovery\Configuration;
 final class CategoryNamespaceProvider
 {
     /**
+     * @var string[]
+     */
+    private const CATEGORY_NAMESPACES = [
+        'Command',
+        'Controller',
+        'Exception',
+        'Facade',
+        'EventSubscriber',
+        'EventListener',
+        'Entity',
+        'EntityFactory',
+        'Repository',
+        'Validator',
+        'Validation',
+    ];
+
+    /**
      * @return string[]
      */
     public function provide(): array
     {
-        return [
-            'Command',
-            'Controller',
-            'Exception',
-            'Facade',
-            'EventSubscriber',
-            'EventListener',
-            'Entity',
-            'EntityFactory',
-            'Repository',
-            'Validator',
-            'Validation',
-        ];
+        return self::CATEGORY_NAMESPACES;
     }
 }

@@ -427,8 +427,10 @@ parameters:
             message: '#Class with base "NodeNameResolver" name is already used in "Symplify\\CodingStandard\\PhpParser\\NodeNameResolver", "Rector\\NodeNameResolver\\NodeNameResolver"\. Use unique name to make classes easy to recognize#'
             path: 'packages/node-name-resolver/src/NodeNameResolver.php'
 
+        -
+            message: '#Use value object over return of values#'
+            path: 'rules/phpunit/src/Composer/ComposerAutoloadedDirectoryProvider.php'
 
         -
-            # parent-method required
-            message: '#Use explicit return value over magic &reference#'
-            path: 'src/PhpParser/Printer/BetterStandardPrinter.php'
+            message: '#Use value object over return of values#'
+            path: 'rules/php70/src/EregToPcreTransformer.php'
