@@ -101,9 +101,9 @@ final class PropertyNaming
      */
     public function underscoreToName(string $underscoreName): string
     {
-        $camelCaseName = str_replace('_', '', ucwords($underscoreName, '_'));
+        $pascalCaseName = str_replace('_', '', ucwords($underscoreName, '_'));
 
-        return lcfirst($camelCaseName);
+        return lcfirst($pascalCaseName);
     }
 
     private function getClassName(TypeWithClassName $typeWithClassName): string

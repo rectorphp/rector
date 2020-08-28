@@ -64,7 +64,7 @@ final class ConfigurationNodeFactory
 
         $properties = [];
         foreach (array_keys($ruleConfiguration) as $constantName) {
-            $propertyName = StaticRectorStrings::uppercaseUnderscoreToPascalCase($constantName);
+            $propertyName = StaticRectorStrings::uppercaseUnderscoreToCamelCase($constantName);
             $type = new ArrayType(new MixedType(), new MixedType());
 
             $property = $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $type);
@@ -111,7 +111,7 @@ final class ConfigurationNodeFactory
         foreach (array_keys($ruleConfiguration) as $constantName) {
             $coalesce = $this->createConstantInConfigurationCoalesce($constantName, $configurationVariable);
 
-            $propertyName = StaticRectorStrings::uppercaseUnderscoreToPascalCase($constantName);
+            $propertyName = StaticRectorStrings::uppercaseUnderscoreToCamelCase($constantName);
             $assign = $this->nodeFactory->createPropertyAssignmentWithExpr($propertyName, $coalesce);
             $assigns[] = new Expression($assign);
         }

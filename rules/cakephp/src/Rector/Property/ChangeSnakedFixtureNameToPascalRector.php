@@ -11,18 +11,19 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToCamel\ChangeSnakedFixtureNameToCamelTest
+ * @see \Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToPascal\ChangeSnakedFixtureNameToPascalTest
  *
  * @see https://book.cakephp.org/3.0/en/appendices/3-7-migration-guide.html
  */
-final class ChangeSnakedFixtureNameToCamelRector extends AbstractRector
+final class ChangeSnakedFixtureNameToPascalRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Changes $fixtues style from snake_case to CamelCase.', [
+        return new RectorDefinition('Changes $fixtues style from snake_case to PascalCase.', [
             new CodeSample(
                 <<<'PHP'
 class SomeTest
@@ -40,7 +41,7 @@ class SomeTest
     protected $fixtures = [
         'app.Posts',
         'app.Users',
-        'some_plugin.Posts/SpeectialPosts',
+        'some_plugin.Posts/SpecialPosts',
     ];
 PHP
             ),
@@ -91,9 +92,7 @@ PHP
 
         $table = array_map(
             function (string $token): string {
-                $tokens = explode('_', $token);
-
-                return implode('', array_map('ucfirst', $tokens));
+                return StaticRectorStrings::underscoreToPascalCase($token);
             },
             explode('/', $table)
         );

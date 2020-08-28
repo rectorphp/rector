@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToCamel;
+namespace Rector\CakePHP\Tests\Rector\Property\ChangeSnakedFixtureNameToPascal;
 
 use Iterator;
-use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToCamelRector;
+use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToPascalRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ChangeSnakedFixtureNameToCamelTest extends AbstractRectorTestCase
+final class ChangeSnakedFixtureNameToPascalTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class ChangeSnakedFixtureNameToCamelTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ChangeSnakedFixtureNameToCamelRector::class;
+        return ChangeSnakedFixtureNameToPascalRector::class;
     }
 }

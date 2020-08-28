@@ -11,7 +11,7 @@ final class NetteControlNaming
 {
     public function createVariableName(string $shortName): string
     {
-        $variableName = StaticRectorStrings::underscoreToPascalCase($shortName);
+        $variableName = StaticRectorStrings::underscoreToCamelCase($shortName);
         if (Strings::endsWith($variableName, 'Form')) {
             return $variableName;
         }
@@ -21,6 +21,6 @@ final class NetteControlNaming
 
     public function createCreateComponentClassMethodName(string $shortName): string
     {
-        return 'createComponent' . StaticRectorStrings::underscoreToCamelCase($shortName);
+        return 'createComponent' . StaticRectorStrings::underscoreToPascalCase($shortName);
     }
 }

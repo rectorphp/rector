@@ -17,13 +17,13 @@ use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\PropertyProperty\UnderscoreToPascalCasePropertyNameRector\UnderscoreToPascalCasePropertyNameRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector\UnderscoreToCamelCasePropertyNameRectorTest
  */
-final class UnderscoreToPascalCasePropertyNameRector extends AbstractRector
+final class UnderscoreToCamelCasePropertyNameRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change under_score names to pascalCase', [
+        return new RectorDefinition('Change under_score names to camelCase', [
             new CodeSample(
                 <<<'PHP'
 final class SomeClass
@@ -81,9 +81,9 @@ PHP
             return null;
         }
 
-        $pascalCaseName = $this->createPascalName($nodeName, $node);
+        $camelCaseName = $this->createCamelName($nodeName, $node);
 
-        $node->name = new Identifier($pascalCaseName);
+        $node->name = new Identifier($camelCaseName);
 
         return $node;
     }
@@ -91,14 +91,14 @@ PHP
     /**
      * @param PropertyProperty|PropertyFetch|StaticPropertyFetch $node
      */
-    private function createPascalName(string $nodeName, Node $node): string
+    private function createCamelName(string $nodeName, Node $node): string
     {
-        $pascalCaseName = StaticRectorStrings::underscoreToPascalCase($nodeName);
+        $camelCaseName = StaticRectorStrings::underscoreToCamelCase($nodeName);
 
         if ($node instanceof StaticPropertyFetch || $node instanceof PropertyProperty) {
-            $pascalCaseName = '$' . $pascalCaseName;
+            $camelCaseName = '$' . $camelCaseName;
         }
 
-        return $pascalCaseName;
+        return $camelCaseName;
     }
 }
