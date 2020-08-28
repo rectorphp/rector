@@ -45,7 +45,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
         $this->nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
-        $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFilenfo();
+        $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
 
         $this->originalTempFileInfo = $inputFileInfo;
