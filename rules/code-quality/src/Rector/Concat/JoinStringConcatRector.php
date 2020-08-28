@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Concat\JoinStringConcatRector\JoinStringConcatRectorTest
@@ -58,21 +59,28 @@ PHP
     }
 
     /**
+     * @var bool
+     */
+    private $nodeReplacementIsRestricted = false;
+
+    /**
      * @param Concat $node
      */
     public function refactor(Node $node): ?Node
     {
-        $originalNode = clone $node;
+        $this->nodeReplacementIsRestricted = false;
+
+        if (! $this->isTopMostConcatNode($node)) {
+            return null;
+        }
 
         $joinedNode = $this->joinConcatIfStrings($node);
         if (! $joinedNode instanceof String_) {
             return null;
         }
 
-        // the value is too long
-        if (Strings::length($joinedNode->value) >= self::LINE_BREAK_POINT) {
-            // this prevents keeping joins
-            return $originalNode;
+        if ($this->nodeReplacementIsRestricted) {
+            return null;
         }
 
         return $joinedNode;
@@ -81,8 +89,10 @@ PHP
     /**
      * @return Concat|String_
      */
-    private function joinConcatIfStrings(Concat $concat): Node
+    private function joinConcatIfStrings(Concat $node): Node
     {
+        $concat = clone $node;
+
         if ($concat->left instanceof Concat) {
             $concat->left = $this->joinConcatIfStrings($concat->left);
         }
@@ -92,13 +102,24 @@ PHP
         }
 
         if (! $concat->left instanceof String_) {
-            return $concat;
+            return $node;
         }
 
         if (! $concat->right instanceof String_) {
-            return $concat;
+            return $node;
         }
 
-        return new String_($concat->left->value . $concat->right->value);
+        $resultStringNode = new String_($concat->left->value . $concat->right->value);
+        if (Strings::length($resultStringNode->value) >= self::LINE_BREAK_POINT) {
+            $this->nodeReplacementIsRestricted = true;
+            return $node;
+        }
+
+        return $resultStringNode;
+    }
+
+    private function isTopMostConcatNode(Concat $node): bool
+    {
+        return ! ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Concat);
     }
 }
