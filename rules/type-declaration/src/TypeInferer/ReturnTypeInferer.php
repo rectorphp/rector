@@ -53,7 +53,6 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
             }
 
             $type = $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
-
             $type = $this->typeNormalizer->uniqueateConstantArrayType($type);
             $type = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($type);
 

@@ -22,7 +22,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fi
 final class ExplicitKeyArray
 {
     /**
-     * @var array<int, string>
+     * @var string[]
      */
     const VALUES_WITH_KEYS = [
         100 => 'hi'
