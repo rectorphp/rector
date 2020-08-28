@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\FixtureImport\SnakeToCamelRector;
+namespace Rector\CakePHP\Tests\Rector\FixtureImport\SnakeToPascalRector;
 
 class ClassImportingFixturesWithSnakeCasedName
 {
@@ -16,7 +16,7 @@ class ClassImportingFixturesWithSnakeCasedName
 -----
 <?php
 
-namespace Rector\CakePHP\Tests\Rector\FixtureImport\SnakeToCamelRector;
+namespace Rector\CakePHP\Tests\Rector\FixtureImport\SnakeToPascalRector;
 
 class ClassImportingFixturesWithSnakeCasedName
 {

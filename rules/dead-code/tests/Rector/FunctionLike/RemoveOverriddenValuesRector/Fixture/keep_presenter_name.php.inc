@@ -5,7 +5,7 @@ namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveOverriddenValuesRector
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Util\RectorStrings;
+use Rector\Core\Util\StaticRectorStrings;
 
 class KeepPresenterName
 {
@@ -19,7 +19,7 @@ class KeepPresenterName
 
         /** @var string $presenterPart */
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
-        $presenterPart = RectorStrings::camelCaseToDashes($presenterPart);
+        $presenterPart = StaticRectorStrings::camelCaseToDashes($presenterPart);
 
         $match = (array) Strings::match($this->getName($classMethod), '#^(action|render)(?<short_action_name>.*?$)#sm');
         $actionPart = lcfirst($match['short_action_name']);

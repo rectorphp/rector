@@ -62,7 +62,7 @@ final class ClassNaming
     {
         $basenameWithoutSuffix = $smartFileInfo->getBasenameWithoutSuffix();
 
-        return StaticRectorStrings::underscoreToCamelCase($basenameWithoutSuffix);
+        return StaticRectorStrings::underscoreToPascalCase($basenameWithoutSuffix);
     }
 
     /**
@@ -71,6 +71,6 @@ final class ClassNaming
     public function createMethodNameFromFunction(Function_ $function): string
     {
         $functionName = (string) $function->name;
-        return StaticRectorStrings::underscoreToPascalCase($functionName);
+        return StaticRectorStrings::underscoreToCamelCase($functionName);
     }
 }

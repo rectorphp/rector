@@ -313,11 +313,11 @@ Moves array options to fluent setter method calls.
 
 <br><br>
 
-### `ChangeSnakedFixtureNameToCamelRector`
+### `ChangeSnakedFixtureNameToPascalRector`
 
-- class: [`Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToCamelRector`](/../master/rules/cakephp/src/Rector/Property/ChangeSnakedFixtureNameToCamelRector.php)
+- class: [`Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToPascalRector`](/../master/rules/cakephp/src/Rector/Property/ChangeSnakedFixtureNameToPascalRector.php)
 
-Changes `$fixtues` style from snake_case to CamelCase.
+Changes `$fixtues` style from snake_case to PascalCase.
 
 ```diff
  class SomeTest
@@ -2250,12 +2250,12 @@ Assign outcome of ternary condition to variable, where applicable
 
 <br><br>
 
-### `UnderscoreToPascalCasePropertyNameRector`
+### `UnderscoreToCamelCasePropertyNameRector`
 
-- class: [`Rector\CodingStyle\Rector\PropertyProperty\UnderscoreToPascalCasePropertyNameRector`](/../master/rules/coding-style/src/Rector/PropertyProperty/UnderscoreToPascalCasePropertyNameRector.php)
-- [test fixtures](/../master/rules/coding-style/tests/Rector/PropertyProperty/UnderscoreToPascalCasePropertyNameRector/Fixture)
+- class: [`Rector\CodingStyle\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector`](/../master/rules/coding-style/src/Rector/PropertyProperty/UnderscoreToCamelCasePropertyNameRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/PropertyProperty/UnderscoreToCamelCasePropertyNameRector/Fixture)
 
-Change under_score names to pascalCase
+Change under_score names to camelCase
 
 ```diff
  final class SomeClass
@@ -2273,12 +2273,12 @@ Change under_score names to pascalCase
 
 <br><br>
 
-### `UnderscoreToPascalCaseVariableNameRector`
+### `UnderscoreToCamelCaseVariableNameRector`
 
-- class: [`Rector\CodingStyle\Rector\Variable\UnderscoreToPascalCaseVariableNameRector`](/../master/rules/coding-style/src/Rector/Variable/UnderscoreToPascalCaseVariableNameRector.php)
-- [test fixtures](/../master/rules/coding-style/tests/Rector/Variable/UnderscoreToPascalCaseVariableNameRector/Fixture)
+- class: [`Rector\CodingStyle\Rector\Variable\UnderscoreToCamelCaseVariableNameRector`](/../master/rules/coding-style/src/Rector/Variable/UnderscoreToCamelCaseVariableNameRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/Variable/UnderscoreToCamelCaseVariableNameRector/Fixture)
 
-Change under_score names to pascalCase
+Change under_score names to camelCase
 
 ```diff
  final class SomeClass

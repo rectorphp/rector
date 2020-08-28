@@ -87,7 +87,7 @@ final class VariableNaming
             $variableName = lcfirst($shortClassName);
         }
 
-        return StaticRectorStrings::underscoreToPascalCase($variableName);
+        return StaticRectorStrings::underscoreToCamelCase($variableName);
     }
 
     public function resolveFromNodeWithScopeCountAndFallbackName(
@@ -218,7 +218,7 @@ final class VariableNaming
                 $valueName = $this->nodeNameResolver->getName($arrayDimFetch->var);
                 $dimName = $this->valueResolver->getValue($arrayDimFetch->dim);
 
-                $dimName = StaticRectorStrings::underscoreToCamelCase($dimName);
+                $dimName = StaticRectorStrings::underscoreToPascalCase($dimName);
 
                 return $valueName . $dimName;
             }

@@ -23,14 +23,14 @@ use Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector;
 use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
-use Rector\CodingStyle\Rector\PropertyProperty\UnderscoreToPascalCasePropertyNameRector;
+use Rector\CodingStyle\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
 use Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector;
 use Rector\CodingStyle\Rector\Use_\SplitGroupedUseImportsRector;
-use Rector\CodingStyle\Rector\Variable\UnderscoreToPascalCaseVariableNameRector;
+use Rector\CodingStyle\Rector\Variable\UnderscoreToCamelCaseVariableNameRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -97,9 +97,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(SplitGroupedUseImportsRector::class);
 
-    $services->set(UnderscoreToPascalCasePropertyNameRector::class);
+    $services->set(UnderscoreToCamelCasePropertyNameRector::class);
 
-    $services->set(UnderscoreToPascalCaseVariableNameRector::class);
+    $services->set(UnderscoreToCamelCaseVariableNameRector::class);
 
     $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
 };

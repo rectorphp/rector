@@ -8,7 +8,7 @@ use Iterator;
 use PHPUnit\Framework\TestCase;
 use Rector\Core\Util\StaticRectorStrings;
 
-final class RectorStringsTest extends TestCase
+final class StaticRectorStringsTest extends TestCase
 {
     /**
      * @dataProvider provideDataForCamelCaseToUnderscore()
@@ -40,6 +40,19 @@ final class RectorStringsTest extends TestCase
     }
 
     public function provideDataForUnderscoreToCamelCase(): Iterator
+    {
+        yield ['simple_test', 'simpleTest'];
+    }
+
+    /**
+     * @dataProvider provideDataForUnderscoreToPascalCase()
+     */
+    public function testUnderscoreToPascalCase(string $content, string $expected): void
+    {
+        $this->assertSame($expected, StaticRectorStrings::underscoreToPascalCase($content));
+    }
+
+    public function provideDataForUnderscoreToPascalCase(): Iterator
     {
         yield ['simple_test', 'SimpleTest'];
     }

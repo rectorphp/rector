@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToPascalCaseVariableNameRector;
+namespace Rector\CodingStyle\Tests\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\Variable\UnderscoreToPascalCaseVariableNameRector;
+use Rector\CodingStyle\Rector\PropertyProperty\UnderscoreToCamelCasePropertyNameRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class UnderscoreToPascalCaseVariableNameRectorTest extends AbstractRectorTestCase
+final class UnderscoreToCamelCasePropertyNameRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class UnderscoreToPascalCaseVariableNameRectorTest extends AbstractRectorT
 
     protected function getRectorClass(): string
     {
-        return UnderscoreToPascalCaseVariableNameRector::class;
+        return UnderscoreToCamelCasePropertyNameRector::class;
     }
 }

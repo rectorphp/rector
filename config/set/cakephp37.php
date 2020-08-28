@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
-use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToCamelRector;
+use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToPascalRector;
 use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
 use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
@@ -77,5 +77,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    $services->set(ChangeSnakedFixtureNameToCamelRector::class);
+    $services->set(ChangeSnakedFixtureNameToPascalRector::class);
 };

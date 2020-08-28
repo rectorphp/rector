@@ -14,9 +14,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToPascalCaseVariableNameRector\UnderscoreToPascalCaseVariableNameRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\Variable\UnderscoreToCamelCaseVariableNameRector\UnderscoreToCamelCaseVariableNameRectorTest
  */
-final class UnderscoreToPascalCaseVariableNameRector extends AbstractRector
+final class UnderscoreToCamelCaseVariableNameRector extends AbstractRector
 {
     /**
      * @var ReservedKeywordAnalyzer
@@ -30,7 +30,7 @@ final class UnderscoreToPascalCaseVariableNameRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change under_score names to pascalCase', [
+        return new RectorDefinition('Change under_score names to camelCase', [
             new CodeSample(
                 <<<'PHP'
 final class SomeClass
@@ -81,12 +81,12 @@ PHP
             return null;
         }
 
-        $pascalCaseName = StaticRectorStrings::underscoreToPascalCase($nodeName);
-        if ($pascalCaseName === 'this') {
+        $camelCaseName = StaticRectorStrings::underscoreToCamelCase($nodeName);
+        if ($camelCaseName === 'this') {
             return null;
         }
 
-        $node->name = $pascalCaseName;
+        $node->name = $camelCaseName;
 
         return $node;
     }

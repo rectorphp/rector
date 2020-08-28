@@ -50,29 +50,24 @@ final class StaticRectorStrings
         return strtoupper($string);
     }
 
-    public static function underscoreToPascalCase(string $string): string
+    public static function underscoreToPascalCase(string $input): string
     {
-        $string = self::underscoreToCamelCase($string);
+        $tokens = explode('_', $input);
 
-        return lcfirst($string);
-    }
-
-    public static function uppercaseUnderscoreToPascalCase(string $input): string
-    {
-        $input = strtolower($input);
-        return self::underscoreToPascalCase($input);
+        return implode('', array_map('ucfirst', $tokens));
     }
 
     public static function underscoreToCamelCase(string $input): string
     {
-        $nameParts = explode('_', $input);
-        $camelCase = '';
+        $input = self::underscoreToPascalCase($input);
 
-        foreach ($nameParts as $namePart) {
-            $camelCase .= ucfirst($namePart);
-        }
+        return lcfirst($input);
+    }
 
-        return $camelCase;
+    public static function uppercaseUnderscoreToCamelCase(string $input): string
+    {
+        $input = strtolower($input);
+        return self::underscoreToCamelCase($input);
     }
 
     /**
