@@ -25,7 +25,7 @@ use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\
 final class FullyQualifiedNameNestedArray
 {
     /**
-     * @return string[][]|\Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\ValidationResult[][]
+     * @return array<string, array<string|\Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\ValidationResult>>
      */
     public function getValidationErrorMessagesAsStringDataProvider(): array
     {
