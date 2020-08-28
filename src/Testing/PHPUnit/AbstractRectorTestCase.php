@@ -37,20 +37,22 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo): void
     {
-        [$originalFileInfo, $expectedFileInfo] = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
+        $inputFileInfoAndExpectedFileInfo = StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos(
             $fixtureFileInfo,
             $this->autoloadTestFixture
         );
 
-        $this->nodeScopeResolver->setAnalysedFiles([$originalFileInfo->getRealPath()]);
+        $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();
+        $this->nodeScopeResolver->setAnalysedFiles([$inputFileInfo->getRealPath()]);
 
-        $this->doTestFileMatchesExpectedContent($originalFileInfo, $expectedFileInfo, $fixtureFileInfo);
+        $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFilenfo();
+        $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
 
-        $this->originalTempFileInfo = $originalFileInfo;
+        $this->originalTempFileInfo = $inputFileInfo;
 
         // runnable?
-        if (Strings::contains($originalFileInfo->getContents(), RunnableInterface::class)) {
-            $this->assertOriginalAndFixedFileResultEquals($originalFileInfo, $expectedFileInfo);
+        if (Strings::contains($inputFileInfo->getContents(), RunnableInterface::class)) {
+            $this->assertOriginalAndFixedFileResultEquals($inputFileInfo, $expectedFileInfo);
         }
     }
 

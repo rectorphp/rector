@@ -431,3 +431,6 @@ parameters:
             message: '#Use value object over return of values#'
             path: 'rules/phpunit/src/Composer/ComposerAutoloadedDirectoryProvider.php'
 
+        -
+            message: '#Use value object over return of values#'
+            path: 'rules/php70/src/EregToPcreTransformer.php'
