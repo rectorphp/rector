@@ -72,6 +72,10 @@ PHP
             return null;
         }
 
+        if ($node->finally !== null && count($node->finally->stmts) > 0) {
+            return null;
+        }
+
         $onlyCatchStmt = $onlyCatch->stmts[0];
         if (! $onlyCatchStmt instanceof Throw_) {
             return null;
