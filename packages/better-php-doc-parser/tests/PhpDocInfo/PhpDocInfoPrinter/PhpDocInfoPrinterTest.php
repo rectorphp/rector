@@ -58,6 +58,10 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
 
         $printedDocComment = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
 
-        $this->assertSame($expectedFileInfo->getContents(), $printedDocComment);
+        $this->assertSame(
+            $expectedFileInfo->getContents(),
+            $printedDocComment,
+            $inputFileInfo->getRelativeFilePathFromCwd()
+        );
     }
 }

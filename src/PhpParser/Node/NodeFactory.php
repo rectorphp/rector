@@ -457,7 +457,7 @@ final class NodeFactory
 
     /**
      * @param mixed $value
-     * @return mixed|Error|\PhpParser\Node\Expr\Variable
+     * @return mixed|Error|Variable
      */
     private function normalizeArgValue($value)
     {

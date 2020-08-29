@@ -118,7 +118,7 @@ final class NonFluentChainMethodCallFactory
 
     /**
      * @param MethodCall[] $chainMethodCalls
-     * @return \PhpParser\Node\Expr\Assign[]|\PhpParser\Node\Expr\MethodCall[]
+     * @return Assign[]|MethodCall[]
      */
     private function createNonFluentMethodCalls(
         array $chainMethodCalls,

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeFactory;
 
-use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -22,7 +21,7 @@ use Rector\Core\PhpParser\Builder\ParamBuilder;
 final class ConfigureOptionsNodeFactory
 {
     /**
-     * @param array<string, Node\Arg> $namesToArgs
+     * @param array<string, Arg> $namesToArgs
      */
     public function create(array $namesToArgs): ClassMethod
     {

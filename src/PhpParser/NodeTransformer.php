@@ -152,7 +152,7 @@ final class NodeTransformer
     }
 
     /**
-     * @return mixed[]|\PhpParser\Node\Expr[]|\PhpParser\Node\Scalar\String_[]
+     * @return mixed[]|Expr[]|String_[]
      */
     private function transformConcatItemToArrayItems(Expr $expr): array
     {

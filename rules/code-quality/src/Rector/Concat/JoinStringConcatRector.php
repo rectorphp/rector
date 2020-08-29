@@ -23,6 +23,11 @@ final class JoinStringConcatRector extends AbstractRector
      */
     private const LINE_BREAK_POINT = 100;
 
+    /**
+     * @var bool
+     */
+    private $nodeReplacementIsRestricted = false;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Joins concat of 2 strings, unless the lenght is too long', [
@@ -57,11 +62,6 @@ PHP
     {
         return [Concat::class];
     }
-
-    /**
-     * @var bool
-     */
-    private $nodeReplacementIsRestricted = false;
 
     /**
      * @param Concat $node

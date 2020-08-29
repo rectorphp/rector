@@ -48,7 +48,7 @@ final class EntityWithMissingUuidProvider
     }
 
     /**
-     * @return \PhpParser\Node\Stmt\Class_[]
+     * @return Class_[]
      */
     public function provide(): array
     {

@@ -127,7 +127,7 @@ PHP
 
     /**
      * @param Node[] $nodes
-     * @return \PhpParser\Node[]|Stmt[]
+     * @return Node[]|Stmt[]
      */
     private function getFileOrNamespaceStmts(array $nodes): array
     {
@@ -168,7 +168,7 @@ PHP
 
     /**
      * @param Node[] $nodes
-     * @return \PhpParser\Node\Stmt\Namespace_[]|Class_[]
+     * @return Namespace_[]|Class_[]
      */
     private function resolveNodesToPrint(array $nodes, Class_ $class): array
     {

@@ -23,7 +23,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * All parsed nodes grouped type
- * @template TNodeType of \PhpParser\Node
+ * @template TNodeType of Node
  * @see https://phpstan.org/blog/generics-in-php-using-phpdocs
  */
 final class ParsedNodeCollector
