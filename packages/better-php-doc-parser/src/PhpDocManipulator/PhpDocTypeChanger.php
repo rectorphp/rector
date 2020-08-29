@@ -12,6 +12,8 @@ use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
@@ -33,14 +35,28 @@ final class PhpDocTypeChanger
      */
     private $paramPhpDocNodeFactory;
 
+    /**
+     * @var RectorChangeCollector
+     */
+    private $rectorChangeCollector;
+
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
     public function __construct(
         ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
         StaticTypeMapper $staticTypeMapper,
-        TypeComparator $typeComparator
+        TypeComparator $typeComparator,
+        RectorChangeCollector $rectorChangeCollector,
+        CurrentNodeProvider $currentNodeProvider
     ) {
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
+        $this->rectorChangeCollector = $rectorChangeCollector;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     public function changeVarType(PhpDocInfo $phpDocInfo, Type $newType): void
@@ -67,6 +83,10 @@ final class PhpDocTypeChanger
             $attributeAwareVarTagValueNode = new AttributeAwareVarTagValueNode($newPHPStanPhpDocType, '', '');
             $phpDocInfo->addTagValueNode($attributeAwareVarTagValueNode);
         }
+
+        // notify about node change
+        $node = $this->currentNodeProvider->getNode();
+        $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
 
     public function changeReturnType(PhpDocInfo $phpDocInfo, Type $newType): void
