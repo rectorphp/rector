@@ -22,7 +22,7 @@ use Rector\Core\PhpParser\Builder\ParamBuilder;
 final class ConfigureOptionsNodeFactory
 {
     /**
-     * @param array<string, Node\Arg> $namesToArgs
+     * @param array<string, Arg> $namesToArgs
      */
     public function create(array $namesToArgs): ClassMethod
     {

@@ -53,7 +53,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
             throw new ShouldNotHappenException();
         }
 
-        /** @var \Doctrine\ORM\Mapping\JoinTable|null $joinTable */
+        /** @var JoinTable|null $joinTable */
         $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $annotationClass);
         if ($joinTable === null) {
             return null;

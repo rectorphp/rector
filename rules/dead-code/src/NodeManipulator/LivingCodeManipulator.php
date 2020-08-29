@@ -122,7 +122,7 @@ final class LivingCodeManipulator
     }
 
     /**
-     * @return \PhpParser\Node\Expr[]
+     * @return Expr[]
      */
     private function processBinary(BinaryOp $binaryOp): array
     {

@@ -80,7 +80,7 @@ final class SetterClassMethodAnalyzer
     }
 
     /**
-     * @return null|Property
+     * @return Property|null
      */
     private function getPropertyByPropertyFetch(ClassMethod $classMethod, PropertyFetch $propertyFetch)
     {

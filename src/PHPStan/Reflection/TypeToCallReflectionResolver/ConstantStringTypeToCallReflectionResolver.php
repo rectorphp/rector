@@ -45,7 +45,7 @@ final class ConstantStringTypeToCallReflectionResolver implements TypeToCallRefl
 
     /**
      * @param ConstantStringType $type
-     * @return FunctionReflection|null|MethodReflection
+     * @return FunctionReflection|MethodReflection|null
      */
     public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer)
     {

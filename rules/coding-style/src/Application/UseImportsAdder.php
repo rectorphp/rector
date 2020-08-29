@@ -30,7 +30,7 @@ final class UseImportsAdder
      * @param Stmt[] $stmts
      * @param FullyQualifiedObjectType[] $useImportTypes
      * @param FullyQualifiedObjectType[] $functionUseImportTypes
-     * @return \PhpParser\Node\Stmt[]
+     * @return Stmt[]
      */
     public function addImportsToStmts(array $stmts, array $useImportTypes, array $functionUseImportTypes): array
     {

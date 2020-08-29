@@ -140,7 +140,7 @@ PHP
     }
 
     /**
-     * @return \PhpParser\Node\Scalar\String_[]|\PhpParser\Node\Expr[]|\PhpParser\Node\Expr\ClassConstFetch[]|FuncCall[]|MethodCall[]
+     * @return String_[]|Expr[]|ClassConstFetch[]|FuncCall[]|MethodCall[]
      */
     private function transformRulesSetToExpressionsArray(Expr $expr): array
     {

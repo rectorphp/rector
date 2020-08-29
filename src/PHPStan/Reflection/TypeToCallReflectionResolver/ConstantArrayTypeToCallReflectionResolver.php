@@ -38,7 +38,7 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
 
     /**
      * @param ConstantArrayType $type
-     * @return null|MethodReflection
+     * @return MethodReflection|null
      */
     public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer)
     {

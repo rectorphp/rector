@@ -137,7 +137,7 @@ PHP
 
     /**
      * @param StaticCall|FuncCall|MethodCall $node
-     * @return \PhpParser\Node\Expr[]|\PhpParser\Node[]
+     * @return Expr[]|Node[]
      */
     private function resolveDefaultValuesFromCall(Node $node): array
     {
@@ -214,7 +214,7 @@ PHP
     }
 
     /**
-     * @return \PhpParser\Node[]|\PhpParser\Node\Expr[]
+     * @return Node[]|Expr[]
      */
     private function resolveFuncCallDefaultParamValues(string $nodeName): array
     {

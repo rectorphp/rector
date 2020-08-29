@@ -74,7 +74,7 @@ final class CallTypeAnalyzer
 
     /**
      * @param MethodCall|StaticCall $node
-     * @return \PHPStan\Type\Type[]
+     * @return Type[]
      */
     private function getMethodParameterTypes(string $className, Node $node): array
     {
