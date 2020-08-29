@@ -186,6 +186,7 @@ final class NodeAnnotationReader
 
         return null;
     }
+
     private function createPropertyReflectionFromPropertyNode(Property $property): ?ReflectionProperty
     {
         /** @var string $propertyName */
