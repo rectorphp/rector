@@ -144,8 +144,8 @@ final class PhpDocInfoPrinter
         // node output
         $nodeCount = count($attributeAwarePhpDocNode->children);
 
-        foreach ($attributeAwarePhpDocNode->children as $i => $phpDocChildNode) {
-            $output .= $this->printNode($phpDocChildNode, null, $i + 1, $nodeCount);
+        foreach ($attributeAwarePhpDocNode->children as $key => $phpDocChildNode) {
+            $output .= $this->printNode($phpDocChildNode, null, $key + 1, $nodeCount);
         }
 
         $output = $this->printEnd($output);
@@ -171,7 +171,7 @@ final class PhpDocInfoPrinter
     private function printNode(
         AttributeAwareNodeInterface $attributeAwareNode,
         ?StartEndValueObject $startEndValueObject = null,
-        int $i = 0,
+        int $key = 0,
         int $nodeCount = 0
     ): string {
         $output = '';
@@ -181,7 +181,7 @@ final class PhpDocInfoPrinter
         $attributeAwareNode = $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAwareNode);
 
         if ($startEndValueObject !== null) {
-            $isLastToken = ($nodeCount === $i);
+            $isLastToken = ($nodeCount === $key);
 
             $output = $this->addTokensFromTo(
                 $output,
