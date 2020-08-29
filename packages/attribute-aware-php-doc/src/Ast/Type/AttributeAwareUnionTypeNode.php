@@ -40,4 +40,9 @@ final class AttributeAwareUnionTypeNode extends UnionTypeNode implements Attribu
 
         return '(' . implode('|', $this->types) . ')';
     }
+
+    public function isWrappedWithBrackets(): bool
+    {
+        return $this->isWrappedWithBrackets;
+    }
 }

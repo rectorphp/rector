@@ -93,8 +93,8 @@ final class ValidateFixtureContentCommand extends Command
         }
 
         // original → expected
-        [$originalContent, $expectedContent] = StaticFixtureSplitter::splitFileInfoToInputAndExpected($smartFileInfo);
+        $inputAndExpected = StaticFixtureSplitter::splitFileInfoToInputAndExpected($smartFileInfo);
 
-        return $originalContent === $expectedContent;
+        return $inputAndExpected->getInput() === $inputAndExpected->getExpected();
     }
 }

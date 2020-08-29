@@ -12,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -58,7 +59,7 @@ final class IterableTypeMapper implements TypeMapperInterface
             return $this->convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes($itemTypeNode);
         }
 
-        return new ArrayTypeNode($itemTypeNode);
+        return new AttributeAwareArrayTypeNode($itemTypeNode);
     }
 
     /**
