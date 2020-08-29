@@ -163,27 +163,6 @@ final class NodeAnnotationReader
         return new ReflectionClass($className);
     }
 
-    private function createPropertyReflectionFromPropertyNode(Property $property): ?ReflectionProperty
-    {
-        /** @var string $propertyName */
-        $propertyName = $this->nodeNameResolver->getName($property);
-
-        /** @var string|null $className */
-        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
-
-        if ($className === null || ! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
-            // probably fresh node
-            return null;
-        }
-
-        try {
-            return new ReflectionProperty($className, $propertyName);
-        } catch (Throwable $throwable) {
-            // in case of PHPUnit property or just-added property
-            return null;
-        }
-    }
-
     /**
      * @param object[] $annotations
      */
@@ -206,5 +185,25 @@ final class NodeAnnotationReader
         }
 
         return null;
+    }
+    private function createPropertyReflectionFromPropertyNode(Property $property): ?ReflectionProperty
+    {
+        /** @var string $propertyName */
+        $propertyName = $this->nodeNameResolver->getName($property);
+
+        /** @var string|null $className */
+        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
+
+        if ($className === null || ! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+            // probably fresh node
+            return null;
+        }
+
+        try {
+            return new ReflectionProperty($className, $propertyName);
+        } catch (Throwable $throwable) {
+            // in case of PHPUnit property or just-added property
+            return null;
+        }
     }
 }
