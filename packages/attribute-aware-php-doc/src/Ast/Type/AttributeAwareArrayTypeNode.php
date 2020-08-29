@@ -38,6 +38,7 @@ final class AttributeAwareArrayTypeNode extends ArrayTypeNode implements Attribu
 
         return $typeAsString . '[]';
     }
+
     private function isGenericArrayCandidate(TypeNode $typeNode): bool
     {
         if (! $this->getAttribute(ArrayTypeMapper::HAS_GENERIC_TYPE_PARENT)) {
