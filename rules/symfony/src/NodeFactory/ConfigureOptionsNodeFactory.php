@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeFactory;
 
-use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
