@@ -14,6 +14,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
@@ -85,8 +86,7 @@ final class PhpDocTypeChanger
         }
 
         // notify about node change
-        $node = $this->currentNodeProvider->getNode();
-        $this->rectorChangeCollector->notifyNodeFileInfo($node);
+        $this->notifyChange();
     }
 
     public function changeReturnType(PhpDocInfo $phpDocInfo, Type $newType): void
@@ -125,5 +125,15 @@ final class PhpDocTypeChanger
         $paramTagValueNode = $this->paramPhpDocNodeFactory->create($type, $param);
 
         $phpDocInfo->addTagValueNode($paramTagValueNode);
+    }
+
+    private function notifyChange(): void
+    {
+        $node = $this->currentNodeProvider->getNode();
+        if ($node === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
 }
