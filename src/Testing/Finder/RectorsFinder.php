@@ -120,6 +120,7 @@ final class RectorsFinder
         $reflectionClass = new ReflectionClass($class);
         return $reflectionClass->isAbstract();
     }
+
     /**
      * @param RectorInterface[] $objects
      * @return RectorInterface[]
