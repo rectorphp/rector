@@ -14,7 +14,7 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-class ArrayTypeMapperTest extends AbstractKernelTestCase
+final class ArrayTypeMapperTest extends AbstractKernelTestCase
 {
     /**
      * @var ArrayTypeMapper

@@ -86,9 +86,9 @@ PHP
         return $joinedNode;
     }
 
-    private function isTopMostConcatNode(Concat $node): bool
+    private function isTopMostConcatNode(Concat $concat): bool
     {
-        return ! ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Concat);
+        return ! ($concat->getAttribute(AttributeKey::PARENT_NODE) instanceof Concat);
     }
 
     /**

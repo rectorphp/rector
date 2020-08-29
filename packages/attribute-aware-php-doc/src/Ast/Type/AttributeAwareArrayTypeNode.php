@@ -38,6 +38,14 @@ final class AttributeAwareArrayTypeNode extends ArrayTypeNode implements Attribu
 
         return $typeAsString . '[]';
     }
+    private function isGenericArrayCandidate(TypeNode $typeNode): bool
+    {
+        if (! $this->getAttribute(ArrayTypeMapper::HAS_GENERIC_TYPE_PARENT)) {
+            return false;
+        }
+
+        return $typeNode instanceof UnionTypeNode || $typeNode instanceof ArrayTypeNode;
+    }
 
     private function printArrayType(ArrayTypeNode $arrayTypeNode): string
     {
@@ -56,22 +64,13 @@ final class AttributeAwareArrayTypeNode extends ArrayTypeNode implements Attribu
         $unionedTypes = [];
 
         if ($attributeAwareUnionTypeNode->isWrappedWithBrackets()) {
-            return (string) $attributeAwareUnionTypeNode . '[]';
+            return $attributeAwareUnionTypeNode . '[]';
         }
 
         foreach ($attributeAwareUnionTypeNode->types as $unionedType) {
-            $unionedTypes[] = (string) $unionedType . '[]';
+            $unionedTypes[] = $unionedType . '[]';
         }
 
         return implode('|', $unionedTypes);
-    }
-
-    private function isGenericArrayCandidate(TypeNode $typeNode): bool
-    {
-        if (! $this->getAttribute(ArrayTypeMapper::HAS_GENERIC_TYPE_PARENT)) {
-            return false;
-        }
-
-        return $typeNode instanceof UnionTypeNode || $typeNode instanceof ArrayTypeNode;
     }
 }
