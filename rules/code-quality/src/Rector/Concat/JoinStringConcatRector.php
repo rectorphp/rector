@@ -86,6 +86,11 @@ PHP
         return $joinedNode;
     }
 
+    private function isTopMostConcatNode(Concat $concat): bool
+    {
+        return ! ($concat->getAttribute(AttributeKey::PARENT_NODE) instanceof Concat);
+    }
+
     /**
      * @return Concat|String_
      */
@@ -109,17 +114,12 @@ PHP
             return $node;
         }
 
-        $resultStringNode = new String_($concat->left->value . $concat->right->value);
-        if (Strings::length($resultStringNode->value) >= self::LINE_BREAK_POINT) {
+        $resultString = new String_($concat->left->value . $concat->right->value);
+        if (Strings::length($resultString->value) >= self::LINE_BREAK_POINT) {
             $this->nodeReplacementIsRestricted = true;
             return $node;
         }
 
-        return $resultStringNode;
-    }
-
-    private function isTopMostConcatNode(Concat $node): bool
-    {
-        return ! ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Concat);
+        return $resultString;
     }
 }

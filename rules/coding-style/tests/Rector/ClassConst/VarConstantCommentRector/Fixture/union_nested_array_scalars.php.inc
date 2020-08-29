@@ -47,14 +47,14 @@ class UnionNestedArrayScalars
     ];
 
     /**
-     * @var int[][]|string[][]
+     * @var array<string, array<int|string>>
      */
     public const NESTED_STRING_INT = [
         'key2' => ['value2', 1234],
     ];
 
     /**
-     * @var string[]|null[]
+     * @var array<int|string, string|null>
      */
     public const STRING_AND_NULL = [
         'key' => 'value',

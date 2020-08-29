@@ -120,15 +120,22 @@ PHP
      */
     private function composeNewArgs(FuncCall $funcCall): array
     {
+        $items = [];
+
         $args = $funcCall->args;
-        $arguments[] = array_pop($args);
-        $arguments[] = array_pop($args);
+
+        $newArgs[] = $args[0];
+        $newArgs[] = $args[1];
+
+        unset($args[0]);
+        unset($args[1]);
 
         foreach ($args as $idx => $arg) {
             $newKey = new String_(self::KNOWN_OPTIONS[$idx]);
-            $arguments[] = new ArrayItem($arg->value, $newKey);
+            $items[] = new ArrayItem($arg->value, $newKey);
         }
 
-        return $this->createArgs($arguments);
+        $newArgs[] = new Arg(new Array_($items));
+        return $newArgs;
     }
 }

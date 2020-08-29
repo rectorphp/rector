@@ -28,7 +28,7 @@ namespace Rector\SOLID\Tests\Rector\Class_\ChangeReadOnlyVariableWithDefaultValu
 class MultipleUsage
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const REPLACEMENTS = [
         'PHPUnit\Framework\TestCase\Notice' => 'expectNotice',

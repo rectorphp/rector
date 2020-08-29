@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
+namespace Rector\PHPStanStaticTypeMapper\Tests\TypeMapper;
 
 use Iterator;
 use PHPStan\Type\ArrayType;
@@ -11,9 +11,10 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-class ArrayTypeMapperTest extends AbstractKernelTestCase
+final class ArrayTypeMapperTest extends AbstractKernelTestCase
 {
     /**
      * @var ArrayTypeMapper
@@ -28,28 +29,28 @@ class ArrayTypeMapperTest extends AbstractKernelTestCase
     }
 
     /**
-     * @dataProvider provideDataMapToPHPStanPhpDocTypeNode()
+     * @dataProvider provideDataWithoutKeys()
+     * @dataProvider provideDataUnionedWithoutKeys()
      */
-    public function testMapToPHPStanPhpDocTypeNode(ArrayType $arrayType, string $expectedResult): void
+    public function testWithoutKeys(ArrayType $arrayType, string $expectedResult): void
     {
         $actualTypeNode = $this->arrayTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType);
-        self::assertSame($expectedResult, (string) $actualTypeNode);
+        $this->assertSame($expectedResult, (string) $actualTypeNode);
     }
 
-    public function provideDataMapToPHPStanPhpDocTypeNode(): Iterator
+    /**
+     * @dataProvider provideDataWithKeys()
+     */
+    public function testWithKeys(ArrayType $arrayType, string $expectedResult): void
+    {
+        $actualTypeNode = $this->arrayTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType);
+        $this->assertSame($expectedResult, (string) $actualTypeNode);
+    }
+
+    public function provideDataWithoutKeys(): Iterator
     {
         $arrayType = new ArrayType(new MixedType(), new StringType());
         yield[$arrayType, 'string[]'];
-
-        $unionArrayType = new ArrayType(new MixedType(), new UnionType([new StringType(), new IntegerType()]));
-        yield [$unionArrayType, 'array<int|string>'];
-
-        $unionArrayType = new ArrayType(new MixedType(), new UnionType([new StringType(), new IntegerType()]));
-        $moreNestedUnionArrayType = new ArrayType(new MixedType(), $unionArrayType);
-        yield [$moreNestedUnionArrayType, 'array<array<int|string>>'];
-
-        $evenMoreNestedUnionArrayType = new ArrayType(new MixedType(), $moreNestedUnionArrayType);
-        yield [$evenMoreNestedUnionArrayType, 'array<array<array<int|string>>>'];
 
         $arrayType = new ArrayType(new MixedType(), new UnionType([
             new StringType(),
@@ -57,7 +58,22 @@ class ArrayTypeMapperTest extends AbstractKernelTestCase
             new StringType(),
         ]));
         yield[$arrayType, 'string[]'];
+    }
 
+    public function provideDataUnionedWithoutKeys(): Iterator
+    {
+        $unionArrayType = new ArrayType(new MixedType(), new UnionType([new StringType(), new IntegerType()]));
+        yield [$unionArrayType, 'int[]|string[]'];
+
+        $moreNestedUnionArrayType = new ArrayType(new MixedType(), $unionArrayType);
+        yield [$moreNestedUnionArrayType, 'int[][]|string[][]'];
+
+        $evenMoreNestedUnionArrayType = new ArrayType(new MixedType(), $moreNestedUnionArrayType);
+        yield [$evenMoreNestedUnionArrayType, 'int[][][]|string[][][]'];
+    }
+
+    public function provideDataWithKeys(): Iterator
+    {
         $arrayType = new ArrayType(new StringType(), new ArrayType(new MixedType(), new StringType()));
         yield[$arrayType, 'array<string, string[]>'];
 
