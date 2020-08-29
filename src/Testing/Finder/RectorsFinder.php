@@ -100,25 +100,6 @@ final class RectorsFinder
         return $classNames;
     }
 
-    /**
-     * @param RectorInterface[] $objects
-     * @return RectorInterface[]
-     */
-    private function sortRectorObjectsByShortClassName(array $objects): array
-    {
-        usort(
-            $objects,
-            function (object $firstObject, object $secondObject): int {
-                $firstRectorShortClass = Strings::after(get_class($firstObject), '\\', -1);
-                $secondRectorShortClass = Strings::after(get_class($secondObject), '\\', -1);
-
-                return $firstRectorShortClass <=> $secondRectorShortClass;
-            }
-        );
-
-        return $objects;
-    }
-
     private function shouldSkipClass(string $class): bool
     {
         // not relevant for documentation
@@ -138,5 +119,23 @@ final class RectorsFinder
 
         $reflectionClass = new ReflectionClass($class);
         return $reflectionClass->isAbstract();
+    }
+    /**
+     * @param RectorInterface[] $objects
+     * @return RectorInterface[]
+     */
+    private function sortRectorObjectsByShortClassName(array $objects): array
+    {
+        usort(
+            $objects,
+            function (object $firstObject, object $secondObject): int {
+                $firstRectorShortClass = Strings::after(get_class($firstObject), '\\', -1);
+                $secondRectorShortClass = Strings::after(get_class($secondObject), '\\', -1);
+
+                return $firstRectorShortClass <=> $secondRectorShortClass;
+            }
+        );
+
+        return $objects;
     }
 }
