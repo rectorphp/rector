@@ -1,0 +1,4 @@
+/**
+ * @Route("/", name="homepage")
+ * @Route("/another-path", name="another-path")
+ */
