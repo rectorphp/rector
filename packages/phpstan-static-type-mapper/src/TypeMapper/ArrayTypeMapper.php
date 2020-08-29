@@ -7,9 +7,7 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
@@ -18,6 +16,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
@@ -58,16 +57,17 @@ final class ArrayTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
-        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getItemType());
+        $itemType = $type->getItemType();
 
-        if ($itemTypeNode instanceof UnionTypeNode) {
-            return $this->convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes($itemTypeNode);
+        if ($itemType instanceof UnionType) {
+            return $this->createUnionType($itemType);
         }
 
-        if ($this->isGenericArrayCandidate($type)) {
-            return $this->createGenericArrayType($type->getKeyType(), $itemTypeNode);
+        if ($itemType instanceof ArrayType || $this->isGenericArrayCandidate($type)) {
+            return $this->createGenericArrayType($type, $this->isGenericArrayCandidate($type));
         }
 
+        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
         return new ArrayTypeNode($itemTypeNode);
     }
 
@@ -94,24 +94,21 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return $this->phpStanStaticTypeMapper->mapToDocString($itemType, $parentType) . '[]';
     }
 
-    private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes(
-        UnionTypeNode $unionTypeNode
-    ): AttributeAwareUnionTypeNode {
+    private function createUnionType(UnionType $unionType): ArrayTypeNode
+    {
         $unionedArrayType = [];
-        foreach ($unionTypeNode->types as $unionedType) {
-            if ($unionedType instanceof UnionTypeNode) {
-                foreach ($unionedType->types as $key => $subUnionedType) {
-                    $unionedType->types[$key] = new ArrayTypeNode($subUnionedType);
-                }
-
-                $unionedArrayType[] = $unionedType;
-                continue;
-            }
-
-            $unionedArrayType[] = new ArrayTypeNode($unionedType);
+        foreach ($unionType->getTypes() as $unionedType) {
+            $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
+            $unionedArrayType[(string) $typeNode] = $typeNode;
         }
 
-        return new AttributeAwareUnionTypeNode($unionedArrayType);
+        if (count($unionedArrayType) > 1) {
+            return new AttributeAwareArrayTypeNode(new AttributeAwareUnionTypeNode($unionedArrayType));
+        }
+
+        /** @var TypeNode $arrayType */
+        $arrayType = array_shift($unionedArrayType);
+        return new AttributeAwareArrayTypeNode($arrayType);
     }
 
     private function isGenericArrayCandidate(ArrayType $arrayType): bool
@@ -148,15 +145,20 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return false;
     }
 
-    private function createGenericArrayType(Type $keyType, TypeNode $itemTypeNode): AttributeAwareGenericTypeNode
+    private function createGenericArrayType(ArrayType $arrayType, bool $withKey = false): AttributeAwareGenericTypeNode
     {
-        /** @var IdentifierTypeNode $keyTypeNode */
-        $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($keyType);
+        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType->getItemType());
 
         $attributeAwareIdentifierTypeNode = new AttributeAwareIdentifierTypeNode('array');
 
+        if ($withKey) {
+            $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType->getKeyType());
+            $genericTypes = [$keyTypeNode, $itemTypeNode];
+        } else {
+            $genericTypes = [$itemTypeNode];
+        }
+
         // @see https://github.com/phpstan/phpdoc-parser/blob/98a088b17966bdf6ee25c8a4b634df313d8aa531/tests/PHPStan/Parser/PhpDocParserTest.php#L2692-L2696
-        $genericTypes = [$keyTypeNode, $itemTypeNode];
         return new AttributeAwareGenericTypeNode($attributeAwareIdentifierTypeNode, $genericTypes);
     }
 

@@ -238,7 +238,8 @@
             "Rector\\Decomplex\\Tests\\": "rules/decomplex/tests",
             "Rector\\Downgrade\\Tests\\": "rules/downgrade/tests",
             "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests",
-            "Rector\\Injection\\Tests\\": "rules/injection/tests"
+            "Rector\\Injection\\Tests\\": "rules/injection/tests",
+            "Rector\\PHPStanStaticTypeMapper\\Tests\\": "packages/phpstan-static-type-mapper/tests"
         },
         "classmap": [
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
