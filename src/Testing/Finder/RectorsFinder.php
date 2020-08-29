@@ -50,21 +50,11 @@ final class RectorsFinder
 
         $rectors = [];
         foreach ($foundClasses as $class) {
-            // not relevant for documentation
-            if (is_a($class, PostRectorInterface::class, true)) {
-                continue;
-            }
-
-            // special case, because robot loader is case insensitive
-            if ($class === ExceptionCorrector::class) {
+            if ($this->shouldSkipClass($class)) {
                 continue;
             }
 
             $reflectionClass = new ReflectionClass($class);
-            if ($reflectionClass->isAbstract()) {
-                continue;
-            }
-
             $rector = $reflectionClass->newInstanceWithoutConstructor();
             if (! $rector instanceof RectorInterface) {
                 // lowercase letter bug in RobotLoader
@@ -108,6 +98,27 @@ final class RectorsFinder
         }
 
         return $classNames;
+    }
+
+    private function shouldSkipClass(string $class): bool
+    {
+        // not relevant for documentation
+        if (is_a($class, PostRectorInterface::class, true)) {
+            return true;
+        }
+
+        // special case, because robot loader is case insensitive
+        if ($class === ExceptionCorrector::class) {
+            return true;
+        }
+
+        // test fixture class
+        if ($class === 'Rector\ModeratePackage\Rector\MethodCall\WhateverRector') {
+            return true;
+        }
+
+        $reflectionClass = new ReflectionClass($class);
+        return $reflectionClass->isAbstract();
     }
 
     /**
