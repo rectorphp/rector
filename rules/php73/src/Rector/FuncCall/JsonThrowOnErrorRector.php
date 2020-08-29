@@ -14,6 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see http://wiki.php.net/rfc/json_throw_on_error
@@ -98,11 +99,27 @@ PHP
 
         $funcCall->args[3] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
 
+        $this->tryToConvertErrorHandling($funcCall);
+
         return $funcCall;
     }
 
     private function createConstFetch(string $name): ConstFetch
     {
         return new ConstFetch(new Name($name));
+    }
+
+    private function tryToConvertErrorHandling(FuncCall $funcCall): void
+    {
+        $condition = $funcCall->getAttribute(AttributeKey::NEXT_NODE); // Gives NULL
+        if (! $condition instanceof Node\Stmt\If_) {
+            return;
+        }
+
+        if (count($condition->stmts) > 1) {
+            return;
+        }
+
+        // TODO: continue
     }
 }
