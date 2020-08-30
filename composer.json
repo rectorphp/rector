@@ -253,7 +253,7 @@
             "rules/generic/tests/Rector/Name/PseudoNamespaceToNamespaceRector/Source"
         ],
         "files": [
-            "rules/generic/tests/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
+            "rules/transform/tests/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
             "rules/coding-style/tests/Rector/Throw_/AnnotateThrowablesRector/Source/i_throw_an_exception.func.php",
             "rules/dead-code/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
             "rules/type-declaration/tests/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
