@@ -5685,7 +5685,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `PropertyToMethodRector`
 
-- class: [`Rector\Generic\Rector\Assign\PropertyToMethodRector`](/../master/rules/generic/src/Rector/Assign/PropertyToMethodRector.php)
+- class: [`Rector\Transform\Rector\Assign\PropertyToMethodRector`](/../master/rules/generic/src/Rector/Assign/PropertyToMethodRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/Assign/PropertyToMethodRector/Fixture)
 
 Replaces properties assign calls be defined methods.
@@ -5694,14 +5694,14 @@ Replaces properties assign calls be defined methods.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Assign\PropertyToMethodRector;
+use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getProperty', [], 'setProperty'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getProperty', [], 'setProperty'))]
         ]]);
 };
 ```
@@ -5719,14 +5719,14 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Assign\PropertyToMethodRector;
+use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getConfig', ['someArg'], null))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getConfig', ['someArg'], null))]
         ]]);
 };
 ```

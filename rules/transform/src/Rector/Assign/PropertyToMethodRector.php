@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Assign;
+namespace Rector\Transform\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -13,14 +13,11 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\PropertyToMethodCall;
+use Rector\Transform\ValueObject\PropertyToMethodCall;
 use Webmozart\Assert\Assert;
 
 /**
- * @todo extract to "transform" or similar set, along with other static call to something else,
- * it's like rename, just with node type change
- *
- * @see \Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector\PropertyToMethodRectorTest
+ * @see \Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\PropertyToMethodRectorTest
  */
 final class PropertyToMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {

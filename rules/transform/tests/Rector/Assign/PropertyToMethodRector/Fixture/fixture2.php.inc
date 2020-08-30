@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector\Fixture;
+namespace Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Fixture;
 
 final class SomeClassWithParameters
 {
@@ -16,7 +16,7 @@ final class SomeClassWithParameters
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\Assign\PropertyToMethodRector\Fixture;
+namespace Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Fixture;
 
 final class SomeClassWithParameters
 {

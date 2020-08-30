@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
-use Rector\Generic\Rector\Assign\PropertyToMethodRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\CallToFluent;
 use Rector\Generic\ValueObject\MethodVisibility;
-use Rector\Generic\ValueObject\PropertyToMethodCall;
 use Rector\Generic\ValueObject\RenamedProperty;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\Transform\Rector\Assign\PropertyToMethodRector;
+use Rector\Transform\ValueObject\PropertyToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
