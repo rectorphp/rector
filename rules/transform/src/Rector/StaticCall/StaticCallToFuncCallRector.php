@@ -16,7 +16,7 @@ use Rector\Transform\ValueObject\StaticCallToFuncCall;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Transform\Tests\Rector\StaticCall\StaticCallToFunctionRector\StaticCallToFunctionRectorTest
+ * @see \Rector\Transform\Tests\Rector\StaticCall\StaticCallToFuncCallRector\StaticCallToFuncCallRectorTest
  */
 final class StaticCallToFuncCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
