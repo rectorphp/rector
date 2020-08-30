@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Laravel\Rector\FuncCall;
+namespace Rector\Transform\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -21,10 +21,7 @@ use Rector\Transform\ValueObject\FunctionToMethodCall;
 use Webmozart\Assert\Assert;
 
 /**
- * @see https://github.com/laravel/framework/blob/78828bc779e410e03cc6465f002b834eadf160d2/src/Illuminate/Foundation/helpers.php#L959
- * @see https://gist.github.com/barryvdh/bb6ffc5d11e0a75dba67
- *
- * @see \Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector\HelperFunctionToConstructorInjectionRectorTest
+ * @see \Rector\Transform\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector\HelperFunctionToConstructorInjectionRectorTest
  */
 final class HelperFunctionToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {

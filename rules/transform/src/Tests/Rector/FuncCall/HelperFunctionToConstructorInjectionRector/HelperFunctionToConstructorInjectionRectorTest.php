@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
+namespace Rector\Transform\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
+use Rector\Transform\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
 use Rector\Transform\ValueObject\ArrayFunctionToMethodCall;
 use Rector\Transform\ValueObject\FunctionToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;

@@ -6330,7 +6330,7 @@ Move Illuminate\Support\Facades\* static calls to constructor injection
 
 ### `HelperFunctionToConstructorInjectionRector`
 
-- class: [`Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector`](/../master/rules/laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php)
+- class: [`Rector\Transform\Rector\FuncCall\HelperFunctionToConstructorInjectionRector`](/../master/rules/laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php)
 - [test fixtures](/../master/rules/laravel/tests/Rector/FuncCall/HelperFunctionToConstructorInjectionRector/Fixture)
 
 Move help facade-like function calls to constructor injection

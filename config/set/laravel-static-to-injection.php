@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
-use Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
 use Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector;
 use Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\Transform\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
 use Rector\Transform\ValueObject\ArrayFunctionToMethodCall;
 use Rector\Transform\ValueObject\FunctionToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -20,6 +20,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RequestStaticValidateToInjectRector::class);
 
+    // @see https://github.com/laravel/framework/blob/78828bc779e410e03cc6465f002b834eadf160d2/src/Illuminate/Foundation/helpers.php#L959
+    // @see https://gist.github.com/barryvdh/bb6ffc5d11e0a75dba67
     $services->set(HelperFunctionToConstructorInjectionRector::class)
         ->call('configure', [[
             HelperFunctionToConstructorInjectionRector::FUNCTIONS_TO_METHOD_CALLS => inline_value_objects([
