@@ -5454,7 +5454,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `MethodCallToStaticCallRector`
 
-- class: [`Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToStaticCallRector.php)
+- class: [`Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToStaticCallRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/MethodCallToStaticCallRector/Fixture)
 
 Change method call to desired static call
@@ -5463,14 +5463,14 @@ Change method call to desired static call
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
+use Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(MethodCallToStaticCallRector::class)
         ->call('configure', [[
             MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod'))]
         ]]);
 };
 ```

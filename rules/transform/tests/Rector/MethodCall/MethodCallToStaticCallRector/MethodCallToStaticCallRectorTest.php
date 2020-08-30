@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\MethodCall\MethodCallToStaticCallRector;
+namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToStaticCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
-use Rector\Generic\ValueObject\MethodCallToStaticCall;
+use Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector;
+use Rector\Transform\ValueObject\MethodCallToStaticCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToStaticCallRectorTest extends AbstractRectorTestCase
