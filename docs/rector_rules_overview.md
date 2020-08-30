@@ -7058,12 +7058,12 @@ Rename property and method param to match its type
 
 <br><br>
 
-### `RenameVariableToMatchGetMethodNameRector`
+### `RenameVariableToMatchMethodCallReturnTypeRector`
 
-- class: [`Rector\Naming\Rector\Assign\RenameVariableToMatchGetMethodNameRector`](/../master/rules/naming/src/Rector/Assign/RenameVariableToMatchGetMethodNameRector.php)
-- [test fixtures](/../master/rules/naming/tests/Rector/Assign/RenameVariableToMatchGetMethodNameRector/Fixture)
+- class: [`Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector`](/../master/rules/naming/src/Rector/Assign/RenameVariableToMatchMethodCallReturnTypeRector.php)
+- [test fixtures](/../master/rules/naming/tests/Rector/Assign/RenameVariableToMatchMethodCallReturnTypeRector/Fixture)
 
-Rename variable to match get method name
+Rename variable to match method return type
 
 ```diff
  class SomeClass
@@ -7072,6 +7072,11 @@ Rename variable to match get method name
      {
 -        $a = $this->getRunner();
 +        $runner = $this->getRunner();
+     }
+
+     public function getRunner(): Runner
+     {
+         return new Runner();
      }
  }
 ```
