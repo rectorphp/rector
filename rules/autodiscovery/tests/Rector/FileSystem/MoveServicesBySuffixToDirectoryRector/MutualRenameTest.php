@@ -67,7 +67,7 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
                 new InputFilePathWithExpectedFilePathAndContent(
                     __DIR__ . '/SourceMutualRename/config/some_config.neon',
                      $this->getFixtureTempDirectory() . '/SourceMutualRename/config/some_config.neon',
-                     __DIR__ . '/ExpectedMutualRename/config/expected_some_config.neon',
+                     __DIR__ . '/ExpectedMutualRename/config/expected_some_config.neon'
                 ),
             ],
         ];

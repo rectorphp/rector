@@ -39,7 +39,7 @@ final class FuncCallToMethodCallRectorTest extends AbstractRectorTestCase
                     new FuncNameToMethodCallName(
                         'Rector\Generic\Tests\Rector\Function_\FuncCallToMethodCallRector\Source\some_view_function',
                         'Namespaced\SomeRenderer',
-                        'render',
+                        'render'
                     ),
                 ],
             ],
