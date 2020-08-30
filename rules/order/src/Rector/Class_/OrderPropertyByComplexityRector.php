@@ -13,22 +13,13 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Order\PropertyRanker;
 use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
+use Rector\Order\ValueObject\PropertyNameRankAndPosition;
 
 /**
  * @see \Rector\Order\Tests\Rector\Class_\OrderPropertyByComplexityRector\OrderPropertyByComplexityRectorTest
  */
 final class OrderPropertyByComplexityRector extends AbstractConstantPropertyMethodOrderRector
 {
-    /**
-     * @var string
-     */
-    private const RANK = 'rank';
-
-    /**
-     * @var string
-     */
-    private const POSITION = 'position';
-
     /**
      * @var PropertyRanker
      */
@@ -104,21 +95,26 @@ PHP
     {
         $propertyByVisibilityByPosition = $this->resolvePropertyByVisibilityByPosition($node);
 
-        foreach ($propertyByVisibilityByPosition as $propertyByPosition) {
-            $propertyNameToRank = [];
+        foreach ($propertyByVisibilityByPosition as $visibility => $propertyByPosition) {
             $propertyPositionByName = [];
+
+            $propertyNamesRanksAndPositions = [];
 
             foreach ($propertyByPosition as $position => $property) {
                 /** @var string $propertyName */
                 $propertyName = $this->getName($property);
 
                 $propertyPositionByName[$position] = $propertyName;
-                $propertyNameToRank[$propertyName][self::RANK] = $this->propertyRanker->rank($property);
-                $propertyNameToRank[$propertyName][self::POSITION] = $position;
+
+                $rank = $this->propertyRanker->rank($property);
+                $propertyNamesRanksAndPositions[] = new PropertyNameRankAndPosition(
+                    $propertyName,
+                    $rank,
+                    $position
+                );
             }
 
-            $sortedPropertyByRank = $this->getSortedPropertiesByRankAndPosition($propertyNameToRank);
-
+            $sortedPropertyByRank = $this->getSortedPropertiesByRankAndPosition($propertyNamesRanksAndPositions);
             $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($sortedPropertyByRank, $propertyPositionByName);
 
             // nothing to re-order
@@ -133,7 +129,8 @@ PHP
     }
 
     /**
-     * @return Property[][]
+     * @param Class_|Trait_ $classLike
+     * @return array<string, array<int, Property>>
      */
     private function resolvePropertyByVisibilityByPosition(ClassLike $classLike): array
     {
@@ -151,22 +148,26 @@ PHP
     }
 
     /**
-     * @param array<string,array<string, mixed>> $propertyNameToRank
+     * @param PropertyNameRankAndPosition[] $propertyNamesRanksAndPositions
      * @return string[]
      */
-    private function getSortedPropertiesByRankAndPosition(array $propertyNameToRank): array
+    private function getSortedPropertiesByRankAndPosition(array $propertyNamesRanksAndPositions): array
     {
         uasort(
-            $propertyNameToRank,
-            function (array $firstArray, array $secondArray): int {
-                return [$firstArray[self::RANK], $firstArray[self::POSITION]] <=> [
-                    $secondArray[self::RANK],
-                    $secondArray[self::POSITION],
-                ];
+            $propertyNamesRanksAndPositions,
+            function (PropertyNameRankAndPosition $firstArray, PropertyNameRankAndPosition $secondArray): int {
+                return [$firstArray->getRank(), $firstArray->getPosition()]
+                    <=>
+                    [$secondArray->getRank(), $secondArray->getPosition()];
             }
         );
 
-        return array_keys($propertyNameToRank);
+        $propertyNames = [];
+        foreach ($propertyNamesRanksAndPositions as $propertyNameRankAndPosition) {
+            $propertyNames[] = $propertyNameRankAndPosition->getName();
+        }
+
+        return $propertyNames;
     }
 
     private function getVisibilityAsString(Property $property): string
