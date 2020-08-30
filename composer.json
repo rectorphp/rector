@@ -86,7 +86,6 @@
             "Rector\\DynamicTypeAnalysis\\": "packages/dynamic-type-analysis/src",
             "Rector\\DoctrineAnnotationGenerated\\": "packages/doctrine-annotation-generated/src",
             "Rector\\FileSystemRector\\": "packages/file-system-rector/src",
-            "Rector\\FrameworkMigration\\": "rules/framework-migration/src",
             "Rector\\FamilyTree\\": "packages/family-tree/src",
             "Rector\\Guzzle\\": "rules/guzzle/src",
             "Rector\\JMS\\": "rules/jms/src",
@@ -150,7 +149,6 @@
             "Rector\\NetteKdyby\\": "rules/nette-kdyby/src",
             "Rector\\NetteUtilsCodeQuality\\": "rules/nette-utils-code-quality/src",
             "Rector\\NetteCodeQuality\\": "rules/nette-code-quality/src",
-            "Rector\\Decomplex\\": "rules/decomplex/src",
             "Rector\\Downgrade\\": "rules/downgrade/src",
             "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src",
             "Rector\\Injection\\": "rules/injection/src"
@@ -236,7 +234,6 @@
             "Rector\\NetteKdyby\\Tests\\": "rules/nette-kdyby/tests",
             "Rector\\NetteUtilsCodeQuality\\Tests\\": "rules/nette-utils-code-quality/tests",
             "Rector\\NetteCodeQuality\\Tests\\": "rules/nette-code-quality/tests",
-            "Rector\\Decomplex\\Tests\\": "rules/decomplex/tests",
             "Rector\\Downgrade\\Tests\\": "rules/downgrade/tests",
             "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests",
             "Rector\\Injection\\Tests\\": "rules/injection/tests",

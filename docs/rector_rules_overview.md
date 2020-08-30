@@ -9,9 +9,8 @@
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
 - [CodeQuality](#codequality) (58)
-- [CodingStyle](#codingstyle) (35)
+- [CodingStyle](#codingstyle) (36)
 - [DeadCode](#deadcode) (40)
-- [Decomplex](#decomplex) (1)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (17)
 - [DoctrineCodeQuality](#doctrinecodequality) (7)
@@ -19,7 +18,7 @@
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (42)
+- [Generic](#generic) (39)
 - [Guzzle](#guzzle) (1)
 - [Injection](#injection) (1)
 - [JMS](#jms) (2)
@@ -70,7 +69,7 @@
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [SymfonyPhpConfig](#symfonyphpconfig) (2)
-- [Transform](#transform) (6)
+- [Transform](#transform) (9)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -2362,6 +2361,29 @@ Use ++ increment instead of `$var += 1`
 
 <br><br>
 
+### `UseMessageVariableForSprintfInSymfonyStyleRector`
+
+- class: [`Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector`](/../master/rules/coding-style/src/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector.php)
+- [test fixtures](/../master/rules/coding-style/tests/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector/Fixture)
+
+Decouple `$message` property from `sprintf()` calls in `$this->smyfonyStyle->method()`
+
+```diff
+ use Symfony\Component\Console\Style\SymfonyStyle;
+
+ final class SomeClass
+ {
+     public function run(SymfonyStyle $symfonyStyle)
+     {
+-        $symfonyStyle->info(sprintf('Hi %s', 'Tom'));
++        $message = sprintf('Hi %s', 'Tom');
++        $symfonyStyle->info($message);
+     }
+ }
+```
+
+<br><br>
+
 ### `VarConstantCommentRector`
 
 - class: [`Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector`](/../master/rules/coding-style/src/Rector/ClassConst/VarConstantCommentRector.php)
@@ -3330,31 +3352,6 @@ Change ternary of bool : false to && bool
      private function getBool(): bool
      {
          return (bool) 5;
-     }
- }
-```
-
-<br><br>
-
-## Decomplex
-
-### `UseMessageVariableForSprintfInSymfonyStyleRector`
-
-- class: [`Rector\Decomplex\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector`](/../master/rules/decomplex/src/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector.php)
-- [test fixtures](/../master/rules/decomplex/tests/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector/Fixture)
-
-Decouple `$message` property from `sprintf()` calls in `$this->smyfonyStyle->method()`
-
-```diff
- use Symfony\Component\Console\Style\SymfonyStyle;
-
- final class SomeClass
- {
-     public function run(SymfonyStyle $symfonyStyle)
-     {
--        $symfonyStyle->info(sprintf('Hi %s', 'Tom'));
-+        $message = sprintf('Hi %s', 'Tom');
-+        $symfonyStyle->info($message);
      }
  }
 ```
@@ -5163,7 +5160,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
             FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\FuncNameToStaticCallName('view', 'SomeStaticClass', 'render'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\FuncNameToStaticCallName('view', 'SomeStaticClass', 'render'))]
         ]]);
 };
 ```
@@ -5372,44 +5369,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 -		new MyClass($argument);
 +		$this->myClassFactory->create($argument);
  	}
- }
-```
-
-<br><br>
-
-### `NewToStaticCallRector`
-
-- class: [`Rector\Generic\Rector\New_\NewToStaticCallRector`](/../master/rules/generic/src/Rector/New_/NewToStaticCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/New_/NewToStaticCallRector/Fixture)
-
-Change new Object to static call
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\New_\NewToStaticCallRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(NewToStaticCallRector::class)
-        ->call('configure', [[
-            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\TypeToStaticCall('Cookie', 'Cookie', 'create'))]
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        new Cookie($name);
-+        Cookie::create($name);
-     }
  }
 ```
 
@@ -5807,7 +5766,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 ### `ReplaceParentCallByPropertyCallRector`
 
 - class: [`Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector`](/../master/rules/generic/src/Rector/MethodCall/ReplaceParentCallByPropertyCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/ReplaceParentCallByPropertyCallRector/Fixture)
+- [test fixtures](/../master/rules/transform/tests/Rector/MethodCall/ReplaceParentCallByPropertyCallRector/Fixture)
 
 Changes method calls in child of specific types to defined property method call
 
@@ -5822,7 +5781,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ReplaceParentCallByPropertyCallRector::class)
         ->call('configure', [[
             ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ParentCallToProperty('SomeTypeToReplace', 'someMethodCall', 'someProperty'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\ParentCallToProperty('SomeTypeToReplace', 'someMethodCall', 'someProperty'))]
         ]]);
 };
 ```
@@ -5867,109 +5826,6 @@ Turns variable in controller action to property fetch, as follow up to action in
 +        $products = $this->productRepository->fetchAll();
      }
  }
-```
-
-<br><br>
-
-### `ServiceGetterToConstructorInjectionRector`
-
-- class: [`Rector\Generic\Rector\MethodCall\ServiceGetterToConstructorInjectionRector`](/../master/rules/generic/src/Rector/MethodCall/ServiceGetterToConstructorInjectionRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/ServiceGetterToConstructorInjectionRector/Fixture)
-
-Get service call to constructor injection
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(ServiceGetterToConstructorInjectionRector::class)
-        ->call('configure', [[
-            ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodCallToService('FirstService', 'getAnotherService', 'AnotherService'))]
-        ]]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     /**
-      * @var FirstService
-      */
-     private $firstService;
-
--    public function __construct(FirstService $firstService)
--    {
--        $this->firstService = $firstService;
--    }
--
--    public function run()
--    {
--        $anotherService = $this->firstService->getAnotherService();
--        $anotherService->run();
--    }
--}
--
--class FirstService
--{
-     /**
-      * @var AnotherService
-      */
-     private $anotherService;
-
--    public function __construct(AnotherService $anotherService)
-+    public function __construct(FirstService $firstService, AnotherService $anotherService)
-     {
-+        $this->firstService = $firstService;
-         $this->anotherService = $anotherService;
-     }
-
--    public function getAnotherService(): AnotherService
-+    public function run()
-     {
--         return $this->anotherService;
-+        $anotherService = $this->anotherService;
-+        $anotherService->run();
-     }
- }
-```
-
-<br><br>
-
-### `StaticCallToFunctionRector`
-
-- class: [`Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector`](/../master/rules/generic/src/Rector/StaticCall/StaticCallToFunctionRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/StaticCall/StaticCallToFunctionRector/Fixture)
-
-Turns static call to function call.
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(StaticCallToFunctionRector::class)
-        ->call('configure', [[
-            StaticCallToFunctionRector::STATIC_CALLS_TO_FUNCTIONS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\StaticCallToFunction('OldClass', 'oldMethod', 'new_function'))]
-        ]]);
-};
-```
-
-↓
-
-```diff
--OldClass::oldMethod("args");
-+new_function("args");
 ```
 
 <br><br>
@@ -14295,6 +14151,44 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
+### `NewToStaticCallRector`
+
+- class: [`Rector\Transform\Rector\New_\NewToStaticCallRector`](/../master/rules/transform/src/Rector/New_/NewToStaticCallRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/New_/NewToStaticCallRector/Fixture)
+
+Change new Object to static call
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\New_\NewToStaticCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(NewToStaticCallRector::class)
+        ->call('configure', [[
+            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\NewToStaticCall('Cookie', 'Cookie', 'create'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        new Cookie($name);
++        Cookie::create($name);
+     }
+ }
+```
+
+<br><br>
+
 ### `PropertyToMethodRector`
 
 - class: [`Rector\Transform\Rector\Assign\PropertyToMethodRector`](/../master/rules/transform/src/Rector/Assign/PropertyToMethodRector.php)
@@ -14348,6 +14242,109 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 ```diff
 -$result = $object->property;
 +$result = $object->getProperty('someArg');
+```
+
+<br><br>
+
+### `ServiceGetterToConstructorInjectionRector`
+
+- class: [`Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector`](/../master/rules/transform/src/Rector/MethodCall/ServiceGetterToConstructorInjectionRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/MethodCall/ServiceGetterToConstructorInjectionRector/Fixture)
+
+Get service call to constructor injection
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ServiceGetterToConstructorInjectionRector::class)
+        ->call('configure', [[
+            ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\MethodCallToService('FirstService', 'getAnotherService', 'AnotherService'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     /**
+      * @var FirstService
+      */
+     private $firstService;
+
+-    public function __construct(FirstService $firstService)
+-    {
+-        $this->firstService = $firstService;
+-    }
+-
+-    public function run()
+-    {
+-        $anotherService = $this->firstService->getAnotherService();
+-        $anotherService->run();
+-    }
+-}
+-
+-class FirstService
+-{
+     /**
+      * @var AnotherService
+      */
+     private $anotherService;
+
+-    public function __construct(AnotherService $anotherService)
++    public function __construct(FirstService $firstService, AnotherService $anotherService)
+     {
++        $this->firstService = $firstService;
+         $this->anotherService = $anotherService;
+     }
+
+-    public function getAnotherService(): AnotherService
++    public function run()
+     {
+-         return $this->anotherService;
++        $anotherService = $this->anotherService;
++        $anotherService->run();
+     }
+ }
+```
+
+<br><br>
+
+### `StaticCallToFuncCallRector`
+
+- class: [`Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector`](/../master/rules/transform/src/Rector/StaticCall/StaticCallToFuncCallRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/StaticCall/StaticCallToFuncCallRector/Fixture)
+
+Turns static call to function call.
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(StaticCallToFuncCallRector::class)
+        ->call('configure', [[
+            StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\StaticCallToFuncCall('OldClass', 'oldMethod', 'new_function'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+-OldClass::oldMethod("args");
++new_function("args");
 ```
 
 <br><br>

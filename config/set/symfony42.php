@@ -9,14 +9,12 @@ use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
-use Rector\Generic\Rector\New_\NewToStaticCallRector;
 use Rector\Generic\ValueObject\AddedArgument;
 use Rector\Generic\ValueObject\MethodReturnType;
 use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Generic\ValueObject\ReplacedArgument;
 use Rector\Generic\ValueObject\TypeMethodWrap;
-use Rector\Generic\ValueObject\TypeToStaticCall;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -24,6 +22,8 @@ use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\Transform\Rector\New_\NewToStaticCallRector;
+use Rector\Transform\ValueObject\NewToStaticCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://github.com/symfony/symfony/pull/28447
@@ -33,7 +33,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NewToStaticCallRector::class)
         ->call('configure', [[
             NewToStaticCallRector::TYPE_TO_STATIC_CALLS => inline_value_objects([
-                new TypeToStaticCall(
+                new NewToStaticCall(
                     'Symfony\Component\HttpFoundation\Cookie',
                     'Symfony\Component\HttpFoundation\Cookie',
                     'create'

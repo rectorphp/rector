@@ -10,10 +10,10 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\ParentCallToProperty;
+use Rector\Transform\ValueObject\ParentCallToProperty;
 
 /**
- * @see \Rector\Generic\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\ReplaceParentCallByPropertyCallRectorTest
+ * @see \Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\ReplaceParentCallByPropertyCallRectorTest
  */
 final class ReplaceParentCallByPropertyCallRector extends AbstractRector implements ConfigurableRectorInterface
 {

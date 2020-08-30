@@ -79,6 +79,11 @@ final class SetList
     /**
      * @var string
      */
+    public const CODING_STYLE_ADVANCED = __DIR__ . '/../../../../config/set/coding-style-advanced.php';
+
+    /**
+     * @var string
+     */
     public const CONTRIBUTTE_TO_SYMFONY = __DIR__ . '/../../../../config/set/contributte-to-symfony.php';
 
     /**
@@ -170,11 +175,6 @@ final class SetList
      * @var string
      */
     public const EASY_ADMIN_BUNDLE_20 = __DIR__ . '/../../../../config/set/easy-admin-bundle20.php';
-
-    /**
-     * @var string
-     */
-    public const ELASTICSEARCH_DSL_50 = __DIR__ . '/../../../../config/set/elasticsearch-dsl50.php';
 
     /**
      * @var string

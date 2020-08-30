@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Cookie\SetCookie;
-use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
-use Rector\Generic\ValueObject\StaticCallToFunction;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
 use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
+use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\FuncNameToMethodCallName;
+use Rector\Transform\ValueObject\StaticCallToFuncCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -43,11 +43,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => inline_value_objects($configuration),
         ]]);
 
-    $services->set(StaticCallToFunctionRector::class)
+    $services->set(StaticCallToFuncCallRector::class)
         ->call('configure', [[
-            StaticCallToFunctionRector::STATIC_CALLS_TO_FUNCTIONS => inline_value_objects([
-                new StaticCallToFunction('GuzzleHttp\Utils', 'setPath', 'GuzzleHttp\set_path'),
-                new StaticCallToFunction('GuzzleHttp\Pool', 'batch', 'GuzzleHttp\Pool\batch'),
+            StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => inline_value_objects([
+                new StaticCallToFuncCall('GuzzleHttp\Utils', 'setPath', 'GuzzleHttp\set_path'),
+                new StaticCallToFuncCall('GuzzleHttp\Pool', 'batch', 'GuzzleHttp\Pool\batch'),
             ]),
         ]]);
 
