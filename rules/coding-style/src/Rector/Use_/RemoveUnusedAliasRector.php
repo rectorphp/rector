@@ -310,9 +310,15 @@ PHP
      */
     private function renameClassMethod(string $lastName, ClassMethod $classMethod, Node $usedNameNode): void
     {
-        if ($classMethod->returnType !== null && $this->areNamesEqual($classMethod->returnType, $usedNameNode)) {
-            $classMethod->returnType = new Name($lastName);
+        if ($classMethod->returnType === null) {
+            return;
         }
+
+        if (! $this->areNamesEqual($classMethod->returnType, $usedNameNode)) {
+            return;
+        }
+
+        $classMethod->returnType = new Name($lastName);
     }
 
     /**
@@ -321,9 +327,11 @@ PHP
     private function renameInterface(string $lastName, Interface_ $interface, Node $usedNameNode): void
     {
         foreach ($interface->extends as $key => $extendInterfaceName) {
-            if ($this->areNamesEqual($extendInterfaceName, $usedNameNode)) {
-                $interface->extends[$key] = new Name($lastName);
+            if (!$this->areNamesEqual($extendInterfaceName, $usedNameNode)) {
+                continue;
             }
+
+            $interface->extends[$key] = new Name($lastName);
         }
     }
 }
