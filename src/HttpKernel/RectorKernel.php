@@ -6,7 +6,6 @@ namespace Rector\Core\HttpKernel;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
-use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorServiceArgumentsCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
@@ -30,18 +29,6 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
      * @var string[]
      */
     private $configs = [];
-
-    /**
-     * @var RectorServiceArgumentCollector
-     */
-    private $rectorServiceArgumentCollector;
-
-    public function __construct(string $environment, bool $debug)
-    {
-        $this->rectorServiceArgumentCollector = new RectorServiceArgumentCollector();
-
-        parent::__construct($environment, $debug);
-    }
 
     public function getCacheDir(): string
     {
@@ -91,11 +78,6 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
 
         $containerBuilder->addCompilerPass(new AutoBindParameterCompilerPass());
         $containerBuilder->addCompilerPass(new MakeRectorsPublicCompilerPass());
-
-        // add all merged arguments of Rector services
-        $containerBuilder->addCompilerPass(
-            new MergeImportedRectorServiceArgumentsCompilerPass($this->rectorServiceArgumentCollector)
-        );
     }
 
     /**
