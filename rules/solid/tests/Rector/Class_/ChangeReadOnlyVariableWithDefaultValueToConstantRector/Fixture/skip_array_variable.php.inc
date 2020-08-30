@@ -12,7 +12,7 @@ class SkipArrayVariable
         $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClassesSortedByHighestParentsAsString();
 
         $data = [
-            # rector.yaml
+            # rector.php
             'services' => [
                 RenameClassRector::class => [
                     RenameClassRector::OLD_TO_NEW_CLASSES => $oldToNewClasses,

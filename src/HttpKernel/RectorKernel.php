@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Rector\Core\HttpKernel;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\DependencyInjection\Collector\RectorServiceArgumentCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorServiceArgumentsCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
-use Rector\Core\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -111,7 +109,6 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
         $loaderResolver = new LoaderResolver([
             new GlobFileLoader($fileLocator),
             new PhpFileLoader($container, $fileLocator),
-            new TolerantRectorYamlFileLoader($container, $fileLocator, $this->rectorServiceArgumentCollector),
         ]);
 
         return new DelegatingLoader($loaderResolver);
