@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -87,18 +87,14 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [ClassLike::class];
+        return [Class_::class, Trait_::class];
     }
 
     /**
-     * @param ClassLike $node
+     * @param Class_|Trait_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Interface_) {
-            return null;
-        }
-
         $sortedClassMethodsAndOriginalClassMethods = $this->getPrivateMethodCallOrderAndClassMethods($node);
 
         // order is correct, nothing to change

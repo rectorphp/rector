@@ -79,6 +79,11 @@ PHP
 
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($propertiesInDesiredOrder, $currentPropertiesOrder);
 
+        // nothing to re-order
+        if (array_keys($oldToNewKeys) === array_values($oldToNewKeys)) {
+            return null;
+        }
+
         return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
     }
 

@@ -131,6 +131,11 @@ PHP
 
             $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($sortedPropertyByRank, $propertyPositionByName);
 
+            // nothing to re-order
+            if (array_keys($oldToNewKeys) === array_values($oldToNewKeys)) {
+                return null;
+            }
+
             $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
         }
 
