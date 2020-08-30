@@ -23,6 +23,7 @@ final class PropertyRankeable implements RankeableInterface
      * @var int
      */
     private $position;
+
     /**
      * @var Property
      */
