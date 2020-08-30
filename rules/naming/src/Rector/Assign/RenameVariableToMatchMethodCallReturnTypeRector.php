@@ -27,9 +27,9 @@ use Rector\Naming\VariableRenamer;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
- * @see \Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\RenameVariableToMatchGetMethodNameRectorTest
+ * @see \Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\RenameVariableToMatchMethodCallReturnTypeRectorTest
  */
-final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
+final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRector
 {
     /**
      * @var string[]
@@ -98,7 +98,7 @@ final class RenameVariableToMatchGetMethodNameRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Rename variable to match get method name', [
+        return new RectorDefinition('Rename variable to match method return type', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
@@ -106,6 +106,11 @@ class SomeClass
     public function run()
     {
         $a = $this->getRunner();
+    }
+
+    public function getRunner(): Runner
+    {
+        return new Runner();
     }
 }
 PHP
@@ -116,6 +121,11 @@ class SomeClass
     public function run()
     {
         $runner = $this->getRunner();
+    }
+
+    public function getRunner(): Runner
+    {
+        return new Runner();
     }
 }
 PHP

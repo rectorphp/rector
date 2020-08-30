@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\FixturePhp74;
 
 use DateTime;
 
@@ -18,7 +18,7 @@ class ArrowFunction
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\FixturePhp74;
 
 use DateTime;
 
