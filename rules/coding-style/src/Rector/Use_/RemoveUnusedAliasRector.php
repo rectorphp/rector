@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\Use_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
@@ -123,9 +124,7 @@ PHP
         $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($node);
 
         // lowercase
-        $this->resolvedDocPossibleAliases = array_map(function (string $value) {
-            return strtolower($value);
-        }, $this->resolvedDocPossibleAliases);
+        $this->resolvedDocPossibleAliases = $this->lowercaseArray($this->resolvedDocPossibleAliases);
 
         $this->resolvedNodeNames = array_change_key_case($this->resolvedNodeNames, CASE_LOWER);
         $this->useNamesAliasToName = array_change_key_case($this->useNamesAliasToName, CASE_LOWER);
@@ -169,6 +168,17 @@ PHP
         }
 
         return $use->getAttribute(AttributeKey::NEXT_NODE);
+    }
+
+    /**
+     * @param string[] $values
+     * @return string[]
+     */
+    private function lowercaseArray(array $values): array
+    {
+        return array_map(function (string $value) {
+            return strtolower($value);
+        }, $values);
     }
 
     private function shouldSkip(string $lastName, string $aliasName): bool
@@ -248,6 +258,10 @@ PHP
             if ($parentNode instanceof Interface_) {
                 $this->renameInterface($lastName, $parentNode, $usedName);
             }
+
+            if ($parentNode instanceof StaticCall) {
+                $this->renameStaticCall($lastName, $parentNode);
+            }
         }
     }
 
@@ -310,9 +324,15 @@ PHP
      */
     private function renameClassMethod(string $lastName, ClassMethod $classMethod, Node $usedNameNode): void
     {
-        if ($classMethod->returnType !== null && $this->areNamesEqual($classMethod->returnType, $usedNameNode)) {
-            $classMethod->returnType = new Name($lastName);
+        if ($classMethod->returnType === null) {
+            return;
         }
+
+        if (! $this->areNamesEqual($classMethod->returnType, $usedNameNode)) {
+            return;
+        }
+
+        $classMethod->returnType = new Name($lastName);
     }
 
     /**
@@ -321,9 +341,16 @@ PHP
     private function renameInterface(string $lastName, Interface_ $interface, Node $usedNameNode): void
     {
         foreach ($interface->extends as $key => $extendInterfaceName) {
-            if ($this->areNamesEqual($extendInterfaceName, $usedNameNode)) {
-                $interface->extends[$key] = new Name($lastName);
+            if (! $this->areNamesEqual($extendInterfaceName, $usedNameNode)) {
+                continue;
             }
+
+            $interface->extends[$key] = new Name($lastName);
         }
+    }
+
+    private function renameStaticCall(string $lastName, StaticCall $staticCall): void
+    {
+        $staticCall->class = new Name($lastName);
     }
 }
