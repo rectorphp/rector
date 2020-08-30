@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Cookie\SetCookie;
-use Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector;
 use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
-use Rector\Generic\ValueObject\FuncNameToMethodCallName;
 use Rector\Generic\ValueObject\StaticCallToFunction;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
 use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
+use Rector\Transform\ValueObject\FuncNameToMethodCallName;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

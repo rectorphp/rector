@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToMethodCallRector;
+namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector;
-use Rector\Generic\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\SomeTranslator;
-use Rector\Generic\ValueObject\FuncNameToMethodCallName;
+use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
+use Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Source\SomeTranslator;
+use Rector\Transform\ValueObject\FuncNameToMethodCallName;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FuncCallToMethodCallRectorTest extends AbstractRectorTestCase

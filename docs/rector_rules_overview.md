@@ -19,7 +19,7 @@
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (43)
+- [Generic](#generic) (42)
 - [Guzzle](#guzzle) (1)
 - [Injection](#injection) (1)
 - [JMS](#jms) (2)
@@ -70,7 +70,7 @@
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [SymfonyPhpConfig](#symfonyphpconfig) (2)
-- [Transform](#transform) (5)
+- [Transform](#transform) (6)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -5125,54 +5125,6 @@ Change null in argument, that is now not nullable anymore
 
 <br><br>
 
-### `FuncCallToMethodCallRector`
-
-- class: [`Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector`](/../master/rules/generic/src/Rector/FuncCall/FuncCallToMethodCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/FuncCall/FuncCallToMethodCallRector/Fixture)
-
-Turns defined function calls to local method calls.
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\FuncCall\FuncCallToMethodCallRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(FuncCallToMethodCallRector::class)
-        ->call('configure', [[
-            FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\FuncNameToMethodCallName('view', 'Namespaced\SomeRenderer', 'render'))]
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-+    /**
-+     * @var \Namespaced\SomeRenderer
-+     */
-+    private $someRenderer;
-+
-+    public function __construct(\Namespaced\SomeRenderer $someRenderer)
-+    {
-+        $this->someRenderer = $someRenderer;
-+    }
-+
-     public function run()
-     {
--        view('...');
-+        $this->someRenderer->view('...');
-     }
- }
-```
-
-<br><br>
-
 ### `FuncCallToNewRector`
 
 - class: [`Rector\Generic\Rector\FuncCall\FuncCallToNewRector`](/../master/rules/generic/src/Rector/FuncCall/FuncCallToNewRector.php)
@@ -6252,7 +6204,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 - class: [`Rector\JMS\Rector\ClassMethod\RemoveJmsInjectParamsAnnotationRector`](/../master/rules/jms/src/Rector/ClassMethod/RemoveJmsInjectParamsAnnotationRector.php)
 - [test fixtures](/../master/rules/jms/tests/Rector/ClassMethod/RemoveJmsInjectParamsAnnotationRector/Fixture)
 
-Removes JMS\DiExtraBundle\Annotation\InjectParams annotation
+Removes `JMS\DiExtraBundle\Annotation\InjectParams` annotation
 
 ```diff
  use JMS\DiExtraBundle\Annotation as DI;
@@ -6357,7 +6309,7 @@ Transforms inline validation rules to array definition
 - class: [`Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector`](/../master/rules/laravel/src/Rector/StaticCall/MinutesToSecondsInCacheRector.php)
 - [test fixtures](/../master/rules/laravel/tests/Rector/StaticCall/MinutesToSecondsInCacheRector/Fixture)
 
-Change minutes argument to seconds in Illuminate\Contracts\Cache\Store and Illuminate\Support\Facades\Cache
+Change minutes argument to seconds in `Illuminate\Contracts\Cache\Store` and Illuminate\Support\Facades\Cache
 
 ```diff
  class SomeClass
@@ -14132,6 +14084,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 ### `ArgumentFuncCallToMethodCallRector`
 
 - class: [`Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector`](/../master/rules/transform/src/Rector/FuncCall/ArgumentFuncCallToMethodCallRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/FuncCall/ArgumentFuncCallToMethodCallRector/Fixture)
 
 Move help facade-like function calls to constructor injection
 
@@ -14172,6 +14125,54 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 -        $viewFactory = view();
 +        $template = $this->viewFactory->make('template.blade');
 +        $viewFactory = $this->viewFactory;
+     }
+ }
+```
+
+<br><br>
+
+### `FuncCallToMethodCallRector`
+
+- class: [`Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector`](/../master/rules/transform/src/Rector/FuncCall/FuncCallToMethodCallRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/FuncCall/FuncCallToMethodCallRector/Fixture)
+
+Turns defined function calls to local method calls.
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(FuncCallToMethodCallRector::class)
+        ->call('configure', [[
+            FuncCallToMethodCallRector::FUNC_CALL_TO_CLASS_METHOD_CALL => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\FuncNameToMethodCallName('view', 'Namespaced\SomeRenderer', 'render'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
++    /**
++     * @var \Namespaced\SomeRenderer
++     */
++    private $someRenderer;
++
++    public function __construct(\Namespaced\SomeRenderer $someRenderer)
++    {
++        $this->someRenderer = $someRenderer;
++    }
++
+     public function run()
+     {
+-        view('...');
++        $this->someRenderer->view('...');
      }
  }
 ```
