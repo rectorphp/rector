@@ -6,8 +6,10 @@ namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 use Iterator;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -41,23 +43,26 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
     {
         $yieldNodes = $this->findCurrentScopeYieldNodes($functionLike);
 
+        if (count($yieldNodes) === 0) {
+            return new MixedType();
+        }
+
         $types = [];
-        if (count($yieldNodes) > 0) {
-            foreach ($yieldNodes as $yieldNode) {
-                if ($yieldNode->value === null) {
-                    continue;
-                }
-
-                $yieldValueStaticType = $this->nodeTypeResolver->getStaticType($yieldNode->value);
-                $types[] = new ArrayType(new MixedType(), $yieldValueStaticType);
+        foreach ($yieldNodes as $yieldNode) {
+            $value = $this->resolveYieldValue($yieldNode);
+            if ($value === null) {
+                continue;
             }
 
-            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::ITERABLE_TYPE)) {
-                // @see https://www.php.net/manual/en/language.types.iterable.php
-                $types[] = new IterableType(new MixedType(), new MixedType());
-            } else {
-                $types[] = new ObjectType(Iterator::class);
-            }
+            $yieldValueStaticType = $this->nodeTypeResolver->getStaticType($value);
+            $types[] = new ArrayType(new MixedType(), $yieldValueStaticType);
+        }
+
+        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::ITERABLE_TYPE)) {
+            // @see https://www.php.net/manual/en/language.types.iterable.php
+            $types[] = new IterableType(new MixedType(), new MixedType());
+        } else {
+            $types[] = new ObjectType(Iterator::class);
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($types);
@@ -69,7 +74,7 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
     }
 
     /**
-     * @return Yield_[]
+     * @return array<Yield_|YieldFrom>
      */
     private function findCurrentScopeYieldNodes(FunctionLike $functionLike): array
     {
@@ -83,7 +88,7 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
 
-            if (! $node instanceof Yield_) {
+            if (! $node instanceof Yield_ && ! $node instanceof YieldFrom) {
                 return null;
             }
 
@@ -92,5 +97,17 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
         });
 
         return $yieldNodes;
+    }
+
+    /**
+     * @param Yield_|YieldFrom $yieldExpr
+     */
+    private function resolveYieldValue(Expr $yieldExpr): ?Expr
+    {
+        if ($yieldExpr instanceof Yield_) {
+            return $yieldExpr->value;
+        }
+
+        return $yieldExpr->expr;
     }
 }
