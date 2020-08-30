@@ -6,6 +6,7 @@ namespace Rector\Core\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
 use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\Stubs\StubLoader;
 use Symplify\PackageBuilder\Console\Input\InputDetector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -26,6 +27,9 @@ final class RectorContainerFactory
             $configFilePaths = $this->unpackRealPathsFromFileInfos($configFileInfos);
             $rectorKernel->setConfigs($configFilePaths);
         }
+
+        $stubLoader = new StubLoader();
+        $stubLoader->loadStubs();
 
         $rectorKernel->boot();
 

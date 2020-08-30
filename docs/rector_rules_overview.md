@@ -14129,10 +14129,9 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ## Transform
 
-### `FuncCallToMethodCallRector`
+### `ArgumentFuncCallToMethodCallRector`
 
-- class: [`Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector`](/../master/rules/transform/src/Rector/FuncCall/FuncCallToMethodCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/FuncCall/FuncCallToMethodCallRector/Fixture)
+- class: [`Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector`](/../master/rules/transform/src/Rector/FuncCall/ArgumentFuncCallToMethodCallRector.php)
 
 Move help facade-like function calls to constructor injection
 
@@ -14140,14 +14139,14 @@ Move help facade-like function calls to constructor injection
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
+use Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(FuncCallToMethodCallRector::class)
+    $services->set(ArgumentFuncCallToMethodCallRector::class)
         ->call('configure', [[
-            FuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\FuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', null, 'make'))]
+            ArgumentFuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', null, 'make'))]
         ]]);
 };
 ```
