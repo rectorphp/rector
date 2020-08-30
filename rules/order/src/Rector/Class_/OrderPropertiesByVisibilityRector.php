@@ -6,26 +6,27 @@ namespace Rector\Order\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
 
 /**
- * @see \Rector\Order\Tests\Rector\Class_\OrderConstantsByVisibilityRector\OrderConstantsByVisibilityRectorTest
+ * @see \Rector\Order\Tests\Rector\Class_\OrderPropertiesByVisibilityRector\OrderPropertiesByVisibilityRectorTest
  */
-final class OrderConstantsByVisibilityRector extends AbstractConstantPropertyMethodOrderRector
+final class OrderPropertiesByVisibilityRector extends AbstractConstantPropertyMethodOrderRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Orders constants by visibility', [
+        return new RectorDefinition('Orders properties by visibility', [
             new CodeSample(
                 <<<'PHP'
 final class SomeClass
 {
-    private const PRIVATE_CONST = 'private';
-    protected const PROTECTED_CONST = 'protected';
-    public const PUBLIC_CONST = 'public';
+    protected $protectedProperty;
+    private $privateProperty;
+    public $publicProperty;
 }
 PHP
 
@@ -33,9 +34,9 @@ PHP
                 <<<'PHP'
 final class SomeClass
 {
-    public const PUBLIC_CONST = 'public';
-    protected const PROTECTED_CONST = 'protected';
-    private const PRIVATE_CONST = 'private';
+    public $publicProperty;
+    protected $protectedProperty;
+    private $privateProperty;
 }
 PHP
 
@@ -48,19 +49,20 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class];
+        return [Class_::class, Trait_::class];
     }
 
     /**
-     * @param Class_ $node
+     * @param Class_|Trait_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        $currentPropertiesOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, ClassConst::class);
-        $propertiesInDesiredOrder = $this->stmtVisibilitySorter->sortConstants($node);
+        $currentPropertiesOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, Property::class);
+        $propertiesInDesiredOrder = $this->stmtVisibilitySorter->sortProperties($node);
 
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($propertiesInDesiredOrder, $currentPropertiesOrder);
 
+        // nothing to re-order
         if (! $this->hasOrderChanged($oldToNewKeys)) {
             return null;
         }

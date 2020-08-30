@@ -8,28 +8,17 @@ use PhpParser\Node;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Order\StmtOrder;
+use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
 
 /**
  * @sponsor Thanks https://amateri.com for sponsoring this rule - visit them on https://www.startupjobs.cz/startup/scrumworks-s-r-o
  *
  * @see \Rector\Order\Tests\Rector\Class_\OrderClassConstantsByIntegerValueRector\OrderClassConstantsByIntegerValueRectorTest
  */
-final class OrderClassConstantsByIntegerValueRector extends AbstractRector
+final class OrderClassConstantsByIntegerValueRector extends AbstractConstantPropertyMethodOrderRector
 {
-    /**
-     * @var StmtOrder
-     */
-    private $stmtOrder;
-
-    public function __construct(StmtOrder $stmtOrder)
-    {
-        $this->stmtOrder = $stmtOrder;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Order class constant order by their integer value', [
@@ -83,6 +72,9 @@ PHP
         asort($sortedClassConstConstsByValue);
 
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($sortedClassConstConstsByValue, $classConstConstsByValue);
+        if (! $this->hasOrderChanged($oldToNewKeys)) {
+            return null;
+        }
 
         $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
 

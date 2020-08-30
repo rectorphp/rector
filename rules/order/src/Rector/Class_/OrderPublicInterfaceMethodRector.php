@@ -22,7 +22,7 @@ final class OrderPublicInterfaceMethodRector extends AbstractRector implements C
     /**
      * @var string
      */
-    public const METHOD_ORDER_BY_INTERFACES = '$methodOrderByInterfaces';
+    public const METHOD_ORDER_BY_INTERFACES = 'method_order_by_interfaces';
 
     /**
      * @var string[][]
@@ -77,8 +77,7 @@ PHP
                self::METHOD_ORDER_BY_INTERFACES => [
                    'FoodRecipeInterface' => ['getDescription', 'process'],
                ],
-           ]
-            ),
+           ]),
         ]);
     }
 
@@ -96,6 +95,10 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $implementedInterfaces = $this->classManipulator->getImplementedInterfaceNames($node);
+        if ($implementedInterfaces === []) {
+            return null;
+        }
+
         $publicMethodOrderByKey = $this->collectPublicMethods($node);
 
         foreach ($implementedInterfaces as $implementedInterface) {
@@ -105,6 +108,12 @@ PHP
             }
 
             $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($publicMethodOrderByKey, $methodOrder);
+
+            // nothing to re-order
+            if (array_keys($oldToNewKeys) === array_values($oldToNewKeys)) {
+                return null;
+            }
+
             $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
 
             break;

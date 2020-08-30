@@ -1,4 +1,4 @@
-# All 566 Rectors Overview
+# All 567 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -39,7 +39,7 @@
 - [Order](#order) (9)
 - [PHPOffice](#phpoffice) (14)
 - [PHPStan](#phpstan) (3)
-- [PHPUnit](#phpunit) (37)
+- [PHPUnit](#phpunit) (38)
 - [PHPUnitSymfony](#phpunitsymfony) (1)
 - [PSR4](#psr4) (3)
 - [Performance](#performance) (1)
@@ -293,6 +293,24 @@ Change `App::uses()` to use imports
 
 Moves array options to fluent setter method calls.
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ArrayToFluentCallRector::class)
+        ->call('configure', [[
+            ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\ArrayToFluentCall('ArticlesTable', ['foreignKey' => 'setForeignKey', 'propertyName' => 'setProperty']))]
+        ]]);
+};
+```
+
+↓
+
 ```diff
  use Cake\ORM\Table;
 
@@ -328,7 +346,7 @@ Changes `$fixtues` style from snake_case to PascalCase.
 -        'some_plugin.posts/special_posts',
 +        'app.Posts',
 +        'app.Users',
-+        'some_plugin.Posts/SpeectialPosts',
++        'some_plugin.Posts/SpecialPosts',
      ];
 ```
 
@@ -358,6 +376,24 @@ Collect implicit class names and add imports
 - [test fixtures](/../master/rules/cakephp/tests/Rector/MethodCall/ModalToGetSetRector/Fixture)
 
 Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ModalToGetSetRector::class)
+        ->call('configure', [[
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig', 1, null))]
+        ]]);
+};
+```
+
+↓
 
 ```diff
  $object = new InstanceConfigTrait;
@@ -393,9 +429,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->call('configure', [[
             RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => [
-                'getParam' => [
-                'match_parameter' => 'paging', 'replace_with' => 'getAttribute'], 'withParam' => [
-                'match_parameter' => 'paging', 'replace_with' => 'withAttribute']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\CallWithParamRename('getParam', 'paging', 'getAttribute', 'ServerRequest')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\CallWithParamRename('withParam', 'paging', 'withAttribute', 'ServerRequest'))]
         ]]);
 };
 ```
@@ -2079,8 +2113,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->call('configure', [[
             ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => [
-                'EventSubscriberInterface' => [
-                'getSubscribedEvents']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CodingStyle\ValueObject\MethodToYield('EventSubscriberInterface', 'getSubscribedEvents'))]
         ]]);
 };
 ```
@@ -4637,6 +4670,24 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 Add method parent call, in case new parent method is added
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(AddMethodParentCallRector::class)
+        ->call('configure', [[
+            AddMethodParentCallRector::METHODS_BY_PARENT_TYPES => [
+                'ParentClassWithNewConstructor' => '__construct']
+        ]]);
+};
+```
+
+↓
+
 ```diff
  class SunshineCommand extends ParentClassWithNewConstructor
  {
@@ -4712,8 +4763,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => [
-                'SomeClass' => [
-                'getData' => 'array']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodReturnType('SomeClass', 'getData', 'array'))]
         ]]);
 };
 ```
@@ -4773,10 +4823,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => [
-                'SomeExampleClass' => [
-                'someMethod' => [
-                [
-            'name' => 'someArgument', 'default_value' => 'true', 'type' => 'SomeType']]]]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\AddedArgument('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null))]
         ]]);
 };
 ```
@@ -4800,10 +4847,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => [
-                'SomeExampleClass' => [
-                'someMethod' => [
-                [
-            'name' => 'someArgument', 'default_value' => 'true', 'type' => 'SomeType']]]]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\AddedArgument('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null))]
         ]]);
 };
 ```
@@ -4840,10 +4884,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
             ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => [
-                'SomeExampleClass' => [
-                'someMethod' => [
-                [
-            ['before' => 'SomeClass::OLD_CONSTANT', 'after' => 'false']]]]]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ReplacedArgument('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', 'false'))]
         ]]);
 };
 ```
@@ -4876,10 +4917,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
             ArgumentRemoverRector::REMOVED_ARGUMENTS => [
-                'ExampleClass' => [
-                'someMethod' => [
-                [
-            'value' => 'true']]]]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RemovedArgument('ExampleClass', 'someMethod', 0, 'true'))]
         ]]);
 };
 ```
@@ -4912,8 +4950,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ChangeConstantVisibilityRector::class)
         ->call('configure', [[
             ChangeConstantVisibilityRector::CLASS_CONSTANT_VISIBILITY_CHANGES => [
-                'ParentObject' => [
-                'SOME_CONSTANT' => 'protected']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ClassConstantVisibilityChange('ParentObject', 'SOME_CONSTANT', 'protected'))]
         ]]);
 };
 ```
@@ -4996,8 +5033,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => [
-                'FrameworkClass' => [
-                'someMethod' => 'protected']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodVisibility('FrameworkClass', 'someMethod', 'protected'))]
         ]]);
 };
 ```
@@ -5319,10 +5355,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
         ->call('configure', [[
             MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => [
-                'Nette\DI\ServiceDefinition' => [
-                'setInject' => [
-                [
-            'addTag', ['inject']]]]]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey('Nette\DI\ServiceDefinition', 'setInject', 'addTag', 'inject'))]
         ]]);
 };
 ```
@@ -5437,9 +5470,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(MethodCallToStaticCallRector::class)
         ->call('configure', [[
             MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => [
-                'AnotherDependency' => [
-                'process' => [
-                'StaticCaller', 'anotherMethod']]]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod'))]
         ]]);
 };
 ```
@@ -5527,8 +5558,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(NewToStaticCallRector::class)
         ->call('configure', [[
             NewToStaticCallRector::TYPE_TO_STATIC_CALLS => [
-                'Cookie' => [
-                'Cookie', 'create']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\TypeToStaticCall('Cookie', 'Cookie', 'create'))]
         ]]);
 };
 ```
@@ -5566,8 +5596,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
             NormalToFluentRector::CALLS_TO_FLUENT => [
-                'SomeClass' => [
-                'someFunction', 'otherFunction']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\CallToFluent('SomeClass', ['someFunction', 'otherFunction']))]
         ]]);
 };
 ```
@@ -5672,9 +5701,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                'SomeObject' => [
-                'property' => [
-                'get' => 'getProperty', 'set' => 'setProperty']]]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getProperty', [], 'setProperty'))]
         ]]);
 };
 ```
@@ -5699,11 +5726,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                'SomeObject' => [
-                'property' => [
-                'get' => [
-                'method' => 'getConfig', 'arguments' => [
-                'someArg']]]]]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getConfig', ['someArg'], null))]
         ]]);
 };
 ```
@@ -5735,8 +5758,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
             PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => [
-                'Some_' => [
-                'Some_Class_To_Keep']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\NamespacePrefixWithExcludedClasses('Some_', ['Some_Class_To_Keep']))]
         ]]);
 };
 ```
@@ -5807,8 +5829,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RemoveFuncCallArgRector::class)
         ->call('configure', [[
             RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => [
-                'remove_last_arg' => [
-                1]]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RemovedFunctionArgument('remove_last_arg', 1))]
         ]]);
 };
 ```
@@ -5989,8 +6010,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
             RenamePropertyRector::RENAMED_PROPERTIES => [
-                'SomeClass' => [
-                'someOldProperty' => 'someNewProperty']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RenamedProperty('SomeClass', 'someOldProperty', 'someNewProperty'))]
         ]]);
 };
 ```
@@ -6022,8 +6042,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ReplaceParentCallByPropertyCallRector::class)
         ->call('configure', [[
             ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => [
-                'SomeTypeToReplace' => [
-                'someMethodCall' => 'someProperty']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ParentCallToProperty('SomeTypeToReplace', 'someMethodCall', 'someProperty'))]
         ]]);
 };
 ```
@@ -6090,8 +6109,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ServiceGetterToConstructorInjectionRector::class)
         ->call('configure', [[
             ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
-                'FirstService' => [
-                'getAnotherService' => 'AnotherService']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodCallToService('FirstService', 'getAnotherService', 'AnotherService'))]
         ]]);
 };
 ```
@@ -6162,8 +6180,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(StaticCallToFunctionRector::class)
         ->call('configure', [[
             StaticCallToFunctionRector::STATIC_CALLS_TO_FUNCTIONS => [
-                'OldClass' => [
-                'oldMethod' => 'new_function']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\StaticCallToFunction('OldClass', 'oldMethod', 'new_function'))]
         ]]);
 };
 ```
@@ -6195,8 +6212,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(StringToClassConstantRector::class)
         ->call('configure', [[
             StringToClassConstantRector::STRINGS_TO_CLASS_CONSTANTS => [
-                'compiler.post_dump' => [
-                'Yet\AnotherClass', 'CONSTANT']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT'))]
         ]]);
 };
 ```
@@ -6234,9 +6250,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(SwapClassMethodArgumentsRector::class)
         ->call('configure', [[
             SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => [
-                'SomeClass' => [
-                'run' => [
-                1, 0]]]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentSwap('SomeClass', 'run', [1, 0]))]
         ]]);
 };
 ```
@@ -6263,6 +6277,24 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 - [test fixtures](/../master/rules/generic/tests/Rector/FuncCall/SwapFuncCallArgumentsRector/Fixture)
 
 Swap arguments in function calls
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(SwapFuncCallArgumentsRector::class)
+        ->call('configure', [[
+            SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\FunctionArgumentSwap('some_function', [1, 0]))]
+        ]]);
+};
+```
+
+↓
 
 ```diff
  final class SomeClass
@@ -6295,8 +6327,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(WrapReturnRector::class)
         ->call('configure', [[
             WrapReturnRector::TYPE_METHOD_WRAPS => [
-                'SomeClass' => [
-                'getItem' => 'array']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\TypeMethodWrap('SomeClass', 'getItem', true))]
         ]]);
 };
 ```
@@ -6898,8 +6929,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
             UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => [
-                'SomeContainer' => [
-                'isset' => 'hasService']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService'))]
         ]]);
 };
 ```
@@ -6923,8 +6953,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(UnsetAndIssetToMethodCallRector::class)
         ->call('configure', [[
             UnsetAndIssetToMethodCallRector::ISSET_UNSET_TO_METHOD_CALL => [
-                'SomeContainer' => [
-                'unset' => 'removeService']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\MagicDisclosure\ValueObject\IssetUnsetToMethodCall('SomeContainer', 'hasService', 'removeService'))]
         ]]);
 };
 ```
@@ -8361,8 +8390,8 @@ Order __constructor dependencies by type A-Z
 
 ### `OrderFirstLevelClassStatementsRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderFirstLevelClassStatementsRector`](/../master/rules/order/src/Rector/ClassLike/OrderFirstLevelClassStatementsRector.php)
-- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderFirstLevelClassStatementsRector/Fixture)
+- class: [`Rector\Order\Rector\Class_\OrderFirstLevelClassStatementsRector`](/../master/rules/order/src/Rector/Class_/OrderFirstLevelClassStatementsRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderFirstLevelClassStatementsRector/Fixture)
 
 Orders first level Class statements
 
@@ -8383,8 +8412,8 @@ Orders first level Class statements
 
 ### `OrderMethodsByVisibilityRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderMethodsByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderMethodsByVisibilityRector.php)
-- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderMethodsByVisibilityRector/Fixture)
+- class: [`Rector\Order\Rector\Class_\OrderMethodsByVisibilityRector`](/../master/rules/order/src/Rector/Class_/OrderMethodsByVisibilityRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderMethodsByVisibilityRector/Fixture)
 
 Orders method by visibility
 
@@ -8402,8 +8431,8 @@ Orders method by visibility
 
 ### `OrderPrivateMethodsByUseRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderPrivateMethodsByUseRector`](/../master/rules/order/src/Rector/ClassLike/OrderPrivateMethodsByUseRector.php)
-- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderPrivateMethodsByUseRector/Fixture)
+- class: [`Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector`](/../master/rules/order/src/Rector/Class_/OrderPrivateMethodsByUseRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderPrivateMethodsByUseRector/Fixture)
 
 Order private methods in order of their use
 
@@ -8432,8 +8461,8 @@ Order private methods in order of their use
 
 ### `OrderPropertiesByVisibilityRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderPropertiesByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderPropertiesByVisibilityRector.php)
-- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderPropertiesByVisibilityRector/Fixture)
+- class: [`Rector\Order\Rector\Class_\OrderPropertiesByVisibilityRector`](/../master/rules/order/src/Rector/Class_/OrderPropertiesByVisibilityRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderPropertiesByVisibilityRector/Fixture)
 
 Orders properties by visibility
 
@@ -8451,8 +8480,8 @@ Orders properties by visibility
 
 ### `OrderPropertyByComplexityRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderPropertyByComplexityRector`](/../master/rules/order/src/Rector/ClassLike/OrderPropertyByComplexityRector.php)
-- [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderPropertyByComplexityRector/Fixture)
+- class: [`Rector\Order\Rector\Class_\OrderPropertyByComplexityRector`](/../master/rules/order/src/Rector/Class_/OrderPropertyByComplexityRector.php)
+- [test fixtures](/../master/rules/order/tests/Rector/Class_/OrderPropertyByComplexityRector/Fixture)
 
 Order properties by complexity, from the simplest like scalars to the most complex, like union or collections
 
@@ -9199,6 +9228,20 @@ Turns `preg_match` comparisons to their method name alternatives in PHPUnit Test
 
 <br><br>
 
+### `AssertResourceToClosedResourceRector`
+
+- class: [`Rector\PHPUnit\Rector\MethodCall\AssertResourceToClosedResourceRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertResourceToClosedResourceRector.php)
+- [test fixtures](/../master/rules/phpunit/tests/Rector/MethodCall/AssertResourceToClosedResourceRector/Fixture)
+
+Turns `assertIsNotResource()` into stricter `assertIsClosedResource()` for resource values in PHPUnit TestCase
+
+```diff
+-$this->assertIsNotResource($aResource, "message");
++$this->assertIsClosedResource($aResource, "message");
+```
+
+<br><br>
+
 ### `AssertSameBoolNullToSpecificMethodRector`
 
 - class: [`Rector\PHPUnit\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector`](/../master/rules/phpunit/src/Rector/MethodCall/AssertSameBoolNullToSpecificMethodRector.php)
@@ -9538,7 +9581,10 @@ Change `$container->get()` calls in PHPUnit to @inject properties autowired by j
 +        $someService = $this->someService;
      }
  }
- class SomeService { }
+
+ class SomeService
+ {
+ }
 ```
 
 <br><br>
@@ -12447,8 +12493,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameAnnotationRector::class)
         ->call('configure', [[
             RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => [
-                'PHPUnit\Framework\TestCase' => [
-                'test' => 'scenario']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenamedAnnotationInType('PHPUnit\Framework\TestCase', 'test', 'scenario'))]
         ]]);
 };
 ```
@@ -12488,8 +12533,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
             RenameClassConstantRector::CLASS_CONSTANT_RENAME => [
-                'SomeClass' => [
-                'OLD_CONSTANT' => 'NEW_CONSTANT', 'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT']]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\ClassConstantRename('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\ClassConstantRename('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'))]
         ]]);
 };
 ```
