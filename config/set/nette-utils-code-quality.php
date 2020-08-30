@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
-use Rector\Transform\ValueObject\FuncNameToStaticCallName;
 use Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector;
 use Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector;
 use Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
@@ -14,6 +13,7 @@ use Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector;
 use Rector\NetteUtilsCodeQuality\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\Transform\ValueObject\FuncNameToStaticCallName;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # @see https://www.tomasvotruba.cz/blog/2018/07/30/hidden-gems-of-php-packages-nette-utils

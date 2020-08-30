@@ -5822,7 +5822,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ReplaceParentCallByPropertyCallRector::class)
         ->call('configure', [[
             ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ParentCallToProperty('SomeTypeToReplace', 'someMethodCall', 'someProperty'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\ParentCallToProperty('SomeTypeToReplace', 'someMethodCall', 'someProperty'))]
         ]]);
 };
 ```
