@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -31,7 +32,7 @@ final class StmtVisibilitySorter
 
     /**
      * @param Class_|Trait_ $classLike
-     * @return RankeableInterface[]
+     * @return string[]
      */
     public function sortProperties(ClassLike $classLike): array
     {
@@ -53,22 +54,16 @@ final class StmtVisibilitySorter
             );
         }
 
-        uasort(
-            $propertyRankeables,
-            function (RankeableInterface $firstRankeable, RankeableInterface $secondRankeable): int {
-                return $firstRankeable->getRanks() <=> $secondRankeable->getRanks();
-            }
-        );
-
-        return $propertyRankeables;
+        return $this->sortByRanksAndGetNames($propertyRankeables);
     }
 
     /**
-     * @return RankeableInterface[]
+     * @return string[]
      */
     public function sortMethods(ClassLike $classLike): array
     {
-        $classMethodsOrderMetadata = [];
+        $classMethodsRankeables = [];
+
         foreach ($classLike->stmts as $position => $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
                 continue;
@@ -77,7 +72,7 @@ final class StmtVisibilitySorter
             /** @var string $classMethodName */
             $classMethodName = $this->nodeNameResolver->getName($classStmt);
 
-            $classMethodsOrderMetadata[] = new ClassMethodRankeable(
+            $classMethodsRankeables[] = new ClassMethodRankeable(
                 $classMethodName,
                 $this->getVisibilityLevelOrder($classStmt),
                 $position,
@@ -85,18 +80,12 @@ final class StmtVisibilitySorter
             );
         }
 
-        uasort(
-            $classMethodsOrderMetadata,
-            function (RankeableInterface $firstRankeable, RankeableInterface $secondRankeable): int {
-                return $firstRankeable->getRanks() <=> $secondRankeable->getRanks();
-            }
-        );
-
-        return $classMethodsOrderMetadata;
+        return $this->sortByRanksAndGetNames($classMethodsRankeables);
     }
 
     /**
-     * @return array<string,array<string, mixed>>
+     * @param Class_|Interface_ $classLike
+     * @return string[]
      */
     public function sortConstants(ClassLike $classLike): array
     {
@@ -116,14 +105,7 @@ final class StmtVisibilitySorter
             );
         }
 
-        uasort(
-            $classConstsRankeables,
-            function (RankeableInterface $firstRankeable, RankeableInterface $secondRankeable): int {
-                return $firstRankeable->getRanks() <=> $secondRankeable->getRanks();
-            }
-        );
-
-        return $classConstsRankeables;
+        return $this->sortByRanksAndGetNames($classConstsRankeables);
     }
 
     /**
@@ -140,5 +122,26 @@ final class StmtVisibilitySorter
         }
 
         return 0;
+    }
+
+    /**
+     * @param RankeableInterface[] $rankeables
+     * @return string[]
+     */
+    private function sortByRanksAndGetNames(array $rankeables): array
+    {
+        uasort(
+            $rankeables,
+            function (RankeableInterface $firstRankeable, RankeableInterface $secondRankeable): int {
+                return $firstRankeable->getRanks() <=> $secondRankeable->getRanks();
+            }
+        );
+
+        $names = [];
+        foreach ($rankeables as $rankeable) {
+            $names[] = $rankeable->getName();
+        }
+
+        return $names;
     }
 }

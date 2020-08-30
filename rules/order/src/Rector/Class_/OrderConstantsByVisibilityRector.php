@@ -57,7 +57,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $currentPropertiesOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, ClassConst::class);
-        $propertiesInDesiredOrder = $this->getPropertiesInDesiredPosition($node);
+        $propertiesInDesiredOrder = $this->stmtVisibilitySorter->sortConstants($node);
 
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($propertiesInDesiredOrder, $currentPropertiesOrder);
 
@@ -66,15 +66,5 @@ PHP
         }
 
         return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getPropertiesInDesiredPosition(Class_ $class): array
-    {
-        $constants = $this->stmtVisibilitySorter->sortConstants($class);
-
-        return array_keys($constants);
     }
 }

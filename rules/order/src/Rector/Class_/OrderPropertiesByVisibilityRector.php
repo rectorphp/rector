@@ -6,7 +6,6 @@ namespace Rector\Order\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -59,7 +58,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $currentPropertiesOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, Property::class);
-        $propertiesInDesiredOrder = $this->getPropertiesInDesiredPosition($node);
+        $propertiesInDesiredOrder = $this->stmtVisibilitySorter->sortProperties($node);
 
         $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($propertiesInDesiredOrder, $currentPropertiesOrder);
 
@@ -69,21 +68,5 @@ PHP
         }
 
         return $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
-    }
-
-    /**
-     * @param Trait_|Class_ $classLike
-     * @return string[]
-     */
-    private function getPropertiesInDesiredPosition(ClassLike $classLike): array
-    {
-        $propertyRankeables = $this->stmtVisibilitySorter->sortProperties($classLike);
-
-        $propertyNames = [];
-        foreach ($propertyRankeables as $propertyRankeable) {
-            $propertyNames[] = $propertyRankeable->getName();
-        }
-
-        return $propertyNames;
     }
 }
