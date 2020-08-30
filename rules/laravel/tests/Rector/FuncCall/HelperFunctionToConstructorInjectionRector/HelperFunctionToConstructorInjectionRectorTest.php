@@ -7,6 +7,8 @@ namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInject
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
+use Rector\Transform\ValueObject\ArrayFunctionToMethodCall;
+use Rector\Transform\ValueObject\FunctionToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class HelperFunctionToConstructorInjectionRectorTest extends AbstractRectorTestCase
@@ -24,8 +26,36 @@ final class HelperFunctionToConstructorInjectionRectorTest extends AbstractRecto
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    protected function getRectorsWithConfiguration(): array
     {
-        return HelperFunctionToConstructorInjectionRector::class;
+        return [
+            HelperFunctionToConstructorInjectionRector::class => [
+                HelperFunctionToConstructorInjectionRector::FUNCTIONS_TO_METHOD_CALLS => [
+                    new FunctionToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'),
+                    new FunctionToMethodCall('route', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'route'),
+                    new FunctionToMethodCall('back', 'Illuminate\Routing\Redirector', 'redirector', 'back', 'back'),
+                    new FunctionToMethodCall(
+                        'broadcast', 'Illuminate\Contracts\Broadcasting\Factory', 'broadcastFactory', 'event'
+                    ),
+                ],
+
+                HelperFunctionToConstructorInjectionRector::ARRAY_FUNCTIONS_TO_METHOD_CALLS => [
+                    new ArrayFunctionToMethodCall(
+                        'config',
+                        'Illuminate\Contracts\Config\Repository',
+                        'configRepository',
+                        'set',
+                        'get'
+                    ),
+                    new ArrayFunctionToMethodCall(
+                        'session',
+                        'Illuminate\Session\SessionManager',
+                        'sessionManager',
+                        'put',
+                        'get'
+                    ),
+                ],
+            ],
+        ];
     }
 }

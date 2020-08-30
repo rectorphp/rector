@@ -10,15 +10,15 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Laravel\FunctionToServiceMap;
-use Rector\Laravel\ValueObject\ArrayFunctionToMethodCall;
-use Rector\Laravel\ValueObject\FunctionToMethodCall;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\Transform\ValueObject\ArrayFunctionToMethodCall;
+use Rector\Transform\ValueObject\FunctionToMethodCall;
+use Webmozart\Assert\Assert;
 
 /**
  * @see https://github.com/laravel/framework/blob/78828bc779e410e03cc6465f002b834eadf160d2/src/Illuminate/Foundation/helpers.php#L959
@@ -26,22 +26,32 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
  *
  * @see \Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector\HelperFunctionToConstructorInjectionRectorTest
  */
-final class HelperFunctionToConstructorInjectionRector extends AbstractRector
+final class HelperFunctionToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var FunctionToServiceMap
+     * @var string
      */
-    private $functionToServiceMap;
+    public const FUNCTIONS_TO_METHOD_CALLS = 'functions_to_method_calls';
 
-    public function __construct(FunctionToServiceMap $functionToServiceMap)
-    {
-        $this->functionToServiceMap = $functionToServiceMap;
-    }
+    /**
+     * @var string
+     */
+    public const ARRAY_FUNCTIONS_TO_METHOD_CALLS = 'array_functions_to_method_calls';
+
+    /**
+     * @var FunctionToMethodCall[]
+     */
+    private $functionToMethodCalls = [];
+
+    /**
+     * @var ArrayFunctionToMethodCall[]
+     */
+    private $arrayFunctionsToMethodCalls = [];
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Move help facade-like function calls to constructor injection', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 class SomeController
 {
@@ -73,6 +83,12 @@ class SomeController
     }
 }
 PHP
+                ,
+                [
+                    self::FUNCTIONS_TO_METHOD_CALLS => [
+                        new FunctionToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'),
+                    ],
+                ]
             ),
         ]);
     }
@@ -97,39 +113,37 @@ PHP
         /** @var Class_ $classLike */
         $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-        $functionName = $this->getName($node);
-        if ($functionName === null) {
-            return null;
-        }
-
-        $functionChange = $this->functionToServiceMap->findByFunction($functionName);
-        if ($functionChange === null) {
-            return null;
-        }
-
-        $fullyQualifiedObjectType = new FullyQualifiedObjectType($functionChange->getClass());
-        $this->addConstructorDependencyToClass($classLike, $fullyQualifiedObjectType, $functionChange->getProperty());
-
-        $propertyFetchNode = $this->createPropertyFetch('this', $functionChange->getProperty());
-
-        if (count($node->args) === 0) {
-            if ($functionChange instanceof FunctionToMethodCall && $functionChange->getMethodIfNoArgs()) {
-                return new MethodCall($propertyFetchNode, $functionChange->getMethodIfNoArgs());
+        foreach ($this->functionToMethodCalls as $functionToMethodCall) {
+            if (! $this->isName($node, $functionToMethodCall->getFunction())) {
+                continue;
             }
 
-            return $propertyFetchNode;
+            return $this->refactorFuncCallToMethodCall($functionToMethodCall, $classLike, $node);
         }
 
-        if ($this->isFunctionToMethodCallWithArgs($node, $functionChange)) {
-            /** @var FunctionToMethodCall $functionChange */
-            return new MethodCall($propertyFetchNode, $functionChange->getMethodIfArgs(), $node->args);
+        foreach ($this->arrayFunctionsToMethodCalls as $arrayFunctionsToMethodCall) {
+            if (! $this->isName($node, $arrayFunctionsToMethodCall->getFunction())) {
+                continue;
+            }
+
+            return $this->refactorArrayFunctionToMethodCall($arrayFunctionsToMethodCall, $node, $classLike);
         }
 
-        if ($functionChange instanceof ArrayFunctionToMethodCall) {
-            return $this->createMethodCallArrayFunctionToMethodCall($node, $functionChange, $propertyFetchNode);
-        }
+        return null;
+    }
 
-        throw new ShouldNotHappenException();
+    /**
+     * @param mixed[] $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        $functionToMethodCalls = $configuration[self::FUNCTIONS_TO_METHOD_CALLS] ?? [];
+        Assert::allIsInstanceOf($functionToMethodCalls, FunctionToMethodCall::class);
+        $this->functionToMethodCalls = $functionToMethodCalls;
+
+        $arrayFunctionsToMethodCalls = $configuration[self::ARRAY_FUNCTIONS_TO_METHOD_CALLS] ?? [];
+        Assert::allIsInstanceOf($arrayFunctionsToMethodCalls, ArrayFunctionToMethodCall::class);
+        $this->arrayFunctionsToMethodCalls = $arrayFunctionsToMethodCalls;
     }
 
     private function shouldSkipFuncCall(FuncCall $funcCall): bool
@@ -149,27 +163,84 @@ PHP
         return $classMethod->isStatic();
     }
 
-    /**
-     * @param FunctionToMethodCall|ArrayFunctionToMethodCall $functionChange
-     */
-    private function isFunctionToMethodCallWithArgs(Node $node, $functionChange): bool
+    private function isFunctionToMethodCallWithArgs(FuncCall $funcCall, FunctionToMethodCall $functionChange): bool
     {
-        if (! $functionChange instanceof FunctionToMethodCall) {
-            return false;
-        }
-
         if ($functionChange->getMethodIfArgs() === null) {
             return false;
         }
 
-        return count($node->args) >= 1;
+        return count($funcCall->args) >= 1;
     }
 
+    /**
+     * @return PropertyFetch|MethodCall
+     */
+    private function refactorFuncCallToMethodCall(
+        FunctionToMethodCall $functionToMethodCall,
+        Class_ $classLike,
+        FuncCall $funcCall
+    ): ?Node {
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType($functionToMethodCall->getClass());
+        $this->addConstructorDependencyToClass(
+            $classLike,
+            $fullyQualifiedObjectType,
+            $functionToMethodCall->getProperty()
+        );
+
+        $propertyFetchNode = $this->createPropertyFetch('this', $functionToMethodCall->getProperty());
+
+        if (count($funcCall->args) === 0) {
+            if ($functionToMethodCall->getMethodIfNoArgs()) {
+                return new MethodCall($propertyFetchNode, $functionToMethodCall->getMethodIfNoArgs());
+            }
+
+            return $propertyFetchNode;
+        }
+
+        if ($this->isFunctionToMethodCallWithArgs($funcCall, $functionToMethodCall)) {
+            return new MethodCall($propertyFetchNode, $functionToMethodCall->getMethodIfArgs(), $funcCall->args);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return PropertyFetch|MethodCall|null
+     */
+    private function refactorArrayFunctionToMethodCall(
+        ArrayFunctionToMethodCall $arrayFunctionsToMethodCall,
+        FuncCall $funcCall,
+        Class_ $class
+    ): ?Node {
+        $propertyFetch = $this->createPropertyFetch('this', $arrayFunctionsToMethodCall->getProperty());
+
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType($arrayFunctionsToMethodCall->getClass());
+
+        $this->addConstructorDependencyToClass(
+            $class,
+            $fullyQualifiedObjectType,
+            $arrayFunctionsToMethodCall->getProperty()
+        );
+
+        return $this->createMethodCallArrayFunctionToMethodCall(
+            $funcCall,
+            $arrayFunctionsToMethodCall,
+            $propertyFetch
+        );
+    }
+
+    /**
+     * @return PropertyFetch|MethodCall|null
+     */
     private function createMethodCallArrayFunctionToMethodCall(
         FuncCall $funcCall,
         ArrayFunctionToMethodCall $arrayFunctionToMethodCall,
         PropertyFetch $propertyFetch
-    ): ?MethodCall {
+    ): ?Node {
+        if (count($funcCall->args) === 0) {
+            return $propertyFetch;
+        }
+
         if ($arrayFunctionToMethodCall->getArrayMethod() && $this->isArrayType($funcCall->args[0]->value)) {
             return new MethodCall($propertyFetch, $arrayFunctionToMethodCall->getArrayMethod(), $funcCall->args);
         }

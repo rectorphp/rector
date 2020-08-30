@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Laravel\ValueObject;
+namespace Rector\Transform\ValueObject;
 
 final class ArrayFunctionToMethodCall
 {
