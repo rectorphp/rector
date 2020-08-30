@@ -20,11 +20,11 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractKernelT
     /**
      * @var PrivatesAccessor
      */
-    private $privateAccessor;
+    private $privatesAccessor;
 
     protected function setUp(): void
     {
-        $this->privateAccessor = new PrivatesAccessor();
+        $this->privatesAccessor = new PrivatesAccessor();
     }
 
     /**
@@ -39,7 +39,7 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractKernelT
         $this->bootKernelWithConfigs(RectorKernel::class, [$config]);
         $this->renameClassRector = self::$container->get(RenameClassRector::class);
 
-        $oldToNewClasses = $this->privateAccessor->getPrivateProperty($this->renameClassRector, 'oldToNewClasses');
+        $oldToNewClasses = $this->privatesAccessor->getPrivateProperty($this->renameClassRector, 'oldToNewClasses');
 
         $this->assertCount($expectedConfigurationCount, $oldToNewClasses);
         $this->assertSame($expectedConfiguration, $oldToNewClasses);

@@ -21,9 +21,9 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
      */
     private $configurableRectorConfigureCallValuesCollector;
 
-    public function __construct(ConfigurableRectorConfigureCallValuesCollector $rectorServiceArgumentCollector)
+    public function __construct(ConfigurableRectorConfigureCallValuesCollector $configurableRectorConfigureCallValuesCollector)
     {
-        $this->configurableRectorConfigureCallValuesCollector = $rectorServiceArgumentCollector;
+        $this->configurableRectorConfigureCallValuesCollector = $configurableRectorConfigureCallValuesCollector;
     }
 
     public function process(ContainerBuilder $containerBuilder): void
