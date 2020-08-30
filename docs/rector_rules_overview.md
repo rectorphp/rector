@@ -5160,7 +5160,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
             FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\FuncNameToStaticCallName('view', 'SomeStaticClass', 'render'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\FuncCallToStaticCall('view', 'SomeStaticClass', 'render'))]
         ]]);
 };
 ```

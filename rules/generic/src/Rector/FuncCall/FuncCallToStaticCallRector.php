@@ -10,7 +10,8 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Transform\ValueObject\FuncNameToStaticCallName;
+use Rector\Transform\ValueObject\FuncCallToStaticCall;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\FuncCall\FuncCallToStaticCallRector\FuncCallToStaticCallRectorTest
@@ -23,9 +24,9 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
     public const FUNC_CALLS_TO_STATIC_CALLS = 'func_calls_to_static_calls';
 
     /**
-     * @var FuncNameToStaticCallName[]
+     * @var FuncCallToStaticCall[]
      */
-    private $funcNameToStaticCallNames = [];
+    private $funcCallsToStaticCalls = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -35,7 +36,7 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
                 'SomeClass::render("...", []);',
                 [
                     self::FUNC_CALLS_TO_STATIC_CALLS => [
-                        new FuncNameToStaticCallName('view', 'SomeStaticClass', 'render'),
+                        new FuncCallToStaticCall('view', 'SomeStaticClass', 'render'),
                     ],
                 ]
             ),
@@ -55,14 +56,14 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->funcNameToStaticCallNames as $funcNameToStaticCallName) {
-            if (! $this->isName($node, $funcNameToStaticCallName->getOldFuncName())) {
+        foreach ($this->funcCallsToStaticCalls as $funcCallsToStaticCall) {
+            if (! $this->isName($node, $funcCallsToStaticCall->getOldFuncName())) {
                 continue;
             }
 
             return $this->createStaticCall(
-                $funcNameToStaticCallName->getNewClassName(),
-                $funcNameToStaticCallName->getNewMethodName(),
+                $funcCallsToStaticCall->getNewClassName(),
+                $funcCallsToStaticCall->getNewMethodName(),
                 $node->args
             );
         }
@@ -72,6 +73,8 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
 
     public function configure(array $configuration): void
     {
-        $this->funcNameToStaticCallNames = $configuration[self::FUNC_CALLS_TO_STATIC_CALLS] ?? [];
+        $funcCallsToStaticCalls = $configuration[self::FUNC_CALLS_TO_STATIC_CALLS] ?? [];
+        Assert::allIsInstanceOf($funcCallsToStaticCalls, FuncCallToStaticCall::class);
+        $this->funcCallsToStaticCalls = $funcCallsToStaticCalls;
     }
 }

@@ -7,7 +7,7 @@ namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToStaticCallRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
-use Rector\Transform\ValueObject\FuncNameToStaticCallName;
+use Rector\Transform\ValueObject\FuncCallToStaticCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FuncCallToStaticCallRectorTest extends AbstractRectorTestCase
@@ -33,8 +33,8 @@ final class FuncCallToStaticCallRectorTest extends AbstractRectorTestCase
         return [
             FuncCallToStaticCallRector::class => [
                 FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => [
-                    new FuncNameToStaticCallName('view', 'SomeStaticClass', 'render'),
-                    new FuncNameToStaticCallName('SomeNamespaced\view', 'AnotherStaticClass', 'render'),
+                    new FuncCallToStaticCall('view', 'SomeStaticClass', 'render'),
+                    new FuncCallToStaticCall('SomeNamespaced\view', 'AnotherStaticClass', 'render'),
                 ],
             ],
         ];
