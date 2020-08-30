@@ -7,7 +7,7 @@ namespace Rector\Generic\Tests\Rector\FuncCall\FuncCallToStaticCallRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\FuncCall\FuncCallToStaticCallRector;
-use Rector\Generic\ValueObject\FuncNameToStaticCallName;
+use Rector\Transform\ValueObject\FuncNameToStaticCallName;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FuncCallToStaticCallRectorTest extends AbstractRectorTestCase

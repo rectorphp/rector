@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
+namespace Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
-use Rector\Generic\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService;
-use Rector\Generic\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
-use Rector\Generic\ValueObject\MethodCallToService;
+use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
+use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService;
+use Rector\Transform\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
+use Rector\Transform\ValueObject\MethodCallToService;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRectorTestCase

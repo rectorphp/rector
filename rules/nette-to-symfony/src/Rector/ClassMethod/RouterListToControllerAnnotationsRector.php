@@ -18,8 +18,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
-use Rector\NetteToSymfony\Routing\ImplicitToExplicitRoutingAnnotationDecorator;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
+use Rector\NetteToSymfony\Routing\ImplicitToExplicitRoutingAnnotationDecorator;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -44,7 +44,7 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $returnTypeInferer;
 
     /**
-     * @var \Rector\NetteToSymfony\Routing\ImplicitToExplicitRoutingAnnotationDecorator
+     * @var ImplicitToExplicitRoutingAnnotationDecorator
      */
     private $implicitToExplicitRoutingAnnotationDecorator;
 

@@ -5163,7 +5163,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(FuncCallToStaticCallRector::class)
         ->call('configure', [[
             FuncCallToStaticCallRector::FUNC_CALLS_TO_STATIC_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\FuncNameToStaticCallName('view', 'SomeStaticClass', 'render'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\FuncNameToStaticCallName('view', 'SomeStaticClass', 'render'))]
         ]]);
 };
 ```
@@ -5873,7 +5873,7 @@ Turns variable in controller action to property fetch, as follow up to action in
 
 ### `ServiceGetterToConstructorInjectionRector`
 
-- class: [`Rector\Generic\Rector\MethodCall\ServiceGetterToConstructorInjectionRector`](/../master/rules/generic/src/Rector/MethodCall/ServiceGetterToConstructorInjectionRector.php)
+- class: [`Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector`](/../master/rules/generic/src/Rector/MethodCall/ServiceGetterToConstructorInjectionRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/ServiceGetterToConstructorInjectionRector/Fixture)
 
 Get service call to constructor injection
@@ -5882,14 +5882,14 @@ Get service call to constructor injection
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
+use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ServiceGetterToConstructorInjectionRector::class)
         ->call('configure', [[
             ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodCallToService('FirstService', 'getAnotherService', 'AnotherService'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\MethodCallToService('FirstService', 'getAnotherService', 'AnotherService'))]
         ]]);
 };
 ```
