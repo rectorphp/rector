@@ -18,7 +18,7 @@
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (40)
+- [Generic](#generic) (39)
 - [Guzzle](#guzzle) (1)
 - [Injection](#injection) (1)
 - [JMS](#jms) (2)
@@ -69,7 +69,7 @@
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [SymfonyPhpConfig](#symfonyphpconfig) (2)
-- [Transform](#transform) (8)
+- [Transform](#transform) (9)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -5369,44 +5369,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 -		new MyClass($argument);
 +		$this->myClassFactory->create($argument);
  	}
- }
-```
-
-<br><br>
-
-### `NewToStaticCallRector`
-
-- class: [`Rector\Generic\Rector\New_\NewToStaticCallRector`](/../master/rules/generic/src/Rector/New_/NewToStaticCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/New_/NewToStaticCallRector/Fixture)
-
-Change new Object to static call
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\New_\NewToStaticCallRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(NewToStaticCallRector::class)
-        ->call('configure', [[
-            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\TypeToStaticCall('Cookie', 'Cookie', 'create'))]
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        new Cookie($name);
-+        Cookie::create($name);
-     }
  }
 ```
 
@@ -14183,6 +14145,44 @@ return function (ContainerConfigurator $containerConfigurator) : void {
      {
 -        return $this->anotherDependency->process('value');
 +        return StaticCaller::anotherMethod('value');
+     }
+ }
+```
+
+<br><br>
+
+### `NewToStaticCallRector`
+
+- class: [`Rector\Transform\Rector\New_\NewToStaticCallRector`](/../master/rules/transform/src/Rector/New_/NewToStaticCallRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/New_/NewToStaticCallRector/Fixture)
+
+Change new Object to static call
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\New_\NewToStaticCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(NewToStaticCallRector::class)
+        ->call('configure', [[
+            NewToStaticCallRector::TYPE_TO_STATIC_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\NewToStaticCall('Cookie', 'Cookie', 'create'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        new Cookie($name);
++        Cookie::create($name);
      }
  }
 ```

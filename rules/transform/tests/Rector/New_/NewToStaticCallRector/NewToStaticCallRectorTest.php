@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\New_\NewToStaticCallRector;
+namespace Rector\Transform\Tests\Rector\New_\NewToStaticCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\New_\NewToStaticCallRector;
-use Rector\Generic\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
-use Rector\Generic\Tests\Rector\New_\NewToStaticCallRector\Source\IntoStaticClass;
-use Rector\Generic\ValueObject\TypeToStaticCall;
+use Rector\Transform\Rector\New_\NewToStaticCallRector;
+use Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
+use Rector\Transform\Tests\Rector\New_\NewToStaticCallRector\Source\IntoStaticClass;
+use Rector\Transform\ValueObject\NewToStaticCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NewToStaticCallRectorTest extends AbstractRectorTestCase
@@ -35,7 +35,7 @@ final class NewToStaticCallRectorTest extends AbstractRectorTestCase
         return [
             NewToStaticCallRector::class => [
                 NewToStaticCallRector::TYPE_TO_STATIC_CALLS => [
-                    new TypeToStaticCall(FromNewClass::class, IntoStaticClass::class, 'run'),
+                    new NewToStaticCall(FromNewClass::class, IntoStaticClass::class, 'run'),
                 ],
             ],
         ];
