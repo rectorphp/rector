@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Architecture\Rector\Class_;
+namespace Rector\DoctrineCodeQuality\Rector\Class_;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -22,7 +22,7 @@ use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
+ * @see \Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
  */
 final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 {
