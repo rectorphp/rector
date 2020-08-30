@@ -80,7 +80,8 @@ final class PropertyNaming
         $shortClassName = Strings::replace($shortClassName, '#_#', '');
         $shortClassName = $this->normalizeUpperCase($shortClassName);
 
-        return lcfirst($shortClassName);
+        // prolong too short generic names with one namespace up
+        return $this->prolongIfTooShort($shortClassName, $className);
     }
 
     /**
@@ -93,7 +94,8 @@ final class PropertyNaming
         $shortName = $this->fqnToShortName($className);
         $shortName = $this->removeInterfaceSuffixPrefix($className, $shortName);
 
-        return lcfirst($shortName);
+        // prolong too short generic names with one namespace up
+        return $this->prolongIfTooShort($shortName, $className);
     }
 
     /**
@@ -156,6 +158,20 @@ final class PropertyNaming
         }
 
         return $shortClassName;
+    }
+
+    private function prolongIfTooShort(string $shortClassName, string $className): string
+    {
+        if (in_array($shortClassName, ['Factory', 'Repository'], true)) {
+            /** @var string $namespaceAbove */
+            $namespaceAbove = Strings::after($className, '\\', -2);
+            /** @var string $namespaceAbove */
+            $namespaceAbove = Strings::before($namespaceAbove, '\\');
+
+            return lcfirst($namespaceAbove) . $shortClassName;
+        }
+
+        return lcfirst($shortClassName);
     }
 
     /**

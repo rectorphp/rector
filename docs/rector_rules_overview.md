@@ -23,7 +23,7 @@
 - [Guzzle](#guzzle) (1)
 - [Injection](#injection) (1)
 - [JMS](#jms) (2)
-- [Laravel](#laravel) (6)
+- [Laravel](#laravel) (5)
 - [Legacy](#legacy) (4)
 - [MagicDisclosure](#magicdisclosure) (8)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
@@ -70,7 +70,7 @@
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [SymfonyPhpConfig](#symfonyphpconfig) (2)
-- [Transform](#transform) (4)
+- [Transform](#transform) (5)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -6322,38 +6322,6 @@ Move Illuminate\Support\Facades\* static calls to constructor injection
      {
 -        return Response::view('example', ['new_example' => 123]);
 +        return $this->responseFactory->view('example', ['new_example' => 123]);
-     }
- }
-```
-
-<br><br>
-
-### `HelperFunctionToConstructorInjectionRector`
-
-- class: [`Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector`](/../master/rules/laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php)
-- [test fixtures](/../master/rules/laravel/tests/Rector/FuncCall/HelperFunctionToConstructorInjectionRector/Fixture)
-
-Move help facade-like function calls to constructor injection
-
-```diff
- class SomeController
- {
-+    /**
-+     * @var \Illuminate\Contracts\View\Factory
-+     */
-+    private $viewFactory;
-+
-+    public function __construct(\Illuminate\Contracts\View\Factory $viewFactory)
-+    {
-+        $this->viewFactory = $viewFactory;
-+    }
-+
-     public function action()
-     {
--        $template = view('template.blade');
--        $viewFactory = view();
-+        $template = $this->viewFactory->make('template.blade');
-+        $viewFactory = $this->viewFactory;
      }
  }
 ```
@@ -14161,9 +14129,59 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ## Transform
 
+### `ArgumentFuncCallToMethodCallRector`
+
+- class: [`Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector`](/../master/rules/transform/src/Rector/FuncCall/ArgumentFuncCallToMethodCallRector.php)
+
+Move help facade-like function calls to constructor injection
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ArgumentFuncCallToMethodCallRector::class)
+        ->call('configure', [[
+            ArgumentFuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', null, 'make'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeController
+ {
++    /**
++     * @var \Illuminate\Contracts\View\Factory
++     */
++    private $viewFactory;
++
++    public function __construct(\Illuminate\Contracts\View\Factory $viewFactory)
++    {
++        $this->viewFactory = $viewFactory;
++    }
++
+     public function action()
+     {
+-        $template = view('template.blade');
+-        $viewFactory = view();
++        $template = $this->viewFactory->make('template.blade');
++        $viewFactory = $this->viewFactory;
+     }
+ }
+```
+
+<br><br>
+
 ### `MethodCallToAnotherMethodCallWithArgumentsRector`
 
 - class: [`Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`](/../master/rules/transform/src/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector/Fixture)
 
 Turns old method call with specific types to new one with arguments
 

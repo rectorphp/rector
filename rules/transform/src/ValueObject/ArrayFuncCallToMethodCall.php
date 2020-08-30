@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Laravel\ValueObject;
+namespace Rector\Transform\ValueObject;
 
-final class ArrayFunctionToMethodCall
+final class ArrayFuncCallToMethodCall
 {
     /**
      * @var string
@@ -19,11 +19,6 @@ final class ArrayFunctionToMethodCall
     /**
      * @var string
      */
-    private $property;
-
-    /**
-     * @var string
-     */
     private $arrayMethod;
 
     /**
@@ -31,16 +26,10 @@ final class ArrayFunctionToMethodCall
      */
     private $nonArrayMethod;
 
-    public function __construct(
-        string $function,
-        string $class,
-        string $property,
-        string $arrayMethod,
-        string $nonArrayMethod
-    ) {
+    public function __construct(string $function, string $class, string $arrayMethod, string $nonArrayMethod)
+    {
         $this->function = $function;
         $this->class = $class;
-        $this->property = $property;
         $this->arrayMethod = $arrayMethod;
         $this->nonArrayMethod = $nonArrayMethod;
     }
@@ -53,11 +42,6 @@ final class ArrayFunctionToMethodCall
     public function getClass(): string
     {
         return $this->class;
-    }
-
-    public function getProperty(): string
-    {
-        return $this->property;
     }
 
     public function getArrayMethod(): string
