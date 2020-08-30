@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Generic\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector\Fixture;
+namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector\Fixture;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Generic\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector\Fixture;
+namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector\Fixture;
 
 class SomeClass
 {

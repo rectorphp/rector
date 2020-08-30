@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php\Rector;
+namespace Rector\Generic\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;

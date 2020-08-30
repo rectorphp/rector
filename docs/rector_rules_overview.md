@@ -5372,7 +5372,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `MethodCallToPropertyFetchRector`
 
-- class: [`Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToPropertyFetchRector.php)
+- class: [`Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToPropertyFetchRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/MethodCallToPropertyFetchRector/Fixture)
 
 Turns method call "$this->something()" to property fetch "$this->something"
@@ -5381,7 +5381,7 @@ Turns method call "$this->something()" to property fetch "$this->something"
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector;
+use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

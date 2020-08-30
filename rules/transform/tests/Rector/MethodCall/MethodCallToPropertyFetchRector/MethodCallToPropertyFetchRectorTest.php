@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector;
+namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToPropertyFetchRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector;
+use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToPropertyFetchRectorTest extends AbstractRectorTestCase
