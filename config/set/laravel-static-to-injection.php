@@ -6,9 +6,9 @@ use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
 use Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector;
 use Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
-use Rector\Transform\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
-use Rector\Transform\ValueObject\ArrayFunctionToMethodCall;
-use Rector\Transform\ValueObject\FunctionToMethodCall;
+use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
+use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
+use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -22,65 +22,65 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // @see https://github.com/laravel/framework/blob/78828bc779e410e03cc6465f002b834eadf160d2/src/Illuminate/Foundation/helpers.php#L959
     // @see https://gist.github.com/barryvdh/bb6ffc5d11e0a75dba67
-    $services->set(HelperFunctionToConstructorInjectionRector::class)
+    $services->set(FuncCallToMethodCallRector::class)
         ->call('configure', [[
-            HelperFunctionToConstructorInjectionRector::FUNCTIONS_TO_METHOD_CALLS => inline_value_objects([
-                new FunctionToMethodCall('auth', 'Illuminate\Contracts\Auth\Guard', 'guard'),
-                new FunctionToMethodCall('policy', 'Illuminate\Contracts\Auth\Access\Gate', 'policy', 'getPolicyFor'),
-                new FunctionToMethodCall('cookie', 'Illuminate\Contracts\Cookie\Factory', 'cookieFactory', 'make'),
+            FuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => inline_value_objects([
+                new FuncCallToMethodCall('auth', 'Illuminate\Contracts\Auth\Guard', 'guard'),
+                new FuncCallToMethodCall('policy', 'Illuminate\Contracts\Auth\Access\Gate', 'policy', 'getPolicyFor'),
+                new FuncCallToMethodCall('cookie', 'Illuminate\Contracts\Cookie\Factory', 'cookieFactory', 'make'),
                 // router
-                new FunctionToMethodCall('put', 'Illuminate\Routing\Router', 'router', 'put'),
-                new FunctionToMethodCall('get', 'Illuminate\Routing\Router', 'router', 'get'),
-                new FunctionToMethodCall('post', 'Illuminate\Routing\Router', 'router', 'post'),
-                new FunctionToMethodCall('patch', 'Illuminate\Routing\Router', 'router', 'patch'),
-                new FunctionToMethodCall('delete', 'Illuminate\Routing\Router', 'router', 'delete'),
-                new FunctionToMethodCall('resource', 'Illuminate\Routing\Router', 'router', 'resource'),
-                new FunctionToMethodCall(
+                new FuncCallToMethodCall('put', 'Illuminate\Routing\Router', 'router', 'put'),
+                new FuncCallToMethodCall('get', 'Illuminate\Routing\Router', 'router', 'get'),
+                new FuncCallToMethodCall('post', 'Illuminate\Routing\Router', 'router', 'post'),
+                new FuncCallToMethodCall('patch', 'Illuminate\Routing\Router', 'router', 'patch'),
+                new FuncCallToMethodCall('delete', 'Illuminate\Routing\Router', 'router', 'delete'),
+                new FuncCallToMethodCall('resource', 'Illuminate\Routing\Router', 'router', 'resource'),
+                new FuncCallToMethodCall(
                     'response',
                     'Illuminate\Contracts\Routing\ResponseFactory',
                     'responseFactory',
                     'make'
                 ),
-                new FunctionToMethodCall('info', 'Illuminate\Log\Writer', 'logWriter', 'info'),
-                new FunctionToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'),
-                new FunctionToMethodCall('bcrypt', 'Illuminate\Hashing\BcryptHasher', 'bcryptHasher', 'make'),
-                new FunctionToMethodCall('redirect', 'Illuminate\Routing\Redirector', 'redirector', 'back'),
-                new FunctionToMethodCall(
+                new FuncCallToMethodCall('info', 'Illuminate\Log\Writer', 'logWriter', 'info'),
+                new FuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'),
+                new FuncCallToMethodCall('bcrypt', 'Illuminate\Hashing\BcryptHasher', 'bcryptHasher', 'make'),
+                new FuncCallToMethodCall('redirect', 'Illuminate\Routing\Redirector', 'redirector', 'back'),
+                new FuncCallToMethodCall(
                     'broadcast',
                     'Illuminate\Contracts\Broadcasting\Factory',
                     'broadcastFactory',
                     'event'
                 ),
-                new FunctionToMethodCall('event', 'Illuminate\Events\Dispatcher', 'eventDispatcher', 'fire'),
-                new FunctionToMethodCall('dispatch', 'Illuminate\Events\Dispatcher', 'eventDispatcher', 'dispatch'),
-                new FunctionToMethodCall('route', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'route'),
-                new FunctionToMethodCall('asset', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'asset'),
-                new FunctionToMethodCall('url', 'Illuminate\Contracts\Routing\UrlGenerator', 'urlGenerator', 'to'),
-                new FunctionToMethodCall('action', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'action'),
-                new FunctionToMethodCall('trans', 'Illuminate\Translation\Translator', 'translator', 'trans'),
-                new FunctionToMethodCall(
+                new FuncCallToMethodCall('event', 'Illuminate\Events\Dispatcher', 'eventDispatcher', 'fire'),
+                new FuncCallToMethodCall('dispatch', 'Illuminate\Events\Dispatcher', 'eventDispatcher', 'dispatch'),
+                new FuncCallToMethodCall('route', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'route'),
+                new FuncCallToMethodCall('asset', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'asset'),
+                new FuncCallToMethodCall('url', 'Illuminate\Contracts\Routing\UrlGenerator', 'urlGenerator', 'to'),
+                new FuncCallToMethodCall('action', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'action'),
+                new FuncCallToMethodCall('trans', 'Illuminate\Translation\Translator', 'translator', 'trans'),
+                new FuncCallToMethodCall(
                     'trans_choice',
                     'Illuminate\Translation\Translator',
                     'translator',
                     'transChoice'
                 ),
-                new FunctionToMethodCall('logger', 'Illuminate\Log\Writer', 'logWriter', 'debug'),
-                new FunctionToMethodCall('back', 'Illuminate\Routing\Redirector', 'redirector', 'back', 'back'),
+                new FuncCallToMethodCall('logger', 'Illuminate\Log\Writer', 'logWriter', 'debug'),
+                new FuncCallToMethodCall('back', 'Illuminate\Routing\Redirector', 'redirector', 'back', 'back'),
             ]),
-            HelperFunctionToConstructorInjectionRector::ARRAY_FUNCTIONS_TO_METHOD_CALLS => inline_value_objects([
-                new ArrayFunctionToMethodCall(
+            FuncCallToMethodCallRector::ARRAY_FUNCTIONS_TO_METHOD_CALLS => inline_value_objects([
+                new ArrayFuncCallToMethodCall(
                     'config',
                     'Illuminate\Contracts\Config\Repository',
                     'configRepository',
                     'set',
                     'get'
                 ),
-                new ArrayFunctionToMethodCall(
+                new ArrayFuncCallToMethodCall(
                     'session',
                     'Illuminate\Session\SessionManager',
                     'sessionManager',
-                'put',
-                'get'
+                    'put',
+                    'get'
               ),
             ]),
         ]]);

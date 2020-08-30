@@ -16,14 +16,14 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Rector\Transform\ValueObject\ArrayFunctionToMethodCall;
-use Rector\Transform\ValueObject\FunctionToMethodCall;
+use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
+use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Transform\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector\HelperFunctionToConstructorInjectionRectorTest
+ * @see \Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\FuncCallToMethodCallRectorTest
  */
-final class HelperFunctionToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
+final class FuncCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -36,12 +36,12 @@ final class HelperFunctionToConstructorInjectionRector extends AbstractRector im
     public const ARRAY_FUNCTIONS_TO_METHOD_CALLS = 'array_functions_to_method_calls';
 
     /**
-     * @var FunctionToMethodCall[]
+     * @var FuncCallToMethodCall[]
      */
     private $functionToMethodCalls = [];
 
     /**
-     * @var ArrayFunctionToMethodCall[]
+     * @var ArrayFuncCallToMethodCall[]
      */
     private $arrayFunctionsToMethodCalls = [];
 
@@ -83,7 +83,7 @@ PHP
                 ,
                 [
                     self::FUNCTIONS_TO_METHOD_CALLS => [
-                        new FunctionToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'),
+                        new FuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'),
                     ],
                 ]
             ),
@@ -135,22 +135,17 @@ PHP
     public function configure(array $configuration): void
     {
         $functionToMethodCalls = $configuration[self::FUNCTIONS_TO_METHOD_CALLS] ?? [];
-        Assert::allIsInstanceOf($functionToMethodCalls, FunctionToMethodCall::class);
+        Assert::allIsInstanceOf($functionToMethodCalls, FuncCallToMethodCall::class);
         $this->functionToMethodCalls = $functionToMethodCalls;
 
         $arrayFunctionsToMethodCalls = $configuration[self::ARRAY_FUNCTIONS_TO_METHOD_CALLS] ?? [];
-        Assert::allIsInstanceOf($arrayFunctionsToMethodCalls, ArrayFunctionToMethodCall::class);
+        Assert::allIsInstanceOf($arrayFunctionsToMethodCalls, ArrayFuncCallToMethodCall::class);
         $this->arrayFunctionsToMethodCalls = $arrayFunctionsToMethodCalls;
     }
 
     private function shouldSkipFuncCall(FuncCall $funcCall): bool
     {
-        // we can inject only in class context
-        $classLike = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            return true;
-        }
-
+        // we can inject only in injectable class method  context
         /** @var ClassMethod|null $classMethod */
         $classMethod = $funcCall->getAttribute(AttributeKey::METHOD_NODE);
         if ($classMethod === null) {
@@ -160,9 +155,11 @@ PHP
         return $classMethod->isStatic();
     }
 
-    private function isFunctionToMethodCallWithArgs(FuncCall $funcCall, FunctionToMethodCall $functionChange): bool
-    {
-        if ($functionChange->getMethodIfArgs() === null) {
+    private function isFunctionToMethodCallWithArgs(
+        FuncCall $funcCall,
+        FuncCallToMethodCall $funcCallToMethodCall
+    ): bool {
+        if ($funcCallToMethodCall->getMethodIfArgs() === null) {
             return false;
         }
 
@@ -173,7 +170,7 @@ PHP
      * @return PropertyFetch|MethodCall
      */
     private function refactorFuncCallToMethodCall(
-        FunctionToMethodCall $functionToMethodCall,
+        FuncCallToMethodCall $functionToMethodCall,
         Class_ $classLike,
         FuncCall $funcCall
     ): ?Node {
@@ -205,7 +202,7 @@ PHP
      * @return PropertyFetch|MethodCall|null
      */
     private function refactorArrayFunctionToMethodCall(
-        ArrayFunctionToMethodCall $arrayFunctionsToMethodCall,
+        ArrayFuncCallToMethodCall $arrayFunctionsToMethodCall,
         FuncCall $funcCall,
         Class_ $class
     ): ?Node {
@@ -231,7 +228,7 @@ PHP
      */
     private function createMethodCallArrayFunctionToMethodCall(
         FuncCall $funcCall,
-        ArrayFunctionToMethodCall $arrayFunctionToMethodCall,
+        ArrayFuncCallToMethodCall $arrayFunctionToMethodCall,
         PropertyFetch $propertyFetch
     ): ?Node {
         if (count($funcCall->args) === 0) {

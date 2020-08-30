@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector\Fixture;
+namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
 class SomeBroadcastController
 {
@@ -14,7 +14,7 @@ class SomeBroadcastController
 -----
 <?php
 
-namespace Rector\Transform\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector\Fixture;
+namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector\Fixture;
 
 class SomeBroadcastController
 {

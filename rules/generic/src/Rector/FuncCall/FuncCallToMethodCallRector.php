@@ -13,6 +13,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\Rector\AbstractToMethodCallRector;
 use Rector\Generic\ValueObject\FuncNameToMethodCallName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Generic\Tests\Rector\FuncCall\FuncCallToMethodCallRector\FuncCallToMethodCallRectorTest
@@ -117,6 +118,8 @@ CODE_SAMPLE
 
     public function configure(array $configuration): void
     {
-        $this->funcNameToMethodCallNames = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? [];
+        $funcCallsToClassMethodCalls = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? [];
+        Assert::allIsInstanceOf($funcCallsToClassMethodCalls, FuncNameToMethodCallName::class);
+        $this->funcNameToMethodCallNames = $funcCallsToClassMethodCalls;
     }
 }

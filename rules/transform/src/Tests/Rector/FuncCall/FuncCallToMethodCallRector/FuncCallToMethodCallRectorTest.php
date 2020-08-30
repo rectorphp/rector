@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Transform\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
+namespace Rector\Transform\Tests\Rector\FuncCall\FuncCallToMethodCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Transform\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
-use Rector\Transform\ValueObject\ArrayFunctionToMethodCall;
-use Rector\Transform\ValueObject\FunctionToMethodCall;
+use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
+use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
+use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class HelperFunctionToConstructorInjectionRectorTest extends AbstractRectorTestCase
+final class FuncCallToMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -29,25 +29,25 @@ final class HelperFunctionToConstructorInjectionRectorTest extends AbstractRecto
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            HelperFunctionToConstructorInjectionRector::class => [
-                HelperFunctionToConstructorInjectionRector::FUNCTIONS_TO_METHOD_CALLS => [
-                    new FunctionToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'),
-                    new FunctionToMethodCall('route', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'route'),
-                    new FunctionToMethodCall('back', 'Illuminate\Routing\Redirector', 'redirector', 'back', 'back'),
-                    new FunctionToMethodCall(
+            FuncCallToMethodCallRector::class => [
+                FuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => [
+                    new FuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'),
+                    new FuncCallToMethodCall('route', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'route'),
+                    new FuncCallToMethodCall('back', 'Illuminate\Routing\Redirector', 'redirector', 'back', 'back'),
+                    new FuncCallToMethodCall(
                         'broadcast', 'Illuminate\Contracts\Broadcasting\Factory', 'broadcastFactory', 'event'
                     ),
                 ],
 
-                HelperFunctionToConstructorInjectionRector::ARRAY_FUNCTIONS_TO_METHOD_CALLS => [
-                    new ArrayFunctionToMethodCall(
+                FuncCallToMethodCallRector::ARRAY_FUNCTIONS_TO_METHOD_CALLS => [
+                    new ArrayFuncCallToMethodCall(
                         'config',
                         'Illuminate\Contracts\Config\Repository',
                         'configRepository',
                         'set',
                         'get'
                     ),
-                    new ArrayFunctionToMethodCall(
+                    new ArrayFuncCallToMethodCall(
                         'session',
                         'Illuminate\Session\SessionManager',
                         'sessionManager',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Transform\ValueObject;
 
-final class FunctionToMethodCall
+final class ArrayFuncCallToMethodCall
 {
     /**
      * @var string
@@ -22,23 +22,27 @@ final class FunctionToMethodCall
     private $property;
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $methodIfNoArgs;
+    private $arrayMethod;
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $methodIfArgs;
+    private $nonArrayMethod;
 
     public function __construct(
-        string $function, string $class, string $property, ?string $methodIfArgs = null, ?string $methodIfNoArgs = null
+        string $function,
+        string $class,
+        string $property,
+        string $arrayMethod,
+        string $nonArrayMethod
     ) {
         $this->function = $function;
         $this->class = $class;
         $this->property = $property;
-        $this->methodIfArgs = $methodIfArgs;
-        $this->methodIfNoArgs = $methodIfNoArgs;
+        $this->arrayMethod = $arrayMethod;
+        $this->nonArrayMethod = $nonArrayMethod;
     }
 
     public function getFunction(): string
@@ -56,13 +60,13 @@ final class FunctionToMethodCall
         return $this->property;
     }
 
-    public function getMethodIfNoArgs(): ?string
+    public function getArrayMethod(): string
     {
-        return $this->methodIfNoArgs;
+        return $this->arrayMethod;
     }
 
-    public function getMethodIfArgs(): ?string
+    public function getNonArrayMethod(): string
     {
-        return $this->methodIfArgs;
+        return $this->nonArrayMethod;
     }
 }
