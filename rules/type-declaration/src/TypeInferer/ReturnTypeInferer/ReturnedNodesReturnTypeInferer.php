@@ -49,13 +49,10 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
 
         $localReturnNodes = $this->collectReturns($functionLike);
         if ($localReturnNodes === []) {
-            // void type
-            if (! $this->isAbstractMethod($classLike, $functionLike)) {
-                return new VoidType();
-            }
-
-            return new MixedType();
+            return $this->resolveNoLocalReturnNodes($classLike, $functionLike);
         }
+
+        $hasSilentVoid = $this->hasSilentVoid($functionLike, $localReturnNodes);
 
         foreach ($localReturnNodes as $localReturnNode) {
             if ($localReturnNode->expr === null) {
@@ -64,6 +61,10 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
             }
 
             $this->types[] = $this->nodeTypeResolver->getStaticType($localReturnNode->expr);
+        }
+
+        if ($hasSilentVoid) {
+            $this->types[] = new VoidType();
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($this->types);
@@ -105,15 +106,36 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
         return $returns;
     }
 
-    private function isAbstractMethod(ClassLike $classLike, FunctionLike $functionLike): bool
+    private function resolveNoLocalReturnNodes(ClassLike $classLike, FunctionLike $functionLike): Type
     {
-        // abstract class method
-        if ($functionLike instanceof ClassMethod && $functionLike->isAbstract()) {
-            return true;
+        // void type
+        if (! $this->isAbstractMethod($classLike, $functionLike)) {
+            return new VoidType();
         }
 
-        // abstract class
-        return $classLike instanceof Class_ && $classLike->isAbstract();
+        return new MixedType();
+    }
+
+    /**
+     * @param ClassMethod|Closure|Function_ $functionLike
+     * @param Return_[] $localReturns
+     */
+    private function hasSilentVoid(FunctionLike $functionLike, array $localReturns): bool
+    {
+        foreach ((array) $functionLike->stmts as $stmt) {
+            foreach ($localReturns as $localReturn) {
+                if ($localReturn === $stmt) {
+                    return false;
+                }
+            }
+
+            // has switch with always return
+            if ($stmt instanceof Switch_ && $this->isSwitchWithAlwaysReturn($stmt)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function processSwitch(Switch_ $switch): void
@@ -125,5 +147,32 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
         }
 
         $this->types[] = new VoidType();
+    }
+
+    private function isAbstractMethod(ClassLike $classLike, FunctionLike $functionLike): bool
+    {
+        // abstract class method
+        if ($functionLike instanceof ClassMethod && $functionLike->isAbstract()) {
+            return true;
+        }
+
+        // abstract class
+        return $classLike instanceof Class_ && $classLike->isAbstract();
+    }
+
+    private function isSwitchWithAlwaysReturn(Switch_ $switch): bool
+    {
+        $casesWithReturn = 0;
+        foreach ($switch->cases as $case) {
+            foreach ($case->stmts as $caseStmt) {
+                if ($caseStmt instanceof Return_) {
+                    ++$casesWithReturn;
+                    break;
+                }
+            }
+        }
+
+        // has same amount of returns as switches
+        return count($switch->cases) === $casesWithReturn;
     }
 }
