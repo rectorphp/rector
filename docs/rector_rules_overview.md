@@ -5944,7 +5944,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 ### `StaticCallToFunctionRector`
 
-- class: [`Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector`](/../master/rules/generic/src/Rector/StaticCall/StaticCallToFunctionRector.php)
+- class: [`Rector\Transform\Rector\StaticCall\StaticCallToFunctionRector`](/../master/rules/generic/src/Rector/StaticCall/StaticCallToFunctionRector.php)
 - [test fixtures](/../master/rules/generic/tests/Rector/StaticCall/StaticCallToFunctionRector/Fixture)
 
 Turns static call to function call.
@@ -5953,14 +5953,14 @@ Turns static call to function call.
 <?php
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
+use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 
 return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(StaticCallToFunctionRector::class)
+    $services->set(StaticCallToFuncCallRector::class)
         ->call('configure', [[
-            StaticCallToFunctionRector::STATIC_CALLS_TO_FUNCTIONS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\StaticCallToFunction('OldClass', 'oldMethod', 'new_function'))]
+            StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\StaticCallToFuncCall('OldClass', 'oldMethod', 'new_function'))]
         ]]);
 };
 ```

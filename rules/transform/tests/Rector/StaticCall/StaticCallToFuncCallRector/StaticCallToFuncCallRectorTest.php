@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\StaticCall\StaticCallToFunctionRector;
+namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToFuncCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\StaticCall\StaticCallToFunctionRector;
-use Rector\Generic\Tests\Rector\StaticCall\StaticCallToFunctionRector\Source\SomeOldStaticClass;
-use Rector\Generic\ValueObject\StaticCallToFunction;
+use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
+use Rector\Transform\Tests\Rector\StaticCall\StaticCallToFuncCallRector\Source\SomeOldStaticClass;
+use Rector\Transform\ValueObject\StaticCallToFuncCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class StaticCallToFunctionRectorTest extends AbstractRectorTestCase
+final class StaticCallToFuncCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -32,9 +32,9 @@ final class StaticCallToFunctionRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            StaticCallToFunctionRector::class => [
-                StaticCallToFunctionRector::STATIC_CALLS_TO_FUNCTIONS => [
-                    new StaticCallToFunction(SomeOldStaticClass::class, 'render', 'view'),
+            StaticCallToFuncCallRector::class => [
+                StaticCallToFuncCallRector::STATIC_CALLS_TO_FUNCTIONS => [
+                    new StaticCallToFuncCall(SomeOldStaticClass::class, 'render', 'view'),
                 ],
             ],
         ];
