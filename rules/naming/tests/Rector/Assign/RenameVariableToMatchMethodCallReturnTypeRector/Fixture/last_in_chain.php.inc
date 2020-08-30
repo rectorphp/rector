@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Source\Runners;
+use Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Source\Runners;
 
 class LastInChainClass
 {
@@ -22,9 +22,9 @@ class LastInChainClass
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Source\Runners;
+use Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Source\Runners;
 
 class LastInChainClass
 {

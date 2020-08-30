@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector;
+namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Naming\Rector\Assign\RenameVariableToMatchGetMethodNameRector;
+use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class RenameVariableToMatchGetMethodNameRectorTest extends AbstractRectorTestCase
+final class RenameVariableToMatchMethodCallReturnTypeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class RenameVariableToMatchGetMethodNameRectorTest extends AbstractRectorT
 
     protected function getRectorClass(): string
     {
-        return RenameVariableToMatchGetMethodNameRector::class;
+        return RenameVariableToMatchMethodCallReturnTypeRector::class;
     }
 }

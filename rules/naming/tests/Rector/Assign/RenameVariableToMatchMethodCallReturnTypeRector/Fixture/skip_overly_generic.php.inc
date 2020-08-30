@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector\Fixture;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar\LNumber;

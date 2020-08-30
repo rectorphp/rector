@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchGetMethodNameRector;
+namespace Rector\Naming\Tests\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Naming\Rector\Assign\RenameVariableToMatchGetMethodNameRector;
+use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Php74Test extends AbstractRectorTestCase
@@ -27,6 +27,6 @@ final class Php74Test extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return RenameVariableToMatchGetMethodNameRector::class;
+        return RenameVariableToMatchMethodCallReturnTypeRector::class;
     }
 }
