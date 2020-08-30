@@ -17,7 +17,7 @@ final class ExcludePathsTest extends AbstractKernelTestCase
 
     public function testShouldFail(): void
     {
-        $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/config/config-with-excluded-paths.yaml']);
+        $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/config/config-with-excluded-paths.php']);
 
         $this->filesFinder = self::$container->get(FilesFinder::class);
         $splFileInfos = $this->filesFinder->findInDirectoriesAndFiles([__DIR__ . '/Source'], ['php']);

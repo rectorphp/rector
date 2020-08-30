@@ -93,6 +93,9 @@ parameters:
         # part of composer
         - '*/tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Expected/Just*ExceptionWithoutNamespace.php'
 
+        # tests
+        - tests/DependencyInjection/config
+
     ignoreErrors:
         # @todo remove
         # iterable types
