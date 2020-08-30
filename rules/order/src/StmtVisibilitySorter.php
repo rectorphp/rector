@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\Order;
 
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class StmtVisibilitySorter
@@ -39,6 +41,7 @@ final class StmtVisibilitySorter
     }
 
     /**
+     * @param Class_|Trait_ $classLike
      * @return array<string,array<string, mixed>>
      */
     public function sortProperties(ClassLike $classLike): array

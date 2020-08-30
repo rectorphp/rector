@@ -76,15 +76,15 @@ PHP
         uasort(
             $stmts,
             function (Stmt $firstStmt, Stmt $secondStmt): int {
-                return [$this->getOrder($firstStmt), $firstStmt->getLine()]
-                    <=> [$this->getOrder($secondStmt), $secondStmt->getLine()];
+                return [$this->resolveClassElementRank($firstStmt), $firstStmt->getLine()]
+                    <=> [$this->resolveClassElementRank($secondStmt), $secondStmt->getLine()];
             }
         );
 
         return $stmts;
     }
 
-    private function getOrder(Stmt $stmt): int
+    private function resolveClassElementRank(Stmt $stmt): int
     {
         if ($stmt instanceof ClassMethod) {
             return 3;

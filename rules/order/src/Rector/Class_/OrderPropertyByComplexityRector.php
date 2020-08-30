@@ -95,7 +95,7 @@ PHP
     {
         $propertyByVisibilityByPosition = $this->resolvePropertyByVisibilityByPosition($node);
 
-        foreach ($propertyByVisibilityByPosition as $visibility => $propertyByPosition) {
+        foreach ($propertyByVisibilityByPosition as $propertyByPosition) {
             $propertyPositionByName = [];
 
             $propertyNamesRanksAndPositions = [];
@@ -119,7 +119,7 @@ PHP
 
             // nothing to re-order
             if (! $this->hasOrderChanged($oldToNewKeys)) {
-                return null;
+                continue;
             }
 
             $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
@@ -135,7 +135,7 @@ PHP
     private function resolvePropertyByVisibilityByPosition(ClassLike $classLike): array
     {
         $propertyByVisibilityByPosition = [];
-        foreach ($classLike->stmts as $position => $classStmt) {
+        foreach ((array) $classLike->stmts as $position => $classStmt) {
             if (! $classStmt instanceof Property) {
                 continue;
             }

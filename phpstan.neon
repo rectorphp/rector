@@ -208,7 +208,6 @@ parameters:
         - '#Offset 0 does not exist on array<PhpParser\\Node\\Stmt>\|null#'
         - '#Parameter \#1 \$left of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Parameter \#2 \$right of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
-        - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver::processNodes\(\) expects Closure\(PhpParser\\Node, PHPStan\\Analyser\\Scope\): void, Closure\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\): void given#'
 
         # false positive
         - '#Comparison operation "<" between 0 and 2 is always true#'
@@ -220,9 +219,6 @@ parameters:
 
         # fix Symplify 7.2 later
         - '#Method (.*?) returns bool type, so the name should start with is/has/was#'
-
-        # known value
-        - '#Cannot cast \(array<string\>\)\|string\|true to string#'
 
         - '#In method "Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createPropertyReflectionFromPropertyNode", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
         # doc is not enough
@@ -237,7 +233,6 @@ parameters:
         - '#Property PhpParser\\Node\\Stmt\\Expression\:\:\$expr \(PhpParser\\Node\\Expr\) does not accept PhpParser\\Node\\Expr\|null#'
         - '#Call to an undefined method PHPStan\\Type\\Type\:\:getClassName\(\)#'
         - '#Parameter \#1 \$typeNode of method Rector\\StaticTypeMapper\\StaticTypeMapper\:\:mapPHPStanPhpDocTypeNodeToPHPStanType\(\) expects PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode, PHPStan\\PhpDocParser\\Ast\\Node given#'
-        - '#Parameter \#1 \$str of function preg_quote expects string, int\|string given#'
 
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\Core\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
@@ -274,7 +269,6 @@ parameters:
 
         # mostly strings in tests
         - '#Class (.*?) should be written with \:\:class notation, string found#'
-        - '#Parameter \#2 \$key of method Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode\:\:printArrayItem\(\) expects string\|null, int\|string given#'
         - '#Method Rector\\Naming\\Naming\\PropertyNaming\:\:resolveShortClassName\(\) should return string but returns string\|null#'
 
         -
@@ -347,7 +341,6 @@ parameters:
             message: '#Class "Rector\\RectorGenerator\\Rector\\Closure\\AddNewServiceToSymfonyPhpConfigRector" is missing @see annotation with test case class reference#'
             path: 'packages/rector-generator/src/Rector/Closure/AddNewServiceToSymfonyPhpConfigRector.php'
 
-        - '#Call to an undefined method PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier\:\:toString\(\)#'
         - '#Class Rector\\Renaming\\Tests\\Rector\\MethodCall\\RenameMethodRector\\Fixture\\SkipSelfMethodRename not found#'
 
         # fixed in symplfiy dev
@@ -389,8 +382,6 @@ parameters:
             paths:
                 # working with cvs file
                 # 3rd party package
-                - utils/project-validator/src/Command/ValidateFixtureContentCommand.php
-                - src/Testing/PHPUnit/AbstractRectorTestCase.php
                 - rules/php70/src/EregToPcreTransformer.php
                 # output format
                 - packages/changes-reporting/src/Output/JsonOutputFormatter.php
@@ -412,7 +403,6 @@ parameters:
         - '#Cannot access property \$key on PhpParser\\Node\\Expr\\ArrayItem\|null#'
         - '#Class Nette\\DI\\CompilerExtension not found#'
         - '#Class Latte\\Macros\\MacroSet not found#'
-        - '#Method Rector\\Generic\\Rector\\ClassMethod\\ArgumentDefaultValueReplacerRector\:\:processArrayReplacement\(\) never returns array<PhpParser\\Node\\Arg\> so it can be removed from the return typehint#'
 
         # symfony/console
         -

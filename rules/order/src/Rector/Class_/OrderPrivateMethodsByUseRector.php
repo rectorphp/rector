@@ -24,7 +24,7 @@ final class OrderPrivateMethodsByUseRector extends AbstractConstantPropertyMetho
     /**
      * @var int
      */
-    private const MAX_ATTEMTPS = 5;
+    private const MAX_ATTEMPTS = 5;
 
     public function getDefinition(): RectorDefinition
     {
@@ -99,7 +99,7 @@ PHP
         $attempt = 0;
         while (! $sortedClassMethodsAndOriginalClassMethods->hasOrderSame()) {
             $attempt++;
-            if ($attempt >= self::MAX_ATTEMTPS) {
+            if ($attempt >= self::MAX_ATTEMPTS) {
                 throw new ShouldNotHappenException('Number of attempts to reorder the methods exceeded');
             }
 

@@ -72,6 +72,7 @@ PHP
     }
 
     /**
+     * @param Trait_|Class_ $classLike
      * @return string[]
      */
     private function getPropertiesInDesiredPosition(ClassLike $classLike): array
