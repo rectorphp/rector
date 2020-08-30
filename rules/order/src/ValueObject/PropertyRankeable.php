@@ -20,14 +20,13 @@ final class PropertyRankeable implements RankeableInterface
     private $visibility;
 
     /**
-     * @var Property
-     */
-    private $property;
-
-    /**
      * @var int
      */
     private $position;
+    /**
+     * @var Property
+     */
+    private $property;
 
     public function __construct(string $name, int $visibility, Property $property, int $position)
     {
