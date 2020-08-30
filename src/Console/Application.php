@@ -189,7 +189,6 @@ final class Application extends SymfonyApplication
 
     private function getDefaultConfigPath(): string
     {
-        // @todo update in Rector 0.8 to PHP
-        return getcwd() . '/rector.yaml';
+        return getcwd() . '/rector.php';
     }
 }
