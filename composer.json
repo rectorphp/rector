@@ -86,7 +86,6 @@
             "Rector\\DynamicTypeAnalysis\\": "packages/dynamic-type-analysis/src",
             "Rector\\DoctrineAnnotationGenerated\\": "packages/doctrine-annotation-generated/src",
             "Rector\\FileSystemRector\\": "packages/file-system-rector/src",
-            "Rector\\FrameworkMigration\\": "rules/framework-migration/src",
             "Rector\\FamilyTree\\": "packages/family-tree/src",
             "Rector\\Guzzle\\": "rules/guzzle/src",
             "Rector\\JMS\\": "rules/jms/src",
