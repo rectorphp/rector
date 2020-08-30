@@ -169,6 +169,16 @@ PHP
 
         return $use->getAttribute(AttributeKey::NEXT_NODE);
     }
+    /**
+     * @param string[] $values
+     * @return string[]
+     */
+    private function lowercaseArray(array $values): array
+    {
+        return array_map(function (string $value) {
+            return strtolower($value);
+        }, $values);
+    }
 
     private function shouldSkip(string $lastName, string $aliasName): bool
     {
@@ -336,17 +346,6 @@ PHP
 
             $interface->extends[$key] = new Name($lastName);
         }
-    }
-
-    /**
-     * @param string[] $values
-     * @return string[]
-     */
-    private function lowercaseArray(array $values): array
-    {
-        return array_map(function (string $value) {
-            return strtolower($value);
-        }, $values);
     }
 
     private function renameStaticCall(string $lastName, StaticCall $staticCall): void
