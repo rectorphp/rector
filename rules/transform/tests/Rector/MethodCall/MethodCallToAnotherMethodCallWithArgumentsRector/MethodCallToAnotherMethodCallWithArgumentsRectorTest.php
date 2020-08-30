@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
+namespace Rector\Transform\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
-use Rector\Generic\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition;
-use Rector\Generic\ValueObject\MethodCallRenameWithAddedArguments;
+use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
+use Rector\Transform\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition;
+use Rector\Transform\ValueObject\MethodCallRenameWithAddedArguments;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends AbstractRectorTestCase
