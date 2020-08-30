@@ -159,6 +159,7 @@ final class PropertyNaming
 
         return $shortClassName;
     }
+
     private function prolongIfTooShort(string $shortClassName, string $className): string
     {
         if (in_array($shortClassName, ['Factory', 'Repository'], true)) {

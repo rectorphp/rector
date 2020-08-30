@@ -226,6 +226,7 @@ PHP
             $propertyFetch
         );
     }
+
     private function isFunctionToMethodCallWithArgs(
         FuncCall $funcCall,
         ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall
