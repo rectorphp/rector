@@ -8361,7 +8361,7 @@ Order __constructor dependencies by type A-Z
 
 ### `OrderFirstLevelClassStatementsRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderFirstLevelClassStatementsRector`](/../master/rules/order/src/Rector/ClassLike/OrderFirstLevelClassStatementsRector.php)
+- class: [`Rector\Order\Rector\Class_\OrderFirstLevelClassStatementsRector`](/../master/rules/order/src/Rector/ClassLike/OrderFirstLevelClassStatementsRector.php)
 - [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderFirstLevelClassStatementsRector/Fixture)
 
 Orders first level Class statements
@@ -8383,7 +8383,7 @@ Orders first level Class statements
 
 ### `OrderMethodsByVisibilityRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderMethodsByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderMethodsByVisibilityRector.php)
+- class: [`Rector\Order\Rector\Class_\OrderMethodsByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderMethodsByVisibilityRector.php)
 - [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderMethodsByVisibilityRector/Fixture)
 
 Orders method by visibility
@@ -8402,7 +8402,7 @@ Orders method by visibility
 
 ### `OrderPrivateMethodsByUseRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderPrivateMethodsByUseRector`](/../master/rules/order/src/Rector/ClassLike/OrderPrivateMethodsByUseRector.php)
+- class: [`Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector`](/../master/rules/order/src/Rector/ClassLike/OrderPrivateMethodsByUseRector.php)
 - [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderPrivateMethodsByUseRector/Fixture)
 
 Order private methods in order of their use
@@ -8432,7 +8432,7 @@ Order private methods in order of their use
 
 ### `OrderPropertiesByVisibilityRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderPropertiesByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderPropertiesByVisibilityRector.php)
+- class: [`Rector\Order\Rector\Class_\OrderPropertiesByVisibilityRector`](/../master/rules/order/src/Rector/ClassLike/OrderPropertiesByVisibilityRector.php)
 - [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderPropertiesByVisibilityRector/Fixture)
 
 Orders properties by visibility
@@ -8451,7 +8451,7 @@ Orders properties by visibility
 
 ### `OrderPropertyByComplexityRector`
 
-- class: [`Rector\Order\Rector\ClassLike\OrderPropertyByComplexityRector`](/../master/rules/order/src/Rector/ClassLike/OrderPropertyByComplexityRector.php)
+- class: [`Rector\Order\Rector\Class_\OrderPropertyByComplexityRector`](/../master/rules/order/src/Rector/ClassLike/OrderPropertyByComplexityRector.php)
 - [test fixtures](/../master/rules/order/tests/Rector/ClassLike/OrderPropertyByComplexityRector/Fixture)
 
 Order properties by complexity, from the simplest like scalars to the most complex, like union or collections

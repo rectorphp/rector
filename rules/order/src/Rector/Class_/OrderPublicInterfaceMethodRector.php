@@ -22,7 +22,7 @@ final class OrderPublicInterfaceMethodRector extends AbstractRector implements C
     /**
      * @var string
      */
-    public const METHOD_ORDER_BY_INTERFACES = '$methodOrderByInterfaces';
+    public const METHOD_ORDER_BY_INTERFACES = 'method_order_by_interfaces';
 
     /**
      * @var string[][]

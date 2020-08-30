@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use Rector\Order\Rector\Class_\OrderClassConstantsByIntegerValueRector;
 use Rector\Order\Rector\Class_\OrderConstantsByVisibilityRector;
+use Rector\Order\Rector\Class_\OrderMethodsByVisibilityRector;
+use Rector\Order\Rector\Class_\OrderPrivateMethodsByUseRector;
+use Rector\Order\Rector\Class_\OrderPropertiesByVisibilityRector;
+use Rector\Order\Rector\Class_\OrderPropertyByComplexityRector;
 use Rector\Order\Rector\Class_\OrderPublicInterfaceMethodRector;
-use Rector\Order\Rector\ClassLike\OrderMethodsByVisibilityRector;
-use Rector\Order\Rector\ClassLike\OrderPrivateMethodsByUseRector;
-use Rector\Order\Rector\ClassLike\OrderPropertiesByVisibilityRector;
-use Rector\Order\Rector\ClassLike\OrderPropertyByComplexityRector;
 use Rector\Order\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
