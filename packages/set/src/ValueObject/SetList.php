@@ -174,11 +174,6 @@ final class SetList
     /**
      * @var string
      */
-    public const ELASTICSEARCH_DSL_50 = __DIR__ . '/../../../../config/set/elasticsearch-dsl50.php';
-
-    /**
-     * @var string
-     */
     public const FRAMEWORK_EXTRA_BUNDLE_40 = __DIR__ . '/../../../../config/set/framework-extra-bundle-40.php';
 
     /**
