@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Decomplex\Tests\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
+namespace Rector\CodingStyle\Tests\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
 
 use Iterator;
+use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Decomplex\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class UseMessageVariableForSprintfInSymfonyStyleRectorTest extends AbstractRectorTestCase

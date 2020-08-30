@@ -3340,7 +3340,7 @@ Change ternary of bool : false to && bool
 
 ### `UseMessageVariableForSprintfInSymfonyStyleRector`
 
-- class: [`Rector\Decomplex\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector`](/../master/rules/decomplex/src/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector.php)
+- class: [`Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector`](/../master/rules/decomplex/src/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector.php)
 - [test fixtures](/../master/rules/decomplex/tests/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector/Fixture)
 
 Decouple `$message` property from `sprintf()` calls in `$this->smyfonyStyle->method()`

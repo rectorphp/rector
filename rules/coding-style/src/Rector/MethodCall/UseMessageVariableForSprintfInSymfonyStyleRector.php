@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Decomplex\Rector\MethodCall;
+namespace Rector\CodingStyle\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -13,7 +13,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Decomplex\Tests\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector\UseMessageVariableForSprintfInSymfonyStyleRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector\UseMessageVariableForSprintfInSymfonyStyleRectorTest
  */
 final class UseMessageVariableForSprintfInSymfonyStyleRector extends AbstractRector
 {
