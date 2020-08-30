@@ -169,6 +169,7 @@ PHP
 
         return $use->getAttribute(AttributeKey::NEXT_NODE);
     }
+
     /**
      * @param string[] $values
      * @return string[]
