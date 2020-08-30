@@ -102,10 +102,14 @@ PHP
      */
     private function getMethodsInDesiredOrder(ClassLike $classLike): array
     {
-        $classMethods = $this->stmtVisibilitySorter->sortMethods($classLike);
-        $classMethods = array_keys($classMethods);
+        $classMethodsOrderMetadata = $this->stmtVisibilitySorter->sortMethods($classLike);
 
-        return $this->applyPreferredPosition($classMethods);
+        $classMethodNames = [];
+        foreach ($classMethodsOrderMetadata as $classMethodOrderMetadata) {
+            $classMethodNames[] = $classMethodOrderMetadata->getName();
+        }
+
+        return $this->applyPreferredPosition($classMethodNames);
     }
 
     /**

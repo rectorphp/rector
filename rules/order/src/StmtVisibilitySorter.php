@@ -12,6 +12,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Order\Contract\RankeableInterface;
+use Rector\Order\ValueObject\ClassMethodRankeable;
 
 final class StmtVisibilitySorter
 {
@@ -76,11 +78,11 @@ final class StmtVisibilitySorter
     }
 
     /**
-     * @return array<string,array<string, mixed>>
+     * @return ClassMethodRankeable[]
      */
     public function sortMethods(ClassLike $classLike): array
     {
-        $classMethods = [];
+        $classMethodsOrderMetadata = [];
         foreach ($classLike->stmts as $position => $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
                 continue;
@@ -89,34 +91,22 @@ final class StmtVisibilitySorter
             /** @var string $classMethodName */
             $classMethodName = $this->nodeNameResolver->getName($classStmt);
 
-            $classMethods[$classMethodName][self::NAME] = $classMethodName;
-            $classMethods[$classMethodName][self::VISIBILITY] = $this->getVisibilityLevelOrder($classStmt);
-            $classMethods[$classMethodName]['abstract'] = $classStmt->isAbstract();
-            $classMethods[$classMethodName]['final'] = $classStmt->isFinal();
-            $classMethods[$classMethodName]['static'] = $classStmt->isStatic();
-            $classMethods[$classMethodName][self::POSITION] = $position;
+            $classMethodsOrderMetadata[] = new ClassMethodRankeable(
+                $classMethodName,
+                $this->getVisibilityLevelOrder($classStmt),
+                $position,
+                $classStmt
+            );
         }
 
         uasort(
-            $classMethods,
-            function (array $firstArray, array $secondArray): int {
-                return [
-                    $firstArray[self::VISIBILITY],
-                    $firstArray['static'],
-                    $secondArray['abstract'],
-                    $firstArray['final'],
-                    $firstArray[self::POSITION],
-                ] <=> [
-                    $secondArray[self::VISIBILITY],
-                    $secondArray['static'],
-                    $firstArray['abstract'],
-                    $secondArray['final'],
-                    $secondArray[self::POSITION],
-                ];
+            $classMethodsOrderMetadata,
+            function (RankeableInterface $firstRankeable, RankeableInterface $secondRankeable): int {
+                return $firstRankeable->getRanks() <=> $secondRankeable->getRanks();
             }
         );
 
-        return $classMethods;
+        return $classMethodsOrderMetadata;
     }
 
     /**

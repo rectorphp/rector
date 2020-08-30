@@ -77,8 +77,7 @@ PHP
                self::METHOD_ORDER_BY_INTERFACES => [
                    'FoodRecipeInterface' => ['getDescription', 'process'],
                ],
-           ]
-            ),
+           ]),
         ]);
     }
 
