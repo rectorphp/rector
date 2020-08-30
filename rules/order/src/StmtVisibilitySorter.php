@@ -13,26 +13,12 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Order\Contract\RankeableInterface;
+use Rector\Order\ValueObject\ClassConstRankeable;
 use Rector\Order\ValueObject\ClassMethodRankeable;
 use Rector\Order\ValueObject\PropertyRankeable;
 
 final class StmtVisibilitySorter
 {
-    /**
-     * @var string
-     */
-    private const VISIBILITY = 'visibility';
-
-    /**
-     * @var string
-     */
-    private const POSITION = 'position';
-
-    /**
-     * @var string
-     */
-    private const NAME = 'name';
-
     /**
      * @var NodeNameResolver
      */
@@ -45,11 +31,11 @@ final class StmtVisibilitySorter
 
     /**
      * @param Class_|Trait_ $classLike
-     * @return PropertyRankeable[]
+     * @return RankeableInterface[]
      */
     public function sortProperties(ClassLike $classLike): array
     {
-        $propertyRankeable = [];
+        $propertyRankeables = [];
 
         foreach ($classLike->stmts as $position => $propertyStmt) {
             if (! $propertyStmt instanceof Property) {
@@ -59,7 +45,7 @@ final class StmtVisibilitySorter
             /** @var string $propertyName */
             $propertyName = $this->nodeNameResolver->getName($propertyStmt);
 
-            $propertyRankeable[] = new PropertyRankeable(
+            $propertyRankeables[] = new PropertyRankeable(
                 $propertyName,
                 $this->getVisibilityLevelOrder($propertyStmt),
                 $propertyStmt,
@@ -68,17 +54,17 @@ final class StmtVisibilitySorter
         }
 
         uasort(
-            $propertyRankeable,
+            $propertyRankeables,
             function (RankeableInterface $firstRankeable, RankeableInterface $secondRankeable): int {
                 return $firstRankeable->getRanks() <=> $secondRankeable->getRanks();
             }
         );
 
-        return $propertyRankeable;
+        return $propertyRankeables;
     }
 
     /**
-     * @return ClassMethodRankeable[]
+     * @return RankeableInterface[]
      */
     public function sortMethods(ClassLike $classLike): array
     {
@@ -114,7 +100,7 @@ final class StmtVisibilitySorter
      */
     public function sortConstants(ClassLike $classLike): array
     {
-        $constants = [];
+        $classConstsRankeables = [];
         foreach ($classLike->stmts as $position => $constantStmt) {
             if (! $constantStmt instanceof ClassConst) {
                 continue;
@@ -123,22 +109,21 @@ final class StmtVisibilitySorter
             /** @var string $constantName */
             $constantName = $this->nodeNameResolver->getName($constantStmt);
 
-            $constants[$constantName][self::NAME] = $constantName;
-            $constants[$constantName][self::VISIBILITY] = $this->getVisibilityLevelOrder($constantStmt);
-            $constants[$constantName][self::POSITION] = $position;
+            $classConstsRankeables[] = new ClassConstRankeable(
+                $constantName,
+                $this->getVisibilityLevelOrder($constantStmt),
+                $position
+            );
         }
 
         uasort(
-            $constants,
-            function (array $firstArray, array $secondArray): int {
-                return [
-                    $firstArray[self::VISIBILITY],
-                    $firstArray[self::POSITION],
-                ] <=> [$secondArray[self::VISIBILITY], $secondArray[self::POSITION]];
+            $classConstsRankeables,
+            function (RankeableInterface $firstRankeable, RankeableInterface $secondRankeable): int {
+                return $firstRankeable->getRanks() <=> $secondRankeable->getRanks();
             }
         );
 
-        return $constants;
+        return $classConstsRankeables;
     }
 
     /**

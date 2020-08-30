@@ -6,5 +6,7 @@ namespace Rector\Order\Contract;
 
 interface RankeableInterface
 {
+    public function getName(): string;
+
     public function getRanks(): array;
 }
