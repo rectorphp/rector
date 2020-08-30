@@ -167,23 +167,12 @@ PHP
         return $classMethod->isStatic();
     }
 
-    private function isFunctionToMethodCallWithArgs(
-        FuncCall $funcCall,
-        ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall
-    ): bool {
-        if ($argumentFuncCallToMethodCall->getMethodIfArgs() === null) {
-            return false;
-        }
-
-        return count($funcCall->args) >= 1;
-    }
-
     /**
      * @return PropertyFetch|MethodCall
      */
     private function refactorFuncCallToMethodCall(
         ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall,
-        Class_ $classLike,
+        Class_ $class,
         FuncCall $funcCall
     ): ?Node {
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($argumentFuncCallToMethodCall->getClass());
@@ -193,7 +182,7 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        $this->addConstructorDependencyToClass($classLike, $fullyQualifiedObjectType, $propertyName);
+        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $propertyName);
 
         $propertyFetchNode = $this->createPropertyFetch('this', $propertyName);
 
@@ -220,22 +209,32 @@ PHP
      * @return PropertyFetch|MethodCall|null
      */
     private function refactorArrayFunctionToMethodCall(
-        ArrayFuncCallToMethodCall $arrayFunctionsToMethodCall,
+        ArrayFuncCallToMethodCall $arrayFuncCallToMethodCall,
         FuncCall $funcCall,
         Class_ $class
     ): ?Node {
-        $propertyName = $this->propertyNaming->fqnToVariableName($arrayFunctionsToMethodCall->getClass());
+        $propertyName = $this->propertyNaming->fqnToVariableName($arrayFuncCallToMethodCall->getClass());
         $propertyFetch = $this->createPropertyFetch('this', $propertyName);
 
-        $fullyQualifiedObjectType = new FullyQualifiedObjectType($arrayFunctionsToMethodCall->getClass());
+        $fullyQualifiedObjectType = new FullyQualifiedObjectType($arrayFuncCallToMethodCall->getClass());
 
         $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $propertyName);
 
         return $this->createMethodCallArrayFunctionToMethodCall(
             $funcCall,
-            $arrayFunctionsToMethodCall,
+            $arrayFuncCallToMethodCall,
             $propertyFetch
         );
+    }
+    private function isFunctionToMethodCallWithArgs(
+        FuncCall $funcCall,
+        ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall
+    ): bool {
+        if ($argumentFuncCallToMethodCall->getMethodIfArgs() === null) {
+            return false;
+        }
+
+        return count($funcCall->args) >= 1;
     }
 
     /**
@@ -243,19 +242,19 @@ PHP
      */
     private function createMethodCallArrayFunctionToMethodCall(
         FuncCall $funcCall,
-        ArrayFuncCallToMethodCall $arrayFunctionToMethodCall,
+        ArrayFuncCallToMethodCall $arrayFuncCallToMethodCall,
         PropertyFetch $propertyFetch
     ): ?Node {
         if (count($funcCall->args) === 0) {
             return $propertyFetch;
         }
 
-        if ($arrayFunctionToMethodCall->getArrayMethod() && $this->isArrayType($funcCall->args[0]->value)) {
-            return new MethodCall($propertyFetch, $arrayFunctionToMethodCall->getArrayMethod(), $funcCall->args);
+        if ($arrayFuncCallToMethodCall->getArrayMethod() && $this->isArrayType($funcCall->args[0]->value)) {
+            return new MethodCall($propertyFetch, $arrayFuncCallToMethodCall->getArrayMethod(), $funcCall->args);
         }
 
-        if ($arrayFunctionToMethodCall->getNonArrayMethod() && ! $this->isArrayType($funcCall->args[0]->value)) {
-            return new MethodCall($propertyFetch, $arrayFunctionToMethodCall->getNonArrayMethod(), $funcCall->args);
+        if ($arrayFuncCallToMethodCall->getNonArrayMethod() && ! $this->isArrayType($funcCall->args[0]->value)) {
+            return new MethodCall($propertyFetch, $arrayFuncCallToMethodCall->getNonArrayMethod(), $funcCall->args);
         }
 
         return null;

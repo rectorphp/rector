@@ -159,6 +159,19 @@ final class PropertyNaming
 
         return $shortClassName;
     }
+    private function prolongIfTooShort(string $shortClassName, string $className): string
+    {
+        if (in_array($shortClassName, ['Factory', 'Repository'], true)) {
+            /** @var string $namespaceAbove */
+            $namespaceAbove = Strings::after($className, '\\', -2);
+            /** @var string $namespaceAbove */
+            $namespaceAbove = Strings::before($namespaceAbove, '\\');
+
+            return lcfirst($namespaceAbove) . $shortClassName;
+        }
+
+        return lcfirst($shortClassName);
+    }
 
     /**
      * @param ObjectType|string $objectType
@@ -226,19 +239,5 @@ final class PropertyNaming
         }
 
         return ctype_digit($char);
-    }
-
-    private function prolongIfTooShort(string $shortClassName, string $className): string
-    {
-        if (in_array($shortClassName, ['Factory', 'Repository'], true)) {
-            /** @var string $namespaceAbove */
-            $namespaceAbove = Strings::after($className, '\\', -2);
-            /** @var string $namespaceAbove */
-            $namespaceAbove = Strings::before($namespaceAbove, '\\');
-
-            return lcfirst($namespaceAbove) . $shortClassName;
-        }
-
-        return lcfirst($shortClassName);
     }
 }
