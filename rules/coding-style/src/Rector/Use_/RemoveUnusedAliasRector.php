@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\Use_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
@@ -123,9 +124,7 @@ PHP
         $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($node);
 
         // lowercase
-        $this->resolvedDocPossibleAliases = array_map(function (string $value) {
-            return strtolower($value);
-        }, $this->resolvedDocPossibleAliases);
+        $this->resolvedDocPossibleAliases = $this->lowercaseArray($this->resolvedDocPossibleAliases);
 
         $this->resolvedNodeNames = array_change_key_case($this->resolvedNodeNames, CASE_LOWER);
         $this->useNamesAliasToName = array_change_key_case($this->useNamesAliasToName, CASE_LOWER);
@@ -248,6 +247,10 @@ PHP
             if ($parentNode instanceof Interface_) {
                 $this->renameInterface($lastName, $parentNode, $usedName);
             }
+
+            if ($parentNode instanceof StaticCall) {
+                $this->renameStaticCall($lastName, $parentNode);
+            }
         }
     }
 
@@ -327,11 +330,27 @@ PHP
     private function renameInterface(string $lastName, Interface_ $interface, Node $usedNameNode): void
     {
         foreach ($interface->extends as $key => $extendInterfaceName) {
-            if (!$this->areNamesEqual($extendInterfaceName, $usedNameNode)) {
+            if (! $this->areNamesEqual($extendInterfaceName, $usedNameNode)) {
                 continue;
             }
 
             $interface->extends[$key] = new Name($lastName);
         }
+    }
+
+    /**
+     * @param string[] $values
+     * @return string[]
+     */
+    private function lowercaseArray(array $values): array
+    {
+        return array_map(function (string $value) {
+            return strtolower($value);
+        }, $values);
+    }
+
+    private function renameStaticCall(string $lastName, StaticCall $staticCall): void
+    {
+        $staticCall->class = new Name($lastName);
     }
 }
