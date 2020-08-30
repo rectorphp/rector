@@ -56,10 +56,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $currentPropertiesOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, ClassConst::class);
-        $propertiesInDesiredOrder = $this->stmtVisibilitySorter->sortConstants($node);
+        $currentClassConstsOrder = $this->stmtOrder->getStmtsOfTypeOrder($node, ClassConst::class);
+        $classConstsInDesiredOrder = $this->stmtVisibilitySorter->sortConstants($node);
 
-        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($propertiesInDesiredOrder, $currentPropertiesOrder);
+        $oldToNewKeys = $this->stmtOrder->createOldToNewKeys($classConstsInDesiredOrder, $currentClassConstsOrder);
 
         if (! $this->hasOrderChanged($oldToNewKeys)) {
             return null;
