@@ -19,7 +19,7 @@
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (47)
+- [Generic](#generic) (43)
 - [Guzzle](#guzzle) (1)
 - [Injection](#injection) (1)
 - [JMS](#jms) (2)
@@ -70,6 +70,7 @@
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [SymfonyPhpConfig](#symfonyphpconfig) (2)
+- [Transform](#transform) (4)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -5337,77 +5338,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
-### `MethodCallToAnotherMethodCallWithArgumentsRector`
-
-- class: [`Rector\Generic\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector/Fixture)
-
-Turns old method call with specific types to new one with arguments
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
-        ->call('configure', [[
-            MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey('Nette\DI\ServiceDefinition', 'setInject', 'addTag', 'inject'))]
-        ]]);
-};
-```
-
-↓
-
-```diff
- $serviceDefinition = new Nette\DI\ServiceDefinition;
--$serviceDefinition->setInject();
-+$serviceDefinition->addTag('inject');
-```
-
-<br><br>
-
-### `MethodCallToPropertyFetchRector`
-
-- class: [`Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToPropertyFetchRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/MethodCallToPropertyFetchRector/Fixture)
-
-Turns method call "$this->something()" to property fetch "$this->something"
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(MethodCallToPropertyFetchRector::class)
-        ->call('configure', [[
-            MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
-                'someMethod' => 'someProperty']
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $this->someMethod();
-+        $this->someProperty;
-     }
- }
-```
-
-<br><br>
-
 ### `MethodCallToReturnRector`
 
 - class: [`Rector\Generic\Rector\Expression\MethodCallToReturnRector`](/../master/rules/generic/src/Rector/Expression/MethodCallToReturnRector.php)
@@ -5446,51 +5376,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
      public function deny()
      {
          return 1;
-     }
- }
-```
-
-<br><br>
-
-### `MethodCallToStaticCallRector`
-
-- class: [`Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector`](/../master/rules/generic/src/Rector/MethodCall/MethodCallToStaticCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/MethodCall/MethodCallToStaticCallRector/Fixture)
-
-Change method call to desired static call
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\MethodCall\MethodCallToStaticCallRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(MethodCallToStaticCallRector::class)
-        ->call('configure', [[
-            MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod'))]
-        ]]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     private $anotherDependency;
-
-     public function __construct(AnotherDependency $anotherDependency)
-     {
-         $this->anotherDependency = $anotherDependency;
-     }
-
-     public function loadConfiguration()
-     {
--        return $this->anotherDependency->process('value');
-+        return StaticCaller::anotherMethod('value');
      }
  }
 ```
@@ -5679,63 +5564,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
  $someObject = new SomeClass;
 -$someObject->oldProperty = false;
 +$someObject->newMethodCall(false);
-```
-
-<br><br>
-
-### `PropertyToMethodRector`
-
-- class: [`Rector\Generic\Rector\Assign\PropertyToMethodRector`](/../master/rules/generic/src/Rector/Assign/PropertyToMethodRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/Assign/PropertyToMethodRector/Fixture)
-
-Replaces properties assign calls be defined methods.
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Assign\PropertyToMethodRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(PropertyToMethodRector::class)
-        ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getProperty', [], 'setProperty'))]
-        ]]);
-};
-```
-
-↓
-
-```diff
--$result = $object->property;
--$object->property = $value;
-+$result = $object->getProperty();
-+$object->setProperty($value);
-```
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Assign\PropertyToMethodRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(PropertyToMethodRector::class)
-        ->call('configure', [[
-            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getConfig', ['someArg'], null))]
-        ]]);
-};
-```
-
-↓
-
-```diff
--$result = $object->property;
-+$result = $object->getProperty('someArg');
 ```
 
 <br><br>
@@ -14327,6 +14155,180 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 +            ])
 +        ]]);
  }
+```
+
+<br><br>
+
+## Transform
+
+### `MethodCallToAnotherMethodCallWithArgumentsRector`
+
+- class: [`Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`](/../master/rules/transform/src/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector.php)
+
+Turns old method call with specific types to new one with arguments
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(MethodCallToAnotherMethodCallWithArgumentsRector::class)
+        ->call('configure', [[
+            MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey('Nette\DI\ServiceDefinition', 'setInject', 'addTag', 'inject'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $serviceDefinition = new Nette\DI\ServiceDefinition;
+-$serviceDefinition->setInject();
++$serviceDefinition->addTag('inject');
+```
+
+<br><br>
+
+### `MethodCallToPropertyFetchRector`
+
+- class: [`Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector`](/../master/rules/transform/src/Rector/MethodCall/MethodCallToPropertyFetchRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/MethodCall/MethodCallToPropertyFetchRector/Fixture)
+
+Turns method call "$this->something()" to property fetch "$this->something"
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(MethodCallToPropertyFetchRector::class)
+        ->call('configure', [[
+            MethodCallToPropertyFetchRector::METHOD_CALL_TO_PROPERTY_FETCHES => [
+                'someMethod' => 'someProperty']
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $this->someMethod();
++        $this->someProperty;
+     }
+ }
+```
+
+<br><br>
+
+### `MethodCallToStaticCallRector`
+
+- class: [`Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector`](/../master/rules/transform/src/Rector/MethodCall/MethodCallToStaticCallRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/MethodCall/MethodCallToStaticCallRector/Fixture)
+
+Change method call to desired static call
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(MethodCallToStaticCallRector::class)
+        ->call('configure', [[
+            MethodCallToStaticCallRector::METHOD_CALLS_TO_STATIC_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     private $anotherDependency;
+
+     public function __construct(AnotherDependency $anotherDependency)
+     {
+         $this->anotherDependency = $anotherDependency;
+     }
+
+     public function loadConfiguration()
+     {
+-        return $this->anotherDependency->process('value');
++        return StaticCaller::anotherMethod('value');
+     }
+ }
+```
+
+<br><br>
+
+### `PropertyToMethodRector`
+
+- class: [`Rector\Transform\Rector\Assign\PropertyToMethodRector`](/../master/rules/transform/src/Rector/Assign/PropertyToMethodRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/Assign/PropertyToMethodRector/Fixture)
+
+Replaces properties assign calls be defined methods.
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\Assign\PropertyToMethodRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(PropertyToMethodRector::class)
+        ->call('configure', [[
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getProperty', [], 'setProperty'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+-$result = $object->property;
+-$object->property = $value;
++$result = $object->getProperty();
++$object->setProperty($value);
+```
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\Assign\PropertyToMethodRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(PropertyToMethodRector::class)
+        ->call('configure', [[
+            PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getConfig', ['someArg'], null))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+-$result = $object->property;
++$result = $object->getProperty('someArg');
 ```
 
 <br><br>

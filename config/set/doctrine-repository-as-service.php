@@ -10,11 +10,11 @@ use Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryConstructorToDepen
 use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\Rector\Class_\RemoveParentRector;
 use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
-use Rector\Generic\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
 use Rector\Generic\ValueObject\ParentCallToProperty;
 use Rector\Generic\ValueObject\ParentDependency;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 /**

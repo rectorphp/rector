@@ -7,7 +7,7 @@ namespace Rector\Php71\Rector\BinaryOp;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Php\Rector\AbstractIsAbleRector;
+use Rector\Generic\Rector\AbstractIsAbleRector;
 
 /**
  * @see \Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector\IsIterableRectorTest
