@@ -25,63 +25,36 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FuncCallToMethodCallRector::class)
         ->call('configure', [[
             FuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => inline_value_objects([
-                new FuncCallToMethodCall('auth', 'Illuminate\Contracts\Auth\Guard', 'guard'),
-                new FuncCallToMethodCall('policy', 'Illuminate\Contracts\Auth\Access\Gate', 'policy', 'getPolicyFor'),
-                new FuncCallToMethodCall('cookie', 'Illuminate\Contracts\Cookie\Factory', 'cookieFactory', 'make'),
+                new FuncCallToMethodCall('auth', 'Illuminate\Contracts\Auth\Guard'),
+                new FuncCallToMethodCall('policy', 'Illuminate\Contracts\Auth\Access\Gate', 'getPolicyFor'),
+                new FuncCallToMethodCall('cookie', 'Illuminate\Contracts\Cookie\Factory', 'make'),
                 // router
-                new FuncCallToMethodCall('put', 'Illuminate\Routing\Router', 'router', 'put'),
-                new FuncCallToMethodCall('get', 'Illuminate\Routing\Router', 'router', 'get'),
-                new FuncCallToMethodCall('post', 'Illuminate\Routing\Router', 'router', 'post'),
-                new FuncCallToMethodCall('patch', 'Illuminate\Routing\Router', 'router', 'patch'),
-                new FuncCallToMethodCall('delete', 'Illuminate\Routing\Router', 'router', 'delete'),
-                new FuncCallToMethodCall('resource', 'Illuminate\Routing\Router', 'router', 'resource'),
-                new FuncCallToMethodCall(
-                    'response',
-                    'Illuminate\Contracts\Routing\ResponseFactory',
-                    'responseFactory',
-                    'make'
-                ),
-                new FuncCallToMethodCall('info', 'Illuminate\Log\Writer', 'logWriter', 'info'),
-                new FuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'),
-                new FuncCallToMethodCall('bcrypt', 'Illuminate\Hashing\BcryptHasher', 'bcryptHasher', 'make'),
-                new FuncCallToMethodCall('redirect', 'Illuminate\Routing\Redirector', 'redirector', 'back'),
-                new FuncCallToMethodCall(
-                    'broadcast',
-                    'Illuminate\Contracts\Broadcasting\Factory',
-                    'broadcastFactory',
-                    'event'
-                ),
-                new FuncCallToMethodCall('event', 'Illuminate\Events\Dispatcher', 'eventDispatcher', 'fire'),
-                new FuncCallToMethodCall('dispatch', 'Illuminate\Events\Dispatcher', 'eventDispatcher', 'dispatch'),
-                new FuncCallToMethodCall('route', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'route'),
-                new FuncCallToMethodCall('asset', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'asset'),
-                new FuncCallToMethodCall('url', 'Illuminate\Contracts\Routing\UrlGenerator', 'urlGenerator', 'to'),
-                new FuncCallToMethodCall('action', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'action'),
-                new FuncCallToMethodCall('trans', 'Illuminate\Translation\Translator', 'translator', 'trans'),
-                new FuncCallToMethodCall(
-                    'trans_choice',
-                    'Illuminate\Translation\Translator',
-                    'translator',
-                    'transChoice'
-                ),
-                new FuncCallToMethodCall('logger', 'Illuminate\Log\Writer', 'logWriter', 'debug'),
-                new FuncCallToMethodCall('back', 'Illuminate\Routing\Redirector', 'redirector', 'back', 'back'),
+                new FuncCallToMethodCall('put', 'Illuminate\Routing\Router', 'put'),
+                new FuncCallToMethodCall('get', 'Illuminate\Routing\Router', 'get'),
+                new FuncCallToMethodCall('post', 'Illuminate\Routing\Router', 'post'),
+                new FuncCallToMethodCall('patch', 'Illuminate\Routing\Router', 'patch'),
+                new FuncCallToMethodCall('delete', 'Illuminate\Routing\Router', 'delete'),
+                new FuncCallToMethodCall('resource', 'Illuminate\Routing\Router', 'resource'),
+                new FuncCallToMethodCall('response', 'Illuminate\Contracts\Routing\ResponseFactory', 'make'),
+                new FuncCallToMethodCall('info', 'Illuminate\Log\Writer', 'info'),
+                new FuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'make'),
+                new FuncCallToMethodCall('bcrypt', 'Illuminate\Hashing\BcryptHasher', 'make'),
+                new FuncCallToMethodCall('redirect', 'Illuminate\Routing\Redirector', 'back'),
+                new FuncCallToMethodCall('broadcast', 'Illuminate\Contracts\Broadcasting\Factory', 'event'),
+                new FuncCallToMethodCall('event', 'Illuminate\Events\Dispatcher', 'fire'),
+                new FuncCallToMethodCall('dispatch', 'Illuminate\Events\Dispatcher', 'dispatch'),
+                new FuncCallToMethodCall('route', 'Illuminate\Routing\UrlGenerator', 'route'),
+                new FuncCallToMethodCall('asset', 'Illuminate\Routing\UrlGenerator', 'asset'),
+                new FuncCallToMethodCall('url', 'Illuminate\Contracts\Routing\UrlGenerator', 'to'),
+                new FuncCallToMethodCall('action', 'Illuminate\Routing\UrlGenerator', 'action'),
+                new FuncCallToMethodCall('trans', 'Illuminate\Translation\Translator', 'trans'),
+                new FuncCallToMethodCall('trans_choice', 'Illuminate\Translation\Translator', 'transChoice'),
+                new FuncCallToMethodCall('logger', 'Illuminate\Log\Writer', 'debug'),
+                new FuncCallToMethodCall('back', 'Illuminate\Routing\Redirector', 'back', 'back'),
             ]),
             FuncCallToMethodCallRector::ARRAY_FUNCTIONS_TO_METHOD_CALLS => inline_value_objects([
-                new ArrayFuncCallToMethodCall(
-                    'config',
-                    'Illuminate\Contracts\Config\Repository',
-                    'configRepository',
-                    'set',
-                    'get'
-                ),
-                new ArrayFuncCallToMethodCall(
-                    'session',
-                    'Illuminate\Session\SessionManager',
-                    'sessionManager',
-                    'put',
-                    'get'
-              ),
+                new ArrayFuncCallToMethodCall('config', 'Illuminate\Contracts\Config\Repository', 'set', 'get'),
+                new ArrayFuncCallToMethodCall('session', 'Illuminate\Session\SessionManager', 'put', 'get'),
             ]),
         ]]);
 

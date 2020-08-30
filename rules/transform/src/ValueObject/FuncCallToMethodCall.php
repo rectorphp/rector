@@ -17,11 +17,6 @@ final class FuncCallToMethodCall
     private $class;
 
     /**
-     * @var string
-     */
-    private $property;
-
-    /**
      * @var string|null
      */
     private $methodIfNoArgs;
@@ -32,11 +27,10 @@ final class FuncCallToMethodCall
     private $methodIfArgs;
 
     public function __construct(
-        string $function, string $class, string $property, ?string $methodIfArgs = null, ?string $methodIfNoArgs = null
+        string $function, string $class, ?string $methodIfArgs = null, ?string $methodIfNoArgs = null
     ) {
         $this->function = $function;
         $this->class = $class;
-        $this->property = $property;
         $this->methodIfArgs = $methodIfArgs;
         $this->methodIfNoArgs = $methodIfNoArgs;
     }
@@ -49,11 +43,6 @@ final class FuncCallToMethodCall
     public function getClass(): string
     {
         return $this->class;
-    }
-
-    public function getProperty(): string
-    {
-        return $this->property;
     }
 
     public function getMethodIfNoArgs(): ?string

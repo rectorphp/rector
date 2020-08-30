@@ -14,6 +14,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
@@ -44,6 +45,16 @@ final class FuncCallToMethodCallRector extends AbstractRector implements Configu
      * @var ArrayFuncCallToMethodCall[]
      */
     private $arrayFunctionsToMethodCalls = [];
+
+    /**
+     * @var PropertyNaming
+     */
+    private $propertyNaming;
+
+    public function __construct(PropertyNaming $propertyNaming)
+    {
+        $this->propertyNaming = $propertyNaming;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -175,13 +186,12 @@ PHP
         FuncCall $funcCall
     ): ?Node {
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($functionToMethodCall->getClass());
-        $this->addConstructorDependencyToClass(
-            $classLike,
-            $fullyQualifiedObjectType,
-            $functionToMethodCall->getProperty()
-        );
 
-        $propertyFetchNode = $this->createPropertyFetch('this', $functionToMethodCall->getProperty());
+        $propertyName = $this->propertyNaming->fqnToVariableName($functionToMethodCall->getClass());
+
+        $this->addConstructorDependencyToClass($classLike, $fullyQualifiedObjectType, $propertyName);
+
+        $propertyFetchNode = $this->createPropertyFetch('this', $propertyName);
 
         if (count($funcCall->args) === 0) {
             if ($functionToMethodCall->getMethodIfNoArgs()) {
@@ -206,15 +216,12 @@ PHP
         FuncCall $funcCall,
         Class_ $class
     ): ?Node {
-        $propertyFetch = $this->createPropertyFetch('this', $arrayFunctionsToMethodCall->getProperty());
+        $propertyName = $this->propertyNaming->fqnToVariableName($arrayFunctionsToMethodCall->getClass());
+        $propertyFetch = $this->createPropertyFetch('this', $propertyName);
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($arrayFunctionsToMethodCall->getClass());
 
-        $this->addConstructorDependencyToClass(
-            $class,
-            $fullyQualifiedObjectType,
-            $arrayFunctionsToMethodCall->getProperty()
-        );
+        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $propertyName);
 
         return $this->createMethodCallArrayFunctionToMethodCall(
             $funcCall,

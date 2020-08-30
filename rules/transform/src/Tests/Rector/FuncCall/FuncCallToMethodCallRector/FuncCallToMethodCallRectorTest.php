@@ -33,27 +33,13 @@ final class FuncCallToMethodCallRectorTest extends AbstractRectorTestCase
                 FuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => [
                     new FuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'viewFactory', 'make'),
                     new FuncCallToMethodCall('route', 'Illuminate\Routing\UrlGenerator', 'urlGenerator', 'route'),
-                    new FuncCallToMethodCall('back', 'Illuminate\Routing\Redirector', 'redirector', 'back', 'back'),
-                    new FuncCallToMethodCall(
-                        'broadcast', 'Illuminate\Contracts\Broadcasting\Factory', 'broadcastFactory', 'event'
-                    ),
+                    new FuncCallToMethodCall('back', 'Illuminate\Routing\Redirector', 'back', 'back'),
+                    new FuncCallToMethodCall('broadcast', 'Illuminate\Contracts\Broadcasting\Factory', 'event'),
                 ],
 
                 FuncCallToMethodCallRector::ARRAY_FUNCTIONS_TO_METHOD_CALLS => [
-                    new ArrayFuncCallToMethodCall(
-                        'config',
-                        'Illuminate\Contracts\Config\Repository',
-                        'configRepository',
-                        'set',
-                        'get'
-                    ),
-                    new ArrayFuncCallToMethodCall(
-                        'session',
-                        'Illuminate\Session\SessionManager',
-                        'sessionManager',
-                        'put',
-                        'get'
-                    ),
+                    new ArrayFuncCallToMethodCall('config', 'Illuminate\Contracts\Config\Repository', 'set', 'get'),
+                    new ArrayFuncCallToMethodCall('session', 'Illuminate\Session\SessionManager', 'put', 'get'),
                 ],
             ],
         ];
