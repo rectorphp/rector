@@ -77,7 +77,13 @@ PHP
      */
     private function getPropertiesInDesiredPosition(ClassLike $classLike): array
     {
-        $properties = $this->stmtVisibilitySorter->sortProperties($classLike);
-        return array_keys($properties);
+        $propertyRankeables = $this->stmtVisibilitySorter->sortProperties($classLike);
+
+        $propertyNames = [];
+        foreach ($propertyRankeables as $propertyRankeable) {
+            $propertyNames[] = $propertyRankeable->getName();
+        }
+
+        return $propertyNames;
     }
 }

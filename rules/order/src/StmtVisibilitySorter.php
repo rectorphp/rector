@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Order\Contract\RankeableInterface;
 use Rector\Order\ValueObject\ClassMethodRankeable;
+use Rector\Order\ValueObject\PropertyRankeable;
 
 final class StmtVisibilitySorter
 {
@@ -44,11 +45,12 @@ final class StmtVisibilitySorter
 
     /**
      * @param Class_|Trait_ $classLike
-     * @return array<string,array<string, mixed>>
+     * @return PropertyRankeable[]
      */
     public function sortProperties(ClassLike $classLike): array
     {
-        $properties = [];
+        $propertyRankeable = [];
+
         foreach ($classLike->stmts as $position => $propertyStmt) {
             if (! $propertyStmt instanceof Property) {
                 continue;
@@ -57,24 +59,22 @@ final class StmtVisibilitySorter
             /** @var string $propertyName */
             $propertyName = $this->nodeNameResolver->getName($propertyStmt);
 
-            $properties[$propertyName][self::NAME] = $propertyName;
-            $properties[$propertyName][self::VISIBILITY] = $this->getVisibilityLevelOrder($propertyStmt);
-            $properties[$propertyName]['static'] = $propertyStmt->isStatic();
-            $properties[$propertyName][self::POSITION] = $position;
+            $propertyRankeable[] = new PropertyRankeable(
+                $propertyName,
+                $this->getVisibilityLevelOrder($propertyStmt),
+                $propertyStmt,
+                $position
+            );
         }
 
         uasort(
-            $properties,
-            function (array $firstArray, array $secondArray): int {
-                return [
-                    $firstArray[self::VISIBILITY],
-                    $firstArray['static'],
-                    $firstArray[self::POSITION],
-                ] <=> [$secondArray[self::VISIBILITY], $secondArray['static'], $secondArray[self::POSITION]];
+            $propertyRankeable,
+            function (RankeableInterface $firstRankeable, RankeableInterface $secondRankeable): int {
+                return $firstRankeable->getRanks() <=> $secondRankeable->getRanks();
             }
         );
 
-        return $properties;
+        return $propertyRankeable;
     }
 
     /**
