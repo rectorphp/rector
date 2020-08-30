@@ -80,7 +80,7 @@ CODE_SAMPLE
         }
 
         throw new ShouldNotHappenException(sprintf(
-            'Complete "parameters > %s" in rector.yaml, so Rector can found your directory',
+            'Complete "parameters > %s" in rector.php, so Rector can found your directory',
             Option::PROJECT_DIRECTORY_PARAMETER
         ));
     }

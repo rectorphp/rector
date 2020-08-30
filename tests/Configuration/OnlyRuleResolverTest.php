@@ -20,7 +20,7 @@ final class OnlyRuleResolverTest extends AbstractKernelTestCase
 
     protected function setUp(): void
     {
-        $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/Source/config/some_config.yaml']);
+        $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/Source/config/some_config.php']);
         $this->onlyRuleResolver = self::$container->get(OnlyRuleResolver::class);
     }
 

@@ -5,18 +5,17 @@ declare(strict_types=1);
 namespace Rector\Core\HttpKernel;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\DependencyInjection\Collector\RectorServiceArgumentCollector;
+use Rector\Core\DependencyInjection\Collector\ConfigurableRectorConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
-use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorServiceArgumentsCompilerPass;
+use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
-use Rector\Core\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
+use Rector\Core\DependencyInjection\Loader\ConfigurableCallValuesCollectingPhpFileLoader;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
@@ -34,13 +33,13 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
     private $configs = [];
 
     /**
-     * @var RectorServiceArgumentCollector
+     * @var ConfigurableRectorConfigureCallValuesCollector
      */
-    private $rectorServiceArgumentCollector;
+    private $configurableRectorConfigureCallValuesCollector;
 
     public function __construct(string $environment, bool $debug)
     {
-        $this->rectorServiceArgumentCollector = new RectorServiceArgumentCollector();
+        $this->configurableRectorConfigureCallValuesCollector = new ConfigurableRectorConfigureCallValuesCollector();
 
         parent::__construct($environment, $debug);
     }
@@ -96,7 +95,9 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
 
         // add all merged arguments of Rector services
         $containerBuilder->addCompilerPass(
-            new MergeImportedRectorServiceArgumentsCompilerPass($this->rectorServiceArgumentCollector)
+            new MergeImportedRectorConfigureCallValuesCompilerPass(
+                $this->configurableRectorConfigureCallValuesCollector
+            )
         );
     }
 
@@ -110,8 +111,11 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
 
         $loaderResolver = new LoaderResolver([
             new GlobFileLoader($fileLocator),
-            new PhpFileLoader($container, $fileLocator),
-            new TolerantRectorYamlFileLoader($container, $fileLocator, $this->rectorServiceArgumentCollector),
+            new ConfigurableCallValuesCollectingPhpFileLoader(
+                $container,
+                $fileLocator,
+                $this->configurableRectorConfigureCallValuesCollector
+            ),
         ]);
 
         return new DelegatingLoader($loaderResolver);

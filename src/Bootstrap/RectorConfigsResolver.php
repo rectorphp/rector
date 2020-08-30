@@ -72,7 +72,7 @@ final class RectorConfigsResolver
         // And from --config or default one
         $inputOrFallbackConfigFileInfo = $this->configResolver->resolveFromInputWithFallback(
             $argvInput,
-            ['rector.php', 'rector.yml', 'rector.yaml']
+            ['rector.php']
         );
 
         if ($inputOrFallbackConfigFileInfo !== null) {

@@ -1,3 +1,0 @@
-services:
-    Rector\Php72\Rector\Assign\ListEachRector: null
-    Rector\Core\Tests\Configuration\Source\CustomLocalRector: null
