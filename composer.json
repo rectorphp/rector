@@ -149,8 +149,7 @@
             "Rector\\NetteUtilsCodeQuality\\": "rules/nette-utils-code-quality/src",
             "Rector\\NetteCodeQuality\\": "rules/nette-code-quality/src",
             "Rector\\Downgrade\\": "rules/downgrade/src",
-            "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src",
-            "Rector\\Injection\\": "rules/injection/src"
+            "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src"
         },
         "files": [
             "rules/symfony-php-config/functions/functions.php"
@@ -234,7 +233,6 @@
             "Rector\\NetteCodeQuality\\Tests\\": "rules/nette-code-quality/tests",
             "Rector\\Downgrade\\Tests\\": "rules/downgrade/tests",
             "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests",
-            "Rector\\Injection\\Tests\\": "rules/injection/tests",
             "Rector\\PHPStanStaticTypeMapper\\Tests\\": "packages/phpstan-static-type-mapper/tests"
         },
         "classmap": [

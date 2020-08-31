@@ -7,8 +7,6 @@ use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
 use Rector\Generic\ValueObject\ReplacedArgument;
-use Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector;
-use Rector\Injection\ValueObject\StaticCallToMethodCall;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
@@ -21,6 +19,8 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\ClassConstantRename;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
+use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
+use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

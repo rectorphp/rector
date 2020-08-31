@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Injection\Rector\StaticCall;
+namespace Rector\Transform\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -14,12 +14,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\Rector\AbstractToMethodCallRector;
-use Rector\Injection\ValueObject\StaticCallToMethodCall;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\StaticCallToMethodCallRectorTest
+ * @see \Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\StaticCallToMethodCallRectorTest
  */
 final class StaticCallToMethodCallRector extends AbstractToMethodCallRector
 {
@@ -27,7 +27,7 @@ final class StaticCallToMethodCallRector extends AbstractToMethodCallRector
      * @api
      * @var string
      */
-    public const STATIC_CALLS_TO_METHOD_CALLS = '$staticCallsToMethodCalls';
+    public const STATIC_CALLS_TO_METHOD_CALLS = 'static_calls_to_method_calls';
 
     /**
      * @var StaticCallToMethodCall[]
@@ -126,15 +126,7 @@ PHP
     public function configure(array $configuration): void
     {
         $staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? [];
-
-        $message = sprintf(
-            'Configuration for "%s" must be in object of "%s". "%s" given',
-            self::class,
-            StaticCallToMethodCall::class,
-            gettype($staticCallsToMethodCalls)
-        );
-        Assert::allIsInstanceOf($staticCallsToMethodCalls, StaticCallToMethodCall::class, $message);
-
+        Assert::allIsInstanceOf($staticCallsToMethodCalls, StaticCallToMethodCall::class);
         $this->staticCallsToMethodCalls = $staticCallsToMethodCalls;
     }
 

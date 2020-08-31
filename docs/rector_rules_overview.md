@@ -1,4 +1,4 @@
-# All 567 Rectors Overview
+# All 566 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -19,8 +19,6 @@
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (39)
-- [Guzzle](#guzzle) (1)
-- [Injection](#injection) (1)
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (5)
 - [Legacy](#legacy) (4)
@@ -69,7 +67,7 @@
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [SymfonyPhpConfig](#symfonyphpconfig) (2)
-- [Transform](#transform) (9)
+- [Transform](#transform) (10)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -5977,76 +5975,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
      {
 -        return 1;
 +        return [1];
-     }
- }
-```
-
-<br><br>
-
-## Guzzle
-
-### `MessageAsArrayRector`
-
-- class: [`Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector`](/../master/rules/guzzle/src/Rector/MethodCall/MessageAsArrayRector.php)
-- [test fixtures](/../master/rules/guzzle/tests/Rector/MethodCall/MessageAsArrayRector/Fixture)
-
-Changes getMessage(..., true) to `getMessageAsArray()`
-
-```diff
- /** @var GuzzleHttp\Message\MessageInterface */
--$value = $message->getMessage('key', true);
-+$value = $message->getMessageAsArray('key');
-```
-
-<br><br>
-
-## Injection
-
-### `StaticCallToMethodCallRector`
-
-- class: [`Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector`](/../master/rules/injection/src/Rector/StaticCall/StaticCallToMethodCallRector.php)
-- [test fixtures](/../master/rules/injection/tests/Rector/StaticCall/StaticCallToMethodCallRector/Fixture)
-
-Change static call to service method via constructor injection
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(StaticCallToMethodCallRector::class)
-        ->call('configure', [[
-            StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Injection\ValueObject\StaticCallToMethodCall('Nette\Utils\FileSystem', 'write', 'Symplify\SmartFileSystem\SmartFileSystem', 'dumpFile'))]
-        ]]);
-};
-```
-
-↓
-
-```diff
--use Nette\Utils\FileSystem;
-+use Symplify\SmartFileSystem\SmartFileSystem;
-
- class SomeClass
- {
-+    /**
-+     * @var SmartFileSystem
-+     */
-+    private $smartFileSystem;
-+
-+    public function __construct(SmartFileSystem $smartFileSystem)
-+    {
-+        $this->smartFileSystem = $smartFileSystem;
-+    }
-+
-     public function run()
-     {
--        return FileSystem::write('file', 'content');
-+        return $this->smartFileSystem->dumpFile('file', 'content');
      }
  }
 ```
@@ -14350,6 +14278,57 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 ```diff
 -OldClass::oldMethod("args");
 +new_function("args");
+```
+
+<br><br>
+
+### `StaticCallToMethodCallRector`
+
+- class: [`Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector`](/../master/rules/transform/src/Rector/StaticCall/StaticCallToMethodCallRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/StaticCall/StaticCallToMethodCallRector/Fixture)
+
+Change static call to service method via constructor injection
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(StaticCallToMethodCallRector::class)
+        ->call('configure', [[
+            StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\StaticCallToMethodCall('Nette\Utils\FileSystem', 'write', 'Symplify\SmartFileSystem\SmartFileSystem', 'dumpFile'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+-use Nette\Utils\FileSystem;
++use Symplify\SmartFileSystem\SmartFileSystem;
+
+ class SomeClass
+ {
++    /**
++     * @var SmartFileSystem
++     */
++    private $smartFileSystem;
++
++    public function __construct(SmartFileSystem $smartFileSystem)
++    {
++        $this->smartFileSystem = $smartFileSystem;
++    }
++
+     public function run()
+     {
+-        return FileSystem::write('file', 'content');
++        return $this->smartFileSystem->dumpFile('file', 'content');
+     }
+ }
 ```
 
 <br><br>

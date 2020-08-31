@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
+namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Nette\Utils\FileSystem;
-use Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Source\ClassWithFileSystem;
+use Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Source\ClassWithFileSystem;
 
 class ReUseParentMethod extends ClassWithFileSystem
 {
@@ -17,10 +17,10 @@ class ReUseParentMethod extends ClassWithFileSystem
 -----
 <?php
 
-namespace Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
+namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Nette\Utils\FileSystem;
-use Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Source\ClassWithFileSystem;
+use Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Source\ClassWithFileSystem;
 
 class ReUseParentMethod extends ClassWithFileSystem
 {
