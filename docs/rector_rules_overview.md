@@ -18,7 +18,7 @@
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (39)
+- [Generic](#generic) (38)
 - [JMS](#jms) (2)
 - [Laravel](#laravel) (4)
 - [Legacy](#legacy) (4)
@@ -67,7 +67,7 @@
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [SymfonyPhpConfig](#symfonyphpconfig) (2)
-- [Transform](#transform) (10)
+- [Transform](#transform) (11)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -5439,40 +5439,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
  {
 +    use Nette\SmartObject;
  }
-```
-
-<br><br>
-
-### `PropertyAssignToMethodCallRector`
-
-- class: [`Rector\Generic\Rector\Assign\PropertyAssignToMethodCallRector`](/../master/rules/generic/src/Rector/Assign/PropertyAssignToMethodCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/Assign/PropertyAssignToMethodCallRector/Fixture)
-
-Turns property assign of specific type and property name to method call
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Assign\PropertyAssignToMethodCallRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(PropertyAssignToMethodCallRector::class)
-        ->call('configure', [[
-            PropertyAssignToMethodCallRector::OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE => [
-                'SomeClass' => [
-                'oldPropertyName' => 'oldProperty', 'newMethodName' => 'newMethodCall']]
-        ]]);
-};
-```
-
-↓
-
-```diff
- $someObject = new SomeClass;
--$someObject->oldProperty = false;
-+$someObject->newMethodCall(false);
 ```
 
 <br><br>
@@ -14085,6 +14051,39 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 +        Cookie::create($name);
      }
  }
+```
+
+<br><br>
+
+### `PropertyAssignToMethodCallRector`
+
+- class: [`Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector`](/../master/rules/transform/src/Rector/Assign/PropertyAssignToMethodCallRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/Assign/PropertyAssignToMethodCallRector/Fixture)
+
+Turns property assign of specific type and property name to method call
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(PropertyAssignToMethodCallRector::class)
+        ->call('configure', [[
+            PropertyAssignToMethodCallRector::PROPERTY_ASSIGNS_TO_METHODS_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyAssignToMethodCall('SomeClass', 'oldPropertyName', 'oldProperty')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyAssignToMethodCall('SomeClass', 'newMethodName', 'newMethodCall'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->oldProperty = false;
++$someObject->newMethodCall(false);
 ```
 
 <br><br>

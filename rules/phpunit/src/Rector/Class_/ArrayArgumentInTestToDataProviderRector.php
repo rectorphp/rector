@@ -45,7 +45,7 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
      * @api
      * @var string
      */
-    public const ARRAY_ARGUMENTS_TO_DATA_PROVIDERS = '$configuration';
+    public const ARRAY_ARGUMENTS_TO_DATA_PROVIDERS = 'array_arguments_to_data_providers';
 
     /**
      * @var ArrayArgumentToDataProvider[]
@@ -246,9 +246,6 @@ PHP
         return $dataProviderClassMethods;
     }
 
-    /**
-     * @param string[] $arrayArgumentToDataProvider
-     */
     private function isMethodCallMatch(
         MethodCall $methodCall,
         ArrayArgumentToDataProvider $arrayArgumentToDataProvider

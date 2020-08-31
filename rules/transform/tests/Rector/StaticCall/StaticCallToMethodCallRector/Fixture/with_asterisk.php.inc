@@ -13,13 +13,12 @@ class ExampleController
 }
 
 ?>
-    -----
+-----
 <?php
 
 namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Illuminate\Support\Facades\Response;
-use Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector\Source\LaravelController;
 
 class ExampleController
 {

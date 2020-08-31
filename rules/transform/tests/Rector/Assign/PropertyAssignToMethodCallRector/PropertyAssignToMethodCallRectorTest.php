@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Tests\Rector\Assign\PropertyAssignToMethodCallRector;
+namespace Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Generic\Rector\Assign\PropertyAssignToMethodCallRector;
-use Rector\Generic\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
+use Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector;
+use Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
+use Rector\Transform\ValueObject\PropertyAssignToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
@@ -32,10 +33,8 @@ final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
     {
         return [
             PropertyAssignToMethodCallRector::class => [
-                PropertyAssignToMethodCallRector::OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE => [
-                    ChoiceControl::class => [
-                        'checkAllowedValues' => 'checkDefaultValue',
-                    ],
+                PropertyAssignToMethodCallRector::PROPERTY_ASSIGNS_TO_METHODS_CALLS => [
+                    new PropertyAssignToMethodCall(ChoiceControl::class, 'checkAllowedValues', 'checkDefaultValue'),
                 ],
             ],
         ];

@@ -20,118 +20,170 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // https://laravel.com/docs/5.7/facades#facades-vs-dependency-injection
     $services->set(StaticCallToMethodCallRector::class)
         ->call('configure', [[
-            new StaticCallToMethodCall('Illuminate\Support\Facades\App', '*', 'Illuminate\Foundation\Application', '*'),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Artisan',
-                '*',
-                'Illuminate\Contracts\Console\Kernel',
-                '*'
-            ),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Auth', '*', 'Illuminate\Auth\AuthManager', '*'),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Blade',
-                '*',
-                'Illuminate\View\Compilers\BladeCompiler',
-                '*'
-            ),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Broadcast',
-                '*',
-                'Illuminate\Contracts\Broadcasting\Factory',
-                '*'
-            ),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Bus',
-                '*',
-                'Illuminate\Contracts\Bus\Dispatcher',
-                '*'
-            ),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Cache', '*', 'Illuminate\Cache\CacheManager', '*'),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Config', '*', 'Illuminate\Config\Repository', '*'),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Cookie', '*', 'Illuminate\Cookie\CookieJar', '*'),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Crypt', '*', 'Illuminate\Encryption\Encrypter', '*'),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\DB',
-                '*',
-                'Illuminate\Database\DatabaseManager',
-                '*'
-            ),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Event', '*', 'Illuminate\Events\Dispatcher', '*'),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\File', '*', 'Illuminate\Filesystem\Filesystem', '*'),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Gate',
-                '*',
-                'Illuminate\Contracts\Auth\Access\Gate',
-                '*'
-            ),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Hash',
-                '*',
-                'Illuminate\Contracts\Hashing\Hasher',
-                '*'
-            ),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Lang',
-                '*',
-                'Illuminate\Translation\Translator',
-                '*'
-            ),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Log', '*', 'Illuminate\Log\LogManager', '*'),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Mail', '*', 'Illuminate\Mail\Mailer', '*'),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Notification',
-                '*',
-                'Illuminate\Notifications\ChannelManager',
-                '*'
-            ),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Password',
-                '*',
-                'Illuminate\Auth\Passwords\PasswordBrokerManager',
-                '*'
-            ),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Queue', '*', 'Illuminate\Queue\QueueManager', '*'),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Redirect',
-                '*',
-                'Illuminate\Routing\Redirector',
-                '*'
-            ),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Redis', '*', 'Illuminate\Redis\RedisManager', '*'),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Request', '*', 'Illuminate\Http\Request', '*'),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Response',
-                '*',
-                'Illuminate\Contracts\Routing\ResponseFactory',
-                '*'
-            ),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\Route', '*', 'Illuminate\Routing\Router', '*'),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Schema',
-                '*',
-                'Illuminate\Database\Schema\Builder',
-                '*'
-            ),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Session',
-                '*',
-                'Illuminate\Session\SessionManager',
-                '*'
-            ),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Storage',
-                '*',
-                'Illuminate\Filesystem\FilesystemManager',
-                '*'
-            ),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\URL', '*', 'Illuminate\Routing\UrlGenerator', '*'),
-            new StaticCallToMethodCall(
-                'Illuminate\Support\Facades\Validator',
-                '*',
-                'Illuminate\Validation\Factory',
-                '*'
-            ),
-            new StaticCallToMethodCall('Illuminate\Support\Facades\View', '*', 'Illuminate\View\Factory', '*'),
+            StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => inline_value_objects([
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\App',
+                    '*',
+                    'Illuminate\Foundation\Application',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Artisan',
+                    '*',
+                    'Illuminate\Contracts\Console\Kernel',
+                    '*'
+                ),
+                new StaticCallToMethodCall('Illuminate\Support\Facades\Auth', '*', 'Illuminate\Auth\AuthManager', '*'),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Blade',
+                    '*',
+                    'Illuminate\View\Compilers\BladeCompiler',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Broadcast',
+                    '*',
+                    'Illuminate\Contracts\Broadcasting\Factory',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Bus',
+                    '*',
+                    'Illuminate\Contracts\Bus\Dispatcher',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Cache',
+                    '*',
+                    'Illuminate\Cache\CacheManager',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Config',
+                    '*',
+                    'Illuminate\Config\Repository',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Cookie',
+                    '*',
+                    'Illuminate\Cookie\CookieJar',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Crypt',
+                    '*',
+                    'Illuminate\Encryption\Encrypter',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\DB',
+                    '*',
+                    'Illuminate\Database\DatabaseManager',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Event',
+                    '*',
+                    'Illuminate\Events\Dispatcher',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\File',
+                    '*',
+                    'Illuminate\Filesystem\Filesystem',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Gate',
+                    '*',
+                    'Illuminate\Contracts\Auth\Access\Gate',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Hash',
+                    '*',
+                    'Illuminate\Contracts\Hashing\Hasher',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Lang',
+                    '*',
+                    'Illuminate\Translation\Translator',
+                    '*'
+                ),
+                new StaticCallToMethodCall('Illuminate\Support\Facades\Log', '*', 'Illuminate\Log\LogManager', '*'),
+                new StaticCallToMethodCall('Illuminate\Support\Facades\Mail', '*', 'Illuminate\Mail\Mailer', '*'),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Notification',
+                    '*',
+                    'Illuminate\Notifications\ChannelManager',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Password',
+                    '*',
+                    'Illuminate\Auth\Passwords\PasswordBrokerManager',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Queue',
+                    '*',
+                    'Illuminate\Queue\QueueManager',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Redirect',
+                    '*',
+                    'Illuminate\Routing\Redirector',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Redis',
+                    '*',
+                    'Illuminate\Redis\RedisManager',
+                    '*'
+                ),
+                new StaticCallToMethodCall('Illuminate\Support\Facades\Request', '*', 'Illuminate\Http\Request', '*'),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Response',
+                    '*',
+                    'Illuminate\Contracts\Routing\ResponseFactory',
+                    '*'
+                ),
+                new StaticCallToMethodCall('Illuminate\Support\Facades\Route', '*', 'Illuminate\Routing\Router', '*'),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Schema',
+                    '*',
+                    'Illuminate\Database\Schema\Builder',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Session',
+                    '*',
+                    'Illuminate\Session\SessionManager',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Storage',
+                    '*',
+                    'Illuminate\Filesystem\FilesystemManager',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\URL',
+                    '*',
+                    'Illuminate\Routing\UrlGenerator',
+                    '*'
+                ),
+                new StaticCallToMethodCall(
+                    'Illuminate\Support\Facades\Validator',
+                    '*',
+                    'Illuminate\Validation\Factory',
+                    '*'
+                ),
+                new StaticCallToMethodCall('Illuminate\Support\Facades\View', '*', 'Illuminate\View\Factory', '*'),
+            ]),
         ]]);
 
     $services->set(RequestStaticValidateToInjectRector::class);

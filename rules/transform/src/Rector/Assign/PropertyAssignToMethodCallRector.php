@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Generic\Rector\Assign;
+namespace Rector\Transform\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -12,21 +12,23 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Transform\ValueObject\PropertyAssignToMethodCall;
+use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Generic\Tests\Rector\Assign\PropertyAssignToMethodCallRector\PropertyAssignToMethodCallRectorTest
+ * @see \Rector\Transform\Tests\Rector\Assign\PropertyAssignToMethodCallRector\PropertyAssignToMethodCallRectorTest
  */
 final class PropertyAssignToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
      */
-    public const OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE = '$oldPropertiesToNewMethodCallsByType';
+    public const PROPERTY_ASSIGNS_TO_METHODS_CALLS = 'property_assigns_to_methods_calls';
 
     /**
-     * @var string[][]
+     * @var PropertyAssignToMethodCall[]
      */
-    private $oldPropertiesToNewMethodCallsByType = [];
+    private $propertyAssignsToMethodCalls = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -43,11 +45,8 @@ $someObject->newMethodCall(false);
 PHP
                 ,
                 [
-                    self::OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE => [
-                        'SomeClass' => [
-                            'oldPropertyName' => 'oldProperty',
-                            'newMethodName' => 'newMethodCall',
-                        ],
+                    self::PROPERTY_ASSIGNS_TO_METHODS_CALLS => [
+                        new PropertyAssignToMethodCall('SomeClass', 'oldProperty', 'newMethodCall'),
                     ],
                 ]
             ),
@@ -76,18 +75,20 @@ PHP
         /** @var Variable $propertyNode */
         $propertyNode = $propertyFetchNode->var;
 
-        foreach ($this->oldPropertiesToNewMethodCallsByType as $type => $oldPropertiesToNewMethodCalls) {
-            if (! $this->isObjectType($propertyFetchNode->var, $type)) {
+        foreach ($this->propertyAssignsToMethodCalls as $propertyAssignToMethodCall) {
+            if (! $this->isObjectType($propertyFetchNode->var, $propertyAssignToMethodCall->getClass())) {
                 continue;
             }
 
-            foreach ($oldPropertiesToNewMethodCalls as $oldProperty => $newMethodCall) {
-                if (! $this->isName($propertyFetchNode, $oldProperty)) {
-                    continue;
-                }
-
-                return $this->createMethodCall($propertyNode, $newMethodCall, [$node->expr]);
+            if (! $this->isName($propertyFetchNode, $propertyAssignToMethodCall->getOldPropertyName())) {
+                continue;
             }
+
+            return $this->createMethodCall(
+                $propertyNode,
+                $propertyAssignToMethodCall->getNewMethodName(),
+                [$node->expr]
+            );
         }
 
         return $node;
@@ -95,6 +96,8 @@ PHP
 
     public function configure(array $configuration): void
     {
-        $this->oldPropertiesToNewMethodCallsByType = $configuration[self::OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE] ?? [];
+        $propertyAssignsToMethodCalls = $configuration[self::PROPERTY_ASSIGNS_TO_METHODS_CALLS] ?? [];
+        Assert::allIsInstanceOf($propertyAssignsToMethodCalls, PropertyAssignToMethodCall::class);
+        $this->propertyAssignsToMethodCalls = $propertyAssignsToMethodCalls;
     }
 }
