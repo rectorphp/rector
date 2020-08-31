@@ -95,7 +95,7 @@ PHP
 
     /**
      * @param string[] $parts
-     * @return ClassConstFetch[]|\PhpParser\Node\Scalar\String_[]
+     * @return ClassConstFetch[]|String_[]
      */
     private function createExpressionsToConcat(array $parts): array
     {

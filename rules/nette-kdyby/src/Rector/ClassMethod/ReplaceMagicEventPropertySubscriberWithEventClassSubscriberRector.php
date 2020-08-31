@@ -144,7 +144,7 @@ PHP
 
     private function replaceEventPropertyReferenceWithEventClassReference(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?void {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
             if (! $node instanceof ArrayItem) {
                 return null;
             }

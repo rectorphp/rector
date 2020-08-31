@@ -248,7 +248,6 @@ PHP
         return false;
     }
 
-
     private function refactorIf(If_ $if, string $privatePropertyName): ?bool
     {
         $this->traverseNodesWithCallable($if->cond, function (Node $node) use (

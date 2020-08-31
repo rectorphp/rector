@@ -137,7 +137,7 @@ PHP
 
     /**
      * @param StaticCall|FuncCall|MethodCall $node
-     * @return \PhpParser\Node[]
+     * @return Node[]
      */
     private function resolveDefaultValuesFromCall(Node $node): array
     {

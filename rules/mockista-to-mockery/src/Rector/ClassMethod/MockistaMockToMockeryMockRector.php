@@ -114,7 +114,7 @@ PHP
     {
         $this->traverseNodesWithCallable(
             (array) $classMethod->stmts,
-            function (Node $node): ?\PhpParser\Node\Expr\MethodCall {
+            function (Node $node): ?MethodCall {
                 if (! $node instanceof PropertyFetch) {
                     return null;
                 }
@@ -130,7 +130,7 @@ PHP
 
     private function removeUnusedMethodCalls(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?void {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
             if (! $this->isMethodCallOrPropertyFetchOnMockVariable($node)) {
                 return null;
             }
@@ -150,9 +150,7 @@ PHP
      */
     private function replaceMethodCallWithExpects(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (
-            Node $node
-        ): ?\PhpParser\Node\Expr\MethodCall {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?MethodCall {
             if (! $this->isMethodCallOrPropertyFetchOnMockVariable($node)) {
                 return null;
             }
@@ -191,7 +189,7 @@ PHP
      */
     private function switchWithAnyArgsAndOnceTwice(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?void {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
             if (! $node instanceof MethodCall) {
                 return null;
             }

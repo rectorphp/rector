@@ -50,7 +50,7 @@ final class StrposMatchAndRefactor extends AbstractMatchAndRefactor implements S
         return null;
     }
 
-    public function refactor(StrStartsWithValueObject $strStartsWithValueObject): \PhpParser\Node\Expr\FuncCall
+    public function refactor(StrStartsWithValueObject $strStartsWithValueObject): FuncCall
     {
         $strposFuncCall = $strStartsWithValueObject->getFuncCall();
         $strposFuncCall->name = new Name('str_starts_with');

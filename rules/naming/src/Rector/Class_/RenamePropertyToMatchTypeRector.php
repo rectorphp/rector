@@ -162,7 +162,7 @@ PHP
         $this->traverseNodesWithCallable([$classLike], function (Node $node) use (
             $oldName,
             $expectedName
-        ): ?\PhpParser\Node\Expr\PropertyFetch {
+        ): ?PropertyFetch {
             if (! $this->isLocalPropertyFetchNamed($node, $oldName)) {
                 return null;
             }

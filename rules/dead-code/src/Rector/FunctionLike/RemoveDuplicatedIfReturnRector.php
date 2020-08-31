@@ -171,7 +171,7 @@ PHP
 
     /**
      * @param If_[][] $ifWithOnlyReturnsByHash
-     * @return \PhpParser\Node\Stmt\If_[]&mixed[][]
+     * @return If_[]&mixed[][]
      */
     private function filterOutSingleItemStmts(array $ifWithOnlyReturnsByHash): array
     {

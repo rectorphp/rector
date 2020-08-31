@@ -150,7 +150,7 @@ PHP
 
     private function refactorEventNames(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?void {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
             if (! $node instanceof Return_) {
                 return null;
             }

@@ -59,7 +59,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
     /**
      * @return Nop|Node
      */
-    public function leaveNode(Node $node): Nop
+    public function leaveNode(Node $node)
     {
         if ($node === $this->removingExpression) {
             // keep any node, so we don't remove it permanently

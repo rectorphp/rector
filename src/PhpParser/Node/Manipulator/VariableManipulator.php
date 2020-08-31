@@ -84,7 +84,7 @@ final class VariableManipulator
 
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
             &$assignsOfArrayToVariable
-        ): ?void {
+        ) {
             if (! $node instanceof Assign) {
                 return null;
             }

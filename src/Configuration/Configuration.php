@@ -37,7 +37,7 @@ final class Configuration
     private $mustMatchGitDiff = false;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $outputFile;
 
@@ -224,7 +224,7 @@ final class Configuration
         return $this->onlyRector;
     }
 
-    public function getOutputFile(): string
+    public function getOutputFile(): ?string
     {
         return $this->outputFile;
     }

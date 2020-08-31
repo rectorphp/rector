@@ -103,7 +103,7 @@ PHP
     {
         $commandName = null;
 
-        $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (&$commandName): ?void {
+        $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (&$commandName) {
             if (! $node instanceof StaticCall) {
                 return null;
             }

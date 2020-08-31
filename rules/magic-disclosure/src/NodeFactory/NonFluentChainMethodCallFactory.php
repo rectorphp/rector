@@ -68,7 +68,7 @@ final class NonFluentChainMethodCallFactory
 
     /**
      * @param MethodCall[] $chainMethodCalls
-     * @return Assign[]|\PhpParser\Node\Expr\MethodCall[]|Return_[]
+     * @return Assign[]|MethodCall[]|Return_[]
      */
     public function createFromAssignObjectAndMethodCalls(
         AssignAndRootExpr $assignAndRootExpr,
@@ -118,7 +118,7 @@ final class NonFluentChainMethodCallFactory
 
     /**
      * @param MethodCall[] $chainMethodCalls
-     * @return Assign[]|\PhpParser\Node\Expr\MethodCall[]
+     * @return Assign[]|MethodCall[]
      */
     private function createNonFluentMethodCalls(
         array $chainMethodCalls,

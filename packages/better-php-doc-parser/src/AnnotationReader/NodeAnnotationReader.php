@@ -51,7 +51,6 @@ final class NodeAnnotationReader
         $this->constantReferenceIdentifierRestorer = $constantReferenceIdentifierRestorer;
     }
 
-
     public function readAnnotation(Node $node, string $annotationClass): ?object
     {
         if ($node instanceof Property) {
@@ -109,7 +108,6 @@ final class NodeAnnotationReader
             return null;
         }
     }
-
 
     private function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName): ?object
     {

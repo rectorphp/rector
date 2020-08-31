@@ -89,7 +89,7 @@ PHP
 
     /**
      * @param ArrayItem[][] $arrayItemsByKeys
-     * @return \PhpParser\Node\Expr\ArrayItem[]&mixed[][]
+     * @return ArrayItem[]&mixed[][]
      */
     private function filterItemsWithSameKey(array $arrayItemsByKeys): array
     {

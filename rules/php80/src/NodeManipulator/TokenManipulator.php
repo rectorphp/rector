@@ -112,7 +112,7 @@ final class TokenManipulator
         // replace "$content = $token;" → "$content = $token->text;"
         $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use (
             $singleTokenExpr
-        ): ?void {
+        ) {
             if (! $node instanceof Assign) {
                 return null;
             }
@@ -208,7 +208,7 @@ final class TokenManipulator
     {
         $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use (
             $singleTokenVariable
-        ): ?void {
+        ) {
             if (! $node instanceof FuncCall) {
                 return null;
             }

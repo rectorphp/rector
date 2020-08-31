@@ -119,7 +119,7 @@ final class ClassMethodAssignManipulator
 
         $this->callableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
             &$arrayDestructionCreatedVariables
-        ): ?void {
+        ) {
             if (! $node instanceof Assign) {
                 return null;
             }
@@ -159,7 +159,7 @@ final class ClassMethodAssignManipulator
 
         $this->callableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
             &$referencedVariables
-        ): ?void {
+        ) {
             if (! $node instanceof Variable) {
                 return null;
             }

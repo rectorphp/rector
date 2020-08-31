@@ -79,7 +79,6 @@ final class SetterClassMethodAnalyzer
         return $propertyFetch;
     }
 
-
     private function getPropertyByPropertyFetch(ClassMethod $classMethod, PropertyFetch $propertyFetch): ?Property
     {
         $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
