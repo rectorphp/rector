@@ -136,6 +136,7 @@ PHP
             return true;
         }
 
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return false;
@@ -143,7 +144,7 @@ PHP
 
         $returnType = $phpDocInfo->getReturnType();
         if ($returnType instanceof ArrayType && $returnType->getItemType() instanceof MixedType) {
-            return false;
+            return true;
         }
 
         return $returnType instanceof IterableType;

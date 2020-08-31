@@ -38,6 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::NAMING,
         SetList::ORDER,
         SetList::DEFLUENT,
+        SetList::TYPE_DECLARATION,
     ]);
 
     $parameters->set(Option::PATHS, [

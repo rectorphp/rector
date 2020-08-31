@@ -10,7 +10,7 @@ class WithComment
     private $values;
 
     /**
-     * @return mixed[] some integer values
+     * @return somethign some integer values
      */
     public function getValues()
     {
