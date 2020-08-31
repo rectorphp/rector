@@ -29,7 +29,7 @@ final class AssignAndRootExprAndNodesToAdd
     }
 
     /**
-     * @return array<Expr|Return_>
+     * @return Expr[]|Return_[]
      */
     public function getNodesToAdd(): array
     {

@@ -84,7 +84,7 @@ PHP
             &$countInCond,
             &$variableName,
             $forScope
-        ) {
+        ): ?Variable {
             if (! $node instanceof FuncCall) {
                 return null;
             }

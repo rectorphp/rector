@@ -27,7 +27,7 @@ final class NodeInfoResult
     }
 
     /**
-     * @return array<string, NodeInfo[]>
+     * @return \Rector\Utils\DocumentationGenerator\ValueObject\NodeInfo[][]
      */
     public function getNodeInfos(): array
     {

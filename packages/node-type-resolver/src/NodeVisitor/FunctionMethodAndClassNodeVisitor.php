@@ -98,6 +98,9 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         return $node;
     }
 
+    /**
+     * @return null
+     */
     public function leaveNode(Node $node)
     {
         if ($node instanceof ClassLike) {

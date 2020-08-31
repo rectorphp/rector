@@ -146,7 +146,7 @@ PHP
     private function resolveManagerRegistryCalledMethodNames(Class_ $class): array
     {
         $registryCalledMethods = [];
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$registryCalledMethods) {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$registryCalledMethods): ?void {
             if (! $node instanceof MethodCall) {
                 return null;
             }
@@ -230,7 +230,7 @@ PHP
 
     private function removeAssignGetRepositoryCalls(Class_ $class): void
     {
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node): ?void {
             if (! $node instanceof Assign) {
                 return null;
             }

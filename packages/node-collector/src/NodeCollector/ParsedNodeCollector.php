@@ -85,7 +85,7 @@ final class ParsedNodeCollector
 
     /**
      * @param class-string<TNodeType> $type
-     * @return array<TNodeType>
+     * @return Node[]
      */
     public function getNodesByType(string $type): array
     {

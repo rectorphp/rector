@@ -27,7 +27,7 @@ final class PreviousVariableAssignNodeFinder
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function find(Assign $assign): ?Assign
+    public function find(Assign $assign): ?Node
     {
         $currentAssign = $assign;
         $variableName = $this->nodeNameResolver->getName($assign->var);

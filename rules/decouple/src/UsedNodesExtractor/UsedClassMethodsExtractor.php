@@ -49,7 +49,7 @@ final class UsedClassMethodsExtractor
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
             &$classMethods,
             $classLike
-        ) {
+        ): ?void {
             if (! $node instanceof MethodCall) {
                 return null;
             }

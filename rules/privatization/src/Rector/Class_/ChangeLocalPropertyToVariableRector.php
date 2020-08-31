@@ -133,7 +133,7 @@ PHP
             foreach ($class->getMethods() as $method) {
                 $hasProperty = (bool) $this->betterNodeFinder->findFirst($method, function (Node $node) use (
                     $privatePropertyName
-                ) {
+                ): bool {
                     if (! $node instanceof PropertyFetch) {
                         return false;
                     }
@@ -174,7 +174,7 @@ PHP
 
             $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
                 $propertyName
-            ) {
+            ): ?Variable {
                 if (! $node instanceof PropertyFetch) {
                     return null;
                 }
@@ -204,7 +204,7 @@ PHP
             $privatePropertyName,
             &$isPropertyReadInIf,
             &$isIfFollowedByAssign
-        ) {
+        ): ?int {
             if ($isPropertyReadInIf) {
                 if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($node, [$privatePropertyName])) {
                     return null;
@@ -251,12 +251,12 @@ PHP
     /**
      * @return bool|null
      */
-    private function refactorIf(If_ $if, string $privatePropertyName)
+    private function refactorIf(If_ $if, string $privatePropertyName): ?bool
     {
         $this->traverseNodesWithCallable($if->cond, function (Node $node) use (
             $privatePropertyName,
             &$isPropertyReadInIf
-        ) {
+        ): ?int {
             if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($node, [$privatePropertyName])) {
                 return null;
             }
@@ -276,7 +276,7 @@ PHP
         $this__->traverseNodesWithCallable($node, function (Node $node) use (
             &$isPropertyChanging,
             $privatePropertyName
-        ) {
+        ): ?int {
             if (! $node instanceof Assign) {
                 return null;
             }

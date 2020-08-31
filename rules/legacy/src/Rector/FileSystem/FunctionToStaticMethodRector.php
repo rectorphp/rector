@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Legacy\Rector\FileSystem;
 
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt;
@@ -103,7 +104,7 @@ PHP
 
         // replace function calls with class static call
 
-        $this->traverseNodesWithCallable($nodes, function (Node $node) {
+        $this->traverseNodesWithCallable($nodes, function (Node $node): ?StaticCall {
             if (! $node instanceof FuncCall) {
                 return null;
             }

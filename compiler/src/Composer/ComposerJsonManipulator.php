@@ -84,6 +84,9 @@ final class ComposerJsonManipulator
         $this->smartFileSystem->dumpFile($composerJsonFile, $this->originalComposerJsonFileContent);
     }
 
+    /**
+     * @return mixed[]
+     */
     private function removeDevKeys(array $json): array
     {
         foreach (self::KEYS_TO_REMOVE as $keyToRemove) {
@@ -94,6 +97,7 @@ final class ComposerJsonManipulator
 
     /**
      * Use phpstan/phpstan-src, because the phpstan.phar cannot be packed into rector.phar
+     * @return mixed[]
      */
     private function replacePHPStanWithPHPStanSrc(array $json): array
     {
@@ -124,6 +128,9 @@ final class ComposerJsonManipulator
         return $this->allowDevDependencies($json);
     }
 
+    /**
+     * @return mixed[]
+     */
     private function addDevDependenciesFromPHPStan(array $json, string $phpstanVersion): array
     {
         // add dev dependencies from PHPStan composer.json
@@ -143,6 +150,10 @@ final class ComposerJsonManipulator
         return $json;
     }
 
+    /**
+     * @param mixed[] $json
+     * @return mixed[]
+     */
     private function allowDevDependencies(array $json): array
     {
         $json['minimum-stability'] = 'dev';
@@ -151,6 +162,9 @@ final class ComposerJsonManipulator
         return $json;
     }
 
+    /**
+     * @return mixed[]
+     */
     private function readRemoteFileToJson(string $jsonFilePath): array
     {
         $jsonFileContent = $this->smartFileSystem->readFile($jsonFilePath);

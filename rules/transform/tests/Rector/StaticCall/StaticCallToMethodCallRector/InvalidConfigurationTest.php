@@ -33,6 +33,9 @@ final class InvalidConfigurationTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return array<string, array<string[][]>>
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

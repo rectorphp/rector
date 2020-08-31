@@ -49,7 +49,7 @@ final class SelfContainerMethodCallCollector
         $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             &$serviceTypes,
             $skipSetUpMethod
-        ) {
+        ): ?void {
             if (! $this->kernelTestCaseNodeAnalyzer->isOnContainerGetMethodCall($node)) {
                 return null;
             }

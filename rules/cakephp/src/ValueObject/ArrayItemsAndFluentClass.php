@@ -38,7 +38,7 @@ final class ArrayItemsAndFluentClass
     }
 
     /**
-     * @return array<string, Expr>
+     * @return array<string, \PhpParser\Node\Expr>
      */
     public function getFluentCalls(): array
     {

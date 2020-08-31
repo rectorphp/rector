@@ -87,7 +87,7 @@ abstract class AbstractNodeVendorLockResolver
     }
 
     /**
-     * @return string[]
+     * @return class-string[]
      */
     protected function getChildrenClassesByClass(Class_ $class): array
     {

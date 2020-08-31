@@ -108,7 +108,7 @@ CODE_SAMPLE
         $node->name = new Name($expectedNamespace);
 
         // add use import for classes from the same namespace
-        $this->traverseNodesWithCallable($node, function (Node $node) use ($currentNamespace) {
+        $this->traverseNodesWithCallable($node, function (Node $node) use ($currentNamespace): ?void {
             if (! $node instanceof Name) {
                 return null;
             }

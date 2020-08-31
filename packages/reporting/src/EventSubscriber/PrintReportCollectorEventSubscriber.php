@@ -56,7 +56,7 @@ final class PrintReportCollectorEventSubscriber implements EventSubscriberInterf
     }
 
     /**
-     * @return string[]
+     * @return array<string, string>
      */
     public static function getSubscribedEvents(): array
     {

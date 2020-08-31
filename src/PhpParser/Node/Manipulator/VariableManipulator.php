@@ -84,7 +84,7 @@ final class VariableManipulator
 
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
             &$assignsOfArrayToVariable
-        ) {
+        ): ?void {
             if (! $node instanceof Assign) {
                 return null;
             }
@@ -121,7 +121,7 @@ final class VariableManipulator
      */
     public function filterOutChangedVariables(array $assignsOfArrayToVariable, ClassMethod $classMethod): array
     {
-        return array_filter($assignsOfArrayToVariable, function (Assign $assign) use ($classMethod) {
+        return array_filter($assignsOfArrayToVariable, function (Assign $assign) use ($classMethod): bool {
             /** @var Variable $variable */
             $variable = $assign->var;
 
@@ -172,7 +172,7 @@ final class VariableManipulator
         return $this->betterNodeFinder->find((array) $classMethod->getStmts(), function (Node $node) use (
             $variable,
             $assign
-        ) {
+        ): bool {
             if (! $node instanceof Variable) {
                 return false;
             }

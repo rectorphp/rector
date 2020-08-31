@@ -78,7 +78,7 @@ final class OverridenExistingNamesResolver
 
     /**
      * @param ClassMethod|Function_|Closure $functionLike
-     * @return string[]|mixed[]
+     * @return string[]
      */
     private function resolveOveriddenNamesForNew(FunctionLike $functionLike): array
     {

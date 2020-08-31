@@ -68,7 +68,7 @@ PHP
         /** @var Assign|Node|null $previousAssignArraysKeysFuncCall */
         $previousAssignArraysKeysFuncCall = $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use (
             $arrayVariable
-        ) {
+        ): bool {
             // breaking out of scope
             if ($node instanceof FunctionLike) {
                 return true;

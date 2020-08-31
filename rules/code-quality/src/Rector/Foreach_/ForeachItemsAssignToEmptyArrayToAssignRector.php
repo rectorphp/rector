@@ -136,7 +136,7 @@ PHP
 
     private function findPreviousNodeUsage(Node $node, Expr $expr): ?Node
     {
-        return $this->scopeAwareNodeFinder->findParent($node, function (Node $node) use ($expr) {
+        return $this->scopeAwareNodeFinder->findParent($node, function (Node $node) use ($expr): bool {
             if ($node === $expr) {
                 return false;
             }
@@ -162,7 +162,7 @@ PHP
 
     private function findPreviousNodeUsageInForeach(Node $node, Expr $expr): ?Node
     {
-        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use ($expr) {
+        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use ($expr): bool {
             if ($node === $expr) {
                 return false;
             }

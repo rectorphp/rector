@@ -74,7 +74,7 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
     }
 
     /**
-     * @return string[][][]
+     * @return array<string, array<int, string[]>>
      */
     protected function getRectorsWithConfiguration(): array
     {

@@ -88,7 +88,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     }
 
     /**
-     * @return FullyQualifiedObjectType[]|AliasedObjectType[]
+     * @return AliasedObjectType[]|\Rector\PHPStan\Type\FullyQualifiedObjectType[]
      */
     public function getUseImportTypesByNode(Node $node): array
     {
@@ -156,7 +156,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     }
 
     /**
-     * @return FullyQualifiedObjectType[]|AliasedObjectType[]
+     * @return AliasedObjectType[]|\Rector\PHPStan\Type\FullyQualifiedObjectType[]
      */
     public function getObjectImportsByFileInfo(SmartFileInfo $smartFileInfo): array
     {

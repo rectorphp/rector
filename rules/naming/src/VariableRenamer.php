@@ -61,7 +61,7 @@ final class VariableRenamer
 
         $this->callableNodeTraverser->traverseNodesWithCallable(
             (array) $functionLike->stmts,
-            function (Node $node) use ($oldName, $expectedName, $assign, &$isRenamingActive) {
+            function (Node $node) use ($oldName, $expectedName, $assign, &$isRenamingActive): ?Variable {
                 if ($assign !== null && $node === $assign) {
                     $isRenamingActive = true;
                     return null;

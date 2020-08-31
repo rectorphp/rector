@@ -25,7 +25,7 @@ final class RemoveAnnotationRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return array<string, array<string, string[]>>
+     * @return array<string, array<int, string[]>>
      */
     protected function getRectorsWithConfiguration(): array
     {

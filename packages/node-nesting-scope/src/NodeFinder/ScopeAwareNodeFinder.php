@@ -31,7 +31,7 @@ final class ScopeAwareNodeFinder
      */
     public function findParentType(Node $node, array $allowedTypes): ?Node
     {
-        $callable = function (Node $node) use ($allowedTypes) {
+        $callable = function (Node $node) use ($allowedTypes): bool {
             foreach ($allowedTypes as $allowedType) {
                 if (! is_a($node, $allowedType)) {
                     continue;
@@ -58,7 +58,7 @@ final class ScopeAwareNodeFinder
         $foundNode = $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use (
             $callable,
             $parentNestingBreakTypes
-        ) {
+        ): bool {
             if ($callable($node)) {
                 return true;
             }

@@ -26,7 +26,7 @@ final class ChangeContractMethodSingleToManyRectorTest extends AbstractRectorTes
     }
 
     /**
-     * @return string[][][][]
+     * @return array<string, array<string, array<string, array<string, string>>>>
      */
     protected function getRectorsWithConfiguration(): array
     {

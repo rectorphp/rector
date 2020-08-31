@@ -25,7 +25,7 @@ final class ReservedFnFunctionRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return string[][][]
+     * @return array<string, array<string, array<string, string>>>
      */
     protected function getRectorsWithConfiguration(): array
     {

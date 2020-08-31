@@ -120,7 +120,7 @@ PHP
      */
     private function getInjectProperties(Class_ $class): array
     {
-        return array_filter($class->getProperties(), function (Property $property) {
+        return array_filter($class->getProperties(), function (Property $property): bool {
             return $this->isInjectProperty($property);
         });
     }

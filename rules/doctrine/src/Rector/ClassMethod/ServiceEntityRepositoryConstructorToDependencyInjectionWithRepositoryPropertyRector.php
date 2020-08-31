@@ -159,7 +159,7 @@ PHP
 
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
             &$entityReferenceExpr
-        ) {
+        ): ?void {
             if (! $node instanceof StaticCall) {
                 return null;
             }

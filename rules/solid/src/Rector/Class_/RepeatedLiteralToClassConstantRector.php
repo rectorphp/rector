@@ -166,7 +166,7 @@ PHP
 
     private function replaceStringsWithClassConstReferences(Class_ $class, array $stringsToReplace): void
     {
-        $this->traverseNodesWithCallable($class, function (Node $node) use ($stringsToReplace) {
+        $this->traverseNodesWithCallable($class, function (Node $node) use ($stringsToReplace): ?ClassConstFetch {
             if (! $node instanceof String_) {
                 return null;
             }
@@ -246,7 +246,7 @@ PHP
 
         // convert camelcase parts to underscore
         $parts = array_map(
-            function (string $v) {
+            function (string $v): string {
                 return StaticRectorStrings::camelCaseToUnderscore($v);
             },
             explode(self::UNDERSCORE, $value)

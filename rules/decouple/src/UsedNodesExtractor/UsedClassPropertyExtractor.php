@@ -40,7 +40,7 @@ final class UsedClassPropertyExtractor
 
     /**
      * @param ClassMethod[] $classMethods
-     * @return Property[]
+     * @return \PhpParser\Node\Stmt\Property[]|array<int|string, \PhpParser\Node\Stmt\Property>
      */
     public function extractFromClassMethods(array $classMethods, ?string $parentClassName = null): array
     {
@@ -70,7 +70,7 @@ final class UsedClassPropertyExtractor
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
             &$properties,
             $classLike
-        ) {
+        ): ?void {
             if (! $node instanceof PropertyFetch) {
                 return null;
             }

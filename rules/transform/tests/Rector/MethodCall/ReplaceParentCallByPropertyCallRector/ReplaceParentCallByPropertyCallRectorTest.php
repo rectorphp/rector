@@ -26,6 +26,9 @@ final class ReplaceParentCallByPropertyCallRectorTest extends AbstractRectorTest
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return array<string, array<int, ParentCallToProperty[]>>
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

@@ -83,7 +83,7 @@ final class ShortNameResolver
         $shortClassLikeNames = [];
         $this->callableNodeTraverser->traverseNodesWithCallable($namespace, function (Node $node) use (
             &$shortClassLikeNames
-        ) {
+        ): ?void {
             // ...
             if (! $node instanceof ClassLike) {
                 return null;
@@ -164,7 +164,7 @@ final class ShortNameResolver
     {
         $shortNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (&$shortNames) {
+        $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (&$shortNames): ?void {
             /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($phpDocInfo === null) {

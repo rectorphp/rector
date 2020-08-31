@@ -131,7 +131,7 @@ final class ParsedFunctionLikeNodeCollector
     }
 
     /**
-     * @return MethodCall[][]|StaticCall[][]
+     * @return \PhpParser\Node\Expr\MethodCall[][]|\PhpParser\Node\Expr\StaticCall[][]
      */
     public function findMethodCallsOnClass(string $className): array
     {
@@ -139,7 +139,7 @@ final class ParsedFunctionLikeNodeCollector
     }
 
     /**
-     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
+     * @return \PhpParser\Node\Expr\MethodCall[]|\PhpParser\Node\Expr\StaticCall[]|\Rector\NodeCollector\ValueObject\ArrayCallable[]
      */
     public function findByClassAndMethod(string $className, string $methodName): array
     {
@@ -196,7 +196,7 @@ final class ParsedFunctionLikeNodeCollector
     {
         $calls = Arrays::flatten($this->methodsCallsByTypeAndMethod);
 
-        return array_filter($calls, function (Node $node) {
+        return array_filter($calls, function (Node $node): bool {
             return $node instanceof MethodCall;
         });
     }

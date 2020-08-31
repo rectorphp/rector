@@ -155,7 +155,7 @@ PHP
         return $this->isUuidType($methodCall->args[0]->value);
     }
 
-    private function getSetUuidMethodCallOnSameVariable(MethodCall $methodCall): ?MethodCall
+    private function getSetUuidMethodCallOnSameVariable(MethodCall $methodCall): ?Node
     {
         $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Expression) {

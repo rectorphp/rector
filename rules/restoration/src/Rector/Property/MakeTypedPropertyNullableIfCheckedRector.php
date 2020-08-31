@@ -128,7 +128,7 @@ PHP
         $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (
             $onlyPropertyProperty,
             &$isIdenticalOrNotIdenticalToNull
-        ) {
+        ): ?void {
             $matchedPropertyFetchName = $this->matchPropertyFetchNameComparedToNull($node);
             if ($matchedPropertyFetchName === null) {
                 return null;
@@ -151,7 +151,7 @@ PHP
         $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (
             $onlyPropertyProperty,
             &$isBooleanNot
-        ) {
+        ): ?void {
             if (! $node instanceof BooleanNot) {
                 return null;
             }

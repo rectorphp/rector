@@ -74,7 +74,7 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
     }
 
     /**
-     * @return array<Yield_|YieldFrom>
+     * @return \PhpParser\Node\Expr\Yield_[]|YieldFrom[]
      */
     private function findCurrentScopeYieldNodes(FunctionLike $functionLike): array
     {

@@ -35,7 +35,7 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
         return $this->items['nullable'];
     }
 
-    public function getTag(): ?string
+    public function getTag(): string
     {
         return $this->tag ?: $this->shortName;
     }

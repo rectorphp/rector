@@ -54,7 +54,7 @@ final class NodeAnnotationReader
     /**
      * @return object|null
      */
-    public function readAnnotation(Node $node, string $annotationClass)
+    public function readAnnotation(Node $node, string $annotationClass): ?object
     {
         if ($node instanceof Property) {
             return $this->readPropertyAnnotation($node, $annotationClass);
@@ -115,7 +115,7 @@ final class NodeAnnotationReader
     /**
      * @return object|null
      */
-    private function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName)
+    private function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName): ?object
     {
         /** @var string $className */
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);

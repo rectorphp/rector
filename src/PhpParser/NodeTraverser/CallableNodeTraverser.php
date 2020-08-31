@@ -25,7 +25,7 @@ final class CallableNodeTraverser
         $nodeTraverser->traverse($nodes);
     }
 
-    private function createNodeVisitor(callable $callable): NodeVisitor
+    private function createNodeVisitor(callable $callable): object
     {
         return new class($callable) extends NodeVisitorAbstract {
             /**

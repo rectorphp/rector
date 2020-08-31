@@ -21,7 +21,7 @@ final class IndexTagValueNode extends AbstractDoctrineTagValueNode implements Ta
         parent::__construct($items, $content);
     }
 
-    public function getTag(): ?string
+    public function getTag(): string
     {
         return $this->tag ?: $this->getShortName();
     }

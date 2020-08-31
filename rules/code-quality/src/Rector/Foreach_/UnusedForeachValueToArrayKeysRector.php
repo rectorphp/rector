@@ -106,7 +106,7 @@ PHP
 
     private function isVariableUsedInForeach(Variable $variable, Foreach_ $foreach): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use ($variable) {
+        return (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use ($variable): bool {
             return $this->areNodesEqual($node, $variable);
         });
     }

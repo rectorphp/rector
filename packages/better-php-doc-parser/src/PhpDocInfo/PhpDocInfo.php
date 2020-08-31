@@ -147,13 +147,13 @@ final class PhpDocInfo
         return count($this->tokens);
     }
 
-    public function getVarTagValue(): ?AttributeAwareVarTagValueNode
+    public function getVarTagValue(): ?VarTagValueNode
     {
         return $this->phpDocNode->getVarTagValues()[0] ?? null;
     }
 
     /**
-     * @return PhpDocTagNode[]|AttributeAwareNodeInterface[]
+     * @return PhpDocTagNode[]|\Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface[]
      */
     public function getTagsByName(string $name): array
     {

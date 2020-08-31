@@ -89,11 +89,11 @@ PHP
 
     /**
      * @param ArrayItem[][] $arrayItemsByKeys
-     * @return ArrayItem[][]
+     * @return \PhpParser\Node\Expr\ArrayItem[]&mixed[][]
      */
     private function filterItemsWithSameKey(array $arrayItemsByKeys): array
     {
-        return array_filter($arrayItemsByKeys, function (array $arrayItems) {
+        return array_filter($arrayItemsByKeys, function (array $arrayItems): bool {
             return count($arrayItems) > 1;
         });
     }

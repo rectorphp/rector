@@ -131,7 +131,7 @@ PHP
     }
 
     /**
-     * @return array<string, Type>
+     * @return array<string, \PHPStan\Type\Type>
      */
     private function resolveFetchedLocalPropertyNameToType(Class_ $class): array
     {
@@ -198,7 +198,7 @@ PHP
     }
 
     /**
-     * @return array<string, Type[]>
+     * @return array<string, \PHPStan\Type\Type[]>
      */
     private function resolveFetchedLocalPropertyNamesToTypes(Class_ $class): array
     {

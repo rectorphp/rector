@@ -98,7 +98,7 @@ final class ClassLikeParsedNodesFinder
     }
 
     /**
-     * @return Class_[]|Interface_[]
+     * @return \PhpParser\Node\Stmt\Class_[]|\PhpParser\Node\Stmt\Interface_[]
      */
     public function findClassesAndInterfacesByType(string $type): array
     {

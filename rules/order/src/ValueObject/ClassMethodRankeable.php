@@ -44,7 +44,7 @@ final class ClassMethodRankeable implements RankeableInterface
 
     /**
      * An array to sort the element order by
-     * @return array<string|int|bool>
+     * @return bool[]|int[]
      */
     public function getRanks(): array
     {

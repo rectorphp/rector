@@ -108,7 +108,7 @@ PHP
         $this->traverseNodesWithCallable((array) $constructClassMethod->stmts, function (Node $node) use (
             $propertyName,
             &$isPropertyInitiated
-        ) {
+        ): ?int {
             if (! $node instanceof Assign) {
                 return null;
             }

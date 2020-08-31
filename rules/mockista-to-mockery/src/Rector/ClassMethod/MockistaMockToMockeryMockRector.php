@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\MockistaToMockery\Rector\ClassMethod;
 
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
@@ -92,7 +93,7 @@ PHP
 
     private function replaceMockWithMockerMockAndCollectMockVariableName(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?StaticCall {
             if (! $this->isFuncCallName($node, 'mock')) {
                 return null;
             }
@@ -111,7 +112,7 @@ PHP
      */
     private function replaceMethodCallOncePropertyFetch(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?\PhpParser\Node\Expr\MethodCall {
             if (! $node instanceof PropertyFetch) {
                 return null;
             }
@@ -126,7 +127,7 @@ PHP
 
     private function removeUnusedMethodCalls(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?void {
             if (! $this->isMethodCallOrPropertyFetchOnMockVariable($node)) {
                 return null;
             }
@@ -146,7 +147,7 @@ PHP
      */
     private function replaceMethodCallWithExpects(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?\PhpParser\Node\Expr\MethodCall {
             if (! $this->isMethodCallOrPropertyFetchOnMockVariable($node)) {
                 return null;
             }
@@ -185,7 +186,7 @@ PHP
      */
     private function switchWithAnyArgsAndOnceTwice(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?void {
             if (! $node instanceof MethodCall) {
                 return null;
             }

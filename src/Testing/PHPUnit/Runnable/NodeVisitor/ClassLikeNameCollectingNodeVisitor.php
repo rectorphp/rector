@@ -23,6 +23,9 @@ final class ClassLikeNameCollectingNodeVisitor extends NodeVisitorAbstract
         return $this->classLikeNames;
     }
 
+    /**
+     * @return null
+     */
     public function enterNode(Node $node)
     {
         if (! $node instanceof ClassLike) {

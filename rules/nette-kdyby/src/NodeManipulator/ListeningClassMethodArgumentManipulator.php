@@ -128,7 +128,7 @@ final class ListeningClassMethodArgumentManipulator
     {
         return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
             $param
-        ) {
+        ): bool {
             if (! $node instanceof Variable) {
                 return false;
             }

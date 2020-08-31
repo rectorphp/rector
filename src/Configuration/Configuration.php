@@ -224,7 +224,7 @@ final class Configuration
         return $this->onlyRector;
     }
 
-    public function getOutputFile(): ?string
+    public function getOutputFile(): string
     {
         return $this->outputFile;
     }

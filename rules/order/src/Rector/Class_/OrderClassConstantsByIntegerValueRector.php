@@ -82,7 +82,7 @@ PHP
     }
 
     /**
-     * @return array<int,ClassConst>
+     * @return ClassConst[]
      */
     private function resolveClassConstByPosition(Class_ $class): array
     {

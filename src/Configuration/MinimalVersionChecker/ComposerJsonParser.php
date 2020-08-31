@@ -19,10 +19,7 @@ final class ComposerJsonParser
         $this->composerJson = $composerJson;
     }
 
-    /**
-     * @return string
-     */
-    public function getPhpVersion()
+    public function getPhpVersion(): string
     {
         $composerArray = Json::decode($this->composerJson, Json::FORCE_ARRAY);
         return Strings::trim($composerArray['require']['php'], '~^>=*.');

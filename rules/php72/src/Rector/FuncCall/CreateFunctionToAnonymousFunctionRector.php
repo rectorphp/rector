@@ -126,7 +126,7 @@ PHP
 
     /**
      * @param String_|Expr $node
-     * @return Stmt[]|Expression[]
+     * @return Expression[]|\PhpParser\Node[]
      */
     private function parseStringToBody(Node $node): array
     {

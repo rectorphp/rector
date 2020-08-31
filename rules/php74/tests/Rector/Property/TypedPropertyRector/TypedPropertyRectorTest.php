@@ -25,7 +25,7 @@ final class TypedPropertyRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return array<string, array<string, bool>>
      */
     protected function getRectorsWithConfiguration(): array
     {

@@ -123,7 +123,7 @@ PHP
         return ltrim($variableName, '$');
     }
 
-    private function findVariableByName(Stmt $stmt, string $docVariableName): ?Variable
+    private function findVariableByName(Stmt $stmt, string $docVariableName): ?Node
     {
         return $this->betterNodeFinder->findFirst($stmt, function (Node $stmt) use ($docVariableName): bool {
             return $this->isVariableName($stmt, $docVariableName);

@@ -26,7 +26,7 @@ final class CompleteMissingDependencyInNewRectorTest extends AbstractRectorTestC
     }
 
     /**
-     * @return string[][][]
+     * @return array<string, array<string, array<string, string>>>
      */
     protected function getRectorsWithConfiguration(): array
     {

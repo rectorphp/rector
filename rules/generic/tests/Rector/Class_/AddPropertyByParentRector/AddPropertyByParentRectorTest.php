@@ -26,6 +26,9 @@ final class AddPropertyByParentRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return array<string, array<int, ParentDependency[]>>
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

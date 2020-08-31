@@ -65,6 +65,9 @@ final class PropertyToMethodCall
         return $this->newSetMethod;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getNewGetArguments(): array
     {
         return $this->newGetArguments;

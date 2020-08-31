@@ -159,7 +159,7 @@ PHP
     private function renamePropertyFetchesInClass(ClassLike $classLike, string $oldName, string $expectedName): void
     {
         // 1. replace property fetch rename in whole class
-        $this->traverseNodesWithCallable([$classLike], function (Node $node) use ($oldName, $expectedName) {
+        $this->traverseNodesWithCallable([$classLike], function (Node $node) use ($oldName, $expectedName): ?\PhpParser\Node\Expr\PropertyFetch {
             if (! $this->isLocalPropertyFetchNamed($node, $oldName)) {
                 return null;
             }

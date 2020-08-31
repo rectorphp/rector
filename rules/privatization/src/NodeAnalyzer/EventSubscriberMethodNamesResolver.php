@@ -30,7 +30,7 @@ final class EventSubscriberMethodNamesResolver
         $methodNames = [];
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
             &$methodNames
-        ) {
+        ): ?void {
             if (! $node instanceof ArrayItem) {
                 return null;
             }

@@ -47,7 +47,7 @@ final class UsedClassConstsExtractor
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
             &$classConsts,
             $classLike
-        ) {
+        ): ?void {
             if (! $node instanceof ClassConstFetch) {
                 return null;
             }

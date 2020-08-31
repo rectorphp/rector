@@ -68,7 +68,7 @@ final class NextVariableUsageNodeFinder
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $scopeNode->stmts, function (Node $currentNode) use (
             $expr,
             &$nextUsageOfVariable
-        ) {
+        ): ?int {
             // used above the assign
             if ($currentNode->getStartTokenPos() < $expr->getStartTokenPos()) {
                 return null;

@@ -152,7 +152,7 @@ PHP
         $this->traverseNodesWithCallable($node, function (Node $node) use (
             $modifiedVariableNames,
             &$containsVariableNames
-        ) {
+        ): ?int {
             if (! $node instanceof Variable) {
                 return null;
             }
@@ -171,11 +171,11 @@ PHP
 
     /**
      * @param If_[][] $ifWithOnlyReturnsByHash
-     * @return If_[][]
+     * @return \PhpParser\Node\Stmt\If_[]&mixed[][]
      */
     private function filterOutSingleItemStmts(array $ifWithOnlyReturnsByHash): array
     {
-        return array_filter($ifWithOnlyReturnsByHash, function (array $stmts) {
+        return array_filter($ifWithOnlyReturnsByHash, function (array $stmts): bool {
             return count($stmts) >= 2;
         });
     }

@@ -40,7 +40,7 @@ final class VariadicFunctionLikeDetector
 
         $this->callableNodeTraverser->traverseNodesWithCallable(
             (array) $functionLike->getStmts(),
-            function (Node $node) use (&$isVariadic) {
+            function (Node $node) use (&$isVariadic): ?int {
                 if (! $node instanceof FuncCall) {
                     return null;
                 }

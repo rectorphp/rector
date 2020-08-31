@@ -130,7 +130,7 @@ PHP
 
     /**
      * @param Class_|Trait_ $classLike
-     * @return array<string, array<int, Property>>
+     * @return array<string, Property[]>
      */
     private function resolvePropertyByVisibilityByPosition(ClassLike $classLike): array
     {

@@ -161,7 +161,7 @@ PHP
 
     private function processGetPresenterGetSessionMethodCall(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) {
+        $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node): ?MethodCall {
             if (! $node instanceof MethodCall) {
                 return null;
             }

@@ -80,7 +80,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     }
 
     /**
-     * @return Type[]|null[]
+     * @return \PHPStan\Type\Type[]|null[]
      */
     public function getPropertiesByClass(Class_ $class): array
     {
@@ -89,7 +89,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     }
 
     /**
-     * @return Type[]|null[]
+     * @return \PHPStan\Type\Type[]|null[]
      */
     public function getPropertiesWithoutConstructorByClass(Class_ $class): array
     {

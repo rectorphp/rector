@@ -226,7 +226,7 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        $this->traverseNodesWithCallable($classMethod, function (Node $node) use ($variableName, $constantName) {
+        $this->traverseNodesWithCallable($classMethod, function (Node $node) use ($variableName, $constantName): ?ClassConstFetch {
             if (! $this->isVariableName($node, $variableName)) {
                 return null;
             }

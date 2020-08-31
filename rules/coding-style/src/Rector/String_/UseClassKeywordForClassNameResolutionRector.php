@@ -71,7 +71,7 @@ PHP
         // @see https://regex101.com/r/Vv41Qr/1/
         $matches = Strings::matchAll($string->value, '#([\\\\a-zA-Z0-9_\\x80-\\xff]*)::#', PREG_PATTERN_ORDER);
 
-        return array_filter($matches[1], function (string $className) {
+        return array_filter($matches[1], function (string $className): bool {
             return class_exists($className);
         });
     }
@@ -81,21 +81,21 @@ PHP
      */
     public function getParts(String_ $string, array $classNames): array
     {
-        $classNames = array_map(function (string $className) {
+        $classNames = array_map(function (string $className): string {
             return preg_quote($className);
         }, $classNames);
 
         // @see https://regex101.com/r/8nGS0F/1
         $parts = Strings::split($string->value, '#(' . implode('|', $classNames) . ')#');
 
-        return array_filter($parts, function (string $className) {
+        return array_filter($parts, function (string $className): bool {
             return $className !== '';
         });
     }
 
     /**
      * @param string[] $parts
-     * @return ClassConstFetch[]|String_[]
+     * @return ClassConstFetch[]|\PhpParser\Node\Scalar\String_[]
      */
     private function createExpressionsToConcat(array $parts): array
     {

@@ -27,6 +27,9 @@ final class ConcatStringAndPlaceholders
         return $this->content;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getPlaceholderNodes(): array
     {
         return $this->placeholderNodes;

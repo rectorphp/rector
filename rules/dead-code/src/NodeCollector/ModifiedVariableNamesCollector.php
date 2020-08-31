@@ -40,7 +40,7 @@ final class ModifiedVariableNamesCollector
 
         $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
             &$modifiedVariableNames
-        ) {
+        ): ?void {
             if ($this->isVariableOverriddenInAssign($node)) {
                 /** @var Assign $node */
                 $variableName = $this->nodeNameResolver->getName($node->var);

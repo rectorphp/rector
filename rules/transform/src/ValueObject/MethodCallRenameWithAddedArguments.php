@@ -49,6 +49,9 @@ final class MethodCallRenameWithAddedArguments
         return $this->newMethod;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getNewArguments(): array
     {
         return $this->newArguments;

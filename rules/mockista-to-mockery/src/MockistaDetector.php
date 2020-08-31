@@ -30,7 +30,7 @@ final class MockistaDetector
 
     public function isInClass(Class_ $class): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $class->stmts, function (Node $node) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $class->stmts, function (Node $node): bool {
             if (! $node instanceof FuncCall) {
                 return false;
             }

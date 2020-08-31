@@ -176,7 +176,7 @@ PHP
      */
     private function lowercaseArray(array $values): array
     {
-        return array_map(function (string $value) {
+        return array_map(function (string $value): string {
             return strtolower($value);
         }, $values);
     }

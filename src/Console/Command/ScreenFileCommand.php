@@ -336,7 +336,7 @@ final class ScreenFileCommand extends AbstractCommand
     /**
      * @param object $object
      */
-    private function getObjectShortClass($object): string
+    private function getObjectShortClass(object $object): string
     {
         $classNode = get_class($object);
 
