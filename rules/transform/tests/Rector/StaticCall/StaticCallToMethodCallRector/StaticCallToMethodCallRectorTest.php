@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector;
+namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector;
-use Rector\Injection\ValueObject\StaticCallToMethodCall;
+use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
+use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class StaticCallToMethodCallRectorTest extends AbstractRectorTestCase
@@ -26,22 +26,20 @@ final class StaticCallToMethodCallRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return StaticCallToMethodCall[][][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {
-        $configuration = [
-            new StaticCallToMethodCall(
-                'Nette\Utils\FileSystem',
-                'write',
-                'Symplify\SmartFileSystem\SmartFileSystem',
-                'dumpFile'
-            ),
-        ];
-
         return [
             StaticCallToMethodCallRector::class => [
-                StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => $configuration,
+                StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => [
+                    new StaticCallToMethodCall(
+                        'Nette\Utils\FileSystem',
+                        'write',
+                        'Symplify\SmartFileSystem\SmartFileSystem',
+                        'dumpFile'
+                    ),
+                ],
             ],
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
+namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Nette\Utils\FileSystem;
 
@@ -16,7 +16,7 @@ class InstantMakeInStaticMethod
 -----
 <?php
 
-namespace Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
+namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Nette\Utils\FileSystem;
 

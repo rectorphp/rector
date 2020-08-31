@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Injection\Tests\Rector\StaticCall\StaticCallToMethodCallRector;
+namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector;
 
 use InvalidArgumentException;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Injection\Rector\StaticCall\StaticCallToMethodCallRector;
+use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class InvalidConfigurationTest extends AbstractRectorTestCase
