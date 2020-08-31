@@ -1,4 +1,4 @@
-# All 566 Rectors Overview
+# All 565 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -20,7 +20,7 @@
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (39)
 - [JMS](#jms) (2)
-- [Laravel](#laravel) (5)
+- [Laravel](#laravel) (4)
 - [Legacy](#legacy) (4)
 - [MagicDisclosure](#magicdisclosure) (8)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
@@ -6031,38 +6031,6 @@ Removes JMS\DiExtraBundle\Annotation\Services annotation
 <br><br>
 
 ## Laravel
-
-### `FacadeStaticCallToConstructorInjectionRector`
-
-- class: [`Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector`](/../master/rules/laravel/src/Rector/StaticCall/FacadeStaticCallToConstructorInjectionRector.php)
-- [test fixtures](/../master/rules/laravel/tests/Rector/StaticCall/FacadeStaticCallToConstructorInjectionRector/Fixture)
-
-Move Illuminate\Support\Facades\* static calls to constructor injection
-
-```diff
- use Illuminate\Support\Facades\Response;
-
- class ExampleController extends Controller
- {
-+    /**
-+     * @var \Illuminate\Contracts\Routing\ResponseFactory
-+     */
-+    private $responseFactory;
-+
-+    public function __construct(\Illuminate\Contracts\Routing\ResponseFactory $responseFactory)
-+    {
-+        $this->responseFactory = $responseFactory;
-+    }
-+
-     public function store()
-     {
--        return Response::view('example', ['new_example' => 123]);
-+        return $this->responseFactory->view('example', ['new_example' => 123]);
-     }
- }
-```
-
-<br><br>
 
 ### `InlineValidationRulesToArrayDefinitionRector`
 

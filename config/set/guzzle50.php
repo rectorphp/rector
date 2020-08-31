@@ -53,7 +53,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameMethodRector::METHOD_CALL_RENAMES => inline_value_objects([
                 new MethodCallRename('GuzzleHttp\Message\MessageInterface', 'getHeaderLines', 'getHeaderAsArray'),
-                new MethodCallRename('GuzzleHttp\Message\MessageInterface', 'getMessage', 'getMessageAsArray'),
             ]),
         ]]);
 };
