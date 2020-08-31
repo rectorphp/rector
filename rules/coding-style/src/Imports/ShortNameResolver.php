@@ -164,7 +164,9 @@ final class ShortNameResolver
     {
         $shortNames = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (&$shortNames): ?void {
+        $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (
+            &$shortNames
+        ): ?void {
             /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($phpDocInfo === null) {

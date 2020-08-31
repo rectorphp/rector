@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\MockistaToMockery\Rector\ClassMethod;
 
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractPHPUnitRector;
@@ -112,17 +112,20 @@ PHP
      */
     private function replaceMethodCallOncePropertyFetch(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?\PhpParser\Node\Expr\MethodCall {
-            if (! $node instanceof PropertyFetch) {
-                return null;
-            }
+        $this->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node): ?\PhpParser\Node\Expr\MethodCall {
+                if (! $node instanceof PropertyFetch) {
+                    return null;
+                }
 
-            if (! $this->isNames($node->name, ['once', 'twice'])) {
-                return null;
-            }
+                if (! $this->isNames($node->name, ['once', 'twice'])) {
+                    return null;
+                }
 
-            return new MethodCall($node->var, $node->name);
-        });
+                return new MethodCall($node->var, $node->name);
+            }
+        );
     }
 
     private function removeUnusedMethodCalls(ClassMethod $classMethod): void
@@ -147,7 +150,9 @@ PHP
      */
     private function replaceMethodCallWithExpects(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?\PhpParser\Node\Expr\MethodCall {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (
+            Node $node
+        ): ?\PhpParser\Node\Expr\MethodCall {
             if (! $this->isMethodCallOrPropertyFetchOnMockVariable($node)) {
                 return null;
             }

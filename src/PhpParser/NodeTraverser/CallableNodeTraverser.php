@@ -6,7 +6,6 @@ namespace Rector\Core\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 
 final class CallableNodeTraverser

@@ -301,7 +301,7 @@ final class PhpDocInfoPrinter
     }
 
     /**
-     * @return \Rector\BetterPhpDocParser\ValueObject\StartEndValueObject[]
+     * @return StartEndValueObject[]
      */
     private function getRemovedNodesPositions(): array
     {

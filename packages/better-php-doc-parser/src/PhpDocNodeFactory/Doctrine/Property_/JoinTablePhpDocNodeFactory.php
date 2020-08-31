@@ -103,10 +103,9 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory impleme
     }
 
     /**
-     * @param JoinTable $joinTable
      * @return JoinColumnTagValueNode[]
      */
-    private function createJoinColumnTagValues(string $annotationContent, \Doctrine\ORM\Mapping\JoinTable $joinTable, string $type): array
+    private function createJoinColumnTagValues(string $annotationContent, JoinTable $joinTable, string $type): array
     {
         $joinColumnContents = $this->matchJoinColumnContents($annotationContent);
 

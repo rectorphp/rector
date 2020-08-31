@@ -376,7 +376,7 @@ final class NodeFactory
     /**
      * @param Expr[] $exprs
      */
-    public function createConcat(array $exprs): ?\PhpParser\Node\Expr
+    public function createConcat(array $exprs): ?Expr
     {
         if ($exprs === []) {
             return null;
@@ -457,7 +457,7 @@ final class NodeFactory
 
     /**
      * @param mixed $value
-     * @return mixed|Error|\PhpParser\Node\Expr\Variable
+     * @return mixed|Error|Variable
      */
     private function normalizeArgValue($value)
     {

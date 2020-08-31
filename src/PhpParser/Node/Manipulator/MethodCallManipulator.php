@@ -127,7 +127,9 @@ final class MethodCallManipulator
 
         $variableName = $this->nodeNameResolver->getName($variable);
 
-        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use ($variableName): bool {
+        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
+            $variableName
+        ): bool {
             if (! $node instanceof MethodCall) {
                 return false;
             }

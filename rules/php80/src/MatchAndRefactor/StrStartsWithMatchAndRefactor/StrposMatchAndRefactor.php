@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;

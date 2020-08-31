@@ -148,7 +148,10 @@ PHP
         $propertyName = $this->getName($propertyProperty);
         $constantName = $this->createConstantNameFromProperty($propertyProperty);
 
-        $this->traverseNodesWithCallable($classLike, function (Node $node) use ($propertyName, $constantName): ?ClassConstFetch {
+        $this->traverseNodesWithCallable($classLike, function (Node $node) use (
+            $propertyName,
+            $constantName
+        ): ?ClassConstFetch {
             if (! $this->isLocalPropertyFetch($node)) {
                 return null;
             }

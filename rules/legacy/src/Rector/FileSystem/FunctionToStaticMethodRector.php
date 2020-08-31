@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Legacy\Rector\FileSystem;
 
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;

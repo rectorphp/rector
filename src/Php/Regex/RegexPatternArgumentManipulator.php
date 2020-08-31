@@ -149,7 +149,7 @@ final class RegexPatternArgumentManipulator
     }
 
     /**
-     * @return \PhpParser\Node\Scalar\String_[]
+     * @return String_[]
      */
     private function resolveArgumentValues(Expr $expr): array
     {

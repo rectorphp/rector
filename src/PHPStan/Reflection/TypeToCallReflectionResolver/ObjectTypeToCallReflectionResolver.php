@@ -33,7 +33,6 @@ final class ObjectTypeToCallReflectionResolver implements TypeToCallReflectionRe
 
     /**
      * @param ObjectType $type
-     * @return MethodReflection|null
      */
     public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer): ?MethodReflection
     {

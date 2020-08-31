@@ -82,7 +82,9 @@ PHP
      */
     private function findVariableUsages(FunctionLike $functionLike, Assign $assign): array
     {
-        return $this->betterNodeFinder->find((array) $functionLike->getStmts(), function (Node $node) use ($assign): bool {
+        return $this->betterNodeFinder->find((array) $functionLike->getStmts(), function (Node $node) use (
+            $assign
+        ): bool {
             if (! $node instanceof Variable) {
                 return false;
             }
