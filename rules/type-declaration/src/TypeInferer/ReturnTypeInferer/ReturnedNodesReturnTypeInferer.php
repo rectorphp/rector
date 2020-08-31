@@ -60,7 +60,8 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
                 continue;
             }
 
-            $this->types[] = $this->nodeTypeResolver->getStaticType($localReturnNode->expr);
+            $exprType = $this->nodeTypeResolver->getStaticType($localReturnNode->expr);
+            $this->types[] = $exprType;
         }
 
         if ($hasSilentVoid) {

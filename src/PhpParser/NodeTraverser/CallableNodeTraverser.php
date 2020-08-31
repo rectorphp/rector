@@ -6,6 +6,7 @@ namespace Rector\Core\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 
 final class CallableNodeTraverser
@@ -20,11 +21,12 @@ final class CallableNodeTraverser
         }
 
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->createNodeVisitor($callable));
+        $callableNodeVisitor = $this->createNodeVisitor($callable);
+        $nodeTraverser->addVisitor($callableNodeVisitor);
         $nodeTraverser->traverse($nodes);
     }
 
-    private function createNodeVisitor(callable $callable): object
+    private function createNodeVisitor(callable $callable): NodeVisitor
     {
         return new class($callable) extends NodeVisitorAbstract {
             /**

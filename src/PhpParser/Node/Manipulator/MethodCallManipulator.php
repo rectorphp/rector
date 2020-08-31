@@ -168,9 +168,9 @@ final class MethodCallManipulator
         return array_values($uniqueObjects);
     }
 
-    private function findAssignToVariableName(Node $node, string $variableName): ?Node
+    private function findAssignToVariableName(Node $node, string $variableName): ?Assign
     {
-        return $this->betterNodeFinder->findFirst($node, function (Node $node) use ($variableName): bool {
+        $assign = $this->betterNodeFinder->findFirst($node, function (Node $node) use ($variableName): bool {
             if (! $node instanceof Assign) {
                 return false;
             }
@@ -181,6 +181,9 @@ final class MethodCallManipulator
 
             return $this->nodeNameResolver->isName($node->var, $variableName);
         });
+
+        /** @var Assign|null $assign */
+        return $assign;
     }
 
     private function resolvePreviousNodeInSameScope(Node $parentNode): ?Node

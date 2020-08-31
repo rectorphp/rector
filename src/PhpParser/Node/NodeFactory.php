@@ -376,19 +376,19 @@ final class NodeFactory
     /**
      * @param Expr[] $exprs
      */
-    public function createConcat(array $exprs): ?Expr
+    public function createConcat(array $exprs): ?Concat
     {
-        if ($exprs === []) {
+        if (count($exprs) < 2) {
             return null;
         }
 
         /** @var Expr $previousConcat */
         $previousConcat = array_shift($exprs);
-
         foreach ($exprs as $expr) {
             $previousConcat = new Concat($previousConcat, $expr);
         }
 
+        /** @var Concat */
         return $previousConcat;
     }
 

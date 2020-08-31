@@ -95,6 +95,8 @@ PHP
     {
         $propertyByVisibilityByPosition = $this->resolvePropertyByVisibilityByPosition($node);
 
+        $hasChanged = false;
+
         foreach ($propertyByVisibilityByPosition as $propertyByPosition) {
             $propertyPositionByName = [];
 
@@ -122,10 +124,15 @@ PHP
                 continue;
             }
 
+            $hasChanged = true;
             $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
         }
 
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     /**

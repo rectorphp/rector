@@ -32,6 +32,8 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassesInterfacesAndUsedTraitsCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PHPStan\TypeFactoryStaticHelper;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
@@ -175,7 +177,7 @@ final class NodeTypeResolver
         }
 
         if ($node instanceof New_ && $this->classNodeAnalyzer->isAnonymousClass($node->class)) {
-            return new ObjectWithoutClassType();
+            return $this->resolveAnonymousClassType($node);
         }
 
         $staticType = $nodeScope->getType($node);
@@ -406,5 +408,32 @@ final class NodeTypeResolver
         }
 
         return $otherType;
+    }
+
+    private function resolveAnonymousClassType(New_ $new): ObjectWithoutClassType
+    {
+        $subtractedType = null;
+
+        $types = [];
+        if ($new->class->extends !== null) {
+            $parentClass = (string) $new->class->extends;
+            $types[] = new FullyQualifiedObjectType($parentClass);
+        }
+
+        foreach ((array) $new->class->implements as $implement) {
+            $parentClass = (string) $implement;
+            $types[] = new FullyQualifiedObjectType($parentClass);
+        }
+
+        if (count($types) > 1) {
+            $unionType = TypeFactoryStaticHelper::createUnionObjectType($types);
+            return new ObjectWithoutClassType($unionType);
+        }
+
+        if (count($types) === 1) {
+            return new ObjectWithoutClassType($types[0]);
+        }
+
+        return new ObjectWithoutClassType();
     }
 }
