@@ -1,11 +1,10 @@
 <?php
 
-namespace Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector\Fixture;
+namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Illuminate\Support\Facades\Response;
-use Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector\Source\LaravelController;
 
-class ExampleController extends LaravelController
+class ExampleController
 {
     public function store()
     {
@@ -17,12 +16,11 @@ class ExampleController extends LaravelController
 -----
 <?php
 
-namespace Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector\Fixture;
+namespace Rector\Transform\Tests\Rector\StaticCall\StaticCallToMethodCallRector\Fixture;
 
 use Illuminate\Support\Facades\Response;
-use Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector\Source\LaravelController;
 
-class ExampleController extends LaravelController
+class ExampleController
 {
     private \Illuminate\Contracts\Routing\ResponseFactory $responseFactory;
     public function __construct(\Illuminate\Contracts\Routing\ResponseFactory $responseFactory)

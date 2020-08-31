@@ -39,6 +39,12 @@ final class StaticCallToMethodCallRectorTest extends AbstractRectorTestCase
                         'Symplify\SmartFileSystem\SmartFileSystem',
                         'dumpFile'
                     ),
+                    new StaticCallToMethodCall(
+                        'Illuminate\Support\Facades\Response',
+                        '*',
+                        'Illuminate\Contracts\Routing\ResponseFactory',
+                        '*'
+                    ),
                 ],
             ],
         ];

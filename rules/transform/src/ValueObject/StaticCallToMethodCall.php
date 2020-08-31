@@ -63,6 +63,11 @@ final class StaticCallToMethodCall
             return false;
         }
 
+        // all methods
+        if ($this->staticMethod === '*') {
+            return true;
+        }
+
         $staticCallMethodName = $staticCall->name->toString();
         return $staticCallMethodName === $this->staticMethod;
     }

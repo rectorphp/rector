@@ -1,4 +1,4 @@
-# All 566 Rectors Overview
+# All 565 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -18,9 +18,9 @@
 - [Downgrade](#downgrade) (1)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
-- [Generic](#generic) (39)
+- [Generic](#generic) (38)
 - [JMS](#jms) (2)
-- [Laravel](#laravel) (5)
+- [Laravel](#laravel) (4)
 - [Legacy](#legacy) (4)
 - [MagicDisclosure](#magicdisclosure) (8)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
@@ -67,7 +67,7 @@
 - [SymfonyCodeQuality](#symfonycodequality) (1)
 - [SymfonyPHPUnit](#symfonyphpunit) (1)
 - [SymfonyPhpConfig](#symfonyphpconfig) (2)
-- [Transform](#transform) (10)
+- [Transform](#transform) (11)
 - [Twig](#twig) (1)
 - [TypeDeclaration](#typedeclaration) (9)
 
@@ -5443,40 +5443,6 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 <br><br>
 
-### `PropertyAssignToMethodCallRector`
-
-- class: [`Rector\Generic\Rector\Assign\PropertyAssignToMethodCallRector`](/../master/rules/generic/src/Rector/Assign/PropertyAssignToMethodCallRector.php)
-- [test fixtures](/../master/rules/generic/tests/Rector/Assign/PropertyAssignToMethodCallRector/Fixture)
-
-Turns property assign of specific type and property name to method call
-
-```php
-<?php
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Rector\Generic\Rector\Assign\PropertyAssignToMethodCallRector;
-
-return function (ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(PropertyAssignToMethodCallRector::class)
-        ->call('configure', [[
-            PropertyAssignToMethodCallRector::OLD_PROPERTIES_TO_NEW_METHOD_CALLS_BY_TYPE => [
-                'SomeClass' => [
-                'oldPropertyName' => 'oldProperty', 'newMethodName' => 'newMethodCall']]
-        ]]);
-};
-```
-
-↓
-
-```diff
- $someObject = new SomeClass;
--$someObject->oldProperty = false;
-+$someObject->newMethodCall(false);
-```
-
-<br><br>
-
 ### `PseudoNamespaceToNamespaceRector`
 
 - class: [`Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector`](/../master/rules/generic/src/Rector/Name/PseudoNamespaceToNamespaceRector.php)
@@ -6031,38 +5997,6 @@ Removes JMS\DiExtraBundle\Annotation\Services annotation
 <br><br>
 
 ## Laravel
-
-### `FacadeStaticCallToConstructorInjectionRector`
-
-- class: [`Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector`](/../master/rules/laravel/src/Rector/StaticCall/FacadeStaticCallToConstructorInjectionRector.php)
-- [test fixtures](/../master/rules/laravel/tests/Rector/StaticCall/FacadeStaticCallToConstructorInjectionRector/Fixture)
-
-Move Illuminate\Support\Facades\* static calls to constructor injection
-
-```diff
- use Illuminate\Support\Facades\Response;
-
- class ExampleController extends Controller
- {
-+    /**
-+     * @var \Illuminate\Contracts\Routing\ResponseFactory
-+     */
-+    private $responseFactory;
-+
-+    public function __construct(\Illuminate\Contracts\Routing\ResponseFactory $responseFactory)
-+    {
-+        $this->responseFactory = $responseFactory;
-+    }
-+
-     public function store()
-     {
--        return Response::view('example', ['new_example' => 123]);
-+        return $this->responseFactory->view('example', ['new_example' => 123]);
-     }
- }
-```
-
-<br><br>
 
 ### `InlineValidationRulesToArrayDefinitionRector`
 
@@ -8529,9 +8463,8 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ArrayArgumentInTestToDataProviderRector::class)
         ->call('configure', [[
-            ArrayArgumentInTestToDataProviderRector::CONFIGURATION => [
-                [
-            'class' => 'PHPUnit\Framework\TestCase', 'old_method' => 'doTestMultiple', 'new_method' => 'doTestSingle', 'variable_name' => 'number']]
+            ArrayArgumentInTestToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number'))]
         ]]);
 };
 ```
@@ -14118,6 +14051,39 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 +        Cookie::create($name);
      }
  }
+```
+
+<br><br>
+
+### `PropertyAssignToMethodCallRector`
+
+- class: [`Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector`](/../master/rules/transform/src/Rector/Assign/PropertyAssignToMethodCallRector.php)
+- [test fixtures](/../master/rules/transform/tests/Rector/Assign/PropertyAssignToMethodCallRector/Fixture)
+
+Turns property assign of specific type and property name to method call
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Transform\Rector\Assign\PropertyAssignToMethodCallRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(PropertyAssignToMethodCallRector::class)
+        ->call('configure', [[
+            PropertyAssignToMethodCallRector::PROPERTY_ASSIGNS_TO_METHODS_CALLS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyAssignToMethodCall('SomeClass', 'oldPropertyName', 'oldProperty')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyAssignToMethodCall('SomeClass', 'newMethodName', 'newMethodCall'))]
+        ]]);
+};
+```
+
+↓
+
+```diff
+ $someObject = new SomeClass;
+-$someObject->oldProperty = false;
++$someObject->newMethodCall(false);
 ```
 
 <br><br>

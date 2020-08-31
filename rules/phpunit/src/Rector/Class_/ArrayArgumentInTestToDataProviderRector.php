@@ -29,8 +29,10 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
+use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 use Rector\PHPUnit\ValueObject\ParamAndArgValueObject;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\Class_\ArrayArgumentInTestToDataProviderRector\ArrayArgumentInTestToDataProviderRectorTest
@@ -43,12 +45,12 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
      * @api
      * @var string
      */
-    public const CONFIGURATION = '$configuration';
+    public const ARRAY_ARGUMENTS_TO_DATA_PROVIDERS = 'array_arguments_to_data_providers';
 
     /**
-     * @var mixed[]
+     * @var ArrayArgumentToDataProvider[]
      */
-    private $configuration = [];
+    private $arrayArgumentsToDataProviders = [];
 
     /**
      * @var DataProviderClassMethodRecipe[]
@@ -113,13 +115,13 @@ PHP
 
                 ,
                 [
-                    '$configuration' => [
-                        [
-                            'class' => 'PHPUnit\Framework\TestCase',
-                            'old_method' => 'doTestMultiple',
-                            'new_method' => 'doTestSingle',
-                            'variable_name' => 'number',
-                        ],
+                    self::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [
+                        new ArrayArgumentToDataProvider(
+                            'PHPUnit\Framework\TestCase',
+                            'doTestMultiple',
+                            'doTestSingle',
+                            'number'
+                        ),
                     ],
                 ]
             ),
@@ -143,8 +145,6 @@ PHP
             return null;
         }
 
-        $this->ensureConfigurationIsSet($this->configuration);
-
         $this->dataProviderClassMethodRecipes = [];
 
         $this->traverseNodesWithCallable($node->stmts, function (Node $node) {
@@ -152,8 +152,8 @@ PHP
                 return null;
             }
 
-            foreach ($this->configuration as $singleConfiguration) {
-                $this->refactorMethodCallWithConfiguration($node, $singleConfiguration);
+            foreach ($this->arrayArgumentsToDataProviders as $arrayArgumentsToDataProvider) {
+                $this->refactorMethodCallWithConfiguration($node, $arrayArgumentsToDataProvider);
             }
 
             return null;
@@ -170,30 +170,18 @@ PHP
         return $node;
     }
 
-    public function configure(array $configuration): void
+    public function configure(array $arrayArgumentsToDataProviders): void
     {
-        $this->configuration = $configuration[self::CONFIGURATION] ?? [];
+        $arrayArgumentsToDataProviders = $arrayArgumentsToDataProviders[self::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS] ?? [];
+        Assert::allIsInstanceOf($arrayArgumentsToDataProviders, ArrayArgumentToDataProvider::class);
+        $this->arrayArgumentsToDataProviders = $arrayArgumentsToDataProviders;
     }
 
-    /**
-     * @param mixed[] $configuration
-     */
-    private function ensureConfigurationIsSet(array $configuration): void
-    {
-        if ($configuration !== []) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Add configuration via "%s" argument for "%s"',
-            '$configuration',
-            self::class
-        ));
-    }
-
-    private function refactorMethodCallWithConfiguration(MethodCall $methodCall, array $singleConfiguration): void
-    {
-        if (! $this->isMethodCallMatch($methodCall, $singleConfiguration)) {
+    private function refactorMethodCallWithConfiguration(
+        MethodCall $methodCall,
+        ArrayArgumentToDataProvider $arrayArgumentToDataProvider
+    ): void {
+        if (! $this->isMethodCallMatch($methodCall, $arrayArgumentToDataProvider)) {
             return;
         }
 
@@ -209,7 +197,7 @@ PHP
         }
 
         // rename method to new one handling non-array input
-        $methodCall->name = new Identifier($singleConfiguration['new_method']);
+        $methodCall->name = new Identifier($arrayArgumentToDataProvider->getNewMethod());
 
         $dataProviderMethodName = $this->createDataProviderMethodName($methodCall);
 
@@ -222,7 +210,7 @@ PHP
 
         $paramAndArgs = $this->collectParamAndArgsFromArray(
             $firstArgumentValue,
-            $singleConfiguration['variable_name']
+            $arrayArgumentToDataProvider->getVariableName()
         );
 
         foreach ($paramAndArgs as $paramAndArg) {
@@ -258,22 +246,21 @@ PHP
         return $dataProviderClassMethods;
     }
 
-    /**
-     * @param string[] $singleConfiguration
-     */
-    private function isMethodCallMatch(MethodCall $methodCall, array $singleConfiguration): bool
-    {
-        if (! $this->isObjectType($methodCall->var, $singleConfiguration['class'])) {
+    private function isMethodCallMatch(
+        MethodCall $methodCall,
+        ArrayArgumentToDataProvider $arrayArgumentToDataProvider
+    ): bool {
+        if (! $this->isObjectType($methodCall->var, $arrayArgumentToDataProvider->getClass())) {
             return false;
         }
 
-        return $this->isName($methodCall->name, $singleConfiguration['old_method']);
+        return $this->isName($methodCall->name, $arrayArgumentToDataProvider->getOldMethod());
     }
 
-    private function createDataProviderMethodName(Node $node): string
+    private function createDataProviderMethodName(MethodCall $methodCall): string
     {
         /** @var string $methodName */
-        $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
+        $methodName = $methodCall->getAttribute(AttributeKey::METHOD_NAME);
 
         return 'provideDataFor' . ucfirst($methodName);
     }

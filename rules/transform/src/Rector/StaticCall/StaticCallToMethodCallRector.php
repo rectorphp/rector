@@ -117,7 +117,14 @@ PHP
             }
 
             $expr = $this->matchTypeProvidingExpr($classLike, $classMethod, $staticCallToMethodCall->getClassType());
-            return new MethodCall($expr, $staticCallToMethodCall->getMethodName(), $node->args);
+
+            if ($staticCallToMethodCall->getMethodName() === '*') {
+                $methodName = $this->getName($node->name);
+            } else {
+                $methodName = $staticCallToMethodCall->getMethodName();
+            }
+
+            return new MethodCall($expr, $methodName, $node->args);
         }
 
         return $node;
