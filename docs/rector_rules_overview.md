@@ -8497,9 +8497,8 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(ArrayArgumentInTestToDataProviderRector::class)
         ->call('configure', [[
-            ArrayArgumentInTestToDataProviderRector::CONFIGURATION => [
-                [
-            'class' => 'PHPUnit\Framework\TestCase', 'old_method' => 'doTestMultiple', 'new_method' => 'doTestSingle', 'variable_name' => 'number']]
+            ArrayArgumentInTestToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number'))]
         ]]);
 };
 ```

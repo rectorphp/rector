@@ -7,6 +7,7 @@ namespace Rector\PHPUnit\Tests\Rector\Class_\ArrayArgumentInTestToDataProviderRe
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector;
+use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArrayArgumentInTestToDataProviderRectorTest extends AbstractRectorTestCase
@@ -31,13 +32,13 @@ final class ArrayArgumentInTestToDataProviderRectorTest extends AbstractRectorTe
     {
         return [
             ArrayArgumentInTestToDataProviderRector::class => [
-                ArrayArgumentInTestToDataProviderRector::CONFIGURATION => [
-                    [
-                        'class' => 'PHPUnit\Framework\TestCase',
-                        'old_method' => 'doTestMultiple',
-                        'new_method' => 'doTestSingle',
-                        'variable_name' => 'variable',
-                    ],
+                ArrayArgumentInTestToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [
+                    new ArrayArgumentToDataProvider(
+                        'PHPUnit\Framework\TestCase',
+                        'doTestMultiple',
+                        'doTestSingle',
+                        'variable'
+                    ),
                 ],
             ],
         ];
