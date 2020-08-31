@@ -102,6 +102,9 @@ final class ComposerJsonManipulator
             return $json;
         }
 
+        // temporary before phpstan/phpstan becomes tagged - fixes https://travis-ci.com/github/rectorphp/rector/builds/182040376
+        $json[self::REQUIRE]['nikic/php-parser'] = '^4.9.1';
+
         $phpstanVersion = $json[self::REQUIRE][self::PHPSTAN_PHPSTAN];
         $phpstanVersion = ltrim($phpstanVersion, '^');
         // use dev-master till this get's to tagged: https://github.com/phpstan/phpstan-src/commit/535c0e25429c1e3dd0dd05f61b43a34830da2a09
