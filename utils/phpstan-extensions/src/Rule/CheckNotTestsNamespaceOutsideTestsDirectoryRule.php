@@ -13,12 +13,12 @@ use PHPStan\Rules\Rule;
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\CheckNotTestsNamespaceOutsideTestsDirectoryRule\CheckNotTestsNamespaceOutsideTestsDirectoryRuleTest
  */
-class CheckNotTestsNamespaceOutsideTestsDirectoryRule implements Rule
+final class CheckNotTestsNamespaceOutsideTestsDirectoryRule implements Rule
 {
     /**
      * @var string
      */
-    public const ERROR_MESSAGE = '"Tests" namespace (%s) used outside of "tests" directory (%s)';
+    private const ERROR_MESSAGE = '"Tests" namespace (%s) used outside of "tests" directory (%s)';
 
     public function getNodeType(): string
     {
