@@ -6,7 +6,8 @@ namespace Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorIn
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector;
+use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
+use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FacadeStaticCallToConstructorInjectionRectorTest extends AbstractRectorTestCase
@@ -24,8 +25,19 @@ final class FacadeStaticCallToConstructorInjectionRectorTest extends AbstractRec
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function getRectorClass(): string
+    protected function getRectorsWithConfiguration(): array
     {
-        return FacadeStaticCallToConstructorInjectionRector::class;
+        return [
+            StaticCallToMethodCallRector::class => [
+                StaticCallToMethodCallRector::STATIC_CALLS_TO_METHOD_CALLS => [
+                    new StaticCallToMethodCall(
+                        'Illuminate\Support\Facades\Response',
+                        '*',
+                        'Illuminate\Contracts\Routing\ResponseFactory',
+                        '*'
+                    ),
+                ],
+            ],
+        ];
     }
 }

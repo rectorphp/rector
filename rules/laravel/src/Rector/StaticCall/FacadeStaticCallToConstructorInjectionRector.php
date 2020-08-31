@@ -25,6 +25,7 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
 final class FacadeStaticCallToConstructorInjectionRector extends AbstractRector
 {
     /**
+     * @todo refactor to static call to method call
      * @see https://laravel.com/docs/5.7/facades#facades-vs-dependency-injection
      * @var array<string, string>
      */
@@ -147,6 +148,6 @@ PHP
             return new MethodCall($propertyFetchNode, $node->name, $node->args);
         }
 
-        return $node;
+        return null;
     }
 }
