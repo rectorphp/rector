@@ -129,7 +129,7 @@ PHP
             return null;
         }
 
-        if ($this->returnTypeAlreadyAddedChecker->isReturnTypeAlreadyAdded($node, $inferedType)) {
+        if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded($node, $inferedType)) {
             return null;
         }
 

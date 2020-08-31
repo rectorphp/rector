@@ -61,7 +61,7 @@ final class ReturnTypeAlreadyAddedChecker
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    public function isReturnTypeAlreadyAdded(FunctionLike $functionLike, Type $returnType): bool
+    public function isSameOrBetterReturnTypeAlreadyAdded(FunctionLike $functionLike, Type $returnType): bool
     {
         $nodeReturnType = $functionLike->returnType;
 

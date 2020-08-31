@@ -7,9 +7,9 @@ namespace Rector\TypeDeclaration\TypeInferer;
 use PhpParser\Node\FunctionLike;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeNormalizer;
+use Webmozart\Assert\Assert;
 
 final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
 {
@@ -73,23 +73,14 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
         ReturnTypeInfererInterface $returnTypeInferer,
         array $excludedInferers
     ): bool {
-        foreach ($excludedInferers as $excludedInferer) {
-            $this->ensureIsTypeInferer($excludedInferer);
+        Assert::allIsAOf($excludedInferers, ReturnTypeInfererInterface::class);
 
+        foreach ($excludedInferers as $excludedInferer) {
             if (is_a($returnTypeInferer, $excludedInferer)) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    private function ensureIsTypeInferer(string $excludedInferer): void
-    {
-        if (is_a($excludedInferer, ReturnTypeInfererInterface::class, true)) {
-            return;
-        }
-
-        throw new ShouldNotHappenException();
     }
 }

@@ -13,9 +13,11 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
@@ -355,7 +357,7 @@ final class NodeTypeResolver
         if ($scope instanceof Scope) {
             $arrayType = $scope->getType($expr);
             if ($arrayType !== null) {
-                return $arrayType;
+                return $this->removeNonEmptyArrayFromIntersectionWithArrayType($arrayType);
             }
         }
 
@@ -373,5 +375,36 @@ final class NodeTypeResolver
         }
 
         return null;
+    }
+
+    private function removeNonEmptyArrayFromIntersectionWithArrayType(Type $type): Type
+    {
+        if (! $type instanceof IntersectionType) {
+            return $type;
+        }
+
+        if (count($type->getTypes()) !== 2) {
+            return $type;
+        }
+
+        if (! $type->isSubTypeOf(new NonEmptyArrayType())->yes()) {
+            return $type;
+        }
+
+        $otherType = null;
+        foreach ($type->getTypes() as $intersectionedType) {
+            if ($intersectionedType instanceof NonEmptyArrayType) {
+                continue;
+            }
+
+            $otherType = $intersectionedType;
+            break;
+        }
+
+        if ($otherType === null) {
+            return $type;
+        }
+
+        return $otherType;
     }
 }
