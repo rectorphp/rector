@@ -194,11 +194,6 @@ final class SetList
     /**
      * @var string
      */
-    public const GUZZLE_50 = __DIR__ . '/../../../../config/set/guzzle50.php';
-
-    /**
-     * @var string
-     */
     public const JMS_DECOUPLE = __DIR__ . '/../../../../config/set/jms-decouple.php';
 
     /**

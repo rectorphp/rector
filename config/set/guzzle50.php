@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Cookie\SetCookie;
-use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
 use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -26,7 +25,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     # both uses "%classes_to_defluent%
     #diff-810cdcfdd8a6b9e1fc0d1e96d7786874
-    # covers https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7
     $services->set(FluentChainMethodCallToNormalMethodCallRector::class)
         ->call(
             'configure',
@@ -50,8 +48,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new StaticCallToFuncCall('GuzzleHttp\Pool', 'batch', 'GuzzleHttp\Pool\batch'),
             ]),
         ]]);
-
-    $services->set(MessageAsArrayRector::class);
 
     $services->set(RenameMethodRector::class)
         ->call('configure', [[
