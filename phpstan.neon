@@ -427,3 +427,6 @@ parameters:
         -
             message: '#Use value object over return of values#'
             path: 'rules/php70/src/EregToPcreTransformer.php'
+
+        # complex class
+        - '#Class cognitive complexity for "NodeTypeResolver" is \d+, keep it under 50#'

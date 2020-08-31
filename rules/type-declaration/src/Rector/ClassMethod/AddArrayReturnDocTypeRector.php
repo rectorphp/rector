@@ -7,9 +7,12 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
@@ -20,6 +23,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
+use Rector\TypeDeclaration\TypeNormalizer;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -38,9 +42,15 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
      */
     private $returnTypeInferer;
 
-    public function __construct(ReturnTypeInferer $returnTypeInferer)
+    /**
+     * @var TypeNormalizer
+     */
+    private $typeNormalizer;
+
+    public function __construct(ReturnTypeInferer $returnTypeInferer, TypeNormalizer $typeNormalizer)
     {
         $this->returnTypeInferer = $returnTypeInferer;
+        $this->typeNormalizer = $typeNormalizer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -122,32 +132,28 @@ PHP
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        if ($this->isName($classMethod->name, '__*')) {
+        if ($this->shouldSkipClassMethod($classMethod)) {
             return true;
         }
 
-        if ($classMethod->returnType === null) {
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return false;
         }
 
-        if (! $this->isNames($classMethod->returnType, ['array', 'iterable'])) {
-            return true;
-        }
-
-        $currentPhpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($currentPhpDocInfo === null) {
-            return false;
-        }
-
-        $returnType = $currentPhpDocInfo->getReturnType();
-
+        $returnType = $phpDocInfo->getReturnType();
         if ($returnType instanceof ArrayType && $returnType->getItemType() instanceof MixedType) {
-            return true;
+            return false;
         }
 
         return $returnType instanceof IterableType;
     }
 
+    /**
+     * @deprecated
+     * @todo merge to
+     * @see \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker
+     */
     private function shouldSkipType(Type $newType, ClassMethod $classMethod): bool
     {
         if ($newType instanceof ArrayType && $this->shouldSkipArrayType($newType, $classMethod)) {
@@ -163,12 +169,33 @@ PHP
             return true;
         }
 
+        if ($this->isMoreSpecificArrayTypeOverride($newType, $classMethod)) {
+            return true;
+        }
+
         return $newType instanceof ConstantArrayType && count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
+    }
+
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
+    {
+        if ($this->isName($classMethod->name, '__*')) {
+            return true;
+        }
+
+        if ($classMethod->returnType === null) {
+            return false;
+        }
+
+        return ! $this->isNames($classMethod->returnType, ['array', 'iterable']);
     }
 
     private function shouldSkipArrayType(ArrayType $arrayType, ClassMethod $classMethod): bool
     {
         if ($this->isNewAndCurrentTypeBothCallable($arrayType, $classMethod)) {
+            return true;
+        }
+
+        if ($this->isClassStringArrayByStringArrayOverride($arrayType, $classMethod)) {
             return true;
         }
 
@@ -180,14 +207,27 @@ PHP
         return count($unionType->getTypes()) > self::MAX_NUMBER_OF_TYPES;
     }
 
-    private function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, ClassMethod $classMethod): bool
+    private function isMoreSpecificArrayTypeOverride(Type $newType, ClassMethod $classMethod): bool
     {
-        $currentPhpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($currentPhpDocInfo === null) {
+        if (! $newType instanceof ConstantArrayType) {
             return false;
         }
 
-        $currentReturnType = $currentPhpDocInfo->getReturnType();
+        if (! $newType->getItemType() instanceof NeverType) {
+            return false;
+        }
+
+        $phpDocReturnType = $this->getNodeReturnPhpDocType($classMethod);
+        if (! $phpDocReturnType instanceof ArrayType) {
+            return false;
+        }
+
+        return ! $phpDocReturnType->getItemType() instanceof VoidType;
+    }
+
+    private function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, ClassMethod $classMethod): bool
+    {
+        $currentReturnType = $this->getNodeReturnPhpDocType($classMethod);
         if (! $currentReturnType instanceof ArrayType) {
             return false;
         }
@@ -197,6 +237,29 @@ PHP
         }
 
         return $currentReturnType->getItemType()->isCallable()->yes();
+    }
+
+    private function isClassStringArrayByStringArrayOverride(ArrayType $arrayType, ClassMethod $classMethod): bool
+    {
+        if (! $arrayType instanceof ConstantArrayType) {
+            return false;
+        }
+
+        $arrayType = $this->typeNormalizer->convertConstantArrayTypeToArrayType($arrayType);
+        if ($arrayType === null) {
+            return false;
+        }
+
+        $currentReturnType = $this->getNodeReturnPhpDocType($classMethod);
+        if (! $currentReturnType instanceof ArrayType) {
+            return false;
+        }
+
+        if (! $currentReturnType->getItemType() instanceof ClassStringType) {
+            return false;
+        }
+
+        return $arrayType->getItemType() instanceof StringType;
     }
 
     private function isMixedOfSpecificOverride(ArrayType $arrayType, ClassMethod $classMethod): bool
@@ -211,5 +274,16 @@ PHP
         }
 
         return $currentPhpDocInfo->getReturnType() instanceof ArrayType;
+    }
+
+    private function getNodeReturnPhpDocType(ClassMethod $classMethod): ?Type
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
+
+        return $phpDocInfo->getReturnType();
     }
 }
