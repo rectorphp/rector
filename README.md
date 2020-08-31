@@ -152,6 +152,7 @@ vendor/bin/rector process src
 declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
+use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -186,6 +187,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::EXCLUDE_RECTORS, [
         SimplifyIfReturnBoolRector::class,
     ]);
+    
+    // Need to add a single Rector, not adding the whole rule set?  
+    $services = $containerConfigurator->services();
+    $services->set(RemoveUnusedClassConstantRector::class::class);
 
     // is your PHP version different from the one your refactor to? [default: your PHP version]
     $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
