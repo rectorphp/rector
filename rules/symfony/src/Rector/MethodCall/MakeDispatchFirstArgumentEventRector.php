@@ -90,10 +90,11 @@ PHP
         if (! $this->isName($methodCall->name, 'dispatch')) {
             return true;
         }
+
         return ! isset($methodCall->args[1]);
     }
 
-    private function refactorStringArgument(MethodCall $methodCall): Node
+    private function refactorStringArgument(MethodCall $methodCall): MethodCall
     {
         // swap arguments
         [$methodCall->args[0], $methodCall->args[1]] = [$methodCall->args[1], $methodCall->args[0]];

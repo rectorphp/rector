@@ -12,7 +12,7 @@ use PhpParser\Node\Name;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\Php80\ValueObject\StrStartsWithValueObject;
+use Rector\Php80\ValueObject\StrStartsWith;
 
 abstract class AbstractMatchAndRefactor
 {
@@ -56,7 +56,7 @@ abstract class AbstractMatchAndRefactor
     /**
      * @return FuncCall|BooleanNot
      */
-    protected function createStrStartsWith(StrStartsWithValueObject $strStartsWithValueObject): Node
+    protected function createStrStartsWith(StrStartsWith $strStartsWithValueObject): Node
     {
         $args = [
             new Arg($strStartsWithValueObject->getHaystackExpr()),
@@ -74,10 +74,10 @@ abstract class AbstractMatchAndRefactor
     protected function createStrStartsWithValueObjectFromFuncCall(
         FuncCall $funcCall,
         bool $isPositive
-    ): StrStartsWithValueObject {
+    ): StrStartsWith {
         $haystack = $funcCall->args[0]->value;
         $needle = $funcCall->args[1]->value;
 
-        return new StrStartsWithValueObject($funcCall, $haystack, $needle, $isPositive);
+        return new StrStartsWith($funcCall, $haystack, $needle, $isPositive);
     }
 }

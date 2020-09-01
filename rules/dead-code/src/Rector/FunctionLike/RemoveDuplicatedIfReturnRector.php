@@ -170,8 +170,8 @@ PHP
     }
 
     /**
-     * @param If_[][] $ifWithOnlyReturnsByHash
-     * @return If_[]&mixed[][]
+     * @param array<string, If_[]> $ifWithOnlyReturnsByHash
+     * @return array<string, If_[]>
      */
     private function filterOutSingleItemStmts(array $ifWithOnlyReturnsByHash): array
     {

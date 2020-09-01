@@ -25,7 +25,7 @@ final class ChangeFileLoaderInExtensionAndKernelRectorTest extends AbstractRecto
     }
 
     /**
-     * @return string[][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

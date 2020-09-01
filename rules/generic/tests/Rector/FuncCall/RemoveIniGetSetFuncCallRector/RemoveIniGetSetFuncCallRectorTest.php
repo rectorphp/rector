@@ -29,7 +29,7 @@ final class RemoveIniGetSetFuncCallRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return string[][][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

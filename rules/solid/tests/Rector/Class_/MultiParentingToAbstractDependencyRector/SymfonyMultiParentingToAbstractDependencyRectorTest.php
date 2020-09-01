@@ -25,7 +25,7 @@ final class SymfonyMultiParentingToAbstractDependencyRectorTest extends Abstract
     }
 
     /**
-     * @return array<string, array<string, string>>
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

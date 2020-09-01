@@ -30,7 +30,7 @@ final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return array<string, mixed[]>
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

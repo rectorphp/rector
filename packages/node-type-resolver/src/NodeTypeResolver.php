@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
@@ -412,15 +413,20 @@ final class NodeTypeResolver
 
     private function resolveAnonymousClassType(New_ $new): ObjectWithoutClassType
     {
-        $subtractedType = null;
+        if (! $new->class instanceof Class_) {
+            return new ObjectWithoutClassType();
+        }
 
         $types = [];
-        if ($new->class->extends !== null) {
-            $parentClass = (string) $new->class->extends;
+
+        /** @var Class_ $class */
+        $class = $new->class;
+        if ($class->extends !== null) {
+            $parentClass = (string) $class->extends;
             $types[] = new FullyQualifiedObjectType($parentClass);
         }
 
-        foreach ((array) $new->class->implements as $implement) {
+        foreach ((array) $class->implements as $implement) {
             $parentClass = (string) $implement;
             $types[] = new FullyQualifiedObjectType($parentClass);
         }

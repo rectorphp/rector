@@ -29,7 +29,7 @@ final class AddTopIncludeRectorTest extends AbstractFileSystemRectorTestCase
     }
 
     /**
-     * @return array<string, array<string, string>>
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

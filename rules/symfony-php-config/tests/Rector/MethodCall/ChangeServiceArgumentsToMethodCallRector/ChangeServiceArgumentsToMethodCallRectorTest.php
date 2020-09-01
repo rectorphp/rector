@@ -26,7 +26,7 @@ final class ChangeServiceArgumentsToMethodCallRectorTest extends AbstractRectorT
     }
 
     /**
-     * @return array<string, array<string, array<string, string>>>
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

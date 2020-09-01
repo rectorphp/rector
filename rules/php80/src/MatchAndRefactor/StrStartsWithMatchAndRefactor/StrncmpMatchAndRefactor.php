@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
-use Rector\Php80\ValueObject\StrStartsWithValueObject;
+use Rector\Php80\ValueObject\StrStartsWith;
 
 final class StrncmpMatchAndRefactor extends AbstractMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
@@ -22,7 +22,7 @@ final class StrncmpMatchAndRefactor extends AbstractMatchAndRefactor implements 
     /**
      * @param Identical|NotIdentical $binaryOp
      */
-    public function match(BinaryOp $binaryOp): ?StrStartsWithValueObject
+    public function match(BinaryOp $binaryOp): ?StrStartsWith
     {
         $isPositive = $binaryOp instanceof Identical;
 
@@ -37,10 +37,10 @@ final class StrncmpMatchAndRefactor extends AbstractMatchAndRefactor implements 
         return null;
     }
 
-    public function refactor(StrStartsWithValueObject $strStartsWithValueObject): ?Node
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith): ?Node
     {
-        $strncmpFuncCall = $strStartsWithValueObject->getFuncCall();
-        $needleExpr = $strStartsWithValueObject->getNeedleExpr();
+        $strncmpFuncCall = $strStartsWith->getFuncCall();
+        $needleExpr = $strStartsWith->getNeedleExpr();
 
         if (! $this->isFuncCallName($strncmpFuncCall->args[2]->value, 'strlen')) {
             return null;
@@ -54,6 +54,6 @@ final class StrncmpMatchAndRefactor extends AbstractMatchAndRefactor implements 
             return null;
         }
 
-        return $this->createStrStartsWith($strStartsWithValueObject);
+        return $this->createStrStartsWith($strStartsWith);
     }
 }

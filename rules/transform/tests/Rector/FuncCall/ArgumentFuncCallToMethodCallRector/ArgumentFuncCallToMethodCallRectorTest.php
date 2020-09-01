@@ -27,7 +27,7 @@ final class ArgumentFuncCallToMethodCallRectorTest extends AbstractRectorTestCas
     }
 
     /**
-     * @return array<string, array<ArgumentFuncCallToMethodCall[]|ArrayFuncCallToMethodCall[]>>
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

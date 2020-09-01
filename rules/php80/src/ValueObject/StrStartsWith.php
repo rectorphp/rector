@@ -7,7 +7,7 @@ namespace Rector\Php80\ValueObject;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 
-final class StrStartsWithValueObject
+final class StrStartsWith
 {
     /**
      * @var bool

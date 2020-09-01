@@ -10,14 +10,14 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
-use Rector\Php80\ValueObject\StrStartsWithValueObject;
+use Rector\Php80\ValueObject\StrStartsWith;
 
 final class SubstrMatchAndRefactor extends AbstractMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     /**
      * @param Identical|NotIdentical $binaryOp
      */
-    public function match(BinaryOp $binaryOp): ?StrStartsWithValueObject
+    public function match(BinaryOp $binaryOp): ?StrStartsWith
     {
         $isPositive = $binaryOp instanceof Identical;
 
@@ -26,7 +26,7 @@ final class SubstrMatchAndRefactor extends AbstractMatchAndRefactor implements S
             $funcCall = $binaryOp->left;
             $haystack = $funcCall->args[0]->value;
 
-            return new StrStartsWithValueObject($funcCall, $haystack, $binaryOp->right, $isPositive);
+            return new StrStartsWith($funcCall, $haystack, $binaryOp->right, $isPositive);
         }
 
         if ($this->isFuncCallName($binaryOp->right, 'substr')) {
@@ -34,15 +34,15 @@ final class SubstrMatchAndRefactor extends AbstractMatchAndRefactor implements S
             $funcCall = $binaryOp->right;
             $haystack = $funcCall->args[0]->value;
 
-            return new StrStartsWithValueObject($funcCall, $haystack, $binaryOp->left, $isPositive);
+            return new StrStartsWith($funcCall, $haystack, $binaryOp->left, $isPositive);
         }
 
         return null;
     }
 
-    public function refactor(StrStartsWithValueObject $strStartsWithValueObject): ?Node
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith): ?Node
     {
-        $substrFuncCall = $strStartsWithValueObject->getFuncCall();
+        $substrFuncCall = $strStartsWith->getFuncCall();
         if (! $this->valueResolver->isValue($substrFuncCall->args[1]->value, 0)) {
             return null;
         }
@@ -55,11 +55,11 @@ final class SubstrMatchAndRefactor extends AbstractMatchAndRefactor implements S
         $strlenFuncCall = $substrFuncCall->args[2]->value;
         $needleExpr = $strlenFuncCall->args[0]->value;
 
-        $comparedNeedleExpr = $strStartsWithValueObject->getNeedleExpr();
+        $comparedNeedleExpr = $strStartsWith->getNeedleExpr();
         if (! $this->betterStandardPrinter->areNodesEqual($needleExpr, $comparedNeedleExpr)) {
             return null;
         }
 
-        return $this->createStrStartsWith($strStartsWithValueObject);
+        return $this->createStrStartsWith($strStartsWith);
     }
 }

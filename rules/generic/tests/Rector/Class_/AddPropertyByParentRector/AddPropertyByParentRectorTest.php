@@ -27,7 +27,7 @@ final class AddPropertyByParentRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return array<string, array<int, ParentDependency[]>>
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {
