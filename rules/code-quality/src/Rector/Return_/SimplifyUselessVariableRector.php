@@ -146,6 +146,7 @@ PHP
 
         return ! $phpDocInfo->getVarType() instanceof MixedType;
     }
+
     /**
      * @param AssignOp|Assign $previousNode
      */
