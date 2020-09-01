@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -19,6 +20,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class VarConstantCommentRector extends AbstractRector
 {
+    /**
+     * @var int
+     */
+    private const ARRAY_LIMIT_TYPES = 3;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Constant should have a @var comment with type', [
@@ -60,24 +66,38 @@ PHP
             return null;
         }
 
-        $constStaticType = $this->getStaticType($node->consts[0]->value);
-        if ($constStaticType instanceof MixedType) {
+        $constType = $this->getStaticType($node->consts[0]->value);
+        if ($constType instanceof MixedType) {
             return null;
         }
 
-        // skip big constants
-        if ($constStaticType instanceof ConstantArrayType && count($constStaticType->getValueTypes()) > 5) {
-            return null;
+        $phpDocInfo = $this->getOrCreatePhpDocInfo($node);
+
+        // skip big arrays and mixed[] constants
+        if ($constType instanceof ConstantArrayType) {
+            if (count($constType->getValueTypes()) > self::ARRAY_LIMIT_TYPES) {
+                return null;
+            }
+
+            $currentVarType = $phpDocInfo->getVarType();
+            if ($currentVarType instanceof ArrayType && $currentVarType->getItemType() instanceof MixedType) {
+                return null;
+            }
         }
 
+        $phpDocInfo->changeVarType($constType);
+
+        return $node;
+    }
+
+    private function getOrCreatePhpDocInfo(Node $node): PhpDocInfo
+    {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
         }
 
-        $phpDocInfo->changeVarType($constStaticType);
-
-        return $node;
+        return $phpDocInfo;
     }
 }
