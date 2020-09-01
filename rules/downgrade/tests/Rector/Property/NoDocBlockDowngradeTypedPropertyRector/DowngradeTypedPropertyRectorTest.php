@@ -32,7 +32,7 @@ final class DowngradeTypedPropertyRectorTest extends AbstractRectorTestCase
     {
         return [
             DowngradeTypedPropertyRector::class => [
-                DowngradeTypedPropertyRector::ADD_DOC_BLOCK => true,
+                DowngradeTypedPropertyRector::ADD_DOC_BLOCK => false,
             ],
         ];
     }

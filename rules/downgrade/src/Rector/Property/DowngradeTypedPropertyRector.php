@@ -6,17 +6,28 @@ namespace Rector\Downgrade\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 
 /**
  * @see \Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  */
-final class DowngradeTypedPropertyRector extends AbstractRector
+final class DowngradeTypedPropertyRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const ADD_DOC_BLOCK = '$addDocBlock';
+
+    /**
+     * @var bool
+     */
+    private $addDocBlock = true;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes property type definition from type definitions to `@var` annotations.', [
@@ -41,6 +52,11 @@ PHP
         ]);
     }
 
+    public function configure(array $configuration): void
+    {
+        $this->addDocBlock = $configuration[self::ADD_DOC_BLOCK] ?? true;
+    }
+
     /**
      * @return string[]
      */
@@ -58,14 +74,16 @@ PHP
             return null;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
-        }
+        if ($this->addDocBlock) {
+            /** @var PhpDocInfo|null $phpDocInfo */
+            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo === null) {
+                $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
+            }
 
-        $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->type);
-        $phpDocInfo->changeVarType($newType);
+            $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->type);
+            $phpDocInfo->changeVarType($newType);
+        }
         $node->type = null;
 
         return $node;
