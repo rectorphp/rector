@@ -23,7 +23,10 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
     /**
      * @var string[]
      */
-    private $getMethodAwareTypes = [];
+    private $getMethodAwareTypes = [
+        'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+        'Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait',
+    ];
 
     public function getDefinition(): RectorDefinition
     {
