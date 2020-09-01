@@ -22,6 +22,7 @@ use PHPStan\Type\VoidType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 
 final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implements ReturnTypeInfererInterface
 {
@@ -29,6 +30,16 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
      * @var Type[]
      */
     private $types = [];
+
+    /**
+     * @var SilentVoidResolver
+     */
+    private $silentVoidResolver;
+
+    public function __construct(SilentVoidResolver $silentVoidResolver)
+    {
+        $this->silentVoidResolver = $silentVoidResolver;
+    }
 
     /**
      * @param ClassMethod|Closure|Function_ $functionLike
@@ -52,7 +63,7 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
             return $this->resolveNoLocalReturnNodes($classLike, $functionLike);
         }
 
-        $hasSilentVoid = $this->hasSilentVoid($functionLike, $localReturnNodes);
+        $hasSilentVoid = $this->silentVoidResolver->hasSilentVoid($functionLike, $localReturnNodes);
 
         foreach ($localReturnNodes as $localReturnNode) {
             if ($localReturnNode->expr === null) {
@@ -117,28 +128,6 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
         return new MixedType();
     }
 
-    /**
-     * @param ClassMethod|Closure|Function_ $functionLike
-     * @param Return_[] $localReturns
-     */
-    private function hasSilentVoid(FunctionLike $functionLike, array $localReturns): bool
-    {
-        foreach ((array) $functionLike->stmts as $stmt) {
-            foreach ($localReturns as $localReturn) {
-                if ($localReturn === $stmt) {
-                    return false;
-                }
-            }
-
-            // has switch with always return
-            if ($stmt instanceof Switch_ && $this->isSwitchWithAlwaysReturn($stmt)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private function processSwitch(Switch_ $switch): void
     {
         foreach ($switch->cases as $case) {
@@ -159,21 +148,5 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
 
         // abstract class
         return $classLike instanceof Class_ && $classLike->isAbstract();
-    }
-
-    private function isSwitchWithAlwaysReturn(Switch_ $switch): bool
-    {
-        $casesWithReturn = 0;
-        foreach ($switch->cases as $case) {
-            foreach ($case->stmts as $caseStmt) {
-                if ($caseStmt instanceof Return_) {
-                    ++$casesWithReturn;
-                    break;
-                }
-            }
-        }
-
-        // has same amount of returns as switches
-        return count($switch->cases) === $casesWithReturn;
     }
 }

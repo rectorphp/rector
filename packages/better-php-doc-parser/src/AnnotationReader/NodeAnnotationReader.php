@@ -68,10 +68,7 @@ final class NodeAnnotationReader
         return null;
     }
 
-    /**
-     * @return object|null
-     */
-    public function readClassAnnotation(Class_ $class, string $annotationClassName)
+    public function readClassAnnotation(Class_ $class, string $annotationClassName): ?object
     {
         $classReflection = $this->createClassReflectionFromNode($class);
 
@@ -87,10 +84,7 @@ final class NodeAnnotationReader
         }
     }
 
-    /**
-     * @return object|null
-     */
-    public function readPropertyAnnotation(Property $property, string $annotationClassName)
+    public function readPropertyAnnotation(Property $property, string $annotationClassName): ?object
     {
         $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
         if ($propertyReflection === null) {

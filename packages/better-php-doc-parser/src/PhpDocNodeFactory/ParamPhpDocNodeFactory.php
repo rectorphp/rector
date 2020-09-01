@@ -62,10 +62,10 @@ final class ParamPhpDocNodeFactory
     {
         try {
             $tokenIterator->pushSavePoint();
-            $tagValue = $this->parseParamTagValue($tokenIterator);
+            $attributeAwareParamTagValueNode = $this->parseParamTagValue($tokenIterator);
             $tokenIterator->dropSavePoint();
 
-            return $tagValue;
+            return $attributeAwareParamTagValueNode;
         } catch (ParserException $parserException) {
             $tokenIterator->rollback();
             $description = $this->privatesCaller->callPrivateMethod(

@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
-use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
+use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 
 final class OriginalSpacingRestorer
 {
@@ -27,9 +27,9 @@ final class OriginalSpacingRestorer
         Node $node,
         string $nodeOutput,
         array $tokens,
-        StartEndValueObject $startEndValueObject
+        StartAndEnd $startAndEnd
     ): string {
-        $oldWhitespaces = $this->whitespaceDetector->detectOldWhitespaces($node, $tokens, $startEndValueObject);
+        $oldWhitespaces = $this->whitespaceDetector->detectOldWhitespaces($node, $tokens, $startAndEnd);
 
         // no original whitespaces, return
         if ($oldWhitespaces === []) {

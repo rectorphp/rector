@@ -39,7 +39,7 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
     /**
      * @var string[]
      */
-    private const EXCLUDED_METHOD_NAMES = [MethodName::CONSTRUCT, '__destruct', '__clone'];
+    private const EXCLUDED_METHOD_NAMES = [MethodName::CONSTRUCT, MethodName::DESCTRUCT, '__clone'];
 
     /**
      * @var bool
@@ -98,9 +98,6 @@ PHP
 
 class SomeClass
 {
-    /**
-     * @return int
-     */
     public function getCount(): int
     {
     }

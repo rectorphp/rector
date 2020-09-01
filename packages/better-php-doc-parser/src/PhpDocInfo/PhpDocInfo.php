@@ -165,7 +165,11 @@ final class PhpDocInfo
             return $tag->name === $name;
         });
 
-        return array_values($tags);
+        // @todo add dynamic function type resolver to PHPStan, the same type on input is on output
+        $tags = array_values($tags);
+
+        /** @var PhpDocTagNode[]|AttributeAwareNodeInterface[] $tags */
+        return $tags;
     }
 
     public function getParamType(string $name): Type

@@ -13,6 +13,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\TypeDeclaration\TypeNormalizer;
 
 final class TypeComparator
 {
@@ -21,9 +22,15 @@ final class TypeComparator
      */
     private $typeHasher;
 
-    public function __construct(TypeHasher $typeHasher)
+    /**
+     * @var TypeNormalizer
+     */
+    private $typeNormalizer;
+
+    public function __construct(TypeHasher $typeHasher, TypeNormalizer $typeNormalizer)
     {
         $this->typeHasher = $typeHasher;
+        $this->typeNormalizer = $typeNormalizer;
     }
 
     public function areTypesEquals(Type $firstType, Type $secondType): bool
@@ -36,6 +43,9 @@ final class TypeComparator
         if ($this->areAliasedObjectMatchingFqnObject($firstType, $secondType)) {
             return true;
         }
+
+        $firstType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($firstType);
+        $secondType = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($secondType);
 
         if ($this->typeHasher->areTypesEqual($firstType, $secondType)) {
             return true;

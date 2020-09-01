@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\NodeManipulator;
 
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class MagicMethodDetector
@@ -17,7 +18,7 @@ final class MagicMethodDetector
         '__callStatic',
         '__clone',
         '__debugInfo',
-        '__destruct',
+        MethodName::DESCTRUCT,
         '__get',
         '__invoke',
         '__isset',

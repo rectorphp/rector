@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Attributes\Attribute;
 
-use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
+use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 
 final class Attribute
 {
@@ -17,7 +17,7 @@ final class Attribute
      * @experiment
      * @var string
      */
-    public const START_END = StartEndValueObject::class;
+    public const START_END = StartAndEnd::class;
 
     /**
      * @var string

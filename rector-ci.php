@@ -2,30 +2,14 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
-use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
-use Rector\CodingStyle\ValueObject\MethodToYield;
 use Rector\Core\Configuration\Option;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\SetList;
-use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ReturnArrayClassMethodToYieldRector::class)
-        ->call('configure', [[
-            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => inline_value_objects([
-                new MethodToYield(TestCase::class, 'provideData'),
-                new MethodToYield(TestCase::class, 'provideData*'),
-                new MethodToYield(TestCase::class, 'dataProvider'),
-                new MethodToYield(TestCase::class, 'dataProvider*'),
-            ]),
-        ]]);
-
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::SETS, [
@@ -39,6 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::ORDER,
         SetList::DEFLUENT,
         SetList::TYPE_DECLARATION,
+        SetList::PHPUNIT_CODE_QUALITY,
     ]);
 
     $parameters->set(Option::PATHS, [
@@ -73,4 +58,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // false positives on constants used in rector-ci.php
         RemoveUnusedClassConstantRector::class,
     ]);
+
+    # so Rector code is still PHP 7.2 compatible
+    $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
 };
