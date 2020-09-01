@@ -19,6 +19,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class VarConstantCommentRector extends AbstractRector
 {
+    /**
+     * @var int
+     */
+    private const LIMIT_TYPES = 3;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Constant should have a @var comment with type', [
@@ -60,24 +65,30 @@ PHP
             return null;
         }
 
-        $constStaticType = $this->getStaticType($node->consts[0]->value);
-        if ($constStaticType instanceof MixedType) {
+        $constType = $this->getStaticType($node->consts[0]->value);
+        if ($constType instanceof MixedType) {
             return null;
         }
 
         // skip big constants
-        if ($constStaticType instanceof ConstantArrayType && count($constStaticType->getValueTypes()) > 5) {
+        if ($constType instanceof ConstantArrayType && count($constType->getValueTypes()) > self::LIMIT_TYPES) {
             return null;
         }
 
+        $phpDocInfo = $this->getOrCreatePhpDocInfo($node);
+        $phpDocInfo->changeVarType($constType);
+
+        return $node;
+    }
+
+    private function getOrCreatePhpDocInfo(Node $node): PhpDocInfo
+    {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
         }
 
-        $phpDocInfo->changeVarType($constStaticType);
-
-        return $node;
+        return $phpDocInfo;
     }
 }
