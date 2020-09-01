@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Fixture;
 
 class SomeClass
 {
@@ -11,7 +11,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Fixture;
 
 class SomeClass
 {

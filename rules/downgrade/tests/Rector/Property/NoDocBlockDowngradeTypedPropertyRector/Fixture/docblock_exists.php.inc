@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Fixture;
 
 class DocBlockExists {
     /**
@@ -13,7 +13,7 @@ class DocBlockExists {
 -----
 <?php
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Fixture;
 
 class DocBlockExists {
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Fixture;
 
-use Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass;
+use Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Source\AnotherClass;
 
 class ClassNameNullableTypeClass
 {
@@ -13,9 +13,9 @@ class ClassNameNullableTypeClass
 -----
 <?php
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Fixture;
 
-use Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass;
+use Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Source\AnotherClass;
 
 class ClassNameNullableTypeClass
 {

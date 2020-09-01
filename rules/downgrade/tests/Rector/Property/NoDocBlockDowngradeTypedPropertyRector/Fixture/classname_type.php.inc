@@ -1,16 +1,16 @@
 <?php
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Fixture;
 
 class ClassNameClass {
-    private \Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Source\AnotherClass $property;
+    private \Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Source\AnotherClass $property;
 }
 
 ?>
 -----
 <?php
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Fixture;
 
 class ClassNameClass {
     private $property;

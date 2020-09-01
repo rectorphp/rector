@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Fixture;
 
 class NullableTypeClass {
     private ?string $property;
@@ -10,7 +10,7 @@ class NullableTypeClass {
 -----
 <?php
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\Fixture;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\Fixture;
 
 class NullableTypeClass {
     private $property;
