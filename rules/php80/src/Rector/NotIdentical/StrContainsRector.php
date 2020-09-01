@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\NotIdentical;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -83,10 +82,7 @@ PHP
                 return null;
             }
 
-            $rightExpr = $notIdentical->right;
-
-            /** @var FuncCall $rightExpr */
-            return $rightExpr;
+            return $notIdentical->right;
         }
 
         if ($this->isFalse($notIdentical->right)) {
@@ -94,10 +90,7 @@ PHP
                 return null;
             }
 
-            $leftExpr = $notIdentical->left;
-
-            /** @var FuncCall $leftExpr */
-            return $leftExpr;
+            return $notIdentical->left;
         }
 
         return null;

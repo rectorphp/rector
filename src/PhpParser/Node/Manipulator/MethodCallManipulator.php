@@ -170,7 +170,7 @@ final class MethodCallManipulator
 
     private function findAssignToVariableName(Node $node, string $variableName): ?Assign
     {
-        $assign = $this->betterNodeFinder->findFirst($node, function (Node $node) use ($variableName): bool {
+        return $this->betterNodeFinder->findFirst($node, function (Node $node) use ($variableName): bool {
             if (! $node instanceof Assign) {
                 return false;
             }
@@ -181,9 +181,6 @@ final class MethodCallManipulator
 
             return $this->nodeNameResolver->isName($node->var, $variableName);
         });
-
-        /** @var Assign|null $assign */
-        return $assign;
     }
 
     private function resolvePreviousNodeInSameScope(Node $parentNode): ?Node

@@ -167,7 +167,7 @@ PHP
     private function refactorAlreadyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
     {
         $varTagValue = $phpDocInfo->getVarTagValue();
-        if ($varTagValue=== null){
+        if ($varTagValue === null) {
             throw new ShouldNotHappenException();
         }
 
