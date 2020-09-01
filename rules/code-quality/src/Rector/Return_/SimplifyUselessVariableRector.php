@@ -133,17 +133,6 @@ PHP
         return $this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode);
     }
 
-    /**
-     * @param AssignOp|Assign $previousNode
-     */
-    private function isPreviousExpressionVisuallySimilar(Expression $previousExpression, Node $previousNode): bool
-    {
-        $prePreviousExpression = $previousExpression->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        return $prePreviousExpression instanceof Expression &&
-            $prePreviousExpression->expr instanceof AssignOp &&
-            $this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var);
-    }
-
     private function isReturnWithVarAnnotation(Node $node): bool
     {
         if (! $node instanceof Return_) {
@@ -156,5 +145,15 @@ PHP
         }
 
         return ! $phpDocInfo->getVarType() instanceof MixedType;
+    }
+    /**
+     * @param AssignOp|Assign $previousNode
+     */
+    private function isPreviousExpressionVisuallySimilar(Expression $previousExpression, Node $previousNode): bool
+    {
+        $prePreviousExpression = $previousExpression->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        return $prePreviousExpression instanceof Expression &&
+            $prePreviousExpression->expr instanceof AssignOp &&
+            $this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var);
     }
 }
