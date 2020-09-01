@@ -6,9 +6,6 @@ namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector;
 
 class UnionNestedAndSingleLevelArrayScalars
 {
-    /**
-     * @var mixed[]
-     */
     public const ARRAY_CONST = [
         'key2' => ['value2', 1234],
         1 => null,

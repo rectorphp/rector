@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -22,7 +23,7 @@ final class VarConstantCommentRector extends AbstractRector
     /**
      * @var int
      */
-    private const LIMIT_TYPES = 3;
+    private const ARRAY_LIMIT_TYPES = 3;
 
     public function getDefinition(): RectorDefinition
     {
@@ -70,12 +71,22 @@ PHP
             return null;
         }
 
-        // skip big constants
-        if ($constType instanceof ConstantArrayType && count($constType->getValueTypes()) > self::LIMIT_TYPES) {
-            return null;
+        $phpDocInfo = $this->getOrCreatePhpDocInfo($node);
+
+        // skip big arrays and mixed[] constants
+        if ($constType instanceof ConstantArrayType) {
+            if (count($constType->getValueTypes()) > self::ARRAY_LIMIT_TYPES) {
+                return null;
+            }
+
+            $currentVarType = $phpDocInfo->getVarType();
+            if ($currentVarType instanceof ArrayType) {
+                if ($currentVarType->getItemType() instanceof MixedType) {
+                    return null;
+                }
+            }
         }
 
-        $phpDocInfo = $this->getOrCreatePhpDocInfo($node);
         $phpDocInfo->changeVarType($constType);
 
         return $node;
