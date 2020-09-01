@@ -113,7 +113,6 @@ PHP
             }
 
             if ($node->expr instanceof Int_) {
-                $hasReturn = true;
                 return null;
             }
 
