@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
 use Rector\Generic\ValueObject\FunctionArgumentSwap;
+use Rector\Generic\ValueObject\RemovedFunctionArgument;
 use Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
@@ -23,27 +25,33 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(MysqlFuncCallToMysqliRector::class);
 
+    $services->set(RemoveFuncCallArgRector::class)
+        ->call('configure', [[
+            RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => inline_value_objects([
+                new RemovedFunctionArgument('mysql_pconnect', 3),
+                new RemovedFunctionArgument('mysql_connect', 3),
+                new RemovedFunctionArgument('mysql_connect', 4),
+            ]),
+        ]]);
+
     $services->set(MysqlPConnectToMysqliConnectRector::class);
 
     # first swap arguments, then rename
     $services->set(SwapFuncCallArgumentsRector::class)
         ->call('configure', [[
             SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => inline_value_objects([
+                new FunctionArgumentSwap('mysql_query', [1, 0]),
                 new FunctionArgumentSwap('mysql_real_escape_string', [1, 0]),
                 new FunctionArgumentSwap('mysql_select_db', [1, 0]),
                 new FunctionArgumentSwap('mysql_set_charset', [1, 0]),
-                new FunctionArgumentSwap('mysql_query', [1, 0]),
-                new FunctionArgumentSwap('mysql_fetch_row', [1, 0]),
             ]),
         ]]);
 
     $services->set(RenameFunctionRector::class)
         ->call('configure', [[
             RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
-                'mysql_affected_rows' => 'mysqli_affected_rows',
-                'mysql_close' => 'mysqli_close',
+                'mysql_connect' => 'mysqli_connect',
                 'mysql_data_seek' => 'mysqli_data_seek',
-                'mysql_errno' => 'mysqli_errno',
                 'mysql_fetch_array' => 'mysqli_fetch_array',
                 'mysql_fetch_assoc' => 'mysqli_fetch_assoc',
                 'mysql_fetch_lengths' => 'mysqli_fetch_lengths',
@@ -52,25 +60,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'mysql_field_seek' => 'mysqli_field_seek',
                 'mysql_free_result' => 'mysqli_free_result',
                 'mysql_get_client_info' => 'mysqli_get_client_info',
-                'mysql_get_host_info' => 'mysqli_get_host_info',
-                'mysql_get_proto_info' => 'mysqli_get_proto_info',
-                'mysql_get_server_info' => 'mysqli_get_server_info',
-                'mysql_info' => 'mysqli_info',
-                'mysql_insert_id' => 'mysqli_insert_id',
-                'mysql_num_rows' => 'mysqli_num_rows',
-                'mysql_ping' => 'mysqli_ping',
-                'mysql_real_escape_string' => 'mysqli_real_escape_string',
-                'mysql_select_db' => 'mysqli_select_db',
-                'mysql_set_charset' => 'mysqli_set_charset',
-                'mysql_stat' => 'mysqli_stat',
-                'mysql_thread_id' => 'mysqli_thread_id',
+                'mysql_num_fields' => 'mysqli_num_fields',
                 'mysql_numfields' => 'mysqli_num_fields',
-                'mysql_escape_string' => 'mysqli_real_escape_string',
-                'mysql_client_encoding' => 'mysqli_character_set_name',
+                'mysql_num_rows' => 'mysqli_num_rows',
                 'mysql_numrows' => 'mysqli_num_rows',
-                'mysql_list_processes' => 'mysqli_thread_id',
-                'mysql_num_fields' => 'mysqli_field_count',
-                'mysql_connect' => 'mysqli_connect',
             ],
         ]]);
 
@@ -79,12 +72,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RenameConstantRector::OLD_TO_NEW_CONSTANTS => [
                 'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
-                'MYSQL_NUM' => 'MYSQLI_NUM',
                 'MYSQL_BOTH' => 'MYSQLI_BOTH',
                 'MYSQL_CLIENT_COMPRESS' => 'MYSQLI_CLIENT_COMPRESS',
                 'MYSQL_CLIENT_IGNORE_SPACE' => 'MYSQLI_CLIENT_IGNORE_SPACE',
                 'MYSQL_CLIENT_INTERACTIVE' => 'MYSQLI_CLIENT_INTERACTIVE',
                 'MYSQL_CLIENT_SSL' => 'MYSQLI_CLIENT_SSL',
+                'MYSQL_NUM' => 'MYSQLI_NUM',
                 'MYSQL_PRIMARY_KEY_FLAG' => 'MYSQLI_PRI_KEY_FLAG',
             ],
         ]]);
