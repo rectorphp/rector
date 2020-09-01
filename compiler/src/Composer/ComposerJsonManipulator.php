@@ -121,7 +121,7 @@ final class ComposerJsonManipulator
 
         $json = $this->addDevDependenciesFromPHPStan($json, $phpstanVersion);
 
-        return $this->allowDevDependnecies($json);
+        return $this->allowDevDependencies($json);
     }
 
     private function addDevDependenciesFromPHPStan(array $json, string $phpstanVersion): array
@@ -143,7 +143,7 @@ final class ComposerJsonManipulator
         return $json;
     }
 
-    private function allowDevDependnecies(array $json): array
+    private function allowDevDependencies(array $json): array
     {
         $json['minimum-stability'] = 'dev';
         $json['prefer-stable'] = true;
