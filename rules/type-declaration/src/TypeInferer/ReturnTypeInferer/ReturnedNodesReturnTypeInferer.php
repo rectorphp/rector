@@ -63,7 +63,7 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
             return $this->resolveNoLocalReturnNodes($classLike, $functionLike);
         }
 
-        $hasSilentVoid = $this->silentVoidResolver->hasSilentVoid($functionLike, $localReturnNodes);
+        $hasSilentVoid = $this->silentVoidResolver->hasSilentVoid($functionLike);
 
         foreach ($localReturnNodes as $localReturnNode) {
             if ($localReturnNode->expr === null) {
