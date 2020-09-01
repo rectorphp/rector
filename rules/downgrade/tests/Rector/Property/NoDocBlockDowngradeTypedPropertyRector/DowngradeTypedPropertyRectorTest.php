@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector;
+namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
@@ -32,7 +32,7 @@ final class DowngradeTypedPropertyRectorTest extends AbstractRectorTestCase
     {
         return [
             DowngradeTypedPropertyRector::class => [
-                DowngradeTypedPropertyRector::ADD_DOC_BLOCK => true,
+                DowngradeTypedPropertyRector::ADD_DOC_BLOCK => false,
             ],
         ];
     }
