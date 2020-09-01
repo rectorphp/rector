@@ -162,6 +162,7 @@ PHP
 
         return $currentPhpDocReturnType instanceof IterableType;
     }
+
     private function getNodeReturnPhpDocType(ClassMethod $classMethod): ?Type
     {
         /** @var PhpDocInfo|null $phpDocInfo */

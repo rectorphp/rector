@@ -58,10 +58,7 @@ abstract class AbstractMatchAndRefactor
      */
     protected function createStrStartsWith(StrStartsWith $strStartsWith): Node
     {
-        $args = [
-            new Arg($strStartsWith->getHaystackExpr()),
-            new Arg($strStartsWith->getNeedleExpr()),
-        ];
+        $args = [new Arg($strStartsWith->getHaystackExpr()), new Arg($strStartsWith->getNeedleExpr())];
 
         $funcCall = new FuncCall(new Name('str_starts_with'), $args);
         if ($strStartsWith->isPositive()) {

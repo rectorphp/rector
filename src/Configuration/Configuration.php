@@ -85,6 +85,7 @@ final class Configuration
      * @var ParameterProvider
      */
     private $parameterProvider;
+
     /**
      * @var string|null
      */

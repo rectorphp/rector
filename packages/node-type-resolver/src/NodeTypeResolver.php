@@ -366,6 +366,7 @@ final class NodeTypeResolver
 
         return new ArrayType(new MixedType(), new MixedType());
     }
+
     private function resolveAnonymousClassType(New_ $new): ObjectWithoutClassType
     {
         if (! $new->class instanceof Class_) {

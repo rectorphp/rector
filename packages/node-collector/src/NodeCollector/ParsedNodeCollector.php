@@ -88,6 +88,7 @@ final class ParsedNodeCollector
      * @var ClassConstFetch[]
      */
     private $classConstFetches = [];
+
     /**
      * @var NodeNameResolver
      */
@@ -282,6 +283,7 @@ final class ParsedNodeCollector
 
         $this->classes[$className] = $class;
     }
+
     /**
      * @param Interface_|Trait_ $classLike
      */

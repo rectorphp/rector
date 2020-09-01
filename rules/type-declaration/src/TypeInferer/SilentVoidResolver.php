@@ -19,7 +19,6 @@ final class SilentVoidResolver
 {
     /**
      * @param ClassMethod|Closure|Function_ $functionLike
-     * @param Return_[] $localReturns
      */
     public function hasSilentVoid(FunctionLike $functionLike): bool
     {
@@ -45,6 +44,7 @@ final class SilentVoidResolver
 
         return true;
     }
+
     /**
      * @param Stmt[]|Expression[] $stmts
      */
