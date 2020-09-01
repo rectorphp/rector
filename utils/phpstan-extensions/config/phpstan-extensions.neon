@@ -11,6 +11,10 @@ services:
          class: Rector\PHPStanExtensions\Rule\KeepRectorNamespaceForRectorRule
          tags: [phpstan.rules.rule]
 
+    -
+         class: Rector\PHPStanExtensions\Rule\CheckNotTestsNamespaceOutsideTestsDirectoryRule
+         tags: [phpstan.rules.rule]
+
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 
     # $node->getAttribute($1) => Type|null by $1
