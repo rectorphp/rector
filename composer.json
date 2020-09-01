@@ -10,7 +10,7 @@
     ],
     "bin": ["bin/rector"],
     "require": {
-        "php": "^7.2.4",
+        "php": "^7.2.4|^8.0",
         "ext-json": "*",
         "composer/xdebug-handler": "^1.4",
         "doctrine/annotations": "^1.10.4",
