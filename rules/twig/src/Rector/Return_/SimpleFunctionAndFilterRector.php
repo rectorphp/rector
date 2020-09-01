@@ -27,7 +27,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const OLD_TO_NEW_CLASSES = [
         'Twig_Function_Method' => 'Twig_SimpleFunction',

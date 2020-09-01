@@ -14,6 +14,9 @@ use Rector\Core\Contract\Exclusion\ExclusionCheckInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @see \Rector\Core\Tests\Exclusion\Check\ExcludeByDocBlockExclusionCheckTest
+ */
 final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
 {
     public function isNodeSkippedByRector(PhpRectorInterface $phpRector, Node $node): bool

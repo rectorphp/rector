@@ -366,6 +366,37 @@ final class NodeTypeResolver
 
         return new ArrayType(new MixedType(), new MixedType());
     }
+    private function resolveAnonymousClassType(New_ $new): ObjectWithoutClassType
+    {
+        if (! $new->class instanceof Class_) {
+            return new ObjectWithoutClassType();
+        }
+
+        $types = [];
+
+        /** @var Class_ $class */
+        $class = $new->class;
+        if ($class->extends !== null) {
+            $parentClass = (string) $class->extends;
+            $types[] = new FullyQualifiedObjectType($parentClass);
+        }
+
+        foreach ((array) $class->implements as $implement) {
+            $parentClass = (string) $implement;
+            $types[] = new FullyQualifiedObjectType($parentClass);
+        }
+
+        if (count($types) > 1) {
+            $unionType = TypeFactoryStaticHelper::createUnionObjectType($types);
+            return new ObjectWithoutClassType($unionType);
+        }
+
+        if (count($types) === 1) {
+            return new ObjectWithoutClassType($types[0]);
+        }
+
+        return new ObjectWithoutClassType();
+    }
 
     private function resolveByNodeTypeResolvers(Node $node): ?Type
     {
@@ -409,37 +440,5 @@ final class NodeTypeResolver
         }
 
         return $otherType;
-    }
-
-    private function resolveAnonymousClassType(New_ $new): ObjectWithoutClassType
-    {
-        if (! $new->class instanceof Class_) {
-            return new ObjectWithoutClassType();
-        }
-
-        $types = [];
-
-        /** @var Class_ $class */
-        $class = $new->class;
-        if ($class->extends !== null) {
-            $parentClass = (string) $class->extends;
-            $types[] = new FullyQualifiedObjectType($parentClass);
-        }
-
-        foreach ((array) $class->implements as $implement) {
-            $parentClass = (string) $implement;
-            $types[] = new FullyQualifiedObjectType($parentClass);
-        }
-
-        if (count($types) > 1) {
-            $unionType = TypeFactoryStaticHelper::createUnionObjectType($types);
-            return new ObjectWithoutClassType($unionType);
-        }
-
-        if (count($types) === 1) {
-            return new ObjectWithoutClassType($types[0]);
-        }
-
-        return new ObjectWithoutClassType();
     }
 }

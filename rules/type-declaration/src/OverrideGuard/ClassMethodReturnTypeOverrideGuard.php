@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassMethodReturnTypeOverrideGuard
 {
     /**
-     * @var array<string, string[]>
+     * @var array<string, array<string>>
      */
     private const CHAOTIC_CLASS_METHOD_NAMES = [
         NodeVisitor::class => ['enterNode', 'leaveNode', 'beforeTraverse', 'afterTraverse'],

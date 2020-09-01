@@ -22,11 +22,11 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
     /**
      * @var FunctionLikeReturnTypeResolver
      */
-    private $typeDeclarationToStringConverter;
+    private $functionLikeReturnTypeResolver;
 
-    public function __construct(FunctionLikeReturnTypeResolver $typeDeclarationToStringConverter)
+    public function __construct(FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver)
     {
-        $this->typeDeclarationToStringConverter = $typeDeclarationToStringConverter;
+        $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
     }
 
     public function inferProperty(Property $property): Type
@@ -46,7 +46,7 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
                 continue;
             }
 
-            $returnType = $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToPHPStanType(
+            $returnType = $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType(
                 $classMethod
             );
             // let PhpDoc solve that later for more precise type

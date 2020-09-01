@@ -17,7 +17,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class CallUserMethodRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const OLD_TO_NEW_FUNCTIONS = [
         'call_user_method' => 'call_user_func',

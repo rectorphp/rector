@@ -67,7 +67,7 @@ final class TypeHasher
     private function createUnionTypeHash(UnionType $unionType): string
     {
         $unionedTypesHashes = [];
-        foreach ($unionType->getTypes() as $key => $unionedType) {
+        foreach ($unionType->getTypes() as $unionedType) {
             $unionedTypesHashes[] = $this->createTypeHash($unionedType);
         }
 

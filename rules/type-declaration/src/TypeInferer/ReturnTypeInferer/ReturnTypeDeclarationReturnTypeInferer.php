@@ -16,11 +16,11 @@ final class ReturnTypeDeclarationReturnTypeInferer extends AbstractTypeInferer i
     /**
      * @var FunctionLikeReturnTypeResolver
      */
-    private $typeDeclarationToStringConverter;
+    private $functionLikeReturnTypeResolver;
 
-    public function __construct(FunctionLikeReturnTypeResolver $typeDeclarationToStringConverter)
+    public function __construct(FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver)
     {
-        $this->typeDeclarationToStringConverter = $typeDeclarationToStringConverter;
+        $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
     }
 
     public function inferFunctionLike(FunctionLike $functionLike): Type
@@ -34,7 +34,7 @@ final class ReturnTypeDeclarationReturnTypeInferer extends AbstractTypeInferer i
             return new MixedType();
         }
 
-        return $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToPHPStanType($functionLike);
+        return $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType($functionLike);
     }
 
     public function getPriority(): int

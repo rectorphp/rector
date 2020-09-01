@@ -168,7 +168,7 @@ final class MethodCallManipulator
         return array_values($uniqueObjects);
     }
 
-    private function findAssignToVariableName(Node $node, string $variableName): ?Assign
+    private function findAssignToVariableName(Node $node, string $variableName): ?Node
     {
         return $this->betterNodeFinder->findFirst($node, function (Node $node) use ($variableName): bool {
             if (! $node instanceof Assign) {

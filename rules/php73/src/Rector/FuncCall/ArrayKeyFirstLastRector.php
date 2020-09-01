@@ -32,7 +32,7 @@ final class ArrayKeyFirstLastRector extends AbstractRector
     private const ARRAY_KEY_LAST = 'array_key_last';
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const PREVIOUS_TO_NEW_FUNCTIONS = [
         'reset' => self::ARRAY_KEY_FIRST,

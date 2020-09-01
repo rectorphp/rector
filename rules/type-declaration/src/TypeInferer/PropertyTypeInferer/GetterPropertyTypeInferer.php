@@ -33,16 +33,16 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
     /**
      * @var FunctionLikeReturnTypeResolver
      */
-    private $typeDeclarationToStringConverter;
+    private $functionLikeReturnTypeResolver;
 
     public function __construct(
         ReturnTagReturnTypeInferer $returnTagReturnTypeInferer,
         ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
-        FunctionLikeReturnTypeResolver $typeDeclarationToStringConverter
+        FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver
     ) {
         $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;
         $this->returnTagReturnTypeInferer = $returnTagReturnTypeInferer;
-        $this->typeDeclarationToStringConverter = $typeDeclarationToStringConverter;
+        $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
     }
 
     public function inferProperty(Property $property): Type
@@ -102,7 +102,7 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
 
     private function inferClassMethodReturnType(ClassMethod $classMethod): Type
     {
-        $returnTypeDeclarationType = $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToPHPStanType(
+        $returnTypeDeclarationType = $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType(
             $classMethod
         );
 

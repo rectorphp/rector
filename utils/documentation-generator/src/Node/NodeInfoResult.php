@@ -19,7 +19,7 @@ final class NodeInfoResult
     }
 
     /**
-     * @return string[]
+     * @return int[]|string[]
      */
     public function getCategories(): array
     {

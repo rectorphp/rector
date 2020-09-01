@@ -14,6 +14,9 @@ use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 
+/**
+ * @see \Rector\PHPStanStaticTypeMapper\Tests\TypeMapper\ArrayTypeMapperTest
+ */
 final class ArrayTypeMapper implements PhpDocTypeMapperInterface
 {
     /**

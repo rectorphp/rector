@@ -70,11 +70,6 @@ final class ParsedNodeCollector
     private $traits = [];
 
     /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
      * @var StaticCall[]
      */
     private $staticCalls = [];
@@ -93,6 +88,10 @@ final class ParsedNodeCollector
      * @var ClassConstFetch[]
      */
     private $classConstFetches = [];
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
 
     public function __construct(NodeNameResolver $nodeNameResolver)
     {
@@ -283,6 +282,22 @@ final class ParsedNodeCollector
 
         $this->classes[$className] = $class;
     }
+    /**
+     * @param Interface_|Trait_ $classLike
+     */
+    private function collectInterfaceOrTrait(ClassLike $classLike): void
+    {
+        $name = $this->nodeNameResolver->getName($classLike);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        if ($classLike instanceof Interface_) {
+            $this->interfaces[$name] = $classLike;
+        } elseif ($classLike instanceof Trait_) {
+            $this->traits[$name] = $classLike;
+        }
+    }
 
     private function addClassConstant(ClassConst $classConst): void
     {
@@ -318,22 +333,5 @@ final class ParsedNodeCollector
 
         // PHPStan polution
         return Strings::startsWith($class->name->toString(), 'AnonymousClass');
-    }
-
-    /**
-     * @param Interface_|Trait_ $classLike
-     */
-    private function collectInterfaceOrTrait(ClassLike $classLike): void
-    {
-        $name = $this->nodeNameResolver->getName($classLike);
-        if ($name === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        if ($classLike instanceof Interface_) {
-            $this->interfaces[$name] = $classLike;
-        } elseif ($classLike instanceof Trait_) {
-            $this->traits[$name] = $classLike;
-        }
     }
 }

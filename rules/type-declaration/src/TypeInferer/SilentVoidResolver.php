@@ -21,7 +21,7 @@ final class SilentVoidResolver
      * @param ClassMethod|Closure|Function_ $functionLike
      * @param Return_[] $localReturns
      */
-    public function hasSilentVoid(FunctionLike $functionLike, array $localReturns): bool
+    public function hasSilentVoid(FunctionLike $functionLike): bool
     {
         if ($this->hasStmtsAlwaysReturn((array) $functionLike->stmts)) {
             return false;
@@ -44,6 +44,24 @@ final class SilentVoidResolver
         }
 
         return true;
+    }
+    /**
+     * @param Stmt[]|Expression[] $stmts
+     */
+    private function hasStmtsAlwaysReturn(array $stmts): bool
+    {
+        foreach ($stmts as $stmt) {
+            if ($stmt instanceof Expression) {
+                $stmt = $stmt->expr;
+            }
+
+            // is 1st level return
+            if ($stmt instanceof Return_) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function isSwitchWithAlwaysReturn(Switch_ $switch): bool
@@ -69,32 +87,9 @@ final class SilentVoidResolver
         }
 
         foreach ($tryCatch->catches as $catch) {
-            if (! $this->hasStmtsAlwaysReturn((array) $catch->stmts)) {
-                return false;
-            }
-
-            return true;
+            return $this->hasStmtsAlwaysReturn((array) $catch->stmts);
         }
 
         return true;
-    }
-
-    /**
-     * @param Stmt[]|Expression[] $stmts
-     */
-    private function hasStmtsAlwaysReturn(array $stmts): bool
-    {
-        foreach ($stmts as $stmt) {
-            if ($stmt instanceof Expression) {
-                $stmt = $stmt->expr;
-            }
-
-            // is 1st level return
-            if ($stmt instanceof Return_) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

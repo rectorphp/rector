@@ -7,6 +7,9 @@ namespace Rector\Core\Configuration\MinimalVersionChecker;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
 
+/**
+ * @see \Rector\Core\Tests\Configuration\ComposerJsonParserTest
+ */
 final class ComposerJsonParser
 {
     /**

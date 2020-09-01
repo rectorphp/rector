@@ -56,15 +56,15 @@ abstract class AbstractMatchAndRefactor
     /**
      * @return FuncCall|BooleanNot
      */
-    protected function createStrStartsWith(StrStartsWith $strStartsWithValueObject): Node
+    protected function createStrStartsWith(StrStartsWith $strStartsWith): Node
     {
         $args = [
-            new Arg($strStartsWithValueObject->getHaystackExpr()),
-            new Arg($strStartsWithValueObject->getNeedleExpr()),
+            new Arg($strStartsWith->getHaystackExpr()),
+            new Arg($strStartsWith->getNeedleExpr()),
         ];
 
         $funcCall = new FuncCall(new Name('str_starts_with'), $args);
-        if ($strStartsWithValueObject->isPositive()) {
+        if ($strStartsWith->isPositive()) {
             return $funcCall;
         }
 

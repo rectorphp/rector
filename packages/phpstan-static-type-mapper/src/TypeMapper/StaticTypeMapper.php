@@ -16,6 +16,9 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\StaticTypeMapper\StaticTypeMapperTest
+ */
 final class StaticTypeMapper implements TypeMapperInterface
 {
     /**

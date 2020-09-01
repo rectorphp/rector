@@ -41,7 +41,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     ];
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const RENAME_METHODS_MAP = [
         'assertTrue' => 'assertInternalType',

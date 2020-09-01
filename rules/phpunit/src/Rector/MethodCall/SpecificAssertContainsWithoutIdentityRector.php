@@ -20,7 +20,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class SpecificAssertContainsWithoutIdentityRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[][]
+     * @var array<string, array<string, string>>
      */
     private const OLD_METHODS_NAMES_TO_NEW_NAMES = [
         'string' => [

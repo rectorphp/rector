@@ -127,13 +127,11 @@ PHP
 
         $currentReturnType = $this->getNodeReturnPhpDocType($node);
 
-        if ($currentReturnType !== null) {
-            if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
-                $currentReturnType,
-                $inferedType
-            )) {
-                return null;
-            }
+        if ($currentReturnType !== null && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
+            $currentReturnType,
+            $inferedType
+        )) {
+            return null;
         }
 
         if ($this->shouldSkipType($inferedType, $node)) {
@@ -163,6 +161,16 @@ PHP
         }
 
         return $currentPhpDocReturnType instanceof IterableType;
+    }
+    private function getNodeReturnPhpDocType(ClassMethod $classMethod): ?Type
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
+
+        return $phpDocInfo->getReturnType();
     }
 
     /**
@@ -286,16 +294,5 @@ PHP
 
         $currentReturnType = $this->getNodeReturnPhpDocType($classMethod);
         return $currentReturnType instanceof ArrayType;
-    }
-
-    private function getNodeReturnPhpDocType(ClassMethod $classMethod): ?Type
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
-        return $phpDocInfo->getReturnType();
     }
 }

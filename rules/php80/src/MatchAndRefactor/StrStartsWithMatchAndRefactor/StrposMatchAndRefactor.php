@@ -55,9 +55,9 @@ final class StrposMatchAndRefactor extends AbstractMatchAndRefactor implements S
      * @return FuncCall
      * @noRector \Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector
      */
-    public function refactorStrStartsWith(StrStartsWith $strStartsWithValueObject): ?Node
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith): ?Node
     {
-        $strposFuncCall = $strStartsWithValueObject->getFuncCall();
+        $strposFuncCall = $strStartsWith->getFuncCall();
         $strposFuncCall->name = new Name('str_starts_with');
 
         return $strposFuncCall;

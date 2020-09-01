@@ -28,7 +28,7 @@ final class SetCookieRector extends AbstractRector
 {
     /**
      * Conversion table from argument index to options name
-     * @var string[]
+     * @var array<int, string>
      */
     private const KNOWN_OPTIONS = [
         2 => 'expires',

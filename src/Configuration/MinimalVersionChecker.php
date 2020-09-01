@@ -7,6 +7,9 @@ namespace Rector\Core\Configuration;
 use Rector\Core\Configuration\MinimalVersionChecker\ComposerJsonParser;
 use Rector\Core\Exception\Application\PhpVersionException;
 
+/**
+ * @see \Rector\Core\Tests\Configuration\MinimalVersionCheckerTest
+ */
 final class MinimalVersionChecker
 {
     /**

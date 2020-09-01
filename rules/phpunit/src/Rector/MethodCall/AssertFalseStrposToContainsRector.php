@@ -19,7 +19,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const RENAME_METHODS_MAP = [
         'assertFalse' => 'assertNotContains',

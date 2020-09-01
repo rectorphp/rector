@@ -7,6 +7,9 @@ namespace Rector\Order;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\NodeNameResolver\NodeNameResolver;
 
+/**
+ * @see \Rector\Order\Tests\StmtOrderTest
+ */
 final class StmtOrder
 {
     /**

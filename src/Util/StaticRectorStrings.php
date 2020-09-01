@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 
 /**
  * @see \Rector\Core\Tests\Util\RectorStringsTest
+ * @see \Rector\Core\Tests\Util\StaticRectorStringsTest
  */
 final class StaticRectorStrings
 {

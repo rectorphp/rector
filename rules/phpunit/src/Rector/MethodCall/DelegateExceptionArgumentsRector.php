@@ -18,7 +18,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const OLD_TO_NEW_METHOD = [
         'setExpectedException' => 'expectExceptionMessage',

@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class OptionNameRector extends AbstractFormAddRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const OLD_TO_NEW_OPTION = [
         'precision' => 'scale',

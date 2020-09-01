@@ -19,7 +19,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends AbstractFormAddRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const OLD_TO_NEW_OPTION_NAME = [
         'type' => 'entry_type',
