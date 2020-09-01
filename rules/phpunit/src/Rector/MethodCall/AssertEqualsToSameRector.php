@@ -7,6 +7,7 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -71,11 +72,11 @@ final class AssertEqualsToSameRector extends AbstractPHPUnitRector
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
