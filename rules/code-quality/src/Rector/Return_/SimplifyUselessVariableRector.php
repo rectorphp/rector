@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\MixedType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -84,6 +86,10 @@ PHP
         }
 
         if ($previousNode instanceof Assign) {
+            if ($this->isReturnWithVarAnnotation($node)) {
+                return null;
+            }
+
             $node->expr = $previousNode->expr;
         }
 
@@ -136,5 +142,19 @@ PHP
         return $prePreviousExpression instanceof Expression &&
             $prePreviousExpression->expr instanceof AssignOp &&
             $this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var);
+    }
+
+    private function isReturnWithVarAnnotation(Node $node): bool
+    {
+        if (! $node instanceof Return_) {
+            return false;
+        }
+
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return false;
+        }
+
+        return ! $phpDocInfo->getVarType() instanceof MixedType;
     }
 }

@@ -31,7 +31,7 @@ final class MarkdownDumpNodesOutputFormatter
         $this->symfonyStyle->newLine();
 
         /** @var string $category */
-        foreach ($nodeInfoResult->getNodeInfos() as $category => $nodeInfos) {
+        foreach ($nodeInfoResult->getNodeInfosByCategory() as $category => $nodeInfos) {
             $categoryTitle = $this->createCategoryTitle($category);
             $this->symfonyStyle->writeln('## ' . $categoryTitle);
             $this->symfonyStyle->newLine();
