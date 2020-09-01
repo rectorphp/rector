@@ -112,6 +112,10 @@ PHP
                 return null;
             }
 
+            if ($node->expr instanceof Int_) {
+                return null;
+            }
+
             // is there return without nesting?
             if ($this->areNodesEqual($node->getAttribute(AttributeKey::PARENT_NODE), $classMethod)) {
                 $hasReturn = true;
