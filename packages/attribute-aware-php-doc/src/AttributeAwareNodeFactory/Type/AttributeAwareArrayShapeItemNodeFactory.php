@@ -35,7 +35,6 @@ final class AttributeAwareArrayShapeItemNodeFactory implements AttributeNodeAwar
     public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         $node->valueType = $this->attributeAwareNodeFactory->createFromNode($node->valueType, $docContent);
-
         return new AttributeAwareArrayShapeItemNode($node->keyName, $node->optional, $node->valueType, $docContent);
     }
 

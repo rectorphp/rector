@@ -15,7 +15,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure();
 
     $services->load('Rector\PSR4\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Rector/*', __DIR__ . '/../src/ValueObject/*']);
+        ->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/ValueObject']);
 
     $services->alias(PSR4AutoloadNamespaceMatcherInterface::class, PSR4NamespaceMatcher::class);
 };

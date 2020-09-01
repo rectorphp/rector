@@ -59,7 +59,7 @@ final class RectorRecipe
     private $nodeTypes = [];
 
     /**
-     * @var mixed[]
+     * @var string[]
      */
     private $resources = [];
 
@@ -123,6 +123,9 @@ final class RectorRecipe
         return $this->name;
     }
 
+    /**
+     * @return class-string[]
+     */
     public function getNodeTypes(): array
     {
         return $this->nodeTypes;
@@ -143,6 +146,9 @@ final class RectorRecipe
         return $this->codeAfter;
     }
 
+    /**
+     * @return string[]
+     */
     public function getResources(): array
     {
         return $this->resources;

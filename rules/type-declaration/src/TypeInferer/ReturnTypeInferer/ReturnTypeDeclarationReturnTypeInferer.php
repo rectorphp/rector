@@ -8,17 +8,17 @@ use PhpParser\Node\FunctionLike;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use Rector\TypeDeclaration\TypeDeclarationToStringConverter;
+use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
 final class ReturnTypeDeclarationReturnTypeInferer extends AbstractTypeInferer implements ReturnTypeInfererInterface
 {
     /**
-     * @var TypeDeclarationToStringConverter
+     * @var FunctionLikeReturnTypeResolver
      */
     private $typeDeclarationToStringConverter;
 
-    public function __construct(TypeDeclarationToStringConverter $typeDeclarationToStringConverter)
+    public function __construct(FunctionLikeReturnTypeResolver $typeDeclarationToStringConverter)
     {
         $this->typeDeclarationToStringConverter = $typeDeclarationToStringConverter;
     }

@@ -66,7 +66,7 @@ PHP
         }
 
         // 2. is in new?
-        if ($this->parsedNodeCollector->findNewNodesByClass($className) !== []) {
+        if ($this->parsedNodeCollector->findNewsByClass($className) !== []) {
             return null;
         }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
@@ -154,8 +155,8 @@ final class NodeScopeAndMetadataDecorator
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]
+     * @param Stmt[] $nodes
+     * @return Stmt[]
      */
     public function decorateNodesFromString(array $nodes): array
     {

@@ -12,5 +12,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public();
 
     $services->load('Rector\AttributeAwarePhpDoc\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Ast/*']);
+        ->exclude([__DIR__ . '/../src/Ast']);
 };

@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\AnonymousClass\NodeAnalyzer\ClassNodeAnalyzer;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
@@ -106,6 +107,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $previousAppliedClass;
 
     /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    /**
      * @required
      */
     public function autowireAbstractRectorDependencies(
@@ -117,7 +123,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
-        ClassNodeAnalyzer $classNodeAnalyzer
+        ClassNodeAnalyzer $classNodeAnalyzer,
+        CurrentNodeProvider $currentNodeProvider
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -128,6 +135,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
         $this->classNodeAnalyzer = $classNodeAnalyzer;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     /**
@@ -175,6 +183,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         $this->currentRectorProvider->changeCurrentRector($this);
+        // mostly for PHP doc and change notifications
+        $this->currentNodeProvider->setNode($node);
 
         // already removed
         if ($this->isNodeRemoved($node)) {

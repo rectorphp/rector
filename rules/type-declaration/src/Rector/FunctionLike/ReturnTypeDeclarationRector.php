@@ -6,24 +6,22 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\ChildPopulator\ChildReturnPopulator;
+use Rector\TypeDeclaration\OverrideGuard\ClassMethodReturnTypeOverrideGuard;
 use Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover;
 use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -61,16 +59,30 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $nonInformativeReturnTagRemover;
 
+    /**
+     * @var ChildReturnPopulator
+     */
+    private $childReturnPopulator;
+
+    /**
+     * @var ClassMethodReturnTypeOverrideGuard
+     */
+    private $classMethodReturnTypeOverrideGuard;
+
     public function __construct(
         ReturnTypeInferer $returnTypeInferer,
+        ChildReturnPopulator $childReturnPopulator,
         ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker,
         NonInformativeReturnTagRemover $nonInformativeReturnTagRemover,
+        ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
         bool $overrideExistingReturnTypes = true
     ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->overrideExistingReturnTypes = $overrideExistingReturnTypes;
         $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
         $this->nonInformativeReturnTagRemover = $nonInformativeReturnTagRemover;
+        $this->childReturnPopulator = $childReturnPopulator;
+        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
     }
 
     public function getDefinition(): RectorDefinition
@@ -145,7 +157,7 @@ PHP
         $this->nonInformativeReturnTagRemover->removeReturnTagIfNotUseful($node);
 
         if ($node instanceof ClassMethod) {
-            $this->populateChildren($node, $inferedType);
+            $this->childReturnPopulator->populateChildren($node, $inferedType);
         }
 
         return $node;
@@ -168,6 +180,10 @@ PHP
             return false;
         }
 
+        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike)) {
+            return true;
+        }
+
         return $this->isNames($functionLike, self::EXCLUDED_METHOD_NAMES);
     }
 
@@ -181,26 +197,31 @@ PHP
             return true;
         }
 
-        // prevent void overriding exception
-        if ($this->isVoidDueToThrow($functionLike, $inferredReturnNode)) {
-            return true;
-        }
-
         // already overridden by previous populateChild() method run
         return $functionLike->returnType && $functionLike->returnType->getAttribute(AttributeKey::DO_NOT_CHANGE);
     }
 
-    private function shouldSkipExistingReturnType(Node $node, Type $inferedType): bool
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     */
+    private function shouldSkipExistingReturnType(FunctionLike $functionLike, Type $inferedType): bool
     {
-        $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
+        if ($functionLike->returnType === null) {
+            return false;
+        }
 
-        if ($node instanceof ClassMethod && $this->vendorLockResolver->isReturnChangeVendorLockedIn($node)) {
+        $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
+
+        if ($functionLike instanceof ClassMethod && $this->vendorLockResolver->isReturnChangeVendorLockedIn(
+            $functionLike
+        )) {
             return true;
         }
 
         if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
             return true;
         }
+
         return $this->isNullableTypeSubType($currentType, $inferedType);
     }
 
@@ -221,50 +242,6 @@ PHP
         } else {
             $functionLike->returnType = $inferredReturnNode;
         }
-    }
-
-    /**
-     * Add typehint to all children class methods
-     */
-    private function populateChildren(ClassMethod $classMethod, Type $returnType): void
-    {
-        $methodName = $this->getName($classMethod);
-        if ($methodName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if (! is_string($className)) {
-            throw new ShouldNotHappenException();
-        }
-
-        $childrenClassLikes = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
-        if ($childrenClassLikes === []) {
-            return;
-        }
-
-        // update their methods as well
-        foreach ($childrenClassLikes as $childClassLike) {
-            $usedTraits = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($childClassLike);
-            foreach ($usedTraits as $trait) {
-                $this->addReturnTypeToChildMethod($trait, $classMethod, $returnType);
-            }
-
-            $this->addReturnTypeToChildMethod($childClassLike, $classMethod, $returnType);
-        }
-    }
-
-    private function isVoidDueToThrow(Node $node, Node $inferredReturnNode): bool
-    {
-        if (! $inferredReturnNode instanceof Identifier) {
-            return false;
-        }
-
-        if ($inferredReturnNode->name !== 'void') {
-            return false;
-        }
-
-        return (bool) $this->betterNodeFinder->findFirstInstanceOf($node->stmts, Throw_::class);
     }
 
     /**
@@ -294,30 +271,5 @@ PHP
         }
 
         return $inferedType->isSubTypeOf($currentType)->yes();
-    }
-
-    private function addReturnTypeToChildMethod(
-        ClassLike $classLike,
-        ClassMethod $classMethod,
-        Type $returnType
-    ): void {
-        $methodName = $this->getName($classMethod);
-
-        $currentClassMethod = $classLike->getMethod($methodName);
-        if ($currentClassMethod === null) {
-            return;
-        }
-
-        $resolvedChildTypeNode = $this->resolveChildTypeNode($returnType);
-        if ($resolvedChildTypeNode === null) {
-            return;
-        }
-
-        $currentClassMethod->returnType = $resolvedChildTypeNode;
-
-        // make sure the type is not overridden
-        $currentClassMethod->returnType->setAttribute(AttributeKey::DO_NOT_CHANGE, true);
-
-        $this->notifyNodeFileInfo($currentClassMethod);
     }
 }

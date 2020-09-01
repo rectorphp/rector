@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
@@ -51,6 +52,9 @@ final class StrposMatchAndRefactor extends AbstractMatchAndRefactor implements S
         return null;
     }
 
+    /**
+     * @return FuncCall|BooleanNot|null
+     */
     public function refactorStrStartsWith(StrStartsWith $strStartsWithValueObject): ?Node
     {
         $strposFuncCall = $strStartsWithValueObject->getFuncCall();

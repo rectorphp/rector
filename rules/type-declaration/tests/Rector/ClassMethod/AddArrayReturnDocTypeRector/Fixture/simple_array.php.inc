@@ -10,7 +10,7 @@ class SimpleArray
     }
 
     /**
-     * @return void[]
+     * @return void
      */
     public function getAnEmptyArray(): array
     {

@@ -102,16 +102,20 @@ PHP
         if (! $this->isName($classMethod, 'rules')) {
             return true;
         }
-        return ! $arrayItem->value instanceof String_ && ! $arrayItem->value instanceof Concat;
+
+        if ($arrayItem->value instanceof String_) {
+            return false;
+        }
+
+        return ! $arrayItem->value instanceof Concat;
     }
 
     /**
-     * @return Expr[]
+     * @return array<int, Expr>
      */
     private function createNewRules(ArrayItem $arrayItem): array
     {
         $newRules = $this->transformRulesSetToExpressionsArray($arrayItem->value);
-
         foreach ($newRules as $key => $newRule) {
             if (! $newRule instanceof Concat) {
                 continue;
@@ -133,6 +137,10 @@ PHP
             $arguments = [new ClassConstFetch(new Name($ruleClass), 'class'), new String_($ruleAttribute)];
 
             $ruleExistsStaticCall = $this->createStaticCall('Illuminate\Validation\Rule', 'exists', $arguments);
+            if (! is_int($key)) {
+                throw new ShouldNotHappenException();
+            }
+
             $newRules[$key] = $ruleExistsStaticCall;
         }
 
@@ -145,9 +153,14 @@ PHP
     private function transformRulesSetToExpressionsArray(Expr $expr): array
     {
         if ($expr instanceof String_) {
-            return array_map(static function (string $value): String_ {
-                return new String_($value);
-            }, explode('|', $expr->value));
+            $items = explode('|', $expr->value);
+
+            $strings = [];
+            foreach ($items as $item) {
+                $strings[] = new String_($item);
+            }
+
+            return $strings;
         }
 
         if ($expr instanceof Concat) {

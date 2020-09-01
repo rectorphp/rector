@@ -30,7 +30,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class MysqlAssignToMysqliRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const FIELD_TO_FIELD_DIRECT = [
         'mysql_field_len' => 'length',

@@ -13,7 +13,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\TypeDeclarationToStringConverter;
+use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInferer;
@@ -31,14 +31,14 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
     private $returnTagReturnTypeInferer;
 
     /**
-     * @var TypeDeclarationToStringConverter
+     * @var FunctionLikeReturnTypeResolver
      */
     private $typeDeclarationToStringConverter;
 
     public function __construct(
         ReturnTagReturnTypeInferer $returnTagReturnTypeInferer,
         ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
-        TypeDeclarationToStringConverter $typeDeclarationToStringConverter
+        FunctionLikeReturnTypeResolver $typeDeclarationToStringConverter
     ) {
         $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;
         $this->returnTagReturnTypeInferer = $returnTagReturnTypeInferer;

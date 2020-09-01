@@ -12,5 +12,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public();
 
     $services->load('Rector\DynamicTypeAnalysis\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Rector/*']);
+        ->exclude([__DIR__ . '/../src/Rector']);
 };
