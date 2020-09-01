@@ -26,7 +26,7 @@ final class DoctrineTypedPropertyRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

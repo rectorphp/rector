@@ -15,7 +15,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure();
 
     $services->load('Rector\Doctrine\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Rector/*']);
+        ->exclude([__DIR__ . '/../src/Rector']);
 
     $services->alias(
         DoctrineEntityAndRepositoryMapperInterface::class,

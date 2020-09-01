@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractPHPUnitRector;
@@ -92,7 +93,7 @@ PHP
 
     private function replaceMockWithMockerMockAndCollectMockVariableName(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?StaticCall {
             if (! $this->isFuncCallName($node, 'mock')) {
                 return null;
             }
@@ -111,17 +112,20 @@ PHP
      */
     private function replaceMethodCallOncePropertyFetch(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
-            if (! $node instanceof PropertyFetch) {
-                return null;
-            }
+        $this->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node): ?MethodCall {
+                if (! $node instanceof PropertyFetch) {
+                    return null;
+                }
 
-            if (! $this->isNames($node->name, ['once', 'twice'])) {
-                return null;
-            }
+                if (! $this->isNames($node->name, ['once', 'twice'])) {
+                    return null;
+                }
 
-            return new MethodCall($node->var, $node->name);
-        });
+                return new MethodCall($node->var, $node->name);
+            }
+        );
     }
 
     private function removeUnusedMethodCalls(ClassMethod $classMethod): void
@@ -146,7 +150,7 @@ PHP
      */
     private function replaceMethodCallWithExpects(ClassMethod $classMethod): void
     {
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): ?MethodCall {
             if (! $this->isMethodCallOrPropertyFetchOnMockVariable($node)) {
                 return null;
             }

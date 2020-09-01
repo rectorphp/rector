@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire();
 
     $services->load('Rector\NodeTypeResolver\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Contract/*', __DIR__ . '/../src/PHPStan/TypeExtension/*']);
+        ->exclude([__DIR__ . '/../src/Contract', __DIR__ . '/../src/PHPStan/TypeExtension']);
 
     $services->set(TypeAnalyzer::class);
 

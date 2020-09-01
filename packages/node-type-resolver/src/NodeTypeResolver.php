@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
@@ -32,6 +33,8 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassesInterfacesAndUsedTraitsCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PHPStan\TypeFactoryStaticHelper;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
@@ -175,7 +178,7 @@ final class NodeTypeResolver
         }
 
         if ($node instanceof New_ && $this->classNodeAnalyzer->isAnonymousClass($node->class)) {
-            return new ObjectWithoutClassType();
+            return $this->resolveAnonymousClassType($node);
         }
 
         $staticType = $nodeScope->getType($node);
@@ -362,6 +365,38 @@ final class NodeTypeResolver
         }
 
         return new ArrayType(new MixedType(), new MixedType());
+    }
+
+    private function resolveAnonymousClassType(New_ $new): ObjectWithoutClassType
+    {
+        if (! $new->class instanceof Class_) {
+            return new ObjectWithoutClassType();
+        }
+
+        $types = [];
+
+        /** @var Class_ $class */
+        $class = $new->class;
+        if ($class->extends !== null) {
+            $parentClass = (string) $class->extends;
+            $types[] = new FullyQualifiedObjectType($parentClass);
+        }
+
+        foreach ((array) $class->implements as $implement) {
+            $parentClass = (string) $implement;
+            $types[] = new FullyQualifiedObjectType($parentClass);
+        }
+
+        if (count($types) > 1) {
+            $unionType = TypeFactoryStaticHelper::createUnionObjectType($types);
+            return new ObjectWithoutClassType($unionType);
+        }
+
+        if (count($types) === 1) {
+            return new ObjectWithoutClassType($types[0]);
+        }
+
+        return new ObjectWithoutClassType();
     }
 
     private function resolveByNodeTypeResolvers(Node $node): ?Type

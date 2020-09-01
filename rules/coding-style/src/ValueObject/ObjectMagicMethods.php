@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\ValueObject;
 
+use Rector\Core\ValueObject\MethodName;
+
 final class ObjectMagicMethods
 {
     /**
@@ -13,9 +15,9 @@ final class ObjectMagicMethods
         '__call',
         '__callStatic',
         '__clone',
-        '__construct',
+        MethodName::CONSTRUCT,
         '__debugInfo',
-        '__destruct',
+        MethodName::DESCTRUCT,
         '__get',
         '__invoke',
         '__isset',

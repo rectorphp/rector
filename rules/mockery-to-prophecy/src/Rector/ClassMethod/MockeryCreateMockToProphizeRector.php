@@ -77,7 +77,7 @@ PHP
             return;
         }
 
-        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node): ?MethodCall {
             if (! $this->isStaticCallNamed($node, 'Mockery', 'mock')) {
                 return null;
             }
@@ -101,7 +101,7 @@ PHP
             return;
         }
 
-        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node): ?MethodCall {
             if (! $node instanceof Arg) {
                 return null;
             }

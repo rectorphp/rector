@@ -22,6 +22,9 @@ final class __Name__Test extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc', '__ExtraFileName__', __DIR__ . '/Source/extra_file.php'];
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

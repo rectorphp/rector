@@ -45,9 +45,6 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
         $this->parsedClassConstFetchNodeCollector = $parsedClassConstFetchNodeCollector;
     }
 
-    /**
-     * @return int|Node|void|null
-     */
     public function enterNode(Node $node)
     {
         if ($this->parsedNodeCollector->isCollectableNode($node)) {
@@ -57,5 +54,7 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
         $this->parsedFunctionLikeNodeCollector->collect($node);
         $this->parsedPropertyFetchNodeCollector->collect($node);
         $this->parsedClassConstFetchNodeCollector->collect($node);
+
+        return null;
     }
 }

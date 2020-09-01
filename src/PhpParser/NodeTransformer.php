@@ -101,7 +101,7 @@ final class NodeTransformer
         return $yieldNodes;
     }
 
-    public function transformConcatToStringArray(Concat $concat): ?Array_
+    public function transformConcatToStringArray(Concat $concat): Array_
     {
         $arrayItems = $this->transformConcatToItems($concat);
 

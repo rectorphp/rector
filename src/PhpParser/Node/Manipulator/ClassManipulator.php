@@ -89,7 +89,7 @@ final class ClassManipulator
      */
     public function getPrivatePropertyNames(Class_ $class): array
     {
-        $privateProperties = array_filter($class->getProperties(), function (Property $property) {
+        $privateProperties = array_filter($class->getProperties(), function (Property $property): bool {
             return $property->isPrivate();
         });
 
@@ -101,7 +101,7 @@ final class ClassManipulator
      */
     public function getPublicMethodNames(Class_ $class): array
     {
-        $publicMethods = array_filter($class->getMethods(), function (ClassMethod $classMethod) {
+        $publicMethods = array_filter($class->getMethods(), function (ClassMethod $classMethod): bool {
             if ($classMethod->isAbstract()) {
                 return false;
             }
@@ -167,7 +167,7 @@ final class ClassManipulator
 
     /**
      * @param Class_|Interface_ $classLike
-     * @return mixed[]|mixed
+     * @return string[]|mixed
      */
     public function getClassLikeNodeParentInterfaceNames(ClassLike $classLike)
     {

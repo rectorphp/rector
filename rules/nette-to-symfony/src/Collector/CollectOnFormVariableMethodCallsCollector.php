@@ -64,7 +64,7 @@ final class CollectOnFormVariableMethodCallsCollector
 
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
             &$newFormVariable
-        ) {
+        ): ?int {
             if (! $node instanceof Assign) {
                 return null;
             }

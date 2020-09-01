@@ -16,5 +16,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire();
 
     $services->load('Rector\FileSystemRector\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/Rector/*']);
+        ->exclude([__DIR__ . '/../src/Rector']);
 };

@@ -74,7 +74,7 @@ final class ShowCommand extends AbstractCommand
     {
         sort($rectors);
 
-        return array_filter($rectors, function (RectorInterface $rector) {
+        return array_filter($rectors, function (RectorInterface $rector): bool {
             // utils rules
             if ($rector instanceof InternalRectorInterface) {
                 return false;

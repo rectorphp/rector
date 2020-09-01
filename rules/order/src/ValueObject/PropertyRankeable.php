@@ -42,6 +42,9 @@ final class PropertyRankeable implements RankeableInterface
         return $this->name;
     }
 
+    /**
+     * @return bool[]|int[]
+     */
     public function getRanks(): array
     {
         return [$this->visibility, $this->property->isStatic(), $this->position];

@@ -14,19 +14,19 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\TypeDeclarationToStringConverter;
+use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
 final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
     /**
-     * @var TypeDeclarationToStringConverter
+     * @var FunctionLikeReturnTypeResolver
      */
-    private $typeDeclarationToStringConverter;
+    private $functionLikeReturnTypeResolver;
 
-    public function __construct(TypeDeclarationToStringConverter $typeDeclarationToStringConverter)
+    public function __construct(FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver)
     {
-        $this->typeDeclarationToStringConverter = $typeDeclarationToStringConverter;
+        $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
     }
 
     public function inferProperty(Property $property): Type
@@ -46,7 +46,7 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
                 continue;
             }
 
-            $returnType = $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToPHPStanType(
+            $returnType = $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType(
                 $classMethod
             );
             // let PhpDoc solve that later for more precise type

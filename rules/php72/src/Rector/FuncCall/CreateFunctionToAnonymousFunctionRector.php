@@ -19,6 +19,7 @@ use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -28,6 +29,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see https://stackoverflow.com/q/48161526/1348344
  * @see http://php.net/manual/en/migration72.deprecated.php#migration72.deprecated.create_function-function
+ *
  * @see \Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\CreateFunctionToAnonymousFunctionRectorTest
  */
 final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
@@ -121,12 +123,24 @@ PHP
 
         $nodes = $this->inlineCodeParser->parse($content);
 
-        return $nodes[0]->expr->expr->params;
+        /** @var Expression $expression */
+        $expression = $nodes[0];
+
+        /** @var Assign $assign */
+        $assign = $expression->expr;
+
+        /** @var Closure $function */
+        $function = $assign->expr;
+        if (! $function instanceof Closure) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $function->params;
     }
 
     /**
      * @param String_|Expr $node
-     * @return Stmt[]|Expression[]
+     * @return Expression[]|Stmt[]
      */
     private function parseStringToBody(Node $node): array
     {

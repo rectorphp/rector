@@ -20,7 +20,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 final class RandomFunctionRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const OLD_TO_NEW_FUNCTION_NAMES = [
         'getrandmax' => 'mt_getrandmax',

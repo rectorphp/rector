@@ -31,6 +31,9 @@ final class NewValueObjectFactory
         return new New_(new Name($valueObjectClass), $args);
     }
 
+    /**
+     * @return mixed[]
+     */
     private function resolvePropertyValuesFromValueObject(string $valueObjectClass, object $valueObject): array
     {
         $reflectionClass = new ReflectionClass($valueObjectClass);

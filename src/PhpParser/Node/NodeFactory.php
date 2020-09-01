@@ -378,17 +378,17 @@ final class NodeFactory
      */
     public function createConcat(array $exprs): ?Concat
     {
-        if ($exprs === []) {
+        if (count($exprs) < 2) {
             return null;
         }
 
         /** @var Expr $previousConcat */
         $previousConcat = array_shift($exprs);
-
         foreach ($exprs as $expr) {
             $previousConcat = new Concat($previousConcat, $expr);
         }
 
+        /** @var Concat $previousConcat */
         return $previousConcat;
     }
 

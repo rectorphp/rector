@@ -15,7 +15,7 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocRemover;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
+use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -129,11 +129,11 @@ final class PhpDocInfoFactory
         /** @var AttributeAwareNodeInterface $lastChildNode */
         $lastChildNode = array_pop($phpDocChildNodes);
 
-        /** @var StartEndValueObject $startEndValueObject */
-        $startEndValueObject = $lastChildNode->getAttribute(Attribute::START_END);
+        /** @var StartAndEnd $startAndEnd */
+        $startAndEnd = $lastChildNode->getAttribute(Attribute::START_END);
 
-        if ($startEndValueObject !== null) {
-            $attributeAwarePhpDocNode->setAttribute(Attribute::LAST_TOKEN_POSITION, $startEndValueObject->getEnd());
+        if ($startAndEnd !== null) {
+            $attributeAwarePhpDocNode->setAttribute(Attribute::LAST_TOKEN_POSITION, $startAndEnd->getEnd());
         }
     }
 

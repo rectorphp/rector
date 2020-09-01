@@ -21,7 +21,6 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\StaticAnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
@@ -147,7 +146,7 @@ final class PhpDocInfo
         return count($this->tokens);
     }
 
-    public function getVarTagValue(): ?AttributeAwareVarTagValueNode
+    public function getVarTagValue(): ?VarTagValueNode
     {
         return $this->phpDocNode->getVarTagValues()[0] ?? null;
     }
@@ -166,7 +165,11 @@ final class PhpDocInfo
             return $tag->name === $name;
         });
 
-        return array_values($tags);
+        // @todo add dynamic function type resolver to PHPStan, the same type on input is on output
+        $tags = array_values($tags);
+
+        /** @var PhpDocTagNode[]|AttributeAwareNodeInterface[] $tags */
+        return $tags;
     }
 
     public function getParamType(string $name): Type

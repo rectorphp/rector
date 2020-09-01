@@ -30,7 +30,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PregMatchFunctionToNetteUtilsStringsRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const FUNCTION_NAME_TO_METHOD_NAME = [
         'preg_match' => 'match',

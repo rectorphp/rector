@@ -6,6 +6,7 @@ namespace Rector\Php71\Rector\TryCatch;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -69,19 +70,20 @@ PHP
 
         $catchKeysByContent = $this->collectCatchKeysByContent($node);
 
-        foreach ($catchKeysByContent as $keys) {
+        foreach ($catchKeysByContent as $catches) {
             // no duplicates
-            if (count($keys) < 2) {
+            if (count($catches) < 2) {
                 continue;
             }
 
-            $collectedTypes = $this->collectTypesFromCatchedByIds($node, $keys);
+            $collectedTypes = $this->collectTypesFromCatchedByIds($node, $catches);
 
-            $firstTryKey = array_shift($keys);
-            $node->catches[$firstTryKey]->types = $collectedTypes;
+            /** @var Catch_ $firstCatch */
+            $firstCatch = array_shift($catches);
+            $firstCatch->types = $collectedTypes;
 
-            foreach ($keys as $key) {
-                unset($node->catches[$key]);
+            foreach ($catches as $catch) {
+                $this->removeNode($catch);
             }
         }
 
@@ -89,30 +91,29 @@ PHP
     }
 
     /**
-     * @return array<string, int[]>
+     * @return array<string, Catch_[]>
      */
     private function collectCatchKeysByContent(TryCatch $tryCatch): array
     {
         $catchKeysByContent = [];
-        foreach ($tryCatch->catches as $key => $catch) {
+        foreach ($tryCatch->catches as $catch) {
             $catchContent = $this->print($catch->stmts);
-            /** @var int $key */
-            $catchKeysByContent[$catchContent][] = $key;
+            $catchKeysByContent[$catchContent][] = $catch;
         }
 
         return $catchKeysByContent;
     }
 
     /**
-     * @param int[] $keys
+     * @param Catch_[] $catches
      * @return Name[]
      */
-    private function collectTypesFromCatchedByIds(TryCatch $tryCatch, array $keys): array
+    private function collectTypesFromCatchedByIds(TryCatch $tryCatch, array $catches): array
     {
         $collectedTypes = [];
 
-        foreach ($keys as $key) {
-            $collectedTypes = array_merge($collectedTypes, $tryCatch->catches[$key]->types);
+        foreach ($catches as $catch) {
+            $collectedTypes = array_merge($collectedTypes, $catch->types);
         }
 
         return $collectedTypes;

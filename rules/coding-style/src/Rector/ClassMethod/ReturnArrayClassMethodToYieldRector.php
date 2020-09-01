@@ -59,6 +59,14 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
     public function __construct(NodeTransformer $nodeTransformer)
     {
         $this->nodeTransformer = $nodeTransformer;
+
+        // default values
+        $this->methodsToYields = [
+            new MethodToYield('PHPUnit\Framework\TestCase', 'provideData'),
+            new MethodToYield('PHPUnit\Framework\TestCase', 'provideData*'),
+            new MethodToYield('PHPUnit\Framework\TestCase', 'dataProvider'),
+            new MethodToYield('PHPUnit\Framework\TestCase', 'dataProvider*'),
+        ];
     }
 
     public function getDefinition(): RectorDefinition

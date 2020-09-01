@@ -27,7 +27,7 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
     /**
      * In reversed order, which they should be called in code.
      *
-     * @var string[]
+     * @var array<string, string>
      */
     private const ANNOTATION_TO_METHOD = [
         'expectedExceptionMessageRegExp' => 'expectExceptionMessageRegExp',

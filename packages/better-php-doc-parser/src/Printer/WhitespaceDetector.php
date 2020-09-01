@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
-use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
+use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 
 final class WhitespaceDetector
 {
@@ -18,18 +18,18 @@ final class WhitespaceDetector
      * @param mixed[] $tokens
      * @return string[]
      */
-    public function detectOldWhitespaces(Node $node, array $tokens, StartEndValueObject $startEndValueObject): array
+    public function detectOldWhitespaces(Node $node, array $tokens, StartAndEnd $startAndEnd): array
     {
         $oldWhitespaces = [];
 
-        $start = $startEndValueObject->getStart();
+        $start = $startAndEnd->getStart();
         // this is needed, because of 1 token taken from tokens and added annotation name: "ORM" + "\X" → "ORM\X"
         // todo, this might be needed to be dynamic, based on taken tokens count (some Collector?)
         if ($node instanceof DoctrineTagNodeInterface) {
             --$start;
         }
 
-        for ($i = $start; $i < $startEndValueObject->getEnd(); ++$i) {
+        for ($i = $start; $i < $startAndEnd->getEnd(); ++$i) {
             /** @var string $tokenValue */
             $tokenValue = $tokens[$i][0];
 

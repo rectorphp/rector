@@ -31,7 +31,7 @@ final class NameScopeFactory
 
     /**
      * @param Use_[] $useNodes
-     * @return string[]
+     * @return array<string, string>
      */
     private function resolveUseNamesByAlias(array $useNodes): array
     {
@@ -47,7 +47,10 @@ final class NameScopeFactory
                     throw new ShouldNotHappenException();
                 }
 
-                $useNamesByAlias[$aliasName] = $useName;
+                // uses must be lowercase, as PHPStan lowercases it
+                $lowercasedAliasName = strtolower($aliasName);
+
+                $useNamesByAlias[$lowercasedAliasName] = $useName;
             }
         }
 

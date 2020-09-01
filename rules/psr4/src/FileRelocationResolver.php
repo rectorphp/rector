@@ -9,6 +9,9 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\PSR4\Tests\FileRelocationResolverTest
+ */
 final class FileRelocationResolver
 {
     /**

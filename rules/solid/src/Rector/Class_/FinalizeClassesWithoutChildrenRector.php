@@ -63,7 +63,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->isFinal() || $node->isAbstract() || $node->isAnonymous()) {
+        if ($node->isFinal() || $node->isAbstract() || $this->isAnonymousClass($node)) {
             return null;
         }
 

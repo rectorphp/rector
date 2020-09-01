@@ -40,7 +40,7 @@ final class UsedClassPropertyExtractor
 
     /**
      * @param ClassMethod[] $classMethods
-     * @return Property[]
+     * @return Property[] <int|string, \PhpParser\Node\Stmt\Property>
      */
     public function extractFromClassMethods(array $classMethods, ?string $parentClassName = null): array
     {

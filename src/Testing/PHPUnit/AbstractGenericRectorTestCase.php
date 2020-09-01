@@ -187,7 +187,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     }
 
     /**
-     * @return array<string, mixed[]|null>
+     * @return mixed[]
      */
     protected function getCurrentTestRectorClassesWithConfiguration(): array
     {

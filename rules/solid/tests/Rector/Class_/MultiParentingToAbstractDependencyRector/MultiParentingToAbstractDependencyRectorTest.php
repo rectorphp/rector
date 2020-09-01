@@ -25,7 +25,7 @@ final class MultiParentingToAbstractDependencyRectorTest extends AbstractRectorT
     }
 
     /**
-     * @return string[][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

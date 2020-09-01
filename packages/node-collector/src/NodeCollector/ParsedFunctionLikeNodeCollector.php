@@ -196,7 +196,7 @@ final class ParsedFunctionLikeNodeCollector
     {
         $calls = Arrays::flatten($this->methodsCallsByTypeAndMethod);
 
-        return array_filter($calls, function (Node $node) {
+        return array_filter($calls, function (Node $node): bool {
             return $node instanceof MethodCall;
         });
     }

@@ -68,7 +68,7 @@ final class NonFluentChainMethodCallFactory
 
     /**
      * @param MethodCall[] $chainMethodCalls
-     * @return Expr[]|Return_[]
+     * @return Assign[]|MethodCall[]|Return_[]
      */
     public function createFromAssignObjectAndMethodCalls(
         AssignAndRootExpr $assignAndRootExpr,

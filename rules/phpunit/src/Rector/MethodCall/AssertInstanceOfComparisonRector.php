@@ -20,7 +20,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const RENAME_METHODS_MAP = [
         'assertTrue' => 'assertInstanceOf',

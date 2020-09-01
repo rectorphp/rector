@@ -15,6 +15,9 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitor\FunctionMethodAndClassNodeVisitorTest
+ */
 final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 {
     /**

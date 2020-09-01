@@ -64,7 +64,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::EXCLUDE_PATHS, [
         '*/Source/*',
-        '*/Fixture/*', '*/Expected/*',
+        '*/Fixture/*',
+        '*/Expected/*',
         # generated from /vendor
         __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingDocParser.php',
         __DIR__ . '/packages/doctrine-annotation-generated/src/ConstantPreservingAnnotationReader.php',

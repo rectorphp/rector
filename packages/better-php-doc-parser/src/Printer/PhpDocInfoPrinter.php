@@ -18,7 +18,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
+use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
 
 /**
@@ -47,7 +47,7 @@ final class PhpDocInfoPrinter
     private $tokens = [];
 
     /**
-     * @var StartEndValueObject[]
+     * @var StartAndEnd[]
      */
     private $removedNodePositions = [];
 
@@ -170,45 +170,45 @@ final class PhpDocInfoPrinter
 
     private function printNode(
         AttributeAwareNodeInterface $attributeAwareNode,
-        ?StartEndValueObject $startEndValueObject = null,
+        ?StartAndEnd $startAndEnd = null,
         int $key = 0,
         int $nodeCount = 0
     ): string {
         $output = '';
 
-        /** @var StartEndValueObject|null $startEndValueObject */
-        $startEndValueObject = $attributeAwareNode->getAttribute(Attribute::START_END) ?: $startEndValueObject;
+        /** @var StartAndEnd|null $startAndEnd */
+        $startAndEnd = $attributeAwareNode->getAttribute(Attribute::START_END) ?: $startAndEnd;
         $attributeAwareNode = $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAwareNode);
 
-        if ($startEndValueObject !== null) {
+        if ($startAndEnd !== null) {
             $isLastToken = ($nodeCount === $key);
 
             $output = $this->addTokensFromTo(
                 $output,
                 $this->currentTokenPosition,
-                $startEndValueObject->getStart(),
+                $startAndEnd->getStart(),
                 $isLastToken
             );
 
-            $this->currentTokenPosition = $startEndValueObject->getEnd();
+            $this->currentTokenPosition = $startAndEnd->getEnd();
         }
 
         if ($attributeAwareNode instanceof PhpDocTagNode) {
-            if ($startEndValueObject !== null) {
-                return $this->printPhpDocTagNode($attributeAwareNode, $startEndValueObject, $output);
+            if ($startAndEnd !== null) {
+                return $this->printPhpDocTagNode($attributeAwareNode, $startAndEnd, $output);
             }
 
             return $output . self::NEWLINE_ASTERISK . $this->printAttributeWithAsterisk($attributeAwareNode);
         }
 
-        if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startEndValueObject) {
+        if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startAndEnd) {
             $nodeContent = (string) $attributeAwareNode;
 
             return $this->originalSpacingRestorer->restoreInOutputWithTokensStartAndEndPosition(
                 $attributeAwareNode,
                 $nodeContent,
                 $this->tokens,
-                $startEndValueObject
+                $startAndEnd
             );
         }
 
@@ -257,7 +257,7 @@ final class PhpDocInfoPrinter
      */
     private function printPhpDocTagNode(
         PhpDocTagNode $phpDocTagNode,
-        StartEndValueObject $startEndValueObject,
+        StartAndEnd $startAndEnd,
         string $output
     ): string {
         $output .= $phpDocTagNode->name;
@@ -267,7 +267,7 @@ final class PhpDocInfoPrinter
             throw new ShouldNotHappenException();
         }
 
-        $nodeOutput = $this->printNode($phpDocTagNodeValue, $startEndValueObject);
+        $nodeOutput = $this->printNode($phpDocTagNodeValue, $startAndEnd);
         $tagSpaceSeparator = $this->resolveTagSpaceSeparator($phpDocTagNode);
 
         // space is handled by $tagSpaceSeparator
@@ -301,7 +301,7 @@ final class PhpDocInfoPrinter
     }
 
     /**
-     * @return StartEndValueObject[]
+     * @return StartAndEnd[]
      */
     private function getRemovedNodesPositions(): array
     {
@@ -316,7 +316,7 @@ final class PhpDocInfoPrinter
         );
 
         foreach ($removedNodes as $removedNode) {
-            /** @var StartEndValueObject $removedPhpDocNodeInfo */
+            /** @var StartAndEnd $removedPhpDocNodeInfo */
             $removedPhpDocNodeInfo = $removedNode->getAttribute(Attribute::START_END);
 
             // change start position to start of the line, so the whole line is removed
@@ -325,10 +325,7 @@ final class PhpDocInfoPrinter
                 --$seekPosition;
             }
 
-            $this->removedNodePositions[] = new StartEndValueObject(
-                $seekPosition - 1,
-                $removedPhpDocNodeInfo->getEnd()
-            );
+            $this->removedNodePositions[] = new StartAndEnd($seekPosition - 1, $removedPhpDocNodeInfo->getEnd());
         }
 
         return $this->removedNodePositions;

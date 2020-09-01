@@ -36,7 +36,7 @@ final class RectorChangeCollector
     {
         return array_filter(
             $this->rectorWithFileAndLineChanges,
-            function (RectorWithFileAndLineChange $rectorWithFileAndLineChange) use ($smartFileInfo) {
+            function (RectorWithFileAndLineChange $rectorWithFileAndLineChange) use ($smartFileInfo): bool {
                 return $rectorWithFileAndLineChange->getRealPath() === $smartFileInfo->getRealPath();
             }
         );

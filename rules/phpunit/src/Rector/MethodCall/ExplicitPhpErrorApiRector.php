@@ -20,7 +20,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class ExplicitPhpErrorApiRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const REPLACEMENTS = [
         'PHPUnit\Framework\TestCase\Notice' => 'expectNotice',

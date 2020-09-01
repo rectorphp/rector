@@ -107,7 +107,7 @@ PHP
 
     private function containsMockeryClose(ClassMethod $classMethod): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
             if (! $node instanceof StaticCall) {
                 return false;
             }

@@ -53,9 +53,7 @@ final class TypeHasher
         }
 
         if ($type instanceof UnionType) {
-            $types = $type->getTypes();
-            sort($types);
-            $type = new UnionType($types);
+            return $this->createUnionTypeHash($type);
         }
 
         return $this->phpStanStaticTypeMapper->mapToDocString($type);
@@ -64,5 +62,18 @@ final class TypeHasher
     public function areTypesEqual(Type $firstType, Type $secondType): bool
     {
         return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
+    }
+
+    private function createUnionTypeHash(UnionType $unionType): string
+    {
+        $unionedTypesHashes = [];
+        foreach ($unionType->getTypes() as $unionedType) {
+            $unionedTypesHashes[] = $this->createTypeHash($unionedType);
+        }
+
+        sort($unionedTypesHashes);
+        $unionedTypesHashes = array_unique($unionedTypesHashes);
+
+        return implode('|', $unionedTypesHashes);
     }
 }

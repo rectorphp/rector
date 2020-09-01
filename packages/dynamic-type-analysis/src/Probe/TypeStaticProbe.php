@@ -9,6 +9,7 @@ use Rector\DynamicTypeAnalysis\ProbeStorage\StaticFileSystemProbeStorage;
 
 /**
  * @see https://stackoverflow.com/a/39525458/1348344
+ * @see \Rector\DynamicTypeAnalysis\Tests\Probe\TypeStaticProbeTest
  */
 final class TypeStaticProbe
 {

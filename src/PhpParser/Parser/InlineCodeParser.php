@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PhpParser\Parser;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -45,7 +46,7 @@ final class InlineCodeParser
     }
 
     /**
-     * @return Node[]
+     * @return Stmt[]
      */
     public function parse(string $content): array
     {

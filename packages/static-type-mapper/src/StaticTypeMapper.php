@@ -25,6 +25,7 @@ use Rector\StaticTypeMapper\PHPStan\NameScopeFactory;
 
 /**
  * Maps PhpParser <=> PHPStan <=> PHPStan doc <=> string type nodes between all possible formats
+ * @see \Rector\NodeTypeResolver\Tests\StaticTypeMapper\StaticTypeMapperTest
  */
 final class StaticTypeMapper
 {

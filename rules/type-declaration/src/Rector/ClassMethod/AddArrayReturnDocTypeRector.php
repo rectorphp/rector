@@ -21,6 +21,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\OverrideGuard\ClassMethodReturnTypeOverrideGuard;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
 use Rector\TypeDeclaration\TypeNormalizer;
@@ -47,10 +48,19 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
      */
     private $typeNormalizer;
 
-    public function __construct(ReturnTypeInferer $returnTypeInferer, TypeNormalizer $typeNormalizer)
-    {
+    /**
+     * @var ClassMethodReturnTypeOverrideGuard
+     */
+    private $classMethodReturnTypeOverrideGuard;
+
+    public function __construct(
+        ReturnTypeInferer $returnTypeInferer,
+        TypeNormalizer $typeNormalizer,
+        ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard
+    ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->typeNormalizer = $typeNormalizer;
+        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
     }
 
     public function getDefinition(): RectorDefinition
@@ -115,6 +125,15 @@ PHP
             [ReturnTypeDeclarationReturnTypeInferer::class]
         );
 
+        $currentReturnType = $this->getNodeReturnPhpDocType($node);
+
+        if ($currentReturnType !== null && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType(
+            $currentReturnType,
+            $inferedType
+        )) {
+            return null;
+        }
+
         if ($this->shouldSkipType($inferedType, $node)) {
             return null;
         }
@@ -136,17 +155,23 @@ PHP
             return true;
         }
 
+        $currentPhpDocReturnType = $this->getNodeReturnPhpDocType($classMethod);
+        if ($currentPhpDocReturnType instanceof ArrayType && $currentPhpDocReturnType->getItemType() instanceof MixedType) {
+            return true;
+        }
+
+        return $currentPhpDocReturnType instanceof IterableType;
+    }
+
+    private function getNodeReturnPhpDocType(ClassMethod $classMethod): ?Type
+    {
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
-            return false;
+            return null;
         }
 
-        $returnType = $phpDocInfo->getReturnType();
-        if ($returnType instanceof ArrayType && $returnType->getItemType() instanceof MixedType) {
-            return false;
-        }
-
-        return $returnType instanceof IterableType;
+        return $phpDocInfo->getReturnType();
     }
 
     /**
@@ -178,7 +203,7 @@ PHP
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        if ($this->isName($classMethod->name, '__*')) {
+        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod)) {
             return true;
         }
 
@@ -268,22 +293,7 @@ PHP
             return false;
         }
 
-        $currentPhpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($currentPhpDocInfo === null) {
-            return false;
-        }
-
-        return $currentPhpDocInfo->getReturnType() instanceof ArrayType;
-    }
-
-    private function getNodeReturnPhpDocType(ClassMethod $classMethod): ?Type
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
-        return $phpDocInfo->getReturnType();
+        $currentReturnType = $this->getNodeReturnPhpDocType($classMethod);
+        return $currentReturnType instanceof ArrayType;
     }
 }

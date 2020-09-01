@@ -88,7 +88,7 @@ final class MethodCallManipulator
         return $this->uniquateObjects($methodCalls);
     }
 
-    public function findAssignToVariable(Variable $variable): ?Assign
+    public function findAssignToVariable(Variable $variable): ?Node
     {
         /** @var Node|null $parentNode */
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
@@ -127,7 +127,9 @@ final class MethodCallManipulator
 
         $variableName = $this->nodeNameResolver->getName($variable);
 
-        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use ($variableName) {
+        return $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use (
+            $variableName
+        ): bool {
             if (! $node instanceof MethodCall) {
                 return false;
             }
@@ -166,7 +168,7 @@ final class MethodCallManipulator
         return array_values($uniqueObjects);
     }
 
-    private function findAssignToVariableName(Node $node, string $variableName): ?Assign
+    private function findAssignToVariableName(Node $node, string $variableName): ?Node
     {
         return $this->betterNodeFinder->findFirst($node, function (Node $node) use ($variableName): bool {
             if (! $node instanceof Assign) {

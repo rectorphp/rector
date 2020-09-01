@@ -17,7 +17,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class OverridenExistingNamesResolver
 {
     /**
-     * @var string[][]
+     * @var array<string, array<int, string>>
      */
     private $overridenExistingVariableNamesByClassMethod = [];
 
@@ -78,7 +78,7 @@ final class OverridenExistingNamesResolver
 
     /**
      * @param ClassMethod|Function_|Closure $functionLike
-     * @return string[]|mixed[]
+     * @return string[]
      */
     private function resolveOveriddenNamesForNew(FunctionLike $functionLike): array
     {

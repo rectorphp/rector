@@ -79,7 +79,7 @@ final class RectorNodeTraverser extends NodeTraverser
 
     public function getZeroCacheRectorCount(): int
     {
-        $zeroCacheRectors = array_filter($this->allPhpRectors, function (PhpRectorInterface $phpRector) {
+        $zeroCacheRectors = array_filter($this->allPhpRectors, function (PhpRectorInterface $phpRector): bool {
             return $phpRector instanceof ZeroCacheRectorInterface;
         });
 

@@ -26,6 +26,9 @@ final class ArgumentFuncCallToMethodCallRectorTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

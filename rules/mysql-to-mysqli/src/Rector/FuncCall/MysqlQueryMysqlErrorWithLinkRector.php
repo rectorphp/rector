@@ -25,7 +25,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class MysqlQueryMysqlErrorWithLinkRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const FUNCTION_RENAME_MAP = [
         'mysql_error' => 'mysqli_error',

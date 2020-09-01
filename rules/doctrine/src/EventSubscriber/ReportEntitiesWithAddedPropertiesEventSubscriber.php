@@ -52,7 +52,7 @@ final class ReportEntitiesWithAddedPropertiesEventSubscriber implements EventSub
     }
 
     /**
-     * @return string[]
+     * @return array<string, string>
      */
     public static function getSubscribedEvents(): array
     {

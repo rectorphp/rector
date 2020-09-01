@@ -37,11 +37,6 @@ final class Configuration
     private $mustMatchGitDiff = false;
 
     /**
-     * @var string
-     */
-    private $outputFile;
-
-    /**
      * @var bool
      */
     private $shouldClearCache = false;
@@ -90,6 +85,11 @@ final class Configuration
      * @var ParameterProvider
      */
     private $parameterProvider;
+
+    /**
+     * @var string|null
+     */
+    private $outputFile;
 
     /**
      * @var SmartFileInfo|null

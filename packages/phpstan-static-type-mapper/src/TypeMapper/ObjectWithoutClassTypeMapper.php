@@ -13,14 +13,21 @@ use PHPStan\Type\VerbosityLevel;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
-final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
+final class ObjectWithoutClassTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMapperAwareInterface
 {
     /**
      * @var PhpVersionProvider
      */
     private $phpVersionProvider;
+
+    /**
+     * @var PHPStanStaticTypeMapper
+     */
+    private $phpStanStaticTypeMapper;
 
     public function __construct(PhpVersionProvider $phpVersionProvider)
     {
@@ -45,6 +52,11 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
+        $subtractedType = $type->getSubtractedType();
+        if ($subtractedType !== null) {
+            return $this->phpStanStaticTypeMapper->mapToPhpParserNode($subtractedType);
+        }
+
         if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::OBJECT_TYPE)) {
             return null;
         }
@@ -55,5 +67,10 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
     public function mapToDocString(Type $type, ?Type $parentType = null): string
     {
         return $type->describe(VerbosityLevel::typeOnly());
+    }
+
+    public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    {
+        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
 }

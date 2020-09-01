@@ -124,7 +124,7 @@ PHP
     private function getSortedParams(ClassMethod $classMethod): array
     {
         $params = $classMethod->getParams();
-        usort($params, function (Param $firstParam, Param $secondParam) {
+        usort($params, function (Param $firstParam, Param $secondParam): int {
             /** @var Name $firstParamType */
             $firstParamType = $this->getParamType($firstParam);
             /** @var Name $secondParamType */

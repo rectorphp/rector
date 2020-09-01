@@ -23,13 +23,13 @@ final class NodeInfoResult
      */
     public function getCategories(): array
     {
-        return array_keys($this->getNodeInfos());
+        return array_keys($this->getNodeInfosByCategory());
     }
 
     /**
      * @return array<string, NodeInfo[]>
      */
-    public function getNodeInfos(): array
+    public function getNodeInfosByCategory(): array
     {
         ksort($this->nodeInfos);
 

@@ -111,7 +111,7 @@ PHP
     {
         $paramName = $this->getName($param->var);
 
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use ($paramName) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use ($paramName): ?int {
             if (! $node instanceof Variable) {
                 return null;
             }

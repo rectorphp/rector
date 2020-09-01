@@ -21,7 +21,7 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode im
         parent::__construct($items, $content);
     }
 
-    public function getTag(): ?string
+    public function getTag(): string
     {
         return $this->tag ?: $this->getShortName();
     }

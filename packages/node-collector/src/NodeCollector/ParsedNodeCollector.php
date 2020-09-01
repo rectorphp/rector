@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
@@ -59,11 +60,6 @@ final class ParsedNodeCollector
     private $constantsByType = [];
 
     /**
-     * @var array<array<TNodeType>>
-     */
-    private $simpleParsedNodesByType = [];
-
-    /**
      * @var Interface_[]
      */
     private $interfaces = [];
@@ -74,6 +70,26 @@ final class ParsedNodeCollector
     private $traits = [];
 
     /**
+     * @var StaticCall[]
+     */
+    private $staticCalls = [];
+
+    /**
+     * @var New_[]
+     */
+    private $news = [];
+
+    /**
+     * @var Param[]
+     */
+    private $params = [];
+
+    /**
+     * @var ClassConstFetch[]
+     */
+    private $classConstFetches = [];
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -81,15 +97,6 @@ final class ParsedNodeCollector
     public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-    }
-
-    /**
-     * @param class-string<TNodeType> $type
-     * @return array<TNodeType>
-     */
-    public function getNodesByType(string $type): array
-    {
-        return $this->simpleParsedNodesByType[$type] ?? [];
     }
 
     /**
@@ -160,25 +167,13 @@ final class ParsedNodeCollector
 
     public function collect(Node $node): void
     {
-        $nodeClass = get_class($node);
-
         if ($node instanceof Class_) {
             $this->addClass($node);
             return;
         }
 
         if ($node instanceof Interface_ || $node instanceof Trait_) {
-            $name = $this->nodeNameResolver->getName($node);
-            if ($name === null) {
-                throw new ShouldNotHappenException();
-            }
-
-            if ($node instanceof Interface_) {
-                $this->interfaces[$name] = $node;
-            } elseif ($node instanceof Trait_) {
-                $this->traits[$name] = $node;
-            }
-
+            $this->collectInterfaceOrTrait($node);
             return;
         }
 
@@ -187,28 +182,42 @@ final class ParsedNodeCollector
             return;
         }
 
-        // simple collect
-        $this->simpleParsedNodesByType[$nodeClass][] = $node;
+        if ($node instanceof StaticCall) {
+            $this->staticCalls[] = $node;
+            return;
+        }
+
+        if ($node instanceof New_) {
+            $this->news[] = $node;
+            return;
+        }
+
+        if ($node instanceof Param) {
+            $this->params[] = $node;
+            return;
+        }
+
+        if ($node instanceof ClassConstFetch) {
+            $this->classConstFetches[] = $node;
+        }
     }
 
     /**
      * @return New_[]
      */
-    public function findNewNodesByClass(string $className): array
+    public function findNewsByClass(string $className): array
     {
-        $newNodesByClass = [];
+        $newsByClass = [];
 
-        $news = $this->getNodesByType(New_::class);
-
-        foreach ($news as $new) {
+        foreach ($this->news as $new) {
             if (! $this->nodeNameResolver->isName($new->class, $className)) {
                 continue;
             }
 
-            $newNodesByClass[] = $new;
+            $newsByClass[] = $new;
         }
 
-        return $newNodesByClass;
+        return $newsByClass;
     }
 
     public function findClassConstantByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
@@ -229,6 +238,38 @@ final class ParsedNodeCollector
         return $this->findClassConstant($class, $constantName);
     }
 
+    /**
+     * @return ClassConstFetch[]
+     */
+    public function getClassConstFetches(): array
+    {
+        return $this->classConstFetches;
+    }
+
+    /**
+     * @return Param[]
+     */
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    /**
+     * @return New_[]
+     */
+    public function getNews(): array
+    {
+        return $this->news;
+    }
+
+    /**
+     * @return StaticCall[]
+     */
+    public function getStaticCalls(): array
+    {
+        return $this->staticCalls;
+    }
+
     private function addClass(Class_ $class): void
     {
         if ($this->isClassAnonymous($class)) {
@@ -241,6 +282,23 @@ final class ParsedNodeCollector
         }
 
         $this->classes[$className] = $class;
+    }
+
+    /**
+     * @param Interface_|Trait_ $classLike
+     */
+    private function collectInterfaceOrTrait(ClassLike $classLike): void
+    {
+        $name = $this->nodeNameResolver->getName($classLike);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        if ($classLike instanceof Interface_) {
+            $this->interfaces[$name] = $classLike;
+        } elseif ($classLike instanceof Trait_) {
+            $this->traits[$name] = $classLike;
+        }
     }
 
     private function addClassConstant(ClassConst $classConst): void

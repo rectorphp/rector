@@ -10,4 +10,9 @@ final class MethodName
      * @var string
      */
     public const CONSTRUCT = '__construct';
+
+    /**
+     * @var string
+     */
+    public const DESCTRUCT = '__destruct';
 }

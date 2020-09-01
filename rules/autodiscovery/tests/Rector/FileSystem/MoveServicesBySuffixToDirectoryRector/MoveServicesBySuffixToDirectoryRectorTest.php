@@ -61,6 +61,9 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystem
         ];
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

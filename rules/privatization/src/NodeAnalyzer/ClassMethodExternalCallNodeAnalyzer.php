@@ -66,7 +66,7 @@ final class ClassMethodExternalCallNodeAnalyzer
 
         // remove static calls and [$this, 'call']
         /** @var MethodCall[] $methodCalls */
-        $methodCalls = array_filter($methodCalls, function (object $node) {
+        $methodCalls = array_filter($methodCalls, function (object $node): bool {
             return $node instanceof MethodCall;
         });
 
@@ -101,7 +101,7 @@ final class ClassMethodExternalCallNodeAnalyzer
     private function isArrayCallable(ClassMethod $classMethod, array $methodCalls, string $methodName): bool
     {
         /** @var ArrayCallable[] $arrayCallables */
-        $arrayCallables = array_filter($methodCalls, function (object $node) {
+        $arrayCallables = array_filter($methodCalls, function (object $node): bool {
             return $node instanceof ArrayCallable;
         });
 

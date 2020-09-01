@@ -11,14 +11,14 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
-use Rector\Php80\ValueObject\StrStartsWithValueObject;
+use Rector\Php80\ValueObject\StrStartsWith;
 
 final class StrposMatchAndRefactor extends AbstractMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     /**
      * @param Identical|NotIdentical $binaryOp
      */
-    public function match(BinaryOp $binaryOp): ?StrStartsWithValueObject
+    public function match(BinaryOp $binaryOp): ?StrStartsWith
     {
         $isPositive = $binaryOp instanceof Identical;
 
@@ -32,7 +32,7 @@ final class StrposMatchAndRefactor extends AbstractMatchAndRefactor implements S
             $haystack = $funcCall->args[0]->value;
             $needle = $funcCall->args[1]->value;
 
-            return new StrStartsWithValueObject($funcCall, $haystack, $needle, $isPositive);
+            return new StrStartsWith($funcCall, $haystack, $needle, $isPositive);
         }
 
         if ($this->isFuncCallName($binaryOp->right, 'strpos')) {
@@ -45,7 +45,7 @@ final class StrposMatchAndRefactor extends AbstractMatchAndRefactor implements S
             $haystack = $funcCall->args[0]->value;
             $needle = $funcCall->args[1]->value;
 
-            return new StrStartsWithValueObject($funcCall, $haystack, $needle, $isPositive);
+            return new StrStartsWith($funcCall, $haystack, $needle, $isPositive);
         }
 
         return null;
@@ -53,10 +53,11 @@ final class StrposMatchAndRefactor extends AbstractMatchAndRefactor implements S
 
     /**
      * @return FuncCall
+     * @noRector \Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector
      */
-    public function refactor(StrStartsWithValueObject $strStartsWithValueObject): ?Node
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith): ?Node
     {
-        $strposFuncCall = $strStartsWithValueObject->getFuncCall();
+        $strposFuncCall = $strStartsWith->getFuncCall();
         $strposFuncCall->name = new Name('str_starts_with');
 
         return $strposFuncCall;

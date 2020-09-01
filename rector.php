@@ -3,22 +3,12 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Generic\ValueObject\NamespacePrefixWithExcludedClasses;
-use Rector\SymfonyPhpConfig\Rector\ArrayItem\ReplaceArrayWithObjectRector;
+use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ReplaceArrayWithObjectRector::class)
-        ->call('configure', [[
-            ReplaceArrayWithObjectRector::CONSTANT_NAMES_TO_VALUE_OBJECTS => [
-                'Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES' => NamespacePrefixWithExcludedClasses::class,
-            ],
-        ]]);
-
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
+    $parameters->set(Option::SETS, [SetList::TYPE_DECLARATION]);
 
     $parameters->set(Option::PATHS, [
         __DIR__ . '/src',
@@ -38,6 +28,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/packages/rector-generator/templates/*',
         '*.php.inc',
     ]);
+
+    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
     # so Rector code is still PHP 7.2 compatible
     $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');

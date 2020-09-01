@@ -132,7 +132,7 @@ PHP
     private function hasSingleStmtCases(Switch_ $switch): bool
     {
         foreach ($switch->cases as $case) {
-            $stmtsWithoutBreak = array_filter($case->stmts, function (Node $node) {
+            $stmtsWithoutBreak = array_filter($case->stmts, function (Node $node): bool {
                 return ! $node instanceof Break_;
             });
 

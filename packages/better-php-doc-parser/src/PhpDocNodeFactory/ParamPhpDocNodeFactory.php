@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ParserException;
@@ -63,10 +62,10 @@ final class ParamPhpDocNodeFactory
     {
         try {
             $tokenIterator->pushSavePoint();
-            $tagValue = $this->parseParamTagValue($tokenIterator);
+            $attributeAwareParamTagValueNode = $this->parseParamTagValue($tokenIterator);
             $tokenIterator->dropSavePoint();
 
-            return $tagValue;
+            return $attributeAwareParamTagValueNode;
         } catch (ParserException $parserException) {
             $tokenIterator->rollback();
             $description = $this->privatesCaller->callPrivateMethod(
@@ -87,7 +86,7 @@ final class ParamPhpDocNodeFactory
     /**
      * Override of parent private method to allow reference: https://github.com/rectorphp/rector/pull/1735
      */
-    private function parseParamTagValue(TokenIterator $tokenIterator): ParamTagValueNode
+    private function parseParamTagValue(TokenIterator $tokenIterator): AttributeAwareParamTagValueNode
     {
         $originalTokenIterator = clone $tokenIterator;
         $annotationContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);

@@ -58,7 +58,7 @@ final class RunnableClassFinder
      */
     private function findClassThatImplementsRunnableInterface(array $nodes): Class_
     {
-        $class = $this->nodeFinder->findFirst($nodes, function (Node $node) {
+        $class = $this->nodeFinder->findFirst($nodes, function (Node $node): bool {
             if (! $node instanceof Class_) {
                 return false;
             }

@@ -25,7 +25,7 @@ final class ClassLikeTypesOnlyTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

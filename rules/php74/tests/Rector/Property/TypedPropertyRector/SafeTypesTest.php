@@ -27,7 +27,7 @@ final class SafeTypesTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

@@ -192,7 +192,7 @@ PHP
     private function findReturnsInCurrentScope(array $stmts): array
     {
         $returns = [];
-        $this->traverseNodesWithCallable($stmts, function (Node $node) use (&$returns) {
+        $this->traverseNodesWithCallable($stmts, function (Node $node) use (&$returns): ?int {
             if ($node instanceof Closure || $node instanceof Function_) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }

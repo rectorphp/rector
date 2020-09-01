@@ -14,7 +14,7 @@ final class NodeClassFinder
     private const EXCLUDED_CLASSES = ['PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode'];
 
     /**
-     * @return string[]
+     * @return class-string[]
      */
     public function findCurrentPHPDocParserNodeClasses(): array
     {

@@ -15,6 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
+ * @see \Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  */
 final class DowngradeTypedPropertyRector extends AbstractRector implements ConfigurableRectorInterface
 {

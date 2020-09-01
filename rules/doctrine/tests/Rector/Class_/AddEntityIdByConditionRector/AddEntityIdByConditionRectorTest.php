@@ -26,7 +26,7 @@ final class AddEntityIdByConditionRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return string[][][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

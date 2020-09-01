@@ -22,7 +22,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertPropertyExistsRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const RENAME_METHODS_WITH_OBJECT_MAP = [
         'assertTrue' => 'assertObjectHasAttribute',
@@ -30,7 +30,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
     ];
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const RENAME_METHODS_WITH_CLASS_MAP = [
         'assertTrue' => 'assertClassHasAttribute',

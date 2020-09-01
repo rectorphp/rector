@@ -26,7 +26,7 @@ final class OrderPublicInterfaceMethodRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return string[][][][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

@@ -7,6 +7,9 @@ namespace Rector\Core\Configuration\MinimalVersionChecker;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
 
+/**
+ * @see \Rector\Core\Tests\Configuration\ComposerJsonParserTest
+ */
 final class ComposerJsonParser
 {
     /**
@@ -19,10 +22,7 @@ final class ComposerJsonParser
         $this->composerJson = $composerJson;
     }
 
-    /**
-     * @return string
-     */
-    public function getPhpVersion()
+    public function getPhpVersion(): string
     {
         $composerArray = Json::decode($this->composerJson, Json::FORCE_ARRAY);
         return Strings::trim($composerArray['require']['php'], '~^>=*.');

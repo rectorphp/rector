@@ -25,6 +25,9 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\TypeNormalizer;
 
+/**
+ * @see \Rector\PHPStanStaticTypeMapper\Tests\TypeMapper\ArrayTypeMapperTest
+ */
 final class ArrayTypeMapper implements TypeMapperInterface
 {
     /**

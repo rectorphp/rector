@@ -51,7 +51,7 @@ final class LogIdentifierAndResolverValueInConstantClassMethodRector extends Abs
         $node->stmts = array_merge([$firstStmt], [$assignExpression], (array) $node->stmts);
 
         // 2. record value in each return
-        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node): ?Return_ {
             if (! $node instanceof Return_) {
                 return null;
             }

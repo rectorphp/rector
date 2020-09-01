@@ -33,7 +33,7 @@ final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return mixed[][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

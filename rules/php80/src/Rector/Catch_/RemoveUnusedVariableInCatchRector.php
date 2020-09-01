@@ -81,7 +81,7 @@ PHP
      */
     private function isVariableUsed(array $nodes, Variable $variable): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($variable) {
+        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($variable): bool {
             if (! $node instanceof Variable) {
                 return false;
             }

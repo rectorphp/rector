@@ -26,7 +26,7 @@ final class ChangeContractMethodSingleToManyRectorTest extends AbstractRectorTes
     }
 
     /**
-     * @return string[][][][]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

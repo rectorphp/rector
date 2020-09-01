@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Order\Rector\AbstractConstantPropertyMethodOrderRector;
 
 /**
@@ -22,8 +23,8 @@ final class OrderMethodsByVisibilityRector extends AbstractConstantPropertyMetho
      * @var string[]
      */
     private const PREFERRED_ORDER = [
-        '__construct',
-        '__destruct',
+        MethodName::CONSTRUCT,
+        MethodName::DESCTRUCT,
         '__call',
         '__callStatic',
         '__get',

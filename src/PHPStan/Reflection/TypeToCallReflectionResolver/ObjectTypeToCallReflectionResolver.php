@@ -33,9 +33,8 @@ final class ObjectTypeToCallReflectionResolver implements TypeToCallReflectionRe
 
     /**
      * @param ObjectType $type
-     * @return MethodReflection|null
      */
-    public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer)
+    public function resolve(Type $type, ClassMemberAccessAnswerer $classMemberAccessAnswerer): ?MethodReflection
     {
         $className = $type->getClassName();
         if (! $this->reflectionProvider->hasClass($className)) {

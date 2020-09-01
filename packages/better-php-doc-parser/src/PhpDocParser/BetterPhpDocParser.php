@@ -23,7 +23,7 @@ use Rector\BetterPhpDocParser\Contract\SpecificPhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\ParamPhpDocNodeFactory;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\PHPUnitDataProviderDocNodeFactory;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
-use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
+use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -238,10 +238,10 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $tokenEnd = $this->resolveTokenEnd($tokenIterator);
 
-        $startEndValueObject = new StartEndValueObject($tokenStart, $tokenEnd);
+        $startAndEnd = new StartAndEnd($tokenStart, $tokenEnd);
 
         $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
-        $attributeAwareNode->setAttribute(Attribute::START_END, $startEndValueObject);
+        $attributeAwareNode->setAttribute(Attribute::START_END, $startAndEnd);
 
         $possibleMultilineText = $this->multilineSpaceFormatPreserver->resolveCurrentPhpDocNodeText(
             $attributeAwareNode

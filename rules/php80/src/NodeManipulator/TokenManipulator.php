@@ -89,7 +89,7 @@ final class TokenManipulator
         $this->replaceTokenDimFetchZeroWithGetTokenName($nodes, $singleTokenExpr);
 
         // replace "$token[1]"; with "$token->value"
-        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) {
+        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node): ?PropertyFetch {
             if (! $this->isArrayDimFetchWithDimIntegerValue($node, 1)) {
                 return null;
             }
@@ -110,7 +110,9 @@ final class TokenManipulator
     public function refactorNonArrayToken(array $nodes, Expr $singleTokenExpr): void
     {
         // replace "$content = $token;" → "$content = $token->text;"
-        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use ($singleTokenExpr) {
+        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use (
+            $singleTokenExpr
+        ) {
             if (! $node instanceof Assign) {
                 return null;
             }
@@ -128,7 +130,9 @@ final class TokenManipulator
         });
 
         // replace "$name = null;" → "$name = $token->getTokenName();"
-        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use ($singleTokenExpr) {
+        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use (
+            $singleTokenExpr
+        ): ?Assign {
             if (! $node instanceof Assign) {
                 return null;
             }
@@ -158,7 +162,9 @@ final class TokenManipulator
 
     public function refactorTokenIsKind(array $nodes, Expr $singleTokenExpr): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use ($singleTokenExpr) {
+        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use (
+            $singleTokenExpr
+        ): ?MethodCall {
             if (! $node instanceof Identical) {
                 return null;
             }
@@ -233,7 +239,9 @@ final class TokenManipulator
      */
     private function replaceTokenDimFetchZeroWithGetTokenName(array $nodes, Expr $singleTokenExpr): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use ($singleTokenExpr) {
+        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use (
+            $singleTokenExpr
+        ): ?MethodCall {
             if (! $node instanceof FuncCall) {
                 return null;
             }

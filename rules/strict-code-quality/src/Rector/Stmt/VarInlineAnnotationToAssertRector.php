@@ -21,6 +21,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -123,7 +124,7 @@ PHP
         return ltrim($variableName, '$');
     }
 
-    private function findVariableByName(Stmt $stmt, string $docVariableName): ?Variable
+    private function findVariableByName(Stmt $stmt, string $docVariableName): ?Node
     {
         return $this->betterNodeFinder->findFirst($stmt, function (Node $stmt) use ($docVariableName): bool {
             return $this->isVariableName($stmt, $docVariableName);
@@ -166,6 +167,10 @@ PHP
     private function refactorAlreadyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
     {
         $varTagValue = $phpDocInfo->getVarTagValue();
+        if ($varTagValue === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $phpStanType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
             $varTagValue->type,
             $variable

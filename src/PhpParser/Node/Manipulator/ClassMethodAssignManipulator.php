@@ -144,7 +144,7 @@ final class ClassMethodAssignManipulator
             }
         });
 
-        return array_filter($variableAssigns, function (Assign $assign) use ($arrayDestructionCreatedVariables) {
+        return array_filter($variableAssigns, function (Assign $assign) use ($arrayDestructionCreatedVariables): bool {
             return ! $this->nodeNameResolver->isNames($assign->var, $arrayDestructionCreatedVariables);
         });
     }
@@ -191,7 +191,7 @@ final class ClassMethodAssignManipulator
             }
         });
 
-        return array_filter($variableAssigns, function (Assign $assign) use ($referencedVariables) {
+        return array_filter($variableAssigns, function (Assign $assign) use ($referencedVariables): bool {
             return ! $this->nodeNameResolver->isNames($assign->var, $referencedVariables);
         });
     }
@@ -204,7 +204,7 @@ final class ClassMethodAssignManipulator
      */
     private function filterOutMultiAssigns(array $readOnlyVariableAssigns): array
     {
-        return array_filter($readOnlyVariableAssigns, function (Assign $assign) {
+        return array_filter($readOnlyVariableAssigns, function (Assign $assign): bool {
             $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
 
             return ! $parentNode instanceof Assign;

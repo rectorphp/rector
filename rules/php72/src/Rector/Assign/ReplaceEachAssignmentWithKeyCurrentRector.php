@@ -99,7 +99,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Assign[]|FuncCall[]
+     * @return array<int, Assign|FuncCall>
      */
     private function createNewNodes(Expr $assignVariable, Expr $eachedVariable): array
     {

@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\AnonymousClass\NodeAnalyzer\ClassNodeAnalyzer;
+use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
@@ -101,6 +102,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $classNodeAnalyzer;
 
     /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    /**
      * @var string|null
      */
     private $previousAppliedClass;
@@ -117,7 +123,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         StaticTypeMapper $staticTypeMapper,
         ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
-        ClassNodeAnalyzer $classNodeAnalyzer
+        ClassNodeAnalyzer $classNodeAnalyzer,
+        CurrentNodeProvider $currentNodeProvider
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -128,12 +135,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->parameterProvider = $parameterProvider;
         $this->currentRectorProvider = $currentRectorProvider;
         $this->classNodeAnalyzer = $classNodeAnalyzer;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     /**
      * @return Node[]|null
      */
-    public function beforeTraverse(array $nodes)
+    public function beforeTraverse(array $nodes): ?array
     {
         $this->previousAppliedClass = null;
 
@@ -175,6 +183,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         $this->currentRectorProvider->changeCurrentRector($this);
+        // mostly for PHP doc and change notifications
+        $this->currentNodeProvider->setNode($node);
 
         // already removed
         if ($this->isNodeRemoved($node)) {

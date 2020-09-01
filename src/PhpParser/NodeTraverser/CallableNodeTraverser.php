@@ -21,7 +21,8 @@ final class CallableNodeTraverser
         }
 
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->createNodeVisitor($callable));
+        $callableNodeVisitor = $this->createNodeVisitor($callable);
+        $nodeTraverser->addVisitor($callableNodeVisitor);
         $nodeTraverser->traverse($nodes);
     }
 

@@ -51,10 +51,7 @@ final class NodeAnnotationReader
         $this->constantReferenceIdentifierRestorer = $constantReferenceIdentifierRestorer;
     }
 
-    /**
-     * @return object|null
-     */
-    public function readAnnotation(Node $node, string $annotationClass)
+    public function readAnnotation(Node $node, string $annotationClass): ?object
     {
         if ($node instanceof Property) {
             return $this->readPropertyAnnotation($node, $annotationClass);
@@ -71,10 +68,7 @@ final class NodeAnnotationReader
         return null;
     }
 
-    /**
-     * @return object|null
-     */
-    public function readClassAnnotation(Class_ $class, string $annotationClassName)
+    public function readClassAnnotation(Class_ $class, string $annotationClassName): ?object
     {
         $classReflection = $this->createClassReflectionFromNode($class);
 
@@ -90,10 +84,7 @@ final class NodeAnnotationReader
         }
     }
 
-    /**
-     * @return object|null
-     */
-    public function readPropertyAnnotation(Property $property, string $annotationClassName)
+    public function readPropertyAnnotation(Property $property, string $annotationClassName): ?object
     {
         $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
         if ($propertyReflection === null) {
@@ -112,10 +103,7 @@ final class NodeAnnotationReader
         }
     }
 
-    /**
-     * @return object|null
-     */
-    private function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName)
+    private function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName): ?object
     {
         /** @var string $className */
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);

@@ -13,7 +13,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\TypeDeclarationToStringConverter;
+use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInferer;
@@ -31,18 +31,18 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
     private $returnTagReturnTypeInferer;
 
     /**
-     * @var TypeDeclarationToStringConverter
+     * @var FunctionLikeReturnTypeResolver
      */
-    private $typeDeclarationToStringConverter;
+    private $functionLikeReturnTypeResolver;
 
     public function __construct(
         ReturnTagReturnTypeInferer $returnTagReturnTypeInferer,
         ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
-        TypeDeclarationToStringConverter $typeDeclarationToStringConverter
+        FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver
     ) {
         $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;
         $this->returnTagReturnTypeInferer = $returnTagReturnTypeInferer;
-        $this->typeDeclarationToStringConverter = $typeDeclarationToStringConverter;
+        $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
     }
 
     public function inferProperty(Property $property): Type
@@ -102,7 +102,7 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
 
     private function inferClassMethodReturnType(ClassMethod $classMethod): Type
     {
-        $returnTypeDeclarationType = $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToPHPStanType(
+        $returnTypeDeclarationType = $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType(
             $classMethod
         );
 

@@ -209,7 +209,7 @@ final class BetterNodeFinder
     /**
      * @param Node[] $nodes
      */
-    public function findFirstNonAnonymousClass(array $nodes): ?Class_
+    public function findFirstNonAnonymousClass(array $nodes): ?Node
     {
         return $this->findFirst($nodes, function (Node $node): bool {
             if (! $node instanceof ClassLike) {
@@ -229,9 +229,9 @@ final class BetterNodeFinder
         return $this->nodeFinder->findFirst($nodes, $filter);
     }
 
-    public function findPreviousAssignToExpr(Expr $expr): ?Assign
+    public function findPreviousAssignToExpr(Expr $expr): ?Node
     {
-        return $this->findFirstPrevious($expr, function (Node $node) use ($expr) {
+        return $this->findFirstPrevious($expr, function (Node $node) use ($expr): bool {
             if (! $node instanceof Assign) {
                 return false;
             }
@@ -267,7 +267,7 @@ final class BetterNodeFinder
      */
     public function findFirstPreviousOfTypes(Node $mainNode, array $types): ?Node
     {
-        return $this->findFirstPrevious($mainNode, function (Node $node) use ($types) {
+        return $this->findFirstPrevious($mainNode, function (Node $node) use ($types): bool {
             foreach ($types as $type) {
                 if (! is_a($node, $type, true)) {
                     continue;

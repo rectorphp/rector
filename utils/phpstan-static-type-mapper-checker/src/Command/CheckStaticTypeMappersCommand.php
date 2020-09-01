@@ -74,7 +74,7 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
     }
 
     /**
-     * @return string[]
+     * @return class-string[]
      */
     private function getMissingNodeClasses(): array
     {

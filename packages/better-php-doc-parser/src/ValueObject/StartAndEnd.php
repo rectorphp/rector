@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject;
 
-final class StartEndValueObject
+use Rector\Core\Exception\ShouldNotHappenException;
+
+final class StartAndEnd
 {
     /**
      * @var int
@@ -18,6 +20,10 @@ final class StartEndValueObject
 
     public function __construct(int $start, int $end)
     {
+        if ($end < $start) {
+            throw new ShouldNotHappenException();
+        }
+
         $this->start = $start;
         $this->end = $end;
     }

@@ -93,8 +93,11 @@ PHP
      */
     private function filterItemsWithSameKey(array $arrayItemsByKeys): array
     {
-        return array_filter($arrayItemsByKeys, function (array $arrayItems) {
+        $arrayItemsByKeys = array_filter($arrayItemsByKeys, function (array $arrayItems): bool {
             return count($arrayItems) > 1;
         });
+
+        /** @var ArrayItem[][] $arrayItemsByKeys */
+        return $arrayItemsByKeys;
     }
 }

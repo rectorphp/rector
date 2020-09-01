@@ -6,6 +6,7 @@ namespace Rector\Legacy\Rector\FileSystem;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -103,7 +104,7 @@ PHP
 
         // replace function calls with class static call
 
-        $this->traverseNodesWithCallable($nodes, function (Node $node) {
+        $this->traverseNodesWithCallable($nodes, function (Node $node): ?StaticCall {
             if (! $node instanceof FuncCall) {
                 return null;
             }
