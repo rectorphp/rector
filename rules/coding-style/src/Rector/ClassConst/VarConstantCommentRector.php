@@ -80,10 +80,8 @@ PHP
             }
 
             $currentVarType = $phpDocInfo->getVarType();
-            if ($currentVarType instanceof ArrayType) {
-                if ($currentVarType->getItemType() instanceof MixedType) {
-                    return null;
-                }
+            if ($currentVarType instanceof ArrayType && $currentVarType->getItemType() instanceof MixedType) {
+                return null;
             }
         }
 
