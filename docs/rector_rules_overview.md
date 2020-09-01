@@ -1,4 +1,4 @@
-# All 565 Rectors Overview
+# All 564 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -20,7 +20,7 @@
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (38)
 - [JMS](#jms) (2)
-- [Laravel](#laravel) (4)
+- [Laravel](#laravel) (3)
 - [Legacy](#legacy) (4)
 - [MagicDisclosure](#magicdisclosure) (8)
 - [MockeryToProphecy](#mockerytoprophecy) (2)
@@ -5997,30 +5997,6 @@ Removes JMS\DiExtraBundle\Annotation\Services annotation
 <br><br>
 
 ## Laravel
-
-### `InlineValidationRulesToArrayDefinitionRector`
-
-- class: [`Rector\Laravel\Rector\ArrayItem\InlineValidationRulesToArrayDefinitionRector`](/../master/rules/laravel/src/Rector/ArrayItem/InlineValidationRulesToArrayDefinitionRector.php)
-- [test fixtures](/../master/rules/laravel/tests/Rector/ArrayItem/InlineValidationRulesToArrayDefinitionRector/Fixture)
-
-Transforms inline validation rules to array definition
-
-```diff
- use Illuminate\Foundation\Http\FormRequest;
-
- class SomeClass extends FormRequest
- {
-     public function rules(): array
-     {
-         return [
--            'someAttribute' => 'required|string|exists:' . SomeModel::class . 'id',
-+            'someAttribute' => ['required', 'string', \Illuminate\Validation\Rule::exists(SomeModel::class, 'id')],
-         ];
-     }
- }
-```
-
-<br><br>
 
 ### `MinutesToSecondsInCacheRector`
 
@@ -14073,7 +14049,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(PropertyAssignToMethodCallRector::class)
         ->call('configure', [[
             PropertyAssignToMethodCallRector::PROPERTY_ASSIGNS_TO_METHODS_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyAssignToMethodCall('SomeClass', 'oldPropertyName', 'oldProperty')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyAssignToMethodCall('SomeClass', 'newMethodName', 'newMethodCall'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyAssignToMethodCall('SomeClass', 'oldProperty', 'newMethodCall'))]
         ]]);
 };
 ```
@@ -14576,9 +14552,9 @@ Change @return types and type from static analysis to type declarations if not a
 
  class SomeClass
  {
-     /**
-      * @return int
-      */
+-    /**
+-     * @return int
+-     */
 -    public function getCount()
 +    public function getCount(): int
      {
