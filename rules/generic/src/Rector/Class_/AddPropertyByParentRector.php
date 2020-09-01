@@ -43,7 +43,7 @@ final class AddPropertyByParentRector extends AbstractRector implements Configur
     }
 
     /**
-     * @return string[]
+     * @return class-string[]
      */
     public function getNodeTypes(): array
     {

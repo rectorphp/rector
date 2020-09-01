@@ -86,11 +86,7 @@ PHP
         }
 
         if ($previousNode instanceof Assign) {
-<<<<<<< HEAD
             if ($this->isReturnWithVarAnnotation($node)) {
-=======
-            if ($this->isAssignWithVarAnnotatoin($node)) {
->>>>>>> 8ff6fd9eb... skip assign on var
                 return null;
             }
 
@@ -148,9 +144,13 @@ PHP
             $this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var);
     }
 
-    private function isAssignWithVarAnnotatoin(Assign $assign): bool
+    private function isReturnWithVarAnnotation(Node $node): bool
     {
-        $phpDocInfo = $assign->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $node instanceof Return_) {
+            return false;
+        }
+
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return false;
         }

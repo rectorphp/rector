@@ -34,7 +34,7 @@ final class InvalidConfigurationTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return array<string, array<string[][]>>
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {

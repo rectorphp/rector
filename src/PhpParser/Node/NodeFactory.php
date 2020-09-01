@@ -388,7 +388,7 @@ final class NodeFactory
             $previousConcat = new Concat($previousConcat, $expr);
         }
 
-        /** @var Concat */
+        /** @var Concat $previousConcat */
         return $previousConcat;
     }
 
