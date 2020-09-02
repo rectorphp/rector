@@ -2,7 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-final class SkipClassDocblockArray
+final class DonotRemoveClassDocblockArray
 {
     /**
      * @var \DateTime[]|null
@@ -16,7 +16,7 @@ final class SkipClassDocblockArray
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-final class SkipClassDocblockArray
+final class DonotRemoveClassDocblockArray
 {
     /**
      * @var \DateTime[]|null
