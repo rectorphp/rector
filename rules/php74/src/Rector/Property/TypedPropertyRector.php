@@ -16,6 +16,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -253,7 +254,7 @@ PHP
     {
         if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if (property_exists($type, 'type') && class_exists($type->type->name)) {
+                if ($type instanceof AttributeAwareArrayTypeNode && class_exists($type->type->name)) {
                     return true;
                 }
             }
