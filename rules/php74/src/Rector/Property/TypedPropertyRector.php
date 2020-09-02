@@ -254,7 +254,7 @@ PHP
     {
         if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if ($type instanceof AttributeAwareArrayTypeNode && class_exists($type->type->name)) {
+                if ($type instanceof AttributeAwareArrayTypeNode && class_exists((string) $type->type)) {
                     return true;
                 }
             }
