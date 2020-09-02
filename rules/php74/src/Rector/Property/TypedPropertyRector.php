@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php74\Rector\Property;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -251,10 +250,11 @@ PHP
 
     private function isNonBasicArrayType(Property $property, VarTagValueNode $varTagValueNode): bool
     {
-        $possibleTypes = explode('|', (string) $varTagValueNode->type);
-        foreach ($possibleTypes as $type) {
-            if (Strings::substring($type, -2) === '[]' && class_exists(rtrim($type, '[]'))) {
-                return true;
+        if (property_exists($varTagValueNode->type, 'types')) {
+            foreach ($varTagValueNode->type->types as $type) {
+                if (class_exists(rtrim((string) $type, '[]'))) {
+                    return true;
+                }
             }
         }
 
