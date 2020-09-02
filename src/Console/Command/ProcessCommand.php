@@ -128,12 +128,11 @@ final class ProcessCommand extends AbstractCommand
         $this->stubLoader = $stubLoader;
         $this->nonPhpFileProcessor = $nonPhpFileProcessor;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
-
-        parent::__construct();
-
         $this->changedFilesDetector = $changedFilesDetector;
         $this->symfonyStyle = $symfonyStyle;
         $this->eventDispatcher = $eventDispatcher;
+
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -211,7 +210,6 @@ final class ProcessCommand extends AbstractCommand
         $this->configuration->setAreAnyPhpRectorsLoaded((bool) $this->rectorNodeTraverser->getPhpRectorCount());
 
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
-        $this->rectorGuard->ensureGetNodeTypesAreNodes();
 
         $this->stubLoader->loadStubs();
 
