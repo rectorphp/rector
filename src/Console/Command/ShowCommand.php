@@ -67,6 +67,54 @@ final class ShowCommand extends AbstractCommand
         return ShellCode::SUCCESS;
     }
 
+    private function reportLoadedRectors(): void
+    {
+        $activeRectors = $this->activeRectorsProvider->provide();
+
+        $rectorCount = count($activeRectors);
+
+        if ($rectorCount > 0) {
+            $this->symfonyStyle->title('Loaded Rector rules');
+
+            foreach ($activeRectors as $rector) {
+                $this->symfonyStyle->writeln(' * ' . get_class($rector));
+                $this->printConfiguration($rector);
+            }
+
+            $message = sprintf('%d loaded Rectors', $rectorCount);
+            $this->symfonyStyle->success($message);
+        } else {
+            $warningMessage = sprintf(
+                'No Rectors were loaded.%sAre sure your "rector.php" config is in the root?%sTry "--config <path>" option to include it.',
+                PHP_EOL . PHP_EOL,
+                PHP_EOL
+            );
+            $this->symfonyStyle->warning($warningMessage);
+        }
+    }
+
+    private function reportLoadedSets(): void
+    {
+        $sets = (array) $this->parameterProvider->provideParameter(Option::SETS);
+        if ($sets === []) {
+            return;
+        }
+
+        $this->symfonyStyle->newLine(2);
+
+        $this->symfonyStyle->title('Loaded Sets');
+
+        sort($sets);
+
+        foreach ($sets as $set) {
+            $filename = realpath($set);
+            $this->symfonyStyle->writeln(' * ' . $filename);
+        }
+
+        $message = sprintf('%d loaded sets', count($sets));
+        $this->symfonyStyle->success($message);
+    }
+
     private function printConfiguration(RectorInterface $rector): void
     {
         $configuration = $this->resolveConfiguration($rector);
@@ -109,53 +157,5 @@ final class ShowCommand extends AbstractCommand
         }
 
         return $configuration;
-    }
-
-    private function reportLoadedRectors(): void
-    {
-        $activeRectors = $this->activeRectorsProvider->provide();
-
-        $rectorCount = count($activeRectors);
-
-        if ($rectorCount > 0) {
-            $this->symfonyStyle->title('Loaded Rector rules');
-
-            foreach ($activeRectors as $rector) {
-                $this->symfonyStyle->writeln(' * ' . get_class($rector));
-                $this->printConfiguration($rector);
-            }
-
-            $message = sprintf('%d loaded Rectors', $rectorCount);
-            $this->symfonyStyle->success($message);
-        } else {
-            $warningMessage = sprintf(
-                'No Rectors were loaded.%sAre sure your "rector.php" config is in the root?%sTry "--config <path>" option to include it.',
-                PHP_EOL . PHP_EOL,
-                PHP_EOL
-            );
-            $this->symfonyStyle->warning($warningMessage);
-        }
-    }
-
-    private function reportLoadedSets(): void
-    {
-        $sets = $this->parameterProvider->provideParameter(Option::SETS) ?? [];
-        if ($sets === []) {
-            return;
-        }
-
-        $this->symfonyStyle->newLine(2);
-
-        $this->symfonyStyle->title('Loaded Sets');
-
-        sort($sets);
-
-        foreach ($sets as $set) {
-            $filename = realpath($set);
-            $this->symfonyStyle->writeln(' * ' . $filename);
-        }
-
-        $message = sprintf('%d loaded sets', count($sets));
-        $this->symfonyStyle->success($message);
     }
 }
