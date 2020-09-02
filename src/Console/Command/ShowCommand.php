@@ -6,10 +6,7 @@ namespace Rector\Core\Console\Command;
 
 use Rector\Core\Application\ActiveRectorsProvider;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\NeonYaml\YamlPrinter;
-use ReflectionClass;
+use Rector\Core\Console\Output\RectorConfigurationFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -25,11 +22,6 @@ final class ShowCommand extends AbstractCommand
     private $symfonyStyle;
 
     /**
-     * @var YamlPrinter
-     */
-    private $yamlPrinter;
-
-    /**
      * @var ActiveRectorsProvider
      */
     private $activeRectorsProvider;
@@ -39,18 +31,24 @@ final class ShowCommand extends AbstractCommand
      */
     private $parameterProvider;
 
+    /**
+     * @var RectorConfigurationFormatter
+     */
+    private $rectorConfigurationFormatter;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         ActiveRectorsProvider $activeRectorsProvider,
         ParameterProvider $parameterProvider,
-        YamlPrinter $yamlPrinter
+        RectorConfigurationFormatter $rectorConfigurationFormatter
     ) {
         $this->symfonyStyle = $symfonyStyle;
-        $this->yamlPrinter = $yamlPrinter;
         $this->activeRectorsProvider = $activeRectorsProvider;
         $this->parameterProvider = $parameterProvider;
 
         parent::__construct();
+
+        $this->rectorConfigurationFormatter = $rectorConfigurationFormatter;
     }
 
     protected function configure(): void
@@ -78,7 +76,7 @@ final class ShowCommand extends AbstractCommand
 
             foreach ($activeRectors as $rector) {
                 $this->symfonyStyle->writeln(' * ' . get_class($rector));
-                $this->printConfiguration($rector);
+                $this->rectorConfigurationFormatter->printRectorConfiguration($rector);
             }
 
             $message = sprintf('%d loaded Rectors', $rectorCount);
@@ -108,54 +106,14 @@ final class ShowCommand extends AbstractCommand
 
         foreach ($sets as $set) {
             $filename = realpath($set);
+            // resolve fallback for PHAR
+            if ($filename === false) {
+                $filename = $set;
+            }
             $this->symfonyStyle->writeln(' * ' . $filename);
         }
 
         $message = sprintf('%d loaded sets', count($sets));
         $this->symfonyStyle->success($message);
-    }
-
-    private function printConfiguration(RectorInterface $rector): void
-    {
-        $configuration = $this->resolveConfiguration($rector);
-        if ($configuration === []) {
-            return;
-        }
-
-        $configurationYamlContent = $this->yamlPrinter->printYamlToString($configuration);
-
-        $lines = explode(PHP_EOL, $configurationYamlContent);
-        $indentedContent = '      ' . implode(PHP_EOL . '      ', $lines);
-
-        $this->symfonyStyle->writeln($indentedContent);
-    }
-
-    /**
-     * Resolve configuration by convention
-     * @return mixed[]
-     */
-    private function resolveConfiguration(RectorInterface $rector): array
-    {
-        if (! $rector instanceof ConfigurableRectorInterface) {
-            return [];
-        }
-
-        $reflectionClass = new ReflectionClass($rector);
-
-        $configuration = [];
-        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
-            $reflectionProperty->setAccessible(true);
-
-            $configurationValue = $reflectionProperty->getValue($rector);
-
-            // probably service → skip
-            if (is_object($configurationValue)) {
-                continue;
-            }
-
-            $configuration[$reflectionProperty->getName()] = $configurationValue;
-        }
-
-        return $configuration;
     }
 }
