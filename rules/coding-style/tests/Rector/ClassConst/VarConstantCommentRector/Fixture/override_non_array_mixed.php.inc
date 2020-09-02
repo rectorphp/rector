@@ -7,7 +7,7 @@ final class OverrideNonArrayMixed
     /**
      * @var mixed
      */
-    public const NESTED_STIRNGS = [
+    public const NESTED_STRINGS = [
         'get_it' => 'yes'
     ];
 }
@@ -23,7 +23,7 @@ final class OverrideNonArrayMixed
     /**
      * @var array<string, string>
      */
-    public const NESTED_STIRNGS = [
+    public const NESTED_STRINGS = [
         'get_it' => 'yes'
     ];
 }
