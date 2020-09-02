@@ -38,7 +38,8 @@
         "symplify/package-builder": "^8.2.11",
         "symplify/set-config-resolver": "^8.2.11",
         "symplify/smart-file-system": "^8.2.11",
-        "tracy/tracy": "^2.7"
+        "tracy/tracy": "^2.7",
+        "webmozart/assert": "^1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
