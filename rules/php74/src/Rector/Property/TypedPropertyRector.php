@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Php74\Rector\Property;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -252,7 +253,7 @@ PHP
     {
         $possibleTypes = explode('|', (string) $varTagValueNode->type);
         foreach ($possibleTypes as $type) {
-            if (substr($type, -2) === '[]' && class_exists(rtrim($type, '[]'))) {
+            if (Strings::substring($type, -2) === '[]' && class_exists(rtrim($type, '[]'))) {
                 return true;
             }
         }
