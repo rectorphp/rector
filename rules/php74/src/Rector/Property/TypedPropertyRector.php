@@ -250,6 +250,13 @@ PHP
 
     private function isNonBasicArrayType(Property $property, VarTagValueNode $varTagValueNode): bool
     {
+        $possibleTypes = explode('|', (string) $varTagValueNode->type);
+        foreach ($possibleTypes as $type) {
+            if (substr($type, -2) === '[]' && class_exists(rtrim($type, '[]'))) {
+                return true;
+            }
+        }
+
         if (! $this->isArrayTypeNode($varTagValueNode)) {
             return false;
         }
