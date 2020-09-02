@@ -1,4 +1,4 @@
-# All 564 Rectors Overview
+# All 563 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -9,7 +9,7 @@
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
 - [CodeQuality](#codequality) (58)
-- [CodingStyle](#codingstyle) (36)
+- [CodingStyle](#codingstyle) (35)
 - [DeadCode](#deadcode) (40)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (17)
@@ -1903,20 +1903,6 @@ Changes use of function calls to use constants
 +        $value = M_PI;
      }
  }
-```
-
-<br><br>
-
-### `IdenticalFalseToBooleanNotRector`
-
-- class: [`Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector`](/../master/rules/coding-style/src/Rector/Identical/IdenticalFalseToBooleanNotRector.php)
-- [test fixtures](/../master/rules/coding-style/tests/Rector/Identical/IdenticalFalseToBooleanNotRector/Fixture)
-
-Changes === false to negate !
-
-```diff
--if ($something === false) {}
-+if (! $something) {}
 ```
 
 <br><br>

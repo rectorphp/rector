@@ -19,7 +19,6 @@ use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector;
 use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
 use Rector\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector;
-use Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector;
 use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
@@ -38,51 +37,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(NullableCompareToNullRector::class);
-
-    $services->set(IdenticalFalseToBooleanNotRector::class);
-
     $services->set(BinarySwitchToIfElseRector::class);
-
     $services->set(ConsistentImplodeRector::class);
-
     $services->set(TernaryConditionVariableAssignmentRector::class);
-
     $services->set(RemoveUnusedAliasRector::class);
-
     $services->set(SymplifyQuoteEscapeRector::class);
-
     $services->set(SplitGroupedConstantsAndPropertiesRector::class);
-
     $services->set(SplitStringClassConstantToClassConstFetchRector::class);
-
     $services->set(StringClassNameToClassConstantRector::class);
-
     $services->set(ConsistentPregDelimiterRector::class);
-
     $services->set(FollowRequireByDirRector::class);
-
     $services->set(CatchExceptionNameMatchingTypeRector::class);
-
     $services->set(UseIncrementAssignRector::class);
-
     $services->set(SplitDoubleAssignRector::class);
-
     $services->set(VarConstantCommentRector::class);
-
     $services->set(EncapsedStringsToSprintfRector::class);
-
     $services->set(WrapEncapsedVariableInCurlyBracesRector::class);
-
     $services->set(NewlineBeforeNewAssignSetRector::class);
-
     $services->set(ManualJsonStringToJsonEncodeArrayRector::class);
-
     $services->set(AddArrayDefaultToArrayPropertyRector::class);
-
     $services->set(MakeInheritedMethodVisibilitySameAsParentRector::class);
-
     $services->set(CallUserFuncCallToVariadicRector::class);
-
     $services->set(VersionCompareFuncCallToConstantRector::class);
 
     $services->set(FunctionCallToConstantRector::class)
@@ -94,12 +69,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $services->set(CamelCaseFunctionNamingToUnderscoreRector::class);
-
     $services->set(SplitGroupedUseImportsRector::class);
-
     $services->set(UnderscoreToCamelCasePropertyNameRector::class);
-
     $services->set(UnderscoreToCamelCaseVariableNameRector::class);
-
     $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
 };
