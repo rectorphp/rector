@@ -253,7 +253,7 @@ PHP
     {
         if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if (class_exists(rtrim((string) $type, '[]'))) {
+                if (property_exists($type, 'type') && class_exists($type->type->name)) {
                     return true;
                 }
             }
