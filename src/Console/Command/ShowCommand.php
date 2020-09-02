@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
+use Rector\Core\Application\ActiveRectorsProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\NeonYaml\YamlPrinter;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use Rector\RectorGenerator\Contract\InternalRectorInterface;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,11 +17,6 @@ use Symplify\PackageBuilder\Console\ShellCode;
 
 final class ShowCommand extends AbstractCommand
 {
-    /**
-     * @var RectorInterface[]
-     */
-    private $rectors = [];
-
     /**
      * @var SymfonyStyle
      */
@@ -34,13 +28,18 @@ final class ShowCommand extends AbstractCommand
     private $yamlPrinter;
 
     /**
-     * @param RectorInterface[] $rectors
+     * @var ActiveRectorsProvider
      */
-    public function __construct(SymfonyStyle $symfonyStyle, array $rectors, YamlPrinter $yamlPrinter)
-    {
+    private $activeRectorsProvider;
+
+    public function __construct(
+        SymfonyStyle $symfonyStyle,
+        ActiveRectorsProvider $activeRectorsProvider,
+        YamlPrinter $yamlPrinter
+    ) {
         $this->symfonyStyle = $symfonyStyle;
-        $this->rectors = $rectors;
         $this->yamlPrinter = $yamlPrinter;
+        $this->activeRectorsProvider = $activeRectorsProvider;
 
         parent::__construct();
     }
@@ -53,36 +52,17 @@ final class ShowCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rectors = $this->filterAndSortRectors($this->rectors);
+        $activeRectors = $this->activeRectorsProvider->provide();
 
-        foreach ($rectors as $rector) {
+        foreach ($activeRectors as $rector) {
             $this->symfonyStyle->writeln(' * ' . get_class($rector));
             $this->printConfiguration($rector);
         }
-        $message = sprintf('%d loaded Rectors', count($rectors));
 
+        $message = sprintf('%d loaded Rectors', count($activeRectors));
         $this->symfonyStyle->success($message);
 
         return ShellCode::SUCCESS;
-    }
-
-    /**
-     * @param RectorInterface[] $rectors
-     * @return RectorInterface[]
-     */
-    private function filterAndSortRectors(array $rectors): array
-    {
-        sort($rectors);
-
-        return array_filter($rectors, function (RectorInterface $rector): bool {
-            // utils rules
-            if ($rector instanceof InternalRectorInterface) {
-                return false;
-            }
-
-            // skip as internal and always run
-            return ! $rector instanceof PostRectorInterface;
-        });
     }
 
     private function printConfiguration(RectorInterface $rector): void

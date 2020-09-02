@@ -47,14 +47,6 @@ final class RectorNodeTraverser extends NodeTraverser
     }
 
     /**
-     * @return PhpRectorInterface[]
-     */
-    public function getAllPhpRectors(): array
-    {
-        return $this->allPhpRectors;
-    }
-
-    /**
      * @param Node[] $nodes
      * @return Node[]
      */

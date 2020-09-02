@@ -4,39 +4,24 @@ declare(strict_types=1);
 
 namespace Rector\Core\Guard;
 
-use PhpParser\Node;
+use Rector\Core\Application\ActiveRectorsProvider;
 use Rector\Core\Exception\NoRectorsLoadedException;
-use Rector\Core\Exception\Rector\InvalidRectorException;
-use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\FileSystemRector\FileSystemFileProcessor;
 
 final class RectorGuard
 {
     /**
-     * @var RectorNodeTraverser
+     * @var ActiveRectorsProvider
      */
-    private $rectorNodeTraverser;
+    private $activeRectorsProvider;
 
-    /**
-     * @var FileSystemFileProcessor
-     */
-    private $fileSystemFileProcessor;
-
-    public function __construct(
-        FileSystemFileProcessor $fileSystemFileProcessor,
-        RectorNodeTraverser $rectorNodeTraverser
-    ) {
-        $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->fileSystemFileProcessor = $fileSystemFileProcessor;
+    public function __construct(ActiveRectorsProvider $activeRectorsProvider)
+    {
+        $this->activeRectorsProvider = $activeRectorsProvider;
     }
 
     public function ensureSomeRectorsAreRegistered(): void
     {
-        if ($this->rectorNodeTraverser->getPhpRectorCount() > 0) {
-            return;
-        }
-
-        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() > 0) {
+        if ($this->activeRectorsProvider->provide() !== []) {
             return;
         }
 
@@ -47,23 +32,5 @@ final class RectorGuard
             PHP_EOL,
             PHP_EOL
         ));
-    }
-
-    public function ensureGetNodeTypesAreNodes(): void
-    {
-        foreach ($this->rectorNodeTraverser->getAllPhpRectors() as $phpRector) {
-            foreach ($phpRector->getNodeTypes() as $nodeTypeClass) {
-                if (is_a($nodeTypeClass, Node::class, true)) {
-                    continue;
-                }
-
-                throw new InvalidRectorException(sprintf(
-                    'Method "%s::getNodeTypes()" provides invalid node class "%s". It must be child of "%s"',
-                    get_class($phpRector),
-                    $nodeTypeClass,
-                    Node::class
-                ));
-            }
-        }
     }
 }
