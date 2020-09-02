@@ -16,6 +16,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -250,6 +252,14 @@ PHP
 
     private function isNonBasicArrayType(Property $property, VarTagValueNode $varTagValueNode): bool
     {
+        if ($varTagValueNode->type instanceof AttributeAwareUnionTypeNode) {
+            foreach ($varTagValueNode->type->types as $type) {
+                if ($type instanceof AttributeAwareArrayTypeNode && class_exists((string) $type->type)) {
+                    return true;
+                }
+            }
+        }
+
         if (! $this->isArrayTypeNode($varTagValueNode)) {
             return false;
         }
