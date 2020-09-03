@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Rector\Downgrade\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Param;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Downgrade\Rector\DowngradeRectorTrait;
+use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Downgrade\Rector\DowngradeRectorTrait;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
 abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeDeclarationRector implements ConfigurableRectorInterface
