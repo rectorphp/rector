@@ -18,7 +18,12 @@ final class CheckNotTestsNamespaceOutsideTestsDirectoryRule implements Rule
     /**
      * @var string
      */
-    private const ERROR_MESSAGE = '"Tests" namespace (%s) used outside of "tests" directory (%s)';
+    private const ERROR_NAMESPACE_OUTSIDE_TEST_DIR = '"Tests" namespace (%s) used outside of "tests" directory (%s)';
+
+    /**
+     * @var string
+     */
+    private const ERROR_TEST_FILE_OUTSIDE_NAMESPACE = 'Test file (%s) is outside of "Tests" namespace (%s)';
 
     public function getNodeType(): string
     {
@@ -36,6 +41,15 @@ final class CheckNotTestsNamespaceOutsideTestsDirectoryRule implements Rule
         }
 
         if (! $this->hasTestsNamespace($node->name)) {
+            if ($this->hasTestSuffix($scope)) {
+                $errorMessage = sprintf(
+                    self::ERROR_TEST_FILE_OUTSIDE_NAMESPACE,
+                    $scope->getFileDescription(),
+                    $node->name->toString()
+                );
+                return [$errorMessage];
+            }
+
             return [];
         }
 
@@ -43,13 +57,23 @@ final class CheckNotTestsNamespaceOutsideTestsDirectoryRule implements Rule
             return [];
         }
 
-        $errorMessage = sprintf(self::ERROR_MESSAGE, $node->name->toString(), $scope->getFileDescription());
+        $errorMessage = sprintf(
+            self::ERROR_NAMESPACE_OUTSIDE_TEST_DIR,
+            $node->name->toString(),
+            $scope->getFileDescription()
+        );
+
         return [$errorMessage];
     }
 
     private function hasTestsNamespace(Name $name): bool
     {
         return in_array('Tests', $name->parts, true);
+    }
+
+    private function hasTestSuffix(Scope $scope): bool
+    {
+        return strstr($scope->getFileDescription(), 'Test.php') !== false;
     }
 
     private function inTestsDirectory(Scope $scope): bool
