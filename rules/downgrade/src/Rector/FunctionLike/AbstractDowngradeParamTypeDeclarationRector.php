@@ -10,12 +10,14 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Downgrade\Rector\DowngradeRectorTrait;
+use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
 abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeDeclarationRector
 {
+    use DowngradeRectorTrait;
+
     /**
      * @var string
      */
@@ -31,6 +33,10 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->isAtLeastPhpVersion($this->getPhpVersionFeature())) {
+            return $node;
+        }
+
         if ($node->params === null || $node->params === []) {
             return null;
         }
