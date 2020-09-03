@@ -18,7 +18,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Cake\Routing\Exception\RedirectException' => 'Cake\Http\Exception\RedirectException',
                 'Cake\Database\Expression\Comparison' => 'Cake\Database\Expression\ComparisonExpression',
-            ]],
+            ],
+        ],
         ]);
 
     $services->set(RenameMethodRector::class)
