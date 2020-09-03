@@ -139,7 +139,17 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const BEFORE_MIXED_TYPE = '7.4';
+
+    /**
+     * @var string
+     */
     public const BEFORE_TYPED_PROPERTIES = '7.3';
+
+    /**
+     * @var string
+     */
+    public const BEFORE_OBJECT_TYPE = '7.1';
 
     /**
      * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
