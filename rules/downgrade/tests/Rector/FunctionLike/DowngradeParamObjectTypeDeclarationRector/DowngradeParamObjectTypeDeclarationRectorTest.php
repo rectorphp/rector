@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Downgrade\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
 
 use Iterator;
-use Symplify\SmartFileSystem\SmartFileInfo;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Downgrade\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DowngradeParamObjectTypeDeclarationRectorTest extends AbstractRectorTestCase
 {

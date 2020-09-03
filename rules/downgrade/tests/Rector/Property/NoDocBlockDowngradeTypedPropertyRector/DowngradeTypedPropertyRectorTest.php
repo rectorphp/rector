@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector;
 
 use Iterator;
-use Symplify\SmartFileSystem\SmartFileInfo;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Downgrade\Rector\Property\DowngradeTypedPropertyRector;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DowngradeTypedPropertyRectorTest extends AbstractRectorTestCase
 {

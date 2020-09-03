@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Rector\Downgrade\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Param;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Downgrade\Rector\DowngradeRectorTrait;
+use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Downgrade\Rector\DowngradeRectorTrait;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
 abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeDeclarationRector implements ConfigurableRectorInterface
@@ -56,6 +56,16 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
     }
 
     /**
+     * Name of the type to remove
+     */
+    abstract protected function getParamTypeName(): string;
+
+    protected function getRectorDefinitionDescription(): string
+    {
+        return sprintf('Remove the \'%s\' param type, add a @param tag instead', $this->getParamTypeName());
+    }
+
+    /**
      * @param ClassMethod|Function_ $functionLike
      */
     private function refactorParam(Param $param, FunctionLike $functionLike, int $position): void
@@ -95,7 +105,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
 
         // It can either be the type, or the nullable type (eg: ?object)
         $isNullableType = $param->type instanceof NullableType;
-        if (!($param->type instanceof Identifier || $isNullableType)) {
+        if (! ($param->type instanceof Identifier || $isNullableType)) {
             return true;
         }
 
@@ -103,19 +113,6 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
         $typeName = $isNullableType ? $param->type->type->name : $param->type->name;
 
         // Check it is the type to be removed
-        return $typeName != $this->getParamTypeName();
-    }
-
-    /**
-     * Name of the type to remove
-     */
-    abstract protected function getParamTypeName(): string;
-
-    protected function getRectorDefinitionDescription(): string
-    {
-        return sprintf(
-            'Remove the \'%s\' param type, add a @param tag instead',
-            $this->getParamTypeName()
-        );
+        return $typeName !== $this->getParamTypeName();
     }
 }
