@@ -6,6 +6,7 @@ namespace Rector\Downgrade\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -70,7 +71,12 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
             return true;
         }
 
-        return $functionLike->returnType->name != $this->getReturnTypeName();
+        // It can either be the type, or the nullable type (eg: ?object)
+        $isNullableType = $functionLike->returnType instanceof NullableType;
+        $typeName = $isNullableType ? $functionLike->returnType->type->name : $functionLike->returnType->name;
+
+        // Check it is the type to be removed
+        return $typeName != $this->getReturnTypeName();
     }
 
     /**
