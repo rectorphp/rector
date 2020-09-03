@@ -29,5 +29,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::PROJECT_TYPE, Option::PROJECT_TYPE_PROPRIETARY);
     $parameters->set(Option::NESTED_CHAIN_METHOD_CALL_LIMIT, 30);
-    $parameters->set(Option::SAFE_TYPES, false);
 };

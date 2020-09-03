@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitorAbstract;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
@@ -21,13 +20,11 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Configuration\Configuration;
-use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -86,17 +83,11 @@ final class PHPStanNodeScopeResolver
      */
     private $symfonyStyle;
 
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
     public function __construct(
         ChangedFilesDetector $changedFilesDetector,
         Configuration $configuration,
         DependencyResolver $dependencyResolver,
         NodeScopeResolver $nodeScopeResolver,
-        ParameterProvider $parameterProvider,
         ReflectionProvider $reflectionProvider,
         RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
         ScopeFactory $scopeFactory,
@@ -112,7 +103,6 @@ final class PHPStanNodeScopeResolver
         $this->changedFilesDetector = $changedFilesDetector;
         $this->configuration = $configuration;
         $this->symfonyStyle = $symfonyStyle;
-        $this->parameterProvider = $parameterProvider;
     }
 
     /**
@@ -155,11 +145,6 @@ final class PHPStanNodeScopeResolver
 
             $this->resolveDependentFiles($node, $scope);
         };
-
-        $safeTypes = (bool) $this->parameterProvider->provideParameter(Option::SAFE_TYPES);
-        if ($safeTypes) {
-            $this->removeCommentsFromNodes($nodes);
-        }
 
         /** @var MutatingScope $scope */
         $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
@@ -210,25 +195,6 @@ final class PHPStanNodeScopeResolver
         } catch (AnalysedCodeException $analysedCodeException) {
             // @ignoreException
         }
-    }
-
-    /**
-     * Remove comments, to enable scope resolving only from code, not docblocks
-     *
-     * @param Node[] $nodes
-     */
-    private function removeCommentsFromNodes(array $nodes): void
-    {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new class() extends NodeVisitorAbstract {
-            public function enterNode(Node $node): ?Node
-            {
-                $node->setAttribute('comments', null);
-                return $node;
-            }
-        });
-
-        $nodeTraverser->traverse($nodes);
     }
 
     /**
