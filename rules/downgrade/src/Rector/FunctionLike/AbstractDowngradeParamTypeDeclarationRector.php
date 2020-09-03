@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -92,12 +93,17 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
             return true;
         }
 
-        if (!($param->type instanceof Identifier)) {
+        // It can either be the type, or the nullable type (eg: ?object)
+        $isNullableType = $param->type instanceof NullableType;
+        if (!($param->type instanceof Identifier || $isNullableType)) {
             return true;
         }
 
+        // If it is the NullableType, extract the name from its inner type
+        $typeName = $isNullableType ? $param->type->type->name : $param->type->name;
+
         // Check it is the type to be removed
-        return $param->type->name != $this->getParamTypeName();
+        return $typeName != $this->getParamTypeName();
     }
 
     /**
