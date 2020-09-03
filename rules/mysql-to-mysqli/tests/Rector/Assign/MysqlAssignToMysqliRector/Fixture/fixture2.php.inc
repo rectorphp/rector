@@ -17,10 +17,7 @@ function mysql_to_mysqli_assign2() {
 
 function mysql_to_mysqli_assign2() {
     $result = [];
-    for ($x = 0; $x < 5; $x++) {
-        mysqli_fetch_field($result);
-    }
-    $fetch = mysqli_fetch_field($result);
+    $fetch = mysqli_fetch_field_direct($result, 5);
 
     $fetch = mysqli_fetch_field($result);
 

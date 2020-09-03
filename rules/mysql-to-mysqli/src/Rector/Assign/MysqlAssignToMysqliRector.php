@@ -7,17 +7,12 @@ namespace Rector\MysqlToMysqli\Rector\Assign;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\For_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -147,29 +142,11 @@ PHP
 
     private function processMysqlFetchField(Assign $assign, FuncCall $funcCall): Assign
     {
-        $funcCall->name = new Name('mysqli_fetch_field');
-
-        if (! isset($funcCall->args[1])) {
-            return $assign;
+        if (isset($funcCall->args[1])) {
+            $funcCall->name = new Name('mysqli_fetch_field_direct');
+        } else {
+            $funcCall->name = new Name('mysqli_fetch_field');
         }
-
-        unset($funcCall->args[1]);
-
-        // add for
-        $variable = new Variable('x');
-        $for = new For_([
-            'init' => [new Assign($variable, new LNumber(0))],
-            'cond' => [new Smaller($variable, new LNumber(5))],
-            'loop' => [new PostInc($variable)],
-            'stmts' => [new Expression($funcCall)],
-        ]);
-
-        $previousStatement = $assign->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if ($previousStatement === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->addNodeAfterNode($for, $previousStatement);
 
         return $assign;
     }
