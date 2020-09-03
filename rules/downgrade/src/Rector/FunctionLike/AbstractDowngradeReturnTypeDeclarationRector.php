@@ -10,9 +10,10 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Downgrade\Rector\DowngradeRectorTrait;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
-abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
+abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractTypeDeclarationRector implements ConfigurableRectorInterface
 {
     use DowngradeRectorTrait;
 
