@@ -39,8 +39,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [
-            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
+            ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
                 new UnprefixedMethodToGetSet('Cake\Form\Form', 'schema'),
-            ],
+            ]),
         ]);
 };
