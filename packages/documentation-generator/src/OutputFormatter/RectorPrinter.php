@@ -107,7 +107,7 @@ final class RectorPrinter
     private function resolveClassFilePathOnGitHub(string $className): string
     {
         $classRelativePath = $this->getClassRelativePath($className);
-        return './' . $classRelativePath;
+        return './' . ltrim($classRelativePath, './');
     }
 
     private function resolveFixtureDirectoryPathOnGitHub(string $className): ?string
@@ -116,7 +116,7 @@ final class RectorPrinter
 
         $fixtureDirectory = dirname($classRelativePath) . '/Fixture';
         if (is_dir($fixtureDirectory)) {
-            return './' . $fixtureDirectory;
+            return './' . ltrim($fixtureDirectory, './');
         }
 
         return null;
