@@ -7,36 +7,34 @@ namespace Rector\Naming\Matcher;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Foreach_;
 
-final class VariableAndCallAssignMatcher extends AbstractMatcher
+final class ForeachMatcher extends AbstractMatcher
 {
     /**
-     * @param Assign $node
+     * @param Foreach_ $node
      */
     public function getVariableName(Node $node): ?string
     {
-        if (! $node->var instanceof Variable) {
+        if (! $node->valueVar instanceof Variable) {
             return null;
         }
 
-        return $this->nodeNameResolver->getName($node->var);
+        return $this->nodeNameResolver->getName($node->valueVar);
     }
 
     /**
-     * @param Assign $node
+     * @param Foreach_ $node
      */
     public function getVariable(Node $node): Variable
     {
         /** @var Variable $variable */
-        $variable = $node->var;
+        $variable = $node->valueVar;
         return $variable;
     }
 
-    /**
-     * @param Assign $node
-     */
     public function getAssign(Node $node): ?Assign
     {
-        return $node;
+        return null;
     }
 }

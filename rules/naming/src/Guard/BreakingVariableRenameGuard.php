@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
@@ -20,6 +21,7 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -54,18 +56,25 @@ final class BreakingVariableRenameGuard
      */
     private $typeUnwrapper;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         ConflictingNameResolver $conflictingNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         OverridenExistingNamesResolver $overridenExistingNamesResolver,
-        TypeUnwrapper $typeUnwrapper
+        TypeUnwrapper $typeUnwrapper,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->conflictingNameResolver = $conflictingNameResolver;
         $this->overridenExistingNamesResolver = $overridenExistingNamesResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeUnwrapper = $typeUnwrapper;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -99,6 +108,10 @@ final class BreakingVariableRenameGuard
         }
 
         if ($this->isUsedInClosureUsesName($expectedName, $functionLike)) {
+            return true;
+        }
+
+        if ($this->isUsedInForeachKeyValueVar($variable, $currentName)) {
             return true;
         }
 
@@ -177,6 +190,34 @@ final class BreakingVariableRenameGuard
         }
 
         return $this->betterNodeFinder->hasVariableOfName((array) $functionLike->uses, $expectedName);
+    }
+
+    private function isUsedInForeachKeyValueVar(Variable $variable, string $currentName): bool
+    {
+        $previousForeach = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [Foreach_::class]);
+        if ($previousForeach instanceof Foreach_) {
+            if ($previousForeach->keyVar === $variable) {
+                return false;
+            }
+
+            if ($previousForeach->valueVar === $variable) {
+                return false;
+            }
+
+            if ($this->nodeNameResolver->isName($previousForeach->valueVar, $currentName)) {
+                return true;
+            }
+
+            if ($previousForeach->keyVar === null) {
+                return false;
+            }
+
+            if ($this->nodeNameResolver->isName($previousForeach->keyVar, $currentName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function isUsedInIfAndOtherBranches(Variable $variable, string $currentVariableName): bool

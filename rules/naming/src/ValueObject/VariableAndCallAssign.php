@@ -28,7 +28,7 @@ final class VariableAndCallAssign
     private $variable;
 
     /**
-     * @var Assign
+     * @var ?Assign
      */
     private $assign;
 
@@ -49,7 +49,7 @@ final class VariableAndCallAssign
     public function __construct(
         Variable $variable,
         Expr $expr,
-        Assign $assign,
+        ?Assign $assign,
         string $variableName,
         FunctionLike $functionLike
     ) {
@@ -86,7 +86,7 @@ final class VariableAndCallAssign
         return $this->functionLike;
     }
 
-    public function getAssign(): Assign
+    public function getAssign(): ?Assign
     {
         return $this->assign;
     }

@@ -14,9 +14,12 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -179,7 +182,10 @@ final class ExpectedNameResolver
         $returnedType = $this->nodeTypeResolver->getStaticType($expr);
 
         if ($returnedType instanceof ArrayType) {
-            return null;
+            $returnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
+            if ($returnedType === null) {
+                return null;
+            }
         }
 
         if ($returnedType instanceof MixedType) {
@@ -229,5 +235,18 @@ final class ExpectedNameResolver
         }
 
         return $expr->name instanceof FuncCall;
+    }
+
+    private function resolveReturnTypeFromArrayType(Expr $expr, ArrayType $arrayType): ?Type
+    {
+        if (! $expr->getAttribute(AttributeKey::PARENT_NODE) instanceof Foreach_) {
+            return null;
+        }
+
+        if (! $arrayType->getItemType() instanceof ObjectType) {
+            return null;
+        }
+
+        return $arrayType->getItemType();
     }
 }
