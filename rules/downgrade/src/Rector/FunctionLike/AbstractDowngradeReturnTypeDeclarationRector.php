@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Rector\Downgrade\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Param;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Downgrade\Rector\DowngradeRectorTrait;
+use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
 abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
 {
+    use DowngradeRectorTrait;
+
     /**
      * @var string
      */
@@ -31,6 +31,10 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->isAtLeastPhpVersion($this->getPhpVersionFeature())) {
+            return $node;
+        }
+
         if ($this->shouldSkip($node)) {
             return null;
         }
