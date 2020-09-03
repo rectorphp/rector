@@ -13,7 +13,7 @@ use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Console\Application;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
-use Symplify\EasyCodingStandard\Bootstrap\InvalidSetReporter;
+use Symplify\SetConfigResolver\Bootstrap\InvalidSetReporter;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\SetConfigResolver\Exception\SetNotFoundException;
