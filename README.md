@@ -262,49 +262,6 @@ vendor/bin/rector process src --set solid --only Rector\SOLID\Rector\Class_\Fina
 vendor/bin/rector process src --set solid --only FinalizeClassesWithoutChildrenRector
 ```
 
-### Safe Types
-
-
-**Experimental** feature
-
-In default type resolving settings, all docblocks are taken seriously.
-
-```php
-<?php
-// rector.php
-
-declare(strict_types=1);
-
-use Rector\Core\Configuration\Option;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
-
-    // [default: false]
-    $parameters->set(Option::SAFE_TYPES, true);
-};
-```
-
-E.g. the `TypedPropertyRector` rule will skip this case, as `string` is defined only in docblock:
-
-```php
-<?php
-
-class ValueObject
-{
-    public $value;
-
-    /**
-     * @param string $value
-     */
-    public function __construct($value)
-    {
-        $this->value = $value;
-    }
-}
-```
-
 ### Limit Execution to Changed Files
 
 Execution can be limited to changed files using the `process` option `--match-git-diff`.
