@@ -7,11 +7,11 @@ namespace Rector\Downgrade\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Downgrade\Rector\DowngradeRectorTrait;
+use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Downgrade\Rector\DowngradeRectorTrait;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
 abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractTypeDeclarationRector implements ConfigurableRectorInterface
@@ -63,6 +63,16 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
     }
 
     /**
+     * Name of the type to remove
+     */
+    abstract protected function getReturnTypeName(): string;
+
+    protected function getRectorDefinitionDescription(): string
+    {
+        return sprintf('Remove the \'%s\' function type, add a @return tag instead', $this->getReturnTypeName());
+    }
+
+    /**
      * @param ClassMethod|Function_ $functionLike
      */
     private function shouldSkip(FunctionLike $functionLike): bool
@@ -76,19 +86,6 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
         $typeName = $isNullableType ? $functionLike->returnType->type->name : $functionLike->returnType->name;
 
         // Check it is the type to be removed
-        return $typeName != $this->getReturnTypeName();
-    }
-
-    /**
-     * Name of the type to remove
-     */
-    abstract protected function getReturnTypeName(): string;
-
-    protected function getRectorDefinitionDescription(): string
-    {
-        return sprintf(
-            'Remove the \'%s\' function type, add a @return tag instead',
-            $this->getReturnTypeName()
-        );
+        return $typeName !== $this->getReturnTypeName();
     }
 }

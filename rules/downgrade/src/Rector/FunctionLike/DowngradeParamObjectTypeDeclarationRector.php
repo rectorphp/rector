@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Rector\Downgrade\Rector\FunctionLike;
 
 use Rector\Core\RectorDefinition\CodeSample;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Downgrade\Rector\FunctionLike\AbstractDowngradeParamTypeDeclarationRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 
 /**
  * @see \Rector\Downgrade\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\DowngradeParamObjectTypeDeclarationRectorTest
