@@ -61,7 +61,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
 
     protected function getRectorDefinitionDescription(): string
     {
-        return sprintf('Remove the \'%s\' param type, add a @param tag instead', $this->getParamTypeName());
+        return sprintf("Remove the '%s' param type, add a @param tag instead", $this->getParamTypeName());
     }
 
     /**
@@ -107,7 +107,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
 
         // It can either be the type, or the nullable type (eg: ?object)
         $isNullableType = $param->type instanceof NullableType;
-        if (! ($param->type instanceof Identifier || $isNullableType)) {
+        if (!$param->type instanceof Identifier && !$isNullableType) {
             return true;
         }
 
