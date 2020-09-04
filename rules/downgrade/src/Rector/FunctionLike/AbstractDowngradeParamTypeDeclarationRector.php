@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Downgrade\Rector\DowngradeRectorInterface;
+use Rector\Downgrade\Contract\Rector\DowngradeRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 

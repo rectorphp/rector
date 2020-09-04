@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Downgrade\Rector;
+namespace Rector\Downgrade\Contract\Rector;
 
 interface DowngradeRectorInterface
 {

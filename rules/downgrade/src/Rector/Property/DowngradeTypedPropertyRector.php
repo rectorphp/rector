@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Downgrade\Rector\DowngradeRectorInterface;
+use Rector\Downgrade\Contract\Rector\DowngradeRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
