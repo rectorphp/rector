@@ -84,7 +84,15 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
 
         // It can either be the type, or the nullable type (eg: ?object)
         $isNullableType = $functionLike->returnType instanceof NullableType;
-        $typeName = $isNullableType ? $this->getName($functionLike->returnType->type) : $this->getName($functionLike->returnType);
+        if ($isNullableType) {
+            /**
+             * @var NullableType
+             */
+            $nullableType = $functionLike->returnType;
+            $typeName = $this->getName($nullableType->type);
+        } else {
+            $typeName = $this->getName($functionLike->returnType);
+        }
 
         // Check it is the type to be removed
         return $typeName !== $this->getReturnTypeName();
