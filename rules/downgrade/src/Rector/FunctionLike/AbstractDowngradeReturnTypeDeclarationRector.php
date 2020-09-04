@@ -47,8 +47,10 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
                 $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
             }
 
-            $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
-            $phpDocInfo->changeReturnType($type);
+            if (!is_null($node->returnType)) {
+                $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
+                $phpDocInfo->changeReturnType($type);
+            }
         }
 
         $node->returnType = null;
