@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector;
+namespace Rector\Downgrade\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Downgrade\Rector\Property\DowngradeTypedPropertyRector;
+use Rector\Downgrade\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeTypedPropertyRectorTest extends AbstractRectorTestCase
+final class DowngradeParamObjectTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP >= 7.4
+     * @requires PHP >= 7.2
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
@@ -32,19 +32,19 @@ final class DowngradeTypedPropertyRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            DowngradeTypedPropertyRector::class => [
-                DowngradeTypedPropertyRector::ADD_DOC_BLOCK => true,
+            DowngradeParamObjectTypeDeclarationRector::class => [
+                DowngradeParamObjectTypeDeclarationRector::ADD_DOC_BLOCK => true,
             ],
         ];
     }
 
     protected function getRectorClass(): string
     {
-        return DowngradeTypedPropertyRector::class;
+        return DowngradeParamObjectTypeDeclarationRector::class;
     }
 
     protected function getPhpVersion(): string
     {
-        return PhpVersionFeature::BEFORE_TYPED_PROPERTIES;
+        return PhpVersionFeature::BEFORE_OBJECT_TYPE;
     }
 }

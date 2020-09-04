@@ -6,6 +6,7 @@ namespace Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropert
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Downgrade\Rector\Property\DowngradeTypedPropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -40,5 +41,10 @@ final class DowngradeTypedPropertyRectorTest extends AbstractRectorTestCase
     protected function getRectorClass(): string
     {
         return DowngradeTypedPropertyRector::class;
+    }
+
+    protected function getPhpVersion(): string
+    {
+        return PhpVersionFeature::BEFORE_TYPED_PROPERTIES;
     }
 }

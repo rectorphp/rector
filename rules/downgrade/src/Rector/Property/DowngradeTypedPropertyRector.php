@@ -11,13 +11,15 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Downgrade\Contract\Rector\DowngradeRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  * @see \Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  */
-final class DowngradeTypedPropertyRector extends AbstractRector implements ConfigurableRectorInterface
+final class DowngradeTypedPropertyRector extends AbstractRector implements ConfigurableRectorInterface, DowngradeRectorInterface
 {
     /**
      * @var string
@@ -71,6 +73,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->isAtLeastPhpVersion($this->getPhpVersionFeature())) {
+            return $node;
+        }
+
         if ($node->type === null) {
             return null;
         }
@@ -88,5 +94,10 @@ PHP
         $node->type = null;
 
         return $node;
+    }
+
+    public function getPhpVersionFeature(): string
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
     }
 }
