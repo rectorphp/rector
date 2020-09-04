@@ -48,16 +48,16 @@ PHP
         );
     }
 
+    public function getPhpVersionFeature(): string
+    {
+        return PhpVersionFeature::OBJECT_TYPE;
+    }
+
     /**
      * Name of the type to remove
      */
     protected function getParamTypeName(): string
     {
         return 'object';
-    }
-
-    public function getPhpVersionFeature(): string
-    {
-        return PhpVersionFeature::OBJECT_TYPE;
     }
 }

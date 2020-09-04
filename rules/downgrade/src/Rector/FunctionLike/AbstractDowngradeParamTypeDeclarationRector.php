@@ -81,7 +81,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
                 $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
             }
 
-            if (!is_null($param->type)) {
+            if ($param->type !== null) {
                 $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
                 $paramName = $this->getName($param->var) ?? '';
                 $phpDocInfo->changeParamType($type, $param, $paramName);
@@ -113,9 +113,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
 
         // If it is the NullableType, extract the name from its inner type
         if ($isNullableType) {
-            /**
-             * @var NullableType
-             */
+            /** @var NullableType */
             $nullableType = $param->type;
             $typeName = $this->getName($nullableType->type);
         } else {

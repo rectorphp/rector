@@ -47,7 +47,7 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
                 $phpDocInfo = $this->phpDocInfoFactory->createEmpty($node);
             }
 
-            if (!is_null($node->returnType)) {
+            if ($node->returnType !== null) {
                 $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
                 $phpDocInfo->changeReturnType($type);
             }
@@ -85,9 +85,7 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
         // It can either be the type, or the nullable type (eg: ?object)
         $isNullableType = $functionLike->returnType instanceof NullableType;
         if ($isNullableType) {
-            /**
-             * @var NullableType
-             */
+            /** @var NullableType */
             $nullableType = $functionLike->returnType;
             $typeName = $this->getName($nullableType->type);
         } else {
