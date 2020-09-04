@@ -111,7 +111,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
         }
 
         // If it is the NullableType, extract the name from its inner type
-        $typeName = $isNullableType ? $param->type->type->name : $param->type->name;
+        $typeName = $isNullableType ? $this->getName($param->type->type) : $this->getName($param->type);
 
         // Check it is the type to be removed
         return $typeName !== $this->getParamTypeName();
