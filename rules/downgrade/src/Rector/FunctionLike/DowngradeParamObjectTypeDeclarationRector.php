@@ -53,10 +53,7 @@ PHP
         return PhpVersionFeature::OBJECT_TYPE;
     }
 
-    /**
-     * Name of the type to remove
-     */
-    protected function getParamTypeName(): string
+    public function getTypeNameToRemove(): string
     {
         return 'object';
     }

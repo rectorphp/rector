@@ -12,10 +12,11 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Downgrade\Contract\Rector\DowngradeRectorInterface;
+use Rector\Downgrade\Contract\Rector\DowngradeTypeRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
-abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractTypeDeclarationRector implements ConfigurableRectorInterface, DowngradeRectorInterface
+abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractTypeDeclarationRector implements ConfigurableRectorInterface, DowngradeRectorInterface, DowngradeTypeRectorInterface
 {
     /**
      * @var string
@@ -63,14 +64,9 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
         $this->addDocBlock = $configuration[self::ADD_DOC_BLOCK] ?? true;
     }
 
-    /**
-     * Name of the type to remove
-     */
-    abstract protected function getReturnTypeName(): string;
-
     protected function getRectorDefinitionDescription(): string
     {
-        return sprintf("Remove the '%s' function type, add a @return tag instead", $this->getReturnTypeName());
+        return sprintf("Remove the '%s' function type, add a @return tag instead", $this->getTypeNameToRemove());
     }
 
     /**
@@ -93,6 +89,6 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
         }
 
         // Check it is the type to be removed
-        return $typeName !== $this->getReturnTypeName();
+        return $typeName !== $this->getTypeNameToRemove();
     }
 }

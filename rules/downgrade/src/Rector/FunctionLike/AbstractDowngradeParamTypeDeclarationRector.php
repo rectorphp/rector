@@ -14,10 +14,11 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Downgrade\Contract\Rector\DowngradeRectorInterface;
+use Rector\Downgrade\Contract\Rector\DowngradeTypeRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
-abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeDeclarationRector implements ConfigurableRectorInterface, DowngradeRectorInterface
+abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeDeclarationRector implements ConfigurableRectorInterface, DowngradeRectorInterface, DowngradeTypeRectorInterface
 {
     /**
      * @var string
@@ -54,14 +55,9 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
         $this->addDocBlock = $configuration[self::ADD_DOC_BLOCK] ?? true;
     }
 
-    /**
-     * Name of the type to remove
-     */
-    abstract protected function getParamTypeName(): string;
-
     protected function getRectorDefinitionDescription(): string
     {
-        return sprintf("Remove the '%s' param type, add a @param tag instead", $this->getParamTypeName());
+        return sprintf("Remove the '%s' param type, add a @param tag instead", $this->getTypeNameToRemove());
     }
 
     /**
@@ -121,6 +117,6 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
         }
 
         // Check it is the type to be removed
-        return $typeName !== $this->getParamTypeName();
+        return $typeName !== $this->getTypeNameToRemove();
     }
 }
