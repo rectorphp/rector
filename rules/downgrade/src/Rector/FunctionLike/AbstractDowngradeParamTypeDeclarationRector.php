@@ -83,7 +83,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
 
             if (!is_null($param->type)) {
                 $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-                $phpDocInfo->changeParamType($type, $param, $param->var->name);
+                $phpDocInfo->changeParamType($type, $param, $this->getName($param->var));
             }
         }
 
