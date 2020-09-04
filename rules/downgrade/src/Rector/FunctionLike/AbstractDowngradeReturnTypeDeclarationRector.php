@@ -70,7 +70,7 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
 
     protected function getRectorDefinitionDescription(): string
     {
-        return sprintf('Remove the \'%s\' function type, add a @return tag instead', $this->getReturnTypeName());
+        return sprintf("Remove the '%s' function type, add a @return tag instead", $this->getReturnTypeName());
     }
 
     /**
