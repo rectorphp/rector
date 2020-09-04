@@ -56,7 +56,7 @@ PHP
         return 'object';
     }
 
-    protected function getPhpVersionFeature(): string
+    public function getPhpVersionFeature(): string
     {
         return PhpVersionFeature::OBJECT_TYPE;
     }

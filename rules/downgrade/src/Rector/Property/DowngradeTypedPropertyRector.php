@@ -12,17 +12,15 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Downgrade\Rector\DowngradeRectorTrait;
+use Rector\Downgrade\Rector\DowngradeRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Downgrade\Tests\Rector\Property\DowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  * @see \Rector\Downgrade\Tests\Rector\Property\NoDocBlockDowngradeTypedPropertyRector\DowngradeTypedPropertyRectorTest
  */
-final class DowngradeTypedPropertyRector extends AbstractRector implements ConfigurableRectorInterface
+final class DowngradeTypedPropertyRector extends AbstractRector implements ConfigurableRectorInterface, DowngradeRectorInterface
 {
-    use DowngradeRectorTrait;
-
     /**
      * @var string
      */
@@ -98,7 +96,7 @@ PHP
         return $node;
     }
 
-    protected function getPhpVersionFeature(): string
+    public function getPhpVersionFeature(): string
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Downgrade\Rector;
 
-trait DowngradeRectorTrait
+interface DowngradeRectorInterface
 {
     /**
      * Run the rector only when the feature is not supported
      */
-    abstract protected function getPhpVersionFeature(): string;
+    function getPhpVersionFeature(): string;
 }
