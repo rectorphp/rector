@@ -89,26 +89,6 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
 
     private function shouldSkipParam(Param $param, FunctionLike $functionLike, int $position): bool
     {
-        /**
-         * The code commented below creates a bug:
-         * the param is removed from the interface, but not from a class
-         * implementing the interface, since it is locked.
-         *
-         * If downgrading only one file, locking makes sense.
-         * If downgrading the whole project (as I am doing), it does not.
-         *
-         * What is the best solution?
-         * - Remove this code?
-         * - Read configuration "ENABLE_LOCKING" in the several `isVendorLocked` functions,
-         *   and set it to `false` in rector.php?
-         *
-         * @todo Find best solution and fix
-         * @todo Implement similar solution for `AbstractDowngradeReturnTypeDeclarationRector`
-         */
-        // if ($this->vendorLockResolver->isClassMethodParamLockedIn($functionLike, $position)) {
-        //     return true;
-        // }
-
         if ($param->variadic) {
             return true;
         }
