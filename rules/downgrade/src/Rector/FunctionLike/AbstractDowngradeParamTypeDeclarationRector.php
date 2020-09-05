@@ -87,7 +87,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
         $param->type = null;
     }
 
-    private function shouldSkipParam(Param $param, FunctionLike $functionLike, int $position): bool
+    private function shouldSkipParam(Param $param): bool
     {
         if ($param->variadic) {
             return true;
