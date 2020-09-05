@@ -43,8 +43,8 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
             return null;
         }
 
-        foreach ($node->params as $position => $param) {
-            $this->refactorParam($param, $node, (int) $position);
+        foreach ($node->params as $param) {
+            $this->refactorParam($param, $node);
         }
 
         return null;
@@ -63,9 +63,9 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
     /**
      * @param ClassMethod|Function_ $functionLike
      */
-    private function refactorParam(Param $param, FunctionLike $functionLike, int $position): void
+    private function refactorParam(Param $param, FunctionLike $functionLike): void
     {
-        if ($this->shouldSkipParam($param, $functionLike, $position)) {
+        if ($this->shouldSkipParam($param)) {
             return;
         }
 
@@ -87,12 +87,8 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
         $param->type = null;
     }
 
-    private function shouldSkipParam(Param $param, FunctionLike $functionLike, int $position): bool
+    private function shouldSkipParam(Param $param): bool
     {
-        if ($this->vendorLockResolver->isClassMethodParamLockedIn($functionLike, $position)) {
-            return true;
-        }
-
         if ($param->variadic) {
             return true;
         }
