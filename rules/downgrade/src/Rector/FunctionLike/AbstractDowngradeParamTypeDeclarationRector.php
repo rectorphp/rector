@@ -65,7 +65,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
      */
     private function refactorParam(Param $param, FunctionLike $functionLike, int $position): void
     {
-        if ($this->shouldSkipParam($param, $functionLike, $position)) {
+        if ($this->shouldSkipParam($param)) {
             return;
         }
 
