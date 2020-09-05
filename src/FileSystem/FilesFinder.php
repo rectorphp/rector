@@ -157,7 +157,7 @@ final class FilesFinder
                 //dead symlink
                 return false;
             }
-            
+
             // make the path work accross different OSes
             $realPath = str_replace('\\', '/', $realPath);
 
@@ -165,7 +165,7 @@ final class FilesFinder
             foreach ($this->excludePaths as $excludePath) {
                 // make the path work accross different OSes
                 $excludePath = str_replace('\\', '/', $excludePath);
-                
+
                 if (Strings::match($realPath, '#' . preg_quote($excludePath, '#') . '#')) {
                     return false;
                 }
