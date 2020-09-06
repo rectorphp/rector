@@ -59,22 +59,34 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->expr instanceof Concat && $node->expr->left instanceof String_ && $this->isRefactorableStringPath(
+            $node->expr->left
+        )) {
+            $node->expr->left = $this->prefixWithDir($node->expr->left);
+
+            return $node;
+        }
+
+        if ($node->expr instanceof String_ && $this->isRefactorableStringPath($node->expr)) {
+            $node->expr = $this->prefixWithDir($node->expr);
+
+            return $node;
+        }
         // nothing we can do
-        if (! $node->expr instanceof String_) {
-            return null;
-        }
+        return null;
+    }
 
-        $includedPath = $node->expr;
-        if (Strings::startsWith($includedPath->value, 'phar://')) {
-            return null;
-        }
+    private function isRefactorableStringPath(String_ $string): bool
+    {
+        return ! Strings::startsWith($string->value, 'phar://');
+    }
 
-        $this->removeExtraDotSlash($includedPath);
-        $this->prependSlashIfMissing($includedPath);
+    private function prefixWithDir(String_ $string): Concat
+    {
+        $this->removeExtraDotSlash($string);
+        $this->prependSlashIfMissing($string);
 
-        $node->expr = new Concat(new Dir(), $includedPath);
-
-        return $node;
+        return new Concat(new Dir(), $string);
     }
 
     /**
