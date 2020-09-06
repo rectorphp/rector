@@ -182,10 +182,7 @@ final class ExpectedNameResolver
         $returnedType = $this->nodeTypeResolver->getStaticType($expr);
 
         if ($returnedType instanceof ArrayType) {
-            $returnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
-            if ($returnedType === null) {
-                return null;
-            }
+            return null;
         }
 
         if ($returnedType instanceof MixedType) {
@@ -204,6 +201,45 @@ final class ExpectedNameResolver
 
         // @see https://regex101.com/r/hnU5pm/2/
         $matches = Strings::match($name, '#^get([A-Z].+)#');
+        if ($matches === null) {
+            return null;
+        }
+
+        return lcfirst($matches[1]);
+    }
+
+    /**
+     * @param MethodCall|StaticCall|FuncCall $expr
+     */
+    public function resolveForForeach(Expr $expr): ?string
+    {
+        if ($this->isDynamicNameCall($expr)) {
+            return null;
+        }
+
+        $name = $this->nodeNameResolver->getName($expr->name);
+        if ($name === null) {
+            return null;
+        }
+
+        $returnedType = $this->nodeTypeResolver->getStaticType($expr);
+
+        if (! $returnedType instanceof ArrayType) {
+            return null;
+        }
+
+        $returnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
+        if ($returnedType === null) {
+            return null;
+        }
+
+        $expectedName = $this->propertyNaming->getExpectedNameFromType($returnedType);
+        if ($expectedName !== null) {
+            return $expectedName;
+        }
+
+        // @see https://regex101.com/r/CVihRP/1
+        $matches = Strings::match($name, '#^get([A-Z].+)s#');
         if ($matches === null) {
             return null;
         }

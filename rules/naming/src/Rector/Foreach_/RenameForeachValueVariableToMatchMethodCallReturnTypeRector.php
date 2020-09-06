@@ -114,7 +114,7 @@ PHP
             return null;
         }
 
-        $expectedName = $this->expectedNameResolver->resolveForCall($variableAndCallAssign->getCall());
+        $expectedName = $this->expectedNameResolver->resolveForForeach($variableAndCallAssign->getCall());
         if ($expectedName === null || $this->isName($variableAndCallAssign->getVariable(), $expectedName)) {
             return null;
         }
