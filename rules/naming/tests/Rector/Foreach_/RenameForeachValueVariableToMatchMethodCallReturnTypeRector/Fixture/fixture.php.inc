@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Naming\Tests\Rector\Foreach_\RenameVariableToMatchMethodCallReturnTypeRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\Foreach_\RenameVariableToMatchMethodCallReturnTypeRector\Source\Method;
+use Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\Method;
 
-class ForeachClass
+class SomeClass
 {
     public function run()
     {
@@ -27,11 +27,11 @@ class ForeachClass
 -----
 <?php
 
-namespace Rector\Naming\Tests\Rector\Foreach_\RenameVariableToMatchMethodCallReturnTypeRector\Fixture;
+namespace Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Fixture;
 
-use Rector\Naming\Tests\Rector\Foreach_\RenameVariableToMatchMethodCallReturnTypeRector\Source\Method;
+use Rector\Naming\Tests\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\Source\Method;
 
-class ForeachClass
+class SomeClass
 {
     public function run()
     {

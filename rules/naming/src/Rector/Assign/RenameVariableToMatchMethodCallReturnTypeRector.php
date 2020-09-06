@@ -11,15 +11,14 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
-use Rector\Naming\Factory\ValueObjectFactory;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
+use Rector\Naming\Matcher\VariableAndCallAssignMatcher;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\NamingConvention\NamingConventionAnalyzer;
 use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
@@ -58,6 +57,11 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
     private $familyRelationsAnalyzer;
 
     /**
+     * @var VariableAndCallAssignMatcher
+     */
+    private $variableAndCallAssignMatcher;
+
+    /**
      * @var NamingConventionAnalyzer
      */
     private $namingConventionAnalyzer;
@@ -72,11 +76,6 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
      */
     private $typeUnwrapper;
 
-    /**
-     * @var ValueObjectFactory
-     */
-    private $valueObjectFactory;
-
     public function __construct(
         BreakingVariableRenameGuard $breakingVariableRenameGuard,
         ExpectedNameResolver $expectedNameResolver,
@@ -84,17 +83,17 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
         NamingConventionAnalyzer $namingConventionAnalyzer,
         TypeUnwrapper $typeUnwrapper,
         VarTagValueNodeRenamer $varTagValueNodeRenamer,
-        VariableRenamer $variableRenamer,
-        ValueObjectFactory $valueObjectFactory
+        VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
+        VariableRenamer $variableRenamer
     ) {
         $this->expectedNameResolver = $expectedNameResolver;
         $this->variableRenamer = $variableRenamer;
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+        $this->variableAndCallAssignMatcher = $variableAndCallAssignMatcher;
         $this->namingConventionAnalyzer = $namingConventionAnalyzer;
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
         $this->typeUnwrapper = $typeUnwrapper;
-        $this->valueObjectFactory = $valueObjectFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -139,28 +138,28 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [Assign::class, Foreach_::class];
+        return [Assign::class];
     }
 
     /**
-     * @param Assign|Foreach_ $node
+     * @param Assign $node
      */
     public function refactor(Node $node): ?Node
     {
-        $variableAndCallAssign = $this->valueObjectFactory->create($node);
-
+        $variableAndCallAssign = $this->variableAndCallAssignMatcher->match($node);
         if ($variableAndCallAssign === null) {
             return null;
         }
 
         $expectedName = $this->expectedNameResolver->resolveForCall($variableAndCallAssign->getCall());
-        if ($expectedName === null || $this->isName($variableAndCallAssign->getVariable(), $expectedName)) {
+        if ($expectedName === null || $this->isName($node->var, $expectedName)) {
             return null;
         }
 
         if ($this->shouldSkip($variableAndCallAssign, $expectedName)) {
             return null;
         }
+
         $this->renameVariable($variableAndCallAssign, $expectedName);
 
         return $node;
