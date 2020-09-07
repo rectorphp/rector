@@ -154,6 +154,11 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const BEFORE_NULL_COALESCE_ASSIGN = '7.3';
+
+    /**
+     * @var string
+     */
     public const BEFORE_OBJECT_TYPE = '7.1';
 
     /**

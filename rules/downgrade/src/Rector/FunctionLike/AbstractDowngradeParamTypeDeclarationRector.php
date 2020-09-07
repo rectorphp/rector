@@ -36,7 +36,7 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractTypeD
     public function refactor(Node $node): ?Node
     {
         if ($this->isAtLeastPhpVersion($this->getPhpVersionFeature())) {
-            return $node;
+            return null;
         }
 
         if ($node->params === null || $node->params === []) {

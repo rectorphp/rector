@@ -169,7 +169,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // single file
         __DIR__ . '/src/ComplicatedFile.php',
         // or directory
-        __DIR__ . '/src/ComplicatedFile.php',
+        __DIR__ . '/src',
         // or fnmatch
         __DIR__ . '/src/*/Tests/*',
     ]);

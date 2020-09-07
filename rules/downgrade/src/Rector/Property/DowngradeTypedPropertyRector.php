@@ -74,7 +74,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         if ($this->isAtLeastPhpVersion($this->getPhpVersionFeature())) {
-            return $node;
+            return null;
         }
 
         if ($node->type === null) {
