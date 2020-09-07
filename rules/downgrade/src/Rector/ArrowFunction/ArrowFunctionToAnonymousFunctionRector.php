@@ -80,7 +80,7 @@ PHP
 
     /**
      * @param ArrowFunction $node
-     * @return Expression[]|Stmt[]
+     * @return Return_[]
      */
     protected function getBody(Node $node): array
     {

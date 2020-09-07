@@ -99,7 +99,7 @@ PHP
 
     /**
      * @param FuncCall $node
-     * @return Expression[]|Stmt[]
+     * @return Stmt[]
      */
     protected function getBody(Node $node): array
     {
