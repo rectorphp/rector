@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
-use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFilePathAndContent;
+use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFile;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -40,7 +40,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
     }
 
     /**
-     * @param InputFilePathWithExpectedFilePathAndContent[] $extraFiles
+     * @param InputFilePathWithExpectedFile[] $extraFiles
      * @todo decouple to own method later
      */
     protected function doTestFileInfo(
@@ -102,11 +102,11 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
     }
 
     /**
-     * @param InputFilePathWithExpectedFilePathAndContent[] $inputFilePathWithExpectedFilePathAndContents
+     * @param InputFilePathWithExpectedFile[] $inputFilePathWithExpectedFiles
      */
-    protected function doTestExtraFileInfos(array $inputFilePathWithExpectedFilePathAndContents): void
+    protected function doTestExtraFileInfos(array $inputFilePathWithExpectedFiles): void
     {
-        foreach ($inputFilePathWithExpectedFilePathAndContents as $extraFile) {
+        foreach ($inputFilePathWithExpectedFiles as $extraFile) {
             $this->assertFileExists($extraFile->getExpectedFilePath());
             $this->assertFileEquals($extraFile->getExpectedContent(), $extraFile->getExpectedFilePath());
         }

@@ -41,7 +41,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
     /**
      * @var OpeningAndClosingSpace
      */
-    private $inverseJoinColumnsClosingSpace;
+    private $inverseJoinColumnsOpeningAndClosingSpace;
 
     /**
      * @var OpeningAndClosingSpace
@@ -71,7 +71,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
         $this->joinColumns = $joinColumns;
         $this->inverseJoinColumns = $inverseJoinColumns;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
-        $this->inverseJoinColumnsClosingSpace = $inverseJoinColumnsOpeningAndClosingSpace;
+        $this->inverseJoinColumnsOpeningAndClosingSpace = $inverseJoinColumnsOpeningAndClosingSpace;
         $this->joinColumnsOpeningAndClosingSpace = $joinColumnsOpeningAndClosingSpace;
     }
 
@@ -135,8 +135,8 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode implement
             $items[self::INVERSE_JOIN_COLUMNS] = $this->printNestedTag(
                 $this->inverseJoinColumns,
                 false,
-                $this->inverseJoinColumnsClosingSpace->getOpeningSpace(),
-                $this->inverseJoinColumnsClosingSpace->getClosingSpace()
+                $this->inverseJoinColumnsOpeningAndClosingSpace->getOpeningSpace(),
+                $this->inverseJoinColumnsOpeningAndClosingSpace->getClosingSpace()
             );
         }
 

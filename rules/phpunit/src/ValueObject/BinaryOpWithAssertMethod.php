@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PHPUnit\ValueObject;
 
-final class BinaryOpWithAssertMethods
+final class BinaryOpWithAssertMethod
 {
     /**
      * @var string

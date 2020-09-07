@@ -31,7 +31,7 @@ use Rector\AnonymousClass\NodeAnalyzer\ClassNodeAnalyzer;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassesInterfacesAndUsedTraitsCorrector;
+use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassLikeTypeCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\TypeFactoryStaticHelper;
@@ -56,9 +56,9 @@ final class NodeTypeResolver
     private $arrayTypeAnalyzer;
 
     /**
-     * @var ParentClassesInterfacesAndUsedTraitsCorrector
+     * @var ParentClassLikeTypeCorrector
      */
-    private $parentClassesInterfacesAndUsedTraitsCorrector;
+    private $parentClassLikeTypeCorrector;
 
     /**
      * @var TypeUnwrapper
@@ -75,7 +75,7 @@ final class NodeTypeResolver
      */
     public function __construct(
         ObjectTypeSpecifier $objectTypeSpecifier,
-        ParentClassesInterfacesAndUsedTraitsCorrector $parentClassesInterfacesAndUsedTraitsCorrector,
+        ParentClassLikeTypeCorrector $parentClassLikeTypeCorrector,
         TypeUnwrapper $typeUnwrapper,
         ClassNodeAnalyzer $classNodeAnalyzer,
         array $nodeTypeResolvers
@@ -85,7 +85,7 @@ final class NodeTypeResolver
         }
 
         $this->objectTypeSpecifier = $objectTypeSpecifier;
-        $this->parentClassesInterfacesAndUsedTraitsCorrector = $parentClassesInterfacesAndUsedTraitsCorrector;
+        $this->parentClassLikeTypeCorrector = $parentClassLikeTypeCorrector;
         $this->typeUnwrapper = $typeUnwrapper;
         $this->classNodeAnalyzer = $classNodeAnalyzer;
     }
@@ -136,7 +136,7 @@ final class NodeTypeResolver
             return $type;
         }
 
-        return $this->parentClassesInterfacesAndUsedTraitsCorrector->correct($type);
+        return $this->parentClassLikeTypeCorrector->correct($type);
     }
 
     /**

@@ -7,7 +7,7 @@ namespace Rector\Core\DependencyInjection\Collector;
 use Symfony\Component\DependencyInjection\Definition;
 use Symplify\PackageBuilder\Yaml\ParametersMerger;
 
-final class ConfigurableRectorConfigureCallValuesCollector
+final class ConfigureCallValuesCollector
 {
     /**
      * @var mixed[]

@@ -84,34 +84,34 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $sortedClassMethodsAndOriginalClassMethods = $this->getPrivateMethodCallOrderAndClassMethods($node);
+        $sortedAndOriginalClassMethods = $this->getSortedAndOriginalClassMethods($node);
 
         // order is correct, nothing to change
-        if ($sortedClassMethodsAndOriginalClassMethods->hasOrderChanged()) {
+        if ($sortedAndOriginalClassMethods->hasOrderChanged()) {
             return null;
         }
 
         // different private method count, one of them is dead probably
-        if (! $sortedClassMethodsAndOriginalClassMethods->hasIdenticalClassMethodCount()) {
+        if (! $sortedAndOriginalClassMethods->hasIdenticalClassMethodCount()) {
             return null;
         }
 
         $attempt = 0;
-        while (! $sortedClassMethodsAndOriginalClassMethods->hasOrderSame()) {
+        while (! $sortedAndOriginalClassMethods->hasOrderSame()) {
             $attempt++;
             if ($attempt >= self::MAX_ATTEMPTS) {
                 throw new ShouldNotHappenException('Number of attempts to reorder the methods exceeded');
             }
 
             $oldToNewKeys = $this->stmtOrder->createOldToNewKeys(
-                $sortedClassMethodsAndOriginalClassMethods->getSortedClassMethods(),
-                $sortedClassMethodsAndOriginalClassMethods->getOriginalClassMethods()
+                $sortedAndOriginalClassMethods->getSortedClassMethods(),
+                $sortedAndOriginalClassMethods->getOriginalClassMethods()
             );
 
             /** @var Class_ $node */
             $node = $this->stmtOrder->reorderClassStmtsByOldToNewKeys($node, $oldToNewKeys);
 
-            $sortedClassMethodsAndOriginalClassMethods = $this->getPrivateMethodCallOrderAndClassMethods($node);
+            $sortedAndOriginalClassMethods = $this->getSortedAndOriginalClassMethods($node);
         }
 
         return $node;
@@ -120,7 +120,7 @@ PHP
     /**
      * @param Class_|Trait_ $classLike
      */
-    private function getPrivateMethodCallOrderAndClassMethods(
+    private function getSortedAndOriginalClassMethods(
         ClassLike $classLike
     ): SortedClassMethodsAndOriginalClassMethods {
         return new SortedClassMethodsAndOriginalClassMethods(

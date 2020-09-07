@@ -19,7 +19,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
-use Rector\NetteToSymfony\Routing\ImplicitToExplicitRoutingAnnotationDecorator;
+use Rector\NetteToSymfony\Routing\ExplicitRouteAnnotationDecorator;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -44,18 +44,18 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $returnTypeInferer;
 
     /**
-     * @var ImplicitToExplicitRoutingAnnotationDecorator
+     * @var ExplicitRouteAnnotationDecorator
      */
-    private $implicitToExplicitRoutingAnnotationDecorator;
+    private $explicitRouteAnnotationDecorator;
 
     public function __construct(
-        ImplicitToExplicitRoutingAnnotationDecorator $implicitToExplicitRoutingAnnotationDecorator,
+        ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator,
         ReturnTypeInferer $returnTypeInferer,
         RouteInfoFactory $routeInfoFactory
     ) {
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
-        $this->implicitToExplicitRoutingAnnotationDecorator = $implicitToExplicitRoutingAnnotationDecorator;
+        $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -156,7 +156,7 @@ PHP
 
             $symfonyRoutePhpDocTagValueNode = $this->createSymfonyRoutePhpDocTagValueNode($routeInfo);
 
-            $this->implicitToExplicitRoutingAnnotationDecorator->decorateClassMethodWithRouteAnnotation(
+            $this->explicitRouteAnnotationDecorator->decorateClassMethodWithRouteAnnotation(
                 $classMethod,
                 $symfonyRoutePhpDocTagValueNode
             );
@@ -255,7 +255,7 @@ PHP
                     'path' => $path,
                 ]);
 
-                $this->implicitToExplicitRoutingAnnotationDecorator->decorateClassMethodWithRouteAnnotation(
+                $this->explicitRouteAnnotationDecorator->decorateClassMethodWithRouteAnnotation(
                     $classMethod,
                     $symfonyRoutePhpDocTagValueNode
                 );
@@ -303,7 +303,7 @@ PHP
             return true;
         }
 
-        if ($node->getAttribute(ImplicitToExplicitRoutingAnnotationDecorator::HAS_ROUTE_ANNOTATION)) {
+        if ($node->getAttribute(ExplicitRouteAnnotationDecorator::HAS_ROUTE_ANNOTATION)) {
             return true;
         }
 

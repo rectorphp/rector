@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\HttpKernel;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Core\DependencyInjection\Collector\ConfigurableRectorConfigureCallValuesCollector;
+use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
@@ -33,13 +33,13 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
     private $configs = [];
 
     /**
-     * @var ConfigurableRectorConfigureCallValuesCollector
+     * @var ConfigureCallValuesCollector
      */
-    private $configurableRectorConfigureCallValuesCollector;
+    private $configureCallValuesCollector;
 
     public function __construct(string $environment, bool $debug)
     {
-        $this->configurableRectorConfigureCallValuesCollector = new ConfigurableRectorConfigureCallValuesCollector();
+        $this->configureCallValuesCollector = new ConfigureCallValuesCollector();
 
         parent::__construct($environment, $debug);
     }
@@ -95,9 +95,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
 
         // add all merged arguments of Rector services
         $containerBuilder->addCompilerPass(
-            new MergeImportedRectorConfigureCallValuesCompilerPass(
-                $this->configurableRectorConfigureCallValuesCollector
-            )
+            new MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector)
         );
     }
 
@@ -114,7 +112,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
             new ConfigurableCallValuesCollectingPhpFileLoader(
                 $container,
                 $fileLocator,
-                $this->configurableRectorConfigureCallValuesCollector
+                $this->configureCallValuesCollector
             ),
         ]);
 

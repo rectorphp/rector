@@ -6,7 +6,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDir
 
 use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
-use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFilePathAndContent;
+use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFile;
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -15,7 +15,7 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
     /**
      * @dataProvider provideData()
      *
-     * @param InputFilePathWithExpectedFilePathAndContent[] $extraFiles
+     * @param InputFilePathWithExpectedFile[] $extraFiles
      */
     public function test(
         SmartFileInfo $originalFileInfo,
@@ -41,7 +41,7 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
 
             // extra files
             [
-                new InputFilePathWithExpectedFilePathAndContent(
+                new InputFilePathWithExpectedFile(
                 __DIR__ . '/SourceMutualRename/Entity/UserWithSpaceMapper.php',
                     $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/UserWithSpaceMapper.php',
                     __DIR__ . '/ExpectedMutualRename/Mapper/UserWithSpaceMapper.php.inc'
@@ -57,14 +57,14 @@ final class MutualRenameTest extends AbstractFileSystemRectorTestCase
 
             // extra files
             [
-                new InputFilePathWithExpectedFilePathAndContent(
+                new InputFilePathWithExpectedFile(
                 __DIR__ . '/SourceMutualRename/Controller/Nested/AbstractBaseMapper.php',
                     $this->getFixtureTempDirectory() . '/SourceMutualRename/Mapper/Nested/AbstractBaseMapper.php',
                      __DIR__ . '/ExpectedMutualRename/Mapper/Nested/AbstractBaseMapper.php.inc'
                 ),
 
                 // includes NEON/YAML file renames
-                new InputFilePathWithExpectedFilePathAndContent(
+                new InputFilePathWithExpectedFile(
                     __DIR__ . '/SourceMutualRename/config/some_config.neon',
                      $this->getFixtureTempDirectory() . '/SourceMutualRename/config/some_config.neon',
                      __DIR__ . '/ExpectedMutualRename/config/expected_some_config.neon'

@@ -30,24 +30,9 @@ final class StaticRectorStrings
         return self::camelCaseToGlue($input, '-');
     }
 
-    public static function camelCaseToSlashes(string $input): string
-    {
-        return self::camelCaseToGlue($input, '/');
-    }
-
     public static function camelCaseToUnderscore(string $input): string
     {
         return self::camelCaseToGlue($input, '_');
-    }
-
-    public static function dashesToConstants(string $input): string
-    {
-        $string = Strings::replace($input, '#\-#', '_');
-
-        // separate letter and number by _
-        $string = Strings::replace($string, '#([a-z])(\d+)$#', '$1_$2');
-
-        return strtoupper($string);
     }
 
     public static function underscoreToPascalCase(string $input): string

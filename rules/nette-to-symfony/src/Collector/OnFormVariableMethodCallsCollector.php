@@ -14,7 +14,7 @@ use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class CollectOnFormVariableMethodCallsCollector
+final class OnFormVariableMethodCallsCollector
 {
     /**
      * @var CallableNodeTraverser

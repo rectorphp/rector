@@ -131,9 +131,7 @@ final class EventAndListenerTreeProvider
             $listeningClassMethodsByClass = $this->getListeningClassMethodsInEventSubscriberByClass($eventClassName);
 
             // getter names by variable name and type
-            $getterNamesWithReturnTypeAndVariableName = $this->resolveGetterNamesWithReturnTypeAndVariableName(
-                $eventClassInNamespace
-            );
+            $getterMethodsBlueprints = $this->resolveGetterMethodBlueprint($eventClassInNamespace);
 
             $eventAndListenerTree = new EventAndListenerTree(
                 $methodCall,
@@ -143,7 +141,7 @@ final class EventAndListenerTreeProvider
                 $eventClassInNamespace,
                 $dispatchMethodCall,
                 $listeningClassMethodsByClass,
-                $getterNamesWithReturnTypeAndVariableName
+                $getterMethodsBlueprints
             );
 
             $this->eventAndListenerTrees[] = $eventAndListenerTree;
@@ -187,11 +185,11 @@ final class EventAndListenerTreeProvider
     /**
      * @return GetterMethodBlueprint[]
      */
-    private function resolveGetterNamesWithReturnTypeAndVariableName(Namespace_ $eventClassInNamespace): array
+    private function resolveGetterMethodBlueprint(Namespace_ $eventClassInNamespace): array
     {
         /** @var Class_ $eventClass */
         $eventClass = $eventClassInNamespace->stmts[0];
-        $getterNamesWithReturnTypeAndVariableName = [];
+        $getterMethodBlueprints = [];
         foreach ($eventClass->getMethods() as $classMethod) {
             if (! $this->nodeNameResolver->isName($classMethod, 'get*')) {
                 continue;
@@ -207,13 +205,13 @@ final class EventAndListenerTreeProvider
             /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($propertyFetch->name);
 
-            $getterNamesWithReturnTypeAndVariableName[] = new GetterMethodBlueprint(
+            $getterMethodBlueprints[] = new GetterMethodBlueprint(
                 $classMethodName,
                 $classMethod->returnType,
                 $variableName
             );
         }
 
-        return $getterNamesWithReturnTypeAndVariableName;
+        return $getterMethodBlueprints;
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\DependencyInjection\Loader;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\DependencyInjection\Collector\ConfigurableRectorConfigureCallValuesCollector;
+use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -13,16 +13,16 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
 {
     /**
-     * @var ConfigurableRectorConfigureCallValuesCollector
+     * @var ConfigureCallValuesCollector
      */
-    private $configurableRectorConfigureCallValuesCollector;
+    private $configureCallValuesCollector;
 
     public function __construct(
         ContainerBuilder $containerBuilder,
         FileLocatorInterface $fileLocator,
-        ConfigurableRectorConfigureCallValuesCollector $configurableRectorConfigureCallValuesCollector
+        ConfigureCallValuesCollector $configureCallValuesCollector
     ) {
-        $this->configurableRectorConfigureCallValuesCollector = $configurableRectorConfigureCallValuesCollector;
+        $this->configureCallValuesCollector = $configureCallValuesCollector;
 
         parent::__construct($containerBuilder, $fileLocator);
     }
@@ -50,7 +50,7 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
                 continue;
             }
 
-            $this->configurableRectorConfigureCallValuesCollector->collectFromServiceAndClassName($class, $definition);
+            $this->configureCallValuesCollector->collectFromServiceAndClassName($class, $definition);
         }
     }
 }
