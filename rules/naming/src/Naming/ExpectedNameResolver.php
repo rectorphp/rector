@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Naming;
 
+use Doctrine\Inflector\Inflector;
 use Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -49,16 +50,23 @@ final class ExpectedNameResolver
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var Inflector
+     */
+    private $inflector;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         PropertyNaming $propertyNaming,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        Inflector $inflector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->inflector = $inflector;
     }
 
     public function resolveForPropertyIfNotYet(Property $property): ?string
@@ -199,13 +207,7 @@ final class ExpectedNameResolver
             return null;
         }
 
-        // @see https://regex101.com/r/hnU5pm/2/
-        $matches = Strings::match($name, '#^get([A-Z].+)#');
-        if ($matches === null) {
-            return null;
-        }
-
-        return lcfirst($matches[1]);
+        return $this->resolveFromMethodName($name);
     }
 
     /**
@@ -224,27 +226,28 @@ final class ExpectedNameResolver
 
         $returnedType = $this->nodeTypeResolver->getStaticType($expr);
 
-        if (! $returnedType instanceof ArrayType) {
+        if ($returnedType->isIterable()->no()) {
             return null;
         }
 
-        $returnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
-        if ($returnedType === null) {
-            return null;
+        if ($returnedType instanceof ArrayType) {
+            $returnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
+            if ($returnedType === null) {
+                return null;
+            }
         }
 
         $expectedName = $this->propertyNaming->getExpectedNameFromType($returnedType);
         if ($expectedName !== null) {
-            return $expectedName;
+            return $this->inflector->singularize($expectedName);
         }
 
-        // @see https://regex101.com/r/CVihRP/1
-        $matches = Strings::match($name, '#^get([A-Z].+)s#');
-        if ($matches === null) {
-            return null;
+        $expectedName = $this->resolveFromMethodName($name);
+        if ($expectedName !== null) {
+            return $this->inflector->singularize($expectedName);
         }
 
-        return lcfirst($matches[1]);
+        return null;
     }
 
     /**
@@ -271,6 +274,17 @@ final class ExpectedNameResolver
         }
 
         return $expr->name instanceof FuncCall;
+    }
+
+    private function resolveFromMethodName(string $name): ?string
+    {
+        // @see https://regex101.com/r/hnU5pm/2/
+        $matches = Strings::match($name, '#^get([A-Z].+)#');
+        if ($matches === null) {
+            return null;
+        }
+
+        return lcfirst($matches[1]);
     }
 
     private function resolveReturnTypeFromArrayType(Expr $expr, ArrayType $arrayType): ?Type
