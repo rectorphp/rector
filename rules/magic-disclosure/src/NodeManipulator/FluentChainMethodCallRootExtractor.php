@@ -148,12 +148,12 @@ final class FluentChainMethodCallRootExtractor
             }
 
             $fullyQualifiedObjectType = new FullyQualifiedObjectType($className);
-            $variableName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
-            if ($variableName === null) {
+            $expectedName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
+            if ($expectedName === null) {
                 return null;
             }
 
-            $variable = new Variable($variableName);
+            $variable = new Variable($expectedName->getName());
             return new AssignAndRootExpr($methodCall->var, $methodCall->var, $variable);
         }
 

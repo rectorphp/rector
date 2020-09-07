@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Naming;
 
-use Doctrine\Inflector\Inflector;
 use Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -50,23 +49,16 @@ final class ExpectedNameResolver
      */
     private $nodeTypeResolver;
 
-    /**
-     * @var Inflector
-     */
-    private $inflector;
-
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         PropertyNaming $propertyNaming,
-        StaticTypeMapper $staticTypeMapper,
-        Inflector $inflector
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyNaming = $propertyNaming;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->inflector = $inflector;
     }
 
     public function resolveForPropertyIfNotYet(Property $property): ?string
@@ -117,7 +109,12 @@ final class ExpectedNameResolver
         }
 
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-        return $this->propertyNaming->getExpectedNameFromType($staticType);
+        $expectedName = $this->propertyNaming->getExpectedNameFromType($staticType);
+        if ($expectedName === null) {
+            return null;
+        }
+
+        return $expectedName->getName();
     }
 
     public function resolveForProperty(Property $property): ?string
@@ -128,7 +125,12 @@ final class ExpectedNameResolver
             return null;
         }
 
-        return $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
+        $expectedName = $this->propertyNaming->getExpectedNameFromType($phpDocInfo->getVarType());
+        if ($expectedName === null) {
+            return null;
+        }
+
+        return $expectedName->getName();
     }
 
     public function resolveForAssignNonNew(Assign $assign): ?string
@@ -170,7 +172,12 @@ final class ExpectedNameResolver
 
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($className);
 
-        return $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
+        $expectedName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
+        if ($expectedName === null) {
+            return null;
+        }
+
+        return $expectedName->getName();
     }
 
     /**
@@ -198,8 +205,9 @@ final class ExpectedNameResolver
         }
 
         $expectedName = $this->propertyNaming->getExpectedNameFromType($returnedType);
+
         if ($expectedName !== null) {
-            return $expectedName;
+            return $expectedName->getName();
         }
 
         // call with args can return different value, so skip there if not sure about the type
@@ -207,7 +215,12 @@ final class ExpectedNameResolver
             return null;
         }
 
-        return $this->resolveFromMethodName($name);
+        $expectedNameFromMethodName = $this->propertyNaming->getExpectedNameFromMethodName($name);
+        if ($expectedNameFromMethodName !== null) {
+            return $expectedNameFromMethodName->getName();
+        }
+
+        return null;
     }
 
     /**
@@ -237,17 +250,22 @@ final class ExpectedNameResolver
             }
         }
 
-        $expectedName = $this->propertyNaming->getExpectedNameFromType($returnedType);
-        if ($expectedName !== null) {
-            return $this->inflector->singularize($expectedName);
+        $expectedNameFromType = $this->propertyNaming->getExpectedNameFromType($returnedType);
+
+        if ($expectedNameFromType !== null) {
+            return $expectedNameFromType->getSingularized();
         }
 
-        $expectedName = $this->resolveFromMethodName($name);
-        if ($expectedName !== null) {
-            return $this->inflector->singularize($expectedName);
+        $expectedNameFromMethodName = $this->propertyNaming->getExpectedNameFromMethodName($name);
+        if ($expectedNameFromMethodName === null) {
+            return null;
         }
 
-        return null;
+        if ($expectedNameFromMethodName->isSingular()) {
+            return null;
+        }
+
+        return $expectedNameFromMethodName->getSingularized();
     }
 
     /**
@@ -274,17 +292,6 @@ final class ExpectedNameResolver
         }
 
         return $expr->name instanceof FuncCall;
-    }
-
-    private function resolveFromMethodName(string $name): ?string
-    {
-        // @see https://regex101.com/r/hnU5pm/2/
-        $matches = Strings::match($name, '#^get([A-Z].+)#');
-        if ($matches === null) {
-            return null;
-        }
-
-        return lcfirst($matches[1]);
     }
 
     private function resolveReturnTypeFromArrayType(Expr $expr, ArrayType $arrayType): ?Type

@@ -13,6 +13,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Generic\ValueObject\ParentDependency;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Webmozart\Assert\Assert;
 
@@ -100,9 +101,9 @@ CODE_SAMPLE
             }
 
             $propertyType = new ObjectType($parentDependency->getDependencyType());
-            /** @var string $propertyName */
+            /** @var ExpectedName $propertyName */
             $propertyName = $this->propertyNaming->getExpectedNameFromType($propertyType);
-            $this->addConstructorDependencyToClass($node, $propertyType, $propertyName);
+            $this->addConstructorDependencyToClass($node, $propertyType, $propertyName->getName());
         }
 
         return $node;
