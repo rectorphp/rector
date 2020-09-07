@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Downgrade\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 use Rector\Downgrade\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
 use Rector\Downgrade\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
 use Rector\Downgrade\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector;
@@ -16,6 +17,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeReturnObjectTypeDeclarationRector::class);
 
     $services->set(DowngradeTypedPropertyRector::class);
+
+    $services->set(ArrowFunctionToAnonymousFunctionRector::class);
 
     $services->set(DowngradeNullCoalescingOperatorRector::class);
 };
