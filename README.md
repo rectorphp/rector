@@ -111,9 +111,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     // here we can define, what sets of rules will be applied
-    $parameters->set(Option::SETS, [
-        SetList::CODE_QUALITY
-    ]);
+    $parameters->set(Option::SETS, [SetList::CODE_QUALITY]);
 
     // get services
     $services = $containerConfigurator->services();
@@ -159,10 +157,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     // paths to refactor; solid alternative to CLI arguments
-    $parameters->set(Option::PATHS, [
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
-    ]);
+    $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
 
     // is there a file you need to skip?
     $parameters->set(Option::EXCLUDE_PATHS, [
@@ -183,9 +178,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     // is there single rule you don't like from a set you use?
-    $parameters->set(Option::EXCLUDE_RECTORS, [
-        SimplifyIfReturnBoolRector::class,
-    ]);
+    $parameters->set(Option::EXCLUDE_RECTORS, [SimplifyIfReturnBoolRector::class]);
 
     // is your PHP version different from the one your refactor to? [default: your PHP version]
     $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
@@ -209,7 +202,6 @@ Every rector can have its own configuration. E.g. the `DowngradeTypedPropertyRec
 
 declare(strict_types=1);
 
-use Rector\Core\Configuration\Option;
 use Rector\Downgrade\Rector\Property\DowngradeTypedPropertyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -233,17 +225,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 For in-file exclusion, use `@noRector \FQN name` annotation:
 
 ```php
+<?php
+declare(strict_types=1);
+
 class SomeClass
 {
     /**
      * @noRector
      */
-    const NAME = '102';
+    public const NAME = '102';
 
     /**
      * @noRector
      */
-    public function foo()
+    public function foo(): void
     {
         /** @noRector \Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector */
         round(1 + 0);
@@ -289,7 +284,10 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ .  '/var/cache/dev/AppKernelDevDebugContainer.xml');
+    $parameters->set(
+        Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
+        __DIR__ . '/var/cache/dev/AppKernelDevDebugContainer.xml'
+    );
 };
 ```
 
