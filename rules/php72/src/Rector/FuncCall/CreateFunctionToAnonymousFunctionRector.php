@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -92,11 +91,10 @@ PHP
 
     /**
      * @param FuncCall $node
-     * @return Variable[]
+     * @return Param[]
      */
     protected function getParameters(Node $node): array
     {
-        /** @var Variable[] */
         return $this->parseStringToParameters($node->args[0]->value);
     }
 

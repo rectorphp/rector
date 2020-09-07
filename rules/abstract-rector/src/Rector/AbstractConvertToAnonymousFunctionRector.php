@@ -30,27 +30,21 @@ abstract class AbstractConvertToAnonymousFunctionRector extends AbstractRector
             return null;
         }
 
-        $parameters = $this->getParameters($node);
-        $returnType = $this->getReturnType($node);
         $body = $this->getBody($node);
+        $parameters = $this->getParameters($node);
         $useVariables = $this->resolveUseVariables($body, $parameters);
 
         $anonymousFunctionNode = new Closure();
-
-        foreach ($parameters as $parameter) {
-            $anonymousFunctionNode->params[] = new Param($parameter);
-        }
-
-        if ($returnType !== null) {
-            $anonymousFunctionNode->returnType = $returnType;
-        }
-
-        if ($body !== []) {
-            $anonymousFunctionNode->stmts = $body;
-        }
+        $anonymousFunctionNode->params = $parameters;
 
         foreach ($useVariables as $useVariable) {
             $anonymousFunctionNode->uses[] = new ClosureUse($useVariable);
+        }
+
+        $anonymousFunctionNode->returnType = $this->getReturnType($node);
+
+        if ($body !== []) {
+            $anonymousFunctionNode->stmts = $body;
         }
 
         return $anonymousFunctionNode;
@@ -59,7 +53,7 @@ abstract class AbstractConvertToAnonymousFunctionRector extends AbstractRector
     abstract protected function shouldSkip(Node $node): bool;
 
     /**
-     * @return Variable[]
+     * @return Param[]
      */
     abstract protected function getParameters(Node $node): array;
 
@@ -75,7 +69,7 @@ abstract class AbstractConvertToAnonymousFunctionRector extends AbstractRector
 
     /**
      * @param Node[] $nodes
-     * @param Variable[] $paramNodes
+     * @param Param[] $paramNodes
      * @return Variable[]
      */
     private function resolveUseVariables(array $nodes, array $paramNodes): array

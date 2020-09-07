@@ -6,10 +6,10 @@ namespace Rector\Downgrade\Rector\ArrowFunction;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
 use Rector\AbstractRector\Rector\AbstractConvertToAnonymousFunctionRector;
@@ -72,11 +72,10 @@ PHP
 
     /**
      * @param ArrowFunction $node
-     * @return Variable[]
+     * @return Param[]
      */
     protected function getParameters(Node $node): array
     {
-        /** @var Variable[] */
         return $node->params;
     }
 
