@@ -1,0 +1,30 @@
+name: Check markdown
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    update_changelog:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.4
+                    coverage: none
+
+            -   run: composer install --no-progress --ansi
+
+            -   run: vendor/bin/ecs check-markdown README.md
+
+            -   uses: stefanzweifel/git-auto-commit-action@v4.1.6
+                with:
+                    commit_message: Fix php code inside markdown file
+                    branch: "master"
+                    commit_user_name: TomasVotruba
+                    commit_user_email: tomas.vot@gmail.com
+                    commit_author: TomasVotruba <tomas.vot@gmail.com>
+                env:
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
