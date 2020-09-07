@@ -65,7 +65,7 @@ PHP
     /**
      * @param ArrowFunction $node
      */
-    protected function shouldSkip(Node $node): bool
+    public function shouldSkip(Node $node): bool
     {
         return false;
     }
@@ -74,7 +74,7 @@ PHP
      * @param ArrowFunction $node
      * @return Param[]
      */
-    protected function getParameters(Node $node): array
+    public function getParameters(Node $node): array
     {
         return $node->params;
     }
@@ -83,7 +83,7 @@ PHP
      * @param ArrowFunction $node
      * @return Identifier|Name|NullableType|UnionType|null
      */
-    protected function getReturnType(Node $node): ?Node
+    public function getReturnType(Node $node): ?Node
     {
         return $node->returnType;
     }
@@ -92,7 +92,7 @@ PHP
      * @param ArrowFunction $node
      * @return Return_[]
      */
-    protected function getBody(Node $node): array
+    public function getBody(Node $node): array
     {
         return [new Return_($node->expr)];
     }

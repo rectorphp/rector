@@ -84,7 +84,7 @@ PHP
     /**
      * @param FuncCall $node
      */
-    protected function shouldSkip(Node $node): bool
+    public function shouldSkip(Node $node): bool
     {
         return ! $this->isName($node, 'create_function');
     }
@@ -93,7 +93,7 @@ PHP
      * @param FuncCall $node
      * @return Param[]
      */
-    protected function getParameters(Node $node): array
+    public function getParameters(Node $node): array
     {
         return $this->parseStringToParameters($node->args[0]->value);
     }
@@ -101,7 +101,7 @@ PHP
     /**
      * @return Identifier|Name|NullableType|UnionType|null
      */
-    protected function getReturnType(Node $node): ?Node
+    public function getReturnType(Node $node): ?Node
     {
         return null;
     }
@@ -110,7 +110,7 @@ PHP
      * @param FuncCall $node
      * @return Stmt[]
      */
-    protected function getBody(Node $node): array
+    public function getBody(Node $node): array
     {
         return $this->parseStringToBody($node->args[1]->value);
     }

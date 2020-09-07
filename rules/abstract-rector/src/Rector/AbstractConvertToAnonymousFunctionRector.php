@@ -9,20 +9,15 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\UnionType;
+use Rector\AbstractRector\Contract\ConvertToAnonymousFunctionRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://www.php.net/functions.anonymous
  */
-abstract class AbstractConvertToAnonymousFunctionRector extends AbstractRector
+abstract class AbstractConvertToAnonymousFunctionRector extends AbstractRector implements ConvertToAnonymousFunctionRectorInterface
 {
     public function refactor(Node $node): ?Node
     {
@@ -49,23 +44,6 @@ abstract class AbstractConvertToAnonymousFunctionRector extends AbstractRector
 
         return $anonymousFunctionNode;
     }
-
-    abstract protected function shouldSkip(Node $node): bool;
-
-    /**
-     * @return Param[]
-     */
-    abstract protected function getParameters(Node $node): array;
-
-    /**
-     * @return Identifier|Name|NullableType|UnionType|null
-     */
-    abstract protected function getReturnType(Node $node): ?Node;
-
-    /**
-     * @return Expression[]|Stmt[]
-     */
-    abstract protected function getBody(Node $node): array;
 
     /**
      * @param Node[] $nodes
