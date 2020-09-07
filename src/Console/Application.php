@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\Console;
 
 use Composer\XdebugHandler\XdebugHandler;
-use Jean85\PrettyVersions;
 use OutOfBoundsException;
 use Rector\ChangesReporting\Output\CheckstyleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
@@ -40,7 +39,7 @@ final class Application extends SymfonyApplication
     public function __construct(Configuration $configuration, array $commands = [])
     {
         try {
-            $version = PrettyVersions::getVersion('rector/rector')->getPrettyVersion();
+            $version = $configuration->getPrettyVersion();
         } catch (OutOfBoundsException $outOfBoundsException) {
             $version = 'Unknown';
         }
