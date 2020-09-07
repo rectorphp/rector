@@ -10,7 +10,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
@@ -19,12 +18,11 @@ use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use Rector\AbstractRector\Rector\AbstractConvertToAnonymousFunctionRector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://stackoverflow.com/q/48161526/1348344
@@ -32,7 +30,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  * @see \Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\CreateFunctionToAnonymousFunctionRectorTest
  */
-final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
+final class CreateFunctionToAnonymousFunctionRector extends AbstractConvertToAnonymousFunctionRector
 {
     /**
      * @var InlineCodeParser
@@ -84,33 +82,28 @@ PHP
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): ?Node
+    protected function shouldSkip(Node $node): bool
     {
-        if (! $this->isName($node, 'create_function')) {
-            return null;
-        }
+        return ! $this->isName($node, 'create_function');
+    }
 
-        /** @var Variable[] $parameters */
-        $parameters = $this->parseStringToParameters($node->args[0]->value);
-        $body = $this->parseStringToBody($node->args[1]->value);
-        $useVariables = $this->resolveUseVariables($body, $parameters);
+    /**
+     * @param FuncCall $node
+     * @return Variable[]
+     */
+    protected function getParameters(Node $node): array
+    {
+        /** @var Variable[] */
+        return $this->parseStringToParameters($node->args[0]->value);
+    }
 
-        $anonymousFunctionNode = new Closure();
-
-        foreach ($parameters as $parameter) {
-            /** @var Variable $parameter */
-            $anonymousFunctionNode->params[] = new Param($parameter);
-        }
-
-        if ($body !== []) {
-            $anonymousFunctionNode->stmts = $body;
-        }
-
-        foreach ($useVariables as $useVariable) {
-            $anonymousFunctionNode->uses[] = new ClosureUse($useVariable);
-        }
-
-        return $anonymousFunctionNode;
+    /**
+     * @param FuncCall $node
+     * @return Expression[]|Stmt[]
+     */
+    protected function getBody(Node $node): array
+    {
+        return $this->parseStringToBody($node->args[1]->value);
     }
 
     /**
@@ -151,53 +144,6 @@ PHP
 
         $node = $this->inlineCodeParser->stringify($node);
         return $this->inlineCodeParser->parse($node);
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @param Variable[] $paramNodes
-     * @return Variable[]
-     */
-    private function resolveUseVariables(array $nodes, array $paramNodes): array
-    {
-        $paramNames = [];
-        foreach ($paramNodes as $paramNode) {
-            $paramNames[] = $this->getName($paramNode);
-        }
-
-        $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, Variable::class);
-
-        /** @var Variable[] $filteredVariables */
-        $filteredVariables = [];
-        $alreadyAssignedVariables = [];
-        foreach ($variableNodes as $variableNode) {
-            // "$this" is allowed
-            if ($this->isName($variableNode, 'this')) {
-                continue;
-            }
-
-            $variableName = $this->getName($variableNode);
-            if ($variableName === null) {
-                continue;
-            }
-
-            if (in_array($variableName, $paramNames, true)) {
-                continue;
-            }
-
-            $parentNode = $variableNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Assign) {
-                $alreadyAssignedVariables[] = $variableName;
-            }
-
-            if ($this->isNames($variableNode, $alreadyAssignedVariables)) {
-                continue;
-            }
-
-            $filteredVariables[$variableName] = $variableNode;
-        }
-
-        return $filteredVariables;
     }
 
     private function createEval(Expr $expr): Expression

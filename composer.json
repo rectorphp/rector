@@ -64,6 +64,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Rector\\AbstractRector\\": "rules/abstract-rector/src",
             "Rector\\Architecture\\": "rules/architecture/src",
             "Rector\\AnonymousClass\\": "packages/anonymous-class/src",
             "Rector\\PostRector\\": "packages/post-rector/src",
