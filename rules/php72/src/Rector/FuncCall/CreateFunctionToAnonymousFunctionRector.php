@@ -12,12 +12,15 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\UnionType;
 use Rector\AbstractRector\Rector\AbstractConvertToAnonymousFunctionRector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
@@ -95,6 +98,14 @@ PHP
     {
         /** @var Variable[] */
         return $this->parseStringToParameters($node->args[0]->value);
+    }
+
+    /**
+     * @return Identifier|Name|NullableType|UnionType|null
+     */
+    protected function getReturnType(Node $node): ?Node
+    {
+        return null;
     }
 
     /**

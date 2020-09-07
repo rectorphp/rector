@@ -7,7 +7,11 @@ namespace Rector\Downgrade\Rector\ArrowFunction;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\UnionType;
 use Rector\AbstractRector\Rector\AbstractConvertToAnonymousFunctionRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -74,6 +78,15 @@ PHP
     {
         /** @var Variable[] */
         return $node->params;
+    }
+
+    /**
+     * @param ArrowFunction $node
+     * @return Identifier|Name|NullableType|UnionType|null
+     */
+    protected function getReturnType(Node $node): ?Node
+    {
+        return $node->returnType;
     }
 
     /**

@@ -9,9 +9,13 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -27,6 +31,7 @@ abstract class AbstractConvertToAnonymousFunctionRector extends AbstractRector
         }
 
         $parameters = $this->getParameters($node);
+        $returnType = $this->getReturnType($node);
         $body = $this->getBody($node);
         $useVariables = $this->resolveUseVariables($body, $parameters);
 
@@ -34,6 +39,10 @@ abstract class AbstractConvertToAnonymousFunctionRector extends AbstractRector
 
         foreach ($parameters as $parameter) {
             $anonymousFunctionNode->params[] = new Param($parameter);
+        }
+
+        if ($returnType !== null) {
+            $anonymousFunctionNode->returnType = $returnType;
         }
 
         if ($body !== []) {
@@ -53,6 +62,11 @@ abstract class AbstractConvertToAnonymousFunctionRector extends AbstractRector
      * @return Variable[]
      */
     abstract protected function getParameters(Node $node): array;
+
+    /**
+     * @return Identifier|Name|NullableType|UnionType|null
+     */
+    abstract protected function getReturnType(Node $node): ?Node;
 
     /**
      * @return Expression[]|Stmt[]
