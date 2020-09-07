@@ -7,8 +7,6 @@ namespace Rector\Downgrade\Rector\ArrowFunction;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\AbstractRector\Rector\AbstractConvertToAnonymousFunctionRector;
 use Rector\Core\RectorDefinition\CodeSample;
