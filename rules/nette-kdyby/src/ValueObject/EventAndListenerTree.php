@@ -24,7 +24,7 @@ final class EventAndListenerTree
     /**
      * @var ClassMethod[][]
      */
-    private $listenerClassMethodsByEventSubscriberClass = [];
+    private $listenerMethodsByEventSubscriberClass = [];
 
     /**
      * @var GetterMethodBlueprint[]
@@ -52,7 +52,8 @@ final class EventAndListenerTree
     private $onMagicProperty;
 
     /**
-     * @param ClassMethod[][] $listenerClassMethodsByEventSubscriberClass
+     * @param ClassMethod[][] $listenerMethodsByEventSubscriberClass
+     * @param GetterMethodBlueprint[] $getterMethodsBlueprints
      */
     public function __construct(
         MethodCall $magicDispatchMethodCall,
@@ -61,7 +62,7 @@ final class EventAndListenerTree
         string $eventFileLocation,
         Namespace_ $eventClassInNamespace,
         MethodCall $eventDispatcherDispatchMethodCall,
-        array $listenerClassMethodsByEventSubscriberClass,
+        array $listenerMethodsByEventSubscriberClass,
         array $getterMethodsBlueprints
     ) {
         $this->magicDispatchMethodCall = $magicDispatchMethodCall;
@@ -69,7 +70,7 @@ final class EventAndListenerTree
         $this->eventClassName = $eventClassName;
         $this->eventFileLocation = $eventFileLocation;
         $this->eventClassInNamespace = $eventClassInNamespace;
-        $this->listenerClassMethodsByEventSubscriberClass = $listenerClassMethodsByEventSubscriberClass;
+        $this->listenerMethodsByEventSubscriberClass = $listenerMethodsByEventSubscriberClass;
         $this->eventDispatcherDispatchMethodCall = $eventDispatcherDispatchMethodCall;
         $this->getterMethodBlueprints = $getterMethodsBlueprints;
     }
@@ -84,7 +85,7 @@ final class EventAndListenerTree
      */
     public function getListenerClassMethodsByClass(string $className): array
     {
-        return $this->listenerClassMethodsByEventSubscriberClass[$className] ?? [];
+        return $this->listenerMethodsByEventSubscriberClass[$className] ?? [];
     }
 
     public function getOnMagicProperty(): ?Property

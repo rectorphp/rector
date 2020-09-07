@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
-final class ParentClassesInterfacesAndUsedTraitsCorrector
+final class ParentClassLikeTypeCorrector
 {
     /**
      * @var TypeFactory

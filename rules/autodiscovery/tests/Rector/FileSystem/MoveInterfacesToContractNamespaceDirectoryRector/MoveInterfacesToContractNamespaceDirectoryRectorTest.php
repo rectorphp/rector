@@ -6,7 +6,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractN
 
 use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector;
-use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFilePathAndContent;
+use Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector\ValueObject\InputFilePathWithExpectedFile;
 use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -15,38 +15,38 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
     /**
      * @requires PHP >= 7.4
      * @dataProvider provideData()
-     * @param InputFilePathWithExpectedFilePathAndContent[] $inputFilePathWithExpectedFilePathAndContents
+     * @param InputFilePathWithExpectedFile[] $InputFilePathWithExpectedFiles
      */
     public function test(
         SmartFileInfo $originalFileInfo,
         string $expectedFileLocation,
         string $expectedFileContent,
-        array $inputFilePathWithExpectedFilePathAndContents = []
+        array $InputFilePathWithExpectedFiles = []
     ): void {
-        $this->doTestFileInfo($originalFileInfo, $inputFilePathWithExpectedFilePathAndContents);
+        $this->doTestFileInfo($originalFileInfo, $InputFilePathWithExpectedFiles);
 
         $this->assertFileExists($expectedFileLocation);
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
 
-        $this->doTestExtraFileInfos($inputFilePathWithExpectedFilePathAndContents);
+        $this->doTestExtraFileInfos($InputFilePathWithExpectedFiles);
     }
 
     public function provideData(): Iterator
     {
         $extraFiles = [
-            new InputFilePathWithExpectedFilePathAndContent(
+            new InputFilePathWithExpectedFile(
                 __DIR__ . '/Source/RandomInterfaceUseCase.php',
                 $this->getFixtureTempDirectory() . '/Source/RandomInterfaceUseCase.php',
                 __DIR__ . '/Expected/ExpectedRandomInterfaceUseCase.php'
             ),
 
-            new InputFilePathWithExpectedFilePathAndContent(
+            new InputFilePathWithExpectedFile(
                 __DIR__ . '/Source/Entity/SameClassImplementEntity.php',
                 $this->getFixtureTempDirectory() . '/Source/Entity/SameClassImplementEntity.php',
                 __DIR__ . '/Expected/Entity/ExpectedSameClassImplementEntity.php'
             ),
 
-            new InputFilePathWithExpectedFilePathAndContent(
+            new InputFilePathWithExpectedFile(
                 __DIR__ . '/Source/Entity/RandomInterfaceUseCaseInTheSameNamespace.php',
                 $this->getFixtureTempDirectory() . '/Source/Entity/RandomInterfaceUseCaseInTheSameNamespace.php',
                 __DIR__ . '/Expected/Entity/RandomInterfaceUseCaseInTheSameNamespace.php'

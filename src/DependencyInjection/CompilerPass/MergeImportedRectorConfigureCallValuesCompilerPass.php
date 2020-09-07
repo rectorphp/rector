@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\DependencyInjection\CompilerPass;
 
-use Rector\Core\DependencyInjection\Collector\ConfigurableRectorConfigureCallValuesCollector;
+use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -17,14 +17,13 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
     private const CONFIGURE_METHOD_NAME = 'configure';
 
     /**
-     * @var ConfigurableRectorConfigureCallValuesCollector
+     * @var ConfigureCallValuesCollector
      */
-    private $configurableRectorConfigureCallValuesCollector;
+    private $configureCallValuesCollector;
 
-    public function __construct(
-        ConfigurableRectorConfigureCallValuesCollector $configurableRectorConfigureCallValuesCollector
-    ) {
-        $this->configurableRectorConfigureCallValuesCollector = $configurableRectorConfigureCallValuesCollector;
+    public function __construct(ConfigureCallValuesCollector $configureCallValuesCollector)
+    {
+        $this->configureCallValuesCollector = $configureCallValuesCollector;
     }
 
     public function process(ContainerBuilder $containerBuilder): void
@@ -36,9 +35,7 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements Compil
 
     private function completeCollectedArguments(string $serviceClass, Definition $definition): void
     {
-        $configureCallValues = $this->configurableRectorConfigureCallValuesCollector->getConfigureCallValues(
-            $serviceClass
-        );
+        $configureCallValues = $this->configureCallValuesCollector->getConfigureCallValues($serviceClass);
         if ($configureCallValues === []) {
             return;
         }

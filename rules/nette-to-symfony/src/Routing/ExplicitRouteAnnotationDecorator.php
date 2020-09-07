@@ -14,7 +14,7 @@ use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 
-final class ImplicitToExplicitRoutingAnnotationDecorator
+final class ExplicitRouteAnnotationDecorator
 {
     /**
      * @var string

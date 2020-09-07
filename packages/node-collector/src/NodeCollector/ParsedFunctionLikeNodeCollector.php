@@ -18,7 +18,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use Rector\NodeCollector\NodeAnalyzer\ArrayCallableClassMethodReferenceAnalyzer;
+use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -66,16 +66,16 @@ final class ParsedFunctionLikeNodeCollector
     private $nodeTypeResolver;
 
     /**
-     * @var ArrayCallableClassMethodReferenceAnalyzer
+     * @var ArrayCallableMethodReferenceAnalyzer
      */
-    private $arrayCallableClassMethodReferenceAnalyzer;
+    private $arrayCallableMethodReferenceAnalyzer;
 
     public function __construct(
-        ArrayCallableClassMethodReferenceAnalyzer $arrayCallableClassMethodReferenceAnalyzer,
+        ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->arrayCallableClassMethodReferenceAnalyzer = $arrayCallableClassMethodReferenceAnalyzer;
+        $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
     }
 
     /**
@@ -96,7 +96,7 @@ final class ParsedFunctionLikeNodeCollector
 
         // array callable - [$this, 'someCall']
         if ($node instanceof Array_) {
-            $arrayCallable = $this->arrayCallableClassMethodReferenceAnalyzer->match($node);
+            $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($node);
             if ($arrayCallable === null) {
                 return;
             }

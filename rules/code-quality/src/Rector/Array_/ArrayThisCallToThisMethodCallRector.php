@@ -15,7 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeAnalyzer\ArrayCallableClassMethodReferenceAnalyzer;
+use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -24,14 +24,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ArrayThisCallToThisMethodCallRector extends AbstractRector
 {
     /**
-     * @var ArrayCallableClassMethodReferenceAnalyzer
+     * @var ArrayCallableMethodReferenceAnalyzer
      */
-    private $arrayCallableClassMethodReferenceAnalyzer;
+    private $arrayCallableMethodReferenceAnalyzer;
 
-    public function __construct(
-        ArrayCallableClassMethodReferenceAnalyzer $arrayCallableClassMethodReferenceAnalyzer
-    ) {
-        $this->arrayCallableClassMethodReferenceAnalyzer = $arrayCallableClassMethodReferenceAnalyzer;
+    public function __construct(ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer)
+    {
+        $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -84,7 +83,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $arrayCallable = $this->arrayCallableClassMethodReferenceAnalyzer->match($node);
+        $arrayCallable = $this->arrayCallableMethodReferenceAnalyzer->match($node);
         if ($arrayCallable === null) {
             return null;
         }

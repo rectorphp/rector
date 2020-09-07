@@ -26,7 +26,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NetteToSymfony\Collector\CollectOnFormVariableMethodCallsCollector;
+use Rector\NetteToSymfony\Collector\OnFormVariableMethodCallsCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,14 +41,13 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FormControlToControllerAndFormTypeRector extends AbstractRector
 {
     /**
-     * @var CollectOnFormVariableMethodCallsCollector
+     * @var OnFormVariableMethodCallsCollector
      */
-    private $collectOnFormVariableMethodCallsCollector;
+    private $onFormVariableMethodCallsCollector;
 
-    public function __construct(
-        CollectOnFormVariableMethodCallsCollector $collectOnFormVariableMethodCallsCollector
-    ) {
-        $this->collectOnFormVariableMethodCallsCollector = $collectOnFormVariableMethodCallsCollector;
+    public function __construct(OnFormVariableMethodCallsCollector $onFormVariableMethodCallsCollector)
+    {
+        $this->onFormVariableMethodCallsCollector = $onFormVariableMethodCallsCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -150,7 +149,7 @@ PHP
 
     private function collectFormMethodCallsAndCreateFormTypeClass(ClassMethod $classMethod): ?Class_
     {
-        $onFormVariableMethodCalls = $this->collectOnFormVariableMethodCallsCollector->collectFromClassMethod(
+        $onFormVariableMethodCalls = $this->onFormVariableMethodCallsCollector->collectFromClassMethod(
             $classMethod
         );
 

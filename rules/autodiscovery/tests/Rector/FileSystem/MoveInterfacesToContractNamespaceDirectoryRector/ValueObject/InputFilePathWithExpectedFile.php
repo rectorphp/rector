@@ -6,7 +6,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractN
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class InputFilePathWithExpectedFilePathAndContent
+final class InputFilePathWithExpectedFile
 {
     /**
      * @var string

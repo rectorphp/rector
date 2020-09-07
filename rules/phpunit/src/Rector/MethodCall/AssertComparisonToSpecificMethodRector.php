@@ -24,7 +24,7 @@ use Rector\Core\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethods;
+use Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertComparisonToSpecificMethodRector\AssertComparisonToSpecificMethodRectorTest
@@ -32,9 +32,9 @@ use Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethods;
 final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var BinaryOpWithAssertMethods[]
+     * @var BinaryOpWithAssertMethod[]
      */
-    private $oldToNewMethods = [];
+    private $binaryOpWithAssertMethods = [];
 
     /**
      * @var IdentifierManipulator
@@ -45,19 +45,19 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     {
         $this->identifierManipulator = $identifierManipulator;
 
-        $this->oldToNewMethods = [
-            new BinaryOpWithAssertMethods(Identical::class, 'assertSame', 'assertNotSame'),
-            new BinaryOpWithAssertMethods(NotIdentical::class, 'assertNotSame', 'assertSame'),
-            new BinaryOpWithAssertMethods(Equal::class, 'assertEquals', 'assertNotEquals'),
-            new BinaryOpWithAssertMethods(NotEqual::class, 'assertNotEquals', 'assertEquals'),
-            new BinaryOpWithAssertMethods(Greater::class, 'assertGreaterThan', 'assertLessThan'),
-            new BinaryOpWithAssertMethods(Smaller::class, 'assertLessThan', 'assertGreaterThan'),
-            new BinaryOpWithAssertMethods(
+        $this->binaryOpWithAssertMethods = [
+            new BinaryOpWithAssertMethod(Identical::class, 'assertSame', 'assertNotSame'),
+            new BinaryOpWithAssertMethod(NotIdentical::class, 'assertNotSame', 'assertSame'),
+            new BinaryOpWithAssertMethod(Equal::class, 'assertEquals', 'assertNotEquals'),
+            new BinaryOpWithAssertMethod(NotEqual::class, 'assertNotEquals', 'assertEquals'),
+            new BinaryOpWithAssertMethod(Greater::class, 'assertGreaterThan', 'assertLessThan'),
+            new BinaryOpWithAssertMethod(Smaller::class, 'assertLessThan', 'assertGreaterThan'),
+            new BinaryOpWithAssertMethod(
                 GreaterOrEqual::class,
                 'assertGreaterThanOrEqual',
                 'assertLessThanOrEqual'
             ),
-            new BinaryOpWithAssertMethods(
+            new BinaryOpWithAssertMethod(
                 SmallerOrEqual::class,
                 'assertLessThanOrEqual',
                 'assertGreaterThanOrEqual'
@@ -71,9 +71,9 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
             'Turns comparison operations to their method name alternatives in PHPUnit TestCase',
             [
                 new CodeSample(
-                    '$this->assertTrue($foo === $bar, "message");',
-                    '$this->assertSame($bar, $foo, "message");'
-                ),
+                        '$this->assertTrue($foo === $bar, "message");',
+                        '$this->assertSame($bar, $foo, "message");'
+                    ),
                 new CodeSample(
                     '$this->assertFalse($foo >= $bar, "message");',
                     '$this->assertLessThanOrEqual($bar, $foo, "message");'
@@ -112,14 +112,14 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
      */
     private function processCallWithBinaryOp(Node $node, BinaryOp $binaryOp): ?Node
     {
-        foreach ($this->oldToNewMethods as $binaryOpWithAssertAndNotAssertMethodNames) {
-            if (get_class($binaryOp) !== $binaryOpWithAssertAndNotAssertMethodNames->getBinaryOpClass()) {
+        foreach ($this->binaryOpWithAssertMethods as $binaryOpWithAssertMethod) {
+            if (get_class($binaryOp) !== $binaryOpWithAssertMethod->getBinaryOpClass()) {
                 continue;
             }
 
             $this->identifierManipulator->renameNodeWithMap($node, [
-                'assertTrue' => $binaryOpWithAssertAndNotAssertMethodNames->getAssetMethodName(),
-                'assertFalse' => $binaryOpWithAssertAndNotAssertMethodNames->getNotAssertMethodName(),
+                'assertTrue' => $binaryOpWithAssertMethod->getAssetMethodName(),
+                'assertFalse' => $binaryOpWithAssertMethod->getNotAssertMethodName(),
             ]);
 
             $this->changeArgumentsOrder($node);

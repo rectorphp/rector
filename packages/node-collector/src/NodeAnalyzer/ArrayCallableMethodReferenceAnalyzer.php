@@ -13,7 +13,7 @@ use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class ArrayCallableClassMethodReferenceAnalyzer
+final class ArrayCallableMethodReferenceAnalyzer
 {
     /**
      * @var NodeNameResolver
