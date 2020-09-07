@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AbstractRector\Contract;
+namespace Rector\Php72\Contract;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;

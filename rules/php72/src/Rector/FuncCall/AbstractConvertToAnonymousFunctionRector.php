@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\AbstractRector\Rector;
+namespace Rector\Php72\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use Rector\AbstractRector\Contract\ConvertToAnonymousFunctionRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php72\Contract\ConvertToAnonymousFunctionRectorInterface;
 
 /**
  * @see https://www.php.net/functions.anonymous

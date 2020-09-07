@@ -20,7 +20,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\UnionType;
-use Rector\AbstractRector\Rector\AbstractConvertToAnonymousFunctionRector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\RectorDefinition\CodeSample;

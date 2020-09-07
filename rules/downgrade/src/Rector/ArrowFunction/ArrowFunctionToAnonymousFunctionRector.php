@@ -12,9 +12,9 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
-use Rector\AbstractRector\Rector\AbstractConvertToAnonymousFunctionRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Php72\Rector\FuncCall\AbstractConvertToAnonymousFunctionRector;
 
 /**
  * @see https://www.php.net/manual/en/functions.arrow.php
