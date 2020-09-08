@@ -205,7 +205,7 @@ Every rector can have its own configuration. E.g. the `DowngradeTypedPropertyRec
 
 declare(strict_types=1);
 
-use Rector\Downgrade\Rector\Property\DowngradeTypedPropertyRector;
+use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

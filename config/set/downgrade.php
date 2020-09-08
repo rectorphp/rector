@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Rector\Downgrade\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
-use Rector\Downgrade\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
-use Rector\Downgrade\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
-use Rector\Downgrade\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector;
-use Rector\Downgrade\Rector\Property\DowngradeTypedPropertyRector;
-use Rector\Downgrade\Rector\Property\DowngradeUnionTypeToDocBlockRector;
+use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
+use Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
+use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
+use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector;
+use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
+use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeToDocBlockRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
