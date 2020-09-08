@@ -36,7 +36,7 @@ final class SimplifyForeachInstanceOfRector extends AbstractRector
             new CodeSample(
                 <<<'PHP'
 foreach ($foos as $foo) {
-    $this->assertInstanceOf(\SplFileInfo::class, $foo);
+    $this->assertInstanceOf(SplFileInfo::class, $foo);
 }
 PHP
                 ,
