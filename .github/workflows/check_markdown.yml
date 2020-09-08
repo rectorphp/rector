@@ -26,7 +26,5 @@ jobs:
                     commit_user_name: TomasVotruba
                     commit_user_email: tomas.vot@gmail.com
                     commit_author: TomasVotruba <tomas.vot@gmail.com>
-                outputs:
-                    changes_detected: true
                 env:
                     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
