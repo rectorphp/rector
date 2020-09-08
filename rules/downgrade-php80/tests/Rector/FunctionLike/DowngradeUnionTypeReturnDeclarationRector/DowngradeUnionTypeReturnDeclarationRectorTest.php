@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Tests\Rector\Property\DowngradeUnionTypeReturnDeclarationRector;
+namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeReturnDeclarationRector;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
