@@ -55,8 +55,7 @@
         "symplify/easy-coding-standard": "^8.2.24",
         "symplify/easy-testing": "^8.2.20",
         "symplify/monorepo-builder": "^8.2.20",
-        "symplify/phpstan-extensions": "^8.2.20",
-        "thecodingmachine/phpstan-strict-rules": "^0.12"
+        "symplify/phpstan-extensions": "^8.2.20"
     },
     "replace": {
         "rector/rector-prefixed": "self.version"
