@@ -12,10 +12,18 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(DowngradeParamObjectTypeDeclarationRector::class);
-    $services->set(DowngradeReturnObjectTypeDeclarationRector::class);
+    /**
+     * Execute in order, from higher to lower versions of PHP
+     * This is because `??=` in 7.4 downgrades to `??` from 7.3,
+     * and `??` downgrades to `isset` in 5.6.
+     */
+    // PHP 8.0
+    $services->set(DowngradeUnionTypeToDocBlockRector::class);
+    // PHP 7.4
     $services->set(DowngradeTypedPropertyRector::class);
     $services->set(ArrowFunctionToAnonymousFunctionRector::class);
     $services->set(DowngradeNullCoalescingOperatorRector::class);
-    $services->set(DowngradeUnionTypeToDocBlockRector::class);
+    // PHP 7.2
+    $services->set(DowngradeParamObjectTypeDeclarationRector::class);
+    $services->set(DowngradeReturnObjectTypeDeclarationRector::class);
 };
