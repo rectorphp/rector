@@ -53,7 +53,7 @@
         "psr/event-dispatcher": "^1.0",
         "slam/phpstan-extensions": "^5.0",
         "symplify/changelog-linker": "^8.2.20",
-        "symplify/easy-coding-standard": "dev-master",
+        "symplify/easy-coding-standard": "^8.2.24",
         "symplify/easy-testing": "^8.2.20",
         "symplify/monorepo-builder": "^8.2.20",
         "symplify/phpstan-extensions": "^8.2.20",
@@ -301,7 +301,5 @@
         "branch-alias": {
             "dev-master": "0.8-dev"
         }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
