@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp80\Tests\Rector\Property\DowngradeUnionTypeTypedPro
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -30,5 +31,10 @@ final class DowngradeUnionTypeTypedPropertyRectorTest extends AbstractRectorTest
     protected function getRectorClass(): string
     {
         return DowngradeUnionTypeTypedPropertyRector::class;
+    }
+
+    protected function getPhpVersion(): string
+    {
+        return PhpVersionFeature::BEFORE_UNION_TYPES;
     }
 }
