@@ -33,7 +33,7 @@ abstract class AbstractDowngradeTypedPropertyRector extends AbstractDowngradeRec
             return null;
         }
 
-        if ($this->shouldSkip($node)) {
+        if (! $this->shouldRemoveProperty($node)) {
             return null;
         }
 

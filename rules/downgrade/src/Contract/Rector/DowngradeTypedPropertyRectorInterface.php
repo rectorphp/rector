@@ -8,5 +8,5 @@ use PhpParser\Node\Stmt\Property;
 
 interface DowngradeTypedPropertyRectorInterface
 {
-    public function shouldSkip(Property $property): bool;
+    public function shouldRemoveProperty(Property $property): bool;
 }
