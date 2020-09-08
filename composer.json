@@ -148,7 +148,9 @@
             "Rector\\NetteKdyby\\": "rules/nette-kdyby/src",
             "Rector\\NetteUtilsCodeQuality\\": "rules/nette-utils-code-quality/src",
             "Rector\\NetteCodeQuality\\": "rules/nette-code-quality/src",
-            "Rector\\Downgrade\\": "rules/downgrade/src",
+            "Rector\\DowngradePhp72\\": "rules/downgrade-php72/src",
+            "Rector\\DowngradePhp74\\": "rules/downgrade-php74/src",
+            "Rector\\DowngradePhp80\\": "rules/downgrade-php80/src",
             "Rector\\SymfonyPhpConfig\\": "rules/symfony-php-config/src"
         },
         "files": [
@@ -231,7 +233,9 @@
             "Rector\\NetteKdyby\\Tests\\": "rules/nette-kdyby/tests",
             "Rector\\NetteUtilsCodeQuality\\Tests\\": "rules/nette-utils-code-quality/tests",
             "Rector\\NetteCodeQuality\\Tests\\": "rules/nette-code-quality/tests",
-            "Rector\\Downgrade\\Tests\\": "rules/downgrade/tests",
+            "Rector\\DowngradePhp72\\Tests\\": "rules/downgrade-php72/tests",
+            "Rector\\DowngradePhp74\\Tests\\": "rules/downgrade-php74/tests",
+            "Rector\\DowngradePhp80\\Tests\\": "rules/downgrade-php80/tests",
             "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests",
             "Rector\\PHPStanStaticTypeMapper\\Tests\\": "packages/phpstan-static-type-mapper/tests"
         },
