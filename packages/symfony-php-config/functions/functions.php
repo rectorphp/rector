@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\SymfonyPhpConfig;
 
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\SymfonyPhpConfig\Exception\ValueObjectException;
 use Rector\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory;
 use ReflectionClass;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline;
@@ -78,7 +78,7 @@ function resolve_argument_values(ReflectionClass $reflectionClass, object $objec
             'Constructor for "%s" was not found. Be sure to use only value objects',
             $reflectionClass->getName()
         );
-        throw new ShouldNotHappenException($message);
+        throw new ValueObjectException($message);
     }
 
     foreach ($constructorMethodReflection->getParameters() as $constructorParameter) {
