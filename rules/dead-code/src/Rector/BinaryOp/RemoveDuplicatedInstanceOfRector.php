@@ -41,7 +41,7 @@ PHP
                 <<<'PHP'
 class SomeClass
 {
-    public function run($value)
+    public function run($value): void
     {
         $isIt = $value instanceof A;
         $isIt = $value instanceof A;
