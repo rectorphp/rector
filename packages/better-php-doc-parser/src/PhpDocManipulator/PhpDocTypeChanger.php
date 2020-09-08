@@ -109,6 +109,7 @@ final class PhpDocTypeChanger
             $phpDocInfo->addTagValueNode($attributeAwareReturnTagValueNode);
         }
 
+        // notify about node change
         $this->notifyChange();
     }
 
@@ -121,13 +122,12 @@ final class PhpDocTypeChanger
         // override existing type
         if ($paramTagValueNode !== null) {
             $paramTagValueNode->type = $phpDocType;
-            return;
+        } else {
+            $paramTagValueNode = $this->paramPhpDocNodeFactory->create($type, $param);
+            $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
 
-        $paramTagValueNode = $this->paramPhpDocNodeFactory->create($type, $param);
-
-        $phpDocInfo->addTagValueNode($paramTagValueNode);
-
+        // notify about node change
         $this->notifyChange();
     }
 

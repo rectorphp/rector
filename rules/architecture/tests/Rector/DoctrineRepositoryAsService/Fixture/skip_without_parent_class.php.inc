@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Post;
-use Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\Source\RandomClass;
+use Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Source\RandomClass;
 
 final class SkipWithoutParentClass extends RandomClass
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\Fixture;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Fixture;
 
 use Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\Entity\Post;
 use Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\SymfonyController;
@@ -21,7 +21,7 @@ final class PostController extends SymfonyController
 -----
 <?php
 
-namespace Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\Fixture;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Fixture;
 
 use Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\Entity\Post;
 use Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\SymfonyController;

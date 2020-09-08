@@ -105,9 +105,8 @@ PHP
 
             $paramName = $this->getName($param);
             $phpDocInfo->changeParamType($type, $param, $paramName);
+            return $node;
         }
-
-        return $node;
     }
 
     private function shouldSkipParam(Param $param): bool

@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService;
 
 use Iterator;
-use Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRector;
 use Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector;
 use Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
+use Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector
- * @see \Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRector
+ * @see \Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector
  * @see \Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector
  */
 final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase

@@ -39,7 +39,7 @@ final class VarInlineAnnotationToAssertRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turn @var inline checks above code to assert() of hte type', [
+        return new RectorDefinition('Turn @var inline checks above code to assert() of the type', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass

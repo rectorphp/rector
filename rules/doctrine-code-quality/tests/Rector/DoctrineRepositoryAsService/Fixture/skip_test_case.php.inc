@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\Fixture;
+namespace Rector\DoctrineCodeQuality\Tests\Rector\DoctrineRepositoryAsService\Fixture;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;

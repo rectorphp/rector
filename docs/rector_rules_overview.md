@@ -1,11 +1,11 @@
-# All 563 Rectors Overview
+# All 568 Rectors Overview
 
 - [Projects](#projects)
 ---
 
 ## Projects
 
-- [Architecture](#architecture) (3)
+- [Architecture](#architecture) (2)
 - [Autodiscovery](#autodiscovery) (4)
 - [CakePHP](#cakephp) (6)
 - [CodeQuality](#codequality) (58)
@@ -13,9 +13,9 @@
 - [DeadCode](#deadcode) (40)
 - [Decouple](#decouple) (1)
 - [Doctrine](#doctrine) (17)
-- [DoctrineCodeQuality](#doctrinecodequality) (7)
+- [DoctrineCodeQuality](#doctrinecodequality) (8)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
-- [Downgrade](#downgrade) (1)
+- [Downgrade](#downgrade) (6)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (38)
@@ -72,34 +72,6 @@
 - [TypeDeclaration](#typedeclaration) (9)
 
 ## Architecture
-
-### `MoveRepositoryFromParentToConstructorRector`
-
-- class: [`Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRector`](/rules/architecture/src/Rector/Class_/MoveRepositoryFromParentToConstructorRector.php)
-
-Turns parent EntityRepository class to constructor dependency
-
-```diff
- namespace App\Repository;
-
-+use App\Entity\Post;
- use Doctrine\ORM\EntityRepository;
-
--final class PostRepository extends EntityRepository
-+final class PostRepository
- {
-+    /**
-+     * @var \Doctrine\ORM\EntityRepository
-+     */
-+    private $repository;
-+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
-+    {
-+        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
-+    }
- }
-```
-
-<br><br>
 
 ### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
 
@@ -4132,6 +4104,34 @@ Move default value for entity property to constructor, the safest place
 
 <br><br>
 
+### `MoveRepositoryFromParentToConstructorRector`
+
+- class: [`Rector\DoctrineCodeQuality\Rector\Class_\MoveRepositoryFromParentToConstructorRector`](/rules/doctrine-code-quality/src/Rector/Class_/MoveRepositoryFromParentToConstructorRector.php)
+
+Turns parent EntityRepository class to constructor dependency
+
+```diff
+ namespace App\Repository;
+
++use App\Entity\Post;
+ use Doctrine\ORM\EntityRepository;
+
+-final class PostRepository extends EntityRepository
++final class PostRepository
+ {
++    /**
++     * @var \Doctrine\ORM\EntityRepository
++     */
++    private $repository;
++    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
++    {
++        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
++    }
+ }
+```
+
+<br><br>
+
 ## DoctrineGedmoToKnplabs
 
 ### `BlameableBehaviorRector`
@@ -4483,6 +4483,93 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 
 ## Downgrade
 
+### `ArrowFunctionToAnonymousFunctionRector`
+
+- class: [`Rector\Downgrade\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector`](/rules/downgrade/src/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector.php)
+- [test fixtures](/rules/downgrade/tests/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector/Fixture)
+
+Replace arrow functions with anonymous functions
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $delimiter = ",";
+-        $callable = fn($matches) => $delimiter . strtolower($matches[1]);
++        $callable = function ($matches) use ($delimiter) {
++            return $delimiter . strtolower($matches[1]);
++        };
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeNullCoalescingOperatorRector`
+
+- class: [`Rector\Downgrade\Rector\Coalesce\DowngradeNullCoalescingOperatorRector`](/rules/downgrade/src/Rector/Coalesce/DowngradeNullCoalescingOperatorRector.php)
+- [test fixtures](/rules/downgrade/tests/Rector/Coalesce/DowngradeNullCoalescingOperatorRector/Fixture)
+
+Remove null coalescing operator ??=
+
+```diff
+ $array = [];
+-$array['user_id'] ??= 'value';
++$array['user_id'] = $array['user_id'] ?? 'value';
+```
+
+<br><br>
+
+### `DowngradeParamObjectTypeDeclarationRector`
+
+- class: [`Rector\Downgrade\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector`](/rules/downgrade/src/Rector/FunctionLike/DowngradeParamObjectTypeDeclarationRector.php)
+- [test fixtures](/rules/downgrade/tests/Rector/FunctionLike/DowngradeParamObjectTypeDeclarationRector/Fixture)
+
+Remove the 'object' param type, add a @param tag instead
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function someFunction(object $someObject)
++    /**
++     * @param object $someObject
++     */
++    public function someFunction($someObject)
+     {
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeReturnObjectTypeDeclarationRector`
+
+- class: [`Rector\Downgrade\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector`](/rules/downgrade/src/Rector/FunctionLike/DowngradeReturnObjectTypeDeclarationRector.php)
+- [test fixtures](/rules/downgrade/tests/Rector/FunctionLike/DowngradeReturnObjectTypeDeclarationRector/Fixture)
+
+Remove the 'object' function type, add a @return tag instead
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function getSomeObject(): object
++    /**
++     * @return object
++     */
++    public function getSomeObject()
+     {
+         return new SomeObject();
+     }
+ }
+```
+
+<br><br>
+
 ### `DowngradeTypedPropertyRector`
 
 - class: [`Rector\Downgrade\Rector\Property\DowngradeTypedPropertyRector`](/rules/downgrade/src/Rector/Property/DowngradeTypedPropertyRector.php)
@@ -4498,6 +4585,35 @@ Changes property type definition from type definitions to `@var` annotations.
 +    * @var string
 +    */
 +    private $property;
+ }
+```
+
+<br><br>
+
+### `DowngradeUnionTypeToDocBlockRector`
+
+- class: [`Rector\Downgrade\Rector\Property\DowngradeUnionTypeToDocBlockRector`](/rules/downgrade/src/Rector/Property/DowngradeUnionTypeToDocBlockRector.php)
+- [test fixtures](/rules/downgrade/tests/Rector/Property/DowngradeUnionTypeToDocBlockRector/Fixture)
+
+Downgrade union types to doc block
+
+```diff
+ class SomeClass
+ {
+-    public int|string $value;
++    /**
++     * @var int|string
++     */
++    public $value;
+
+-    public function run(): int|string
++    /**
++     * @return int|string
++     */
++    public function run()
+     {
+         $this->value;
+     }
  }
 ```
 
@@ -12831,7 +12947,7 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
 - class: [`Rector\StrictCodeQuality\Rector\Stmt\VarInlineAnnotationToAssertRector`](/rules/strict-code-quality/src/Rector/Stmt/VarInlineAnnotationToAssertRector.php)
 - [test fixtures](/rules/strict-code-quality/tests/Rector/Stmt/VarInlineAnnotationToAssertRector/Fixture)
 
-Turn @var inline checks above code to `assert()` of hte type
+Turn @var inline checks above code to `assert()` of the type
 
 ```diff
  class SomeClass
