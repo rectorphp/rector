@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector\SkipAlreadyMoved\Source\Mapper;
+namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector\Source\Mapper;
 
 final class CorrectMapper
 {

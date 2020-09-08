@@ -237,7 +237,8 @@
         "exclude-from-classmap": [
             "**/Fixture/**",
             "**/Fixture**",
-            "*.php.inc",
+            "**/Expected/**",
+            "**.php.inc",
             "rules/decouple/tests/Rector/ClassMethod/DecoupleClassMethodToOwnClassRector/Source/ExpectedExtraClassName.php"
         ],
         "classmap": [
