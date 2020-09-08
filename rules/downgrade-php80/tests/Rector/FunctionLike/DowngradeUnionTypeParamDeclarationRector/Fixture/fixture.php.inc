@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\Property\DowngradeUnionTypeToDocBlockRector\Fixture;
+namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector\Fixture;
 
 class FunctionParam
 {
@@ -13,7 +13,7 @@ class FunctionParam
 -----
 <?php
 
-namespace Rector\DowngradePhp80\Tests\Rector\Property\DowngradeUnionTypeToDocBlockRector\Fixture;
+namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector\Fixture;
 
 class FunctionParam
 {

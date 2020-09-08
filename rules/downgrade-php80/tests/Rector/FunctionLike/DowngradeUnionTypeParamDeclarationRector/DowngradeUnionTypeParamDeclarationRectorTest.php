@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Tests\Rector\Property\DowngradeUnionTypeToDocBlockRector;
+namespace Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeToDocBlockRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @requires PHP >= 8.0
  */
-final class DowngradeUnionTypeToDocBlockRectorTest extends AbstractRectorTestCase
+final class DowngradeUnionTypeParamDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -29,6 +30,11 @@ final class DowngradeUnionTypeToDocBlockRectorTest extends AbstractRectorTestCas
 
     protected function getRectorClass(): string
     {
-        return DowngradeUnionTypeToDocBlockRector::class;
+        return DowngradeUnionTypeParamDeclarationRector::class;
+    }
+
+    protected function getPhpVersion(): string
+    {
+        return PhpVersionFeature::BEFORE_UNION_TYPES;
     }
 }
