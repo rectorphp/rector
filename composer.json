@@ -234,6 +234,12 @@
             "Rector\\SymfonyPhpConfig\\Tests\\": "rules/symfony-php-config/tests",
             "Rector\\PHPStanStaticTypeMapper\\Tests\\": "packages/phpstan-static-type-mapper/tests"
         },
+        "exclude-from-classmap": [
+            "**/Fixture/**",
+            "**/Fixture**",
+            "*.php.inc",
+            "rules/decouple/tests/Rector/ClassMethod/DecoupleClassMethodToOwnClassRector/Source/ExpectedExtraClassName.php"
+        ],
         "classmap": [
             "rules/cakephp/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
             "rules/symfony/tests/Rector/MethodCall/ContainerGetToConstructorInjectionRector/Source",

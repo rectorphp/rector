@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php: ['7.2', '7.3', '7.4']
+                php: ['7.2', '7.3', '7.4', '8.0']
 
         name: PHP ${{ matrix.php }} tests
         steps:
@@ -25,5 +25,11 @@ jobs:
             -   name: Setup Problem Matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-            -   run: composer install --no-progress --ansi
+            -   if: matrix.php == '8.0'
+                # because php-cs-fixer prevents 8.0 in composer.json in dev, https://github.com/FriendsOfPHP/PHP-CS-Fixer/pull/5134
+                run: composer install --no-progress --ansi --ignore-platform-reqs
+
+            -   if: matrix.php != '8.0'
+                run: composer install --no-progress --ansi
+
             -   run: vendor/bin/phpunit

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Generic\Rector\Property;
 
-use DI\Annotation\Inject as PHPDIInject;
-use JMS\DiExtraBundle\Annotation\Inject as JMSInject;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -38,14 +36,14 @@ final class InjectAnnotationClassRector extends AbstractRector implements Config
     /**
      * @var string
      */
-    public const ANNOTATION_CLASSES = '$annotationClasses';
+    public const ANNOTATION_CLASSES = 'annotation_classes';
 
     /**
      * @var array<string, string>
      */
     private const ANNOTATION_TO_TAG_CLASS = [
-        PHPDIInject::class => PHPDIInjectTagValueNode::class,
-        JMSInject::class => JMSInjectTagValueNode::class,
+        'DI\Annotation\Inject' => PHPDIInjectTagValueNode::class,
+        'JMS\DiExtraBundle\Annotation\Inject' => JMSInjectTagValueNode::class,
     ];
 
     /**
@@ -107,7 +105,7 @@ class SomeController
 PHP
                     ,
                     [
-                        self::ANNOTATION_CLASSES => [PHPDIInject::class, JMSInject::class],
+                        self::ANNOTATION_CLASSES => ['DI\Annotation\Inject', 'JMS\DiExtraBundle\Annotation\Inject'],
                     ]
                 ),
             ]

@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Doctrine\Rector\MethodCall;
 
-use Doctrine\Common\Persistence\ManagerRegistry as DeprecatedManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager as DeprecatedObjectManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -33,11 +28,11 @@ final class EntityAliasToClassConstantReferenceRector extends AbstractRector imp
      * @var string[]
      */
     private const ALLOWED_OBJECT_TYPES = [
-        EntityManagerInterface::class,
-        ObjectManager::class,
-        DeprecatedObjectManager::class,
-        ManagerRegistry::class,
-        DeprecatedManagerRegistry::class,
+        'Doctrine\Persistence\ObjectManager',
+        'Doctrine\ORM\EntityManagerInterface',
+        'Doctrine\Common\Persistence\ManagerRegistry',
+        'Doctrine\Common\Persistence\ObjectManager',
+        'Doctrine\Persistence\ManagerRegistry',
     ];
 
     /**

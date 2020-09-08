@@ -98,6 +98,7 @@ PHP
             if ($this->shouldSkipParam($param)) {
                 return null;
             }
+
             $type = $this->paramTypeInferer->inferParam($param);
             if ($type instanceof MixedType) {
                 return null;
