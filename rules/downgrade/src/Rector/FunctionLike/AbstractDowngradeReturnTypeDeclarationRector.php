@@ -10,23 +10,19 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Downgrade\Contract\Rector\DowngradeRectorInterface;
 use Rector\Downgrade\Contract\Rector\DowngradeTypeRectorInterface;
+use Rector\Downgrade\Rector\Property\AbstractDowngradeRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
-abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractTypeDeclarationRector implements ConfigurableRectorInterface, DowngradeRectorInterface, DowngradeTypeRectorInterface
+abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractDowngradeRector implements DowngradeTypeRectorInterface
 {
     /**
-     * @var string
+     * @return string[]
      */
-    public const ADD_DOC_BLOCK = '$addDocBlock';
-
-    /**
-     * @var bool
-     */
-    private $addDocBlock = true;
+    public function getNodeTypes(): array
+    {
+        return [Function_::class, ClassMethod::class];
+    }
 
     /**
      * @param ClassMethod|Function_ $node
@@ -57,11 +53,6 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractType
         $node->returnType = null;
 
         return $node;
-    }
-
-    public function configure(array $configuration): void
-    {
-        $this->addDocBlock = $configuration[self::ADD_DOC_BLOCK] ?? true;
     }
 
     protected function getRectorDefinitionDescription(): string
