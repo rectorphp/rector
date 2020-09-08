@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp80\Rector\FunctionLike;
 
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
