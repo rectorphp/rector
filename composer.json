@@ -277,7 +277,10 @@
             "phpunit"
         ],
         "check-cs": "vendor/bin/ecs check --ansi",
-        "fix-cs": "vendor/bin/ecs check --fix --ansi",
+        "fix-cs": [
+            "vendor/bin/ecs check --fix --ansi",
+            "vendor/bin/ecs check-markdown README.md"
+        ],
         "phpstan": [
             "vendor/bin/phpstan analyse --ansi --error-format symplify",
             "vendor/bin/phpstan analyse config/set --ansi --error-format symplify"
