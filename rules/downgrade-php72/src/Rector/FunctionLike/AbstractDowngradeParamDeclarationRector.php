@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\DowngradePhp72\Contract\Rector\DowngradeParamDeclarationRectorInterface;
-use Rector\DowngradePhp72\Rector\Property\AbstractDowngradeRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractDowngradeParamDeclarationRector extends AbstractDowngradeRector implements DowngradeParamDeclarationRectorInterface
