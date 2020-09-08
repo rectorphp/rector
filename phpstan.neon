@@ -3,9 +3,7 @@ includes:
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
     - vendor/slam/phpstan-extensions/conf/slam-rules.neon
     - vendor/symplify/phpstan-extensions/config/config.neon
-    # commented till gets merged - also add to composer.json
-    # https://github.com/thecodingmachine/phpstan-strict-rules/pull/56
-    #- vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
 
     # see https://github.com/symplify/coding-standard
     - vendor/symplify/coding-standard/config/symplify-rules.neon
