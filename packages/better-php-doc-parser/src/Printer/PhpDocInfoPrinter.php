@@ -232,8 +232,8 @@ final class PhpDocInfoPrinter
     ): string {
         // skip removed nodes
         $positionJumpSet = [];
-        foreach ($this->getRemovedNodesPositions() as $removedTokensPosition) {
-            $positionJumpSet[$removedTokensPosition->getStart()] = $removedTokensPosition->getEnd();
+        foreach ($this->getRemovedNodesPositions() as $startAndEnd) {
+            $positionJumpSet[$startAndEnd->getStart()] = $startAndEnd->getEnd();
         }
 
         // include also space before, in case of inlined docs

@@ -175,8 +175,8 @@ PHP
 
         $node = $methodCall;
 
-        foreach ($arrayItemsAndFluentClass->getFluentCalls() as $method => $arg) {
-            $args = $this->createArgs([$arg]);
+        foreach ($arrayItemsAndFluentClass->getFluentCalls() as $method => $expr) {
+            $args = $this->createArgs([$expr]);
             $node = $this->createMethodCall($node, $method, $args);
         }
 

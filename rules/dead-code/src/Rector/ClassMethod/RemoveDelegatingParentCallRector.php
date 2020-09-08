@@ -262,9 +262,9 @@ PHP
         ClassMethod $classMethod,
         ReflectionMethod $reflectionMethod
     ): bool {
-        foreach ($reflectionMethod->getParameters() as $key => $parameter) {
+        foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
             if (! isset($classMethod->params[$key])) {
-                if ($parameter->isDefaultValueAvailable()) {
+                if ($reflectionParameter->isDefaultValueAvailable()) {
                     continue;
                 }
                 return true;
@@ -272,7 +272,7 @@ PHP
 
             $methodParam = $classMethod->params[$key];
 
-            if ($this->areDefaultValuesDifferent($parameter, $methodParam)) {
+            if ($this->areDefaultValuesDifferent($reflectionParameter, $methodParam)) {
                 return true;
             }
         }

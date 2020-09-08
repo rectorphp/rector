@@ -217,17 +217,17 @@ PHP
     private function removeSetAndGetMethods(Class_ $class, array $removedPropertyNames): void
     {
         foreach ($removedPropertyNames as $removedPropertyName) {
-            foreach ($class->getMethods() as $method) {
-                if ($this->isName($method, 'set' . ucfirst($removedPropertyName))) {
-                    $this->removeNode($method);
+            foreach ($class->getMethods() as $classMethod) {
+                if ($this->isName($classMethod, 'set' . ucfirst($removedPropertyName))) {
+                    $this->removeNode($classMethod);
                 }
 
-                if ($this->isName($method, 'get' . ucfirst($removedPropertyName))) {
-                    $this->removeNode($method);
+                if ($this->isName($classMethod, 'get' . ucfirst($removedPropertyName))) {
+                    $this->removeNode($classMethod);
                 }
 
-                if ($this->isName($method, 'setTranslatableLocale')) {
-                    $this->removeNode($method);
+                if ($this->isName($classMethod, 'setTranslatableLocale')) {
+                    $this->removeNode($classMethod);
                 }
             }
         }

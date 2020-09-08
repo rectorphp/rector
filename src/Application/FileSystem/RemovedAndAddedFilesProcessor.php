@@ -99,8 +99,8 @@ final class RemovedAndAddedFilesProcessor
 
     private function processDeletedFiles(): void
     {
-        foreach ($this->removedAndAddedFilesCollector->getRemovedFiles() as $smartFileInfo) {
-            $relativePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
+        foreach ($this->removedAndAddedFilesCollector->getRemovedFiles() as $removedFile) {
+            $relativePath = $removedFile->getRelativeFilePathFromDirectory(getcwd());
 
             if ($this->configuration->isDryRun()) {
                 $message = sprintf('File "%s" will be removed', $relativePath);
@@ -108,7 +108,7 @@ final class RemovedAndAddedFilesProcessor
             } else {
                 $message = sprintf('File "%s" was removed', $relativePath);
                 $this->symfonyStyle->warning($message);
-                $this->filesystem->remove($smartFileInfo->getRealPath());
+                $this->filesystem->remove($removedFile->getRealPath());
             }
         }
     }

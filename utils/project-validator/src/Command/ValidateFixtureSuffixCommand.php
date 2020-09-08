@@ -44,8 +44,8 @@ final class ValidateFixtureSuffixCommand extends Command
     {
         $invalidFilePaths = [];
 
-        foreach ($this->getInvalidFixtureFileInfos() as $fixtureFileInfo) {
-            $invalidFilePaths[] = $fixtureFileInfo->getRelativeFilePathFromCwd();
+        foreach ($this->getInvalidFixtureFileInfos() as $invalidFixtureFileInfo) {
+            $invalidFilePaths[] = $invalidFixtureFileInfo->getRelativeFilePathFromCwd();
         }
 
         if (count($invalidFilePaths) > 0) {

@@ -93,9 +93,9 @@ final class CallTypeAnalyzer
 
         $parameterTypes = [];
 
-        /** @var ParameterReflection $parameter */
-        foreach ($functionVariant->getParameters() as $parameter) {
-            $parameterTypes[] = $parameter->getType();
+        /** @var ParameterReflection $parameterReflection */
+        foreach ($functionVariant->getParameters() as $parameterReflection) {
+            $parameterTypes[] = $parameterReflection->getType();
         }
 
         return $parameterTypes;

@@ -30,14 +30,14 @@ final class LetManipulator
 
     public function isLetNeededInClass(Class_ $class): bool
     {
-        foreach ($class->getMethods() as $method) {
+        foreach ($class->getMethods() as $classMethod) {
             // new test
-            if ($this->nodeNameResolver->isName($method, 'test*')) {
+            if ($this->nodeNameResolver->isName($classMethod, 'test*')) {
                 continue;
             }
 
             $hasBeConstructedThrough = (bool) $this->betterNodeFinder->find(
-                (array) $method->stmts,
+                (array) $classMethod->stmts,
                 function (Node $node): ?bool {
                     if (! $node instanceof MethodCall) {
                         return null;

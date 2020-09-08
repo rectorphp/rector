@@ -120,25 +120,25 @@ PHP
         Class_ $class,
         PropertyAndClassMethodName $propertyAndClassMethodName
     ): Class_ {
-        foreach ($class->getMethods() as $method) {
-            if ($this->isName($method, $propertyAndClassMethodName->getClassMethodName())) {
-                $this->removeNodeFromStatements($class, $method);
+        foreach ($class->getMethods() as $classMethod) {
+            if ($this->isName($classMethod, $propertyAndClassMethodName->getClassMethodName())) {
+                $this->removeNodeFromStatements($class, $classMethod);
                 continue;
             }
 
-            if (! $this->isNames($method, [MethodName::CONSTRUCT, '__clone', '__wakeup'])) {
+            if (! $this->isNames($classMethod, [MethodName::CONSTRUCT, '__clone', '__wakeup'])) {
                 continue;
             }
 
-            if ($method->isPublic()) {
+            if ($classMethod->isPublic()) {
                 continue;
             }
 
             // remove non-public empty
-            if ($method->stmts === []) {
-                $this->removeNodeFromStatements($class, $method);
+            if ($classMethod->stmts === []) {
+                $this->removeNodeFromStatements($class, $classMethod);
             } else {
-                $this->makePublic($method);
+                $this->makePublic($classMethod);
             }
         }
 
