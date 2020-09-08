@@ -21,6 +21,7 @@ jobs:
 
             -   uses: stefanzweifel/git-auto-commit-action@v4.1.6
                 with:
+                    changes_detected: true
                     commit_message: Fix php code inside markdown file
                     branch: "master"
                     commit_user_name: TomasVotruba
