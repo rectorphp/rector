@@ -44,17 +44,12 @@ abstract class AbstractDowngradeParamDeclarationRector extends AbstractDowngrade
         return null;
     }
 
-    protected function getRectorDefinitionDescription(): string
-    {
-        return sprintf("Remove the '%s' param type, add a @param tag instead", $this->getTypeNameToRemove());
-    }
-
     /**
      * @param ClassMethod|Function_ $functionLike
      */
     private function refactorParam(Param $param, FunctionLike $functionLike): void
     {
-        if ($this->shouldSkipParam($param)) {
+        if (! $this->shouldRemoveParamDeclaration($param)) {
             return;
         }
 
@@ -74,18 +69,5 @@ abstract class AbstractDowngradeParamDeclarationRector extends AbstractDowngrade
         }
 
         $param->type = null;
-    }
-
-    private function shouldSkipParam(Param $param): bool
-    {
-        if ($param->variadic) {
-            return true;
-        }
-
-        if ($param->type === null) {
-            return true;
-        }
-
-        return ! $this->shouldRemoveParamDeclaration($param);
     }
 }

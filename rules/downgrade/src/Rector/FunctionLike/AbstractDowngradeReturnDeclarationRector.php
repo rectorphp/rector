@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Downgrade\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -32,7 +31,7 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractDowngrad
             return null;
         }
 
-        if ($this->shouldSkip($node)) {
+        if (! $this->shouldRemoveReturnDeclaration($node)) {
             return null;
         }
 
@@ -52,17 +51,5 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractDowngrad
         $node->returnType = null;
 
         return $node;
-    }
-
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function shouldSkip(FunctionLike $functionLike): bool
-    {
-        if ($functionLike->returnType === null) {
-            return true;
-        }
-
-        return ! $this->shouldRemoveReturnDeclaration($functionLike);
     }
 }

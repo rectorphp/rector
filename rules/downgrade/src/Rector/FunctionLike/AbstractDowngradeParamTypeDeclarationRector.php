@@ -13,6 +13,14 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractDowng
 {
     public function shouldRemoveParamDeclaration(Param $param): bool
     {
+        if ($param->variadic) {
+            return false;
+        }
+
+        if ($param->type === null) {
+            return false;
+        }
+
         // It can either be the type, or the nullable type (eg: ?object)
         $isNullableType = $param->type instanceof NullableType;
         if (! $param->type instanceof Identifier && ! $isNullableType) {
@@ -30,5 +38,10 @@ abstract class AbstractDowngradeParamTypeDeclarationRector extends AbstractDowng
 
         // Check it is the type to be removed
         return $typeName === $this->getTypeNameToRemove();
+    }
+
+    protected function getRectorDefinitionDescription(): string
+    {
+        return sprintf("Remove the '%s' param type, add a @param tag instead", $this->getTypeNameToRemove());
     }
 }

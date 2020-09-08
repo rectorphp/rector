@@ -17,6 +17,10 @@ abstract class AbstractDowngradeReturnTypeDeclarationRector extends AbstractDown
      */
     public function shouldRemoveReturnDeclaration(FunctionLike $functionLike): bool
     {
+        if ($functionLike->returnType === null) {
+            return false;
+        }
+
         // It can either be the type, or the nullable type (eg: ?object)
         $isNullableType = $functionLike->returnType instanceof NullableType;
         if ($isNullableType) {
