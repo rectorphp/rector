@@ -56,6 +56,6 @@ PHP
     public function shouldRemoveProperty(Property $property): bool
     {
         // Check it is the union type
-        return $property instanceof UnionType;
+        return $property->type instanceof UnionType;
     }
 }
