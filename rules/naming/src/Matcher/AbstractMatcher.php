@@ -10,16 +10,16 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Naming\ValueObject\VariableAndCallAssign;
+use Rector\Naming\ValueObject\VariableAndCallForeach;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-abstract class AbstractMatcher
+abstract class AbstractMatcher implements MatcherInterface
 {
     /**
      * @var NodeNameResolver
@@ -31,16 +31,11 @@ abstract class AbstractMatcher
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    abstract public function getVariableName(Node $node): ?string;
-
-    abstract public function getVariable(Node $node): Variable;
-
-    abstract public function getAssign(Node $node): ?Assign;
-
     /**
      * @param Assign|Foreach_ $node
+     * @return VariableAndCallAssign|VariableAndCallForeach|null
      */
-    public function match(Node $node): ?VariableAndCallAssign
+    public function match(Node $node)
     {
         $call = $this->matchCall($node);
         if ($call === null) {
@@ -57,9 +52,17 @@ abstract class AbstractMatcher
             return null;
         }
 
-        return new VariableAndCallAssign($this->getVariable($node), $call, $this->getAssign(
-            $node
-        ), $variableName, $functionLike);
+        $variable = $this->getVariable($node);
+
+        if ($node instanceof Foreach_) {
+            return new VariableAndCallForeach($variable, $call, $variableName, $functionLike);
+        }
+
+        if ($node instanceof Assign) {
+            return new VariableAndCallAssign($variable, $call, $node, $variableName, $functionLike);
+        }
+
+        return null;
     }
 
     /**

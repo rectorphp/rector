@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Naming\Matcher;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 
@@ -31,10 +30,5 @@ final class ForeachMatcher extends AbstractMatcher
         /** @var Variable $variable */
         $variable = $node->valueVar;
         return $variable;
-    }
-
-    public function getAssign(Node $node): ?Assign
-    {
-        return null;
     }
 }

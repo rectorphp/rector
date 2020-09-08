@@ -13,7 +13,7 @@ use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Matcher\ForeachMatcher;
 use Rector\Naming\Naming\ExpectedNameResolver;
 use Rector\Naming\NamingConvention\NamingConventionAnalyzer;
-use Rector\Naming\ValueObject\VariableAndCallAssign;
+use Rector\Naming\ValueObject\VariableAndCallForeach;
 use Rector\Naming\VariableRenamer;
 
 /**
@@ -108,6 +108,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        /** @var VariableAndCallForeach|null $variableAndCallAssign */
         $variableAndCallAssign = $this->varValueAndCallForeachMatcher->match($node);
 
         if ($variableAndCallAssign === null) {
@@ -128,30 +129,30 @@ PHP
         return $node;
     }
 
-    private function shouldSkip(VariableAndCallAssign $variableAndCallAssign, string $expectedName): bool
+    private function shouldSkip(VariableAndCallForeach $variableAndCallForeach, string $expectedName): bool
     {
         if ($this->namingConventionAnalyzer->isCallMatchingVariableName(
-            $variableAndCallAssign->getCall(),
-            $variableAndCallAssign->getVariableName(),
+            $variableAndCallForeach->getCall(),
+            $variableAndCallForeach->getVariableName(),
             $expectedName
         )) {
             return true;
         }
 
         return $this->breakingVariableRenameGuard->shouldSkipVariable(
-            $variableAndCallAssign->getVariableName(),
+            $variableAndCallForeach->getVariableName(),
             $expectedName,
-            $variableAndCallAssign->getFunctionLike(),
-            $variableAndCallAssign->getVariable()
+            $variableAndCallForeach->getFunctionLike(),
+            $variableAndCallForeach->getVariable()
         );
     }
 
-    private function renameVariable(VariableAndCallAssign $variableAndCallAssign, string $expectedName): void
+    private function renameVariable(VariableAndCallForeach $variableAndCallForeach, string $expectedName): void
     {
         $this->variableRenamer->renameVariableInFunctionLike(
-            $variableAndCallAssign->getFunctionLike(),
-            $variableAndCallAssign->getAssign(),
-            $variableAndCallAssign->getVariableName(),
+            $variableAndCallForeach->getFunctionLike(),
+            null,
+            $variableAndCallForeach->getVariableName(),
             $expectedName
         );
     }

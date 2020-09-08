@@ -31,12 +31,4 @@ final class VariableAndCallAssignMatcher extends AbstractMatcher
         $variable = $node->var;
         return $variable;
     }
-
-    /**
-     * @param Assign $node
-     */
-    public function getAssign(Node $node): ?Assign
-    {
-        return $node;
-    }
 }

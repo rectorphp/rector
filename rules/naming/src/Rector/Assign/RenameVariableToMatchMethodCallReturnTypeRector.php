@@ -146,6 +146,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        /** @var VariableAndCallAssign|null $variableAndCallAssign */
         $variableAndCallAssign = $this->variableAndCallAssignMatcher->match($node);
         if ($variableAndCallAssign === null) {
             return null;
@@ -190,13 +191,11 @@ PHP
     private function renameVariable(VariableAndCallAssign $variableAndCallAssign, string $expectedName): void
     {
         // TODO: Remove in next PR, implemented in VariableRenamer::renameVariableIfMatchesName()
-        if ($variableAndCallAssign->getAssign() !== null) {
-            $this->varTagValueNodeRenamer->renameAssignVarTagVariableName(
-                $variableAndCallAssign->getAssign(),
-                $variableAndCallAssign->getVariableName(),
-                $expectedName
-            );
-        }
+        $this->varTagValueNodeRenamer->renameAssignVarTagVariableName(
+            $variableAndCallAssign->getAssign(),
+            $variableAndCallAssign->getVariableName(),
+            $expectedName
+        );
 
         $this->variableRenamer->renameVariableInFunctionLike(
             $variableAndCallAssign->getFunctionLike(),
