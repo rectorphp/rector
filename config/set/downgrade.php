@@ -7,6 +7,9 @@ use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarati
 use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 use Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
 use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector;
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
@@ -23,6 +26,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeUnionTypeTypedPropertyRector::class);
     $services->set(DowngradeUnionTypeReturnDeclarationRector::class);
     $services->set(DowngradeUnionTypeParamDeclarationRector::class);
+    $services->set(DowngradeParamMixedTypeDeclarationRector::class);
+    $services->set(DowngradeReturnMixedTypeDeclarationRector::class);
+    $services->set(DowngradeReturnStaticTypeDeclarationRector::class);
     // PHP 7.4
     $services->set(DowngradeTypedPropertyRector::class);
     $services->set(ArrowFunctionToAnonymousFunctionRector::class);
