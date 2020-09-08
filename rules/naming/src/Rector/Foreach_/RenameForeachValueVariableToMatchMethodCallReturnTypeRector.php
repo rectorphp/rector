@@ -62,7 +62,7 @@ final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends 
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Renames value variable name in foreach loop to match get method name', [
+        return new RectorDefinition('Renames value variable name in foreach loop to match method type', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
