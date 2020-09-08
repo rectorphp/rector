@@ -97,6 +97,7 @@ To use them, create a `rector.php` in your root directory:
 
 ```php
 <?php
+
 // rector.php
 
 declare(strict_types=1);
@@ -145,6 +146,7 @@ vendor/bin/rector process src
 
 ```php
 <?php
+
 // rector.php
 
 declare(strict_types=1);
@@ -198,6 +200,7 @@ Every rector can have its own configuration. E.g. the `DowngradeTypedPropertyRec
 
 ```php
 <?php
+
 // rector.php
 
 declare(strict_types=1);
@@ -226,6 +229,7 @@ For in-file exclusion, use `@noRector \FQN name` annotation:
 
 ```php
 <?php
+
 declare(strict_types=1);
 
 class SomeClass
@@ -274,6 +278,7 @@ To work with some Symfony rules, you now need to link your container XML file
 
 ```php
 <?php
+
 // rector.php
 
 declare(strict_types=1);
