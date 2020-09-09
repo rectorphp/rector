@@ -39,6 +39,11 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $configuration->setIsDryRun(false);
     }
 
+    public function getRectorInterface(): string
+    {
+        return FileSystemRectorInterface::class;
+    }
+
     /**
      * @param InputFilePathWithExpectedFile[] $extraFiles
      * @todo decouple to own method later
@@ -89,11 +94,6 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $this->removedAndAddedFilesProcessor->run();
 
         return $temporaryFileInfo;
-    }
-
-    protected function getRectorInterface(): string
-    {
-        return FileSystemRectorInterface::class;
     }
 
     protected function getFixtureTempDirectory(): string

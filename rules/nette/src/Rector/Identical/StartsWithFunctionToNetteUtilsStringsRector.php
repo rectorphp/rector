@@ -49,12 +49,12 @@ PHP
         ]);
     }
 
-    protected function getMethodName(): string
+    public function getMethodName(): string
     {
         return 'startsWith';
     }
 
-    protected function matchContentAndNeedleOfSubstrOfVariableLength(
+    public function matchContentAndNeedleOfSubstrOfVariableLength(
         Node $node,
         Variable $variable
     ): ?ContentExprAndNeedleExpr {

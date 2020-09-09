@@ -7,12 +7,12 @@ namespace Rector\Php71\Rector\BinaryOp;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Generic\Rector\AbstractIsAbleRector;
+use Rector\Generic\Rector\AbstractIsAbleFunCallRector;
 
 /**
  * @see \Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector\IsIterableRectorTest
  */
-final class IsIterableRector extends AbstractIsAbleRector
+final class IsIterableRector extends AbstractIsAbleFunCallRector
 {
     public function getDefinition(): RectorDefinition
     {
@@ -21,17 +21,17 @@ final class IsIterableRector extends AbstractIsAbleRector
         ]);
     }
 
-    protected function getFuncName(): string
+    public function getFuncName(): string
     {
         return 'is_iterable';
     }
 
-    protected function getPhpVersion(): string
+    public function getPhpVersion(): string
     {
         return PhpVersionFeature::IS_ITERABLE;
     }
 
-    protected function getType(): string
+    public function getType(): string
     {
         return 'Traversable';
     }

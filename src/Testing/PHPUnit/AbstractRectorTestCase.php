@@ -28,6 +28,11 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      */
     private $autoloadTestFixture = true;
 
+    public function getRectorInterface(): string
+    {
+        return PhpRectorInterface::class;
+    }
+
     protected function doTestFileInfoWithoutAutoload(SmartFileInfo $fileInfo): void
     {
         $this->autoloadTestFixture = false;
@@ -72,11 +77,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     protected function getTempPath(): string
     {
         return StaticFixtureSplitter::getTemporaryPath();
-    }
-
-    protected function getRectorInterface(): string
-    {
-        return PhpRectorInterface::class;
     }
 
     protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void

@@ -49,12 +49,12 @@ PHP
         ]);
     }
 
-    protected function getMethodName(): string
+    public function getMethodName(): string
     {
         return 'endsWith';
     }
 
-    protected function matchContentAndNeedleOfSubstrOfVariableLength(
+    public function matchContentAndNeedleOfSubstrOfVariableLength(
         Node $node,
         Variable $variable
     ): ?ContentExprAndNeedleExpr {

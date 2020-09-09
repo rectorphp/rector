@@ -10,9 +10,10 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Nette\Contract\WithFunctionToNetteUtilsStringsRectorInterface;
 use Rector\Nette\ValueObject\ContentExprAndNeedleExpr;
 
-abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRector
+abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRector implements WithFunctionToNetteUtilsStringsRectorInterface
 {
     /**
      * @return string[]
@@ -43,13 +44,6 @@ abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRec
 
         return $staticCall;
     }
-
-    abstract protected function getMethodName(): string;
-
-    abstract protected function matchContentAndNeedleOfSubstrOfVariableLength(
-        Node $node,
-        Variable $variable
-    ): ?ContentExprAndNeedleExpr;
 
     /**
      * @param Identical|NotIdentical $node

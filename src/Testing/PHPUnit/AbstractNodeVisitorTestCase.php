@@ -7,6 +7,7 @@ namespace Rector\Core\Testing\PHPUnit;
 use PhpParser\Node;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\Testing\Contract\NodeTraversableInterface;
 use Rector\Core\Testing\Node\NodeAttributeExtractor;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -16,7 +17,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  * To update the fixture run phpunit as follows
  * $ UPDATE_FIXTURE=1 vendor/bin/phpunit
  */
-abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase
+abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase implements NodeTraversableInterface
 {
     /**
      * @var NodeAttributeExtractor
@@ -35,11 +36,6 @@ abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase
         $this->parser = static::$container->get(Parser::class);
         $this->nodeAttributeExtractor = static::$container->get(NodeAttributeExtractor::class);
     }
-
-    /**
-     * @param Node[] $nodes
-     */
-    abstract protected function traverseNodes(array $nodes): void;
 
     /**
      * @return mixed[]
