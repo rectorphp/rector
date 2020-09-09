@@ -15,6 +15,7 @@ use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\Stubs\StubLoader;
 use Rector\Core\Testing\Application\EnabledRectorsProvider;
+use Rector\Core\Testing\Contract\RectorInterfaceAwareInterface;
 use Rector\Core\Testing\Finder\RectorsFinder;
 use Rector\Core\Testing\PhpConfigPrinter\PhpConfigPrinterFactory;
 use Rector\Naming\Tests\Rector\Class_\RenamePropertyToMatchTypeRector\Source\ContainerInterface;
@@ -29,7 +30,7 @@ use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
+abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase implements RectorInterfaceAwareInterface
 {
     /**
      * @var FileProcessor
@@ -142,11 +143,6 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
             $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
         }
     }
-
-    /**
-     * Return interface type that extends @see \Rector\Core\Contract\Rector\RectorInterface;
-     */
-    abstract protected function getRectorInterface(): string;
 
     protected function getRectorClass(): string
     {
