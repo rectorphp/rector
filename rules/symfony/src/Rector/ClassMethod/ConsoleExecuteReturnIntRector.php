@@ -44,7 +44,7 @@ PHP
                 <<<'PHP'
 class SomeCommand extends Command
 {
-    public function index(InputInterface $input, OutputInterface $output): int
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         return 0;
     }
