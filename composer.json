@@ -32,7 +32,7 @@
         "symfony/finder": "^4.4.8|^5.0.6",
         "symfony/process": "^4.4.8|^5.0.6",
         "symplify/auto-bind-parameter": "^8.2.20",
-        "symplify/autowire-array-parameter": "^8.2.20",
+        "symplify/autowire-array-parameter": "^8.2.27",
         "symplify/console-color-diff": "^8.2.20",
         "symplify/easy-testing": "^8.2.20",
         "symplify/package-builder": "^8.2.20",
@@ -52,7 +52,7 @@
         "psr/event-dispatcher": "^1.0",
         "slam/phpstan-extensions": "^5.0",
         "symplify/changelog-linker": "^8.2.20",
-        "symplify/easy-coding-standard": "^8.2.24",
+        "symplify/easy-coding-standard": "^8.2.27",
         "symplify/easy-testing": "^8.2.20",
         "symplify/monorepo-builder": "^8.2.20",
         "symplify/phpstan-extensions": "^8.2.20",
@@ -277,7 +277,10 @@
             "phpunit"
         ],
         "check-cs": "vendor/bin/ecs check --ansi",
-        "fix-cs": "vendor/bin/ecs check --fix --ansi",
+        "fix-cs": [
+            "vendor/bin/ecs check --fix --ansi",
+            "vendor/bin/ecs check-markdown README.md --fix"
+        ],
         "phpstan": [
             "vendor/bin/phpstan analyse --ansi --error-format symplify",
             "vendor/bin/phpstan analyse config/set --ansi --error-format symplify"
