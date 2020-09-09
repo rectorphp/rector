@@ -1,4 +1,4 @@
-# All 574 Rectors Overview
+# All 575 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -59,7 +59,7 @@
 - [Polyfill](#polyfill) (2)
 - [Privatization](#privatization) (7)
 - [RectorGenerator](#rectorgenerator) (1)
-- [RemovingStatic](#removingstatic) (4)
+- [RemovingStatic](#removingstatic) (5)
 - [Renaming](#renaming) (8)
 - [Restoration](#restoration) (7)
 - [SOLID](#solid) (12)
@@ -11964,6 +11964,31 @@ Adds a new `$services->set(...)` call to PHP Config
 <br><br>
 
 ## RemovingStatic
+
+### `LocallyCalledStaticMethodToNonStaticRector`
+
+- class: [`Rector\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector`](/rules/removing-static/src/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php)
+- [test fixtures](/rules/removing-static/tests/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector/Fixture)
+
+Change static method and local-only calls to non-static
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        self::someStatic();
++        $this->someStatic();
+     }
+
+-    private static function someStatic()
++    private function someStatic()
+     {
+     }
+ }
+```
+
+<br><br>
 
 ### `NewUniqueObjectToEntityFactoryRector`
 
