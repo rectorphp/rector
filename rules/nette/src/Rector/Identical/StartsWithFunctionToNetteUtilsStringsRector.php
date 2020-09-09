@@ -54,7 +54,7 @@ PHP
         return 'startsWith';
     }
 
-    protected function matchContentAndNeedleOfSubstrOfVariableLength(
+    public function matchContentAndNeedleOfSubstrOfVariableLength(
         Node $node,
         Variable $variable
     ): ?ContentExprAndNeedleExpr {

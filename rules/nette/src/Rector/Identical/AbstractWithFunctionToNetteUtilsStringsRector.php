@@ -45,11 +45,6 @@ abstract class AbstractWithFunctionToNetteUtilsStringsRector extends AbstractRec
         return $staticCall;
     }
 
-    abstract protected function matchContentAndNeedleOfSubstrOfVariableLength(
-        Node $node,
-        Variable $variable
-    ): ?ContentExprAndNeedleExpr;
-
     /**
      * @param Identical|NotIdentical $node
      */
