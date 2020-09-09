@@ -49,7 +49,7 @@ PHP
         ]);
     }
 
-    protected function getMethodName(): string
+    public function getMethodName(): string
     {
         return 'startsWith';
     }
