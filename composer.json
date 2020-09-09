@@ -279,7 +279,7 @@
         "check-cs": "vendor/bin/ecs check --ansi",
         "fix-cs": [
             "vendor/bin/ecs check --fix --ansi",
-            "vendor/bin/ecs check-markdown README.md --fix"
+            "vendor/bin/ecs check-markdown README.md --fix --ansi"
         ],
         "phpstan": [
             "vendor/bin/phpstan analyse --ansi --error-format symplify",
