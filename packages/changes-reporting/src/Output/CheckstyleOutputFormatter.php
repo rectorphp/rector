@@ -53,13 +53,13 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
         $message = sprintf('<file name="%s">', $this->escape($fileDiff->getRelativeFilePath()));
         $this->symfonyStyle->writeln($message);
 
-        foreach ($fileDiff->getRectorChanges() as $rectorChange) {
-            $message = $rectorChange->getRectorDefinitionsDescription() . ' (Reported by: ' . $rectorChange->getRectorClass() . ')';
+        foreach ($fileDiff->getRectorChanges() as $rectorWithFileAndLineChange) {
+            $message = $rectorWithFileAndLineChange->getRectorDefinitionsDescription() . ' (Reported by: ' . $rectorWithFileAndLineChange->getRectorClass() . ')';
             $message = $this->escape($message);
 
             $error = sprintf(
                 '  <error line="%d" column="1" severity="error" message="%s" />',
-                $this->escape((string) $rectorChange->getLine()),
+                $this->escape((string) $rectorWithFileAndLineChange->getLine()),
                 $message
             );
             $this->symfonyStyle->writeln($error);
@@ -73,8 +73,8 @@ final class CheckstyleOutputFormatter implements OutputFormatterInterface
         if ($errorAndDiffCollector->getErrors() !== []) {
             $this->symfonyStyle->writeln('<file>');
 
-            foreach ($errorAndDiffCollector->getErrors() as $error) {
-                $escapedMessage = $this->escape($error->getMessage());
+            foreach ($errorAndDiffCollector->getErrors() as $rectorError) {
+                $escapedMessage = $this->escape($rectorError->getMessage());
                 $message = sprintf('    <error severity="error" message="%s" />', $escapedMessage);
 
                 $this->symfonyStyle->writeln($message);

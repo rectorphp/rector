@@ -50,8 +50,8 @@ final class DependencyResolver
         }
 
         $dependencies = [];
-        foreach ($this->phpStanDependencyResolver->resolveDependencies($node, $scope) as $dependencyReflection) {
-            $dependencyFile = $dependencyReflection->getFileName();
+        foreach ($this->phpStanDependencyResolver->resolveDependencies($node, $scope) as $nodeDependency) {
+            $dependencyFile = $nodeDependency->getFileName();
             if (! $dependencyFile) {
                 continue;
             }

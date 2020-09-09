@@ -128,14 +128,14 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
             return [];
         }
 
-        /** @var ParameterReflection $parameter */
-        foreach ($parametersAcceptor->getParameters() as $key => $parameter) {
+        /** @var ParameterReflection $parameterReflection */
+        foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             // omitted optional parameter
             if (! isset($node->args[$key])) {
                 continue;
             }
 
-            if ($parameter->passedByReference()->no()) {
+            if ($parameterReflection->passedByReference()->no()) {
                 continue;
             }
 

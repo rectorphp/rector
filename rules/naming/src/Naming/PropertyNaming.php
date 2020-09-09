@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Naming;
 
+use Doctrine\Inflector\Inflector;
 use Nette\Utils\Strings;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
@@ -37,12 +39,31 @@ final class PropertyNaming
      */
     private $typeUnwrapper;
 
-    public function __construct(TypeUnwrapper $typeUnwrapper)
+    /**
+     * @var Inflector
+     */
+    private $inflector;
+
+    public function __construct(TypeUnwrapper $typeUnwrapper, Inflector $inflector)
     {
         $this->typeUnwrapper = $typeUnwrapper;
+        $this->inflector = $inflector;
     }
 
-    public function getExpectedNameFromType(Type $type): ?string
+    public function getExpectedNameFromMethodName(string $methodName): ?ExpectedName
+    {
+        // @see https://regex101.com/r/hnU5pm/2/
+        $matches = Strings::match($methodName, '#^get([A-Z].+)#');
+        if ($matches === null) {
+            return null;
+        }
+
+        $originalName = lcfirst($matches[1]);
+
+        return new ExpectedName($originalName, $this->inflector->singularize($originalName));
+    }
+
+    public function getExpectedNameFromType(Type $type): ?ExpectedName
     {
         if ($type instanceof UnionType) {
             $type = $this->typeUnwrapper->unwrapNullableType($type);
@@ -81,7 +102,8 @@ final class PropertyNaming
         $shortClassName = $this->normalizeUpperCase($shortClassName);
 
         // prolong too short generic names with one namespace up
-        return $this->prolongIfTooShort($shortClassName, $className);
+        $originalName = $this->prolongIfTooShort($shortClassName, $className);
+        return new ExpectedName($originalName, $this->inflector->singularize($originalName));
     }
 
     /**

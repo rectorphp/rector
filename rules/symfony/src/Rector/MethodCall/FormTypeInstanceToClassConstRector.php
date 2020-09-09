@@ -250,8 +250,8 @@ PHP
         }
 
         $namesToArgs = [];
-        foreach ($constructorReflectionMethod->getParameters() as $parameterReflection) {
-            $namesToArgs[$parameterReflection->getName()] = $argNodes[$parameterReflection->getPosition()];
+        foreach ($constructorReflectionMethod->getParameters() as $reflectionParameter) {
+            $namesToArgs[$reflectionParameter->getName()] = $argNodes[$reflectionParameter->getPosition()];
         }
 
         return $namesToArgs;

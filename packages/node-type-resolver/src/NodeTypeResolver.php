@@ -247,8 +247,8 @@ final class NodeTypeResolver
             return false;
         }
 
-        foreach ($nodeType->getTypes() as $subtype) {
-            if ($subtype instanceof ObjectType) {
+        foreach ($nodeType->getTypes() as $type) {
+            if ($type instanceof ObjectType) {
                 return true;
             }
         }

@@ -50,8 +50,8 @@ final class ClassManipulator
     public function getUsedTraits(ClassLike $classLike): array
     {
         $usedTraits = [];
-        foreach ($classLike->getTraitUses() as $stmt) {
-            foreach ($stmt->traits as $trait) {
+        foreach ($classLike->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $trait) {
                 /** @var string $traitName */
                 $traitName = $this->nodeNameResolver->getName($trait);
                 $usedTraits[$traitName] = $trait;

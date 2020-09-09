@@ -138,8 +138,8 @@ PHP
         }
 
         if ($st instanceof UnionType) {
-            foreach ($st->getTypes() as $candidate) {
-                if ($candidate->equals($resourceType)) {
+            foreach ($st->getTypes() as $type) {
+                if ($type->equals($resourceType)) {
                     return true;
                 }
             }

@@ -100,13 +100,13 @@ PHP
         /** @var ReflectionMethod $constructorMethodReflection */
         $constructorMethodReflection = $this->getNewNodeClassConstructorMethodReflection($node);
 
-        foreach ($constructorMethodReflection->getParameters() as $position => $parameterReflection) {
+        foreach ($constructorMethodReflection->getParameters() as $position => $reflectionParameter) {
             // argument is already set
             if (isset($node->args[$position])) {
                 continue;
             }
 
-            $classToInstantiate = $this->resolveClassToInstantiateByParameterReflection($parameterReflection);
+            $classToInstantiate = $this->resolveClassToInstantiateByParameterReflection($reflectionParameter);
             if ($classToInstantiate === null) {
                 continue;
             }

@@ -130,8 +130,8 @@ PHP
         $propertyUsageByMethods = [];
 
         foreach ($privatePropertyNames as $privatePropertyName) {
-            foreach ($class->getMethods() as $method) {
-                $hasProperty = (bool) $this->betterNodeFinder->findFirst($method, function (Node $node) use (
+            foreach ($class->getMethods() as $classMethod) {
+                $hasProperty = (bool) $this->betterNodeFinder->findFirst($classMethod, function (Node $node) use (
                     $privatePropertyName
                 ): bool {
                     if (! $node instanceof PropertyFetch) {
@@ -145,7 +145,7 @@ PHP
                     continue;
                 }
 
-                $isPropertyChangingInMultipleMethodCalls = $this->isPropertyChangingInMultipleMethodCalls($method,
+                $isPropertyChangingInMultipleMethodCalls = $this->isPropertyChangingInMultipleMethodCalls($classMethod,
                     $privatePropertyName);
 
                 if ($isPropertyChangingInMultipleMethodCalls) {
@@ -153,7 +153,7 @@ PHP
                 }
 
                 /** @var string $classMethodName */
-                $classMethodName = $this->getName($method);
+                $classMethodName = $this->getName($classMethod);
                 $propertyUsageByMethods[$privatePropertyName][] = $classMethodName;
             }
         }

@@ -172,8 +172,8 @@ final class AttributeAwareClassFactoryFactory
 
         $phpDocParserNodeVariable = new Variable(self::NODE);
 
-        foreach ($constructorReflectionMethod->getParameters() as $parameter) {
-            $parameterName = $parameter->getName();
+        foreach ($constructorReflectionMethod->getParameters() as $reflectionParameter) {
+            $parameterName = $reflectionParameter->getName();
 
             $new->args[] = new Arg(new PropertyFetch($phpDocParserNodeVariable, $parameterName));
         }

@@ -176,15 +176,15 @@ PHP
         FuncCall $funcCall
     ): ?Node {
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($argumentFuncCallToMethodCall->getClass());
-        $propertyName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
+        $expectedName = $this->propertyNaming->getExpectedNameFromType($fullyQualifiedObjectType);
 
-        if ($propertyName === null) {
+        if ($expectedName === null) {
             throw new ShouldNotHappenException();
         }
 
-        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $propertyName);
+        $this->addConstructorDependencyToClass($class, $fullyQualifiedObjectType, $expectedName->getName());
 
-        $propertyFetchNode = $this->createPropertyFetch('this', $propertyName);
+        $propertyFetchNode = $this->createPropertyFetch('this', $expectedName->getName());
 
         if (count($funcCall->args) === 0) {
             if ($argumentFuncCallToMethodCall->getMethodIfNoArgs()) {
