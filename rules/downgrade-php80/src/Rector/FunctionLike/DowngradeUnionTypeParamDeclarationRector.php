@@ -8,7 +8,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\UnionType;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 
 /**
@@ -51,11 +50,6 @@ PHP
                 ),
             ]
         );
-    }
-
-    public function getPhpVersionFeature(): string
-    {
-        return PhpVersionFeature::UNION_TYPES;
     }
 
     public function shouldRemoveParamDeclaration(Param $param): bool

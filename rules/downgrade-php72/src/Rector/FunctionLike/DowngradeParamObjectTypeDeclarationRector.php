@@ -6,7 +6,6 @@ namespace Rector\DowngradePhp72\Rector\FunctionLike;
 
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\ValueObject\PhpVersionFeature;
 
 /**
  * @see \Rector\DowngradePhp72\Tests\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector\DowngradeParamObjectTypeDeclarationRectorTest
@@ -46,11 +45,6 @@ PHP
                 ),
             ]
         );
-    }
-
-    public function getPhpVersionFeature(): string
-    {
-        return PhpVersionFeature::OBJECT_TYPE;
     }
 
     public function getTypeNameToRemove(): string

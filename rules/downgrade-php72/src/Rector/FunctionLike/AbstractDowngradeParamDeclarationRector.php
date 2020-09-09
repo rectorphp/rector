@@ -28,10 +28,6 @@ abstract class AbstractDowngradeParamDeclarationRector extends AbstractDowngrade
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isAtLeastPhpVersion($this->getPhpVersionFeature())) {
-            return null;
-        }
-
         if ($node->params === null || $node->params === []) {
             return null;
         }

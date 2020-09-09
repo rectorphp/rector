@@ -26,10 +26,6 @@ abstract class AbstractDowngradeReturnDeclarationRector extends AbstractDowngrad
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isAtLeastPhpVersion($this->getPhpVersionFeature())) {
-            return null;
-        }
-
         if (! $this->shouldRemoveReturnDeclaration($node)) {
             return null;
         }

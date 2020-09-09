@@ -26,10 +26,6 @@ abstract class AbstractDowngradeTypedPropertyRector extends AbstractDowngradeRec
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isAtLeastPhpVersion($this->getPhpVersionFeature())) {
-            return null;
-        }
-
         if ($node->type === null) {
             return null;
         }
