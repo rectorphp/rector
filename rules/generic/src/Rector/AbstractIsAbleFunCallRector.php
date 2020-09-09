@@ -7,9 +7,10 @@ namespace Rector\Generic\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Generic\Contract\IsAbleFuncCallInterface;
 use Rector\Php71\IsArrayAndDualCheckToAble;
 
-abstract class AbstractIsAbleRector extends AbstractRector
+abstract class AbstractIsAbleFunCallRector extends AbstractRector implements IsAbleFuncCallInterface
 {
     /**
      * @var IsArrayAndDualCheckToAble
@@ -44,12 +45,6 @@ abstract class AbstractIsAbleRector extends AbstractRector
             $this->getFuncName()
         ) ?: $node;
     }
-
-    abstract protected function getFuncName(): string;
-
-    abstract protected function getPhpVersion(): string;
-
-    abstract protected function getType(): string;
 
     private function shouldSkip(): bool
     {
