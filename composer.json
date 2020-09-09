@@ -276,7 +276,10 @@
             "@docs",
             "phpunit"
         ],
-        "check-cs": "vendor/bin/ecs check --ansi",
+        "check-cs": [
+            "vendor/bin/ecs check --ansi",
+            "vendor/bin/ecs check-markdown README.md --ansi"
+        ],
         "fix-cs": [
             "vendor/bin/ecs check --fix --ansi",
             "vendor/bin/ecs check-markdown README.md --fix --ansi"
