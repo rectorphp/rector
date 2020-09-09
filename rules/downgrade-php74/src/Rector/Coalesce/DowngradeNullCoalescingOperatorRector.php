@@ -11,14 +11,12 @@ use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DowngradePhp72\Contract\Rector\DowngradeRectorInterface;
 
 /**
  * @see https://wiki.php.net/rfc/null_coalesce_equal_operator
  * @see \Rector\DowngradePhp74\Tests\Rector\Coalesce\DowngradeNullCoalescingOperatorRector\DowngradeNullCoalescingOperatorRectorTest
  */
-final class DowngradeNullCoalescingOperatorRector extends AbstractRector implements DowngradeRectorInterface
+final class DowngradeNullCoalescingOperatorRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
@@ -50,15 +48,6 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isAtLeastPhpVersion($this->getPhpVersionFeature())) {
-            return null;
-        }
-
         return new Assign($node->var, new Coalesce($node->var, $node->expr));
-    }
-
-    public function getPhpVersionFeature(): string
-    {
-        return PhpVersionFeature::NULL_COALESCE_ASSIGN;
     }
 }

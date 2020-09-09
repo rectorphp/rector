@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeReturnDeclarationRector;
 
 /**
@@ -59,11 +58,6 @@ PHP
                 ),
             ]
         );
-    }
-
-    public function getPhpVersionFeature(): string
-    {
-        return PhpVersionFeature::UNION_TYPES;
     }
 
     /**

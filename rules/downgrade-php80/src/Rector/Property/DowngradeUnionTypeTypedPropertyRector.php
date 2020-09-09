@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp74\Rector\Property\AbstractDowngradeTypedPropertyRector;
 
 /**
@@ -46,11 +45,6 @@ PHP
     public function getNodeTypes(): array
     {
         return [Property::class];
-    }
-
-    public function getPhpVersionFeature(): string
-    {
-        return PhpVersionFeature::UNION_TYPES;
     }
 
     public function shouldRemoveProperty(Property $property): bool
