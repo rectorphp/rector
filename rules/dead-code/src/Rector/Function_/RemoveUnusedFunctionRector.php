@@ -10,23 +10,12 @@ use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Function_\RemoveUnusedFunctionRector\RemoveUnusedFunctionRectorTest
  */
 final class RemoveUnusedFunctionRector extends AbstractRector implements ZeroCacheRectorInterface
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(NodeRepository $nodeRepository)
-    {
-        $this->nodeRepository = $nodeRepository;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove unused function', [

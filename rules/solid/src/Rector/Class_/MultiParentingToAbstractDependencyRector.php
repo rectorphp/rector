@@ -17,7 +17,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeFactory\InjectMethodFactory;
 use Rector\SOLID\NodeRemover\ClassMethodNodeRemover;
@@ -72,23 +71,16 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector impl
      */
     private $classInsertManipulator;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
         ClassMethodNodeRemover $classMethodNodeRemover,
         InjectMethodFactory $injectMethodFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        ClassInsertManipulator $classInsertManipulator,
-        NodeRepository $nodeRepository
+        ClassInsertManipulator $classInsertManipulator
     ) {
         $this->injectMethodFactory = $injectMethodFactory;
         $this->classMethodNodeRemover = $classMethodNodeRemover;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->classInsertManipulator = $classInsertManipulator;
-        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition

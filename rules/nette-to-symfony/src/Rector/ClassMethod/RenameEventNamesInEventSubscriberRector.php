@@ -176,7 +176,7 @@ PHP
 
     private function processMethodArgument(string $class, string $method, EventInfo $eventInfo): void
     {
-        $classMethodNode = $this->functionLikeParsedNodesFinder->findClassMethod($method, $class);
+        $classMethodNode = $this->nodeRepository->findClassMethod($class, $method);
         if ($classMethodNode === null) {
             return;
         }

@@ -23,7 +23,7 @@ final class StaticAnalyzer
 
     public function isStaticMethod(string $methodName, string $className): bool
     {
-        $classMethod = $this->nodeRepository->findMethod($methodName, $className);
+        $classMethod = $this->nodeRepository->findClassMethod($className, $methodName);
         if ($classMethod !== null) {
             return $classMethod->isStatic();
         }

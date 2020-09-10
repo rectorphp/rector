@@ -12,7 +12,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\Contract\MethodNamesByInputNamesResolverAwareInterface;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
-use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -35,25 +35,25 @@ final class GetComponentMethodCallFormControlTypeResolver implements FormControl
     private $nodeTypeResolver;
 
     /**
-     * @var FunctionLikeParsedNodesFinder
-     */
-    private $functionLikeParsedNodesFinder;
-
-    /**
      * @var MethodNamesByInputNamesResolver
      */
     private $methodNamesByInputNamesResolver;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        NodeRepository $nodeRepository
     ) {
         $this->valueResolver = $valueResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -79,9 +79,9 @@ final class GetComponentMethodCallFormControlTypeResolver implements FormControl
 
         // combine constructor + method body name
         $constructorClassMethodData = [];
-        $constructorClassMethod = $this->functionLikeParsedNodesFinder->findClassMethod(
-            MethodName::CONSTRUCT,
-            $staticType->getClassName()
+        $constructorClassMethod = $this->nodeRepository->findClassMethod(
+            $staticType->getClassName(),
+            MethodName::CONSTRUCT
         );
 
         if ($constructorClassMethod !== null) {
@@ -92,9 +92,9 @@ final class GetComponentMethodCallFormControlTypeResolver implements FormControl
 
         $createComponentClassMethodData = [];
         if ($callerType instanceof TypeWithClassName) {
-            $createComponentClassMethod = $this->functionLikeParsedNodesFinder->findClassMethod(
-                $createComponentClassMethodName,
-                $callerType->getClassName()
+            $createComponentClassMethod = $this->nodeRepository->findClassMethod(
+                $callerType->getClassName(),
+                $createComponentClassMethodName
             );
 
             if ($createComponentClassMethod !== null) {

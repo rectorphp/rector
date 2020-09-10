@@ -20,7 +20,6 @@ use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
@@ -55,22 +54,15 @@ trait ComplexRemovalTrait
     private $propertyManipulator;
 
     /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    /**
      * @required
      */
     public function autowireComplextRemovalTrait(
-        NodeRepository $nodeRepository,
         PropertyManipulator $propertyManipulator,
         ParsedNodeCollector $parsedNodeCollector,
         LivingCodeManipulator $livingCodeManipulator,
         BetterStandardPrinter $betterStandardPrinter
     ): void {
         $this->parsedNodeCollector = $parsedNodeCollector;
-        $this->nodeRepository = $nodeRepository;
         $this->propertyManipulator = $propertyManipulator;
         $this->livingCodeManipulator = $livingCodeManipulator;
         $this->betterStandardPrinter = $betterStandardPrinter;

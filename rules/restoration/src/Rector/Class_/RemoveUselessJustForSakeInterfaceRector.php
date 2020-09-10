@@ -14,7 +14,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use ReflectionClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -36,19 +35,12 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
      */
     private $renamedClassesCollector;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
         RenamedClassesCollector $renamedClassesCollector,
-        NodeRepository $nodeRepository,
         string $interfacePattern = '#(.*?)#'
     ) {
         $this->interfacePattern = $interfacePattern;
         $this->renamedClassesCollector = $renamedClassesCollector;
-        $this->nodeRepository = $nodeRepository;
     }
 
     /**

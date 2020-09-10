@@ -16,7 +16,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Naming\MethodNameResolver;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 /**
  * @see \Rector\Naming\Tests\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector\MakeIsserClassMethodNameStartWithIsRectorTest
@@ -33,15 +32,9 @@ final class MakeIsserClassMethodNameStartWithIsRector extends AbstractRector
      */
     private $methodNameResolver;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(MethodNameResolver $methodNameResolver, NodeRepository $nodeRepository)
+    public function __construct(MethodNameResolver $methodNameResolver)
     {
         $this->methodNameResolver = $methodNameResolver;
-        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition

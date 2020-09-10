@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -20,16 +19,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class LocallyCalledStaticMethodToNonStaticRector extends AbstractRector
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(NodeRepository $nodeRepository)
-    {
-        $this->nodeRepository = $nodeRepository;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change static method and local-only calls to non-static', [

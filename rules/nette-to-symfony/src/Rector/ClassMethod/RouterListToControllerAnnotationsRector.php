@@ -21,7 +21,6 @@ use Rector\Core\Util\StaticRectorStrings;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\Routing\ExplicitRouteAnnotationDecorator;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use ReflectionMethod;
@@ -49,21 +48,14 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private $explicitRouteAnnotationDecorator;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
         ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator,
-        NodeRepository $nodeRepository,
         ReturnTypeInferer $returnTypeInferer,
         RouteInfoFactory $routeInfoFactory
     ) {
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
-        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition

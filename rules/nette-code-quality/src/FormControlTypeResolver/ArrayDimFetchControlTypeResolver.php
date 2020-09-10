@@ -11,17 +11,12 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\Naming\NetteControlNaming;
 use Rector\NetteCodeQuality\NodeAnalyzer\ControlDimFetchAnalyzer;
-use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 final class ArrayDimFetchControlTypeResolver implements FormControlTypeResolverInterface
 {
-    /**
-     * @var FunctionLikeParsedNodesFinder
-     */
-    private $functionLikeParsedNodesFinder;
-
     /**
      * @var ControlDimFetchAnalyzer
      */
@@ -42,18 +37,23 @@ final class ArrayDimFetchControlTypeResolver implements FormControlTypeResolverI
      */
     private $returnTypeInferer;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         ControlDimFetchAnalyzer $controlDimFetchAnalyzer,
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
         NetteControlNaming $netteControlNaming,
         NodeTypeResolver $nodeTypeResolver,
-        ReturnTypeInferer $returnTypeInferer
+        ReturnTypeInferer $returnTypeInferer,
+        NodeRepository $nodeRepository
     ) {
-        $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
         $this->controlDimFetchAnalyzer = $controlDimFetchAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->netteControlNaming = $netteControlNaming;
         $this->returnTypeInferer = $returnTypeInferer;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -101,9 +101,9 @@ final class ArrayDimFetchControlTypeResolver implements FormControlTypeResolverI
             $controlShortName
         );
 
-        return $this->functionLikeParsedNodesFinder->findClassMethod(
-            $createComponentClassMethodName,
-            $callerType->getClassName()
+        return $this->nodeRepository->findClassMethod(
+            $callerType->getClassName(),
+            $createComponentClassMethodName
         );
     }
 }

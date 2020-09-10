@@ -104,9 +104,9 @@ PHP
 
         $reflectionMethod = $arrayCallable->getReflectionMethod();
         if ($reflectionMethod->getNumberOfParameters() > 0) {
-            $classMethod = $this->functionLikeParsedNodesFinder->findClassMethod(
-                $arrayCallable->getMethod(),
-                $arrayCallable->getClass()
+            $classMethod = $this->nodeRepository->findClassMethod(
+                $arrayCallable->getClass(),
+                $arrayCallable->getMethod()
             );
             if ($classMethod !== null) {
                 return $this->nodeFactory->createClosureFromClassMethod($classMethod);

@@ -9,23 +9,12 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector\FinalizeClassesWithoutChildrenRectorTest
  */
 final class FinalizeClassesWithoutChildrenRector extends AbstractRector
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(NodeRepository $nodeRepository)
-    {
-        $this->nodeRepository = $nodeRepository;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Finalize every class that has no children', [

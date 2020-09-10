@@ -32,6 +32,7 @@ use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
  * All parsed nodes grouped type
@@ -99,18 +100,25 @@ final class NodeRepository
      */
     private $parsedNodeCollector;
 
+    /**
+     * @var TypeUnwrapper
+     */
+    private $typeUnwrapper;
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
         NodeNameResolver $nodeNameResolver,
         ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector,
-        ParsedNodeCollector $parsedNodeCollector
+        ParsedNodeCollector $parsedNodeCollector,
+        TypeUnwrapper $typeUnwrapper
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
         $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
         $this->parsedClassConstFetchNodeCollector = $parsedClassConstFetchNodeCollector;
         $this->parsedNodeCollector = $parsedNodeCollector;
+        $this->typeUnwrapper = $typeUnwrapper;
     }
 
     /**
@@ -225,11 +233,16 @@ final class NodeRepository
             return null;
         }
 
-        return $this->findMethod($staticCallClass, $method);
+        return $this->findClassMethod($staticCallClass, $method);
     }
 
-    public function findMethod(string $className, string $methodName): ?ClassMethod
+    public function findClassMethod(string $className, string $methodName): ?ClassMethod
     {
+        if (Strings::contains($methodName, '\\')) {
+            $message = sprintf('Class and method arguments are switched in "%s"', __METHOD__);
+            throw new ShouldNotHappenException($message);
+        }
+
         if (isset($this->classMethodsByType[$className][$methodName])) {
             return $this->classMethodsByType[$className][$methodName];
         }
@@ -267,7 +280,7 @@ final class NodeRepository
 
         /** @var string $className */
         $className = $methodReflection->getDeclaringClass()->getName();
-        return $this->findMethod($className, $methodName);
+        return $this->findClassMethod($className, $methodName);
     }
 
     /**
@@ -441,6 +454,21 @@ final class NodeRepository
         return $this->parsedNodeCollector->findClass($name);
     }
 
+    public function findClassMethodByMethodCall(MethodCall $methodCall): ?ClassMethod
+    {
+        $className = $this->resolveCallerClassName($methodCall);
+        if ($className === null) {
+            return null;
+        }
+
+        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        if ($methodName === null) {
+            return null;
+        }
+
+        return $this->findClassMethod($className, $methodName);
+    }
+
     private function addMethod(ClassMethod $classMethod): void
     {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
@@ -518,6 +546,17 @@ final class NodeRepository
         }
 
         return $implementerInterfaces;
+    }
+
+    private function resolveCallerClassName(MethodCall $methodCall): ?string
+    {
+        $callerType = $this->nodeTypeResolver->getStaticType($methodCall->var);
+        $callerObjectType = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($callerType);
+        if (! $callerObjectType instanceof TypeWithClassName) {
+            return null;
+        }
+
+        return $callerObjectType->getClassName();
     }
 
     private function resolveNodeClassTypes(Node $node): Type

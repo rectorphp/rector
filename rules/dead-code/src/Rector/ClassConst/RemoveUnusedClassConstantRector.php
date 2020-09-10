@@ -11,7 +11,6 @@ use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -19,16 +18,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RemoveUnusedClassConstantRector extends AbstractRector implements ZeroCacheRectorInterface
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(NodeRepository $nodeRepository)
-    {
-        $this->nodeRepository = $nodeRepository;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove unused class constants', [

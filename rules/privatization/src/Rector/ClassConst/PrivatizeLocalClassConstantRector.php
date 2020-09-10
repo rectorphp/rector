@@ -12,7 +12,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeFinder\ParentClassConstantNodeFinder;
 use Rector\SOLID\Reflection\ParentConstantReflectionResolver;
@@ -38,19 +37,12 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector implements 
      */
     private $parentClassConstantNodeFinder;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
-        NodeRepository $nodeRepository,
         ParentClassConstantNodeFinder $parentClassConstantNodeFinder,
         ParentConstantReflectionResolver $parentConstantReflectionResolver
     ) {
         $this->parentConstantReflectionResolver = $parentConstantReflectionResolver;
         $this->parentClassConstantNodeFinder = $parentClassConstantNodeFinder;
-        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
