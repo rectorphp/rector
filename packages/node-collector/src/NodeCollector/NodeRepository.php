@@ -28,6 +28,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
+use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -99,18 +100,25 @@ final class NodeRepository
      */
     private $parsedNodeCollector;
 
+    /**
+     * @var FunctionLikeParsedNodesFinder
+     */
+    private $functionLikeParsedNodesFinder;
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
         NodeNameResolver $nodeNameResolver,
         ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector,
-        ParsedNodeCollector $parsedNodeCollector
+        ParsedNodeCollector $parsedNodeCollector,
+        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
         $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
         $this->parsedClassConstFetchNodeCollector = $parsedClassConstFetchNodeCollector;
         $this->parsedNodeCollector = $parsedNodeCollector;
+        $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
     }
 
     /**
