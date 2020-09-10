@@ -487,43 +487,6 @@ final class NodeRepository
         return $this->callsByTypeAndMethod[$className][$methodName] ?? $this->arrayCallablesByTypeAndMethod[$className][$methodName] ?? [];
     }
 
-    private function resolveNodeClassTypes(Node $node): Type
-    {
-        if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
-            /** @var string|null $className */
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-
-            if ($className) {
-                return new ObjectType($className);
-            }
-
-            return new MixedType();
-        }
-
-        if ($node instanceof MethodCall) {
-            return $this->nodeTypeResolver->resolve($node->var);
-        }
-
-        return $this->nodeTypeResolver->resolve($node);
-    }
-
-    private function addCallByType(Node $node, Type $classType, string $methodName): void
-    {
-        if ($classType instanceof TypeWithClassName) {
-            $this->callsByTypeAndMethod[$classType->getClassName()][$methodName][] = $node;
-        }
-
-        if ($classType instanceof UnionType) {
-            foreach ($classType->getTypes() as $unionedType) {
-                if (! $unionedType instanceof ObjectType) {
-                    continue;
-                }
-
-                $this->callsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
-            }
-        }
-    }
-
     private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName): bool
     {
         if ($currentClassName === null) {
@@ -555,5 +518,40 @@ final class NodeRepository
         }
 
         return $implementerInterfaces;
+    }
+    private function resolveNodeClassTypes(Node $node): Type
+    {
+        if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
+            /** @var string|null $className */
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+
+            if ($className) {
+                return new ObjectType($className);
+            }
+
+            return new MixedType();
+        }
+
+        if ($node instanceof MethodCall) {
+            return $this->nodeTypeResolver->resolve($node->var);
+        }
+
+        return $this->nodeTypeResolver->resolve($node);
+    }
+    private function addCallByType(Node $node, Type $classType, string $methodName): void
+    {
+        if ($classType instanceof TypeWithClassName) {
+            $this->callsByTypeAndMethod[$classType->getClassName()][$methodName][] = $node;
+        }
+
+        if ($classType instanceof UnionType) {
+            foreach ($classType->getTypes() as $unionedType) {
+                if (! $unionedType instanceof ObjectType) {
+                    continue;
+                }
+
+                $this->callsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
+            }
+        }
     }
 }
