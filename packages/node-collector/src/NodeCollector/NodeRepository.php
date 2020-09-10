@@ -519,6 +519,7 @@ final class NodeRepository
 
         return $implementerInterfaces;
     }
+
     private function resolveNodeClassTypes(Node $node): Type
     {
         if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
@@ -538,6 +539,7 @@ final class NodeRepository
 
         return $this->nodeTypeResolver->resolve($node);
     }
+
     private function addCallByType(Node $node, Type $classType, string $methodName): void
     {
         if ($classType instanceof TypeWithClassName) {
