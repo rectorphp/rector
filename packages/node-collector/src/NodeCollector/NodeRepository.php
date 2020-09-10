@@ -547,6 +547,16 @@ final class NodeRepository
 
         return $implementerInterfaces;
     }
+    private function resolveCallerClassName(MethodCall $methodCall): ?string
+    {
+        $callerType = $this->nodeTypeResolver->getStaticType($methodCall->var);
+        $callerObjectType = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($callerType);
+        if (! $callerObjectType instanceof TypeWithClassName) {
+            return null;
+        }
+
+        return $callerObjectType->getClassName();
+    }
 
     private function resolveNodeClassTypes(Node $node): Type
     {
@@ -583,16 +593,5 @@ final class NodeRepository
                 $this->callsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
             }
         }
-    }
-
-    private function resolveCallerClassName(MethodCall $methodCall): ?string
-    {
-        $callerType = $this->nodeTypeResolver->getStaticType($methodCall->var);
-        $callerObjectType = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($callerType);
-        if (! $callerObjectType instanceof TypeWithClassName) {
-            return null;
-        }
-
-        return $callerObjectType->getClassName();
     }
 }
