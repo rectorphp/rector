@@ -1,4 +1,4 @@
-# All 568 Rectors Overview
+# All 575 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -15,7 +15,9 @@
 - [Doctrine](#doctrine) (17)
 - [DoctrineCodeQuality](#doctrinecodequality) (8)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
-- [Downgrade](#downgrade) (6)
+- [DowngradePhp72](#downgradephp72) (2)
+- [DowngradePhp74](#downgradephp74) (3)
+- [DowngradePhp80](#downgradephp80) (6)
 - [DynamicTypeAnalysis](#dynamictypeanalysis) (3)
 - [FileSystemRector](#filesystemrector) (1)
 - [Generic](#generic) (38)
@@ -26,7 +28,7 @@
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
-- [Naming](#naming) (6)
+- [Naming](#naming) (7)
 - [Nette](#nette) (16)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
@@ -57,7 +59,7 @@
 - [Polyfill](#polyfill) (2)
 - [Privatization](#privatization) (7)
 - [RectorGenerator](#rectorgenerator) (1)
-- [RemovingStatic](#removingstatic) (4)
+- [RemovingStatic](#removingstatic) (5)
 - [Renaming](#renaming) (8)
 - [Restoration](#restoration) (7)
 - [SOLID](#solid) (12)
@@ -906,7 +908,7 @@ Simplify `foreach` loops into `in_array` when possible
 
 ```diff
 -foreach ($items as $item) {
--    if ($item === "something") {
+-    if ($item === 'something') {
 -        return true;
 -    }
 -}
@@ -2844,7 +2846,8 @@ Remove duplicated instanceof in one call
 ```diff
  class SomeClass
  {
-     public function run($value)
+-    public function run($value)
++    public function run($value): void
      {
 -        $isIt = $value instanceof A || $value instanceof A;
 -        $isIt = $value instanceof A && $value instanceof A;
@@ -3929,7 +3932,6 @@ Change database type "bigint" for @var/type declaration to string
 Change array to ArrayCollection in setParameters method of query builder
 
 ```diff
--
 +use Doctrine\Common\Collections\ArrayCollection;
  use Doctrine\ORM\EntityRepository;
 +use Doctrine\ORM\Query\Parameter;
@@ -4481,50 +4483,12 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 
 <br><br>
 
-## Downgrade
-
-### `ArrowFunctionToAnonymousFunctionRector`
-
-- class: [`Rector\Downgrade\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector`](/rules/downgrade/src/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector.php)
-- [test fixtures](/rules/downgrade/tests/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector/Fixture)
-
-Replace arrow functions with anonymous functions
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $delimiter = ",";
--        $callable = fn($matches) => $delimiter . strtolower($matches[1]);
-+        $callable = function ($matches) use ($delimiter) {
-+            return $delimiter . strtolower($matches[1]);
-+        };
-     }
- }
-```
-
-<br><br>
-
-### `DowngradeNullCoalescingOperatorRector`
-
-- class: [`Rector\Downgrade\Rector\Coalesce\DowngradeNullCoalescingOperatorRector`](/rules/downgrade/src/Rector/Coalesce/DowngradeNullCoalescingOperatorRector.php)
-- [test fixtures](/rules/downgrade/tests/Rector/Coalesce/DowngradeNullCoalescingOperatorRector/Fixture)
-
-Remove null coalescing operator ??=
-
-```diff
- $array = [];
--$array['user_id'] ??= 'value';
-+$array['user_id'] = $array['user_id'] ?? 'value';
-```
-
-<br><br>
+## DowngradePhp72
 
 ### `DowngradeParamObjectTypeDeclarationRector`
 
-- class: [`Rector\Downgrade\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector`](/rules/downgrade/src/Rector/FunctionLike/DowngradeParamObjectTypeDeclarationRector.php)
-- [test fixtures](/rules/downgrade/tests/Rector/FunctionLike/DowngradeParamObjectTypeDeclarationRector/Fixture)
+- class: [`Rector\DowngradePhp72\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector`](/rules/downgrade-php72/src/Rector/FunctionLike/DowngradeParamObjectTypeDeclarationRector.php)
+- [test fixtures](/rules/downgrade-php72/tests/Rector/FunctionLike/DowngradeParamObjectTypeDeclarationRector/Fixture)
 
 Remove the 'object' param type, add a @param tag instead
 
@@ -4547,8 +4511,8 @@ Remove the 'object' param type, add a @param tag instead
 
 ### `DowngradeReturnObjectTypeDeclarationRector`
 
-- class: [`Rector\Downgrade\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector`](/rules/downgrade/src/Rector/FunctionLike/DowngradeReturnObjectTypeDeclarationRector.php)
-- [test fixtures](/rules/downgrade/tests/Rector/FunctionLike/DowngradeReturnObjectTypeDeclarationRector/Fixture)
+- class: [`Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector`](/rules/downgrade-php72/src/Rector/FunctionLike/DowngradeReturnObjectTypeDeclarationRector.php)
+- [test fixtures](/rules/downgrade-php72/tests/Rector/FunctionLike/DowngradeReturnObjectTypeDeclarationRector/Fixture)
 
 Remove the 'object' function type, add a @return tag instead
 
@@ -4570,10 +4534,50 @@ Remove the 'object' function type, add a @return tag instead
 
 <br><br>
 
+## DowngradePhp74
+
+### `ArrowFunctionToAnonymousFunctionRector`
+
+- class: [`Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector`](/rules/downgrade-php74/src/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector.php)
+- [test fixtures](/rules/downgrade-php74/tests/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector/Fixture)
+
+Replace arrow functions with anonymous functions
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $delimiter = ",";
+-        $callable = fn($matches) => $delimiter . strtolower($matches[1]);
++        $callable = function ($matches) use ($delimiter) {
++            return $delimiter . strtolower($matches[1]);
++        };
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeNullCoalescingOperatorRector`
+
+- class: [`Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector`](/rules/downgrade-php74/src/Rector/Coalesce/DowngradeNullCoalescingOperatorRector.php)
+- [test fixtures](/rules/downgrade-php74/tests/Rector/Coalesce/DowngradeNullCoalescingOperatorRector/Fixture)
+
+Remove null coalescing operator ??=
+
+```diff
+ $array = [];
+-$array['user_id'] ??= 'value';
++$array['user_id'] = $array['user_id'] ?? 'value';
+```
+
+<br><br>
+
 ### `DowngradeTypedPropertyRector`
 
-- class: [`Rector\Downgrade\Rector\Property\DowngradeTypedPropertyRector`](/rules/downgrade/src/Rector/Property/DowngradeTypedPropertyRector.php)
-- [test fixtures](/rules/downgrade/tests/Rector/Property/DowngradeTypedPropertyRector/Fixture)
+- class: [`Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector`](/rules/downgrade-php74/src/Rector/Property/DowngradeTypedPropertyRector.php)
+- [test fixtures](/rules/downgrade-php74/tests/Rector/Property/DowngradeTypedPropertyRector/Fixture)
 
 Changes property type definition from type definitions to `@var` annotations.
 
@@ -4590,30 +4594,153 @@ Changes property type definition from type definitions to `@var` annotations.
 
 <br><br>
 
-### `DowngradeUnionTypeToDocBlockRector`
+## DowngradePhp80
 
-- class: [`Rector\Downgrade\Rector\Property\DowngradeUnionTypeToDocBlockRector`](/rules/downgrade/src/Rector/Property/DowngradeUnionTypeToDocBlockRector.php)
-- [test fixtures](/rules/downgrade/tests/Rector/Property/DowngradeUnionTypeToDocBlockRector/Fixture)
+### `DowngradeParamMixedTypeDeclarationRector`
 
-Downgrade union types to doc block
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeParamMixedTypeDeclarationRector.php)
+- [test fixtures](/rules/downgrade-php80/tests/Rector/FunctionLike/DowngradeParamMixedTypeDeclarationRector/Fixture)
+
+Remove the 'mixed' param type, add a @param tag instead
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function someFunction(mixed $anything)
++    /**
++     * @param mixed $anything
++     */
++    public function someFunction($anything)
+     {
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeReturnMixedTypeDeclarationRector`
+
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeReturnMixedTypeDeclarationRector.php)
+- [test fixtures](/rules/downgrade-php80/tests/Rector/FunctionLike/DowngradeReturnMixedTypeDeclarationRector/Fixture)
+
+Remove the 'mixed' function type, add a @return tag instead
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function getAnything(bool $flag): mixed
++    /**
++     * @return mixed
++     */
++    public function getAnything(bool $flag)
+     {
+         if ($flag) {
+             return 1;
+         }
+         return 'Hello world'
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeReturnStaticTypeDeclarationRector`
+
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeReturnStaticTypeDeclarationRector.php)
+- [test fixtures](/rules/downgrade-php80/tests/Rector/FunctionLike/DowngradeReturnStaticTypeDeclarationRector/Fixture)
+
+Remove the 'static' function type, add a @return tag instead
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function getStatic(): static
++    /**
++     * @return static
++     */
++    public function getStatic()
+     {
+         return new static();
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeUnionTypeParamDeclarationRector`
+
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeUnionTypeParamDeclarationRector.php)
+- [test fixtures](/rules/downgrade-php80/tests/Rector/FunctionLike/DowngradeUnionTypeParamDeclarationRector/Fixture)
+
+Remove the union type params, add @param tags instead
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function echoInput(string|int $input)
++    /**
++     * @param string|int $input
++     */
++    public function echoInput($input)
+     {
+         echo $input;
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeUnionTypeReturnDeclarationRector`
+
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector`](/rules/downgrade-php80/src/Rector/FunctionLike/DowngradeUnionTypeReturnDeclarationRector.php)
+- [test fixtures](/rules/downgrade-php80/tests/Rector/FunctionLike/DowngradeUnionTypeReturnDeclarationRector/Fixture)
+
+Remove returning union types, add a @return tag instead
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function getSomeObject(bool $flag): string|int
++    /**
++     * @return string|int
++     */
++    public function getSomeObject(bool $flag)
+     {
+         if ($flag) {
+             return 1;
+         }
+         return 'Hello world';
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeUnionTypeTypedPropertyRector`
+
+- class: [`Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector`](/rules/downgrade-php80/src/Rector/Property/DowngradeUnionTypeTypedPropertyRector.php)
+- [test fixtures](/rules/downgrade-php80/tests/Rector/Property/DowngradeUnionTypeTypedPropertyRector/Fixture)
+
+Removes union type property type definition, adding `@var` annotations instead.
 
 ```diff
  class SomeClass
  {
--    public int|string $value;
+-    private string|int $property;
 +    /**
-+     * @var int|string
-+     */
-+    public $value;
-
--    public function run(): int|string
-+    /**
-+     * @return int|string
-+     */
-+    public function run()
-     {
-         $this->value;
-     }
++    * @var string|int
++    */
++    private $property;
  }
 ```
 
@@ -6720,6 +6847,30 @@ Change is method names to start with is/has/was
 +    public function isActive()
      {
          return $this->isActive;
+     }
+ }
+```
+
+<br><br>
+
+### `RenameForeachValueVariableToMatchMethodCallReturnTypeRector`
+
+- class: [`Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector`](/rules/naming/src/Rector/Foreach_/RenameForeachValueVariableToMatchMethodCallReturnTypeRector.php)
+- [test fixtures](/rules/naming/tests/Rector/Foreach_/RenameForeachValueVariableToMatchMethodCallReturnTypeRector/Fixture)
+
+Renames value variable name in foreach loop to match method type
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $array = [];
+-        foreach ($object->getMethods() as $property) {
+-            $array[] = $property;
++        foreach ($object->getMethods() as $method) {
++            $array[] = $method;
+         }
      }
  }
 ```
@@ -8884,8 +9035,8 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 ```diff
 -$this->setExpectedException(Exception::class, "Message", "CODE");
 +$this->setExpectedException(Exception::class);
-+$this->expectExceptionMessage("Message");
-+$this->expectExceptionCode("CODE");
++$this->expectExceptionMessage('Message');
++$this->expectExceptionCode('CODE');
 ```
 
 <br><br>
@@ -9146,7 +9297,7 @@ Simplify unnecessary foreach check of instances
 
 ```diff
 -foreach ($foos as $foo) {
--    $this->assertInstanceOf(\SplFileInfo::class, $foo);
+-    $this->assertInstanceOf(SplFileInfo::class, $foo);
 -}
 +$this->assertContainsOnlyInstancesOf(\SplFileInfo::class, $foos);
 ```
@@ -10294,12 +10445,14 @@ Changes multi catch of same exception to single one | separated.
 
 ```diff
  try {
-    // Some code...
+-    // Some code...
 -} catch (ExceptionType1 $exception) {
--   $sameCode;
+-    $sameCode;
 -} catch (ExceptionType2 $exception) {
+-    $sameCode;
++   // Some code...
 +} catch (ExceptionType1 | ExceptionType2 $exception) {
-    $sameCode;
++   $sameCode;
  }
 ```
 
@@ -11370,13 +11523,14 @@ Change global `$variables` to private properties
 Migrate PhpSpec behavior to PHPUnit test
 
 ```diff
+-
  namespace spec\SomeNamespaceForThisTest;
 
 -use PhpSpec\ObjectBehavior;
 -
  class OrderSpec extends ObjectBehavior
  {
--    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod): void
 +    /**
 +     * @var \SomeNamespaceForThisTest\Order
 +     */
@@ -11404,13 +11558,14 @@ Migrate PhpSpec behavior to PHPUnit test
 Migrate PhpSpec behavior to PHPUnit test
 
 ```diff
+-
  namespace spec\SomeNamespaceForThisTest;
 
 -use PhpSpec\ObjectBehavior;
 -
  class OrderSpec extends ObjectBehavior
  {
--    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod): void
 +    /**
 +     * @var \SomeNamespaceForThisTest\Order
 +     */
@@ -11438,13 +11593,14 @@ Migrate PhpSpec behavior to PHPUnit test
 Migrate PhpSpec behavior to PHPUnit test
 
 ```diff
+-
  namespace spec\SomeNamespaceForThisTest;
 
 -use PhpSpec\ObjectBehavior;
 -
  class OrderSpec extends ObjectBehavior
  {
--    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod): void
 +    /**
 +     * @var \SomeNamespaceForThisTest\Order
 +     */
@@ -11472,13 +11628,14 @@ Migrate PhpSpec behavior to PHPUnit test
 Migrate PhpSpec behavior to PHPUnit test
 
 ```diff
+-
  namespace spec\SomeNamespaceForThisTest;
 
 -use PhpSpec\ObjectBehavior;
 -
  class OrderSpec extends ObjectBehavior
  {
--    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod): void
 +    /**
 +     * @var \SomeNamespaceForThisTest\Order
 +     */
@@ -11506,13 +11663,14 @@ Migrate PhpSpec behavior to PHPUnit test
 Migrate PhpSpec behavior to PHPUnit test
 
 ```diff
+-
  namespace spec\SomeNamespaceForThisTest;
 
 -use PhpSpec\ObjectBehavior;
 -
  class OrderSpec extends ObjectBehavior
  {
--    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod): void
 +    /**
 +     * @var \SomeNamespaceForThisTest\Order
 +     */
@@ -11540,13 +11698,14 @@ Migrate PhpSpec behavior to PHPUnit test
 Migrate PhpSpec behavior to PHPUnit test
 
 ```diff
+-
  namespace spec\SomeNamespaceForThisTest;
 
 -use PhpSpec\ObjectBehavior;
 -
  class OrderSpec extends ObjectBehavior
  {
--    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod): void
 +    /**
 +     * @var \SomeNamespaceForThisTest\Order
 +     */
@@ -11805,6 +11964,31 @@ Adds a new `$services->set(...)` call to PHP Config
 <br><br>
 
 ## RemovingStatic
+
+### `LocallyCalledStaticMethodToNonStaticRector`
+
+- class: [`Rector\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector`](/rules/removing-static/src/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php)
+- [test fixtures](/rules/removing-static/tests/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector/Fixture)
+
+Change static method and local-only calls to non-static
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        self::someStatic();
++        $this->someStatic();
+     }
+
+-    private static function someStatic()
++    private function someStatic()
+     {
+     }
+ }
+```
+
+<br><br>
 
 ### `NewUniqueObjectToEntityFactoryRector`
 
@@ -13174,7 +13358,7 @@ Returns int from Command::execute command
  class SomeCommand extends Command
  {
 -    public function execute(InputInterface $input, OutputInterface $output)
-+    public function index(InputInterface $input, OutputInterface $output): int
++    public function execute(InputInterface $input, OutputInterface $output): int
      {
 -        return null;
 +        return 0;

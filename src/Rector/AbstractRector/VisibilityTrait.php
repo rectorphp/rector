@@ -94,6 +94,14 @@ trait VisibilityTrait
         $this->visibilityManipulator->makeStatic($node);
     }
 
+    /**
+     * @param ClassMethod|Property|ClassConst $node
+     */
+    public function makeNonStatic(Node $node): void
+    {
+        $this->visibilityManipulator->makeNonStatic($node);
+    }
+
     public function makeFinal(Class_ $class): void
     {
         $this->visibilityManipulator->makeFinal($class);

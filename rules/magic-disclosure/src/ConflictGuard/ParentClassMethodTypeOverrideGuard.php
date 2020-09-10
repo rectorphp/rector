@@ -49,7 +49,9 @@ final class ParentClassMethodTypeOverrideGuard
             return true;
         }
 
-        $parentClassMethod = $this->getClassMethodByMethodReflection($parentClassMethodReflection);
+        $parentClassMethod = $this->parsedFunctionLikeNodeCollector->findClassMethodByMethodReflection(
+            $parentClassMethodReflection
+        );
 
         // if null, we're unable to override → skip it
         return $parentClassMethod !== null;
@@ -83,15 +85,5 @@ final class ParentClassMethodTypeOverrideGuard
         }
 
         return null;
-    }
-
-    private function getClassMethodByMethodReflection(MethodReflection $parentClassMethodReflection): ?ClassMethod
-    {
-        $methodName = $parentClassMethodReflection->getName();
-
-        /** @var string $className */
-        $className = $parentClassMethodReflection->getDeclaringClass()->getName();
-
-        return $this->parsedFunctionLikeNodeCollector->findMethod($className, $methodName);
     }
 }

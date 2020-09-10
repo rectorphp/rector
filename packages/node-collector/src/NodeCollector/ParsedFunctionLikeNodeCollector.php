@@ -13,11 +13,13 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodReferenceAnalyzer;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -26,6 +28,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
  * All parsed nodes grouped type
+ * @todo add ParsedNodesRepository, merge with all other node collectors to smymplfiy the access
+ *
+ * Have api like:
+ * - findXByX for N
+ * - getXByX for 1
  */
 final class ParsedFunctionLikeNodeCollector
 {
@@ -147,6 +154,17 @@ final class ParsedFunctionLikeNodeCollector
     }
 
     /**
+     * @return StaticCall[]
+     */
+    public function findStaticCallsByClassMethod(ClassMethod $classMethod): array
+    {
+        $calls = $this->findCallsByClassMethod($classMethod);
+        return array_filter($calls, function (Node $node): bool {
+            return $node instanceof StaticCall;
+        });
+    }
+
+    /**
      * @return ClassMethod[]
      */
     public function findClassMethodByTypeAndMethod(string $desiredType, string $desiredMethodName): array
@@ -166,6 +184,28 @@ final class ParsedFunctionLikeNodeCollector
         }
 
         return $classMethods;
+    }
+
+    public function findClassMethodByStaticCall(StaticCall $staticCall): ?ClassMethod
+    {
+        $staticCallType = $this->nodeTypeResolver->resolve($staticCall->class);
+        if ($staticCallType instanceof TypeWithClassName) {
+            $staticCallClass = $staticCallType->getClassName();
+        } else {
+            // possible union type?
+            return null;
+        }
+
+        if ($staticCallClass === null) {
+            return null;
+        }
+
+        $method = $this->nodeNameResolver->getName($staticCall->name);
+        if ($method === null) {
+            return null;
+        }
+
+        return $this->findMethod($staticCallClass, $method);
     }
 
     public function findMethod(string $className, string $methodName): ?ClassMethod
@@ -199,6 +239,15 @@ final class ParsedFunctionLikeNodeCollector
         return array_filter($calls, function (Node $node): bool {
             return $node instanceof MethodCall;
         });
+    }
+
+    public function findClassMethodByMethodReflection(MethodReflection $methodReflection): ?ClassMethod
+    {
+        $methodName = $methodReflection->getName();
+
+        /** @var string $className */
+        $className = $methodReflection->getDeclaringClass()->getName();
+        return $this->findMethod($className, $methodName);
     }
 
     private function addMethod(ClassMethod $classMethod): void
@@ -237,6 +286,21 @@ final class ParsedFunctionLikeNodeCollector
         }
 
         $this->addCallByType($node, $classType, $methodName);
+    }
+
+    /**
+     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
+     */
+    private function findCallsByClassMethod(ClassMethod $classMethod): array
+    {
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if (! is_string($class)) {
+            throw new ShouldNotHappenException();
+        }
+
+        /** @var string $method */
+        $method = $this->nodeNameResolver->getName($classMethod->name);
+        return $this->findByClassAndMethod($class, $method);
     }
 
     private function resolveNodeClassTypes(Node $node): Type
