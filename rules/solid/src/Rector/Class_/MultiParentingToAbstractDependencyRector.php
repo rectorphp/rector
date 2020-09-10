@@ -17,7 +17,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeFactory\InjectMethodFactory;
 use Rector\SOLID\NodeRemover\ClassMethodNodeRemover;
@@ -72,18 +72,23 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector impl
      */
     private $classInsertManipulator;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
         ClassMethodNodeRemover $classMethodNodeRemover,
         InjectMethodFactory $injectMethodFactory,
         PhpDocInfoFactory $phpDocInfoFactory,
-        ClassInsertManipulator $classInsertManipulator
+        ClassInsertManipulator $classInsertManipulator,
+        NodeRepository $nodeRepository
     ) {
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->injectMethodFactory = $injectMethodFactory;
         $this->classMethodNodeRemover = $classMethodNodeRemover;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->classInsertManipulator = $classInsertManipulator;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -170,7 +175,7 @@ PHP
             return null;
         }
 
-        $childrenClasses = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
+        $childrenClasses = $this->nodeRepository->findChildrenOfClass($className);
         if (count($childrenClasses) < 2) {
             return null;
         }

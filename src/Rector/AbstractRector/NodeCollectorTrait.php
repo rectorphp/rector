@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Rector\AbstractRector;
 
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 
 /**
@@ -14,11 +13,6 @@ use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 trait NodeCollectorTrait
 {
     /**
-     * @var ClassLikeParsedNodesFinder
-     */
-    protected $classLikeParsedNodesFinder;
-
-    /**
      * @var FunctionLikeParsedNodesFinder
      */
     protected $functionLikeParsedNodesFinder;
@@ -26,11 +20,8 @@ trait NodeCollectorTrait
     /**
      * @required
      */
-    public function autowireNodeCollectorTrait(
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder
-    ): void {
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
+    public function autowireNodeCollectorTrait(FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder): void
+    {
         $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
     }
 }

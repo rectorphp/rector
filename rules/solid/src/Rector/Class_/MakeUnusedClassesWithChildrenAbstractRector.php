@@ -9,12 +9,23 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector\MakeUnusedClassesWithChildrenAbstractRectorTest
  */
 final class MakeUnusedClassesWithChildrenAbstractRector extends AbstractRector
 {
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
+    public function __construct(NodeRepository $nodeRepository)
+    {
+        $this->nodeRepository = $nodeRepository;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Classes that have no children nor are used, should have abstract', [
@@ -61,7 +72,7 @@ PHP
         }
 
         // 1. is in static call?
-        if ($this->functionLikeParsedNodesFinder->findMethodCallsOnClass($className) !== []) {
+        if ($this->nodeRepository->findMethodCallsOnClass($className) !== []) {
             return null;
         }
 
@@ -71,7 +82,7 @@ PHP
         }
 
         // 3. does it have any children
-        if ($this->classLikeParsedNodesFinder->findChildrenOfClass($className) === []) {
+        if ($this->nodeRepository->findChildrenOfClass($className) === []) {
             return null;
         }
 

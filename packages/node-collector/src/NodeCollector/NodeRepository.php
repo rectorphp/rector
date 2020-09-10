@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeCollector\NodeCollector;
 
 use Nette\Utils\Arrays;
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
@@ -12,9 +13,13 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -89,16 +94,23 @@ final class NodeRepository
      */
     private $parsedClassConstFetchNodeCollector;
 
+    /**
+     * @var ParsedNodeCollector
+     */
+    private $parsedNodeCollector;
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
         NodeNameResolver $nodeNameResolver,
-        ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector
+        ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector,
+        ParsedNodeCollector $parsedNodeCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
         $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
         $this->parsedClassConstFetchNodeCollector = $parsedClassConstFetchNodeCollector;
+        $this->parsedNodeCollector = $parsedNodeCollector;
     }
 
     /**
@@ -327,6 +339,108 @@ final class NodeRepository
         return [];
     }
 
+    public function hasClassChildren(Class_ $desiredClass): bool
+    {
+        $desiredClassName = $desiredClass->getAttribute(AttributeKey::CLASS_NAME);
+        if ($desiredClassName === null) {
+            return false;
+        }
+
+        foreach ($this->parsedNodeCollector->getClasses() as $classNode) {
+            $currentClassName = $classNode->getAttribute(AttributeKey::CLASS_NAME);
+            if ($currentClassName === null) {
+                continue;
+            }
+
+            if (! $this->isChildOrEqualClassLike($desiredClassName, $currentClassName)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return Class_[]
+     */
+    public function findClassesBySuffix(string $suffix): array
+    {
+        $classNodes = [];
+
+        foreach ($this->parsedNodeCollector->getClasses() as $className => $classNode) {
+            if (! Strings::endsWith($className, $suffix)) {
+                continue;
+            }
+
+            $classNodes[] = $classNode;
+        }
+
+        return $classNodes;
+    }
+
+    /**
+     * @return Trait_[]
+     */
+    public function findUsedTraitsInClass(ClassLike $classLike): array
+    {
+        $traits = [];
+
+        foreach ($classLike->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $trait) {
+                $traitName = $this->nodeNameResolver->getName($trait);
+                if ($traitName === null) {
+                    continue;
+                }
+
+                $foundTrait = $this->parsedNodeCollector->findTrait($traitName);
+                if ($foundTrait !== null) {
+                    $traits[] = $foundTrait;
+                }
+            }
+        }
+
+        return $traits;
+    }
+
+    /**
+     * @return Class_[]|Interface_[]
+     */
+    public function findClassesAndInterfacesByType(string $type): array
+    {
+        return array_merge($this->findChildrenOfClass($type), $this->findImplementersOfInterface($type));
+    }
+
+    /**
+     * @return Class_[]
+     */
+    public function findChildrenOfClass(string $class): array
+    {
+        $childrenClasses = [];
+
+        foreach ($this->parsedNodeCollector->getClasses() as $classNode) {
+            $currentClassName = $classNode->getAttribute(AttributeKey::CLASS_NAME);
+            if (! $this->isChildOrEqualClassLike($class, $currentClassName)) {
+                continue;
+            }
+
+            $childrenClasses[] = $classNode;
+        }
+
+        return $childrenClasses;
+    }
+
+    public function findInterface(string $class): ?Interface_
+    {
+        return $this->parsedNodeCollector->findInterface($class);
+    }
+
+    public function findClass(string $name): ?Class_
+    {
+        return $this->parsedNodeCollector->findClass($name);
+    }
+
     private function addMethod(ClassMethod $classMethod): void
     {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
@@ -408,5 +522,38 @@ final class NodeRepository
                 $this->callsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
             }
         }
+    }
+
+    private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName): bool
+    {
+        if ($currentClassName === null) {
+            return false;
+        }
+
+        if (! is_a($currentClassName, $desiredClass, true)) {
+            return false;
+        }
+
+        return $currentClassName !== $desiredClass;
+    }
+
+    /**
+     * @return Interface_[]
+     */
+    private function findImplementersOfInterface(string $interface): array
+    {
+        $implementerInterfaces = [];
+
+        foreach ($this->parsedNodeCollector->getInterfaces() as $interfaceNode) {
+            $className = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
+
+            if (! $this->isChildOrEqualClassLike($interface, $className)) {
+                continue;
+            }
+
+            $implementerInterfaces[] = $interfaceNode;
+        }
+
+        return $implementerInterfaces;
     }
 }

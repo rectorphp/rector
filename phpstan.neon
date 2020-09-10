@@ -436,3 +436,6 @@ parameters:
 
         # the smallest descriptive method
         - '#Variable "\$inverseJoinColumnsOpeningAndClosingSpace" is too long with \d+ chars\. Narrow it under 40 chars#'
+
+        # complex - single repository for all nodes
+        - '#Class cognitive complexity for "NodeRepository" is \d+, keep it under 50#'

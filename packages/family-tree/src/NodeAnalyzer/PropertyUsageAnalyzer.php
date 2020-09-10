@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -22,11 +22,6 @@ final class PropertyUsageAnalyzer
     private $nodeNameResolver;
 
     /**
-     * @var ClassLikeParsedNodesFinder
-     */
-    private $classLikeParsedNodesFinder;
-
-    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -36,16 +31,21 @@ final class PropertyUsageAnalyzer
      */
     private $familyRelationsAnalyzer;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
         FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        NodeRepository $nodeRepository
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function isPropertyFetchedInChildClass(Property $property): bool
@@ -67,7 +67,7 @@ final class PropertyUsageAnalyzer
 
         $childrenClassNames = $this->familyRelationsAnalyzer->getChildrenOfClass($className);
         foreach ($childrenClassNames as $childClassName) {
-            $childClass = $this->classLikeParsedNodesFinder->findClass($childClassName);
+            $childClass = $this->nodeRepository->findClass($childClassName);
             if ($childClass === null) {
                 continue;
             }

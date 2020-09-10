@@ -18,7 +18,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\SelfObjectType;
@@ -27,11 +27,6 @@ use Rector\TypeDeclaration\ValueObject\NewType;
 
 final class ChildParamPopulator
 {
-    /**
-     * @var ClassLikeParsedNodesFinder
-     */
-    private $classLikeParsedNodesFinder;
-
     /**
      * @var StaticTypeMapper
      */
@@ -47,16 +42,21 @@ final class ChildParamPopulator
      */
     private $rectorChangeCollector;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
         NodeNameResolver $nodeNameResolver,
         RectorChangeCollector $rectorChangeCollector,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        NodeRepository $nodeRepository
     ) {
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->rectorChangeCollector = $rectorChangeCollector;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -76,12 +76,12 @@ final class ChildParamPopulator
             return;
         }
 
-        $childrenClassLikes = $this->classLikeParsedNodesFinder->findClassesAndInterfacesByType($className);
+        $childrenClassLikes = $this->nodeRepository->findClassesAndInterfacesByType($className);
 
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
             if ($childClassLike instanceof Class_) {
-                $usedTraits = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($childClassLike);
+                $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childClassLike);
 
                 foreach ($usedTraits as $trait) {
                     $this->addParamTypeToMethod($trait, $position, $functionLike, $paramType);

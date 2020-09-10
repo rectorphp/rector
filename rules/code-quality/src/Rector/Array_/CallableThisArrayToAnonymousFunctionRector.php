@@ -26,6 +26,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -37,6 +38,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
+    public function __construct(NodeRepository $nodeRepository)
+    {
+        $this->nodeRepository = $nodeRepository;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Convert [$this, "method"] to proper anonymous function', [
@@ -150,7 +161,7 @@ PHP
         $objectType = $this->popFirstObjectType($objectType);
 
         if ($objectType instanceof ObjectType) {
-            $class = $this->classLikeParsedNodesFinder->findClass($objectType->getClassName());
+            $class = $this->nodeRepository->findClass($objectType->getClassName());
 
             if ($class === null) {
                 return null;

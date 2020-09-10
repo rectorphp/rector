@@ -15,7 +15,6 @@ use Rector\DoctrineCodeQuality\NodeAnalyzer\ColumnDatetimePropertyAnalyzer;
 use Rector\DoctrineCodeQuality\NodeFactory\ValueAssignFactory;
 use Rector\DoctrineCodeQuality\NodeManipulator\ColumnDatetimePropertyManipulator;
 use Rector\DoctrineCodeQuality\NodeManipulator\ConstructorManipulator;
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
 
 /**
  * @sponsor Thanks https://www.luzanky.cz/ for sponsoring this rule
@@ -47,13 +46,11 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends Abstra
     private $columnDatetimePropertyManipulator;
 
     public function __construct(
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
         ColumnDatetimePropertyAnalyzer $columnDatetimePropertyAnalyzer,
         ConstructorManipulator $constructorManipulator,
         ValueAssignFactory $valueAssignFactory,
         ColumnDatetimePropertyManipulator $columnDatetimePropertyManipulator
     ) {
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->columnDatetimePropertyAnalyzer = $columnDatetimePropertyAnalyzer;
         $this->constructorManipulator = $constructorManipulator;
         $this->valueAssignFactory = $valueAssignFactory;

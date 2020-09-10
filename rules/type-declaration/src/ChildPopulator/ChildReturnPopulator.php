@@ -15,7 +15,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\SelfObjectType;
@@ -29,23 +29,23 @@ final class ChildReturnPopulator
     private $nodeNameResolver;
 
     /**
-     * @var ClassLikeParsedNodesFinder
-     */
-    private $classLikeParsedNodesFinder;
-
-    /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        NodeRepository $nodeRepository
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -63,14 +63,14 @@ final class ChildReturnPopulator
             throw new ShouldNotHappenException();
         }
 
-        $childrenClassLikes = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
+        $childrenClassLikes = $this->nodeRepository->findChildrenOfClass($className);
         if ($childrenClassLikes === []) {
             return;
         }
 
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
-            $usedTraits = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($childClassLike);
+            $usedTraits = $this->nodeRepository->findUsedTraitsInClass($childClassLike);
             foreach ($usedTraits as $trait) {
                 $this->addReturnTypeToChildMethod($trait, $classMethod, $returnType);
             }

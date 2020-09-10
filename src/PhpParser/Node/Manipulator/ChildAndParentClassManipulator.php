@@ -9,8 +9,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -27,25 +27,25 @@ final class ChildAndParentClassManipulator
     private $nodeNameResolver;
 
     /**
-     * @var ClassLikeParsedNodesFinder
-     */
-    private $classLikeParsedNodesFinder;
-
-    /**
      * @var ParsedNodeCollector
      */
     private $parsedNodeCollector;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
         NodeFactory $nodeFactory,
         NodeNameResolver $nodeNameResolver,
-        ParsedNodeCollector $parsedNodeCollector
+        ParsedNodeCollector $parsedNodeCollector,
+        NodeRepository $nodeRepository
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->parsedNodeCollector = $parsedNodeCollector;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -80,7 +80,7 @@ final class ChildAndParentClassManipulator
             return;
         }
 
-        $childClassNodes = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
+        $childClassNodes = $this->nodeRepository->findChildrenOfClass($className);
 
         foreach ($childClassNodes as $childClassNode) {
             $childConstructorClassMethod = $childClassNode->getMethod(MethodName::CONSTRUCT);

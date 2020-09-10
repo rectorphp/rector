@@ -80,7 +80,7 @@ PHP
         }
 
         // 0. constants declared in interfaces have to be public
-        if ($this->classLikeParsedNodesFinder->findInterface($class) !== null) {
+        if ($this->nodeRepository->findInterface($class) !== null) {
             $this->makePublic($node);
             return $node;
         }

@@ -14,7 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use ReflectionClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -36,14 +36,19 @@ final class RemoveUselessJustForSakeInterfaceRector extends AbstractRector
      */
     private $renamedClassesCollector;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         RenamedClassesCollector $renamedClassesCollector,
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
+        NodeRepository $nodeRepository,
         string $interfacePattern = '#(.*?)#'
     ) {
         $this->interfacePattern = $interfacePattern;
         $this->renamedClassesCollector = $renamedClassesCollector;
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -173,7 +178,7 @@ CODE_SAMPLE
     private function removeInterfaceFile(string $interfaceName, string $classFileLocation): void
     {
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            $interface = $this->classLikeParsedNodesFinder->findInterface($interfaceName);
+            $interface = $this->nodeRepository->findInterface($interfaceName);
             if ($interface instanceof Interface_) {
                 $this->removeNode($interface);
             }

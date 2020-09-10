@@ -17,6 +17,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeManipulator\MagicMethodDetector;
 use Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -47,16 +48,23 @@ final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCa
      */
     private $variadicFunctionLikeDetector;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         ClassManipulator $classManipulator,
         ClassMethodManipulator $classMethodManipulator,
         MagicMethodDetector $magicMethodDetector,
-        VariadicFunctionLikeDetector $variadicFunctionLikeDetector
+        VariadicFunctionLikeDetector $variadicFunctionLikeDetector,
+        NodeRepository $nodeRepository
     ) {
         $this->classManipulator = $classManipulator;
         $this->classMethodManipulator = $classMethodManipulator;
         $this->magicMethodDetector = $magicMethodDetector;
         $this->variadicFunctionLikeDetector = $variadicFunctionLikeDetector;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -114,7 +122,7 @@ PHP
             return null;
         }
 
-        $childrenOfClass = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
+        $childrenOfClass = $this->nodeRepository->findChildrenOfClass($className);
         $unusedParameters = $this->getUnusedParameters($node, $methodName, $childrenOfClass);
         if ($unusedParameters === []) {
             return null;
