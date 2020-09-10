@@ -24,7 +24,6 @@ use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\Core\Skip\Skipper;
-use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -114,11 +113,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $previousAppliedClass;
 
     /**
-     * @var CurrentFileInfoProvider
-     */
-    private $currentFileInfoProvider;
-
-    /**
      * @var Skipper
      */
     private $skipper;
@@ -137,7 +131,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         CurrentRectorProvider $currentRectorProvider,
         ClassNodeAnalyzer $classNodeAnalyzer,
         CurrentNodeProvider $currentNodeProvider,
-        CurrentFileInfoProvider $currentFileInfoProvider,
         Skipper $skipper
     ): void {
         $this->symfonyStyle = $symfonyStyle;
@@ -211,8 +204,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
-        $currentFileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
-        if ($this->skipper->shouldSkipFileInfoAndRule($currentFileInfo, $this)) {
+        if ($node instanceof SmartFileInfo && $this->skipper->shouldSkipFileInfoAndRule($node)) {
             return null;
         }
 
