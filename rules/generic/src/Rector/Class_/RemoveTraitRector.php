@@ -60,7 +60,8 @@ PHP
 class SomeClass
 {
 }
-PHP,
+PHP
+,
                 [
                     self::TRAITS_TO_REMOVE => ['TraitNameToRemove'],
                 ]

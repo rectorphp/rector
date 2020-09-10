@@ -81,7 +81,8 @@ class SomeClass
         return \AnotherClass::class;
     }
 }
-PHP,
+PHP
+,
                 [
                     self::CLASSES_TO_SKIP => ['ClassName', 'AnotherClassName'],
                 ]

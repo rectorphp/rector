@@ -54,14 +54,16 @@ final class AddTopIncludeRector extends AbstractFileSystemRector implements Conf
 if (isset($_POST['csrf'])) {
     processPost($_POST);
 }
-PHP,
+PHP
+,
                 <<<'PHP'
 require_once __DIR__ . '/../autoloader.php';
 
 if (isset($_POST['csrf'])) {
     processPost($_POST);
 }
-PHP,
+PHP
+,
                 [
                     self::class => [
                         self::AUTOLOAD_FILE_PATH => '/../autoloader.php',

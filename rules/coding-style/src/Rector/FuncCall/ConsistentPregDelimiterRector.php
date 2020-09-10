@@ -89,7 +89,8 @@ class SomeClass
         preg_match_all('#value#im', $value);
     }
 }
-PHP,
+PHP
+,
                 [
                     self::DELIMITER => '#',
                 ]

@@ -44,7 +44,8 @@ class SomeClass
         return new static();
     }
 }
-PHP,
+PHP
+,
                     [
                         self::ADD_DOC_BLOCK => true,
                     ]

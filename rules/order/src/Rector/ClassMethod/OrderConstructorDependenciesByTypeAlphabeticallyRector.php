@@ -63,7 +63,8 @@ class SomeClass
     ) {
     }
 }
-PHP,
+PHP
+,
                 [
                     self::SKIP_PATTERNS => ['Cla*ame', 'Ano?herClassName'],
                 ]

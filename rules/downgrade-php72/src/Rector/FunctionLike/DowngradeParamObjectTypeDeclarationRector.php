@@ -41,7 +41,8 @@ class SomeClass
     {
     }
 }
-PHP,
+PHP
+,
                     [
                         self::ADD_DOC_BLOCK => true,
                     ]

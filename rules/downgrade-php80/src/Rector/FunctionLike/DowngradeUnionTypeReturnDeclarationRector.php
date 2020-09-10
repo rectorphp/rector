@@ -54,7 +54,8 @@ class SomeClass
         return 'Hello world';
     }
 }
-PHP,
+PHP
+,
                     [
                         self::ADD_DOC_BLOCK => true,
                     ]

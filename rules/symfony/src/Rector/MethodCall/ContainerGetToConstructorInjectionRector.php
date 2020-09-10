@@ -64,7 +64,8 @@ final class SomeCommand extends Command
         $this->someService;
     }
 }
-PHP,
+PHP
+,
                     [
                         self::CONTAINER_AWARE_PARENT_TYPES => [
                             'ContainerAwareParentClassName',

@@ -50,7 +50,8 @@ class SomeClass
         $array = new \Collection([]);
     }
 }
-PHP,
+PHP
+,
                 [
                     self::FUNCTION_TO_NEW => [
                         'collection' => ['Collection'],

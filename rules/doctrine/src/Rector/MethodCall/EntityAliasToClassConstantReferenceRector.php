@@ -57,7 +57,8 @@ PHP
 <<<'PHP'
 $entityManager = new Doctrine\ORM\EntityManager();
 $entityManager->getRepository(\App\Entity\Post::class);
-PHP,
+PHP
+,
                 [
                     self::ALIASES_TO_NAMESPACES => [
                         'App' => 'App\Entity',

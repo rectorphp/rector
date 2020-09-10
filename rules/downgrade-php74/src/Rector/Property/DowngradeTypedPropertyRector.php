@@ -33,7 +33,8 @@ class SomeClass
     */
     private $property;
 }
-PHP,
+PHP
+,
                 [
                     self::ADD_DOC_BLOCK => true,
                 ]

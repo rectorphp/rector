@@ -46,7 +46,8 @@ class SomeClass
         echo $input;
     }
 }
-PHP,
+PHP
+,
                     [
                         self::ADD_DOC_BLOCK => true,
                     ]
