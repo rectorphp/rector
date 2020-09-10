@@ -9,23 +9,12 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector\MakeUnusedClassesWithChildrenAbstractRectorTest
  */
 final class MakeUnusedClassesWithChildrenAbstractRector extends AbstractRector
 {
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(NodeRepository $nodeRepository)
-    {
-        $this->nodeRepository = $nodeRepository;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Classes that have no children nor are used, should have abstract', [

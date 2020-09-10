@@ -228,12 +228,12 @@ PHP
     private function findClassMethod(Node $node): ?ClassMethod
     {
         if ($node instanceof MethodCall) {
-            $classMethod = $this->functionLikeParsedNodesFinder->findClassMethodByMethodCall($node);
+            $classMethod = $this->nodeRepository->findClassMethodByMethodCall($node);
             if ($classMethod !== null) {
                 return $classMethod;
             }
         } elseif ($node instanceof StaticCall) {
-            $classMethod = $this->functionLikeParsedNodesFinder->findClassMethodByStaticCall($node);
+            $classMethod = $this->nodeRepository->findClassMethodByStaticCall($node);
             if ($classMethod !== null) {
                 return $classMethod;
             }

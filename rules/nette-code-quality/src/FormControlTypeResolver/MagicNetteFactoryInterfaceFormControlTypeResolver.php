@@ -12,18 +12,13 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\Contract\MethodNamesByInputNamesResolverAwareInterface;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
-use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormControlTypeResolverInterface, MethodNamesByInputNamesResolverAwareInterface
 {
-    /**
-     * @var FunctionLikeParsedNodesFinder
-     */
-    private $functionLikeParsedNodesFinder;
-
     /**
      * @var NodeTypeResolver
      */
@@ -39,14 +34,19 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
      */
     private $nodeNameResolver;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
+        NodeRepository $nodeRepository,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -63,7 +63,7 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
             return [];
         }
 
-        $classMethod = $this->functionLikeParsedNodesFinder->findClassMethodByMethodCall($node);
+        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($node);
         if ($classMethod === null) {
             return [];
         }
@@ -80,9 +80,9 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormCon
             return [];
         }
 
-        $constructorClassMethod = $this->functionLikeParsedNodesFinder->findClassMethod(
-            MethodName::CONSTRUCT,
-            $returnedType->getClassName()
+        $constructorClassMethod = $this->nodeRepository->findClassMethod(
+            $returnedType->getClassName(),
+            MethodName::CONSTRUCT
         );
 
         if ($constructorClassMethod === null) {

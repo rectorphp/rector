@@ -10,7 +10,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\Contract\MethodNamesByInputNamesResolverAwareInterface;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
-use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class NewFormControlTypeResolver implements FormControlTypeResolverInterface, MethodNamesByInputNamesResolverAwareInterface
@@ -21,21 +21,19 @@ final class NewFormControlTypeResolver implements FormControlTypeResolverInterfa
     private $nodeNameResolver;
 
     /**
-     * @var FunctionLikeParsedNodesFinder
-     */
-    private $functionLikeParsedNodesFinder;
-
-    /**
      * @var MethodNamesByInputNamesResolver
      */
     private $methodNamesByInputNamesResolver;
 
-    public function __construct(
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
-        NodeNameResolver $nodeNameResolver
-    ) {
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -52,10 +50,7 @@ final class NewFormControlTypeResolver implements FormControlTypeResolverInterfa
             return [];
         }
 
-        $constructorClassMethod = $this->functionLikeParsedNodesFinder->findClassMethod(
-            MethodName::CONSTRUCT,
-            $className
-        );
+        $constructorClassMethod = $this->nodeRepository->findClassMethod($className, MethodName::CONSTRUCT);
         if ($constructorClassMethod === null) {
             return [];
         }

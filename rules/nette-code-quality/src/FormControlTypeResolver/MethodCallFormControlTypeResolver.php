@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\NetteCodeQuality\Contract\FormControlTypeResolverInterface;
 use Rector\NetteCodeQuality\Contract\MethodNamesByInputNamesResolverAwareInterface;
 use Rector\NetteCodeQuality\NodeResolver\MethodNamesByInputNamesResolver;
-use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class MethodCallFormControlTypeResolver implements FormControlTypeResolverInterface, MethodNamesByInputNamesResolverAwareInterface
@@ -20,21 +20,19 @@ final class MethodCallFormControlTypeResolver implements FormControlTypeResolver
     private $nodeNameResolver;
 
     /**
-     * @var FunctionLikeParsedNodesFinder
-     */
-    private $functionLikeParsedNodesFinder;
-
-    /**
      * @var MethodNamesByInputNamesResolver
      */
     private $methodNamesByInputNamesResolver;
 
-    public function __construct(
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
-        NodeNameResolver $nodeNameResolver
-    ) {
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
+    {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -50,7 +48,7 @@ final class MethodCallFormControlTypeResolver implements FormControlTypeResolver
             return [];
         }
 
-        $classMethod = $this->functionLikeParsedNodesFinder->findClassMethodByMethodCall($node);
+        $classMethod = $this->nodeRepository->findClassMethodByMethodCall($node);
         if ($classMethod === null) {
             return [];
         }

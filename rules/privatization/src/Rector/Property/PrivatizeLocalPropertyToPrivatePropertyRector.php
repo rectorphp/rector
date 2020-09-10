@@ -12,7 +12,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VendorLocker\NodeVendorLocker\PropertyVisibilityVendorLockResolver;
 
@@ -37,16 +36,8 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
      */
     private $propertyVisibilityVendorLockResolver;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
-    public function __construct(
-        NodeRepository $nodeRepository,
-        PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver
-    ) {
-        $this->nodeRepository = $nodeRepository;
+    public function __construct(PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver)
+    {
         $this->propertyVisibilityVendorLockResolver = $propertyVisibilityVendorLockResolver;
     }
 

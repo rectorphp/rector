@@ -157,7 +157,7 @@ PHP
             return [];
         }
 
-        $classMethodNode = $this->functionLikeParsedNodesFinder->findClassMethod($nodeName, $className);
+        $classMethodNode = $this->nodeRepository->findClassMethod($className, $nodeName);
         if ($classMethodNode !== null) {
             return $this->resolveDefaultParamValuesFromFunctionLike($classMethodNode);
         }
@@ -218,7 +218,7 @@ PHP
      */
     private function resolveFuncCallDefaultParamValues(string $nodeName): array
     {
-        $functionNode = $this->functionLikeParsedNodesFinder->findFunction($nodeName);
+        $functionNode = $this->nodeRepository->findFunction($nodeName);
         if ($functionNode !== null) {
             return $this->resolveDefaultParamValuesFromFunctionLike($functionNode);
         }

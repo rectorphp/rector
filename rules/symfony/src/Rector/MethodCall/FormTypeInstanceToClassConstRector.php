@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\Symfony\NodeFactory\BuilderFormNodeFactory;
 use Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory;
 use ReflectionClass;
@@ -53,19 +52,12 @@ final class FormTypeInstanceToClassConstRector extends AbstractFormAddRector
      */
     private $configureOptionsNodeFactory;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
         BuilderFormNodeFactory $builderFormNodeFactory,
-        ConfigureOptionsNodeFactory $configureOptionsNodeFactory,
-        NodeRepository $nodeRepository
+        ConfigureOptionsNodeFactory $configureOptionsNodeFactory
     ) {
         $this->builderFormNodeFactory = $builderFormNodeFactory;
         $this->configureOptionsNodeFactory = $configureOptionsNodeFactory;
-        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition

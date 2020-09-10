@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Rector\AbstractRector;
 
-use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -13,15 +13,15 @@ use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 trait NodeCollectorTrait
 {
     /**
-     * @var FunctionLikeParsedNodesFinder
+     * @var NodeRepository
      */
-    protected $functionLikeParsedNodesFinder;
+    protected $nodeRepository;
 
     /**
      * @required
      */
-    public function autowireNodeCollectorTrait(FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder): void
+    public function autowireNodeCollectorTrait(NodeRepository $nodeRepository): void
     {
-        $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
     }
 }

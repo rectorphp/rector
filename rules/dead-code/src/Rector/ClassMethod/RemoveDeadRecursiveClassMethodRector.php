@@ -14,7 +14,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\NodeManipulator\ClassMethodAndCallMatcher;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodVendorLockResolver;
@@ -34,19 +33,12 @@ final class RemoveDeadRecursiveClassMethodRector extends AbstractRector implemen
      */
     private $classMethodVendorLockResolver;
 
-    /**
-     * @var NodeRepository
-     */
-    private $nodeRepository;
-
     public function __construct(
         ClassMethodAndCallMatcher $classMethodAndCallMatcher,
-        ClassMethodVendorLockResolver $classMethodVendorLockResolver,
-        NodeRepository $nodeRepository
+        ClassMethodVendorLockResolver $classMethodVendorLockResolver
     ) {
         $this->classMethodAndCallMatcher = $classMethodAndCallMatcher;
         $this->classMethodVendorLockResolver = $classMethodVendorLockResolver;
-        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition

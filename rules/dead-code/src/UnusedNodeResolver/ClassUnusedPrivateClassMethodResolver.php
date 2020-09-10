@@ -7,7 +7,7 @@ namespace Rector\DeadCode\UnusedNodeResolver;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use ReflectionMethod;
 
@@ -24,18 +24,18 @@ final class ClassUnusedPrivateClassMethodResolver
     private $classManipulator;
 
     /**
-     * @var FunctionLikeParsedNodesFinder
+     * @var NodeRepository
      */
-    private $functionLikeParsedNodesFinder;
+    private $nodeRepository;
 
     public function __construct(
         ClassManipulator $classManipulator,
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        NodeRepository $nodeRepository
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classManipulator = $classManipulator;
-        $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -46,7 +46,7 @@ final class ClassUnusedPrivateClassMethodResolver
         /** @var string $className */
         $className = $this->nodeNameResolver->getName($class);
 
-        $classMethodCalls = $this->functionLikeParsedNodesFinder->findMethodCallsOnClass($className);
+        $classMethodCalls = $this->nodeRepository->findMethodCallsOnClass($className);
 
         $usedMethodNames = array_keys($classMethodCalls);
         $classPublicMethodNames = $this->classManipulator->getPublicMethodNames($class);
