@@ -31,10 +31,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     # so Rector code is still PHP 7.2 compatible
     $parameters->set(Option::PHP_VERSION_FEATURES, '7.2');
-
-    $parameters->set(Option::SKIP, [
-        Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector::class => [
-           __DIR__ . '/SomePath'
-        ]
-     ]);
 };
