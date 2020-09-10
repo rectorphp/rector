@@ -5,25 +5,25 @@ declare(strict_types=1);
 namespace Rector\NodeCollector;
 
 use Nette\Utils\Strings;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use ReflectionClass;
 
 final class StaticAnalyzer
 {
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
-    public function __construct(ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector)
+    public function __construct(NodeRepository $nodeRepository)
     {
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function isStaticMethod(string $methodName, string $className): bool
     {
-        $classMethod = $this->parsedFunctionLikeNodeCollector->findMethod($methodName, $className);
+        $classMethod = $this->nodeRepository->findMethod($methodName, $className);
         if ($classMethod !== null) {
             return $classMethod->isStatic();
         }

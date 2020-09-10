@@ -11,7 +11,7 @@ use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeFinder\ClassConstParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -20,13 +20,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RemoveUnusedClassConstantRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
-     * @var ClassConstParsedNodesFinder
+     * @var NodeRepository
      */
-    private $classConstParsedNodesFinder;
+    private $nodeRepository;
 
-    public function __construct(ClassConstParsedNodesFinder $classConstParsedNodesFinder)
+    public function __construct(NodeRepository $nodeRepository)
     {
-        $this->classConstParsedNodesFinder = $classConstParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -88,12 +88,12 @@ PHP
         /** @var string $constant */
         $constant = $this->getName($node);
 
-        $directUseClasses = $this->classConstParsedNodesFinder->findDirectClassConstantFetches($class, $constant);
+        $directUseClasses = $this->nodeRepository->findDirectClassConstantFetches($class, $constant);
         if ($directUseClasses !== []) {
             return null;
         }
 
-        $indirectUseClasses = $this->classConstParsedNodesFinder->findIndirectClassConstantFetches($class, $constant);
+        $indirectUseClasses = $this->nodeRepository->findIndirectClassConstantFetches($class, $constant);
         if ($indirectUseClasses !== []) {
             return null;
         }

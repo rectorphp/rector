@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -21,13 +21,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RemoveUnusedPrivateMethodRector extends AbstractRector
 {
     /**
-     * @var MethodCallParsedNodesFinder
+     * @var NodeRepository
      */
-    private $methodCallParsedNodesFinder;
+    private $nodeRepository;
 
-    public function __construct(MethodCallParsedNodesFinder $methodCallParsedNodesFinder)
+    public function __construct(NodeRepository $nodeRepository)
     {
-        $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -79,8 +79,8 @@ PHP
             return null;
         }
 
-        $classMethodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($node);
-        if ($classMethodCalls !== []) {
+        $calls = $this->nodeRepository->findCallsByClassMethod($node);
+        if ($calls !== []) {
             return null;
         }
 

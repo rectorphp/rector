@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -21,13 +21,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class LocallyCalledStaticMethodToNonStaticRector extends AbstractRector
 {
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
-    public function __construct(ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector)
+    public function __construct(NodeRepository $nodeRepository)
     {
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -105,7 +105,7 @@ PHP
 
     private function refactorStaticCall(StaticCall $staticCall): ?MethodCall
     {
-        $classMethod = $this->parsedFunctionLikeNodeCollector->findClassMethodByStaticCall($staticCall);
+        $classMethod = $this->nodeRepository->findClassMethodByStaticCall($staticCall);
         if ($classMethod === null) {
             return null;
         }
@@ -121,7 +121,7 @@ PHP
 
     private function isClassMethodWithOnlyLocalStaticCalls(ClassMethod $classMethod): bool
     {
-        $staticCalls = $this->parsedFunctionLikeNodeCollector->findStaticCallsByClassMethod($classMethod);
+        $staticCalls = $this->nodeRepository->findStaticCallsByClassMethod($classMethod);
 
         // get static staticCalls
         return $this->haveSharedClass($classMethod, $staticCalls);

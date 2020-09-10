@@ -8,7 +8,7 @@ use Nette\Application\UI\Control;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -20,20 +20,18 @@ final class OnPropertyMagicCallProvider
     private $onPropertyMagicCalls = [];
 
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
     /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
 
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector
-    ) {
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
+    {
+        $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -46,7 +44,7 @@ final class OnPropertyMagicCallProvider
             return $this->onPropertyMagicCalls;
         }
 
-        foreach ($this->parsedFunctionLikeNodeCollector->getMethodsCalls() as $methodCall) {
+        foreach ($this->nodeRepository->getMethodsCalls() as $methodCall) {
             if (! $this->isLocalOnPropertyCall($methodCall)) {
                 continue;
             }

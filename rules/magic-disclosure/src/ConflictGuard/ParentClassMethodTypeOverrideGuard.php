@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -20,9 +20,9 @@ final class ParentClassMethodTypeOverrideGuard
     private $reflectionProvider;
 
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
     /**
      * @var NodeNameResolver
@@ -31,11 +31,11 @@ final class ParentClassMethodTypeOverrideGuard
 
     public function __construct(
         ReflectionProvider $reflectionProvider,
-        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector,
+        NodeRepository $nodeRepository,
         NodeNameResolver $nodeNameResolver
     ) {
         $this->reflectionProvider = $reflectionProvider;
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -49,7 +49,7 @@ final class ParentClassMethodTypeOverrideGuard
             return true;
         }
 
-        $parentClassMethod = $this->parsedFunctionLikeNodeCollector->findClassMethodByMethodReflection(
+        $parentClassMethod = $this->nodeRepository->findClassMethodByMethodReflection(
             $parentClassMethodReflection
         );
 

@@ -20,9 +20,9 @@ use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
-use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
@@ -55,25 +55,25 @@ trait ComplexRemovalTrait
     private $propertyManipulator;
 
     /**
-     * @var MethodCallParsedNodesFinder
+     * @var NodeRepository
      */
-    private $methodCallParsedNodesFinder;
+    private $nodeRepository;
 
     /**
      * @required
      */
     public function autowireComplextRemovalTrait(
+        NodeRepository $nodeRepository,
         PropertyManipulator $propertyManipulator,
         ParsedNodeCollector $parsedNodeCollector,
         LivingCodeManipulator $livingCodeManipulator,
-        BetterStandardPrinter $betterStandardPrinter,
-        MethodCallParsedNodesFinder $methodCallParsedNodesFinder
+        BetterStandardPrinter $betterStandardPrinter
     ): void {
         $this->parsedNodeCollector = $parsedNodeCollector;
+        $this->nodeRepository = $nodeRepository;
         $this->propertyManipulator = $propertyManipulator;
         $this->livingCodeManipulator = $livingCodeManipulator;
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
     }
 
     abstract protected function removeNode(Node $node): void;
@@ -82,8 +82,8 @@ trait ComplexRemovalTrait
     {
         $this->removeNode($classMethod);
 
-        $classMethodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($classMethod);
-        foreach ($classMethodCalls as $classMethodCall) {
+        $calls = $this->nodeRepository->findCallsByClassMethod($classMethod);
+        foreach ($calls as $classMethodCall) {
             if ($classMethodCall instanceof ArrayCallable) {
                 continue;
             }

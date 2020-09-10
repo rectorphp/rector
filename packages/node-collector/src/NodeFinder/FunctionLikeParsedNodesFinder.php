@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -28,9 +28,9 @@ final class FunctionLikeParsedNodesFinder
     private $nodeTypeResolver;
 
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
     /**
      * @var TypeUnwrapper
@@ -40,12 +40,12 @@ final class FunctionLikeParsedNodesFinder
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector,
+        NodeRepository $nodeRepository,
         TypeUnwrapper $typeUnwrapper
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $nodeRepository;
         $this->typeUnwrapper = $typeUnwrapper;
     }
 
@@ -86,12 +86,12 @@ final class FunctionLikeParsedNodesFinder
 
     public function findFunction(string $name): ?Function_
     {
-        return $this->parsedFunctionLikeNodeCollector->findFunction($name);
+        return $this->nodeRepository->findFunction($name);
     }
 
     public function findClassMethod(string $methodName, string $className): ?ClassMethod
     {
-        return $this->parsedFunctionLikeNodeCollector->findMethod($className, $methodName);
+        return $this->nodeRepository->findMethod($className, $methodName);
     }
 
     /**
@@ -99,7 +99,7 @@ final class FunctionLikeParsedNodesFinder
      */
     public function findMethodCallsOnClass(string $className): array
     {
-        return $this->parsedFunctionLikeNodeCollector->findMethodCallsOnClass($className);
+        return $this->nodeRepository->findMethodCallsOnClass($className);
     }
 
     private function resolveCallerClassName(MethodCall $methodCall): ?string
