@@ -219,6 +219,31 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 Move value object to ValueObject namespace/directory
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
+        ->call('configure', [[
+            MoveValueObjectsToValueObjectDirectoryRector::TYPES => [
+                'ValueObjectInterfaceClassName']
+        ]])
+        ->call('configure', [[
+            MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => [
+                'Search']
+        ]])
+        ->call('configure', [[
+            MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true
+        ]]);
+};
+```
+
+↓
+
 ```diff
 -// app/Exception/Name.php
 +// app/ValueObject/Name.php
@@ -1795,6 +1820,23 @@ Changes various `implode` forms to consistent one
 
 Replace PREG delimiter with configured one
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ConsistentPregDelimiterRector::class)
+        ->call('configure', [[
+            ConsistentPregDelimiterRector::DELIMITER => '#'
+        ]]);
+};
+```
+
+↓
+
 ```diff
  class SomeClass
  {
@@ -1857,6 +1899,24 @@ include/require should be followed by absolute path
 
 Changes use of function calls to use constants
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(FunctionCallToConstantRector::class)
+        ->call('configure', [[
+            FunctionCallToConstantRector::FUNCTIONS_TO_CONSTANTS => [
+                'php_sapi_name' => 'PHP_SAPI']
+        ]]);
+};
+```
+
+↓
+
 ```diff
  class SomeClass
  {
@@ -1867,6 +1927,24 @@ Changes use of function calls to use constants
      }
  }
 ```
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(FunctionCallToConstantRector::class)
+        ->call('configure', [[
+            FunctionCallToConstantRector::FUNCTIONS_TO_CONSTANTS => [
+                'pi' => 'M_PI']
+        ]]);
+};
+```
+
+↓
 
 ```diff
  class SomeClass
@@ -3736,6 +3814,24 @@ Change param type of `setId()` to uuid interface
 
 Replaces doctrine alias with class.
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(EntityAliasToClassConstantReferenceRector::class)
+        ->call('configure', [[
+            EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => [
+                'App' => 'App\Entity']
+        ]]);
+};
+```
+
+↓
+
 ```diff
  $entityManager = new Doctrine\ORM\EntityManager();
 -$entityManager->getRepository("AppBundle:Post");
@@ -4492,6 +4588,23 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 
 Remove the 'object' param type, add a @param tag instead
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeParamObjectTypeDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeParamObjectTypeDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeParamObjectTypeDeclarationRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
+
 ```diff
  <?php
 
@@ -4515,6 +4628,23 @@ Remove the 'object' param type, add a @param tag instead
 - [test fixtures](/rules/downgrade-php72/tests/Rector/FunctionLike/DowngradeReturnObjectTypeDeclarationRector/Fixture)
 
 Remove the 'object' function type, add a @return tag instead
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp72\Rector\FunctionLike\DowngradeReturnObjectTypeDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeReturnObjectTypeDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeReturnObjectTypeDeclarationRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
 
 ```diff
  <?php
@@ -4581,6 +4711,23 @@ Remove null coalescing operator ??=
 
 Changes property type definition from type definitions to `@var` annotations.
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeTypedPropertyRector::class)
+        ->call('configure', [[
+            DowngradeTypedPropertyRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
+
 ```diff
  class SomeClass
  {
@@ -4602,6 +4749,23 @@ Changes property type definition from type definitions to `@var` annotations.
 - [test fixtures](/rules/downgrade-php80/tests/Rector/FunctionLike/DowngradeParamMixedTypeDeclarationRector/Fixture)
 
 Remove the 'mixed' param type, add a @param tag instead
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeParamMixedTypeDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeParamMixedTypeDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeParamMixedTypeDeclarationRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
 
 ```diff
  <?php
@@ -4626,6 +4790,23 @@ Remove the 'mixed' param type, add a @param tag instead
 - [test fixtures](/rules/downgrade-php80/tests/Rector/FunctionLike/DowngradeReturnMixedTypeDeclarationRector/Fixture)
 
 Remove the 'mixed' function type, add a @return tag instead
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnMixedTypeDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeReturnMixedTypeDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeReturnMixedTypeDeclarationRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
 
 ```diff
  <?php
@@ -4655,6 +4836,23 @@ Remove the 'mixed' function type, add a @return tag instead
 
 Remove the 'static' function type, add a @return tag instead
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeReturnStaticTypeDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeReturnStaticTypeDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeReturnStaticTypeDeclarationRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
+
 ```diff
  <?php
 
@@ -4680,6 +4878,23 @@ Remove the 'static' function type, add a @return tag instead
 
 Remove the union type params, add @param tags instead
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeUnionTypeParamDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeUnionTypeParamDeclarationRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
+
 ```diff
  <?php
 
@@ -4704,6 +4919,23 @@ Remove the union type params, add @param tags instead
 - [test fixtures](/rules/downgrade-php80/tests/Rector/FunctionLike/DowngradeUnionTypeReturnDeclarationRector/Fixture)
 
 Remove returning union types, add a @return tag instead
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeUnionTypeReturnDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeUnionTypeReturnDeclarationRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
 
 ```diff
  <?php
@@ -4732,6 +4964,23 @@ Remove returning union types, add a @return tag instead
 - [test fixtures](/rules/downgrade-php80/tests/Rector/Property/DowngradeUnionTypeTypedPropertyRector/Fixture)
 
 Removes union type property type definition, adding `@var` annotations instead.
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeUnionTypeTypedPropertyRector::class)
+        ->call('configure', [[
+            DowngradeUnionTypeTypedPropertyRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
 
 ```diff
  class SomeClass
@@ -4814,6 +5063,24 @@ Clean up probe that records argument types
 - class: [`Rector\FileSystemRector\Rector\Removing\RemoveProjectFileRector`](/packages/file-system-rector/src/Rector/Removing/RemoveProjectFileRector.php)
 
 Remove file relative to project directory
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\FileSystemRector\Rector\Removing\RemoveProjectFileRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(RemoveProjectFileRector::class)
+        ->call('configure', [[
+            RemoveProjectFileRector::FILE_PATHS_TO_REMOVE => [
+                'someFile/ToBeRemoved.txt']
+        ]]);
+};
+```
+
+↓
 
 ```diff
 -// someFile/ToBeRemoved.txt
@@ -5356,6 +5623,25 @@ Change null in argument, that is now not nullable anymore
 
 Change configured function calls to new Instance
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\FuncCall\FuncCallToNewRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(FuncCallToNewRector::class)
+        ->call('configure', [[
+            FuncCallToNewRector::FUNCTION_TO_NEW => [
+                'collection' => [
+                'Collection']]
+        ]]);
+};
+```
+
+↓
+
 ```diff
  class SomeClass
  {
@@ -5882,6 +6168,24 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 
 Remove specific traits from code
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Generic\Rector\Class_\RemoveTraitRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(RemoveTraitRector::class)
+        ->call('configure', [[
+            RemoveTraitRector::TRAITS_TO_REMOVE => [
+                'TraitNameToRemove']
+        ]]);
+};
+```
+
+↓
+
 ```diff
  class SomeClass
  {
@@ -6298,6 +6602,27 @@ Change static `validate()` method to `$request->validate()`
 - [test fixtures](/rules/legacy/tests/Rector/Include_/AddTopIncludeRector/Fixture)
 
 Adds an include file at the top of matching files, except class definitions
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Legacy\Rector\Include_\AddTopIncludeRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(AddTopIncludeRector::class)
+        ->call('configure', [[
+            AddTopIncludeRector::AUTOLOAD_FILE_PATH => '/../autoloader.php'
+        ]])
+        ->call('configure', [[
+            AddTopIncludeRector::PATTERNS => [
+                'pat*/*/?ame.php', 'somepath/?ame.php']
+        ]]);
+};
+```
+
+↓
 
 ```diff
 +require_once __DIR__ . '/../autoloader.php';
@@ -8069,6 +8394,24 @@ Orders constants by visibility
 - [test fixtures](/rules/order/tests/Rector/ClassMethod/OrderConstructorDependenciesByTypeAlphabeticallyRector/Fixture)
 
 Order __constructor dependencies by type A-Z
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Order\Rector\ClassMethod\OrderConstructorDependenciesByTypeAlphabeticallyRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(OrderConstructorDependenciesByTypeAlphabeticallyRector::class)
+        ->call('configure', [[
+            OrderConstructorDependenciesByTypeAlphabeticallyRector::SKIP_PATTERNS => [
+                'Cla*ame', 'Ano?herClassName']
+        ]]);
+};
+```
+
+↓
 
 ```diff
  class SomeClass
@@ -9946,6 +10289,24 @@ The /e modifier is no longer supported, use `preg_replace_callback` instead
 
 Replace string class names by <class>::class constant
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(StringClassNameToClassConstantRector::class)
+        ->call('configure', [[
+            StringClassNameToClassConstantRector::CLASSES_TO_SKIP => [
+                'ClassName', 'AnotherClassName']
+        ]]);
+};
+```
+
+↓
+
 ```diff
  class AnotherClass
  {
@@ -10495,6 +10856,24 @@ Remove extra parameters
 - [test fixtures](/rules/php71/tests/Rector/Name/ReservedObjectRector/Fixture)
 
 Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Php71\Rector\Name\ReservedObjectRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ReservedObjectRector::class)
+        ->call('configure', [[
+            ReservedObjectRector::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
+                'ReservedObject' => 'SmartObject', 'Object' => 'AnotherSmartObject']
+        ]]);
+};
+```
+
+↓
 
 ```diff
 -class Object
@@ -11130,6 +11509,24 @@ Change deprecated (real) to (float)
 
 Change `fn()` function name, since it will be reserved keyword
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Php74\Rector\Function_\ReservedFnFunctionRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ReservedFnFunctionRector::class)
+        ->call('configure', [[
+            ReservedFnFunctionRector::RESERVED_NAMES_TO_NEW_ONES => [
+                'fn' => 'someFunctionName']
+        ]]);
+};
+```
+
+↓
+
 ```diff
  class SomeClass
  {
@@ -11172,6 +11569,23 @@ Add null default to properties with PHP 7.4 property nullable type
 - [test fixtures](/rules/php74/tests/Rector/Property/TypedPropertyRector/Fixture)
 
 Changes property `@var` annotations from annotation to type.
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Php74\Rector\Property\TypedPropertyRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(TypedPropertyRector::class)
+        ->call('configure', [[
+            TypedPropertyRector::CLASS_LIKE_TYPE_ONLY => false
+        ]]);
+};
+```
+
+↓
 
 ```diff
  final class SomeClass
@@ -11996,6 +12410,24 @@ Change static method and local-only calls to non-static
 
 Convert new X to new factories
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\RemovingStatic\Rector\Class_\NewUniqueObjectToEntityFactoryRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(NewUniqueObjectToEntityFactoryRector::class)
+        ->call('configure', [[
+            NewUniqueObjectToEntityFactoryRector::TYPES_TO_SERVICES => [
+                'ClassName']
+        ]]);
+};
+```
+
+↓
+
 ```diff
 -<?php
 -
@@ -12331,6 +12763,24 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 - [test fixtures](/rules/renaming/tests/Rector/ConstFetch/RenameConstantRector/Fixture)
 
 Replace constant by new ones
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(RenameConstantRector::class)
+        ->call('configure', [[
+            RenameConstantRector::OLD_TO_NEW_CONSTANTS => [
+                'MYSQL_ASSOC' => 'MYSQLI_ASSOC', 'OLD_CONSTANT' => 'NEW_CONSTANT']
+        ]]);
+};
+```
+
+↓
 
 ```diff
  final class SomeClass
@@ -13406,6 +13856,24 @@ Turns old default value to parameter in `ContainerBuilder->build()` method in DI
 
 Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(ContainerGetToConstructorInjectionRector::class)
+        ->call('configure', [[
+            ContainerGetToConstructorInjectionRector::CONTAINER_AWARE_PARENT_TYPES => [
+                'ContainerAwareParentClassName', 'ContainerAwareParentCommandClassName', 'ThisClassCallsMethodInConstructorClassName']
+        ]]);
+};
+```
+
+↓
+
 ```diff
 -final class SomeCommand extends ContainerAwareCommand
 +final class SomeCommand extends Command
@@ -13555,6 +14023,24 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 - [test fixtures](/rules/symfony/tests/Rector/MethodCall/GetToConstructorInjectionRector/Fixture)
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(GetToConstructorInjectionRector::class)
+        ->call('configure', [[
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
+                'SymfonyControllerClassName', 'GetTraitClassName']
+        ]]);
+};
+```
+
+↓
 
 ```diff
 -class MyCommand extends ContainerAwareCommand

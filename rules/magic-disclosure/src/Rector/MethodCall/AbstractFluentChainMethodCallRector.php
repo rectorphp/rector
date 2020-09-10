@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\MagicDisclosure\Rector\MethodCall;
 
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\MagicDisclosure\NodeAnalyzer\ChainCallsStaticTypeResolver;
 use Rector\MagicDisclosure\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\MagicDisclosure\NodeFactory\NonFluentChainMethodCallFactory;
@@ -14,7 +13,7 @@ use Rector\MagicDisclosure\Rector\AbstractRector\AbstractConfigurableMatchTypeRe
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExpr;
 use Rector\MagicDisclosure\ValueObject\AssignAndRootExprAndNodesToAdd;
 
-abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableMatchTypeRector implements ConfigurableRectorInterface
+abstract class AbstractFluentChainMethodCallRector extends AbstractConfigurableMatchTypeRector
 {
     /**
      * Skip query and builder

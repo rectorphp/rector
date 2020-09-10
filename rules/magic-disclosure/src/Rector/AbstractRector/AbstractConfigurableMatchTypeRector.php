@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\MagicDisclosure\Rector\AbstractRector;
 
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 
-abstract class AbstractConfigurableMatchTypeRector extends AbstractRector
+abstract class AbstractConfigurableMatchTypeRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @api

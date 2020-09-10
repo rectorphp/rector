@@ -65,10 +65,8 @@ if (isset($_POST['csrf'])) {
 PHP
 ,
                 [
-                    self::class => [
-                        self::AUTOLOAD_FILE_PATH => '/../autoloader.php',
-                        self::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
-                    ],
+                    self::AUTOLOAD_FILE_PATH => '/../autoloader.php',
+                    self::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
                 ]
             ),
         ]);
