@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -49,7 +49,7 @@ final class AddTopIncludeRector extends AbstractFileSystemRector implements Conf
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Adds an include file at the top of matching files, except class definitions', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 if (isset($_POST['csrf'])) {
     processPost($_POST);
@@ -61,7 +61,13 @@ require_once __DIR__ . '/../autoloader.php';
 if (isset($_POST['csrf'])) {
     processPost($_POST);
 }
-PHP
+PHP,
+                [
+                    self::class => [
+                        self::AUTOLOAD_FILE_PATH => '/../autoloader.php',
+                        self::PATTERNS => ['pat*/*/?ame.php', 'somepath/?ame.php'],
+                    ],
+                ]
             ),
         ]);
     }

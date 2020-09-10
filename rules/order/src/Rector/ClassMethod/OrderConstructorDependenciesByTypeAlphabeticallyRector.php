@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\UnionType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -38,7 +38,7 @@ final class OrderConstructorDependenciesByTypeAlphabeticallyRector extends Abstr
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Order __constructor dependencies by type A-Z', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 class SomeClass
 {
@@ -63,7 +63,10 @@ class SomeClass
     ) {
     }
 }
-PHP
+PHP,
+                [
+                    self::SKIP_PATTERNS => ['Cla*ame', 'Ano?herClassName'],
+                ]
             ),
         ]);
     }

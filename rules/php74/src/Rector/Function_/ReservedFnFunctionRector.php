@@ -11,7 +11,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -34,7 +34,7 @@ final class ReservedFnFunctionRector extends AbstractRector implements Configura
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change fn() function name, since it will be reserved keyword', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 class SomeClass
 {
@@ -64,6 +64,12 @@ class SomeClass
     }
 }
 PHP
+                ,
+                [
+                    self::RESERVED_NAMES_TO_NEW_ONES => [
+                        'fn' => 'someFunctionName',
+                    ],
+                ]
             ),
         ]);
     }

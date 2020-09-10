@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\Property;
 
 use PhpParser\Node\Stmt\Property;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -17,7 +17,7 @@ final class DowngradeTypedPropertyRector extends AbstractDowngradeTypedPropertyR
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes property type definition from type definitions to `@var` annotations.', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 class SomeClass
 {
@@ -33,7 +33,10 @@ class SomeClass
     */
     private $property;
 }
-PHP
+PHP,
+                [
+                    self::ADD_DOC_BLOCK => true,
+                ]
             ),
         ]);
     }

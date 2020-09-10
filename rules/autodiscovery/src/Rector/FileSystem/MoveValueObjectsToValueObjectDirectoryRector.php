@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Autodiscovery\Analyzer\ClassAnalyzer;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileMovingFileSystemRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -75,7 +75,7 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractFileMov
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Move value object to ValueObject namespace/directory', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 // app/Exception/Name.php
 class Name
@@ -110,7 +110,12 @@ class Name
         return $this->name;
     }
 }
-CODE_SAMPLE
+CODE_SAMPLE,
+                [
+                    self::TYPES => ['ValueObjectInterfaceClassName'],
+                    self::SUFFIXES => ['Search'],
+                    self::ENABLE_VALUE_OBJECT_GUESSING => true,
+                ]
             ),
         ]);
     }

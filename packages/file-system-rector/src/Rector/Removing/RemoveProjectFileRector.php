@@ -6,7 +6,7 @@ namespace Rector\FileSystemRector\Rector\Removing;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Configuration\Option;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
@@ -47,13 +47,17 @@ final class RemoveProjectFileRector extends AbstractFileSystemRector implements 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove file relative to project directory', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 // someFile/ToBeRemoved.txt
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-CODE_SAMPLE
+
+CODE_SAMPLE,
+                [
+                    self::FILE_PATHS_TO_REMOVE => ['someFile/ToBeRemoved.txt'],
+                ]
             ),
         ]);
     }

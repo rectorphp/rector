@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\Rector\FunctionLike;
 
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -17,7 +17,7 @@ final class DowngradeParamObjectTypeDeclarationRector extends AbstractDowngradeP
         return new RectorDefinition(
             $this->getRectorDefinitionDescription(),
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'PHP'
 <?php
 
@@ -41,7 +41,10 @@ class SomeClass
     {
     }
 }
-PHP
+PHP,
+                    [
+                        self::ADD_DOC_BLOCK => true,
+                    ]
                 ),
             ]
         );

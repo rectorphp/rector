@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -31,7 +31,7 @@ final class FunctionCallToConstantRector extends AbstractRector implements Confi
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes use of function calls to use constants', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'EOS'
 class SomeClass
 {
@@ -50,9 +50,14 @@ class SomeClass
         $value = PHP_SAPI;
     }
 }
-EOS
+EOS,
+                [
+                    self::FUNCTIONS_TO_CONSTANTS => [
+                        'php_sapi_name' => 'PHP_SAPI',
+                    ],
+                ]
             ),
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'EOS'
 class SomeClass
 {
@@ -71,7 +76,12 @@ class SomeClass
         $value = M_PI;
     }
 }
-EOS
+EOS,
+                [
+                    self::FUNCTIONS_TO_CONSTANTS => [
+                        'pi' => 'M_PI',
+                    ],
+                ]
             ),
         ]);
     }

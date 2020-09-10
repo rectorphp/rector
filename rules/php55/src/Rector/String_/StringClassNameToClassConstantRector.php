@@ -10,7 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -54,7 +54,7 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replace string class names by <class>::class constant', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 class AnotherClass
 {
@@ -81,7 +81,10 @@ class SomeClass
         return \AnotherClass::class;
     }
 }
-PHP
+PHP,
+                [
+                    self::CLASSES_TO_SKIP => ['ClassName', 'AnotherClassName'],
+                ]
             ),
         ]);
     }
