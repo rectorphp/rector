@@ -8,6 +8,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Skipper
 {
+    /**
+     * @var mixed[]
+     */
     private $skip;
 
     /**
@@ -18,7 +21,7 @@ final class Skipper
         $this->skip = $skip;
     }
 
-    public function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo)
+    public function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo): bool
     {
         if ($this->skip === []) {
             return false;

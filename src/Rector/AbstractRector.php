@@ -203,7 +203,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
-        if ($node instanceof SmartFileInfo && $this->skipper->shouldSkipFileInfoAndRule($node)) {
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        if ($fileInfo instanceof SmartFileInfo && $this->skipper->shouldSkipFileInfoAndRule($fileInfo)) {
             return null;
         }
 
