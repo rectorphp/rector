@@ -14,16 +14,16 @@ final class StaticAnalyzer
     /**
      * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
-    public function __construct(NodeRepository $parsedFunctionLikeNodeCollector)
+    public function __construct(NodeRepository $nodeRepository)
     {
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function isStaticMethod(string $methodName, string $className): bool
     {
-        $classMethod = $this->parsedFunctionLikeNodeCollector->findMethod($methodName, $className);
+        $classMethod = $this->nodeRepository->findMethod($methodName, $className);
         if ($classMethod !== null) {
             return $classMethod->isStatic();
         }

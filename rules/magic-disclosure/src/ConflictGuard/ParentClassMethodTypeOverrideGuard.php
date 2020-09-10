@@ -22,7 +22,7 @@ final class ParentClassMethodTypeOverrideGuard
     /**
      * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
     /**
      * @var NodeNameResolver
@@ -31,11 +31,11 @@ final class ParentClassMethodTypeOverrideGuard
 
     public function __construct(
         ReflectionProvider $reflectionProvider,
-        NodeRepository $parsedFunctionLikeNodeCollector,
+        NodeRepository $nodeRepository,
         NodeNameResolver $nodeNameResolver
     ) {
         $this->reflectionProvider = $reflectionProvider;
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -49,7 +49,7 @@ final class ParentClassMethodTypeOverrideGuard
             return true;
         }
 
-        $parentClassMethod = $this->parsedFunctionLikeNodeCollector->findClassMethodByMethodReflection(
+        $parentClassMethod = $this->nodeRepository->findClassMethodByMethodReflection(
             $parentClassMethodReflection
         );
 

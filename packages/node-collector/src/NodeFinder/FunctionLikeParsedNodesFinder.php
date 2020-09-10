@@ -40,12 +40,12 @@ final class FunctionLikeParsedNodesFinder
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        NodeRepository $parsedFunctionLikeNodeCollector,
+        NodeRepository $nodeRepository,
         TypeUnwrapper $typeUnwrapper
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeRepository = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $nodeRepository;
         $this->typeUnwrapper = $typeUnwrapper;
     }
 

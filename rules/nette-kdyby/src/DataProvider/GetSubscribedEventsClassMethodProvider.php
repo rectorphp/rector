@@ -14,9 +14,9 @@ final class GetSubscribedEventsClassMethodProvider
      */
     private $nodeRepository;
 
-    public function __construct(NodeRepository $parsedFunctionLikeNodeCollector)
+    public function __construct(NodeRepository $nodeRepository)
     {
-        $this->nodeRepository = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**

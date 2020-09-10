@@ -20,11 +20,11 @@ final class RemoveUnusedFunctionRector extends AbstractRector implements ZeroCac
     /**
      * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
-    public function __construct(NodeRepository $parsedFunctionLikeNodeCollector)
+    public function __construct(NodeRepository $nodeRepository)
     {
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -70,7 +70,7 @@ PHP
         /** @var string $functionName */
         $functionName = $this->getName($node);
 
-        if ($this->parsedFunctionLikeNodeCollector->isFunctionUsed($functionName)) {
+        if ($this->nodeRepository->isFunctionUsed($functionName)) {
             return null;
         }
 

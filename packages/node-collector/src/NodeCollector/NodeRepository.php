@@ -340,14 +340,6 @@ final class NodeRepository
     }
 
     /**
-     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
-     */
-    private function findCallsByClassAndMethod(string $className, string $methodName): array
-    {
-        return $this->callsByTypeAndMethod[$className][$methodName] ?? $this->arrayCallablesByTypeAndMethod[$className][$methodName] ?? [];
-    }
-
-    /**
      * @param MethodCall|StaticCall $node
      */
     private function addCall(Node $node): void
@@ -371,6 +363,13 @@ final class NodeRepository
         }
 
         $this->addCallByType($node, $classType, $methodName);
+    }
+    /**
+     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
+     */
+    private function findCallsByClassAndMethod(string $className, string $methodName): array
+    {
+        return $this->callsByTypeAndMethod[$className][$methodName] ?? $this->arrayCallablesByTypeAndMethod[$className][$methodName] ?? [];
     }
 
     private function resolveNodeClassTypes(Node $node): Type
