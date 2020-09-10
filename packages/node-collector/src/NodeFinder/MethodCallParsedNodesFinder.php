@@ -7,18 +7,18 @@ namespace Rector\NodeCollector\NodeFinder;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MethodCallParsedNodesFinder
 {
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
     private $parsedFunctionLikeNodeCollector;
 
-    public function __construct(ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector)
+    public function __construct(NodeRepository $parsedFunctionLikeNodeCollector)
     {
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
     }

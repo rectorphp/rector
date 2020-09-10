@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -21,11 +21,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class LocallyCalledStaticMethodToNonStaticRector extends AbstractRector
 {
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
     private $parsedFunctionLikeNodeCollector;
 
-    public function __construct(ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector)
+    public function __construct(NodeRepository $parsedFunctionLikeNodeCollector)
     {
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
     }

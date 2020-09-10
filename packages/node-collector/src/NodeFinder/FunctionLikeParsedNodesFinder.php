@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -28,7 +28,7 @@ final class FunctionLikeParsedNodesFinder
     private $nodeTypeResolver;
 
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
     private $parsedFunctionLikeNodeCollector;
 
@@ -40,7 +40,7 @@ final class FunctionLikeParsedNodesFinder
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector,
+        NodeRepository $parsedFunctionLikeNodeCollector,
         TypeUnwrapper $typeUnwrapper
     ) {
         $this->nodeNameResolver = $nodeNameResolver;

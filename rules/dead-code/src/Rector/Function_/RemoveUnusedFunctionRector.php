@@ -10,7 +10,7 @@ use Rector\Caching\Contract\Rector\ZeroCacheRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\Function_\RemoveUnusedFunctionRector\RemoveUnusedFunctionRectorTest
@@ -18,11 +18,11 @@ use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
 final class RemoveUnusedFunctionRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
     private $parsedFunctionLikeNodeCollector;
 
-    public function __construct(ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector)
+    public function __construct(NodeRepository $parsedFunctionLikeNodeCollector)
     {
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
     }

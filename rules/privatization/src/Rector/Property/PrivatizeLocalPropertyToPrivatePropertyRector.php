@@ -12,7 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeCollector\NodeFinder\PropertyFetchParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VendorLocker\NodeVendorLocker\PropertyVisibilityVendorLockResolver;
 
@@ -33,20 +33,20 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
     ];
 
     /**
-     * @var PropertyFetchParsedNodesFinder
-     */
-    private $propertyFetchParsedNodesFinder;
-
-    /**
      * @var PropertyVisibilityVendorLockResolver
      */
     private $propertyVisibilityVendorLockResolver;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
-        PropertyFetchParsedNodesFinder $propertyFetchParsedNodesFinder,
+        NodeRepository $nodeRepository,
         PropertyVisibilityVendorLockResolver $propertyVisibilityVendorLockResolver
     ) {
-        $this->propertyFetchParsedNodesFinder = $propertyFetchParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
         $this->propertyVisibilityVendorLockResolver = $propertyVisibilityVendorLockResolver;
     }
 
@@ -98,7 +98,7 @@ PHP
             return null;
         }
 
-        $propertyFetches = $this->propertyFetchParsedNodesFinder->findPropertyFetchesByProperty($node);
+        $propertyFetches = $this->nodeRepository->findPropertyFetchesByProperty($node);
 
         $usedPropertyFetchClassNames = [];
         foreach ($propertyFetches as $propertyFetch) {

@@ -9,10 +9,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -34,7 +36,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
  * - findXByX for N
  * - getXByX for 1
  */
-final class ParsedFunctionLikeNodeCollector
+final class NodeRepository
 {
     /**
      * @var array<string, ClassMethod[]>
@@ -77,12 +79,19 @@ final class ParsedFunctionLikeNodeCollector
      */
     private $arrayCallableMethodReferenceAnalyzer;
 
+    /**
+     * @var ParsedPropertyFetchNodeCollector
+     */
+    private $parsedPropertyFetchNodeCollector;
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
+        ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
         NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
+        $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
     }
 
     /**
@@ -248,6 +257,23 @@ final class ParsedFunctionLikeNodeCollector
         /** @var string $className */
         $className = $methodReflection->getDeclaringClass()->getName();
         return $this->findMethod($className, $methodName);
+    }
+
+    /**
+     * @return PropertyFetch[]
+     */
+    public function findPropertyFetchesByProperty(Property $property): array
+    {
+        /** @var string|null $className */
+        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return [];
+        }
+
+        /** @var string $propertyName */
+        $propertyName = $this->nodeNameResolver->getName($property);
+
+        return $this->parsedPropertyFetchNodeCollector->findPropertyFetchesByTypeAndName($className, $propertyName);
     }
 
     private function addMethod(ClassMethod $classMethod): void

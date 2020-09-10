@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Rector\NetteKdyby\DataProvider;
 
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 final class GetSubscribedEventsClassMethodProvider
 {
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
     private $parsedFunctionLikeNodeCollector;
 
-    public function __construct(ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector)
+    public function __construct(NodeRepository $parsedFunctionLikeNodeCollector)
     {
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
     }

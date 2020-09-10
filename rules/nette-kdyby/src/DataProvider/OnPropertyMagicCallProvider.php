@@ -8,7 +8,7 @@ use Nette\Application\UI\Control;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -20,7 +20,7 @@ final class OnPropertyMagicCallProvider
     private $onPropertyMagicCalls = [];
 
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
     private $parsedFunctionLikeNodeCollector;
 
@@ -31,7 +31,7 @@ final class OnPropertyMagicCallProvider
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector
+        NodeRepository $parsedFunctionLikeNodeCollector
     ) {
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
         $this->nodeNameResolver = $nodeNameResolver;

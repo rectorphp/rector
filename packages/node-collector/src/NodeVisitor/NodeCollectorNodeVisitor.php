@@ -6,15 +6,15 @@ namespace Rector\NodeCollector\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeCollector\NodeCollector\ParsedClassConstFetchNodeCollector;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeCollector\NodeCollector\ParsedPropertyFetchNodeCollector;
 
 final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
     private $parsedFunctionLikeNodeCollector;
 
@@ -35,7 +35,7 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 
     public function __construct(
         ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector,
-        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector,
+        NodeRepository $parsedFunctionLikeNodeCollector,
         ParsedNodeCollector $parsedNodeCollector,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector
     ) {

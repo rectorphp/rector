@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Rector\NodeCollector;
 
 use Nette\Utils\Strings;
-use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use ReflectionClass;
 
 final class StaticAnalyzer
 {
     /**
-     * @var ParsedFunctionLikeNodeCollector
+     * @var NodeRepository
      */
     private $parsedFunctionLikeNodeCollector;
 
-    public function __construct(ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector)
+    public function __construct(NodeRepository $parsedFunctionLikeNodeCollector)
     {
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
     }
