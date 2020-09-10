@@ -547,6 +547,7 @@ final class NodeRepository
 
         return $implementerInterfaces;
     }
+
     private function resolveCallerClassName(MethodCall $methodCall): ?string
     {
         $callerType = $this->nodeTypeResolver->getStaticType($methodCall->var);
