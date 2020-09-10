@@ -9,7 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\MagicDisclosure\Rector\Return_\DefluentReturnMethodCallRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -25,7 +25,7 @@ final class FluentChainMethodCallToNormalMethodCallRector extends AbstractFluent
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns fluent interface calls to classic ones.', [
-            new ConfiguredCodeSample(
+            new CodeSample(
             <<<'PHP'
 $someClass = new SomeClass();
 $someClass->someFunction()
@@ -37,11 +37,8 @@ $someClass = new SomeClass();
 $someClass->someFunction();
 $someClass->otherFunction();
 PHP
-        ,
-            [
-                self::TYPES_TO_MATCH => ['SomeClass'],
-            ]
-        ), ]);
+        ),
+        ]);
     }
 
     /**

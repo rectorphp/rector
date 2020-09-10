@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Cookie\SetCookie;
 use Rector\MagicDisclosure\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -14,22 +13,11 @@ use Rector\Transform\ValueObject\StaticCallToFuncCall;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
-
-    $parameters->set(
-        'classes_to_defluent',
-        ['GuzzleHttp\Collection', 'GuzzleHttp\Url', 'GuzzleHttp\Query', 'GuzzleHttp\Post\PostBody', SetCookie::class]
-    );
-
     $services = $containerConfigurator->services();
 
     # both uses "%classes_to_defluent%
     #diff-810cdcfdd8a6b9e1fc0d1e96d7786874
-    $services->set(FluentChainMethodCallToNormalMethodCallRector::class)
-        ->call(
-            'configure',
-            [[FluentChainMethodCallToNormalMethodCallRector::TYPES_TO_MATCH => '%classes_to_defluent%']]
-        );
+    $services->set(FluentChainMethodCallToNormalMethodCallRector::class);
 
     $configuration = [
         new FuncNameToMethodCallName('GuzzleHttp\json_decode', 'GuzzleHttp\Utils', 'jsonDecode'),
