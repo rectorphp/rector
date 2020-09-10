@@ -143,7 +143,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->currentRectorProvider = $currentRectorProvider;
         $this->classNodeAnalyzer = $classNodeAnalyzer;
         $this->currentNodeProvider = $currentNodeProvider;
-        $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->skipper = $skipper;
     }
 
