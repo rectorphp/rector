@@ -84,14 +84,21 @@ final class NodeRepository
      */
     private $parsedPropertyFetchNodeCollector;
 
+    /**
+     * @var ParsedClassConstFetchNodeCollector
+     */
+    private $parsedClassConstFetchNodeCollector;
+
     public function __construct(
         ArrayCallableMethodReferenceAnalyzer $arrayCallableMethodReferenceAnalyzer,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        ParsedClassConstFetchNodeCollector $parsedClassConstFetchNodeCollector
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arrayCallableMethodReferenceAnalyzer = $arrayCallableMethodReferenceAnalyzer;
         $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
+        $this->parsedClassConstFetchNodeCollector = $parsedClassConstFetchNodeCollector;
     }
 
     /**
@@ -282,6 +289,42 @@ final class NodeRepository
         $method = $classMethod->getAttribute(AttributeKey::METHOD_NAME);
 
         return $this->findCallsByClassAndMethod($class, $method);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function findDirectClassConstantFetches(string $desiredClassName, string $desiredConstantName): array
+    {
+        $classConstantFetchByClassAndName = $this->parsedClassConstFetchNodeCollector->getClassConstantFetchByClassAndName();
+        return $classConstantFetchByClassAndName[$desiredClassName][$desiredConstantName] ?? [];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function findIndirectClassConstantFetches(string $desiredClassName, string $desiredConstantName): array
+    {
+        $classConstantFetchByClassAndName = $this->parsedClassConstFetchNodeCollector->getClassConstantFetchByClassAndName();
+
+        foreach ($classConstantFetchByClassAndName as $className => $classesByConstantName) {
+            if (! isset($classesByConstantName[$desiredConstantName])) {
+                continue;
+            }
+
+            // include child usages
+            if (! is_a($desiredClassName, $className, true)) {
+                continue;
+            }
+
+            if ($desiredClassName === $className) {
+                continue;
+            }
+
+            return $classesByConstantName[$desiredConstantName];
+        }
+
+        return [];
     }
 
     private function addMethod(ClassMethod $classMethod): void

@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeCollector\NodeFinder\ClassConstParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeFinder\ParentClassConstantNodeFinder;
 use Rector\SOLID\Reflection\ParentConstantReflectionResolver;
@@ -39,18 +39,18 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector implements 
     private $parentClassConstantNodeFinder;
 
     /**
-     * @var ClassConstParsedNodesFinder
+     * @var NodeRepository
      */
-    private $classConstParsedNodesFinder;
+    private $nodeRepository;
 
     public function __construct(
-        ClassConstParsedNodesFinder $classConstParsedNodesFinder,
+        NodeRepository $nodeRepository,
         ParentClassConstantNodeFinder $parentClassConstantNodeFinder,
         ParentConstantReflectionResolver $parentConstantReflectionResolver
     ) {
         $this->parentConstantReflectionResolver = $parentConstantReflectionResolver;
         $this->parentClassConstantNodeFinder = $parentClassConstantNodeFinder;
-        $this->classConstParsedNodesFinder = $classConstParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -124,8 +124,8 @@ PHP
             return $node;
         }
 
-        $directUseClasses = $this->classConstParsedNodesFinder->findDirectClassConstantFetches($class, $constant);
-        $indirectUseClasses = $this->classConstParsedNodesFinder->findIndirectClassConstantFetches($class, $constant);
+        $directUseClasses = $this->nodeRepository->findDirectClassConstantFetches($class, $constant);
+        $indirectUseClasses = $this->nodeRepository->findIndirectClassConstantFetches($class, $constant);
 
         $this->changeConstantVisibility(
             $node,
