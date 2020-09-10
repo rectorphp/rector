@@ -287,6 +287,7 @@ final class ParsedFunctionLikeNodeCollector
 
         $this->addCallByType($node, $classType, $methodName);
     }
+
     /**
      * @return MethodCall[]|StaticCall[]|ArrayCallable[]
      */

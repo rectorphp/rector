@@ -126,6 +126,7 @@ PHP
         // get static staticCalls
         return $this->haveSharedClass($classMethod, $staticCalls);
     }
+
     /**
      * @param Node[] $nodes
      */
