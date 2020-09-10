@@ -111,6 +111,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var Skipper
      */
     private $skipper;
+
     /**
      * @var string|null
      */

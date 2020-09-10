@@ -11,7 +11,7 @@ final class Skipper
     /**
      * @var mixed[]
      */
-    private $skip;
+    private $skip = [];
 
     /**
      * @param mixed[] $skip
@@ -21,12 +21,8 @@ final class Skipper
         $this->skip = $skip;
     }
 
-    public function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo): bool
+    private function shouldSkipFileInfoAndRule(): bool
     {
-        if ($this->skip === []) {
-            return false;
-        }
-
-        return false;
+        return $this->skip !== [];
     }
 }
