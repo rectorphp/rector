@@ -54,7 +54,8 @@ CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 
-CODE_SAMPLE,
+CODE_SAMPLE
+                ,
                 [
                     self::FILE_PATHS_TO_REMOVE => ['someFile/ToBeRemoved.txt'],
                 ]

@@ -32,7 +32,7 @@ final class FunctionCallToConstantRector extends AbstractRector implements Confi
     {
         return new RectorDefinition('Changes use of function calls to use constants', [
             new ConfiguredCodeSample(
-                <<<'EOS'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -40,9 +40,9 @@ class SomeClass
         $value = php_sapi_name();
     }
 }
-EOS
+CODE_SAMPLE
                 ,
-                <<<'EOS'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,7 +50,8 @@ class SomeClass
         $value = PHP_SAPI;
     }
 }
-EOS,
+CODE_SAMPLE
+                ,
                 [
                     self::FUNCTIONS_TO_CONSTANTS => [
                         'php_sapi_name' => 'PHP_SAPI',
@@ -58,7 +59,7 @@ EOS,
                 ]
             ),
             new ConfiguredCodeSample(
-                <<<'EOS'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -66,9 +67,9 @@ class SomeClass
         $value = pi();
     }
 }
-EOS
+CODE_SAMPLE
                 ,
-                <<<'EOS'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -76,7 +77,8 @@ class SomeClass
         $value = M_PI;
     }
 }
-EOS,
+CODE_SAMPLE
+                ,
                 [
                     self::FUNCTIONS_TO_CONSTANTS => [
                         'pi' => 'M_PI',

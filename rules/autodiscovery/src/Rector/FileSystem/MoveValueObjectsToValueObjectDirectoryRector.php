@@ -110,7 +110,8 @@ class Name
         return $this->name;
     }
 }
-CODE_SAMPLE,
+CODE_SAMPLE
+                ,
                 [
                     self::TYPES => ['ValueObjectInterfaceClassName'],
                     self::SUFFIXES => ['Search'],
