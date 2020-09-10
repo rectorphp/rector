@@ -21,6 +21,7 @@ use Rector\Core\Util\StaticRectorStrings;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\Routing\ExplicitRouteAnnotationDecorator;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use ReflectionMethod;
@@ -48,14 +49,21 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private $explicitRouteAnnotationDecorator;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         ExplicitRouteAnnotationDecorator $explicitRouteAnnotationDecorator,
+        NodeRepository $nodeRepository,
         ReturnTypeInferer $returnTypeInferer,
         RouteInfoFactory $routeInfoFactory
     ) {
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->explicitRouteAnnotationDecorator = $explicitRouteAnnotationDecorator;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -224,7 +232,7 @@ PHP
 
     private function resolveControllerClassMethod(RouteInfo $routeInfo): ?ClassMethod
     {
-        $classNode = $this->classLikeParsedNodesFinder->findClass($routeInfo->getClass());
+        $classNode = $this->nodeRepository->findClass($routeInfo->getClass());
         if ($classNode === null) {
             return null;
         }
@@ -242,7 +250,7 @@ PHP
 
     private function completeImplicitRoutes(): void
     {
-        $presenterClasses = $this->classLikeParsedNodesFinder->findClassesBySuffix('Presenter');
+        $presenterClasses = $this->nodeRepository->findClassesBySuffix('Presenter');
 
         foreach ($presenterClasses as $presenterClass) {
             foreach ($presenterClass->getMethods() as $classMethod) {

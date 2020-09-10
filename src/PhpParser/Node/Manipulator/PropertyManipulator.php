@@ -21,7 +21,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\Guard\VariableToConstantGuard;
@@ -54,29 +54,29 @@ final class PropertyManipulator
     private $assignManipulator;
 
     /**
-     * @var ClassLikeParsedNodesFinder
-     */
-    private $classLikeParsedNodesFinder;
-
-    /**
      * @var VariableToConstantGuard
      */
     private $variableToConstantGuard;
+
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
 
     public function __construct(
         AssignManipulator $assignManipulator,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
         NodeNameResolver $nodeNameResolver,
-        VariableToConstantGuard $variableToConstantGuard
+        VariableToConstantGuard $variableToConstantGuard,
+        NodeRepository $nodeRepository
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->assignManipulator = $assignManipulator;
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->variableToConstantGuard = $variableToConstantGuard;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -90,7 +90,7 @@ final class PropertyManipulator
             return [];
         }
 
-        $nodesToSearch = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($classLike);
+        $nodesToSearch = $this->nodeRepository->findUsedTraitsInClass($classLike);
         $nodesToSearch[] = $classLike;
 
         $singleProperty = $property->props[0];

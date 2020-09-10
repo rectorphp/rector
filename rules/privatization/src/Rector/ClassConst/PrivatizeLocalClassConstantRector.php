@@ -108,7 +108,7 @@ PHP
         $node->setAttribute(self::HAS_NEW_ACCESS_LEVEL, true);
 
         // 0. constants declared in interfaces have to be public
-        if ($this->classLikeParsedNodesFinder->findInterface($class) !== null) {
+        if ($this->nodeRepository->findInterface($class) !== null) {
             $this->makePublic($node);
             return $node;
         }

@@ -19,6 +19,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\DeadCode\UnusedNodeResolver\ClassUnusedPrivateClassMethodResolver;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -47,14 +48,21 @@ final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRe
      */
     private $doctrineEntityManipulator;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         ClassManipulator $classManipulator,
         ClassUnusedPrivateClassMethodResolver $classUnusedPrivateClassMethodResolver,
-        DoctrineEntityManipulator $doctrineEntityManipulator
+        DoctrineEntityManipulator $doctrineEntityManipulator,
+        NodeRepository $nodeRepository
     ) {
         $this->classUnusedPrivateClassMethodResolver = $classUnusedPrivateClassMethodResolver;
         $this->classManipulator = $classManipulator;
         $this->doctrineEntityManipulator = $doctrineEntityManipulator;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -263,7 +271,7 @@ PHP
         }
 
         // get the class property and remove "mappedBy/inversedBy" from annotation
-        $relatedEntityClass = $this->classLikeParsedNodesFinder->findClass($targetEntity);
+        $relatedEntityClass = $this->nodeRepository->findClass($targetEntity);
         if (! $relatedEntityClass instanceof Class_) {
             return null;
         }
