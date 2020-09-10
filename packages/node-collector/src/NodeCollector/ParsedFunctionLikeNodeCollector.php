@@ -250,21 +250,6 @@ final class ParsedFunctionLikeNodeCollector
         return $this->findMethod($className, $methodName);
     }
 
-    /**
-     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
-     */
-    private function findCallsByClassMethod(ClassMethod $classMethod): array
-    {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if (! is_string($class)) {
-            throw new ShouldNotHappenException();
-        }
-
-        /** @var string $method */
-        $method = $this->nodeNameResolver->getName($classMethod->name);
-        return $this->findByClassAndMethod($class, $method);
-    }
-
     private function addMethod(ClassMethod $classMethod): void
     {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
@@ -301,6 +286,20 @@ final class ParsedFunctionLikeNodeCollector
         }
 
         $this->addCallByType($node, $classType, $methodName);
+    }
+    /**
+     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
+     */
+    private function findCallsByClassMethod(ClassMethod $classMethod): array
+    {
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if (! is_string($class)) {
+            throw new ShouldNotHappenException();
+        }
+
+        /** @var string $method */
+        $method = $this->nodeNameResolver->getName($classMethod->name);
+        return $this->findByClassAndMethod($class, $method);
     }
 
     private function resolveNodeClassTypes(Node $node): Type

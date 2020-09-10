@@ -119,6 +119,13 @@ PHP
         return new MethodCall($thisVariable, $staticCall->name, $staticCall->args);
     }
 
+    private function isClassMethodWithOnlyLocalStaticCalls(ClassMethod $classMethod): bool
+    {
+        $staticCalls = $this->parsedFunctionLikeNodeCollector->findStaticCallsByClassMethod($classMethod);
+
+        // get static staticCalls
+        return $this->haveSharedClass($classMethod, $staticCalls);
+    }
     /**
      * @param Node[] $nodes
      */
@@ -133,13 +140,5 @@ PHP
         }
 
         return true;
-    }
-
-    private function isClassMethodWithOnlyLocalStaticCalls(ClassMethod $classMethod): bool
-    {
-        $staticCalls = $this->parsedFunctionLikeNodeCollector->findStaticCallsByClassMethod($classMethod);
-
-        // get static staticCalls
-        return $this->haveSharedClass($classMethod, $staticCalls);
     }
 }
