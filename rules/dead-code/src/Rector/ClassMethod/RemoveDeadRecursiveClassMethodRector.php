@@ -14,7 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\NodeManipulator\ClassMethodAndCallMatcher;
-use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodVendorLockResolver;
@@ -25,11 +25,6 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodVendorLockResolver;
 final class RemoveDeadRecursiveClassMethodRector extends AbstractRector implements ZeroCacheRectorInterface
 {
     /**
-     * @var MethodCallParsedNodesFinder
-     */
-    private $methodCallParsedNodesFinder;
-
-    /**
      * @var ClassMethodAndCallMatcher
      */
     private $classMethodAndCallMatcher;
@@ -39,14 +34,19 @@ final class RemoveDeadRecursiveClassMethodRector extends AbstractRector implemen
      */
     private $classMethodVendorLockResolver;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         ClassMethodAndCallMatcher $classMethodAndCallMatcher,
         ClassMethodVendorLockResolver $classMethodVendorLockResolver,
-        MethodCallParsedNodesFinder $methodCallParsedNodesFinder
+        NodeRepository $nodeRepository
     ) {
-        $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
         $this->classMethodAndCallMatcher = $classMethodAndCallMatcher;
         $this->classMethodVendorLockResolver = $classMethodVendorLockResolver;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -94,7 +94,7 @@ PHP
             return null;
         }
 
-        $methodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($node);
+        $methodCalls = $this->nodeRepository->findCallsByClassMethod($node);
 
         // handles remove dead methods rules
         if ($methodCalls === []) {

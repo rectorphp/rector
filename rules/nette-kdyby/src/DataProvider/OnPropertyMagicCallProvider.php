@@ -22,7 +22,7 @@ final class OnPropertyMagicCallProvider
     /**
      * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
     /**
      * @var NodeNameResolver
@@ -33,7 +33,7 @@ final class OnPropertyMagicCallProvider
         NodeNameResolver $nodeNameResolver,
         NodeRepository $parsedFunctionLikeNodeCollector
     ) {
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $parsedFunctionLikeNodeCollector;
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
@@ -46,7 +46,7 @@ final class OnPropertyMagicCallProvider
             return $this->onPropertyMagicCalls;
         }
 
-        foreach ($this->parsedFunctionLikeNodeCollector->getMethodsCalls() as $methodCall) {
+        foreach ($this->nodeRepository->getMethodsCalls() as $methodCall) {
             if (! $this->isLocalOnPropertyCall($methodCall)) {
                 continue;
             }

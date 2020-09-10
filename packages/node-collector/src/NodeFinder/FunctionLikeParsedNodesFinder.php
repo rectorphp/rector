@@ -30,7 +30,7 @@ final class FunctionLikeParsedNodesFinder
     /**
      * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
     /**
      * @var TypeUnwrapper
@@ -45,7 +45,7 @@ final class FunctionLikeParsedNodesFinder
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $parsedFunctionLikeNodeCollector;
         $this->typeUnwrapper = $typeUnwrapper;
     }
 
@@ -86,12 +86,12 @@ final class FunctionLikeParsedNodesFinder
 
     public function findFunction(string $name): ?Function_
     {
-        return $this->parsedFunctionLikeNodeCollector->findFunction($name);
+        return $this->nodeRepository->findFunction($name);
     }
 
     public function findClassMethod(string $methodName, string $className): ?ClassMethod
     {
-        return $this->parsedFunctionLikeNodeCollector->findMethod($className, $methodName);
+        return $this->nodeRepository->findMethod($className, $methodName);
     }
 
     /**
@@ -99,7 +99,7 @@ final class FunctionLikeParsedNodesFinder
      */
     public function findMethodCallsOnClass(string $className): array
     {
-        return $this->parsedFunctionLikeNodeCollector->findMethodCallsOnClass($className);
+        return $this->nodeRepository->findMethodCallsOnClass($className);
     }
 
     private function resolveCallerClassName(MethodCall $methodCall): ?string

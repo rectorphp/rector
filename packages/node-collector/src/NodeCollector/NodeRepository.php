@@ -56,7 +56,7 @@ final class NodeRepository
     /**
      * @var array<string, array<array<MethodCall|StaticCall>>>
      */
-    private $methodsCallsByTypeAndMethod = [];
+    private $callsByTypeAndMethod = [];
 
     /**
      * E.g. [$this, 'someLocalMethod']
@@ -151,15 +151,7 @@ final class NodeRepository
      */
     public function findMethodCallsOnClass(string $className): array
     {
-        return $this->methodsCallsByTypeAndMethod[$className] ?? [];
-    }
-
-    /**
-     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
-     */
-    public function findByClassAndMethod(string $className, string $methodName): array
-    {
-        return $this->methodsCallsByTypeAndMethod[$className][$methodName] ?? $this->arrayCallablesByTypeAndMethod[$className][$methodName] ?? [];
+        return $this->callsByTypeAndMethod[$className] ?? [];
     }
 
     /**
@@ -243,7 +235,7 @@ final class NodeRepository
      */
     public function getMethodsCalls(): array
     {
-        $calls = Arrays::flatten($this->methodsCallsByTypeAndMethod);
+        $calls = Arrays::flatten($this->callsByTypeAndMethod);
 
         return array_filter($calls, function (Node $node): bool {
             return $node instanceof MethodCall;
@@ -276,6 +268,22 @@ final class NodeRepository
         return $this->parsedPropertyFetchNodeCollector->findPropertyFetchesByTypeAndName($className, $propertyName);
     }
 
+    /**
+     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
+     */
+    public function findCallsByClassMethod(ClassMethod $classMethod): array
+    {
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if (! is_string($class)) {
+            throw new ShouldNotHappenException();
+        }
+
+        /** @var string $method */
+        $method = $classMethod->getAttribute(AttributeKey::METHOD_NAME);
+
+        return $this->findCallsByClassAndMethod($class, $method);
+    }
+
     private function addMethod(ClassMethod $classMethod): void
     {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
@@ -286,6 +294,14 @@ final class NodeRepository
 
         $methodName = $this->nodeNameResolver->getName($classMethod);
         $this->classMethodsByType[$className][$methodName] = $classMethod;
+    }
+
+    /**
+     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
+     */
+    private function findCallsByClassAndMethod(string $className, string $methodName): array
+    {
+        return $this->callsByTypeAndMethod[$className][$methodName] ?? $this->arrayCallablesByTypeAndMethod[$className][$methodName] ?? [];
     }
 
     /**
@@ -314,21 +330,6 @@ final class NodeRepository
         $this->addCallByType($node, $classType, $methodName);
     }
 
-    /**
-     * @return MethodCall[]|StaticCall[]|ArrayCallable[]
-     */
-    private function findCallsByClassMethod(ClassMethod $classMethod): array
-    {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if (! is_string($class)) {
-            throw new ShouldNotHappenException();
-        }
-
-        /** @var string $method */
-        $method = $this->nodeNameResolver->getName($classMethod->name);
-        return $this->findByClassAndMethod($class, $method);
-    }
-
     private function resolveNodeClassTypes(Node $node): Type
     {
         if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
@@ -352,7 +353,7 @@ final class NodeRepository
     private function addCallByType(Node $node, Type $classType, string $methodName): void
     {
         if ($classType instanceof TypeWithClassName) {
-            $this->methodsCallsByTypeAndMethod[$classType->getClassName()][$methodName][] = $node;
+            $this->callsByTypeAndMethod[$classType->getClassName()][$methodName][] = $node;
         }
 
         if ($classType instanceof UnionType) {
@@ -361,7 +362,7 @@ final class NodeRepository
                     continue;
                 }
 
-                $this->methodsCallsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
+                $this->callsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
             }
         }
     }

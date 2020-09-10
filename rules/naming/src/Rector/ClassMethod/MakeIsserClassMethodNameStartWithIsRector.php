@@ -16,7 +16,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Naming\MethodNameResolver;
-use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 
 /**
  * @see \Rector\Naming\Tests\Rector\ClassMethod\MakeIsserClassMethodNameStartWithIsRector\MakeIsserClassMethodNameStartWithIsRectorTest
@@ -34,16 +34,14 @@ final class MakeIsserClassMethodNameStartWithIsRector extends AbstractRector
     private $methodNameResolver;
 
     /**
-     * @var MethodCallParsedNodesFinder
+     * @var NodeRepository
      */
-    private $methodCallParsedNodesFinder;
+    private $nodeRepository;
 
-    public function __construct(
-        MethodNameResolver $methodNameResolver,
-        MethodCallParsedNodesFinder $methodCallParsedNodesFinder
-    ) {
+    public function __construct(MethodNameResolver $methodNameResolver, NodeRepository $nodeRepository)
+    {
         $this->methodNameResolver = $methodNameResolver;
-        $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function getDefinition(): RectorDefinition
@@ -154,7 +152,7 @@ PHP
     private function updateClassMethodCalls(ClassMethod $classMethod, string $newClassMethodName): void
     {
         /** @var MethodCall[] $methodCalls */
-        $methodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($classMethod);
+        $methodCalls = $this->nodeRepository->findCallsByClassMethod($classMethod);
         foreach ($methodCalls as $methodCall) {
             $methodCall->name = new Identifier($newClassMethodName);
         }

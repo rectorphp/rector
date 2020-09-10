@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\TypeWithClassName;
-use Rector\NodeCollector\NodeFinder\MethodCallParsedNodesFinder;
+use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -18,11 +18,6 @@ use ReflectionMethod;
 
 final class ClassMethodExternalCallNodeAnalyzer
 {
-    /**
-     * @var MethodCallParsedNodesFinder
-     */
-    private $methodCallParsedNodesFinder;
-
     /**
      * @var NodeNameResolver
      */
@@ -38,21 +33,26 @@ final class ClassMethodExternalCallNodeAnalyzer
      */
     private $eventSubscriberMethodNamesResolver;
 
+    /**
+     * @var NodeRepository
+     */
+    private $nodeRepository;
+
     public function __construct(
         EventSubscriberMethodNamesResolver $eventSubscriberMethodNamesResolver,
-        MethodCallParsedNodesFinder $methodCallParsedNodesFinder,
+        NodeRepository $nodeRepository,
         NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->methodCallParsedNodesFinder = $methodCallParsedNodesFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->eventSubscriberMethodNamesResolver = $eventSubscriberMethodNamesResolver;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public function hasExternalCall(ClassMethod $classMethod): bool
     {
-        $methodCalls = $this->methodCallParsedNodesFinder->findByClassMethod($classMethod);
+        $methodCalls = $this->nodeRepository->findCallsByClassMethod($classMethod);
 
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);

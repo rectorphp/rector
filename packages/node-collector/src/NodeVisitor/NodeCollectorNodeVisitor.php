@@ -16,7 +16,7 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
     /**
      * @var NodeRepository
      */
-    private $parsedFunctionLikeNodeCollector;
+    private $nodeRepository;
 
     /**
      * @var ParsedNodeCollector
@@ -39,7 +39,7 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
         ParsedNodeCollector $parsedNodeCollector,
         ParsedPropertyFetchNodeCollector $parsedPropertyFetchNodeCollector
     ) {
-        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->nodeRepository = $parsedFunctionLikeNodeCollector;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->parsedPropertyFetchNodeCollector = $parsedPropertyFetchNodeCollector;
         $this->parsedClassConstFetchNodeCollector = $parsedClassConstFetchNodeCollector;
@@ -51,7 +51,7 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
             $this->parsedNodeCollector->collect($node);
         }
 
-        $this->parsedFunctionLikeNodeCollector->collect($node);
+        $this->nodeRepository->collect($node);
         $this->parsedPropertyFetchNodeCollector->collect($node);
         $this->parsedClassConstFetchNodeCollector->collect($node);
 
