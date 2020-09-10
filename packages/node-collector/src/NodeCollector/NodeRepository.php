@@ -364,6 +364,7 @@ final class NodeRepository
 
         $this->addCallByType($node, $classType, $methodName);
     }
+
     /**
      * @return MethodCall[]|StaticCall[]|ArrayCallable[]
      */

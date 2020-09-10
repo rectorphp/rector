@@ -29,10 +29,8 @@ final class OnPropertyMagicCallProvider
      */
     private $nodeNameResolver;
 
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        NodeRepository $nodeRepository
-    ) {
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeRepository $nodeRepository)
+    {
         $this->nodeRepository = $nodeRepository;
         $this->nodeNameResolver = $nodeNameResolver;
     }
