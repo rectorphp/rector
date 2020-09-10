@@ -108,14 +108,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $currentNodeProvider;
 
     /**
-     * @var string|null
-     */
-    private $previousAppliedClass;
-
-    /**
      * @var Skipper
      */
     private $skipper;
+    /**
+     * @var string|null
+     */
+    private $previousAppliedClass;
 
     /**
      * @required
