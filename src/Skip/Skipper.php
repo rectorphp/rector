@@ -16,6 +16,11 @@ final class Skipper
     private $skip = [];
 
     /**
+     * @var array
+     */
+    private static $filesInDirectory = [];
+
+    /**
      * @param mixed[] $skip
      */
     public function __construct(array $skip = [])
@@ -38,10 +43,7 @@ final class Skipper
 
         foreach ($locations as $location) {
             if (is_dir($location)) {
-                $finder = new Finder();
-                $finder->files()->in($location)->name('*.php');
-
-                if ($this->isFoundInDirectory($finder, $filePathName)) {
+                if ($this->isFoundInDirectory($location, $filePathName)) {
                     return true;
                 }
             }
@@ -54,12 +56,19 @@ final class Skipper
         return false;
     }
 
-    private function isFoundInDirectory(Finder $finder, string $filePathName): bool
+    private function isFoundInDirectory(string $location, string $filePathName): bool
     {
-        foreach ($finder as $file) {
-            if ($file->getRealPath() === $filePathName) {
-                return true;
+        if (! array_key_exists($location, self::$filesInDirectory)) {
+            $finder = new Finder();
+            $finder->files()->in($location)->name('*.php');
+
+            foreach ($finder as $file) {
+                self::$filesInDirectory[$location][] = $file->getRealPath();
             }
+        }
+
+        if (in_array($filePathName, self::$filesInDirectory[$location], true)) {
+            return true;
         }
 
         return false;
