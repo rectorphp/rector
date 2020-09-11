@@ -24,6 +24,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -35,12 +36,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
 /**
- * All parsed nodes grouped type
- * @todo add ParsedNodesRepository, merge with all other node collectors to smymplfiy the access
- *
- * Have api like:
- * - findXByX for N
- * - getXByX for 1
+ * @rector-doc
+ * This service contains all the parsed nodes. E.g. all the functions, method call, classes, static calls etc.
+ * It's useful in case of context analysis, e.g. find all the usage of class method to detect, if the method is used.
  */
 final class NodeRepository
 {
@@ -216,24 +214,22 @@ final class NodeRepository
 
     public function findClassMethodByStaticCall(StaticCall $staticCall): ?ClassMethod
     {
-        $staticCallType = $this->nodeTypeResolver->resolve($staticCall->class);
-        if ($staticCallType instanceof TypeWithClassName) {
-            $staticCallClass = $staticCallType->getClassName();
-        } else {
-            // possible union type?
-            return null;
-        }
-
-        if ($staticCallClass === null) {
-            return null;
-        }
-
         $method = $this->nodeNameResolver->getName($staticCall->name);
         if ($method === null) {
             return null;
         }
 
-        return $this->findClassMethod($staticCallClass, $method);
+        $objectType = $this->nodeTypeResolver->resolve($staticCall->class);
+        $classes = TypeUtils::getDirectClassNames($objectType);
+
+        foreach ($classes as $class) {
+            $possibleClassMethod = $this->findClassMethod($class, $method);
+            if ($possibleClassMethod !== null) {
+                return $possibleClassMethod;
+            }
+        }
+
+        return null;
     }
 
     public function findClassMethod(string $className, string $methodName): ?ClassMethod
