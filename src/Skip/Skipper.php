@@ -47,14 +47,23 @@ final class Skipper
                     continue;
                 }
 
-                foreach ($finder as $file) {
-                    if ($file->getRealPath() === $filePathName) {
-                        return true;
-                    }
+                if ($this->isFoundInDirectory($finder, $filePathName)) {
+                    return true;
                 }
             }
 
             if ($location === $filePathName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isFoundInDirectory(Finder $finder, string $filePathName): bool
+    {
+        foreach ($finder as $file) {
+            if ($file->getRealPath() === $filePathName) {
                 return true;
             }
         }
