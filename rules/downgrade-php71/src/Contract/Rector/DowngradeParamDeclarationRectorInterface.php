@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp72\Contract\Rector;
+namespace Rector\DowngradePhp71\Contract\Rector;
 
 use PhpParser\Node\Param;
 

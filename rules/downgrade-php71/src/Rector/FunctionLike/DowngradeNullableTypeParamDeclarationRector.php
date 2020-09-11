@@ -8,7 +8,6 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 
 /**
  * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector\DowngradeNullableTypeParamDeclarationRectorTest

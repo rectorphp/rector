@@ -7,7 +7,7 @@ namespace Rector\DowngradePhp74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeRector;
+use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeRector;
 use Rector\DowngradePhp74\Contract\Rector\DowngradeTypedPropertyRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 

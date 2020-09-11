@@ -8,7 +8,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\UnionType;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
+use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 
 /**
  * @see \Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector\DowngradeUnionTypeParamDeclarationRectorTest
