@@ -162,6 +162,16 @@ final class PhpVersionFeature
     public const BEFORE_OBJECT_TYPE = '7.1';
 
     /**
+     * @var string
+     */
+    public const BEFORE_VOID_RETURN_TYPE = '7.0';
+
+    /**
+     * @var string
+     */
+    public const BEFORE_NULLABLE_TYPE = '7.0';
+
+    /**
      * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
      * @var string
      */
