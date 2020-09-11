@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Skip;
 
+use Rector\Core\Rector\AbstractRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Skipper
@@ -21,8 +22,22 @@ final class Skipper
         $this->skip = $skip;
     }
 
-    private function shouldSkipFileInfoAndRule(): bool
+    public function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo, AbstractRector $rector): bool
     {
-        return $this->skip !== [];
+        if ($this->skip === []) {
+            return false;
+        }
+
+        $rectorClass = get_class($rector);
+        if (! in_array($rectorClass, $this->skip, true)) {
+            return false;
+        }
+
+        $locations = $this->skip[$rectorClass];
+        if (! in_array($smartFileInfo->getPathName(), $locations, true)) {
+            return false;
+        }
+
+        return true;
     }
 }
