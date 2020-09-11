@@ -23,7 +23,7 @@ final class Skipper
         $this->skip = $skip;
     }
 
-    private function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo, AbstractRector $rector): bool
+    public function shouldSkipFileInfoAndRule(SmartFileInfo $smartFileInfo, AbstractRector $rector): bool
     {
         if ($this->skip === []) {
             return false;
