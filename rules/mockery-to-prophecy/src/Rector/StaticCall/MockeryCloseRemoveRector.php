@@ -52,7 +52,8 @@ public function tearDown() : void
 {
     \Mockery::close();
 }
-PHP,
+PHP
+,
                     <<<'PHP'
 public function tearDown() : void
 {

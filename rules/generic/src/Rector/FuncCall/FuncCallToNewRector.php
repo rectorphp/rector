@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -31,7 +31,7 @@ final class FuncCallToNewRector extends AbstractRector implements ConfigurableRe
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change configured function calls to new Instance', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 class SomeClass
 {
@@ -51,6 +51,12 @@ class SomeClass
     }
 }
 PHP
+,
+                [
+                    self::FUNCTION_TO_NEW => [
+                        'collection' => ['Collection'],
+                    ],
+                ]
             ),
         ]);
     }

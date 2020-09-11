@@ -15,7 +15,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -48,7 +48,7 @@ final class EntityAliasToClassConstantReferenceRector extends AbstractRector imp
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replaces doctrine alias with class.', [
-            new CodeSample(
+            new ConfiguredCodeSample(
 <<<'PHP'
 $entityManager = new Doctrine\ORM\EntityManager();
 $entityManager->getRepository("AppBundle:Post");
@@ -58,6 +58,12 @@ PHP
 $entityManager = new Doctrine\ORM\EntityManager();
 $entityManager->getRepository(\App\Entity\Post::class);
 PHP
+,
+                [
+                    self::ALIASES_TO_NAMESPACES => [
+                        'App' => 'App\Entity',
+                    ],
+                ]
             ),
         ]);
     }

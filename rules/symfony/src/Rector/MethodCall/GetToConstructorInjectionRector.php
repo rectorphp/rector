@@ -7,7 +7,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -33,7 +33,7 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
         return new RectorDefinition(
             'Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'PHP'
 class MyCommand extends ContainerAwareCommand
 {
@@ -59,6 +59,10 @@ class MyCommand extends Command
     }
 }
 PHP
+                    ,
+                    [
+                        self::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName'],
+                    ]
                 ),
             ]
         );

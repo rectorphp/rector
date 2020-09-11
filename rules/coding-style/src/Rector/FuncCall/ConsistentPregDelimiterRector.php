@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -68,7 +68,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Conf
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Replace PREG delimiter with configured one', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 class SomeClass
 {
@@ -90,6 +90,10 @@ class SomeClass
     }
 }
 PHP
+,
+                [
+                    self::DELIMITER => '#',
+                ]
             ),
         ]);
     }

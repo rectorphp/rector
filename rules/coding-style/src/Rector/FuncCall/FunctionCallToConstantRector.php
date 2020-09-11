@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -31,8 +31,8 @@ final class FunctionCallToConstantRector extends AbstractRector implements Confi
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes use of function calls to use constants', [
-            new CodeSample(
-                <<<'EOS'
+            new ConfiguredCodeSample(
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -40,9 +40,9 @@ class SomeClass
         $value = php_sapi_name();
     }
 }
-EOS
+CODE_SAMPLE
                 ,
-                <<<'EOS'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,10 +50,16 @@ class SomeClass
         $value = PHP_SAPI;
     }
 }
-EOS
+CODE_SAMPLE
+                ,
+                [
+                    self::FUNCTIONS_TO_CONSTANTS => [
+                        'php_sapi_name' => 'PHP_SAPI',
+                    ],
+                ]
             ),
-            new CodeSample(
-                <<<'EOS'
+            new ConfiguredCodeSample(
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -61,9 +67,9 @@ class SomeClass
         $value = pi();
     }
 }
-EOS
+CODE_SAMPLE
                 ,
-                <<<'EOS'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -71,7 +77,13 @@ class SomeClass
         $value = M_PI;
     }
 }
-EOS
+CODE_SAMPLE
+                ,
+                [
+                    self::FUNCTIONS_TO_CONSTANTS => [
+                        'pi' => 'M_PI',
+                    ],
+                ]
             ),
         ]);
     }

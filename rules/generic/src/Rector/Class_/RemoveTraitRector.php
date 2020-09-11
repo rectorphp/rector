@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -48,7 +48,7 @@ final class RemoveTraitRector extends AbstractRector implements ConfigurableRect
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove specific traits from code', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 class SomeClass
 {
@@ -61,6 +61,10 @@ class SomeClass
 {
 }
 PHP
+,
+                [
+                    self::TRAITS_TO_REMOVE => ['TraitNameToRemove'],
+                ]
             ),
         ]);
     }

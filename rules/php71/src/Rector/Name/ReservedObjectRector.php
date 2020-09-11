@@ -10,7 +10,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -35,7 +35,7 @@ final class ReservedObjectRector extends AbstractRector implements ConfigurableR
     {
         return new RectorDefinition(
             'Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured',
-            [new CodeSample(<<<'PHP'
+            [new ConfiguredCodeSample(<<<'PHP'
 class Object
 {
 }
@@ -45,6 +45,13 @@ class SmartObject
 {
 }
 PHP
+            ,
+            [
+                self::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
+                    'ReservedObject' => 'SmartObject',
+                    'Object' => 'AnotherSmartObject',
+                ],
+            ]
             )]
         );
     }

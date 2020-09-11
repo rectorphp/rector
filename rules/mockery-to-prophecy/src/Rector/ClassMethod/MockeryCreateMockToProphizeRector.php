@@ -59,7 +59,8 @@ final class MockeryCreateMockToProphizeRector extends AbstractPHPUnitRector
 $mock = \Mockery::mock(\'MyClass\');
 $service = new Service();
 $service->injectDependency($mock);
-PHP,
+PHP
+,
                     <<<'PHP'
  $mock = $this->prophesize(\'MyClass\');
 

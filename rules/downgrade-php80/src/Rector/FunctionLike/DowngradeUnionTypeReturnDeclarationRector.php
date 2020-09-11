@@ -8,7 +8,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeReturnDeclarationRector;
 
@@ -22,7 +22,7 @@ final class DowngradeUnionTypeReturnDeclarationRector extends AbstractDowngradeR
         return new RectorDefinition(
             'Remove returning union types, add a @return tag instead',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'PHP'
 <?php
 
@@ -55,6 +55,10 @@ class SomeClass
     }
 }
 PHP
+,
+                    [
+                        self::ADD_DOC_BLOCK => true,
+                    ]
                 ),
             ]
         );

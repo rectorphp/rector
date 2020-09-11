@@ -52,7 +52,7 @@ final class VersionCompareFuncCallToConstantRector extends AbstractRector
     {
         return new RectorDefinition('Changes use of call to version compare function to use of PHP version constant', [
             new CodeSample(
-                <<<'EOS'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -60,9 +60,9 @@ class SomeClass
         version_compare(PHP_VERSION, '5.3.0', '<');
     }
 }
-EOS
+CODE_SAMPLE
                 ,
-                <<<'EOS'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -70,7 +70,7 @@ class SomeClass
         PHP_VERSION_ID < 50300;
     }
 }
-EOS
+CODE_SAMPLE
             ),
         ]);
     }

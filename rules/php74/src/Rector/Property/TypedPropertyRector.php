@@ -20,7 +20,7 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareArrayTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
@@ -82,7 +82,7 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
         return new RectorDefinition(
             'Changes property `@var` annotations from annotation to type.',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'PHP'
 final class SomeClass
 {
@@ -99,6 +99,10 @@ final class SomeClass
     private int count;
 }
 PHP
+                    ,
+                    [
+                        self::CLASS_LIKE_TYPE_ONLY => false,
+                    ]
                 ),
             ]
         );
