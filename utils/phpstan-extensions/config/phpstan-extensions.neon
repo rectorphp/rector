@@ -19,6 +19,10 @@ services:
          class: Rector\PHPStanExtensions\Rule\ConfigurableRectorRule
          tags: [phpstan.rules.rule]
 
+    -
+         class: Rector\PHPStanExtensions\Rule\RectorRuleAndValueObjectHaveSameStartsRule
+         tags: [phpstan.rules.rule]
+
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 
     # $node->getAttribute($1) => Type|null by $1
