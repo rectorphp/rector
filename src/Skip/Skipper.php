@@ -16,7 +16,7 @@ final class Skipper
     private $skip = [];
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private static $filesInDirectory = [];
 
@@ -42,10 +42,8 @@ final class Skipper
         $filePathName = $smartFileInfo->getPathName();
 
         foreach ($locations as $location) {
-            if (is_dir($location)) {
-                if ($this->isFoundInDirectory($location, $filePathName)) {
-                    return true;
-                }
+            if (is_dir($location) && $this->isFoundInDirectory($location, $filePathName)) {
+                return true;
             }
 
             if ($location === $filePathName) {
@@ -67,10 +65,6 @@ final class Skipper
             }
         }
 
-        if (in_array($filePathName, self::$filesInDirectory[$location], true)) {
-            return true;
-        }
-
-        return false;
+        return in_array($filePathName, self::$filesInDirectory[$location], true);
     }
 }
