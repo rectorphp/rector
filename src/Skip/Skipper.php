@@ -54,17 +54,18 @@ final class Skipper
         return false;
     }
 
-    private function isFoundInDirectory(string $location, string $filePathName): bool
+    private function isFoundInDirectory(string $directory, string $filePathName): bool
     {
-        if (! array_key_exists($location, self::$filesInDirectory)) {
+        $directory = rtrim($directory, '/') . '/';
+        if (! array_key_exists($directory, self::$filesInDirectory)) {
             $finder = new Finder();
-            $finder->files()->in($location)->name('*.php');
+            $finder->files()->in($directory)->name('*.php');
 
             foreach ($finder as $file) {
-                self::$filesInDirectory[$location][] = $file->getRealPath();
+                self::$filesInDirectory[$directory][] = $file->getRealPath();
             }
         }
 
-        return in_array($filePathName, self::$filesInDirectory[$location], true);
+        return in_array($filePathName, self::$filesInDirectory[$directory], true);
     }
 }
