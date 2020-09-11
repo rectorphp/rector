@@ -43,10 +43,6 @@ final class Skipper
                 $finder = new Finder();
                 $finder->files()->in($location)->name('*.php');
 
-                if (! $finder->hasResults()) {
-                    continue;
-                }
-
                 if ($this->isFoundInDirectory($finder, $filePathName)) {
                     return true;
                 }
