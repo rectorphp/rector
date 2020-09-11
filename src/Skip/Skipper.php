@@ -28,8 +28,9 @@ final class Skipper
             return false;
         }
 
+        $skippedRules = array_keys($this->skip);
         $rectorClass = get_class($rector);
-        if (! in_array($rectorClass, $this->skip, true)) {
+        if (! in_array($rectorClass, $skippedRules, true)) {
             return false;
         }
 
