@@ -191,6 +191,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
     // skip classes used in PHP DocBlocks, like in /** @var \Some\Class */ [default: true]
     $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
+
+    // skip directory/file by rule
+    $parameters->set(Option::SKIP, [
+        Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector::class => [
+            __DIR__ . '/skipped-directory/',
+            __DIR__ . '/foo/bar/baz.php',
+        ],
+        Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector::class => [
+            __DIR__ . '/skipped-directory/',
+            __DIR__ . '/foo/bar/baz.php',
+        ],
+    ]);
 };
 ```
 
