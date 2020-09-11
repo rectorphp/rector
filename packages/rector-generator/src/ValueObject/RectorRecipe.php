@@ -44,11 +44,6 @@ final class RectorRecipe
     private $isRectorRepository = false;
 
     /**
-     * @var bool
-     */
-    private $isPhpSnippet = true;
-
-    /**
      * @var string
      */
     private $category;
@@ -182,11 +177,6 @@ final class RectorRecipe
         return $this->extraFileContent;
     }
 
-    public function isPhpSnippet(): bool
-    {
-        return $this->isPhpSnippet;
-    }
-
     public function isRectorRepository(): bool
     {
         return $this->isRectorRepository;
@@ -293,8 +283,6 @@ final class RectorRecipe
 
     private function setCodeBefore(string $codeBefore): void
     {
-        $this->detectIsPhpSnippet($codeBefore);
-
         $this->codeBefore = $this->normalizeCode($codeBefore);
     }
 
@@ -309,12 +297,6 @@ final class RectorRecipe
     private function resolveCategory(array $nodeTypes): void
     {
         $this->category = (string) Strings::after($nodeTypes[0], '\\', -1);
-    }
-
-    private function detectIsPhpSnippet(string $codeBefore): void
-    {
-        // dummy yet effective way to detect PHP snippet from HTML
-        $this->isPhpSnippet = Strings::startsWith($codeBefore, '<?php') || Strings::match($codeBefore, '#^class #ms');
     }
 
     private function normalizeCode(string $code): string
