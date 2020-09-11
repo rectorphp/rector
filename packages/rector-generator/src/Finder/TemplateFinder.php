@@ -46,7 +46,7 @@ final class TemplateFinder
         $filePaths = $this->addRuleAndTestCase($rectorRecipe, $filePaths);
 
         /** @var string[] $filePaths */
-        $filePaths[] = $this->resolveFixtureFilePath($rectorRecipe->isPhpSnippet());
+        $filePaths[] = $this->resolveFixtureFilePath();
 
         $this->ensureFilePathsExists($filePaths);
 
@@ -85,14 +85,9 @@ final class TemplateFinder
         return $filePaths;
     }
 
-    private function resolveFixtureFilePath(bool $isPhpSnippet): string
+    private function resolveFixtureFilePath(): string
     {
-        if ($isPhpSnippet) {
-            return __DIR__ . '/../../templates/rules/__package__/tests/Rector/__Category__/__Name__/Fixture/fixture.php.inc';
-        }
-
-        // is html snippet
-        return __DIR__ . '/../../templates/rules/__package__/tests/Rector/__Category__/__Name__/Fixture/html_fixture.php.inc';
+        return __DIR__ . '/../../templates/rules/__package__/tests/Rector/__Category__/__Name__/Fixture/fixture.php.inc';
     }
 
     /**
