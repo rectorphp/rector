@@ -9,9 +9,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DowngradePhp72\Rector\FunctionLike\AbstractDowngradeReturnTypeDeclarationRector;
 
 /**
- * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeReturnVoidTypeDeclarationRector\DowngradeReturnVoidTypeDeclarationRectorTest
+ * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector\DowngradeVoidTypeReturnDeclarationRectorTest
  */
-final class DowngradeReturnVoidTypeDeclarationRector extends AbstractDowngradeReturnTypeDeclarationRector
+final class DowngradeVoidTypeReturnDeclarationRector extends AbstractDowngradeReturnTypeDeclarationRector
 {
     public function getDefinition(): RectorDefinition
     {

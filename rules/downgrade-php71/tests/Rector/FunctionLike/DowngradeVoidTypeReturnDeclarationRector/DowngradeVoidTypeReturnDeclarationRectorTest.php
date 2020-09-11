@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeReturnVoidTypeDeclarationRector;
+namespace Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeReturnVoidTypeDeclarationRector;
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class DowngradeReturnVoidTypeDeclarationRectorTest extends AbstractRectorTestCase
+final class DowngradeVoidTypeReturnDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP >= 7.1
@@ -32,15 +32,15 @@ final class DowngradeReturnVoidTypeDeclarationRectorTest extends AbstractRectorT
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            DowngradeReturnVoidTypeDeclarationRector::class => [
-                DowngradeReturnVoidTypeDeclarationRector::ADD_DOC_BLOCK => true,
+            DowngradeVoidTypeReturnDeclarationRector::class => [
+                DowngradeVoidTypeReturnDeclarationRector::ADD_DOC_BLOCK => true,
             ],
         ];
     }
 
     protected function getRectorClass(): string
     {
-        return DowngradeReturnVoidTypeDeclarationRector::class;
+        return DowngradeVoidTypeReturnDeclarationRector::class;
     }
 
     protected function getPhpVersion(): string
