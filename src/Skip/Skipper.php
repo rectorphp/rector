@@ -58,7 +58,7 @@ final class Skipper
                 return true;
             }
 
-            if ($ignoredPath . $fileName === $filePathName) {
+            if (rtrim($ignoredPath, '/') . DIRECTORY_SEPARATOR . $fileName === $filePathName) {
                 return true;
             }
         }
@@ -82,6 +82,6 @@ final class Skipper
             return $path . '*';
         }
 
-        return rtrim($path, '/') . '/';
+        return $path;
     }
 }
