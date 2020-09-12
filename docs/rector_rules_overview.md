@@ -2149,7 +2149,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->call('configure', [[
             ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CodingStyle\ValueObject\MethodToYield('EventSubscriberInterface', 'getSubscribedEvents'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('EventSubscriberInterface', 'getSubscribedEvents'))]
         ]]);
 };
 ```
