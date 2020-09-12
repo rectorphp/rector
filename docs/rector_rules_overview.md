@@ -12657,7 +12657,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameAnnotationRector::class)
         ->call('configure', [[
             RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenamedAnnotationInType('PHPUnit\Framework\TestCase', 'test', 'scenario'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenameAnnotation('PHPUnit\Framework\TestCase', 'test', 'scenario'))]
         ]]);
 };
 ```
