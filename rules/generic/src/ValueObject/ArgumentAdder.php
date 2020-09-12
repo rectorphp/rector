@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Generic\ValueObject;
 
-final class AddedArgument
+final class ArgumentAdder
 {
     /**
      * @var string

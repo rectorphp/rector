@@ -9,7 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeContainerBuilder;
 use Rector\Generic\Tests\Rector\ClassMethod\ArgumentAdderRector\Source\SomeParentClient;
-use Rector\Generic\ValueObject\AddedArgument;
+use Rector\Generic\ValueObject\ArgumentAdder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArgumentAdderRectorTest extends AbstractRectorTestCase
@@ -35,11 +35,11 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
         return [
             ArgumentAdderRector::class => [
                 ArgumentAdderRector::ADDED_ARGUMENTS => [
-                    new AddedArgument(SomeContainerBuilder::class, 'compile', 0, 'isCompiled', false),
-                    new AddedArgument(SomeContainerBuilder::class, 'addCompilerPass', 2, 'priority', 0, 'int'),
+                    new ArgumentAdder(SomeContainerBuilder::class, 'compile', 0, 'isCompiled', false),
+                    new ArgumentAdder(SomeContainerBuilder::class, 'addCompilerPass', 2, 'priority', 0, 'int'),
 
                     // scoped
-                    new AddedArgument(
+                    new ArgumentAdder(
                         SomeParentClient::class,
                         'submit',
                         2,
@@ -48,7 +48,7 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
                         'array',
                         ArgumentAdderRector::SCOPE_PARENT_CALL
                     ),
-                    new AddedArgument(
+                    new ArgumentAdder(
                         SomeParentClient::class,
                         'submit',
                         2,

@@ -21,7 +21,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\AddedArgument;
+use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Webmozart\Assert\Assert;
 
@@ -51,7 +51,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     public const SCOPE_CLASS_METHOD = 'class_method';
 
     /**
-     * @var AddedArgument[]
+     * @var ArgumentAdder[]
      */
     private $addedArguments = [];
 
@@ -59,7 +59,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     {
         $exampleConfiguration = [
             self::ADDED_ARGUMENTS => [
-                new AddedArgument('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType'),
+                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType'),
             ],
         ];
 
@@ -138,7 +138,7 @@ PHP
     public function configure(array $configuration): void
     {
         $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? [];
-        Assert::allIsInstanceOf($addedArguments, AddedArgument::class);
+        Assert::allIsInstanceOf($addedArguments, ArgumentAdder::class);
         $this->addedArguments = $addedArguments;
     }
 
@@ -170,7 +170,7 @@ PHP
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
      */
-    private function processPositionWithDefaultValues(Node $node, AddedArgument $addedArgument): void
+    private function processPositionWithDefaultValues(Node $node, ArgumentAdder $addedArgument): void
     {
         if ($this->shouldSkipParameter($node, $addedArgument)) {
             return;
@@ -202,7 +202,7 @@ PHP
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
      */
-    private function shouldSkipParameter(Node $node, AddedArgument $addedArgument): bool
+    private function shouldSkipParameter(Node $node, ArgumentAdder $addedArgument): bool
     {
         $position = $addedArgument->getPosition();
         $argumentName = $addedArgument->getArgumentName();
@@ -255,7 +255,7 @@ PHP
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
      */
-    private function isInCorrectScope(Node $node, AddedArgument $addedArgument): bool
+    private function isInCorrectScope(Node $node, ArgumentAdder $addedArgument): bool
     {
         if ($addedArgument->getScope() === null) {
             return true;

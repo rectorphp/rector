@@ -5315,7 +5315,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\AddedArgument('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null))]
         ]]);
 };
 ```
@@ -5339,7 +5339,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\AddedArgument('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null))]
         ]]);
 };
 ```

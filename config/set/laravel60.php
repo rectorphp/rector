@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
-use Rector\Generic\ValueObject\AddedArgument;
+use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\Generic\ValueObject\MethodCallWrap;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -89,10 +89,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
                 // https://github.com/laravel/framework/commit/6c1e014943a508afb2c10869c3175f7783a004e1
-                new AddedArgument('Illuminate\Database\Capsule\Manager', 'table', 1, 'as', 'null'),
-                new AddedArgument('Illuminate\Database\Connection', 'table', 1, 'as', 'null'),
-                new AddedArgument('Illuminate\Database\ConnectionInterface', 'table', 1, 'as', 'null'),
-                new AddedArgument('Illuminate\Database\Query\Builder', 'from', 1, 'as', 'null'),
+                new ArgumentAdder('Illuminate\Database\Capsule\Manager', 'table', 1, 'as', 'null'),
+                new ArgumentAdder('Illuminate\Database\Connection', 'table', 1, 'as', 'null'),
+                new ArgumentAdder('Illuminate\Database\ConnectionInterface', 'table', 1, 'as', 'null'),
+                new ArgumentAdder('Illuminate\Database\Query\Builder', 'from', 1, 'as', 'null'),
             ]),
         ]]);
 };

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\Generic\Rector\ClassMethod\AddMethodParentCallRector;
 
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Generic\ValueObject\AddedArgument;
+use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -83,7 +83,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface',
                     'setMarking',
                     2,

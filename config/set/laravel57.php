@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
-use Rector\Generic\ValueObject\AddedArgument;
+use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector;
@@ -28,8 +28,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
-                new AddedArgument('Illuminate\Auth\Middleware\Authenticate', 'authenticate', 0, 'request'),
-                new AddedArgument(
+                new ArgumentAdder('Illuminate\Auth\Middleware\Authenticate', 'authenticate', 0, 'request'),
+                new ArgumentAdder(
                     'Illuminate\Foundation\Auth\ResetsPasswords',
                     'sendResetResponse',
                     0,
@@ -37,7 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     'Illuminate\Http\Illuminate\Http'
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Illuminate\Foundation\Auth\SendsPasswordResetEmails',
                     'sendResetLinkResponse',
                     0,

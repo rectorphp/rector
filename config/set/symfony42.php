@@ -9,8 +9,8 @@ use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
-use Rector\Generic\ValueObject\AddedArgument;
 use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
+use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Generic\ValueObject\ReplacedArgument;
@@ -65,7 +65,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
                 // https://github.com/symfony/symfony/commit/fa2063efe43109aea093d6fbfc12d675dba82146
                 // https://github.com/symfony/symfony/commit/e3aa90f852f69040be19da3d8729cdf02d238ec7
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Component\BrowserKit\Client',
                     'submit',
                     2,
@@ -74,7 +74,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     ArgumentAdderRector::SCOPE_METHOD_CALL
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Component\DomCrawler\Crawler',
                     'children',
                     0,
@@ -83,7 +83,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     ArgumentAdderRector::SCOPE_METHOD_CALL
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Component\Finder\Finder',
                     'sortByName',
                     0,
@@ -92,7 +92,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     ArgumentAdderRector::SCOPE_METHOD_CALL
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Bridge\Monolog\Processor\DebugProcessor',
                     'getLogs',
                     0,
@@ -101,7 +101,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     ArgumentAdderRector::SCOPE_METHOD_CALL
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Bridge\Monolog\Processor\DebugProcessor',
                     'countErrors',
                     0,
@@ -110,7 +110,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     ArgumentAdderRector::SCOPE_METHOD_CALL
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Bridge\Monolog\Logger',
                     'getLogs',
                     0,
@@ -119,7 +119,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     ArgumentAdderRector::SCOPE_METHOD_CALL
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Bridge\Monolog\Logger',
                     'countErrors',
                     0,
@@ -128,7 +128,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     ArgumentAdderRector::SCOPE_METHOD_CALL
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Component\Serializer\Normalizer',
                     'handleCircularReference',
                     1,
@@ -137,7 +137,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     null,
                     ArgumentAdderRector::SCOPE_METHOD_CALL
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Component\Serializer\Normalizer',
                     'handleCircularReference',
                     2,

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Generic\ValueObject\AddedArgument;
+use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -17,21 +17,21 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Component\DependencyInjection\ContainerBuilder',
                     'compile',
                     2,
                     '__unknown__',
                     0
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Component\DependencyInjection\ContainerBuilder',
                     'addCompilerPass',
                     2,
                     'priority',
                     0
                 ),
-                new AddedArgument(
+                new ArgumentAdder(
                     'Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph',
                     'connect',
                     6,
