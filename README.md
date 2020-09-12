@@ -196,11 +196,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SKIP, [
         Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector::class => [
             __DIR__ . '/skipped-directory/',
-            __DIR__ . '/foo/bar/baz.php',
+            __DIR__ . '/*/skipped-directory/*',
         ],
         Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector::class => [
             __DIR__ . '/skipped-directory/',
-            __DIR__ . '/foo/bar/baz.php',
+            __DIR__ . '/*/skipped-directory/*',
         ],
     ]);
 };
