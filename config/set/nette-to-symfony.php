@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\Generic\Rector\Class_\RemoveInterfacesRector;
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\NetteToSymfony\Rector\Class_\FormControlToControllerAndFormTypeRector;
 use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector;
 use Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector;
@@ -35,7 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
-                new MethodReturnType(
+                new AddReturnTypeDeclaration(
                     'Nette\Application\IPresenter',
                     'run',
                     'Symfony\Component\HttpFoundation\Response'

@@ -10,7 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Webmozart\Assert\Assert;
 
 /**
@@ -24,7 +24,7 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
     public const METHOD_RETURN_TYPES = 'method_return_types';
 
     /**
-     * @var MethodReturnType[]
+     * @var AddReturnTypeDeclaration[]
      */
     private $methodReturnTypes = [];
 
@@ -51,7 +51,7 @@ class SomeClass
 PHP
                 ,
                 [
-                    self::METHOD_RETURN_TYPES => [new MethodReturnType('SomeClass', 'getData', 'array')],
+                    self::METHOD_RETURN_TYPES => [new AddReturnTypeDeclaration('SomeClass', 'getData', 'array')],
                 ]
             ),
         ]);
@@ -90,7 +90,7 @@ PHP
     public function configure(array $configuration): void
     {
         $methodReturnTypes = $configuration[self::METHOD_RETURN_TYPES] ?? [];
-        Assert::allIsInstanceOf($methodReturnTypes, MethodReturnType::class);
+        Assert::allIsInstanceOf($methodReturnTypes, AddReturnTypeDeclaration::class);
 
         $this->methodReturnTypes = $methodReturnTypes;
     }

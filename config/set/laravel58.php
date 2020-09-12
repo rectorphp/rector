@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\Generic\ValueObject\RenamedProperty;
 use Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
@@ -23,11 +23,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
-                new MethodReturnType('Illuminate\Contracts\Cache\Repository', 'put', 'bool'),
-                new MethodReturnType('Illuminate\Contracts\Cache\Repository', 'forever', 'bool'),
-                new MethodReturnType('Illuminate\Contracts\Cache\Store', 'put', 'bool'),
-                new MethodReturnType('Illuminate\Contracts\Cache\Store', 'putMany', 'bool'),
-                new MethodReturnType('Illuminate\Contracts\Cache\Store', 'forever', 'bool'), ]
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'put', 'bool'),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Repository', 'forever', 'bool'),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'put', 'bool'),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'putMany', 'bool'),
+                new AddReturnTypeDeclaration('Illuminate\Contracts\Cache\Store', 'forever', 'bool'), ]
             ),
         ]]);
 

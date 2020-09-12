@@ -10,7 +10,7 @@ use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\ValueObject\AddedArgument;
-use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Generic\ValueObject\ReplacedArgument;
@@ -164,7 +164,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects([
-                new MethodReturnType('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', 'iterable'),
+                new AddReturnTypeDeclaration('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', 'iterable'),
             ]),
         ]]);
 

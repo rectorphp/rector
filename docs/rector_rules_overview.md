@@ -5255,7 +5255,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodReturnType('SomeClass', 'getData', 'array'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\AddReturnTypeDeclaration('SomeClass', 'getData', 'array'))]
         ]]);
 };
 ```

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
@@ -45,13 +45,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects(
                 [
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'setUpBeforeClass', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'setUp', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'assertPreConditions', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'assertPostConditions', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'tearDown', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'tearDownAfterClass', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'onNotSuccessfulTest', 'void'), ]
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'setUpBeforeClass', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'setUp', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'assertPreConditions', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'assertPostConditions', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'tearDown', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'tearDownAfterClass', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'onNotSuccessfulTest', 'void'), ]
             ),
         ]]);
 
