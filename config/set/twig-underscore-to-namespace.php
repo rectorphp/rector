@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\Name\PseudoNamespaceToNamespaceRector;
-use Rector\Generic\ValueObject\NamespacePrefixWithExcludedClasses;
+use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -172,7 +172,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
             PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => inline_value_objects([
-                new NamespacePrefixWithExcludedClasses('Twig_'),
+                new PseudoNamespaceToNamespace('Twig_'),
             ]),
         ]]);
 };

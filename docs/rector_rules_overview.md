@@ -5976,7 +5976,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
             PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\NamespacePrefixWithExcludedClasses('Some_', ['Some_Class_To_Keep']))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\PseudoNamespaceToNamespace('Some_', ['Some_Class_To_Keep']))]
         ]]);
 };
 ```

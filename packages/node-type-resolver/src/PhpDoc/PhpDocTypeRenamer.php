@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Generic\ValueObject\NamespacePrefixWithExcludedClasses;
+use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
@@ -35,7 +35,7 @@ final class PhpDocTypeRenamer
 
     public function changeUnderscoreType(
         Node $node,
-        NamespacePrefixWithExcludedClasses $namespacePrefixWithExcludedClasses
+        PseudoNamespaceToNamespace $namespacePrefixWithExcludedClasses
     ): void {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -68,7 +68,7 @@ final class PhpDocTypeRenamer
     private function shouldSkip(
         PhpDocParserNode $phpDocParserNode,
         Node $phpParserNode,
-        NamespacePrefixWithExcludedClasses $namespacePrefixWithExcludedClasses
+        PseudoNamespaceToNamespace $namespacePrefixWithExcludedClasses
     ): bool {
         if (! $phpDocParserNode instanceof IdentifierTypeNode) {
             return true;
