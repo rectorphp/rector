@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject;
 
-final class MovedClassValueObject
+final class MovedClass
 {
     /**
      * @var string

@@ -7,7 +7,7 @@ namespace Rector\Core\Application\FileSystem;
 use Rector\Core\Configuration\Configuration;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\Core\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Rector\Core\ValueObject\MovedClassValueObject;
+use Rector\Core\ValueObject\MovedClass;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -131,7 +131,7 @@ final class RemovedAndAddedFilesProcessor
         }
     }
 
-    private function printFileMoveWarning(MovedClassValueObject $movedClassValueObject, string $verb): void
+    private function printFileMoveWarning(MovedClass $movedClassValueObject, string $verb): void
     {
         $message = sprintf(
             'File "%s" %s moved to "%s"',
