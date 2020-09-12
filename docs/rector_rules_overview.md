@@ -5409,7 +5409,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
             ArgumentRemoverRector::REMOVED_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RemovedArgument('ExampleClass', 'someMethod', 0, 'true'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentRemover('ExampleClass', 'someMethod', 0, 'true'))]
         ]]);
 };
 ```

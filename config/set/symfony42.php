@@ -11,8 +11,8 @@ use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\Generic\ValueObject\ArgumentAdder;
+use Rector\Generic\ValueObject\ArgumentRemover;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
-use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Generic\ValueObject\ReplacedArgument;
 use Rector\Generic\ValueObject\TypeMethodWrap;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -203,13 +203,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             # https://github.com/symfony/symfony/commit/f5c355e1ba399a1b3512367647d902148bdaf09f
             ArgumentRemoverRector::REMOVED_ARGUMENTS => inline_value_objects([
-                new RemovedArgument(
+                new ArgumentRemover(
                     'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector',
                     '__construct',
                     0,
                     null
                 ),
-                new RemovedArgument(
+                new ArgumentRemover(
                     'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector',
                     '__construct',
                     1,
