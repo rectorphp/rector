@@ -9,7 +9,7 @@ use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\Persister;
 use Rector\Generic\Tests\Rector\ClassMethod\ArgumentRemoverRector\Source\RemoveInTheMiddle;
-use Rector\Generic\ValueObject\RemovedArgument;
+use Rector\Generic\ValueObject\ArgumentRemover;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -36,14 +36,14 @@ final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
         return [
             ArgumentRemoverRector::class => [
                 ArgumentRemoverRector::REMOVED_ARGUMENTS => [
-                    new RemovedArgument(Persister::class, 'getSelectJoinColumnSQL', 4, null),
-                    new RemovedArgument(Yaml::class, 'parse', 1, [
+                    new ArgumentRemover(Persister::class, 'getSelectJoinColumnSQL', 4, null),
+                    new ArgumentRemover(Yaml::class, 'parse', 1, [
                         'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS',
                         'hey',
                         55,
                         5.5,
                     ]),
-                    new RemovedArgument(RemoveInTheMiddle::class, 'run', 1, ['name' => 'second']),
+                    new ArgumentRemover(RemoveInTheMiddle::class, 'run', 1, ['name' => 'second']),
                 ],
             ],
         ];

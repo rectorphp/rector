@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 use Rector\Transform\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition;
-use Rector\Transform\ValueObject\MethodCallRenameWithAddedArguments;
+use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends AbstractRectorTestCase
@@ -34,7 +34,7 @@ final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends Abstrac
         return [
             MethodCallToAnotherMethodCallWithArgumentsRector::class => [
                 MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => [
-                    new MethodCallRenameWithAddedArguments(
+                    new MethodCallToAnotherMethodCallWithArguments(
                         NetteServiceDefinition::class,
                         'setInject',
                         'addTag',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\ValueObject;
 
-final class MethodToYield
+final class ReturnArrayClassMethodToYield
 {
     /**
      * @var string

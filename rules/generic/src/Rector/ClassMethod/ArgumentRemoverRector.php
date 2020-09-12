@@ -13,7 +13,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\RemovedArgument;
+use Rector\Generic\ValueObject\ArgumentRemover;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,7 +27,7 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
     public const REMOVED_ARGUMENTS = 'removed_arguments';
 
     /**
-     * @var RemovedArgument[]
+     * @var ArgumentRemover[]
      */
     private $removedArguments = [];
 
@@ -48,7 +48,7 @@ $someObject->someMethod();'
 PHP
                     ,
                     [
-                        self::REMOVED_ARGUMENTS => [new RemovedArgument('ExampleClass', 'someMethod', 0, 'true')],
+                        self::REMOVED_ARGUMENTS => [new ArgumentRemover('ExampleClass', 'someMethod', 0, 'true')],
                     ]
                 ),
             ]
@@ -86,38 +86,38 @@ PHP
     public function configure(array $configuration): void
     {
         $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? [];
-        Assert::allIsInstanceOf($removedArguments, RemovedArgument::class);
+        Assert::allIsInstanceOf($removedArguments, ArgumentRemover::class);
         $this->removedArguments = $removedArguments;
     }
 
     /**
      * @param ClassMethod|StaticCall|MethodCall $node
      */
-    private function processPosition(Node $node, RemovedArgument $removedArgument): void
+    private function processPosition(Node $node, ArgumentRemover $argumentRemover): void
     {
-        if ($removedArgument->getValue() === null) {
+        if ($argumentRemover->getValue() === null) {
             if ($node instanceof MethodCall || $node instanceof StaticCall) {
-                unset($node->args[$removedArgument->getPosition()]);
+                unset($node->args[$argumentRemover->getPosition()]);
             } else {
-                unset($node->params[$removedArgument->getPosition()]);
+                unset($node->params[$argumentRemover->getPosition()]);
             }
 
             return;
         }
 
-        $match = $removedArgument->getValue();
+        $match = $argumentRemover->getValue();
         if (isset($match['name'])) {
-            $this->removeByName($node, $removedArgument->getPosition(), $match['name']);
+            $this->removeByName($node, $argumentRemover->getPosition(), $match['name']);
             return;
         }
 
         // only argument specific value can be removed
-        if ($node instanceof ClassMethod || ! isset($node->args[$removedArgument->getPosition()])) {
+        if ($node instanceof ClassMethod || ! isset($node->args[$argumentRemover->getPosition()])) {
             return;
         }
 
-        if ($this->isArgumentValueMatch($node->args[$removedArgument->getPosition()], $match)) {
-            unset($node->args[$removedArgument->getPosition()]);
+        if ($this->isArgumentValueMatch($node->args[$argumentRemover->getPosition()], $match)) {
+            unset($node->args[$argumentRemover->getPosition()]);
         }
     }
 

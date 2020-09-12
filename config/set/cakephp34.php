@@ -3,19 +3,19 @@
 declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
-use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
+use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Generic\ValueObject\CallToFluent;
-use Rector\Generic\ValueObject\MethodVisibility;
-use Rector\Generic\ValueObject\RenamedProperty;
+use Rector\Generic\ValueObject\ChangeMethodVisibility;
+use Rector\Generic\ValueObject\NormalToFluent;
+use Rector\Generic\ValueObject\RenameProperty;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
-use Rector\Transform\ValueObject\PropertyToMethodCall;
+use Rector\Transform\ValueObject\PropertyToMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -25,163 +25,153 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
                 // source: https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html
-                new PropertyToMethodCall('Cake\Network\Request', 'params', 'getAttribute', null, ['params']),
-                new PropertyToMethodCall('Cake\Network\Request', 'data', 'getData'),
-                new PropertyToMethodCall('Cake\Network\Request', 'query', 'getQueryParams'),
-                new PropertyToMethodCall('Cake\Network\Request', 'cookies', 'getCookie'),
-                new PropertyToMethodCall('Cake\Network\Request', 'base', 'getAttribute', null, ['base']),
-                new PropertyToMethodCall('Cake\Network\Request', 'webroot', 'getAttribute', null, ['webroot']),
-                new PropertyToMethodCall('Cake\Network\Request', 'here', 'getAttribute', null, ['here']),
+                new PropertyToMethod('Cake\Network\Request', 'params', 'getAttribute', null, ['params']),
+                new PropertyToMethod('Cake\Network\Request', 'data', 'getData'),
+                new PropertyToMethod('Cake\Network\Request', 'query', 'getQueryParams'),
+                new PropertyToMethod('Cake\Network\Request', 'cookies', 'getCookie'),
+                new PropertyToMethod('Cake\Network\Request', 'base', 'getAttribute', null, ['base']),
+                new PropertyToMethod('Cake\Network\Request', 'webroot', 'getAttribute', null, ['webroot']),
+                new PropertyToMethod('Cake\Network\Request', 'here', 'getAttribute', null, ['here']),
             ]),
         ]]);
 
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
             RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
-                new RenamedProperty('Cake\Network\Request', '_session', 'session'),
+                new RenameProperty('Cake\Network\Request', '_session', 'session'),
             ]),
         ]]);
 
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
             ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
-                new UnprefixedMethodToGetSet('Cake\Core\InstanceConfigTrait', 'config', null, null, 2, 'array'),
-                new UnprefixedMethodToGetSet('Cake\Core\StaticConfigTrait', 'config', null, null, 2, 'array'),
-                new UnprefixedMethodToGetSet('Cake\Console\ConsoleOptionParser', 'command'),
-                new UnprefixedMethodToGetSet('Cake\Console\ConsoleOptionParser', 'description'),
-                new UnprefixedMethodToGetSet('Cake\Console\ConsoleOptionParser', 'epilog'),
-                new UnprefixedMethodToGetSet('Cake\Database\Connection', 'driver'),
-                new UnprefixedMethodToGetSet('Cake\Database\Connection', 'schemaCollection'),
-                new UnprefixedMethodToGetSet(
+                new ModalToGetSet('Cake\Core\InstanceConfigTrait', 'config', null, null, 2, 'array'),
+                new ModalToGetSet('Cake\Core\StaticConfigTrait', 'config', null, null, 2, 'array'),
+                new ModalToGetSet('Cake\Console\ConsoleOptionParser', 'command'),
+                new ModalToGetSet('Cake\Console\ConsoleOptionParser', 'description'),
+                new ModalToGetSet('Cake\Console\ConsoleOptionParser', 'epilog'),
+                new ModalToGetSet('Cake\Database\Connection', 'driver'),
+                new ModalToGetSet('Cake\Database\Connection', 'schemaCollection'),
+                new ModalToGetSet(
                     'Cake\Database\Connection',
                     'useSavePoints',
                     'isSavePointsEnabled',
                     'enableSavePoints'
                 ),
-                new UnprefixedMethodToGetSet(
+                new ModalToGetSet(
                     'Cake\Database\Driver',
                     'autoQuoting',
                     'isAutoQuotingEnabled',
                     'enableAutoQuoting'
                 ),
-                new UnprefixedMethodToGetSet('Cake\Database\Expression\FunctionExpression', 'name'),
-                new UnprefixedMethodToGetSet(
+                new ModalToGetSet('Cake\Database\Expression\FunctionExpression', 'name'),
+                new ModalToGetSet(
                     'Cake\Database\Expression\QueryExpression',
                     'tieWith',
                     'getConjunction',
                     'setConjunction'
                 ),
-                new UnprefixedMethodToGetSet('Cake\Database\Expression\ValuesExpression', 'columns'),
-                new UnprefixedMethodToGetSet('Cake\Database\Expression\ValuesExpression', 'values'),
-                new UnprefixedMethodToGetSet('Cake\Database\Expression\ValuesExpression', 'query'),
-                new UnprefixedMethodToGetSet('Cake\Database\Query', 'connection'),
-                new UnprefixedMethodToGetSet('Cake\Database\Query', 'selectTypeMap'),
-                new UnprefixedMethodToGetSet(
+                new ModalToGetSet('Cake\Database\Expression\ValuesExpression', 'columns'),
+                new ModalToGetSet('Cake\Database\Expression\ValuesExpression', 'values'),
+                new ModalToGetSet('Cake\Database\Expression\ValuesExpression', 'query'),
+                new ModalToGetSet('Cake\Database\Query', 'connection'),
+                new ModalToGetSet('Cake\Database\Query', 'selectTypeMap'),
+                new ModalToGetSet(
                     'Cake\Database\Query',
                     'bufferResults',
                     'isBufferedResultsEnabled',
                     'enableBufferedResults'
                 ),
-                new UnprefixedMethodToGetSet('Cake\Database\Schema\CachedCollection', 'cacheMetadata'),
-                new UnprefixedMethodToGetSet('Cake\Database\Schema\TableSchema', 'options'),
-                new UnprefixedMethodToGetSet(
-                    'Cake\Database\Schema\TableSchema',
-                    'temporary',
-                    'isTemporary',
-                    'setTemporary'
-                ),
-                new UnprefixedMethodToGetSet('Cake\Database\TypeMap', 'defaults'),
-                new UnprefixedMethodToGetSet('Cake\Database\TypeMap', 'types'),
-                new UnprefixedMethodToGetSet('Cake\Database\TypeMapTrait', 'typeMap'),
-                new UnprefixedMethodToGetSet('Cake\Database\TypeMapTrait', 'defaultTypes'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'name'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'cascadeCallbacks'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'source'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'target'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'conditions'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'bindingKey'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'foreignKey'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'dependent'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'joinType'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'property'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'strategy'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'finder'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association\BelongsToMany', 'targetForeignKey'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association\BelongsToMany', 'saveStrategy'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association\BelongsToMany', 'conditions'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association\HasMany', 'saveStrategy'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association\HasMany', 'foreignKey'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association\HasMany', 'sort'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association\HasOne', 'foreignKey'),
-                new UnprefixedMethodToGetSet('Cake\ORM\EagerLoadable', 'config'),
-                new UnprefixedMethodToGetSet('Cake\ORM\EagerLoadable', 'canBeJoined', 'canBeJoined', 'setCanBeJoined'),
+                new ModalToGetSet('Cake\Database\Schema\CachedCollection', 'cacheMetadata'),
+                new ModalToGetSet('Cake\Database\Schema\TableSchema', 'options'),
+                new ModalToGetSet('Cake\Database\Schema\TableSchema', 'temporary', 'isTemporary', 'setTemporary'),
+                new ModalToGetSet('Cake\Database\TypeMap', 'defaults'),
+                new ModalToGetSet('Cake\Database\TypeMap', 'types'),
+                new ModalToGetSet('Cake\Database\TypeMapTrait', 'typeMap'),
+                new ModalToGetSet('Cake\Database\TypeMapTrait', 'defaultTypes'),
+                new ModalToGetSet('Cake\ORM\Association', 'name'),
+                new ModalToGetSet('Cake\ORM\Association', 'cascadeCallbacks'),
+                new ModalToGetSet('Cake\ORM\Association', 'source'),
+                new ModalToGetSet('Cake\ORM\Association', 'target'),
+                new ModalToGetSet('Cake\ORM\Association', 'conditions'),
+                new ModalToGetSet('Cake\ORM\Association', 'bindingKey'),
+                new ModalToGetSet('Cake\ORM\Association', 'foreignKey'),
+                new ModalToGetSet('Cake\ORM\Association', 'dependent'),
+                new ModalToGetSet('Cake\ORM\Association', 'joinType'),
+                new ModalToGetSet('Cake\ORM\Association', 'property'),
+                new ModalToGetSet('Cake\ORM\Association', 'strategy'),
+                new ModalToGetSet('Cake\ORM\Association', 'finder'),
+                new ModalToGetSet('Cake\ORM\Association\BelongsToMany', 'targetForeignKey'),
+                new ModalToGetSet('Cake\ORM\Association\BelongsToMany', 'saveStrategy'),
+                new ModalToGetSet('Cake\ORM\Association\BelongsToMany', 'conditions'),
+                new ModalToGetSet('Cake\ORM\Association\HasMany', 'saveStrategy'),
+                new ModalToGetSet('Cake\ORM\Association\HasMany', 'foreignKey'),
+                new ModalToGetSet('Cake\ORM\Association\HasMany', 'sort'),
+                new ModalToGetSet('Cake\ORM\Association\HasOne', 'foreignKey'),
+                new ModalToGetSet('Cake\ORM\EagerLoadable', 'config'),
+                new ModalToGetSet('Cake\ORM\EagerLoadable', 'canBeJoined', 'canBeJoined', 'setCanBeJoined'),
 
                 // note: will have to be called after setMatching() to keep the old behavior
                 // ref: https://github.com/cakephp/cakephp/blob/4feee5463641e05c068b4d1d31dc5ee882b4240f/src/ORM/EagerLoader.php#L330
-                new UnprefixedMethodToGetSet('Cake\ORM\EagerLoadable', 'matching'),
-                new UnprefixedMethodToGetSet(
+                new ModalToGetSet('Cake\ORM\EagerLoadable', 'matching'),
+                new ModalToGetSet(
                     'Cake\ORM\EagerLoadable',
                     'autoFields',
                     'isAutoFieldsEnabled',
                     'enableAutoFields'
                 ),
-                new UnprefixedMethodToGetSet('Cake\ORM\Locator\TableLocator', 'config'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Query', 'eagerLoader'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Query', 'hydrate', 'isHydrationEnabled', 'enableHydration'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Query', 'autoFields', 'isAutoFieldsEnabled', 'enableAutoFields'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Table', 'table'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Table', 'alias'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Table', 'registryAlias'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Table', 'connection'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Table', 'schema'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Table', 'primaryKey'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Table', 'displayField'),
-                new UnprefixedMethodToGetSet('Cake\ORM\Table', 'entityClass'),
+                new ModalToGetSet('Cake\ORM\Locator\TableLocator', 'config'),
+                new ModalToGetSet('Cake\ORM\Query', 'eagerLoader'),
+                new ModalToGetSet('Cake\ORM\Query', 'hydrate', 'isHydrationEnabled', 'enableHydration'),
+                new ModalToGetSet('Cake\ORM\Query', 'autoFields', 'isAutoFieldsEnabled', 'enableAutoFields'),
+                new ModalToGetSet('Cake\ORM\Table', 'table'),
+                new ModalToGetSet('Cake\ORM\Table', 'alias'),
+                new ModalToGetSet('Cake\ORM\Table', 'registryAlias'),
+                new ModalToGetSet('Cake\ORM\Table', 'connection'),
+                new ModalToGetSet('Cake\ORM\Table', 'schema'),
+                new ModalToGetSet('Cake\ORM\Table', 'primaryKey'),
+                new ModalToGetSet('Cake\ORM\Table', 'displayField'),
+                new ModalToGetSet('Cake\ORM\Table', 'entityClass'),
 
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'entityClass'),
+                new ModalToGetSet('Cake\Mailer\Email', 'entityClass'),
 
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'from'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'sender'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'replyTo'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'readReceipt'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'returnPath'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'to'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'cc'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'bcc'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'charset'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'headerCharset'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'emailPattern'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'subject'),
+                new ModalToGetSet('Cake\Mailer\Email', 'from'),
+                new ModalToGetSet('Cake\Mailer\Email', 'sender'),
+                new ModalToGetSet('Cake\Mailer\Email', 'replyTo'),
+                new ModalToGetSet('Cake\Mailer\Email', 'readReceipt'),
+                new ModalToGetSet('Cake\Mailer\Email', 'returnPath'),
+                new ModalToGetSet('Cake\Mailer\Email', 'to'),
+                new ModalToGetSet('Cake\Mailer\Email', 'cc'),
+                new ModalToGetSet('Cake\Mailer\Email', 'bcc'),
+                new ModalToGetSet('Cake\Mailer\Email', 'charset'),
+                new ModalToGetSet('Cake\Mailer\Email', 'headerCharset'),
+                new ModalToGetSet('Cake\Mailer\Email', 'emailPattern'),
+                new ModalToGetSet('Cake\Mailer\Email', 'subject'),
                 // template: have to be changed manually, non A → B change + array case
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'viewRender', 'getViewRenderer', 'setViewRenderer'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'viewVars'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'theme'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'helpers'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'emailFormat'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'transport'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'messageId'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'domain'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'attachments'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'configTransport'),
-                new UnprefixedMethodToGetSet('Cake\Mailer\Email', 'profile'),
-                new UnprefixedMethodToGetSet('Cake\Validation\Validator', 'provider'),
-                new UnprefixedMethodToGetSet('Cake\View\StringTemplateTrait', 'templates'),
-                new UnprefixedMethodToGetSet('Cake\View\ViewBuilder', 'templatePath'),
-                new UnprefixedMethodToGetSet('Cake\View\ViewBuilder', 'layoutPath'),
-                new UnprefixedMethodToGetSet('Cake\View\ViewBuilder', 'plugin'),
-                new UnprefixedMethodToGetSet('Cake\View\ViewBuilder', 'helpers'),
-                new UnprefixedMethodToGetSet('Cake\View\ViewBuilder', 'theme'),
-                new UnprefixedMethodToGetSet('Cake\View\ViewBuilder', 'template'),
-                new UnprefixedMethodToGetSet('Cake\View\ViewBuilder', 'layout'),
-                new UnprefixedMethodToGetSet('Cake\View\ViewBuilder', 'options'),
-                new UnprefixedMethodToGetSet('Cake\View\ViewBuilder', 'name'),
-                new UnprefixedMethodToGetSet('Cake\View\ViewBuilder', 'className'),
-                new UnprefixedMethodToGetSet(
-                    'Cake\View\ViewBuilder',
-                    'autoLayout',
-                    'isAutoLayoutEnabled',
-                    'enableAutoLayout'
-                ),
+                new ModalToGetSet('Cake\Mailer\Email', 'viewRender', 'getViewRenderer', 'setViewRenderer'),
+                new ModalToGetSet('Cake\Mailer\Email', 'viewVars'),
+                new ModalToGetSet('Cake\Mailer\Email', 'theme'),
+                new ModalToGetSet('Cake\Mailer\Email', 'helpers'),
+                new ModalToGetSet('Cake\Mailer\Email', 'emailFormat'),
+                new ModalToGetSet('Cake\Mailer\Email', 'transport'),
+                new ModalToGetSet('Cake\Mailer\Email', 'messageId'),
+                new ModalToGetSet('Cake\Mailer\Email', 'domain'),
+                new ModalToGetSet('Cake\Mailer\Email', 'attachments'),
+                new ModalToGetSet('Cake\Mailer\Email', 'configTransport'),
+                new ModalToGetSet('Cake\Mailer\Email', 'profile'),
+                new ModalToGetSet('Cake\Validation\Validator', 'provider'),
+                new ModalToGetSet('Cake\View\StringTemplateTrait', 'templates'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'templatePath'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'layoutPath'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'plugin'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'helpers'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'theme'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'template'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'layout'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'options'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'name'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'className'),
+                new ModalToGetSet('Cake\View\ViewBuilder', 'autoLayout', 'isAutoLayoutEnabled', 'enableAutoLayout'),
             ]),
         ]]);
 
@@ -233,8 +223,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
-                new MethodVisibility('Cake\Mailer\MailerAwareTrait', 'getMailer', 'protected'),
-                new MethodVisibility('Cake\View\CellTrait', 'cell', 'protected'),
+                new ChangeMethodVisibility('Cake\Mailer\MailerAwareTrait', 'getMailer', 'protected'),
+                new ChangeMethodVisibility('Cake\View\CellTrait', 'cell', 'protected'),
             ]),
         ]]);
 
@@ -248,7 +238,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
             NormalToFluentRector::CALLS_TO_FLUENT => inline_value_objects([
-                new CallToFluent('Cake\Network\Response', [
+                new NormalToFluent('Cake\Network\Response', [
                     'withLocation',
                     'withHeader',
                     'withDisabledCache',

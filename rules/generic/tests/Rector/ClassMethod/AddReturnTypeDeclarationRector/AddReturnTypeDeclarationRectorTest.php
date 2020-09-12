@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
-use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
@@ -34,27 +34,27 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
         return [
             AddReturnTypeDeclarationRector::class => [
                 AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => [
-                    new MethodReturnType(
+                    new AddReturnTypeDeclaration(
                         'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass',
                         'parse',
                         'array'
                     ),
-                    new MethodReturnType(
+                    new AddReturnTypeDeclaration(
                         'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass',
                         'resolve',
                         'SomeType'
                     ),
-                    new MethodReturnType(
+                    new AddReturnTypeDeclaration(
                         'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass',
                         'nullable',
                         '?SomeType'
                     ),
-                    new MethodReturnType(
+                    new AddReturnTypeDeclaration(
                         'Rector\Generic\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\RemoveReturnType',
                         'clear',
                         ''
                     ),
-                    new MethodReturnType(PHPUnitTestCase::class, 'tearDown', 'void'),
+                    new AddReturnTypeDeclaration(PHPUnitTestCase::class, 'tearDown', 'void'),
                 ],
             ],
         ];

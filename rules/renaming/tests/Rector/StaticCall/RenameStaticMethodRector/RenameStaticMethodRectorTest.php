@@ -9,7 +9,7 @@ use Nette\Utils\Html;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\Tests\Rector\StaticCall\RenameStaticMethodRector\Source\FormMacros;
-use Rector\Renaming\ValueObject\StaticCallRename;
+use Rector\Renaming\ValueObject\RenameStaticMethod;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameStaticMethodRectorTest extends AbstractRectorTestCase
@@ -35,8 +35,8 @@ final class RenameStaticMethodRectorTest extends AbstractRectorTestCase
         return [
             RenameStaticMethodRector::class => [
                 RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                    new StaticCallRename(Html::class, 'add', Html::class, 'addHtml'),
-                    new StaticCallRename(
+                    new RenameStaticMethod(Html::class, 'add', Html::class, 'addHtml'),
+                    new RenameStaticMethod(
                         FormMacros::class,
                         'renderFormBegin',
                         'Nette\Bridges\FormsLatte\Runtime',

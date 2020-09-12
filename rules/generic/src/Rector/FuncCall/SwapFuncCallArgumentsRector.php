@@ -10,7 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\FunctionArgumentSwap;
+use Rector\Generic\ValueObject\SwapFuncCallArguments;
 use Webmozart\Assert\Assert;
 
 /**
@@ -24,7 +24,7 @@ final class SwapFuncCallArgumentsRector extends AbstractRector implements Config
     public const FUNCTION_ARGUMENT_SWAPS = 'new_argument_positions_by_function_name';
 
     /**
-     * @var FunctionArgumentSwap[]
+     * @var SwapFuncCallArguments[]
      */
     private $functionArgumentSwaps = [];
 
@@ -52,7 +52,7 @@ final class SomeClass
 }
 PHP
                 , [
-                    self::FUNCTION_ARGUMENT_SWAPS => [new FunctionArgumentSwap('some_function', [1, 0])],
+                    self::FUNCTION_ARGUMENT_SWAPS => [new SwapFuncCallArguments('some_function', [1, 0])],
                 ]
             ),
         ]);
@@ -96,7 +96,7 @@ PHP
     public function configure(array $configuration): void
     {
         $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? [];
-        Assert::allIsInstanceOf($functionArgumentSwaps, FunctionArgumentSwap::class);
+        Assert::allIsInstanceOf($functionArgumentSwaps, SwapFuncCallArguments::class);
         $this->functionArgumentSwaps = $functionArgumentSwaps;
     }
 }

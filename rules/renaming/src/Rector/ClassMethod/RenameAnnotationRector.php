@@ -14,7 +14,7 @@ use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Renaming\ValueObject\RenamedAnnotationInType;
+use Rector\Renaming\ValueObject\RenameAnnotation;
 use Webmozart\Assert\Assert;
 
 /**
@@ -28,7 +28,7 @@ final class RenameAnnotationRector extends AbstractPHPUnitRector implements Conf
     public const RENAMED_ANNOTATIONS_IN_TYPES = 'renamed_annotations_in_types';
 
     /**
-     * @var RenamedAnnotationInType[]
+     * @var RenameAnnotation[]
      */
     private $renamedAnnotationInTypes = [];
 
@@ -64,7 +64,7 @@ PHP
                     ,
                     [
                         self::RENAMED_ANNOTATIONS_IN_TYPES => [
-                            new RenamedAnnotationInType('PHPUnit\Framework\TestCase', 'test', 'scenario'),
+                            new RenameAnnotation('PHPUnit\Framework\TestCase', 'test', 'scenario'),
                         ],
                     ]
                 ),
@@ -112,7 +112,7 @@ PHP
     public function configure(array $configuration): void
     {
         $renamedAnnotationsInTypes = $configuration[self::RENAMED_ANNOTATIONS_IN_TYPES] ?? [];
-        Assert::allIsInstanceOf($renamedAnnotationsInTypes, RenamedAnnotationInType::class);
+        Assert::allIsInstanceOf($renamedAnnotationsInTypes, RenameAnnotation::class);
         $this->renamedAnnotationInTypes = $renamedAnnotationsInTypes;
     }
 }

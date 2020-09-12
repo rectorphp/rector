@@ -11,7 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\RenamedProperty;
+use Rector\Generic\ValueObject\RenameProperty;
 use Webmozart\Assert\Assert;
 
 /**
@@ -25,7 +25,7 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     public const RENAMED_PROPERTIES = 'old_to_new_property_by_types';
 
     /**
-     * @var RenamedProperty[]
+     * @var RenameProperty[]
      */
     private $renamedProperties = [];
 
@@ -37,7 +37,7 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
                 '$someObject->someNewProperty;',
                 [
                     self::RENAMED_PROPERTIES => [
-                        new RenamedProperty('SomeClass', 'someOldProperty', 'someNewProperty'),
+                        new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty'),
                     ],
                 ]
             ),
@@ -76,7 +76,7 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     public function configure(array $configuration): void
     {
         $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? [];
-        Assert::allIsInstanceOf($renamedProperties, RenamedProperty::class);
+        Assert::allIsInstanceOf($renamedProperties, RenameProperty::class);
         $this->renamedProperties = $renamedProperties;
     }
 }

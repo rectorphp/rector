@@ -385,7 +385,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
             ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig', 1, null))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\ModalToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig', 1, null))]
         ]]);
 };
 ```
@@ -426,7 +426,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->call('configure', [[
             RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\CallWithParamRename('getParam', 'paging', 'getAttribute', 'ServerRequest')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\CallWithParamRename('withParam', 'paging', 'withAttribute', 'ServerRequest'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter('getParam', 'paging', 'getAttribute', 'ServerRequest')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter('withParam', 'paging', 'withAttribute', 'ServerRequest'))]
         ]]);
 };
 ```
@@ -2149,7 +2149,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ReturnArrayClassMethodToYieldRector::class)
         ->call('configure', [[
             ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CodingStyle\ValueObject\MethodToYield('EventSubscriberInterface', 'getSubscribedEvents'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('EventSubscriberInterface', 'getSubscribedEvents'))]
         ]]);
 };
 ```
@@ -4707,7 +4707,7 @@ Remove null coalescing operator ??=
 ### `DowngradeTypedPropertyRector`
 
 - class: [`Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector`](/rules/downgrade-php74/src/Rector/Property/DowngradeTypedPropertyRector.php)
-- [test fixtures](/rules/downgrade-php74/tests/Rector/Property/DowngradeTypedPropertyRector/Fixture)
+- [test fixtures](/rules/downgrade-php74/tests/Rector/Property/NoDocBlockDowngradeTypedPropertyRector/Fixture)
 
 Changes property type definition from type definitions to `@var` annotations.
 
@@ -5255,7 +5255,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodReturnType('SomeClass', 'getData', 'array'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\AddReturnTypeDeclaration('SomeClass', 'getData', 'array'))]
         ]]);
 };
 ```
@@ -5315,7 +5315,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\AddedArgument('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null))]
         ]]);
 };
 ```
@@ -5339,7 +5339,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\AddedArgument('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', 'true', 'SomeType', null))]
         ]]);
 };
 ```
@@ -5376,7 +5376,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
             ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ReplacedArgument('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', 'false'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentDefaultValueReplacer('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', 'false'))]
         ]]);
 };
 ```
@@ -5409,7 +5409,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
             ArgumentRemoverRector::REMOVED_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RemovedArgument('ExampleClass', 'someMethod', 0, 'true'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentRemover('ExampleClass', 'someMethod', 0, 'true'))]
         ]]);
 };
 ```
@@ -5525,7 +5525,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodVisibility('FrameworkClass', 'someMethod', 'protected'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ChangeMethodVisibility('FrameworkClass', 'someMethod', 'protected'))]
         ]]);
 };
 ```
@@ -5905,7 +5905,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
             NormalToFluentRector::CALLS_TO_FLUENT => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\CallToFluent('SomeClass', ['someFunction', 'otherFunction']))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\NormalToFluent('SomeClass', ['someFunction', 'otherFunction']))]
         ]]);
 };
 ```
@@ -5976,7 +5976,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(PseudoNamespaceToNamespaceRector::class)
         ->call('configure', [[
             PseudoNamespaceToNamespaceRector::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\NamespacePrefixWithExcludedClasses('Some_', ['Some_Class_To_Keep']))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\PseudoNamespaceToNamespace('Some_', ['Some_Class_To_Keep']))]
         ]]);
 };
 ```
@@ -6047,7 +6047,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RemoveFuncCallArgRector::class)
         ->call('configure', [[
             RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RemovedFunctionArgument('remove_last_arg', 1))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RemoveFuncCallArg('remove_last_arg', 1))]
         ]]);
 };
 ```
@@ -6246,7 +6246,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
             RenamePropertyRector::RENAMED_PROPERTIES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RenamedProperty('SomeClass', 'someOldProperty', 'someNewProperty'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty'))]
         ]]);
 };
 ```
@@ -6278,7 +6278,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ReplaceParentCallByPropertyCallRector::class)
         ->call('configure', [[
             ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\ParentCallToProperty('SomeTypeToReplace', 'someMethodCall', 'someProperty'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty'))]
         ]]);
 };
 ```
@@ -6383,7 +6383,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(SwapClassMethodArgumentsRector::class)
         ->call('configure', [[
             SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentSwap('SomeClass', 'run', [1, 0]))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\SwapClassMethodArguments('SomeClass', 'run', [1, 0]))]
         ]]);
 };
 ```
@@ -6422,7 +6422,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(SwapFuncCallArgumentsRector::class)
         ->call('configure', [[
             SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\FunctionArgumentSwap('some_function', [1, 0]))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\SwapFuncCallArguments('some_function', [1, 0]))]
         ]]);
 };
 ```
@@ -6460,7 +6460,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(WrapReturnRector::class)
         ->call('configure', [[
             WrapReturnRector::TYPE_METHOD_WRAPS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\TypeMethodWrap('SomeClass', 'getItem', true))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\WrapReturn('SomeClass', 'getItem', true))]
         ]]);
 };
 ```
@@ -12657,7 +12657,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameAnnotationRector::class)
         ->call('configure', [[
             RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenamedAnnotationInType('PHPUnit\Framework\TestCase', 'test', 'scenario'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenameAnnotation('PHPUnit\Framework\TestCase', 'test', 'scenario'))]
         ]]);
 };
 ```
@@ -12697,7 +12697,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
             RenameClassConstantRector::CLASS_CONSTANT_RENAME => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\ClassConstantRename('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\ClassConstantRename('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenameClassConstant('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenameClassConstant('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'))]
         ]]);
 };
 ```
@@ -12910,7 +12910,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
             RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\StaticCallRename('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenameStaticMethod('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'))]
         ]]);
 };
 ```
@@ -12933,7 +12933,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
             RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\StaticCallRename('SomeClass', 'oldMethod', 'SomeClass', 'newStaticMethod'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenameStaticMethod('SomeClass', 'oldMethod', 'SomeClass', 'newStaticMethod'))]
         ]]);
 };
 ```
@@ -14854,7 +14854,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getProperty', [], 'setProperty'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethod('SomeObject', 'property', 'getProperty', [], 'setProperty'))]
         ]]);
 };
 ```
@@ -14879,7 +14879,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getConfig', ['someArg'], null))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethod('SomeObject', 'property', 'getConfig', ['someArg'], null))]
         ]]);
 };
 ```
@@ -14911,7 +14911,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ServiceGetterToConstructorInjectionRector::class)
         ->call('configure', [[
             ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\MethodCallToService('FirstService', 'getAnotherService', 'AnotherService'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService'))]
         ]]);
 };
 ```
@@ -15204,7 +15204,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\TypeDeclaration\ValueObject\ParameterTypehint('SomeClass', 'process', 0, 'string'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('SomeClass', 'process', 0, 'string'))]
         ]]);
 };
 ```

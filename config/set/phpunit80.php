@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Generic\ValueObject\MethodReturnType;
+use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector;
@@ -11,7 +11,7 @@ use Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
-use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
+use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
                 // https://github.com/rectorphp/rector/issues/1024 - no type, $dataName
-                new ParameterTypehint('PHPUnit\Framework\TestCase', '__construct', 2, ''),
+                new AddParamTypeDeclaration('PHPUnit\Framework\TestCase', '__construct', 2, ''),
             ]),
         ]]);
 
@@ -45,13 +45,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => inline_value_objects(
                 [
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'setUpBeforeClass', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'setUp', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'assertPreConditions', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'assertPostConditions', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'tearDown', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'tearDownAfterClass', 'void'),
-                    new MethodReturnType('PHPUnit\Framework\TestCase', 'onNotSuccessfulTest', 'void'), ]
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'setUpBeforeClass', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'setUp', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'assertPreConditions', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'assertPostConditions', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'tearDown', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'tearDownAfterClass', 'void'),
+                    new AddReturnTypeDeclaration('PHPUnit\Framework\TestCase', 'onNotSuccessfulTest', 'void'), ]
             ),
         ]]);
 

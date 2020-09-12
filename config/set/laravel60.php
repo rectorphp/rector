@@ -5,14 +5,14 @@ declare(strict_types=1);
 use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
-use Rector\Generic\ValueObject\AddedArgument;
-use Rector\Generic\ValueObject\MethodCallWrap;
-use Rector\Generic\ValueObject\MethodVisibility;
+use Rector\Generic\ValueObject\ArgumentAdder;
+use Rector\Generic\ValueObject\ChangeMethodVisibility;
+use Rector\Generic\ValueObject\MethodCallToReturn;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\StaticCallRename;
+use Rector\Renaming\ValueObject\RenameStaticMethod;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -26,7 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MethodCallToReturnRector::class)
         ->call('configure', [[
             MethodCallToReturnRector::METHOD_CALL_WRAPS => inline_value_objects([
-                new MethodCallWrap('Illuminate\Auth\Access\HandlesAuthorization', 'deny'),
+                new MethodCallToReturn('Illuminate\Auth\Access\HandlesAuthorization', 'deny'),
             ]),
         ]]);
 
@@ -60,7 +60,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $configuration = [
         # https://github.com/laravel/framework/commit/55785d3514a8149d4858acef40c56a31b6b2ccd1
-        new StaticCallRename('Illuminate\Support\Facades\Input', 'get', 'Illuminate\Support\Facades\Request', 'input'),
+        new RenameStaticMethod(
+            'Illuminate\Support\Facades\Input',
+            'get',
+            'Illuminate\Support\Facades\Request',
+            'input'
+        ),
     ];
 
     $services->set(RenameStaticMethodRector::class)
@@ -81,7 +86,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
-                new MethodVisibility('Illuminate\Foundation\Http\FormRequest', 'validationData', 'public'),
+                new ChangeMethodVisibility('Illuminate\Foundation\Http\FormRequest', 'validationData', 'public'),
             ]),
         ]]);
 
@@ -89,10 +94,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => inline_value_objects([
                 // https://github.com/laravel/framework/commit/6c1e014943a508afb2c10869c3175f7783a004e1
-                new AddedArgument('Illuminate\Database\Capsule\Manager', 'table', 1, 'as', 'null'),
-                new AddedArgument('Illuminate\Database\Connection', 'table', 1, 'as', 'null'),
-                new AddedArgument('Illuminate\Database\ConnectionInterface', 'table', 1, 'as', 'null'),
-                new AddedArgument('Illuminate\Database\Query\Builder', 'from', 1, 'as', 'null'),
+                new ArgumentAdder('Illuminate\Database\Capsule\Manager', 'table', 1, 'as', 'null'),
+                new ArgumentAdder('Illuminate\Database\Connection', 'table', 1, 'as', 'null'),
+                new ArgumentAdder('Illuminate\Database\ConnectionInterface', 'table', 1, 'as', 'null'),
+                new ArgumentAdder('Illuminate\Database\Query\Builder', 'from', 1, 'as', 'null'),
             ]),
         ]]);
 };

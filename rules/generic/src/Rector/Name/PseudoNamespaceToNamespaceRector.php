@@ -21,7 +21,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\NamespacePrefixWithExcludedClasses;
+use Rector\Generic\ValueObject\PseudoNamespaceToNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
 use Webmozart\Assert\Assert;
@@ -43,7 +43,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
     private const SPLIT_BY_UNDERSCORE_PATTERN = '#([a-zA-Z])(_)?(_)([a-zA-Z])#';
 
     /**
-     * @var NamespacePrefixWithExcludedClasses[]
+     * @var PseudoNamespaceToNamespace[]
      */
     private $namespacePrefixesWithExcludedClasses = [];
 
@@ -88,7 +88,7 @@ PHP
                 ,
                 [
                     self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES => [
-                        new NamespacePrefixWithExcludedClasses('Some_', ['Some_Class_To_Keep']),
+                        new PseudoNamespaceToNamespace('Some_', ['Some_Class_To_Keep']),
                     ],
                 ]
             ),
@@ -148,7 +148,7 @@ PHP
     public function configure(array $configuration): void
     {
         $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? [];
-        Assert::allIsInstanceOf($namespacePrefixesWithExcludedClasses, NamespacePrefixWithExcludedClasses::class);
+        Assert::allIsInstanceOf($namespacePrefixesWithExcludedClasses, PseudoNamespaceToNamespace::class);
         $this->namespacePrefixesWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
     }
 

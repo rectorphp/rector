@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Generic\ValueObject;
 
-final class ArgumentSwap
+final class SwapFuncCallArguments
 {
     /**
      * @var string
      */
-    private $class;
-
-    /**
-     * @var string
-     */
-    private $method;
+    private $function;
 
     /**
      * @var array<int, int>
@@ -24,21 +19,15 @@ final class ArgumentSwap
     /**
      * @param array<int, int> $order
      */
-    public function __construct(string $class, string $method, array $order)
+    public function __construct(string $function, array $order)
     {
-        $this->class = $class;
-        $this->method = $method;
+        $this->function = $function;
         $this->order = $order;
     }
 
-    public function getClass(): string
+    public function getFunction(): string
     {
-        return $this->class;
-    }
-
-    public function getMethod(): string
-    {
-        return $this->method;
+        return $this->function;
     }
 
     /**

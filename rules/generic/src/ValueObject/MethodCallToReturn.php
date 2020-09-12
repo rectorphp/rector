@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Generic\ValueObject;
 
-final class MethodVisibility
+final class MethodCallToReturn
 {
     /**
      * @var string
@@ -16,16 +16,10 @@ final class MethodVisibility
      */
     private $method;
 
-    /**
-     * @var string
-     */
-    private $visibility;
-
-    public function __construct(string $class, string $method, string $visibility)
+    public function __construct(string $class, string $method)
     {
         $this->class = $class;
         $this->method = $method;
-        $this->visibility = $visibility;
     }
 
     public function getClass(): string
@@ -36,10 +30,5 @@ final class MethodVisibility
     public function getMethod(): string
     {
         return $this->method;
-    }
-
-    public function getVisibility(): string
-    {
-        return $this->visibility;
     }
 }

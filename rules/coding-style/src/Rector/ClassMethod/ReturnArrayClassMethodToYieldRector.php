@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\CodingStyle\ValueObject\MethodToYield;
+use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTransformer;
@@ -37,7 +37,7 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
     public const METHODS_TO_YIELDS = 'methods_to_yields';
 
     /**
-     * @var MethodToYield[]
+     * @var ReturnArrayClassMethodToYield[]
      */
     private $methodsToYields = [];
 
@@ -62,10 +62,10 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
 
         // default values
         $this->methodsToYields = [
-            new MethodToYield('PHPUnit\Framework\TestCase', 'provideData'),
-            new MethodToYield('PHPUnit\Framework\TestCase', 'provideData*'),
-            new MethodToYield('PHPUnit\Framework\TestCase', 'dataProvider'),
-            new MethodToYield('PHPUnit\Framework\TestCase', 'dataProvider*'),
+            new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', 'provideData'),
+            new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', 'provideData*'),
+            new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', 'dataProvider'),
+            new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', 'dataProvider*'),
         ];
     }
 
@@ -95,7 +95,7 @@ PHP
                 ,
                 [
                     self::METHODS_TO_YIELDS => [
-                        new MethodToYield('EventSubscriberInterface', 'getSubscribedEvents'),
+                        new ReturnArrayClassMethodToYield('EventSubscriberInterface', 'getSubscribedEvents'),
                     ],
                 ]
             ),
@@ -146,7 +146,7 @@ PHP
     public function configure(array $configuration): void
     {
         $methodsToYields = $configuration[self::METHODS_TO_YIELDS] ?? [];
-        Assert::allIsInstanceOf($methodsToYields, MethodToYield::class);
+        Assert::allIsInstanceOf($methodsToYields, ReturnArrayClassMethodToYield::class);
         $this->methodsToYields = $methodsToYields;
     }
 

@@ -12,7 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\MethodCallWrap;
+use Rector\Generic\ValueObject\MethodCallToReturn;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Webmozart\Assert\Assert;
 
@@ -27,7 +27,7 @@ final class MethodCallToReturnRector extends AbstractRector implements Configura
     public const METHOD_CALL_WRAPS = 'method_call_wraps';
 
     /**
-     * @var MethodCallWrap[]
+     * @var MethodCallToReturn[]
      */
     private $methodCallWraps = [];
 
@@ -98,7 +98,7 @@ PHP
     public function configure(array $configuration): void
     {
         $methodCallWraps = $configuration[self::METHOD_CALL_WRAPS] ?? [];
-        Assert::allIsInstanceOf($methodCallWraps, MethodCallWrap::class);
+        Assert::allIsInstanceOf($methodCallWraps, MethodCallToReturn::class);
         $this->methodCallWraps = $methodCallWraps;
     }
 

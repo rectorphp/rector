@@ -10,7 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\MethodVisibility;
+use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Webmozart\Assert\Assert;
 
@@ -25,7 +25,7 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
     public const METHOD_VISIBILITIES = 'method_visibilities';
 
     /**
-     * @var MethodVisibility[]
+     * @var ChangeMethodVisibility[]
      */
     private $methodVisibilities = [];
 
@@ -68,7 +68,7 @@ PHP
                 ,
                 [
                     self::METHOD_VISIBILITIES => [
-                        new MethodVisibility('FrameworkClass', 'someMethod', 'protected'),
+                        new ChangeMethodVisibility('FrameworkClass', 'someMethod', 'protected'),
                     ],
                 ]
             )]
@@ -115,7 +115,7 @@ PHP
     public function configure(array $configuration): void
     {
         $methodVisibilities = $configuration[self::METHOD_VISIBILITIES] ?? [];
-        Assert::allIsInstanceOf($methodVisibilities, MethodVisibility::class);
+        Assert::allIsInstanceOf($methodVisibilities, ChangeMethodVisibility::class);
 
         $this->methodVisibilities = $methodVisibilities;
     }

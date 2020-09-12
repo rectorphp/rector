@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
-use Rector\Generic\ValueObject\FunctionArgumentSwap;
-use Rector\Generic\ValueObject\RemovedFunctionArgument;
+use Rector\Generic\ValueObject\RemoveFuncCallArg;
+use Rector\Generic\ValueObject\SwapFuncCallArguments;
 use Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
@@ -28,9 +28,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveFuncCallArgRector::class)
         ->call('configure', [[
             RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => inline_value_objects([
-                new RemovedFunctionArgument('mysql_pconnect', 3),
-                new RemovedFunctionArgument('mysql_connect', 3),
-                new RemovedFunctionArgument('mysql_connect', 4),
+                new RemoveFuncCallArg('mysql_pconnect', 3),
+                new RemoveFuncCallArg('mysql_connect', 3),
+                new RemoveFuncCallArg('mysql_connect', 4),
             ]),
         ]]);
 
@@ -40,10 +40,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SwapFuncCallArgumentsRector::class)
         ->call('configure', [[
             SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => inline_value_objects([
-                new FunctionArgumentSwap('mysql_query', [1, 0]),
-                new FunctionArgumentSwap('mysql_real_escape_string', [1, 0]),
-                new FunctionArgumentSwap('mysql_select_db', [1, 0]),
-                new FunctionArgumentSwap('mysql_set_charset', [1, 0]),
+                new SwapFuncCallArguments('mysql_query', [1, 0]),
+                new SwapFuncCallArguments('mysql_real_escape_string', [1, 0]),
+                new SwapFuncCallArguments('mysql_select_db', [1, 0]),
+                new SwapFuncCallArguments('mysql_set_charset', [1, 0]),
             ]),
         ]]);
 

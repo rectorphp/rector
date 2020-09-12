@@ -7,7 +7,7 @@ namespace Rector\Generic\Tests\Rector\FuncCall\SwapFuncCallArgumentsRector;
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
-use Rector\Generic\ValueObject\FunctionArgumentSwap;
+use Rector\Generic\ValueObject\SwapFuncCallArguments;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SwapFuncCallArgumentsRectorTest extends AbstractRectorTestCase
@@ -33,7 +33,7 @@ final class SwapFuncCallArgumentsRectorTest extends AbstractRectorTestCase
         return [
             SwapFuncCallArgumentsRector::class => [
                 SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => [
-                    new FunctionArgumentSwap('some_function', [1, 0]),
+                    new SwapFuncCallArguments('some_function', [1, 0]),
                 ],
             ],
         ];

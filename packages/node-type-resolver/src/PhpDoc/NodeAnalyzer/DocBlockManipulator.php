@@ -16,7 +16,7 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Renaming\ValueObject\RenamedAnnotationInType;
+use Rector\Renaming\ValueObject\RenameAnnotation;
 
 final class DocBlockManipulator
 {
@@ -44,15 +44,15 @@ final class DocBlockManipulator
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
     }
 
-    public function replaceAnnotationInNode(Node $node, RenamedAnnotationInType $renamedAnnotationInType): void
+    public function replaceAnnotationInNode(Node $node, RenameAnnotation $renameAnnotation): void
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         $this->replaceTagByAnother(
             $phpDocInfo->getPhpDocNode(),
-            $renamedAnnotationInType->getOldAnnotation(),
-            $renamedAnnotationInType->getNewAnnotation()
+            $renameAnnotation->getOldAnnotation(),
+            $renameAnnotation->getNewAnnotation()
         );
     }
 

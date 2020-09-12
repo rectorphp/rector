@@ -13,7 +13,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\CallToFluent;
+use Rector\Generic\ValueObject\NormalToFluent;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,7 +27,7 @@ final class NormalToFluentRector extends AbstractRector implements ConfigurableR
     public const CALLS_TO_FLUENT = 'calls_to_fluent';
 
     /**
-     * @var CallToFluent[]
+     * @var NormalToFluent[]
      */
     private $callsToFluent = [];
 
@@ -53,7 +53,7 @@ $someObject->someFunction()
 PHP
                 ,
                 [
-                    self::CALLS_TO_FLUENT => [new CallToFluent('SomeClass', ['someFunction', 'otherFunction'])],
+                    self::CALLS_TO_FLUENT => [new NormalToFluent('SomeClass', ['someFunction', 'otherFunction'])],
                 ]
             ),
         ]);
@@ -116,7 +116,7 @@ PHP
     public function configure(array $configuration): void
     {
         $callsToFluent = $configuration[self::CALLS_TO_FLUENT] ?? [];
-        Assert::allIsInstanceOf($callsToFluent, CallToFluent::class);
+        Assert::allIsInstanceOf($callsToFluent, NormalToFluent::class);
         $this->callsToFluent = $callsToFluent;
     }
 

@@ -6,8 +6,8 @@ use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\ValueObject\ClassConstantRename;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\RenameClassConstant;
 use Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector;
 use Rector\Symfony\Rector\ClassMethod\GetRequestRector;
 use Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
@@ -46,20 +46,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
             RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
-                new ClassConstantRename('Symfony\Component\Form\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'),
-                new ClassConstantRename('Symfony\Component\Form\FormEvents', 'BIND', 'SUBMIT'),
-                new ClassConstantRename('Symfony\Component\Form\FormEvents', 'POST_BIND', 'POST_SUBMIT'),
-                new ClassConstantRename(
+                new RenameClassConstant('Symfony\Component\Form\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'),
+                new RenameClassConstant('Symfony\Component\Form\FormEvents', 'BIND', 'SUBMIT'),
+                new RenameClassConstant('Symfony\Component\Form\FormEvents', 'POST_BIND', 'POST_SUBMIT'),
+                new RenameClassConstant(
                     'Symfony\Component\Form\Extension\Core\DataTransformer',
                     'ROUND_HALFEVEN',
                     'ROUND_HALF_EVEN'
                 ),
-                new ClassConstantRename(
+                new RenameClassConstant(
                     'Symfony\Component\Form\Extension\Core\DataTransformer',
                     'ROUND_HALFUP',
                     'ROUND_HALF_UP'
                 ),
-                new ClassConstantRename(
+                new RenameClassConstant(
                     'Symfony\Component\Form\Extension\Core\DataTransformer',
                     'ROUND_HALFDOWN',
                     'ROUND_HALF_DOWN'

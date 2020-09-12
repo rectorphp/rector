@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 use Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Source\Translator;
-use Rector\Transform\ValueObject\PropertyToMethodCall;
+use Rector\Transform\ValueObject\PropertyToMethod;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PropertyToMethodRectorTest extends AbstractRectorTestCase
@@ -34,8 +34,8 @@ final class PropertyToMethodRectorTest extends AbstractRectorTestCase
         return [
             PropertyToMethodRector::class => [
                 PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                    new PropertyToMethodCall(Translator::class, 'locale', 'getLocale', 'setLocale'),
-                    new PropertyToMethodCall(
+                    new PropertyToMethod(Translator::class, 'locale', 'getLocale', 'setLocale'),
+                    new PropertyToMethod(
                         'Rector\Transform\Tests\Rector\Assign\PropertyToMethodRector\Fixture\SomeClassWithParameters',
                         'parameter',
                         'getConfig',

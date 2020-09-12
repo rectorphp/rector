@@ -17,7 +17,7 @@ use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Transform\ValueObject\MethodCallToService;
+use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
 use Webmozart\Assert\Assert;
 
 /**
@@ -31,7 +31,7 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector imp
     public const METHOD_CALL_TO_SERVICES = 'method_call_to_services';
 
     /**
-     * @var MethodCallToService[]
+     * @var ServiceGetterToConstructorInjection[]
      */
     private $methodCallToServices = [];
 
@@ -117,7 +117,7 @@ PHP
                 ,
                 [
                     self::METHOD_CALL_TO_SERVICES => [
-                        new MethodCallToService('FirstService', 'getAnotherService', 'AnotherService'),
+                        new ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService'),
                     ],
                 ]
             ),
@@ -167,7 +167,7 @@ PHP
     public function configure(array $configuration): void
     {
         $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? [];
-        Assert::allIsInstanceOf($methodCallToServices, MethodCallToService::class);
+        Assert::allIsInstanceOf($methodCallToServices, ServiceGetterToConstructorInjection::class);
         $this->methodCallToServices = $methodCallToServices;
     }
 }
