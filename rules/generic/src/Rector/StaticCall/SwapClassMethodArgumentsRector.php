@@ -96,16 +96,16 @@ PHP
     /**
      * @param StaticCall|MethodCall|ClassMethod $node
      */
-    private function refactorArgumentPositions(SwapClassMethodArguments $argumentSwap, Node $node): void
+    private function refactorArgumentPositions(SwapClassMethodArguments $swapClassMethodArguments, Node $node): void
     {
-        if (! $this->isMethodStaticCallOrClassMethodName($node, $argumentSwap->getMethod())) {
+        if (! $this->isMethodStaticCallOrClassMethodName($node, $swapClassMethodArguments->getMethod())) {
             return;
         }
 
         if ($node instanceof ClassMethod) {
-            $this->swapParameters($node, $argumentSwap->getOrder());
+            $this->swapParameters($node, $swapClassMethodArguments->getOrder());
         } else {
-            $this->swapArguments($node, $argumentSwap->getOrder());
+            $this->swapArguments($node, $swapClassMethodArguments->getOrder());
         }
     }
 

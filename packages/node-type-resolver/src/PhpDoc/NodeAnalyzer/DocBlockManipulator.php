@@ -44,15 +44,15 @@ final class DocBlockManipulator
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
     }
 
-    public function replaceAnnotationInNode(Node $node, RenameAnnotation $renamedAnnotationInType): void
+    public function replaceAnnotationInNode(Node $node, RenameAnnotation $renameAnnotation): void
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         $this->replaceTagByAnother(
             $phpDocInfo->getPhpDocNode(),
-            $renamedAnnotationInType->getOldAnnotation(),
-            $renamedAnnotationInType->getNewAnnotation()
+            $renameAnnotation->getOldAnnotation(),
+            $renameAnnotation->getNewAnnotation()
         );
     }
 

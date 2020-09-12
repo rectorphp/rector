@@ -64,15 +64,15 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
         )];
     }
 
-    private function shouldSkip(MethodCall $node): bool
+    private function shouldSkip(MethodCall $methodCall): bool
     {
         /** @var Identifier $name */
-        $name = $node->name;
+        $name = $methodCall->name;
         if ($name->toString() !== 'call') {
             return true;
         }
         /** @var String_ $expr */
-        $expr = $node->args[0]->value;
+        $expr = $methodCall->args[0]->value;
         return $expr->value !== 'configure';
     }
 

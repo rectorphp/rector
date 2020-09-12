@@ -170,25 +170,25 @@ PHP
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
      */
-    private function processPositionWithDefaultValues(Node $node, ArgumentAdder $addedArgument): void
+    private function processPositionWithDefaultValues(Node $node, ArgumentAdder $argumentAdder): void
     {
-        if ($this->shouldSkipParameter($node, $addedArgument)) {
+        if ($this->shouldSkipParameter($node, $argumentAdder)) {
             return;
         }
 
-        $defaultValue = $addedArgument->getArgumentDefaultValue();
-        $argumentType = $addedArgument->getArgumentType();
+        $defaultValue = $argumentAdder->getArgumentDefaultValue();
+        $argumentType = $argumentAdder->getArgumentType();
 
-        $position = $addedArgument->getPosition();
+        $position = $argumentAdder->getPosition();
 
         if ($node instanceof ClassMethod) {
-            $argumentName = $addedArgument->getArgumentName();
+            $argumentName = $argumentAdder->getArgumentName();
             if ($argumentName === null) {
                 throw new ShouldNotHappenException();
             }
             $this->addClassMethodParam($node, $argumentName, $defaultValue, $argumentType, $position);
         } elseif ($node instanceof StaticCall) {
-            $argumentName = $addedArgument->getArgumentName();
+            $argumentName = $argumentAdder->getArgumentName();
             if ($argumentName === null) {
                 throw new ShouldNotHappenException();
             }
@@ -202,10 +202,10 @@ PHP
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
      */
-    private function shouldSkipParameter(Node $node, ArgumentAdder $addedArgument): bool
+    private function shouldSkipParameter(Node $node, ArgumentAdder $argumentAdder): bool
     {
-        $position = $addedArgument->getPosition();
-        $argumentName = $addedArgument->getArgumentName();
+        $position = $argumentAdder->getPosition();
+        $argumentName = $argumentAdder->getArgumentName();
 
         if ($node instanceof ClassMethod) {
             // already added?
@@ -218,7 +218,7 @@ PHP
         }
 
         // is correct scope?
-        return ! $this->isInCorrectScope($node, $addedArgument);
+        return ! $this->isInCorrectScope($node, $argumentAdder);
     }
 
     /**
@@ -255,13 +255,13 @@ PHP
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
      */
-    private function isInCorrectScope(Node $node, ArgumentAdder $addedArgument): bool
+    private function isInCorrectScope(Node $node, ArgumentAdder $argumentAdder): bool
     {
-        if ($addedArgument->getScope() === null) {
+        if ($argumentAdder->getScope() === null) {
             return true;
         }
 
-        $scope = $addedArgument->getScope();
+        $scope = $argumentAdder->getScope();
 
         if ($node instanceof ClassMethod) {
             return $scope === self::SCOPE_CLASS_METHOD;

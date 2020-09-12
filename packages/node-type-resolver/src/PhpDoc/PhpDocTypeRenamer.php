@@ -35,7 +35,7 @@ final class PhpDocTypeRenamer
 
     public function changeUnderscoreType(
         Node $node,
-        PseudoNamespaceToNamespace $namespacePrefixWithExcludedClasses
+        PseudoNamespaceToNamespace $pseudoNamespaceToNamespace
     ): void {
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -48,8 +48,8 @@ final class PhpDocTypeRenamer
 
         $this->phpDocNodeTraverser->traverseWithCallable($attributeAwarePhpDocNode, '', function (
             PhpDocParserNode $node
-        ) use ($namespacePrefixWithExcludedClasses, $phpParserNode): PhpDocParserNode {
-            if ($this->shouldSkip($node, $phpParserNode, $namespacePrefixWithExcludedClasses)) {
+        ) use ($pseudoNamespaceToNamespace, $phpParserNode): PhpDocParserNode {
+            if ($this->shouldSkip($node, $phpParserNode, $pseudoNamespaceToNamespace)) {
                 return $node;
             }
 
@@ -68,7 +68,7 @@ final class PhpDocTypeRenamer
     private function shouldSkip(
         PhpDocParserNode $phpDocParserNode,
         Node $phpParserNode,
-        PseudoNamespaceToNamespace $namespacePrefixWithExcludedClasses
+        PseudoNamespaceToNamespace $pseudoNamespaceToNamespace
     ): bool {
         if (! $phpDocParserNode instanceof IdentifierTypeNode) {
             return true;
@@ -81,12 +81,12 @@ final class PhpDocTypeRenamer
 
         if (! Strings::startsWith(
             $staticType->getClassName(),
-            $namespacePrefixWithExcludedClasses->getNamespacePrefix()
+            $pseudoNamespaceToNamespace->getNamespacePrefix()
         )) {
             return true;
         }
 
         // excluded?
-        return in_array($staticType->getClassName(), $namespacePrefixWithExcludedClasses->getExcludedClasses(), true);
+        return in_array($staticType->getClassName(), $pseudoNamespaceToNamespace->getExcludedClasses(), true);
     }
 }

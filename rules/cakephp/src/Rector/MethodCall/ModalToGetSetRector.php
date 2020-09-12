@@ -118,28 +118,28 @@ PHP
 
     private function resolveNewMethodNameByCondition(
         MethodCall $methodCall,
-        ModalToGetSet $unprefixedMethodToGetSet
+        ModalToGetSet $modalToGetSet
     ): string {
-        if (count($methodCall->args) >= $unprefixedMethodToGetSet->getMinimalSetterArgumentCount()) {
-            return $unprefixedMethodToGetSet->getSetMethod();
+        if (count($methodCall->args) >= $modalToGetSet->getMinimalSetterArgumentCount()) {
+            return $modalToGetSet->getSetMethod();
         }
 
         if (! isset($methodCall->args[0])) {
-            return $unprefixedMethodToGetSet->getGetMethod();
+            return $modalToGetSet->getGetMethod();
         }
 
         // first argument type that is considered setter
-        if ($unprefixedMethodToGetSet->getFirstArgumentType() === null) {
-            return $unprefixedMethodToGetSet->getGetMethod();
+        if ($modalToGetSet->getFirstArgumentType() === null) {
+            return $modalToGetSet->getGetMethod();
         }
 
-        $firstArgumentType = $unprefixedMethodToGetSet->getFirstArgumentType();
+        $firstArgumentType = $modalToGetSet->getFirstArgumentType();
         $argumentValue = $methodCall->args[0]->value;
 
         if ($firstArgumentType === 'array' && $argumentValue instanceof Array_) {
-            return $unprefixedMethodToGetSet->getSetMethod();
+            return $modalToGetSet->getSetMethod();
         }
 
-        return $unprefixedMethodToGetSet->getGetMethod();
+        return $modalToGetSet->getGetMethod();
     }
 }

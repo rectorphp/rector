@@ -93,31 +93,31 @@ PHP
     /**
      * @param ClassMethod|StaticCall|MethodCall $node
      */
-    private function processPosition(Node $node, ArgumentRemover $removedArgument): void
+    private function processPosition(Node $node, ArgumentRemover $argumentRemover): void
     {
-        if ($removedArgument->getValue() === null) {
+        if ($argumentRemover->getValue() === null) {
             if ($node instanceof MethodCall || $node instanceof StaticCall) {
-                unset($node->args[$removedArgument->getPosition()]);
+                unset($node->args[$argumentRemover->getPosition()]);
             } else {
-                unset($node->params[$removedArgument->getPosition()]);
+                unset($node->params[$argumentRemover->getPosition()]);
             }
 
             return;
         }
 
-        $match = $removedArgument->getValue();
+        $match = $argumentRemover->getValue();
         if (isset($match['name'])) {
-            $this->removeByName($node, $removedArgument->getPosition(), $match['name']);
+            $this->removeByName($node, $argumentRemover->getPosition(), $match['name']);
             return;
         }
 
         // only argument specific value can be removed
-        if ($node instanceof ClassMethod || ! isset($node->args[$removedArgument->getPosition()])) {
+        if ($node instanceof ClassMethod || ! isset($node->args[$argumentRemover->getPosition()])) {
             return;
         }
 
-        if ($this->isArgumentValueMatch($node->args[$removedArgument->getPosition()], $match)) {
-            unset($node->args[$removedArgument->getPosition()]);
+        if ($this->isArgumentValueMatch($node->args[$argumentRemover->getPosition()], $match)) {
+            unset($node->args[$argumentRemover->getPosition()]);
         }
     }
 

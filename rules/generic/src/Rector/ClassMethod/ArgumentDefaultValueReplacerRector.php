@@ -103,14 +103,14 @@ PHP
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    private function processReplaces(Node $node, ArgumentDefaultValueReplacer $replacedArgument): ?Node
+    private function processReplaces(Node $node, ArgumentDefaultValueReplacer $argumentDefaultValueReplacer): ?Node
     {
         if ($node instanceof ClassMethod) {
-            if (! isset($node->params[$replacedArgument->getPosition()])) {
+            if (! isset($node->params[$argumentDefaultValueReplacer->getPosition()])) {
                 return null;
             }
-        } elseif (isset($node->args[$replacedArgument->getPosition()])) {
-            $this->processArgs($node, $replacedArgument);
+        } elseif (isset($node->args[$argumentDefaultValueReplacer->getPosition()])) {
+            $this->processArgs($node, $argumentDefaultValueReplacer);
         }
 
         return $node;
@@ -119,16 +119,16 @@ PHP
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function processArgs(Node $node, ArgumentDefaultValueReplacer $replacedArgument): void
+    private function processArgs(Node $node, ArgumentDefaultValueReplacer $argumentDefaultValueReplacer): void
     {
-        $position = $replacedArgument->getPosition();
+        $position = $argumentDefaultValueReplacer->getPosition();
 
         $argValue = $this->getValue($node->args[$position]->value);
 
-        if (is_scalar($replacedArgument->getValueBefore()) && $argValue === $replacedArgument->getValueBefore()) {
-            $node->args[$position] = $this->normalizeValueToArgument($replacedArgument->getValueAfter());
-        } elseif (is_array($replacedArgument->getValueBefore())) {
-            $newArgs = $this->processArrayReplacement($node->args, $replacedArgument);
+        if (is_scalar($argumentDefaultValueReplacer->getValueBefore()) && $argValue === $argumentDefaultValueReplacer->getValueBefore()) {
+            $node->args[$position] = $this->normalizeValueToArgument($argumentDefaultValueReplacer->getValueAfter());
+        } elseif (is_array($argumentDefaultValueReplacer->getValueBefore())) {
+            $newArgs = $this->processArrayReplacement($node->args, $argumentDefaultValueReplacer);
 
             if ($newArgs) {
                 $node->args = $newArgs;
@@ -158,21 +158,21 @@ PHP
      */
     private function processArrayReplacement(
         array $argumentNodes,
-        ArgumentDefaultValueReplacer $replacedArgument
+        ArgumentDefaultValueReplacer $argumentDefaultValueReplacer
     ): ?array {
-        $argumentValues = $this->resolveArgumentValuesToBeforeRecipe($argumentNodes, $replacedArgument);
-        if ($argumentValues !== $replacedArgument->getValueBefore()) {
+        $argumentValues = $this->resolveArgumentValuesToBeforeRecipe($argumentNodes, $argumentDefaultValueReplacer);
+        if ($argumentValues !== $argumentDefaultValueReplacer->getValueBefore()) {
             return null;
         }
 
-        if (is_string($replacedArgument->getValueAfter())) {
-            $argumentNodes[$replacedArgument->getPosition()] = $this->normalizeValueToArgument(
-                $replacedArgument->getValueAfter()
+        if (is_string($argumentDefaultValueReplacer->getValueAfter())) {
+            $argumentNodes[$argumentDefaultValueReplacer->getPosition()] = $this->normalizeValueToArgument(
+                $argumentDefaultValueReplacer->getValueAfter()
             );
 
             // clear following arguments
-            $argumentCountToClear = count($replacedArgument->getValueBefore());
-            for ($i = $replacedArgument->getPosition() + 1; $i <= $replacedArgument->getPosition() + $argumentCountToClear; ++$i) {
+            $argumentCountToClear = count($argumentDefaultValueReplacer->getValueBefore());
+            for ($i = $argumentDefaultValueReplacer->getPosition() + 1; $i <= $argumentDefaultValueReplacer->getPosition() + $argumentCountToClear; ++$i) {
                 unset($argumentNodes[$i]);
             }
         }
@@ -186,20 +186,20 @@ PHP
      */
     private function resolveArgumentValuesToBeforeRecipe(
         array $argumentNodes,
-        ArgumentDefaultValueReplacer $replacedArgument
+        ArgumentDefaultValueReplacer $argumentDefaultValueReplacer
     ): array {
         $argumentValues = [];
 
         /** @var mixed[] $valueBefore */
-        $valueBefore = $replacedArgument->getValueBefore();
+        $valueBefore = $argumentDefaultValueReplacer->getValueBefore();
         $beforeArgumentCount = count($valueBefore);
 
         for ($i = 0; $i < $beforeArgumentCount; ++$i) {
-            if (! isset($argumentNodes[$replacedArgument->getPosition() + $i])) {
+            if (! isset($argumentNodes[$argumentDefaultValueReplacer->getPosition() + $i])) {
                 continue;
             }
 
-            $nextArg = $argumentNodes[$replacedArgument->getPosition() + $i];
+            $nextArg = $argumentNodes[$argumentDefaultValueReplacer->getPosition() + $i];
             $argumentValues[] = $this->getValue($nextArg->value);
         }
 
