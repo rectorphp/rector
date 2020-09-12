@@ -6,7 +6,7 @@ use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\ValueObject\RemovedArgument;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
-use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
+use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -15,13 +15,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
-                new ParameterTypehint(
+                new AddParamTypeDeclaration(
                     'Doctrine\ORM\Mapping\ClassMetadataFactory',
                     'setEntityManager',
                     0,
                     'Doctrine\ORM\EntityManagerInterface'
                 ),
-                new ParameterTypehint(
+                new AddParamTypeDeclaration(
                     'Doctrine\ORM\Tools\DebugUnitOfWorkListener',
                     'dumpIdentityMap',
                     0,

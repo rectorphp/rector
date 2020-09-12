@@ -11,7 +11,7 @@ use Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
-use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
+use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
                 // https://github.com/rectorphp/rector/issues/1024 - no type, $dataName
-                new ParameterTypehint('PHPUnit\Framework\TestCase', '__construct', 2, ''),
+                new AddParamTypeDeclaration('PHPUnit\Framework\TestCase', '__construct', 2, ''),
             ]),
         ]]);
 

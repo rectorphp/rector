@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\ValueObject;
 
-final class ParameterTypehint
+final class AddParamTypeDeclaration
 {
     /**
      * @var string

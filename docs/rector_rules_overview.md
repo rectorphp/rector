@@ -15204,7 +15204,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\TypeDeclaration\ValueObject\ParameterTypehint('SomeClass', 'process', 0, 'string'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('SomeClass', 'process', 0, 'string'))]
         ]]);
 };
 ```

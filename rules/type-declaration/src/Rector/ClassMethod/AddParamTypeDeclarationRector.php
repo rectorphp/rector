@@ -16,7 +16,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
+use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Webmozart\Assert\Assert;
 
 /**
@@ -30,7 +30,7 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
     public const PARAMETER_TYPEHINTS = 'parameter_typehintgs';
 
     /**
-     * @var ParameterTypehint[]
+     * @var AddParamTypeDeclaration[]
      */
     private $parameterTypehints = [];
 
@@ -56,7 +56,7 @@ class SomeClass
 }
 PHP
             , [
-                self::PARAMETER_TYPEHINTS => [new ParameterTypehint('SomeClass', 'process', 0, 'string')],
+                self::PARAMETER_TYPEHINTS => [new AddParamTypeDeclaration('SomeClass', 'process', 0, 'string')],
             ]),
         ]);
     }
@@ -99,7 +99,7 @@ PHP
     public function configure(array $configuration): void
     {
         $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? [];
-        Assert::allIsInstanceOf($parameterTypehints, ParameterTypehint::class);
+        Assert::allIsInstanceOf($parameterTypehints, AddParamTypeDeclaration::class);
         $this->parameterTypehints = $parameterTypehints;
     }
 
@@ -141,7 +141,7 @@ PHP
 
     private function refactorClassMethodWithTypehintByParameterPosition(
         ClassMethod $classMethod,
-        ParameterTypehint $parameterTypehint
+        AddParamTypeDeclaration $parameterTypehint
     ): void {
         $parameter = $classMethod->params[$parameterTypehint->getPosition()] ?? null;
         if ($parameter === null) {
@@ -151,7 +151,7 @@ PHP
         $this->refactorParameter($parameter, $parameterTypehint);
     }
 
-    private function refactorParameter(Param $param, ParameterTypehint $parameterTypehint): void
+    private function refactorParameter(Param $param, AddParamTypeDeclaration $parameterTypehint): void
     {
         // already set → no change
         if ($param->type && $this->isName($param->type, $parameterTypehint->getTypehint())) {

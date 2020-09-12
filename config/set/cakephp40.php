@@ -19,7 +19,7 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\StaticCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
-use Rector\TypeDeclaration\ValueObject\ParameterTypehint;
+use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # source: https://book.cakephp.org/4/en/appendices/4-0-migration-guide.html
@@ -100,39 +100,69 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => inline_value_objects([
-                new ParameterTypehint('Cake\Form\Form', 'getData', 0, '?string'),
-                new ParameterTypehint('Cake\ORM\Behavior', 'beforeFind', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Behavior', 'buildValidator', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Behavior', 'buildRules', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Behavior', 'beforeRules', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Behavior', 'afterRules', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Behavior', 'beforeSave', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Behavior', 'afterSave', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Behavior', 'beforeDelete', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Behavior', 'afterDelete', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Table', 'beforeFind', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Table', 'buildValidator', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Table', 'buildRules', 0, 'Cake\ORM\RulesChecker'),
-                new ParameterTypehint('Cake\ORM\Table', 'beforeRules', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Table', 'afterRules', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Table', 'beforeSave', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Table', 'afterSave', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Table', 'beforeDelete', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\ORM\Table', 'afterDelete', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\Controller\Controller', 'beforeFilter', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\Controller\Controller', 'afterFilter', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\Controller\Controller', 'beforeRender', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint(
+                new AddParamTypeDeclaration('Cake\Form\Form', 'getData', 0, '?string'),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeFind', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'buildValidator', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'buildRules', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeRules', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'afterRules', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeSave', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'afterSave', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'beforeDelete', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Behavior', 'afterDelete', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeFind', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'buildValidator', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'buildRules', 0, 'Cake\ORM\RulesChecker'),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeRules', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'afterRules', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeSave', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'afterSave', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'beforeDelete', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\ORM\Table', 'afterDelete', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration(
+                    'Cake\Controller\Controller',
+                    'beforeFilter',
+                    0,
+                    'Cake\Event\EventInterface'
+                ),
+                new AddParamTypeDeclaration(
+                    'Cake\Controller\Controller',
+                    'afterFilter',
+                    0,
+                    'Cake\Event\EventInterface'
+                ),
+                new AddParamTypeDeclaration(
+                    'Cake\Controller\Controller',
+                    'beforeRender',
+                    0,
+                    'Cake\Event\EventInterface'
+                ),
+                new AddParamTypeDeclaration(
                     'Cake\Controller\Controller',
                     'beforeRedirect',
                     0,
                     'Cake\Event\EventInterface'
                 ),
-                new ParameterTypehint('Cake\Controller\Component', 'shutdown', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\Controller\Component', 'startup', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\Controller\Component', 'beforeFilter', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\Controller\Component', 'beforeRender', 0, 'Cake\Event\EventInterface'),
-                new ParameterTypehint('Cake\Controller\Component', 'beforeRedirect', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\Controller\Component', 'shutdown', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration('Cake\Controller\Component', 'startup', 0, 'Cake\Event\EventInterface'),
+                new AddParamTypeDeclaration(
+                    'Cake\Controller\Component',
+                    'beforeFilter',
+                    0,
+                    'Cake\Event\EventInterface'
+                ),
+                new AddParamTypeDeclaration(
+                    'Cake\Controller\Component',
+                    'beforeRender',
+                    0,
+                    'Cake\Event\EventInterface'
+                ),
+                new AddParamTypeDeclaration(
+                    'Cake\Controller\Component',
+                    'beforeRedirect',
+                    0,
+                    'Cake\Event\EventInterface'
+                ),
             ]),
         ]]);
 
