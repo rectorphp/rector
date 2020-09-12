@@ -10,7 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Transform\ValueObject\ParentCallToProperty;
+use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 
 /**
  * @see \Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\ReplaceParentCallByPropertyCallRectorTest
@@ -23,7 +23,7 @@ final class ReplaceParentCallByPropertyCallRector extends AbstractRector impleme
     public const PARENT_CALLS_TO_PROPERTIES = 'parent_calls_to_properties';
 
     /**
-     * @var ParentCallToProperty[]
+     * @var ReplaceParentCallByPropertyCall[]
      */
     private $parentCallToProperties = [];
 
@@ -54,7 +54,7 @@ CODE_SAMPLE
                     ,
                     [
                         self::PARENT_CALLS_TO_PROPERTIES => [
-                            new ParentCallToProperty('SomeTypeToReplace', 'someMethodCall', 'someProperty'),
+                            new ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty'),
                         ],
                     ]
                 ),

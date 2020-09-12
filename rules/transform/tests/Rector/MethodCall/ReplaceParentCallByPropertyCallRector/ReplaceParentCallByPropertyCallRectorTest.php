@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
 use Rector\Transform\Tests\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\Source\TypeClassToReplaceMethodCallBy;
-use Rector\Transform\ValueObject\ParentCallToProperty;
+use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ReplaceParentCallByPropertyCallRectorTest extends AbstractRectorTestCase
@@ -34,7 +34,11 @@ final class ReplaceParentCallByPropertyCallRectorTest extends AbstractRectorTest
         return [
             ReplaceParentCallByPropertyCallRector::class => [
                 ReplaceParentCallByPropertyCallRector::PARENT_CALLS_TO_PROPERTIES => [
-                    new ParentCallToProperty(TypeClassToReplaceMethodCallBy::class, 'someMethod', 'someProperty'),
+                    new ReplaceParentCallByPropertyCall(
+                        TypeClassToReplaceMethodCallBy::class,
+                        'someMethod',
+                        'someProperty'
+                    ),
                 ],
             ],
         ];
