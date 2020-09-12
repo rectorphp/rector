@@ -2,23 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Rector\FunctionLike;
+namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PhpParser\Node\UnionType;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeParamDeclarationRector;
 
 /**
- * @see \Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeParamDeclarationRector\DowngradeUnionTypeParamDeclarationRectorTest
+ * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector\DowngradeNullableTypeParamDeclarationRectorTest
  */
-final class DowngradeUnionTypeParamDeclarationRector extends AbstractDowngradeParamDeclarationRector
+final class DowngradeNullableTypeParamDeclarationRector extends AbstractDowngradeParamDeclarationRector
 {
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Remove the union type params, add @param tags instead',
+            'Remove the nullable type params, add @param tags instead',
             [
                 new ConfiguredCodeSample(
                     <<<'PHP'
@@ -26,9 +25,9 @@ final class DowngradeUnionTypeParamDeclarationRector extends AbstractDowngradePa
 
 class SomeClass
 {
-    public function echoInput(string|int $input)
+    public function run(?string $input)
     {
-        echo $input;
+        // do something
     }
 }
 PHP
@@ -39,11 +38,11 @@ PHP
 class SomeClass
 {
     /**
-     * @param string|int $input
+     * @param string|null $input
      */
-    public function echoInput($input)
+    public function run($input)
     {
-        echo $input;
+        // do something
     }
 }
 PHP
@@ -67,6 +66,6 @@ PHP
         }
 
         // Check it is the union type
-        return $param->type instanceof UnionType;
+        return $param->type instanceof NullableType;
     }
 }

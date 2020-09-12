@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp72\Rector\FunctionLike;
+namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\DowngradePhp72\Contract\Rector\DowngradeReturnDeclarationRectorInterface;
+use Rector\DowngradePhp71\Contract\Rector\DowngradeReturnDeclarationRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractDowngradeReturnDeclarationRector extends AbstractDowngradeRector implements DowngradeReturnDeclarationRectorInterface

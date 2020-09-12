@@ -2,25 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp80\Rector\FunctionLike;
+namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\UnionType;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\DowngradePhp71\Rector\FunctionLike\AbstractDowngradeReturnDeclarationRector;
 
 /**
- * @see \Rector\DowngradePhp80\Tests\Rector\FunctionLike\DowngradeUnionTypeReturnDeclarationRector\DowngradeUnionTypeReturnDeclarationRectorTest
+ * @see \Rector\DowngradePhp71\Tests\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector\DowngradeNullableTypeReturnDeclarationRectorTest
  */
-final class DowngradeUnionTypeReturnDeclarationRector extends AbstractDowngradeReturnDeclarationRector
+final class DowngradeNullableTypeReturnDeclarationRector extends AbstractDowngradeReturnDeclarationRector
 {
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Remove returning union types, add a @return tag instead',
+            'Remove returning nullable types, add a @return tag instead',
             [
                 new ConfiguredCodeSample(
                     <<<'PHP'
@@ -28,12 +27,12 @@ final class DowngradeUnionTypeReturnDeclarationRector extends AbstractDowngradeR
 
 class SomeClass
 {
-    public function getSomeObject(bool $flag): string|int
+    public function getResponseOrNothing(bool $flag): ?string
     {
         if ($flag) {
-            return 1;
+            return 'Hello world';
         }
-        return 'Hello world';
+        return null;
     }
 }
 PHP
@@ -44,14 +43,14 @@ PHP
 class SomeClass
 {
     /**
-     * @return string|int
+     * @return string|null
      */
-    public function getSomeObject(bool $flag)
+    public function getResponseOrNothing(bool $flag)
     {
         if ($flag) {
-            return 1;
+            return 'Hello world';
         }
-        return 'Hello world';
+        return null;
     }
 }
 PHP
@@ -74,6 +73,6 @@ PHP
         }
 
         // Check it is the union type
-        return $functionLike->returnType instanceof UnionType;
+        return $functionLike->returnType instanceof NullableType;
     }
 }
