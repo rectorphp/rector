@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CakePHP\ValueObject;
 
-final class CallWithParamRename
+final class RenameMethodCallBasedOnParameter
 {
     /**
      * @var string

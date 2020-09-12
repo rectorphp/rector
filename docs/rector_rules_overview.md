@@ -426,7 +426,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->call('configure', [[
             RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\CallWithParamRename('getParam', 'paging', 'getAttribute', 'ServerRequest')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\CallWithParamRename('withParam', 'paging', 'withAttribute', 'ServerRequest'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter('getParam', 'paging', 'getAttribute', 'ServerRequest')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter('withParam', 'paging', 'withAttribute', 'ServerRequest'))]
         ]]);
 };
 ```

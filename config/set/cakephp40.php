@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
-use Rector\CakePHP\ValueObject\CallWithParamRename;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
+use Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
@@ -169,8 +169,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameMethodCallBasedOnParameterRector::class)
         ->call('configure', [[
             RenameMethodCallBasedOnParameterRector::CALLS_WITH_PARAM_RENAMES => inline_value_objects([
-                new CallWithParamRename('Cake\Http\ServerRequest', 'getParam', 'paging', 'getAttribute'),
-                new CallWithParamRename('Cake\Http\ServerRequest', 'withParam', 'paging', 'withAttribute'),
+                new RenameMethodCallBasedOnParameter('Cake\Http\ServerRequest', 'getParam', 'paging', 'getAttribute'),
+                new RenameMethodCallBasedOnParameter('Cake\Http\ServerRequest', 'withParam', 'paging', 'withAttribute'),
             ]),
         ]]);
 

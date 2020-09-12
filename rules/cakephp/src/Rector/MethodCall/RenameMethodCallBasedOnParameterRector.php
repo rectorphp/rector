@@ -7,7 +7,7 @@ namespace Rector\CakePHP\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\CakePHP\ValueObject\CallWithParamRename;
+use Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -28,7 +28,7 @@ final class RenameMethodCallBasedOnParameterRector extends AbstractRector implem
     public const CALLS_WITH_PARAM_RENAMES = 'calls_with_param_renames';
 
     /**
-     * @var CallWithParamRename[]
+     * @var RenameMethodCallBasedOnParameter[]
      */
     private $callsWithParamRenames = [];
 
@@ -54,8 +54,13 @@ PHP
                     ,
                     [
                         self::CALLS_WITH_PARAM_RENAMES => [
-                            new CallWithParamRename('ServerRequest', 'getParam', 'paging', 'getAttribute'),
-                            new CallWithParamRename('ServerRequest', 'withParam', 'paging', 'withAttribute'),
+                            new RenameMethodCallBasedOnParameter('ServerRequest', 'getParam', 'paging', 'getAttribute'),
+                            new RenameMethodCallBasedOnParameter(
+                                'ServerRequest',
+                                'withParam',
+                                'paging',
+                                'withAttribute'
+                            ),
                         ],
                     ]
                 ),
@@ -89,11 +94,11 @@ PHP
     public function configure(array $configuration): void
     {
         $callsWithParamNames = $configuration[self::CALLS_WITH_PARAM_RENAMES] ?? [];
-        Assert::allIsInstanceOf($callsWithParamNames, CallWithParamRename::class);
+        Assert::allIsInstanceOf($callsWithParamNames, RenameMethodCallBasedOnParameter::class);
         $this->callsWithParamRenames = $callsWithParamNames;
     }
 
-    private function matchTypeAndMethodName(MethodCall $methodCall): ?CallWithParamRename
+    private function matchTypeAndMethodName(MethodCall $methodCall): ?RenameMethodCallBasedOnParameter
     {
         foreach ($this->callsWithParamRenames as $callWithParamRename) {
             if (! $this->isObjectType($methodCall, $callWithParamRename->getOldClass())) {
