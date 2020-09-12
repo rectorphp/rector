@@ -9,7 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\UseUse;
-use Rector\CodingStyle\ValueObject\NameAndParentValueObject;
+use Rector\CodingStyle\ValueObject\NameAndParent;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -18,7 +18,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class UseManipulator
 {
     /**
-     * @var NameAndParentValueObject[][]
+     * @var NameAndParent[][]
      */
     private $resolvedNodeNames = [];
 
@@ -39,7 +39,7 @@ final class UseManipulator
     }
 
     /**
-     * @return NameAndParentValueObject[][]
+     * @return NameAndParent[][]
      */
     public function resolveUsedNameNodes(Node $node): array
     {
@@ -69,10 +69,7 @@ final class UseManipulator
                 throw new ShouldNotHappenException();
             }
 
-            $this->resolvedNodeNames[$originalName->toString()][] = new NameAndParentValueObject(
-                $nameNode,
-                $parentNode
-            );
+            $this->resolvedNodeNames[$originalName->toString()][] = new NameAndParent($nameNode, $parentNode);
         }
     }
 
@@ -92,7 +89,7 @@ final class UseManipulator
                 continue;
             }
 
-            $this->resolvedNodeNames[$name][] = new NameAndParentValueObject($classLikeName, $classLike);
+            $this->resolvedNodeNames[$name][] = new NameAndParent($classLikeName, $classLike);
         }
     }
 
@@ -107,7 +104,7 @@ final class UseManipulator
                 continue;
             }
 
-            $this->resolvedNodeNames[$identifier->name][] = new NameAndParentValueObject($identifier, $parentNode);
+            $this->resolvedNodeNames[$identifier->name][] = new NameAndParent($identifier, $parentNode);
         }
     }
 }

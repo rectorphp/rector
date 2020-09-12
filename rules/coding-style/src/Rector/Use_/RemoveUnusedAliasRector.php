@@ -19,7 +19,7 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Node\DocAliasResolver;
 use Rector\CodingStyle\Node\UseManipulator;
 use Rector\CodingStyle\Node\UseNameAliasToNameResolver;
-use Rector\CodingStyle\ValueObject\NameAndParentValueObject;
+use Rector\CodingStyle\ValueObject\NameAndParent;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -31,7 +31,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RemoveUnusedAliasRector extends AbstractRector
 {
     /**
-     * @var NameAndParentValueObject[][]
+     * @var NameAndParent[][]
      */
     private $resolvedNodeNames = [];
 
@@ -227,7 +227,7 @@ PHP
     }
 
     /**
-     * @param NameAndParentValueObject[] $usedNameNodes
+     * @param NameAndParent[] $usedNameNodes
      */
     private function renameNameNode(array $usedNameNodes, string $lastName): void
     {
