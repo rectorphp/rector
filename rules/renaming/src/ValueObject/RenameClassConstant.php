@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Renaming\ValueObject;
 
-final class ClassConstantRename
+final class RenameClassConstant
 {
     /**
      * @var string

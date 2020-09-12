@@ -12697,7 +12697,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
             RenameClassConstantRector::CLASS_CONSTANT_RENAME => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\ClassConstantRename('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\ClassConstantRename('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenameClassConstant('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT')), \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenameClassConstant('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'))]
         ]]);
 };
 ```

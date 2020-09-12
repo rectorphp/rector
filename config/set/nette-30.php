@@ -16,7 +16,7 @@ use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotate
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\ValueObject\ClassConstantRename;
+use Rector\Renaming\ValueObject\RenameClassConstant;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
@@ -67,9 +67,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameClassConstantRector::class)
         ->call('configure', [[
             RenameClassConstantRector::CLASS_CONSTANT_RENAME => inline_value_objects([
-                new ClassConstantRename('Contributte\Events\Extra\Event\Security\LoggedInEvent', 'NAME', 'class'),
-                new ClassConstantRename('Contributte\Events\Extra\Event\Security\LoggedOutEvent', 'NAME', 'class'),
-                new ClassConstantRename('Contributte\Events\Extra\Event\Application\ShutdownEvent', 'NAME', 'class'),
+                new RenameClassConstant('Contributte\Events\Extra\Event\Security\LoggedInEvent', 'NAME', 'class'),
+                new RenameClassConstant('Contributte\Events\Extra\Event\Security\LoggedOutEvent', 'NAME', 'class'),
+                new RenameClassConstant('Contributte\Events\Extra\Event\Application\ShutdownEvent', 'NAME', 'class'),
             ]),
         ]]);
 

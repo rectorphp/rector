@@ -13,7 +13,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Renaming\ValueObject\ClassConstantRename;
+use Rector\Renaming\ValueObject\RenameClassConstant;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,7 +27,7 @@ final class RenameClassConstantRector extends AbstractRector implements Configur
     public const CLASS_CONSTANT_RENAME = 'constant_rename';
 
     /**
-     * @var ClassConstantRename[]
+     * @var RenameClassConstant[]
      */
     private $classConstantRenames = [];
 
@@ -47,8 +47,8 @@ PHP
                 ,
                 [
                     self::CLASS_CONSTANT_RENAME => [
-                        new ClassConstantRename('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
-                        new ClassConstantRename('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'),
+                        new RenameClassConstant('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
+                        new RenameClassConstant('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass::NEW_CONSTANT'),
                     ],
                 ]
             ),
@@ -95,7 +95,7 @@ PHP
     public function configure(array $configuration): void
     {
         $classConstantRenames = $configuration[self::CLASS_CONSTANT_RENAME] ?? [];
-        Assert::allIsInstanceOf($classConstantRenames, ClassConstantRename::class);
+        Assert::allIsInstanceOf($classConstantRenames, RenameClassConstant::class);
         $this->classConstantRenames = $classConstantRenames;
     }
 
