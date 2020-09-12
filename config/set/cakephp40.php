@@ -9,7 +9,7 @@ use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
-use Rector\Generic\ValueObject\RenamedProperty;
+use Rector\Generic\ValueObject\RenameProperty;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -72,7 +72,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
             RenamePropertyRector::RENAMED_PROPERTIES => inline_value_objects([
-                new RenamedProperty('Cake\ORM\Entity', '_properties', '_fields'),
+                new RenameProperty('Cake\ORM\Entity', '_properties', '_fields'),
             ]),
         ]]);
 

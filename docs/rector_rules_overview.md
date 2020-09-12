@@ -6246,7 +6246,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenamePropertyRector::class)
         ->call('configure', [[
             RenamePropertyRector::RENAMED_PROPERTIES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RenamedProperty('SomeClass', 'someOldProperty', 'someNewProperty'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty'))]
         ]]);
 };
 ```
