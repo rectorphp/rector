@@ -54,11 +54,11 @@ final class Skipper
         foreach ($locations as $location) {
             $ignoredPath = $this->normalizeForFnmatch($location);
 
-            if ($ignoredPath . $fileName === $filePathName) {
+            if ($smartFileInfo->endsWith($ignoredPath) || $smartFileInfo->doesFnmatch($ignoredPath)) {
                 return true;
             }
 
-            if ($smartFileInfo->endsWith($ignoredPath) || $smartFileInfo->doesFnmatch($ignoredPath)) {
+            if ($ignoredPath . $fileName === $filePathName) {
                 return true;
             }
         }
