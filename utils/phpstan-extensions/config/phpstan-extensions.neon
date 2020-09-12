@@ -20,6 +20,10 @@ services:
          tags: [phpstan.rules.rule]
 
     -
+         class: Rector\PHPStanExtensions\Rule\CheckGetNodeTypesReturnPhpParserNodeRule
+         tags: [phpstan.rules.rule]
+
+    -
          class: Rector\PHPStanExtensions\Rule\RectorRuleAndValueObjectHaveSameStartsRule
          tags: [phpstan.rules.rule]
 
