@@ -7,7 +7,7 @@ namespace Rector\TypeDeclaration\ValueObject;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 
-final class NestedArrayTypeValueObject
+final class NestedArrayType
 {
     /**
      * @var int
