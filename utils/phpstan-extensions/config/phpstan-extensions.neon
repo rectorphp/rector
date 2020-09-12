@@ -24,6 +24,10 @@ services:
          tags: [phpstan.rules.rule]
 
     -
+         class: Rector\PHPStanExtensions\Rule\ValueObjectHasNoValueObjectSuffixRule
+         tags: [phpstan.rules.rule]
+
+    -
          class: Rector\PHPStanExtensions\Rule\RectorRuleAndValueObjectHaveSameStartsRule
          tags: [phpstan.rules.rule]
 

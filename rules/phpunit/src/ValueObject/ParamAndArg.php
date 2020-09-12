@@ -7,7 +7,7 @@ namespace Rector\PHPUnit\ValueObject;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\Type;
 
-final class ParamAndArgValueObject
+final class ParamAndArg
 {
     /**
      * @var Variable

@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 
-final class NameAndParentValueObject
+final class NameAndParent
 {
     /**
      * @var Node

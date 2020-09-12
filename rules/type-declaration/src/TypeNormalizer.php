@@ -16,7 +16,7 @@ use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\PHPStan\TypeFactoryStaticHelper;
-use Rector\TypeDeclaration\ValueObject\NestedArrayTypeValueObject;
+use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\TypeNormalizerTest
@@ -24,7 +24,7 @@ use Rector\TypeDeclaration\ValueObject\NestedArrayTypeValueObject;
 final class TypeNormalizer
 {
     /**
-     * @var NestedArrayTypeValueObject[]
+     * @var NestedArrayType[]
      */
     private $collectedNestedArrayTypes = [];
 
@@ -91,7 +91,7 @@ final class TypeNormalizer
         } elseif ($type->getItemType() instanceof UnionType) {
             $this->collectNestedArrayTypeFromUnionType($type->getItemType(), $arrayNesting);
         } else {
-            $this->collectedNestedArrayTypes[] = new NestedArrayTypeValueObject(
+            $this->collectedNestedArrayTypes[] = new NestedArrayType(
                 $type->getItemType(),
                 $arrayNesting,
                 $type->getKeyType()
@@ -187,13 +187,13 @@ final class TypeNormalizer
                 ++$arrayNesting;
                 $this->normalizeArrayOfUnionToUnionArray($unionedType, $arrayNesting);
             } else {
-                $this->collectedNestedArrayTypes[] = new NestedArrayTypeValueObject($unionedType, $arrayNesting);
+                $this->collectedNestedArrayTypes[] = new NestedArrayType($unionedType, $arrayNesting);
             }
         }
     }
 
     /**
-     * @param NestedArrayTypeValueObject[] $collectedNestedArrayTypes
+     * @param NestedArrayType[] $collectedNestedArrayTypes
      */
     private function createUnionedTypesFromArrayTypes(array $collectedNestedArrayTypes): Type
     {

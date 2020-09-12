@@ -31,7 +31,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
-use Rector\PHPUnit\ValueObject\ParamAndArgValueObject;
+use Rector\PHPUnit\ValueObject\ParamAndArg;
 use Webmozart\Assert\Assert;
 
 /**
@@ -266,7 +266,7 @@ PHP
     }
 
     /**
-     * @return ParamAndArgValueObject[]
+     * @return ParamAndArg[]
      */
     private function collectParamAndArgsFromArray(Array_ $array, string $variableName): array
     {
@@ -280,7 +280,7 @@ PHP
     }
 
     /**
-     * @param ParamAndArgValueObject[] $paramAndArgs
+     * @param ParamAndArg[] $paramAndArgs
      */
     private function refactorTestClassMethodParams(ClassMethod $classMethod, array $paramAndArgs): void
     {
@@ -326,7 +326,7 @@ PHP
     }
 
     /**
-     * @return ParamAndArgValueObject[]
+     * @return ParamAndArg[]
      */
     private function collectParamAndArgsFromNestedArray(Array_ $array, string $variableName): array
     {
@@ -340,7 +340,7 @@ PHP
                 $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
                 $itemsStaticType = $this->getStaticType($nestedArrayItem->value);
-                $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
+                $paramAndArgs[] = new ParamAndArg($variable, $itemsStaticType);
                 ++$i;
             }
         }
@@ -363,7 +363,7 @@ PHP
     }
 
     /**
-     * @return ParamAndArgValueObject[]
+     * @return ParamAndArg[]
      */
     private function collectParamAndArgsFromNonNestedArray(
         Array_ $array,
@@ -376,7 +376,7 @@ PHP
         foreach ($array->items as $arrayItem) {
             $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
-            $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
+            $paramAndArgs[] = new ParamAndArg($variable, $itemsStaticType);
             ++$i;
 
             if (! $arrayItem->value instanceof Array_) {
@@ -388,7 +388,7 @@ PHP
     }
 
     /**
-     * @param ParamAndArgValueObject[] $paramAndArgs
+     * @param ParamAndArg[] $paramAndArgs
      * @return Param[]
      */
     private function createParams(array $paramAndArgs): array
@@ -410,9 +410,9 @@ PHP
         return new AttributeAwareParamTagValueNode($typeNode, false, '$' . $name, '', false);
     }
 
-    private function setTypeIfNotNull(ParamAndArgValueObject $paramAndArgValueObject, Param $param): void
+    private function setTypeIfNotNull(ParamAndArg $paramAndArg, Param $param): void
     {
-        $staticType = $paramAndArgValueObject->getType();
+        $staticType = $paramAndArg->getType();
         if ($staticType === null) {
             return;
         }
