@@ -195,12 +195,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // skip directory/file by rule
     $parameters->set(Option::SKIP, [
         Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector::class => [
-            __DIR__ . '/skipped-directory/',
-            __DIR__ . '/*/skipped-directory/*',
+            // single file
+            __DIR__ . '/src/ComplicatedFile.php',
+            // or directory
+            __DIR__ . '/src',
+            // or fnmatch
+            __DIR__ . '/src/*/Tests/*',
         ],
         Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector::class => [
-            __DIR__ . '/skipped-directory/',
-            __DIR__ . '/*/skipped-directory/*',
+            // single file
+            __DIR__ . '/src/ComplicatedFile.php',
+            // or directory
+            __DIR__ . '/src',
+            // or fnmatch
+            __DIR__ . '/src/*/Tests/*',
         ],
     ]);
 };
