@@ -6,7 +6,7 @@ namespace Rector\DowngradePhp71\Rector\FunctionLike;
 
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -19,7 +19,7 @@ final class DowngradeNullableTypeParamDeclarationRector extends AbstractDowngrad
         return new RectorDefinition(
             'Remove the nullable type params, add @param tags instead',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'PHP'
 <?php
 
@@ -46,6 +46,10 @@ class SomeClass
     }
 }
 PHP
+,
+                    [
+                        self::ADD_DOC_BLOCK => true,
+                    ]
                 ),
             ]
         );
