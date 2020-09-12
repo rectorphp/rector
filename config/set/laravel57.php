@@ -6,7 +6,7 @@ use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\ValueObject\AddedArgument;
-use Rector\Generic\ValueObject\MethodVisibility;
+use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
@@ -20,8 +20,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
-                new MethodVisibility('Illuminate\Routing\Router', 'addRoute', 'public'),
-                new MethodVisibility('Illuminate\Contracts\Auth\Access\Gate', 'raw', 'public'),
+                new ChangeMethodVisibility('Illuminate\Routing\Router', 'addRoute', 'public'),
+                new ChangeMethodVisibility('Illuminate\Contracts\Auth\Access\Gate', 'raw', 'public'),
             ]),
         ]]);
 

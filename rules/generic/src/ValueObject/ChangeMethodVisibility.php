@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Generic\ValueObject;
 
-final class MethodVisibility
+final class ChangeMethodVisibility
 {
     /**
      * @var string

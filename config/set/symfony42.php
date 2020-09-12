@@ -11,7 +11,7 @@ use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\ValueObject\AddedArgument;
 use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
-use Rector\Generic\ValueObject\MethodVisibility;
+use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\Generic\ValueObject\RemovedArgument;
 use Rector\Generic\ValueObject\ReplacedArgument;
 use Rector\Generic\ValueObject\TypeMethodWrap;
@@ -175,7 +175,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
-                new MethodVisibility('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', 'static'),
+                new ChangeMethodVisibility(
+                    'Symfony\Component\Form\AbstractTypeExtension',
+                    'getExtendedTypes',
+                    'static'
+                ),
             ]),
         ]]);
 

@@ -6,8 +6,8 @@ use Rector\Generic\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
 use Rector\Generic\ValueObject\AddedArgument;
+use Rector\Generic\ValueObject\ChangeMethodVisibility;
 use Rector\Generic\ValueObject\MethodCallWrap;
-use Rector\Generic\ValueObject\MethodVisibility;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
@@ -81,7 +81,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => inline_value_objects([
-                new MethodVisibility('Illuminate\Foundation\Http\FormRequest', 'validationData', 'public'),
+                new ChangeMethodVisibility('Illuminate\Foundation\Http\FormRequest', 'validationData', 'public'),
             ]),
         ]]);
 

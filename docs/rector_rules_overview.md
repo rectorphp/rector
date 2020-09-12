@@ -5525,7 +5525,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ChangeMethodVisibilityRector::class)
         ->call('configure', [[
             ChangeMethodVisibilityRector::METHOD_VISIBILITIES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\MethodVisibility('FrameworkClass', 'someMethod', 'protected'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ChangeMethodVisibility('FrameworkClass', 'someMethod', 'protected'))]
         ]]);
 };
 ```
