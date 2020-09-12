@@ -6460,7 +6460,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(WrapReturnRector::class)
         ->call('configure', [[
             WrapReturnRector::TYPE_METHOD_WRAPS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\TypeMethodWrap('SomeClass', 'getItem', true))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\WrapReturn('SomeClass', 'getItem', true))]
         ]]);
 };
 ```

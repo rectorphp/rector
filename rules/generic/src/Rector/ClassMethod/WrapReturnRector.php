@@ -13,7 +13,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\TypeMethodWrap;
+use Rector\Generic\ValueObject\WrapReturn;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,7 +27,7 @@ final class WrapReturnRector extends AbstractRector implements ConfigurableRecto
     public const TYPE_METHOD_WRAPS = 'type_method_wraps';
 
     /**
-     * @var TypeMethodWrap[]
+     * @var WrapReturn[]
      */
     private $typeMethodWraps = [];
 
@@ -56,7 +56,7 @@ final class SomeClass
 PHP
                 ,
                 [
-                    self::TYPE_METHOD_WRAPS => [new TypeMethodWrap('SomeClass', 'getItem', true)],
+                    self::TYPE_METHOD_WRAPS => [new WrapReturn('SomeClass', 'getItem', true)],
                 ]
             ),
         ]);
@@ -97,7 +97,7 @@ PHP
     public function configure(array $configuration): void
     {
         $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? [];
-        Assert::allIsInstanceOf($typeMethodWraps, TypeMethodWrap::class);
+        Assert::allIsInstanceOf($typeMethodWraps, WrapReturn::class);
         $this->typeMethodWraps = $typeMethodWraps;
     }
 

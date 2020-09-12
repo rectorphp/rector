@@ -14,7 +14,7 @@ use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\Generic\ValueObject\ArgumentRemover;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
-use Rector\Generic\ValueObject\TypeMethodWrap;
+use Rector\Generic\ValueObject\WrapReturn;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -186,7 +186,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(WrapReturnRector::class)
         ->call('configure', [[
             WrapReturnRector::TYPE_METHOD_WRAPS => inline_value_objects([
-                new TypeMethodWrap('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', true),
+                new WrapReturn('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', true),
             ]),
         ]]);
 
