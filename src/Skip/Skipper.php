@@ -58,7 +58,7 @@ final class Skipper
                 return true;
             }
 
-            if (rtrim($ignoredPath, '/') . DIRECTORY_SEPARATOR . $fileName === $filePathName) {
+            if (rtrim($ignoredPath, '\/') . DIRECTORY_SEPARATOR . $fileName === $filePathName) {
                 return true;
             }
         }
