@@ -125,7 +125,9 @@ PHP
 
         $argValue = $this->getValue($node->args[$position]->value);
 
-        if (is_scalar($argumentDefaultValueReplacer->getValueBefore()) && $argValue === $argumentDefaultValueReplacer->getValueBefore()) {
+        if (is_scalar(
+            $argumentDefaultValueReplacer->getValueBefore()
+        ) && $argValue === $argumentDefaultValueReplacer->getValueBefore()) {
             $node->args[$position] = $this->normalizeValueToArgument($argumentDefaultValueReplacer->getValueAfter());
         } elseif (is_array($argumentDefaultValueReplacer->getValueBefore())) {
             $newArgs = $this->processArrayReplacement($node->args, $argumentDefaultValueReplacer);

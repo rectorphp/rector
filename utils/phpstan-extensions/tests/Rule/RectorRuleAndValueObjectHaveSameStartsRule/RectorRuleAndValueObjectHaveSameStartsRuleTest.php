@@ -7,7 +7,6 @@ namespace Rector\PHPStanExtensions\Tests\Rule\RectorRuleAndValueObjectHaveSameSt
 use Iterator;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\PHPStanExtensions\Rule\RectorRuleAndValueObjectHaveSameStartsRule;
 
 final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends RuleTestCase
