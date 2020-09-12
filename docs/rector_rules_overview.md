@@ -6047,7 +6047,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RemoveFuncCallArgRector::class)
         ->call('configure', [[
             RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RemovedFunctionArgument('remove_last_arg', 1))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\RemoveFuncCallArg('remove_last_arg', 1))]
         ]]);
 };
 ```

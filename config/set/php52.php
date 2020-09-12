@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
-use Rector\Generic\ValueObject\RemovedFunctionArgument;
+use Rector\Generic\ValueObject\RemoveFuncCallArg;
 use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => inline_value_objects([
                 // see https://www.php.net/manual/en/function.ldap-first-attribute.php
-                new RemovedFunctionArgument('ldap_first_attribute', 2),
+                new RemoveFuncCallArg('ldap_first_attribute', 2),
             ]),
         ]]);
 };

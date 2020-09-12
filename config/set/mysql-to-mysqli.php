@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
 use Rector\Generic\ValueObject\FunctionArgumentSwap;
-use Rector\Generic\ValueObject\RemovedFunctionArgument;
+use Rector\Generic\ValueObject\RemoveFuncCallArg;
 use Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
@@ -28,9 +28,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveFuncCallArgRector::class)
         ->call('configure', [[
             RemoveFuncCallArgRector::REMOVED_FUNCTION_ARGUMENTS => inline_value_objects([
-                new RemovedFunctionArgument('mysql_pconnect', 3),
-                new RemovedFunctionArgument('mysql_connect', 3),
-                new RemovedFunctionArgument('mysql_connect', 4),
+                new RemoveFuncCallArg('mysql_pconnect', 3),
+                new RemoveFuncCallArg('mysql_connect', 3),
+                new RemoveFuncCallArg('mysql_connect', 4),
             ]),
         ]]);
 

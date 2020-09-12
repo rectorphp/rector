@@ -10,7 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\RemovedFunctionArgument;
+use Rector\Generic\ValueObject\RemoveFuncCallArg;
 use Webmozart\Assert\Assert;
 
 /**
@@ -26,7 +26,7 @@ final class RemoveFuncCallArgRector extends AbstractRector implements Configurab
     public const REMOVED_FUNCTION_ARGUMENTS = 'removed_function_arguments';
 
     /**
-     * @var RemovedFunctionArgument[]
+     * @var RemoveFuncCallArg[]
      */
     private $removedFunctionArguments = [];
 
@@ -42,7 +42,7 @@ CODE_SAMPLE
 remove_last_arg(1);
 CODE_SAMPLE
                 , [
-                    self::REMOVED_FUNCTION_ARGUMENTS => [new RemovedFunctionArgument('remove_last_arg', 1)],
+                    self::REMOVED_FUNCTION_ARGUMENTS => [new RemoveFuncCallArg('remove_last_arg', 1)],
                 ]),
         ]);
     }
@@ -80,7 +80,7 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $removedFunctionArguments = $configuration[self::REMOVED_FUNCTION_ARGUMENTS] ?? [];
-        Assert::allIsInstanceOf($removedFunctionArguments, RemovedFunctionArgument::class);
+        Assert::allIsInstanceOf($removedFunctionArguments, RemoveFuncCallArg::class);
         $this->removedFunctionArguments = $removedFunctionArguments;
     }
 }
