@@ -12,7 +12,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\StaticCallRename;
+use Rector\Renaming\ValueObject\RenameStaticMethod;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -60,7 +60,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $configuration = [
         # https://github.com/laravel/framework/commit/55785d3514a8149d4858acef40c56a31b6b2ccd1
-        new StaticCallRename('Illuminate\Support\Facades\Input', 'get', 'Illuminate\Support\Facades\Request', 'input'),
+        new RenameStaticMethod(
+            'Illuminate\Support\Facades\Input',
+            'get',
+            'Illuminate\Support\Facades\Request',
+            'input'
+        ),
     ];
 
     $services->set(RenameStaticMethodRector::class)

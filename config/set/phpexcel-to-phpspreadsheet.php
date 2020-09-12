@@ -20,7 +20,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\StaticCallRename;
+use Rector\Renaming\ValueObject\RenameStaticMethod;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -72,33 +72,38 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]]);
 
     $configuration = [
-        new StaticCallRename('PHPExcel_Shared_Date', 'ExcelToPHP', 'PHPExcel_Shared_Date', 'excelToTimestamp'),
-        new StaticCallRename(
+        new RenameStaticMethod('PHPExcel_Shared_Date', 'ExcelToPHP', 'PHPExcel_Shared_Date', 'excelToTimestamp'),
+        new RenameStaticMethod(
             'PHPExcel_Shared_Date',
             'ExcelToPHPObject',
             'PHPExcel_Shared_Date',
             'excelToDateTimeObject'
         ),
-        new StaticCallRename(
+        new RenameStaticMethod(
             'PHPExcel_Shared_Date',
             'FormattedPHPToExcel',
             'PHPExcel_Shared_Date',
             'formattedPHPToExcel'
         ),
-        new StaticCallRename('PHPExcel_Calculation_DateTime', 'DAYOFWEEK', 'PHPExcel_Calculation_DateTime', 'WEEKDAY'),
-        new StaticCallRename(
+        new RenameStaticMethod(
+            'PHPExcel_Calculation_DateTime',
+            'DAYOFWEEK',
+            'PHPExcel_Calculation_DateTime',
+            'WEEKDAY'
+        ),
+        new RenameStaticMethod(
             'PHPExcel_Calculation_DateTime',
             'WEEKOFYEAR',
             'PHPExcel_Calculation_DateTime',
             'WEEKNUCM'
         ),
-        new StaticCallRename(
+        new RenameStaticMethod(
             'PHPExcel_Calculation_DateTime',
             'SECONDOFMINUTE',
             'PHPExcel_Calculation_DateTime',
             'SECOND'
         ),
-        new StaticCallRename(
+        new RenameStaticMethod(
             'PHPExcel_Calculation_DateTime',
             'MINUTEOFHOUR',
             'PHPExcel_Calculation_DateTime',

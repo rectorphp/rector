@@ -12,7 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Renaming\ValueObject\StaticCallRename;
+use Rector\Renaming\ValueObject\RenameStaticMethod;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\StaticCall\RenameStaticMethodRector\RenameStaticMethodRectorTest
@@ -30,7 +30,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
     private const SOME_CLASS = 'SomeClass';
 
     /**
-     * @var StaticCallRename[]
+     * @var RenameStaticMethod[]
      */
     private $staticMethodRenames = [];
 
@@ -42,7 +42,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
                 'AnotherExampleClass::newStaticMethod();',
                 [
                     self::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                        new StaticCallRename(self::SOME_CLASS, 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'),
+                        new RenameStaticMethod(self::SOME_CLASS, 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'),
                     ],
                 ]
             ),
@@ -51,7 +51,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
                 'SomeClass::newStaticMethod();',
                 [
                     self::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                        new StaticCallRename(self::SOME_CLASS, 'oldMethod', self::SOME_CLASS, 'newStaticMethod'),
+                        new RenameStaticMethod(self::SOME_CLASS, 'oldMethod', self::SOME_CLASS, 'newStaticMethod'),
                     ],
                 ]
             ),
@@ -91,7 +91,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
         $this->staticMethodRenames = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES] ?? [];
     }
 
-    private function rename(StaticCall $staticCall, StaticCallRename $staticCallRename): StaticCall
+    private function rename(StaticCall $staticCall, RenameStaticMethod $staticCallRename): StaticCall
     {
         $staticCall->name = new Identifier($staticCallRename->getNewMethod());
 

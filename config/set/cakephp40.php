@@ -16,7 +16,7 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstant;
-use Rector\Renaming\ValueObject\StaticCallRename;
+use Rector\Renaming\ValueObject\RenameStaticMethod;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
@@ -63,9 +63,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
             RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => inline_value_objects([
-                new StaticCallRename('Router', 'pushRequest', 'Router', 'setRequest'),
-                new StaticCallRename('Router', 'setRequestInfo', 'Router', 'setRequest'),
-                new StaticCallRename('Router', 'setRequestContext', 'Router', 'setRequest'),
+                new RenameStaticMethod('Router', 'pushRequest', 'Router', 'setRequest'),
+                new RenameStaticMethod('Router', 'setRequestInfo', 'Router', 'setRequest'),
+                new RenameStaticMethod('Router', 'setRequestContext', 'Router', 'setRequest'),
             ]),
         ]]);
 

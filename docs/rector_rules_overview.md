@@ -12910,7 +12910,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
             RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\StaticCallRename('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenameStaticMethod('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'))]
         ]]);
 };
 ```
@@ -12933,7 +12933,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(RenameStaticMethodRector::class)
         ->call('configure', [[
             RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\StaticCallRename('SomeClass', 'oldMethod', 'SomeClass', 'newStaticMethod'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Renaming\ValueObject\RenameStaticMethod('SomeClass', 'oldMethod', 'SomeClass', 'newStaticMethod'))]
         ]]);
 };
 ```
