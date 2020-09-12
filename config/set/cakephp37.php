@@ -10,7 +10,7 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
-use Rector\Transform\ValueObject\MethodCallRenameWithAddedArguments;
+use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
 use Rector\Transform\ValueObject\PropertyToMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -58,8 +58,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => inline_value_objects(
                 [
-                    new MethodCallRenameWithAddedArguments('Cake\Database\Query', 'join', 'clause', ['join']),
-                    new MethodCallRenameWithAddedArguments('Cake\Database\Query', 'from', 'clause', ['from']),
+                    new MethodCallToAnotherMethodCallWithArguments('Cake\Database\Query', 'join', 'clause', ['join']),
+                    new MethodCallToAnotherMethodCallWithArguments('Cake\Database\Query', 'from', 'clause', ['from']),
                 ]
             ),
         ]]);

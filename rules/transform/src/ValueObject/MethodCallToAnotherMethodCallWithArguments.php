@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Transform\ValueObject;
 
-final class MethodCallRenameWithAddedArguments
+final class MethodCallToAnotherMethodCallWithArguments
 {
     /**
      * @var string

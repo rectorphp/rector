@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
-use Rector\Transform\ValueObject\MethodCallRenameWithAddedArguments;
+use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
 use Webmozart\Assert\Assert;
 
 /**
@@ -26,7 +26,7 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     public const METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS = 'method_call_renames_with_added_arguments';
 
     /**
-     * @var MethodCallRenameWithAddedArguments[]
+     * @var MethodCallToAnotherMethodCallWithArguments[]
      */
     private $methodCallRenamesWithAddedArguments = [];
 
@@ -87,7 +87,10 @@ PHP
     public function configure(array $configuration): void
     {
         $methodCallRenamesWithAddedArguments = $configuration[self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS] ?? [];
-        Assert::allIsInstanceOf($methodCallRenamesWithAddedArguments, MethodCallRenameWithAddedArguments::class);
+        Assert::allIsInstanceOf(
+            $methodCallRenamesWithAddedArguments,
+            MethodCallToAnotherMethodCallWithArguments::class
+        );
         $this->methodCallRenamesWithAddedArguments = $methodCallRenamesWithAddedArguments;
     }
 }
