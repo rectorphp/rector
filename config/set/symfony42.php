@@ -11,9 +11,9 @@ use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\WrapReturnRector;
 use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
 use Rector\Generic\ValueObject\ArgumentAdder;
+use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\Generic\ValueObject\ArgumentRemover;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
-use Rector\Generic\ValueObject\ReplacedArgument;
 use Rector\Generic\ValueObject\TypeMethodWrap;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -194,8 +194,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             // https://github.com/symfony/symfony/commit/9493cfd5f2366dab19bbdde0d0291d0575454567
             ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects([
-                new ReplacedArgument('Symfony\Component\HttpFoundation\Cookie', '__construct', 5, false, null),
-                new ReplacedArgument('Symfony\Component\HttpFoundation\Cookie', '__construct', 8, null, 'lax'),
+                new ArgumentDefaultValueReplacer(
+                    'Symfony\Component\HttpFoundation\Cookie',
+                    '__construct',
+                    5,
+                    false,
+                    null
+                ),
+                new ArgumentDefaultValueReplacer(
+                    'Symfony\Component\HttpFoundation\Cookie',
+                    '__construct',
+                    8,
+                    null,
+                    'lax'
+                ),
             ]),
         ]]);
 

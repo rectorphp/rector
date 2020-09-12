@@ -6,7 +6,7 @@ use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Generic\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector;
-use Rector\Generic\ValueObject\ReplacedArgument;
+use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\BuilderExpandToHelperExpandRector;
 use Rector\Nette\Rector\MethodCall\GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector;
@@ -16,8 +16,8 @@ use Rector\NetteCodeQuality\Rector\ArrayDimFetch\ChangeFormArrayAccessToAnnotate
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstantRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\ValueObject\RenameClassConstant;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\RenameClassConstant;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
@@ -90,9 +90,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => inline_value_objects([
                 // json 2nd argument is now int typed
-                new ReplacedArgument('Nette\Utils\Json', 'decode', 1, true, 'Nette\Utils\Json::FORCE_ARRAY'),
+                new ArgumentDefaultValueReplacer(
+                    'Nette\Utils\Json',
+                    'decode',
+                    1,
+                    true,
+                    'Nette\Utils\Json::FORCE_ARRAY'
+                ),
                 // @see https://github.com/nette/forms/commit/574b97f9d5e7a902a224e57d7d584e7afc9fefec
-                new ReplacedArgument('Nette\Forms\Form', 'decode', 0, true, 'array'),
+                new ArgumentDefaultValueReplacer('Nette\Forms\Form', 'decode', 0, true, 'array'),
             ]),
         ]]
     );

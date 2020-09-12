@@ -7,7 +7,7 @@ namespace Rector\Generic\Tests\Rector\ClassMethod\ArgumentDefaultValueReplacerRe
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
-use Rector\Generic\ValueObject\ReplacedArgument;
+use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCase
@@ -33,7 +33,7 @@ final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCas
         return [
             ArgumentDefaultValueReplacerRector::class => [
                 ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => [
-                    new ReplacedArgument(
+                    new ArgumentDefaultValueReplacer(
                         'Symfony\Component\DependencyInjection\Definition',
                         'setScope',
                         0,
@@ -41,29 +41,29 @@ final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCas
                                     false
                     ),
 
-                    new ReplacedArgument('Symfony\Component\Yaml\Yaml', 'parse', 1, [
+                    new ArgumentDefaultValueReplacer('Symfony\Component\Yaml\Yaml', 'parse', 1, [
                         false,
                         false,
                         true,
                     ], 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP'),
 
-                    new ReplacedArgument('Symfony\Component\Yaml\Yaml', 'parse', 1, [
+                    new ArgumentDefaultValueReplacer('Symfony\Component\Yaml\Yaml', 'parse', 1, [
                         false,
                         true,
                     ], 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT'),
-                    new ReplacedArgument('Symfony\Component\Yaml\Yaml', 'parse', 1, false, 0),
-                    new ReplacedArgument(
+                    new ArgumentDefaultValueReplacer('Symfony\Component\Yaml\Yaml', 'parse', 1, false, 0),
+                    new ArgumentDefaultValueReplacer(
                         'Symfony\Component\Yaml\Yaml',
                         'parse',
                         1,
                         true,
                         'Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE'
                     ),
-                    new ReplacedArgument('Symfony\Component\Yaml\Yaml', 'dump', 3, [
+                    new ArgumentDefaultValueReplacer('Symfony\Component\Yaml\Yaml', 'dump', 3, [
                         false,
                         true,
                     ], 'Symfony\Component\Yaml\Yaml::DUMP_OBJECT'),
-                    new ReplacedArgument(
+                    new ArgumentDefaultValueReplacer(
                         'Symfony\Component\Yaml\Yaml',
                         'dump',
                         3,

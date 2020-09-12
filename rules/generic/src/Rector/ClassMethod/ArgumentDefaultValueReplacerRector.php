@@ -15,7 +15,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\ReplacedArgument;
+use Rector\Generic\ValueObject\ArgumentDefaultValueReplacer;
 use Webmozart\Assert\Assert;
 
 /**
@@ -29,7 +29,7 @@ final class ArgumentDefaultValueReplacerRector extends AbstractRector implements
     public const REPLACED_ARGUMENTS = 'replaced_arguments';
 
     /**
-     * @var ReplacedArgument[]
+     * @var ArgumentDefaultValueReplacer[]
      */
     private $replacedArguments = [];
 
@@ -51,7 +51,7 @@ PHP
                     ,
                     [
                         self::REPLACED_ARGUMENTS => [
-                            new ReplacedArgument(
+                            new ArgumentDefaultValueReplacer(
                                 'SomeExampleClass',
                                 'someMethod',
                                 0,
@@ -96,14 +96,14 @@ PHP
     public function configure(array $configuration): void
     {
         $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? [];
-        Assert::allIsInstanceOf($replacedArguments, ReplacedArgument::class);
+        Assert::allIsInstanceOf($replacedArguments, ArgumentDefaultValueReplacer::class);
         $this->replacedArguments = $replacedArguments;
     }
 
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    private function processReplaces(Node $node, ReplacedArgument $replacedArgument): ?Node
+    private function processReplaces(Node $node, ArgumentDefaultValueReplacer $replacedArgument): ?Node
     {
         if ($node instanceof ClassMethod) {
             if (! isset($node->params[$replacedArgument->getPosition()])) {
@@ -119,7 +119,7 @@ PHP
     /**
      * @param MethodCall|StaticCall $node
      */
-    private function processArgs(Node $node, ReplacedArgument $replacedArgument): void
+    private function processArgs(Node $node, ArgumentDefaultValueReplacer $replacedArgument): void
     {
         $position = $replacedArgument->getPosition();
 
@@ -156,8 +156,10 @@ PHP
      * @param Arg[] $argumentNodes
      * @return Arg[]|null
      */
-    private function processArrayReplacement(array $argumentNodes, ReplacedArgument $replacedArgument): ?array
-    {
+    private function processArrayReplacement(
+        array $argumentNodes,
+        ArgumentDefaultValueReplacer $replacedArgument
+    ): ?array {
         $argumentValues = $this->resolveArgumentValuesToBeforeRecipe($argumentNodes, $replacedArgument);
         if ($argumentValues !== $replacedArgument->getValueBefore()) {
             return null;
@@ -184,7 +186,7 @@ PHP
      */
     private function resolveArgumentValuesToBeforeRecipe(
         array $argumentNodes,
-        ReplacedArgument $replacedArgument
+        ArgumentDefaultValueReplacer $replacedArgument
     ): array {
         $argumentValues = [];
 

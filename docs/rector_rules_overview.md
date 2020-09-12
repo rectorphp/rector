@@ -5376,7 +5376,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ArgumentDefaultValueReplacerRector::class)
         ->call('configure', [[
             ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ReplacedArgument('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', 'false'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentDefaultValueReplacer('SomeExampleClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', 'false'))]
         ]]);
 };
 ```
