@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanExtensions\Rule;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -55,7 +56,12 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
             return [];
         }
 
-        return [sprintf(self::ERROR, $valueObjectClassName, rtrim($rectorRuleClassName, 'Rector'))];
+        return [sprintf(
+            self::ERROR,
+            $valueObjectClassName,
+            // @see https://regex101.com/r/F8z9PY/1
+            Strings::replace($rectorRuleClassName, '#Rector$#', '')
+        )];
     }
 
     private function shouldSkip(MethodCall $node): bool
