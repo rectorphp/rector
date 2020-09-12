@@ -104,6 +104,10 @@ PHP
             return null;
         }
 
+        if ($this->isInStaticClassMethod($staticCall)) {
+            return null;
+        }
+
         $thisVariable = new Variable('this');
         return new MethodCall($thisVariable, $staticCall->name, $staticCall->args);
     }
@@ -130,5 +134,16 @@ PHP
         }
 
         return true;
+    }
+
+    private function isInStaticClassMethod(StaticCall $staticCall): bool
+    {
+        /** @var ClassMethod|null $locationClassMethod */
+        $locationClassMethod = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
+        if ($locationClassMethod === null) {
+            return false;
+        }
+
+        return $locationClassMethod->isStatic();
     }
 }

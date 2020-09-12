@@ -575,6 +575,9 @@ final class NodeRepository
         return $this->nodeTypeResolver->resolve($node);
     }
 
+    /**
+     * @param MethodCall|StaticCall $node
+     */
     private function addCallByType(Node $node, Type $classType, string $methodName): void
     {
         if ($classType instanceof TypeWithClassName) {
