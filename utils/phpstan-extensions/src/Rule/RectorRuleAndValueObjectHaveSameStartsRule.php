@@ -77,7 +77,6 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
             if (! $node instanceof FuncCall) {
                 return null;
             }
-
             $className = $this->getClassNameFromNode($node);
             if ($className === null) {
                 return null;
@@ -96,6 +95,12 @@ final class RectorRuleAndValueObjectHaveSameStartsRule implements Rule
 
         $valueObjectNode = $nodeFinder->findFirstInstanceOf($inlineValueObjectsNode, New_::class);
         if ($valueObjectNode === null) {
+            return null;
+        }
+
+        /** @var FullyQualified $classNode */
+        $classNode = $valueObjectNode->class;
+        if (class_implements($classNode->toCodeString()) !== []) {
             return null;
         }
 

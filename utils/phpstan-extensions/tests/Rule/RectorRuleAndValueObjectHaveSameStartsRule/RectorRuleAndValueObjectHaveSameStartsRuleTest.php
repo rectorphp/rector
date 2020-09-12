@@ -29,8 +29,14 @@ final class RectorRuleAndValueObjectHaveSameStartsRuleTest extends RuleTestCase
 
         yield [__DIR__ . '/Fixture/SkipNoInlineValueObjects.php', []];
 
-        $errorMessage = sprintf(RectorRuleAndValueObjectHaveSameStartsRule::ERROR, 'MethodCallRename', 'RenameMethod');
+        $errorMessage = sprintf(
+            RectorRuleAndValueObjectHaveSameStartsRule::ERROR,
+            'MethodVisibility',
+            'ChangeMethodVisibility'
+        );
         yield [__DIR__ . '/Fixture/HaveDifferentStarts.php', [[$errorMessage, 15]]];
+
+        yield [__DIR__ . '/Fixture/SkipConfigureValueObjectImplementsInterface.php', []];
     }
 
     protected function getRule(): Rule
