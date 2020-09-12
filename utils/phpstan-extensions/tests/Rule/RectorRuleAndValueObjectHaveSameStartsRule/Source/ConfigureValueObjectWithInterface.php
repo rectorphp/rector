@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanExtensions\Tests\Rule\RectorRuleAndValueObjectHaveSameStartsRule\Source;
 
-class ConfigureValueObject
+
+class ConfigureValueObjectWithInterface implements ValueObjectInterface
 {
 
 }
