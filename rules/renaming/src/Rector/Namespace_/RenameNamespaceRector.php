@@ -157,14 +157,14 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
         return false;
     }
 
-    private function resolvePartialNewName(Name $name, RenamedNamespace $renamedNamespaceValueObject): ?string
+    private function resolvePartialNewName(Name $name, RenamedNamespace $renamedNamespace): ?string
     {
         $nodeName = $this->getName($name);
         if ($nodeName === null) {
             return null;
         }
 
-        $nameInNewNamespace = $renamedNamespaceValueObject->getNameInNewNamespace();
+        $nameInNewNamespace = $renamedNamespace->getNameInNewNamespace();
 
         // first dummy implementation - improve
         $cutOffFromTheLeft = Strings::length($nameInNewNamespace) - Strings::length($name->toString());

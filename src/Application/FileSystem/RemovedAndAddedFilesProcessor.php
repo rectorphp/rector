@@ -131,13 +131,13 @@ final class RemovedAndAddedFilesProcessor
         }
     }
 
-    private function printFileMoveWarning(MovedClass $movedClassValueObject, string $verb): void
+    private function printFileMoveWarning(MovedClass $movedClass, string $verb): void
     {
         $message = sprintf(
             'File "%s" %s moved to "%s"',
-            $movedClassValueObject->getOldPath(),
+            $movedClass->getOldPath(),
             $verb,
-            $movedClassValueObject->getNewPath()
+            $movedClass->getNewPath()
         );
         $this->symfonyStyle->warning($message);
     }

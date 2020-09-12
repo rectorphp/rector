@@ -13,15 +13,22 @@ use PHPStan\Rules\Rule;
 /**
  * @see \Rector\PHPStanExtensions\Tests\Rule\ValueObjectHasNoValueObjectSuffixRule\ValueObjectHasNoValueObjectSuffixRuleTest
  */
-class ValueObjectHasNoValueObjectSuffixRule implements Rule
+final class ValueObjectHasNoValueObjectSuffixRule implements Rule
 {
+    /**
+     * @var string
+     */
     public const ERROR = 'Value Object class name "%s" is incorrect. The correct class name is "%s".';
 
     /**
      * @see https://regex101.com/r/3jsBnt/1
+     * @var string
      */
     private const REGEX_PATTERN = '#ValueObject$#';
 
+    /**
+     * @var string
+     */
     private const VALUE_OBJECT_NAMESPACE = 'ValueObject';
 
     public function getNodeType(): string
@@ -31,6 +38,7 @@ class ValueObjectHasNoValueObjectSuffixRule implements Rule
 
     /**
      * @param Class_ $node
+     * @return string[]
      */
     public function processNode(Node $node, Scope $scope): array
     {

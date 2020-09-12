@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Rector\PHPStanExtensions\Rule\ValueObjectHasNoValueObjectSuffixRule;
 
-class ValueObjectHasNoValueObjectSuffixRuleTest extends RuleTestCase
+final class ValueObjectHasNoValueObjectSuffixRuleTest extends RuleTestCase
 {
     /**
      * @dataProvider provideData()

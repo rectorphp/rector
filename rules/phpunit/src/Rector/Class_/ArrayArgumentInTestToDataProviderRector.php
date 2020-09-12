@@ -410,9 +410,9 @@ PHP
         return new AttributeAwareParamTagValueNode($typeNode, false, '$' . $name, '', false);
     }
 
-    private function setTypeIfNotNull(ParamAndArg $paramAndArgValueObject, Param $param): void
+    private function setTypeIfNotNull(ParamAndArg $paramAndArg, Param $param): void
     {
-        $staticType = $paramAndArgValueObject->getType();
+        $staticType = $paramAndArg->getType();
         if ($staticType === null) {
             return;
         }
