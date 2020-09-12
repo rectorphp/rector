@@ -5905,7 +5905,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
             NormalToFluentRector::CALLS_TO_FLUENT => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\CallToFluent('SomeClass', ['someFunction', 'otherFunction']))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\NormalToFluent('SomeClass', ['someFunction', 'otherFunction']))]
         ]]);
 };
 ```

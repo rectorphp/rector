@@ -7,8 +7,8 @@ use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\ClassMethod\NormalToFluentRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Generic\ValueObject\CallToFluent;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
+use Rector\Generic\ValueObject\NormalToFluent;
 use Rector\Generic\ValueObject\RenameProperty;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -238,7 +238,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NormalToFluentRector::class)
         ->call('configure', [[
             NormalToFluentRector::CALLS_TO_FLUENT => inline_value_objects([
-                new CallToFluent('Cake\Network\Response', [
+                new NormalToFluent('Cake\Network\Response', [
                     'withLocation',
                     'withHeader',
                     'withDisabledCache',
