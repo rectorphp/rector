@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CakePHP\ValueObject;
 
-final class UnprefixedMethodToGetSet
+final class ModalToGetSet
 {
     /**
      * @var string

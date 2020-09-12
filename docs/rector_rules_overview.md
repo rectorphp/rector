@@ -385,7 +385,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
             ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig', 1, null))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\CakePHP\ValueObject\ModalToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig', 1, null))]
         ]]);
 };
 ```

@@ -7,7 +7,7 @@ namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector;
 use Iterator;
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source\SomeModelType;
-use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
+use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -34,8 +34,8 @@ final class ModalToGetSetRectorTest extends AbstractRectorTestCase
         return [
             ModalToGetSetRector::class => [
                 ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => [
-                    new UnprefixedMethodToGetSet(SomeModelType::class, 'config', null, null, 2, 'array'),
-                    new UnprefixedMethodToGetSet(
+                    new ModalToGetSet(SomeModelType::class, 'config', null, null, 2, 'array'),
+                    new ModalToGetSet(
                         SomeModelType::class,
                         'customMethod',
                         'customMethodGetName',
@@ -43,13 +43,8 @@ final class ModalToGetSetRectorTest extends AbstractRectorTestCase
                         2,
                         'array'
                     ),
-                    new UnprefixedMethodToGetSet(
-                        SomeModelType::class,
-                        'makeEntity',
-                        'createEntity',
-                        'generateEntity'
-                    ),
-                    new UnprefixedMethodToGetSet(SomeModelType::class, 'method'),
+                    new ModalToGetSet(SomeModelType::class, 'makeEntity', 'createEntity', 'generateEntity'),
+                    new ModalToGetSet(SomeModelType::class, 'method'),
                 ],
             ],
         ];

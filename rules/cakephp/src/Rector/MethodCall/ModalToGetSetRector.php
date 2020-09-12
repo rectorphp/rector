@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
+use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -29,7 +29,7 @@ final class ModalToGetSetRector extends AbstractRector implements ConfigurableRe
     public const UNPREFIXED_METHODS_TO_GET_SET = 'unprefixed_methods_to_get_set';
 
     /**
-     * @var UnprefixedMethodToGetSet[]
+     * @var ModalToGetSet[]
      */
     private $unprefixedMethodsToGetSet = [];
 
@@ -60,7 +60,7 @@ $object->setConfig(['key' => 'value']);
 PHP
                     , [
                         self::UNPREFIXED_METHODS_TO_GET_SET => [
-                            new UnprefixedMethodToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig'),
+                            new ModalToGetSet('InstanceConfigTrait', 'config', 'getConfig', 'setConfig'),
                         ],
                     ]
                 ),
@@ -95,11 +95,11 @@ PHP
     public function configure(array $configuration): void
     {
         $unprefixedMethodsToGetSet = $configuration[self::UNPREFIXED_METHODS_TO_GET_SET] ?? [];
-        Assert::allIsInstanceOf($unprefixedMethodsToGetSet, UnprefixedMethodToGetSet::class);
+        Assert::allIsInstanceOf($unprefixedMethodsToGetSet, ModalToGetSet::class);
         $this->unprefixedMethodsToGetSet = $unprefixedMethodsToGetSet;
     }
 
-    private function matchTypeAndMethodName(MethodCall $methodCall): ?UnprefixedMethodToGetSet
+    private function matchTypeAndMethodName(MethodCall $methodCall): ?ModalToGetSet
     {
         foreach ($this->unprefixedMethodsToGetSet as $unprefixedMethodToGetSet) {
             if (! $this->isObjectType($methodCall->var, $unprefixedMethodToGetSet->getType())) {
@@ -118,7 +118,7 @@ PHP
 
     private function resolveNewMethodNameByCondition(
         MethodCall $methodCall,
-        UnprefixedMethodToGetSet $unprefixedMethodToGetSet
+        ModalToGetSet $unprefixedMethodToGetSet
     ): string {
         if (count($methodCall->args) >= $unprefixedMethodToGetSet->getMinimalSetterArgumentCount()) {
             return $unprefixedMethodToGetSet->getSetMethod();

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 use Rector\CakePHP\ValueObject\CallWithParamRename;
-use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
+use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Generic\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Generic\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Generic\ValueObject\AddReturnTypeDeclaration;
@@ -147,9 +147,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
             ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
-                new UnprefixedMethodToGetSet('Cake\Console\ConsoleIo', 'styles', 'setStyle', 'getStyle'),
-                new UnprefixedMethodToGetSet('Cake\Console\ConsoleOutput', 'styles', 'setStyle', 'getStyle'),
-                new UnprefixedMethodToGetSet('Cake\ORM\EntityInterface', 'isNew', 'setNew', 'isNew'),
+                new ModalToGetSet('Cake\Console\ConsoleIo', 'styles', 'setStyle', 'getStyle'),
+                new ModalToGetSet('Cake\Console\ConsoleOutput', 'styles', 'setStyle', 'getStyle'),
+                new ModalToGetSet('Cake\ORM\EntityInterface', 'isNew', 'setNew', 'isNew'),
             ]),
         ]]);
 };

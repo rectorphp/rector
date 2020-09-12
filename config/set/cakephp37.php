@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToPascalRector;
-use Rector\CakePHP\ValueObject\UnprefixedMethodToGetSet;
+use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
@@ -67,13 +67,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ModalToGetSetRector::class)
         ->call('configure', [[
             ModalToGetSetRector::UNPREFIXED_METHODS_TO_GET_SET => inline_value_objects([
-                new UnprefixedMethodToGetSet(
+                new ModalToGetSet(
                     'Cake\Database\Connection',
                     'logQueries',
                     'isQueryLoggingEnabled',
                     'enableQueryLogging'
                 ),
-                new UnprefixedMethodToGetSet('Cake\ORM\Association', 'className', 'getClassName', 'setClassName'),
+                new ModalToGetSet('Cake\ORM\Association', 'className', 'getClassName', 'setClassName'),
             ]),
         ]]);
 
