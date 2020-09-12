@@ -439,3 +439,5 @@ parameters:
 
         # complex - single repository for all nodes
         - '#Class cognitive complexity for "NodeRepository" is \d+, keep it under 50#'
+
+        - '#Method "autowireAbstractRectorDependencies\(\)" is using too many parameters \- 11\. Make it under 10#'

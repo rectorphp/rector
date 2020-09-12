@@ -23,6 +23,7 @@ use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
+use Rector\Core\Skip\Skipper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -107,6 +108,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $currentNodeProvider;
 
     /**
+     * @var Skipper
+     */
+    private $skipper;
+
+    /**
      * @var string|null
      */
     private $previousAppliedClass;
@@ -124,7 +130,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         ParameterProvider $parameterProvider,
         CurrentRectorProvider $currentRectorProvider,
         ClassNodeAnalyzer $classNodeAnalyzer,
-        CurrentNodeProvider $currentNodeProvider
+        CurrentNodeProvider $currentNodeProvider,
+        Skipper $skipper
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -136,6 +143,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->currentRectorProvider = $currentRectorProvider;
         $this->classNodeAnalyzer = $classNodeAnalyzer;
         $this->currentNodeProvider = $currentNodeProvider;
+        $this->skipper = $skipper;
     }
 
     /**
@@ -192,6 +200,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         if ($this->exclusionManager->isNodeSkippedByRector($this, $node)) {
+            return null;
+        }
+
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        if ($fileInfo instanceof SmartFileInfo && $this->skipper->shouldSkipFileInfoAndRule($fileInfo, $this)) {
             return null;
         }
 

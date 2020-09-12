@@ -129,6 +129,11 @@ final class Option
     /**
      * @var string
      */
+    public const SKIP = 'skip';
+
+    /**
+     * @var string
+     */
     public const FILE_EXTENSIONS = 'file_extensions';
 
     /**
