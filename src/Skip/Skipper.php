@@ -4,21 +4,26 @@ declare(strict_types=1);
 
 namespace Rector\Core\Skip;
 
+use Nette\Utils\Strings;
 use Rector\Core\Rector\AbstractRector;
-use Symfony\Component\Finder\Finder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Skipper
 {
     /**
-     * @var mixed[]
+     * @var string
      */
-    private $skip = [];
+    private const ONLY_ENDS_WITH_ASTERISK_PATTERN = '#^[^*](.*?)\*$#';
+
+    /**
+     * @var string
+     */
+    private const ONLY_STARTS_WITH_ASTERISK_PATTERN = '#^\*(.*?)[^*]$#';
 
     /**
      * @var mixed[]
      */
-    private static $filesInDirectory = [];
+    private $skip = [];
 
     /**
      * @param mixed[] $skip
@@ -33,6 +38,7 @@ final class Skipper
         if ($this->skip === []) {
             return false;
         }
+
         $rectorClass = get_class($rector);
         if (! array_key_exists($rectorClass, $this->skip)) {
             return false;
@@ -40,13 +46,19 @@ final class Skipper
 
         $locations = $this->skip[$rectorClass];
         $filePathName = $smartFileInfo->getPathName();
+        if (in_array($filePathName, $locations, true)) {
+            return true;
+        }
 
+        $fileName = $smartFileInfo->getFileName();
         foreach ($locations as $location) {
-            if (is_dir($location) && $this->isFoundInDirectory($location, $filePathName)) {
+            $ignoredPath = $this->normalizeForFnmatch($location);
+
+            if ($ignoredPath . $fileName === $filePathName) {
                 return true;
             }
 
-            if ($location === $filePathName) {
+            if ($smartFileInfo->endsWith($ignoredPath) || $smartFileInfo->doesFnmatch($ignoredPath)) {
                 return true;
             }
         }
@@ -54,18 +66,22 @@ final class Skipper
         return false;
     }
 
-    private function isFoundInDirectory(string $directory, string $filePathName): bool
+    /**
+     * "value*" → "*value*"
+     * "*value" → "*value*"
+     */
+    private function normalizeForFnmatch(string $path): string
     {
-        $directory = rtrim($directory, '/') . '/';
-        if (! array_key_exists($directory, self::$filesInDirectory)) {
-            $finder = new Finder();
-            $finder->files()->in($directory)->name('*.php');
-
-            foreach ($finder as $file) {
-                self::$filesInDirectory[$directory][] = $file->getRealPath();
-            }
+        // ends with *
+        if (Strings::match($path, self::ONLY_ENDS_WITH_ASTERISK_PATTERN)) {
+            return '*' . $path;
         }
 
-        return in_array($filePathName, self::$filesInDirectory[$directory], true);
+        // starts with *
+        if (Strings::match($path, self::ONLY_STARTS_WITH_ASTERISK_PATTERN)) {
+            return $path . '*';
+        }
+
+        return rtrim($path, '/') . '/';
     }
 }
