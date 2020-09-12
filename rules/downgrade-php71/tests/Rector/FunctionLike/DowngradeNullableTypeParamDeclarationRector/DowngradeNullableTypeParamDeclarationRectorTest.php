@@ -10,9 +10,6 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP >= 7.1
- */
 final class DowngradeNullableTypeParamDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
