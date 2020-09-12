@@ -15,7 +15,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Core\ValueObject\RenamedNamespaceValueObject;
+use Rector\Core\ValueObject\RenamedNamespace;
 use Rector\Naming\NamespaceMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -157,10 +157,8 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
         return false;
     }
 
-    private function resolvePartialNewName(
-        Name $name,
-        RenamedNamespaceValueObject $renamedNamespaceValueObject
-    ): ?string {
+    private function resolvePartialNewName(Name $name, RenamedNamespace $renamedNamespaceValueObject): ?string
+    {
         $nodeName = $this->getName($name);
         if ($nodeName === null) {
             return null;
