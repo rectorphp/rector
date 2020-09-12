@@ -7,7 +7,7 @@ use Rector\Generic\Rector\ClassMethod\ChangeMethodVisibilityRector;
 use Rector\Generic\Rector\Expression\MethodCallToReturnRector;
 use Rector\Generic\ValueObject\ArgumentAdder;
 use Rector\Generic\ValueObject\ChangeMethodVisibility;
-use Rector\Generic\ValueObject\MethodCallWrap;
+use Rector\Generic\ValueObject\MethodCallToReturn;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
@@ -26,7 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MethodCallToReturnRector::class)
         ->call('configure', [[
             MethodCallToReturnRector::METHOD_CALL_WRAPS => inline_value_objects([
-                new MethodCallWrap('Illuminate\Auth\Access\HandlesAuthorization', 'deny'),
+                new MethodCallToReturn('Illuminate\Auth\Access\HandlesAuthorization', 'deny'),
             ]),
         ]]);
 
