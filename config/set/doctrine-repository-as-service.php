@@ -11,7 +11,7 @@ use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\Rector\Class_\RemoveParentRector;
 use Rector\Generic\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Generic\Rector\MethodCall\ReplaceParentCallByPropertyCallRector;
-use Rector\Generic\ValueObject\ParentDependency;
+use Rector\Generic\ValueObject\AddPropertyByParent;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector;
 use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
@@ -44,7 +44,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddPropertyByParentRector::class)
         ->call('configure', [[
             AddPropertyByParentRector::PARENT_DEPENDENCIES => inline_value_objects([
-                new ParentDependency(
+                new AddPropertyByParent(
                     'Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository',
                     'Doctrine\ORM\EntityManagerInterface'
                 ),

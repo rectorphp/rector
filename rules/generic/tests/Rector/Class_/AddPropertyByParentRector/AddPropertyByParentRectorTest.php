@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Generic\Rector\Class_\AddPropertyByParentRector;
 use Rector\Generic\Tests\Rector\Class_\AddPropertyByParentRector\Source\SomeParentClassToAddDependencyBy;
-use Rector\Generic\ValueObject\ParentDependency;
+use Rector\Generic\ValueObject\AddPropertyByParent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class AddPropertyByParentRectorTest extends AbstractRectorTestCase
@@ -34,7 +34,7 @@ final class AddPropertyByParentRectorTest extends AbstractRectorTestCase
         return [
             AddPropertyByParentRector::class => [
                 AddPropertyByParentRector::PARENT_DEPENDENCIES => [
-                    new ParentDependency(SomeParentClassToAddDependencyBy::class, 'SomeDependency'),
+                    new AddPropertyByParent(SomeParentClassToAddDependencyBy::class, 'SomeDependency'),
                 ],
             ],
         ];

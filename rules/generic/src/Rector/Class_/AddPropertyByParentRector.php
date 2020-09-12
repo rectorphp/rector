@@ -11,7 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\ParentDependency;
+use Rector\Generic\ValueObject\AddPropertyByParent;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -29,7 +29,7 @@ final class AddPropertyByParentRector extends AbstractRector implements Configur
     public const PARENT_DEPENDENCIES = 'parent_dependencies';
 
     /**
-     * @var ParentDependency[]
+     * @var AddPropertyByParent[]
      */
     private $parentDependencies = [];
 
@@ -112,7 +112,7 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $parentDependencies = $configuration[self::PARENT_DEPENDENCIES] ?? [];
-        Assert::allIsInstanceOf($parentDependencies, ParentDependency::class);
+        Assert::allIsInstanceOf($parentDependencies, AddPropertyByParent::class);
         $this->parentDependencies = $parentDependencies;
     }
 }
