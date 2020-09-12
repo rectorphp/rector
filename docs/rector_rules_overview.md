@@ -6383,7 +6383,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(SwapClassMethodArgumentsRector::class)
         ->call('configure', [[
             SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\ArgumentSwap('SomeClass', 'run', [1, 0]))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\SwapClassMethodArguments('SomeClass', 'run', [1, 0]))]
         ]]);
 };
 ```

@@ -13,7 +13,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Generic\ValueObject\ArgumentSwap;
+use Rector\Generic\ValueObject\SwapClassMethodArguments;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,7 +27,7 @@ final class SwapClassMethodArgumentsRector extends AbstractRector implements Con
     public const ARGUMENT_SWAPS = 'argument_swaps';
 
     /**
-     * @var ArgumentSwap[]
+     * @var SwapClassMethodArguments[]
      */
     private $argumentSwaps = [];
 
@@ -57,7 +57,7 @@ PHP
 
             ,
             [
-                self::ARGUMENT_SWAPS => [new ArgumentSwap('SomeClass', 'run', [1, 0])],
+                self::ARGUMENT_SWAPS => [new SwapClassMethodArguments('SomeClass', 'run', [1, 0])],
             ]),
         ]);
     }
@@ -89,14 +89,14 @@ PHP
     public function configure(array $configuration): void
     {
         $argumentSwaps = $configuration[self::ARGUMENT_SWAPS] ?? [];
-        Assert::allIsInstanceOf($argumentSwaps, ArgumentSwap::class);
+        Assert::allIsInstanceOf($argumentSwaps, SwapClassMethodArguments::class);
         $this->argumentSwaps = $argumentSwaps;
     }
 
     /**
      * @param StaticCall|MethodCall|ClassMethod $node
      */
-    private function refactorArgumentPositions(ArgumentSwap $argumentSwap, Node $node): void
+    private function refactorArgumentPositions(SwapClassMethodArguments $argumentSwap, Node $node): void
     {
         if (! $this->isMethodStaticCallOrClassMethodName($node, $argumentSwap->getMethod())) {
             return;

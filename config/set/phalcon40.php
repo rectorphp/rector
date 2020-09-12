@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Generic\Rector\StaticCall\SwapClassMethodArgumentsRector;
-use Rector\Generic\ValueObject\ArgumentSwap;
+use Rector\Generic\ValueObject\SwapClassMethodArguments;
 use Rector\Phalcon\Rector\Assign\FlashWithCssClassesToExtraCallRector;
 use Rector\Phalcon\Rector\Assign\NewApplicationToToFactoryWithDefaultContainerRector;
 use Rector\Phalcon\Rector\MethodCall\AddRequestToHandleMethodCallRector;
@@ -23,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SwapClassMethodArgumentsRector::class)
         ->call('configure', [[
             SwapClassMethodArgumentsRector::ARGUMENT_SWAPS => inline_value_objects([
-                new ArgumentSwap('Phalcon\Model', 'assign', [0, 2, 1]),
+                new SwapClassMethodArguments('Phalcon\Model', 'assign', [0, 2, 1]),
             ]),
         ]]);
 
