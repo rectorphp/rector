@@ -7,7 +7,7 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
-use Rector\Transform\ValueObject\PropertyToMethodCall;
+use Rector\Transform\ValueObject\PropertyToMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -26,9 +26,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
-                new PropertyToMethodCall('Cake\Controller\Controller', 'name', 'getName', 'setName'),
-                new PropertyToMethodCall('Cake\Controller\Controller', 'plugin', 'getPlugin', 'setPlugin'),
-                new PropertyToMethodCall('Cake\Form\Form', 'validator', 'getValidator', 'setValidator'),
+                new PropertyToMethod('Cake\Controller\Controller', 'name', 'getName', 'setName'),
+                new PropertyToMethod('Cake\Controller\Controller', 'plugin', 'getPlugin', 'setPlugin'),
+                new PropertyToMethod('Cake\Form\Form', 'validator', 'getValidator', 'setValidator'),
             ]),
         ]]);
 

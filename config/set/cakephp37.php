@@ -11,7 +11,7 @@ use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
 use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 use Rector\Transform\ValueObject\MethodCallRenameWithAddedArguments;
-use Rector\Transform\ValueObject\PropertyToMethodCall;
+use Rector\Transform\ValueObject\PropertyToMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # source: https://book.cakephp.org/3.0/en/appendices/3-7-migration-guide.html
@@ -32,25 +32,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
-                new PropertyToMethodCall('Cake\Http\Client\Response', 'body', 'getStringBody'),
-                new PropertyToMethodCall('Cake\Http\Client\Response', 'json', 'getJson'),
-                new PropertyToMethodCall('Cake\Http\Client\Response', 'xml', 'getXml'),
-                new PropertyToMethodCall('Cake\Http\Client\Response', 'cookies', 'getCookies'),
-                new PropertyToMethodCall('Cake\Http\Client\Response', 'code', 'getStatusCode'),
+                new PropertyToMethod('Cake\Http\Client\Response', 'body', 'getStringBody'),
+                new PropertyToMethod('Cake\Http\Client\Response', 'json', 'getJson'),
+                new PropertyToMethod('Cake\Http\Client\Response', 'xml', 'getXml'),
+                new PropertyToMethod('Cake\Http\Client\Response', 'cookies', 'getCookies'),
+                new PropertyToMethod('Cake\Http\Client\Response', 'code', 'getStatusCode'),
 
-                new PropertyToMethodCall('Cake\View\View', 'request', 'getRequest', 'setRequest'),
-                new PropertyToMethodCall('Cake\View\View', 'response', 'getResponse', 'setResponse'),
-                new PropertyToMethodCall('Cake\View\View', 'templatePath', 'getTemplatePath', 'setTemplatePath'),
-                new PropertyToMethodCall('Cake\View\View', 'template', 'getTemplate', 'setTemplate'),
-                new PropertyToMethodCall('Cake\View\View', 'layout', 'getLayout', 'setLayout'),
-                new PropertyToMethodCall('Cake\View\View', 'layoutPath', 'getLayoutPath', 'setLayoutPath'),
-                new PropertyToMethodCall('Cake\View\View', 'autoLayout', 'isAutoLayoutEnabled', 'enableAutoLayout'),
-                new PropertyToMethodCall('Cake\View\View', 'theme', 'getTheme', 'setTheme'),
-                new PropertyToMethodCall('Cake\View\View', 'subDir', 'getSubDir', 'setSubDir'),
-                new PropertyToMethodCall('Cake\View\View', 'plugin', 'getPlugin', 'setPlugin'),
-                new PropertyToMethodCall('Cake\View\View', 'name', 'getName', 'setName'),
-                new PropertyToMethodCall('Cake\View\View', 'elementCache', 'getElementCache', 'setElementCache'),
-                new PropertyToMethodCall('Cake\View\View', 'helpers', 'helpers'),
+                new PropertyToMethod('Cake\View\View', 'request', 'getRequest', 'setRequest'),
+                new PropertyToMethod('Cake\View\View', 'response', 'getResponse', 'setResponse'),
+                new PropertyToMethod('Cake\View\View', 'templatePath', 'getTemplatePath', 'setTemplatePath'),
+                new PropertyToMethod('Cake\View\View', 'template', 'getTemplate', 'setTemplate'),
+                new PropertyToMethod('Cake\View\View', 'layout', 'getLayout', 'setLayout'),
+                new PropertyToMethod('Cake\View\View', 'layoutPath', 'getLayoutPath', 'setLayoutPath'),
+                new PropertyToMethod('Cake\View\View', 'autoLayout', 'isAutoLayoutEnabled', 'enableAutoLayout'),
+                new PropertyToMethod('Cake\View\View', 'theme', 'getTheme', 'setTheme'),
+                new PropertyToMethod('Cake\View\View', 'subDir', 'getSubDir', 'setSubDir'),
+                new PropertyToMethod('Cake\View\View', 'plugin', 'getPlugin', 'setPlugin'),
+                new PropertyToMethod('Cake\View\View', 'name', 'getName', 'setName'),
+                new PropertyToMethod('Cake\View\View', 'elementCache', 'getElementCache', 'setElementCache'),
+                new PropertyToMethod('Cake\View\View', 'helpers', 'helpers'),
             ]),
         ]]);
 

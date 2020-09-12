@@ -14854,7 +14854,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getProperty', [], 'setProperty'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethod('SomeObject', 'property', 'getProperty', [], 'setProperty'))]
         ]]);
 };
 ```
@@ -14879,7 +14879,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(PropertyToMethodRector::class)
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethodCall('SomeObject', 'property', 'getConfig', ['someArg'], null))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\PropertyToMethod('SomeObject', 'property', 'getConfig', ['someArg'], null))]
         ]]);
 };
 ```

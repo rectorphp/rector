@@ -13,7 +13,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\Transform\ValueObject\PropertyToMethodCall;
+use Rector\Transform\ValueObject\PropertyToMethod;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,7 +27,7 @@ final class PropertyToMethodRector extends AbstractRector implements Configurabl
     public const PROPERTIES_TO_METHOD_CALLS = 'properties_to_method_calls';
 
     /**
-     * @var PropertyToMethodCall[]
+     * @var PropertyToMethod[]
      */
     private $propertiesToMethodCalls = [];
 
@@ -47,7 +47,7 @@ PHP
                 ,
                 [
                     self::PROPERTIES_TO_METHOD_CALLS => [
-                        new PropertyToMethodCall('SomeObject', 'property', 'getProperty', 'setProperty'),
+                        new PropertyToMethod('SomeObject', 'property', 'getProperty', 'setProperty'),
                     ],
                 ]
             ),
@@ -62,7 +62,7 @@ PHP
                 ,
                 [
                     self::PROPERTIES_TO_METHOD_CALLS => [
-                        new PropertyToMethodCall('SomeObject', 'property', 'getConfig', null, ['someArg']),
+                        new PropertyToMethod('SomeObject', 'property', 'getConfig', null, ['someArg']),
                     ],
                 ]
             ),
@@ -96,7 +96,7 @@ PHP
     public function configure(array $configuration): void
     {
         $propertiesToMethodCalls = $configuration[self::PROPERTIES_TO_METHOD_CALLS] ?? [];
-        Assert::allIsInstanceOf($propertiesToMethodCalls, PropertyToMethodCall::class);
+        Assert::allIsInstanceOf($propertiesToMethodCalls, PropertyToMethod::class);
         $this->propertiesToMethodCalls = $propertiesToMethodCalls;
     }
 
@@ -147,7 +147,7 @@ PHP
         return $assign;
     }
 
-    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch): ?PropertyToMethodCall
+    private function matchPropertyFetchCandidate(PropertyFetch $propertyFetch): ?PropertyToMethod
     {
         foreach ($this->propertiesToMethodCalls as $propertyToMethodCall) {
             if (! $this->isObjectType($propertyFetch->var, $propertyToMethodCall->getOldType())) {

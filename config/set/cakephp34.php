@@ -15,7 +15,7 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use function Rector\SymfonyPhpConfig\inline_value_objects;
 use Rector\Transform\Rector\Assign\PropertyToMethodRector;
-use Rector\Transform\ValueObject\PropertyToMethodCall;
+use Rector\Transform\ValueObject\PropertyToMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -25,13 +25,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             PropertyToMethodRector::PROPERTIES_TO_METHOD_CALLS => inline_value_objects([
                 // source: https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html
-                new PropertyToMethodCall('Cake\Network\Request', 'params', 'getAttribute', null, ['params']),
-                new PropertyToMethodCall('Cake\Network\Request', 'data', 'getData'),
-                new PropertyToMethodCall('Cake\Network\Request', 'query', 'getQueryParams'),
-                new PropertyToMethodCall('Cake\Network\Request', 'cookies', 'getCookie'),
-                new PropertyToMethodCall('Cake\Network\Request', 'base', 'getAttribute', null, ['base']),
-                new PropertyToMethodCall('Cake\Network\Request', 'webroot', 'getAttribute', null, ['webroot']),
-                new PropertyToMethodCall('Cake\Network\Request', 'here', 'getAttribute', null, ['here']),
+                new PropertyToMethod('Cake\Network\Request', 'params', 'getAttribute', null, ['params']),
+                new PropertyToMethod('Cake\Network\Request', 'data', 'getData'),
+                new PropertyToMethod('Cake\Network\Request', 'query', 'getQueryParams'),
+                new PropertyToMethod('Cake\Network\Request', 'cookies', 'getCookie'),
+                new PropertyToMethod('Cake\Network\Request', 'base', 'getAttribute', null, ['base']),
+                new PropertyToMethod('Cake\Network\Request', 'webroot', 'getAttribute', null, ['webroot']),
+                new PropertyToMethod('Cake\Network\Request', 'here', 'getAttribute', null, ['here']),
             ]),
         ]]);
 
