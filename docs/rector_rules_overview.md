@@ -14911,7 +14911,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(ServiceGetterToConstructorInjectionRector::class)
         ->call('configure', [[
             ServiceGetterToConstructorInjectionRector::METHOD_CALL_TO_SERVICES => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\MethodCallToService('FirstService', 'getAnotherService', 'AnotherService'))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Transform\ValueObject\ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService'))]
         ]]);
 };
 ```
