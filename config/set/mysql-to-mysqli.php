@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Rector\Generic\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Generic\Rector\FuncCall\SwapFuncCallArgumentsRector;
-use Rector\Generic\ValueObject\FunctionArgumentSwap;
 use Rector\Generic\ValueObject\RemoveFuncCallArg;
+use Rector\Generic\ValueObject\SwapFuncCallArguments;
 use Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
@@ -40,10 +40,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SwapFuncCallArgumentsRector::class)
         ->call('configure', [[
             SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => inline_value_objects([
-                new FunctionArgumentSwap('mysql_query', [1, 0]),
-                new FunctionArgumentSwap('mysql_real_escape_string', [1, 0]),
-                new FunctionArgumentSwap('mysql_select_db', [1, 0]),
-                new FunctionArgumentSwap('mysql_set_charset', [1, 0]),
+                new SwapFuncCallArguments('mysql_query', [1, 0]),
+                new SwapFuncCallArguments('mysql_real_escape_string', [1, 0]),
+                new SwapFuncCallArguments('mysql_select_db', [1, 0]),
+                new SwapFuncCallArguments('mysql_set_charset', [1, 0]),
             ]),
         ]]);
 

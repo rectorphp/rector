@@ -6422,7 +6422,7 @@ return function (ContainerConfigurator $containerConfigurator) : void {
     $services->set(SwapFuncCallArgumentsRector::class)
         ->call('configure', [[
             SwapFuncCallArgumentsRector::FUNCTION_ARGUMENT_SWAPS => [
-                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\FunctionArgumentSwap('some_function', [1, 0]))]
+                \Rector\SymfonyPhpConfig\inline_value_object(new Rector\Generic\ValueObject\SwapFuncCallArguments('some_function', [1, 0]))]
         ]]);
 };
 ```
