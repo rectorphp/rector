@@ -22,7 +22,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
                 new AddReturnTypeDeclaration('Nette\Caching\Cache', 'generateKey', 'string'),
                 new AddReturnTypeDeclaration('Nette\Security\IResource', 'getResourceId', 'string'),
-                new AddReturnTypeDeclaration('Nette\Security\IAuthenticator', 'authenticate', 'Nette\Security\IIdentity'),
+                new AddReturnTypeDeclaration(
+                    'Nette\Security\IAuthenticator',
+                    'authenticate',
+                    'Nette\Security\IIdentity'
+                ),
                 new AddReturnTypeDeclaration('Nette\Security\IAuthorizator', 'isAllowed', 'bool'),
                 new AddReturnTypeDeclaration('Nette\Security\Identity', 'getData', 'array'),
                 new AddReturnTypeDeclaration('Nette\Security\IIdentity', 'getRoles', 'array'),
@@ -31,7 +35,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AddReturnTypeDeclaration('Nette\Security\User', 'logout', 'void'),
                 new AddReturnTypeDeclaration('Nette\Security\User', 'isLoggedIn', 'bool'),
                 new AddReturnTypeDeclaration('Nette\Security\User', 'getIdentity', '?Nette\Security\IIdentity'),
-                new AddReturnTypeDeclaration('Nette\Security\User', 'getAuthenticator', '?Nette\Security\IAuthenticator'),
+                new AddReturnTypeDeclaration(
+                    'Nette\Security\User',
+                    'getAuthenticator',
+                    '?Nette\Security\IAuthenticator'
+                ),
                 new AddReturnTypeDeclaration('Nette\Security\User', 'getAuthorizator', '?Nette\Security\IAuthorizator'),
                 new AddReturnTypeDeclaration('Nette\Security\User', 'getLogoutReason', '?int'),
                 new AddReturnTypeDeclaration('Nette\Security\User', 'getRoles', 'array'),
@@ -40,7 +48,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AddReturnTypeDeclaration('Nette\Security\IUserStorage', 'isAuthenticated', 'bool'),
                 new AddReturnTypeDeclaration('Nette\Security\IUserStorage', 'getIdentity', '?Nette\Security\IIdentity'),
                 new AddReturnTypeDeclaration('Nette\Security\IUserStorage', 'getLogoutReason', '?int'),
-                new AddReturnTypeDeclaration('Nette\ComponentModel\Component', 'lookup', 'Nette\ComponentModel\IComponent'),
+                new AddReturnTypeDeclaration(
+                    'Nette\ComponentModel\Component',
+                    'lookup',
+                    'Nette\ComponentModel\IComponent'
+                ),
                 new AddReturnTypeDeclaration('Nette\ComponentModel\Component', 'lookupPath', '?string'),
                 new AddReturnTypeDeclaration('Nette\ComponentModel\Component', 'monitor', 'void'),
                 new AddReturnTypeDeclaration('Nette\ComponentModel\Component', 'unmonitor', 'void'),
@@ -92,7 +104,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'getPresenter',
                     '?Nette\Application\IPresenter'
                 ),
-                new AddReturnTypeDeclaration('Nette\Application\Application', 'getRouter', '?Nette\Application\IRouter'),
+                new AddReturnTypeDeclaration(
+                    'Nette\Application\Application',
+                    'getRouter',
+                    '?Nette\Application\IRouter'
+                ),
                 new AddReturnTypeDeclaration(
                     'Nette\Application\Application',
                     'getPresenterFactory',
@@ -169,7 +185,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
                 new AddReturnTypeDeclaration('Nette\Application\UI\Component', 'offsetExists', 'void'),
                 new AddReturnTypeDeclaration('Nette\Application\UI\Component', 'offsetUnset', 'void'),
-                new AddReturnTypeDeclaration('Nette\Application\UI\Presenter', 'getRequest', 'Nette\Application\Request'),
+                new AddReturnTypeDeclaration(
+                    'Nette\Application\UI\Presenter',
+                    'getRequest',
+                    'Nette\Application\Request'
+                ),
                 new AddReturnTypeDeclaration(
                     'Nette\Application\UI\Presenter',
                     'getPresenter',
@@ -230,7 +250,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ),
                 new AddReturnTypeDeclaration('Nette\Application\UI\Presenter', 'getContext', 'Nette\DI\Container'),
                 new AddReturnTypeDeclaration('Nette\Application\UI\Presenter', 'getHttpRequest', 'Nette\Http\IRequest'),
-                new AddReturnTypeDeclaration('Nette\Application\UI\Presenter', 'getHttpResponse', 'Nette\Http\IResponse'),
+                new AddReturnTypeDeclaration(
+                    'Nette\Application\UI\Presenter',
+                    'getHttpResponse',
+                    'Nette\Http\IResponse'
+                ),
                 new AddReturnTypeDeclaration('Nette\Application\UI\Presenter', 'getUser', 'Nette\Security\User'),
                 new AddReturnTypeDeclaration(
                     'Nette\Application\UI\Presenter',
@@ -262,7 +286,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AddReturnTypeDeclaration('Nette\Bridges\ApplicationTracy\RoutingPanel', 'getTab', 'string'),
                 new AddReturnTypeDeclaration('Nette\Bridges\ApplicationTracy\RoutingPanel', 'getPanel', 'string'),
                 new AddReturnTypeDeclaration('Nette\Bridges\ApplicationLatte\UIRuntime', 'initialize', 'void'),
-                new AddReturnTypeDeclaration('Nette\Application\UI\ComponentReflection', 'getPersistentParams', 'array'),
+                new AddReturnTypeDeclaration(
+                    'Nette\Application\UI\ComponentReflection',
+                    'getPersistentParams',
+                    'array'
+                ),
                 new AddReturnTypeDeclaration(
                     'Nette\Application\UI\ComponentReflection',
                     'getPersistentComponents',
@@ -332,7 +360,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Nette\Application\Responses\RedirectResponse'
                 ),
                 new AddReturnTypeDeclaration('Nette\Application\MicroPresenter', 'error', 'void'),
-                new AddReturnTypeDeclaration('Nette\Application\MicroPresenter', 'getRequest', '?Nette\Application\Request'),
+                new AddReturnTypeDeclaration(
+                    'Nette\Application\MicroPresenter',
+                    'getRequest',
+                    '?Nette\Application\Request'
+                ),
             ]),
         ]]);
 };
