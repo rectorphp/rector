@@ -41,7 +41,6 @@ final class ClassInsertManipulator
         if ($this->tryInsertBeforeFirstMethod($class, $stmt)) {
             return;
         }
-
         if ($this->tryInsertAfterLastProperty($class, $stmt)) {
             return;
         }
@@ -64,8 +63,8 @@ final class ClassInsertManipulator
             return;
         }
 
-        $propertyNode = $this->nodeFactory->createPrivatePropertyFromNameAndType($name, $type);
-        $this->addAsFirstMethod($class, $propertyNode);
+        $property = $this->nodeFactory->createPrivatePropertyFromNameAndType($name, $type);
+        $this->addAsFirstMethod($class, $property);
     }
 
     public function addInjectPropertyToClass(Class_ $class, string $name, ?Type $type): void

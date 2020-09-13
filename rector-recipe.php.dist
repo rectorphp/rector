@@ -63,7 +63,7 @@ CODE_SAMPLE
     // $rectorRecipe->addExtraFile('SomeExtraFile.php', '<?php ... SomeExtraFileContent');
 
     // is the rule configurable? add default configuration here
-    // $rectorRecipe->addConfiguration(['SOME_CONSTANT_KEY' => ['before' => 'after']]);
+    // $rectorRecipe->setConfiguration(['SOME_CONSTANT_KEY' => ['before' => 'after']]);
 
 
     // [RECTOR CORE CONTRIBUTION]

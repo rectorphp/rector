@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator;
 
 use Nette\Utils\Strings;
+use PhpParser\BuilderHelpers;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -165,7 +166,14 @@ final class TemplateVariablesFactory
                 $class = new FullyQualified($rectorClass);
             }
             $classConstFetch = new ClassConstFetch($class, $constantName);
-            $arrayItems[] = new ArrayItem($this->nodeFactory->createArray($variableConfiguration), $classConstFetch);
+
+            if (is_array($variableConfiguration)) {
+                $variableConfiguration = $this->nodeFactory->createArray($variableConfiguration);
+            } else {
+                $variableConfiguration = BuilderHelpers::normalizeValue($variableConfiguration);
+            }
+
+            $arrayItems[] = new ArrayItem($variableConfiguration, $classConstFetch);
         }
 
         $array = new Array_($arrayItems);
