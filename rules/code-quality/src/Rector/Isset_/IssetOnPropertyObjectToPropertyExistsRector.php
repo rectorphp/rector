@@ -16,10 +16,10 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExists\IssetOnPropertyObjectToPropertyExistsTest
+ * @see \Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\IssetOnPropertyObjectToPropertyExistsRectorTest
  * @see https://3v4l.org/TI8XL Only usable on single property value and property has value
  */
-final class IssetOnPropertyObjectToPropertyExists extends AbstractRector
+final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {

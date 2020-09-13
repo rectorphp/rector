@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExists;
+namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
 
 use Iterator;
-use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExists;
+use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class IssetOnPropertyObjectToPropertyExistsTest extends AbstractRectorTestCase
+final class IssetOnPropertyObjectToPropertyExistsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,6 +26,6 @@ final class IssetOnPropertyObjectToPropertyExistsTest extends AbstractRectorTest
 
     protected function getRectorClass(): string
     {
-        return IssetOnPropertyObjectToPropertyExists::class;
+        return IssetOnPropertyObjectToPropertyExistsRector::class;
     }
 }
