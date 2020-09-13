@@ -74,7 +74,7 @@ PHP
             }
 
             $className = $issetVar->var->getAttribute('className');
-            $property = $issetVar->name->name;
+            $property = (string) $issetVar->name;
 
             return new FuncCall(
                 new Name('property_exists'),
