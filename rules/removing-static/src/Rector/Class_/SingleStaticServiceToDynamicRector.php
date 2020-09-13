@@ -38,6 +38,11 @@ final class SingleStaticServiceToDynamicRector extends AbstractRector implements
     public const CLASS_TYPES = 'class_types';
 
     /**
+     * @var string
+     */
+    private const THIS = 'this';
+
+    /**
      * @var string[]
      */
     private $classTypes = [];
@@ -51,10 +56,6 @@ final class SingleStaticServiceToDynamicRector extends AbstractRector implements
      * @var StaticCallPresenceAnalyzer
      */
     private $staticCallPresenceAnalyzer;
-    /**
-     * @var string
-     */
-    private const THIS = 'this';
 
     public function __construct(PropertyNaming $propertyNaming, StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer)
     {
@@ -277,6 +278,7 @@ PHP
 
         return null;
     }
+
     private function completeDependencyToConstructorOnly(Class_ $class, string $classType): void
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
