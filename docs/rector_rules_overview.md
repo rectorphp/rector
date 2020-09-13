@@ -1,4 +1,4 @@
-# All 575 Rectors Overview
+# All 579 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -15,6 +15,7 @@
 - [Doctrine](#doctrine) (17)
 - [DoctrineCodeQuality](#doctrinecodequality) (8)
 - [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs) (7)
+- [DowngradePhp71](#downgradephp71) (3)
 - [DowngradePhp72](#downgradephp72) (2)
 - [DowngradePhp74](#downgradephp74) (3)
 - [DowngradePhp80](#downgradephp80) (6)
@@ -59,7 +60,7 @@
 - [Polyfill](#polyfill) (2)
 - [Privatization](#privatization) (7)
 - [RectorGenerator](#rectorgenerator) (1)
-- [RemovingStatic](#removingstatic) (5)
+- [RemovingStatic](#removingstatic) (6)
 - [Renaming](#renaming) (8)
 - [Restoration](#restoration) (7)
 - [SOLID](#solid) (12)
@@ -4579,6 +4580,137 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 
 <br><br>
 
+## DowngradePhp71
+
+### `DowngradeNullableTypeParamDeclarationRector`
+
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeNullableTypeParamDeclarationRector.php)
+- [test fixtures](/rules/downgrade-php71/tests/Rector/FunctionLike/DowngradeNullableTypeParamDeclarationRector/Fixture)
+
+Remove the nullable type params, add @param tags instead
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeParamDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeNullableTypeParamDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeNullableTypeParamDeclarationRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function run(?string $input)
++    /**
++     * @param string|null $input
++     */
++    public function run($input)
+     {
+         // do something
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeNullableTypeReturnDeclarationRector`
+
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeNullableTypeReturnDeclarationRector.php)
+- [test fixtures](/rules/downgrade-php71/tests/Rector/FunctionLike/DowngradeNullableTypeReturnDeclarationRector/Fixture)
+
+Remove returning nullable types, add a @return tag instead
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeReturnDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeNullableTypeReturnDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeNullableTypeReturnDeclarationRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function getResponseOrNothing(bool $flag): ?string
++    /**
++     * @return string|null
++     */
++    public function getResponseOrNothing(bool $flag)
+     {
+         if ($flag) {
+             return 'Hello world';
+         }
+         return null;
+     }
+ }
+```
+
+<br><br>
+
+### `DowngradeVoidTypeReturnDeclarationRector`
+
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector`](/rules/downgrade-php71/src/Rector/FunctionLike/DowngradeVoidTypeReturnDeclarationRector.php)
+- [test fixtures](/rules/downgrade-php71/tests/Rector/FunctionLike/DowngradeVoidTypeReturnDeclarationRector/Fixture)
+
+Remove the 'void' function type, add a @return tag instead
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeReturnDeclarationRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(DowngradeVoidTypeReturnDeclarationRector::class)
+        ->call('configure', [[
+            DowngradeVoidTypeReturnDeclarationRector::ADD_DOC_BLOCK => true
+        ]]);
+};
+```
+
+↓
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+-    public function run(): void
++    /**
++     * @return void
++     */
++    public function run()
+     {
+         // do something
+     }
+ }
+```
+
+<br><br>
+
 ## DowngradePhp72
 
 ### `DowngradeParamObjectTypeDeclarationRector`
@@ -4707,7 +4839,7 @@ Remove null coalescing operator ??=
 ### `DowngradeTypedPropertyRector`
 
 - class: [`Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector`](/rules/downgrade-php74/src/Rector/Property/DowngradeTypedPropertyRector.php)
-- [test fixtures](/rules/downgrade-php74/tests/Rector/Property/NoDocBlockDowngradeTypedPropertyRector/Fixture)
+- [test fixtures](/rules/downgrade-php74/tests/Rector/Property/DowngradeTypedPropertyRector/Fixture)
 
 Changes property type definition from type definitions to `@var` annotations.
 
@@ -12581,6 +12713,68 @@ return function (ContainerConfigurator $containerConfigurator) : void {
 +    public function create(): AnotherClass
 +    {
 +        return new AnotherClass($this->staticClass);
+     }
+ }
+```
+
+<br><br>
+
+### `SingleStaticServiceToDynamicRector`
+
+- class: [`Rector\RemovingStatic\Rector\Class_\SingleStaticServiceToDynamicRector`](/rules/removing-static/src/Rector/Class_/SingleStaticServiceToDynamicRector.php)
+- [test fixtures](/rules/removing-static/tests/Rector/Class_/SingleStaticServiceToDynamicRector/Fixture)
+
+Change full static service, to dynamic one
+
+```php
+<?php
+
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\RemovingStatic\Rector\Class_\SingleStaticServiceToDynamicRector;
+
+return function (ContainerConfigurator $containerConfigurator) : void {
+    $services = $containerConfigurator->services();
+    $services->set(SingleStaticServiceToDynamicRector::class)
+        ->call('configure', [[
+            SingleStaticServiceToDynamicRector::CLASS_TYPES => [
+                'SomeClass']
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class AnotherClass
+ {
++    /**
++     * @var SomeClass
++     */
++    private $someClass;
++
++    public fuction __construct(SomeClass $someClass)
++    {
++        $this->someClass = $someClass;
++    }
++
+     public function run()
+     {
+         SomeClass::someStatic();
+     }
+ }
+
+ class SomeClass
+ {
+-    public static function run()
++    public function run()
+     {
+-        self::someStatic();
++        $this->someStatic();
+     }
+
+-    private static function someStatic()
++    private function someStatic()
+     {
      }
  }
 ```
