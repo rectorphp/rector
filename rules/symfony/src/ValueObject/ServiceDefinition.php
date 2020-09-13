@@ -16,12 +16,12 @@ final class ServiceDefinition
     /**
      * @var bool
      */
-    private $public = false;
+    private $isPublic = false;
 
     /**
      * @var bool
      */
-    private $synthetic = false;
+    private $isSynthetic = false;
 
     /**
      * @var TagInterface[]
@@ -45,8 +45,8 @@ final class ServiceDefinition
     {
         $this->id = $id;
         $this->class = $class;
-        $this->public = $public;
-        $this->synthetic = $synthetic;
+        $this->isPublic = $public;
+        $this->isSynthetic = $synthetic;
         $this->alias = $alias;
         $this->tags = $tags;
     }
@@ -63,12 +63,12 @@ final class ServiceDefinition
 
     public function isPublic(): bool
     {
-        return $this->public;
+        return $this->isPublic;
     }
 
     public function isSynthetic(): bool
     {
-        return $this->synthetic;
+        return $this->isSynthetic;
     }
 
     public function getAlias(): ?string

@@ -13,9 +13,11 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -254,6 +256,25 @@ final class NodeTypeResolver
         }
 
         return false;
+    }
+
+    public function isBooleanType(Node $node): bool
+    {
+        return $this->isStaticType($node, BooleanType::class);
+    }
+
+    public function isPropertyBoolean(Property $property): bool
+    {
+        if ($this->isBooleanType($property)) {
+            return true;
+        }
+
+        $defaultNodeValue = $property->props[0]->default;
+        if ($defaultNodeValue === null) {
+            return false;
+        }
+
+        return $this->isBooleanType($defaultNodeValue);
     }
 
     private function addNodeTypeResolver(NodeTypeResolverInterface $nodeTypeResolver): void

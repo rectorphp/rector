@@ -2131,9 +2131,9 @@ declare(strict_types=1);
 use PhpParser\Node\Expr\Eval_;
 use PhpParser\Node\Scalar\String_;
 
-$phpCode = new String_('Some php code');
+$string = new String_('Some php code');
 
-return new Eval_($phpCode);
+return new Eval_(new String_('Some php code'));
 ```
 
 ↓
@@ -2152,9 +2152,9 @@ declare(strict_types=1);
 use PhpParser\Node\Expr\Eval_;
 use PhpParser\Node\Scalar\String_;
 
-$string = new String_('Some php code');
+$phpCode = new String_('Some php code');
 
-return new Eval_(new String_('Some php code'));
+return new Eval_($phpCode);
 ```
 
 ↓
@@ -2418,6 +2418,27 @@ match ($variableName) {
 
 declare(strict_types=1);
 
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+
+$variable = new Variable('someObject');
+
+return new MethodCall($variable, 'methodName');
+```
+
+↓
+
+```php
+$someObject->methodName()
+```
+
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -2436,27 +2457,6 @@ return new MethodCall($variable, 'methodName', $args);
 
 ```php
 $someObject->methodName('yes', 'maybe')
-```
-
-<br>
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-
-$variable = new Variable('someObject');
-
-return new MethodCall($variable, 'methodName');
-```
-
-↓
-
-```php
-$someObject->methodName()
 ```
 
 <br>
@@ -3599,6 +3599,30 @@ public const SOME_CLASS_CONSTANT = 'default value';
 
 declare(strict_types=1);
 
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+
+$classMethod = new ClassMethod('methodName');
+$classMethod->flags = Class_::MODIFIER_PUBLIC;
+
+return $classMethod;
+```
+
+↓
+
+```php
+public function methodName()
+{
+}
+```
+
+<br>
+
+```php
+<?php
+
+declare(strict_types=1);
+
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
@@ -3619,30 +3643,6 @@ return $classMethod;
 
 ```php
 private function methodName($paramName): string
-{
-}
-```
-
-<br>
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-
-$classMethod = new ClassMethod('methodName');
-$classMethod->flags = Class_::MODIFIER_PUBLIC;
-
-return $classMethod;
-```
-
-↓
-
-```php
-public function methodName()
 {
 }
 ```

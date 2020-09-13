@@ -1,4 +1,4 @@
-# All 580 Rectors Overview
+# All 581 Rectors Overview
 
 - [Projects](#projects)
 ---
@@ -29,7 +29,7 @@
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 - [MockistaToMockery](#mockistatomockery) (2)
 - [MysqlToMysqli](#mysqltomysqli) (4)
-- [Naming](#naming) (7)
+- [Naming](#naming) (8)
 - [Nette](#nette) (16)
 - [NetteCodeQuality](#nettecodequality) (6)
 - [NetteKdyby](#nettekdyby) (4)
@@ -7281,6 +7281,30 @@ Add mysql_query and mysql_error with connection
 <br><br>
 
 ## Naming
+
+### `MakeBoolPropertyRespectIsHasWasMethodNamingRector`
+
+- class: [`Rector\Naming\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector`](/rules/naming/src/Rector/Property/MakeBoolPropertyRespectIsHasWasMethodNamingRector.php)
+- [test fixtures](/rules/naming/tests/Rector/Property/MakeBoolPropertyRespectIsHasWasMethodNamingRector/Fixture)
+
+Renames property to respect is/has/was method naming
+
+```diff
+ class SomeClass
+ {
+-    private $full = false;
++    private $isFull = false;
+
+     public function isFull()
+     {
+-        return $this->full;
++        return $this->isFull;
+     }
++
+ }
+```
+
+<br><br>
 
 ### `MakeGetterClassMethodNameStartWithGetRector`
 

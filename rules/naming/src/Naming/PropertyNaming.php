@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NetteKdyby\Naming\VariableNaming;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
@@ -36,6 +42,12 @@ final class PropertyNaming
     private const INTERFACE = 'Interface';
 
     /**
+     * @see https://regex101.com/r/RDhBNR/1
+     * @var string
+     */
+    private const PREFIXED_CLASS_METHODS_REGEX = '#^(is|are|was|were|has|have|had|can)[A-Z].+#';
+
+    /**
      * @var TypeUnwrapper
      */
     private $typeUnwrapper;
@@ -45,10 +57,26 @@ final class PropertyNaming
      */
     private $rectorNamingInflector;
 
-    public function __construct(TypeUnwrapper $typeUnwrapper, RectorNamingInflector $rectorNamingInflector)
-    {
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
+    public function __construct(
+        TypeUnwrapper $typeUnwrapper,
+        RectorNamingInflector $rectorNamingInflector,
+        BetterNodeFinder $betterNodeFinder,
+        NodeNameResolver $nodeNameResolver
+    ) {
         $this->typeUnwrapper = $typeUnwrapper;
         $this->rectorNamingInflector = $rectorNamingInflector;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function getExpectedNameFromMethodName(string $methodName): ?ExpectedName
@@ -129,6 +157,23 @@ final class PropertyNaming
         $pascalCaseName = str_replace('_', '', ucwords($underscoreName, '_'));
 
         return lcfirst($pascalCaseName);
+    }
+
+    public function getExpectedNameFromBooleanPropertyType(Property $property): ?string
+    {
+        $prefixedClassMethods = $this->getPrefixedClassMethods($property);
+        if ($prefixedClassMethods === []) {
+            return null;
+        }
+
+        $classMethods = $this->filterClassMethodsWithPropertyFetchReturnOnly($prefixedClassMethods, $property);
+
+        if (count($classMethods) !== 1) {
+            return null;
+        }
+
+        $classMethod = reset($classMethods);
+        return $this->nodeNameResolver->getName($classMethod);
     }
 
     private function getClassName(TypeWithClassName $typeWithClassName): string
@@ -241,6 +286,65 @@ final class PropertyNaming
         }
 
         return $shortName;
+    }
+
+    /**
+     * @return ClassMethod[]
+     */
+    private function getPrefixedClassMethods(Property $property): array
+    {
+        $name = $this->nodeNameResolver->getName($property);
+        if ($name === null) {
+            return [];
+        }
+
+        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classLike === null) {
+            return [];
+        }
+
+        $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, ClassMethod::class);
+        return array_filter($classMethods, function (ClassMethod $classMethod): bool {
+            $classMethodName = $this->nodeNameResolver->getName($classMethod);
+            return Strings::match($classMethodName, self::PREFIXED_CLASS_METHODS_REGEX) !== null;
+        });
+    }
+
+    /**
+     * @param ClassMethod[] $prefixedClassMethods
+     * @return ClassMethod[]
+     */
+    private function filterClassMethodsWithPropertyFetchReturnOnly(
+        array $prefixedClassMethods,
+        Property $property
+    ): array {
+        $currentName = $this->nodeNameResolver->getName($property);
+        if ($currentName === null) {
+            return [];
+        }
+
+        return array_filter($prefixedClassMethods, function (ClassMethod $classMethod) use ($currentName): bool {
+            $stmts = $classMethod->stmts;
+            if ($stmts === null) {
+                return false;
+            }
+
+            if (! array_key_exists(0, $stmts)) {
+                return false;
+            }
+
+            $return = $stmts[0];
+            if (! $return instanceof Return_) {
+                return false;
+            }
+
+            $node = $return->expr;
+            if ($node === null) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($node, $currentName);
+        });
     }
 
     private function isPrefixedInterface(string $shortClassName): bool
