@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
@@ -74,7 +75,9 @@ PHP
             }
 
             $className = $issetVar->var->getAttribute('className');
-            $property = $issetVar->name->toString();
+            /** @var Identifier $name */
+            $name = $issetVar->name;
+            $property = $name->toString();
 
             return new FuncCall(
                 new Name('property_exists'),
