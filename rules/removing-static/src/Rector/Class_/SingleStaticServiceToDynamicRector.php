@@ -40,7 +40,7 @@ final class SingleStaticServiceToDynamicRector extends AbstractRector implements
     /**
      * @var string[]
      */
-    private $classTypes;
+    private $classTypes = [];
 
     /**
      * @var PropertyNaming
@@ -51,6 +51,10 @@ final class SingleStaticServiceToDynamicRector extends AbstractRector implements
      * @var StaticCallPresenceAnalyzer
      */
     private $staticCallPresenceAnalyzer;
+    /**
+     * @var string
+     */
+    private const THIS = 'this';
 
     public function __construct(PropertyNaming $propertyNaming, StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer)
     {
@@ -167,28 +171,18 @@ PHP
         $this->classTypes = $configuration[self::CLASS_TYPES] ?? [];
     }
 
-    private function completeDependencyToConstructorOnly(Class_ $class, string $classType): void
+    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod === null) {
-            return;
+        foreach ($this->classTypes as $classType) {
+            if (! $this->isInClassNamed($classMethod, $classType)) {
+                continue;
+            }
+
+            $this->makeNonStatic($classMethod);
+            return $classMethod;
         }
 
-        $hasStaticCall = $this->staticCallPresenceAnalyzer->hasMethodStaticCallOnType(
-            $constructClassMethod,
-            $classType
-        );
-
-        if (! $hasStaticCall) {
-            return;
-        }
-
-        $propertyExpectedName = $this->propertyNaming->fqnToVariableName(new ObjectType($classType));
-        $constructClassMethod->params[] = new Param(
-            new Variable($propertyExpectedName),
-            null,
-            new FullyQualified($this->classTypes)
-        );
+        return null;
     }
 
     private function refactorStaticCall(StaticCall $staticCall): ?MethodCall
@@ -202,11 +196,11 @@ PHP
             $className = $this->getName($staticCall->class);
 
             if ($className === 'self') {
-                return new MethodCall(new Variable('this'), $staticCall->name, $staticCall->args);
+                return new MethodCall(new Variable(self::THIS), $staticCall->name, $staticCall->args);
             }
 
             $propertyName = $this->propertyNaming->fqnToVariableName($classType);
-            $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+            $propertyFetch = new PropertyFetch(new Variable(self::THIS), $propertyName);
             return new MethodCall($propertyFetch, $staticCall->name, $staticCall->args);
         }
 
@@ -230,20 +224,6 @@ PHP
 
                 return $class;
             }
-        }
-
-        return null;
-    }
-
-    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
-    {
-        foreach ($this->classTypes as $classType) {
-            if (! $this->isInClassNamed($classMethod, $classType)) {
-                continue;
-            }
-
-            $this->makeNonStatic($classMethod);
-            return $classMethod;
         }
 
         return null;
@@ -275,7 +255,7 @@ PHP
                 continue;
             }
 
-            return new PropertyFetch(new Variable('this'), $staticPropertyFetch->name);
+            return new PropertyFetch(new Variable(self::THIS), $staticPropertyFetch->name);
         }
 
         // B. external property fetch
@@ -291,10 +271,33 @@ PHP
             $class = $staticPropertyFetch->getAttribute(AttributeKey::CLASS_NODE);
             $this->addConstructorDependencyToClass($class, new ObjectType($classType), $propertyName);
 
-            $objectPropertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+            $objectPropertyFetch = new PropertyFetch(new Variable(self::THIS), $propertyName);
             return new PropertyFetch($objectPropertyFetch, $staticPropertyFetch->name);
         }
 
         return null;
+    }
+    private function completeDependencyToConstructorOnly(Class_ $class, string $classType): void
+    {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if ($constructClassMethod === null) {
+            return;
+        }
+
+        $hasStaticCall = $this->staticCallPresenceAnalyzer->hasMethodStaticCallOnType(
+            $constructClassMethod,
+            $classType
+        );
+
+        if (! $hasStaticCall) {
+            return;
+        }
+
+        $propertyExpectedName = $this->propertyNaming->fqnToVariableName(new ObjectType($classType));
+        $constructClassMethod->params[] = new Param(
+            new Variable($propertyExpectedName),
+            null,
+            new FullyQualified($this->classTypes)
+        );
     }
 }
