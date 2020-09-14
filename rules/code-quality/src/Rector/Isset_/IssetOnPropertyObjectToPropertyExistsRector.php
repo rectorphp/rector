@@ -73,7 +73,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($node->vars as $key => $issetVar) {
+        foreach ($node->vars as $issetVar) {
             if (! $issetVar instanceof PropertyFetch) {
                 continue;
             }
