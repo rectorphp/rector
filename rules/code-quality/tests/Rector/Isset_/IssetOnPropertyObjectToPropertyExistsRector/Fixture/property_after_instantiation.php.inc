@@ -2,26 +2,22 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
-class SomeClass
+class SomeClass2
 {
-    private $x;
-
-    public function run()
-    {
-        isset($this->x);
-    }
+    public $x;
 }
+
+$obj = new SomeClass2();
+isset($obj->x);
 -----
 <?php
 
 namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\Fixture;
 
-class SomeClass
+class SomeClass2
 {
-    private $x;
-
-    public function run()
-    {
-        property_exists($this, 'x');
-    }
+    public $x;
 }
+
+$obj = new SomeClass2();
+property_exists($obj, 'x');

@@ -15,6 +15,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\IssetOnPropertyObjectToPropertyExistsRectorTest
@@ -81,7 +82,10 @@ PHP
 
             return new FuncCall(
                 new Name('property_exists'),
-                [new Arg(new String_($className)), new Arg(new String_($property))]
+                [
+                    new Arg($issetVar->var->getAttribute(AttributeKey::ORIGINAL_NODE)),
+                    new Arg(new String_($property)),
+                ]
             );
         }
 
