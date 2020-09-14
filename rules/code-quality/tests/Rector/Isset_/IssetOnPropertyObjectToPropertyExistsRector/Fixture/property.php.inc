@@ -5,10 +5,12 @@ namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToProperty
 class SomeClass
 {
     private $x;
+    private $y;
 
     public function run()
     {
         isset($this->x);
+        isset($this->y);
     }
 }
 -----
@@ -19,9 +21,11 @@ namespace Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToProperty
 class SomeClass
 {
     private $x;
+    private $y;
 
     public function run()
     {
         property_exists($this, 'x') && $this->x !== null;
+        property_exists($this, 'y') && $this->y !== null;
     }
 }
