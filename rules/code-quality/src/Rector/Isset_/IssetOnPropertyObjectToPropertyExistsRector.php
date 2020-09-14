@@ -78,15 +78,15 @@ PHP
                 continue;
             }
 
-            if (isset($node->vars[$key + 1]) &&
-                $node->vars[$key + 1]->getAttribute(AttributeKey::PARENT_NODE) === $issetVar->getAttribute(AttributeKey::PARENT_NODE)
-            ) {
+            $previous = $issetVar->getAttribute(AttributeKey::PREVIOUS_NODE);
+            $current = $issetVar->getAttribute(AttributeKey::PARENT_NODE);
+            $next = $issetVar->getAttribute(AttributeKey::NEXT_NODE);
+
+            if ($previous && $previous->getAttribute(AttributeKey::PARENT_NODE) === $current) {
                 continue;
             }
 
-            if (isset($node->vars[$key - 1]) &&
-                $node->vars[$key - 1]->getAttribute(AttributeKey::PARENT_NODE) === $issetVar->getAttribute(AttributeKey::PARENT_NODE)
-            ) {
+            if ($next && $next->getAttribute(AttributeKey::PARENT_NODE) === $current) {
                 continue;
             }
 
