@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\Isset_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -48,7 +49,7 @@ class SomeClass
 
     public function run(): void
     {
-        property_exists('SomeClass', 'x');
+        property_exists($this, 'x');
     }
 }
 PHP
@@ -75,18 +76,13 @@ PHP
                 continue;
             }
 
-            $className = $issetVar->var->getAttribute('className');
+            /** @var Expr $object */
+            $object = $issetVar->var->getAttribute(AttributeKey::ORIGINAL_NODE);
             /** @var Identifier $name */
             $name = $issetVar->name;
             $property = $name->toString();
 
-            return new FuncCall(
-                new Name('property_exists'),
-                [
-                    new Arg($issetVar->var->getAttribute(AttributeKey::ORIGINAL_NODE)),
-                    new Arg(new String_($property)),
-                ]
-            );
+            return new FuncCall(new Name('property_exists'), [new Arg($object), new Arg(new String_($property))]);
         }
 
         return null;
