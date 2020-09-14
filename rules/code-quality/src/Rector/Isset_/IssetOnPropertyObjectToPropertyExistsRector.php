@@ -79,13 +79,13 @@ PHP
             }
 
             if (isset($node->vars[$key + 1]) &&
-                $node->vars[$key + 1]->getAttribute('parent') === $issetVar->getAttribute('parent')
+                $node->vars[$key + 1]->getAttribute(AttributeKey::PARENT_NODE) === $issetVar->getAttribute(AttributeKey::PARENT_NODE)
             ) {
                 continue;
             }
 
             if (isset($node->vars[$key - 1]) &&
-                $node->vars[$key - 1]->getAttribute('parent') === $issetVar->getAttribute('parent')
+                $node->vars[$key - 1]->getAttribute(AttributeKey::PARENT_NODE) === $issetVar->getAttribute(AttributeKey::PARENT_NODE)
             ) {
                 continue;
             }
