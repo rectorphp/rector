@@ -12,7 +12,10 @@ jobs:
         strategy:
             matrix:
                 php: ['7.2', '7.3', '7.4']
-                dependencies: [lowest, locked]
+                dependencies: [locked]
+                include:
+                    - php: '7.2'
+                      dependencies: lowest
 
         name: PHP ${{ matrix.php }} tests
         steps:
@@ -29,5 +32,5 @@ jobs:
             -   run: composer update --prefer-lowest --no-progress --ansi
                 if: "matrix.dependencies == 'lowest'"
             -   run: composer install --no-progress --ansi
-                if: "matrix.dependencies == 'locked'"
+                if: "matrix.dependencies != 'lowest'"
             -   run: vendor/bin/phpunit
