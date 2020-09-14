@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Naming;
 
-use Doctrine\Inflector\Inflector;
 use Nette\Utils\Strings;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NetteKdyby\Naming\VariableNaming;
 use Rector\PHPStan\Type\SelfObjectType;
@@ -41,14 +41,14 @@ final class PropertyNaming
     private $typeUnwrapper;
 
     /**
-     * @var Inflector
+     * @var RectorNamingInflector
      */
-    private $inflector;
+    private $rectorNamingInflector;
 
-    public function __construct(TypeUnwrapper $typeUnwrapper, Inflector $inflector)
+    public function __construct(TypeUnwrapper $typeUnwrapper, RectorNamingInflector $rectorNamingInflector)
     {
         $this->typeUnwrapper = $typeUnwrapper;
-        $this->inflector = $inflector;
+        $this->rectorNamingInflector = $rectorNamingInflector;
     }
 
     public function getExpectedNameFromMethodName(string $methodName): ?ExpectedName
@@ -61,7 +61,7 @@ final class PropertyNaming
 
         $originalName = lcfirst($matches[1]);
 
-        return new ExpectedName($originalName, $this->singularize($originalName));
+        return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
 
     public function getExpectedNameFromType(Type $type): ?ExpectedName
@@ -104,7 +104,7 @@ final class PropertyNaming
 
         // prolong too short generic names with one namespace up
         $originalName = $this->prolongIfTooShort($shortClassName, $className);
-        return new ExpectedName($originalName, $this->singularize($originalName));
+        return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
 
     /**
@@ -129,19 +129,6 @@ final class PropertyNaming
         $pascalCaseName = str_replace('_', '', ucwords($underscoreName, '_'));
 
         return lcfirst($pascalCaseName);
-    }
-
-    private function singularize(string $name): string
-    {
-        // @see https://regex101.com/r/VqVvke/3
-        $matches = Strings::match($name, '#^(.+)(Data|Info)$$#');
-        if ($matches === null) {
-            return $this->inflector->singularize($name);
-        }
-
-        $singularized = $this->inflector->singularize($matches[1]);
-        $uninflectable = $matches[2];
-        return $singularized . $uninflectable;
     }
 
     private function getClassName(TypeWithClassName $typeWithClassName): string
