@@ -7,7 +7,7 @@ namespace Rector\Naming;
 use Doctrine\Inflector\Inflector;
 use Nette\Utils\Strings;
 
-class RectorNamingInflector
+final class RectorNamingInflector
 {
     /**
      * @var Inflector

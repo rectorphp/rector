@@ -12,7 +12,7 @@ use Rector\Naming\ValueObject\ExpectedName;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-class PropertyNamingTest extends AbstractKernelTestCase
+final class PropertyNamingTest extends AbstractKernelTestCase
 {
     /**
      * @dataProvider getExpectedNameFromMethodNameDataProvider
