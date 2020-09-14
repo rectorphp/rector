@@ -22,6 +22,6 @@ class SomeClass
 
     public function run()
     {
-        property_exists($this, 'x');
+        property_exists($this, 'x') && $this->x !== null;
     }
 }

@@ -7,6 +7,8 @@ namespace Rector\CodeQuality\Rector\Isset_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -20,7 +22,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\IssetOnPropertyObjectToPropertyExistsRectorTest
- * @see https://3v4l.org/TI8XL Only usable on single property value and property has value
+ * @see https://3v4l.org/TI8XL Change isset on property object to property_exists() with not null check
  */
 final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
 {
@@ -49,7 +51,7 @@ class SomeClass
 
     public function run(): void
     {
-        property_exists($this, 'x');
+        property_exists($this, 'x') && $this->x !== null;
     }
 }
 PHP
@@ -82,7 +84,10 @@ PHP
             $name = $issetVar->name;
             $property = $name->toString();
 
-            return new FuncCall(new Name('property_exists'), [new Arg($object), new Arg(new String_($property))]);
+            return new BooleanAnd(
+                new FuncCall(new Name('property_exists'), [new Arg($object), new Arg(new String_($property))]),
+                new NotIdentical($issetVar, $this->createNull())
+            );
         }
 
         return null;

@@ -20,4 +20,4 @@ class SomeClass2
 }
 
 $obj = new SomeClass2();
-property_exists($obj, 'x');
+property_exists($obj, 'x') && $obj->x !== null;
