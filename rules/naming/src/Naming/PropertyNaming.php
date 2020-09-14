@@ -21,6 +21,7 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
  * @deprecated
  * @todo merge with very similar logic in
  * @see VariableNaming
+ * @see \Rector\Naming\Tests\Naming\PropertyNamingTest
  */
 final class PropertyNaming
 {
@@ -60,7 +61,7 @@ final class PropertyNaming
 
         $originalName = lcfirst($matches[1]);
 
-        return new ExpectedName($originalName, $this->inflector->singularize($originalName));
+        return new ExpectedName($originalName, $this->singularize($originalName));
     }
 
     public function getExpectedNameFromType(Type $type): ?ExpectedName
@@ -103,7 +104,7 @@ final class PropertyNaming
 
         // prolong too short generic names with one namespace up
         $originalName = $this->prolongIfTooShort($shortClassName, $className);
-        return new ExpectedName($originalName, $this->inflector->singularize($originalName));
+        return new ExpectedName($originalName, $this->singularize($originalName));
     }
 
     /**
@@ -128,6 +129,19 @@ final class PropertyNaming
         $pascalCaseName = str_replace('_', '', ucwords($underscoreName, '_'));
 
         return lcfirst($pascalCaseName);
+    }
+
+    private function singularize(string $name): string
+    {
+        // @see https://regex101.com/r/VqVvke/3
+        $matches = Strings::match($name, '#^(.+)(Data|Info)$$#');
+        if ($matches === null) {
+            return $this->inflector->singularize($name);
+        }
+
+        $singularized = $this->inflector->singularize($matches[1]);
+        $uninflectable = $matches[2];
+        return $singularized . $uninflectable;
     }
 
     private function getClassName(TypeWithClassName $typeWithClassName): string
