@@ -12,10 +12,10 @@ jobs:
         strategy:
             matrix:
                 php: ['7.2', '7.3', '7.4']
-                dependencies: [locked]
+                dependencies: ['locked']
                 include:
                     - php: '7.2'
-                      dependencies: lowest
+                      dependencies: 'lowest'
 
         name: PHP ${{ matrix.php }} tests
         steps:
