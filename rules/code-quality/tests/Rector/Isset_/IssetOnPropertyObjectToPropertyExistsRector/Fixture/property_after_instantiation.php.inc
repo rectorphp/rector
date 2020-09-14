@@ -11,6 +11,7 @@ class SomeClass2
 $obj = new SomeClass2();
 isset($obj->x);
 isset($obj->y);
+isset($obj->x) && isset($obj->y);
 -----
 <?php
 
@@ -25,3 +26,4 @@ class SomeClass2
 $obj = new SomeClass2();
 property_exists($obj, 'x') && $obj->x !== null;
 property_exists($obj, 'y') && $obj->y !== null;
+property_exists($obj, 'x') && $obj->x !== null && (property_exists($obj, 'y') && $obj->y !== null);

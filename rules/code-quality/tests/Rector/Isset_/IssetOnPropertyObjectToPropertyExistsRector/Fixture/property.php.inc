@@ -11,6 +11,7 @@ class SomeClass
     {
         isset($this->x);
         isset($this->y);
+        isset($this->x) && isset($this->y);
     }
 }
 -----
@@ -27,5 +28,6 @@ class SomeClass
     {
         property_exists($this, 'x') && $this->x !== null;
         property_exists($this, 'y') && $this->y !== null;
+        property_exists($this, 'x') && $this->x !== null && (property_exists($this, 'y') && $this->y !== null);
     }
 }
