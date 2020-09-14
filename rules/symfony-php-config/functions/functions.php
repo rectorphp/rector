@@ -7,6 +7,7 @@ namespace Rector\SymfonyPhpConfig;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory;
 use ReflectionClass;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\inline;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 use Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
@@ -39,9 +40,14 @@ function inline_value_object(object $object): InlineServiceConfigurator
     $className = $reflectionClass->getName();
     $argumentValues = resolve_argument_values($reflectionClass, $object);
 
-    return inline_service($className)->args($argumentValues);
-}
+    // Symfony 5.1+
+    if (function_exists('Symfony\Component\DependencyInjection\Loader\Configurator\inline_service')) {
+        return inline_service($className)->args($argumentValues);
+    }
 
+    // Symfony 5.0-
+    return inline($className)->args($argumentValues);
+}
 
 /**
  * @param object[] $objects
