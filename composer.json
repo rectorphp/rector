@@ -39,7 +39,7 @@
         "symplify/set-config-resolver": "^8.2.20",
         "symplify/smart-file-system": "^8.2.20",
         "tracy/tracy": "^2.7",
-        "webmozart/assert": "^1.0"
+        "webmozart/assert": "^1.8"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
