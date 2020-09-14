@@ -35,7 +35,7 @@ final class SpecificAssertContainsRector extends AbstractPHPUnitRector
             'Change assertContains()/assertNotContains() method to new string and iterable alternatives',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -46,9 +46,9 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
         $this->assertNotContains('foo', 'foo bar');
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 <?php
 
 final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -59,7 +59,7 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
         $this->assertStringNotContainsString('foo', 'foo bar');
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

@@ -51,7 +51,7 @@ final class ChangeReadOnlyVariableWithDefaultValueToConstantRector extends Abstr
     {
         return new RectorDefinition('Change variable with read only status with default value to constant', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -65,9 +65,9 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -84,7 +84,7 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -42,7 +42,7 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
             'Changes `@expectedException annotations to expectException*() methods',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 /**
  * @expectedException Exception
  * @expectedExceptionMessage Message
@@ -51,16 +51,16 @@ public function test()
 {
     // tested code
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 public function test()
 {
     $this->expectException('Exception');
     $this->expectExceptionMessage('Message');
     // tested code
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

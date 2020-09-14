@@ -24,7 +24,7 @@ final class ChangePdfWriterRector extends AbstractRector
     {
         return new RectorDefinition('Change init of PDF writer', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -34,9 +34,9 @@ final class SomeClass
         $writer = \PHPExcel_IOFactory::createWriter($spreadsheet, 'PDF');
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -44,7 +44,7 @@ final class SomeClass
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf($spreadsheet);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -19,7 +19,7 @@ final class RemoveFinalFromEntityRector extends AbstractRector
     {
         return new RectorDefinition('Remove final from Doctrine entities', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,9 +28,9 @@ use Doctrine\ORM\Mapping as ORM;
 final class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,7 +39,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

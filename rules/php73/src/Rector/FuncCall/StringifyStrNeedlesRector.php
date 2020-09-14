@@ -38,15 +38,15 @@ final class StringifyStrNeedlesRector extends AbstractRector
     {
         return new RectorDefinition('Makes needles explicit strings', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $needle = 5;
 $fivePosition = strpos('725', $needle);
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $needle = 5;
 $fivePosition = strpos('725', (string) $needle);
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

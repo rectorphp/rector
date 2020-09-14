@@ -41,7 +41,7 @@ final class ChangeNestedIfsToEarlyReturnRector extends AbstractRector
     {
         return new RectorDefinition('Change nested ifs to early return', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -55,9 +55,9 @@ class SomeClass
         return 'no';
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -73,7 +73,7 @@ class SomeClass
         return 'no';
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -44,7 +44,7 @@ final class PrivatizeLocalOnlyMethodRector extends AbstractRector implements Zer
     {
         return new RectorDefinition('Privatize local-only use methods', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -59,9 +59,9 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -76,7 +76,7 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

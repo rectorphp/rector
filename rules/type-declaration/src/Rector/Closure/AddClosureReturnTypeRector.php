@@ -33,7 +33,7 @@ final class AddClosureReturnTypeRector extends AbstractRector
     {
         return new RectorDefinition('Add known return type to functions', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($meetups)
@@ -43,9 +43,9 @@ class SomeClass
         });
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($meetups)
@@ -55,7 +55,7 @@ class SomeClass
         });
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

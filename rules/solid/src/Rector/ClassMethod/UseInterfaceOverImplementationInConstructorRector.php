@@ -21,7 +21,7 @@ final class UseInterfaceOverImplementationInConstructorRector extends AbstractRe
     {
         return new RectorDefinition('Use interface instead of specific class', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(SomeImplementation $someImplementation)
@@ -36,9 +36,9 @@ class SomeImplementation implements SomeInterface
 interface SomeInterface
 {
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(SomeInterface $someImplementation)
@@ -53,7 +53,7 @@ class SomeImplementation implements SomeInterface
 interface SomeInterface
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

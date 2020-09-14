@@ -37,7 +37,7 @@ final class CorrectDefaultTypesOnEntityPropertyRector extends AbstractRector
     {
         return new RectorDefinition('Change default value types to match Doctrine annotation type', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,10 +50,10 @@ class User
      */
     private $isOld = '0';
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,7 +66,7 @@ class User
      */
     private $isOld = false;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

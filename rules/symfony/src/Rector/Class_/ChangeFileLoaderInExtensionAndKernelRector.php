@@ -58,7 +58,7 @@ final class ChangeFileLoaderInExtensionAndKernelRector extends AbstractRector im
     {
         return new RectorDefinition('Change XML loader to YAML in Bundle Extension', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -73,9 +73,9 @@ final class SomeExtension extends Extension
         $loader->load(__DIR__ . '/../Resources/config/events.xml');
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -90,7 +90,7 @@ final class SomeExtension extends Extension
         $loader->load(__DIR__ . '/../Resources/config/events.yaml');
     }
 }
-PHP
+CODE_SAMPLE
     , [
         self::FROM => 'xml',
         self::TO => 'yaml',

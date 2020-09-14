@@ -23,19 +23,19 @@ final class RemoveNullPropertyInitializationRector extends AbstractRector
     {
         return new RectorDefinition('Remove initialization with null value from property declarations', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SunshineCommand extends ParentClassWithNewConstructor
 {
     private $myVar = null;
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SunshineCommand extends ParentClassWithNewConstructor
 {
     private $myVar;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

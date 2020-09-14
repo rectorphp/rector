@@ -42,7 +42,7 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRecto
     {
         return new RectorDefinition('Changes ManagerRegistry intermediate calls directly to EntityManager calls', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 class CustomRepository
@@ -63,9 +63,9 @@ class CustomRepository
         $someRepository = $entityManager->getRepository('Some');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\EntityManagerInterface;
 
 class CustomRepository
@@ -85,7 +85,7 @@ class CustomRepository
         $someRepository = $this->entityManager->getRepository('Some');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

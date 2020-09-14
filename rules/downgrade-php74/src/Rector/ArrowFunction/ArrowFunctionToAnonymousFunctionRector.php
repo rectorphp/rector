@@ -27,7 +27,7 @@ final class ArrowFunctionToAnonymousFunctionRector extends AbstractConvertToAnon
     {
         return new RectorDefinition('Replace arrow functions with anonymous functions', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -36,9 +36,9 @@ class SomeClass
         $callable = fn($matches) => $delimiter . strtolower($matches[1]);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -49,7 +49,7 @@ class SomeClass
         };
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

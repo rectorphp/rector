@@ -40,7 +40,7 @@ final class ChangeIOFactoryArgumentRector extends AbstractRector
             'Change argument of PHPExcel_IOFactory::createReader(), PHPExcel_IOFactory::createWriter() and PHPExcel_IOFactory::identify()',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -48,9 +48,9 @@ final class SomeClass
         $writer = \PHPExcel_IOFactory::createWriter('CSV');
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -58,7 +58,7 @@ final class SomeClass
         $writer = \PHPExcel_IOFactory::createWriter('Csv');
     }
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

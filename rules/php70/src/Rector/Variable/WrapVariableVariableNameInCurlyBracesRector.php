@@ -21,19 +21,19 @@ final class WrapVariableVariableNameInCurlyBracesRector extends AbstractRector
     {
         return new RectorDefinition('Ensure variable variables are wrapped in curly braces', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 function run($foo)
 {
     global $$foo->bar;
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 function run($foo)
 {
     global ${$foo->bar};
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

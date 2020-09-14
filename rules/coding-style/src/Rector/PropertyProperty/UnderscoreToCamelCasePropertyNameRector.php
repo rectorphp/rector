@@ -25,7 +25,7 @@ final class UnderscoreToCamelCasePropertyNameRector extends AbstractRector
     {
         return new RectorDefinition('Change under_score names to camelCase', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public $property_name;
@@ -35,9 +35,9 @@ final class SomeClass
         $this->property_name = 5;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public $propertyName;
@@ -47,7 +47,7 @@ final class SomeClass
         $this->propertyName = 5;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -36,7 +36,7 @@ final class MoveInjectToExistingConstructorRector extends AbstractRector
     {
         return new RectorDefinition('Move @inject properties to constructor, if there already is one', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -55,9 +55,9 @@ final class SomeClass
         $this->otherDependency = $otherDependency;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -76,7 +76,7 @@ final class SomeClass
         $this->someDependency = $someDependency;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

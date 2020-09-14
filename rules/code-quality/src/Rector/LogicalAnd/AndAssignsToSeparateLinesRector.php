@@ -23,7 +23,7 @@ final class AndAssignsToSeparateLinesRector extends AbstractRector
     {
         return new RectorDefinition('Split 2 assigns ands to separate line', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -32,9 +32,9 @@ class SomeClass
         $token = 4 and $tokens[] = $token;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,7 +44,7 @@ class SomeClass
         $tokens[] = $token;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

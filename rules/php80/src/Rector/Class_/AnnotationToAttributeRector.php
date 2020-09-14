@@ -35,7 +35,7 @@ final class AnnotationToAttributeRector extends AbstractRector
     {
         return new RectorDefinition('Change annotation to attribute', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Attributes as ORM;
 
 /**
@@ -44,16 +44,16 @@ use Doctrine\ORM\Attributes as ORM;
 class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Attributes as ORM;
 
 <<ORM\Entity>>
 class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

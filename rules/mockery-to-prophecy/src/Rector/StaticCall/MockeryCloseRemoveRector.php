@@ -47,18 +47,18 @@ final class MockeryCloseRemoveRector extends AbstractPHPUnitRector
             'Removes mockery close from test classes',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 public function tearDown() : void
 {
     \Mockery::close();
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 public function tearDown() : void
 {
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

@@ -20,7 +20,7 @@ final class GetConfigWithDefaultsArgumentToArrayMergeInCompilerExtensionRector e
     {
         return new RectorDefinition('Change $this->getConfig($defaults) to array_merge', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\DI\CompilerExtension;
 
 final class SomeExtension extends CompilerExtension
@@ -34,9 +34,9 @@ final class SomeExtension extends CompilerExtension
         $config = $this->getConfig($this->defaults);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\DI\CompilerExtension;
 
 final class SomeExtension extends CompilerExtension
@@ -50,7 +50,7 @@ final class SomeExtension extends CompilerExtension
         $config = array_merge($this->defaults, $this->getConfig());
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -40,7 +40,7 @@ final class WithConsecutiveArgToArrayRector extends AbstractRector
     {
         return new RectorDefinition('Split withConsecutive() arg to array', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($one, $two)
@@ -59,9 +59,9 @@ class SomeTestCase extends \PHPUnit\Framework\TestCase
             ->withConsecutive(1, 2, 3, 5);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($one, $two)
@@ -80,7 +80,7 @@ class SomeTestCase extends \PHPUnit\Framework\TestCase
             ->withConsecutive([1, 2], [3, 5]);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

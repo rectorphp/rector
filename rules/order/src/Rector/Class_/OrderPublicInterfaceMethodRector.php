@@ -49,7 +49,7 @@ final class OrderPublicInterfaceMethodRector extends AbstractRector implements C
     {
         return new RectorDefinition('Order public methods required by interface in custom orderer', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass implements FoodRecipeInterface
 {
     public function process()
@@ -60,9 +60,9 @@ class SomeClass implements FoodRecipeInterface
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass implements FoodRecipeInterface
 {
     public function getDescription()
@@ -72,7 +72,7 @@ class SomeClass implements FoodRecipeInterface
     {
     }
 }
-PHP
+CODE_SAMPLE
            , [
                self::METHOD_ORDER_BY_INTERFACES => [
                    'FoodRecipeInterface' => ['getDescription', 'process'],

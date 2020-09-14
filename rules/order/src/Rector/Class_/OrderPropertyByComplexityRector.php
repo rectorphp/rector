@@ -36,7 +36,7 @@ final class OrderPropertyByComplexityRector extends AbstractConstantPropertyMeth
             'Order properties by complexity, from the simplest like scalars to the most complex, like union or collections',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -54,9 +54,9 @@ class SomeClass
      */
     private $price;
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass implements FoodRecipeInterface
 {
     /**
@@ -74,7 +74,7 @@ class SomeClass implements FoodRecipeInterface
      */
     private $service;
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

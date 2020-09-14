@@ -45,7 +45,7 @@ final class PrivatizeLocalPropertyToPrivatePropertyRector extends AbstractRector
     {
         return new RectorDefinition('Privatize local-only property to private property', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public $value;
@@ -55,9 +55,9 @@ class SomeClass
         return $this->value;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $value;
@@ -67,7 +67,7 @@ class SomeClass
         return $this->value;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

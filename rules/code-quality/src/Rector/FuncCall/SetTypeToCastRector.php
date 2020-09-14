@@ -47,7 +47,7 @@ final class SetTypeToCastRector extends AbstractRector
     {
         return new RectorDefinition('Changes settype() to (type) where possible', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($foo)
@@ -57,9 +57,9 @@ class SomeClass
         return settype($foo, 'integer');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(array $items)
@@ -69,7 +69,7 @@ class SomeClass
         return (int) $foo;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

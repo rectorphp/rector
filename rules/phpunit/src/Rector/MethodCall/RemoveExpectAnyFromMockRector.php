@@ -20,7 +20,7 @@ final class RemoveExpectAnyFromMockRector extends AbstractPHPUnitRector
     {
         return new RectorDefinition('Remove `expect($this->any())` from mocks as it has no added value', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -33,9 +33,9 @@ class SomeClass extends TestCase
             ->willReturn('translated max {{ max }}!');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -47,7 +47,7 @@ class SomeClass extends TestCase
             ->willReturn('translated max {{ max }}!');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

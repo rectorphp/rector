@@ -41,7 +41,7 @@ final class VarInlineAnnotationToAssertRector extends AbstractRector
     {
         return new RectorDefinition('Turn @var inline checks above code to assert() of the type', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,9 +50,9 @@ class SomeClass
         $value->call();
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -62,7 +62,7 @@ class SomeClass
         $value->call();
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

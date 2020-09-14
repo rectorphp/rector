@@ -38,19 +38,19 @@ final class RenameMethodCallBasedOnParameterRector extends AbstractRector implem
             'Changes method calls based on matching the first parameter value.',
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $object = new ServerRequest();
 
 $config = $object->getParam('paging');
 $object = $object->withParam('paging', ['a value']);
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $object = new ServerRequest();
 
 $config = $object->getAttribute('paging');
 $object = $object->withAttribute('paging', ['a value']);
-PHP
+CODE_SAMPLE
                     ,
                     [
                         self::CALLS_WITH_PARAM_RENAMES => [

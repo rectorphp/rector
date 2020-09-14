@@ -29,7 +29,7 @@ final class IncreaseColumnIndexRector extends AbstractRector
             'Column index changed from 0 to 1 - run only ONCE! changes current value without memory',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -38,9 +38,9 @@ final class SomeClass
         $worksheet->setCellValueByColumnAndRow(0, 3, '1150');
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -49,7 +49,7 @@ final class SomeClass
         $worksheet->setCellValueByColumnAndRow(1, 3, '1150');
     }
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

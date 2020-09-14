@@ -47,7 +47,7 @@ final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
     {
         return new RectorDefinition('Change @param types to type declarations if not a BC-break', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 <?php
 
 class ParentClass
@@ -76,9 +76,9 @@ final class ChildClass extends ParentClass
     {
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 <?php
 
 class ParentClass
@@ -107,7 +107,7 @@ final class ChildClass extends ParentClass
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -39,19 +39,19 @@ final class UnwrapFutureCompatibleIfPhpVersionRector extends AbstractRector
     {
         return new RectorDefinition('Remove php version checks if they are passed', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 // current PHP: 7.2
 if (version_compare(PHP_VERSION, '7.2', '<')) {
     return 'is PHP 7.1-';
 } else {
     return 'is PHP 7.2+';
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 // current PHP: 7.2
 return 'is PHP 7.2+';
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

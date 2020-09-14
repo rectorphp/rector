@@ -38,15 +38,15 @@ final class ListEachRector extends AbstractRector
             'each() function is deprecated, use key() and current() instead',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 list($key, $callback) = each($callbacks);
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $key = key($callbacks);
 $callback = current($callbacks);
 next($callbacks);
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

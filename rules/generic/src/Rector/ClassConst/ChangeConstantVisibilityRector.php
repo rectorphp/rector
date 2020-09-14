@@ -33,7 +33,7 @@ final class ChangeConstantVisibilityRector extends AbstractRector implements Con
         return new RectorDefinition(
             'Change visibility of constant from parent class.',
             [new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected const SOME_CONSTANT = 1;
@@ -43,9 +43,9 @@ class MyClass extends FrameworkClass
 {
     public const SOME_CONSTANT = 1;
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected const SOME_CONSTANT = 1;
@@ -55,7 +55,7 @@ class MyClass extends FrameworkClass
 {
     protected const SOME_CONSTANT = 1;
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::CLASS_CONSTANT_VISIBILITY_CHANGES => [

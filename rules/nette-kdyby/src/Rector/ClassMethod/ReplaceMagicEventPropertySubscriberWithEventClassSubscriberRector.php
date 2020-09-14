@@ -52,7 +52,7 @@ final class ReplaceMagicEventPropertySubscriberWithEventClassSubscriberRector ex
     {
         return new RectorDefinition('Change getSubscribedEvents() from on magic property, to Event class', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Kdyby\Events\Subscriber;
 
 final class ActionLogEventSubscriber implements Subscriber
@@ -69,9 +69,9 @@ final class ActionLogEventSubscriber implements Subscriber
         $album->play();
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Kdyby\Events\Subscriber;
 
 final class ActionLogEventSubscriber implements Subscriber
@@ -89,7 +89,7 @@ final class ActionLogEventSubscriber implements Subscriber
         $album->play();
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

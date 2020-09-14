@@ -22,7 +22,7 @@ final class ChangeChartRendererRector extends AbstractRector
     {
         return new RectorDefinition('Change chart renderer', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -30,9 +30,9 @@ final class SomeClass
         \PHPExcel_Settings::setChartRenderer($rendererName, $rendererLibraryPath);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -40,7 +40,7 @@ final class SomeClass
         \PHPExcel_Settings::setChartRenderer(\PhpOffice\PhpSpreadsheet\Chart\Renderer\JpGraph::class);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

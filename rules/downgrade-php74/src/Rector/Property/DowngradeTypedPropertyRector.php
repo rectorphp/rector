@@ -18,14 +18,14 @@ final class DowngradeTypedPropertyRector extends AbstractDowngradeTypedPropertyR
     {
         return new RectorDefinition('Changes property type definition from type definitions to `@var` annotations.', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     private string $property;
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -33,7 +33,7 @@ class SomeClass
     */
     private $property;
 }
-PHP
+CODE_SAMPLE
 ,
                 [
                     self::ADD_DOC_BLOCK => true,

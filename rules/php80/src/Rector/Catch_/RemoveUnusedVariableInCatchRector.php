@@ -22,7 +22,7 @@ final class RemoveUnusedVariableInCatchRector extends AbstractRector
     {
         return new RectorDefinition('Remove unused variable in catch()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -32,9 +32,9 @@ final class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -44,7 +44,7 @@ final class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

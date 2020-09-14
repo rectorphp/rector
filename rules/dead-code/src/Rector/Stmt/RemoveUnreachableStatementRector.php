@@ -31,7 +31,7 @@ final class RemoveUnreachableStatementRector extends AbstractRector
     {
         return new RectorDefinition('Remove unreachable statements', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -41,9 +41,9 @@ class SomeClass
         $removeMe = 10;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -51,7 +51,7 @@ class SomeClass
         return 5;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

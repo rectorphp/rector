@@ -24,17 +24,17 @@ final class LogicalToBooleanRector extends AbstractRector
     {
         return new RectorDefinition('Change OR, AND to ||, && with more common understanding', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 if ($f = false or true) {
     return $f;
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 if (($f = false) || true) {
     return $f;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

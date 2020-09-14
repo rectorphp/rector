@@ -20,13 +20,13 @@ final class IsCountableRector extends AbstractIsAbleFunCallRector
             'Changes is_array + Countable check to is_countable',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 is_array($foo) || $foo instanceof Countable;
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 is_countable($foo);
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

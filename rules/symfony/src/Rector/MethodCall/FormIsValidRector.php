@@ -35,15 +35,15 @@ final class FormIsValidRector extends AbstractRector
             'Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 if ($form->isValid()) {
 }
-PHP
+CODE_SAMPLE
                     ,
-<<<'PHP'
+<<<'CODE_SAMPLE'
 if ($form->isSubmitted() && $form->isValid()) {
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

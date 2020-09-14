@@ -40,7 +40,7 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
             'Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeExtension extends Twig_Extension
 {
     public function getFunctions()
@@ -57,9 +57,9 @@ class SomeExtension extends Twig_Extension
         ];
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeExtension extends Twig_Extension
 {
     public function getFunctions()
@@ -76,7 +76,7 @@ class SomeExtension extends Twig_Extension
         ];
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

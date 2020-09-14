@@ -26,7 +26,7 @@ final class ArrayAccessSetControlToAddComponentMethodCallRector extends Abstract
     {
         return new RectorDefinition('Change magic arrays access set, to explicit $this->setComponent(...) method', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
 
@@ -38,9 +38,9 @@ class SomeClass extends Presenter
         $this['whatever'] = $someControl;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
 
@@ -52,7 +52,7 @@ class SomeClass extends Presenter
         $this->addComponent($someControl, 'whatever');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

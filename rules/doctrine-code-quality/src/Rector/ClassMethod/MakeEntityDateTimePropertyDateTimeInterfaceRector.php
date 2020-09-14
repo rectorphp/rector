@@ -43,7 +43,7 @@ final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends AbstractRe
     {
         return new RectorDefinition('Make maker bundle generate DateTime property accept DateTimeInterface too', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -61,10 +61,10 @@ class User
         $this->bornAt = $bornAt;
     }
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -82,7 +82,7 @@ class User
         $this->bornAt = $bornAt;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

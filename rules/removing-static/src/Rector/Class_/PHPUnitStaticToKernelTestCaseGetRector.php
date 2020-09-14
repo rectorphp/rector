@@ -87,7 +87,7 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector implem
     {
         return new RectorDefinition('Convert static calls in PHPUnit test cases, to get() from the container of KernelTestCase', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 <?php
 
 use PHPUnit\Framework\TestCase;
@@ -99,9 +99,9 @@ final class SomeTestCase extends TestCase
         $product = EntityFactory::create('product');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class SomeTestCase extends KernelTestCase
@@ -122,7 +122,7 @@ final class SomeTestCase extends KernelTestCase
         $product = $this->entityFactory->create('product');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::STATIC_CLASS_TYPES => ['EntityFactory'],

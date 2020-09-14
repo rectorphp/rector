@@ -27,19 +27,19 @@ final class RestoreDefaultNullToNullableTypePropertyRector extends AbstractRecto
     {
         return new RectorDefinition('Add null default to properties with PHP 7.4 property nullable type', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public ?string $name;
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public ?string $name = null;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

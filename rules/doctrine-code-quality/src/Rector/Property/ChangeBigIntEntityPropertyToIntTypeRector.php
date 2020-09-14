@@ -49,7 +49,7 @@ final class ChangeBigIntEntityPropertyToIntTypeRector extends AbstractRector
     {
         return new RectorDefinition('Change database type "bigint" for @var/type declaration to string', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,9 +63,9 @@ class SomeEntity
      */
     private $bigNumber;
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -79,7 +79,7 @@ class SomeEntity
      */
     private $bigNumber;
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

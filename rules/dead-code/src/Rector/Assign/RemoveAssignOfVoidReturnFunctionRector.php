@@ -23,7 +23,7 @@ final class RemoveAssignOfVoidReturnFunctionRector extends AbstractRector
     {
         return new RectorDefinition('Remove assign of void function/method to variable', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -35,9 +35,9 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -49,7 +49,7 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

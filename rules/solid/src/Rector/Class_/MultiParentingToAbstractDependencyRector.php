@@ -89,7 +89,7 @@ final class MultiParentingToAbstractDependencyRector extends AbstractRector impl
             'Move dependency passed to all children to parent as @inject/@required dependency',
             [
                 new ConfiguredCodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 abstract class AbstractParentClass
 {
     private $someDependency;
@@ -115,9 +115,9 @@ class SecondChild extends AbstractParentClass
         parent::__construct($someDependency);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 abstract class AbstractParentClass
 {
     /**
@@ -134,7 +134,7 @@ class FirstChild extends AbstractParentClass
 class SecondChild extends AbstractParentClass
 {
 }
-PHP
+CODE_SAMPLE
 ,
                     [
                         self::FRAMEWORK => self::FRAMEWORK_NETTE,

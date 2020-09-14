@@ -30,7 +30,7 @@ final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends Abst
     {
         return new RectorDefinition('Rename `type` option to `entry_type` in CollectionType', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -46,9 +46,9 @@ class TaskType extends AbstractType
         ]);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -64,7 +64,7 @@ class TaskType extends AbstractType
         ]);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

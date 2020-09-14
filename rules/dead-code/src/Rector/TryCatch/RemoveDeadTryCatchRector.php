@@ -21,7 +21,7 @@ final class RemoveDeadTryCatchRector extends AbstractRector
     {
         return new RectorDefinition('Remove dead try/catch', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -34,9 +34,9 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -44,7 +44,7 @@ class SomeClass
         // some code
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

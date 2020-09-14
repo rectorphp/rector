@@ -42,7 +42,7 @@ final class ChangeConditionalReturnedCellRector extends AbstractRector
     {
         return new RectorDefinition('Change conditional call to getCell()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -51,9 +51,9 @@ final class SomeClass
         $cell = $worksheet->setCellValue('A1', 'value', true);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -62,7 +62,7 @@ final class SomeClass
         $cell = $worksheet->getCell('A1')->setValue('value');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

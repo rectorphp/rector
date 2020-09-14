@@ -33,7 +33,7 @@ final class RemoveParentCallWithoutParentRector extends AbstractRector
     {
         return new RectorDefinition('Remove unused parent call with no parent class', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class OrphanClass
 {
     public function __construct()
@@ -41,16 +41,16 @@ class OrphanClass
          parent::__construct();
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class OrphanClass
 {
     public function __construct()
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

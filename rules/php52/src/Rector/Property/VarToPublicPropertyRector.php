@@ -19,19 +19,19 @@ final class VarToPublicPropertyRector extends AbstractRector
     {
         return new RectorDefinition('Remove unused private method', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeController
 {
     var $name = 'Tom';
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeController
 {
     public $name = 'Tom';
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -25,7 +25,7 @@ final class ContextGetByTypeToConstructorInjectionRector extends AbstractToConst
             'Move dependency get via $context->getByType() to constructor injection',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -38,9 +38,9 @@ class SomeClass
         $someTypeToInject = $this->context->getByType(SomeTypeToInject::class);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -63,7 +63,7 @@ class SomeClass
         $someTypeToInject = $this->someTypeToInject;
     }
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

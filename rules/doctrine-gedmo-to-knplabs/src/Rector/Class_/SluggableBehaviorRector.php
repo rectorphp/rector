@@ -41,7 +41,7 @@ final class SluggableBehaviorRector extends AbstractRector
     {
         return new RectorDefinition('Change Sluggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Gedmo\Mapping\Annotation as Gedmo;
 
 class SomeClass
@@ -61,9 +61,9 @@ class SomeClass
         $this->slug = $slug;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Gedmo\Mapping\Annotation as Gedmo;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
@@ -80,7 +80,7 @@ class SomeClass implements SluggableInterface
         return ['name'];
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

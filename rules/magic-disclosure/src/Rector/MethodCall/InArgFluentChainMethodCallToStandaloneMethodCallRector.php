@@ -44,7 +44,7 @@ final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends Abstr
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns fluent interface calls to classic ones.', [new CodeSample(<<<'PHP'
+        return new RectorDefinition('Turns fluent interface calls to classic ones.', [new CodeSample(<<<'CODE_SAMPLE'
 class UsedAsParameter
 {
     public function someFunction(FluentClass $someClass)
@@ -57,8 +57,8 @@ class UsedAsParameter
     }
 }
 
-PHP
-            , <<<'PHP'
+CODE_SAMPLE
+            , <<<'CODE_SAMPLE'
 class UsedAsParameter
 {
     public function someFunction(FluentClass $someClass)
@@ -72,7 +72,7 @@ class UsedAsParameter
     {
     }
 }
-PHP
+CODE_SAMPLE
         )]);
     }
 

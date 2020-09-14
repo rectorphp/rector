@@ -61,7 +61,7 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends Abstra
     {
         return new RectorDefinition('Move default value for entity property to constructor, the safest place', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -76,10 +76,10 @@ class User
      */
     private $when = 'now()';
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -99,7 +99,7 @@ class User
         $this->when = new \DateTime();
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

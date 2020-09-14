@@ -26,7 +26,7 @@ final class ContinueToBreakInSwitchRector extends AbstractRector
     {
         return new RectorDefinition('Use break instead of continue in switch statements', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 function some_run($value)
 {
     switch ($value) {
@@ -38,9 +38,9 @@ function some_run($value)
             break;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 function some_run($value)
 {
     switch ($value) {
@@ -52,7 +52,7 @@ function some_run($value)
             break;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -50,7 +50,7 @@ final class RenameVariableToMatchNewTypeRector extends AbstractRector
     {
         return new RectorDefinition('Rename variable to match new ClassType', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -59,9 +59,9 @@ final class SomeClass
         $search->advance();
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -70,7 +70,7 @@ final class SomeClass
         $dreamSearch->advance();
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

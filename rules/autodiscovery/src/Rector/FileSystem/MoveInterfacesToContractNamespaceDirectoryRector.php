@@ -34,7 +34,7 @@ final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractFil
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Move interface to "Contract" namespace', [new CodeSample(
-<<<'PHP'
+<<<'CODE_SAMPLE'
 // file: app/Exception/Rule.php
 
 namespace App\Exception;
@@ -42,9 +42,9 @@ namespace App\Exception;
 interface Rule
 {
 }
-PHP
+CODE_SAMPLE
             ,
-            <<<'PHP'
+            <<<'CODE_SAMPLE'
 // file: app/Contract/Rule.php
 
 namespace App\Contract;
@@ -52,7 +52,7 @@ namespace App\Contract;
 interface Rule
 {
 }
-PHP
+CODE_SAMPLE
         )]);
     }
 

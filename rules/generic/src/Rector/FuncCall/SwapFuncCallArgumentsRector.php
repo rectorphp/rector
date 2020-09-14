@@ -32,7 +32,7 @@ final class SwapFuncCallArgumentsRector extends AbstractRector implements Config
     {
         return new RectorDefinition('Swap arguments in function calls', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one, $two)
@@ -40,9 +40,9 @@ final class SomeClass
         return some_function($one, $two);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one, $two)
@@ -50,7 +50,7 @@ final class SomeClass
         return some_function($two, $one);
     }
 }
-PHP
+CODE_SAMPLE
                 , [
                     self::FUNCTION_ARGUMENT_SWAPS => [new SwapFuncCallArguments('some_function', [1, 0])],
                 ]

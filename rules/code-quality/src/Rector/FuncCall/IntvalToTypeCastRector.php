@@ -23,7 +23,7 @@ final class IntvalToTypeCastRector extends AbstractRector
     {
         return new RectorDefinition('Change intval() to faster and readable (int) $value', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -31,9 +31,9 @@ class SomeClass
         return intval($value);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -41,7 +41,7 @@ class SomeClass
         return (int) $value;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

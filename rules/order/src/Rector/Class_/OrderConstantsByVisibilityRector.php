@@ -20,24 +20,24 @@ final class OrderConstantsByVisibilityRector extends AbstractConstantPropertyMet
     {
         return new RectorDefinition('Orders constants by visibility', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private const PRIVATE_CONST = 'private';
     protected const PROTECTED_CONST = 'protected';
     public const PUBLIC_CONST = 'public';
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public const PUBLIC_CONST = 'public';
     protected const PROTECTED_CONST = 'protected';
     private const PRIVATE_CONST = 'private';
 }
-PHP
+CODE_SAMPLE
 
             ),
         ]);

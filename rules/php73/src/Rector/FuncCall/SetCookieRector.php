@@ -44,22 +44,22 @@ final class SetCookieRector extends AbstractRector
             'Convert setcookie argument to PHP7.3 option array',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 setcookie('name', $value, 360);
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 setcookie('name', $value, ['expires' => 360]);
-PHP
+CODE_SAMPLE
                 ),
                 new CodeSample(
-<<<'PHP'
+<<<'CODE_SAMPLE'
 setcookie('name', $name, 0, '', '', true, true);
-PHP
+CODE_SAMPLE
                     ,
-<<<'PHP'
+<<<'CODE_SAMPLE'
 setcookie('name', $name, ['expires' => 0, 'path' => '', 'domain' => '', 'secure' => true, 'httponly' => true]);
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

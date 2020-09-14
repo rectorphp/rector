@@ -29,7 +29,7 @@ final class AddDatePickerToDateControlRector extends AbstractRector
     {
         return new RectorDefinition('Nextras/Form upgrade of addDatePicker method call to DateControl assign', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Form;
 
 class SomeClass
@@ -40,9 +40,9 @@ class SomeClass
         $form->addDatePicker('key', 'Label');
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Form;
 
 class SomeClass
@@ -53,7 +53,7 @@ class SomeClass
         $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

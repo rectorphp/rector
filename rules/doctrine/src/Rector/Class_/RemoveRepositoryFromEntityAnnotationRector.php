@@ -21,7 +21,7 @@ final class RemoveRepositoryFromEntityAnnotationRector extends AbstractRector
     {
         return new RectorDefinition('Removes repository class from @Entity annotation', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,9 +30,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,7 +41,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

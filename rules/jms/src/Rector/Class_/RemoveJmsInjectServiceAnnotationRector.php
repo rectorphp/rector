@@ -25,7 +25,7 @@ final class RemoveJmsInjectServiceAnnotationRector extends AbstractRector
     {
         return new RectorDefinition('Removes JMS\DiExtraBundle\Annotation\Services annotation', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use JMS\DiExtraBundle\Annotation as DI;
 
 /**
@@ -34,15 +34,15 @@ use JMS\DiExtraBundle\Annotation as DI;
 class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use JMS\DiExtraBundle\Annotation as DI;
 
 class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

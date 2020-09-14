@@ -58,14 +58,14 @@ final class AddEntityIdByConditionRector extends AbstractRector implements Confi
     {
         return new RectorDefinition('Add entity id with annotations when meets condition', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     use SomeTrait;
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     use SomeTrait;
@@ -82,7 +82,7 @@ class SomeClass
         return $this->id;
     }
 }
-PHP
+CODE_SAMPLE
 , []),
         ]);
     }

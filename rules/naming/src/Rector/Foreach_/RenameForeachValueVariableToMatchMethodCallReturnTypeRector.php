@@ -64,7 +64,7 @@ final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends 
     {
         return new RectorDefinition('Renames value variable name in foreach loop to match method type', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -75,10 +75,10 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -89,7 +89,7 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
 
             ),
         ]);

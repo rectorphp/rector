@@ -63,7 +63,7 @@ final class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRec
     {
         return new RectorDefinition('Change array to ArrayCollection in setParameters method of query builder', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\EntityRepository;
 
 class SomeRepository extends EntityRepository
@@ -82,9 +82,9 @@ class SomeRepository extends EntityRepository
         ;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Parameter;
@@ -105,7 +105,7 @@ class SomeRepository extends EntityRepository
         ;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

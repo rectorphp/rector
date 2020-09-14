@@ -32,7 +32,7 @@ final class StringToClassConstantRector extends AbstractRector implements Config
     {
         return new RectorDefinition('Changes strings to specific constants', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeSubscriber
 {
     public static function getSubscribedEvents()
@@ -40,9 +40,9 @@ final class SomeSubscriber
         return ['compiler.post_dump' => 'compile'];
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeSubscriber
 {
     public static function getSubscribedEvents()
@@ -50,7 +50,7 @@ final class SomeSubscriber
         return [\Yet\AnotherClass::CONSTANT => 'compile'];
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::STRINGS_TO_CLASS_CONSTANTS => [

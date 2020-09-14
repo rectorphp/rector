@@ -49,18 +49,18 @@ final class RemoveTraitRector extends AbstractRector implements ConfigurableRect
     {
         return new RectorDefinition('Remove specific traits from code', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     use SomeTrait;
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
 ,
                 [
                     self::TRAITS_TO_REMOVE => ['TraitNameToRemove'],

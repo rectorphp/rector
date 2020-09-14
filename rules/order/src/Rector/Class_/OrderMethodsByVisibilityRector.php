@@ -49,24 +49,24 @@ final class OrderMethodsByVisibilityRector extends AbstractConstantPropertyMetho
     {
         return new RectorDefinition('Orders method by visibility', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     protected function protectedFunctionName();
     private function privateFunctionName();
     public function publicFunctionName();
 }
-PHP
+CODE_SAMPLE
 
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function publicFunctionName();
     protected function protectedFunctionName();
     private function privateFunctionName();
 }
-PHP
+CODE_SAMPLE
 
             ),
         ]);

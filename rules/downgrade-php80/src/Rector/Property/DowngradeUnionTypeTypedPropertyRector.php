@@ -19,14 +19,14 @@ final class DowngradeUnionTypeTypedPropertyRector extends AbstractDowngradeTyped
     {
         return new RectorDefinition('Removes union type property type definition, adding `@var` annotations instead.', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     private string|int $property;
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -34,7 +34,7 @@ class SomeClass
     */
     private $property;
 }
-PHP
+CODE_SAMPLE
 ,
                 [
                     self::ADD_DOC_BLOCK => true,

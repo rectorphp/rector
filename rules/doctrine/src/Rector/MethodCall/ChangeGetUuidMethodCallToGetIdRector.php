@@ -31,7 +31,7 @@ final class ChangeGetUuidMethodCallToGetIdRector extends AbstractRector
     {
         return new RectorDefinition('Change getUuid() method call to getId()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -57,9 +57,9 @@ class UuidEntity
         return $this->uuid;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -85,7 +85,7 @@ class UuidEntity
         return $this->uuid;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

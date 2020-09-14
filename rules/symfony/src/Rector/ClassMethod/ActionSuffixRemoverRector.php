@@ -39,23 +39,23 @@ final class ActionSuffixRemoverRector extends AbstractRector
     {
         return new RectorDefinition('Removes Action suffixes from methods in Symfony Controllers', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeController
 {
     public function indexAction()
     {
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeController
 {
     public function index()
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -38,7 +38,7 @@ final class CompleteMissingDependencyInNewRector extends AbstractRector implemen
     {
         return new RectorDefinition('Complete missing constructor dependency instance by type', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -53,9 +53,9 @@ class RandomValueObject
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -70,7 +70,7 @@ class RandomValueObject
     {
     }
 }
-PHP
+CODE_SAMPLE
                 , [
                     self::CLASS_TO_INSTANTIATE_BY_TYPE => [
                         'RandomDependency' => 'RandomDependency',

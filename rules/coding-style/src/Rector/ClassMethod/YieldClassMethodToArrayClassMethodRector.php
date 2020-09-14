@@ -52,7 +52,7 @@ final class YieldClassMethodToArrayClassMethodRector extends AbstractRector impl
     {
         return new RectorDefinition('Turns yield return to array return in specific type and method', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
@@ -60,9 +60,9 @@ class SomeEventSubscriber implements EventSubscriberInterface
         yield 'event' => 'callback';
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
@@ -70,7 +70,7 @@ class SomeEventSubscriber implements EventSubscriberInterface
         return ['event' => 'callback'];
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::METHODS_BY_TYPE => [

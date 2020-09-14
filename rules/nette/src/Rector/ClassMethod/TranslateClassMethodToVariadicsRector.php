@@ -36,7 +36,7 @@ final class TranslateClassMethodToVariadicsRector extends AbstractRector
     {
         return new RectorDefinition('Change translate() method call 2nd arg to variadic', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Localization\ITranslator;
 
 final class SomeClass implements ITranslator
@@ -46,9 +46,9 @@ final class SomeClass implements ITranslator
         return [$message, $count];
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Localization\ITranslator;
 
 final class SomeClass implements ITranslator
@@ -59,7 +59,7 @@ final class SomeClass implements ITranslator
         return [$message, $count];
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

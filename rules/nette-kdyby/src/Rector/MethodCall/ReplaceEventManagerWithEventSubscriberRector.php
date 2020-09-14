@@ -49,7 +49,7 @@ final class ReplaceEventManagerWithEventSubscriberRector extends AbstractRector
     {
         return new RectorDefinition('Change Kdyby EventManager to EventDispatcher', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Kdyby\Events\EventManager;
 
 final class SomeClass
@@ -70,9 +70,9 @@ final class SomeClass
         $this->eventManager->dispatchEvent(static::class . '::onCopy', new EventArgsList([$this, $key]));
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Kdyby\Events\EventManager;
 
 final class SomeClass
@@ -93,7 +93,7 @@ final class SomeClass
         $this->eventManager->dispatch(new SomeClassCopyEvent($this, $key));
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

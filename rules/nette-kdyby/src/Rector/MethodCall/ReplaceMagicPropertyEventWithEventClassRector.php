@@ -49,7 +49,7 @@ final class ReplaceMagicPropertyEventWithEventClassRector extends AbstractRector
     {
         return new RectorDefinition('Change $onProperty magic call with event disptacher and class dispatch', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class FileManager
 {
     public $onUpload;
@@ -59,9 +59,9 @@ final class FileManager
         $this->onUpload($user);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class FileManager
 {
     use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -77,7 +77,7 @@ final class FileManager
         $this->eventDispatcher->dispatch($onFileManagerUploadEvent);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

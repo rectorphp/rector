@@ -49,7 +49,7 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector imp
     {
         return new RectorDefinition('Get service call to constructor injection', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -86,9 +86,9 @@ class FirstService
          return $this->anotherService;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -113,7 +113,7 @@ final class SomeClass
         $anotherService->run();
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::METHOD_CALL_TO_SERVICES => [

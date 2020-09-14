@@ -35,7 +35,7 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
     {
         return new RectorDefinition('Change simple property init and assign to constructor promotion', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public float $x;
@@ -52,9 +52,9 @@ class SomeClass
         $this->z = $z;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(
@@ -63,7 +63,7 @@ class SomeClass
         public float $z = 0.0,
     ) {}
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

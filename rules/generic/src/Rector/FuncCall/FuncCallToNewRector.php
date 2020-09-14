@@ -32,7 +32,7 @@ final class FuncCallToNewRector extends AbstractRector implements ConfigurableRe
     {
         return new RectorDefinition('Change configured function calls to new Instance', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -40,9 +40,9 @@ class SomeClass
         $array = collection([]);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,7 +50,7 @@ class SomeClass
         $array = new \Collection([]);
     }
 }
-PHP
+CODE_SAMPLE
 ,
                 [
                     self::FUNCTION_TO_NEW => [

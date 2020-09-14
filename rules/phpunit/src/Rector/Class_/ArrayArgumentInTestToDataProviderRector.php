@@ -79,7 +79,7 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
     {
         return new RectorDefinition('Move array argument from tests into data provider [configurable]', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeServiceTest extends TestCase
@@ -89,9 +89,9 @@ class SomeServiceTest extends TestCase
         $this->doTestMultiple([1, 2, 3]);
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeServiceTest extends TestCase
@@ -111,7 +111,7 @@ class SomeServiceTest extends TestCase
         yield [3];
     }
 }
-PHP
+CODE_SAMPLE
 
                 ,
                 [

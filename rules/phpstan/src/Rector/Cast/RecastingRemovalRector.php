@@ -44,21 +44,21 @@ final class RecastingRemovalRector extends AbstractRector
     {
         return new RectorDefinition('Removes recasting of the same type', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $string = '';
 $string = (string) $string;
 
 $array = [];
 $array = (array) $array;
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $string = '';
 $string = $string;
 
 $array = [];
 $array = $array;
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

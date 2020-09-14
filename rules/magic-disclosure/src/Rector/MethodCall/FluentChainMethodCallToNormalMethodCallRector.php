@@ -26,17 +26,17 @@ final class FluentChainMethodCallToNormalMethodCallRector extends AbstractFluent
     {
         return new RectorDefinition('Turns fluent interface calls to classic ones.', [
             new CodeSample(
-            <<<'PHP'
+            <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 $someClass->someFunction()
             ->otherFunction();
-PHP
+CODE_SAMPLE
             ,
-            <<<'PHP'
+            <<<'CODE_SAMPLE'
 $someClass = new SomeClass();
 $someClass->someFunction();
 $someClass->otherFunction();
-PHP
+CODE_SAMPLE
         ),
         ]);
     }

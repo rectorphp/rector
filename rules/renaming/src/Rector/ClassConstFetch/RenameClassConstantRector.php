@@ -35,15 +35,15 @@ final class RenameClassConstantRector extends AbstractRector implements Configur
     {
         return new RectorDefinition('Replaces defined class constants in their calls.', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $value = SomeClass::OLD_CONSTANT;
 $value = SomeClass::OTHER_OLD_CONSTANT;
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $value = SomeClass::NEW_CONSTANT;
 $value = DifferentClass::NEW_CONSTANT;
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::CLASS_CONSTANT_RENAME => [

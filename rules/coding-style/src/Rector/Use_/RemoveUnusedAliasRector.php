@@ -76,21 +76,21 @@ final class RemoveUnusedAliasRector extends AbstractRector
             'Removes unused use aliases. Keep annotation aliases like "Doctrine\ORM\Mapping as ORM" to keep convention format',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Symfony\Kernel as BaseKernel;
 
 class SomeClass extends BaseKernel
 {
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Symfony\Kernel;
 
 class SomeClass extends Kernel
 {
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

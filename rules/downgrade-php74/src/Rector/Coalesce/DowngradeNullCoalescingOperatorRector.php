@@ -22,15 +22,15 @@ final class DowngradeNullCoalescingOperatorRector extends AbstractRector
     {
         return new RectorDefinition('Remove null coalescing operator ??=', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $array = [];
 $array['user_id'] ??= 'value';
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $array = [];
 $array['user_id'] = $array['user_id'] ?? 'value';
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

@@ -31,7 +31,7 @@ final class RemoveDataProviderTestPrefixRector extends AbstractPHPUnitRector
     {
         return new RectorDefinition('Data provider methods cannot start with "test" prefix', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     /**
@@ -47,9 +47,9 @@ class SomeClass extends PHPUnit\Framework\TestCase
         return ['123'];
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     /**
@@ -65,7 +65,7 @@ class SomeClass extends PHPUnit\Framework\TestCase
         return ['123'];
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

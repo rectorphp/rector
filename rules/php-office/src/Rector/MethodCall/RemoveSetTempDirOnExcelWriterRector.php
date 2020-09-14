@@ -21,7 +21,7 @@ final class RemoveSetTempDirOnExcelWriterRector extends AbstractRector
     {
         return new RectorDefinition('Remove setTempDir() on PHPExcel_Writer_Excel5', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -30,9 +30,9 @@ final class SomeClass
         $writer->setTempDir();
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -40,7 +40,7 @@ final class SomeClass
         $writer = new \PHPExcel_Writer_Excel5;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

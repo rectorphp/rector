@@ -27,17 +27,17 @@ final class SensitiveHereNowDocRector extends AbstractRector
     {
         return new RectorDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $value = <<<A
     A
 A
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $value = <<<A_WRAP
     A
 A_WRAP
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

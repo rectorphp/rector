@@ -26,7 +26,7 @@ final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
     {
         return new RectorDefinition('Merge removed @Method annotation to @Route one', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -40,9 +40,9 @@ class DefaultController extends Controller
     {
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends Controller
@@ -54,7 +54,7 @@ class DefaultController extends Controller
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

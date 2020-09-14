@@ -22,7 +22,7 @@ final class StrlenZeroToIdenticalEmptyStringRector extends AbstractRector
     {
         return new RectorDefinition('Changes strlen comparison to 0 to direct empty string compare', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -30,9 +30,9 @@ class SomeClass
         $empty = strlen($value) === 0;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -40,7 +40,7 @@ class SomeClass
         $empty = $value === '';
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

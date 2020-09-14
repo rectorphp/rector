@@ -38,7 +38,7 @@ final class AddArrayParamDocTypeRector extends AbstractRector
     {
         return new RectorDefinition('Adds @param annotation to array parameters inferred from the rest of the code', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -51,9 +51,9 @@ class SomeClass
         $this->values = $values;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -69,7 +69,7 @@ class SomeClass
         $this->values = $values;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

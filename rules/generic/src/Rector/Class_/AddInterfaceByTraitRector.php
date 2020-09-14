@@ -42,19 +42,19 @@ final class AddInterfaceByTraitRector extends AbstractRector implements Configur
     {
         return new RectorDefinition('Add interface by used trait', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     use SomeTrait;
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass implements SomeInterface
 {
     use SomeTrait;
 }
-PHP
+CODE_SAMPLE
             , [
                 self::INTERFACE_BY_TRAIT => [
                     'SomeTrait' => 'SomeInterface',

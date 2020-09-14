@@ -42,7 +42,7 @@ final class TemplateMagicAssignToExplicitVariableArrayRector extends AbstractRec
     {
         return new RectorDefinition('Change `$this->templates->{magic}` to `$this->template->render(..., $values)`', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 
 class SomeControl extends Control
@@ -53,9 +53,9 @@ class SomeControl extends Control
         $this->template->render(__DIR__ . '/poll.latte');
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Nette\Application\UI\Control;
 
 class SomeControl extends Control
@@ -65,7 +65,7 @@ class SomeControl extends Control
         $this->template->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

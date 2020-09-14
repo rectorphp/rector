@@ -63,7 +63,7 @@ final class RemoveUnusedParameterRector extends AbstractRector implements ZeroCa
     {
         return new RectorDefinition('Remove unused parameter, if not required by interface or parent class', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct($value, $value2)
@@ -71,9 +71,9 @@ class SomeClass
          $this->value = $value;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct($value)
@@ -81,7 +81,7 @@ class SomeClass
          $this->value = $value;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

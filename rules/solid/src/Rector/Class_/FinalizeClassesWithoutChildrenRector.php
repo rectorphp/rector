@@ -19,7 +19,7 @@ final class FinalizeClassesWithoutChildrenRector extends AbstractRector
     {
         return new RectorDefinition('Finalize every class that has no children', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class FirstClass
 {
 }
@@ -31,9 +31,9 @@ class SecondClass
 class ThirdClass extends SecondClass
 {
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class FirstClass
 {
 }
@@ -45,7 +45,7 @@ class SecondClass
 final class ThirdClass extends SecondClass
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

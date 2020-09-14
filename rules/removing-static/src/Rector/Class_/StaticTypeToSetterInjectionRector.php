@@ -56,7 +56,7 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector implements 
         // custom made only for Elasticr
         return new RectorDefinition('Changes types to setter injection', [
             new ConfiguredCodeSample(
-<<<'PHP'
+<<<'CODE_SAMPLE'
 <?php
 
 final class CheckoutEntityFactory
@@ -66,9 +66,9 @@ final class CheckoutEntityFactory
         return SomeStaticClass::go();
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-<<<'PHP'
+<<<'CODE_SAMPLE'
 <?php
 
 final class CheckoutEntityFactory
@@ -88,7 +88,7 @@ final class CheckoutEntityFactory
         return $this->someStaticClass->go();
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::STATIC_TYPES => ['SomeStaticClass'],

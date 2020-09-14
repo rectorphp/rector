@@ -44,7 +44,7 @@ final class TestListenerToHooksRector extends AbstractRector
     {
         return new RectorDefinition('Refactor "*TestListener.php" to particular "*Hook.php" files', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 namespace App\Tests;
 
 use PHPUnit\Framework\TestListener;
@@ -93,9 +93,9 @@ final class BeforeListHook implements TestListener
         echo $time;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-<<<'PHP'
+<<<'CODE_SAMPLE'
 namespace App\Tests;
 
 final class BeforeListHook implements \PHPUnit\Runner\BeforeTestHook, \PHPUnit\Runner\AfterTestHook
@@ -110,7 +110,7 @@ final class BeforeListHook implements \PHPUnit\Runner\BeforeTestHook, \PHPUnit\R
         echo $time;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

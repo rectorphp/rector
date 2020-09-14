@@ -38,23 +38,23 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
     {
         return new RectorDefinition('Add param types where needed', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function process($name)
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function process(string $name)
     {
     }
 }
-PHP
+CODE_SAMPLE
             , [
                 self::PARAMETER_TYPEHINTS => [new AddParamTypeDeclaration('SomeClass', 'process', 0, 'string')],
             ]),

@@ -32,7 +32,7 @@ final class MethodCallToStaticCallRector extends AbstractRector implements Confi
     {
         return new RectorDefinition('Change method call to desired static call', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $anotherDependency;
@@ -47,9 +47,9 @@ final class SomeClass
         return $this->anotherDependency->process('value');
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $anotherDependency;
@@ -64,7 +64,7 @@ final class SomeClass
         return StaticCaller::anotherMethod('value');
     }
 }
-PHP
+CODE_SAMPLE
 ,
                 [
                     self::METHOD_CALLS_TO_STATIC_CALLS => [

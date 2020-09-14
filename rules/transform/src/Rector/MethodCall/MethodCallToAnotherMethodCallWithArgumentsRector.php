@@ -34,15 +34,15 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     {
         return new RectorDefinition('Turns old method call with specific types to new one with arguments', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $serviceDefinition = new Nette\DI\ServiceDefinition;
 $serviceDefinition->setInject();
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 $serviceDefinition = new Nette\DI\ServiceDefinition;
 $serviceDefinition->addTag('inject');
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => [

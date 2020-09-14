@@ -20,7 +20,7 @@ final class RemoveArgumentTypeProbeRector extends AbstractRector
     {
         return new RectorDefinition('Clean up probe that records argument types', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use Rector\DynamicTypeAnalysis\Probe\TypeStaticProbe;
 
 class SomeClass
@@ -30,16 +30,16 @@ class SomeClass
         TypeStaticProbe::recordArgumentType($arg, __METHOD__, 0);
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($arg)
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

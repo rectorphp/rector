@@ -21,7 +21,7 @@ final class IsAWithStringWithThirdArgumentRector extends AbstractRector
     {
         return new RectorDefinition('Complete missing 3rd argument in case is_a() function in case of strings', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(string $value)
@@ -29,9 +29,9 @@ class SomeClass
         return is_a($value, 'stdClass');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(string $value)
@@ -39,7 +39,7 @@ class SomeClass
         return is_a($value, 'stdClass', true);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

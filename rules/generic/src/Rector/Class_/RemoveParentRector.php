@@ -32,17 +32,17 @@ final class RemoveParentRector extends AbstractRector implements ConfigurableRec
     {
         return new RectorDefinition('Removes extends class by name', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass extends SomeParentClass
 {
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
 }
-PHP
+CODE_SAMPLE
                 , [
                     self::PARENT_TYPES_TO_REMOVE => ['SomeParentClass'],
                 ]

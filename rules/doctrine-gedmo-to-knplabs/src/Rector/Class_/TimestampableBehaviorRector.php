@@ -36,16 +36,16 @@ final class TimestampableBehaviorRector extends AbstractRector
             'Change Timestampable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 class SomeClass
 {
     use TimestampableEntity;
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 
@@ -53,7 +53,7 @@ class SomeClass implements TimestampableInterface
 {
     use TimestampableTrait;
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

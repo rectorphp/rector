@@ -21,17 +21,17 @@ final class ProcessBuilderGetProcessRector extends AbstractRector
             'Removes `$processBuilder->getProcess()` calls to $processBuilder in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $processBuilder = new Symfony\Component\Process\ProcessBuilder;
 $process = $processBuilder->getProcess();
 $commamdLine = $processBuilder->getProcess()->getCommandLine();
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 $processBuilder = new Symfony\Component\Process\ProcessBuilder;
 $process = $processBuilder;
 $commamdLine = $processBuilder->getCommandLine();
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

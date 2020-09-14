@@ -37,7 +37,7 @@ final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
     {
         return new RectorDefinition('Simplify use of assertions in WebTestCase', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -58,9 +58,9 @@ class SomeClass extends TestCase
         $this->assertContains('Hello World', $crawler->filter('h1')->text());
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -80,7 +80,7 @@ class SomeClass extends TestCase
         $this->assertSelectorTextContains('h1', 'Hello World');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

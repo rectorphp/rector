@@ -29,7 +29,7 @@ final class UnionTypesRector extends AbstractRector
             'Change docs types to union types, where possible (properties are covered by TypedPropertiesRector)',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -40,9 +40,9 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -53,7 +53,7 @@ class SomeClass
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

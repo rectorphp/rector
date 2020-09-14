@@ -25,7 +25,7 @@ final class JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector extends AbstractR
             'Changes json_encode()/json_decode() to safer and more verbose Nette\Utils\Json::encode()/decode() calls',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function decodeJson(string $jsonString)
@@ -43,9 +43,9 @@ class SomeClass
         $prettyJsonString = json_encode($data, JSON_PRETTY_PRINT);
     }
 }
-PHP
+CODE_SAMPLE
                     ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function decodeJson(string $jsonString)
@@ -63,7 +63,7 @@ class SomeClass
         $prettyJsonString = \Nette\Utils\Json::encode($data, \Nette\Utils\Json::PRETTY);
     }
 }
-PHP
+CODE_SAMPLE
                 ),
             ]
         );

@@ -61,7 +61,7 @@ final class ArgumentFuncCallToMethodCallRector extends AbstractRector implements
     {
         return new RectorDefinition('Move help facade-like function calls to constructor injection', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeController
 {
     public function action()
@@ -70,9 +70,9 @@ class SomeController
         $viewFactory = view();
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeController
 {
     /**
@@ -91,7 +91,7 @@ class SomeController
         $viewFactory = $this->viewFactory;
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::FUNCTIONS_TO_METHOD_CALLS => [

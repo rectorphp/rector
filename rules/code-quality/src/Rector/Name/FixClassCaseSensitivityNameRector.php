@@ -38,7 +38,7 @@ final class FixClassCaseSensitivityNameRector extends AbstractRector
     {
         return new RectorDefinition('Change miss-typed case sensitivity name to correct one', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -50,9 +50,9 @@ final class SomeClass
 final class AnotherClass
 {
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -64,7 +64,7 @@ final class SomeClass
 final class AnotherClass
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

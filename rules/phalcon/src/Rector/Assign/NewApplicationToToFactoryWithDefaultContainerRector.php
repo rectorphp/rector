@@ -26,7 +26,7 @@ final class NewApplicationToToFactoryWithDefaultContainerRector extends Abstract
     {
         return new RectorDefinition('Change new application to default factory with application', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($di)
@@ -36,9 +36,9 @@ class SomeClass
         $response = $application->handle();
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($di)
@@ -49,7 +49,7 @@ class SomeClass
         $response = $application->handle($_SERVER["REQUEST_URI"]);
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

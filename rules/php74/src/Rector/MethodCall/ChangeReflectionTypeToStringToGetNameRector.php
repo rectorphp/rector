@@ -40,7 +40,7 @@ final class ChangeReflectionTypeToStringToGetNameRector extends AbstractRector
     {
         return new RectorDefinition('Change string calls on ReflectionType', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go(ReflectionFunction $reflectionFunction)
@@ -55,9 +55,9 @@ class SomeClass
         return $reflectionFunction->getReturnType();
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go(ReflectionFunction $reflectionFunction)
@@ -72,7 +72,7 @@ class SomeClass
         return $reflectionFunction->getReturnType();
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

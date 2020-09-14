@@ -25,7 +25,7 @@ final class InlineIfToExplicitIfRector extends AbstractRector
     {
         return new RectorDefinition('Change inline if to explicit if', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -35,9 +35,9 @@ class SomeClass
         is_null($userId) && $userId = 5;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -49,7 +49,7 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

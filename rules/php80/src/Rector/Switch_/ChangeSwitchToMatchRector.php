@@ -34,7 +34,7 @@ final class ChangeSwitchToMatchRector extends AbstractRector
     {
         return new RectorDefinition('Change switch() to match()', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -58,9 +58,9 @@ class SomeClass
         }
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -73,7 +73,7 @@ class SomeClass
         };
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

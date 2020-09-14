@@ -41,7 +41,7 @@ final class RemoveOverriddenValuesRector extends AbstractRector
     {
         return new RectorDefinition('Remove initial assigns of overridden values', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run()
@@ -51,9 +51,9 @@ final class SomeController
          $directories = array_filter($possibleDirectories, 'file_exists');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run()
@@ -62,7 +62,7 @@ final class SomeController
          $directories = array_filter($possibleDirectories, 'file_exists');
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

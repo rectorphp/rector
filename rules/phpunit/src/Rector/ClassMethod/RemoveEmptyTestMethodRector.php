@@ -19,7 +19,7 @@ final class RemoveEmptyTestMethodRector extends AbstractPHPUnitRector
     {
         return new RectorDefinition('Remove empty test methods', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -31,13 +31,13 @@ class SomeTest extends \PHPUnit\Framework\TestCase
     {
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeTest extends \PHPUnit\Framework\TestCase
 {
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

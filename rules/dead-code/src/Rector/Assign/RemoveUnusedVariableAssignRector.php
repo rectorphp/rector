@@ -22,7 +22,7 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
     {
         return new RectorDefinition('Remove unused assigns to variables', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -30,16 +30,16 @@ class SomeClass
         $value = 5;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
     {
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

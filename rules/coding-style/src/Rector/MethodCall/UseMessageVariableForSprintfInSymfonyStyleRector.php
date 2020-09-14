@@ -23,7 +23,7 @@ final class UseMessageVariableForSprintfInSymfonyStyleRector extends AbstractRec
             'Decouple $message property from sprintf() calls in $this->smyfonyStyle->method()',
             [
                 new CodeSample(
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class SomeClass
@@ -33,9 +33,9 @@ final class SomeClass
         $symfonyStyle->info(sprintf('Hi %s', 'Tom'));
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                    <<<'PHP'
+                    <<<'CODE_SAMPLE'
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class SomeClass
@@ -46,7 +46,7 @@ final class SomeClass
         $symfonyStyle->info($message);
     }
 }
-PHP
+CODE_SAMPLE
             ),
             ]
         );

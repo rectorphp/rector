@@ -21,7 +21,7 @@ final class TernaryToBooleanOrFalseToBooleanAndRector extends AbstractRector
     {
         return new RectorDefinition('Change ternary of bool : false to && bool', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go()
@@ -34,9 +34,9 @@ class SomeClass
         return (bool) 5;
     }
 }
-PHP
+CODE_SAMPLE
 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go()
@@ -49,7 +49,7 @@ class SomeClass
         return (bool) 5;
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

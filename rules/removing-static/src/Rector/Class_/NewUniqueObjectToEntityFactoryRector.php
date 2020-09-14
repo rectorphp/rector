@@ -73,7 +73,7 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector implemen
     {
         return new RectorDefinition('Convert new X to new factories', [
             new ConfiguredCodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 <?php
 
 class SomeClass
@@ -91,9 +91,9 @@ class AnotherClass
         return StaticClass::staticMethod();
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(AnotherClassFactory $anotherClassFactory)
@@ -114,7 +114,7 @@ class AnotherClass
         return StaticClass::staticMethod();
     }
 }
-PHP
+CODE_SAMPLE
                 ,
                 [
                     self::TYPES_TO_SERVICES => ['ClassName'],

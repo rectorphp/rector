@@ -32,7 +32,7 @@ final class CompactToVariablesRector extends AbstractRector
     {
         return new RectorDefinition('Change compact() call to own array', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -43,9 +43,9 @@ class SomeClass
         return compact('checkout', 'form');
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -56,7 +56,7 @@ class SomeClass
         return ['checkout' => $checkout, 'form' => $form];
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }

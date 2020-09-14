@@ -37,7 +37,7 @@ final class ExplicitBoolCompareRector extends AbstractRector
     {
         return new RectorDefinition('Make if conditions more explicit', [
             new CodeSample(
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run($items)
@@ -47,9 +47,9 @@ final class SomeController
         }
     }
 }
-PHP
+CODE_SAMPLE
                 ,
-                <<<'PHP'
+                <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function run($items)
@@ -59,7 +59,7 @@ final class SomeController
         }
     }
 }
-PHP
+CODE_SAMPLE
             ),
         ]);
     }
